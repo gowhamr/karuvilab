@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Processing Tools — KaruviLab</title>
+  <meta name="description" content="Compress, convert, resize, and crop images. Fast, secure, and entirely local image processing in your browser." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <script>window.SHELL_ACTIVE = 'image';</script>
+</head>
+<body>
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <p class="nav-title">Image Toolkit</p>
+        <p class="nav-subtitle">High-performance image processing, 100% local</p>
+      </div>
+    </div>
+    
+    <div class="panel-scroll">
+      <div class="tool-section">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumb-nav">
+          <a href="/">Home</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+          <span class="current">Image Tools</span>
+        </nav>
+
+        <h1 style="font-size:1.8rem; font-weight:900; margin-bottom:12px;">Image Tools</h1>
+        <p style="color:var(--text-3); margin-bottom:32px; max-width:600px;">Optimize, transform, and edit your images instantly. Your photos never leave your device.</p>
+
+        <div class="cat-grid">
+          <a href="../tools/compress/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#EEF2FF;--f:#4F46E5"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14V4h10l6 6v10H4v-2"/><path d="M14 4v6h6"/><path d="M7 14l5-5 5 5"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Compress Image</span>
+              <span class="cat-btn-desc">Reduce file size while keeping quality</span>
+            </span>
+          </a>
+
+          <a href="../tools/image-converter/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#DCFCE7;--f:#10B981"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Convert Image</span>
+              <span class="cat-btn-desc">Change between formats (JPG, PNG, WebP)</span>
+            </span>
+          </a>
+
+          <a href="../tools/create/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#FEF9C3;--f:#CA8A04"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Create Placeholder</span>
+              <span class="cat-btn-desc">Generate solid color or gradient images</span>
+            </span>
+          </a>
+
+          <a href="../tools/image-resizer/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#F3E8FF;--f:#7C3AED"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><path d="M12 2v20M2 12h20"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Resize Image</span>
+              <span class="cat-btn-desc">Change dimensions with aspect lock</span>
+            </span>
+          </a>
+
+          <a href="../tools/image-crop/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#FEE2E2;--f:#EF4444"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.13 1L6 16a2 2 0 002 2h15"/><path d="M1 6.13L16 6a2 2 0 012 2v15"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Crop Image</span>
+              <span class="cat-btn-desc">Cut and frame your photos</span>
+            </span>
+          </a>
+
+          <a href="../tools/image-base64/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#EFF6FF;--f:#3B82F6"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 002-2V7.5L14.5 2H6a2 2 0 00-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Image to Base64</span>
+              <span class="cat-btn-desc">Convert image to data URI string</span>
+            </span>
+          </a>
+
+          <a href="../tools/convert/" class="cat-btn" style="text-decoration:none">
+            <span class="cat-icon" style="--c:#F5F3FF;--f:#7C3AED"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></span>
+            <span class="cat-btn-text">
+              <span class="cat-btn-name">Image to PDF</span>
+              <span class="cat-btn-desc">Create PDF from single image</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div class="tool-section info-section" style="margin-top: 40px;">
+        <h3>Professional Image Suite</h3>
+        <p>KaruviLab provides a set of high-performance image tools that run entirely in your browser. This means your private photos are never uploaded to any server, ensuring 100% privacy and lightning-fast results.</p>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 32px;">
+           <div class="stat-box" style="background:var(--bg-input); padding:20px; border-radius:12px; border:1px solid var(--border);">
+             <h4 style="color:var(--blue); margin-bottom:8px;">🔒 Privacy Guaranteed</h4>
+             <p style="font-size:0.85rem; color:var(--text-3);">All processing is done locally. No data is sent to our servers.</p>
+           </div>
+           <div class="stat-box" style="background:var(--bg-input); padding:20px; border-radius:12px; border:1px solid var(--border);">
+             <h4 style="color:var(--blue); margin-bottom:8px;">🚀 GPU Accelerated</h4>
+             <p style="font-size:0.85rem; color:var(--text-3);">Uses your browser's native capabilities for fast rendering.</p>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/shell.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

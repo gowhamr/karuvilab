@@ -9,6 +9,11 @@
     const path = window.location.pathname;
     if (path.includes('/calculators/')) window.SHELL_ACTIVE = 'calculators';
     else if (path.includes('/pdf-tools/')) window.SHELL_ACTIVE = 'pdf';
+    else if (path.includes('/image-tools/')) window.SHELL_ACTIVE = 'image';
+    else if (path.includes('/security-tools/')) window.SHELL_ACTIVE = 'security';
+    else if (path.includes('/developer-tools/')) window.SHELL_ACTIVE = 'dev';
+    else if (path.includes('/utilities/')) window.SHELL_ACTIVE = 'utils';
+    else if (path.includes('/seo-tools/')) window.SHELL_ACTIVE = 'seo';
     else if (path.includes('/tools/')) {
        // Match specific tools that app.js expects
        const tools = ['markdown','qrcode','base64','regex','format','validate','compress','convert','create'];
