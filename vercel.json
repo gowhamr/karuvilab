@@ -2,8 +2,7 @@
   "version": 2,
   "framework": null,
   "cleanUrls": true,
-  "trailingSlash": false,
-  "outputDirectory": ".",
+  "trailingSlash": true,
   "redirects": [
     { "source": "/tools/calculators/age/(.*)", "destination": "/calculators/age-calculator/", "permanent": true },
     { "source": "/tools/calculators/emi/(.*)", "destination": "/calculators/emi-calculator/", "permanent": true },
@@ -28,7 +27,14 @@
     { "source": "/tools/pdf/imgtopdf/(.*)", "destination": "/pdf-tools/image-to-pdf/", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/:path*", "destination": "/index.html" }
+    { "source": "/calculators", "destination": "/calculators/index.html" },
+    { "source": "/pdf-tools", "destination": "/pdf-tools/index.html" },
+    { "source": "/image-tools", "destination": "/image-tools/index.html" },
+    { "source": "/security-tools", "destination": "/security-tools/index.html" },
+    { "source": "/developer-tools", "destination": "/developer-tools/index.html" },
+    { "source": "/utilities", "destination": "/utilities/index.html" },
+    { "source": "/seo-tools", "destination": "/seo-tools/index.html" },
+    { "source": "/tools/:tool*", "destination": "/index.html" }
   ],
   "headers": [
     {
