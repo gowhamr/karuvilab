@@ -41,6 +41,15 @@ function qrInit() {
 
 function qrOnInput() {
   clearTimeout(qrDebounceTimer);
+  
+  // QR-001: Immediately disable buttons during typing/processing
+  const downloadBtn = document.getElementById('qr-download-btn');
+  const copyBtn = document.getElementById('qr-copy-btn');
+  const svgBtn = document.getElementById('qr-svg-btn');
+  if (downloadBtn) downloadBtn.disabled = true;
+  if (copyBtn) copyBtn.disabled = true;
+  if (svgBtn) svgBtn.disabled = true;
+
   qrDebounceTimer = setTimeout(qrGenerate, 150);
 }
 

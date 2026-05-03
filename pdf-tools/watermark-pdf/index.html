@@ -44,23 +44,22 @@
             <div class="settings-row" style="margin-top:16px;">
               <span class="settings-label">Font Size</span>
               <div style="flex:1; display:flex; align-items:center; gap:12px;">
-                <input type="range" id="wm-size" min="10" max="150" value="50" style="flex:1" />
+                <input type="range" id="wm-size" min="10" max="150" value="50" style="flex:1" aria-label="Watermark Size" aria-valuemin="10" aria-valuemax="150" aria-valuenow="50" />
                 <span id="wm-size-val" style="font-size:0.8rem; font-weight:600; width:30px;">50</span>
-              </div>
-            </div>
-
-            <div class="settings-row">
-              <span class="settings-label">Opacity</span>
-              <div style="flex:1; display:flex; align-items:center; gap:12px;">
-                <input type="range" id="wm-opacity" min="0" max="100" value="30" style="flex:1" />
+                </div>
+                </div>
+                <div class="settings-row">
+                <span class="settings-label">Opacity</span>
+                <div style="flex:1; display:flex; align-items:center; gap:12px;">
+                <input type="range" id="wm-opacity" min="0" max="100" value="30" style="flex:1" aria-label="Watermark Opacity" aria-valuemin="0" aria-valuemax="100" aria-valuenow="30" />
                 <span id="wm-opacity-val" style="font-size:0.8rem; font-weight:600; width:30px;">30%</span>
-              </div>
-            </div>
+                </div>
+                </div>
+                <div class="settings-row">
+                <span class="settings-label">Rotation</span>
+                <div style="flex:1; display:flex; align-items:center; gap:12px;">
+                <input type="range" id="wm-rotation" min="-180" max="180" value="45" style="flex:1" aria-label="Watermark Rotation" aria-valuemin="-180" aria-valuemax="180" aria-valuenow="45" />
 
-            <div class="settings-row">
-              <span class="settings-label">Rotation</span>
-              <div style="flex:1; display:flex; align-items:center; gap:12px;">
-                <input type="range" id="wm-rotation" min="-180" max="180" value="45" style="flex:1" />
                 <span id="wm-rotation-val" style="font-size:0.8rem; font-weight:600; width:40px;">45°</span>
               </div>
             </div>
@@ -115,9 +114,9 @@
 
       let currentFile = null;
 
-      sizeIn.oninput = () => sizeVal.textContent = sizeIn.value;
-      opacityIn.oninput = () => opacityVal.textContent = opacityIn.value + '%';
-      rotateIn.oninput = () => rotateVal.textContent = rotateIn.value + '°';
+      sizeIn.oninput = () => { sizeVal.textContent = sizeIn.value; sizeIn.setAttribute('aria-valuenow', sizeIn.value); };
+      opacityIn.oninput = () => { opacityVal.textContent = opacityIn.value + '%'; opacityIn.setAttribute('aria-valuenow', opacityIn.value); };
+      rotateIn.oninput = () => { rotateVal.textContent = rotateIn.value + '°'; rotateIn.setAttribute('aria-valuenow', rotateIn.value); };
 
       async function handleFile(file) {
         const check = Utils.validateFile(file, ['pdf'], 50);

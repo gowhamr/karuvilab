@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let panelTransitioning = false;
   const homePanel = document.getElementById('panel-home');
 
+  // UI-002: Track cancellable operations
+  let compressAbortCtrl = null;
+  let convertAbortCtrl  = null;
+  let regexWorker       = null;
+  let regexTimeout      = null;
+
   const TOOL_PANELS = ['compressor','converter','creator','pdf','validator','base64','regex','formatter','markdown','qrcode','history','texttools','hash','urlencode','moretools'];
 
   function setDockActive(dockId) {
@@ -35,6 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showPanel(panelId) {
     if (panelId === activePanel || panelTransitioning) return;
+
+    // UI-002: Abort previous panel operations to prevent memory leaks and background noise
+    compressAbortCtrl?.abort();
+    convertAbortCtrl?.abort();
+    if (regexWorker) {
+      regexWorker.terminate();
+      regexWorker = null;
+    }
+    if (regexTimeout) clearTimeout(regexTimeout);
+
     panelTransitioning = true;
     
     const prev = document.querySelector('.panel.active');
@@ -228,13 +244,17 @@ document.addEventListener('DOMContentLoaded', () => {
   //  QUALITY SLIDERS
   // ══════════════════════════════════════════════════════
   function bindSlider(sliderId, valId) {
-    const s = document.getElementById(sliderId);
-    const v = document.getElementById(valId);
-    if (!s || !v) return;
-    const upd = () => { v.textContent = Math.round(s.value * 100) + '%'; };
-    s.addEventListener('input', upd);
-    upd();
+   const s = document.getElementById(sliderId);
+   const v = document.getElementById(valId);
+   if (!s || !v) return;
+   const upd = () => { 
+     v.textContent = Math.round(s.value * 100) + '%';
+     s.setAttribute('aria-valuenow', s.value);
+   };
+   s.addEventListener('input', upd);
+   upd();
   }
+
   bindSlider('convert-quality', 'convert-quality-val');
   bindSlider('pdf-img-quality', 'pdf-img-quality-val');
 
@@ -273,7 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function setSliderVal(id, valId, val, fmt) {
     const s = document.getElementById(id);
     const v = document.getElementById(valId);
-    if (s) s.value = val;
+    if (s) {
+      s.value = val;
+      s.setAttribute('aria-valuenow', val);
+    }
     if (v) v.textContent = fmt(val);
   }
 
@@ -285,7 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById(sliderId);
     const valEl  = document.getElementById(valId);
     if (!slider || !valEl) return;
-    const upd = () => { valEl.textContent = fmt(slider.value); };
+    const upd = () => { 
+      valEl.textContent = fmt(slider.value); 
+      slider.setAttribute('aria-valuenow', slider.value);
+    };
     slider.addEventListener('input', upd);
     slider.addEventListener('change', runCompressor);
     upd();
@@ -309,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ══════════════════════════════════════════════════════
   const compressBtn = document.getElementById('compress-btn');
   let compressProcessing = false;
-  let compressAbortCtrl = null;
 
   function syncCompressBtn() {
     if (compressBtn) compressBtn.disabled = compressorFiles.length === 0 || compressProcessing;
@@ -356,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           if (/\.pdf$/i.test(file.name)) {
             resultsEl.innerHTML = processingMsg(`Compressing PDF: ${file.name}…`);
+            await PdfTools.ready();
             const blob = await PdfTools.compressPdf(file, 0.6, null, signal);
             resultBlobs.push(blob);
             html += buildResultCard(file, blob, 'compressed', 'pdf');
@@ -393,7 +419,6 @@ document.addEventListener('DOMContentLoaded', () => {
   //  CONVERTER
   // ══════════════════════════════════════════════════════
   let convertProcessing = false;
-  let convertAbortCtrl = null;
 
   const converterFiles = setupDropZone('converter-drop','converter-input','converter-file-list', files => {
     const btn = document.getElementById('convert-btn');
@@ -446,10 +471,12 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           const srcExt = Utils.getExt(file.name);
           if (targetFmt === 'pdf') {
+            await PdfTools.ready();
             const blob = await PdfTools.imagesToPdf([file], 'fit', 'portrait', signal);
             resultBlobs.push(blob);
             html += buildResultCard(file, blob, 'converted', 'pdf', 'pdf');
           } else if (srcExt === 'pdf') {
+            await PdfTools.ready();
             const fmtArg = ['png','bmp','tiff'].includes(targetFmt) ? targetFmt : 'jpeg';
             const { blob } = await PdfTools.pdfPageToImage(file, 1, fmtArg, 2);
             resultBlobs.push(blob);
@@ -826,7 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     runBtn.addEventListener('click', () => {
-      const text = input.value.trim();
+      const text = input.value; // BASE64-001: Don't trim as spaces are valid content
       if (!text) {
         Shell.toast('Please enter some text or base64 to process.', 'warn');
         input.focus();
@@ -835,14 +862,13 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         if (getMode() === 'encode') {
           const bytes = new TextEncoder().encode(text);
-          let binary = '';
-          for (let i = 0; i < bytes.byteLength; i++) {
-            binary += String.fromCharCode(bytes[i]);
-          }
-          showOut(btoa(binary));
+          const binString = Array.from(bytes, (byte) => String.fromCharCode(byte)).join("");
+          showOut(btoa(binString));
           Shell.toast('Text encoded successfully', 'success');
         } else {
-          const binary = atob(text);
+          // BASE64-001: Support decoding with whitespace
+          const cleanedText = text.replace(/\s/g, '');
+          const binary = atob(cleanedText);
           const bytes = new Uint8Array(binary.length);
           for (let i = 0; i < binary.length; i++) {
             bytes[i] = binary.charCodeAt(i);
@@ -938,8 +964,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
-    let regexWorker = null;
-
     runBtn.addEventListener('click', () => {
       const pattern = patternInput.value.trim();
       const testStr = testInput?.value || '';
@@ -964,18 +988,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (regexWorker) regexWorker.terminate();
       regexWorker = new Worker('../../js/regex-worker.js');
 
-      const timeout = setTimeout(() => {
-        regexWorker.terminate();
-        regexWorker = null;
-        runBtn.disabled = false;
-        runBtn.textContent = '⚡ Test Pattern';
-        const msg = 'Regex took too long and was terminated (3s limit).';
-        if (errEl) { errEl.textContent = msg; errEl.hidden = false; }
-        Shell.toast(msg, 'error');
-      }, 3000);
+      regexTimeout = setTimeout(() => {
+        if (regexWorker) {
+          regexWorker.terminate();
+          regexWorker = null;
+          runBtn.disabled = false;
+          runBtn.textContent = '⚡ Test Pattern';
+          const msg = 'Regex took too long and was terminated (5s limit).';
+          if (errEl) { errEl.textContent = msg; errEl.hidden = false; }
+          Shell.toast(msg, 'error');
+        }
+      }, 5000);
 
       regexWorker.onmessage = function(e) {
-        clearTimeout(timeout);
+        clearTimeout(regexTimeout);
         runBtn.disabled = false;
         runBtn.textContent = '⚡ Test Pattern';
         
@@ -1046,8 +1072,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function formatJson(text, minify) {
-      const obj = JSON.parse(text);
-      return minify ? JSON.stringify(obj) : JSON.stringify(obj, null, 2);
+      try {
+        const obj = JSON.parse(text);
+        return minify ? JSON.stringify(obj) : JSON.stringify(obj, null, 2);
+      } catch (e) {
+        let msg = e.message;
+        const posMatch = msg.match(/at position (\d+)/);
+        if (posMatch) {
+          const pos = parseInt(posMatch[1]);
+          const before = text.substring(0, pos);
+          const lines = before.split('\n');
+          const line = lines.length;
+          const col = lines[line - 1].length + 1;
+          msg = `JSON Parse Error: ${msg} (Line ${line}, Column ${col})`;
+          
+          // Focus and select the error position if possible
+          if (fmtInput) {
+            fmtInput.focus();
+            fmtInput.setSelectionRange(pos, pos + 1);
+          }
+        }
+        throw new Error(msg);
+      }
     }
     function formatXml(text, minify) {
       const parser = new DOMParser();

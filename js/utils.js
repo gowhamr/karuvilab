@@ -205,13 +205,22 @@ const Utils = (() => {
       }
     }
 
-    // Check MIME for images/pdfs
-    const isImg = ['jpg','jpeg','png','webp','avif','tiff','bmp','heic'].includes(ext);
-    if (isImg && !file.type.startsWith('image/')) {
-      return { valid: false, error: 'File content does not match image extension.' };
-    }
-    if (ext === 'pdf' && file.type !== 'application/pdf') {
-      return { valid: false, error: 'File content does not match PDF extension.' };
+    // Check MIME for images/pdfs/etc
+    const expectedMime = mimeFromExt(ext);
+    if (file.type && expectedMime !== 'application/octet-stream') {
+      // Browsers sometimes use slightly different MIME names or generic ones
+      const isMatch = (file.type === expectedMime) || 
+                      (expectedMime === 'image/jpeg' && ['image/pjpeg', 'image/jpg'].includes(file.type)) ||
+                      (expectedMime === 'image/png' && file.type === 'image/x-png');
+      
+      if (!isMatch) {
+        // Only reject if it's a completely different category (e.g. text instead of image)
+        const expectedCat = expectedMime.split('/')[0];
+        const actualCat   = file.type.split('/')[0];
+        if (expectedCat !== actualCat) {
+          return { valid: false, error: `Security Warning: File content (${file.type}) does not match extension (.${ext}).` };
+        }
+      }
     }
 
     return { valid: true };

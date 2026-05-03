@@ -94,7 +94,15 @@
       };
 
       function minifyJS(code) {
-        return code
+        let strict = "";
+        const strictMatch = code.match(/^\s*(['"]use strict['"]\s*;?)/);
+        if (strictMatch) {
+          strict = strictMatch[1].trim().replace(/\s+/, ' ');
+          if (!strict.endsWith(';')) strict += ';';
+          code = code.slice(strictMatch[0].length);
+        }
+
+        return strict + code
           .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm, '$1')
           .replace(/\s+/g, ' ')
           .replace(/\s*([{}():;=,])\s*/g, '$1')

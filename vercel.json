@@ -28,8 +28,7 @@
     { "source": "/tools/pdf/imgtopdf/(.*)", "destination": "/pdf-tools/image-to-pdf/", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/404.html", "has": [{ "type": "header", "key": "x-vercel-id" }] },
-    { "source": "/:path*", "destination": "/404.html" }
+    { "source": "/:path*", "destination": "/index.html" }
   ],
   "headers": [
     {

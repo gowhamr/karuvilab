@@ -18,8 +18,8 @@
       </div>
       <div class="nav-head">
         <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
-          <a href="/" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
-          <a href="/calculators/" style="color:inherit; text-decoration:none;">Calculators</a> &nbsp;&rsaquo;&nbsp; 
+          <a href="../../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <a href="../" style="color:inherit; text-decoration:none;">Calculators</a> &nbsp;&rsaquo;&nbsp; 
           <span style="color:var(--text-1); font-weight:600;">Percentage Calculator</span>
         </nav>
         <h1 class="nav-title">Percentage Calculator</h1>
@@ -100,25 +100,35 @@
       });
 
       el('calc-btn').onclick = () => {
-        const a = +el('pct-a').value, b = +el('pct-b').value;
+        const aVal = el('pct-a').value, bVal = el('pct-b').value;
+        const a = +aVal, b = +bVal;
         const res = el('pct-result');
         let out, label;
+
+        // CALC-PCT-001: Precision warning
+        const isHighPrecision = aVal.replace('.', '').length > 15 || bVal.replace('.', '').length > 15;
+        if (isHighPrecision) {
+          Shell.toast('Values exceed 15-digit precision. Results may be approximate.', 'warn');
+        }
         
         if (pctMode === '1') {
-          out = (a * b / 100).toLocaleString();
+          out = (a * b / 100).toLocaleString(undefined, { maximumFractionDigits: 10 });
           label = `${a}% of ${b}`;
         } else if (pctMode === '2') {
-          out = ((a / b) * 100).toFixed(2) + '%';
+          out = ((a / b) * 100).toLocaleString(undefined, { maximumFractionDigits: 4 }) + '%';
           label = `${a} as % of ${b}`;
         } else {
-          out = (((b - a) / a) * 100).toFixed(2) + '%';
+          out = (((b - a) / a) * 100).toLocaleString(undefined, { maximumFractionDigits: 4 }) + '%';
           label = `Change from ${a} to ${b}`;
         }
         
+        const warnHtml = isHighPrecision ? `<div style="font-size:0.7rem; color:var(--warn); margin-top:8px;">⚠️ Precision limit reached (15+ digits)</div>` : '';
+
         res.innerHTML = `
           <div class="result-card">
             <div style="font-size:0.75rem; color:var(--text-3); text-transform:uppercase; font-weight:700; margin-bottom:8px;">${label}</div>
             <div style="font-size:1.8rem; font-weight:800; color:var(--blue)">${out}</div>
+            ${warnHtml}
           </div>`;
         res.style.display = 'block';
       };

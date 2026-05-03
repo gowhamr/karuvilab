@@ -119,8 +119,8 @@
       </div>
       <div class="nav-head">
         <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
-          <a href="/" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
-          <a href="/calculators/" style="color:inherit; text-decoration:none;">Calculators</a> &nbsp;&rsaquo;&nbsp; 
+          <a href="../../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <a href="../" style="color:inherit; text-decoration:none;">Calculators</a> &nbsp;&rsaquo;&nbsp; 
           <span style="color:var(--text-1); font-weight:600;">EMI Calculator</span>
         </nav>
         <h1 class="nav-title">EMI Calculator</h1>
@@ -144,7 +144,7 @@
                 <div class="input-title">Loan Amount</div>
                 <div class="input-val-badge" id="val-amt">₹10,00,000</div>
               </div>
-              <input type="range" class="slider-pro" id="in-amt" min="50000" max="10000000" step="50000" value="1000000">
+              <input type="range" class="slider-pro" id="in-amt" min="50000" max="10000000" step="50000" value="1000000" aria-label="Loan Amount" aria-valuemin="50000" aria-valuemax="10000000" aria-valuenow="1000000">
             </div>
 
             <div class="input-group">
@@ -152,7 +152,7 @@
                 <div class="input-title">Interest Rate (p.a)</div>
                 <div class="input-val-badge" id="val-rate">9.5%</div>
               </div>
-              <input type="range" class="slider-pro" id="in-rate" min="1" max="25" step="0.1" value="9.5">
+              <input type="range" class="slider-pro" id="in-rate" min="1" max="25" step="0.1" value="9.5" aria-label="Interest Rate (p.a)" aria-valuemin="1" aria-valuemax="25" aria-valuenow="9.5">
             </div>
 
             <div class="input-group">
@@ -160,7 +160,7 @@
                 <div class="input-title">Tenure (Years)</div>
                 <div class="input-val-badge" id="val-years">20Y</div>
               </div>
-              <input type="range" class="slider-pro" id="in-years" min="1" max="30" step="1" value="20">
+              <input type="range" class="slider-pro" id="in-years" min="1" max="30" step="1" value="20" aria-label="Tenure (Years)" aria-valuemin="1" aria-valuemax="30" aria-valuenow="20">
             </div>
 
             <div class="cta-row">
@@ -270,14 +270,45 @@
       function calculate() {
         const P = +el('in-amt').value;
         const annualRate = +el('in-rate').value;
-        const r = annualRate / 12 / 100;
         const years = +el('in-years').value;
         const n = years * 12;
+
+        const statusBox = el('status-box');
+        const btnCopy = el('btn-copy');
+        const btnTable = el('btn-toggle-table');
+
+        // CALC-EMI-002: Prevent calculation when interest rate <= 0
+        if (annualRate <= 0) {
+          statusBox.textContent = 'Interest rate must be greater than 0%';
+          statusBox.style.display = 'block';
+          statusBox.style.background = '#fee2e2';
+          statusBox.style.color = '#b91c1c';
+          btnCopy.disabled = true;
+          btnTable.disabled = true;
+          el('out-emi').textContent = '₹0';
+          el('out-principal').textContent = '₹0';
+          el('out-interest').textContent = '₹0';
+          el('out-total').textContent = '₹0';
+          el('out-interest-ratio').textContent = '0%';
+          el('res-table').querySelector('tbody').innerHTML = '';
+          return;
+        } else {
+          statusBox.style.display = 'none';
+          btnCopy.disabled = false;
+          btnTable.disabled = false;
+        }
+
+        const r = annualRate / 12 / 100;
 
         // UI Updates
         el('val-amt').textContent = inr(P);
         el('val-rate').textContent = annualRate + '%';
         el('val-years').textContent = years + 'Y';
+
+        // A11y Updates
+        el('in-amt').setAttribute('aria-valuenow', P);
+        el('in-rate').setAttribute('aria-valuenow', annualRate);
+        el('in-years').setAttribute('aria-valuenow', years);
 
         let emi = 0;
         if (r === 0) {
@@ -286,12 +317,15 @@
           emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
         }
 
+        // Avoid NaN/Infinity
+        if (!isFinite(emi) || isNaN(emi)) emi = 0;
+
         const totalPayable = emi * n;
-        const totalInterest = totalPayable - P;
-        const interestRatio = totalInterest / totalPayable;
+        const totalInterest = Math.max(0, totalPayable - P);
+        const interestRatio = totalPayable > 0 ? totalInterest / totalPayable : 0;
 
         // Update Text
-        el('out-emi').textContent = r === 0 ? '₹' + emi.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2}) : inr(emi);
+        el('out-emi').textContent = inr(emi);
         el('out-principal').textContent = inr(P);
         el('out-interest').textContent = inr(totalInterest);
         el('out-total').textContent = inr(totalPayable);

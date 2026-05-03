@@ -56,6 +56,7 @@
               <button class="tool-copy-btn" data-copy="hash-md5">Copy</button>
             </div>
             <textarea class="tool-textarea tool-output" id="hash-md5" rows="1" readonly placeholder="Waiting for input..."></textarea>
+            <p style="font-size: 0.75rem; color: #b91c1c; margin-top: 4px; font-weight: 500;">⚠️ MD5 is insecure. Use SHA-256 for security-critical tasks.</p>
           </div>
         </div>
       </div>
@@ -92,7 +93,12 @@
           el('hash-sha256').value = await SecurityTools.hashText(text, 'SHA-256');
           el('hash-sha512').value = await SecurityTools.hashText(text, 'SHA-512');
           if (typeof md5 !== 'undefined') {
-            el('hash-md5').value = md5(text);
+            if (md5('') !== 'd41d8cd98f00b204e9800998ecf8427e') {
+              el('hash-md5').value = 'Error: MD5 Validation Failed';
+              console.error('MD5 test vector failed');
+            } else {
+              el('hash-md5').value = md5(text);
+            }
           }
         } catch (e) {
           console.error(e);

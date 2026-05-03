@@ -138,40 +138,50 @@
           return;
         }
 
-        const oldLines = oldVal.split('\n');
-        const newLines = newVal.split('\n');
-        const maxLines = Math.max(oldLines.length, newLines.length);
-        
-        let oldHtml = '';
-        let newHtml = '';
-        
-        for (let i = 0; i < maxLines; i++) {
-          const oldLine = oldLines[i] !== undefined ? oldLines[i] : '';
-          const newLine = newLines[i] !== undefined ? newLines[i] : '';
-          
-          const lineNum = i + 1;
-          const lineNumHtml = `<span class="diff-line-num">${lineNum}</span>`;
+        const isLarge = oldVal.length > 10000 || newVal.length > 10000;
+        const originalBtnText = runBtn.textContent;
+        runBtn.disabled = true;
+        runBtn.textContent = 'Comparing...';
 
-          if (oldLine === newLine) {
-            oldHtml += `<div class="diff-line">${lineNumHtml}${Utils.escHtml(oldLine)}</div>`;
-            newHtml += `<div class="diff-line">${lineNumHtml}${Utils.escHtml(newLine)}</div>`;
-          } else {
-            if (oldLines[i] !== undefined && newLines[i] !== undefined) {
-               oldHtml += `<div class="diff-line diff-removed">${lineNumHtml}${Utils.escHtml(oldLine)}</div>`;
-               newHtml += `<div class="diff-line diff-added">${lineNumHtml}${Utils.escHtml(newLine)}</div>`;
-            } else if (oldLines[i] !== undefined) {
-               oldHtml += `<div class="diff-line diff-removed">${lineNumHtml}${Utils.escHtml(oldLine)}</div>`;
-               newHtml += `<div class="diff-line">${lineNumHtml} </div>`;
+        setTimeout(() => {
+          const oldLines = oldVal.split('\n');
+          const newLines = newVal.split('\n');
+          const maxLines = Math.max(oldLines.length, newLines.length);
+          
+          let oldHtml = '';
+          let newHtml = '';
+          
+          for (let i = 0; i < maxLines; i++) {
+            const oldLine = oldLines[i] !== undefined ? oldLines[i] : '';
+            const newLine = newLines[i] !== undefined ? newLines[i] : '';
+            
+            const lineNum = i + 1;
+            const lineNumHtml = `<span class="diff-line-num">${lineNum}</span>`;
+
+            if (oldLine === newLine) {
+              oldHtml += `<div class="diff-line">${lineNumHtml}${Utils.escHtml(oldLine)}</div>`;
+              newHtml += `<div class="diff-line">${lineNumHtml}${Utils.escHtml(newLine)}</div>`;
             } else {
-               oldHtml += `<div class="diff-line">${lineNumHtml} </div>`;
-               newHtml += `<div class="diff-line diff-added">${lineNumHtml}${Utils.escHtml(newLine)}</div>`;
+              if (oldLines[i] !== undefined && newLines[i] !== undefined) {
+                 oldHtml += `<div class="diff-line diff-removed">${lineNumHtml}${Utils.escHtml(oldLine)}</div>`;
+                 newHtml += `<div class="diff-line diff-added">${lineNumHtml}${Utils.escHtml(newLine)}</div>`;
+              } else if (oldLines[i] !== undefined) {
+                 oldHtml += `<div class="diff-line diff-removed">${lineNumHtml}${Utils.escHtml(oldLine)}</div>`;
+                 newHtml += `<div class="diff-line">${lineNumHtml} </div>`;
+              } else {
+                 oldHtml += `<div class="diff-line">${lineNumHtml} </div>`;
+                 newHtml += `<div class="diff-line diff-added">${lineNumHtml}${Utils.escHtml(newLine)}</div>`;
+              }
             }
           }
-        }
 
-        diffOld.innerHTML = oldHtml;
-        diffNew.innerHTML = newHtml;
-        resultWrap.hidden = false;
+          diffOld.innerHTML = oldHtml;
+          diffNew.innerHTML = newHtml;
+          resultWrap.hidden = false;
+          
+          runBtn.disabled = false;
+          runBtn.textContent = originalBtnText;
+        }, isLarge ? 50 : 10);
       }
 
       const debouncedCompare = Utils.debounce(compare, 500);

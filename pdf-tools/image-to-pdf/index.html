@@ -24,8 +24,8 @@
     <div class="panel-scroll">
       <div class="tool-section">
         <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
-          <a href="/" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
-          <a href="/pdf-tools/" style="color:inherit; text-decoration:none;">PDF Tools</a> &nbsp;&rsaquo;&nbsp; 
+          <a href="../../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <a href="../" style="color:inherit; text-decoration:none;">PDF Tools</a> &nbsp;&rsaquo;&nbsp; 
           <span style="color:var(--text-1); font-weight:600;">Images to PDF</span>
         </nav>
 
@@ -171,6 +171,7 @@
             try {
               const ps = el('pdf-page-size').value;
               const orient = el('pdf-orientation').value;
+              await PdfTools.ready();
               const blob = await PdfTools.imagesToPdf(files, ps, orient);
               const url = URL.createObjectURL(blob);
               const name = `images_${Date.now()}.pdf`;

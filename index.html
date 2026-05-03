@@ -10,7 +10,16 @@
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <link rel="stylesheet" href="css/style.css" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
-  <script>window.SHELL_ACTIVE = 'home';</script>
+  <script>
+    // ROUTER-001: Set SHELL_ACTIVE dynamically for SPA fallback
+    (function() {
+      const p = window.location.pathname;
+      if (p.includes('/calculators/')) window.SHELL_ACTIVE = 'calculators';
+      else if (p.includes('/pdf-tools/')) window.SHELL_ACTIVE = 'pdf';
+      else if (p.includes('/tools/')) window.SHELL_ACTIVE = 'tools';
+      else window.SHELL_ACTIVE = 'home';
+    })();
+  </script>
 </head>
 <body>
 
@@ -104,7 +113,7 @@
         <span class="cat-icon" style="--c:#FEF9C3;--f:#CA8A04"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><rect x="8" y="10" width="2" height="2" rx=".5"/><rect x="11" y="10" width="2" height="2" rx=".5"/><rect x="14" y="10" width="2" height="2" rx=".5"/></svg></span>
         <span class="cat-btn-text">
           <span class="cat-btn-name">Calculators</span>
-          <span class="cat-btn-desc">17+ calculators for daily use</span>
+          <span class="cat-btn-desc">16 calculators for daily use</span>
         </span>
       </a>
       <a href="tools/qrcode/" class="cat-btn" style="text-decoration:none">
@@ -245,5 +254,17 @@
   <script src="js/shell.js"></script>
   <script src="js/theme.js"></script>
   <script src="js/home.js"></script>
+  <script>
+    // PERF-001: Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          console.log('[KaruviLab] SW registered:', reg.scope);
+        }).catch(err => {
+          console.log('[KaruviLab] SW registration failed:', err);
+        });
+      });
+    }
+  </script>
 </body>
 </html>

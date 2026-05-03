@@ -10,6 +10,15 @@ const PdfTools = (() => {
   function jsPDF() { return window.jspdf ? window.jspdf.jsPDF : null; }
   function pdfLib() { return window.PDFLib || null; }
 
+  async function ready() {
+    const libs = [];
+    if (!window.jspdf) libs.push('jspdf');
+    if (!window.PDFLib) libs.push('PDFLib');
+    if (!window.pdfjsLib && !window['pdfjs-dist/build/pdf']) libs.push('pdfjsLib');
+    if (libs.length === 0) return true;
+    return await Shell.waitForLibs(libs, 'PDF Tools');
+  }
+
   function getPdfjsLib() {
     const lib = window['pdfjs-dist/build/pdf'] || window.pdfjsLib;
     if (lib && lib.GlobalWorkerOptions.workerSrc !== PDFJS_WORKER_SRC) {

@@ -4,6 +4,21 @@
  */
 
 (function() {
+  // ROUTER-001: Set SHELL_ACTIVE dynamically if not hardcoded
+  if (!window.SHELL_ACTIVE) {
+    const path = window.location.pathname;
+    if (path.includes('/calculators/')) window.SHELL_ACTIVE = 'calculators';
+    else if (path.includes('/pdf-tools/')) window.SHELL_ACTIVE = 'pdf';
+    else if (path.includes('/tools/')) {
+       // Match specific tools that app.js expects
+       const tools = ['markdown','qrcode','base64','regex','format','validate','compress','convert','create'];
+       const found = tools.find(t => path.includes('/' + t + '/'));
+       window.SHELL_ACTIVE = found || 'tools';
+    } else {
+      window.SHELL_ACTIVE = 'home';
+    }
+  }
+
   // Determine the base path immediately from the script source
   const script = document.currentScript || document.querySelector('script[src*="js/shell.js"]');
   const base = script ? script.src.replace(/js\/shell\.js.*$/, '') : '/';
@@ -196,16 +211,30 @@
 
     async waitForLibs(libs, toolName) {
       let attempts = 0;
-      const maxAttempts = 50; 
+      const maxAttempts = 150; // 15 seconds (150 * 100ms)
+      
+      // Show global loading if possible
+      const scroll = document.querySelector('.panel-scroll');
+      let loader = null;
+      if (scroll && !document.querySelector('.lib-loader')) {
+        loader = document.createElement('div');
+        loader.className = 'lib-loader';
+        loader.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.1);z-index:10000;display:flex;flex-direction:column;align-items:center;gap:12px;font-weight:600;color:var(--blue);';
+        loader.innerHTML = `<span class="spinner"></span> <span>Preparing ${toolName}...</span>`;
+        document.body.appendChild(loader);
+      }
+
       return new Promise((resolve) => {
         const check = () => {
           const missing = libs.filter(l => !window[l] && !(l.includes('.') && l.split('.').reduce((o,i)=>o[i], window)));
           if (missing.length === 0) {
+            if (loader) loader.remove();
             resolve(true);
           } else if (attempts < maxAttempts) {
             attempts++;
             setTimeout(check, 100);
           } else {
+            if (loader) loader.remove();
             this.toast(`Failed to load dependencies for ${toolName}. Please check your connection.`, 'error');
             this.showFallbackError(`Could not load required libraries: ${missing.join(', ')}`);
             resolve(false);
