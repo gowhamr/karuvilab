@@ -1,258 +1,185 @@
-/* ===== pdf-tools.js – PDF creation, merge, compress ===== */
-
-const PDFJS_WORKER_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
+const PDFJS_WORKER_SRC = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 const MAX_PDF_SIZE_MB = 100;
-
-const PdfTools = (() => {
-
-  /** Wait for jsPDF / pdf-lib to be available */
-  function jsPDF() { return window.jspdf ? window.jspdf.jsPDF : null; }
-  function pdfLib() { return window.PDFLib || null; }
-
+const PdfTools = /* @__PURE__ */ (() => {
+  function jsPDF() {
+    return window.jspdf ? window.jspdf.jsPDF : null;
+  }
+  function pdfLib() {
+    return window.PDFLib || null;
+  }
   async function ready() {
     const libs = [];
-    if (!window.jspdf) libs.push('jspdf');
-    if (!window.PDFLib) libs.push('PDFLib');
-    if (!window.pdfjsLib && !window['pdfjs-dist/build/pdf']) libs.push('pdfjsLib');
+    if (!window.jspdf) libs.push("jspdf");
+    if (!window.PDFLib) libs.push("PDFLib");
+    if (!window.pdfjsLib) libs.push("pdfjsLib");
     if (libs.length === 0) return true;
-    return await Shell.waitForLibs(libs, 'PDF Tools');
+    return window.Shell.waitForLibs(libs, "PDF Tools");
   }
-
   function getPdfjsLib() {
-    const lib = window['pdfjs-dist/build/pdf'] || window.pdfjsLib;
+    const lib = window.pdfjsLib ?? null;
     if (lib && lib.GlobalWorkerOptions.workerSrc !== PDFJS_WORKER_SRC) {
       lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_SRC;
     }
     return lib;
   }
-
-  // ── A4 dimensions in pt (jsPDF default unit) ──
   const A4_W = 595.28, A4_H = 841.89;
   const LETTER_W = 612, LETTER_H = 792;
-
-  /**
-   * Convert an array of image Files to a single PDF Blob.
-   * @param {File[]} files
-   * @param {string} pageSize – 'a4'|'letter'|'fit'
-   * @param {string} orientation – 'portrait'|'landscape'
-   * @param {AbortSignal} [signal]
-   * @returns {Promise<Blob>}
-   */
-  async function imagesToPdf(files, pageSize = 'a4', orientation = 'portrait', signal = null) {
-    const JsPDF = jsPDF();
-    if (!JsPDF) throw new Error('jsPDF library not loaded');
-
+  async function imagesToPdf(files, pageSize = "a4", orientation = "portrait", signal = null) {
+    const JsPDFCtor = jsPDF();
+    if (!JsPDFCtor) throw new Error("jsPDF library not loaded");
     let doc = null;
-
     for (let i = 0; i < files.length; i++) {
-      if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+      if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
       const file = files[i];
       const dataUrl = await Utils.readAsDataURL(file);
       const img = await Utils.loadImage(dataUrl);
       const iw = img.naturalWidth, ih = img.naturalHeight;
-
       let pgW, pgH;
-      if (pageSize === 'fit') {
-        pgW = iw * 0.75; pgH = ih * 0.75; // px → pt (96dpi vs 72dpi)
-      } else if (pageSize === 'letter') {
-        pgW = orientation === 'landscape' ? LETTER_H : LETTER_W;
-        pgH = orientation === 'landscape' ? LETTER_W : LETTER_H;
+      if (pageSize === "fit") {
+        pgW = iw * 0.75;
+        pgH = ih * 0.75;
+      } else if (pageSize === "letter") {
+        pgW = orientation === "landscape" ? LETTER_H : LETTER_W;
+        pgH = orientation === "landscape" ? LETTER_W : LETTER_H;
       } else {
-        pgW = orientation === 'landscape' ? A4_H : A4_W;
-        pgH = orientation === 'landscape' ? A4_W : A4_H;
+        pgW = orientation === "landscape" ? A4_H : A4_W;
+        pgH = orientation === "landscape" ? A4_W : A4_H;
       }
-
       if (i === 0) {
-        doc = new JsPDF({ unit: 'pt', format: [pgW, pgH], orientation: orientation === 'landscape' ? 'l' : 'p' });
+        doc = new JsPDFCtor({ unit: "pt", format: [pgW, pgH], orientation: orientation === "landscape" ? "l" : "p" });
       } else {
-        doc.addPage([pgW, pgH], orientation === 'landscape' ? 'l' : 'p');
+        doc.addPage([pgW, pgH], orientation === "landscape" ? "l" : "p");
       }
-
-      // Scale image to fit page with padding
       const pad = 20;
       const availW = pgW - pad * 2, availH = pgH - pad * 2;
       const scale = Math.min(availW / iw, availH / ih, 1);
       const dw = iw * scale, dh = ih * scale;
       const dx = pad + (availW - dw) / 2, dy = pad + (availH - dh) / 2;
-
       const ext = Utils.getExt(file.name);
-      let fmt = 'JPEG';
-      if (ext === 'png') fmt = 'PNG';
-      else if (ext === 'webp') fmt = 'WEBP';
-      
+      let fmt = "JPEG";
+      if (ext === "png") fmt = "PNG";
+      else if (ext === "webp") fmt = "WEBP";
       doc.addImage(dataUrl, fmt, dx, dy, dw, dh);
     }
-
-    if (!doc) throw new Error('No files provided');
-    return doc.output('blob');
+    if (!doc) throw new Error("No files provided");
+    return doc.output("blob");
   }
-
-  /**
-   * Merge multiple PDF Blobs/Files into one using pdf-lib.
-   * @param {(File|Blob)[]} pdfs
-   * @param {AbortSignal} [signal]
-   * @returns {Promise<Blob>}
-   */
   async function mergePdfs(pdfs, signal = null) {
     const lib = pdfLib();
-    if (!lib) throw new Error('pdf-lib library not loaded');
-
+    if (!lib) throw new Error("pdf-lib library not loaded");
     const merged = await lib.PDFDocument.create();
     for (const pdf of pdfs) {
-      if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+      if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
       const ab = await Utils.readAsArrayBuffer(pdf);
       const doc = await lib.PDFDocument.load(ab, { ignoreEncryption: true });
       const pages = await merged.copyPages(doc, doc.getPageIndices());
-      pages.forEach(p => merged.addPage(p));
+      pages.forEach((p) => merged.addPage(p));
     }
     const bytes = await merged.save();
-    return new Blob([bytes], { type: 'application/pdf' });
+    return new Blob([bytes.buffer], { type: "application/pdf" });
   }
-
-  /**
-   * Compress a PDF by re-rendering each page as a JPEG image via pdf.js canvas,
-   * then rebuilding via jsPDF.
-   * @param {File} file
-   * @param {number} imageQuality – 0–1
-   * @param {Function} onProgress – (pageNum, total)
-   * @param {AbortSignal} [signal]
-   * @returns {Promise<Blob>}
-   */
   async function compressPdf(file, imageQuality = 0.6, onProgress = null, signal = null) {
     if (file.size > MAX_PDF_SIZE_MB * 1024 * 1024) {
       throw new Error(`File too large. Please use a PDF under ${MAX_PDF_SIZE_MB} MB.`);
     }
-
-    const JsPDF = jsPDF();
-    if (!JsPDF) throw new Error('jsPDF not loaded');
-
+    const JsPDFCtor = jsPDF();
+    if (!JsPDFCtor) throw new Error("jsPDF not loaded");
     const pdfjsLib = getPdfjsLib();
-    if (!pdfjsLib) throw new Error('PDF.js not loaded');
-
+    if (!pdfjsLib) throw new Error("PDF.js not loaded");
     const ab = await Utils.readAsArrayBuffer(file);
     const loadingTask = pdfjsLib.getDocument({ data: ab });
     const pdfDoc = await loadingTask.promise;
     const total = pdfDoc.numPages;
-
     let jsdoc = null;
-
     try {
       for (let i = 1; i <= total; i++) {
-        if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+        if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
         if (onProgress) onProgress(i, total);
         const page = await pdfDoc.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 }); // moderate resolution
-        const canvas = document.createElement('canvas');
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement("canvas");
         canvas.width = Math.round(viewport.width);
         canvas.height = Math.round(viewport.height);
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         await page.render({ canvasContext: ctx, viewport }).promise;
-
-        const dataUrl = canvas.toDataURL('image/jpeg', imageQuality);
-        const pgW = viewport.width * 0.75; // px → pt
+        const dataUrl = canvas.toDataURL("image/jpeg", imageQuality);
+        const pgW = viewport.width * 0.75;
         const pgH = viewport.height * 0.75;
-
         if (i === 1) {
-          jsdoc = new JsPDF({ unit: 'pt', format: [pgW, pgH], orientation: 'p' });
+          jsdoc = new JsPDFCtor({ unit: "pt", format: [pgW, pgH], orientation: "p" });
         } else {
-          jsdoc.addPage([pgW, pgH], 'p');
+          jsdoc.addPage([pgW, pgH], "p");
         }
-        jsdoc.addImage(dataUrl, 'JPEG', 0, 0, pgW, pgH);
+        jsdoc.addImage(dataUrl, "JPEG", 0, 0, pgW, pgH);
       }
     } finally {
       await pdfDoc.destroy();
     }
-
-    if (!jsdoc) throw new Error('PDF has no pages');
-    return jsdoc.output('blob');
+    if (!jsdoc) throw new Error("PDF has no pages");
+    return jsdoc.output("blob");
   }
-
-  /**
-   * Convert a single-page PDF to an image Blob.
-   * @param {File} file
-   * @param {number} pageNum – 1-based
-   * @param {string} format – 'jpeg'|'png'
-   * @param {number} scale
-   * @returns {Promise<{blob, width, height}>}
-   */
-  async function pdfPageToImage(file, pageNum = 1, format = 'jpeg', scale = 2) {
+  async function pdfPageToImage(file, pageNum = 1, format = "jpeg", scale = 2) {
     const pdfjsLib = getPdfjsLib();
-    if (!pdfjsLib) throw new Error('PDF.js not loaded');
-
+    if (!pdfjsLib) throw new Error("PDF.js not loaded");
     const ab = await Utils.readAsArrayBuffer(file);
     const pdfDoc = await pdfjsLib.getDocument({ data: ab }).promise;
     try {
       const page = await pdfDoc.getPage(pageNum);
       const viewport = page.getViewport({ scale });
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       canvas.width = Math.round(viewport.width);
       canvas.height = Math.round(viewport.height);
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-
-      const mime = format === 'png' ? 'image/png' : 'image/jpeg';
+      await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+      const mime = format === "png" ? "image/png" : "image/jpeg";
       const blob = await Utils.canvasToBlob(canvas, mime, 0.9);
       return { blob, width: canvas.width, height: canvas.height };
     } finally {
       await pdfDoc.destroy();
     }
   }
-
-  /**
-   * Split a PDF into individual pages or ranges.
-   * @param {File|Blob} pdf
-   * @param {string} range – e.g. "1-3, 5, 8-10"
-   * @param {AbortSignal} [signal]
-   * @returns {Promise<Blob[]>}
-   */
-  async function splitPdf(pdf, range = 'all', signal = null) {
+  async function splitPdf(pdf, range = "all", signal = null) {
     const lib = pdfLib();
-    if (!lib) throw new Error('pdf-lib library not loaded');
-
+    if (!lib) throw new Error("pdf-lib library not loaded");
     const ab = await Utils.readAsArrayBuffer(pdf);
     const srcDoc = await lib.PDFDocument.load(ab, { ignoreEncryption: true });
     const pageCount = srcDoc.getPageCount();
-
-    let pagesToExtract = [];
-    if (range === 'all' || !range.trim()) {
-      pagesToExtract = Array.from({ length: pageCount }, (_, i) => [i]);
+    const pagesToExtract = [];
+    if (range === "all" || !range.trim()) {
+      for (let i = 0; i < pageCount; i++) pagesToExtract.push([i]);
     } else {
-      // Validate range pattern: 1-3, 5, 8-10
       if (!/^\s*\d+\s*(?:-\s*\d+\s*)?(?:,\s*\d+\s*(?:-\s*\d+\s*)?)*$/.test(range)) {
         throw new Error('Invalid range format. Use numbers and ranges like "1-3, 5".');
       }
-
-      const parts = range.split(',').map(s => s.trim());
+      const parts = range.split(",").map((s) => s.trim());
       for (const part of parts) {
-        if (part.includes('-')) {
-          const [start, end] = part.split('-').map(Number);
+        if (part.includes("-")) {
+          const [startStr, endStr] = part.split("-");
+          const start = Number(startStr), end = Number(endStr);
           if (isNaN(start) || isNaN(end)) throw new Error(`Invalid range: ${part}`);
           if (start > end) throw new Error(`Start page cannot be greater than end page: ${part}`);
           if (start < 1 || end > pageCount) throw new Error(`Range ${part} is out of bounds (1-${pageCount})`);
-          
           const rangePages = [];
           for (let i = start - 1; i < end; i++) rangePages.push(i);
           if (rangePages.length) pagesToExtract.push(rangePages);
         } else {
-          const num = parseInt(part);
+          const num = parseInt(part, 10);
           if (isNaN(num)) throw new Error(`Invalid page number: ${part}`);
           if (num < 1 || num > pageCount) throw new Error(`Page ${num} is out of bounds (1-${pageCount})`);
           pagesToExtract.push([num - 1]);
         }
       }
     }
-
-    if (!pagesToExtract.length) throw new Error('No valid pages selected for split.');
+    if (!pagesToExtract.length) throw new Error("No valid pages selected for split.");
+    const results = [];
     for (const indices of pagesToExtract) {
-      if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+      if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
       const newDoc = await lib.PDFDocument.create();
       const copiedPages = await newDoc.copyPages(srcDoc, indices);
-      copiedPages.forEach(p => newDoc.addPage(p));
+      copiedPages.forEach((p) => newDoc.addPage(p));
       const bytes = await newDoc.save();
-      results.push(new Blob([bytes], { type: 'application/pdf' }));
+      results.push(new Blob([bytes.buffer], { type: "application/pdf" }));
     }
     return results;
   }
-
-  return { imagesToPdf, mergePdfs, compressPdf, pdfPageToImage, splitPdf };
+  return { ready, imagesToPdf, mergePdfs, compressPdf, pdfPageToImage, splitPdf };
 })();

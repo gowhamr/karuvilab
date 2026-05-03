@@ -1,52 +1,43 @@
-/**
- * KaruviLab Home Page Logic
- */
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Redirect legacy hash-based URLs to standalone pages
+document.addEventListener("DOMContentLoaded", () => {
   const hash = window.location.hash;
   if (hash) {
-    const panelId = hash.replace('#panel-', '').replace('#', '');
+    const panelId = hash.replace("#panel-", "").replace("#", "");
     const panelMap = {
-      'compressor': 'compress',
-      'converter': 'convert',
-      'creator': 'create',
-      'pdf': 'pdf-tools',
-      'validator': 'validate',
-      'calculators': 'calculators',
-      'base64': 'base64',
-      'regex': 'regex',
-      'formatter': 'format',
-      'markdown': 'markdown',
-      'qrcode': 'qrcode',
-      'split-copy': 'split-copy'
+      compressor: "compress",
+      converter: "convert",
+      creator: "create",
+      pdf: "pdf-tools",
+      validator: "validate",
+      calculators: "calculators",
+      base64: "base64",
+      regex: "regex",
+      formatter: "format",
+      markdown: "markdown",
+      qrcode: "qrcode",
+      "split-copy": "split-copy"
     };
     if (panelMap[panelId]) {
-      const path = panelMap[panelId].includes('-') || panelMap[panelId] === 'calculators' 
-        ? `/${panelMap[panelId]}/` 
-        : `/tools/${panelMap[panelId]}/`;
+      const dest = panelMap[panelId];
+      const path = dest.includes("-") || dest === "calculators" ? `/${dest}/` : `/tools/${dest}/`;
       window.location.href = path;
     }
   }
-
-  // FAQ / MORE OVERLAY
-  const faqOverlay = document.getElementById('faq-overlay');
-  const moreBtn    = document.querySelector('.dock-btn[href*="pages/about.html"]'); // Flexible selector for shell links
-  const faqCloseBtn = document.getElementById('faq-close-btn');
-
+  const faqOverlay = document.getElementById("faq-overlay");
+  const faqCloseBtn = document.getElementById("faq-close-btn");
   function openFaq() {
-    faqOverlay?.classList.remove('hidden');
+    faqOverlay?.classList.remove("hidden");
   }
   function closeFaq() {
-    faqOverlay?.classList.add('hidden');
+    faqOverlay?.classList.add("hidden");
   }
-
-  // Handle FAQ triggers if they exist on home
-  document.querySelectorAll('[data-action="open-faq"]').forEach(btn => {
-    btn.addEventListener('click', openFaq);
+  document.querySelectorAll('[data-action="open-faq"]').forEach((btn) => {
+    btn.addEventListener("click", openFaq);
   });
-
-  faqCloseBtn?.addEventListener('click', closeFaq);
-  faqOverlay?.addEventListener('click', e => { if (e.target === faqOverlay) closeFaq(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFaq(); });
+  faqCloseBtn?.addEventListener("click", closeFaq);
+  faqOverlay?.addEventListener("click", (e) => {
+    if (e.target === faqOverlay) closeFaq();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeFaq();
+  });
 });

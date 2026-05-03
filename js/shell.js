@@ -1,41 +1,30 @@
-/**
- * KaruviLab Shell Component
- * Shared header and navigation for all pages
- */
-
 (function() {
-  // ROUTER-001: Set SHELL_ACTIVE dynamically if not hardcoded
   if (!window.SHELL_ACTIVE) {
     const path = window.location.pathname;
-    if (path.includes('/calculators/')) window.SHELL_ACTIVE = 'calculators';
-    else if (path.includes('/pdf-tools/')) window.SHELL_ACTIVE = 'pdf';
-    else if (path.includes('/image-tools/')) window.SHELL_ACTIVE = 'image';
-    else if (path.includes('/security-tools/')) window.SHELL_ACTIVE = 'security';
-    else if (path.includes('/developer-tools/')) window.SHELL_ACTIVE = 'dev';
-    else if (path.includes('/utilities/')) window.SHELL_ACTIVE = 'utils';
-    else if (path.includes('/seo-tools/')) window.SHELL_ACTIVE = 'seo';
-    else if (path.includes('/tools/')) {
-       // Match specific tools that app.js expects or group them logically
-       const seoTools = ['meta-tags', 'image-seo', 'slug-generator'];
-       const isSeo = seoTools.some(t => path.includes('/' + t + '/'));
-       if (isSeo) {
-         window.SHELL_ACTIVE = 'seo';
-         return;
-       }
-
-       const tools = ['markdown','qrcode','base64','regex','format','validate','compress','convert','create'];
-       const found = tools.find(t => path.includes('/' + t + '/'));
-       window.SHELL_ACTIVE = found || 'tools';
+    if (path.includes("/calculators/")) window.SHELL_ACTIVE = "calculators";
+    else if (path.includes("/pdf-tools/")) window.SHELL_ACTIVE = "pdf";
+    else if (path.includes("/image-tools/")) window.SHELL_ACTIVE = "image";
+    else if (path.includes("/security-tools/")) window.SHELL_ACTIVE = "security";
+    else if (path.includes("/developer-tools/")) window.SHELL_ACTIVE = "dev";
+    else if (path.includes("/utilities/")) window.SHELL_ACTIVE = "utils";
+    else if (path.includes("/seo-tools/")) window.SHELL_ACTIVE = "seo";
+    else if (path.includes("/tools/")) {
+      const seoTools = ["meta-tags", "image-seo", "slug-generator"];
+      const isSeo = seoTools.some((t) => path.includes("/" + t + "/"));
+      if (isSeo) {
+        window.SHELL_ACTIVE = "seo";
+        return;
+      }
+      const tools = ["markdown", "qrcode", "base64", "regex", "format", "validate", "compress", "convert", "create"];
+      const found = tools.find((t) => path.includes("/" + t + "/"));
+      window.SHELL_ACTIVE = found || "tools";
     } else {
-      window.SHELL_ACTIVE = 'home';
+      window.SHELL_ACTIVE = "home";
     }
   }
-
-  // Determine the base path immediately from the script source
   const script = document.currentScript || document.querySelector('script[src*="js/shell.js"]');
-  const base = script ? script.src.replace(/js\/shell\.js.*$/, '') : '/';
+  const base = script ? script.src.replace(/js\/shell\.js.*$/, "") : "/";
   window.KARUVI_BASE = base;
-
   const shell = {
     init() {
       this.render();
@@ -43,29 +32,22 @@
       this.setupEffects();
       this.setupErrorHandling();
     },
-
     goHome() {
       try {
-        // Explicitly go to the root index
-        window.location.href = window.KARUVI_BASE || '/';
-      } catch (e) {
-        window.location.href = '/';
+        window.location.href = window.KARUVI_BASE || "/";
+      } catch {
+        window.location.href = "/";
       }
     },
-
     render() {
-      if (document.getElementById('shell-rendered')) return;
-      
-      const active = window.SHELL_ACTIVE || 'home';
-      document.body.classList.add('app-shell');
-      const base = window.KARUVI_BASE || '/';
-
-      // SVG Sprite
-      let sprite = document.getElementById('ic-sprite');
-      if (!sprite) {
-        sprite = document.createElement('div');
-        sprite.id = 'ic-sprite';
-        sprite.style.display = 'none';
+      if (document.getElementById("shell-rendered")) return;
+      const active = window.SHELL_ACTIVE || "home";
+      document.body.classList.add("app-shell");
+      const base2 = window.KARUVI_BASE || "/";
+      if (!document.getElementById("ic-sprite")) {
+        const sprite = document.createElement("div");
+        sprite.id = "ic-sprite";
+        sprite.style.display = "none";
         sprite.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -76,14 +58,12 @@
         `;
         document.body.appendChild(sprite);
       }
-
-      // Create Header
-      const header = document.createElement('header');
-      header.className = 'top-stripe';
-      header.setAttribute('role', 'banner');
+      const header = document.createElement("header");
+      header.className = "top-stripe";
+      header.setAttribute("role", "banner");
       header.innerHTML = `
         <div class="ts-brand">
-          <a href="${base}" class="ts-logo-link" style="text-decoration:none">
+          <a href="${base2}" class="ts-logo-link" style="text-decoration:none">
             <div class="ts-logo" style="background: #6366F1; border-radius: 9px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M10 2v7.31"/><path d="M14 9.31V2"/><path d="M8.5 2h7"/><path d="M14 9.31L20.39 21H3.61L10 9.31"/>
@@ -95,11 +75,11 @@
             <span class="ts-tagline">Fast &middot; Private &middot; No uploads</span>
           </div>
           <nav class="ts-desktop-nav" aria-label="Main navigation">
-            <a href="${base}" class="ts-nav-link ${active === 'home' ? 'active' : ''}">Home</a>
-            <a href="${base}tools/compress/" class="ts-nav-link ${active === 'compress' ? 'active' : ''}">Compress</a>
-            <a href="${base}pdf-tools/" class="ts-nav-link ${active === 'pdf' ? 'active' : ''}">PDF</a>
-            <a href="${base}tools/validate/" class="ts-nav-link ${active === 'validate' ? 'active' : ''}">Validate</a>
-            <a href="${base}calculators/" class="ts-nav-link ${active === 'calculators' ? 'active' : ''}">Calculators</a>
+            <a href="${base2}" class="ts-nav-link ${active === "home" ? "active" : ""}">Home</a>
+            <a href="${base2}tools/compress/" class="ts-nav-link ${active === "compress" ? "active" : ""}">Compress</a>
+            <a href="${base2}pdf-tools/" class="ts-nav-link ${active === "pdf" ? "active" : ""}">PDF</a>
+            <a href="${base2}tools/validate/" class="ts-nav-link ${active === "validate" ? "active" : ""}">Validate</a>
+            <a href="${base2}calculators/" class="ts-nav-link ${active === "calculators" ? "active" : ""}">Calculators</a>
           </nav>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
@@ -113,175 +93,160 @@
           </span>
         </div>
       `;
-
-      // Create Bottom Nav (Dock)
-      const dock = document.createElement('nav');
-      dock.className = 'dock';
+      const dock = document.createElement("nav");
+      dock.className = "dock";
       dock.innerHTML = `
-        <a href="${base}" class="dock-btn ${active === 'home' ? 'active' : ''}">
+        <a href="${base2}" class="dock-btn ${active === "home" ? "active" : ""}">
           <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
           <span class="dock-lbl">Home</span>
         </a>
-        <a href="${base}tools/" class="dock-btn ${active === 'tools' ? 'active' : ''}">
+        <a href="${base2}tools/" class="dock-btn ${active === "tools" ? "active" : ""}">
           <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           <span class="dock-lbl">All Tools</span>
         </a>
-        <a href="${base}pages/about.html" class="dock-btn">
+        <a href="${base2}pages/about.html" class="dock-btn">
           <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <span class="dock-lbl">Help / Settings</span>
         </a>
       `;
-
       document.body.prepend(header);
-      
-      if (!document.querySelector('.viewport')) {
-        const viewport = document.createElement('div');
-        viewport.className = 'viewport';
-        const children = Array.from(document.body.children).filter(c => c !== header && c !== sprite);
-        children.forEach(c => viewport.appendChild(c));
+      if (!document.querySelector(".viewport")) {
+        const viewport = document.createElement("div");
+        viewport.className = "viewport";
+        const sprite = document.getElementById("ic-sprite");
+        Array.from(document.body.children).filter((c) => c !== header && c !== sprite).forEach((c) => viewport.appendChild(c));
         document.body.appendChild(viewport);
       }
-      
       document.body.appendChild(dock);
-
-      const marker = document.createElement('div');
-      marker.id = 'shell-rendered';
-      marker.style.display = 'none';
+      const marker = document.createElement("div");
+      marker.id = "shell-rendered";
+      marker.style.display = "none";
       document.body.appendChild(marker);
     },
-
     setupTheme() {
-      const toggle = document.getElementById('theme-toggle');
+      const toggle = document.getElementById("theme-toggle");
       if (!toggle) return;
-      toggle.addEventListener('click', () => {
+      toggle.addEventListener("click", () => {
         if (window.THEME_MANAGER_LOADED) return;
-        const current = document.documentElement.getAttribute('data-theme') || (localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
+        const current = document.documentElement.getAttribute("data-theme") || (localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
         const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', next === 'dark' ? '#0F172A' : '#4F46E5');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0F172A" : "#4F46E5");
       });
     },
-
     setupEffects() {
-      const stripe = document.querySelector('.top-stripe');
+      const stripe = document.querySelector(".top-stripe");
       if (stripe) {
-        document.addEventListener('scroll', (e) => {
-          if (e.target.classList && (e.target.classList.contains('panel') || e.target.classList.contains('viewport'))) {
-            stripe.classList.toggle('scrolled', e.target.scrollTop > 4);
+        document.addEventListener("scroll", (e) => {
+          const t = e.target;
+          if (t.classList && (t.classList.contains("panel") || t.classList.contains("viewport"))) {
+            stripe.classList.toggle("scrolled", t.scrollTop > 4);
           }
         }, true);
-        window.addEventListener('scroll', () => {
-          stripe.classList.toggle('scrolled', window.scrollY > 4);
+        window.addEventListener("scroll", () => {
+          stripe.classList.toggle("scrolled", window.scrollY > 4);
         }, { passive: true });
       }
-
-      document.addEventListener('click', e => {
-        const btn = e.target.closest('.cat-btn, .dock-btn, .panel-cta-btn, .home-hero-cta-primary, .home-hero-cta-ghost, .fmt-btn, .btn');
+      document.addEventListener("click", (e) => {
+        const target = e.target;
+        const btn = target.closest(".cat-btn, .dock-btn, .panel-cta-btn, .home-hero-cta-primary, .home-hero-cta-ghost, .fmt-btn, .btn");
         if (btn && !btn.disabled) {
           const r = btn.getBoundingClientRect();
           const size = Math.max(r.width, r.height);
-          const ripple = document.createElement('span');
-          ripple.className = 'ripple';
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = (e.clientX - r.left - size / 2) + 'px';
-          ripple.style.top = (e.clientY - r.top - size / 2) + 'px';
+          const ripple = document.createElement("span");
+          ripple.className = "ripple";
+          ripple.style.width = ripple.style.height = size + "px";
+          ripple.style.left = e.clientX - r.left - size / 2 + "px";
+          ripple.style.top = e.clientY - r.top - size / 2 + "px";
           btn.appendChild(ripple);
-          ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+          ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
         }
       });
     },
-
     setupErrorHandling() {
-      const self = this;
-      window.addEventListener('error', (e) => {
-        const fromToolFile = e.filename && (e.filename.includes('/js/') || e.filename.includes('tool'));
+      window.addEventListener("error", (e) => {
+        const fromToolFile = e.filename && (e.filename.includes("/js/") || e.filename.includes("tool"));
         const fromInline = !e.filename;
         if (!fromToolFile && !fromInline) return;
-        console.error('KaruviLab Tool Error:', e.message, e.filename || '(inline)');
-        self.showFallbackError();
+        console.error("KaruviLab Tool Error:", e.message, e.filename || "(inline)");
+        shell.showFallbackError();
       });
     },
-
     showFallbackError(msg) {
-      const scroll = document.querySelector('.panel-scroll');
-      if (scroll && !scroll.querySelector('.tool-error-fallback')) {
-        const isCalc = window.SHELL_ACTIVE === 'calculators';
-        const err = document.createElement('div');
-        err.className = 'tool-error-fallback';
-        err.style.cssText = 'padding:40px 20px;text-align:center;color:var(--text-3);';
+      const scroll = document.querySelector(".panel-scroll");
+      if (scroll && !scroll.querySelector(".tool-error-fallback")) {
+        const isCalc = window.SHELL_ACTIVE === "calculators";
+        const err = document.createElement("div");
+        err.className = "tool-error-fallback";
+        err.style.cssText = "padding:40px 20px;text-align:center;color:var(--text-3);";
         err.innerHTML = `
-          <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
-          <p style="font-weight:600;margin-bottom:8px">${msg || (isCalc ? 'Calculator failed to load. Please refresh.' : 'Oops! This tool encountered an error.')}</p>
+          <div style="font-size:2rem;margin-bottom:12px">\u26A0\uFE0F</div>
+          <p style="font-weight:600;margin-bottom:8px">${msg || (isCalc ? "Calculator failed to load. Please refresh." : "Oops! This tool encountered an error.")}</p>
           <p style="font-size:.85rem;margin-bottom:20px">Please try refreshing the page or contact support if the issue persists.</p>
           <button onclick="location.reload()" class="fmt-btn" style="display:inline-flex">Refresh Page</button>
         `;
         scroll.prepend(err);
       }
     },
-
     async waitForLibs(libs, toolName) {
       let attempts = 0;
-      const maxAttempts = 150; // 15 seconds (150 * 100ms)
-      
-      // Show global loading if possible
-      const scroll = document.querySelector('.panel-scroll');
+      const maxAttempts = 150;
+      const scroll = document.querySelector(".panel-scroll");
       let loader = null;
-      if (scroll && !document.querySelector('.lib-loader')) {
-        loader = document.createElement('div');
-        loader.className = 'lib-loader';
-        loader.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.1);z-index:10000;display:flex;flex-direction:column;align-items:center;gap:12px;font-weight:600;color:var(--blue);';
+      if (scroll && !document.querySelector(".lib-loader")) {
+        loader = document.createElement("div");
+        loader.className = "lib-loader";
+        loader.style.cssText = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.1);z-index:10000;display:flex;flex-direction:column;align-items:center;gap:12px;font-weight:600;color:var(--blue);";
         loader.innerHTML = `<span class="spinner"></span> <span>Preparing ${toolName}...</span>`;
         document.body.appendChild(loader);
       }
-
       return new Promise((resolve) => {
         const check = () => {
-          const missing = libs.filter(l => !window[l] && !(l.includes('.') && l.split('.').reduce((o,i)=>o[i], window)));
+          const missing = libs.filter((l) => {
+            if (l.includes(".")) {
+              return !l.split(".").reduce((o, k) => o?.[k], window);
+            }
+            return !window[l];
+          });
           if (missing.length === 0) {
-            if (loader) loader.remove();
+            loader?.remove();
             resolve(true);
           } else if (attempts < maxAttempts) {
             attempts++;
             setTimeout(check, 100);
           } else {
-            if (loader) loader.remove();
-            this.toast(`Failed to load dependencies for ${toolName}. Please check your connection.`, 'error');
-            this.showFallbackError(`Could not load required libraries: ${missing.join(', ')}`);
+            loader?.remove();
+            shell.toast(`Failed to load dependencies for ${toolName}. Please check your connection.`, "error");
+            shell.showFallbackError(`Could not load required libraries: ${missing.join(", ")}`);
             resolve(false);
           }
         };
         check();
       });
     },
-
-    toast(msg, type = 'info', duration = 3000) {
-      let container = document.getElementById('ts-toast-container');
+    toast(msg, type = "info", duration = 3e3) {
+      let container = document.getElementById("ts-toast-container");
       if (!container) {
-        container = document.createElement('div');
-        container.id = 'ts-toast-container';
+        container = document.createElement("div");
+        container.id = "ts-toast-container";
         document.body.appendChild(container);
       }
-      const el = document.createElement('div');
+      const el = document.createElement("div");
       el.className = `ts-toast ts-toast-${type}`;
-      let icon = 'ℹ️';
-      if (type === 'success') icon = '✅';
-      if (type === 'error')   icon = '❌';
-      if (type === 'warn')    icon = '⚠️';
+      const icon = type === "success" ? "\u2705" : type === "error" ? "\u274C" : type === "warn" ? "\u26A0\uFE0F" : "\u2139\uFE0F";
       el.innerHTML = `<span class="ts-toast-icon">${icon}</span><span class="ts-toast-msg">${msg}</span>`;
       container.appendChild(el);
       setTimeout(() => {
-        el.classList.add('out');
+        el.classList.add("out");
         setTimeout(() => el.remove(), 400);
       }, duration);
     }
   };
-
   window.Shell = shell;
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => shell.init());
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => shell.init());
   } else {
     shell.init();
   }

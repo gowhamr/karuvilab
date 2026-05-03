@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "WebWorker"],
+    "module": "None",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/regex-worker.ts"
+  ]
+}

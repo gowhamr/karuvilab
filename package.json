@@ -1,0 +1,16 @@
+{
+  "name": "karuvilab",
+  "version": "1.0.0",
+  "description": "KaruviLab – fast, private browser tools",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
+}
