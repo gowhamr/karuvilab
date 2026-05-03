@@ -189,7 +189,53 @@ const FormatUtils = (() => {
     return csvRows.join('\n');
   }
 
+  /**
+   * Create a UI card for a selected file.
+   */
+  function createFileCard(file, onRemove) {
+    const ext = Utils.getExt(file.name);
+    const color = colorFor(ext);
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `
+      <span class="file-icon">${ext === 'pdf' ? '&#128196;' : '&#128247;'}</span>
+      <div class="file-info">
+        <div class="file-name">${Utils.escHtml(file.name)}</div>
+        <div class="file-meta">${Utils.formatBytes(file.size)}</div>
+      </div>
+      <span class="file-fmt-badge" style="background:${color}22;color:${color}">${ext.toUpperCase()}</span>
+      <button class="remove-btn" title="Remove">&#10005;</button>`;
+    if (onRemove) item.querySelector('.remove-btn').onclick = onRemove;
+    return item;
+  }
+
+  /**
+   * Create a UI card for a processing result.
+   */
+  function createResultCard(filename, blob, label = 'Converted') {
+    const ext = Utils.getExt(filename);
+    const color = colorFor(ext);
+    const card = document.createElement('div');
+    card.className = 'result-card success-pop';
+    card.innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="success-check" style="background:${color}; flex-shrink:0;">✓</div>
+          <div>
+            <h4 style="font-size:0.9rem; font-weight:700; color:var(--text-1); margin-bottom:2px;">${Utils.escHtml(filename)}</h4>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="status-badge" style="background:${color}22; color:${color}">${label}</span>
+              <span style="font-size:0.75rem; color:var(--text-3);">${Utils.formatBytes(blob.size)}</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-small dl-btn">Download</button>
+      </div>`;
+    card.querySelector('.dl-btn').onclick = () => Utils.downloadBlob(blob, filename);
+    return card;
+  }
+
   return { FORMAT_INFO, ALL_IMAGE_EXTS, isImage, needsSpecialRead,
            loadAny, loadHeic, loadTiff, encodeTiff, encodeBmp,
-           drawElement, colorFor, jsonToCsv };
+           drawElement, colorFor, jsonToCsv, createFileCard, createResultCard };
 })();

@@ -21,8 +21,14 @@
     </div>
 
     <div class="panel-scroll">
-      <div class="panel-upload-group">
-        <div class="upload-zone upload-zone-hero" id="convert-drop">
+      <nav class="breadcrumb-nav">
+        <a href="../../">Home</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <a href="../../image-tools/">Image Tools</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <span class="current">Image Converter</span>
+      </nav>
+
+      <div class="tool-section">
+        <div class="upload-zone" id="convert-drop">
           <div class="upload-icon-wrap">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
@@ -30,44 +36,43 @@
             </svg>
           </div>
           <p class="upload-main">Upload Images</p>
-          <p class="upload-sub"><label for="convert-input">Tap to select</label> or drag here</p>
-          <p class="upload-formats">JPG &middot; PNG &middot; WebP &middot; HEIC</p>
-          <input type="file" id="convert-input" accept="image/*" multiple />
+          <p class="upload-sub"><label for="convert-input" class="link">Select files</label> or drag here</p>
+          <p class="upload-formats">JPG &middot; PNG &middot; WebP &middot; HEIC &middot; TIFF &middot; BMP</p>
+          <input type="file" id="convert-input" accept="image/*" multiple hidden />
         </div>
-      </div>
 
-      <div class="panel-settings-group" id="convert-settings" style="display:none">
-        <div class="settings-card">
-          <p class="settings-card-title">Conversion Settings</p>
-          <div class="settings-row">
-            <span class="settings-label">Convert to</span>
-            <select id="convert-format">
-              <option value="png">PNG (Lossless)</option>
-              <option value="jpeg">JPG (Standard)</option>
-              <option value="webp">WebP (Modern)</option>
-            </select>
-          </div>
-          <div class="slider-row" id="quality-row">
-            <div class="slider-header">
-              <span class="slider-label">Quality</span>
-              <span class="slider-val" id="quality-val">90%</span>
+        <div id="convert-settings" style="display:none; margin-top:24px;">
+          <div class="settings-card">
+            <p class="settings-card-title">Conversion Settings</p>
+            <div class="settings-row">
+              <span class="settings-label">Convert to</span>
+              <select id="convert-format" class="workspace-input">
+                <option value="png">PNG (Lossless)</option>
+                <option value="jpg">JPG (Standard)</option>
+                <option value="webp">WebP (Modern)</option>
+                <option value="avif">AVIF (Ultra-small)</option>
+                <option value="bmp">BMP (Raw)</option>
+              </select>
             </div>
-            <input type="range" id="convert-quality" min="10" max="100" value="90" aria-label="Output Quality" aria-valuemin="10" aria-valuemax="100" aria-valuenow="90" />
+            <div class="slider-row" id="quality-row">
+              <div class="slider-header">
+                <span class="slider-label">Output Quality</span>
+                <span class="slider-val" id="quality-val">90%</span>
+              </div>
+              <input type="range" id="convert-quality" min="10" max="100" value="90" aria-label="Output Quality" aria-valuemin="10" aria-valuemax="100" aria-valuenow="90" />
+            </div>
+          </div>
+
+          <div class="panel-cta-bar" style="position:static;padding:0;margin-top:20px">
+            <button class="panel-cta-btn" id="convert-btn" style="width:100%">
+              Convert & Download
+            </button>
           </div>
         </div>
 
-        <div class="panel-cta-bar" style="position:static;padding:0;margin-top:20px">
-          <button class="panel-cta-btn" id="convert-btn">
-            Convert & Download
-          </button>
-        </div>
+        <div class="file-list" id="convert-file-list" style="margin-top:24px"></div>
+        <div class="results-area" id="convert-results" style="margin-top:24px"></div>
       </div>
-
-      <div class="panel-files-group">
-        <div id="convert-file-list" class="file-list"></div>
-        <div id="convert-results" class="results-area"></div>
-      </div>
-    </div>
   </div>
 
   <!-- Libraries -->
@@ -96,57 +101,70 @@
 
       let currentFiles = [];
 
-      async function handleFiles(files) {
-        if (!files.length) return;
-        currentFiles = Array.from(files);
-        
+      function updateUI() {
         fileList.innerHTML = '';
         currentFiles.forEach((file, idx) => {
           fileList.appendChild(FormatUtils.createFileCard(file, () => {
             currentFiles.splice(idx, 1);
-            if (!currentFiles.length) settingsArea.style.display = 'none';
-            handleFiles(currentFiles);
+            updateUI();
           }));
         });
 
-        settingsArea.style.display = 'block';
-        resultsArea.innerHTML = '';
+        settingsArea.style.display = currentFiles.length ? 'block' : 'none';
+        if (!currentFiles.length) resultsArea.innerHTML = '';
+      }
+
+      async function handleFiles(files) {
+        if (!files.length) return;
+        
+        for (const file of files) {
+          if (FormatUtils.isImage(file)) {
+            currentFiles.push(file);
+          } else {
+            Shell.toast(`${file.name} is not a supported image.`, 'error');
+          }
+        }
+        updateUI();
       }
 
       Utils.setupDropZone(dropZone, fileInput, handleFiles);
 
       formatSelect.onchange = () => {
-        qualityRow.style.display = formatSelect.value === 'png' ? 'none' : 'block';
+        const fmt = formatSelect.value;
+        qualityRow.style.display = (fmt === 'png' || fmt === 'bmp') ? 'none' : 'block';
       };
 
       qualityInput.oninput = () => {
         qualityVal.innerText = qualityInput.value + '%';
+        qualityInput.setAttribute('aria-valuenow', qualityInput.value);
       };
 
       convertBtn.onclick = async () => {
         if (!currentFiles.length) return;
 
         convertBtn.disabled = true;
-        convertBtn.innerHTML = 'Converting...';
+        convertBtn.innerHTML = Utils.spinnerHTML() + ' Converting...';
         resultsArea.innerHTML = '';
 
         const targetFmt = formatSelect.value;
         const quality = parseInt(qualityInput.value) / 100;
 
+        let successCount = 0;
         for (const file of currentFiles) {
           try {
-            const result = await ImageTools.convert(file, targetFmt === 'jpeg' ? 'jpg' : targetFmt, quality);
-            const outName = file.name.replace(/\.[\w\d]+$/, '') + '.' + (targetFmt === 'jpeg' ? 'jpg' : targetFmt);
+            const result = await ImageTools.convert(file, targetFmt, quality);
+            const outName = Utils.replaceExt(file.name, targetFmt);
             resultsArea.appendChild(FormatUtils.createResultCard(outName, result.blob));
+            successCount++;
           } catch (err) {
             console.error(err);
-            Shell.toast('Error converting ' + file.name);
+            Shell.toast('Error converting ' + file.name + ': ' + err.message, 'error');
           }
         }
 
         convertBtn.disabled = false;
         convertBtn.innerHTML = 'Convert & Download';
-        Shell.toast('Success! Images converted.');
+        if (successCount > 0) Shell.toast(`Successfully converted ${successCount} images.`, 'success');
       };
     })();
   </script>
