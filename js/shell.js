@@ -15,7 +15,14 @@
     else if (path.includes('/utilities/')) window.SHELL_ACTIVE = 'utils';
     else if (path.includes('/seo-tools/')) window.SHELL_ACTIVE = 'seo';
     else if (path.includes('/tools/')) {
-       // Match specific tools that app.js expects
+       // Match specific tools that app.js expects or group them logically
+       const seoTools = ['meta-tags', 'image-seo', 'slug-generator'];
+       const isSeo = seoTools.some(t => path.includes('/' + t + '/'));
+       if (isSeo) {
+         window.SHELL_ACTIVE = 'seo';
+         return;
+       }
+
        const tools = ['markdown','qrcode','base64','regex','format','validate','compress','convert','create'];
        const found = tools.find(t => path.includes('/' + t + '/'));
        window.SHELL_ACTIVE = found || 'tools';
