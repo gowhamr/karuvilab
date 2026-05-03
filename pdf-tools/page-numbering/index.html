@@ -152,7 +152,7 @@
         applyBtn.innerHTML = 'Processing...';
 
         try {
-          await Shell.waitForLibs(['PDFLib']);
+          await PdfTools.ready();
           const lib = window.PDFLib;
           const arrayBuffer = await Utils.readAsArrayBuffer(currentFile);
           const pdfDoc = await lib.PDFDocument.load(arrayBuffer);

@@ -110,6 +110,8 @@
       document.querySelector('.angle-btn[data-angle="90"]').classList.add('fmt-btn-primary');
 
       async function handleFile(file) {
+        await PdfTools.ready();
+        await PdfTools.ready();
         const check = Utils.validateFile(file, ['pdf'], 100);
         if (!check.valid) {
           Shell.toast(check.error, 'error');

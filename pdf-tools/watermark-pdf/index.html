@@ -103,7 +103,7 @@
   <script src="../../js/utils.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const ready = await Shell.waitForLibs(['PDFLib'], 'Watermark PDF');
+      const ready = await PdfTools.ready();
       if (!ready) return;
 
       const el = id => document.getElementById(id);

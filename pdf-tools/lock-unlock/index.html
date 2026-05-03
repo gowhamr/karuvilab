@@ -111,7 +111,7 @@
         // Check if locked
         try {
           const ab = await Utils.readAsArrayBuffer(file);
-          await Shell.waitForLibs(['PDFLib']);
+          await PdfTools.ready();
           const lib = window.PDFLib;
           
           try {
