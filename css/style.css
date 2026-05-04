@@ -7,6 +7,19 @@
 * { -webkit-tap-highlight-color: transparent; }
 a, button { touch-action: manipulation; }
 input, select, textarea { font-size: max(16px, 1em); }
+select {
+  background-color: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color-scheme: inherit;
+}
+option, optgroup {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
 
 /* Apply theme transition only when requested (prevents load flicker/jank) */
 .theme-transitioning,
@@ -35,7 +48,7 @@ input, select, textarea { font-size: max(16px, 1em); }
   --surface:      #FFFFFF;
   --bg-input:     #F1F5F9;
 
-  color-scheme: light;
+  color-scheme: light dark;
 
   /* Legacy aliases (used by component classes below) */
   --primary:        var(--blue);
@@ -2260,12 +2273,13 @@ input[type=range]:focus { outline: none; box-shadow: none; }
      color-scheme is not reliably inherited by form controls from <html>. */
   color-scheme: dark;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748B'/%3E%3C/svg%3E");
+  color-scheme: dark;
 }
 /* Firefox honours background-color/color on <option>/<optgroup> */
 [data-theme="dark"] select option,
 [data-theme="dark"] select optgroup {
-  background-color: #1E293B;
-  color: #F1F5F9;
+  background-color: var(--surface);
+  color: var(--text);
 }
 
 /* ── Dark: calculator embed ── */

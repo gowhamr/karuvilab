@@ -90,61 +90,6 @@
   <script src="../../js/shell.js" defer></script>
   <script src="../../js/theme.js" defer></script>
   <script src="../../js/utils.js" defer></script>
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    try {
-
-    (function() {
-      const el = id => document.getElementById(id);
-      const fmt = (n, d = 0) => n.toLocaleString('en-IN', { minimumFractionDigits: d, maximumFractionDigits: d });
-      const metric = (label, value, cls='') => `
-        <div class="result-card" style="margin-bottom:12px">
-          <div style="font-size:0.75rem; color:var(--text-3); text-transform:uppercase; font-weight:700;">${label}</div>
-          <div style="font-size:1.5rem; font-weight:800; color:${cls==='accent'?'var(--blue)':'var(--text)'}">${value}</div>
-        </div>`;
-
-      let timeMode = 'add';
-      const btns = document.querySelectorAll('#time-toggle button');
-      btns.forEach(b => {
-        b.onclick = () => {
-          btns.forEach(x => x.classList.remove('active'));
-          b.classList.add('active');
-          timeMode = b.dataset.mode;
-        };
-      });
-
-      el('calc-btn').onclick = () => {
-        const s1 = (+el('t1-h').value) * 3600 + (+el('t1-m').value) * 60 + (+el('t1-s').value);
-        const s2 = (+el('t2-h').value) * 3600 + (+el('t2-m').value) * 60 + (+el('t2-s').value);
-        let total = timeMode === 'add' ? s1 + s2 : s1 - s2;
-        const neg = total < 0;
-        total = Math.abs(total);
-        const h = Math.floor(total / 3600);
-        const m = Math.floor((total % 3600) / 60);
-        const s = total % 60;
-        
-        const res = el('time-result');
-        res.innerHTML = `
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
-            ${metric('Result', (neg ? '− ' : '') + `${h}h ${m}m ${s}s`, 'accent')}
-            ${metric('In Minutes', fmt(total / 60, 2))}
-            ${metric('In Seconds', fmt(total, 0))}
-          </div>`;
-        res.style.display = 'block';
-      };
-    })();
-  
-    } catch (e) {
-      var s = document.querySelector('.panel-scroll');
-      if (s && !s.querySelector('.calc-error')) {
-        var d = document.createElement('div');
-        d.className = 'calc-error';
-        d.style.cssText = 'padding:16px;margin:16px;background:#fee2e2;border-radius:8px;color:#b91c1c;text-align:center;font-weight:600';
-        d.textContent = 'Calculator failed to load. Please refresh.';
-        s.prepend(d);
-      }
-    }
-  });
-</script>
+  <script src="../../js/tools/time-calculator.js" defer></script>
 </body>
 </html>

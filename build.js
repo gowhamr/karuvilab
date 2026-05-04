@@ -23,6 +23,17 @@ const entries = [
   'app',
   'markdown-tool',
   'split-tool',
+  'tools/emi-calculator',
+  'tools/sip-calculator',
+  'tools/age-calculator',
+  'tools/compound-interest',
+  'tools/gst-calculator',
+  'tools/currency-converter',
+  'tools/discount-calculator',
+  'tools/world-clock',
+  'tools/date-calculator',
+  'tools/time-calculator',
+  'tools/standard-calculator',
 ];
 
 const entryPoints = entries.map(name => ({

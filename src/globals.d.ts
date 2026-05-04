@@ -188,6 +188,31 @@ interface Window {
 
   // Computed globals
   Shell: ShellInterface;
+  Utils: UtilsInterface;
+}
+
+// ─── Utils interface (defined in utils.ts) ───────────────────────
+
+interface UtilsInterface {
+  formatBytes(bytes: number): string;
+  safeName(name: string): string;
+  hasSpecialChars(name: string): boolean;
+  readAsDataURL(file: File): Promise<string>;
+  readAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer>;
+  loadImage(src: string): Promise<HTMLImageElement>;
+  downloadBlob(blob: Blob, filename: string): void;
+  drawResized(img: HTMLImageElement, maxW: number | null, maxH: number | null): HTMLCanvasElement;
+  canvasToBlob(canvas: HTMLCanvasElement, mimeType?: string, quality?: number): Promise<Blob>;
+  mimeFromExt(ext: string): string;
+  extFromMime(mime: string): string;
+  supportsFormat(mime: string): Promise<boolean>;
+  replaceExt(filename: string, newExt: string): string;
+  getExt(filename: string): string;
+  escHtml(str: unknown): string;
+  spinnerHTML(): string;
+  sizeBars(originalBytes: number, newBytes: number): string;
+  debounce<T extends (...args: unknown[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void;
+  validateFile(file: File | null, allowedExtensions?: string[], maxMB?: number): FileValidationResult;
 }
 
 // ─── Shell interface (defined in shell.ts, used everywhere) ──────
