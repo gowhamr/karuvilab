@@ -128,11 +128,17 @@
         el('compress-btn').disabled = false;
       };
 
-      el('compress-input').onchange = () => { if(el('compress-input').files[0]) updateUI(el('compress-input').files[0]); };
+      const acceptFile = (file) => {
+        const check = Utils.validateFile(file, ['pdf'], 100);
+        if (!check.valid) { Shell.toast(check.error || 'Invalid file.', 'error'); return; }
+        updateUI(file);
+      };
+
+      el('compress-input').onchange = () => { if(el('compress-input').files[0]) acceptFile(el('compress-input').files[0]); el('compress-input').value = ''; };
       el('compress-drop').onclick = () => el('compress-input').click();
       el('compress-drop').ondragover = e => { e.preventDefault(); el('compress-drop').classList.add('drag-over'); };
       el('compress-drop').ondragleave = () => el('compress-drop').classList.remove('drag-over');
-      el('compress-drop').ondrop = e => { e.preventDefault(); el('compress-drop').classList.remove('drag-over'); if(e.dataTransfer.files[0]) updateUI(e.dataTransfer.files[0]); };
+      el('compress-drop').ondrop = e => { e.preventDefault(); el('compress-drop').classList.remove('drag-over'); if(e.dataTransfer.files[0]) acceptFile(e.dataTransfer.files[0]); };
 
       el('compress-quality').oninput = () => { el('quality-val').textContent = Math.round(el('compress-quality').value * 100) + '%'; };
 
@@ -169,7 +175,7 @@
 
           if (signal.aborted) return;
 
-          const url = URL.createObjectURL(blob);
+          const url = Utils.createObjectURL(blob);
           const name = `${selectedFile.name.replace('.pdf','')}_compressed.pdf`;
           results.innerHTML = `
             <div class="result-card success-pop">
