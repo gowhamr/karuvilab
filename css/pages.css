@@ -413,6 +413,18 @@ a { color: var(--primary); }
   --shadow-lg:   0 12px 40px rgba(0,0,0,.6);
 }
 
+/* ── Dark mode: select fixes ── */
+[data-theme="dark"] select {
+  background-color: var(--bg-input);
+  color: var(--text);
+  color-scheme: dark;
+}
+[data-theme="dark"] select option {
+  background-color: var(--bg-card);
+  color: var(--text);
+  color-scheme: dark;
+}
+
 /* ── Shell Components (Header & Dock) ── */
 .app-shell .top-stripe {
   position: fixed; top: 0; left: 0; right: 0;
