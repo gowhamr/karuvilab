@@ -330,7 +330,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("compressor-drop")?.addEventListener("drop", () => setTimeout(runCompressor, 120));
   document.getElementById("compressor-input")?.addEventListener("change", () => setTimeout(runCompressor, 120));
   compressBtn?.addEventListener("click", runCompressor);
-  window.addEventListener("pagehide", () => compressAbortCtrl?.abort());
+  window.addEventListener("pagehide", () => {
+    compressAbortCtrl?.abort();
+    Utils.revokeAllObjectURLs();
+  });
   async function runCompressor() {
     if (compressProcessing) return;
     const resultsEl = document.getElementById("compressor-results");
@@ -606,7 +609,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (hintEl) hintEl.style.display = "none";
       const ext = fmtKey === "jpeg" ? "jpg" : fmtKey;
       const filename = `created_${w}x${h}.${ext}`;
-      const url = URL.createObjectURL(blob);
+      const url = Utils.createObjectURL(blob);
       const fallbackNote = fallback ? `<em style="color:var(--warn)"> (browser fallback \u2192 JPG)</em>` : "";
       if (resultEl) resultEl.innerHTML = `
         <div class="result-card success">
@@ -733,7 +736,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const base = dot > 0 ? origFile.name.slice(0, dot) : origFile.name;
       return `${base}_${verb}.${extOut}`;
     })();
-    const url = URL.createObjectURL(blob);
+    const url = Utils.createObjectURL(blob);
     const saved = origFile.size - blob.size;
     const savedStr = saved > 0 ? `\xB7 saved ${Utils.formatBytes(saved)}` : "";
     const color = FormatUtils.colorFor(extOut);
@@ -944,7 +947,7 @@ document.addEventListener("DOMContentLoaded", () => {
       runBtn.disabled = true;
       runBtn.textContent = "\u26A1 Testing\u2026";
       if (regexWorker) regexWorker.terminate();
-      regexWorker = new Worker("../../js/regex-worker.js");
+      regexWorker = new Worker((window.KARUVI_BASE ?? "/") + "js/regex-worker.js");
       regexTimeout = setTimeout(() => {
         if (regexWorker) {
           regexWorker.terminate();

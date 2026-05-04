@@ -147,6 +147,21 @@ const Utils = /* @__PURE__ */ (() => {
       timeout = setTimeout(later, wait);
     };
   }
+  const _blobUrls = [];
+  function createObjectURL(blob) {
+    const url = URL.createObjectURL(blob);
+    _blobUrls.push(url);
+    return url;
+  }
+  function revokeObjectURL(url) {
+    const idx = _blobUrls.indexOf(url);
+    if (idx !== -1) _blobUrls.splice(idx, 1);
+    URL.revokeObjectURL(url);
+  }
+  function revokeAllObjectURLs() {
+    _blobUrls.forEach((u) => URL.revokeObjectURL(u));
+    _blobUrls.length = 0;
+  }
   function validateFile(file, allowedExtensions = [], maxMB = 20) {
     if (!file) return { valid: false, error: "No file selected." };
     const maxSize = maxMB * 1024 * 1024;
@@ -191,6 +206,9 @@ const Utils = /* @__PURE__ */ (() => {
     spinnerHTML,
     sizeBars,
     debounce,
-    validateFile
+    validateFile,
+    createObjectURL,
+    revokeObjectURL,
+    revokeAllObjectURLs
   };
 })();

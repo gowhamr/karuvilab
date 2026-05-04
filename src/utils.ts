@@ -151,6 +151,26 @@ const Utils = (() => {
     };
   }
 
+  // ── Blob URL registry – tracks all object URLs so they can be revoked ──
+  const _blobUrls: string[] = [];
+
+  function createObjectURL(blob: Blob): string {
+    const url = URL.createObjectURL(blob);
+    _blobUrls.push(url);
+    return url;
+  }
+
+  function revokeObjectURL(url: string): void {
+    const idx = _blobUrls.indexOf(url);
+    if (idx !== -1) _blobUrls.splice(idx, 1);
+    URL.revokeObjectURL(url);
+  }
+
+  function revokeAllObjectURLs(): void {
+    _blobUrls.forEach(u => URL.revokeObjectURL(u));
+    _blobUrls.length = 0;
+  }
+
   function validateFile(file: File | null, allowedExtensions: string[] = [], maxMB: number = 20): FileValidationResult {
     if (!file) return { valid: false, error: 'No file selected.' };
 
@@ -193,5 +213,6 @@ const Utils = (() => {
     replaceExt, getExt,
     escHtml, spinnerHTML, sizeBars,
     debounce, validateFile,
+    createObjectURL, revokeObjectURL, revokeAllObjectURLs,
   };
 })();

@@ -168,10 +168,19 @@
     setupErrorHandling() {
       window.addEventListener("error", (e) => {
         const fromToolFile = e.filename && (e.filename.includes("/js/") || e.filename.includes("tool"));
-        const fromInline = !e.filename;
-        if (!fromToolFile && !fromInline) return;
-        console.error("KaruviLab Tool Error:", e.message, e.filename || "(inline)");
+        if (!fromToolFile) return;
+        console.error("KaruviLab Tool Error:", e.message, e.filename);
         shell.showFallbackError();
+      });
+      window.addEventListener("unhandledrejection", (e) => {
+        const reason = e.reason;
+        if (reason instanceof DOMException && reason.name === "AbortError") return;
+        const msg = reason instanceof Error ? reason.message : String(reason ?? "Unknown async error");
+        console.error("KaruviLab Unhandled Rejection:", msg);
+        shell.toast("An unexpected error occurred. Please try again.", "error");
+      });
+      window.addEventListener("pagehide", () => {
+        if (typeof Utils !== "undefined") Utils.revokeAllObjectURLs();
       });
     },
     showFallbackError(msg) {
@@ -236,7 +245,7 @@
       const el = document.createElement("div");
       el.className = `ts-toast ts-toast-${type}`;
       const icon = type === "success" ? "\u2705" : type === "error" ? "\u274C" : type === "warn" ? "\u26A0\uFE0F" : "\u2139\uFE0F";
-      el.innerHTML = `<span class="ts-toast-icon">${icon}</span><span class="ts-toast-msg">${msg}</span>`;
+      el.innerHTML = `<span class="ts-toast-icon">${icon}</span><span class="ts-toast-msg">${Utils.escHtml(msg)}</span>`;
       container.appendChild(el);
       setTimeout(() => {
         el.classList.add("out");

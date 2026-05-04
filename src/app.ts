@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('compressor-input')?.addEventListener('change', () => setTimeout(runCompressor, 120));
   compressBtn?.addEventListener('click', runCompressor);
 
-  window.addEventListener('pagehide', () => compressAbortCtrl?.abort());
+  window.addEventListener('pagehide', () => { compressAbortCtrl?.abort(); Utils.revokeAllObjectURLs(); });
 
   async function runCompressor(): Promise<void> {
     if (compressProcessing) return;
@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hintEl) hintEl.style.display = 'none';
       const ext      = fmtKey === 'jpeg' ? 'jpg' : fmtKey;
       const filename = `created_${w}x${h}.${ext}`;
-      const url      = URL.createObjectURL(blob);
+      const url      = Utils.createObjectURL(blob);
       const fallbackNote = fallback ? `<em style="color:var(--warn)"> (browser fallback → JPG)</em>` : '';
       if (resultEl) resultEl.innerHTML = `
         <div class="result-card success">
@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const base = dot > 0 ? origFile.name.slice(0, dot) : origFile.name;
           return `${base}_${verb}.${extOut}`;
         })();
-    const url      = URL.createObjectURL(blob);
+    const url      = Utils.createObjectURL(blob);
     const saved    = origFile.size - blob.size;
     const savedStr = saved > 0 ? `· saved ${Utils.formatBytes(saved)}` : '';
     const color    = FormatUtils.colorFor(extOut);
@@ -1011,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
       runBtn.textContent = '⚡ Testing…';
 
       if (regexWorker) regexWorker.terminate();
-      regexWorker = new Worker('../../js/regex-worker.js');
+      regexWorker = new Worker((window.KARUVI_BASE ?? '/') + 'js/regex-worker.js');
 
       // DEV-002: 5-second timeout to prevent runaway regex hanging the UI
       regexTimeout = setTimeout(() => {

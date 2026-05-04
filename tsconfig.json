@@ -21,6 +21,7 @@
   ],
   "exclude": [
     "src/regex-worker.ts",
+    "src/__tests__",
     "node_modules"
   ]
 }

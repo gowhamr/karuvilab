@@ -2,6 +2,12 @@
 //  KaruviLab – Shared TypeScript Interfaces & Types
 // ═══════════════════════════════════════════════════════════════
 
+// ─── Result monad ───────────────────────────────────────────────
+
+type Result<T, E = Error> =
+  | { ok: true;  value: T }
+  | { ok: false; error: E };
+
 // ─── Result types ───────────────────────────────────────────────
 
 interface FileValidationResult {
