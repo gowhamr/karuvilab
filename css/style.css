@@ -2253,11 +2253,15 @@ input[type=range]:focus { outline: none; box-shadow: none; }
 [data-theme="dark"] .regex-highlighted mark { background: rgba(253,230,138,.15); color: #FCD34D; }
 [data-theme="dark"] .workspace-input:focus { background: var(--surface); }
 
-/* ── Dark: select dropdown arrow ── */
+/* ── Dark: select – closed control + native popup colour ── */
 [data-theme="dark"] select,
 [data-theme="dark"] .select-styled {
+  /* Tells Chromium/Safari/WebKit to render the native popup in dark mode.
+     color-scheme is not reliably inherited by form controls from <html>. */
+  color-scheme: dark;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748B'/%3E%3C/svg%3E");
 }
+/* Firefox honours background-color/color on <option>/<optgroup> */
 [data-theme="dark"] select option,
 [data-theme="dark"] select optgroup {
   background-color: #1E293B;
