@@ -34,15 +34,6 @@
             filter: brightness(1.1);
             box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.4);
         }
-        .amount-btn {
-            transition: all 0.2s ease;
-        }
-        .amount-btn.active {
-            background: #ec4899;
-            border-color: #ec4899;
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
-            color: white !important;
-        }
         .floating-icon {
             position: absolute;
             opacity: 0.1;
@@ -67,7 +58,7 @@
         <div class="glass rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
             
             <!-- Header -->
-            <div class="flex flex-col items-center mb-10">
+            <div class="flex flex-col items-center mb-12">
                 <div class="w-16 h-16 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 heart-glow">
                     <i data-lucide="heart" class="text-pink-500 fill-pink-500" size="32"></i>
                 </div>
@@ -75,26 +66,6 @@
                 <p class="text-slate-300 text-center mt-4 text-lg max-w-lg">
                     Your support helps us build more free tools, cover server costs, and keep our platform open for everyone.
                 </p>
-            </div>
-
-            <!-- Amount Selector -->
-            <div class="mb-10">
-                <label class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 block text-center">Choose an amount</label>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="amount-selector">
-                    <button class="amount-btn glass py-4 rounded-2xl text-slate-300 font-bold hover:bg-white/5 border-white/10" data-amount="50">₹50</button>
-                    <button class="amount-btn glass py-4 rounded-2xl text-slate-300 font-bold hover:bg-white/5 border-white/10" data-amount="100">₹100</button>
-                    <button class="amount-btn glass py-4 rounded-2xl text-slate-300 font-bold active hover:bg-white/5 border-white/10" data-amount="250">₹250</button>
-                    <button class="amount-btn glass py-4 rounded-2xl text-slate-300 font-bold hover:bg-white/5 border-white/10" data-amount="500">₹500</button>
-                    <button class="amount-btn glass py-4 rounded-2xl text-slate-300 font-bold hover:bg-white/5 border-white/10" id="custom-trigger">Other</button>
-                </div>
-                
-                <!-- Custom Input (hidden by default) -->
-                <div id="custom-input-container" class="mt-4 hidden">
-                    <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
-                        <input type="number" id="custom-amount" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-10 pr-4 text-white font-bold outline-none focus:border-pink-500 transition-colors" placeholder="Enter custom amount">
-                    </div>
-                </div>
             </div>
 
             <!-- CTA -->
@@ -153,49 +124,8 @@
         // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Amount Selection Logic
-        const amountBtns = document.querySelectorAll('.amount-btn[data-amount]');
-        const customTrigger = document.getElementById('custom-trigger');
-        const customContainer = document.getElementById('custom-input-container');
-        const customInput = document.getElementById('custom-amount');
-        const donateBtn = document.getElementById('donate-btn');
-        
-        let selectedAmount = 250;
-
-        amountBtns.forEach(btn => {
-            btn.onclick = () => {
-                // UI
-                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                customContainer.classList.add('hidden');
-                
-                // State
-                selectedAmount = btn.dataset.amount;
-            };
-        });
-
-        customTrigger.onclick = () => {
-            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
-            customTrigger.classList.add('active');
-            customContainer.classList.remove('hidden');
-            customInput.focus();
-            selectedAmount = customInput.value || 0;
-        };
-
-        customInput.oninput = () => {
-            selectedAmount = customInput.value;
-        };
-
-        donateBtn.onclick = () => {
-            const amount = selectedAmount || 0;
-            if (amount <= 0 && customTrigger.classList.contains('active')) {
-                alert('Please enter a valid amount');
-                return;
-            }
-            
-            // Redirect to Razorpay (using the base link provided)
-            // Razorpay.me usually doesn't take amount in URL params directly for simple links, 
-            // but we'll send them to the page where they can enter/confirm it.
+        // Donation Redirect
+        document.getElementById('donate-btn').onclick = () => {
             window.location.href = 'https://razorpay.me/@karuvilab';
         };
     </script>
