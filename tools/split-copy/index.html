@@ -118,6 +118,18 @@
       white-space: pre-wrap;
       word-break: break-all;
     }
+
+    /* Dark mode select fixes */
+    [data-theme="dark"] select {
+      background-color: var(--bg-input);
+      color: var(--text);
+      border-color: var(--border);
+      color-scheme: dark;
+    }
+    [data-theme="dark"] select option {
+      background-color: var(--surface);
+      color: var(--text);
+    }
   </style>
 </head>
 <body>

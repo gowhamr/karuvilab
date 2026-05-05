@@ -9,8 +9,8 @@
     else if (path.includes('/image-tools/')) window.SHELL_ACTIVE = 'image';
     else if (path.includes('/security-tools/')) window.SHELL_ACTIVE = 'security';
     else if (path.includes('/developer-tools/')) window.SHELL_ACTIVE = 'dev';
-    else if (path.includes('/utilities/'))  window.SHELL_ACTIVE = 'utils';
-    else if (path.includes('/seo-tools/'))  window.SHELL_ACTIVE = 'seo';
+    else if (path.includes('/utilities/'))       window.SHELL_ACTIVE = 'utils';
+    else if (path.includes('/tools/seo/'))       window.SHELL_ACTIVE = 'seo';
     else if (path.includes('/tools/')) {
       const seoTools = ['meta-tags', 'image-seo', 'slug-generator'];
       const isSeo = seoTools.some(t => path.includes('/' + t + '/'));
