@@ -189,6 +189,7 @@ interface Window {
   // Computed globals
   Shell: ShellInterface;
   Utils: UtilsInterface;
+  KaruviRegistry?: KaruviRegistryInterface;
 }
 
 // ─── Utils interface (defined in utils.ts) ───────────────────────
@@ -224,7 +225,28 @@ interface ShellInterface {
   setupTheme(): void;
   setupEffects(): void;
   setupErrorHandling(): void;
+  recordVisit(): void;
   showFallbackError(msg?: string): void;
   waitForLibs(libs: string[], toolName: string): Promise<boolean>;
   toast(msg: string, type?: ToastType, duration?: number): void;
+}
+
+// ─── Tool Registry (defined in tool-registry.ts) ─────────────────
+
+interface KaruviToolEntry {
+  id: string;
+  name: string;
+  desc: string;
+  href: string;
+  category: 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'seo';
+  keywords: string[];
+  popular?: boolean;
+}
+
+interface KaruviRegistryInterface {
+  TOOLS: KaruviToolEntry[];
+  CATEGORIES: Array<{ id: KaruviToolEntry['category']; label: string; href: string; emoji: string }>;
+  findToolById(id: string): KaruviToolEntry | undefined;
+  findToolByPath(pathname: string): KaruviToolEntry | undefined;
+  getRecentTools(): KaruviToolEntry[];
 }

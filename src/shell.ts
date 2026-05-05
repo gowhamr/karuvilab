@@ -39,6 +39,26 @@
       this.setupTheme();
       this.setupEffects();
       this.setupErrorHandling();
+      this.recordVisit();
+    },
+
+    recordVisit() {
+      // Record this tool visit so the homepage can surface "Recent Tools".
+      // Stores raw pathnames (no registry needed on tool pages); the homepage
+      // resolves them via window.KaruviRegistry.findToolByPath.
+      try {
+        if ((window.SHELL_ACTIVE || 'home') === 'home') return;
+        const RECENT_KEY = 'karuvi.recent.paths';
+        const RECENT_LIMIT = 8;
+        const path = window.location.pathname.replace(/index\.html$/, '');
+        if (!path || path === '/') return;
+        const raw = localStorage.getItem(RECENT_KEY);
+        const list: string[] = raw ? JSON.parse(raw) : [];
+        const next = [path, ...list.filter(p => p !== path)].slice(0, RECENT_LIMIT);
+        localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+      } catch {
+        /* localStorage unavailable */
+      }
     },
 
     goHome() {
