@@ -6,7 +6,8 @@
     "moduleResolution": "bundler",
     "strict": true,
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vitest"]
   },
   "include": ["src/__tests__/**/*.ts"]
 }
