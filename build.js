@@ -12,6 +12,8 @@ const entries = [
   'utils',
   'theme',
   'home',
+  'home-discovery',
+  'tool-registry',
   'shell',
   'format-utils',
   'image-tools',

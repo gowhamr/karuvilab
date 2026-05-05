@@ -606,6 +606,142 @@ body.app-shell {
   margin: 0 4px 12px;
 }
 
+/* ════════════════════════════════════════════════════
+   HOME DISCOVERY (search + filters + recent + popular)
+   ════════════════════════════════════════════════════ */
+.home-discover { padding-top: 8px; }
+
+.discover-search-wrap {
+  position: relative;
+  display: flex; align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 4px 8px 4px 44px;
+  margin-bottom: 14px;
+  transition: border-color .18s, box-shadow .18s;
+  box-shadow: var(--shadow-sm);
+}
+.discover-search-wrap:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.18);
+}
+.discover-search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--text-3); display: flex; pointer-events: none;
+}
+.discover-search-input {
+  flex: 1; min-width: 0;
+  border: none; outline: none; background: transparent;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  color: var(--text);
+  padding: 12px 0;
+}
+.discover-search-input::placeholder { color: var(--text-4); }
+/* Strip default search clear (we use our own) */
+.discover-search-input::-webkit-search-cancel-button,
+.discover-search-input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+.discover-search-clear {
+  background: var(--bg-input);
+  color: var(--text-3);
+  border: none;
+  border-radius: 8px;
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background .14s, color .14s;
+}
+.discover-search-clear:hover { background: var(--border); color: var(--text); }
+
+.discover-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 12px;
+}
+.filter-chip {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s, transform .15s;
+  white-space: nowrap;
+}
+.filter-chip:hover {
+  background: var(--bg-input);
+  border-color: var(--text-4);
+  color: var(--text);
+}
+.filter-chip.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.filter-chip.active:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+}
+
+.discover-count {
+  font-size: 0.78rem;
+  color: var(--text-3);
+  font-weight: 600;
+  margin: 0 4px 12px;
+  min-height: 1em;
+}
+.discover-count:empty { display: none; }
+
+.discover-results { margin-bottom: 24px; }
+.discover-results[hidden] { display: none; }
+
+.discover-empty {
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--text-3);
+  margin-bottom: 24px;
+}
+.discover-empty p { margin-bottom: 4px; font-size: 0.88rem; }
+.discover-empty p strong { color: var(--text-1); }
+
+.discover-section { margin-bottom: 20px; }
+.discover-section[hidden] { display: none; }
+.discover-section .cat-label { margin-top: 4px; }
+
+/* Discovery card variant — adds a subtle category tag pill */
+.discovery-card .cat-btn-text { position: relative; min-width: 0; }
+.discovery-card-letter {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--f, var(--blue));
+}
+.discovery-card-tag {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: var(--bg-input);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+[data-theme="dark"] .discover-search-wrap { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .discover-search-wrap:focus-within { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.32); }
+[data-theme="dark"] .filter-chip { background: var(--surface); border-color: var(--border); color: var(--text-2); }
+[data-theme="dark"] .filter-chip:hover { background: var(--border); color: var(--text); }
+[data-theme="dark"] .filter-chip.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+[data-theme="dark"] .discover-empty { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .discovery-card-tag { background: var(--border); color: var(--text-3); }
+
 /* ── Category tool grid ── */
 .cat-grid {
   display: grid;
