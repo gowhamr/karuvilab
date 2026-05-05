@@ -29,6 +29,7 @@ interface JsPDFOptions {
   unit?: string;
   format?: number[] | string;
   orientation?: 'p' | 'l';
+  compress?: boolean;
 }
 
 interface JsPDFInstance {
@@ -37,7 +38,9 @@ interface JsPDFInstance {
     data: string,
     format: string,
     x: number, y: number,
-    w: number, h: number
+    w: number, h: number,
+    alias?: string,
+    compression?: 'NONE' | 'FAST' | 'MEDIUM' | 'SLOW'
   ): void;
   output(type: 'blob'): Blob;
 }
