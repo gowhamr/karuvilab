@@ -28,26 +28,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // FAQ / MORE OVERLAY
+  // FAQ / MORE OVERLAY — accessible dialog with focus trap
   const faqOverlay  = document.getElementById('faq-overlay');
   const faqCloseBtn = document.getElementById('faq-close-btn');
+  const faqTriggers = document.querySelectorAll<HTMLElement>('[data-action="open-faq"]');
+  let lastFocusedTrigger: HTMLElement | null = null;
 
-  function openFaq(): void {
-    faqOverlay?.classList.remove('hidden');
+  const FOCUSABLE_SELECTOR = [
+    'a[href]', 'area[href]', 'button:not([disabled])',
+    'input:not([disabled]):not([type="hidden"])', 'select:not([disabled])',
+    'textarea:not([disabled])', '[tabindex]:not([tabindex="-1"])',
+    'summary', 'details',
+  ].join(',');
+
+  function getFocusable(container: HTMLElement | null): HTMLElement[] {
+    if (!container) return [];
+    return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+      .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
   }
+
+  function setTriggersExpanded(expanded: boolean): void {
+    faqTriggers.forEach(t => t.setAttribute('aria-expanded', String(expanded)));
+  }
+
+  function openFaq(trigger?: HTMLElement | null): void {
+    if (!faqOverlay) return;
+    lastFocusedTrigger = (trigger ?? document.activeElement) as HTMLElement | null;
+    faqOverlay.classList.remove('hidden');
+    faqOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('faq-open');
+    setTriggersExpanded(true);
+    requestAnimationFrame(() => {
+      const focusables = getFocusable(faqOverlay);
+      const target = (faqCloseBtn as HTMLElement | null) ?? focusables[0];
+      target?.focus();
+    });
+  }
+
   function closeFaq(): void {
-    faqOverlay?.classList.add('hidden');
+    if (!faqOverlay) return;
+    faqOverlay.classList.add('hidden');
+    faqOverlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('faq-open');
+    setTriggersExpanded(false);
+    if (lastFocusedTrigger && typeof lastFocusedTrigger.focus === 'function') {
+      lastFocusedTrigger.focus();
+    }
   }
 
-  document.querySelectorAll('[data-action="open-faq"]').forEach(btn => {
-    btn.addEventListener('click', openFaq);
+  faqTriggers.forEach(btn => {
+    btn.addEventListener('click', () => openFaq(btn));
   });
-
   faqCloseBtn?.addEventListener('click', closeFaq);
   faqOverlay?.addEventListener('click', (e: Event) => {
     if (e.target === faqOverlay) closeFaq();
   });
+
+  // Focus trap + Escape handling while dialog is open
   document.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Escape') closeFaq();
+    if (!faqOverlay || faqOverlay.classList.contains('hidden')) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeFaq();
+      return;
+    }
+    if (e.key === 'Tab') {
+      const focusables = getFocusable(faqOverlay);
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 });
