@@ -599,6 +599,163 @@ body.app-shell {
 .workspace-cta:active { transform: scale(.96); }
 .workspace-cta svg { flex-shrink: 0; }
 
+/* ════════════════════════════════════════════════════
+   PDF FLOW STEPPER — Upload → Configure → Download
+   ════════════════════════════════════════════════════ */
+.pdf-flow {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin: 0 0 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  font-size: 0.78rem;
+  font-weight: 700;
+  overflow-x: auto;
+}
+.pdf-flow-step {
+  display: inline-flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+  padding: 6px 12px;
+  color: var(--text-3);
+  border-radius: 99px;
+  position: relative;
+  counter-increment: pdfstep;
+  transition: background .18s, color .18s;
+}
+.pdf-flow-step::before {
+  content: counter(pdfstep);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  color: var(--text-3);
+  font-size: 0.72rem; font-weight: 800;
+  border: 1.5px solid var(--border);
+  flex-shrink: 0;
+}
+.pdf-flow-step + .pdf-flow-step::after {
+  content: '';
+  position: absolute; left: -10px; top: 50%;
+  width: 12px; height: 2px;
+  background: var(--border);
+  transform: translateY(-50%);
+}
+.pdf-flow-step.active {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+.pdf-flow-step.active::before {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.pdf-flow-step.done {
+  color: var(--success);
+}
+.pdf-flow-step.done::before {
+  content: '\2713';  /* ✓ */
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+.pdf-flow { counter-reset: pdfstep; }
+
+[data-theme="dark"] .pdf-flow { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .pdf-flow-step.active { background: rgba(99, 102, 241, 0.15); color: #A5B4FC; }
+[data-theme="dark"] .pdf-flow-step.active::before { background: var(--blue); border-color: var(--blue); }
+[data-theme="dark"] .pdf-flow-step.done { color: #34D399; }
+
+/* ════════════════════════════════════════════════════
+   SHARED STATE BLOCKS — loading / empty / error / success
+   Mounted by States.loading / States.empty / etc.
+   ════════════════════════════════════════════════════ */
+.state-block {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px;
+  padding: 28px 20px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  margin: 12px 0;
+}
+.state-block .state-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 32px;
+}
+.state-block .state-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0;
+}
+.state-block .state-message {
+  font-size: 0.84rem;
+  color: var(--text-3);
+  margin: 0;
+  max-width: 460px;
+  line-height: 1.5;
+}
+.state-block .state-action { margin-top: 6px; }
+
+.state-loading { background: var(--bg-input); border-style: dashed; }
+.state-loading .state-title { color: var(--text-2); }
+.state-empty { background: var(--bg-input); border-style: dashed; }
+.state-error {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+.state-error .state-title { color: var(--error); }
+.state-error .state-message { color: var(--text-2); }
+.state-success {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+.state-success .state-title { color: var(--success); }
+
+/* Determinate progress bar */
+.state-progress {
+  width: min(360px, 90%);
+  height: 8px;
+  border-radius: 99px;
+  background: var(--border);
+  overflow: hidden;
+}
+.state-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3B82F6, #1E40AF);
+  transition: width .25s ease;
+}
+
+/* Indeterminate spinner */
+.state-spinner {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--blue);
+  animation: state-spin 0.85s linear infinite;
+  display: inline-block;
+}
+@keyframes state-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .state-spinner { animation-duration: 2.4s; }
+}
+
+[data-theme="dark"] .state-block { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .state-loading,
+[data-theme="dark"] .state-empty { background: rgba(255,255,255,0.02); }
+[data-theme="dark"] .state-error { background: rgba(239,68,68,0.10); border-color: rgba(239,68,68,0.35); }
+[data-theme="dark"] .state-success { background: rgba(16,185,129,0.10); border-color: rgba(16,185,129,0.35); }
+[data-theme="dark"] .state-error .state-title { color: #FCA5A5; }
+[data-theme="dark"] .state-success .state-title { color: #34D399; }
+
 /* ── Category label ── */
 .cat-label {
   font-size: .65rem; font-weight: 800; color: var(--text-4);

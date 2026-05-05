@@ -74,13 +74,13 @@ function iconPixel(x, y, size) {
   if (d > 1.2) return [0, 0, 0, 0]; // outside
   const bgA = Math.round(Math.min(1, Math.max(0, 1.2 - d)) * 255);
 
-  // Brand gradient #6366F1 → #4F46E5
+  // Brand gradient: #3B82F6 (top) → #1E3A8A (bottom) — matches the new logo
   const t   = y / s;
-  const bgR = Math.round(99  + (79  - 99)  * t);
-  const bgG = Math.round(102 + (70  - 102) * t);
-  const bgB = Math.round(241 + (229 - 241) * t);
+  const bgR = Math.round(59  + (30  - 59)  * t);
+  const bgG = Math.round(130 + (58  - 130) * t);
+  const bgB = Math.round(246 + (138 - 246) * t);
 
-  // 'K' letterform in normalised coords (origin = centre, unit ≈ size*0.28)
+  // 'K' letterform in normalised coords (origin = centre, unit ≈ size*0.30)
   const sc  = s * 0.30;
   const nx  = (x - cx) / sc;
   const ny  = (y - cy) / sc;
@@ -96,12 +96,30 @@ function iconPixel(x, y, size) {
   // Lower arm
   const inLower = ny >= -0.06 && distSeg(nx, ny, jx,  0.04, 1.05,  1.08) < sw * 1.05;
 
+  // Small wrench accent inside the K (only at sizes ≥ 32 — keeps 16px legible)
+  if (size >= 32) {
+    // Wrench shaft (vertical bar from K crossbar downward, sitting in negative space)
+    const inWrenchShaft = Math.abs(nx - 0.05) < 0.10 && ny > -0.20 && ny < 0.85;
+    // Wrench head (open-end) at the top
+    const headDx = nx - 0.05, headDy = ny + 0.40;
+    const headR  = Math.hypot(headDx, headDy);
+    const inWrenchHead  = headR < 0.32 && headR > 0.18 && headDy < 0.06;
+    if (inWrenchShaft || inWrenchHead) {
+      // Wrench is white-with-subtle-tint on top of the K
+      return [255, 255, 255, bgA];
+    }
+  }
+
   if (inStem || inUpper || inLower) return [255, 255, 255, bgA];
   return [bgR, bgG, bgB, bgA];
 }
 
 // ── Generate PNGs ─────────────────────────────────────────────────────────────
-const iconsDir = path.join(__dirname, 'icons');
+// Write directly to the project root so favicon assets are picked up by
+// every page. (Earlier versions of this script wrote to scripts/icons/
+// which is gitignored — that left generated assets stranded.)
+const projectRoot = path.resolve(__dirname, '..');
+const iconsDir = path.join(projectRoot, 'icons');
 if (!fs.existsSync(iconsDir)) fs.mkdirSync(iconsDir);
 
 const sizes = [16, 32, 48, 180, 192, 512];
@@ -140,5 +158,5 @@ const ico = makeIco([
   { sz: 32, png: pngMap[32] },
   { sz: 48, png: pngMap[48] },
 ]);
-fs.writeFileSync(path.join(__dirname, 'favicon.ico'), ico);
+fs.writeFileSync(path.join(projectRoot, 'favicon.ico'), ico);
 console.log(`  favicon.ico           (${ico.length} bytes)`);

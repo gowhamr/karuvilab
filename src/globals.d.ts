@@ -189,7 +189,33 @@ interface Window {
   // Computed globals
   Shell: ShellInterface;
   Utils: UtilsInterface;
+  States?: StatesInterface;
+  PDFFlow?: PDFFlowInterface;
   KaruviRegistry?: KaruviRegistryInterface;
+}
+
+// ─── PDFFlow interface (defined in pdf-flow.ts) ──────────────────
+
+interface PDFFlowInterface {
+  setStep(name: string, selector?: string): void;
+  advance(name: string, selector?: string): void;
+  reset(selector?: string): void;
+  currentStep(selector?: string): string | null;
+}
+
+// ─── States interface (defined in states.ts) ─────────────────────
+
+interface StateLoadingOptions { title?: string; message?: string; progress?: number; }
+interface StateEmptyOptions   { title?: string; message?: string; icon?: string; }
+interface StateErrorOptions   { title?: string; message?: string; onRetry?: () => void; retryLabel?: string; }
+interface StateSuccessOptions { title?: string; message?: string; actionLabel?: string; onAction?: () => void; }
+
+interface StatesInterface {
+  loading(target: HTMLElement | string, opts?: StateLoadingOptions): HTMLElement | null;
+  empty(target: HTMLElement | string, opts?: StateEmptyOptions): HTMLElement | null;
+  error(target: HTMLElement | string, opts?: StateErrorOptions): HTMLElement | null;
+  success(target: HTMLElement | string, opts?: StateSuccessOptions): HTMLElement | null;
+  clear(target: HTMLElement | string): void;
 }
 
 // ─── Utils interface (defined in utils.ts) ───────────────────────

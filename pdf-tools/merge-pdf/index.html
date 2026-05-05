@@ -35,7 +35,13 @@
         </nav>
 
         <h1 style="font-size:1.8rem; font-weight:900; margin-bottom:12px;">Merge PDF</h1>
-        <p style="color:var(--text-3); margin-bottom:32px; max-width:600px;">Combine multiple PDF files into one professional document. Fast, secure, and runs entirely in your browser.</p>
+        <p style="color:var(--text-3); margin-bottom:24px; max-width:600px;">Combine multiple PDF files into one professional document. Fast, secure, and runs entirely in your browser.</p>
+
+        <ol class="pdf-flow" data-pdf-flow aria-label="Workflow steps">
+          <li class="pdf-flow-step active" data-step="upload">Upload</li>
+          <li class="pdf-flow-step" data-step="configure">Order &amp; review</li>
+          <li class="pdf-flow-step" data-step="download">Download</li>
+        </ol>
 
         <div class="upload-zone upload-zone-hero" id="merge-drop">
           <div class="upload-icon-wrap">
@@ -89,6 +95,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 
   <!-- Scripts -->
+  <script src="../../js/states.js"></script>
+  <script src="../../js/pdf-flow.js"></script>
   <script src="../../js/shell.js"></script>
   <script src="../../js/theme.js"></script>
   <script src="../../js/utils.js"></script>
@@ -119,6 +127,11 @@
               </div>
             `).join('');
             btn.disabled = files.length < 2 || isProcessing;
+            if (window.PDFFlow) {
+              if (files.length === 0)      window.PDFFlow.setStep('upload');
+              else if (files.length === 1) window.PDFFlow.setStep('upload');
+              else                          window.PDFFlow.setStep('configure');
+            }
           }
 
           window.removeFile = (i) => { files.splice(i, 1); updateUI(); };
@@ -160,14 +173,16 @@
             btn.disabled = true;
             btn.innerHTML = Utils.spinnerHTML() + ' Merging…';
 
-            results.innerHTML = `<div class="processing-wrap">
-              <div class="processing-msg">${Utils.spinnerHTML()} Merging ${files.length} PDFs...</div>
-              <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-            </div>`;
+            if (window.States) {
+              window.States.loading(results, { title: 'Merging PDFs…', message: `Combining ${files.length} files into one document.` });
+            } else {
+              results.innerHTML = `<div class="processing-wrap"><div class="processing-msg">${Utils.spinnerHTML()} Merging ${files.length} PDFs...</div><div class="progress-bar-container"><div class="progress-bar-fill"></div></div></div>`;
+            }
             try {
               await PdfTools.ready();
               const blob = await PdfTools.mergePdfs(files, signal);
               if (signal.aborted) return;
+              if (window.PDFFlow) window.PDFFlow.advance('download');
 
               const url = URL.createObjectURL(blob);
               const name = `merged_${Date.now()}.pdf`;
@@ -197,7 +212,15 @@
               Shell.toast(`Successfully merged ${files.length} PDFs.`, 'success');
             } catch (err) {
               if (err.name === 'AbortError') return;
-              results.innerHTML = `<div class="result-card error"><h4>Merge Failed</h4><p>${err.message}</p></div>`;
+              if (window.States) {
+                window.States.error(results, {
+                  title: 'Merge failed',
+                  message: err.message || 'An unexpected error occurred while merging.',
+                  onRetry: () => btn.click(),
+                });
+              } else {
+                results.innerHTML = `<div class="result-card error"><h4>Merge Failed</h4><p>${err.message}</p></div>`;
+              }
               Shell.toast('Merge failed: ' + err.message, 'error');
             } finally {
               isProcessing = false;
@@ -206,7 +229,14 @@
             }
           };
 
-          el('clear-btn').onclick = () => { abortCtrl?.abort(); files = []; results.innerHTML = ''; updateUI(); };
+          el('clear-btn').onclick = () => {
+            abortCtrl?.abort();
+            files = [];
+            results.innerHTML = '';
+            if (window.States) window.States.clear(results);
+            if (window.PDFFlow) window.PDFFlow.reset();
+            updateUI();
+          };
         })();
       } catch (e) {
         console.error('Merge PDF init failed:', e);
