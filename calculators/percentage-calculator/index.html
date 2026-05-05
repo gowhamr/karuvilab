@@ -106,36 +106,55 @@
 
       el('calc-btn').onclick = () => {
         const aVal = el('pct-a').value, bVal = el('pct-b').value;
-        const a = +aVal, b = +bVal;
+        if (!aVal || !bVal) {
+          Shell.toast('Please enter both values.', 'warn');
+          return;
+        }
+
+        const a = parseFloat(aVal), b = parseFloat(bVal);
         const res = el('pct-result');
-        let out, label;
+        let outValue: number | string = 0, label = '';
 
         // CALC-PCT-001: Precision warning
-        const isHighPrecision = aVal.replace('.', '').length > 15 || bVal.replace('.', '').length > 15;
+        const isHighPrecision = aVal.replace(/[\.\-]/g, '').length > 15 || bVal.replace(/[\.\-]/g, '').length > 15;
         if (isHighPrecision) {
           Shell.toast('Values exceed 15-digit precision. Results may be approximate.', 'warn');
         }
         
-        if (pctMode === '1') {
-          out = (a * b / 100).toLocaleString(undefined, { maximumFractionDigits: 10 });
-          label = `${a}% of ${b}`;
-        } else if (pctMode === '2') {
-          out = ((a / b) * 100).toLocaleString(undefined, { maximumFractionDigits: 4 }) + '%';
-          label = `${a} as % of ${b}`;
-        } else {
-          out = (((b - a) / a) * 100).toLocaleString(undefined, { maximumFractionDigits: 4 }) + '%';
-          label = `Change from ${a} to ${b}`;
-        }
-        
-        const warnHtml = isHighPrecision ? `<div style="font-size:0.7rem; color:var(--warn); margin-top:8px;">⚠️ Precision limit reached (15+ digits)</div>` : '';
+        try {
+          if (pctMode === '1') {
+            outValue = (a * b / 100);
+            label = `${a}% of ${b}`;
+          } else if (pctMode === '2') {
+            if (b === 0) throw new Error('Cannot divide by zero.');
+            outValue = ((a / b) * 100);
+            label = `${a} as % of ${b}`;
+          } else {
+            if (a === 0) throw new Error('Cannot calculate change from zero.');
+            outValue = (((b - a) / a) * 100);
+            label = `Change from ${a} to ${b}`;
+          }
 
-        res.innerHTML = `
-          <div class="result-card">
-            <div style="font-size:0.75rem; color:var(--text-3); text-transform:uppercase; font-weight:700; margin-bottom:8px;">${label}</div>
-            <div style="font-size:1.8rem; font-weight:800; color:var(--blue)">${out}</div>
-            ${warnHtml}
-          </div>`;
-        res.style.display = 'block';
+          if (isNaN(outValue as number)) throw new Error('Invalid calculation result.');
+          if (!isFinite(outValue as number)) throw new Error('Result too large to display (Infinity).');
+
+          const outStr = typeof outValue === 'number' 
+            ? outValue.toLocaleString(undefined, { maximumFractionDigits: 10 }) + (pctMode !== '1' ? '%' : '')
+            : outValue;
+
+          const warnHtml = isHighPrecision ? `<div style="font-size:0.7rem; color:var(--warn); margin-top:8px;">⚠️ Precision limit reached (15+ digits)</div>` : '';
+
+          res.innerHTML = `
+            <div class="result-card">
+              <div style="font-size:0.75rem; color:var(--text-3); text-transform:uppercase; font-weight:700; margin-bottom:8px;">${label}</div>
+              <div style="font-size:1.8rem; font-weight:800; color:var(--blue)">${outStr}</div>
+              ${warnHtml}
+            </div>`;
+          res.style.display = 'block';
+        } catch (e) {
+          Shell.toast((e as Error).message, 'error');
+          res.style.display = 'none';
+        }
       };
     })();
   

@@ -363,7 +363,10 @@ document.addEventListener("DOMContentLoaded", () => {
           if (/\.pdf$/i.test(file.name)) {
             if (resultsEl) resultsEl.innerHTML = processingMsg(`Compressing PDF: ${file.name}\u2026`);
             await PdfTools.ready();
-            const blob = await PdfTools.compressPdf(file, 0.6, null, signal);
+            const blob = await PdfTools.compressPdf(file, 0.6, (p, t) => {
+              const bar = document.querySelector(".progress-bar-fill");
+              if (bar) bar.style.width = p / t * 100 + "%";
+            }, signal);
             resultBlobs.push(blob);
             html += buildResultCard(file, blob, "compressed", "pdf");
           } else {
@@ -836,6 +839,10 @@ document.addEventListener("DOMContentLoaded", () => {
           window.Shell.toast("Text encoded successfully", "success");
         } else {
           const cleanedText = text.replace(/\s/g, "");
+          const b64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+          if (!b64Regex.test(cleanedText)) {
+            throw new Error("Input is not a valid Base64 string.");
+          }
           const binary = atob(cleanedText);
           const bytes = new Uint8Array(binary.length);
           for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
@@ -1027,31 +1034,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function formatJson(text, minify) {
       try {
+        if (!text.trim()) return "";
         const obj = JSON.parse(text);
         return minify ? JSON.stringify(obj) : JSON.stringify(obj, null, 2);
       } catch (e) {
         let msg = e.message;
         const posMatch = msg.match(/at position (\d+)/);
-        if (posMatch) {
+        if (posMatch && fmtInput) {
           const pos = parseInt(posMatch[1], 10);
           const before = text.substring(0, pos);
           const lines = before.split("\n");
           const line = lines.length;
           const col = lines[line - 1].length + 1;
           msg = `JSON Parse Error: ${msg} (Line ${line}, Column ${col})`;
-          if (fmtInput) {
-            fmtInput.focus();
-            fmtInput.setSelectionRange(pos, pos + 1);
-          }
+          fmtInput.focus();
+          fmtInput.setSelectionRange(pos, pos + 1);
         }
         throw new Error(msg);
       }
     }
     function formatXml(text, minify) {
+      if (!text.trim()) return "";
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, "application/xml");
       const parseErr = doc.querySelector("parsererror");
-      if (parseErr) throw new Error(parseErr.textContent?.split("\n")[0] ?? "Parse error");
+      if (parseErr) {
+        const msg = parseErr.textContent?.split("\n")[0] ?? "Parse error";
+        throw new Error("XML " + msg);
+      }
+      if (!doc.documentElement) throw new Error("Invalid XML: No root element found.");
       const prologMatch = text.match(/^<\?xml.*?\?>/i);
       const prolog = prologMatch ? prologMatch[0] + "\n" : "";
       if (minify) {

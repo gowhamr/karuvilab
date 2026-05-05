@@ -48,6 +48,13 @@ const Validator = (() => {
   };
 
   async function validate(file: File, docType: string = 'general'): Promise<ValidationResult> {
+    if (!file) {
+      return {
+        passed: false,
+        checks: [{ label: 'File', pass: false, warn: false, detail: 'No file selected for validation' }],
+        rule: DOC_RULES[docType] ?? DOC_RULES['general']
+      };
+    }
     const rule   = DOC_RULES[docType] ?? DOC_RULES['general'];
     const ext    = Utils.getExt(file.name);
     const sizeKB = file.size / 1024;

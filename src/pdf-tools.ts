@@ -1,7 +1,7 @@
 /* ===== pdf-tools.ts – PDF creation, merge, compress, split ===== */
 
 const PDFJS_WORKER_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-const MAX_PDF_SIZE_MB  = 100;
+const MAX_PDF_SIZE_MB  = 200;
 
 const PdfTools = (() => {
 
@@ -96,6 +96,12 @@ const PdfTools = (() => {
     const merged = await lib.PDFDocument.create();
     for (const pdf of pdfs) {
       if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+      
+      // PDF-002: MIME type validation
+      if (pdf.type && pdf.type !== 'application/pdf') {
+        throw new Error('Unsupported file type. Please provide only PDF files.');
+      }
+
       const ab  = await Utils.readAsArrayBuffer(pdf);
       const doc = await lib.PDFDocument.load(ab, { ignoreEncryption: true });
       const pages = await merged.copyPages(doc, doc.getPageIndices());
@@ -131,6 +137,10 @@ const PdfTools = (() => {
     try {
       for (let i = 1; i <= total; i++) {
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+        
+        // PDF-001: Chunk-based processing to avoid blocking main thread
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        
         if (onProgress) onProgress(i, total);
 
         const page     = await pdfDoc.getPage(i);
@@ -139,6 +149,7 @@ const PdfTools = (() => {
         canvas.width   = Math.round(viewport.width);
         canvas.height  = Math.round(viewport.height);
         const ctx      = canvas.getContext('2d') as CanvasRenderingContext2D;
+        
         await page.render({ canvasContext: ctx, viewport }).promise;
 
         const dataUrl = canvas.toDataURL('image/jpeg', imageQuality);
@@ -146,11 +157,21 @@ const PdfTools = (() => {
         const pgH = viewport.height * 0.75;
 
         if (i === 1) {
-          jsdoc = new JsPDFCtor({ unit: 'pt', format: [pgW, pgH], orientation: 'p' });
+          jsdoc = new JsPDFCtor({ 
+            unit: 'pt', 
+            format: [pgW, pgH], 
+            orientation: pgW > pgH ? 'l' : 'p',
+            compress: true // Enable internal jsPDF compression
+          });
         } else {
-          jsdoc!.addPage([pgW, pgH], 'p');
+          jsdoc!.addPage([pgW, pgH], pgW > pgH ? 'l' : 'p');
         }
-        jsdoc!.addImage(dataUrl, 'JPEG', 0, 0, pgW, pgH);
+        
+        jsdoc!.addImage(dataUrl, 'JPEG', 0, 0, pgW, pgH, undefined, 'FAST');
+        
+        // Memory cleanup
+        canvas.width = 0;
+        canvas.height = 0;
       }
     } finally {
       await pdfDoc.destroy();
@@ -202,8 +223,10 @@ const PdfTools = (() => {
 
     const pagesToExtract: number[][] = [];
 
-    if (range === 'all' || !range.trim()) {
+    if (range === 'all') {
       for (let i = 0; i < pageCount; i++) pagesToExtract.push([i]);
+    } else if (!range || !range.trim()) {
+      throw new Error('Please enter a valid page range (e.g. 1-3, 5).');
     } else {
       if (!/^\s*\d+\s*(?:-\s*\d+\s*)?(?:,\s*\d+\s*(?:-\s*\d+\s*)?)*$/.test(range)) {
         throw new Error('Invalid range format. Use numbers and ranges like "1-3, 5".');

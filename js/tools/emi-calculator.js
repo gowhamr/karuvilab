@@ -1,7 +1,7 @@
 (function() {
   const el = (id) => document.getElementById(id);
-  const fmt = (n) => Math.round(n).toLocaleString("en-IN");
-  const inr = (n) => "\u20B9" + fmt(n);
+  const fmt = (n, d = 0) => n.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const inr = (n, d = 0) => "\u20B9" + fmt(n, d);
   const sliders = ["amt", "rate", "years"];
   function calculate() {
     const P = +el("in-amt").value;
@@ -18,10 +18,10 @@
       statusBox.style.color = "#b91c1c";
       if (btnCopy) btnCopy.disabled = true;
       if (btnTable) btnTable.disabled = true;
-      el("out-emi").textContent = "\u20B90";
-      el("out-principal").textContent = "\u20B90";
-      el("out-interest").textContent = "\u20B90";
-      el("out-total").textContent = "\u20B90";
+      el("out-emi").textContent = "\u20B90.00";
+      el("out-principal").textContent = "\u20B90.00";
+      el("out-interest").textContent = "\u20B90.00";
+      el("out-total").textContent = "\u20B90.00";
       el("out-interest-ratio").textContent = "0%";
       const tbody2 = el("res-table")?.querySelector("tbody");
       if (tbody2) tbody2.innerHTML = "";
@@ -48,10 +48,10 @@
     const totalPayable = emi * n;
     const totalInterest = Math.max(0, totalPayable - P);
     const interestRatio = totalPayable > 0 ? totalInterest / totalPayable : 0;
-    el("out-emi").textContent = inr(emi);
-    el("out-principal").textContent = inr(P);
-    el("out-interest").textContent = inr(totalInterest);
-    el("out-total").textContent = inr(totalPayable);
+    el("out-emi").textContent = inr(emi, 2);
+    el("out-principal").textContent = inr(P, 2);
+    el("out-interest").textContent = inr(totalInterest, 2);
+    el("out-total").textContent = inr(totalPayable, 2);
     el("out-interest-ratio").textContent = Math.round(interestRatio * 100) + "%";
     const circumference = 2 * Math.PI * 40;
     const pSeg = el("donut-principal");
@@ -80,9 +80,9 @@
         yearlyData.push(`
           <tr>
             <td>Year ${y}</td>
-            <td>${inr(yPrincipal)}</td>
-            <td style="color:var(--warn)">${inr(yInterest)}</td>
-            <td style="font-weight:700">${inr(Math.max(0, balance))}</td>
+            <td>${inr(yPrincipal, 2)}</td>
+            <td style="color:var(--warn)">${inr(yInterest, 2)}</td>
+            <td style="font-weight:700">${inr(Math.max(0, balance), 2)}</td>
           </tr>
         `);
       }

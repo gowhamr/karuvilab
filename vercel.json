@@ -34,8 +34,7 @@
     { "source": "/security-tools", "destination": "/security-tools/index.html" },
     { "source": "/developer-tools", "destination": "/developer-tools/index.html" },
     { "source": "/utilities", "destination": "/utilities/index.html" },
-    { "source": "/tools/seo", "destination": "/tools/seo/index.html" },
-    { "source": "/tools/:tool*", "destination": "/index.html" }
+    { "source": "/tools/seo", "destination": "/tools/seo/index.html" }
   ],
   "headers": [
     {
