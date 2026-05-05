@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark">
+  <title>Safe-to-Spend Calculator — Daily Budget Planner — KaruviLab</title>
+  <meta name="description" content="Calculate exactly how much you can safely spend today after accounting for bills, savings, and upcoming expenses. The smartest way to manage your daily budget." />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <script>window.SHELL_ACTIVE = 'calculators';</script>
+  <style>
+    .safe-hero { background: var(--blue-light); padding: 24px; border-radius: 16px; text-align: center; margin-bottom: 24px; border: 1px solid var(--blue); }
+    .safe-amount { display: block; font-size: 2.5rem; font-weight: 900; color: var(--blue); margin: 8px 0; }
+    .safe-label { font-size: 0.9rem; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; }
+    .budget-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .budget-row input { margin-bottom: 0; }
+    .budget-row .btn-sm { padding: 8px; }
+  </style>
+</head>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <p class="nav-title">Safe-to-Spend Calculator</p>
+        <p class="nav-subtitle">Know your daily limit and stop overspending</p>
+      </div>
+    </div>
+
+    <div class="panel-scroll">
+      <nav class="breadcrumb-nav">
+        <a href="../../">Home</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <a href="../">Calculators</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <span class="current">Safe-to-Spend</span>
+      </nav>
+
+      <div class="tool-section">
+        <div class="safe-hero">
+          <span class="safe-label">Available for Today</span>
+          <span class="safe-amount" id="safe-total">$0.00</span>
+          <p style="font-size:0.85rem; color:var(--text-3);" id="safe-remark">Enter your details to calculate</p>
+        </div>
+
+        <div class="settings-card">
+          <p class="settings-card-title">1. Your Resources</p>
+          <div class="settings-row">
+            <span class="settings-label">Current Bank Balance</span>
+            <input type="number" id="in-balance" class="workspace-input" placeholder="0.00" style="margin-bottom:0; width:120px">
+          </div>
+          <div class="settings-row" style="border-bottom:none">
+            <span class="settings-label">Days Until Next Payday</span>
+            <input type="number" id="in-days" class="workspace-input" placeholder="30" style="margin-bottom:0; width:80px">
+          </div>
+        </div>
+
+        <div class="settings-card" style="margin-top:20px">
+          <p class="settings-card-title">2. Upcoming Obligations (Fixed)</p>
+          <div id="bills-container">
+            <div class="budget-row">
+              <input type="text" class="workspace-input bill-name" placeholder="e.g. Rent" style="flex:2">
+              <input type="number" class="workspace-input bill-val" placeholder="0.00" style="flex:1">
+              <button class="btn btn-sm btn-outline remove-row">×</button>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline" id="add-bill" style="margin-top:10px">+ Add Expense</button>
+        </div>
+
+        <div class="settings-card" style="margin-top:20px">
+          <p class="settings-card-title">3. Savings Goal</p>
+          <div class="settings-row" style="border-bottom:none">
+            <span class="settings-label">Target Savings for Period</span>
+            <input type="number" id="in-savings" class="workspace-input" placeholder="0.00" style="margin-bottom:0; width:120px">
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-section info-section">
+        <h3>How the Safe-to-Spend Calculator Works</h3>
+        <p>The "Safe-to-Spend" concept is a modern budgeting technique that focuses on a single number: how much money you can spend <em>right now</em> without compromising your future bills or savings goals. Instead of tracking every penny in a complex spreadsheet, this tool gives you a clear daily limit based on your real-time balance.</p>
+        
+        <h4 style="margin-top:20px;">The Mathematical Formula</h4>
+        <p>Our calculator follows a simple but powerful logic: <code>(Current Balance - Sum of Upcoming Bills - Savings Goal) / Days until Payday</code>. This ensures that you aren't just looking at your bank account and seeing "extra" money that is actually spoken for by next week's rent or insurance payment.</p>
+        
+        <h4 style="margin-top:20px;">Accounting for Fixed Expenses</h4>
+        <p>Most of us have fixed costs that hit at different times of the month. By listing your upcoming bills (rent, utilities, subscriptions) and subtracting them from your available balance immediately, you get a "true" available balance. This effectively hides the money you can't touch, preventing accidental overspending.</p>
+        
+        <h4 style="margin-top:20px;">Prioritizing Your Savings</h4>
+        <p>A key feature of this tool is the "Savings Goal." By treating your savings target as an immediate deduction from your daily allowance, you ensure that you "pay yourself first." If your daily safe-to-spend number is too low, you can adjust your savings goal or find ways to reduce your fixed expenses.</p>
+
+        <h3 style="margin-top:32px;">Example Scenario</h3>
+        <div class="example-box" style="background:var(--bg-input); padding:16px; border-radius:12px; margin-top:16px; line-height:1.6;">
+          <p><strong>Bank Balance:</strong> $2,500</p>
+          <p><strong>Payday:</strong> 10 days away</p>
+          <p><strong>Rent:</strong> $1,200</p>
+          <p><strong>Savings Goal:</strong> $300</p>
+          <hr style="margin:10px 0; border:none; border-top:1px solid var(--border);">
+          <p><strong>Calculation:</strong> ($2,500 - $1,200 - $300) / 10 = <strong>$100.00</strong></p>
+          <p><em>You can safely spend $100 per day until your next paycheck.</em></p>
+        </div>
+
+        <h3 style="margin-top:32px;">Frequently Asked Questions</h3>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Should I include credit card balances?</strong></p>
+          <p>If you plan to pay off your credit card in full this period, you should include that payment amount as an "Upcoming Obligation." This ensures you have the cash set aside when the statement is due.</p>
+        </div>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Is my financial data safe?</strong></p>
+          <p>Absolutely. Like all KaruviLab tools, this calculator is entirely browser-based. We do not store your balance, bills, or goals on any server. The data stays on your device and is lost when you refresh the page (unless you choose to save it locally in a future update).</p>
+        </div>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>What if my Safe-to-Spend number is negative?</strong></p>
+          <p>A negative number indicates that your current resources are not enough to cover your upcoming bills and savings goals before your next payday. You should review your expenses or adjust your savings target immediately.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/shell.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/tools/safe-to-spend.js"></script>
+</body>
+</html>

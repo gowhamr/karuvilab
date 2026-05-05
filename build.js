@@ -34,6 +34,20 @@ const entries = [
   'tools/date-calculator',
   'tools/time-calculator',
   'tools/standard-calculator',
+  'tools/text-utility',
+  'tools/url-cleaner',
+  'tools/grammar-checker',
+  'tools/robots-txt',
+  'tools/sitemap-generator',
+  'tools/og-preview',
+  'tools/seo-title',
+  'tools/safe-to-spend',
+  'tools/work-hours',
+  'tools/task-reminder',
+  'tools/smart-converter',
+  'tools/bulk-resizer',
+  'tools/bg-remover',
+  'tools/pdf-to-word',
 ];
 
 const entryPoints = entries.map(name => ({

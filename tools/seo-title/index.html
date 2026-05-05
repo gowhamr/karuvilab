@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark">
+  <title>SEO Title Optimizer — Analyze & Perfect Your Titles — KaruviLab</title>
+  <meta name="description" content="Optimize your page titles for better search rankings. Check length, keyword placement, and preview how it looks on Google search results." />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <script>window.SHELL_ACTIVE = 'seo';</script>
+  <style>
+    .google-preview { background: #fff; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: var(--shadow-sm); max-width: 600px; border: 1px solid #dfe1e5; }
+    [data-theme="dark"] .google-preview { background: #202124; border-color: #3c4043; }
+    .google-url { color: #202124; font-size: 14px; margin-bottom: 4px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    [data-theme="dark"] .google-url { color: #bdc1c6; }
+    .google-title { color: #1a0dab; font-size: 20px; line-height: 1.3; font-weight: 400; margin-bottom: 3px; display: block; cursor: pointer; }
+    [data-theme="dark"] .google-title { color: #8ab4f8; }
+    .google-title:hover { text-decoration: underline; }
+    .google-desc { color: #4d5156; font-size: 14px; line-height: 1.58; display: block; }
+    [data-theme="dark"] .google-desc { color: #bdc1c6; }
+    .progress-bar { height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+    .progress-fill { height: 100%; transition: width 0.3s ease, background 0.3s ease; }
+    .score-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; }
+  </style>
+</head>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <p class="nav-title">SEO Title Optimizer</p>
+        <p class="nav-subtitle">Perfect your headlines for search results</p>
+      </div>
+    </div>
+
+    <div class="panel-scroll">
+      <nav class="breadcrumb-nav">
+        <a href="../../">Home</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <a href="../../seo-tools/">SEO Tools</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <span class="current">Title Optimizer</span>
+      </nav>
+
+      <div class="tool-section">
+        <label class="tool-label">Target Page Title</label>
+        <input type="text" id="title-input" class="workspace-input" placeholder="e.g. 10 Best Tools for SEO Optimization in 2024">
+        
+        <div style="margin-top:20px">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="stat-label">Title Length</span>
+            <span id="title-len" style="font-weight:700;">0 / 60</span>
+          </div>
+          <div class="progress-bar"><div id="title-progress" class="progress-fill" style="width:0; background:var(--error);"></div></div>
+          <p id="title-feedback" style="font-size:0.75rem; color:var(--text-3); margin-top:6px;">Start typing your title...</p>
+        </div>
+
+        <div style="margin-top:32px;">
+          <label class="tool-label">Meta Description (Optional)</label>
+          <textarea id="desc-input" class="workspace-input" rows="3" placeholder="A short summary for search engines..."></textarea>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+            <span class="stat-label">Description Length</span>
+            <span id="desc-len" style="font-weight:700;">0 / 160</span>
+          </div>
+          <div class="progress-bar"><div id="desc-progress" class="progress-fill" style="width:0; background:var(--error);"></div></div>
+        </div>
+
+        <p class="tool-label" style="margin-top:40px;">Google Search Preview</p>
+        <div class="google-preview">
+          <span class="google-url">https://your-site.com/your-page-url</span>
+          <span class="google-title" id="prev-title">Your Page Title Here</span>
+          <span class="google-desc" id="prev-desc">This is how your description will appear in search results. Google usually truncates after 155-160 characters.</span>
+        </div>
+      </div>
+
+      <div class="tool-section info-section">
+        <h3>How the SEO Title Optimizer Works</h3>
+        <p>Your page title is arguably the most important on-page SEO element. It tells both users and search engines what your page is about and serves as the primary headline in Search Engine Results Pages (SERPs). This tool analyzes your title's length and keywords to ensure it is perfectly optimized for maximum visibility and clicks.</p>
+        
+        <h4 style="margin-top:20px;">The 60-Character Sweet Spot</h4>
+        <p>While there is no fixed character limit, Google typically displays the first 50–60 characters of a title. If you keep your titles under 60 characters, research suggests you can expect about 90% of your titles to display properly. Our tool provides a real-time progress bar to help you hit this "sweet spot" without guessing.</p>
+        
+        <h4 style="margin-top:20px;">Meta Descriptions and CTR</h4>
+        <p>Although meta descriptions are not a direct ranking factor, they are crucial for Click-Through Rate (CTR). A well-written description acts as an advertisement for your page. We analyze your description to ensure it stays within the recommended 150-160 character limit, preventing it from being cut off in the middle of a sentence.</p>
+        
+        <h4 style="margin-top:20px;">Mobile vs. Desktop Preview</h4>
+        <p>Google's SERP display varies between mobile and desktop devices. Our preview simulates the standard desktop view, which is the most common benchmark for initial SEO optimization. Ensuring your most important keywords appear near the beginning of the title helps capture user attention regardless of the device.</p>
+
+        <h3 style="margin-top:32px;">Optimization Tips</h3>
+        <ul style="margin-left:20px; margin-top:12px; color:var(--text-2); line-height:1.6;">
+          <li><strong>Keyword First:</strong> Place your primary keyword as close to the beginning of the title as possible.</li>
+          <li><strong>Avoid Stuffing:</strong> Don't repeat keywords; it looks spammy and can hurt your rankings.</li>
+          <li><strong>Be Descriptive:</strong> Make sure the title accurately reflects the content of the page.</li>
+          <li><strong>Include Brand:</strong> If space permits, add your brand name at the end (e.g., "| KaruviLab").</li>
+        </ul>
+
+        <h3 style="margin-top:32px;">Frequently Asked Questions</h3>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Will Google always show the title I set?</strong></p>
+          <p>Not always. Sometimes Google will automatically rewrite your title in search results if they believe a different headline would better match a user's search query. However, providing a well-optimized title increases the chances of yours being used.</p>
+        </div>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Does title length affect my ranking?</strong></p>
+          <p>The length itself isn't a direct ranking factor, but a title that is too long gets truncated, which can reduce its clarity and CTR. A lower CTR can indirectly signal to Google that your page is less relevant to users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/shell.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/tools/seo-title.js"></script>
+</body>
+</html>

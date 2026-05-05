@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark">
+  <title>Work Hours Calculator — Timesheet & Overtime Tracker — KaruviLab</title>
+  <meta name="description" content="Calculate your total working hours, including breaks and overtime. Perfect for freelancers, employees, and managers needing accurate timesheet calculations." />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <script>window.SHELL_ACTIVE = 'calculators';</script>
+  <style>
+    .time-row { display: grid; grid-template-columns: 1fr 1fr 1fr 40px; gap: 12px; margin-bottom: 12px; align-items: center; }
+    .time-row label { font-size: 0.75rem; color: var(--text-3); margin-bottom: 4px; display: block; }
+    .time-row input { margin-bottom: 0; }
+    .total-banner { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 16px; display: flex; justify-content: space-around; margin-bottom: 24px; text-align: center; }
+    .total-val { display: block; font-size: 1.5rem; font-weight: 800; color: var(--blue); }
+    .total-label { font-size: 0.7rem; color: var(--text-4); text-transform: uppercase; font-weight: 700; }
+  </style>
+</head>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <p class="nav-title">Work Hours Calculator</p>
+        <p class="nav-subtitle">Accurate tracking for timesheets and payroll</p>
+      </div>
+    </div>
+
+    <div class="panel-scroll">
+      <nav class="breadcrumb-nav">
+        <a href="../../">Home</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <a href="../">Calculators</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <span class="current">Work Hours</span>
+      </nav>
+
+      <div class="tool-section">
+        <div class="total-banner">
+          <div>
+            <span class="total-label">Total Time</span>
+            <span class="total-val" id="total-hours">0h 0m</span>
+          </div>
+          <div>
+            <span class="total-label">Decimal Hours</span>
+            <span class="total-val" id="total-decimal">0.00</span>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <p class="settings-card-title">Daily Time Entries</p>
+          <div id="timesheet-container">
+            <div class="time-row">
+              <div><label>Start Time</label><input type="time" class="workspace-input start-time" value="09:00"></div>
+              <div><label>End Time</label><input type="time" class="workspace-input end-time" value="17:00"></div>
+              <div><label>Break (Min)</label><input type="number" class="workspace-input break-time" placeholder="30" value="0"></div>
+              <button class="btn btn-sm btn-outline remove-row" style="margin-top:20px">×</button>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline" id="add-day" style="margin-top:10px">+ Add Entry</button>
+        </div>
+
+        <div class="settings-card" style="margin-top:20px">
+          <p class="settings-card-title">Settings</p>
+          <div class="settings-row" style="border-bottom:none">
+            <span class="settings-label">Hourly Rate (Optional)</span>
+            <input type="number" id="hourly-rate" class="workspace-input" placeholder="0.00" style="margin-bottom:0; width:100px">
+          </div>
+          <div id="pay-display" style="margin-top:12px; font-weight:700; color:var(--success); display:none; text-align:right;">
+            Estimated Pay: <span id="total-pay">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-section info-section">
+        <h3>How the Work Hours Calculator Works</h3>
+        <p>Keeping track of hours worked can be surprisingly complex, especially when accounting for variable start times, lunch breaks, and overtime. Our Work Hours Calculator simplifies this process by providing an easy-to-use interface for logging your daily activity and instantly seeing your totals in both standard and decimal formats.</p>
+        
+        <h4 style="margin-top:20px;">Standard vs. Decimal Hours</h4>
+        <p>Most employers and payroll software require time to be submitted in decimal format (e.g., 8.5 hours instead of 8 hours and 30 minutes). This tool automatically performs that conversion for you, ensuring that your timesheets are always accurate and ready for submission.</p>
+        
+        <h4 style="margin-top:20px;">Break Deductions</h4>
+        <p>Unpaid breaks are a common feature of the modern workday. By entering your break duration in minutes for each shift, the calculator automatically subtracts that time from your total duration. This prevents the common mistake of overestimating hours by forgetting to account for lunch or rest periods.</p>
+        
+        <h4 style="margin-top:20px;">Income Estimation</h4>
+        <p>If you work as a freelancer or contractor, you can enter your hourly rate to get an immediate estimate of your gross earnings for the period. This is helpful for budgeting and project management, giving you a real-time view of the value of your labor.</p>
+
+        <h3 style="margin-top:32px;">Example Calculation</h3>
+        <div class="example-box" style="background:var(--bg-input); padding:16px; border-radius:12px; margin-top:16px; line-height:1.6;">
+          <p><strong>Start:</strong> 08:30 AM</p>
+          <p><strong>End:</strong> 05:15 PM</p>
+          <p><strong>Break:</strong> 45 minutes</p>
+          <hr style="margin:10px 0; border:none; border-top:1px solid var(--border);">
+          <p><strong>Total Duration:</strong> 8 hours 45 minutes</p>
+          <p><strong>Decimal Format:</strong> 8.75 hours</p>
+        </div>
+
+        <h3 style="margin-top:32px;">Frequently Asked Questions</h3>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Can I calculate overnight shifts?</strong></p>
+          <p>Yes. If your end time is earlier than your start time (e.g., 10:00 PM to 06:00 AM), the calculator automatically assumes the shift crossed into the next day and calculates the 8-hour duration correctly.</p>
+        </div>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>How do I clear the data?</strong></p>
+          <p>Since the data is not stored, refreshing the page will reset all inputs to their defaults. We recommend copying your totals before closing the tab.</p>
+        </div>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Is there a limit to the number of entries?</strong></p>
+          <p>No. You can add as many rows as needed for a week, a month, or even a full project lifecycle. Performance is optimized for hundreds of entries.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/shell.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/tools/work-hours.js"></script>
+</body>
+</html>

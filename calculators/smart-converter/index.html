@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark">
+  <title>Smart Unit Converter — Quick Length, Weight, & Temp — KaruviLab</title>
+  <meta name="description" content="A fast and intelligent unit converter. Convert between length, mass, temperature, and volume units instantly. Support for both metric and imperial systems." />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <script>window.SHELL_ACTIVE = 'calculators';</script>
+  <style>
+    .conv-grid { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 12px; align-items: center; margin-bottom: 24px; }
+    .conv-box { background: var(--surface); border: 1.5px solid var(--border); padding: 16px; border-radius: 16px; }
+    .conv-box input { border: none; background: transparent; font-size: 1.5rem; font-weight: 800; width: 100%; color: var(--blue); padding: 0; margin-bottom: 8px; outline: none; }
+    .conv-box select { border: none; background: transparent; font-size: 0.85rem; color: var(--text-3); padding: 0; font-weight: 600; width: 100%; -webkit-appearance: none; appearance: none; cursor: pointer; }
+    .swap-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; background: var(--surface); cursor: pointer; transition: transform 0.2s; }
+    .swap-btn:hover { transform: rotate(180deg); border-color: var(--blue); color: var(--blue); }
+    .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 20px; scrollbar-width: none; }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab { white-space: nowrap; padding: 8px 16px; border-radius: 20px; background: var(--bg-input); border: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--text-2); transition: all 0.2s; }
+    .cat-tab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  </style>
+</head>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <p class="nav-title">Smart Unit Converter</p>
+        <p class="nav-subtitle">Multi-category conversion with real-time results</p>
+      </div>
+    </div>
+
+    <div class="panel-scroll">
+      <nav class="breadcrumb-nav">
+        <a href="../../">Home</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <a href="../">Calculators</a> <span class="breadcrumb-sep">&rsaquo;</span> 
+        <span class="current">Smart Converter</span>
+      </nav>
+
+      <div class="tool-section">
+        <div class="cat-tabs" id="cat-tabs">
+          <button class="cat-tab active" data-cat="length">📏 Length</button>
+          <button class="cat-tab" data-cat="weight">⚖️ Weight</button>
+          <button class="cat-tab" data-cat="temp">🌡️ Temp</button>
+          <button class="cat-tab" data-cat="area">📐 Area</button>
+          <button class="cat-tab" data-cat="volume">🧪 Volume</button>
+        </div>
+
+        <div class="conv-grid">
+          <div class="conv-box">
+            <input type="number" id="in-val" value="1">
+            <select id="in-unit">
+              <!-- Options populated via JS -->
+            </select>
+          </div>
+          <div class="swap-btn" id="swap-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4M7 4L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+          </div>
+          <div class="conv-box">
+            <input type="number" id="out-val" readonly>
+            <select id="out-unit">
+              <!-- Options populated via JS -->
+            </select>
+          </div>
+        </div>
+
+        <div id="quick-conversions" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:12px;">
+          <!-- Quick reference cards will appear here -->
+        </div>
+      </div>
+
+      <div class="tool-section info-section">
+        <h3>How the Smart Unit Converter Works</h3>
+        <p>Converting between different systems of measurement (like Metric and Imperial) is a common task for students, engineers, and travelers. Our Smart Unit Converter provides a high-precision, real-time solution that works entirely in your browser. Whether you're converting kilometers to miles or Celsius to Fahrenheit, the results are instantaneous.</p>
+        
+        <h4 style="margin-top:20px;">Precision and Accuracy</h4>
+        <p>Under the hood, the converter uses high-precision conversion factors derived from international standards. For example, 1 inch is exactly 25.4 millimeters. By calculating everything locally with 64-bit floating-point numbers, we ensure that rounding errors are kept to an absolute minimum.</p>
+        
+        <h4 style="margin-top:20px;">Category-Based Organization</h4>
+        <p>To keep the interface clean, we've organized units into logical categories:
+          <ul style="margin-left:20px; margin-top:10px; color:var(--text-2); line-height:1.6;">
+            <li><strong>Length:</strong> mm, cm, meters, km, inches, feet, yards, miles.</li>
+            <li><strong>Weight/Mass:</strong> mg, grams, kg, ounces, pounds, stone.</li>
+            <li><strong>Temperature:</strong> Celsius, Fahrenheit, Kelvin.</li>
+            <li><strong>Area:</strong> sq meters, sq feet, acres, hectares.</li>
+          </ul>
+        </p>
+        
+        <h4 style="margin-top:20px;">Real-Time Updates</h4>
+        <p>There's no "Calculate" button because it isn't needed. As you type a value or change a unit, the corresponding value in the other box updates immediately. The "Swap" button allows you to flip the conversion direction with a single click, which is useful for checking calculations in reverse.</p>
+
+        <h3 style="margin-top:32px;">Frequently Asked Questions</h3>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>What is the difference between Metric and Imperial?</strong></p>
+          <p>The Metric system (SI) is based on powers of ten and is the global standard. The Imperial system (used primarily in the USA, UK, and Liberia) uses units like inches, feet, and pounds. This tool makes moving between them seamless.</p>
+        </div>
+        <div class="faq-item" style="margin-top:16px;">
+          <p><strong>Can I convert units of time or data storage?</strong></p>
+          <p>We have specialized tools for <a href="../time-calculator/" style="color:var(--blue)">Time Calculation</a> and <a href="../unit-converter/" style="color:var(--blue)">Data Storage</a>. This Smart Converter focuses on physical measurements like length, mass, and temperature.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/shell.js"></script>
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/tools/smart-converter.js"></script>
+</body>
+</html>
