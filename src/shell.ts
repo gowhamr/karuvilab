@@ -75,11 +75,12 @@
       const header = document.createElement('header');
       header.className = 'top-stripe';
       header.setAttribute('role', 'banner');
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
       header.innerHTML = `
         <div class="ts-brand">
-          <a href="${base}" class="ts-logo-link" style="text-decoration:none">
-            <div class="ts-logo" style="background: #6366F1; border-radius: 9px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <a href="${base}" class="ts-logo-link" aria-label="KaruviLab home" style="text-decoration:none">
+            <div class="ts-logo" aria-hidden="true" style="background: #6366F1; border-radius: 9px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+              <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M10 2v7.31"/><path d="M14 9.31V2"/><path d="M8.5 2h7"/><path d="M14 9.31L20.39 21H3.61L10 9.31"/>
               </svg>
             </div>
@@ -89,20 +90,20 @@
             <span class="ts-tagline">Fast &middot; Private &middot; No uploads</span>
           </div>
           <nav class="ts-desktop-nav" aria-label="Main navigation">
-            <a href="${base}" class="ts-nav-link ${active === 'home' ? 'active' : ''}">Home</a>
-            <a href="${base}tools/compress/" class="ts-nav-link ${active === 'compress' ? 'active' : ''}">Compress</a>
-            <a href="${base}pdf-tools/" class="ts-nav-link ${active === 'pdf' ? 'active' : ''}">PDF</a>
-            <a href="${base}tools/validate/" class="ts-nav-link ${active === 'validate' ? 'active' : ''}">Validate</a>
-            <a href="${base}calculators/" class="ts-nav-link ${active === 'calculators' ? 'active' : ''}">Calculators</a>
+            <a href="${base}" class="ts-nav-link ${active === 'home' ? 'active' : ''}"${active === 'home' ? ' aria-current="page"' : ''}>Home</a>
+            <a href="${base}tools/compress/" class="ts-nav-link ${active === 'compress' ? 'active' : ''}"${active === 'compress' ? ' aria-current="page"' : ''}>Compress</a>
+            <a href="${base}pdf-tools/" class="ts-nav-link ${active === 'pdf' ? 'active' : ''}"${active === 'pdf' ? ' aria-current="page"' : ''}>PDF</a>
+            <a href="${base}tools/validate/" class="ts-nav-link ${active === 'validate' ? 'active' : ''}"${active === 'validate' ? ' aria-current="page"' : ''}>Validate</a>
+            <a href="${base}calculators/" class="ts-nav-link ${active === 'calculators' ? 'active' : ''}"${active === 'calculators' ? ' aria-current="page"' : ''}>Calculators</a>
           </nav>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-            <svg class="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            <svg class="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} theme" aria-pressed="${currentTheme === 'dark'}">
+            <svg class="theme-icon-moon" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="theme-icon-sun" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </button>
-          <span class="ts-badge" style="font-size: .65rem; font-weight: 800; padding: 4px 10px; border-radius: 8px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span class="ts-badge" role="status" aria-label="Privacy: all processing happens locally" style="font-size: .65rem; font-weight: 800; padding: 4px 10px; border-radius: 8px;">
+            <svg aria-hidden="true" focusable="false" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
             PRIVATE
           </span>
         </div>
@@ -110,17 +111,18 @@
 
       const dock = document.createElement('nav');
       dock.className = 'dock';
+      dock.setAttribute('aria-label', 'Primary');
       dock.innerHTML = `
-        <a href="${base}" class="dock-btn ${active === 'home' ? 'active' : ''}">
-          <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        <a href="${base}" class="dock-btn ${active === 'home' ? 'active' : ''}"${active === 'home' ? ' aria-current="page"' : ''}>
+          <svg class="dock-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
           <span class="dock-lbl">Home</span>
         </a>
-        <a href="${base}tools/" class="dock-btn ${active === 'tools' ? 'active' : ''}">
-          <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <a href="${base}tools/" class="dock-btn ${active === 'tools' ? 'active' : ''}"${active === 'tools' ? ' aria-current="page"' : ''}>
+          <svg class="dock-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           <span class="dock-lbl">All Tools</span>
         </a>
         <a href="${base}pages/about.html" class="dock-btn">
-          <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <svg class="dock-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <span class="dock-lbl">Help / Settings</span>
         </a>
       `;
@@ -148,8 +150,17 @@
     setupTheme() {
       const toggle = document.getElementById('theme-toggle');
       if (!toggle) return;
+      const syncToggleState = () => {
+        const t = document.documentElement.getAttribute('data-theme') || 'light';
+        toggle.setAttribute('aria-pressed', String(t === 'dark'));
+        toggle.setAttribute('aria-label', `Switch to ${t === 'dark' ? 'light' : 'dark'} theme`);
+      };
+      syncToggleState();
       toggle.addEventListener('click', () => {
-        if (window.THEME_MANAGER_LOADED) return;
+        if (window.THEME_MANAGER_LOADED) {
+          requestAnimationFrame(syncToggleState);
+          return;
+        }
         const current =
           document.documentElement.getAttribute('data-theme') ||
           (localStorage.getItem('theme') ||
@@ -159,6 +170,7 @@
         localStorage.setItem('theme', next);
         const meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute('content', next === 'dark' ? '#0F172A' : '#4F46E5');
+        syncToggleState();
       });
     },
 
