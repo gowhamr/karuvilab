@@ -205,6 +205,76 @@ const Utils = (() => {
     return { valid: true };
   }
 
+  /**
+   * UTF-8-safe Base64 encode. The native btoa() throws on multi-byte
+   * characters (emoji, non-ASCII). Encode UTF-8 bytes to a Latin-1
+   * string that btoa() accepts.
+   */
+  function b64EncodeUtf8(text: string): string {
+    const bytes = new TextEncoder().encode(text);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  /**
+   * UTF-8-safe Base64 decode. Accepts both standard and URL-safe Base64
+   * (with or without padding) and decodes the resulting bytes as UTF-8.
+   */
+  function b64DecodeUtf8(b64: string): string {
+    let s = b64.replace(/-/g, '+').replace(/_/g, '/').replace(/\s+/g, '');
+    while (s.length % 4) s += '=';
+    const bin = atob(s);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+  }
+
+  /**
+   * Forgiving JSON parser. Returns the value on success. On failure, returns
+   * an object with line/column information extracted from the native parse
+   * error so callers can show a friendly message. As a last resort, strips
+   * common offenders (trailing commas, JS comments) and retries.
+   */
+  function lenientJsonParse(text: string): { ok: true; value: unknown; sanitized: boolean }
+                                          | { ok: false; error: string; line?: number; col?: number; pos?: number } {
+    function tryParse(t: string) {
+      try { return { ok: true as const, value: JSON.parse(t) }; }
+      catch (e) { return { ok: false as const, error: (e as Error).message }; }
+    }
+    const first = tryParse(text);
+    if (first.ok) return { ok: true, value: first.value, sanitized: false };
+
+    // Strip line + block comments and trailing commas (matches outside strings only)
+    const sanitized = text
+      .replace(/(['"`])(?:\\.|(?!\1)[^\\])*\1|\/\/.*$|\/\*[\s\S]*?\*\//gm,
+               m => (m.startsWith('"') || m.startsWith("'") || m.startsWith('`')) ? m : '')
+      .replace(/,\s*([}\]])/g, '$1');
+    if (sanitized !== text) {
+      const second = tryParse(sanitized);
+      if (second.ok) return { ok: true, value: second.value, sanitized: true };
+    }
+
+    // Extract position info from the native error message
+    const msg = first.error;
+    const posMatch = msg.match(/position\s+(\d+)/i);
+    const lineMatch = msg.match(/line\s+(\d+)/i);
+    const colMatch = msg.match(/column\s+(\d+)/i);
+    let line: number | undefined;
+    let col: number | undefined;
+    let pos: number | undefined;
+    if (posMatch) {
+      pos = parseInt(posMatch[1], 10);
+      const upTo = text.slice(0, pos);
+      line = upTo.split('\n').length;
+      col = pos - upTo.lastIndexOf('\n');
+    } else if (lineMatch) {
+      line = parseInt(lineMatch[1], 10);
+      if (colMatch) col = parseInt(colMatch[1], 10);
+    }
+    return { ok: false, error: msg, line, col, pos };
+  }
+
   return {
     formatBytes, safeName, hasSpecialChars,
     readAsDataURL, readAsArrayBuffer,
@@ -214,5 +284,6 @@ const Utils = (() => {
     escHtml, spinnerHTML, sizeBars,
     debounce, validateFile,
     createObjectURL, revokeObjectURL, revokeAllObjectURLs,
+    b64EncodeUtf8, b64DecodeUtf8, lenientJsonParse,
   };
 })();

@@ -67,8 +67,19 @@ const SecurityTools = (() => {
       if (parts.length !== 3) throw new Error('Invalid JWT format');
 
       function decodePart(str: string): Record<string, unknown> | null {
+        // JWT-001: UTF-8-safe Base64URL decode so claims with emoji /
+        // non-ASCII text (e.g. names) don't blow up native atob().
         try {
-          return JSON.parse(atob(str.replace(/-/g, '+').replace(/_/g, '/')));
+          const json = (window as Window & { Utils?: { b64DecodeUtf8(s: string): string } })
+            .Utils?.b64DecodeUtf8?.(str);
+          if (json !== undefined) return JSON.parse(json);
+          // Fallback for the edge case where Utils isn't loaded yet
+          let pad = str.replace(/-/g, '+').replace(/_/g, '/');
+          while (pad.length % 4) pad += '=';
+          const bin = atob(pad);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder('utf-8', { fatal: false }).decode(bytes));
         } catch {
           return null;
         }

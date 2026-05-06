@@ -68,6 +68,8 @@ function qrGenerate() {
   canvas.height = size;
   canvas.style.maxWidth = "100%";
   canvas.style.height = "auto";
+  const genBtn = document.getElementById("qr-gen-btn");
+  if (genBtn) genBtn.disabled = true;
   try {
     window.QRCode.toCanvas(canvas, input, {
       width: size,
@@ -75,6 +77,7 @@ function qrGenerate() {
       errorCorrectionLevel: ecl,
       color: { dark: fgColor, light: bgColor }
     }, (err) => {
+      if (requestId === lastQrRequestId && genBtn) genBtn.disabled = false;
       if (requestId !== lastQrRequestId) return;
       if (err) {
         window.Shell.toast("QR generation failed: " + err.message, "error");
@@ -88,6 +91,7 @@ function qrGenerate() {
       if (svgBtn) svgBtn.disabled = false;
     });
   } catch (e) {
+    if (genBtn) genBtn.disabled = false;
     window.Shell.toast("Error: " + e.message, "error");
   }
 }

@@ -889,30 +889,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       try {
         if (getMode() === 'encode') {
-          const bytes     = new TextEncoder().encode(text);
-          const binString = Array.from(bytes, byte => String.fromCharCode(byte)).join('');
-          showOut(btoa(binString));
+          // BASE64-002: Use UTF-8-safe encoder so emojis & multi-byte chars work
+          showOut(window.Utils.b64EncodeUtf8(text));
           window.Shell.toast('Text encoded successfully', 'success');
         } else {
-          // BASE64-001: Support decoding with whitespace
           const cleanedText = text.replace(/\s/g, '');
-          
-          // UTIL-001: Validate Base64 before decoding
-          const b64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+          // Validate (allow URL-safe chars too) before decoding
+          const b64Regex = /^[A-Za-z0-9+/_\-]*={0,2}$/;
           if (!b64Regex.test(cleanedText)) {
             throw new Error('Input is not a valid Base64 string.');
           }
-
-          const binary      = atob(cleanedText);
-          const bytes       = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-          showOut(new TextDecoder().decode(bytes));
+          showOut(window.Utils.b64DecodeUtf8(cleanedText));
           window.Shell.toast('Base64 decoded successfully', 'success');
         }
       } catch (err) {
         showErr(getMode() === 'decode'
           ? 'Invalid Base64 string: ' + (err as Error).message
-          : 'Could not encode — check for unsupported characters.');
+          : 'Could not encode — ' + (err as Error).message);
       }
     });
 

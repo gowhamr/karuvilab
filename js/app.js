@@ -833,24 +833,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       try {
         if (getMode() === "encode") {
-          const bytes = new TextEncoder().encode(text);
-          const binString = Array.from(bytes, (byte) => String.fromCharCode(byte)).join("");
-          showOut(btoa(binString));
+          showOut(window.Utils.b64EncodeUtf8(text));
           window.Shell.toast("Text encoded successfully", "success");
         } else {
           const cleanedText = text.replace(/\s/g, "");
-          const b64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+          const b64Regex = /^[A-Za-z0-9+/_\-]*={0,2}$/;
           if (!b64Regex.test(cleanedText)) {
             throw new Error("Input is not a valid Base64 string.");
           }
-          const binary = atob(cleanedText);
-          const bytes = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-          showOut(new TextDecoder().decode(bytes));
+          showOut(window.Utils.b64DecodeUtf8(cleanedText));
           window.Shell.toast("Base64 decoded successfully", "success");
         }
       } catch (err) {
-        showErr(getMode() === "decode" ? "Invalid Base64 string: " + err.message : "Could not encode \u2014 check for unsupported characters.");
+        showErr(getMode() === "decode" ? "Invalid Base64 string: " + err.message : "Could not encode \u2014 " + err.message);
       }
     });
     clrBtn?.addEventListener("click", () => {

@@ -86,6 +86,12 @@ function qrGenerate(): void {
   canvas.style.maxWidth = '100%';
   canvas.style.height   = 'auto';
 
+  // QR-002: Disable the Generate button while a request is in flight so
+  // rapid clicks can't kick off parallel renders. lastQrRequestId already
+  // ignores stale callbacks; this disables the visible affordance too.
+  const genBtn = document.getElementById('qr-gen-btn') as HTMLButtonElement | null;
+  if (genBtn) genBtn.disabled = true;
+
   try {
     window.QRCode.toCanvas(canvas, input, {
       width: size,
@@ -93,6 +99,8 @@ function qrGenerate(): void {
       errorCorrectionLevel: ecl,
       color: { dark: fgColor, light: bgColor },
     }, (err: Error | null) => {
+      // Re-enable Generate as soon as the latest request settles
+      if (requestId === lastQrRequestId && genBtn) genBtn.disabled = false;
       if (requestId !== lastQrRequestId) return;
       if (err) {
         window.Shell.toast('QR generation failed: ' + err.message, 'error');
@@ -106,6 +114,7 @@ function qrGenerate(): void {
       if (svgBtn)     svgBtn.disabled  = false;
     });
   } catch (e) {
+    if (genBtn) genBtn.disabled = false;
     window.Shell.toast('Error: ' + (e as Error).message, 'error');
   }
 }

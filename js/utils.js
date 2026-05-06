@@ -187,6 +187,56 @@ const Utils = /* @__PURE__ */ (() => {
     }
     return { valid: true };
   }
+  function b64EncodeUtf8(text) {
+    const bytes = new TextEncoder().encode(text);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64DecodeUtf8(b64) {
+    let s = b64.replace(/-/g, "+").replace(/_/g, "/").replace(/\s+/g, "");
+    while (s.length % 4) s += "=";
+    const bin = atob(s);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+  }
+  function lenientJsonParse(text) {
+    function tryParse(t) {
+      try {
+        return { ok: true, value: JSON.parse(t) };
+      } catch (e) {
+        return { ok: false, error: e.message };
+      }
+    }
+    const first = tryParse(text);
+    if (first.ok) return { ok: true, value: first.value, sanitized: false };
+    const sanitized = text.replace(
+      /(['"`])(?:\\.|(?!\1)[^\\])*\1|\/\/.*$|\/\*[\s\S]*?\*\//gm,
+      (m) => m.startsWith('"') || m.startsWith("'") || m.startsWith("`") ? m : ""
+    ).replace(/,\s*([}\]])/g, "$1");
+    if (sanitized !== text) {
+      const second = tryParse(sanitized);
+      if (second.ok) return { ok: true, value: second.value, sanitized: true };
+    }
+    const msg = first.error;
+    const posMatch = msg.match(/position\s+(\d+)/i);
+    const lineMatch = msg.match(/line\s+(\d+)/i);
+    const colMatch = msg.match(/column\s+(\d+)/i);
+    let line;
+    let col;
+    let pos;
+    if (posMatch) {
+      pos = parseInt(posMatch[1], 10);
+      const upTo = text.slice(0, pos);
+      line = upTo.split("\n").length;
+      col = pos - upTo.lastIndexOf("\n");
+    } else if (lineMatch) {
+      line = parseInt(lineMatch[1], 10);
+      if (colMatch) col = parseInt(colMatch[1], 10);
+    }
+    return { ok: false, error: msg, line, col, pos };
+  }
   return {
     formatBytes,
     safeName,
@@ -209,6 +259,9 @@ const Utils = /* @__PURE__ */ (() => {
     validateFile,
     createObjectURL,
     revokeObjectURL,
-    revokeAllObjectURLs
+    revokeAllObjectURLs,
+    b64EncodeUtf8,
+    b64DecodeUtf8,
+    lenientJsonParse
   };
 })();
