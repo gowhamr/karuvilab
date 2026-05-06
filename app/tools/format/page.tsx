@@ -74,16 +74,13 @@ const FORMATTERS: Record<Lang, (code: string) => string> = {
 export default function CodeFormatter() {
   const [lang, setLang] = useState<Lang>("json");
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
 
-  const output = (() => {
-    setError("");
-    if (!input.trim()) return "";
+  const { output, error } = (() => {
+    if (!input.trim()) return { output: "", error: "" };
     try {
-      return FORMATTERS[lang](input);
+      return { output: FORMATTERS[lang](input), error: "" };
     } catch (e) {
-      setError((e as Error).message);
-      return "";
+      return { output: "", error: (e as Error).message };
     }
   })();
 
@@ -97,7 +94,7 @@ export default function CodeFormatter() {
           {(["json", "html", "css", "sql", "markdown"] as Lang[]).map(l => (
             <button
               key={l}
-              onClick={() => { setLang(l); setInput(""); setError(""); }}
+              onClick={() => { setLang(l); setInput(""); }}
               className={`px-5 py-2 rounded-xl text-sm font-bold uppercase transition-all ${lang === l ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
             >
               {l}

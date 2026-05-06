@@ -4,15 +4,7 @@ import { FormatInfo } from './types';
 import * as Utils from './utils';
 
 declare global {
-  interface Window {
-    heic2any?: (options: { blob: Blob; toType: string; quality: number }) => Promise<Blob | Blob[]>;
-    UTIF?: {
-      decode: (buffer: ArrayBuffer) => any[];
-      decodeImage: (buffer: ArrayBuffer, ifd: any) => void;
-      toRGBA8: (ifd: any) => Uint8Array;
-      encodeImage: (rgba: Uint8ClampedArray | Uint8Array, w: number, h: number) => ArrayBuffer;
-    };
-  }
+  interface Window {}
 }
 
 export const FORMAT_INFO: Record<string, FormatInfo> = {
