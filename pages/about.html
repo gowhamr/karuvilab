@@ -13,6 +13,9 @@
   <link rel="manifest" href="../manifest.json" />
   <meta name="theme-color" content="#4F46E5" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/pages.css" />
   <script>window.SHELL_ACTIVE = 'about';</script>
@@ -24,9 +27,9 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       </div>
       <div class="nav-head">
-        <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
-          <a href="../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
-          <span style="color:var(--text-1); font-weight:600;">About Us</span>
+        <nav class="breadcrumb-nav">
+          <a href="../">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <span class="current">About Us</span>
         </nav>
         <h1 class="nav-title">About KaruviLab</h1>
         <p class="nav-subtitle">Privacy-first browser tools for everyday document work.</p>
@@ -34,83 +37,85 @@
     </div>
 
     <div class="panel-scroll">
-      <div class="tool-section">
-        <h2>What is KaruviLab?</h2>
-        <p>KaruviLab is a free, browser-based utility designed to help individuals prepare images and PDF documents that meet the strict requirements of government portals, online application systems, and official document submissions.</p>
-        <p>From passport photos and signatures to ID proofs and thumb impressions — every government document upload has its own format, size, and dimension requirements. Our tool takes the guesswork out of the process by letting you compress, convert, create, and validate files directly in your browser, without uploading anything to a server.</p>
-      </div>
+      <main class="page-main" style="margin: 0 auto; padding: 0;">
+        <section class="page-section">
+          <h2>What is KaruviLab?</h2>
+          <p>KaruviLab is a free, browser-based utility designed to help individuals prepare images and PDF documents that meet the strict requirements of government portals, online application systems, and official document submissions.</p>
+          <p>From passport photos and signatures to ID proofs and thumb impressions — every government document upload has its own format, size, and dimension requirements. Our tool takes the guesswork out of the process by letting you compress, convert, create, and validate files directly in your browser, without uploading anything to a server.</p>
+        </section>
 
-      <div class="tool-section">
-        <h2>Why We Built This</h2>
-        <p>Millions of people struggle every year when uploading documents to government portals. Common errors include file size limits, wrong dimensions, or unsupported formats. We built this tool to be the one-stop solution for all these problems — fast, free, and private.</p>
-      </div>
+        <section class="page-section">
+          <h2>Why We Built This</h2>
+          <p>Millions of people struggle every year when uploading documents to government portals. Common errors include file size limits, wrong dimensions, or unsupported formats. We built this tool to be the one-stop solution for all these problems — fast, free, and private.</p>
+        </section>
 
-      <div class="tool-section">
-        <h2>Key Features</h2>
-        <div class="feature-grid">
-          <div class="feature-item">
-            <span class="feature-icon">&#128230;</span>
-            <strong>Compressor</strong>
-            <p>Reduce image size to under 100 KB or PDFs to under 1 MB.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#128260;</span>
-            <strong>Converter</strong>
-            <p>Convert between JPG, PNG, GIF, WebP, AVIF, TIFF, BMP, HEIC, and PDF.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#128247;</span>
-            <strong>Image Creator</strong>
-            <p>Create passport photos, signatures, and custom-sized images.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#128196;</span>
-            <strong>PDF Tools</strong>
-            <p>Merge PDFs, convert images to PDF, and compress PDF files.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#9989;</span>
-            <strong>Validator</strong>
-            <p>Validate files against government portal rules and auto-fix issues.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#128187;</span>
-            <strong>Developer Tools</strong>
-            <p>Base64, Regex, JSON/XML formatter, and Markdown editor.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#128203;</span>
-            <strong>Split & Copy</strong>
-            <p>Break large text into parts for easy mobile clipboard sharing.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">&#128274;</span>
-            <strong>100% Private</strong>
-            <p>All processing happens locally. No file is ever uploaded to any server.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="tool-section">
-        <h2>About the Owner</h2>
-        <div class="owner-card">
-          <div class="owner-avatar">RG</div>
-          <div class="owner-info">
-            <h3>R Gowtham</h3>
-            <p class="owner-title">Owner &amp; Administrator</p>
-            <p>R Gowtham is the creator and maintainer of KaruviLab under the <strong>Wanderseven</strong> brand. Passionate about building practical, privacy-first tools for everyday users.</p>
-            <div class="owner-links">
-              <a href="https://wanderseven.com" target="_blank" rel="noopener">&#127760; wanderseven.com</a>
-              <a href="mailto:wanderseven@proton.me">&#9993; wanderseven@proton.me</a>
+        <section class="page-section">
+          <h2>Key Features</h2>
+          <div class="feature-grid">
+            <div class="feature-item">
+              <span class="feature-icon">&#128230;</span>
+              <strong>Compressor</strong>
+              <p>Reduce image size to under 100 KB or PDFs to under 1 MB.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#128260;</span>
+              <strong>Converter</strong>
+              <p>Convert between JPG, PNG, GIF, WebP, AVIF, TIFF, BMP, HEIC, and PDF.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#128247;</span>
+              <strong>Image Creator</strong>
+              <p>Create passport photos, signatures, and custom-sized images.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#128196;</span>
+              <strong>PDF Tools</strong>
+              <p>Merge PDFs, convert images to PDF, and compress PDF files.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#9989;</span>
+              <strong>Validator</strong>
+              <p>Validate files against government portal rules and auto-fix issues.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#128187;</span>
+              <strong>Developer Tools</strong>
+              <p>Base64, Regex, JSON/XML formatter, and Markdown editor.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#128203;</span>
+              <strong>Split & Copy</strong>
+              <p>Break large text into parts for easy mobile clipboard sharing.</p>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">&#128274;</span>
+              <strong>100% Private</strong>
+              <p>All processing happens locally. No file is ever uploaded to any server.</p>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div class="tool-section">
-        <h2>Technology</h2>
-        <p>This tool is built with plain HTML, CSS, and vanilla JavaScript. It uses open-source libraries like jsPDF, PDF.js, pdf-lib, UTIF.js, and heic2any for advanced format support. No frameworks. No tracking. No cookies.</p>
-      </div>
+        <section class="page-section">
+          <h2>About the Owner</h2>
+          <div class="owner-card">
+            <div class="owner-avatar">RG</div>
+            <div class="owner-info">
+              <h3>R Gowtham</h3>
+              <p class="owner-title">Owner &amp; Administrator</p>
+              <p>R Gowtham is the creator and maintainer of KaruviLab under the <strong>Wanderseven</strong> brand. Passionate about building practical, privacy-first tools for everyday users.</p>
+              <div class="owner-links">
+                <a href="https://wanderseven.com" target="_blank" rel="noopener">&#127760; wanderseven.com</a>
+                <a href="mailto:wanderseven@proton.me">&#9993; wanderseven@proton.me</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" style="border-bottom: none;">
+          <h2>Technology</h2>
+          <p>This tool is built with plain HTML, CSS, and vanilla JavaScript. It uses open-source libraries like jsPDF, PDF.js, pdf-lib, UTIF.js, and heic2any for advanced format support. No frameworks. No tracking. No cookies.</p>
+        </section>
+      </main>
     </div>
   </div>
 

@@ -13,6 +13,9 @@
   <link rel="manifest" href="../manifest.json" />
   <meta name="theme-color" content="#4F46E5" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/pages.css" />
   <script>window.SHELL_ACTIVE = 'contact';</script>
@@ -24,9 +27,9 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       </div>
       <div class="nav-head">
-        <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
-          <a href="../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
-          <span style="color:var(--text-1); font-weight:600;">Contact Us</span>
+        <nav class="breadcrumb-nav">
+          <a href="../">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <span class="current">Contact Us</span>
         </nav>
         <h1 class="nav-title">Contact Us</h1>
         <p class="nav-subtitle">We're here to help — reach out any time</p>
@@ -34,61 +37,63 @@
     </div>
 
     <div class="panel-scroll">
-      <div class="tool-section">
-        <h2>Get in Touch</h2>
-        <p>Have a question, a bug to report, or a feature suggestion? We'd love to hear from you. KaruviLab is maintained by a small, dedicated team and we respond to every message.</p>
-      </div>
+      <main class="page-main" style="margin: 0 auto; padding: 0;">
+        <section class="page-section">
+          <h2>Get in Touch</h2>
+          <p>Have a question, a bug to report, or a feature suggestion? We'd love to hear from you. KaruviLab is maintained by a small, dedicated team and we respond to every message.</p>
+        </section>
 
-      <div class="tool-section">
-        <div class="contact-cards">
-          <div class="contact-card">
-            <span class="contact-icon">&#9993;</span>
-            <h3>Email Support</h3>
-            <p>For general enquiries, feature requests, and bug reports:</p>
-            <a href="mailto:wanderseven@proton.me" class="contact-link">wanderseven@proton.me</a>
-            <p class="contact-note">We aim to respond within 1–2 business days.</p>
+        <section class="page-section">
+          <div class="contact-cards">
+            <div class="contact-card">
+              <span class="contact-icon">&#9993;</span>
+              <h3>Email Support</h3>
+              <p>For general enquiries, feature requests, and bug reports:</p>
+              <a href="mailto:wanderseven@proton.me" class="contact-link">wanderseven@proton.me</a>
+              <p class="contact-note">We aim to respond within 1–2 business days.</p>
+            </div>
+            <div class="contact-card">
+              <span class="contact-icon">&#127760;</span>
+              <h3>Website</h3>
+              <p>Visit our main website for more tools and resources:</p>
+              <a href="https://wanderseven.com" target="_blank" rel="noopener" class="contact-link">wanderseven.com</a>
+            </div>
+            <div class="contact-card">
+              <span class="contact-icon">&#128100;</span>
+              <h3>Owner</h3>
+              <p>This tool is operated by:</p>
+              <p><strong>R Gowtham</strong><br />Wanderseven</p>
+            </div>
           </div>
-          <div class="contact-card">
-            <span class="contact-icon">&#127760;</span>
-            <h3>Website</h3>
-            <p>Visit our main website for more tools and resources:</p>
-            <a href="https://wanderseven.com" target="_blank" rel="noopener" class="contact-link">wanderseven.com</a>
-          </div>
-          <div class="contact-card">
-            <span class="contact-icon">&#128100;</span>
-            <h3>Owner</h3>
-            <p>This tool is operated by:</p>
-            <p><strong>R Gowtham</strong><br />Wanderseven</p>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      <div class="tool-section">
-        <h2>What to Include in Your Message</h2>
-        <p>To help us assist you faster, please include:</p>
-        <ul style="margin-bottom:16px;">
-          <li>A brief description of your issue or request</li>
-          <li>The browser and operating system you are using</li>
-          <li>The file format or tool you were using</li>
-          <li>Any error messages you saw</li>
-        </ul>
-      </div>
+        <section class="page-section">
+          <h2>What to Include in Your Message</h2>
+          <p>To help us assist you faster, please include:</p>
+          <ul style="margin-bottom:16px; padding-left: 20px;">
+            <li>A brief description of your issue or request</li>
+            <li>The browser and operating system you are using</li>
+            <li>The file format or tool you were using</li>
+            <li>Any error messages you saw</li>
+          </ul>
+        </section>
 
-      <div class="tool-section">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-item">
-          <h3>Is this tool completely free?</h3>
-          <p>Yes. KaruviLab is 100% free to use, with no sign-up required and no file upload to any server.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Are my files safe and private?</h3>
-          <p>Absolutely. All processing happens entirely in your browser using JavaScript. Your files never leave your device.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Which browsers are supported?</h3>
-          <p>The tool works best on modern browsers: Chrome 90+, Firefox 90+, Safari 15+, and Edge 90+.</p>
-        </div>
-      </div>
+        <section class="page-section" style="border-bottom: none;">
+          <h2>Frequently Asked Questions</h2>
+          <div class="faq-item">
+            <h3>Is this tool completely free?</h3>
+            <p>Yes. KaruviLab is 100% free to use, with no sign-up required and no file upload to any server.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Are my files safe and private?</h3>
+            <p>Absolutely. All processing happens entirely in your browser using JavaScript. Your files never leave your device.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Which browsers are supported?</h3>
+            <p>The tool works best on modern browsers: Chrome 90+, Firefox 90+, Safari 15+, and Edge 90+.</p>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
 
