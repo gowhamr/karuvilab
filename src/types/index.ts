@@ -4,25 +4,25 @@
 
 // ─── Result monad ───────────────────────────────────────────────
 
-type Result<T, E = Error> =
+export type Result<T, E = Error> =
   | { ok: true;  value: T }
   | { ok: false; error: E };
 
 // ─── Result types ───────────────────────────────────────────────
 
-interface FileValidationResult {
+export interface FileValidationResult {
   valid: boolean;
   error?: string;
 }
 
-interface ValidationCheck {
+export interface ValidationCheck {
   label: string;
   pass: boolean;
   warn: boolean;
   detail: string;
 }
 
-interface ValidationResult {
+export interface ValidationResult {
   passed: boolean;
   checks: ValidationCheck[];
   rule: DocRule;
@@ -30,7 +30,7 @@ interface ValidationResult {
 
 // ─── Document / validator rules ─────────────────────────────────
 
-interface DocRule {
+export interface DocRule {
   label: string;
   formats: string[];
   minKB?: number;
@@ -43,13 +43,13 @@ interface DocRule {
 
 // ─── Image processing ────────────────────────────────────────────
 
-interface CompressionOptions {
+export interface CompressionOptions {
   targetKB?: number;
   maxWidth?: number;
   signal?: AbortSignal | null;
 }
 
-interface CompressResult {
+export interface CompressResult {
   blob: Blob;
   width: number;
   height: number;
@@ -59,20 +59,20 @@ interface CompressResult {
   fmtKey: string;
 }
 
-interface ConvertResult {
+export interface ConvertResult {
   blob: Blob;
   mime: string;
   fmtKey: string;
   fallback: boolean;
 }
 
-interface ResolvedMime {
+export interface ResolvedMime {
   mime: string;
   fmtKey: string;
   fallback: boolean;
 }
 
-interface CreateOptions {
+export interface CreateOptions {
   width: number;
   height: number;
   bg?: string;
@@ -83,7 +83,7 @@ interface CreateOptions {
   lockRatio?: boolean;
 }
 
-interface CreateResult {
+export interface CreateResult {
   blob: Blob;
   canvas: HTMLCanvasElement;
   mime?: string;
@@ -93,26 +93,26 @@ interface CreateResult {
 
 // ─── PDF processing ──────────────────────────────────────────────
 
-type PdfPageSize = 'a4' | 'letter' | 'fit';
-type PdfOrientation = 'portrait' | 'landscape';
+export type PdfPageSize = 'a4' | 'letter' | 'fit';
+export type PdfOrientation = 'portrait' | 'landscape';
 
 // ─── Security tools ──────────────────────────────────────────────
 
-interface PasswordOptions {
+export interface PasswordOptions {
   upper: boolean;
   lower: boolean;
   number: boolean;
   symbol: boolean;
 }
 
-interface PasswordStrength {
+export interface PasswordStrength {
   score: number;
   label: string;
   color: string;
   pct: number;
 }
 
-interface JWTDecodeResult {
+export interface JWTDecodeResult {
   header?: Record<string, unknown>;
   payload?: Record<string, unknown>;
   valid: boolean;
@@ -121,7 +121,7 @@ interface JWTDecodeResult {
 
 // ─── Compress presets ────────────────────────────────────────────
 
-interface CompressPreset {
+export interface CompressPreset {
   kb: number;
   px: number;
   mb: number;
@@ -129,7 +129,7 @@ interface CompressPreset {
 
 // ─── Format metadata ─────────────────────────────────────────────
 
-interface FormatInfo {
+export interface FormatInfo {
   label: string;
   exts: string[];
   color: string;
@@ -138,38 +138,38 @@ interface FormatInfo {
 
 // ─── Toast / UI ──────────────────────────────────────────────────
 
-type ToastType = 'info' | 'success' | 'error' | 'warn';
+export type ToastType = 'info' | 'success' | 'error' | 'warn';
 
 // ─── Regex worker messages ───────────────────────────────────────
 
-interface RegexWorkerRequest {
+export interface RegexWorkerRequest {
   pattern: string;
   flags: string;
   testStr: string;
 }
 
-interface RegexMatch {
+export interface RegexMatch {
   index: number;
   value: string;
 }
 
-interface RegexWorkerResult {
+export interface RegexWorkerResult {
   type: 'result';
   matches: RegexMatch[];
 }
 
-interface RegexWorkerError {
+export interface RegexWorkerError {
   type: 'error';
   message: string;
 }
 
-type RegexWorkerMessage = RegexWorkerResult | RegexWorkerError;
+export type RegexWorkerMessage = RegexWorkerResult | RegexWorkerError;
 
 // ─── Split tool ──────────────────────────────────────────────────
 
-type SplitMethod = 'equal' | 'chars' | 'delim' | 'custom';
+export type SplitMethod = 'equal' | 'chars' | 'delim' | 'custom';
 
-interface SplitToolState {
+export interface SplitToolState {
   parts: string[];
   content: string;
   currentMethod: SplitMethod;
