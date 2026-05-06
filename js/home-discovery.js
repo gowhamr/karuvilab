@@ -167,6 +167,17 @@
     setupSearch();
     renderPopular();
     renderRecent();
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("q");
+      if (q && searchInput) {
+        searchInput.value = q;
+        query = q;
+        if (clearBtn) clearBtn.hidden = false;
+        searchInput.focus();
+      }
+    } catch {
+    }
     renderResults();
   });
 })();
