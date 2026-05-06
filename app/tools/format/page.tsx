@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -75,17 +75,17 @@ export default function CodeFormatter() {
   const [lang, setLang] = useState<Lang>("json");
   const [input, setInput] = useState("");
 
-  const { output, error } = (() => {
+  const { output, error } = useMemo(() => {
     if (!input.trim()) return { output: "", error: "" };
     try {
       return { output: FORMATTERS[lang](input), error: "" };
     } catch (e) {
       return { output: "", error: (e as Error).message };
     }
-  })();
+  }, [input, lang]);
 
-  const originalSize = new TextEncoder().encode(input).length;
-  const formattedSize = new TextEncoder().encode(output).length;
+  const originalSize = useMemo(() => new TextEncoder().encode(input).length, [input]);
+  const formattedSize = useMemo(() => new TextEncoder().encode(output).length, [output]);
 
   return (
     <ToolShell title="Code Formatter" description="Format JSON, HTML, CSS, SQL, and Markdown. Note: for production-quality formatting, consider Prettier locally." category={cat}>

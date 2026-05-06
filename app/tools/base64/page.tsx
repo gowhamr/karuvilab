@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -21,24 +21,23 @@ export default function Base64Tool() {
   const [tab, setTab] = useState<"encode" | "decode">("encode");
   const [input, setInput] = useState("");
   const [urlSafe, setUrlSafe] = useState(false);
-  const [error, setError] = useState("");
 
-  const output = (() => {
-    if (!input) return "";
-    setError("");
+  const { output, error } = useMemo(() => {
+    if (!input) return { output: "", error: "" };
     if (tab === "encode") {
-      try { return toBase64(input, urlSafe); } catch { return ""; }
+      try {
+        return { output: toBase64(input, urlSafe), error: "" };
+      } catch {
+        return { output: "", error: "Encoding failed" };
+      }
     } else {
       try {
-        const r = fromBase64(input);
-        setError("");
-        return r;
+        return { output: fromBase64(input), error: "" };
       } catch {
-        setError("Invalid Base64 input");
-        return "";
+        return { output: "", error: "Invalid Base64 input" };
       }
     }
-  })();
+  }, [input, tab, urlSafe]);
 
   return (
     <ToolShell title="Base64 Encoder / Decoder" description="Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants." category={cat}>
@@ -47,7 +46,7 @@ export default function Base64Tool() {
           {(["encode", "decode"] as const).map(t => (
             <button
               key={t}
-              onClick={() => { setTab(t); setInput(""); setError(""); }}
+              onClick={() => { setTab(t); setInput(""); }}
               className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${tab === t ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
             >
               {t === "encode" ? "Encode" : "Decode"}

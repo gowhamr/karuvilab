@@ -1,25 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 export default function AgeCalculator() {
   const [dob, setDob] = useState("1995-01-01");
   const [asOf, setAsOf] = useState(new Date().toISOString().split("T")[0]);
-  const [result, setResult] = useState<{
-    years: number;
-    months: number;
-    days: number;
-    totalMonths: number;
-    totalDays: number;
-    totalWeeks: number;
-  } | null>(null);
 
-  const calculate = () => {
+  const result = useMemo(() => {
     const d1 = new Date(dob);
     const d2 = new Date(asOf);
 
-    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) return;
-    if (d1 > d2) return;
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) return null;
+    if (d1 > d2) return null;
 
     let years = d2.getFullYear() - d1.getFullYear();
     let months = d2.getMonth() - d1.getMonth();
@@ -39,19 +31,15 @@ export default function AgeCalculator() {
     const totalMonths = years * 12 + months;
     const totalWeeks = totalDays / 7;
 
-    setResult({
+    return {
       years,
       months,
       days,
       totalMonths,
       totalDays,
       totalWeeks,
-    });
-  };
-
-  useEffect(() => {
-    calculate();
-  }, []);
+    };
+  }, [dob, asOf]);
 
   const metric = (label: string, value: string, accent = false) => (
     <div className="bg-surface border border-border p-5 rounded-xl">
@@ -92,13 +80,6 @@ export default function AgeCalculator() {
             />
           </div>
         </div>
-
-        <button
-          onClick={calculate}
-          className="w-full py-4 bg-blue text-white font-bold rounded-xl shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-        >
-          Calculate Age
-        </button>
       </div>
 
       {result && (

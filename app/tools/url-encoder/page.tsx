@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -27,19 +27,16 @@ function parseURL(input: string) {
 export default function URLEncoder() {
   const [tab, setTab] = useState<"encode" | "decode">("encode");
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
 
-  const output = (() => {
-    if (!input) return "";
+  const { output, error } = useMemo(() => {
+    if (!input) return { output: "", error: "" };
     try {
-      setError("");
-      if (tab === "encode") return encodeURIComponent(input);
-      return decodeURIComponent(input);
-    } catch (e) {
-      setError("Invalid URI sequence");
-      return "";
+      const res = tab === "encode" ? encodeURIComponent(input) : decodeURIComponent(input);
+      return { output: res, error: "" };
+    } catch {
+      return { output: "", error: "Invalid URI sequence" };
     }
-  })();
+  }, [input, tab]);
 
   const parsed = input ? parseURL(input) : null;
 
@@ -50,7 +47,7 @@ export default function URLEncoder() {
           {(["encode", "decode"] as const).map(t => (
             <button
               key={t}
-              onClick={() => { setTab(t); setInput(""); setError(""); }}
+              onClick={() => { setTab(t); setInput(""); }}
               className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${tab === t ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
             >
               {t === "encode" ? "Encode" : "Decode"}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -57,18 +57,16 @@ function csvToJSON(csv: string): string {
 export default function JSONCSVConverter() {
   const [tab, setTab] = useState<"json-csv" | "csv-json">("json-csv");
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
 
-  const output = (() => {
-    setError("");
-    if (!input.trim()) return "";
+  const { output, error } = useMemo(() => {
+    if (!input.trim()) return { output: "", error: "" };
     try {
-      return tab === "json-csv" ? jsonToCSV(input) : csvToJSON(input);
+      const res = tab === "json-csv" ? jsonToCSV(input) : csvToJSON(input);
+      return { output: res, error: "" };
     } catch (e) {
-      setError((e as Error).message);
-      return "";
+      return { output: "", error: (e as Error).message };
     }
-  })();
+  }, [input, tab]);
 
   const placeholders = {
     "json-csv": '[{"name":"Alice","age":30},{"name":"Bob","age":25}]',
@@ -82,7 +80,7 @@ export default function JSONCSVConverter() {
           {(["json-csv", "csv-json"] as const).map(t => (
             <button
               key={t}
-              onClick={() => { setTab(t); setInput(""); setError(""); }}
+              onClick={() => { setTab(t); setInput(""); }}
               className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${tab === t ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
             >
               {t === "json-csv" ? "JSON → CSV" : "CSV → JSON"}

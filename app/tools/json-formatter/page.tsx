@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -82,34 +82,31 @@ export default function JSONFormatter() {
   const [input, setInput] = useState("");
   const [indent, setIndent] = useState<Indent>(2);
   const [treeView, setTreeView] = useState(false);
-  const [error, setError] = useState<{ message: string; line?: number } | null>(null);
-  const [parsed, setParsed] = useState<unknown>(null);
 
-  const process = useCallback(() => {
-    setError(null);
-    if (!input.trim()) { setParsed(null); return ""; }
+  const { output, error, parsed } = useMemo(() => {
+    if (!input.trim()) return { output: "", error: null, parsed: null };
     try {
       const obj = JSON.parse(input);
-      setParsed(obj);
-      if (tab === "minify") return JSON.stringify(obj);
-      const spaces = indent === "tab" ? "\t" : indent;
-      return JSON.stringify(obj, null, spaces);
+      let out = "";
+      if (tab === "minify") {
+        out = JSON.stringify(obj);
+      } else {
+        const spaces = indent === "tab" ? "\t" : indent;
+        out = JSON.stringify(obj, null, spaces);
+      }
+      return { output: out, error: null, parsed: obj };
     } catch (e) {
       const msg = (e as Error).message;
       const lineMatch = msg.match(/position (\d+)/);
+      let errorData: { message: string; line?: number } = { message: msg };
       if (lineMatch) {
         const pos = Number(lineMatch[1]);
         const line = input.slice(0, pos).split("\n").length;
-        setError({ message: msg, line });
-      } else {
-        setError({ message: msg });
+        errorData = { message: msg, line };
       }
-      setParsed(null);
-      return "";
+      return { output: "", error: errorData, parsed: null };
     }
   }, [input, tab, indent]);
-
-  const output = process();
 
   return (
     <ToolShell title="JSON Formatter" description="Beautify, minify, validate JSON and explore it as a tree." category={cat}>
