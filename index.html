@@ -20,6 +20,8 @@
       const p = window.location.pathname;
       if (p.includes('/calculators/')) window.SHELL_ACTIVE = 'calculators';
       else if (p.includes('/pdf-tools/')) window.SHELL_ACTIVE = 'pdf';
+      else if (p.includes('/pages/settings.html')) window.SHELL_ACTIVE = 'settings';
+      else if (p.includes('/pages/help.html'))     window.SHELL_ACTIVE = 'help';
       else if (p.includes('/tools/')) window.SHELL_ACTIVE = 'tools';
       else window.SHELL_ACTIVE = 'home';
     })();
@@ -186,13 +188,13 @@
         </div>
       </div>
       <nav class="home-footer-nav" aria-label="Site information">
-        <a href="pages/about.html">About</a>
-        <a href="pages/help.html">Help</a>
-        <a href="pages/settings.html">Settings</a>
-        <a href="pages/donate.html" style="color: #ec4899; font-weight: 700;">Donate</a>
+        <a href="pages/about.html">ℹ️ About</a>
+        <a href="pages/help.html">❔ Help</a>
+        <a href="pages/settings.html">⚙️ Settings</a>
+        <a href="pages/donate.html" style="color: #ec4899; font-weight: 700;">❤️ Donate</a>
         <a href="pages/privacy.html">Privacy</a>
         <a href="pages/terms.html">Terms</a>
-        <a href="pages/contact.html">Contact</a>
+        <a href="pages/contact.html">📧 Contact</a>
       </nav>
       <p class="home-footer-copy">&copy; 2026 KaruviLab. All processing runs in your browser.</p>
     </div>
