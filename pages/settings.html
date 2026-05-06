@@ -24,40 +24,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/pages.css" />
-  <style>
-    .settings-group { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
-    .settings-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px; background: var(--bg-input); border: 1px solid var(--border);
-      border-radius: 12px; transition: border-color .2s;
-    }
-    .settings-item:hover { border-color: var(--primary); }
-    .settings-info h3 { font-size: 0.95rem; margin-bottom: 4px; color: var(--text); }
-    .settings-info p { font-size: 0.8rem; color: var(--text-3); margin: 0; }
-    .theme-options { display: flex; gap: 8px; }
-    .theme-btn {
-      padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
-      background: var(--bg-card); color: var(--text-2); cursor: pointer;
-      font-size: 0.8rem; font-weight: 600; transition: all .2s;
-    }
-    .theme-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .danger-btn { color: var(--error); border-color: var(--error); background: transparent; }
-    .danger-btn:hover { background: var(--error); color: #fff; }
-
-    @media (max-width: 600px) {
-      .settings-item { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .theme-options { width: 100%; justify-content: space-between; }
-      .theme-btn { flex: 1; text-align: center; }
-    }
-  </style>
 </head>
 <body>
   <header class="hero hero-sm">
     <div class="hero-inner">
       <a href="../index.html" class="hero-back">&#8592; Back to Tools</a>
-      <h1 class="hero-title">
-        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 10px; opacity: 0.9;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
-      </h1>
+      <h1 class="hero-title">Settings</h1>
       <p class="hero-sub">Configure KaruviLab to your preference. Everything stays on this device.</p>
     </div>
   </header>
@@ -124,7 +96,7 @@
               <h3>About KaruviLab</h3>
               <p>Mission, features, and the team behind the tools.</p>
             </div>
-            <a class="theme-btn" href="about.html">ℹ️ About</a>
+            <a class="theme-btn" href="about.html">About</a>
           </div>
         </div>
       </section>
@@ -137,10 +109,10 @@
       <p class="footer-logo">&#9879; KaruviLab</p>
       <p class="footer-note">&copy; 2026 KaruviLab by R Gowtham. All rights reserved.</p>
       <nav class="footer-nav" aria-label="Site information">
-        <a href="about.html">ℹ️ About</a>
-        <a href="help.html">❔ Help</a>
-        <a href="settings.html">⚙️ Settings</a>
-        <a href="contact.html">📧 Contact</a>
+        <a href="about.html">About</a>
+        <a href="help.html">Help</a>
+        <a href="settings.html">Settings</a>
+        <a href="contact.html">Contact</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms</a>
       </nav>

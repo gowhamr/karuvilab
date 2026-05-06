@@ -537,3 +537,29 @@ a { color: var(--primary); }
 
 
 
+
+/* ── Settings page specific ── */
+.settings-group { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
+.settings-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: 12px; transition: border-color .2s;
+}
+.settings-item:hover { border-color: var(--primary); }
+.settings-info h3 { font-size: 0.95rem; margin-bottom: 4px; color: var(--text); }
+.settings-info p { font-size: 0.8rem; color: var(--text-3); margin: 0; }
+.theme-options { display: flex; gap: 8px; }
+.theme-btn {
+  padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-2); cursor: pointer;
+  font-size: 0.8rem; font-weight: 600; transition: all .2s;
+}
+.theme-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.danger-btn { color: var(--error); border-color: var(--error); background: transparent; }
+.danger-btn:hover { background: var(--error); color: #fff; }
+
+@media (max-width: 600px) {
+  .settings-item { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .theme-options { width: 100%; justify-content: space-between; }
+  .theme-btn { flex: 1; text-align: center; }
+}
