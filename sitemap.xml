@@ -45,9 +45,23 @@
 
   <url>
     <loc>https://karuvilab.com/pages/about.html</loc>
-    <lastmod>2026-05-01</lastmod>
+    <lastmod>2026-05-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://karuvilab.com/pages/help.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://karuvilab.com/pages/settings.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 
   <url>

@@ -4,22 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark">
-  <title>Help & Settings – KaruviLab</title>
+  <title>About – KaruviLab</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
-  <meta name="description" content="KaruviLab Help and Settings. Configure your preferences and learn how our private browser tools work." />
+  <meta name="description" content="Learn about KaruviLab — a privacy-first browser toolset built for compressing, converting, and validating files locally." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://wanderseven.com/pages/about.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Help & Settings – KaruviLab" />
-  <meta property="og:description" content="Configure KaruviLab preferences and learn how our 100% private browser tools work." />
+  <meta property="og:title" content="About – KaruviLab" />
+  <meta property="og:description" content="Learn why KaruviLab exists and how 100% local browser tools keep your documents private." />
   <meta property="og:url" content="https://wanderseven.com/pages/about.html" />
   <meta property="og:image" content="https://wanderseven.com/icons/og-image.png" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Help & Settings – KaruviLab" />
-  <meta name="twitter:description" content="Configure KaruviLab preferences and learn how our 100% private browser tools work." />
+  <meta name="twitter:title" content="About – KaruviLab" />
+  <meta name="twitter:description" content="Learn why KaruviLab exists and how 100% local browser tools keep your documents private." />
   <link rel="manifest" href="../manifest.json" />
   <meta name="theme-color" content="#2563EB" />
   <!-- Theme: applied before paint to prevent flash of unstyled content -->
@@ -28,106 +28,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/pages.css" />
-  <style>
-    .settings-group { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
-    .settings-item { 
-      display: flex; align-items: center; justify-content: space-between; 
-      padding: 16px; background: var(--bg-input); border: 1px solid var(--border); 
-      border-radius: 12px; transition: border-color .2s;
-    }
-    .settings-item:hover { border-color: var(--primary); }
-    .settings-info h3 { font-size: 0.95rem; margin-bottom: 4px; color: var(--text); }
-    .settings-info p { font-size: 0.8rem; color: var(--text-3); margin: 0; }
-    .theme-options { display: flex; gap: 8px; }
-    .theme-btn { 
-      padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); 
-      background: var(--bg-card); color: var(--text-2); cursor: pointer; 
-      font-size: 0.8rem; font-weight: 600; transition: all .2s;
-    }
-    .theme-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .danger-btn { color: var(--error); border-color: var(--error); background: transparent; }
-    .danger-btn:hover { background: var(--error); color: #fff; }
-    
-    @media (max-width: 600px) {
-      .settings-item { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .theme-options { width: 100%; justify-content: space-between; }
-      .theme-btn { flex: 1; text-align: center; }
-    }
-  </style>
 </head>
 <body>
   <header class="hero hero-sm">
     <div class="hero-inner">
-      <a href="../index.html" class="hero-back">&#8592; Back to Tool</a>
-      <h1 class="hero-title">Help, Settings & About</h1>
-      <p class="hero-sub">Configure KaruviLab and learn about our mission</p>
+      <a href="../index.html" class="hero-back">&#8592; Back to Tools</a>
+      <h1 class="hero-title">About KaruviLab</h1>
+      <p class="hero-sub">Privacy-first browser tools for everyday document work.</p>
+      <p class="hero-sub" style="margin-top:6px;font-size:0.82rem;">
+        Looking for setup or FAQs? Visit <a href="settings.html" style="color:inherit;text-decoration:underline;">Settings</a>
+        or <a href="help.html" style="color:inherit;text-decoration:underline;">Help</a>.
+      </p>
     </div>
   </header>
 
   <main class="page-main">
     <article class="page-card">
-
-      <section class="page-section">
-        <h2>App Settings</h2>
-        <div class="settings-group">
-          <div class="settings-item">
-            <div class="settings-info">
-              <h3>Appearance</h3>
-              <p>Choose how KaruviLab looks to you.</p>
-            </div>
-            <div class="theme-options" id="theme-selector">
-              <button class="theme-btn" data-mode="light">Light</button>
-              <button class="theme-btn" data-mode="dark">Dark</button>
-              <button class="theme-btn" data-mode="auto">System</button>
-            </div>
-          </div>
-
-          <div class="settings-item">
-            <div class="settings-info">
-              <h3>Data & Cache</h3>
-              <p>Clear locally stored settings and cached files.</p>
-            </div>
-            <button class="theme-btn danger-btn" id="clear-storage">Clear Data</button>
-          </div>
-
-          <div class="settings-item">
-            <div class="settings-info">
-              <h3>App Version</h3>
-              <p>KaruviLab v3.2.0 (Stable)</p>
-            </div>
-            <span style="font-size: 0.75rem; color: var(--success); font-weight: 700; background: rgba(16,185,129,0.1); padding: 4px 8px; border-radius: 6px;">UP TO DATE</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="page-section">
-        <h2>How it works (FAQ)</h2>
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <details style="border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
-            <summary style="font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;">
-              🔒 Is my data safe?
-              <span style="font-size: 1.2rem; color: var(--text-4);">+</span>
-            </summary>
-            <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-2); line-height: 1.6;">Yes, 100%. KaruviLab uses client-side JavaScript and WebAssembly to process files. Your documents never leave your device and are never uploaded to our servers.</p>
-          </details>
-          
-          <details style="border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
-            <summary style="font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;">
-              🌍 Does it work without internet?
-              <span style="font-size: 1.2rem; color: var(--text-4);">+</span>
-            </summary>
-            <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-2); line-height: 1.6;">Most tools work completely offline once the page has loaded. This is part of our commitment to privacy and performance.</p>
-          </details>
-
-          <details style="border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
-            <summary style="font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;">
-              🇮🇳 Can I use this for Govt. applications?
-              <span style="font-size: 1.2rem; color: var(--text-4);">+</span>
-            </summary>
-            <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-2); line-height: 1.6;">Absolutely. We specifically design our compressors and validators to meet the requirements of Indian government portals (SSO, Passport, Exam forms, etc.).</p>
-          </details>
-        </div>
-      </section>
 
       <section class="page-section">
         <h2>What is KaruviLab?</h2>
@@ -230,8 +146,10 @@
     <div class="footer-inner">
       <p class="footer-logo">&#9879; KaruviLab</p>
       <p class="footer-note">&copy; 2026 KaruviLab by R Gowtham. All rights reserved.</p>
-      <nav class="footer-nav">
+      <nav class="footer-nav" aria-label="Site information">
         <a href="about.html">About</a>
+        <a href="help.html">Help</a>
+        <a href="settings.html">Settings</a>
         <a href="contact.html">Contact</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms</a>
@@ -242,49 +160,5 @@
   </footer>
   <script src="../js/shell.js"></script>
   <script src="../js/theme.js"></script>
-  <script src="../js/utils.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const themeSelector = document.getElementById('theme-selector');
-      const clearStorageBtn = document.getElementById('clear-storage');
-      
-      // Update active state of theme buttons
-      const updateThemeButtons = () => {
-        const currentTheme = localStorage.getItem('theme');
-        const mode = currentTheme || 'auto';
-        document.querySelectorAll('.theme-btn[data-mode]').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.mode === mode);
-        });
-      };
-      
-      updateThemeButtons();
-      
-      themeSelector.addEventListener('click', (e) => {
-        const btn = e.target.closest('.theme-btn');
-        if (!btn) return;
-        
-        const mode = btn.dataset.mode;
-        if (mode === 'auto') {
-          localStorage.removeItem('theme');
-          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-        } else {
-          localStorage.setItem('theme', mode);
-          document.documentElement.setAttribute('data-theme', mode);
-        }
-        updateThemeButtons();
-        
-        // Dispatch event for other components if needed
-        window.dispatchEvent(new Event('storage'));
-      });
-      
-      clearStorageBtn.addEventListener('click', () => {
-        if (confirm('This will clear all saved preferences and reset the app. Are you sure?')) {
-          localStorage.clear();
-          location.reload();
-        }
-      });
-    });
-  </script>
 </body>
 </html>

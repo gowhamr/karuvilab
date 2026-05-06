@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark">
+  <title>Help &amp; FAQ – KaruviLab</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
+  <meta name="description" content="Help, FAQ, and troubleshooting for KaruviLab. Learn how each browser-based tool works and how to fix common problems." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://wanderseven.com/pages/help.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Help &amp; FAQ – KaruviLab" />
+  <meta property="og:description" content="Help, FAQ, and troubleshooting for KaruviLab — how each browser-based tool works." />
+  <meta property="og:url" content="https://wanderseven.com/pages/help.html" />
+  <meta property="og:image" content="https://wanderseven.com/icons/og-image.png" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="theme-color" content="#2563EB" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <style>
+    .help-faq { display: flex; flex-direction: column; gap: 14px; }
+    .help-faq details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: var(--bg-input);
+      transition: border-color .2s;
+    }
+    .help-faq details[open] { border-color: var(--primary); background: var(--bg-card); }
+    .help-faq summary {
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      color: var(--text);
+    }
+    .help-faq summary::-webkit-details-marker { display: none; }
+    .help-faq summary::after {
+      content: '+';
+      font-size: 1.3rem;
+      color: var(--text-4);
+      transition: transform .18s;
+      flex-shrink: 0;
+    }
+    .help-faq details[open] summary::after { transform: rotate(45deg); color: var(--primary); }
+    .help-faq p {
+      margin-top: 12px;
+      font-size: 0.92rem;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+    .help-tip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 12px; }
+    .help-tip {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .help-tip h3 { font-size: 0.95rem; margin-bottom: 6px; color: var(--text); }
+    .help-tip p { font-size: 0.85rem; color: var(--text-3); line-height: 1.55; }
+    .help-cta {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;
+    }
+    .help-cta a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-2);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .help-cta a:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+  </style>
+</head>
+<body>
+  <header class="hero hero-sm">
+    <div class="hero-inner">
+      <a href="../index.html" class="hero-back">&#8592; Back to Tools</a>
+      <h1 class="hero-title">Help &amp; FAQ</h1>
+      <p class="hero-sub">How KaruviLab works, common questions, and quick troubleshooting.</p>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <article class="page-card">
+
+      <section class="page-section" aria-labelledby="how-it-works">
+        <h2 id="how-it-works">How KaruviLab works</h2>
+        <div class="help-tip-grid">
+          <div class="help-tip">
+            <h3>&#x1F512; 100% local processing</h3>
+            <p>Every file you drop in is processed by your browser using JavaScript and WebAssembly. Nothing is uploaded to a server.</p>
+          </div>
+          <div class="help-tip">
+            <h3>&#x26A1; Instant results</h3>
+            <p>Because there's no upload step, your output is ready as soon as your device finishes the calculation.</p>
+          </div>
+          <div class="help-tip">
+            <h3>&#x1F30D; Works offline</h3>
+            <p>After the page loads, most tools keep working without an internet connection — perfect for sensitive documents.</p>
+          </div>
+          <div class="help-tip">
+            <h3>&#x1F1EE;&#x1F1F3; Built for portals</h3>
+            <p>Compressors and validators target the strict size, format, and resolution rules of government and exam portals.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">Frequently asked questions</h2>
+        <div class="help-faq">
+          <details>
+            <summary>&#x1F512; Is my data safe?</summary>
+            <p>Yes, 100%. KaruviLab uses client-side JavaScript and WebAssembly to process files. Your documents never leave your device and are never uploaded to our servers.</p>
+          </details>
+
+          <details>
+            <summary>&#x1F30D; Does it work without the internet?</summary>
+            <p>Most tools work completely offline once the page has loaded. This is part of our commitment to privacy and performance. You'll need a connection only the first time you load a tool.</p>
+          </details>
+
+          <details>
+            <summary>&#x1F1EE;&#x1F1F3; Can I use this for government applications?</summary>
+            <p>Yes. We specifically design our compressors and validators to meet the requirements of Indian government portals (SSO, Passport, Exam forms, etc.) and similar systems.</p>
+          </details>
+
+          <details>
+            <summary>&#x1F4C2; What file types are supported?</summary>
+            <p>Images: JPG, PNG, GIF, WebP, AVIF, TIFF, BMP, HEIC. Documents: PDF (compress, merge, split, convert). Code &amp; text: JSON, CSV, Markdown, plain text. Specific tools list their supported formats on the upload zone.</p>
+          </details>
+
+          <details>
+            <summary>&#x1F4DA; How do I save my output?</summary>
+            <p>Each tool ends with a download button. Click it to save the result to your device — exactly like any normal download.</p>
+          </details>
+
+          <details>
+            <summary>&#x1F4BE; Why does the app remember my recent tools?</summary>
+            <p>The home page surfaces tools you've used recently for faster access. The data is stored only in your browser's localStorage and is never transmitted anywhere. You can clear it any time from <a href="settings.html">Settings &rarr; Recent tools</a>.</p>
+          </details>
+
+          <details>
+            <summary>&#x26A0;&#xFE0F; A tool failed or behaved strangely. What now?</summary>
+            <p>First, refresh the page — most issues clear up after a fresh load. If the problem persists, try the same tool with a smaller file, switch browsers (Chrome, Firefox, Safari), or send us a note via the <a href="contact.html">contact page</a>.</p>
+          </details>
+
+          <details>
+            <summary>&#x1F4F1; Does it work on mobile?</summary>
+            <p>Yes. KaruviLab is designed mobile-first. Some advanced PDF and image tools work best on devices with at least 2 GB of RAM, since processing happens in your browser.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="page-section" aria-labelledby="more-help">
+        <h2 id="more-help">Still need help?</h2>
+        <p>Reach out, request a feature, or peek at advanced guides.</p>
+        <div class="help-cta">
+          <a href="contact.html">&#9993;&#xFE0F; Contact us</a>
+          <a href="guides.html">&#x1F4D6; Tool guides</a>
+          <a href="settings.html">&#x2699;&#xFE0F; Open Settings</a>
+          <a href="about.html">&#x2139;&#xFE0F; About KaruviLab</a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-logo">&#9879; KaruviLab</p>
+      <p class="footer-note">&copy; 2026 KaruviLab by R Gowtham. All rights reserved.</p>
+      <nav class="footer-nav" aria-label="Site information">
+        <a href="about.html">About</a>
+        <a href="help.html">Help</a>
+        <a href="settings.html">Settings</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../js/shell.js"></script>
+  <script src="../js/theme.js"></script>
+</body>
+</html>
