@@ -134,42 +134,52 @@ const PdfTools = (() => {
 
     let jsdoc: JsPDFInstance | null = null;
 
+    // PDF-002: Adapt render scale to file size so very large PDFs don't
+    // exhaust memory or freeze the tab during canvas.toDataURL().
+    const scale = file.size > 25 * 1024 * 1024 ? 1.0
+                : file.size > 10 * 1024 * 1024 ? 1.25
+                : 1.5;
+
     try {
       for (let i = 1; i <= total; i++) {
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
-        
-        // PDF-001: Chunk-based processing to avoid blocking main thread
+
+        // PDF-001: Yield to the browser so the UI thread can repaint
+        // (spinner, progress bar) between pages.
         await new Promise(resolve => requestAnimationFrame(resolve));
-        
+
         if (onProgress) onProgress(i, total);
 
         const page     = await pdfDoc.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 });
+        const viewport = page.getViewport({ scale });
         const canvas   = document.createElement('canvas');
         canvas.width   = Math.round(viewport.width);
         canvas.height  = Math.round(viewport.height);
         const ctx      = canvas.getContext('2d') as CanvasRenderingContext2D;
-        
+
         await page.render({ canvasContext: ctx, viewport }).promise;
 
+        // Yield once more before the (synchronous) toDataURL — keeps the
+        // spinner animating on huge pages.
+        await new Promise(resolve => setTimeout(resolve, 0));
         const dataUrl = canvas.toDataURL('image/jpeg', imageQuality);
         const pgW = viewport.width  * 0.75;
         const pgH = viewport.height * 0.75;
 
         if (i === 1) {
-          jsdoc = new JsPDFCtor({ 
-            unit: 'pt', 
-            format: [pgW, pgH], 
+          jsdoc = new JsPDFCtor({
+            unit: 'pt',
+            format: [pgW, pgH],
             orientation: pgW > pgH ? 'l' : 'p',
-            compress: true // Enable internal jsPDF compression
+            compress: true,
           });
         } else {
           jsdoc!.addPage([pgW, pgH], pgW > pgH ? 'l' : 'p');
         }
-        
+
         jsdoc!.addImage(dataUrl, 'JPEG', 0, 0, pgW, pgH, undefined, 'FAST');
-        
-        // Memory cleanup
+
+        // Release canvas memory immediately so large PDFs don't accumulate
         canvas.width = 0;
         canvas.height = 0;
       }

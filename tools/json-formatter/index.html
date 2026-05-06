@@ -113,25 +113,41 @@
       function process() {
         const val = input.value.trim();
         errorMsg.hidden = true;
-        
+
         if (!val) {
           outputWrap.hidden = true;
           return;
         }
 
-        try {
-          const parsed = JSON.parse(val);
-          let result = '';
+        // JSON-001: Use forgiving parser — strips trailing commas + JS comments
+        // before retrying, and surfaces line/column on failure.
+        const result = (window.Utils && window.Utils.lenientJsonParse)
+          ? window.Utils.lenientJsonParse(val)
+          : (function () {
+              try { return { ok: true, value: JSON.parse(val), sanitized: false }; }
+              catch (e) { return { ok: false, error: e.message }; }
+            })();
+
+        if (result.ok) {
+          let output_str = '';
           if (mode === 'beautify') {
             const indent = indentSelect.value === '\\t' ? '\t' : parseInt(indentSelect.value);
-            result = JSON.stringify(parsed, null, indent);
+            output_str = JSON.stringify(result.value, null, indent);
           } else {
-            result = JSON.stringify(parsed);
+            output_str = JSON.stringify(result.value);
           }
-          output.value = result;
+          output.value = output_str;
           outputWrap.hidden = false;
-        } catch (e) {
-          errorMsg.textContent = "Invalid JSON: " + e.message;
+          if (result.sanitized && window.Shell && window.Shell.toast) {
+            window.Shell.toast('Fixed up trailing commas / comments before formatting.', 'info');
+          }
+        } else {
+          let msg = 'Invalid JSON';
+          if (result.line) {
+            msg += ' (line ' + result.line + (result.col ? ', column ' + result.col : '') + ')';
+          }
+          msg += ': ' + result.error;
+          errorMsg.textContent = msg;
           errorMsg.hidden = false;
           outputWrap.hidden = true;
         }

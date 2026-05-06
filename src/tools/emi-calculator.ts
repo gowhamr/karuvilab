@@ -17,9 +17,13 @@
     const btnCopy = el('btn-copy') as HTMLButtonElement;
     const btnTable = el('btn-toggle-table') as HTMLButtonElement;
 
-    // CALC-EMI-002: Prevent calculation when interest rate <= 0
-    if (annualRate <= 0) {
-      statusBox.textContent = 'Interest rate must be greater than 0%';
+    // CALC-EMI-003: Allow 0% interest (interest-free / zero-cost EMI is a real
+    // scenario). Reject only negative rates or invalid amount/tenure. The math
+    // branch below handles r === 0 with a Principal / Tenure division.
+    if (annualRate < 0 || !isFinite(annualRate) || P <= 0 || n <= 0) {
+      statusBox.textContent = annualRate < 0
+        ? 'Interest rate cannot be negative.'
+        : 'Please enter a valid amount and tenure.';
       statusBox.style.display = 'block';
       statusBox.style.background = '#fee2e2';
       statusBox.style.color = '#b91c1c';

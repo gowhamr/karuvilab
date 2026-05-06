@@ -11,8 +11,8 @@
     const statusBox = el("status-box");
     const btnCopy = el("btn-copy");
     const btnTable = el("btn-toggle-table");
-    if (annualRate <= 0) {
-      statusBox.textContent = "Interest rate must be greater than 0%";
+    if (annualRate < 0 || !isFinite(annualRate) || P <= 0 || n <= 0) {
+      statusBox.textContent = annualRate < 0 ? "Interest rate cannot be negative." : "Please enter a valid amount and tenure.";
       statusBox.style.display = "block";
       statusBox.style.background = "#fee2e2";
       statusBox.style.color = "#b91c1c";

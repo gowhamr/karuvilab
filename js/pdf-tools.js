@@ -94,18 +94,20 @@ const PdfTools = /* @__PURE__ */ (() => {
     const pdfDoc = await loadingTask.promise;
     const total = pdfDoc.numPages;
     let jsdoc = null;
+    const scale = file.size > 25 * 1024 * 1024 ? 1 : file.size > 10 * 1024 * 1024 ? 1.25 : 1.5;
     try {
       for (let i = 1; i <= total; i++) {
         if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
         await new Promise((resolve) => requestAnimationFrame(resolve));
         if (onProgress) onProgress(i, total);
         const page = await pdfDoc.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 });
+        const viewport = page.getViewport({ scale });
         const canvas = document.createElement("canvas");
         canvas.width = Math.round(viewport.width);
         canvas.height = Math.round(viewport.height);
         const ctx = canvas.getContext("2d");
         await page.render({ canvasContext: ctx, viewport }).promise;
+        await new Promise((resolve) => setTimeout(resolve, 0));
         const dataUrl = canvas.toDataURL("image/jpeg", imageQuality);
         const pgW = viewport.width * 0.75;
         const pgH = viewport.height * 0.75;
@@ -115,7 +117,6 @@ const PdfTools = /* @__PURE__ */ (() => {
             format: [pgW, pgH],
             orientation: pgW > pgH ? "l" : "p",
             compress: true
-            // Enable internal jsPDF compression
           });
         } else {
           jsdoc.addPage([pgW, pgH], pgW > pgH ? "l" : "p");

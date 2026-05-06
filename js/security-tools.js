@@ -49,7 +49,14 @@ const SecurityTools = /* @__PURE__ */ (() => {
     try {
       let decodePart2 = function(str) {
         try {
-          return JSON.parse(atob(str.replace(/-/g, "+").replace(/_/g, "/")));
+          const json = window.Utils?.b64DecodeUtf8?.(str);
+          if (json !== void 0) return JSON.parse(json);
+          let pad = str.replace(/-/g, "+").replace(/_/g, "/");
+          while (pad.length % 4) pad += "=";
+          const bin = atob(pad);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder("utf-8", { fatal: false }).decode(bytes));
         } catch {
           return null;
         }

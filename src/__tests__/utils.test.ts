@@ -179,3 +179,110 @@ describe('mimeFromExt', () => {
     expect(mimeFromExt('xyz')).toBe('application/octet-stream');
   });
 });
+
+// ─── b64EncodeUtf8 / b64DecodeUtf8 ───────────────────────────────
+function b64EncodeUtf8(text: string): string {
+  const bytes = new TextEncoder().encode(text);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64DecodeUtf8(b64: string): string {
+  let s = b64.replace(/-/g, '+').replace(/_/g, '/').replace(/\s+/g, '');
+  while (s.length % 4) s += '=';
+  const bin = atob(s);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+}
+
+describe('b64EncodeUtf8 / b64DecodeUtf8', () => {
+  it('round-trips ASCII text', () => {
+    expect(b64DecodeUtf8(b64EncodeUtf8('Hello world'))).toBe('Hello world');
+  });
+  it('round-trips emoji safely (native btoa would throw)', () => {
+    const original = 'Hello 👋 KaruviLab 🚀';
+    const encoded = b64EncodeUtf8(original);
+    expect(typeof encoded).toBe('string');
+    expect(b64DecodeUtf8(encoded)).toBe(original);
+  });
+  it('round-trips multi-byte non-ASCII', () => {
+    const original = 'ಕರುವಿ — naïve résumé · 日本語 · العربية';
+    expect(b64DecodeUtf8(b64EncodeUtf8(original))).toBe(original);
+  });
+  it('decodes URL-safe base64 with no padding', () => {
+    const original = 'Hello 👋';
+    const std = b64EncodeUtf8(original);
+    const urlSafe = std.replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+    expect(b64DecodeUtf8(urlSafe)).toBe(original);
+  });
+});
+
+// ─── lenientJsonParse ───────────────────────────────────────────
+function lenientJsonParse(text: string):
+  | { ok: true; value: unknown; sanitized: boolean }
+  | { ok: false; error: string; line?: number; col?: number; pos?: number } {
+  function tryParse(t: string) {
+    try { return { ok: true as const, value: JSON.parse(t) }; }
+    catch (e) { return { ok: false as const, error: (e as Error).message }; }
+  }
+  const first = tryParse(text);
+  if (first.ok) return { ok: true, value: first.value, sanitized: false };
+
+  const sanitized = text
+    .replace(/(['"`])(?:\\.|(?!\1)[^\\])*\1|\/\/.*$|\/\*[\s\S]*?\*\//gm,
+             m => (m.startsWith('"') || m.startsWith("'") || m.startsWith('`')) ? m : '')
+    .replace(/,\s*([}\]])/g, '$1');
+  if (sanitized !== text) {
+    const second = tryParse(sanitized);
+    if (second.ok) return { ok: true, value: second.value, sanitized: true };
+  }
+
+  const msg = first.error;
+  const posMatch = msg.match(/position\s+(\d+)/i);
+  let line: number | undefined;
+  let col: number | undefined;
+  let pos: number | undefined;
+  if (posMatch) {
+    pos = parseInt(posMatch[1], 10);
+    const upTo = text.slice(0, pos);
+    line = upTo.split('\n').length;
+    col = pos - upTo.lastIndexOf('\n');
+  }
+  return { ok: false, error: msg, line, col, pos };
+}
+
+describe('lenientJsonParse', () => {
+  it('parses valid JSON without sanitisation', () => {
+    const r = lenientJsonParse('{"a":1,"b":[1,2,3]}');
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value).toEqual({ a: 1, b: [1, 2, 3] });
+      expect(r.sanitized).toBe(false);
+    }
+  });
+  it('strips trailing commas in objects and arrays', () => {
+    const r = lenientJsonParse('{"name":"test",}');
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value).toEqual({ name: 'test' });
+      expect(r.sanitized).toBe(true);
+    }
+    const r2 = lenientJsonParse('[1, 2, 3,]');
+    expect(r2.ok).toBe(true);
+    if (r2.ok) expect(r2.value).toEqual([1, 2, 3]);
+  });
+  it('strips line and block comments', () => {
+    const r = lenientJsonParse('{\n"a":1, // comment\n"b":2 /* trailing */}');
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value).toEqual({ a: 1, b: 2 });
+  });
+  it('reports an error on real failures', () => {
+    const r = lenientJsonParse('{"a":}');
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(typeof r.error).toBe('string');
+      expect(r.error.length).toBeGreaterThan(0);
+    }
+  });
+});

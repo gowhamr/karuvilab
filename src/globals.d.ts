@@ -223,6 +223,10 @@ interface StatesInterface {
 
 // ─── Utils interface (defined in utils.ts) ───────────────────────
 
+type LenientJsonResult =
+  | { ok: true; value: unknown; sanitized: boolean }
+  | { ok: false; error: string; line?: number; col?: number; pos?: number };
+
 interface UtilsInterface {
   formatBytes(bytes: number): string;
   safeName(name: string): string;
@@ -243,6 +247,12 @@ interface UtilsInterface {
   sizeBars(originalBytes: number, newBytes: number): string;
   debounce<T extends (...args: unknown[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void;
   validateFile(file: File | null, allowedExtensions?: string[], maxMB?: number): FileValidationResult;
+  createObjectURL(blob: Blob): string;
+  revokeObjectURL(url: string): void;
+  revokeAllObjectURLs(): void;
+  b64EncodeUtf8(text: string): string;
+  b64DecodeUtf8(b64: string): string;
+  lenientJsonParse(text: string): LenientJsonResult;
 }
 
 // ─── Shell interface (defined in shell.ts, used everywhere) ──────
