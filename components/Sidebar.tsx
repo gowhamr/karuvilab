@@ -13,7 +13,7 @@ const SUPPORT_LINKS = [
 ];
 
 export function Sidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const [isOpen, setIsOpen] = useState(false);
 
   return (
