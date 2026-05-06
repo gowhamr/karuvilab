@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES } from "@/src/tool-registry";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About" },
@@ -15,6 +15,11 @@ const SUPPORT_LINKS = [
 export function Sidebar() {
   const pathname = usePathname() ?? "";
   const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <>

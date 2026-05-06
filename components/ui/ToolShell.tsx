@@ -13,7 +13,7 @@ export function ToolShell({ title, description, category, children }: ToolShellP
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="space-y-3">
         {category && (
-          <nav className="flex items-center gap-2 text-sm text-text-4">
+          <nav className="flex flex-wrap items-center gap-2 text-sm text-text-4">
             <Link href="/" className="hover:text-blue transition-colors">Home</Link>
             <span>/</span>
             <Link href={`/${category.href}`} className="hover:text-blue transition-colors">{category.label}</Link>
