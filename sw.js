@@ -1,4 +1,4 @@
-const CACHE_NAME = 'karuvilab-v18';
+const CACHE_NAME = 'karuvilab-v19';
 const ASSETS = [
   './',
   './index.html',
@@ -15,6 +15,15 @@ const ASSETS = [
   './js/home.js',
   './manifest.json',
   './icons/icon.svg',
+  './pages/about.html',
+  './pages/help.html',
+  './pages/settings.html',
+  './pages/contact.html',
+  './pages/privacy.html',
+  './pages/terms.html',
+  './pages/disclaimer.html',
+  './pages/guides.html',
+  './pages/donate.html',
   './image-tools/',
   './security-tools/',
   './developer-tools/',

@@ -32,7 +32,10 @@
   const script =
     (document.currentScript as HTMLScriptElement | null) ||
     (document.querySelector('script[src*="js/shell.js"]') as HTMLScriptElement | null);
-  const base = script ? script.src.replace(/js\/shell\.js.*$/, '') : '/';
+  
+  // Use getAttribute to get the raw relative path if possible, fallback to resolved src
+  const rawSrc = script ? (script.getAttribute('src') || script.src) : '/';
+  const base = rawSrc.replace(/js\/shell\.js.*$/, '') || './';
   window.KARUVI_BASE = base;
 
   const shell: ShellInterface = {

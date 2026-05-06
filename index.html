@@ -15,6 +15,11 @@
   <link rel="stylesheet" href="css/style.css" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
   <script>
+    // Ensure trailing slash for correct relative path resolution
+    if (window.location.pathname.endsWith('/karuvilab')) {
+      window.location.replace(window.location.pathname + '/');
+    }
+
     // ROUTER-001: Set SHELL_ACTIVE dynamically for SPA fallback
     (function() {
       const p = window.location.pathname;

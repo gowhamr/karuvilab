@@ -25,7 +25,8 @@
     }
   }
   const script = document.currentScript || document.querySelector('script[src*="js/shell.js"]');
-  const base = script ? script.src.replace(/js\/shell\.js.*$/, "") : "/";
+  const rawSrc = script ? script.getAttribute("src") || script.src : "/";
+  const base = rawSrc.replace(/js\/shell\.js.*$/, "") || "./";
   window.KARUVI_BASE = base;
   const shell = {
     init() {
