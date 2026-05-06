@@ -4,67 +4,48 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark">
-  <title>About – KaruviLab</title>
+  <title>About Us — KaruviLab</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
   <meta name="description" content="Learn about KaruviLab — a privacy-first browser toolset built for compressing, converting, and validating files locally." />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://wanderseven.com/pages/about.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="About – KaruviLab" />
-  <meta property="og:description" content="Learn why KaruviLab exists and how 100% local browser tools keep your documents private." />
-  <meta property="og:url" content="https://wanderseven.com/pages/about.html" />
-  <meta property="og:image" content="https://wanderseven.com/icons/og-image.png" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="About – KaruviLab" />
-  <meta name="twitter:description" content="Learn why KaruviLab exists and how 100% local browser tools keep your documents private." />
   <link rel="manifest" href="../manifest.json" />
-  <meta name="theme-color" content="#2563EB" />
-  <!-- Theme: applied before paint to prevent flash of unstyled content -->
+  <meta name="theme-color" content="#4F46E5" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/pages.css" />
+  <script>window.SHELL_ACTIVE = 'about';</script>
 </head>
-<body>
-  <header class="hero hero-sm">
-    <div class="hero-inner">
-      <a href="../index.html" class="hero-back">&#8592; Back to Tools</a>
-      <h1 class="hero-title">About KaruviLab</h1>
-      <p class="hero-sub">Privacy-first browser tools for everyday document work.</p>
-      <p class="hero-sub" style="margin-top:6px;font-size:0.82rem;">
-        Looking for setup or FAQs? Visit <a href="settings.html" style="color:inherit;text-decoration:underline;">Settings</a>
-        or <a href="help.html" style="color:inherit;text-decoration:underline;">Help</a>.
-      </p>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
+          <a href="../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <span style="color:var(--text-1); font-weight:600;">About Us</span>
+        </nav>
+        <h1 class="nav-title">About KaruviLab</h1>
+        <p class="nav-subtitle">Privacy-first browser tools for everyday document work.</p>
+      </div>
     </div>
-  </header>
 
-  <main class="page-main">
-    <article class="page-card">
-
-      <section class="page-section">
+    <div class="panel-scroll">
+      <div class="tool-section">
         <h2>What is KaruviLab?</h2>
-        <p>KaruviLab is a free, browser-based utility designed to help individuals prepare images and PDF documents that meet the strict requirements of government portals, online application systems, and official document submissions in India and beyond.</p>
+        <p>KaruviLab is a free, browser-based utility designed to help individuals prepare images and PDF documents that meet the strict requirements of government portals, online application systems, and official document submissions.</p>
         <p>From passport photos and signatures to ID proofs and thumb impressions — every government document upload has its own format, size, and dimension requirements. Our tool takes the guesswork out of the process by letting you compress, convert, create, and validate files directly in your browser, without uploading anything to a server.</p>
-      </section>
+      </div>
 
-      <section class="page-section">
+      <div class="tool-section">
         <h2>Why We Built This</h2>
-        <p>Millions of people struggle every year when uploading documents to government portals. Common errors include:</p>
-        <ul>
-          <li>File size exceeds the allowed limit</li>
-          <li>Wrong image dimensions (e.g., passport photo must be exactly 200×230 px)</li>
-          <li>Unsupported file formats</li>
-          <li>Special characters in file names</li>
-          <li>DPI/resolution out of range</li>
-        </ul>
-        <p>We built this tool to be the one-stop solution for all these problems — fast, free, and private.</p>
-      </section>
+        <p>Millions of people struggle every year when uploading documents to government portals. Common errors include file size limits, wrong dimensions, or unsupported formats. We built this tool to be the one-stop solution for all these problems — fast, free, and private.</p>
+      </div>
 
-      <section class="page-section">
+      <div class="tool-section">
         <h2>Key Features</h2>
         <div class="feature-grid">
           <div class="feature-item">
@@ -108,57 +89,33 @@
             <p>All processing happens locally. No file is ever uploaded to any server.</p>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section class="page-section">
+      <div class="tool-section">
         <h2>About the Owner</h2>
         <div class="owner-card">
           <div class="owner-avatar">RG</div>
           <div class="owner-info">
             <h3>R Gowtham</h3>
             <p class="owner-title">Owner &amp; Administrator</p>
-            <p>R Gowtham is the creator and maintainer of KaruviLab under the <strong>Wanderseven</strong> brand. With a passion for building practical, privacy-first tools for everyday users, the aim is to simplify complex document preparation tasks for everyone.</p>
+            <p>R Gowtham is the creator and maintainer of KaruviLab under the <strong>Wanderseven</strong> brand. Passionate about building practical, privacy-first tools for everyday users.</p>
             <div class="owner-links">
               <a href="https://wanderseven.com" target="_blank" rel="noopener">&#127760; wanderseven.com</a>
               <a href="mailto:wanderseven@proton.me">&#9993; wanderseven@proton.me</a>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section class="page-section">
+      <div class="tool-section">
         <h2>Technology</h2>
-        <p>This tool is built with plain HTML, CSS, and vanilla JavaScript. It uses the following open-source libraries (loaded via CDN) for advanced format support:</p>
-        <ul>
-          <li><strong>jsPDF</strong> – PDF creation from images</li>
-          <li><strong>PDF.js</strong> – PDF rendering and compression</li>
-          <li><strong>pdf-lib</strong> – PDF merging</li>
-          <li><strong>UTIF.js</strong> – TIFF image encoding and decoding</li>
-          <li><strong>heic2any</strong> – HEIC/HEIF decoding for browsers</li>
-        </ul>
-        <p>No frameworks. No tracking. No cookies. Just fast, private tools.</p>
-      </section>
-
-    </article>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="footer-logo">&#9879; KaruviLab</p>
-      <p class="footer-note">&copy; 2026 KaruviLab by R Gowtham. All rights reserved.</p>
-      <nav class="footer-nav" aria-label="Site information">
-        <a href="about.html">About</a>
-        <a href="help.html">Help</a>
-        <a href="settings.html">Settings</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms</a>
-        <a href="disclaimer.html">Disclaimer</a>
-        <a href="guides.html">Guides ↗</a>
-      </nav>
+        <p>This tool is built with plain HTML, CSS, and vanilla JavaScript. It uses open-source libraries like jsPDF, PDF.js, pdf-lib, UTIF.js, and heic2any for advanced format support. No frameworks. No tracking. No cookies.</p>
+      </div>
     </div>
-  </footer>
-  <script src="../js/shell.js"></script>
-  <script src="../js/theme.js"></script>
+  </div>
+
+  <script src="../js/shell.js" defer></script>
+  <script src="../js/theme.js" defer></script>
+  <script src="../js/utils.js" defer></script>
 </body>
 </html>

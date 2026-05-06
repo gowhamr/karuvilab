@@ -4,137 +4,69 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark">
-  <title>Terms &amp; Conditions – KaruviLab</title>
+  <title>Terms &amp; Conditions — KaruviLab</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
-  <meta name="description" content="Terms &amp; Conditions for KaruviLab. Read our usage rules, intellectual property policy, disclaimer of warranties and limitation of liability." />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://wanderseven.com/pages/terms.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Terms &amp; Conditions – KaruviLab" />
-  <meta property="og:description" content="Usage rules and legal terms for KaruviLab, a free browser-based image and PDF utility." />
-  <meta property="og:url" content="https://wanderseven.com/pages/terms.html" />
-  <meta property="og:image" content="https://wanderseven.com/icons/og-image.png" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Terms &amp; Conditions – KaruviLab" />
-  <meta name="twitter:description" content="Usage rules and legal terms for KaruviLab." />
+  <meta name="description" content="Terms &amp; Conditions for KaruviLab. Read our usage rules and disclaimer of warranties." />
   <link rel="manifest" href="../manifest.json" />
-  <meta name="theme-color" content="#2563EB" />
-  <!-- Theme: applied before paint to prevent flash of unstyled content -->
+  <meta name="theme-color" content="#4F46E5" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/pages.css" />
 </head>
-<body>
-  <header class="hero hero-sm">
-    <div class="hero-inner">
-      <a href="../index.html" class="hero-back">&#8592; Back to Tool</a>
-      <h1 class="hero-title">Terms &amp; Conditions</h1>
-      <p class="hero-sub">Last updated: April 30, 2026</p>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
+          <a href="../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <span style="color:var(--text-1); font-weight:600;">Terms & Conditions</span>
+        </nav>
+        <h1 class="nav-title">Terms &amp; Conditions</h1>
+        <p class="nav-subtitle">Last updated: April 30, 2026</p>
+      </div>
     </div>
-  </header>
 
-  <main class="page-main">
-    <article class="page-card">
-
-      <section class="page-section">
+    <div class="panel-scroll">
+      <div class="tool-section">
         <h2>1. Acceptance of Terms</h2>
         <p>By accessing and using KaruviLab ("the Tool"), you accept and agree to be bound by these Terms &amp; Conditions. If you do not agree with any part of these terms, please do not use the Tool.</p>
-      </section>
+      </div>
 
-      <section class="page-section">
+      <div class="tool-section">
         <h2>2. Description of the Tool</h2>
         <p>KaruviLab is a free, browser-based utility that allows users to compress, convert, create, and validate image and PDF files. The Tool is provided by <strong>R Gowtham</strong> under the <strong>Wanderseven</strong> brand.</p>
-        <ul>
-          <li><strong>Email:</strong> <a href="mailto:wanderseven@proton.me">wanderseven@proton.me</a></li>
-          <li><strong>Website:</strong> <a href="https://wanderseven.com" target="_blank" rel="noopener">wanderseven.com</a></li>
-        </ul>
-      </section>
+      </div>
 
-      <section class="page-section">
+      <div class="tool-section">
         <h2>3. Use of the Tool</h2>
-        <p>You agree to use the Tool only for lawful purposes and in a manner that does not infringe the rights of others. You must not:</p>
-        <ul>
-          <li>Use the Tool to process files containing illegal, harmful, or offensive content</li>
-          <li>Attempt to reverse-engineer, decompile, or modify the Tool's source code beyond what is permitted by applicable open-source licences</li>
-          <li>Use automated scripts or bots to abuse or overwhelm the Tool</li>
-          <li>Misrepresent the origin or authenticity of documents processed using the Tool</li>
-        </ul>
-      </section>
+        <p>You agree to use the Tool only for lawful purposes. You must not attempt to reverse-engineer the Tool's source code beyond what is permitted by applicable open-source licences, or use automated scripts to abuse the Tool.</p>
+      </div>
 
-      <section class="page-section">
-        <h2>4. Intellectual Property</h2>
-        <p>The Tool's design, code structure, and original content are the property of Wanderseven / R Gowtham and are protected by applicable intellectual property laws. Open-source libraries used by the Tool are subject to their respective licences.</p>
-        <p>You retain full ownership of any files you process using the Tool. We make no claim over any content you create, compress, convert, or download.</p>
-      </section>
+      <div class="tool-section">
+        <h2>4. Disclaimer of Warranties</h2>
+        <p>The Tool is provided on an "as is" and "as available" basis without warranties of any kind. We do not guarantee that the output will meet the specific requirements of any government portal or authority.</p>
+      </div>
 
-      <section class="page-section">
-        <h2>5. Disclaimer of Warranties</h2>
-        <p>The Tool is provided on an <strong>"as is" and "as available"</strong> basis without warranties of any kind, either express or implied, including but not limited to:</p>
-        <ul>
-          <li>Merchantability or fitness for a particular purpose</li>
-          <li>Accuracy, completeness, or reliability of results</li>
-          <li>Uninterrupted or error-free operation</li>
-        </ul>
-        <p>We do not guarantee that the output of the Tool will meet the specific requirements of any government portal or authority. It is your responsibility to verify compliance before submission.</p>
-      </section>
+      <div class="tool-section">
+        <h2>5. Limitation of Liability</h2>
+        <p>Wanderseven and R Gowtham shall not be liable for any direct or indirect damages arising from your use of or inability to use the Tool, including any file loss or processing errors.</p>
+      </div>
 
-      <section class="page-section">
-        <h2>6. Limitation of Liability</h2>
-        <p>To the maximum extent permitted by applicable law, Wanderseven and R Gowtham shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from:</p>
-        <ul>
-          <li>Your use of or inability to use the Tool</li>
-          <li>Any file loss, corruption, or processing error</li>
-          <li>Rejection of documents by any government portal or authority</li>
-          <li>Any unauthorised access to your files (noting that all processing is local)</li>
-        </ul>
-      </section>
-
-      <section class="page-section">
-        <h2>7. Third-Party Libraries</h2>
-        <p>The Tool uses third-party open-source JavaScript libraries (jsPDF, PDF.js, pdf-lib, UTIF.js, heic2any). Their use is subject to their respective open-source licences. We are not responsible for any issues arising from the behaviour of these libraries.</p>
-      </section>
-
-      <section class="page-section">
-        <h2>8. Changes to the Tool and Terms</h2>
-        <p>We reserve the right to modify, suspend, or discontinue the Tool at any time without notice. We may also update these Terms &amp; Conditions at any time. Continued use of the Tool after changes constitutes your acceptance of the revised terms.</p>
-      </section>
-
-      <section class="page-section">
-        <h2>9. Governing Law</h2>
-        <p>These Terms &amp; Conditions are governed by the laws of India. Any disputes arising from the use of the Tool shall be subject to the jurisdiction of the courts of India.</p>
-      </section>
-
-      <section class="page-section">
-        <h2>10. Contact</h2>
+      <div class="tool-section">
+        <h2>6. Contact</h2>
         <p>For any queries regarding these Terms &amp; Conditions, please contact: <a href="mailto:wanderseven@proton.me">wanderseven@proton.me</a></p>
-      </section>
-
-    </article>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="footer-logo">&#9879; KaruviLab</p>
-      <p class="footer-note">&copy; 2026 KaruviLab by R Gowtham. All rights reserved.</p>
-      <nav class="footer-nav" aria-label="Site information">
-        <a href="about.html">About</a>
-        <a href="help.html">Help</a>
-        <a href="settings.html">Settings</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms</a>
-        <a href="disclaimer.html">Disclaimer</a>
-        <a href="guides.html">Guides ↗</a>
-      </nav>
+      </div>
     </div>
-  </footer>
-  <script src="../js/shell.js"></script>
-  <script src="../js/theme.js"></script>
-  <script src="../js/utils.js"></script>
+  </div>
+
+  <script src="../js/shell.js" defer></script>
+  <script src="../js/theme.js" defer></script>
+  <script src="../js/utils.js" defer></script>
 </body>
 </html>

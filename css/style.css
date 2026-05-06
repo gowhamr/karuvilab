@@ -634,9 +634,11 @@ body.app-shell {
 .sidebar-foot-item {
   display: flex; align-items: center; gap: 10px;
   font-size: 0.8rem; color: var(--text-3); text-decoration: none;
-  font-weight: 600; transition: color 0.2s;
+  font-weight: 600; transition: color 0.2s, background 0.2s;
+  padding: 8px 12px; border-radius: 8px;
 }
-.sidebar-foot-item:hover { color: var(--blue); }
+.sidebar-foot-item:hover { color: var(--blue); background: var(--bg-input); }
+.sidebar-foot-item.active { background: var(--blue-light); color: var(--blue); }
 
 /* Backdrop */
 .sidebar-backdrop {
@@ -651,6 +653,7 @@ body.app-shell {
 /* --- DARK MODE --- */
 [data-theme="dark"] .app-sidebar { background: var(--surface); border-right-color: var(--border); }
 [data-theme="dark"] .sidebar-link.active { background: rgba(79, 70, 229, 0.15); color: #A5B4FC; }
+[data-theme="dark"] .sidebar-foot-item.active { background: rgba(79, 70, 229, 0.15); color: #A5B4FC; }
 [data-theme="dark"] .sidebar-sub-link.active { color: #A5B4FC; }
 [data-theme="dark"] .sidebar-link:hover, [data-theme="dark"] .sidebar-toggle:hover { background: rgba(255,255,255,0.05); }
 

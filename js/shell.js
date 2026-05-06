@@ -10,6 +10,8 @@
     else if (path.includes("/tools/seo/")) window.SHELL_ACTIVE = "seo";
     else if (path.includes("/pages/settings.html")) window.SHELL_ACTIVE = "settings";
     else if (path.includes("/pages/help.html")) window.SHELL_ACTIVE = "help";
+    else if (path.includes("/pages/about.html")) window.SHELL_ACTIVE = "about";
+    else if (path.includes("/pages/contact.html")) window.SHELL_ACTIVE = "contact";
     else if (path.includes("/tools/")) {
       const seoTools = ["meta-tags", "image-seo", "slug-generator"];
       const isSeo = seoTools.some((t) => path.includes("/" + t + "/"));
@@ -291,11 +293,11 @@
         </nav>
 
         <div class="sidebar-foot">
-          <a href="${base2}pages/about.html" class="sidebar-foot-item">
+          <a href="${base2}pages/about.html" class="sidebar-foot-item ${active === "about" ? "active" : ""}">
             <span class="sidebar-icon">${ICON.info}</span>
             <span class="sidebar-foot-text">About Us</span>
           </a>
-          <a href="${base2}pages/contact.html" class="sidebar-foot-item">
+          <a href="${base2}pages/contact.html" class="sidebar-foot-item ${active === "contact" ? "active" : ""}">
             <span class="sidebar-icon">${ICON.mail}</span>
             <span class="sidebar-foot-text">Contact</span>
           </a>

@@ -4,41 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark">
-  <title>Settings – KaruviLab</title>
+  <title>Settings — KaruviLab</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
   <meta name="description" content="Configure KaruviLab preferences — theme, data, and app information. All settings stay on your device." />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://wanderseven.com/pages/settings.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Settings – KaruviLab" />
-  <meta property="og:description" content="Configure KaruviLab preferences. All settings are stored locally." />
-  <meta property="og:url" content="https://wanderseven.com/pages/settings.html" />
-  <meta property="og:image" content="https://wanderseven.com/icons/og-image.png" />
   <link rel="manifest" href="../manifest.json" />
-  <meta name="theme-color" content="#2563EB" />
+  <meta name="theme-color" content="#4F46E5" />
   <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/pages.css" />
+  <script>window.SHELL_ACTIVE = 'settings';</script>
 </head>
-<body>
-  <header class="hero hero-sm">
-    <div class="hero-inner">
-      <a href="../index.html" class="hero-back">&#8592; Back to Tools</a>
-      <h1 class="hero-title">Settings</h1>
-      <p class="hero-sub">Configure KaruviLab to your preference. Everything stays on this device.</p>
+<body class="app-shell">
+  <div class="panel tool-panel active">
+    <div class="panel-nav">
+      <div class="nav-back" onclick="Shell.goHome()" role="button" tabindex="0" aria-label="Go home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </div>
+      <div class="nav-head">
+        <nav class="breadcrumb-nav" style="margin-bottom:24px; font-size:0.85rem; color:var(--text-3);">
+          <a href="../" style="color:inherit; text-decoration:none;">Home</a> &nbsp;&rsaquo;&nbsp; 
+          <span style="color:var(--text-1); font-weight:600;">Settings</span>
+        </nav>
+        <h1 class="nav-title">Settings</h1>
+        <p class="nav-subtitle">Configure KaruviLab to your preference. Everything stays on this device.</p>
+      </div>
     </div>
-  </header>
 
-  <main class="page-main">
-    <article class="page-card">
-
-      <section class="page-section" aria-labelledby="appearance-heading">
-        <h2 id="appearance-heading">Appearance</h2>
+    <div class="panel-scroll">
+      <section class="tool-section">
+        <h2>Appearance</h2>
         <div class="settings-group">
           <div class="settings-item">
             <div class="settings-info">
@@ -54,13 +51,13 @@
         </div>
       </section>
 
-      <section class="page-section" aria-labelledby="data-heading">
-        <h2 id="data-heading">Data &amp; Privacy</h2>
+      <section class="tool-section">
+        <h2>Data &amp; Privacy</h2>
         <div class="settings-group">
           <div class="settings-item">
             <div class="settings-info">
               <h3>Local data</h3>
-              <p>Your saved preferences (theme, recently used tools) live in this browser only. Clearing data signs you out of those preferences.</p>
+              <p>Your saved preferences live in this browser only. Clearing data resets the app.</p>
             </div>
             <button type="button" class="theme-btn danger-btn" id="clear-storage" aria-label="Clear saved preferences and reload the app">Clear Data</button>
           </div>
@@ -74,8 +71,8 @@
         </div>
       </section>
 
-      <section class="page-section" aria-labelledby="about-heading">
-        <h2 id="about-heading">App information</h2>
+      <section class="tool-section">
+        <h2>App information</h2>
         <div class="settings-group">
           <div class="settings-item">
             <div class="settings-info">
@@ -86,42 +83,22 @@
           </div>
           <div class="settings-item">
             <div class="settings-info">
-              <h3>Need help?</h3>
-              <p>FAQs, troubleshooting, and feature explainers.</p>
+              <h3>Support</h3>
+              <p>FAQs, troubleshooting, and missions.</p>
             </div>
-            <a class="theme-btn" href="help.html">Open Help</a>
-          </div>
-          <div class="settings-item">
-            <div class="settings-info">
-              <h3>About KaruviLab</h3>
-              <p>Mission, features, and the team behind the tools.</p>
+            <div style="display:flex; gap:8px;">
+              <a class="theme-btn" href="help.html" style="text-decoration:none">Help</a>
+              <a class="theme-btn" href="about.html" style="text-decoration:none">About</a>
             </div>
-            <a class="theme-btn" href="about.html">About</a>
           </div>
         </div>
       </section>
-
-    </article>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="footer-logo">&#9879; KaruviLab</p>
-      <p class="footer-note">&copy; 2026 KaruviLab by R Gowtham. All rights reserved.</p>
-      <nav class="footer-nav" aria-label="Site information">
-        <a href="about.html">About</a>
-        <a href="help.html">Help</a>
-        <a href="settings.html">Settings</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms</a>
-      </nav>
     </div>
-  </footer>
+  </div>
 
-  <script src="../js/shell.js"></script>
-  <script src="../js/theme.js"></script>
-  <script src="../js/utils.js"></script>
+  <script src="../js/shell.js" defer></script>
+  <script src="../js/theme.js" defer></script>
+  <script src="../js/utils.js" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const themeSelector = document.getElementById('theme-selector');
