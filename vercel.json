@@ -1,62 +1,37 @@
 {
-  "version": 2,
-  "framework": null,
-  "outputDirectory": ".",
-  "cleanUrls": true,
-  "trailingSlash": true,
+  "framework": "nextjs",
   "redirects": [
-    { "source": "/tools/calculators/age/(.*)", "destination": "/calculators/age-calculator/", "permanent": true },
-    { "source": "/tools/calculators/emi/(.*)", "destination": "/calculators/emi-calculator/", "permanent": true },
-    { "source": "/tools/calculators/gst/(.*)", "destination": "/calculators/gst-calculator/", "permanent": true },
-    { "source": "/tools/calculators/sip/(.*)", "destination": "/calculators/sip-calculator/", "permanent": true },
-    { "source": "/tools/calculators/percentage/(.*)", "destination": "/calculators/percentage-calculator/", "permanent": true },
-    { "source": "/tools/calculators/discount/(.*)", "destination": "/calculators/discount-calculator/", "permanent": true },
-    { "source": "/tools/calculators/unit/(.*)", "destination": "/calculators/unit-converter/", "permanent": true },
-    { "source": "/tools/calculators/speed/(.*)", "destination": "/calculators/unit-converter/", "permanent": true },
-    { "source": "/tools/calculators/temp/(.*)", "destination": "/calculators/unit-converter/", "permanent": true },
-    { "source": "/tools/calculators/storage/(.*)", "destination": "/calculators/unit-converter/", "permanent": true },
-    { "source": "/tools/calculators/date/(.*)", "destination": "/calculators/date-calculator/", "permanent": true },
-    { "source": "/tools/calculators/time/(.*)", "destination": "/calculators/time-calculator/", "permanent": true },
-    { "source": "/tools/calculators/compound/(.*)", "destination": "/calculators/compound-interest/", "permanent": true },
-    { "source": "/tools/calculators/currency/(.*)", "destination": "/calculators/currency-converter/", "permanent": true },
-    { "source": "/tools/calculators/numeral/(.*)", "destination": "/calculators/numeral-converter/", "permanent": true },
-    { "source": "/tools/calculators/worldclock/(.*)", "destination": "/calculators/world-clock/", "permanent": true },
-    { "source": "/tools/calculators/utc/(.*)", "destination": "/calculators/utc-ist-converter/", "permanent": true },
-    { "source": "/tools/pdf/compress/(.*)", "destination": "/pdf-tools/compress-pdf/", "permanent": true },
-    { "source": "/tools/pdf/merge/(.*)", "destination": "/pdf-tools/merge-pdf/", "permanent": true },
-    { "source": "/tools/pdf/split/(.*)", "destination": "/pdf-tools/split-pdf/", "permanent": true },
-    { "source": "/tools/pdf/imgtopdf/(.*)", "destination": "/pdf-tools/image-to-pdf/", "permanent": true }
-  ],
-  "rewrites": [
-    { "source": "/calculators", "destination": "/calculators/index.html" },
-    { "source": "/pdf-tools", "destination": "/pdf-tools/index.html" },
-    { "source": "/image-tools", "destination": "/image-tools/index.html" },
-    { "source": "/security-tools", "destination": "/security-tools/index.html" },
-    { "source": "/developer-tools", "destination": "/developer-tools/index.html" },
-    { "source": "/utilities", "destination": "/utilities/index.html" },
-    { "source": "/tools/seo", "destination": "/tools/seo/index.html" }
+    { "source": "/tools/calculators/age/(.*)",        "destination": "/calculators/age-calculator/",       "permanent": true },
+    { "source": "/tools/calculators/emi/(.*)",        "destination": "/calculators/emi-calculator/",       "permanent": true },
+    { "source": "/tools/calculators/gst/(.*)",        "destination": "/calculators/gst-calculator/",       "permanent": true },
+    { "source": "/tools/calculators/sip/(.*)",        "destination": "/calculators/sip-calculator/",       "permanent": true },
+    { "source": "/tools/calculators/percentage/(.*)", "destination": "/calculators/percentage-calculator/","permanent": true },
+    { "source": "/tools/calculators/discount/(.*)",   "destination": "/calculators/discount-calculator/",  "permanent": true },
+    { "source": "/tools/calculators/unit/(.*)",       "destination": "/calculators/unit-converter/",       "permanent": true },
+    { "source": "/tools/calculators/speed/(.*)",      "destination": "/calculators/unit-converter/",       "permanent": true },
+    { "source": "/tools/calculators/temp/(.*)",       "destination": "/calculators/unit-converter/",       "permanent": true },
+    { "source": "/tools/calculators/storage/(.*)",    "destination": "/calculators/unit-converter/",       "permanent": true },
+    { "source": "/tools/calculators/date/(.*)",       "destination": "/calculators/date-calculator/",      "permanent": true },
+    { "source": "/tools/calculators/time/(.*)",       "destination": "/calculators/time-calculator/",      "permanent": true },
+    { "source": "/tools/calculators/compound/(.*)",   "destination": "/calculators/compound-interest/",    "permanent": true },
+    { "source": "/tools/calculators/currency/(.*)",   "destination": "/calculators/currency-converter/",   "permanent": true },
+    { "source": "/tools/calculators/numeral/(.*)",    "destination": "/calculators/numeral-converter/",    "permanent": true },
+    { "source": "/tools/calculators/worldclock/(.*)", "destination": "/calculators/world-clock/",          "permanent": true },
+    { "source": "/tools/calculators/utc/(.*)",        "destination": "/calculators/utc-ist-converter/",    "permanent": true },
+    { "source": "/tools/pdf/compress/(.*)",           "destination": "/pdf-tools/compress-pdf/",           "permanent": true },
+    { "source": "/tools/pdf/merge/(.*)",              "destination": "/pdf-tools/merge-pdf/",              "permanent": true },
+    { "source": "/tools/pdf/split/(.*)",              "destination": "/pdf-tools/split-pdf/",              "permanent": true },
+    { "source": "/tools/pdf/imgtopdf/(.*)",           "destination": "/pdf-tools/image-to-pdf/",           "permanent": true }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-XSS-Protection", "value": "1; mode=block" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
-      ]
-    },
-    {
-      "source": "/js/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/css/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        { "key": "X-Content-Type-Options",            "value": "nosniff" },
+        { "key": "X-Frame-Options",                   "value": "DENY" },
+        { "key": "X-XSS-Protection",                  "value": "1; mode=block" },
+        { "key": "Referrer-Policy",                   "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security",         "value": "max-age=63072000; includeSubDomains; preload" }
       ]
     }
   ]
