@@ -146,9 +146,9 @@
           <span class="dock-lbl">Settings</span>
         </a>
       `;
-      document.body.prepend(header);
       const sidebar = this.buildSidebar(base2, active);
       document.body.appendChild(sidebar);
+      document.body.appendChild(header);
       const backdrop = document.createElement("div");
       backdrop.className = "sidebar-backdrop";
       backdrop.id = "sidebar-backdrop";

@@ -169,11 +169,11 @@
         </a>
       `;
 
-      document.body.prepend(header);
-
-      // Build sidebar (after header so it sits below in source order)
+      // Build sidebar
       const sidebar = this.buildSidebar(base, active);
       document.body.appendChild(sidebar);
+
+      document.body.appendChild(header);
 
       // Backdrop for mobile/tablet drawer
       const backdrop = document.createElement('div');
