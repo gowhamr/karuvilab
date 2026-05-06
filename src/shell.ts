@@ -80,6 +80,7 @@
 
       const active = window.SHELL_ACTIVE || 'home';
       document.body.classList.add('app-shell');
+      document.documentElement.classList.add('app-shell-mode');
       const base = window.KARUVI_BASE || '/';
 
       // SVG Sprite

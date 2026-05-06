@@ -62,6 +62,7 @@
       if (document.getElementById("shell-rendered")) return;
       const active = window.SHELL_ACTIVE || "home";
       document.body.classList.add("app-shell");
+      document.documentElement.classList.add("app-shell-mode");
       const base2 = window.KARUVI_BASE || "/";
       if (!document.getElementById("ic-sprite")) {
         const sprite = document.createElement("div");
