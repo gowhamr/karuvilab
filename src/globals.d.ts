@@ -251,6 +251,8 @@ interface ShellInterface {
   setupTheme(): void;
   setupEffects(): void;
   setupErrorHandling(): void;
+  setupSidebar(): void;
+  buildSidebar(base: string, active: string): HTMLElement;
   recordVisit(): void;
   showFallbackError(msg?: string): void;
   waitForLibs(libs: string[], toolName: string): Promise<boolean>;

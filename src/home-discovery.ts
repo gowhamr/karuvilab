@@ -190,6 +190,20 @@
     setupSearch();
     renderPopular();
     renderRecent();
+
+    // Pre-fill search if arrived via ?q=… (from header search on other pages)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      if (q && searchInput) {
+        searchInput.value = q;
+        query = q;
+        if (clearBtn) clearBtn.hidden = false;
+        // Smooth-scroll the results into view
+        searchInput.focus();
+      }
+    } catch { /* no URL params */ }
+
     renderResults();
   });
 })();
