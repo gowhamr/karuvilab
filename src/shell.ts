@@ -555,7 +555,8 @@
       const el = document.createElement('div');
       el.className = `ts-toast ts-toast-${type}`;
       const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
-      el.innerHTML = `<span class="ts-toast-icon">${icon}</span><span class="ts-toast-msg">${Utils.escHtml(msg)}</span>`;
+      const safeMsg = (typeof Utils !== 'undefined' && Utils.escHtml) ? Utils.escHtml(msg) : String(msg);
+      el.innerHTML = `<span class="ts-toast-icon">${icon}</span><span class="ts-toast-msg">${safeMsg}</span>`;
       container.appendChild(el);
       setTimeout(() => {
         el.classList.add('out');

@@ -2469,7 +2469,8 @@ input[type=range]:focus { outline: none; box-shadow: none; }
 @media (min-width: 1024px) {
 
   /* ── Shell: allow page to scroll instead of overflow:hidden ── */
-  html:has(body.app-shell) { height: auto; }
+  html:has(body.app-shell),
+  html.app-shell-mode { height: auto; overflow: visible; }
   body.app-shell {
     height: auto;
     overflow: auto;
