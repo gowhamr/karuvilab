@@ -1,10 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
-import Script from "next/script";
+import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-
-declare const PDFLib: any;
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -14,7 +12,6 @@ export default function LockUnlockPdf() {
   const [password, setPassword] = useState("");
   const [ownerPassword, setOwnerPassword] = useState("");
   const [unlockPassword, setUnlockPassword] = useState("");
-  const [libReady, setLibReady] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -23,7 +20,6 @@ export default function LockUnlockPdf() {
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
   const process = async () => {
-    if (!libReady) { setError("PDF library not loaded yet."); return; }
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
@@ -45,7 +41,7 @@ export default function LockUnlockPdf() {
             annotating: false,
           },
         });
-        const blob = new Blob([outBytes], { type: "application/pdf" });
+        const blob = new Blob([outBytes as any], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -57,7 +53,7 @@ export default function LockUnlockPdf() {
         if (!unlockPassword) { setError("Please enter the PDF password."); setProcessing(false); return; }
         const doc = await PDFDocument.load(bytes, { password: unlockPassword });
         const outBytes = await doc.save();
-        const blob = new Blob([outBytes], { type: "application/pdf" });
+        const blob = new Blob([outBytes as any], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -77,72 +73,67 @@ export default function LockUnlockPdf() {
   };
 
   return (
-    <>
-      <Script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js" onLoad={() => setLibReady(true)} />
-      <ToolShell title="Lock / Unlock PDF" description="Add password protection to a PDF or remove it — all in your browser." category={cat}>
-        {!libReady && <div className="bg-surface border border-border p-4 rounded-2xl text-sm text-text-3 flex items-center gap-2"><span className="animate-spin">⏳</span> Loading PDF library…</div>}
+    <ToolShell title="Lock / Unlock PDF" description="Add password protection to a PDF or remove it — all in your browser." category={cat}>
+      <div className="flex gap-2">
+        {(["lock","unlock"] as const).map(m => (
+          <button key={m} onClick={() => setMode(m)} className={`px-5 py-2 rounded-xl text-sm font-semibold capitalize transition-colors ${mode === m ? "bg-blue text-white" : "bg-surface border border-border text-text-3 hover:border-blue hover:text-blue"}`}>
+            {m === "lock" ? "🔒 Lock (Add Password)" : "🔓 Unlock (Remove Password)"}
+          </button>
+        ))}
+      </div>
 
-        <div className="flex gap-2">
-          {(["lock","unlock"] as const).map(m => (
-            <button key={m} onClick={() => setMode(m)} className={`px-5 py-2 rounded-xl text-sm font-semibold capitalize transition-colors ${mode === m ? "bg-blue text-white" : "bg-surface border border-border text-text-3 hover:border-blue hover:text-blue"}`}>
-              {m === "lock" ? "🔒 Lock (Add Password)" : "🔓 Unlock (Remove Password)"}
-            </button>
-          ))}
-        </div>
+      <div
+        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
+        onClick={() => fileRef.current?.click()}
+        onDragOver={e => e.preventDefault()}
+        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) setFile(f); }}
+      >
+        {file ? (
+          <div className="space-y-1">
+            <p className="font-semibold text-text-2">{file.name}</p>
+            <p className="text-sm text-text-3">{(file.size / 1024).toFixed(0)} KB</p>
+          </div>
+        ) : (
+          <>
+            <div className="text-4xl mb-2">{mode === "lock" ? "🔒" : "🔓"}</div>
+            <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
+          </>
+        )}
+        <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) setFile(f); }} />
+      </div>
 
-        <div
-          className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-          onClick={() => fileRef.current?.click()}
-          onDragOver={e => e.preventDefault()}
-          onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) setFile(f); }}
-        >
-          {file ? (
+      <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
+        {mode === "lock" ? (
+          <>
             <div className="space-y-1">
-              <p className="font-semibold text-text-2">{file.name}</p>
-              <p className="text-sm text-text-3">{(file.size / 1024).toFixed(0)} KB</p>
+              <label className="text-sm font-medium">User Password (required to open the PDF)</label>
+              <input type="password" className={inputClass} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" />
             </div>
-          ) : (
-            <>
-              <div className="text-4xl mb-2">{mode === "lock" ? "🔒" : "🔓"}</div>
-              <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
-            </>
-          )}
-          <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) setFile(f); }} />
-        </div>
-
-        <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
-          {mode === "lock" ? (
-            <>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">User Password (required to open the PDF)</label>
-                <input type="password" className={inputClass} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Owner Password (optional — for permissions)</label>
-                <input type="password" className={inputClass} value={ownerPassword} onChange={e => setOwnerPassword(e.target.value)} placeholder="Leave blank to use user password" />
-              </div>
-              <p className="text-xs text-text-4">The owner password controls editing/printing permissions. If left blank, the user password is used for both.</p>
-            </>
-          ) : (
             <div className="space-y-1">
-              <label className="text-sm font-medium">PDF Password</label>
-              <input type="password" className={inputClass} value={unlockPassword} onChange={e => setUnlockPassword(e.target.value)} placeholder="Enter the PDF password" />
-              <p className="text-xs text-text-4">Enter the password to decrypt and save the PDF without protection.</p>
+              <label className="text-sm font-medium">Owner Password (optional — for permissions)</label>
+              <input type="password" className={inputClass} value={ownerPassword} onChange={e => setOwnerPassword(e.target.value)} placeholder="Leave blank to use user password" />
             </div>
-          )}
-        </div>
+            <p className="text-xs text-text-4">The owner password controls editing/printing permissions. If left blank, the user password is used for both.</p>
+          </>
+        ) : (
+          <div className="space-y-1">
+            <label className="text-sm font-medium">PDF Password</label>
+            <input type="password" className={inputClass} value={unlockPassword} onChange={e => setUnlockPassword(e.target.value)} placeholder="Enter the PDF password" />
+            <p className="text-xs text-text-4">Enter the password to decrypt and save the PDF without protection.</p>
+          </div>
+        )}
+      </div>
 
-        {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
-        {success && <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl text-green-700 text-sm">{success}</div>}
+      {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
+      {success && <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl text-green-700 text-sm">{success}</div>}
 
-        <button
-          onClick={process}
-          disabled={!file || processing || !libReady}
-          className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-        >
-          {processing ? "Processing…" : mode === "lock" ? "Lock PDF" : "Unlock PDF"}
-        </button>
-      </ToolShell>
-    </>
+      <button
+        onClick={process}
+        disabled={!file || processing}
+        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+      >
+        {processing ? "Processing…" : mode === "lock" ? "Lock PDF" : "Unlock PDF"}
+      </button>
+    </ToolShell>
   );
 }

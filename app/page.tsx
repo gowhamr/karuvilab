@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/ui/SearchBar";
+import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import {
   UploadCloud, Lock, Gift, Zap, ChevronRight, Star,
@@ -85,6 +86,8 @@ export default function Home() {
           </div>
 
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+          <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
 
           {/* Feature Badges */}
           <div className="flex flex-wrap gap-2">
