@@ -1,15 +1,35 @@
-import { TRUST_INDICATORS } from "./Icons";
+"use client";
+
+import { ShieldCheck, Lock, Zap, Gift, CloudOff, UserMinus } from "lucide-react";
+import { motion } from "framer-motion";
+
+const INDICATORS = [
+  { icon: CloudOff, title: "No Uploads", desc: "Data never leaves your browser" },
+  { icon: UserMinus, title: "No Accounts", desc: "Start using tools instantly" },
+  { icon: Lock, title: "100% Private", desc: "Local-only execution" },
+  { icon: Zap, title: "Blazing Fast", desc: "Zero latency processing" },
+];
 
 export function TrustIndicators() {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-4">
-      {TRUST_INDICATORS.map(({ icon: Icon, label }) => (
-        <div key={label} className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-blue/5 flex items-center justify-center group-hover:bg-blue/10 transition-colors">
-            <Icon className="w-4 h-4 text-blue" />
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      {INDICATORS.map((item, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: i * 0.1 }}
+          className="group p-4 md:p-5 bg-surface border border-border rounded-2xl flex flex-col gap-3 hover:border-blue/30 transition-all"
+        >
+          <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-white transition-all">
+            <item.icon className="w-5 h-5" />
           </div>
-          <span className="text-xs font-bold text-text-4 tracking-wide uppercase">{label}</span>
-        </div>
+          <div className="space-y-0.5">
+            <h3 className="text-sm font-black text-text tracking-tight">{item.title}</h3>
+            <p className="text-[11px] text-text-4 font-semibold leading-tight">{item.desc}</p>
+          </div>
+        </motion.div>
       ))}
     </div>
   );

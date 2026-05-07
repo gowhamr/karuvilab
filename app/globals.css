@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-blue: #4F46E5;
-  --color-blue-dark: #4338CA;
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
   --color-blue-light: var(--blue-light);
-  --color-blue-glow: rgba(79, 70, 229, 0.18);
+  --color-blue-glow: var(--blue-glow);
   
   --color-success: #10B981;
   --color-error: #EF4444;
@@ -21,7 +21,7 @@
   --color-border-focus: var(--border-focus);
   
   --color-text: var(--text);
-  --color-text-1: var(--text-1);
+  --color-text-1: var(--text);
   --color-text-2: var(--text-2);
   --color-text-3: var(--text-3);
   --color-text-4: var(--text-4);
@@ -32,7 +32,7 @@
   --radius-xl: 24px;
   --radius-2xl: 32px;
 
-  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.4), 0 0 40px rgba(79, 70, 229, 0.2);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
 
   --spacing-stripe: 52px;
   --spacing-dock: 64px;
@@ -40,16 +40,11 @@
 
 @layer utilities {
   .ease-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  .shadow-sm  { box-shadow: var(--shadow-sm); }
-  .shadow     { box-shadow: var(--shadow); }
-  .shadow-md  { box-shadow: var(--shadow-md); }
-  .shadow-lg  { box-shadow: var(--shadow-lg); }
-  .shadow-glow { box-shadow: var(--shadow-glow); }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   
   .glass {
-    @apply bg-surface/80 backdrop-blur-md border border-white/10;
+    @apply bg-surface/70 backdrop-blur-xl border border-white/10;
   }
 }
 
@@ -57,25 +52,27 @@
   --blue:         #4F46E5;
   --blue-dark:    #4338CA;
   --blue-light:   #EEF2FF;
-  --blue-glow:    rgba(79,70,229,.18);
+  --blue-glow:    rgba(79, 70, 229, 0.15);
   --success:      #10B981;
   --error:        #EF4444;
   --warn:         #F59E0B;
 
   --text:         #0F172A;
-  --text-1:       var(--text);
-  --text-2:       #334155;
+  --text-rgb:     15, 23, 42;
+  --text-2:       #475569;
   --text-3:       #64748B;
   --text-4:       #94A3B8;
   --border:       #E2E8F0;
+  --border-rgb:   226, 232, 240;
   --border-2:     #F1F5F9;
   --bg:           #F8FAFC;
+  --bg-rgb:       248, 250, 252;
   --surface:      #FFFFFF;
   --elevated:     #F1F5F9;
-  --hover:        #F1F5F9;
+  --hover:        #E2E8F0;
   --bg-input:     #F1F5F9;
 
-  --border-focus:   #6366F1;
+  --border-focus:   #4F46E5;
   --shadow-sm:      0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow:         0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-md:      0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -83,24 +80,33 @@
 }
 
 [data-theme="dark"] {
+  --blue:        #6366F1;
+  --blue-dark:   #4F46E5;
+  --blue-light:  rgba(99, 102, 241, 0.1);
+  --blue-glow:   rgba(99, 102, 241, 0.2);
+  
   --text:        #F8FAFC;
-  --text-2:      #E2E8F0;
+  --text-rgb:    248, 250, 252;
+  --text-2:      #94A3B8;
   --text-3:      #CBD5E1;
-  --text-4:      #94A3B8;
+  --text-4:      #64748B;
   --border:      #1E293B;
+  --border-rgb:  30, 41, 59;
   --border-2:    #0F172A;
   --bg:          #020617;
+  --bg-rgb:      2, 6, 23;
   --surface:     #0F172A;
   --elevated:    #111827;
   --hover:       #1E293B;
   --bg-input:    #020617;
-  --blue-light:  rgba(79,70,229,.15);
-  --border-focus:#818CF8;
+  --border-focus:#6366F1;
+  
   --shadow-sm:   0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow:      0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --shadow-md:      0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
   --shadow-lg:      0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
+
 
 body {
   background-color: var(--bg);
@@ -122,8 +128,8 @@ body {
 .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
 
 @keyframes bounce-slow {
-  0%, 100% { transform: translateY(-5%) rotate(15deg); }
-  50% { transform: translateY(0) rotate(15deg); }
+  0%, 100% { transform: translateY(-5%) rotate(0deg); }
+  50% { transform: translateY(0) rotate(0deg); }
 }
 .animate-bounce-slow { animation: bounce-slow 4s ease-in-out infinite; }
 

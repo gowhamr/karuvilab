@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { Search, Command } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
+import { motion } from "framer-motion";
 
 interface SearchBarProps {
   value: string;
@@ -26,12 +27,17 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
   }, []);
 
   return (
-    <div className="relative group max-w-2xl mx-auto w-full">
-      <div className="absolute inset-0 bg-blue/10 blur-2xl opacity-0 group-focus-within:opacity-30 transition-opacity duration-500 -z-10" />
+    <div className="relative group w-full max-w-2xl mx-auto">
+      {/* Dynamic Glow Background */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-blue/20 via-indigo-500/10 to-blue/20 rounded-3xl blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-700 pointer-events-none" />
       
-      <div className="relative flex items-center bg-elevated border border-border rounded-xl shadow-md focus-within:ring-4 focus-within:ring-blue/5 focus-within:border-blue/50 transition-all overflow-hidden">
-        <div className="pl-5 text-text-4">
-          <Search className="w-5 h-5" />
+      <motion.div 
+        whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.995 }}
+        className="relative flex items-center bg-surface border-2 border-border rounded-2xl shadow-2xl focus-within:border-blue focus-within:ring-4 focus-within:ring-blue/5 transition-all duration-300"
+      >
+        <div className="pl-5 text-text-4 group-focus-within:text-blue transition-colors">
+          <Search className="w-5 h-5 md:w-6 md:h-6" />
         </div>
         
         <input
@@ -39,23 +45,18 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={() => {
-            // Optional: can trigger palette or just use local search
-          }}
-          placeholder={placeholder || "Search tools... (⌘K)"}
-          className="w-full px-3 py-4 md:py-5 bg-transparent outline-none text-base md:text-lg text-text placeholder:text-text-4 font-bold"
+          placeholder={placeholder || "Search 100+ private tools... (⌘K)"}
+          className="w-full px-4 py-4 md:py-5 bg-transparent outline-none text-base md:text-xl text-text placeholder:text-text-4 font-bold tracking-tight"
         />
 
-        <div className="pr-5 flex items-center gap-3">
-          <button 
-            onClick={() => setIsPaletteOpen(true)}
-            className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-surface border border-border rounded-md text-[9px] font-black text-text-4 shadow-sm hover:bg-hover transition-colors"
-          >
-            <Command className="w-2.5 h-2.5" />
+        <div className="pr-5 hidden sm:flex items-center gap-2">
+          <kbd className="flex items-center gap-1 px-2 py-1 bg-bg border border-border rounded-lg text-[10px] font-black text-text-4 shadow-sm">
+            <Command className="w-3 h-3" />
             <span>K</span>
-          </button>
+          </kbd>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
+

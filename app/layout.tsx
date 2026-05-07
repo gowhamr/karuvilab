@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Sidebar } from "@/components/Sidebar";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { ToastProvider } from "@/components/ui/Toast";
-import { CommandPalette } from "@/components/ui/CommandPalette";
+import { ClientLayout } from "@/components/ClientLayout";
+import { metadata } from "./metadata";
 
-export const metadata: Metadata = {
-  title: "KaruviLab — Free Online Tools",
-  description: "KaruviLab – fast, private browser tools for developers, designers, and daily tasks.",
-};
+export { metadata };
 
 export default function RootLayout({
   children,
@@ -24,22 +19,13 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased bg-bg text-text min-h-screen">
-        <ToastProvider>
-          <CommandPalette />
-          <div className="flex">
-            <Sidebar />
-            <main className="flex-1 md:ml-[280px]">
-              <header className="h-[52px] border-b border-border flex items-center justify-end px-6 sticky top-0 bg-surface/90 backdrop-blur-md z-30">
-                <ThemeToggle />
-              </header>
-              <div className="p-6">
-                {children}
-              </div>
-            </main>
-          </div>
-        </ToastProvider>
+      <body className="antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue">
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
 }
+
+

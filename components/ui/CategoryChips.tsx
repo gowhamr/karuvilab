@@ -2,6 +2,7 @@
 
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "./Icons";
+import { motion } from "framer-motion";
 
 interface CategoryChipsProps {
   activeCategory: string | null;
@@ -10,17 +11,24 @@ interface CategoryChipsProps {
 
 export function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
   return (
-    <div className="relative -mx-6 px-6">
+    <div className="relative">
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 snap-x snap-mandatory">
         <button
           onClick={() => onCategoryChange(null)}
           className={`
-            flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold transition-all border snap-start
+            relative flex-shrink-0 px-5 py-2 rounded-xl text-xs font-black transition-all border snap-start
             ${!activeCategory 
-              ? "bg-blue text-white shadow-lg shadow-blue/25 border-blue" 
-              : "bg-elevated border-border text-text-3 hover:border-blue hover:text-blue hover:bg-hover"}
+              ? "text-blue border-blue/20 bg-blue/5 shadow-sm" 
+              : "bg-surface border-border text-text-4 hover:border-blue/30 hover:text-blue hover:bg-blue/5"}
           `}
         >
+          {!activeCategory && (
+            <motion.div 
+              layoutId="active-pill"
+              className="absolute inset-0 border-2 border-blue rounded-xl -z-10"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
           All Tools
         </button>
         {CATEGORIES.map(cat => (
@@ -28,21 +36,25 @@ export function CategoryChips({ activeCategory, onCategoryChange }: CategoryChip
             key={cat.id}
             onClick={() => onCategoryChange(cat.id)}
             className={`
-              flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all border snap-start
+              relative flex-shrink-0 flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-black transition-all border snap-start
               ${activeCategory === cat.id 
-                ? "bg-blue text-white shadow-lg shadow-blue/25 border-blue" 
-                : "bg-elevated border-border text-text-3 hover:border-blue hover:text-blue hover:bg-hover"}
+                ? "text-blue border-blue/20 bg-blue/5 shadow-sm" 
+                : "bg-surface border-border text-text-4 hover:border-blue/30 hover:text-blue hover:bg-blue/5"}
             `}
           >
-            <ToolIcon category={cat.id} className="w-4 h-4" />
+            {activeCategory === cat.id && (
+              <motion.div 
+                layoutId="active-pill"
+                className="absolute inset-0 border-2 border-blue rounded-xl -z-10"
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              />
+            )}
+            <ToolIcon category={cat.id} className={`w-3.5 h-3.5 transition-colors ${activeCategory === cat.id ? "text-blue" : "group-hover:text-blue"}`} />
             {cat.label}
           </button>
         ))}
       </div>
-      
-      {/* Scroll Fade Indicators */}
-      <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-bg to-transparent pointer-events-none lg:hidden" />
-      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-bg to-transparent pointer-events-none lg:hidden" />
     </div>
   );
 }
+
