@@ -13,6 +13,7 @@ export interface ToolEntry {
   category: Category;
   keywords: string[];
   popular?: boolean;
+  related?: string[]; // Array of tool IDs
 }
 
 export interface CategoryEntry {
@@ -34,9 +35,9 @@ export const CATEGORIES: CategoryEntry[] = [
 
 export const TOOLS: ToolEntry[] = [
   // Calculators
-  { id: 'emi-calculator',         name: 'EMI Calculator',         desc: 'Loan EMI, interest, and amortization',           href: 'calculators/emi-calculator/',         category: 'calculators', keywords: ['emi','loan','interest','mortgage','amortization'], popular: true },
-  { id: 'sip-calculator',         name: 'SIP Calculator',         desc: 'Project mutual-fund SIP returns',                href: 'calculators/sip-calculator/',         category: 'calculators', keywords: ['sip','investment','mutual fund','returns'], popular: true },
-  { id: 'age-calculator',         name: 'Age Calculator',         desc: 'Calculate age in years, months, and days',       href: 'calculators/age-calculator/',         category: 'calculators', keywords: ['age','birthday','years'] },
+  { id: 'emi-calculator',         name: 'EMI Calculator',         desc: 'Loan EMI, interest, and amortization',           href: 'calculators/emi-calculator/',         category: 'calculators', keywords: ['emi','loan','interest','mortgage','amortization'], popular: true, related: ['sip-calculator', 'salary-calculator'] },
+  { id: 'sip-calculator',         name: 'SIP Calculator',         desc: 'Project mutual-fund SIP returns',                href: 'calculators/sip-calculator/',         category: 'calculators', keywords: ['sip','investment','mutual fund','returns'], popular: true, related: ['compound-interest', 'emi-calculator'] },
+  { id: 'age-calculator',         name: 'Age Calculator',         desc: 'Calculate age in years, months, and days',       href: 'calculators/age-calculator/',         category: 'calculators', keywords: ['age','birthday','years'], related: ['date-calculator', 'time-calculator'] },
   { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', keywords: ['compound','interest','savings','growth'] },
   { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', keywords: ['gst','tax','vat','india'] },
   { id: 'currency-converter',     name: 'Currency Converter',     desc: 'Convert between world currencies',               href: 'calculators/currency-converter/',     category: 'calculators', keywords: ['currency','exchange','forex','usd','eur','inr'] },
@@ -78,14 +79,14 @@ export const TOOLS: ToolEntry[] = [
   // Security & Encoding
   { id: 'hash-generator',     name: 'Hash Generator',       desc: 'MD5, SHA-1/256/512 hashes',           href: 'tools/hash-generator/',     category: 'security', keywords: ['hash','md5','sha','checksum'], popular: true },
   { id: 'password-generator', name: 'Password Generator',   desc: 'Strong, random passwords',            href: 'tools/password-generator/', category: 'security', keywords: ['password','random','strong','generator'], popular: true },
-  { id: 'base64',             name: 'Base64 Encode/Decode', desc: 'Encode or decode Base64 strings',     href: 'tools/base64/',             category: 'security', keywords: ['base64','encode','decode'] },
-  { id: 'url-encoder',        name: 'URL Encoder',          desc: 'Percent-encode and decode URLs',      href: 'tools/url-encoder/',        category: 'security', keywords: ['url','encode','decode','percent'] },
+  { id: 'base64',             name: 'Base64 Encode/Decode', desc: 'Encode or decode Base64 strings',     href: 'tools/base64/',             category: 'security', keywords: ['base64','encode','decode'], related: ['url-encoder', 'hash-generator', 'jwt-decoder'] },
+  { id: 'url-encoder',        name: 'URL Encoder',          desc: 'Percent-encode and decode URLs',      href: 'tools/url-encoder/',        category: 'security', keywords: ['url','encode','decode','percent'], related: ['base64', 'url-cleaner'] },
   { id: 'html-entities',      name: 'HTML Entities',        desc: 'Convert characters to HTML entities', href: 'tools/html-entities/',      category: 'security', keywords: ['html','entities','escape'] },
   { id: 'jwt-decoder',        name: 'JWT Decoder',          desc: 'Inspect JSON Web Tokens',             href: 'tools/jwt-decoder/',        category: 'security', keywords: ['jwt','token','json','decode'] },
 
   // Developer
-  { id: 'json-formatter', name: 'JSON Formatter',  desc: 'Format and validate JSON',          href: 'tools/json-formatter/', category: 'developer', keywords: ['json','format','pretty','validate'], popular: true },
-  { id: 'json-csv',       name: 'JSON ↔ CSV', desc: 'Convert between JSON and CSV',      href: 'tools/json-csv/',       category: 'developer', keywords: ['json','csv','convert'] },
+  { id: 'json-formatter', name: 'JSON Formatter',  desc: 'Format and validate JSON',          href: 'tools/json-formatter/', category: 'developer', keywords: ['json','format','pretty','validate'], popular: true, related: ['json-csv', 'base64', 'format'] },
+  { id: 'json-csv',       name: 'JSON ↔ CSV', desc: 'Convert between JSON and CSV',      href: 'tools/json-csv/',       category: 'developer', keywords: ['json','csv','convert'], related: ['json-formatter', 'unit-converter'] },
   { id: 'regex-tester',   name: 'Regex Tester',    desc: 'Test regular expressions live',     href: 'tools/regex/',          category: 'developer', keywords: ['regex','regexp','match','pattern'], popular: true },
   { id: 'code-minifier',  name: 'Code Minifier',   desc: 'Minify CSS, JS, and HTML',          href: 'tools/code-minifier/',  category: 'developer', keywords: ['minify','css','js','html'] },
   { id: 'diff-checker',   name: 'Diff Checker',    desc: 'Compare two text snippets',         href: 'tools/diff-checker/',   category: 'developer', keywords: ['diff','compare','text'] },

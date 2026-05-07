@@ -15,9 +15,9 @@ interface ToolShellProps {
 }
 
 export function ToolShell({ title, description, category, children, content }: ToolShellProps) {
-  const related = content?.relatedTools
-    ? TOOLS.filter(t => content.relatedTools?.includes(t.id))
-    : [];
+  const currentTool = TOOLS.find(t => t.name === title || t.id === title.toLowerCase().replace(/ /g, '-'));
+  const relatedIds = currentTool?.related || content?.relatedTools || [];
+  const related = TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (
     <div className="max-w-4xl mx-auto space-y-12">
