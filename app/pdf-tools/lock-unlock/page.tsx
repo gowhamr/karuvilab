@@ -40,7 +40,7 @@ export default function LockUnlockPdf() {
             copying: false,
             annotating: false,
           },
-        });
+        } as any);
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -51,7 +51,7 @@ export default function LockUnlockPdf() {
         setSuccess("PDF locked successfully and downloaded.");
       } else {
         if (!unlockPassword) { setError("Please enter the PDF password."); setProcessing(false); return; }
-        const doc = await PDFDocument.load(bytes, { password: unlockPassword });
+        const doc = await PDFDocument.load(bytes, { password: unlockPassword } as any);
         const outBytes = await doc.save();
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);

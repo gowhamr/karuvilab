@@ -118,6 +118,12 @@ body {
   from { height: var(--radix-accordion-content-height); }
   to { height: 0; }
 }
-
 .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
 .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(-5%) rotate(15deg); }
+  50% { transform: translateY(0) rotate(15deg); }
+}
+.animate-bounce-slow { animation: bounce-slow 4s ease-in-out infinite; }
+

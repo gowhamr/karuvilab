@@ -18,50 +18,37 @@ export function ToolCard({ tool, compact }: ToolCardProps) {
     <Link 
       href={`/${tool.href}`}
       className={cn(
-        "group relative flex flex-col bg-surface border border-border rounded-xl hover:border-blue/50 hover:shadow-lg hover:shadow-blue/5 transition-all duration-300 ease-expo overflow-hidden",
-        compact ? "p-4" : "p-6"
+        "group relative flex flex-col bg-surface border border-border rounded-2xl hover:border-blue/50 hover:shadow-xl hover:shadow-blue/10 transition-all duration-500 ease-expo overflow-hidden",
+        compact ? "p-4 gap-3" : "p-6 gap-4"
       )}
     >
-      <div className={cn("flex items-start justify-between", compact ? "mb-3" : "mb-5")}>
+      <div className="flex items-start justify-between w-full">
         <div className={cn(
-          "rounded-lg bg-bg border border-border flex items-center justify-center group-hover:scale-110 group-hover:bg-blue/5 group-hover:border-blue/20 transition-all duration-500",
-          compact ? "w-9 h-9" : "w-11 h-11"
+          "rounded-xl bg-bg border border-border flex items-center justify-center group-hover:scale-110 group-hover:bg-blue/5 group-hover:border-blue/20 transition-all duration-500",
+          compact ? "w-10 h-10" : "w-12 h-12"
         )}>
           <ToolIcon category={tool.category} className={cn("text-text-2 group-hover:text-blue transition-colors", compact ? "w-5 h-5" : "w-6 h-6")} />
         </div>
         
-        <div className="flex items-center gap-1.5">
-          {tool.popular && !compact && (
-            <div className="flex items-center gap-1 px-1.5 py-0.5 bg-yellow-500/10 text-yellow-600 rounded-md">
-              <Star className="w-2.5 h-2.5 fill-current" />
-              <span className="text-[9px] font-black uppercase tracking-wider">Popular</span>
-            </div>
-          )}
-          <span className="text-[9px] font-black uppercase tracking-widest text-text-4 group-hover:text-blue transition-colors">
-            {categoryLabel}
-          </span>
-        </div>
+        <button className="p-1.5 rounded-lg text-text-4 hover:text-yellow-500 hover:bg-yellow-500/5 transition-all">
+          <Star className="w-4 h-4" />
+        </button>
       </div>
 
-      <div className="space-y-1 flex-1">
+      <div className="space-y-1.5 flex-1">
         <h3 className={cn("font-bold text-text group-hover:text-blue transition-colors leading-tight", compact ? "text-base" : "text-lg")}>
           {tool.name}
         </h3>
-        {!compact && (
-          <p className="text-text-3 text-xs leading-relaxed line-clamp-2 font-medium">
-            {tool.desc}
-          </p>
-        )}
+        <p className="text-text-3 text-xs leading-relaxed line-clamp-2 font-medium">
+          {tool.desc}
+        </p>
       </div>
 
-      {!compact && (
-        <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
-          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-text-4 group-hover:text-blue transition-all">
-            Open
-          </span>
-          <ArrowRight className="w-3.5 h-3.5 text-text-4 group-hover:text-blue group-hover:translate-x-0.5 transition-all" />
-        </div>
-      )}
+      <div className="flex items-center">
+        <span className="text-[10px] font-bold text-text-4 px-2 py-1 bg-bg border border-border rounded-lg group-hover:text-blue group-hover:border-blue/20 transition-all">
+          {categoryLabel}
+        </span>
+      </div>
     </Link>
   );
 }
