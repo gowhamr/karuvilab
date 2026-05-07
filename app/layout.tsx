@@ -3,6 +3,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ToastProvider } from "@/components/ui/Toast";
+import { CommandPalette } from "@/components/ui/CommandPalette";
 
 export const metadata: Metadata = {
   title: "KaruviLab — Free Online Tools",
@@ -25,6 +26,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-bg text-text min-h-screen">
         <ToastProvider>
+          <CommandPalette />
           <div className="flex">
             <Sidebar />
             <main className="flex-1 lg:ml-[280px]">
