@@ -21,7 +21,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
     <button
       onClick={handleCopy}
       className={`
-        px-3 py-1.5 text-sm font-bold rounded-lg transition-all border
+        min-h-[44px] px-3 py-2 text-sm font-bold rounded-lg transition-all border
         ${copied ? "bg-green-500/10 border-green-500/30 text-green-600" : "bg-surface border-border hover:border-blue hover:text-blue"}
       `}
     >

@@ -29,6 +29,7 @@
     "components/**/*.ts",
     "components/**/*.tsx",
     "src/tool-registry.ts",
+    "src/tool-content.ts",
     "src/types/**/*.ts",
     "src/utils.ts",
     "src/format-utils.ts",

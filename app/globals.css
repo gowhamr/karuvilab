@@ -13,6 +13,8 @@
   --color-bg: var(--bg);
   --color-bg-input: var(--bg-input);
   --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-hover: var(--hover);
   
   --color-border: var(--border);
   --color-border-2: var(--border-2);
@@ -28,6 +30,7 @@
   --radius-default: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-2xl: 32px;
 
   --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.4), 0 0 40px rgba(79, 70, 229, 0.2);
 
@@ -62,6 +65,8 @@
   --border-2:     #F1F5F9;
   --bg:           #F8FAFC;
   --surface:      #FFFFFF;
+  --elevated:     #F1F5F9;
+  --hover:        #E2E8F0;
   --bg-input:     #F1F5F9;
 
   --border-focus:   #6366F1;
@@ -83,6 +88,8 @@
   --border-2:    #0F172A;
   --bg:          #020617;
   --surface:     #0F172A;
+  --elevated:    #111827;
+  --hover:       #1E293B;
   --bg-input:    #020617;
   --blue-light:  rgba(79,70,229,.15);
   --border-focus:#818CF8;

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { b64EncodeUtf8, b64DecodeUtf8 } from "@/src/utils";
 
 function toBase64(text: string, urlSafe: boolean): string {
@@ -44,57 +45,61 @@ export default function Base64Client() {
   }, [input, tab, urlSafe]);
 
   return (
-    <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-      <div className="flex gap-2">
+    <div className="bg-surface border border-border p-6 md:p-8 rounded-3xl shadow-sm space-y-8">
+      {/* Tab Switcher */}
+      <div className="flex p-1 bg-bg border border-border rounded-2xl w-fit">
         {(["encode", "decode"] as const).map(t => (
           <button
             key={t}
             onClick={() => { setTab(t); setInput(""); }}
-            className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${tab === t ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
+            className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${tab === t ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-3 hover:text-text"}`}
           >
             {t === "encode" ? "Encode" : "Decode"}
           </button>
         ))}
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-bold text-text-2">
-          {tab === "encode" ? "Plain Text" : "Base64 Input"}
-        </label>
-        <textarea
-          className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
-          rows={5}
-          placeholder={tab === "encode" ? "Enter text to encode…" : "Paste Base64 string…"}
+      {/* Input Section */}
+      <div className="space-y-6">
+        <ToolInput
+          label={tab === "encode" ? "Plain Text" : "Base64 Input"}
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={setInput}
+          placeholder={tab === "encode" ? "Enter text to encode..." : "Paste Base64 string..."}
+          rows={6}
+          mono
+          description={tab === "encode" ? "UTF-8 Supported" : "Automatic Padding"}
         />
+
+        <label className="flex items-center gap-3 cursor-pointer select-none group w-fit">
+          <div
+            onClick={() => setUrlSafe(v => !v)}
+            className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all group-hover:scale-110 ${urlSafe ? "bg-blue border-blue shadow-lg shadow-blue/20" : "border-border bg-bg"}`}
+          >
+            {urlSafe && (
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </div>
+          <div className="space-y-0.5">
+            <span className="text-sm font-bold text-text-2">URL-safe Base64</span>
+            <p className="text-[10px] text-text-4 font-medium uppercase tracking-tighter">+→-, /→_, no padding</p>
+          </div>
+        </label>
       </div>
 
-      <label className="flex items-center gap-2 cursor-pointer select-none">
-        <div
-          onClick={() => setUrlSafe(v => !v)}
-          className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${urlSafe ? "bg-blue border-blue" : "border-border"}`}
-        >
-          {urlSafe && <span className="text-white text-xs font-bold">✓</span>}
-        </div>
-        <span className="text-sm text-text-2">URL-safe Base64 (+→-, /→_, no padding)</span>
-      </label>
-
-      {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
-
-      {output && !error && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-bold text-text-2">
-              {tab === "encode" ? "Base64 Output" : "Decoded Text"}
-            </label>
-            <CopyButton text={output} />
-          </div>
-          <div className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all">
-            {output}
-          </div>
-        </div>
-      )}
+      {/* Result Section */}
+      <div className="pt-4 border-t border-border/50">
+        <ToolResultArea
+          label={tab === "encode" ? "Base64 Output" : "Decoded Text"}
+          value={output}
+          error={error}
+          onClear={() => setInput("")}
+          onDownload={() => {}}
+          language={tab === "encode" ? "Base64" : "UTF-8"}
+        />
+      </div>
     </div>
   );
 }

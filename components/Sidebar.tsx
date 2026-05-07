@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
+import { ToolIcon } from "@/components/ui/Icons";
 import { useState, useEffect } from "react";
+import { Home, Info, HelpCircle, Settings, Shield, Menu, X, Clock } from "lucide-react";
 
 const SUPPORT_LINKS = [
-  { href: "/about/", label: "About" },
-  { href: "/help/", label: "Help" },
-  { href: "/settings/", label: "Settings" },
-  { href: "/privacy/", label: "Privacy" },
+  { href: "/about/", label: "About", icon: Info },
+  { href: "/help/", label: "Help", icon: HelpCircle },
+  { href: "/settings/", label: "Settings", icon: Settings },
+  { href: "/privacy/", label: "Privacy", icon: Shield },
 ];
 
 export function Sidebar() {
@@ -28,7 +30,7 @@ export function Sidebar() {
       {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -39,18 +41,16 @@ export function Sidebar() {
         transition-transform duration-300 ease-expo lg:translate-x-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
       `}>
-        <div className="h-[52px] flex items-center justify-between px-4 border-b border-border">
-          <Link href="/" className="flex items-center gap-3 font-bold text-xl">
+        <div className="h-[52px] flex items-center justify-between px-4 border-b border-border bg-elevated/50">
+          <Link href="/" className="flex items-center gap-3 font-black text-xl tracking-tighter">
             <span className="text-blue">Karuvi</span>Lab
           </Link>
           <button
-            className="lg:hidden p-2"
+            className="lg:hidden p-2 hover:bg-bg rounded-lg transition-colors"
             onClick={() => setIsOpen(false)}
             aria-label="Close menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -59,11 +59,9 @@ export function Sidebar() {
           <div className="space-y-1">
             <Link
               href="/"
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === "/" ? "bg-blue/10 text-blue font-semibold" : "hover:bg-border"}`}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold ${pathname === "/" ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-3 hover:bg-bg hover:text-text"}`}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
+              <Home className="w-5 h-5" />
               Home
             </Link>
           </div>
@@ -71,13 +69,16 @@ export function Sidebar() {
           {/* Recent Tools */}
           {recent.length > 0 && (
             <div className="space-y-2">
-              <div className="px-3 text-[10px] font-bold text-text-4 uppercase tracking-wider">Recently Used</div>
+              <div className="px-3 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
+                <Clock className="w-3 h-3" />
+                Recently Used
+              </div>
               <div className="space-y-1">
                 {recent.map(tool => (
                   <Link
                     key={tool.id}
                     href={`/${tool.href}`}
-                    className={`block px-3 py-1.5 text-sm rounded-lg transition-colors ${pathname.includes(tool.href) ? "bg-blue/5 text-blue font-medium" : "text-text-3 hover:bg-border hover:text-text"}`}
+                    className={`block px-3 py-2 text-sm rounded-lg transition-all font-medium ${pathname.includes(tool.href) ? "bg-blue/10 text-blue" : "text-text-4 hover:bg-bg hover:text-text"}`}
                   >
                     {tool.name}
                   </Link>
@@ -88,39 +89,50 @@ export function Sidebar() {
 
           {/* Tool Categories */}
           <div className="space-y-1 flex-1">
-            <div className="px-3 text-[10px] font-bold text-text-4 uppercase tracking-wider mb-2">Categories</div>
-            {CATEGORIES.map((cat) => (
-              <div key={cat.id}>
+            <div className="px-3 text-[10px] font-black text-text-4 uppercase tracking-[0.2em] mb-3">Categories</div>
+            <div className="space-y-1">
+              {CATEGORIES.map((cat) => (
                 <Link
+                  key={cat.id}
                   href={`/${cat.href}`}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold ${
                     pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`)
-                      ? "bg-blue/10 text-blue font-semibold"
-                      : "hover:bg-border"
+                      ? "bg-blue/10 text-blue"
+                      : "text-text-3 hover:bg-bg hover:text-text"
                   }`}
                 >
-                  <span className="text-xl">{cat.emoji}</span>
-                  <span className="font-medium">{cat.label}</span>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                    pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`)
+                      ? "bg-blue text-white shadow-md shadow-blue/20"
+                      : "bg-elevated border border-border group-hover:border-blue/50"
+                  }`}>
+                    <ToolIcon category={cat.id} className="w-4 h-4" />
+                  </div>
+                  <span className="flex-1">{cat.label}</span>
                 </Link>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Support Links */}
           <div className="pt-4 border-t border-border space-y-1">
-            {SUPPORT_LINKS.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
-                  pathname === link.href
-                    ? "text-blue font-semibold"
-                    : "text-text-4 hover:text-text hover:bg-border"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {SUPPORT_LINKS.map(link => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all font-bold ${
+                    pathname === link.href
+                      ? "text-blue bg-blue/5"
+                      : "text-text-4 hover:text-text hover:bg-bg"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         </nav>
       </aside>
@@ -128,13 +140,11 @@ export function Sidebar() {
       {/* Mobile Toggle Button */}
       {!isOpen && (
         <button
-          className="fixed top-3 left-4 z-30 lg:hidden p-2 bg-surface border border-border rounded-lg shadow-sm"
+          className="fixed top-3 left-4 z-30 lg:hidden p-2 bg-surface border border-border rounded-xl shadow-lg focus:ring-2 focus:ring-blue outline-none"
           onClick={() => setIsOpen(true)}
           aria-label="Open menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <Menu className="w-6 h-6 text-text" />
         </button>
       )}
     </>
