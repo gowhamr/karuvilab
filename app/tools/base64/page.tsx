@@ -1,98 +1,45 @@
-"use client";
-import { useState, useMemo } from "react";
+import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import { CopyButton } from "@/components/ui/CopyButton";
+import Base64Client from "./Base64Client";
 
 const cat = CATEGORIES.find(c => c.id === "security")!;
 
-function toBase64(text: string, urlSafe: boolean): string {
-  const b64 = btoa(unescape(encodeURIComponent(text)));
-  return urlSafe ? b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "") : b64;
-}
-
-function fromBase64(b64: string): string {
-  const normalized = b64.replace(/-/g, "+").replace(/_/g, "/");
-  const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
-  return decodeURIComponent(escape(atob(padded)));
-}
+export const metadata: Metadata = {
+  title: "Base64 Encoder / Decoder | KaruviLab",
+  description: "Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants.",
+  keywords: ["base64", "encode", "decode", "url-safe", "security"],
+};
 
 export default function Base64Tool() {
-  const [tab, setTab] = useState<"encode" | "decode">("encode");
-  const [input, setInput] = useState("");
-  const [urlSafe, setUrlSafe] = useState(false);
-
-  const { output, error } = useMemo(() => {
-    if (!input) return { output: "", error: "" };
-    if (tab === "encode") {
-      try {
-        return { output: toBase64(input, urlSafe), error: "" };
-      } catch {
-        return { output: "", error: "Encoding failed" };
-      }
-    } else {
-      try {
-        return { output: fromBase64(input), error: "" };
-      } catch {
-        return { output: "", error: "Invalid Base64 input" };
-      }
-    }
-  }, [input, tab, urlSafe]);
-
   return (
-    <ToolShell title="Base64 Encoder / Decoder" description="Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants." category={cat}>
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <div className="flex gap-2">
-          {(["encode", "decode"] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => { setTab(t); setInput(""); }}
-              className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${tab === t ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-            >
-              {t === "encode" ? "Encode" : "Decode"}
-            </button>
-          ))}
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">
-            {tab === "encode" ? "Plain Text" : "Base64 Input"}
-          </label>
-          <textarea
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
-            rows={5}
-            placeholder={tab === "encode" ? "Enter text to encode…" : "Paste Base64 string…"}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-          />
-        </div>
-
-        <label className="flex items-center gap-2 cursor-pointer select-none">
-          <div
-            onClick={() => setUrlSafe(v => !v)}
-            className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${urlSafe ? "bg-blue border-blue" : "border-border"}`}
-          >
-            {urlSafe && <span className="text-white text-xs font-bold">✓</span>}
-          </div>
-          <span className="text-sm text-text-2">URL-safe Base64 (+→-, /→_, no padding)</span>
-        </label>
-
-        {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
-
-        {output && !error && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-text-2">
-                {tab === "encode" ? "Base64 Output" : "Decoded Text"}
-              </label>
-              <CopyButton text={output} />
-            </div>
-            <div className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all">
-              {output}
-            </div>
-          </div>
-        )}
-      </div>
+    <ToolShell 
+      title="Base64 Encoder / Decoder" 
+      description="Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants." 
+      category={cat}
+      content={{
+        detailedDescription: "Base64 encoding is a process of converting binary data into an ASCII string format by translating it into a radix-64 representation. This is commonly used when there is a need to encode binary data that needs to be stored and transferred over media that are designed to deal with textual data. This tool allows you to easily encode plain text to Base64 and decode Base64 strings back to their original form. It also supports the URL-safe variant, which replaces '+' with '-' and '/' with '_', and removes padding characters, making it suitable for use in URLs and filenames.",
+        howTo: [
+          "Choose whether you want to Encode or Decode using the toggle buttons.",
+          "Enter your text in the input area.",
+          "Optionally enable 'URL-safe Base64' for web-safe encoding.",
+          "The result will appear automatically in the output section.",
+          "Click the copy button to copy the result to your clipboard."
+        ],
+        faq: [
+          {
+            question: "What is Base64 encoding?",
+            answer: "Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format. It is often used to transmit data over protocols that only support text."
+          },
+          {
+            question: "What is URL-safe Base64?",
+            answer: "URL-safe Base64 is a variation where characters that have special meaning in URLs (like '+' and '/') are replaced with '-' and '_', and padding '=' is omitted."
+          }
+        ],
+        relatedTools: ["hash-generator", "password-generator", "url-encoder"]
+      }}
+    >
+      <Base64Client />
     </ToolShell>
   );
 }

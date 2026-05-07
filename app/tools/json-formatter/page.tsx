@@ -109,7 +109,37 @@ export default function JSONFormatter() {
   }, [input, tab, indent]);
 
   return (
-    <ToolShell title="JSON Formatter" description="Beautify, minify, validate JSON and explore it as a tree." category={cat}>
+    <ToolShell
+      title="JSON Formatter"
+      description="Beautify, minify, validate JSON and explore it as a tree."
+      category={cat}
+      content={{
+        detailedDescription: "The JSON Formatter is a comprehensive tool for developers and data engineers to handle JSON data efficiently. It allows you to transform messy, unreadable JSON into a beautifully formatted structure with customizable indentation. Beyond just 'prettifying', the tool validates your JSON in real-time, highlighting exact line numbers and error positions to help you debug quickly. For large datasets, the interactive 'Tree View' provides a navigable interface where you can collapse and expand nodes to focus on specific parts of the data. You can also minify your JSON to reduce payload sizes for API testing or production use. All processing happens on the client side, ensuring your data remains private and secure. Whether you're debugging a REST API response or cleaning up a configuration file, this tool provides the utility and speed required for a modern development workflow.",
+        howTo: [
+          "Paste your raw JSON string into the input area.",
+          "The tool will instantly validate the JSON and show a success or error message.",
+          "Choose between 'Beautify' (to format) or 'Minify' (to compress).",
+          "If beautifying, select your preferred indentation level (2 spaces, 4 spaces, or Tabs).",
+          "Switch to 'Tree' view to interactively explore nested objects and arrays.",
+          "Use the 'Copy' button to save the result to your clipboard."
+        ],
+        faq: [
+          {
+            question: "Why is my JSON showing an error?",
+            answer: "Common issues include missing quotes around keys, trailing commas, or unclosed brackets. Our validator will point you to the exact line to fix."
+          },
+          {
+            question: "What is the benefit of the Tree view?",
+            answer: "The Tree view is ideal for large JSON objects where you need to selectively expand deep nesting without being overwhelmed by the entire text."
+          },
+          {
+            question: "Is there a limit to the size of JSON I can format?",
+            answer: "The limit is generally determined by your browser's memory. We have optimized the formatter to handle multi-megabyte JSON files smoothly."
+          }
+        ],
+        relatedTools: ["json-csv", "code-minifier", "jwt-decoder"]
+      }}
+    >
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="flex flex-wrap gap-2 items-center justify-between">
           <div className="flex gap-2">

@@ -76,6 +76,32 @@ export default function SipCalculator() {
       title="SIP Calculator"
       description="Project your mutual fund SIP returns with step-up and lumpsum options."
       category={cat}
+      content={{
+        detailedDescription: "The SIP (Systematic Investment Plan) Calculator is designed to help investors estimate the future value of their mutual fund investments. SIPs are a disciplined way to invest, allowing you to contribute a fixed amount regularly. This tool takes into account the power of compounding and offers advanced features like 'Step-up SIP' and 'Lumpsum' additions. The Step-up feature allows you to increase your monthly contribution annually, reflecting expected salary hikes or increased savings. Additionally, the calculator provides an inflation-adjusted value, giving you a realistic picture of what your wealth might be worth in today's terms. Whether you're planning for retirement, a child's education, or long-term wealth creation, this tool provides the projections needed to align your investments with your financial goals.",
+        howTo: [
+          "Enter your intended monthly investment amount (SIP).",
+          "Input the expected annual rate of return from your investment.",
+          "Choose the total duration of your investment in years.",
+          "Optionally, add an annual Step-up percentage to increase your contribution over time.",
+          "Add a one-time Lumpsum amount if you plan to make an initial investment.",
+          "Review the estimated gains and the total value of your investment at maturity."
+        ],
+        faq: [
+          {
+            question: "What is a Step-up SIP?",
+            answer: "A Step-up SIP allows you to increase your monthly investment amount by a fixed percentage every year, helping you reach your financial goals faster."
+          },
+          {
+            question: "Is the expected return guaranteed?",
+            answer: "No, the returns in mutual funds are subject to market risks. This calculator uses a fixed rate to provide an estimate based on historical performance or your expectations."
+          },
+          {
+            question: "What does 'Inflation-adjusted' mean?",
+            answer: "It shows what the future value of your investment would be worth in today's purchasing power, assuming a standard inflation rate (default is 6%)."
+          }
+        ],
+        relatedTools: ["compound-interest", "emi-calculator", "percentage-calculator"]
+      }}
     >
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
         <SliderField

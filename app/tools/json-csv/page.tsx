@@ -74,7 +74,36 @@ export default function JSONCSVConverter() {
   };
 
   return (
-    <ToolShell title="JSON ↔ CSV Converter" description="Convert between JSON arrays and CSV format." category={cat}>
+    <ToolShell
+      title="JSON ↔ CSV Converter"
+      description="Convert between JSON arrays and CSV format instantly with precision."
+      category={cat}
+      content={{
+        detailedDescription: "The JSON ↔ CSV Converter is a specialized developer tool designed to bridge the gap between structured JSON data and tabular CSV formats. This tool is essential for developers, data analysts, and researchers who need to export web-based JSON objects into Excel-friendly CSV files or vice-versa. It handles complex JSON arrays of objects by automatically identifying keys as headers and supports various CSV edge cases including quoted strings and multi-line values. By using this converter, you can streamline your data migration tasks, prepare datasets for machine learning models, or simply view complex JSON structures in a more readable table-like format. The conversion is performed entirely in your browser, ensuring that your sensitive data never leaves your device.",
+        howTo: [
+          "Select the conversion mode: 'JSON → CSV' or 'CSV → JSON'.",
+          "Paste your source data into the input field. For JSON, ensure it is an array of objects.",
+          "The tool will automatically process the data and display the result in the output field.",
+          "Review the output for any errors or warnings shown in the feedback area.",
+          "Click the 'Copy' button to save the converted result to your clipboard."
+        ],
+        faq: [
+          {
+            question: "What JSON format is required for CSV conversion?",
+            answer: "The tool expects a JSON array of objects. Each object in the array represents a row, and the object keys represent the column headers."
+          },
+          {
+            question: "Does it support nested JSON objects?",
+            answer: "Currently, the tool performs a shallow conversion. For nested objects, it will stringify the contents within the cell. We recommend flattening your JSON for the best results."
+          },
+          {
+            question: "Is my data secure?",
+            answer: "Yes, all conversions are performed locally in your browser using JavaScript. No data is sent to our servers, making it safe for confidential datasets."
+          }
+        ],
+        relatedTools: ["json-formatter", "code-minifier", "diff-checker"]
+      }}
+    >
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="flex gap-2">
           {(["json-csv", "csv-json"] as const).map(t => (

@@ -1,178 +1,49 @@
-"use client";
-import { useState, useEffect, useMemo } from "react";
+import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import { CopyButton } from "@/components/ui/CopyButton";
+import UtcIstConverterClient from "./UtcIstConverterClient";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-const IST_OFFSET_MINUTES = 5 * 60 + 30; // UTC+5:30
-
-function utcToIst(utcDatetime: string): string {
-  if (!utcDatetime) return "";
-  try {
-    const [datePart, timePart] = utcDatetime.split("T");
-    if (!datePart || !timePart) return "";
-    const [y, mo, d] = datePart.split("-").map(Number);
-    const [h, mi] = timePart.split(":").map(Number);
-    const totalMins = h * 60 + mi + IST_OFFSET_MINUTES;
-    const newMins = totalMins % (24 * 60);
-    const dayOverflow = Math.floor(totalMins / (24 * 60));
-    const newH = Math.floor(newMins / 60);
-    const newM = newMins % 60;
-    // Handle date overflow (simplified: ignore month boundaries for brevity)
-    const newD = d + dayOverflow;
-    const dateStr = `${y}-${String(mo).padStart(2, "0")}-${String(newD).padStart(2, "0")}`;
-    return `${dateStr}T${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
-  } catch {
-    return "";
-  }
-}
-
-function istToUtc(istDatetime: string): string {
-  if (!istDatetime) return "";
-  try {
-    const [datePart, timePart] = istDatetime.split("T");
-    if (!datePart || !timePart) return "";
-    const [y, mo, d] = datePart.split("-").map(Number);
-    const [h, mi] = timePart.split(":").map(Number);
-    let totalMins = h * 60 + mi - IST_OFFSET_MINUTES;
-    let dayUnderflow = 0;
-    if (totalMins < 0) { totalMins += 24 * 60; dayUnderflow = -1; }
-    const newH = Math.floor(totalMins / 60);
-    const newM = totalMins % 60;
-    const newD = d + dayUnderflow;
-    const dateStr = `${y}-${String(mo).padStart(2, "0")}-${String(Math.max(1, newD)).padStart(2, "0")}`;
-    return `${dateStr}T${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
-  } catch {
-    return "";
-  }
-}
-
-function nowUTC(): string {
-  return new Date().toISOString().slice(0, 16);
-}
-
-function fmtDisplay(dt: string): string {
-  if (!dt) return "—";
-  try {
-    const d = new Date(dt + ":00Z");
-    return d.toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" });
-  } catch {
-    return dt;
-  }
-}
-
-// IST business hours 9AM-6PM → UTC equivalents
-const IST_BIZ_HOURS = [
-  { istLabel: "IST 9:00 AM", utcLabel: "UTC 3:30 AM" },
-  { istLabel: "IST 10:00 AM", utcLabel: "UTC 4:30 AM" },
-  { istLabel: "IST 12:00 PM", utcLabel: "UTC 6:30 AM" },
-  { istLabel: "IST 2:00 PM", utcLabel: "UTC 8:30 AM" },
-  { istLabel: "IST 5:00 PM", utcLabel: "UTC 11:30 AM" },
-  { istLabel: "IST 6:00 PM", utcLabel: "UTC 12:30 PM" },
-];
+export const metadata: Metadata = {
+  title: "UTC ↔ IST Converter | KaruviLab",
+  description: "Convert between Coordinated Universal Time (UTC) and Indian Standard Time (IST). Features live clocks and business hour references.",
+  keywords: ["utc to ist", "ist to utc", "time converter", "india time", "universal time", "offset converter"],
+};
 
 export default function UtcIstConverter() {
-  const [utcInput, setUtcInput] = useState(() => nowUTC());
-  const [istInput, setIstInput] = useState(() => utcToIst(nowUTC()));
-  const [liveUtc, setLiveUtc] = useState(() => nowUTC());
-  const [liveIst, setLiveIst] = useState(() => utcToIst(nowUTC()));
-
-  // Live clock
-  useEffect(() => {
-    const id = setInterval(() => {
-      const u = nowUTC();
-      setLiveUtc(u);
-      setLiveIst(utcToIst(u));
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const handleUtcChange = (val: string) => {
-    setUtcInput(val);
-    setIstInput(utcToIst(val));
-  };
-
-  const handleIstChange = (val: string) => {
-    setIstInput(val);
-    setUtcInput(istToUtc(val));
-  };
-
-  const summary = `UTC ↔ IST Conversion\n----------------------\nUTC: ${utcInput}\nIST: ${istInput}\n\nGenerated via KaruviLab`;
-
   return (
     <ToolShell
       title="UTC ↔ IST Converter"
       description="Convert between UTC and Indian Standard Time (UTC+5:30). Times stay in sync."
       category={cat}
+      content={{
+        detailedDescription: "The UTC to IST Converter is an essential utility for professionals working in global environments, particularly those collaborating with teams in India. Indian Standard Time (IST) is consistently UTC+5:30, with no daylight saving time adjustments. This tool provides real-time clocks for both zones and a synchronized conversion interface, allowing you to quickly determine local times for meetings, server logs, or release schedules. It also includes a quick-reference guide for standard IST business hours and their UTC equivalents.",
+        howTo: [
+          "Observe the live clocks at the top for the current UTC and IST times.",
+          "To convert a specific time, enter it into either the UTC or IST input field.",
+          "The other field will automatically update to show the converted time in sync.",
+          "Use the 'Use Current Time' button to reset the converter to the present moment.",
+          "Refer to the bottom table for common business hour conversions (e.g., IST 9:00 AM = UTC 3:30 AM)."
+        ],
+        faq: [
+          {
+            question: "Does India use Daylight Saving Time?",
+            answer: "No, India does not observe Daylight Saving Time. The offset is always UTC+5:30 throughout the year."
+          },
+          {
+            question: "What is the difference between GMT and UTC?",
+            answer: "For most practical purposes, GMT (Greenwich Mean Time) and UTC (Coordinated Universal Time) are the same. This tool uses UTC as the precise standard."
+          },
+          {
+            question: "Can I use this for server log analysis?",
+            answer: "Yes, by entering the UTC timestamp from your logs into the converter, you can quickly find the corresponding local time in India."
+          }
+        ],
+        relatedTools: ["world-clock", "date-calculator", "time-calculator"]
+      }}
     >
-      {/* Live clocks */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Current UTC</div>
-          <div className="text-2xl font-black font-mono text-text">{liveUtc.split("T")[1]}</div>
-          <div className="text-sm text-text-3">{liveUtc.split("T")[0]}</div>
-        </div>
-        <div className="bg-surface border border-blue/30 p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Current IST (UTC+5:30)</div>
-          <div className="text-2xl font-black font-mono text-blue">{liveIst.split("T")[1]}</div>
-          <div className="text-sm text-text-3">{liveIst.split("T")[0]}</div>
-        </div>
-      </div>
-
-      {/* Converter inputs */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <h2 className="font-bold text-text-2">Convert a specific date & time</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">UTC Date & Time</label>
-            <input
-              type="datetime-local"
-              value={utcInput}
-              onChange={(e) => handleUtcChange(e.target.value)}
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
-            />
-            <p className="text-xs text-text-4">{fmtDisplay(utcInput)}</p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">IST Date & Time (UTC+5:30)</label>
-            <input
-              type="datetime-local"
-              value={istInput}
-              onChange={(e) => handleIstChange(e.target.value)}
-              className="w-full px-4 py-3 bg-bg border border-blue/30 rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
-            />
-            <p className="text-xs text-text-4">{fmtDisplay(istInput + ":00")}</p>
-          </div>
-        </div>
-        <button
-          onClick={() => { handleUtcChange(nowUTC()); }}
-          className="px-4 py-2 text-sm font-bold border border-border rounded-xl hover:border-blue hover:text-blue transition-colors"
-        >
-          Use Current Time
-        </button>
-      </div>
-
-      {/* Common IST business hours */}
-      <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-border font-bold text-text-2">
-          Common IST Business Hours in UTC
-        </div>
-        <div className="divide-y divide-border">
-          {IST_BIZ_HOURS.map((row) => (
-            <div key={row.istLabel} className="flex justify-between px-4 py-3">
-              <span className="text-sm font-medium text-text">{row.istLabel}</span>
-              <span className="text-sm font-bold text-blue">{row.utcLabel}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between">
-        <span className="text-sm text-text-3">IST = UTC + 5 hours 30 minutes</span>
-        <CopyButton text={summary} label="Copy" />
-      </div>
+      <UtcIstConverterClient />
     </ToolShell>
   );
 }
