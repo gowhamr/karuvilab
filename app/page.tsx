@@ -26,26 +26,26 @@ import {
 
 function SectionHeader({ title, subtitle, icon: Icon, badge, href }: any) {
   return (
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
-      <div className="space-y-3">
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 md:mb-8">
+      <div className="space-y-2">
         {badge && (
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue/5 border border-blue/10 text-[10px] font-black uppercase tracking-widest text-blue">
-            <Sparkles className="w-3 h-3" />
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 text-[9px] font-black uppercase tracking-widest text-blue">
+            <Sparkles className="w-2.5 h-2.5" />
             {badge}
           </div>
         )}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {Icon && (
-            <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-3 shadow-sm">
-              <Icon className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-surface border border-border flex items-center justify-center text-text-3 shadow-sm">
+              <Icon className="w-4 h-4" />
             </div>
           )}
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-text">
+          <h2 className="text-xl md:text-2xl font-black tracking-tight text-text">
             {title}
           </h2>
         </div>
         {subtitle && (
-          <p className="text-sm md:text-base text-text-4 font-semibold max-w-2xl leading-relaxed">
+          <p className="text-xs md:text-sm text-text-4 font-semibold max-w-xl leading-relaxed">
             {subtitle}
           </p>
         )}
@@ -53,14 +53,15 @@ function SectionHeader({ title, subtitle, icon: Icon, badge, href }: any) {
       {href && (
         <Link 
           href={href}
-          className="group flex items-center gap-2 text-sm font-black text-blue hover:translate-x-1 transition-all"
+          className="group flex items-center gap-2 text-[10px] font-black text-blue hover:translate-x-1 transition-all"
         >
-          View all <ArrowRight className="w-4 h-4" />
+          View all <ArrowRight className="w-3 h-3" />
         </Link>
       )}
     </div>
   );
 }
+
 
 const FAQ = [
   { q: "Is KaruviLab free for commercial use?", a: "Yes. All tools are 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
@@ -101,50 +102,50 @@ export default function Home() {
   const isSearching = !!(searchQuery || activeCategory);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 space-y-24 md:space-y-40">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 space-y-12 md:space-y-24">
       
       {/* ── 1. Hero Section ─────────────────────────────────────────────────── */}
-      <section className="relative pt-12 md:pt-24 lg:pt-32 flex flex-col items-center text-center space-y-12 overflow-hidden">
+      <section className="relative pt-8 md:pt-16 flex flex-col items-center text-center space-y-8 overflow-hidden">
         {/* Decorative Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl aspect-square bg-blue/5 blur-[120px] rounded-full -z-10" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl aspect-square bg-blue/5 blur-[100px] rounded-full -z-10" />
         
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-6 max-w-4xl"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="space-y-4 max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface border border-border shadow-sm mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-border shadow-sm mb-2">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue"></span>
             </span>
-            <span className="text-[10px] font-black uppercase tracking-widest text-text-3">Privacy-first productivity</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Local-first privacy</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-text">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.95] text-text">
             Every tool you need,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue via-indigo-500 to-blue-dark">
               right here.
             </span>
           </h1>
           
-          <p className="text-lg md:text-xl text-text-4 font-semibold max-w-2xl mx-auto leading-relaxed">
-            Fast, private, and secure browser-based tools. <br className="hidden md:block" />
-            No uploads. No tracking. <span className="text-text-2">Everything runs locally.</span>
+          <p className="text-base md:text-lg text-text-4 font-semibold max-w-xl mx-auto leading-relaxed">
+            Fast, private browser tools. No uploads. No tracking.<br className="hidden md:block" />
+            <span className="text-text-2">Everything runs locally on your device.</span>
           </p>
         </motion.div>
 
-        <div className="w-full max-w-2xl mx-auto space-y-8">
+        <div className="w-full max-w-2xl mx-auto space-y-6">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
           
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Popular:</span>
-            {["Compress PDF", "JSON Formatter", "Base64", "EMI Calculator"].map(s => (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="text-[9px] font-black uppercase tracking-widest text-text-4">Popular:</span>
+            {["Compress PDF", "JSON Formatter", "Base64", "EMI"].map(s => (
               <button 
                 key={s} 
                 onClick={() => setSearchQuery(s)}
-                className="px-3 py-1 bg-surface border border-border rounded-lg text-xs font-bold text-text-3 hover:border-blue/30 hover:text-blue transition-all"
+                className="px-2.5 py-0.5 bg-surface border border-border rounded-lg text-[10px] font-bold text-text-3 hover:border-blue/30 hover:text-blue transition-all"
               >
                 {s}
               </button>
@@ -152,7 +153,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="w-full max-w-5xl mx-auto pt-8">
+        <div className="w-full max-w-4xl mx-auto pt-4">
           <TrustIndicators />
         </div>
       </section>
@@ -160,89 +161,68 @@ export default function Home() {
       {/* ── 2. Content Area (Search Results or Default) ─────────────────────── */}
       <div className="relative">
         {/* Sticky Category Nav */}
-        <div className="sticky top-[56px] md:top-[64px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-4 bg-bg/80 backdrop-blur-xl border-b border-border/50">
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-8">
+        <div className="sticky top-[56px] md:top-[64px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 bg-bg/80 backdrop-blur-xl border-b border-border/50">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
             <div className="flex-1 overflow-hidden">
               <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
             </div>
             {isSearching && (
               <button
                 onClick={() => { setSearchQuery(""); setActiveCategory(null); }}
-                className="hidden md:block text-xs font-black text-blue hover:underline whitespace-nowrap"
+                className="text-[10px] font-black text-blue hover:underline whitespace-nowrap"
               >
-                Clear Filters
+                Clear
               </button>
             )}
           </div>
         </div>
 
-        <div className="pt-12 md:pt-16">
+        <div className="pt-8 md:pt-12">
           <AnimatePresence mode="wait">
             {isSearching ? (
               <motion.section 
                 key="search-results"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="space-y-12"
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue">
-                      <LayoutGrid className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-black text-text">
-                        {searchQuery ? `Search Results` : CATEGORIES.find(c => c.id === activeCategory)?.label}
-                      </h2>
-                      <p className="text-xs text-text-4 font-bold uppercase tracking-wider">{filteredTools.length} tools found</p>
-                    </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue/5 border border-blue/10 flex items-center justify-center text-blue">
+                    <LayoutGrid className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-black text-text">
+                      {searchQuery ? `Search Results` : CATEGORIES.find(c => c.id === activeCategory)?.label}
+                    </h2>
+                    <p className="text-[10px] text-text-4 font-bold uppercase tracking-wider">{filteredTools.length} tools</p>
                   </div>
                 </div>
 
-                {filteredTools.length === 0 ? (
-                  <div className="py-32 text-center space-y-6 bg-surface border-2 border-dashed border-border rounded-[40px]">
-                    <div className="w-16 h-16 rounded-2xl bg-bg border border-border flex items-center justify-center text-text-4 mx-auto">
-                      <HelpCircle className="w-8 h-8" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-xl font-black text-text">No matches found</p>
-                      <p className="text-sm text-text-4 font-semibold">Try a different keyword or category.</p>
-                    </div>
-                    <button 
-                      onClick={() => { setSearchQuery(""); setActiveCategory(null); }}
-                      className="px-6 py-2 bg-blue text-white rounded-xl font-bold hover:scale-105 transition-transform"
-                    >
-                      Browse All Tools
-                    </button>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    {filteredTools.map(tool => (
-                      <ToolCard key={tool.id} tool={tool} compact />
-                    ))}
-                  </div>
-                )}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+                  {filteredTools.map(tool => (
+                    <ToolCard key={tool.id} tool={tool} compact />
+                  ))}
+                </div>
               </motion.section>
             ) : (
               <motion.div 
                 key="default-content"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="space-y-32 md:space-y-48"
+                className="space-y-16 md:space-y-28"
               >
-                {/* Popular Tools Horizontal Area */}
+                {/* Popular Tools Area */}
                 <section>
                   <SectionHeader 
-                    title="Most Popular Tools" 
-                    subtitle="The most used utilities by our community, optimized for speed and privacy."
-                    badge="Trending Now"
+                    title="Popular Tools" 
+                    badge="Trending"
                     icon={TrendingUp}
                     href="/calculators"
                   />
-                  <div className="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x">
+                  <div className="flex overflow-x-auto no-scrollbar gap-3 md:gap-5 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x">
                     {popularTools.map(tool => (
-                      <div key={tool.id} className="min-w-[260px] md:min-w-[300px] snap-start">
+                      <div key={tool.id} className="min-w-[220px] md:min-w-[280px] snap-start">
                         <ToolCard tool={tool} />
                       </div>
                     ))}
@@ -252,75 +232,44 @@ export default function Home() {
                 {/* Main Discovery Grid */}
                 <section id="tools">
                   <SectionHeader 
-                    title="Powerful Browser Tools" 
-                    subtitle="Browse our complete catalog of professional utilities, all running 100% locally."
+                    title="All Utilities" 
                     icon={LayoutGrid}
                   />
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
                     {(ALL_TOOLS as ToolEntry[]).slice(0, 16).map(tool => (
                       <ToolCard key={tool.id} tool={tool} compact />
                     ))}
                   </div>
-                  <div className="mt-12 flex justify-center">
+                  <div className="mt-8 flex justify-center">
                     <Link 
                       href="/calculators"
-                      className="inline-flex items-center gap-3 px-8 py-4 bg-surface border border-border rounded-2xl font-black text-text hover:border-blue/30 hover:text-blue transition-all shadow-sm"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black text-text hover:border-blue/30 hover:text-blue transition-all shadow-sm"
                     >
-                      Browse All 100+ Tools <ArrowRight className="w-4 h-4" />
+                      Browse 100+ Tools <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </section>
 
-                {/* Recently Used */}
-                {recentTools.length > 0 && (
-                  <section>
-                    <SectionHeader 
-                      title="Recently Used" 
-                      subtitle="Pick up exactly where you left off."
-                      icon={Clock}
-                    />
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                      {recentTools.map(tool => (
-                        <Link
-                          key={tool.id}
-                          href={`/${tool.href}`}
-                          className="flex items-center gap-3 p-4 bg-surface border border-border rounded-2xl hover:border-blue/30 hover:shadow-lg transition-all group overflow-hidden"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-bg border border-border flex items-center justify-center text-sm font-black text-text-4 group-hover:bg-blue/10 group-hover:text-blue group-hover:border-blue/20 transition-all">
-                            {tool.name.charAt(0)}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="font-bold text-text text-xs truncate group-hover:text-blue transition-colors">{tool.name}</div>
-                            <div className="text-[9px] text-text-4 font-black uppercase">Recent</div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
                 {/* Privacy & Security */}
                 <section>
                   <SectionHeader 
-                    title="Privacy & Security" 
-                    subtitle="How we ensure your data never leaves your device."
+                    title="Privacy First" 
                     icon={ShieldCheck}
                   />
                   <PrivacyFeatures />
                 </section>
 
                 {/* FAQ Section */}
-                <section className="max-w-4xl mx-auto w-full">
+                <section className="max-w-3xl mx-auto w-full">
                   <SectionHeader 
-                    title="Common Questions" 
-                    subtitle="Everything you need to know about KaruviLab."
+                    title="FAQ" 
                     icon={MessageSquare}
                   />
-                  <Accordion type="single" collapsible className="w-full space-y-4">
+                  <Accordion type="single" collapsible className="w-full space-y-2">
                     {FAQ.map((item, i) => (
-                      <AccordionItem key={i} value={`item-${i}`} className="bg-surface border border-border rounded-2xl px-6 border-b-0 overflow-hidden hover:border-blue/30 transition-colors">
-                        <AccordionTrigger className="text-base md:text-lg hover:no-underline">{item.q}</AccordionTrigger>
-                        <AccordionContent className="text-sm md:text-base">{item.a}</AccordionContent>
+                      <AccordionItem key={i} value={`item-${i}`} className="bg-surface border border-border rounded-xl px-4 border-b-0 overflow-hidden hover:border-blue/30 transition-colors">
+                        <AccordionTrigger className="text-sm md:text-base py-4 hover:no-underline">{item.q}</AccordionTrigger>
+                        <AccordionContent className="text-xs md:text-sm pb-4">{item.a}</AccordionContent>
                       </AccordionItem>
                     ))}
                   </Accordion>

@@ -45,8 +45,8 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder || "Search 100+ private tools... (⌘K)"}
-          className="w-full px-4 py-4 md:py-5 bg-transparent outline-none text-base md:text-xl text-text placeholder:text-text-4 font-bold tracking-tight"
+          placeholder={placeholder || "Search tools... (⌘K)"}
+          className="w-full px-4 py-3 md:py-4 bg-transparent outline-none text-base md:text-lg text-text placeholder:text-text-4 font-bold tracking-tight"
         />
 
         <div className="pr-5 hidden sm:flex items-center gap-2">
