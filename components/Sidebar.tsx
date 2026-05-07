@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CATEGORIES } from "@/src/tool-registry";
+import { CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { useState, useEffect } from "react";
 
 const SUPPORT_LINKS = [
@@ -15,10 +15,12 @@ const SUPPORT_LINKS = [
 export function Sidebar() {
   const pathname = usePathname() ?? "";
   const [isOpen, setIsOpen] = useState(false);
+  const [recent, setRecent] = useState<ToolEntry[]>([]);
 
   // Close sidebar on route change (mobile)
   useEffect(() => {
     setIsOpen(false);
+    setRecent(getRecentTools().slice(0, 5));
   }, [pathname]);
 
   return (
@@ -52,7 +54,7 @@ export function Sidebar() {
           </button>
         </div>
 
-        <nav className="p-4 overflow-y-auto h-[calc(100vh-52px)] flex flex-col gap-6">
+        <nav className="p-4 overflow-y-auto h-[calc(100vh-52px)] flex flex-col gap-8">
           {/* Home */}
           <div className="space-y-1">
             <Link
@@ -66,8 +68,27 @@ export function Sidebar() {
             </Link>
           </div>
 
+          {/* Recent Tools */}
+          {recent.length > 0 && (
+            <div className="space-y-2">
+              <div className="px-3 text-[10px] font-bold text-text-4 uppercase tracking-wider">Recently Used</div>
+              <div className="space-y-1">
+                {recent.map(tool => (
+                  <Link
+                    key={tool.id}
+                    href={`/${tool.href}`}
+                    className={`block px-3 py-1.5 text-sm rounded-lg transition-colors ${pathname.includes(tool.href) ? "bg-blue/5 text-blue font-medium" : "text-text-3 hover:bg-border hover:text-text"}`}
+                  >
+                    {tool.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Tool Categories */}
-          <div className="space-y-4 flex-1">
+          <div className="space-y-1 flex-1">
+            <div className="px-3 text-[10px] font-bold text-text-4 uppercase tracking-wider mb-2">Categories</div>
             {CATEGORIES.map((cat) => (
               <div key={cat.id}>
                 <Link

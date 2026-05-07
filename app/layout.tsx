@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export const metadata: Metadata = {
   title: "KaruviLab — Free Online Tools",
@@ -23,17 +24,19 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased bg-bg text-text min-h-screen">
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 lg:ml-[280px]">
-            <header className="h-[52px] border-b border-border flex items-center justify-end px-6 sticky top-0 bg-surface/90 backdrop-blur-md z-30">
-              <ThemeToggle />
-            </header>
-            <div className="p-6">
-              {children}
-            </div>
-          </main>
-        </div>
+        <ToastProvider>
+          <div className="flex">
+            <Sidebar />
+            <main className="flex-1 lg:ml-[280px]">
+              <header className="h-[52px] border-b border-border flex items-center justify-end px-6 sticky top-0 bg-surface/90 backdrop-blur-md z-30">
+                <ThemeToggle />
+              </header>
+              <div className="p-6">
+                {children}
+              </div>
+            </main>
+          </div>
+        </ToastProvider>
       </body>
     </html>
   );
