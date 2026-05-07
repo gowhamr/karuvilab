@@ -6,3 +6,6 @@ scripts/favicon.ico
 .next/
 out/
 *.tsbuildinfo
+
+# UI References
+.temp_ui_refs/

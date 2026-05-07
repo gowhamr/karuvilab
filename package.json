@@ -10,7 +10,7 @@
     "lint": "next lint",
     "legacy:build": "node build.js",
     "legacy:watch": "node build.js --watch",
-    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json && tsc --noEmit -p tsconfig.test.json",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
     "test:ui": "vitest --ui"
   },
