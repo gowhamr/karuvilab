@@ -45,6 +45,8 @@
   .shadow-md  { box-shadow: var(--shadow-md); }
   .shadow-lg  { box-shadow: var(--shadow-lg); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
 
 :root {
@@ -59,14 +61,14 @@
   --text:         #0F172A;
   --text-1:       var(--text);
   --text-2:       #334155;
-  --text-3:       #475569;
-  --text-4:       #64748B;
+  --text-3:       #64748B;
+  --text-4:       #94A3B8;
   --border:       #E2E8F0;
   --border-2:     #F1F5F9;
   --bg:           #F8FAFC;
   --surface:      #FFFFFF;
   --elevated:     #F1F5F9;
-  --hover:        #E2E8F0;
+  --hover:        #F1F5F9;
   --bg-input:     #F1F5F9;
 
   --border-focus:   #6366F1;
@@ -103,4 +105,5 @@ body {
   background-color: var(--bg);
   color: var(--text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

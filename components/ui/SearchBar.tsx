@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { Search, Command } from "lucide-react";
+import { useSearchStore } from "@/src/store/useSearchStore";
 
 interface SearchBarProps {
   value: string;
@@ -11,6 +12,7 @@ interface SearchBarProps {
 
 export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const setIsPaletteOpen = useSearchStore((state) => state.setIsPaletteOpen);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -25,11 +27,11 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
 
   return (
     <div className="relative group max-w-2xl mx-auto w-full">
-      <div className="absolute inset-0 bg-blue/20 blur-3xl opacity-0 group-focus-within:opacity-40 transition-opacity duration-500 -z-10" />
+      <div className="absolute inset-0 bg-blue/10 blur-2xl opacity-0 group-focus-within:opacity-30 transition-opacity duration-500 -z-10" />
       
-      <div className="relative flex items-center bg-elevated border border-border rounded-2xl shadow-lg focus-within:ring-4 focus-within:ring-blue/10 focus-within:border-blue transition-all overflow-hidden">
-        <div className="pl-6 text-text-4">
-          <Search className="w-6 h-6" />
+      <div className="relative flex items-center bg-elevated border border-border rounded-xl shadow-md focus-within:ring-4 focus-within:ring-blue/5 focus-within:border-blue/50 transition-all overflow-hidden">
+        <div className="pl-5 text-text-4">
+          <Search className="w-5 h-5" />
         </div>
         
         <input
@@ -37,15 +39,21 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder || "Search for a tool... (Press ⌘K)"}
-          className="w-full px-4 py-5 md:py-6 bg-transparent outline-none text-lg md:text-xl text-text placeholder:text-text-4 font-medium"
+          onFocus={() => {
+            // Optional: can trigger palette or just use local search
+          }}
+          placeholder={placeholder || "Search tools... (⌘K)"}
+          className="w-full px-3 py-4 md:py-5 bg-transparent outline-none text-base md:text-lg text-text placeholder:text-text-4 font-bold"
         />
 
-        <div className="pr-6 flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-surface border border-border rounded-lg text-[10px] font-bold text-text-4 shadow-sm">
-            <Command className="w-3 h-3" />
+        <div className="pr-5 flex items-center gap-3">
+          <button 
+            onClick={() => setIsPaletteOpen(true)}
+            className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-surface border border-border rounded-md text-[9px] font-black text-text-4 shadow-sm hover:bg-hover transition-colors"
+          >
+            <Command className="w-2.5 h-2.5" />
             <span>K</span>
-          </div>
+          </button>
         </div>
       </div>
     </div>
