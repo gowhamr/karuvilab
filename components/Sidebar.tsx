@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
+import { CATEGORIES, getRecentTools, ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { useState, useEffect } from "react";
-import { Home, Info, HelpCircle, Settings, Shield, Menu, X, Clock } from "lucide-react";
+import { Home, Info, HelpCircle, Settings, Shield, Menu, X, Clock, Search } from "lucide-react";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About", icon: Info },
@@ -30,7 +30,7 @@ export function Sidebar() {
       {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm animate-in fade-in duration-300"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -38,7 +38,7 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside className={`
         fixed top-0 left-0 bottom-0 w-[280px] bg-surface border-r border-border z-50
-        transition-transform duration-300 ease-expo lg:translate-x-0
+        transition-transform duration-300 ease-expo md:translate-x-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
       `}>
         <div className="h-[52px] flex items-center justify-between px-4 border-b border-border bg-elevated/50">
@@ -46,7 +46,7 @@ export function Sidebar() {
             <span className="text-blue">Karuvi</span>Lab
           </Link>
           <button
-            className="lg:hidden p-2 hover:bg-bg rounded-lg transition-colors"
+            className="md:hidden p-2 hover:bg-bg rounded-lg transition-colors"
             onClick={() => setIsOpen(false)}
             aria-label="Close menu"
           >
@@ -55,8 +55,8 @@ export function Sidebar() {
         </div>
 
         <nav className="p-4 overflow-y-auto h-[calc(100vh-52px)] flex flex-col gap-8">
-          {/* Home */}
-          <div className="space-y-1">
+          {/* Home & Search */}
+          <div className="space-y-4">
             <Link
               href="/"
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold ${pathname === "/" ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-3 hover:bg-bg hover:text-text"}`}
@@ -64,6 +64,20 @@ export function Sidebar() {
               <Home className="w-5 h-5" />
               Home
             </Link>
+
+            <button 
+               onClick={() => {
+                 window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
+                 window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }));
+               }}
+               className="w-full flex items-center justify-between px-3 py-2.5 bg-bg/50 border border-border rounded-xl text-sm font-bold text-text-3 hover:border-blue/50 hover:bg-bg transition-all group text-left"
+             >
+               <div className="flex items-center gap-3">
+                 <Search className="w-5 h-5 text-text-4 group-hover:text-blue transition-colors" />
+                 <span>Search...</span>
+               </div>
+               <kbd className="hidden sm:inline-flex px-1.5 py-0.5 bg-surface border border-border rounded text-[10px] font-mono text-text-4 group-hover:border-blue/30 group-hover:text-blue">⌘K</kbd>
+             </button>
           </div>
 
           {/* Recent Tools */}
@@ -91,26 +105,50 @@ export function Sidebar() {
           <div className="space-y-1 flex-1">
             <div className="px-3 text-[10px] font-black text-text-4 uppercase tracking-[0.2em] mb-3">Categories</div>
             <div className="space-y-1">
-              {CATEGORIES.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/${cat.href}`}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold ${
-                    pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`)
-                      ? "bg-blue/10 text-blue"
-                      : "text-text-3 hover:bg-bg hover:text-text"
-                  }`}
-                >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                    pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`)
-                      ? "bg-blue text-white shadow-md shadow-blue/20"
-                      : "bg-elevated border border-border group-hover:border-blue/50"
-                  }`}>
-                    <ToolIcon category={cat.id} className="w-4 h-4" />
+              {CATEGORIES.map((cat) => {
+                const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
+                const catTools = ALL_TOOLS.filter(t => t.category === cat.id);
+                
+                return (
+                  <div key={cat.id} className="space-y-1">
+                    <Link
+                      href={`/${cat.href}`}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold ${
+                        isActive
+                          ? "bg-blue/10 text-blue"
+                          : "text-text-3 hover:bg-bg hover:text-text"
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                        isActive
+                          ? "bg-blue text-white shadow-md shadow-blue/20"
+                          : "bg-elevated border border-border group-hover:border-blue/50"
+                      }`}>
+                        <ToolIcon category={cat.id} className="w-4 h-4" />
+                      </div>
+                      <span className="flex-1">{cat.label}</span>
+                    </Link>
+                    
+                    {isActive && (
+                      <div className="ml-7 space-y-1 border-l-2 border-blue/20 pl-4 py-1 my-1 animate-in fade-in slide-in-from-top-2 duration-300">
+                        {catTools.map(tool => (
+                          <Link
+                            key={tool.id}
+                            href={`/${tool.href}`}
+                            className={`block py-1.5 text-xs font-medium transition-colors ${
+                              pathname.includes(tool.href) 
+                                ? "text-blue font-bold" 
+                                : "text-text-4 hover:text-text"
+                            }`}
+                          >
+                            {tool.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <span className="flex-1">{cat.label}</span>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -140,7 +178,7 @@ export function Sidebar() {
       {/* Mobile Toggle Button */}
       {!isOpen && (
         <button
-          className="fixed top-3 left-4 z-30 lg:hidden p-2 bg-surface border border-border rounded-xl shadow-lg focus:ring-2 focus:ring-blue outline-none"
+          className="fixed top-3 left-4 z-30 md:hidden p-2 bg-surface border border-border rounded-xl shadow-lg focus:ring-2 focus:ring-blue outline-none"
           onClick={() => setIsOpen(true)}
           aria-label="Open menu"
         >

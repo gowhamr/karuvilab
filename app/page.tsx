@@ -46,7 +46,7 @@ export default function Home() {
   }, []);
 
   const popularTools = useMemo(
-    () => (ALL_TOOLS as ToolEntry[]).filter(t => t.popular).slice(0, 6),
+    () => (ALL_TOOLS as ToolEntry[]).filter(t => t.popular).slice(0, 12),
     []
   );
 
@@ -75,8 +75,8 @@ export default function Home() {
         <div className="space-y-8">
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight leading-[1.05]">
-              Every tool you need,{" "}
-              <span className="text-blue bg-blue/5 px-3 rounded-2xl whitespace-nowrap">right here.</span>
+              68+ private tools,{" "}
+              <span className="text-blue bg-blue/5 px-3 rounded-2xl whitespace-nowrap">one platform.</span>
             </h1>
             <p className="text-base md:text-lg text-text-3 leading-relaxed font-medium max-w-md">
               Fast, private, and secure browser-based tools.{" "}

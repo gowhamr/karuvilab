@@ -29,7 +29,7 @@ export default function RootLayout({
           <CommandPalette />
           <div className="flex">
             <Sidebar />
-            <main className="flex-1 lg:ml-[280px]">
+            <main className="flex-1 md:ml-[280px]">
               <header className="h-[52px] border-b border-border flex items-center justify-end px-6 sticky top-0 bg-surface/90 backdrop-blur-md z-30">
                 <ThemeToggle />
               </header>

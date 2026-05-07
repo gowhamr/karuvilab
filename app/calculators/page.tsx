@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TOOLS, CATEGORIES } from "@/src/tool-registry";
+import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function CalculatorsPage() {
   const cat = CATEGORIES.find(c => c.id === "calculators")!;
-  const tools = TOOLS.filter(t => t.category === "calculators");
+  const tools = ALL_TOOLS.filter(t => t.category === "calculators");
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="space-y-2">
