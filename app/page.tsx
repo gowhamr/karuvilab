@@ -139,6 +139,58 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Tool Guides / Blog-like Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-6">
+                <h2 className="text-3xl font-black">Pro Tips & Guides</h2>
+                <div className="space-y-6">
+                  {[
+                    {
+                      title: "How to fix 'File Size Too Large' errors",
+                      desc: "Most government portals have a 100KB or 500KB limit. Learn how to use our intelligent compression to hit the target every time without losing quality.",
+                    },
+                    {
+                      title: "The Ultimate Guide to PDF Management",
+                      desc: "From merging multiple documents to extracting specific pages, discover how to handle complex PDF workflows entirely in your browser.",
+                    },
+                    {
+                      title: "Developer Workflow: Fast & Private",
+                      desc: "Why upload sensitive JSON or Base64 data to unknown servers? Use KaruviLab's local tools to format, minify, and encode safely.",
+                    }
+                  ].map((guide, i) => (
+                    <div key={i} className="group cursor-pointer space-y-2">
+                      <h3 className="text-lg font-bold group-hover:text-blue transition-colors underline decoration-blue/20 decoration-2 underline-offset-4">{guide.title}</h3>
+                      <p className="text-text-3 text-sm leading-relaxed">{guide.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-6">
+                <h2 className="text-3xl font-black">Frequently Asked Questions</h2>
+                <div className="space-y-4">
+                  {[
+                    {
+                      q: "Are my files uploaded to a server?",
+                      a: "No. KaruviLab uses 'Client-Side Processing'. This means all calculations happen on your computer. Your files never leave your device.",
+                    },
+                    {
+                      q: "Is KaruviLab free to use?",
+                      a: "Yes, 100% free. No subscriptions, no credits, and no hidden fees. We build these tools to help the community.",
+                    },
+                    {
+                      q: "Can I use these tools on my mobile phone?",
+                      a: "Yes! KaruviLab is fully responsive and works perfectly on Chrome, Safari, and Firefox on both iOS and Android.",
+                    }
+                  ].map((faq, i) => (
+                    <div key={i} className="bg-surface border border-border p-5 rounded-2xl space-y-2">
+                      <h3 className="font-bold text-sm">{faq.q}</h3>
+                      <p className="text-text-3 text-sm leading-relaxed">{faq.a}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {/* All Categories */}
             {CATEGORIES.map(cat => {
               const catTools = TOOLS.filter(t => t.category === cat.id);
