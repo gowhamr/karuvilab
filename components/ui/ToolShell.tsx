@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { ALL_TOOLS, CategoryEntry } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
-import { Check, X, Wrench } from "lucide-react";
+import { Check, X, Wrench, Heart } from "lucide-react";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { StructuredData } from "@/src/lib/seo";
+import { useFavoriteStore } from "@/src/store/useFavoriteStore";
+import { useState, useEffect } from "react";
 
 interface ToolShellProps {
   title: string;
@@ -24,6 +28,13 @@ interface ToolShellProps {
 }
 
 export function ToolShell({ title, description, category, children, toolId, content }: ToolShellProps) {
+  const { isFavorite, toggleFavorite } = useFavoriteStore();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   const currentTool = ALL_TOOLS.find(t =>
     t.id === toolId ||
     t.name === title ||
@@ -56,17 +67,33 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
       {/* Tool Header & Navigation */}
       <header className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
-        <nav className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
-          <Link href="/" className="hover:text-blue transition-colors">Home</Link>
-          <span>/</span>
-          {category && (
-            <>
-              <Link href={`/${category.href}`} className="hover:text-blue transition-colors">{category.label}</Link>
-              <span>/</span>
-            </>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <nav className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
+            <Link href="/" className="hover:text-blue transition-colors">Home</Link>
+            <span>/</span>
+            {category && (
+              <>
+                <Link href={`/${category.href}`} className="hover:text-blue transition-colors">{category.label}</Link>
+                <span>/</span>
+              </>
+            )}
+            <span className="text-text-3">{title}</span>
+          </nav>
+          
+          {currentTool && hydrated && (
+            <button
+              onClick={() => toggleFavorite(currentTool.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                isFavorite(currentTool.id)
+                  ? "bg-red-500 text-white shadow-lg shadow-red-500/20"
+                  : "bg-surface border border-border text-text-4 hover:border-red-500/30 hover:text-red-500"
+              }`}
+            >
+              <Heart className={`w-3 h-3 ${isFavorite(currentTool.id) ? "fill-current" : ""}`} />
+              {isFavorite(currentTool.id) ? "Favorited" : "Add to Favorites"}
+            </button>
           )}
-          <span className="text-text-3">{title}</span>
-        </nav>
+        </div>
         
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight">{title}</h1>

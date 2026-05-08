@@ -8,6 +8,7 @@ import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
+import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import {
   Accordion,
   AccordionContent,
@@ -78,11 +79,21 @@ const FAQ = [
 
 export default function HomeClient() {
   const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearchStore();
+  const { favorites: favoriteIds } = useFavoriteStore();
   const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
+  const [favoriteTools, setFavorites] = useState<ToolEntry[]>([]);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    setHydrated(true);
     setRecentTools(getRecentTools().slice(0, 5));
   }, []);
+
+  useEffect(() => {
+    if (hydrated) {
+      setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
+    }
+  }, [favoriteIds, hydrated]);
 
   const popularTools = useMemo(
     () => (ALL_TOOLS as ToolEntry[]).filter(t => t.popular).slice(0, 10),
@@ -205,6 +216,22 @@ export default function HomeClient() {
                 animate={{ opacity: 1 }}
                 className="space-y-12 md:space-y-20"
               >
+                {/* Personal Favorites (if any) */}
+                {favoriteTools.length > 0 && (
+                  <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <SectionHeader 
+                      title="Personal Favorites" 
+                      subtitle="Your hand-picked toolkit"
+                      icon={Heart}
+                    />
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                      {favoriteTools.map(tool => (
+                        <ToolCard key={tool.id} tool={tool} compact />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
                 {/* Recently Used (if any) */}
                 {recentTools.length > 0 && (
                   <section>
@@ -286,4 +313,3 @@ export default function HomeClient() {
     </div>
   );
 }
-
