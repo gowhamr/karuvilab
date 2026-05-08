@@ -2,34 +2,42 @@
 
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Search, Command, Laptop } from "lucide-react";
+import { Search, Command, Menu, Laptop } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Header() {
-  const setIsPaletteOpen = useSearchStore((state) => state.setIsPaletteOpen);
+  const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
   const { scrollY } = useScroll();
   
-  const borderOpacity = useTransform(scrollY, [0, 20], [0, 1]);
-  const backdropBlur = useTransform(scrollY, [0, 20], [0, 24]);
-  const bgOpacity = useTransform(scrollY, [0, 20], [0, 0.7]);
+  const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.8]);
+  const blur = useTransform(scrollY, [0, 50], [0, 16]);
+  const borderOpacity = useTransform(scrollY, [0, 50], [0, 1]);
 
   return (
     <motion.header 
       style={{ 
-        borderBottomColor: `rgba(var(--border-rgb, 30, 41, 59), ${borderOpacity.get()})`,
-        backdropFilter: `blur(${backdropBlur.get()}px)`,
-        backgroundColor: `rgba(var(--bg-rgb), ${bgOpacity.get()})`
+        backgroundColor: `rgba(var(--bg-rgb), ${bgOpacity.get()})`,
+        backdropFilter: `blur(${blur.get()}px)`,
+        borderBottomColor: `rgba(var(--border-rgb), ${borderOpacity.get()})`
       }}
-      className="sticky top-0 z-50 w-full border-b border-transparent transition-all duration-300"
+      className="sticky top-0 z-40 w-full border-b border-transparent transition-all duration-300 h-[60px] md:h-[72px]"
     >
-      <div className="max-w-7xl mx-auto px-4 h-14 md:h-16 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-blue flex items-center justify-center text-white shadow-lg shadow-blue/20 group-hover:scale-110 transition-transform duration-500">
+      <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3 md:gap-8">
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="md:hidden p-2 -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
+            aria-label="Open menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-blue flex items-center justify-center text-white shadow-lg shadow-blue/25 group-hover:scale-105 group-active:scale-95 transition-all duration-300">
               <Laptop className="w-4 h-4" />
             </div>
-            <span className="font-black text-lg tracking-tighter">
+            <span className="font-black text-base md:text-lg tracking-tight">
               <span className="text-blue">Karuvi</span>Lab
             </span>
           </Link>
@@ -43,7 +51,7 @@ export function Header() {
               <Link 
                 key={link.label}
                 href={link.href}
-                className="px-3 py-1.5 rounded-lg text-xs font-bold text-text-3 hover:text-blue hover:bg-blue/5 transition-all"
+                className="flex items-center h-12 px-3 rounded-lg text-[11px] font-bold text-text-3 hover:text-blue hover:bg-blue/5 transition-all uppercase tracking-wider"
               >
                 {link.label}
               </Link>
@@ -51,31 +59,23 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex-1 max-w-md hidden md:block">
+        <div className="flex items-center gap-2 md:gap-4">
           <button 
             onClick={() => setIsPaletteOpen(true)}
-            className="w-full flex items-center justify-between px-4 py-1.5 bg-surface/50 border border-border rounded-xl text-xs font-bold text-text-4 shadow-sm hover:border-blue/30 hover:text-blue transition-all group"
+            aria-label="Search tools"
+            className="group flex items-center justify-between gap-3 px-3 py-1.5 md:min-w-[160px] lg:min-w-[240px] bg-surface border border-border rounded-lg text-[11px] font-bold text-text-4 shadow-sm hover:border-blue/30 hover:text-blue hover:bg-blue/5 transition-all"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Search className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-              <span>Search tools...</span>
+              <span className="hidden md:inline">Quick search...</span>
             </div>
-            <kbd className="flex items-center gap-1 px-1.5 py-0.5 bg-bg border border-border rounded text-[10px] font-mono">
+            <div className="hidden md:flex items-center gap-0.5 px-1 py-0.5 bg-bg border border-border rounded text-[9px] font-mono group-hover:border-blue/20">
               <Command className="w-2.5 h-2.5" />
-              K
-            </kbd>
-          </button>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={() => setIsPaletteOpen(true)}
-            className="md:hidden p-2 text-text-3 hover:text-blue transition-colors"
-          >
-            <Search className="w-5 h-5" />
+              <span>K</span>
+            </div>
           </button>
           
-          <div className="h-4 w-px bg-border mx-2 hidden sm:block" />
+          <div className="h-4 w-px bg-border/50 hidden sm:block" />
 
           <ThemeToggle />
         </div>
@@ -83,4 +83,5 @@ export function Header() {
     </motion.header>
   );
 }
+
 

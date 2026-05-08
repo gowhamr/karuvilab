@@ -86,7 +86,10 @@ export function CommandPalette() {
                 setSelectedIndex(0);
               }}
             />
-            <Dialog.Close className="p-2 hover:bg-bg rounded-lg text-text-4 transition-colors">
+            <Dialog.Close 
+              aria-label="Close palette"
+              className="p-2 hover:bg-bg rounded-lg text-text-4 transition-colors"
+            >
               <X className="w-4 h-4" />
             </Dialog.Close>
           </div>
