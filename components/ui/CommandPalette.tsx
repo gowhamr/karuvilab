@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { TOOLS, ToolEntry } from "@/src/tool-registry";
+import { ALL_TOOLS, ToolEntry } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { Search, Command, X, ArrowDown, ArrowUp, CornerDownLeft } from "lucide-react";
@@ -32,12 +32,12 @@ export function CommandPalette() {
 
   // Search Logic
   const filteredTools = useMemo(() => {
-    if (!query.trim()) return TOOLS.filter(t => t.popular).slice(0, 6);
+    if (!query.trim()) return ALL_TOOLS.filter((t: ToolEntry) => t.popular).slice(0, 6);
     const q = query.toLowerCase();
-    return TOOLS.filter(t => 
+    return ALL_TOOLS.filter((t: ToolEntry) => 
       t.name.toLowerCase().includes(q) ||
       t.desc.toLowerCase().includes(q) ||
-      t.keywords.some(k => k.toLowerCase().includes(q))
+      t.keywords.some((k: string) => k.toLowerCase().includes(q))
     ).slice(0, 8);
   }, [query]);
 
@@ -104,7 +104,7 @@ export function CommandPalette() {
                 No tools found.
               </div>
             ) : (
-              filteredTools.map((tool, i) => (
+              filteredTools.map((tool: ToolEntry, i: number) => (
                 <button
                   key={tool.id}
                   onMouseEnter={() => setSelectedIndex(i)}

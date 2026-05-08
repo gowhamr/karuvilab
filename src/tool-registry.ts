@@ -24,19 +24,19 @@ export interface ToolEntry {
   
   // Discovery & SEO
   keywords: string[];
-  searchIntent: string; // e.g., "transactional", "informational"
+  searchIntent?: string; // e.g., "transactional", "informational"
   canonicalUrl?: string;
-  priority: number; // 0 to 1 for sitemap (e.g., 0.8)
+  priority?: number; // 0 to 1 for sitemap (e.g., 0.8)
   
   // UI & UX
-  icon: string; // Emoji or SVG path
+  icon?: string; // Emoji or SVG path
   color?: string; // Brand color for the tool
   featured?: boolean;
   popular?: boolean;
-  difficulty: Difficulty;
+  difficulty?: Difficulty;
   
   // Semantic Intelligence
-  related: string[]; // Array of tool IDs
+  related?: string[]; // Array of tool IDs
   
   // Content Engine
   seoContent?: SEOContent;
@@ -44,7 +44,7 @@ export interface ToolEntry {
   
   // Analytics & Management
   analyticsId?: string;
-  status: 'stable' | 'beta' | 'deprecated';
+  status?: 'stable' | 'beta' | 'deprecated';
 }
 
 export interface CategoryEntry {
@@ -62,10 +62,10 @@ export const CATEGORIES: CategoryEntry[] = [
   { id: 'security',    label: 'Security',        href: 'security-tools/',  emoji: '', description: 'Private password generators, encoders, and hash utilities.' },
   { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '', description: 'Essential utilities for formatting, minifying, and debugging code.' },
   { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.' },
-  { id: 'seo',         label: 'SEO Tools',       href: 'tools/seo/',       emoji: '', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.' },
+  { id: 'seo',         label: 'SEO Tools',       href: 'seo-tools/',       emoji: '', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.' },
 ];
 
-export const TOOLS: ToolEntry[] = [
+export const ALL_TOOLS: ToolEntry[] = [
   // ── Calculators ────────────────────────────────────────────────────────────
   { 
     id: 'emi-calculator', 
@@ -125,73 +125,6 @@ export const TOOLS: ToolEntry[] = [
       ]
     }
   },
-  
-  // ── Developer Tools ────────────────────────────────────────────────────────
-  { 
-    id: 'json-formatter', 
-    name: 'JSON Formatter', 
-    desc: 'Format and validate JSON', 
-    href: 'tools/json-formatter/', 
-    category: 'developer', 
-    keywords: ['json','format','pretty','validate'], 
-    popular: true, 
-    difficulty: 'beginner',
-    searchIntent: 'informational',
-    priority: 0.9,
-    icon: '',
-    related: ['json-csv', 'base64', 'format'],
-    status: 'stable',
-    schemaType: 'SoftwareApplication'
-  },
-  { 
-    id: 'json-csv', 
-    name: 'JSON ↔ CSV', 
-    desc: 'Convert between JSON and CSV', 
-    href: 'tools/json-csv/', 
-    category: 'developer', 
-    keywords: ['json','csv','convert'], 
-    difficulty: 'intermediate',
-    searchIntent: 'transactional',
-    priority: 0.8,
-    icon: '',
-    related: ['json-formatter', 'unit-converter'],
-    status: 'stable'
-  },
-
-  // ── Security & Encoding ───────────────────────────────────────────────────
-  { 
-    id: 'base64', 
-    name: 'Base64 Encode/Decode', 
-    desc: 'Encode or decode Base64 strings', 
-    href: 'tools/base64/', 
-    category: 'security', 
-    keywords: ['base64','encode','decode'], 
-    difficulty: 'beginner',
-    searchIntent: 'transactional',
-    priority: 0.8,
-    icon: '',
-    related: ['url-encoder', 'hash-generator', 'jwt-decoder'],
-    status: 'stable'
-  },
-  { 
-    id: 'password-generator', 
-    name: 'Password Generator', 
-    desc: 'Strong, random passwords', 
-    href: 'tools/password-generator/', 
-    category: 'security', 
-    keywords: ['password','random','strong','generator'], 
-    popular: true, 
-    difficulty: 'beginner',
-    searchIntent: 'transactional',
-    priority: 0.9,
-    icon: '',
-    related: ['hash-generator', 'base64'],
-    status: 'stable'
-  }
-];
-
-// Re-map full list for compatibility with existing code during migration
-const LEGACY_TOOLS: any[] = [
   { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', keywords: ['compound','interest','savings','growth'] },
   { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', keywords: ['gst','tax','vat','india'] },
   { id: 'currency-converter',     name: 'Currency Converter',     desc: 'Convert between world currencies',               href: 'calculators/currency-converter/',     category: 'calculators', keywords: ['currency','exchange','forex','usd','eur','inr'] },
@@ -208,8 +141,10 @@ const LEGACY_TOOLS: any[] = [
   { id: 'safe-to-spend',          name: 'Safe-to-Spend',          desc: 'Daily budget planner',                           href: 'calculators/safe-to-spend/',          category: 'calculators', keywords: ['budget','spending','daily'] },
   { id: 'work-hours',             name: 'Work Hours',             desc: 'Timesheet and overtime tracker',                 href: 'calculators/work-hours/',             category: 'calculators', keywords: ['work','hours','timesheet','overtime'] },
   { id: 'utc-ist-converter',      name: 'UTC ↔ IST',         desc: 'Convert between UTC and IST',                    href: 'calculators/utc-ist-converter/',      category: 'calculators', keywords: ['utc','ist','timezone','india'] },
-  { id: 'compress-pdf',     name: 'Compress PDF',     desc: 'Reduce PDF file size',                href: 'pdf-tools/compress-pdf/',   category: 'pdf', keywords: ['pdf','compress','reduce','size'], popular: true },
-  { id: 'merge-pdf',        name: 'Merge PDF',        desc: 'Combine multiple PDFs into one',      href: 'pdf-tools/merge-pdf/',      category: 'pdf', keywords: ['pdf','merge','combine','join'], popular: true },
+
+  // ── PDF Tools ──────────────────────────────────────────────────────────────
+  { id: 'compress-pdf',     name: 'Compress PDF',     desc: 'Reduce PDF file size',                href: 'pdf-tools/compress-pdf/',   category: 'pdf', keywords: ['pdf','compress','reduce','size'], popular: true, priority: 0.8 },
+  { id: 'merge-pdf',        name: 'Merge PDF',        desc: 'Combine multiple PDFs into one',      href: 'pdf-tools/merge-pdf/',      category: 'pdf', keywords: ['pdf','merge','combine','join'], popular: true, priority: 0.8 },
   { id: 'split-pdf',        name: 'Split PDF',        desc: 'Extract pages from a PDF',            href: 'pdf-tools/split-pdf/',      category: 'pdf', keywords: ['pdf','split','extract','pages'] },
   { id: 'image-to-pdf',     name: 'Image to PDF',     desc: 'Convert images into a single PDF',    href: 'pdf-tools/image-to-pdf/',   category: 'pdf', keywords: ['image','jpg','png','pdf','convert'] },
   { id: 'pdf-to-word',      name: 'PDF to Word',      desc: 'Convert PDF text to editable Word',   href: 'pdf-tools/pdf-to-word/',    category: 'pdf', keywords: ['pdf','word','docx','convert'], popular: true },
@@ -218,39 +153,106 @@ const LEGACY_TOOLS: any[] = [
   { id: 'page-numbering',   name: 'Page Numbering',   desc: 'Add page numbers to PDF',             href: 'pdf-tools/page-numbering/', category: 'pdf', keywords: ['pdf','page','number'] },
   { id: 'rotate-pdf',       name: 'Rotate PDF',       desc: 'Rotate one or all pages',             href: 'pdf-tools/rotate-pdf/',     category: 'pdf', keywords: ['pdf','rotate','flip','orientation'] },
   { id: 'extract-images',   name: 'Extract Images',   desc: 'Pull images out of a PDF',            href: 'pdf-tools/extract-images/', category: 'pdf', keywords: ['pdf','extract','image'] },
-  { id: 'image-compress',  name: 'Compress Image',     desc: 'Reduce image file size',                 href: 'tools/compress/',           category: 'image', keywords: ['image','compress','jpg','png','webp'], popular: true },
-  { id: 'image-converter', name: 'Image Converter',    desc: 'Convert between JPG, PNG, WebP, AVIF',   href: 'tools/image-converter/',    category: 'image', keywords: ['image','convert','jpg','png','webp','avif'] },
-  { id: 'image-resizer',   name: 'Image Resizer',      desc: 'Resize images to exact dimensions',      href: 'tools/image-resizer/',      category: 'image', keywords: ['image','resize','dimensions'] },
-  { id: 'image-crop',      name: 'Image Crop',         desc: 'Crop images to ratio or freeform',       href: 'tools/image-crop/',         category: 'image', keywords: ['image','crop','trim'] },
+
+  // ── Image Tools ────────────────────────────────────────────────────────────
+  { id: 'image-compress',  name: 'Compress Image',     desc: 'Reduce image file size',                 href: 'image-tools/compress/',           category: 'image', keywords: ['image','compress','jpg','png','webp'], popular: true, priority: 0.8 },
+  { id: 'image-converter', name: 'Image Converter',    desc: 'Convert between JPG, PNG, WebP, AVIF',   href: 'image-tools/image-converter/',    category: 'image', keywords: ['image','convert','jpg','png','webp','avif'] },
+  { id: 'image-resizer',   name: 'Image Resizer',      desc: 'Resize images to exact dimensions',      href: 'image-tools/image-resizer/',      category: 'image', keywords: ['image','resize','dimensions'] },
+  { id: 'image-crop',      name: 'Image Crop',         desc: 'Crop images to ratio or freeform',       href: 'image-tools/image-crop/',         category: 'image', keywords: ['image','crop','trim'] },
   { id: 'bulk-resizer',    name: 'Bulk Image Resize',  desc: 'Resize many images at once',             href: 'image-tools/bulk-resizer/', category: 'image', keywords: ['image','bulk','batch','resize'] },
   { id: 'bg-remover',      name: 'Background Remover', desc: 'Remove image backgrounds locally',       href: 'image-tools/bg-remover/',   category: 'image', keywords: ['image','background','remove','transparent'], popular: true },
-  { id: 'image-base64',    name: 'Image to Base64',    desc: 'Encode images as Base64 data URIs',      href: 'tools/image-base64/',       category: 'image', keywords: ['image','base64','data uri'] },
-  { id: 'hash-generator',     name: 'Hash Generator',       desc: 'MD5, SHA-1/256/512 hashes',           href: 'tools/hash-generator/',     category: 'security', keywords: ['hash','md5','sha','checksum'], popular: true },
-  { id: 'url-encoder',        name: 'URL Encoder',          desc: 'Percent-encode and decode URLs',      href: 'tools/url-encoder/',        category: 'security', keywords: ['url','encode','decode','percent'] },
-  { id: 'html-entities',      name: 'HTML Entities',        desc: 'Convert characters to HTML entities', href: 'tools/html-entities/',      category: 'security', keywords: ['html','entities','escape'] },
-  { id: 'jwt-decoder',        name: 'JWT Decoder',          desc: 'Inspect JSON Web Tokens',             href: 'tools/jwt-decoder/',        category: 'security', keywords: ['jwt','token','json','decode'] },
-  { id: 'regex-tester',   name: 'Regex Tester',    desc: 'Test regular expressions live',     href: 'tools/regex/',          category: 'developer', keywords: ['regex','regexp','match','pattern'], popular: true },
-  { id: 'code-minifier',  name: 'Code Minifier',   desc: 'Minify CSS, JS, and HTML',          href: 'tools/code-minifier/',  category: 'developer', keywords: ['minify','css','js','html'] },
-  { id: 'diff-checker',   name: 'Diff Checker',    desc: 'Compare two text snippets',         href: 'tools/diff-checker/',   category: 'developer', keywords: ['diff','compare','text'] },
-  { id: 'format',         name: 'Code Formatter',  desc: 'Auto-format code in many languages',href: 'tools/format/',         category: 'developer', keywords: ['format','prettier','code'] },
-  { id: 'qrcode',         name: 'QR Code Generator', desc: 'Make QR codes for URLs, text, Wi-Fi', href: 'tools/qrcode/',          category: 'utilities', keywords: ['qr','qrcode','barcode'], popular: true },
-  { id: 'split-copy',     name: 'Split & Copy',      desc: 'Break long text into chunks',         href: 'tools/split-copy/',      category: 'utilities', keywords: ['split','copy','text','chunks'] },
-  { id: 'text-utility',   name: 'Text Utility',      desc: 'Clean, case convert, count words',    href: 'tools/text-utility/',    category: 'utilities', keywords: ['text','case','word count','clean'] },
-  { id: 'grammar-checker',name: 'Grammar Checker',   desc: 'Spot common writing errors',          href: 'tools/grammar-checker/', category: 'utilities', keywords: ['grammar','spelling','writing'] },
-  { id: 'task-reminder',  name: 'Task Reminder',     desc: 'Lightweight private to-do list',      href: 'tools/task-reminder/',   category: 'utilities', keywords: ['task','todo','reminder','list'] },
-  { id: 'markdown',       name: 'Markdown Editor',   desc: 'Live preview Markdown editor',        href: 'tools/markdown/',        category: 'utilities', keywords: ['markdown','md','editor','preview'] },
-  { id: 'url-cleaner',    name: 'URL Cleaner',       desc: 'Strip tracking parameters',           href: 'tools/url-cleaner/',     category: 'utilities', keywords: ['url','clean','tracking','utm'] },
-  { id: 'validate',       name: 'File Validator',    desc: 'Validate file size and type',         href: 'tools/validate/',        category: 'utilities', keywords: ['validate','file','size','type'] },
-  { id: 'meta-tags',         name: 'Meta Tags Generator', desc: 'Build SEO meta tags',           href: 'tools/meta-tags/',         category: 'seo', keywords: ['seo','meta','tags','head'], popular: true },
-  { id: 'og-preview',        name: 'OG Preview',          desc: 'Preview Open Graph cards',      href: 'tools/og-preview/',        category: 'seo', keywords: ['og','open graph','preview','social'] },
-  { id: 'sitemap-generator', name: 'Sitemap Generator',   desc: 'Build XML sitemaps',            href: 'tools/sitemap-generator/', category: 'seo', keywords: ['sitemap','xml','seo'] },
-  { id: 'robots-txt',        name: 'robots.txt Builder',  desc: 'Create robots.txt files',       href: 'tools/robots-txt/',        category: 'seo', keywords: ['robots','txt','crawl','seo'] },
-  { id: 'image-seo',         name: 'Image SEO',           desc: 'Generate alt text and filenames',href: 'tools/image-seo/',        category: 'seo', keywords: ['image','seo','alt','filename'] },
-  { id: 'slug-generator',    name: 'Slug Generator',      desc: 'URL-safe slugs from text',      href: 'tools/slug-generator/',    category: 'seo', keywords: ['slug','url','permalink','seo'] },
-  { id: 'seo-title',         name: 'SEO Title Tester',    desc: 'Score SEO title tags',          href: 'tools/seo-title/',         category: 'seo', keywords: ['seo','title','tag','score'] },
-];
+  { id: 'image-base64',    name: 'Image to Base64',    desc: 'Encode images as Base64 data URIs',      href: 'image-tools/image-base64/',       category: 'image', keywords: ['image','base64','data uri'] },
 
-export const ALL_TOOLS = [...TOOLS, ...LEGACY_TOOLS];
+  // ── Developer Tools ────────────────────────────────────────────────────────
+  { 
+    id: 'json-formatter', 
+    name: 'JSON Formatter', 
+    desc: 'Format and validate JSON', 
+    href: 'developer-tools/json-formatter/', 
+    category: 'developer', 
+    keywords: ['json','format','pretty','validate'], 
+    popular: true, 
+    difficulty: 'beginner',
+    searchIntent: 'informational',
+    priority: 0.9,
+    icon: '',
+    related: ['json-csv', 'base64', 'format'],
+    status: 'stable',
+    schemaType: 'SoftwareApplication'
+  },
+  { 
+    id: 'json-csv', 
+    name: 'JSON ↔ CSV', 
+    desc: 'Convert between JSON and CSV', 
+    href: 'developer-tools/json-csv/', 
+    category: 'developer', 
+    keywords: ['json','csv','convert'], 
+    difficulty: 'intermediate',
+    searchIntent: 'transactional',
+    priority: 0.8,
+    icon: '',
+    related: ['json-formatter', 'unit-converter'],
+    status: 'stable'
+  },
+  { id: 'regex-tester',   name: 'Regex Tester',    desc: 'Test regular expressions live',     href: 'developer-tools/regex/',          category: 'developer', keywords: ['regex','regexp','match','pattern'], popular: true },
+  { id: 'code-minifier',  name: 'Code Minifier',   desc: 'Minify CSS, JS, and HTML',          href: 'developer-tools/code-minifier/',  category: 'developer', keywords: ['minify','css','js','html'] },
+  { id: 'diff-checker',   name: 'Diff Checker',    desc: 'Compare two text snippets',         href: 'developer-tools/diff-checker/',   category: 'developer', keywords: ['diff','compare','text'] },
+  { id: 'format',         name: 'Code Formatter',  desc: 'Auto-format code in many languages',href: 'developer-tools/format/',         category: 'developer', keywords: ['format','prettier','code'] },
+
+  // ── Security & Encoding ───────────────────────────────────────────────────
+  { 
+    id: 'base64', 
+    name: 'Base64 Encode/Decode', 
+    desc: 'Encode or decode Base64 strings', 
+    href: 'security-tools/base64/', 
+    category: 'security', 
+    keywords: ['base64','encode','decode'], 
+    difficulty: 'beginner',
+    searchIntent: 'transactional',
+    priority: 0.8,
+    icon: '',
+    related: ['url-encoder', 'hash-generator', 'jwt-decoder'],
+    status: 'stable'
+  },
+  { 
+    id: 'password-generator', 
+    name: 'Password Generator', 
+    desc: 'Strong, random passwords', 
+    href: 'security-tools/password-generator/', 
+    category: 'security', 
+    keywords: ['password','random','strong','generator'], 
+    popular: true, 
+    difficulty: 'beginner',
+    searchIntent: 'transactional',
+    priority: 0.9,
+    icon: '',
+    related: ['hash-generator', 'base64'],
+    status: 'stable'
+  },
+  { id: 'hash-generator',     name: 'Hash Generator',       desc: 'MD5, SHA-1/256/512 hashes',           href: 'security-tools/hash-generator/',     category: 'security', keywords: ['hash','md5','sha','checksum'], popular: true, priority: 0.8 },
+  { id: 'url-encoder',        name: 'URL Encoder',          desc: 'Percent-encode and decode URLs',      href: 'security-tools/url-encoder/',        category: 'security', keywords: ['url','encode','decode','percent'] },
+  { id: 'html-entities',      name: 'HTML Entities',        desc: 'Convert characters to HTML entities', href: 'security-tools/html-entities/',      category: 'security', keywords: ['html','entities','escape'] },
+  { id: 'jwt-decoder',        name: 'JWT Decoder',          desc: 'Inspect JSON Web Tokens',             href: 'security-tools/jwt-decoder/',        category: 'security', keywords: ['jwt','token','json','decode'] },
+
+  // ── Daily Utilities ────────────────────────────────────────────────────────
+  { id: 'qrcode',         name: 'QR Code Generator', desc: 'Make QR codes for URLs, text, Wi-Fi', href: 'utilities/qrcode/',          category: 'utilities', keywords: ['qr','qrcode','barcode'], popular: true },
+  { id: 'split-copy',     name: 'Split & Copy',      desc: 'Break long text into chunks',         href: 'utilities/split-copy/',      category: 'utilities', keywords: ['split','copy','text','chunks'] },
+  { id: 'text-utility',   name: 'Text Utility',      desc: 'Clean, case convert, count words',    href: 'utilities/text-utility/',    category: 'utilities', keywords: ['text','case','word count','clean'] },
+  { id: 'grammar-checker',name: 'Grammar Checker',   desc: 'Spot common writing errors',          href: 'utilities/grammar-checker/', category: 'utilities', keywords: ['grammar','spelling','writing'] },
+  { id: 'task-reminder',  name: 'Task Reminder',     desc: 'Lightweight private to-do list',      href: 'utilities/task-reminder/',   category: 'utilities', keywords: ['task','todo','reminder','list'] },
+  { id: 'markdown',       name: 'Markdown Editor',   desc: 'Live preview Markdown editor',        href: 'utilities/markdown/',        category: 'utilities', keywords: ['markdown','md','editor','preview'] },
+  { id: 'url-cleaner',    name: 'URL Cleaner',       desc: 'Strip tracking parameters',           href: 'utilities/url-cleaner/',     category: 'utilities', keywords: ['url','clean','tracking','utm'] },
+  { id: 'validate',       name: 'File Validator',    desc: 'Validate file size and type',         href: 'utilities/validate/',        category: 'utilities', keywords: ['validate','file','size','type'] },
+
+  // ── SEO Tools ──────────────────────────────────────────────────────────────
+  { id: 'meta-tags',         name: 'Meta Tags Generator', desc: 'Build SEO meta tags',           href: 'seo-tools/meta-tags/',         category: 'seo', keywords: ['seo','meta','tags','head'], popular: true },
+  { id: 'og-preview',        name: 'OG Preview',          desc: 'Preview Open Graph cards',      href: 'seo-tools/og-preview/',        category: 'seo', keywords: ['og','open graph','preview','social'] },
+  { id: 'sitemap-generator', name: 'Sitemap Generator',   desc: 'Build XML sitemaps',            href: 'seo-tools/sitemap-generator/', category: 'seo', keywords: ['sitemap','xml','seo'] },
+  { id: 'robots-txt',        name: 'robots.txt Builder',  desc: 'Create robots.txt files',       href: 'seo-tools/robots-txt/',        category: 'seo', keywords: ['robots','txt','crawl','seo'] },
+  { id: 'image-seo',         name: 'Image SEO',           desc: 'Generate alt text and filenames',href: 'seo-tools/image-seo/',        category: 'seo', keywords: ['image','seo','alt','filename'] },
+  { id: 'slug-generator',    name: 'Slug Generator',      desc: 'URL-safe slugs from text',      href: 'seo-tools/slug-generator/',    category: 'seo', keywords: ['slug','url','permalink','seo'] },
+  { id: 'seo-title',         name: 'SEO Title Tester',    desc: 'Score SEO title tags',          href: 'seo-tools/seo-title/',         category: 'seo', keywords: ['seo','title','tag','score'] },
+];
 
 export const RECENT_PATH_KEY = 'karuvi.recent.paths';
 

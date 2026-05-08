@@ -7,9 +7,10 @@ import { ToastProvider } from "@/components/ui/Toast";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { usePathname } from "next/navigation";
 
+import { Footer } from "@/components/Footer";
+
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
 
   return (
     <ToastProvider>
@@ -25,6 +26,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
             {children}
           </main>
 
+          <Footer />
           <BottomNav />
         </div>
       </div>

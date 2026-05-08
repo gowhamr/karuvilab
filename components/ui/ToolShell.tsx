@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { ALL_TOOLS } from "@/src/tool-registry";
+import { ALL_TOOLS, CategoryEntry } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
 import { Check, X, Wrench } from "lucide-react";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 interface ToolShellProps {
   title: string;
   description?: string;
-  category?: any;
+  category?: CategoryEntry;
   children: React.ReactNode;
   toolId?: string;
   content?: {
@@ -72,7 +73,9 @@ export function ToolShell({ title, description, category, children, toolId, cont
       {/* Main Tool UI */}
       <section className="relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
         <div className="absolute -inset-4 bg-blue/5 blur-3xl -z-10 rounded-full opacity-50" />
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </section>
 
       {/* ── SEO Content & Documentation ──────────────────────────────────── */}
