@@ -13,11 +13,11 @@ export default function PdfToolsPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="space-y-2">
-        <h1 className="text-4xl font-black">{cat.emoji} {cat.label}</h1>
+        <h1 className="text-4xl font-black">{cat.label}</h1>
         <p className="text-text-3 text-lg">Process PDF files entirely in your browser — no data leaves your device.</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tools.map(tool => <ToolCard key={tool.id} tool={tool} />)}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+        {tools.map(tool => <ToolCard key={tool.id} tool={tool} compact />)}
       </div>
     </div>
   );
