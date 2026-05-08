@@ -160,7 +160,7 @@ export default function SeoTitleTester() {
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Google Preview</h2>
             <p className="text-xs text-text-4">~600px width container with title truncation at 60 chars</p>
             <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl p-5 max-w-[600px]">
-              <p className="text-blue text-xl font-medium hover:underline cursor-pointer" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>
+              <p className="text-blue text-xl font-medium hover:underline cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap max-w-full">
                 {title || "Your Title Here"}
               </p>
               <p className="text-green-600 dark:text-green-400 text-sm mt-0.5">https://example.com › page-url</p>

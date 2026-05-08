@@ -22,7 +22,15 @@ import {
 
 // ── Components ──────────────────────────────────────────────────────────────
 
-function SectionHeader({ title, subtitle, icon: Icon, badge, href }: any) {
+interface SectionHeaderProps {
+  title: string;
+  subtitle?: string;
+  icon?: React.ElementType;
+  badge?: string;
+  href?: string;
+}
+
+function SectionHeader({ title, subtitle, icon: Icon, badge, href }: SectionHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-4 md:mb-6">
       <div className="flex items-center gap-2.5">
@@ -152,7 +160,7 @@ export default function HomeClient() {
       {/* ── 2. Content Area ─────────────────────────────────────────────────── */}
       <div className="relative">
         {/* Horizontal Category Chips */}
-        <div className="sticky top-[56px] md:top-[64px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 glass border-b border-border/10">
+        <div className="sticky top-[60px] md:top-[72px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 glass border-b border-border/10">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
             <div className="flex-1 overflow-hidden">
               <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />

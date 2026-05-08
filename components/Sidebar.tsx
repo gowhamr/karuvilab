@@ -24,6 +24,7 @@ function SidebarContent({ pathname, recent, setIsOpen }: { pathname: string, rec
       <div className="space-y-1">
         <Link
           href="/"
+          aria-current={pathname === "/" ? "page" : undefined}
           className={`flex items-center gap-3 h-[48px] px-4 rounded-xl transition-all font-bold text-xs ${pathname === "/" ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-2 dark:text-white/60 hover:bg-blue/5 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"}`}
         >
           <Home className="w-4 h-4" />
@@ -81,6 +82,7 @@ function SidebarContent({ pathname, recent, setIsOpen }: { pathname: string, rec
               <Link
                 key={cat.id}
                 href={`/${cat.href}`}
+                aria-current={isActive ? "page" : undefined}
                 className={`flex items-center gap-3 h-[48px] px-4 rounded-xl transition-all font-bold text-[11px] ${
                   isActive
                     ? "bg-blue/10 text-blue"

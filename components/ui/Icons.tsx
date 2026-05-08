@@ -33,5 +33,5 @@ export const TRUST_INDICATORS = [
 
 export function ToolIcon({ category, className = "w-5 h-5" }: { category: string; className?: string }) {
   const Icon = CATEGORY_ICONS[category] || Wrench;
-  return <Icon className={className} />;
+  return <Icon className={className} aria-hidden="true" />;
 }

@@ -10,16 +10,24 @@ export function Header() {
   const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
   const { scrollY } = useScroll();
   
-  const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.8]);
-  const blur = useTransform(scrollY, [0, 50], [0, 16]);
-  const borderOpacity = useTransform(scrollY, [0, 50], [0, 1]);
+  const bg = useTransform(scrollY, [0, 50], [
+    "rgba(var(--bg-rgb), 0)",
+    "rgba(var(--bg-rgb), 0.8)"
+  ]);
+  const blurValue = useTransform(scrollY, [0, 50], [0, 16]);
+  const blurFilter = useTransform(blurValue, (v) => v > 0 ? `blur(${v}px)` : "none");
+  const border = useTransform(scrollY, [0, 50], [
+    "rgba(var(--border-rgb), 0)",
+    "rgba(var(--border-rgb), 1)"
+  ]);
 
   return (
     <motion.header 
       style={{ 
-        backgroundColor: `rgba(var(--bg-rgb), ${bgOpacity.get()})`,
-        backdropFilter: `blur(${blur.get()}px)`,
-        borderBottomColor: `rgba(var(--border-rgb), ${borderOpacity.get()})`
+        backgroundColor: bg,
+        backdropFilter: blurFilter,
+        WebkitBackdropFilter: blurFilter,
+        borderBottomColor: border
       }}
       className="sticky top-0 z-40 w-full border-b border-transparent transition-all duration-300 h-[60px] md:h-[72px]"
     >

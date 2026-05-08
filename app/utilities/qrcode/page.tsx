@@ -99,8 +99,7 @@ export default function QRCodeGenerator() {
               alt="QR Code"
               width={size}
               height={size}
-              className="rounded-lg"
-              style={{ maxWidth: "100%", height: "auto" }}
+              className="rounded-lg max-w-full h-auto"
             />
           </div>
           <button

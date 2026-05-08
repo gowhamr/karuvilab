@@ -58,6 +58,7 @@ export function BottomNav() {
             <Link
               key={item.label}
               href={item.href!}
+              aria-label={item.label}
               className={`flex flex-col items-center gap-1 transition-all ${
                 isActive ? "text-blue scale-110" : "text-text-4 hover:text-text"
               }`}
