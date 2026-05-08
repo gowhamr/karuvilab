@@ -4,6 +4,9 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy — KaruviLab",
   description: "Privacy Policy for KaruviLab. No files are collected or uploaded. All processing runs locally in your browser.",
+  alternates: {
+    canonical: "/privacy/",
+  },
 };
 
 export default function PrivacyPage() {

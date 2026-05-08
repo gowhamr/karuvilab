@@ -2440,6 +2440,232 @@ const urlCleaner: ToolContent = {
   alternatives: ["ClearURLs browser extension", "URLCleaner.com", "uBlock Origin (partial)"],
 };
 
+const standardCalculator: ToolContent = {
+  detailedDescription:
+    "A clean, responsive standard calculator for everyday arithmetic. Performs addition, subtraction, multiplication, and division with support for keyboard input and decimal precision. Designed for speed and reliability with no tracking or server-side calls.",
+  howTo: [
+    "Type numbers using your keyboard or the on-screen buttons.",
+    "Use standard operator buttons (+, -, *, /) for calculations.",
+    "Press '=' or 'Enter' to see the result.",
+    "Use 'C' to clear the current input or 'AC' for a full reset.",
+    "Click the percentage button for quick ratio calculations.",
+  ],
+  faq: [
+    {
+      question: "Can I use my keyboard?",
+      answer: "Yes! Use number keys, '+', '-', '*', '/', '.', and 'Enter' for calculations. 'Escape' or 'Backspace' can be used for clearing.",
+    },
+    {
+      question: "How accurate is the division?",
+      answer: "The calculator uses standard IEEE 754 floating-point arithmetic. It is suitable for everyday use but may have minute precision limits with extremely large or small numbers.",
+    },
+    {
+      question: "Does it support history?",
+      answer: "The current version focus on immediate results. History support is planned for a future update.",
+    },
+  ],
+  useCases: [
+    "Simple shopping bill additions",
+    "Basic unit math",
+    "Quickly checking a percentage",
+    "Everyday household math",
+  ],
+  alternatives: ["Google Calculator", "Windows Calculator", "Calculator.net"],
+};
+
+const timeCalculator: ToolContent = {
+  detailedDescription:
+    "Add or subtract time durations with ease. Calculate the exact difference between two times or add hours, minutes, and seconds to a starting time. Perfect for payroll, logbook tracking, and project timing. Runs entirely in your browser.",
+  howTo: [
+    "Select a calculation mode: 'Time Difference' or 'Add/Subtract Time'.",
+    "Enter the start and end times, or the duration values.",
+    "The result is calculated instantly in HH:MM:SS format.",
+    "Toggle between 12-hour and 24-hour formats if needed.",
+  ],
+  faq: [
+    {
+      question: "Does it handle overnight shifts?",
+      answer: "Yes. If the end time is earlier than the start time, the tool automatically calculates across the midnight boundary.",
+    },
+    {
+      question: "Can I input just minutes or seconds?",
+      answer: "Yes. You can leave hours or minutes at zero to perform calculations on smaller units.",
+    },
+    {
+      question: "Does it track dates?",
+      answer: "This tool is focused on time durations within a 24-hour window. For date differences, use our Date Calculator.",
+    },
+  ],
+  useCases: [
+    "Calculating total hours worked in a day",
+    "Finding the duration of a video or audio file",
+    "Planning travel times with layovers",
+    "Timing cooking durations with multiple steps",
+  ],
+  alternatives: ["Timeanddate.com", "Calculator.net Time Calculator", "Online-Stopwatch.com"],
+};
+
+const imageSeo: ToolContent = {
+  detailedDescription:
+    "Optimise your images for search engines by generating descriptive, SEO-friendly filenames and alt text. Convert generic filenames like 'IMG_1234.jpg' into keyword-rich strings like 'blue-running-shoes-mesh.jpg' to improve Google Image indexing. Runs 100% locally.",
+  howTo: [
+    "Upload your image to the tool.",
+    "Enter the primary keyword or description of the image content.",
+    "The tool generates an SEO-friendly filename and suggested alt text.",
+    "Download the image with the new filename or copy the alt text.",
+  ],
+  faq: [
+    {
+      question: "Why is filename SEO important?",
+      answer: "Search engines use filenames as a primary signal to understand image content. Descriptive names help your images rank in image search results.",
+    },
+    {
+      question: "What makes a good alt text?",
+      answer: "Good alt text is descriptive, concise, and includes relevant keywords without 'keyword stuffing'. It should accurately describe the image for screen readers.",
+    },
+    {
+      question: "Does this tool resize my image?",
+      answer: "This tool focuses on filenames and metadata. For resizing, use our Image Resizer or Compressor tools.",
+    },
+  ],
+  useCases: [
+    "Renaming product photos for an e-commerce store",
+    "Preparing blog post images for better search rankings",
+    "Ensuring accessibility compliance with accurate alt text",
+    "Batch processing portfolio images with consistent naming",
+  ],
+  alternatives: ["Squoosh (for compression)", "TinyPNG", "Keyword Tool for Images"],
+};
+
+const fileValidator: ToolContent = {
+  detailedDescription:
+    "Validate files against specific requirements before uploading them to government portals or applications. Check file size (KB/MB), dimensions (pixels), and MIME types instantly. The tool alerts you to common security issues and format mismatches. No files are uploaded.",
+  howTo: [
+    "Select a validation profile (e.g., 'Passport Seva', 'PAN Card', or 'Custom').",
+    "Upload the file you want to validate.",
+    "Review the pass/fail indicators for size, type, and dimensions.",
+    "Follow the provided instructions to fix any failed requirements.",
+  ],
+  faq: [
+    {
+      question: "Is my document safe?",
+      answer: "Yes. The validation is performed entirely using JavaScript in your browser. Your sensitive documents never leave your device.",
+    },
+    {
+      question: "Does it support PDF validation?",
+      answer: "Yes. It checks PDF page counts, file size, and basic integrity to ensure compatibility with portal uploaders.",
+    },
+    {
+      question: "Can I create custom rules?",
+      answer: "Yes. Use the 'Custom' mode to define your own size limits and allowed extensions.",
+    },
+  ],
+  useCases: [
+    "Checking passport photos for portal upload compatibility",
+    "Ensuring tax documents are under the 2MB size limit",
+    "Validating signatures for online application forms",
+    "Verifying file extensions match the actual file content",
+  ],
+  alternatives: ["Online File Validator", "CheckFileType.com", "VirusTotal (for security)"],
+};
+
+const worldClock: ToolContent = {
+  detailedDescription:
+    "Track current time across multiple global cities simultaneously with our responsive World Clock. Perfect for scheduling international meetings, tracking market hours, or keeping in touch with global teams. Displays local time, UTC offset, and date for each selected location.",
+  howTo: [
+    "Search for a city or country in the search bar.",
+    "Click 'Add' to include the location in your dashboard.",
+    "View the current time, date, and time zone for all saved cities.",
+    "Remove cities by clicking the 'X' or 'Remove' button.",
+    "Toggle between digital and analog views (if available).",
+  ],
+  faq: [
+    {
+      question: "Does it account for Daylight Saving Time (DST)?",
+      answer: "Yes. The tool uses the browser's Intl API which automatically adjusts for current DST rules in every time zone.",
+    },
+    {
+      question: "Can I add as many cities as I want?",
+      answer: "Yes. You can add dozens of cities. Your list is saved locally in your browser so it persists between visits.",
+    },
+    {
+      question: "How accurate is the time?",
+      answer: "The time is based on your system clock. For best results, ensure your device time is synchronised with an internet time server.",
+    },
+  ],
+  useCases: [
+    "Coordinating calls with offshore development teams",
+    "Tracking opening hours of global stock exchanges",
+    "Staying connected with family living in different time zones",
+    "Planning international travel itineraries",
+  ],
+  alternatives: ["WorldTimeServer.com", "Timeanddate.com World Clock", "Google 'time in [city]'"],
+};
+
+const utcIstConverter: ToolContent = {
+  detailedDescription:
+    "Quickly convert between Coordinated Universal Time (UTC) and Indian Standard Time (IST). This tool is essential for developers, IT professionals, and traders who frequently deal with server logs, international APIs, and global schedules. Works 100% offline.",
+  howTo: [
+    "Enter a time in the UTC field to see the equivalent IST time.",
+    "Alternatively, enter an IST time to convert it back to UTC.",
+    "Use the 'Current Time' button to instantly convert the present moment.",
+    "The 5-hour 30-minute offset is automatically applied.",
+  ],
+  faq: [
+    {
+      question: "What is the offset between UTC and IST?",
+      answer: "IST (Indian Standard Time) is 5 hours and 30 minutes ahead of UTC (Coordinated Universal Time).",
+    },
+    {
+      question: "Does IST have Daylight Saving Time?",
+      answer: "No. India does not observe Daylight Saving Time. The +5:30 offset remains constant throughout the year.",
+    },
+    {
+      question: "Can I convert other time zones?",
+      answer: "This specific tool is optimized for UTC/IST. For other zones, use our general Time Zone Converter or World Clock.",
+    },
+  ],
+  useCases: [
+    "Decoding server log timestamps into local Indian time",
+    "Scheduling meetings between Indian and international teams",
+    "Calculating trade settlement times for global markets",
+    "Converting GitHub commit times to local time",
+  ],
+  alternatives: ["UTCto.net", "TimeBie", "WorldTimeBuddy"],
+};
+
+const bulkResizer: ToolContent = {
+  detailedDescription:
+    "Resize multiple images at once directly in your browser. Maintain aspect ratio, set custom width/height, and process dozens of files in seconds. Uses the Canvas API for high-performance client-side resizing — your private photos never leave your device.",
+  howTo: [
+    "Drag and drop multiple images or click 'Select Files'.",
+    "Set your target dimensions or percentage scale.",
+    "Choose whether to 'Fit', 'Fill', or 'Stretch' the images.",
+    "Click 'Process All' and download the resized images in a ZIP file.",
+  ],
+  faq: [
+    {
+      question: "How many images can I process at once?",
+      answer: "You can process up to 50 images at a time. The limit depends on your browser's available memory.",
+    },
+    {
+      question: "Does it lower image quality?",
+      answer: "Resizing naturally involves resampling. We use high-quality interpolation to ensure your images stay sharp while reducing dimensions.",
+    },
+    {
+      question: "Is there a file size limit?",
+      answer: "We recommend individual files be under 20MB for the best performance on mobile and desktop browsers.",
+    },
+  ],
+  useCases: [
+    "Preparing product images for a web gallery",
+    "Batch resizing photos for email attachments",
+    "Creating thumbnails for a blog or portfolio",
+    "Normalizing image sizes for a social media campaign",
+  ],
+  alternatives: ["BIRME (Bulk Image Resizing Made Easy)", "BulkResizePhotos.com", "Adobe Express Batch Resize"],
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Registry export
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2468,6 +2694,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "markdown": markdown,
   "grammar-checker": grammarChecker,
   "task-reminder": taskReminder,
+  "validate": fileValidator,
 
   // Image Tools
   "image-compress": imageCompress,
@@ -2476,6 +2703,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "image-crop": imageCrop,
   "image-base64": imageBase64,
   "bg-remover": bgRemover,
+  "bulk-resizer": bulkResizer,
 
   // PDF Tools
   "compress-pdf": compressPdf,
@@ -2495,6 +2723,10 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "unit-converter": unitConverter,
   "date-calculator": dateCalculator,
   "discount-calculator": discountCalculator,
+  "standard-calculator": standardCalculator,
+  "time-calculator": timeCalculator,
+  "world-clock": worldClock,
+  "utc-ist-converter": utcIstConverter,
 
   // SEO Tools
   "slug-generator": slugGenerator,
@@ -2504,4 +2736,5 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "robots-txt": robotsTxt,
   "seo-title": seoTitle,
   "url-cleaner": urlCleaner,
+  "image-seo": imageSeo,
 };

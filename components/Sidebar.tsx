@@ -14,6 +14,7 @@ const SUPPORT_LINKS = [
   { href: "/help/", label: "Help", icon: HelpCircle },
   { href: "/settings/", label: "Settings", icon: Settings },
   { href: "/privacy/", label: "Privacy", icon: Shield },
+  { href: "/disclaimer/", label: "Disclaimer", icon: Shield },
 ];
 
 function SidebarContent({ pathname, recent, setIsOpen }: { pathname: string, recent: ToolEntry[], setIsOpen: (o: boolean) => void }) {

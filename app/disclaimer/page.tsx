@@ -4,6 +4,9 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Disclaimer — KaruviLab",
   description: "Disclaimer for KaruviLab. This tool is independent and not affiliated with any government body.",
+  alternates: {
+    canonical: "/disclaimer/",
+  },
 };
 
 export default function DisclaimerPage() {

@@ -4,6 +4,9 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Terms & Conditions — KaruviLab",
   description: "Terms & Conditions for KaruviLab. Read our usage rules and disclaimer of warranties.",
+  alternates: {
+    canonical: "/terms/",
+  },
 };
 
 export default function TermsPage() {
