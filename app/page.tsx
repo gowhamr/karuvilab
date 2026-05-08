@@ -295,10 +295,6 @@ export default function Home() {
         
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 pb-12 border-t border-border/5">
           <p className="text-[9px] font-black uppercase tracking-widest text-text-4">© 2026 KaruviLab. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <a href="#" className="text-[9px] font-black uppercase tracking-widest text-text-4 hover:text-blue transition-colors">Twitter</a>
-            <a href="#" className="text-[9px] font-black uppercase tracking-widest text-text-4 hover:text-blue transition-colors">GitHub</a>
-          </div>
           <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-text-4">
             Made with <Heart className="w-3 h-3 text-red-500 fill-current" /> by developers
           </p>
