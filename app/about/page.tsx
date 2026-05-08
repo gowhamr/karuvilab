@@ -41,14 +41,14 @@ export default function AboutPage() {
           <h2 className="text-xl font-bold">Key Features</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { icon: "📦", title: "Compressor", desc: "Reduce image size to under 100 KB or PDFs to under 1 MB." },
-              { icon: "🔄", title: "Converter", desc: "Convert between JPG, PNG, GIF, WebP, AVIF, TIFF, BMP, HEIC, and PDF." },
-              { icon: "📷", title: "Image Creator", desc: "Create passport photos, signatures, and custom-sized images." },
-              { icon: "📄", title: "PDF Tools", desc: "Merge PDFs, convert images to PDF, and compress PDF files." },
-              { icon: "✅", title: "Validator", desc: "Validate files against government portal rules and auto-fix issues." },
-              { icon: "💻", title: "Developer Tools", desc: "Base64, Regex, JSON/XML formatter, and Markdown editor." },
-              { icon: "📋", title: "Split & Copy", desc: "Break large text into parts for easy mobile clipboard sharing." },
-              { icon: "🔒", title: "100% Private", desc: "All processing happens locally. No file is ever uploaded to any server." },
+              { icon: "", title: "Compressor", desc: "Reduce image size to under 100 KB or PDFs to under 1 MB." },
+              { icon: "", title: "Converter", desc: "Convert between JPG, PNG, GIF, WebP, AVIF, TIFF, BMP, HEIC, and PDF." },
+              { icon: "", title: "Image Creator", desc: "Create passport photos, signatures, and custom-sized images." },
+              { icon: "", title: "PDF Tools", desc: "Merge PDFs, convert images to PDF, and compress PDF files." },
+              { icon: "", title: "Validator", desc: "Validate files against government portal rules and auto-fix issues." },
+              { icon: "", title: "Developer Tools", desc: "Base64, Regex, JSON/XML formatter, and Markdown editor." },
+              { icon: "", title: "Split & Copy", desc: "Break large text into parts for easy mobile clipboard sharing." },
+              { icon: "", title: "100% Private", desc: "All processing happens locally. No file is ever uploaded to any server." },
             ].map(f => (
               <div key={f.title} className="bg-bg border border-border rounded-xl p-4 space-y-2">
                 <span className="text-2xl">{f.icon}</span>
@@ -71,10 +71,10 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-wrap gap-3 pt-1">
                 <a href="https://wanderseven.com" target="_blank" rel="noopener noreferrer" className="text-sm text-blue hover:underline">
-                  🌐 wanderseven.com
+                  wanderseven.com
                 </a>
                 <a href="mailto:wanderseven@proton.me" className="text-sm text-blue hover:underline">
-                  ✉️ wanderseven@proton.me
+                  wanderseven@proton.me
                 </a>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ALL_TOOLS } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
+import { Check, X, Wrench } from "lucide-react";
 
 interface ToolShellProps {
   title: string;
@@ -95,7 +96,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {merged.useCases.map((uc, i) => (
                   <li key={i} className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4 min-h-[52px]">
-                    <span className="text-blue flex-shrink-0 font-black mt-0.5">✓</span>
+                    <Check className="text-blue w-4 h-4 mt-0.5 flex-shrink-0" />
                     <span className="text-text-2 text-sm leading-relaxed">{uc}</span>
                   </li>
                 ))}
@@ -137,11 +138,11 @@ export function ToolShell({ title, description, category, children, toolId, cont
                 {merged.commonErrors.map((item, i) => (
                   <div key={i} className="bg-surface border border-border rounded-xl overflow-hidden">
                     <div className="flex items-start gap-3 p-4 border-b border-border/50">
-                      <span className="text-red-500 flex-shrink-0 font-black text-sm mt-0.5">✗</span>
+                      <X className="text-red-500 w-4 h-4 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-text-2 font-medium">{item.error}</p>
                     </div>
                     <div className="flex items-start gap-3 p-4">
-                      <span className="text-green-500 flex-shrink-0 font-black text-sm mt-0.5">✓</span>
+                      <Check className="text-green-500 w-4 h-4 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-text-3">{item.fix}</p>
                     </div>
                   </div>
@@ -218,7 +219,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
                 className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl hover:border-blue hover:shadow-xl hover:shadow-blue/5 transition-all active:scale-[0.98]"
               >
                 <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">
-                  {'icon' in tool ? tool.icon : '🛠️'}
+                  {'icon' in tool && tool.icon ? tool.icon : <Wrench className="w-5 h-5" />}
                 </div>
                 <div className="min-w-0">
                   <div className="font-black text-text group-hover:text-blue transition-colors text-sm truncate">{tool.name}</div>

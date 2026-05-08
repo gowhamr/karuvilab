@@ -56,13 +56,13 @@ export interface CategoryEntry {
 }
 
 export const CATEGORIES: CategoryEntry[] = [
-  { id: 'calculators', label: 'Calculators',     href: 'calculators/',     emoji: '🧮', description: 'Precision tools for financial, date, and mathematical calculations.' },
-  { id: 'pdf',         label: 'PDF Tools',       href: 'pdf-tools/',       emoji: '📄', description: 'Fast, browser-side PDF merging, compression, and conversion.' },
-  { id: 'image',       label: 'Image Tools',     href: 'image-tools/',     emoji: '🖼️', description: 'Optimize, convert, and resize images without uploading them.' },
-  { id: 'security',    label: 'Security',        href: 'security-tools/',  emoji: '🔐', description: 'Private password generators, encoders, and hash utilities.' },
-  { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '💻', description: 'Essential utilities for formatting, minifying, and debugging code.' },
-  { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '🛠️', description: 'Lightweight helpers for text, reminders, and daily productivity.' },
-  { id: 'seo',         label: 'SEO Tools',       href: 'tools/seo/',       emoji: '🔍', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.' },
+  { id: 'calculators', label: 'Calculators',     href: 'calculators/',     emoji: '', description: 'Precision tools for financial, date, and mathematical calculations.' },
+  { id: 'pdf',         label: 'PDF Tools',       href: 'pdf-tools/',       emoji: '', description: 'Fast, browser-side PDF merging, compression, and conversion.' },
+  { id: 'image',       label: 'Image Tools',     href: 'image-tools/',     emoji: '', description: 'Optimize, convert, and resize images without uploading them.' },
+  { id: 'security',    label: 'Security',        href: 'security-tools/',  emoji: '', description: 'Private password generators, encoders, and hash utilities.' },
+  { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '', description: 'Essential utilities for formatting, minifying, and debugging code.' },
+  { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.' },
+  { id: 'seo',         label: 'SEO Tools',       href: 'tools/seo/',       emoji: '', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.' },
 ];
 
 export const TOOLS: ToolEntry[] = [
@@ -79,7 +79,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'beginner',
     searchIntent: 'transactional',
     priority: 0.9,
-    icon: '💰',
+    icon: '',
     color: '#4F46E5',
     related: ['sip-calculator', 'salary-calculator', 'compound-interest'],
     status: 'stable',
@@ -96,7 +96,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'beginner',
     searchIntent: 'transactional',
     priority: 0.8,
-    icon: '📈',
+    icon: '',
     related: ['compound-interest', 'emi-calculator'],
     status: 'stable'
   },
@@ -110,7 +110,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'beginner',
     searchIntent: 'informational',
     priority: 0.7,
-    icon: '🎂',
+    icon: '',
     related: ['date-calculator', 'time-calculator'],
     status: 'stable',
     seoContent: {
@@ -138,7 +138,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'beginner',
     searchIntent: 'informational',
     priority: 0.9,
-    icon: '📦',
+    icon: '',
     related: ['json-csv', 'base64', 'format'],
     status: 'stable',
     schemaType: 'SoftwareApplication'
@@ -153,7 +153,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'intermediate',
     searchIntent: 'transactional',
     priority: 0.8,
-    icon: '🔄',
+    icon: '',
     related: ['json-formatter', 'unit-converter'],
     status: 'stable'
   },
@@ -169,7 +169,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'beginner',
     searchIntent: 'transactional',
     priority: 0.8,
-    icon: '🔐',
+    icon: '',
     related: ['url-encoder', 'hash-generator', 'jwt-decoder'],
     status: 'stable'
   },
@@ -184,7 +184,7 @@ export const TOOLS: ToolEntry[] = [
     difficulty: 'beginner',
     searchIntent: 'transactional',
     priority: 0.9,
-    icon: '🔑',
+    icon: '',
     related: ['hash-generator', 'base64'],
     status: 'stable'
   }

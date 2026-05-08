@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 
 const CITIES = [
-  { city: "Mumbai", country: "India", tz: "Asia/Kolkata", flag: "🇮🇳" },
-  { city: "New York", country: "USA", tz: "America/New_York", flag: "🇺🇸" },
-  { city: "London", country: "UK", tz: "Europe/London", flag: "🇬🇧" },
-  { city: "Dubai", country: "UAE", tz: "Asia/Dubai", flag: "🇦🇪" },
-  { city: "Singapore", country: "Singapore", tz: "Asia/Singapore", flag: "🇸🇬" },
-  { city: "Tokyo", country: "Japan", tz: "Asia/Tokyo", flag: "🇯🇵" },
-  { city: "Sydney", country: "Australia", tz: "Australia/Sydney", flag: "🇦🇺" },
-  { city: "Los Angeles", country: "USA", tz: "America/Los_Angeles", flag: "🇺🇸" },
+  { city: "Mumbai", country: "India", tz: "Asia/Kolkata", flag: "" },
+  { city: "New York", country: "USA", tz: "America/New_York", flag: "" },
+  { city: "London", country: "UK", tz: "Europe/London", flag: "" },
+  { city: "Dubai", country: "UAE", tz: "Asia/Dubai", flag: "" },
+  { city: "Singapore", country: "Singapore", tz: "Asia/Singapore", flag: "" },
+  { city: "Tokyo", country: "Japan", tz: "Asia/Tokyo", flag: "" },
+  { city: "Sydney", country: "Australia", tz: "Australia/Sydney", flag: "" },
+  { city: "Los Angeles", country: "USA", tz: "America/Los_Angeles", flag: "" },
 ];
 
 function getTimeInZone(tz: string, now: Date): { time: string; date: string; offset: string; ampm: string } {
