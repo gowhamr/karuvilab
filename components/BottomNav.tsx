@@ -9,13 +9,13 @@ import { motion } from "framer-motion";
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Search", action: "search", icon: Search },
-  { label: "Tools", href: "/calculators", icon: LayoutGrid },
+  { label: "Tools", action: "menu", icon: LayoutGrid },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
-  const setIsPaletteOpen = useSearchStore((state) => state.setIsPaletteOpen);
+  const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden glass border-t border-border/10 rounded-t-[24px] h-[72px] px-6 shadow-premium">
@@ -34,6 +34,21 @@ export function BottomNav() {
               >
                 <div className="p-2 rounded-xl bg-blue/5 border border-blue/10">
                   <Icon className="w-5 h-5 text-blue" />
+                </div>
+              </button>
+            );
+          }
+
+          if (item.action === "menu") {
+            return (
+              <button
+                key={item.label}
+                onClick={() => setIsSidebarOpen(true)}
+                className="flex flex-col items-center gap-1 text-text-4 hover:text-blue transition-colors"
+                aria-label="Menu"
+              >
+                <div className="p-2 rounded-xl transition-all">
+                  <Icon className="w-5 h-5" />
                 </div>
               </button>
             );
