@@ -61,6 +61,20 @@
     box-shadow: 0 0 15px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
   }
 
+  .premium-card-shadow {
+    box-shadow: 
+      0 0 0 1px rgba(0, 0, 0, 0.03),
+      0 2px 4px rgba(0, 0, 0, 0.05),
+      0 12px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme="dark"] .premium-card-shadow {
+    box-shadow: 
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      0 12px 24px rgba(0, 0, 0, 0.4);
+  }
+
   .premium-gradient {
     background: radial-gradient(circle at top center, var(--blue-glow), transparent 70%);
   }
