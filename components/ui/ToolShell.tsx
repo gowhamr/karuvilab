@@ -3,6 +3,7 @@ import { ALL_TOOLS, CategoryEntry } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
 import { Check, X, Wrench } from "lucide-react";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { StructuredData } from "@/src/lib/seo";
 
 interface ToolShellProps {
   title: string;
@@ -29,7 +30,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
     t.id === title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
   );
 
-  const reg: ToolContent = currentTool ? (TOOL_CONTENT[currentTool.id] ?? {}) : {};
+  const reg: ToolContent = currentTool ? (TOOL_CONTENT[currentTool.id as keyof typeof TOOL_CONTENT] ?? {}) : {};
 
   const merged = {
     detailedDescription: content?.detailedDescription ?? reg.detailedDescription,
@@ -46,6 +47,13 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 pb-24">
+      {/* SEO & Structured Data */}
+      <StructuredData 
+        tool={currentTool} 
+        category={category} 
+        content={merged} 
+      />
+
       {/* Tool Header & Navigation */}
       <header className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
         <nav className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4">

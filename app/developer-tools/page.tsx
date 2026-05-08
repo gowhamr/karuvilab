@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "Developer Tools — KaruviLab",
-  description: "Free developer tools — JSON formatter, regex tester, diff checker, code minifier, and more.",
+  title: "Developer Tools — JSON, Regex, and Code Utilities",
+  description: "Essential tools for developers. Format JSON, test regex, compare diffs, and minify code — 100% private and browser-side.",
+  keywords: ["developer tools", "json formatter", "regex tester", "diff checker", "code minifier", "code formatter"],
+  alternates: {
+    canonical: "/developer-tools/",
+  },
 };
 
 export default function DeveloperToolsPage() {

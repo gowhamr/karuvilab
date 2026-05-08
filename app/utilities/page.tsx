@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "Daily Utilities — KaruviLab",
-  description: "Free daily utility tools — QR code generator, text utility, markdown editor, URL cleaner, and more.",
+  title: "Daily Utilities — QR Code, Text, and Productivity Tools",
+  description: "Simple, effective tools for daily tasks. Generate QR codes, edit Markdown, clean URLs, and manage tasks privately.",
+  keywords: ["utility tools", "qr code generator", "text utility", "markdown editor", "url cleaner", "task reminder"],
+  alternates: {
+    canonical: "/utilities/",
+  },
 };
 
 export default function UtilitiesPage() {

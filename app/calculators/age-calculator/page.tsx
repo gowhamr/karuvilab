@@ -2,14 +2,11 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import AgeCalculatorClient from "./AgeCalculatorClient";
+import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-export const metadata: Metadata = {
-  title: "Age Calculator | KaruviLab",
-  description: "Calculate exact age in years, months, and days. Accounts for leap years and provides detailed metrics.",
-  keywords: ["age calculator", "birthday calculator", "how old am i", "date of birth", "age in days"],
-};
+export const metadata: Metadata = generateToolMetadata("age-calculator");
 
 export default function AgeCalculator() {
   return (

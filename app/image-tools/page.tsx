@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "Image Tools — KaruviLab",
-  description: "Free online image tools — compress, convert, resize, crop, and remove backgrounds. Client-side only.",
+  title: "Image Tools — Compress, Convert, and Resize Images",
+  description: "Fast, private browser-side image tools. Optimize, resize, crop, and convert images without uploading them to any server.",
+  keywords: ["image tools", "compress image", "resize image", "crop image", "image converter", "background remover"],
+  alternates: {
+    canonical: "/image-tools/",
+  },
 };
 
 export default function ImageToolsPage() {

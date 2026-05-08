@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "SEO Tools — KaruviLab",
-  description: "Free SEO tools — meta tags generator, Open Graph preview, sitemap builder, robots.txt generator, and more.",
+  title: "SEO Tools — Meta Tags, Sitemaps, and Robots.txt Builders",
+  description: "Free online SEO tools to optimize your website. Generate meta tags, sitemaps, robots.txt, and preview Open Graph cards privately.",
+  keywords: ["seo tools", "meta tags generator", "sitemap generator", "robots.txt builder", "og preview", "slug generator"],
+  alternates: {
+    canonical: "/seo-tools/",
+  },
 };
 
 export default function SeoToolsPage() {

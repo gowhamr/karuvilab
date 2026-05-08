@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "Calculators — KaruviLab",
-  description: "Free online calculators — EMI, SIP, age, compound interest, GST, salary, and more.",
+  title: "Calculators — Financial, Date, and Math Tools",
+  description: "Free, private online calculators — EMI, SIP, age, compound interest, GST, salary, and more. 100% browser-side with no data uploads.",
+  keywords: ["online calculators", "emi calculator", "sip calculator", "gst calculator", "age calculator", "financial tools"],
+  alternates: {
+    canonical: "/calculators/",
+  },
 };
 
 export default function CalculatorsPage() {

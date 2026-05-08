@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "Security Tools — KaruviLab",
-  description: "Free security and encoding tools — hash generator, password generator, Base64, JWT decoder, and more.",
+  title: "Security Tools — Password, Hash, and Encoding Utilities",
+  description: "Private security and encoding tools. Generate strong passwords, compute hashes, decode JWTs, and more without uploading data.",
+  keywords: ["security tools", "password generator", "hash generator", "jwt decoder", "base64", "url encoder"],
+  alternates: {
+    canonical: "/security-tools/",
+  },
 };
 
 export default function SecurityToolsPage() {

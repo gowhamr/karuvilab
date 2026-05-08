@@ -3,8 +3,12 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 
 export const metadata: Metadata = {
-  title: "PDF Tools — KaruviLab",
-  description: "Free online PDF tools — compress, merge, split, convert, and more. Fully private, runs in browser.",
+  title: "PDF Tools — Compress, Merge, and Convert PDFs",
+  description: "Fast, private browser-side PDF tools. Merge, split, compress, and convert PDFs without uploading them to any server.",
+  keywords: ["pdf tools", "merge pdf", "compress pdf", "split pdf", "image to pdf", "pdf converter"],
+  alternates: {
+    canonical: "/pdf-tools/",
+  },
 };
 
 export default function PdfToolsPage() {
