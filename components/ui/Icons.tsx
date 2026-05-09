@@ -7,7 +7,7 @@ import {
   Combine, Scissors, FileImage, FileType, Key, Droplet, Hash as HashIcon, 
   RefreshCw, Crop, Users, Wand2, Braces, Table, Terminal, FileCode, GitCompare, 
   QrCode, Copy, Type, SpellCheck, CheckSquare, FileEdit, Link2, FileCheck, 
-  Globe, Layout, FileSearch, Trash2, Binary, Fingerprint
+  Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate
 } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -70,6 +70,7 @@ export const TOOL_ICONS: Record<string, any> = {
   "code-minifier": FileCode,
   "diff-checker": GitCompare,
   "format": Code,
+  "html-viewer": LayoutTemplate,
 
   // Security Tools
   "base64": Binary,

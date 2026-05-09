@@ -198,6 +198,20 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: 'code-minifier',  name: 'Code Minifier',   desc: 'Minify CSS, JS, and HTML',          href: 'developer-tools/code-minifier/',  category: 'developer', keywords: ['minify','css','js','html'] },
   { id: 'diff-checker',   name: 'Diff Checker',    desc: 'Compare two text snippets',         href: 'developer-tools/diff-checker/',   category: 'developer', keywords: ['diff','compare','text'] },
   { id: 'format',         name: 'Code Formatter',  desc: 'Auto-format code in many languages',href: 'developer-tools/format/',         category: 'developer', keywords: ['format','prettier','code'] },
+  { 
+    id: 'html-viewer',    
+    name: 'HTML Online Viewer', 
+    desc: 'Professional live HTML/CSS/JS editor and sandboxed preview', 
+    href: 'developer-tools/html-viewer/', 
+    category: 'developer', 
+    keywords: ['html','viewer','editor','codepen','playground','javascript','css'], 
+    popular: true, 
+    difficulty: 'intermediate',
+    searchIntent: 'transactional',
+    priority: 0.95,
+    related: ['code-minifier', 'format', 'json-formatter'],
+    status: 'new'
+  },
 
   // ── Security & Encoding ───────────────────────────────────────────────────
   { 
