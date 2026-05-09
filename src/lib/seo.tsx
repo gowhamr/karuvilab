@@ -54,7 +54,11 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": BASE_URL
+      "item": {
+        "@type": "Thing",
+        "@id": BASE_URL,
+        "name": "Home"
+      }
     }
   ];
 
@@ -63,7 +67,11 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       "@type": "ListItem",
       "position": itemListElement.length + 1,
       "name": category.label,
-      "item": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, '')}/`
+      "item": {
+        "@type": "Thing",
+        "@id": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, '')}/`,
+        "name": category.label
+      }
     });
   }
 
@@ -72,7 +80,11 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       "@type": "ListItem",
       "position": itemListElement.length + 1,
       "name": tool.name,
-      "item": `${BASE_URL}/${tool.href.replace(/^\/|\/$/g, '')}/`
+      "item": {
+        "@type": "Thing",
+        "@id": `${BASE_URL}/${tool.href.replace(/^\/|\/$/g, '')}/`,
+        "name": tool.name
+      }
     });
   }
 
