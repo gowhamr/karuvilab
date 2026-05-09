@@ -235,8 +235,8 @@ export function Sidebar() {
 
               <div className="h-20 flex items-center justify-between px-6 border-b border-border dark:border-white/5 bg-white/5">
                 <Link href="/" className="flex items-center gap-3 group">
-                  <div className="w-9 h-9 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 transition-all">
-                    <span className="brand-wordmark text-xl leading-none mt-0.5">K</span>
+                  <div className="w-10 h-10 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
+                    <span className="brand-wordmark text-xl leading-none mt-0.5 drop-shadow-sm">K</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
@@ -263,8 +263,8 @@ export function Sidebar() {
       <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] sidebar-glass z-30 flex-col overflow-hidden">
         <div className="h-24 flex items-center px-8 border-b border-border dark:border-white/5 bg-white/5">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 transition-all">
-              <span className="brand-wordmark text-2xl leading-none mt-1">K</span>
+            <div className="w-11 h-11 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
+              <span className="brand-wordmark text-2xl leading-none mt-1 drop-shadow-sm">K</span>
             </div>
             <div className="flex flex-col">
               <span className="brand-wordmark text-2xl tracking-tight leading-none text-text dark:text-white">

@@ -44,8 +44,8 @@ export function Header() {
           </button>
 
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 group-active:scale-95 transition-all duration-300">
-              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
+            <div className="w-9 h-9 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 group-active:scale-95 transition-all duration-300">
+              <span className="brand-wordmark text-lg leading-none mt-0.5 drop-shadow-sm">K</span>
             </div>
             <div className="flex flex-col">
               <span className="brand-wordmark text-lg md:text-xl tracking-tight leading-none">

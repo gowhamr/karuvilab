@@ -85,6 +85,33 @@
     font-style: italic;
   }
 
+  .glass-icon {
+    background: linear-gradient(135deg, #0077B6 0%, #00B4D8 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, transparent 100%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .glass-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
   .hairline-rule {
     height: 1px;
     background: linear-gradient(to right, transparent, var(--border), transparent);

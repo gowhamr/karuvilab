@@ -63,41 +63,64 @@ function iconPixel(x, y, size) {
   const s  = size;
   const cx = s / 2, cy = s / 2;
 
-  // Rounded-rect SDF – corner radius = 20 % of size
-  const cr = s * 0.20;
+  // Rounded-rect SDF – corner radius = 24 % of size
+  const cr = s * 0.24;
   const hw = s / 2 - 0.5, hh = s / 2 - 0.5;
   const rx = Math.abs(x - cx) - hw + cr;
   const ry = Math.abs(y - cy) - hh + cr;
-  const d  = Math.min(Math.max(rx, ry), 0) +
-             Math.sqrt(Math.max(rx, 0) ** 2 + Math.max(ry, 0) ** 2) - cr;
+  const dist = Math.min(Math.max(rx, ry), 0) +
+               Math.sqrt(Math.max(rx, 0) ** 2 + Math.max(ry, 0) ** 2) - cr;
 
-  if (d > 1.2) return [0, 0, 0, 0]; // outside
-  const bgA = Math.round(Math.min(1, Math.max(0, 1.2 - d)) * 255);
+  if (dist > 1.2) return [0, 0, 0, 0]; // outside
+  const baseAlpha = Math.round(Math.min(1, Math.max(0, 1.2 - dist)) * 255);
 
-  // Ocean Blue: #0077B6
-  const bgR = 0;
-  const bgG = 119;
-  const bgB = 182;
+  // --- Glass Background ---
+  // Ocean Blue Gradient: #0077B6 (top-ish) to #00B4D8 (bottom-ish)
+  const ty = y / s;
+  let bgR = Math.round(0);
+  let bgG = Math.round(119 + (180 - 119) * ty);
+  let bgB = Math.round(182 + (216 - 182) * ty);
 
-  // 'K' letterform in normalised coords (origin = centre, unit ≈ size*0.30)
+  // --- Glass Highlights ---
+  // 1. Top Highlight (Glare)
+  const glare = Math.max(0, 1 - Math.hypot((x - s*0.3)/s, (y - s*0.2)/s) * 2);
+  const glareAmount = Math.pow(glare, 2) * 60;
+  
+  // 2. Inner Glow / Border
+  const innerGlow = Math.max(0, 1 - Math.abs(dist + 1) * (10 / s));
+  const glowAmount = Math.pow(innerGlow, 2) * 40;
+
+  bgR = Math.min(255, bgR + glareAmount + glowAmount);
+  bgG = Math.min(255, bgG + glareAmount + glowAmount);
+  bgB = Math.min(255, bgB + glareAmount + glowAmount);
+
+  // --- 'K' Lettermark ---
   const sc  = s * 0.35;
   const nx  = (x - cx) / sc;
   const ny  = (y - cy) / sc;
   const sw  = 0.22; // stroke half-width
 
-  // Vertical stem  x ≈ -0.5
+  // Vertical stem
   const stemX = -0.5;
   const inStem = Math.abs(nx - stemX) < sw && Math.abs(ny) < 0.9;
 
-  // Arms joint
+  // Arms
   const jx = stemX + sw;
-  // Upper arm
   const inUpper = ny <= 0.1 && distSeg(nx, ny, jx, 0, 0.8, -0.9) < sw;
-  // Lower arm
   const inLower = ny >= -0.1 && distSeg(nx, ny, jx, 0, 0.8, 0.9) < sw;
 
-  if (inStem || inUpper || inLower) return [255, 255, 255, bgA];
-  return [bgR, bgG, bgB, bgA];
+  if (inStem || inUpper || inLower) {
+    // White K with subtle depth
+    const kHighlight = (nx + 1) * 10;
+    return [
+      Math.min(255, 245 + kHighlight), 
+      Math.min(255, 245 + kHighlight), 
+      Math.min(255, 245 + kHighlight), 
+      baseAlpha
+    ];
+  }
+
+  return [bgR, bgG, bgB, baseAlpha];
 }
 
 // ── Generate PNGs ─────────────────────────────────────────────────────────────

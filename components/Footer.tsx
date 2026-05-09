@@ -9,8 +9,8 @@ export function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12">
         <div className="space-y-4 text-center md:text-left">
           <Link href="/" className="flex items-center gap-3 group justify-center md:justify-start">
-            <div className="w-8 h-8 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 transition-all">
-              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
+            <div className="w-9 h-9 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
+              <span className="brand-wordmark text-lg leading-none mt-0.5 drop-shadow-sm">K</span>
             </div>
             <div className="flex flex-col text-left">
               <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
