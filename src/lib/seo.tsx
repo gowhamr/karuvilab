@@ -49,36 +49,38 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
   const scripts: any[] = [];
 
   // 1. Breadcrumb Schema
-  const breadcrumbList = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": BASE_URL
-      }
-    ]
-  };
+  const itemListElement: any[] = [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": BASE_URL
+    }
+  ];
 
   if (category) {
-    breadcrumbList.itemListElement.push({
+    itemListElement.push({
       "@type": "ListItem",
-      "position": 2,
+      "position": itemListElement.length + 1,
       "name": category.label,
-      "item": `${BASE_URL}/${category.href}`
+      "item": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, '')}/`
     });
   }
 
   if (tool) {
-    breadcrumbList.itemListElement.push({
+    itemListElement.push({
       "@type": "ListItem",
-      "position": 3,
+      "position": itemListElement.length + 1,
       "name": tool.name,
-      "item": `${BASE_URL}/${tool.href}`
+      "item": `${BASE_URL}/${tool.href.replace(/^\/|\/$/g, '')}/`
     });
   }
+
+  const breadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": itemListElement
+  };
 
   scripts.push(breadcrumbList);
 
