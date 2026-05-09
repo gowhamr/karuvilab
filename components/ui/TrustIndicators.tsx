@@ -1,7 +1,7 @@
 "use client";
 
 import { ShieldCheck, Lock, Zap, Gift, CloudOff, UserMinus } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const INDICATORS = [
   { icon: CloudOff, title: "No Uploads", desc: "Data never leaves your browser" },
@@ -14,7 +14,7 @@ export function TrustIndicators() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       {INDICATORS.map((item, i) => (
-        <motion.div
+        <m.div
           key={i}
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ export function TrustIndicators() {
             <h3 className="text-sm font-black text-text tracking-tight">{item.title}</h3>
             <p className="text-[11px] text-text-4 font-semibold leading-tight">{item.desc}</p>
           </div>
-        </motion.div>
+        </m.div>
       ))}
     </div>
   );

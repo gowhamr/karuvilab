@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Zap, Layout, Heart } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { m, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About", icon: Info },
@@ -205,7 +205,7 @@ export function Sidebar() {
         {isOpen && (
           <>
             {/* Mobile Backdrop */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -214,7 +214,7 @@ export function Sidebar() {
             />
 
             {/* Mobile Drawer */}
-            <motion.aside
+            <m.aside
               drag="x"
               dragConstraints={{ left: -300, right: 0 }}
               dragElastic={0.05}
@@ -249,7 +249,7 @@ export function Sidebar() {
                 </button>
               </div>
               <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
-            </motion.aside>
+            </m.aside>
           </>
         )}
       </AnimatePresence>

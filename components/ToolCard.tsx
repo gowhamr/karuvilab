@@ -1,22 +1,23 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
 import { ToolEntry, CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
-import { ArrowRight, Star, Zap } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface ToolCardProps {
   tool: ToolEntry;
   compact?: boolean;
 }
 
-export function ToolCard({ tool, compact }: ToolCardProps) {
+export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
   const categoryLabel = CATEGORIES.find(c => c.id === tool.category)?.label || tool.category;
 
   return (
-    <motion.div
+    <m.div
       whileHover={{ y: -4, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", damping: 20, stiffness: 400 }}
@@ -67,6 +68,6 @@ export function ToolCard({ tool, compact }: ToolCardProps) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </m.div>
   );
-}
+});

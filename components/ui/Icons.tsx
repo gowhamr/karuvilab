@@ -107,10 +107,12 @@ export const TRUST_INDICATORS = [
   { icon: Smartphone, label: "Mobile Optimized" },
 ];
 
-export function ToolIcon({ category, toolId, className = "w-5 h-5" }: { category?: string; toolId?: string; className?: string }) {
+import { memo } from "react";
+
+export const ToolIcon = memo(function ToolIcon({ category, toolId, className = "w-5 h-5" }: { category?: string; toolId?: string; className?: string }) {
   const Icon = (toolId && TOOL_ICONS[toolId]) || (category && CATEGORIES_FALLBACK[category]) || Wrench;
   return <Icon className={className} aria-hidden="true" />;
-}
+});
 
 const CATEGORIES_FALLBACK: Record<string, any> = {
   calculators: Calculator,

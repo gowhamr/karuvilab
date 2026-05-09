@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, LayoutGrid, Settings, Laptop } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { motion } from "framer-motion";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },

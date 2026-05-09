@@ -7,7 +7,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   turbopack: {},
   webpack(config) {

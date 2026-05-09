@@ -8,7 +8,7 @@ import {
   Terminal, Settings, Trash2, Copy, Check, FileCode, ExternalLink,
   ChevronDown, ChevronUp, Maximize2, Minimize2, ShieldCheck
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CATEGORIES } from "@/src/tool-registry";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -303,7 +303,7 @@ export default function HtmlViewerClient() {
             {/* CDN Overlay */}
             <AnimatePresence>
               {isCdnOpen && (
-                <motion.div
+                <m.div
                   initial={{ x: "100%" }}
                   animate={{ x: 0 }}
                   exit={{ x: "100%" }}
@@ -359,7 +359,7 @@ export default function HtmlViewerClient() {
                        </div>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </div>
@@ -431,7 +431,7 @@ export default function HtmlViewerClient() {
              {/* Console Drawer */}
              <AnimatePresence>
                 {isConsoleOpen && (
-                  <motion.div
+                  <m.div
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: "100%" }}
@@ -453,7 +453,7 @@ export default function HtmlViewerClient() {
                           </div>
                         ))}
                      </div>
-                  </motion.div>
+                  </m.div>
                 )}
              </AnimatePresence>
           </div>

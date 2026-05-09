@@ -1,25 +1,25 @@
 "use client";
 
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, memo } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+import { m, AnimatePresence } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/Accordion";
 import { 
   ArrowRight, LayoutGrid, Zap, ShieldCheck, 
   Search, Laptop, Sparkles, TrendingUp,
   CloudOff, UserMinus, Lock, Heart, Command
 } from "lucide-react";
+
+const Accordion = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.Accordion), { ssr: false });
+const AccordionItem = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionItem), { ssr: false });
+const AccordionTrigger = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionTrigger), { ssr: false });
+const AccordionContent = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionContent), { ssr: false });
 
 // ── Components ──────────────────────────────────────────────────────────────
 
@@ -31,7 +31,7 @@ interface SectionHeaderProps {
   href?: string;
 }
 
-function SectionHeader({ title, subtitle, icon: Icon, badge, href }: SectionHeaderProps) {
+const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon, badge, href }: SectionHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-4 md:mb-6">
       <div className="flex items-center gap-2.5">
@@ -66,7 +66,7 @@ function SectionHeader({ title, subtitle, icon: Icon, badge, href }: SectionHead
       )}
     </div>
   );
-}
+});
 
 const FAQ = [
   { q: "Is KaruviLab free for commercial use?", a: "Yes. All tools are 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
@@ -123,7 +123,7 @@ export default function HomeClient() {
       <section className="relative pt-6 md:pt-12 flex flex-col items-center text-center space-y-6">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl aspect-square premium-gradient opacity-40 -z-10" />
         
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
@@ -143,7 +143,7 @@ export default function HomeClient() {
             The world's most private browser-side toolkit.
             <span className="block text-text-4">Fast. Secure. Local-first.</span>
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="w-full max-w-xl mx-auto space-y-3">
           <div className="relative group">
@@ -190,7 +190,7 @@ export default function HomeClient() {
         <div className="pt-8">
           <AnimatePresence mode="wait">
             {isSearching ? (
-              <motion.section 
+              <m.section 
                 key="search-results"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -208,47 +208,15 @@ export default function HomeClient() {
                     <ToolCard key={tool.id} tool={tool} compact />
                   ))}
                 </div>
-              </motion.section>
+              </m.section>
             ) : (
-              <motion.div 
+              <m.div 
                 key="default-content"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="space-y-12 md:space-y-20"
               >
-                {/* Personal Favorites (if any) */}
-                {favoriteTools.length > 0 && (
-                  <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                    <SectionHeader 
-                      title="Personal Favorites" 
-                      subtitle="Your hand-picked toolkit"
-                      icon={Heart}
-                    />
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-                      {favoriteTools.map(tool => (
-                        <ToolCard key={tool.id} tool={tool} compact />
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {/* Recently Used (if any) */}
-                {recentTools.length > 0 && (
-                  <section>
-                    <SectionHeader 
-                      title="Recently Used" 
-                      subtitle="Pick up where you left off"
-                      icon={TrendingUp}
-                    />
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-                      {recentTools.map(tool => (
-                        <ToolCard key={tool.id} tool={tool} compact />
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {/* Popular Tools Area */}
+                {/* 1. Popular Tools Area (Static-ish, above the fold) */}
                 <section>
                   <SectionHeader 
                     title="Most Popular" 
@@ -266,7 +234,39 @@ export default function HomeClient() {
                   </div>
                 </section>
 
-                {/* Main Grid */}
+                {/* 2. Personal Favorites (if any) */}
+                {favoriteTools.length > 0 && (
+                  <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <SectionHeader 
+                      title="Personal Favorites" 
+                      subtitle="Your hand-picked toolkit"
+                      icon={Heart}
+                    />
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                      {favoriteTools.map(tool => (
+                        <ToolCard key={tool.id} tool={tool} compact />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* 3. Recently Used (if any) */}
+                {recentTools.length > 0 && (
+                  <section>
+                    <SectionHeader 
+                      title="Recently Used" 
+                      subtitle="Pick up where you left off"
+                      icon={TrendingUp}
+                    />
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                      {recentTools.map(tool => (
+                        <ToolCard key={tool.id} tool={tool} compact />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* 4. Main Grid */}
                 <section id="tools">
                   <SectionHeader 
                     title="All Tools" 
@@ -305,7 +305,7 @@ export default function HomeClient() {
                     ))}
                   </Accordion>
                 </section>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

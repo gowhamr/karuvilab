@@ -1,7 +1,7 @@
 "use client";
 
 import { Shield, EyeOff, ServerOff, HardDrive, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 
 const FEATURES = [
@@ -30,7 +30,7 @@ export function PrivacyFeatures() {
     <div className="space-y-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {FEATURES.map((f, i) => (
-          <motion.div
+          <m.div
             key={i}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -51,11 +51,11 @@ export function PrivacyFeatures() {
                 {f.desc}
               </p>
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
       
-      <motion.div 
+      <m.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -76,7 +76,7 @@ export function PrivacyFeatures() {
         >
           View Privacy Policy
         </Link>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Search, Command, Menu, Laptop, WifiOff } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { m, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useOnlineStatus } from "@/src/lib/hooks";
 
 export function Header() {
@@ -24,7 +24,7 @@ export function Header() {
   ]);
 
   return (
-    <motion.header 
+    <m.header 
       style={{ 
         backgroundColor: bg,
         backdropFilter: blurFilter,
@@ -89,7 +89,7 @@ export function Header() {
 
           <AnimatePresence>
             {!isOnline && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
@@ -97,14 +97,14 @@ export function Header() {
               >
                 <WifiOff className="w-3 h-3" />
                 <span className="hidden xs:inline">Offline</span>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
           <ThemeToggle />
         </div>
       </div>
-    </motion.header>
+    </m.header>
   );
 }
 

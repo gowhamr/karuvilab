@@ -1,15 +1,16 @@
 "use client";
 
+import { memo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "./Icons";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface CategoryChipsProps {
   activeCategory: string | null;
   onCategoryChange: (id: string | null) => void;
 }
 
-export function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
+export const CategoryChips = memo(function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
   return (
     <div className="relative">
       <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 snap-x">
@@ -23,7 +24,7 @@ export function CategoryChips({ activeCategory, onCategoryChange }: CategoryChip
           `}
         >
           {!activeCategory && (
-            <motion.div 
+            <m.div 
               layoutId="active-cat"
               className="absolute inset-0 bg-blue rounded-lg shadow-lg shadow-blue/25 -z-10"
               transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
@@ -43,7 +44,7 @@ export function CategoryChips({ activeCategory, onCategoryChange }: CategoryChip
             `}
           >
             {activeCategory === cat.id && (
-              <motion.div 
+              <m.div 
                 layoutId="active-cat"
                 className="absolute inset-0 bg-blue rounded-lg shadow-lg shadow-blue/25 -z-10"
                 transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
@@ -56,6 +57,4 @@ export function CategoryChips({ activeCategory, onCategoryChange }: CategoryChip
       </div>
     </div>
   );
-}
-
-
+});

@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, memo } from "react";
 import { Search, Command } from "lucide-react";
-import { useSearchStore } from "@/src/store/useSearchStore";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface SearchBarProps {
   value: string;
@@ -11,7 +10,7 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
+export const SearchBar = memo(function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
       {/* Background Glow */}
       <div className="absolute -inset-1 bg-blue/10 rounded-xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 pointer-events-none" />
       
-      <motion.div 
+      <m.div 
         className="relative h-[56px] md:h-[64px] flex items-center bg-surface border border-border rounded-xl shadow-premium focus-within:border-blue/40 focus-within:ring-4 focus-within:ring-blue/5 transition-all duration-300"
       >
         <div className="pl-5 text-text-4 group-focus-within:text-blue transition-colors">
@@ -53,9 +52,7 @@ export function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
             <span>K</span>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
-}
-
-
+});

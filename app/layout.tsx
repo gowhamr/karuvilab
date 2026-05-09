@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { metadata } from "./metadata";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { PWARegistration } from "@/components/PWARegistration";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export { metadata };
 
@@ -14,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -22,7 +29,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue">
+      <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
         <ClientLayout>
           {children}
         </ClientLayout>
