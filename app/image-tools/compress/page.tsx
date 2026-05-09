@@ -2,6 +2,8 @@
 import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { workerManager } from "@/src/workers/manager";
+import { TaskProgress } from "@/src/workers/types";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 
@@ -12,6 +14,7 @@ interface CompressedImage {
   originalUrl: string;
   compressedUrl: string;
   blob: Blob;
+  progress?: TaskProgress;
 }
 
 function fmtSize(bytes: number): string {
@@ -27,38 +30,31 @@ export default function ImageCompressor() {
   const [processing, setProcessing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const compressImage = async (file: File): Promise<CompressedImage> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      const originalUrl = URL.createObjectURL(file);
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext("2d")!;
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(
-          blob => {
-            if (!blob) return reject(new Error("Failed to compress"));
-            const compressedUrl = URL.createObjectURL(blob);
-            const ext = format === "image/jpeg" ? ".jpg" : format === "image/webp" ? ".webp" : ".png";
-            const name = file.name.replace(/\.[^.]+$/, "") + ext;
-            resolve({
-              name,
-              originalSize: file.size,
-              compressedSize: blob.size,
-              originalUrl,
-              compressedUrl,
-              blob,
-            });
-          },
-          format,
-          quality / 100
-        );
-      };
-      img.onerror = reject;
-      img.src = originalUrl;
-    });
+  const compressSingle = async (file: File): Promise<CompressedImage> => {
+    const buffer = await file.arrayBuffer();
+    const resultBytes = await workerManager.compressImage(
+      buffer,
+      format,
+      quality,
+      (p) => {
+        // We can update individual progress if we want, but for now we'll just log it or use a global one
+      }
+    );
+
+    const blob = new Blob([resultBytes as unknown as BlobPart], { type: format });
+    const compressedUrl = URL.createObjectURL(blob);
+    const originalUrl = URL.createObjectURL(file);
+    const ext = format === "image/jpeg" ? ".jpg" : format === "image/webp" ? ".webp" : ".png";
+    const name = file.name.replace(/\.[^.]+$/, "") + ext;
+
+    return {
+      name,
+      originalSize: file.size,
+      compressedSize: blob.size,
+      originalUrl,
+      compressedUrl,
+      blob,
+    };
   };
 
   const handleFiles = async (files: FileList | null) => {
@@ -66,15 +62,16 @@ export default function ImageCompressor() {
     setProcessing(true);
     setResults([]);
     const arr = Array.from(files);
-    const out: CompressedImage[] = [];
-    for (const file of arr) {
-      try {
-        const r = await compressImage(file);
-        out.push(r);
-      } catch {}
+    
+    try {
+      // Process in parallel with limited concurrency (handled by WorkerManager)
+      const out = await Promise.all(arr.map(file => compressSingle(file)));
+      setResults(out);
+    } catch (err) {
+      console.error("Compression failed", err);
+    } finally {
+      setProcessing(false);
     }
-    setResults(out);
-    setProcessing(false);
   };
 
   const download = (item: CompressedImage) => {

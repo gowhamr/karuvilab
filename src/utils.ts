@@ -139,7 +139,7 @@ export function sizeBars(originalBytes: number, newBytes: number): string {
   </div>`;
 }
 
-export function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+export function debounce<T extends (...args: unknown[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | undefined;
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
@@ -221,7 +221,7 @@ export function b64DecodeUtf8(b64: string): string {
   return new TextDecoder('utf-8', { fatal: false }).decode(bytes);
 }
 
-export function lenientJsonParse(text: string): { ok: true; value: any; sanitized: boolean }
+export function lenientJsonParse(text: string): { ok: true; value: unknown; sanitized: boolean }
                                         | { ok: false; error: string; line?: number; col?: number; pos?: number } {
   function tryParse(t: string) {
     try { return { ok: true as const, value: JSON.parse(t) }; }

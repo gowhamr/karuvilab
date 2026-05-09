@@ -34,7 +34,9 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
+    "comlink": "^4.4.2",
     "framer-motion": "^12.38.0",
+    "idb": "^8.0.3",
     "lucide-react": "^1.14.0",
     "lz-string": "^1.5.0",
     "next": "^16.2.4",
@@ -42,6 +44,7 @@
     "react": "^19.0.6",
     "react-dom": "^19.0.6",
     "tailwind-merge": "^3.5.0",
+    "workbox-window": "^7.4.1",
     "zustand": "^5.0.13"
   }
 }

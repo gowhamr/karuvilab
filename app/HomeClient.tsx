@@ -198,7 +198,7 @@ export default function HomeClient() {
                 className="space-y-6"
               >
                 <SectionHeader 
-                  title={searchQuery ? `Results for "${searchQuery}"` : CATEGORIES.find(c => c.id === activeCategory)?.label}
+                  title={searchQuery ? `Results for "${searchQuery}"` : (CATEGORIES.find(c => c.id === activeCategory)?.label || "Tools")}
                   subtitle="Search results"
                   icon={Search}
                 />

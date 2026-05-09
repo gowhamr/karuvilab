@@ -39,17 +39,21 @@ export function generateToolMetadata(toolId: string): Metadata {
 interface StructuredDataProps {
   tool?: ToolEntry;
   category?: CategoryEntry;
-  content?: any;
+  content?: {
+    detailedDescription?: string;
+    faq?: { question: string; answer: string }[];
+    howTo?: string[];
+  };
 }
 
 /**
  * Renders JSON-LD structured data for Tools, Breadcrumbs, FAQ, and HowTo.
  */
 export function StructuredData({ tool, category, content: propsContent }: StructuredDataProps) {
-  const scripts: any[] = [];
+  const scripts: Record<string, unknown>[] = [];
 
   // 1. Breadcrumb Schema
-  const itemListElement: any[] = [
+  const itemListElement: Record<string, unknown>[] = [
     {
       "@type": "ListItem",
       "position": 1,
@@ -129,9 +133,9 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
   // 3. Tool / SoftwareApplication Schema
   if (tool) {
     const registryContent = TOOL_CONTENT[tool.id as keyof typeof TOOL_CONTENT] || {};
-    const detailedDesc = propsContent?.detailedDescription || registryContent.detailedDescription || tool.desc;
+    const detailedDesc = propsContent?.detailedDescription || (registryContent as any).detailedDescription || tool.desc;
     
-    const toolSchema: any = {
+    const toolSchema: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": tool.schemaType || "WebApplication",
       "name": tool.name,
@@ -153,12 +157,12 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     scripts.push(toolSchema);
 
     // 3. FAQ Schema
-    const faqs = propsContent?.faq || registryContent.faq;
+    const faqs = propsContent?.faq || (registryContent as any).faq;
     if (faqs && faqs.length > 0) {
       const faqSchema = {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": faqs.map((f: any) => ({
+        "mainEntity": faqs.map((f: { question: string; answer: string }) => ({
           "@type": "Question",
           "name": f.question,
           "acceptedAnswer": {
@@ -171,7 +175,7 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     }
 
     // 4. HowTo Schema
-    const howTo = propsContent?.howTo || registryContent.howTo;
+    const howTo = propsContent?.howTo || (registryContent as any).howTo;
     if (howTo && howTo.length > 0) {
       const howToSchema = {
         "@context": "https://schema.org",

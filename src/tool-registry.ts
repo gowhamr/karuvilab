@@ -44,7 +44,7 @@ export interface ToolEntry {
   
   // Analytics & Management
   analyticsId?: string;
-  status?: 'stable' | 'beta' | 'deprecated';
+  status?: 'stable' | 'beta' | 'deprecated' | 'new';
 }
 
 export interface CategoryEntry {

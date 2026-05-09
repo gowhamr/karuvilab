@@ -4,6 +4,7 @@ import { ClientLayout } from "@/components/ClientLayout";
 import { metadata } from "./metadata";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { PWARegistration } from "@/components/PWARegistration";
 
 export { metadata };
 
@@ -27,17 +28,7 @@ export default function RootLayout({
         </ClientLayout>
         <Analytics />
         <SpeedInsights />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js');
-                });
-              }
-            `,
-          }}
-        />
+        <PWARegistration />
       </body>
     </html>
   );

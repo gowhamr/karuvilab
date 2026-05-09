@@ -1,49 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { workerManager } from "@/src/workers/manager";
+import { TaskProgress } from "@/src/workers/types";
 
 const cat = CATEGORIES.find(c => c.id === "developer")!;
 
 type Lang = "css" | "js" | "html";
-
-function minifyCSS(css: string): string {
-  return css
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\s*([{}:;,>~+])\s*/g, "$1")
-    .replace(/;\s*}/g, "}")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function minifyJS(js: string): string {
-  return js
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\/\/[^\n]*/g, "")
-    .replace(/\n+/g, "\n")
-    .split("\n")
-    .map(l => l.trim())
-    .filter(Boolean)
-    .join(" ")
-    .replace(/\s*([=+\-*/<>!&|?,;:{}()[\]])\s*/g, "$1")
-    .replace(/([;,{])\s+/g, "$1")
-    .trim();
-}
-
-function minifyHTML(html: string): string {
-  return html
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/\s+/g, " ")
-    .replace(/>\s+</g, "><")
-    .trim();
-}
-
-const MINIFIERS: Record<Lang, (s: string) => string> = {
-  css: minifyCSS,
-  js: minifyJS,
-  html: minifyHTML,
-};
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -53,8 +18,40 @@ function formatSize(bytes: number): string {
 export default function CodeMinifier() {
   const [lang, setLang] = useState<Lang>("css");
   const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState<TaskProgress | null>(null);
 
-  const output = input ? MINIFIERS[lang](input) : "";
+  useEffect(() => {
+    if (!input) {
+      setOutput("");
+      setProgress(null);
+      return;
+    }
+
+    const controller = new AbortController();
+    setProcessing(true);
+    setProgress({ percent: 0, message: "Starting..." });
+
+    workerManager.minifyCode(
+      input,
+      lang,
+      (p) => setProgress(p),
+      controller.signal
+    ).then(res => {
+      setOutput(res);
+      setProgress(null);
+    }).catch(err => {
+      if (err.message !== "Task cancelled") {
+        console.error("Minification failed", err);
+      }
+    }).finally(() => {
+      setProcessing(false);
+    });
+
+    return () => controller.abort();
+  }, [input, lang]);
+
   const originalSize = new TextEncoder().encode(input).length;
   const minifiedSize = new TextEncoder().encode(output).length;
   const reduction = originalSize > 0 ? Math.round((1 - minifiedSize / originalSize) * 100) : 0;
@@ -85,6 +82,18 @@ export default function CodeMinifier() {
           />
         </div>
       </div>
+
+      {processing && (
+        <div className="bg-blue/5 border border-blue/10 p-4 rounded-xl flex items-center justify-between">
+          <span className="text-xs font-bold text-blue uppercase tracking-widest">{progress?.message || "Processing..."}</span>
+          <div className="w-32 h-1 bg-blue/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-blue transition-all duration-300" 
+              style={{ width: `${progress?.percent || 0}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {output && (
         <div className="space-y-4">

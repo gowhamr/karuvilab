@@ -1,8 +1,9 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import * as PDFLib from "pdf-lib";
+import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { workerManager } from "@/src/workers/manager";
+import { TaskProgress } from "@/src/workers/types";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -11,7 +12,9 @@ interface PdfFile { name: string; file: File; }
 export default function MergePdf() {
   const [files, setFiles] = useState<PdfFile[]>([]);
   const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState<TaskProgress | null>(null);
   const [error, setError] = useState("");
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const addFiles = (fl: FileList | null) => {
@@ -32,20 +35,23 @@ export default function MergePdf() {
 
   const merge = async () => {
     if (files.length < 2) { setError("Please add at least 2 PDF files to merge."); return; }
+    
+    const controller = new AbortController();
+    setAbortController(controller);
     setProcessing(true);
     setError("");
+    setProgress({ percent: 0, message: "Preparing files..." });
+    
     try {
-      const { PDFDocument } = PDFLib;
-      const merged = await PDFDocument.create();
-      for (const { file } of files) {
-        const bytes = await file.arrayBuffer();
-        const doc = await PDFDocument.load(bytes);
-        const pageIndices = doc.getPageIndices();
-        const pages = await merged.copyPages(doc, pageIndices);
-        pages.forEach((p: any) => merged.addPage(p));
-      }
-      const bytes = await merged.save();
-      const blob = new Blob([bytes as any], { type: "application/pdf" });
+      const arrayBuffers = await Promise.all(files.map(f => f.file.arrayBuffer()));
+      
+      const bytes = await workerManager.mergePdfs(
+        arrayBuffers,
+        (p) => setProgress(p),
+        controller.signal
+      );
+
+      const blob = new Blob([bytes as unknown as BlobPart], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -53,9 +59,20 @@ export default function MergePdf() {
       a.click();
       URL.revokeObjectURL(url);
     } catch (e: any) {
-      setError(e?.message || "Failed to merge PDFs.");
+      if (e.message === "Task cancelled") {
+        setError("Merge cancelled.");
+      } else {
+        setError(e?.message || "Failed to merge PDFs.");
+      }
+    } finally {
+      setProcessing(false);
+      setProgress(null);
+      setAbortController(null);
     }
-    setProcessing(false);
+  };
+
+  const cancelMerge = () => {
+    abortController?.abort();
   };
 
   return (
@@ -95,13 +112,38 @@ export default function MergePdf() {
 
       {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
 
-      <button
-        onClick={merge}
-        disabled={files.length < 2 || processing}
-        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-      >
-        {processing ? "Merging…" : `Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={merge}
+          disabled={files.length < 2 || processing}
+          className="flex-1 py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 flex flex-col items-center justify-center gap-1"
+        >
+          {processing ? (
+            <>
+              <span>{progress?.message || "Merging..."}</span>
+              {progress && (
+                <div className="w-48 h-1 bg-white/20 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-white transition-all duration-300" 
+                    style={{ width: `${progress.percent}%` }}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            `Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`
+          )}
+        </button>
+
+        {processing && (
+          <button
+            onClick={cancelMerge}
+            className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </ToolShell>
   );
 }

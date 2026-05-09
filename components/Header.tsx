@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Search, Command, Menu, Laptop } from "lucide-react";
+import { Search, Command, Menu, Laptop, WifiOff } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useOnlineStatus } from "@/src/lib/hooks";
 
 export function Header() {
+  const isOnline = useOnlineStatus();
   const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
   const { scrollY } = useScroll();
   
@@ -84,6 +86,20 @@ export function Header() {
           </button>
           
           <div className="h-4 w-px bg-border/50 hidden sm:block" />
+
+          <AnimatePresence>
+            {!isOnline && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="flex items-center gap-1.5 px-2 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-[10px] font-bold uppercase tracking-wider"
+              >
+                <WifiOff className="w-3 h-3" />
+                <span className="hidden xs:inline">Offline</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <ThemeToggle />
         </div>

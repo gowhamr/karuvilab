@@ -1,18 +1,28 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { usePersistentState } from "@/src/lib/hooks";
 
 const inr = (n: number, d = 0) =>
   "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
 
 export default function EMICalculatorClient() {
-  const [principal, setPrincipal] = useState(500000);
-  const [rate, setRate] = useState(8.5);
-  const [years, setYears] = useState(5);
+  const [inputs, setInputs, isLoaded] = usePersistentState('emi-calculator', {
+    principal: 500000,
+    rate: 8.5,
+    years: 5
+  });
+  
   const [showTable, setShowTable] = useState(false);
+
+  const { principal, rate, years } = inputs;
+
+  const setPrincipal = (v: number) => setInputs(prev => ({ ...prev, principal: v }));
+  const setRate = (v: number) => setInputs(prev => ({ ...prev, rate: v }));
+  const setYears = (v: number) => setInputs(prev => ({ ...prev, years: v }));
 
   const calc = useCallback(() => {
     const r = rate / 12 / 100;
@@ -50,6 +60,8 @@ export default function EMICalculatorClient() {
       rows,
     };
   }, [principal, rate, years]);
+
+  if (!isLoaded) return <div className="animate-pulse h-[400px] bg-surface/50 rounded-2xl" />;
 
   const { emi, totalPayable, totalInterest, interestRatio, rows } = calc();
 

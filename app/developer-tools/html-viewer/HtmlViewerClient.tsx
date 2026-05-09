@@ -6,12 +6,13 @@ import LZString from "lz-string";
 import { 
   Play, Download, Share2, Plus, X, Laptop, Tablet, Smartphone, 
   Terminal, Settings, Trash2, Copy, Check, FileCode, ExternalLink,
-  ChevronDown, ChevronUp, Maximize2, Minimize2
+  ChevronDown, ChevronUp, Maximize2, Minimize2, ShieldCheck
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CATEGORIES } from "@/src/tool-registry";
 import { useSearchParams, useRouter } from "next/navigation";
+import { cn } from "@/src/lib/utils";
 
 const cat = CATEGORIES.find(c => c.id === "developer")!;
 

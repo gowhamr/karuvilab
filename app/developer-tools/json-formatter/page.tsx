@@ -4,6 +4,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
 
+import { usePersistentState } from "@/src/lib/hooks";
+
 const cat = CATEGORIES.find(c => c.id === "developer")!;
 
 type Indent = 2 | 4 | "tab";
@@ -78,10 +80,19 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
 }
 
 export default function JSONFormatter() {
-  const [tab, setTab] = useState<"beautify" | "minify">("beautify");
-  const [input, setInput] = useState("");
-  const [indent, setIndent] = useState<Indent>(2);
-  const [treeView, setTreeView] = useState(false);
+  const [state, setState, isLoaded] = usePersistentState('json-formatter', {
+    tab: "beautify" as "beautify" | "minify",
+    input: "",
+    indent: 2 as Indent,
+    treeView: false
+  });
+
+  const { tab, input, indent, treeView } = state;
+
+  const setTab = (t: "beautify" | "minify") => setState(prev => ({ ...prev, tab: t, treeView: false }));
+  const setInput = (i: string) => setState(prev => ({ ...prev, input: i }));
+  const setIndent = (v: Indent) => setState(prev => ({ ...prev, indent: v }));
+  const setTreeView = (v: boolean) => setState(prev => ({ ...prev, treeView: v }));
 
   const { output, error, parsed } = useMemo(() => {
     if (!input.trim()) return { output: "", error: null, parsed: null };
@@ -107,6 +118,8 @@ export default function JSONFormatter() {
       return { output: "", error: errorData, parsed: null };
     }
   }, [input, tab, indent]);
+
+  if (!isLoaded) return <div className="animate-pulse h-[400px] bg-surface/50 rounded-2xl" />;
 
   return (
     <ToolShell
