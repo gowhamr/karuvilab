@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ALL_TOOLS, CategoryEntry } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
 import { Check, X, Wrench, Heart } from "lucide-react";
+import { ToolIcon } from "@/components/ui/Icons";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { StructuredData } from "@/src/lib/seo";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
@@ -257,7 +258,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
                 className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl hover:border-blue hover:shadow-xl hover:shadow-blue/5 transition-all active:scale-[0.98]"
               >
                 <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">
-                  {'icon' in tool && tool.icon ? tool.icon : <Wrench className="w-5 h-5" />}
+                  <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
                   <div className="font-black text-text group-hover:text-blue transition-colors text-sm truncate">{tool.name}</div>

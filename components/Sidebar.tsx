@@ -82,7 +82,7 @@ function SidebarContent({ pathname, recent, favorites, setIsOpen }: { pathname: 
                 }`}
               >
                 <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hover:bg-red-500/20 transition-all">
-                  <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-red-500" />
+                  <ToolIcon toolId={tool.id} category={tool.category} className="w-3.5 h-3.5 text-red-500" />
                 </div>
                 {tool.name}
               </Link>

@@ -34,7 +34,7 @@ export function ToolCard({ tool, compact }: ToolCardProps) {
         {/* Top Section: Icon & Badge */}
         <div className="flex items-center justify-between mb-2 md:mb-4">
           <div className="w-9 h-9 md:w-11 md:h-11 rounded-[16px] bg-blue/5 dark:bg-blue/10 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-white group-hover:neon-glow transition-all duration-500">
-            <ToolIcon category={tool.category} className="w-4 h-4 md:w-5 md:h-5" />
+            <ToolIcon toolId={tool.id} category={tool.category} className="w-4 h-4 md:w-5 md:h-5" />
           </div>
           
           {tool.popular && (

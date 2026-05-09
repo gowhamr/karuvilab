@@ -118,7 +118,7 @@ export function CommandPalette() {
                     w-9 h-9 rounded-lg flex items-center justify-center text-xl flex-shrink-0 border transition-colors
                     ${i === selectedIndex ? "bg-white/20 border-white/10" : "bg-elevated border-border"}
                   `}>
-                    <ToolIcon category={tool.category} className={`w-4 h-4 ${i === selectedIndex ? "text-white" : "text-text-2"}`} />
+                    <ToolIcon toolId={tool.id} category={tool.category} className={`w-4 h-4 ${i === selectedIndex ? "text-white" : "text-text-2"}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-bold truncate text-sm">{tool.name}</div>
