@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { ClientLayout } from "@/components/ClientLayout";
 import { metadata } from "./metadata";
@@ -13,6 +13,13 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const dmSerif = DM_Serif_Display({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-dm-serif",
+});
+
 export { metadata };
 
 export default function RootLayout({
@@ -21,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable}`}>
       <head>
         <script
           dangerouslySetInnerHTML={{

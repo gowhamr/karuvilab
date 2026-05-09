@@ -43,13 +43,16 @@ export function Header() {
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-blue flex items-center justify-center text-white shadow-lg shadow-blue/25 group-hover:scale-105 group-active:scale-95 transition-all duration-300">
-              <Laptop className="w-4 h-4" />
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-8 h-8 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 group-active:scale-95 transition-all duration-300">
+              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
             </div>
-            <span className="font-black text-base md:text-lg tracking-tight">
-              <span className="text-blue">Karuvi</span>Lab
-            </span>
+            <div className="flex flex-col">
+              <span className="brand-wordmark text-lg md:text-xl tracking-tight leading-none">
+                KaruviLab
+              </span>
+              <div className="hairline-rule mt-1" />
+            </div>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">

@@ -74,41 +74,27 @@ function iconPixel(x, y, size) {
   if (d > 1.2) return [0, 0, 0, 0]; // outside
   const bgA = Math.round(Math.min(1, Math.max(0, 1.2 - d)) * 255);
 
-  // Brand gradient: #3B82F6 (top) → #1E3A8A (bottom) — matches the new logo
-  const t   = y / s;
-  const bgR = Math.round(59  + (30  - 59)  * t);
-  const bgG = Math.round(130 + (58  - 130) * t);
-  const bgB = Math.round(246 + (138 - 246) * t);
+  // Ocean Blue: #0077B6
+  const bgR = 0;
+  const bgG = 119;
+  const bgB = 182;
 
   // 'K' letterform in normalised coords (origin = centre, unit ≈ size*0.30)
-  const sc  = s * 0.30;
+  const sc  = s * 0.35;
   const nx  = (x - cx) / sc;
   const ny  = (y - cy) / sc;
-  const sw  = 0.26; // stroke half-width
+  const sw  = 0.22; // stroke half-width
 
-  // Vertical stem  x ≈ -0.62
-  const stemX = -0.62;
-  const inStem = Math.abs(nx - stemX) < sw && Math.abs(ny) < 1.08;
+  // Vertical stem  x ≈ -0.5
+  const stemX = -0.5;
+  const inStem = Math.abs(nx - stemX) < sw && Math.abs(ny) < 0.9;
 
-  // Upper arm: from stem-right edge at mid-height → top-right corner
+  // Arms joint
   const jx = stemX + sw;
-  const inUpper = ny <= 0.06 && distSeg(nx, ny, jx, -0.04, 1.05, -1.08) < sw * 1.05;
+  // Upper arm
+  const inUpper = ny <= 0.1 && distSeg(nx, ny, jx, 0, 0.8, -0.9) < sw;
   // Lower arm
-  const inLower = ny >= -0.06 && distSeg(nx, ny, jx,  0.04, 1.05,  1.08) < sw * 1.05;
-
-  // Small wrench accent inside the K (only at sizes ≥ 32 — keeps 16px legible)
-  if (size >= 32) {
-    // Wrench shaft (vertical bar from K crossbar downward, sitting in negative space)
-    const inWrenchShaft = Math.abs(nx - 0.05) < 0.10 && ny > -0.20 && ny < 0.85;
-    // Wrench head (open-end) at the top
-    const headDx = nx - 0.05, headDy = ny + 0.40;
-    const headR  = Math.hypot(headDx, headDy);
-    const inWrenchHead  = headR < 0.32 && headR > 0.18 && headDy < 0.06;
-    if (inWrenchShaft || inWrenchHead) {
-      // Wrench is white-with-subtle-tint on top of the K
-      return [255, 255, 255, bgA];
-    }
-  }
+  const inLower = ny >= -0.1 && distSeg(nx, ny, jx, 0, 0.8, 0.9) < sw;
 
   if (inStem || inUpper || inLower) return [255, 255, 255, bgA];
   return [bgR, bgG, bgB, bgA];

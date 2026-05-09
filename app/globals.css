@@ -2,6 +2,7 @@
 
 @theme {
   --color-blue: var(--blue);
+  --color-ocean: var(--ocean-blue);
   --color-blue-dark: var(--blue-dark);
   --color-blue-light: var(--blue-light);
   --color-blue-glow: var(--blue-glow);
@@ -78,10 +79,23 @@
   .premium-gradient {
     background: radial-gradient(circle at top center, var(--blue-glow), transparent 70%);
   }
+
+  .brand-wordmark {
+    font-family: var(--font-dm-serif), serif;
+    font-style: italic;
+  }
+
+  .hairline-rule {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    width: 100%;
+    opacity: 0.5;
+  }
 }
 
 :root {
   --blue:         #4F46E5;
+  --ocean-blue:   #0077B6;
   --blue-dark:    #4338CA;
   --blue-light:   #EEF2FF;
   --blue-glow:    rgba(79, 70, 229, 0.08);

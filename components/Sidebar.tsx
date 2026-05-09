@@ -234,11 +234,16 @@ export function Sidebar() {
               <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-white/20 rounded-full md:hidden" />
 
               <div className="h-20 flex items-center justify-between px-6 border-b border-border dark:border-white/5 bg-white/5">
-                <Link href="/" className="flex items-center gap-3 font-black text-xl tracking-tight text-text dark:text-white">
-                  <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white neon-glow">
-                    <Zap className="w-4 h-4 fill-current" />
+                <Link href="/" className="flex items-center gap-3 group">
+                  <div className="w-9 h-9 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 transition-all">
+                    <span className="brand-wordmark text-xl leading-none mt-0.5">K</span>
                   </div>
-                  <span>Karuvi<span className="text-blue">Lab</span></span>
+                  <div className="flex flex-col">
+                    <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
+                      KaruviLab
+                    </span>
+                    <div className="hairline-rule mt-1" />
+                  </div>
                 </Link>
                 <button
                   className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors text-text-4 dark:text-white/40"
@@ -257,11 +262,16 @@ export function Sidebar() {
       {/* Desktop Permanent Sidebar */}
       <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] sidebar-glass z-30 flex-col overflow-hidden">
         <div className="h-24 flex items-center px-8 border-b border-border dark:border-white/5 bg-white/5">
-          <Link href="/" className="flex items-center gap-3 font-black text-xl tracking-tight">
-            <div className="w-10 h-10 rounded-xl bg-blue flex items-center justify-center text-white neon-glow">
-              <Zap className="w-5 h-5 fill-current" />
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-ocean flex items-center justify-center text-white shadow-lg shadow-ocean/20 group-hover:scale-105 transition-all">
+              <span className="brand-wordmark text-2xl leading-none mt-1">K</span>
             </div>
-            <span>Karuvi<span className="text-blue">Lab</span></span>
+            <div className="flex flex-col">
+              <span className="brand-wordmark text-2xl tracking-tight leading-none text-text dark:text-white">
+                KaruviLab
+              </span>
+              <div className="hairline-rule mt-1" />
+            </div>
           </Link>
         </div>
         <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
