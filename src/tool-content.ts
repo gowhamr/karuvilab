@@ -1548,6 +1548,209 @@ const imageToPdf: ToolContent = {
 // Calculators
 // ─────────────────────────────────────────────────────────────────────────────
 
+const mutualFundReturns: ToolContent = {
+  detailedDescription: "Estimate the growth of your mutual fund investments based on past performance or expected returns. This tool calculates both absolute returns (total gain/loss) and CAGR (annualized returns), helping you understand how your wealth might grow over time. It supports both SIP and lumpsum inputs.",
+  howTo: [
+    "Enter the initial investment amount or monthly SIP.",
+    "Set the expected annual return rate based on historical data.",
+    "Select the investment duration in years.",
+    "The tool will instantly show the estimated future value and total gains."
+  ],
+  faq: [
+    { question: "What is the difference between absolute and annualized returns?", answer: "Absolute return is the total percentage gain over the entire period, while annualized return (CAGR) is the geometric mean of the return per year." },
+    { question: "Does this tool use real-time market data?", answer: "No, it uses assumed return rates for projections. Actual mutual fund performance depends on market conditions." }
+  ],
+  useCases: [
+    "Projecting long-term wealth creation through mutual funds",
+    "Comparing different fund categories (Equity vs Debt) based on assumed returns",
+    "Planning for financial goals like a house or education"
+  ],
+  alternatives: ["Groww", "Value Research", "Morningstar"]
+};
+
+const lumpsumCalculator: ToolContent = {
+  detailedDescription: "Calculate the future value of a one-time investment using the power of compounding. This tool is perfect for seeing how a single deposit grows over several years at a fixed interest rate. It's ideal for planning fixed deposits or one-time mutual fund investments.",
+  howTo: [
+    "Enter the one-time investment amount.",
+    "Enter the expected annual interest/return rate.",
+    "Enter the number of years you plan to stay invested.",
+    "The tool displays the total maturity value and total interest earned."
+  ],
+  faq: [
+    { question: "What formula is used for lumpsum calculations?", answer: "FV = PV × (1 + r)^n, where FV is future value, PV is principal, r is annual interest rate, and n is number of years." },
+    { question: "Is compounding annual?", answer: "Yes, this standard lumpsum calculator assumes annual compounding." }
+  ],
+  useCases: [
+    "Estimating the maturity of a one-time fixed deposit",
+    "Planning for a goal with a single large investment",
+    "Visualizing the impact of long-term compounding"
+  ],
+  alternatives: ["Calculator.net", "Investopedia"]
+};
+
+const ppfCalculator: ToolContent = {
+  detailedDescription: "The Public Provident Fund (PPF) is one of India's most popular long-term tax-saving investments. This calculator helps you estimate the maturity amount after the mandatory 15-year tenure, accounting for annual interest and maximum investment limits. It handles the specific PPF rules like annual compounding and interest calculation on the minimum balance between the 5th and last day of the month.",
+  howTo: [
+    "Enter your annual investment amount (Max ₹1.5 Lakh).",
+    "The current PPF interest rate is usually pre-filled but can be adjusted.",
+    "The tenure is fixed at 15 years by default.",
+    "View the year-by-year balance and total interest earned."
+  ],
+  faq: [
+    { question: "What is the maximum I can invest in PPF?", answer: "As per current Indian law, you can invest a maximum of ₹1,50,000 per financial year." },
+    { question: "Is PPF interest tax-free?", answer: "Yes, PPF follows the EEE (Exempt-Exempt-Exempt) tax status, meaning the investment, interest, and maturity are all tax-exempt." }
+  ],
+  useCases: [
+    "Retirement planning with tax-free returns",
+    "Building a low-risk long-term corpus",
+    "Optimizing Section 80C tax deductions"
+  ],
+  alternatives: ["BankBazaar", "ClearTax", "Indmoney"]
+};
+
+const fdCalculator: ToolContent = {
+  detailedDescription: "Fixed Deposits (FD) offer guaranteed returns over a set period. This calculator computes the maturity amount and interest earned for your FD, supporting different compounding frequencies like monthly, quarterly, semi-annual, or annual. It helps you compare different bank FD rates and tenures.",
+  howTo: [
+    "Enter the FD principal amount.",
+    "Enter the annual interest rate.",
+    "Select the tenure in days, months, or years.",
+    "Choose the compounding frequency (Quarterly is most common).",
+    "The tool calculates the maturity amount instantly."
+  ],
+  faq: [
+    { question: "How does compounding frequency affect my returns?", answer: "More frequent compounding (like monthly vs. annual) results in slightly higher total interest because interest is earned on interest more often." },
+    { question: "Is FD interest taxable?", answer: "Yes, FD interest is taxable as per your income tax slab, and TDS may be deducted by the bank." }
+  ],
+  useCases: [
+    "Planning for short-term financial needs",
+    "Comparing FD returns across different banks",
+    "Calculating interest income for tax planning"
+  ],
+  alternatives: ["SBI FD Calculator", "HDFC Bank", "ICICI Bank"]
+};
+
+const rdCalculator: ToolContent = {
+  detailedDescription: "A Recurring Deposit (RD) allows you to save a fixed amount every month and earn interest similar to an FD. This calculator helps you find the maturity value of your monthly savings, accounting for quarterly compounding which is standard for most Indian banks.",
+  howTo: [
+    "Enter your monthly deposit amount.",
+    "Enter the annual interest rate.",
+    "Enter the deposit tenure in months or years.",
+    "The tool calculates the total maturity amount and interest earned."
+  ],
+  faq: [
+    { question: "How is RD interest calculated?", answer: "RD interest is usually compounded quarterly. The formula is complex because each monthly installment earns interest for a different duration." },
+    { question: "Can I withdraw my RD early?", answer: "Most banks allow premature withdrawal but may charge a small penalty on the interest rate." }
+  ],
+  useCases: [
+    "Disciplined monthly savings for a specific goal",
+    "Building a corpus for annual expenses like insurance or school fees",
+    "Low-risk monthly investment strategy"
+  ],
+  alternatives: ["Post Office RD Calculator", "BankBazaar"]
+};
+
+const cagrCalculator: ToolContent = {
+  detailedDescription: "Compound Annual Growth Rate (CAGR) is the best way to measure the mean annual growth of an investment over time, smoothing out volatility. This tool calculates the annualized return given the starting value, ending value, and the time period. It's essential for comparing different investment assets.",
+  howTo: [
+    "Enter the initial investment value.",
+    "Enter the final (current) investment value.",
+    "Enter the duration in years.",
+    "The tool calculates the CAGR percentage instantly."
+  ],
+  faq: [
+    { question: "Why use CAGR instead of absolute return?", answer: "Absolute return doesn't account for the time it took to get those returns. CAGR allows you to compare a 50% return over 5 years vs. a 20% return over 2 years." },
+    { question: "Does CAGR account for mid-term additions?", answer: "No, standard CAGR assumes a single investment at the start and a single exit value." }
+  ],
+  useCases: [
+    "Evaluating the performance of a stock or mutual fund portfolio",
+    "Comparing business growth over several years",
+    "Determining the annualized yield of real estate investments"
+  ],
+  alternatives: ["Investopedia", "Morningstar"]
+};
+
+const stockAverageCalculator: ToolContent = {
+  detailedDescription: "When you buy the same stock at different prices (averaging down or up), it's hard to track your true cost basis. This tool calculates the weighted average price of your stock holdings, helping you determine your break-even point and current profit/loss.",
+  howTo: [
+    "Add multiple 'Buy' entries with quantity and price per share.",
+    "The tool calculates the total shares, total cost, and average price.",
+    "You can also add a 'Target Average' to see how many more shares you need to buy at a certain price."
+  ],
+  faq: [
+    { question: "What is averaging down?", answer: "Buying more shares of a stock when its price drops to lower your overall average cost per share." },
+    { question: "Does this include brokerage fees?", answer: "You can add brokerage fees to the total cost to get a more accurate net average price." }
+  ],
+  useCases: [
+    "Managing a stock portfolio with multiple buy orders",
+    "Planning an 'average down' strategy for a falling stock",
+    "Calculating the break-even point for a trade"
+  ],
+  alternatives: ["TradingView", "Zerodha"]
+};
+
+const retirementCalculator: ToolContent = {
+  detailedDescription: "Planning for retirement requires accounting for current expenses, inflation, and life expectancy. This comprehensive tool estimates the 'Retirement Corpus' you need to maintain your lifestyle after you stop working. It factors in your current age, retirement age, expected inflation, and post-retirement return rates.",
+  howTo: [
+    "Enter your current age and planned retirement age.",
+    "Enter your current monthly expenses.",
+    "Set the expected inflation rate (usually 6-7% in India).",
+    "Enter the expected return on your retirement corpus.",
+    "The tool calculates the total corpus required and the monthly savings needed to reach it."
+  ],
+  faq: [
+    { question: "Why is inflation important in retirement planning?", answer: "Inflation reduces your purchasing power. ₹50,000 today might buy what ₹2 Lakh buys in 25 years." },
+    { question: "What is the 'Safe Withdrawal Rate'?", answer: "It is the percentage of your corpus you can withdraw annually without running out of money, usually estimated at 3-4%." }
+  ],
+  useCases: [
+    "Early retirement planning (FIRE movement)",
+    "Determining if your current savings are on track",
+    "Visualizing the impact of inflation on future expenses"
+  ],
+  alternatives: ["Vanguard Retirement Nest Egg", "Fidelity"]
+};
+
+const swpCalculator: ToolContent = {
+  detailedDescription: "A Systematic Withdrawal Plan (SWP) is the opposite of an SIP. It allows you to withdraw a fixed amount from your mutual fund investment regularly while the remaining balance continues to grow. This tool calculates how long your corpus will last or what the final balance will be after a certain period.",
+  howTo: [
+    "Enter the total initial investment (corpus).",
+    "Enter the monthly withdrawal amount.",
+    "Enter the expected annual return rate.",
+    "Enter the duration for which you want to withdraw.",
+    "The tool shows the remaining balance and total withdrawals made."
+  ],
+  faq: [
+    { question: "Is SWP better than a fixed pension?", answer: "SWP can be more tax-efficient as only the capital gains portion of the withdrawal is taxed, and it offers potential for corpus growth." },
+    { question: "What happens if returns are lower than my withdrawal rate?", answer: "Your principal will be depleted over time. It's important to keep withdrawals at a sustainable level." }
+  ],
+  useCases: [
+    "Generating a monthly pension from a retirement corpus",
+    "Planning for regular income during a career break",
+    "Managing cash flow from a large lumpsum windfall"
+  ],
+  alternatives: ["Groww SWP Calculator", "HDFC Mutual Fund"]
+};
+
+const inflationCalculator: ToolContent = {
+  detailedDescription: "Inflation erodes the value of money over time. This tool calculates what a certain amount of money today will be worth in the future, or what a future amount is worth in today's terms, based on an average inflation rate. It's a reality check for long-term financial goals.",
+  howTo: [
+    "Enter the amount of money.",
+    "Enter the average annual inflation rate.",
+    "Enter the time period in years.",
+    "Choose between 'Forward' (Future Value) or 'Backward' (Purchasing Power) calculation.",
+    "The tool displays the adjusted value."
+  ],
+  faq: [
+    { question: "What is the average inflation rate in India?", answer: "Historically, India's retail inflation (CPI) has averaged between 5% and 7%." },
+    { question: "How does inflation affect my savings?", answer: "If your savings interest rate is lower than the inflation rate, your 'real' wealth is actually decreasing." }
+  ],
+  useCases: [
+    "Adjusting long-term goals (like a child's college fund) for inflation",
+    "Comparing historical prices to today's values",
+    "Estimating future cost of living"
+  ],
+  alternatives: ["CPI Inflation Calculator", "World Bank Data"]
+};
+
 const emiCalculator: ToolContent = {
   detailedDescription:
     "Calculate the monthly Equated Monthly Installment (EMI) for any loan given the principal amount, annual interest rate, and loan tenure. Also shows a full amortisation schedule breaking down principal and interest per month. All calculations run in the browser.",
@@ -2747,6 +2950,16 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "image-to-pdf": imageToPdf,
 
   // Calculators
+  "mutual-fund-returns": mutualFundReturns,
+  "lumpsum-calculator": lumpsumCalculator,
+  "ppf-calculator": ppfCalculator,
+  "fd-calculator": fdCalculator,
+  "rd-calculator": rdCalculator,
+  "cagr-calculator": cagrCalculator,
+  "stock-average-calculator": stockAverageCalculator,
+  "retirement-calculator": retirementCalculator,
+  "swp-calculator": swpCalculator,
+  "inflation-calculator": inflationCalculator,
   "emi-calculator": emiCalculator,
   "sip-calculator": sipCalculator,
   "age-calculator": ageCalculator,

@@ -141,6 +141,106 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: 'safe-to-spend',          name: 'Safe-to-Spend',          desc: 'Daily budget planner',                           href: 'calculators/safe-to-spend/',          category: 'calculators', keywords: ['budget','spending','daily'] },
   { id: 'work-hours',             name: 'Work Hours',             desc: 'Timesheet and overtime tracker',                 href: 'calculators/work-hours/',             category: 'calculators', keywords: ['work','hours','timesheet','overtime'] },
   { id: 'utc-ist-converter',      name: 'UTC ↔ IST',         desc: 'Convert between UTC and IST',                    href: 'calculators/utc-ist-converter/',      category: 'calculators', keywords: ['utc','ist','timezone','india'] },
+  { 
+    id: 'mutual-fund-returns', 
+    name: 'Mutual Fund Returns', 
+    desc: 'Calculate absolute and annualized returns', 
+    href: 'calculators/mutual-fund-returns/', 
+    category: 'calculators', 
+    keywords: ['mutual fund','returns','absolute','annualized','yield'], 
+    difficulty: 'intermediate',
+    status: 'new'
+  },
+  { 
+    id: 'lumpsum-calculator', 
+    name: 'Lumpsum Calculator', 
+    desc: 'Future value of one-time investment', 
+    href: 'calculators/lumpsum-calculator/', 
+    category: 'calculators', 
+    keywords: ['lumpsum','investment','future value','wealth'], 
+    difficulty: 'beginner',
+    status: 'new'
+  },
+  { 
+    id: 'ppf-calculator', 
+    name: 'PPF Calculator', 
+    desc: 'Public Provident Fund maturity & interest', 
+    href: 'calculators/ppf-calculator/', 
+    category: 'calculators', 
+    keywords: ['ppf','savings','tax saving','interest','maturity'], 
+    difficulty: 'beginner',
+    status: 'new'
+  },
+  { 
+    id: 'fd-calculator', 
+    name: 'Fixed Deposit (FD)', 
+    desc: 'FD maturity amount and interest earned', 
+    href: 'calculators/fd-calculator/', 
+    category: 'calculators', 
+    keywords: ['fd','fixed deposit','interest','savings'], 
+    difficulty: 'beginner',
+    status: 'new'
+  },
+  { 
+    id: 'rd-calculator', 
+    name: 'Recurring Deposit (RD)', 
+    desc: 'RD maturity and interest calculation', 
+    href: 'calculators/rd-calculator/', 
+    category: 'calculators', 
+    keywords: ['rd','recurring deposit','savings','interest'], 
+    difficulty: 'beginner',
+    status: 'new'
+  },
+  { 
+    id: 'cagr-calculator', 
+    name: 'CAGR Calculator', 
+    desc: 'Compound Annual Growth Rate', 
+    href: 'calculators/cagr-calculator/', 
+    category: 'calculators', 
+    keywords: ['cagr','growth','return','annualized'], 
+    difficulty: 'intermediate',
+    status: 'new'
+  },
+  { 
+    id: 'stock-average-calculator', 
+    name: 'Stock Average', 
+    desc: 'Weighted average buy price for stocks', 
+    href: 'calculators/stock-average-calculator/', 
+    category: 'calculators', 
+    keywords: ['stock','average','buy price','trading','investing'], 
+    difficulty: 'beginner',
+    status: 'new'
+  },
+  { 
+    id: 'retirement-calculator', 
+    name: 'Retirement Planner', 
+    desc: 'Corpus needed for your retirement', 
+    href: 'calculators/retirement-calculator/', 
+    category: 'calculators', 
+    keywords: ['retirement','planning','pension','corpus','savings'], 
+    difficulty: 'intermediate',
+    status: 'new'
+  },
+  { 
+    id: 'swp-calculator', 
+    name: 'SWP Calculator', 
+    desc: 'Systematic Withdrawal Plan planning', 
+    href: 'calculators/swp-calculator/', 
+    category: 'calculators', 
+    keywords: ['swp','withdrawal','pension','mutual fund','income'], 
+    difficulty: 'intermediate',
+    status: 'new'
+  },
+  { 
+    id: 'inflation-calculator', 
+    name: 'Inflation Calculator', 
+    desc: 'Purchasing power over time', 
+    href: 'calculators/inflation-calculator/', 
+    category: 'calculators', 
+    keywords: ['inflation','purchasing power','money','value'], 
+    difficulty: 'beginner',
+    status: 'new'
+  },
 
   // ── PDF Tools ──────────────────────────────────────────────────────────────
   { id: 'compress-pdf',     name: 'Compress PDF',     desc: 'Reduce PDF file size',                href: 'pdf-tools/compress-pdf/',   category: 'pdf', keywords: ['pdf','compress','reduce','size'], popular: true, priority: 0.8 },
