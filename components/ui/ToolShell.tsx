@@ -1,14 +1,11 @@
-"use client";
-
 import Link from "next/link";
 import { ALL_TOOLS, CategoryEntry } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
-import { Check, X, Wrench, Heart } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { ToolIcon } from "@/components/ui/Icons";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { StructuredData } from "@/src/lib/seo";
-import { useFavoriteStore } from "@/src/store/useFavoriteStore";
-import { useState, useEffect } from "react";
+import { FavoriteButton } from "./FavoriteButton";
 
 interface ToolShellProps {
   title: string;
@@ -29,13 +26,6 @@ interface ToolShellProps {
 }
 
 export function ToolShell({ title, description, category, children, toolId, content }: ToolShellProps) {
-  const { isFavorite, toggleFavorite } = useFavoriteStore();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
   const currentTool = ALL_TOOLS.find(t =>
     t.id === toolId ||
     t.name === title ||
@@ -58,16 +48,10 @@ export function ToolShell({ title, description, category, children, toolId, cont
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (
-    <div className="max-w-5xl mx-auto space-y-16 pb-24">
-      {/* SEO & Structured Data */}
-      <StructuredData 
-        tool={currentTool} 
-        category={category} 
-        content={merged} 
-      />
+    <div className="max-w-5xl mx-auto space-y-16 pb-24 px-4">
+      <StructuredData tool={currentTool} category={category} content={merged} />
 
-      {/* Tool Header & Navigation */}
-      <header className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+      <header className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <nav className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
             <Link href="/" className="hover:text-blue transition-colors">Home</Link>
@@ -80,20 +64,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
             )}
             <span className="text-text-3">{title}</span>
           </nav>
-          
-          {currentTool && hydrated && (
-            <button
-              onClick={() => toggleFavorite(currentTool.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                isFavorite(currentTool.id)
-                  ? "bg-red-500 text-white shadow-lg shadow-red-500/20"
-                  : "bg-surface border border-border text-text-4 hover:border-red-500/30 hover:text-red-500"
-              }`}
-            >
-              <Heart className={`w-3 h-3 ${isFavorite(currentTool.id) ? "fill-current" : ""}`} />
-              {isFavorite(currentTool.id) ? "Favorited" : "Add to Favorites"}
-            </button>
-          )}
+          {currentTool && <FavoriteButton toolId={currentTool.id} />}
         </div>
         
         <div className="space-y-4">
@@ -106,19 +77,15 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </div>
       </header>
 
-      {/* Main Tool UI */}
-      <section className="relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+      <section className="relative z-10">
         <div className="absolute -inset-4 bg-blue/5 blur-3xl -z-10 rounded-full opacity-50" />
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
       </section>
 
-      {/* ── SEO Content & Documentation ──────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8 border-t border-border/50">
         <div className="lg:col-span-2 space-y-12">
-
-          {/* Detailed Description */}
           {merged.detailedDescription && (
             <section className="space-y-4">
               <h2 className="text-2xl font-black">Deep Dive</h2>
@@ -128,7 +95,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </section>
           )}
 
-          {/* Use Cases */}
           {merged.useCases && merged.useCases.length > 0 && (
             <section className="space-y-5">
               <h2 className="text-2xl font-black">Who uses this?</h2>
@@ -143,7 +109,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </section>
           )}
 
-          {/* Examples */}
           {merged.examples && merged.examples.length > 0 && (
             <section className="space-y-5">
               <h2 className="text-2xl font-black">Examples</h2>
@@ -169,7 +134,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </section>
           )}
 
-          {/* Common Errors */}
           {merged.commonErrors && merged.commonErrors.length > 0 && (
             <section className="space-y-5">
               <h2 className="text-2xl font-black">Common Errors & Fixes</h2>
@@ -190,7 +154,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </section>
           )}
 
-          {/* FAQ */}
           {merged.faq && merged.faq.length > 0 && (
             <section className="space-y-6">
               <h2 className="text-2xl font-black">Expert FAQ</h2>
@@ -204,24 +167,9 @@ export function ToolShell({ title, description, category, children, toolId, cont
               </div>
             </section>
           )}
-
-          {/* Alternatives */}
-          {merged.alternatives && merged.alternatives.length > 0 && (
-            <section className="space-y-4">
-              <h2 className="text-2xl font-black">Alternatives</h2>
-              <div className="flex flex-wrap gap-2">
-                {merged.alternatives.map((alt, i) => (
-                  <span key={i} className="px-3 py-2 min-h-[44px] flex items-center bg-surface border border-border rounded-full text-sm text-text-3 font-medium">
-                    {alt}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
         </div>
 
         <aside className="space-y-12">
-          {/* How-to Quick Guide */}
           {merged.howTo && merged.howTo.length > 0 && (
             <section className="bg-blue/5 border border-blue/10 rounded-3xl p-8 space-y-8 h-fit sticky top-24">
               <div className="space-y-2">
@@ -243,7 +191,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </aside>
       </div>
 
-      {/* ── Related Tools ─────────────────────────────────────────────────── */}
       {related.length > 0 && (
         <section className="pt-12 border-t border-border/50 space-y-8">
           <div className="flex items-center justify-between">
