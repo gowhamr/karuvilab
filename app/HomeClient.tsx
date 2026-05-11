@@ -75,6 +75,8 @@ const FAQ = [
   { q: "Do you store any of my inputs or outputs?", a: "Absolutely not. We do not have a backend that processes your data. Everything stays in your browser's volatile memory." },
 ];
 
+import { useI18n } from "@/src/lib/i18n/store";
+
 // ── Page Component ───────────────────────────────────────────────────────────
 
 export default function HomeClient() {
@@ -83,6 +85,7 @@ export default function HomeClient() {
   const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
   const [favoriteTools, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     setHydrated(true);
@@ -131,16 +134,16 @@ export default function HomeClient() {
         >
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue/5 border border-blue/10 text-[9px] font-black uppercase tracking-[0.2em] text-blue shadow-sm">
             <Sparkles className="w-3 h-3" />
-            <span>Productivity Refined</span>
+            <span>{t('hero.tag')}</span>
           </div>
           
           <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-[1.1] text-text">
-            Every tool you need.<br />
-            <span className="opacity-40">Privacy you can trust.</span>
+            {t('hero.title')}<br />
+            <span className="opacity-40">{t('hero.subtitle')}</span>
           </h1>
           
           <p className="text-xs md:text-sm text-text-3 font-bold max-w-md mx-auto leading-relaxed">
-            The world's most private browser-side toolkit.
+            {t('hero.desc')}
             <span className="block text-text-4">Fast. Secure. Local-first.</span>
           </p>
         </m.div>
@@ -219,7 +222,7 @@ export default function HomeClient() {
                 {/* 1. Popular Tools Area (Static-ish, above the fold) */}
                 <section>
                   <SectionHeader 
-                    title="Most Popular" 
+                    title={t('common.popular')} 
                     subtitle="Industry standards"
                     icon={TrendingUp}
                     badge="Hot"
@@ -238,7 +241,7 @@ export default function HomeClient() {
                 {favoriteTools.length > 0 && (
                   <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                     <SectionHeader 
-                      title="Personal Favorites" 
+                      title={t('common.favorites')} 
                       subtitle="Your hand-picked toolkit"
                       icon={Heart}
                     />
@@ -254,7 +257,7 @@ export default function HomeClient() {
                 {recentTools.length > 0 && (
                   <section>
                     <SectionHeader 
-                      title="Recently Used" 
+                      title={t('common.recent')} 
                       subtitle="Pick up where you left off"
                       icon={TrendingUp}
                     />
@@ -269,7 +272,7 @@ export default function HomeClient() {
                 {/* 4. Main Grid */}
                 <section id="tools">
                   <SectionHeader 
-                    title="All Tools" 
+                    title={t('common.all')} 
                     subtitle="Universal toolkit"
                     icon={LayoutGrid}
                     href="/calculators"
