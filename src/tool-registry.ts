@@ -42,6 +42,9 @@ export interface ToolEntry {
   seoContent?: SEOContent;
   schemaType?: 'SoftwareApplication' | 'WebApplication';
   
+  // Custom grouping
+  subCategory?: string;
+  
   // Analytics & Management
   analyticsId?: string;
   status?: 'stable' | 'beta' | 'deprecated' | 'new';
@@ -73,6 +76,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Loan EMI, interest, and amortization', 
     href: 'calculators/emi-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['emi','loan','interest','mortgage','amortization'], 
     popular: true, 
     featured: true,
@@ -91,6 +95,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Project mutual-fund SIP returns', 
     href: 'calculators/sip-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['sip','investment','mutual fund','returns'], 
     popular: true, 
     difficulty: 'beginner',
@@ -106,6 +111,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Calculate age in years, months, and days', 
     href: 'calculators/age-calculator/', 
     category: 'calculators', 
+    subCategory: 'Date & Time',
     keywords: ['age','birthday','years'], 
     difficulty: 'beginner',
     searchIntent: 'informational',
@@ -114,28 +120,29 @@ export const ALL_TOOLS: ToolEntry[] = [
     related: ['date-calculator', 'time-calculator'],
     status: 'stable'
   },
-  { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', keywords: ['compound','interest','savings','growth'] },
-  { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', keywords: ['gst','tax','vat','india'] },
-  { id: 'currency-converter',     name: 'Currency Converter',     desc: 'Convert between world currencies',               href: 'calculators/currency-converter/',     category: 'calculators', keywords: ['currency','exchange','forex','usd','eur','inr'] },
-  { id: 'discount-calculator',    name: 'Discount Calculator',    desc: 'Find sale price and savings',                    href: 'calculators/discount-calculator/',    category: 'calculators', keywords: ['discount','sale','percent','savings'] },
-  { id: 'world-clock',            name: 'World Clock',            desc: 'Time across multiple cities',                    href: 'calculators/world-clock/',            category: 'calculators', keywords: ['time','timezone','clock','utc'] },
-  { id: 'date-calculator',        name: 'Date Calculator',        desc: 'Add, subtract, or diff dates',                   href: 'calculators/date-calculator/',        category: 'calculators', keywords: ['date','days','difference','add'] },
-  { id: 'time-calculator',        name: 'Time Calculator',        desc: 'Add or subtract hours and minutes',              href: 'calculators/time-calculator/',        category: 'calculators', keywords: ['time','duration','hours','minutes'] },
-  { id: 'standard-calculator',    name: 'Standard Calculator',    desc: 'Quick arithmetic calculator',                    href: 'calculators/standard-calculator/',    category: 'calculators', keywords: ['calculator','math','arithmetic'] },
-  { id: 'salary-calculator',      name: 'Salary Calculator',      desc: 'Indian take-home salary breakdown',              href: 'calculators/salary-calculator/',      category: 'calculators', keywords: ['salary','ctc','take home','tax','india'] },
-  { id: 'percentage-calculator',  name: 'Percentage Calculator',  desc: 'Find percentages and ratios',                    href: 'calculators/percentage-calculator/',  category: 'calculators', keywords: ['percent','percentage','ratio'] },
-  { id: 'unit-converter',         name: 'Unit Converter',         desc: 'Length, weight, volume, and more',               href: 'calculators/unit-converter/',         category: 'calculators', keywords: ['unit','convert','length','weight','volume','metric'] },
-  { id: 'numeral-converter',      name: 'Numeral Converter',      desc: 'Convert numbers between bases',                  href: 'calculators/numeral-converter/',      category: 'calculators', keywords: ['numeral','binary','hex','decimal','base'] },
-  { id: 'smart-converter',        name: 'Smart Unit Converter',   desc: 'Natural-language unit conversion',               href: 'calculators/smart-converter/',        category: 'calculators', keywords: ['convert','smart','natural language'] },
-  { id: 'safe-to-spend',          name: 'Safe-to-Spend',          desc: 'Daily budget planner',                           href: 'calculators/safe-to-spend/',          category: 'calculators', keywords: ['budget','spending','daily'] },
-  { id: 'work-hours',             name: 'Work Hours',             desc: 'Timesheet and overtime tracker',                 href: 'calculators/work-hours/',             category: 'calculators', keywords: ['work','hours','timesheet','overtime'] },
-  { id: 'utc-ist-converter',      name: 'UTC ↔ IST',         desc: 'Convert between UTC and IST',                    href: 'calculators/utc-ist-converter/',      category: 'calculators', keywords: ['utc','ist','timezone','india'] },
+  { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', subCategory: 'Financial', keywords: ['compound','interest','savings','growth'] },
+  { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', subCategory: 'Financial', keywords: ['gst','tax','vat','india'] },
+  { id: 'currency-converter',     name: 'Currency Converter',     desc: 'Convert between world currencies',               href: 'calculators/currency-converter/',     category: 'calculators', subCategory: 'Math & Units', keywords: ['currency','exchange','forex','usd','eur','inr'] },
+  { id: 'discount-calculator',    name: 'Discount Calculator',    desc: 'Find sale price and savings',                    href: 'calculators/discount-calculator/',    category: 'calculators', subCategory: 'Financial', keywords: ['discount','sale','percent','savings'] },
+  { id: 'world-clock',            name: 'World Clock',            desc: 'Time across multiple cities',                    href: 'calculators/world-clock/',            category: 'calculators', subCategory: 'Date & Time', keywords: ['time','timezone','clock','utc'] },
+  { id: 'date-calculator',        name: 'Date Calculator',        desc: 'Add, subtract, or diff dates',                   href: 'calculators/date-calculator/',        category: 'calculators', subCategory: 'Date & Time', keywords: ['date','days','difference','add'] },
+  { id: 'time-calculator',        name: 'Time Calculator',        desc: 'Add or subtract hours and minutes',              href: 'calculators/time-calculator/',        category: 'calculators', subCategory: 'Date & Time', keywords: ['time','duration','hours','minutes'] },
+  { id: 'standard-calculator',    name: 'Standard Calculator',    desc: 'Quick arithmetic calculator',                    href: 'calculators/standard-calculator/',    category: 'calculators', subCategory: 'Math & Units', keywords: ['calculator','math','arithmetic'] },
+  { id: 'salary-calculator',      name: 'Salary Calculator',      desc: 'Indian take-home salary breakdown',              href: 'calculators/salary-calculator/',      category: 'calculators', subCategory: 'Financial', keywords: ['salary','ctc','take home','tax','india'] },
+  { id: 'percentage-calculator',  name: 'Percentage Calculator',  desc: 'Find percentages and ratios',                    href: 'calculators/percentage-calculator/',  category: 'calculators', subCategory: 'Math & Units', keywords: ['percent','percentage','ratio'] },
+  { id: 'unit-converter',         name: 'Unit Converter',         desc: 'Length, weight, volume, and more',               href: 'calculators/unit-converter/',         category: 'calculators', subCategory: 'Math & Units', keywords: ['unit','convert','length','weight','volume','metric'] },
+  { id: 'numeral-converter',      name: 'Numeral Converter',      desc: 'Convert numbers between bases',                  href: 'calculators/numeral-converter/',      category: 'calculators', subCategory: 'Math & Units', keywords: ['numeral','binary','hex','decimal','base'] },
+  { id: 'smart-converter',        name: 'Smart Unit Converter',   desc: 'Natural-language unit conversion',               href: 'calculators/smart-converter/',        category: 'calculators', subCategory: 'Math & Units', keywords: ['convert','smart','natural language'] },
+  { id: 'safe-to-spend',          name: 'Safe-to-Spend',          desc: 'Daily budget planner',                           href: 'calculators/safe-to-spend/',          category: 'calculators', subCategory: 'Financial', keywords: ['budget','spending','daily'] },
+  { id: 'work-hours',             name: 'Work Hours',             desc: 'Timesheet and overtime tracker',                 href: 'calculators/work-hours/',             category: 'calculators', subCategory: 'Date & Time', keywords: ['work','hours','timesheet','overtime'] },
+  { id: 'utc-ist-converter',      name: 'UTC ↔ IST',         desc: 'Convert between UTC and IST',                    href: 'calculators/utc-ist-converter/',      category: 'calculators', subCategory: 'Date & Time', keywords: ['utc','ist','timezone','india'] },
   { 
     id: 'mutual-fund-returns', 
     name: 'Mutual Fund Returns', 
     desc: 'Calculate absolute and annualized returns', 
     href: 'calculators/mutual-fund-returns/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['mutual fund','returns','absolute','annualized','yield'], 
     difficulty: 'intermediate',
     status: 'new'
@@ -146,6 +153,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Future value of one-time investment', 
     href: 'calculators/lumpsum-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['lumpsum','investment','future value','wealth'], 
     difficulty: 'beginner',
     status: 'new'
@@ -156,6 +164,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Public Provident Fund maturity & interest', 
     href: 'calculators/ppf-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['ppf','savings','tax saving','interest','maturity'], 
     difficulty: 'beginner',
     status: 'new'
@@ -166,6 +175,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'FD maturity amount and interest earned', 
     href: 'calculators/fd-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['fd','fixed deposit','interest','savings'], 
     difficulty: 'beginner',
     status: 'new'
@@ -176,6 +186,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'RD maturity and interest calculation', 
     href: 'calculators/rd-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['rd','recurring deposit','savings','interest'], 
     difficulty: 'beginner',
     status: 'new'
@@ -186,6 +197,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Compound Annual Growth Rate', 
     href: 'calculators/cagr-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['cagr','growth','return','annualized'], 
     difficulty: 'intermediate',
     status: 'new'
@@ -196,6 +208,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Weighted average buy price for stocks', 
     href: 'calculators/stock-average-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['stock','average','buy price','trading','investing'], 
     difficulty: 'beginner',
     status: 'new'
@@ -206,6 +219,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Corpus needed for your retirement', 
     href: 'calculators/retirement-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['retirement','planning','pension','corpus','savings'], 
     difficulty: 'intermediate',
     status: 'new'
@@ -216,6 +230,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Systematic Withdrawal Plan planning', 
     href: 'calculators/swp-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['swp','withdrawal','pension','mutual fund','income'], 
     difficulty: 'intermediate',
     status: 'new'
@@ -226,10 +241,12 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Purchasing power over time', 
     href: 'calculators/inflation-calculator/', 
     category: 'calculators', 
+    subCategory: 'Financial',
     keywords: ['inflation','purchasing power','money','value'], 
     difficulty: 'beginner',
     status: 'new'
   },
+
 
   // ── PDF Tools ──────────────────────────────────────────────────────────────
   { id: 'compress-pdf',     name: 'Compress PDF',     desc: 'Reduce PDF file size',                href: 'pdf-tools/compress-pdf/',   category: 'pdf', keywords: ['pdf','compress','reduce','size'], popular: true, priority: 0.8 },
