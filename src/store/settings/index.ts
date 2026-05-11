@@ -70,8 +70,8 @@ export const createSettingsStore: StateCreator<SettingsStore> = (set) => ({
   updateAccessibility: (settings: Partial<AccessibilitySettings>) =>
     set((state: SettingsStore) => {
       const newState = { accessibility: { ...state.accessibility, ...settings } };
-      if (settings.fontScaling) {
-        localStorage.setItem('karuvi-font-size', settings.fontScaling === 1 ? 'normal' : 'large');
+      if (settings.fontScaling !== undefined) {
+        localStorage.setItem('karuvi-font-size', settings.fontScaling.toString());
       }
       return newState;
     }),

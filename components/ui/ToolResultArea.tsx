@@ -39,10 +39,10 @@ export function ToolResultArea({
   return (
     <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-bold text-text-2 flex items-center gap-2">
+        <div className="text-sm font-bold text-text-2 flex items-center gap-2">
           {label}
           {language && <span className="px-2 py-0.5 bg-blue/10 text-blue text-[10px] uppercase tracking-widest rounded-md font-black">{language}</span>}
-        </label>
+        </div>
         <div className="flex items-center gap-2">
           {onClear && (
             <button
@@ -71,13 +71,19 @@ export function ToolResultArea({
       </div>
 
       {error ? (
-        <div className="w-full px-4 py-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-xl text-red-600 dark:text-red-400 text-sm font-medium">
+        <div 
+          role="alert"
+          className="w-full px-4 py-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-xl text-red-600 dark:text-red-400 text-sm font-medium"
+        >
           {error}
         </div>
       ) : (
         <div className="relative group">
           <div className="absolute inset-0 bg-blue/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-          <div className="w-full min-h-[120px] px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10">
+          <div 
+            aria-live="polite"
+            className="w-full min-h-[120px] px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10"
+          >
             {value || <span className="text-text-4 italic">Result will appear here...</span>}
           </div>
         </div>

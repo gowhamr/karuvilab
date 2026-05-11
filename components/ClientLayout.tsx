@@ -21,9 +21,6 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <LazyMotion features={domAnimation}>
       <div 
-        style={{ 
-          fontSize: isHydrated ? `${accessibility.fontScaling * 100}%` : '100%' 
-        }}
         className={isHydrated && accessibility.highContrast ? 'high-contrast' : ''}
       >
         <ToastProvider>

@@ -138,6 +138,13 @@
   }
 }
 
+html[data-font-size="0.9"] { font-size: 90%; }
+html[data-font-size="1.0"] { font-size: 100%; }
+html[data-font-size="1.1"] { font-size: 110%; }
+html[data-font-size="1.2"] { font-size: 120%; }
+html[data-font-size="large"] { font-size: 110%; } /* Fallback for legacy values */
+html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values */
+
 :root {
   color-scheme: light;
   --blue:         #4F46E5;

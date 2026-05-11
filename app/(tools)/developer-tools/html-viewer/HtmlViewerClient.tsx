@@ -6,7 +6,7 @@ import LZString from "lz-string";
 import { 
   Play, Download, Share2, Plus, X, Laptop, Tablet, Smartphone, 
   Terminal, Settings, Trash2, Copy, Check, FileCode, ExternalLink,
-  ChevronDown, ChevronUp, Maximize2, Minimize2, ShieldCheck
+  ChevronDown, ChevronUp, Maximize2, Minimize2, ShieldCheck, Upload
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { ToolShell } from "@/components/ui/ToolShell";
@@ -57,9 +57,11 @@ export default function HtmlViewerClient() {
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
   const [isCdnOpen, setIsCdnOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [codeCopied, setCodeCopied] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const logIdRef = useRef(0);
 
   // Load from URL or LocalStorage
@@ -184,6 +186,19 @@ export default function HtmlViewerClient() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleCopyCode = () => {
+    const code = activeTab === "html" ? html : activeTab === "css" ? css : js;
+    navigator.clipboard.writeText(code);
+    setCodeCopied(true);
+    setTimeout(() => setCodeCopied(false), 2000);
+  };
+
+  const handleClear = () => {
+    if (activeTab === "html") setHtml("");
+    else if (activeTab === "css") setCss("");
+    else setJs("");
+  };
+
   const handleDownload = () => {
     const blob = new Blob([getCompiledDoc()], { type: "text/html" });
     const url = URL.createObjectURL(blob);
@@ -203,6 +218,29 @@ export default function HtmlViewerClient() {
 
   const removeCdn = (url: string) => {
     setCdns(cdns.filter(c => c !== url));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      if (file.name.endsWith(".html")) {
+        setHtml(content);
+        setActiveTab("html");
+      } else if (file.name.endsWith(".css")) {
+        setCss(content);
+        setActiveTab("css");
+      } else if (file.name.endsWith(".js")) {
+        setJs(content);
+        setActiveTab("js");
+      }
+    };
+    reader.readAsText(file);
+    // Reset input
+    e.target.value = "";
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -226,6 +264,13 @@ export default function HtmlViewerClient() {
       description="Professional developer playground with multi-pane editor and secure real-time preview."
       category={cat}
     >
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        accept=".html,.css,.js" 
+        className="hidden" 
+      />
       <div 
         className={cn(
           "flex flex-col lg:flex-row h-[70vh] min-h-[600px] border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
@@ -256,7 +301,29 @@ export default function HtmlViewerClient() {
             </div>
             
             <div className="flex items-center gap-2">
-               <button 
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors"
+                title="Upload File"
+              >
+                <Upload className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={handleCopyCode}
+                className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors"
+                title="Copy Code"
+              >
+                {codeCopied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              </button>
+              <button 
+                onClick={handleClear}
+                className="p-2 text-text-4 hover:bg-blue/5 hover:text-red-500 rounded-lg transition-colors"
+                title="Clear Editor"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+              <div className="w-[1px] h-4 bg-border mx-1" />
+              <button 
                 onClick={() => setIsCdnOpen(!isCdnOpen)}
                 className={cn(
                   "p-2 rounded-lg transition-colors",
