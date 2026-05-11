@@ -7,8 +7,9 @@ import {
   Combine, Scissors, FileImage, FileType, Key, Droplet, Hash as HashIcon, 
   RefreshCw, Crop, Users, Wand2, Braces, Table, Terminal, FileCode, GitCompare, 
   QrCode, Copy, Type, SpellCheck, CheckSquare, FileEdit, Link2, FileCheck, 
-  Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate
-} from "lucide-react";
+  Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate,
+  Activity
+  } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
   calculators: Calculator,
@@ -89,6 +90,7 @@ export const TOOL_ICONS: Record<string, any> = {
   "markdown": FileEdit,
   "url-cleaner": Trash2,
   "validate": FileCheck,
+  "internet-speed-test": Activity,
 
   // SEO Tools
   "meta-tags": Layout,

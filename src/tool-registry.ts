@@ -363,6 +363,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: 'markdown',       name: 'Markdown Editor',   desc: 'Live preview Markdown editor',        href: 'utilities/markdown/',        category: 'utilities', keywords: ['markdown','md','editor','preview'] },
   { id: 'url-cleaner',    name: 'URL Cleaner',       desc: 'Strip tracking parameters',           href: 'utilities/url-cleaner/',     category: 'utilities', keywords: ['url','clean','tracking','utm'] },
   { id: 'validate',       name: 'File Validator',    desc: 'Validate file size and type',         href: 'utilities/validate/',        category: 'utilities', keywords: ['validate','file','size','type'] },
+  { id: 'internet-speed-test', name: 'Speed Tester', desc: 'Measure your internet connection speed', href: 'utilities/internet-speed-test/', category: 'utilities', keywords: ['speed','test','internet','wifi','ping','latency'], status: 'new' },
 
   // ── SEO Tools ──────────────────────────────────────────────────────────────
   { id: 'meta-tags',         name: 'Meta Tags Generator', desc: 'Build SEO meta tags',           href: 'seo-tools/meta-tags/',         category: 'seo', keywords: ['seo','meta','tags','head'], popular: true },
