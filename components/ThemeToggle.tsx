@@ -9,15 +9,20 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const initialTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const savedTheme = localStorage.getItem("karuvi-theme") as "light" | "dark" | "system" | null;
+    let initialTheme: "light" | "dark" = "light";
+    if (savedTheme && savedTheme !== "system") {
+      initialTheme = savedTheme as "light" | "dark";
+    } else {
+      initialTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
     setTheme(initialTheme);
   }, []);
 
   const toggleTheme = () => {
     const nextTheme = theme === "light" ? "dark" : "light";
     setTheme(nextTheme);
-    localStorage.setItem("theme", nextTheme);
+    localStorage.setItem("karuvi-theme", nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
   };
 

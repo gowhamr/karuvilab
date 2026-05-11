@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --color-blue: var(--blue);
   --color-ocean: var(--ocean-blue);
@@ -121,6 +123,7 @@
 }
 
 :root {
+  color-scheme: light;
   --blue:         #4F46E5;
   --ocean-blue:   #0077B6;
   --blue-dark:    #4338CA;
@@ -149,6 +152,7 @@
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --blue:        #6366F1;
   --blue-dark:   #4F46E5;
   --blue-light:  rgba(99, 102, 241, 0.1);

@@ -23,8 +23,8 @@ const SettingsClient = memo(function SettingsClient() {
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("karuvi.theme") as Theme | null;
-    const storedFont = localStorage.getItem("karuvi.fontSize") as FontSize | null;
+    const storedTheme = localStorage.getItem("karuvi-theme") as Theme | null;
+    const storedFont = localStorage.getItem("karuvi-font-size") as FontSize | null;
     if (storedTheme) setTheme(storedTheme);
     if (storedFont) setFontSize(storedFont);
     calcStorage();
@@ -60,7 +60,7 @@ const SettingsClient = memo(function SettingsClient() {
 
   const applyTheme = (t: Theme) => {
     setTheme(t);
-    localStorage.setItem("karuvi.theme", t);
+    localStorage.setItem("karuvi-theme", t);
     const resolved = t === "system"
       ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
       : t;
@@ -69,7 +69,7 @@ const SettingsClient = memo(function SettingsClient() {
 
   const applyFontSize = (f: FontSize) => {
     setFontSize(f);
-    localStorage.setItem("karuvi.fontSize", f);
+    localStorage.setItem("karuvi-font-size", f);
     document.documentElement.setAttribute("data-font-size", f);
   };
 
@@ -79,7 +79,7 @@ const SettingsClient = memo(function SettingsClient() {
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i)!;
-      if (!k.startsWith("karuvi.theme") && !k.startsWith("karuvi.fontSize")) {
+      if (!k.startsWith("karuvi-theme") && !k.startsWith("karuvi-font-size")) {
         keysToRemove.push(k);
       }
     }
