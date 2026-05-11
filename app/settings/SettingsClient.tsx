@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { 
   Sun, Shield, UserSearch, Star, 
   Settings2, RefreshCw,
-  ChevronRight, ArrowLeft
+  ChevronRight, ArrowLeft, Globe
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useIsHydrated } from "@/src/store/settings/store";
@@ -17,6 +17,7 @@ const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m 
 const AccessibilitySection = dynamic(() => import("./sections/AccessibilitySection").then(m => m.AccessibilitySection), { ssr: false });
 const ToolPreferencesSection = dynamic(() => import("./sections/ToolPreferencesSection").then(m => m.ToolPreferencesSection), { ssr: false });
 const FavoritesSection = dynamic(() => import("./sections/FavoritesSection").then(m => m.FavoritesSection), { ssr: false });
+const LanguageSection = dynamic(() => import("./sections/LanguageSection").then(m => m.LanguageSection), { ssr: false });
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density, animations' },
@@ -24,6 +25,7 @@ const MENU_ITEMS = [
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic, history' },
   { id: 'favorites', label: 'Favorites', icon: Star, desc: 'Pinned tools, recent history' },
   { id: 'tools', label: 'Tool Preferences', icon: Settings2, desc: 'Formats, inputs, auto-copy' },
+  { id: 'language', label: 'Language', icon: Globe, desc: 'Localization, RTL support' },
 ];
 
 export default function SettingsClient() {
@@ -141,6 +143,7 @@ export default function SettingsClient() {
               {activeSection === 'accessibility' && <AccessibilitySection />}
               {activeSection === 'tools' && <ToolPreferencesSection />}
               {activeSection === 'favorites' && <FavoritesSection />}
+              {activeSection === 'language' && <LanguageSection />}
             </div>
           </m.div>
         </AnimatePresence>

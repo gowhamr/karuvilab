@@ -12,7 +12,7 @@ export const LanguageSection = memo(function LanguageSection() {
     <div className="space-y-2">
       <SettingRow 
         label="App Language" 
-        description="Choose your preferred language for the interface."
+        description="Choose your preferred language for the interface. More languages coming soon."
         icon={Languages}
       >
         <SettingSelect 
@@ -28,7 +28,7 @@ export const LanguageSection = memo(function LanguageSection() {
 
       <SettingRow 
         label="RTL Support" 
-        description="Optimize the interface for Right-to-Left languages."
+        description="Optimize the interface for Right-to-Left languages like Arabic or Hebrew."
         icon={Globe}
       >
         <SettingSwitch 
@@ -39,7 +39,7 @@ export const LanguageSection = memo(function LanguageSection() {
 
       <SettingRow 
         label="Auto-Detect" 
-        description="Automatically switch language based on your browser preferences."
+        description="Automatically switch language based on your browser's primary locale."
         icon={Target}
       >
         <SettingSwitch 
