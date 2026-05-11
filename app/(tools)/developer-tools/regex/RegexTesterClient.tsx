@@ -126,7 +126,7 @@ export default function RegexTesterClient() {
               <div className="text-2xl font-black text-blue">{result.matches.length}</div>
               <div className="text-xs text-text-4 uppercase tracking-wider">Matches</div>
             </div>
-            {result.matches[0]?.groups.length > 0 && (
+            {result.matches[0] && result.matches[0].groups.length > 0 && (
               <div className="text-center">
                 <div className="text-2xl font-black text-text">{result.matches[0].groups.length}</div>
                 <div className="text-xs text-text-4 uppercase tracking-wider">Groups</div>

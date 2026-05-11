@@ -97,16 +97,19 @@ class WorkerManager {
     abortSignal?: AbortSignal
   ): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.queue.push({
+      const task: QueuedTask = {
         id: Math.random().toString(36).substring(7),
         type,
         args,
-        transferables,
         resolve,
         reject,
-        onProgress,
-        abortSignal
-      });
+      };
+
+      if (transferables) task.transferables = transferables;
+      if (onProgress) task.onProgress = onProgress;
+      if (abortSignal) task.abortSignal = abortSignal;
+
+      this.queue.push(task);
       this.processQueue();
     });
   }
@@ -136,6 +139,18 @@ class WorkerManager {
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
     return this.enqueue("compressImage", [file, format, quality], [file], onProgress, abortSignal);
+  }
+
+  async resizeImage(
+    file: ArrayBuffer,
+    width: number,
+    height: number,
+    format: "image/jpeg" | "image/png" | "image/webp",
+    quality: number,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return this.enqueue("resizeImage", [file, width, height, format, quality], [file], onProgress, abortSignal);
   }
 
   async minifyCode(

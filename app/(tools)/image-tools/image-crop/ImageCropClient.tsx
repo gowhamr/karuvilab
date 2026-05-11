@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 
@@ -15,6 +16,7 @@ const PRESETS = [
 ];
 
 export default function ImageCropClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [origW, setOrigW] = useState(0);
   const [origH, setOrigH] = useState(0);
@@ -30,9 +32,11 @@ export default function ImageCropClient() {
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
   const handleFile = (file: File) => {
-    const url = URL.createObjectURL(file);
+    if (originalUrl) revokeUrl(originalUrl);
+    const url = createUrl(file);
     setOriginalUrl(url);
     setFileName(file.name.replace(/\.[^.]+$/, ""));
+    if (croppedUrl) revokeUrl(croppedUrl);
     setCroppedUrl(null);
     const img = new Image();
     img.onload = () => {
@@ -98,7 +102,10 @@ export default function ImageCropClient() {
     img.onload = () => {
       ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
       canvas.toBlob(blob => {
-        if (blob) setCroppedUrl(URL.createObjectURL(blob));
+        if (blob) {
+          if (croppedUrl) revokeUrl(croppedUrl);
+          setCroppedUrl(createUrl(blob));
+        }
       }, "image/jpeg", 0.92);
     };
     img.src = originalUrl;

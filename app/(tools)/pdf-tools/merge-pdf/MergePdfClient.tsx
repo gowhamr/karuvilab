@@ -5,11 +5,14 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
 
+import { useObjectUrlManager } from "@/src/lib/hooks";
+
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 interface PdfFile { name: string; file: File; }
 
 export default function MergePdfClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [files, setFiles] = useState<PdfFile[]>([]);
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState<TaskProgress | null>(null);
@@ -26,11 +29,11 @@ export default function MergePdfClient() {
 
   const moveUp = (i: number) => {
     if (i === 0) return;
-    setFiles(f => { const a = [...f]; [a[i-1], a[i]] = [a[i], a[i-1]]; return a; });
+    setFiles(f => { const a = [...f]; const t = a[i-1]!; a[i-1] = a[i]!; a[i] = t; return a; });
   };
 
   const moveDown = (i: number) => {
-    setFiles(f => { if (i >= f.length - 1) return f; const a = [...f]; [a[i], a[i+1]] = [a[i+1], a[i]]; return a; });
+    setFiles(f => { if (i >= f.length - 1) return f; const a = [...f]; const t = a[i]!; a[i] = a[i+1]!; a[i+1] = t; return a; });
   };
 
   const merge = async () => {
@@ -52,12 +55,14 @@ export default function MergePdfClient() {
       );
 
       const blob = new Blob([bytes as unknown as BlobPart], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = "merged.pdf";
       a.click();
-      URL.revokeObjectURL(url);
+      
+      // Delay revocation slightly to ensure browser starts download
+      setTimeout(() => revokeUrl(url), 100);
     } catch (e: any) {
       if (e.message === "Task cancelled") {
         setError("Merge cancelled.");

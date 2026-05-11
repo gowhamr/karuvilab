@@ -1,40 +1,78 @@
 "use client";
 
-import { useState, useMemo, memo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
-import { CopyButton } from "@/components/ui/CopyButton";
 import { m } from "framer-motion";
+import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl, exportToCSV } from "@/src/lib/calculator-utils";
+import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
+import { useToast } from "@/components/ui/Toast";
 
-const inr = (n: number, d = 0) =>
-  "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
+const DEFAULT_STATE = {
+  principal: 100000,
+  rate: 12,
+  years: 10,
+};
 
-const LumpsumCalculatorClient = memo(function LumpsumCalculatorClient() {
-  const [principal, setPrincipal] = useState(100000);
-  const [rate, setRate] = useState(12);
-  const [years, setYears] = useState(10);
+export default function LumpsumCalculatorClient() {
+  const { toast } = useToast();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [principal, setPrincipal] = useState(DEFAULT_STATE.principal);
+  const [rate, setRate] = useState(DEFAULT_STATE.rate);
+  const [years, setYears] = useState(DEFAULT_STATE.years);
   const [showTable, setShowTable] = useState(false);
 
+  // Initialize from URL
+  useEffect(() => {
+    const state = getInitialStateFromUrl(DEFAULT_STATE);
+    setPrincipal(state.principal);
+    setRate(state.rate);
+    setYears(state.years);
+    setIsLoaded(true);
+  }, []);
+
+  // Sync to URL
+  useEffect(() => {
+    if (!isLoaded) return;
+    syncStateToUrl({ principal, rate, years });
+  }, [principal, rate, years, isLoaded]);
+
   const result = useMemo(() => {
-    const r = rate / 100;
+    const r = d(rate).div(100);
     const rows: { year: number; value: number; gains: number }[] = [];
 
     for (let y = 1; y <= years; y++) {
-      const value = principal * Math.pow(1 + r, y);
+      const value = d(principal).mul(d(1).add(r).pow(y));
       rows.push({
         year: y,
-        value: value,
-        gains: value - principal,
+        value: value.toNumber(),
+        gains: value.sub(principal).toNumber(),
       });
     }
 
-    const totalValue = principal * Math.pow(1 + r, years);
-    const totalGains = totalValue - principal;
+    const totalValue = d(principal).mul(d(1).add(r).pow(years));
+    const totalGains = totalValue.sub(principal);
     
-    return { totalValue, totalGains, rows };
+    return { totalValue: totalValue.toNumber(), totalGains: totalGains.toNumber(), rows };
   }, [principal, rate, years]);
 
-  const summary = `Lumpsum Investment Summary\n--------------------------\nPrincipal: ${inr(principal)}\nInterest Rate: ${rate}%\nDuration: ${years} years\n\nTotal Gains: ${inr(result.totalGains)}\nTotal Maturity Value: ${inr(result.totalValue)}\n\nGenerated via KaruviLab`;
+  const summary = `Lumpsum Investment Summary
+--------------------------
+Principal: ${formatINR(principal)}
+Interest Rate: ${rate}%
+Duration: ${years} years
+
+Total Gains: ${formatINR(result.totalGains)}
+Total Maturity Value: ${formatINR(result.totalValue)}
+
+Generated via KaruviLab`;
+
+  const handleExport = () => {
+    const headers = ["Year", "Maturity Value", "Gains"];
+    const rows = result.rows.map(r => [r.year, r.value, r.gains]);
+    exportToCSV(`lumpsum-projection-${Date.now()}.csv`, headers, rows);
+    toast("Exported projection to CSV");
+  };
 
   return (
     <div className="space-y-6">
@@ -48,7 +86,7 @@ const LumpsumCalculatorClient = memo(function LumpsumCalculatorClient() {
             step={5000}
             value={principal}
             onChange={setPrincipal}
-            format={(v) => inr(v)}
+            format={(v) => formatINR(v)}
           />
           <SliderField
             label="Expected Return Rate (p.a)"
@@ -58,7 +96,7 @@ const LumpsumCalculatorClient = memo(function LumpsumCalculatorClient() {
             step={0.5}
             value={rate}
             onChange={setRate}
-            format={(v) => v + "%"}
+            format={(v) => formatPercent(v)}
           />
           <SliderField
             label="Duration"
@@ -74,20 +112,20 @@ const LumpsumCalculatorClient = memo(function LumpsumCalculatorClient() {
 
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <MetricCard label="Maturity Value" value={inr(result.totalValue)} accent />
-            <MetricCard label="Total Invested" value={inr(principal)} />
-            <MetricCard label="Estimated Gains" value={inr(result.totalGains)} />
+            <MetricCard label="Maturity Value" value={formatINR(result.totalValue)} accent />
+            <MetricCard label="Total Invested" value={formatINR(principal)} />
+            <MetricCard label="Estimated Gains" value={formatINR(result.totalGains)} />
           </div>
           
-          <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between gap-3">
-             <CopyButton text={summary} label="Copy Summary" />
-             <button
-                onClick={() => setShowTable(!showTable)}
-                className="px-4 py-2 text-sm font-medium bg-bg border border-border rounded-lg hover:border-blue transition-colors"
-              >
-                {showTable ? "Hide" : "Show"} Projection
-              </button>
-          </div>
+          <CalculatorActionBar
+            summary={summary}
+            toolId="lumpsum-calculator"
+            historyLabel={`${formatINR(principal)} for ${years}y`}
+            historyData={{ principal, rate, years, result: { totalValue: result.totalValue, totalGains: result.totalGains } }}
+            onExport={handleExport}
+            showProjection={showTable}
+            onToggleProjection={() => setShowTable(!showTable)}
+          />
         </div>
       </div>
 
@@ -100,17 +138,17 @@ const LumpsumCalculatorClient = memo(function LumpsumCalculatorClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-surface border-b border-border text-text-3">
-                <th className="px-4 py-3 text-left">Year</th>
-                <th className="px-4 py-3 text-right">Value</th>
-                <th className="px-4 py-3 text-right">Gains</th>
+                <th className="px-4 py-3 text-left font-bold">Year</th>
+                <th className="px-4 py-3 text-right font-bold">Value</th>
+                <th className="px-4 py-3 text-right font-bold">Gains</th>
               </tr>
             </thead>
             <tbody>
               {result.rows.map((row) => (
-                <tr key={row.year} className="border-b border-border/50 hover:bg-surface/50">
-                  <td className="px-4 py-3">Year {row.year}</td>
-                  <td className="px-4 py-3 text-right font-bold text-blue">{inr(row.value)}</td>
-                  <td className="px-4 py-3 text-right text-green-500">{inr(row.gains)}</td>
+                <tr key={row.year} className="border-b border-border/50 hover:bg-surface/50 transition-colors">
+                  <td className="px-4 py-3 text-text-2 font-medium">Year {row.year}</td>
+                  <td className="px-4 py-3 text-right font-bold text-blue">{formatINR(row.value)}</td>
+                  <td className="px-4 py-3 text-right text-green-500 font-medium">{formatINR(row.gains)}</td>
                 </tr>
               ))}
             </tbody>
@@ -119,6 +157,4 @@ const LumpsumCalculatorClient = memo(function LumpsumCalculatorClient() {
       )}
     </div>
   );
-});
-
-export default LumpsumCalculatorClient;
+}

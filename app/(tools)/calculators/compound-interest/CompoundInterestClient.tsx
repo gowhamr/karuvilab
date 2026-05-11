@@ -1,15 +1,9 @@
 "use client";
-import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { useState, useMemo, useEffect } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
-import { CopyButton } from "@/components/ui/CopyButton";
-
-const fmt = (n: number, d = 2) =>
-  n.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
-
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
+import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 
 const FREQ_OPTIONS = [
   { label: "Annually", value: 1 },
@@ -18,20 +12,66 @@ const FREQ_OPTIONS = [
   { label: "Monthly", value: 12 },
 ];
 
+const DEFAULT_STATE = {
+  principal: 100000,
+  rate: 10,
+  years: 10,
+  freq: 1,
+};
+
 export default function CompoundInterestClient() {
-  const [principal, setPrincipal] = useState(100000);
-  const [rate, setRate] = useState(10);
-  const [years, setYears] = useState(10);
-  const [freq, setFreq] = useState(1);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [principal, setPrincipal] = useState(DEFAULT_STATE.principal);
+  const [rate, setRate] = useState(DEFAULT_STATE.rate);
+  const [years, setYears] = useState(DEFAULT_STATE.years);
+  const [freq, setFreq] = useState(DEFAULT_STATE.freq);
+
+  // Initialize from URL
+  useEffect(() => {
+    const state = getInitialStateFromUrl(DEFAULT_STATE);
+    setPrincipal(state.principal);
+    setRate(state.rate);
+    setYears(state.years);
+    setFreq(state.freq);
+    setIsLoaded(true);
+  }, []);
+
+  // Sync to URL
+  useEffect(() => {
+    if (!isLoaded) return;
+    syncStateToUrl({ principal, rate, years, freq });
+  }, [principal, rate, years, freq, isLoaded]);
 
   const result = useMemo(() => {
-    const A = principal * Math.pow(1 + rate / 100 / freq, freq * years);
-    const interest = A - principal;
-    const returnPct = principal > 0 ? (interest / principal) * 100 : 0;
-    return { finalAmount: A, interest, returnPct };
+    // A = P(1 + r/n)^(nt)
+    const P = d(principal);
+    const r = d(rate).div(100);
+    const n = d(freq);
+    const t = d(years);
+
+    const A = P.mul(d(1).add(r.div(n)).pow(n.mul(t)));
+    const interest = A.sub(P);
+    const returnPct = P.gt(0) ? interest.div(P).mul(100) : d(0);
+    
+    return { 
+      finalAmount: A.toNumber(), 
+      interest: interest.toNumber(), 
+      returnPct: returnPct.toNumber() 
+    };
   }, [principal, rate, years, freq]);
 
-  const summary = `Compound Interest Results\n--------------------------\nPrincipal: ₹${fmt(principal, 0)}\nRate: ${rate}% p.a.\nDuration: ${years} years\nCompounding: ${FREQ_OPTIONS.find((f) => f.value === freq)?.label}\n\nFinal Amount: ₹${fmt(result.finalAmount)}\nTotal Interest: ₹${fmt(result.interest)}\nTotal Return: ${fmt(result.returnPct)}%\n\nGenerated via KaruviLab`;
+  const summary = `Compound Interest Results
+--------------------------
+Principal: ${formatINR(principal)}
+Rate: ${rate}% p.a.
+Duration: ${years} years
+Compounding: ${FREQ_OPTIONS.find((f) => f.value === freq)?.label}
+
+Final Amount: ${formatINR(result.finalAmount)}
+Total Interest: ${formatINR(result.interest)}
+Total Return: ${formatPercent(result.returnPct)}
+
+Generated via KaruviLab`;
 
   return (
     <div className="space-y-6">
@@ -44,7 +84,7 @@ export default function CompoundInterestClient() {
           step={1000}
           value={principal}
           onChange={setPrincipal}
-          format={(v) => "₹" + v.toLocaleString("en-IN")}
+          format={(v) => formatINR(v)}
         />
         <SliderField
           label="Annual Interest Rate"
@@ -54,7 +94,7 @@ export default function CompoundInterestClient() {
           step={0.5}
           value={rate}
           onChange={setRate}
-          format={(v) => v.toFixed(1) + "%"}
+          format={(v) => formatPercent(v)}
         />
         <SliderField
           label="Duration"
@@ -90,26 +130,34 @@ export default function CompoundInterestClient() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <MetricCard
           label="Final Amount"
-          value={"₹" + fmt(result.finalAmount)}
+          value={formatINR(result.finalAmount)}
           accent
         />
         <MetricCard
           label="Total Interest"
-          value={"₹" + fmt(result.interest)}
+          value={formatINR(result.interest)}
         />
         <MetricCard
           label="Total Return"
-          value={fmt(result.returnPct) + "%"}
+          value={formatPercent(result.returnPct)}
         />
       </div>
 
-      <div className="bg-surface border border-border p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
-        <span className="text-sm text-text-3">
-          ₹{fmt(principal, 0)} grows to{" "}
-          <strong className="text-blue">₹{fmt(result.finalAmount)}</strong> in{" "}
-          {years} years at {rate}%
-        </span>
-        <CopyButton text={summary} label="Copy Summary" />
+      <div className="space-y-4">
+        <div className="bg-surface border border-border p-4 rounded-xl">
+          <span className="text-sm text-text-3 font-medium">
+            {formatINR(principal)} grows to{" "}
+            <strong className="text-blue">{formatINR(result.finalAmount)}</strong> in{" "}
+            {years} years at {rate}%
+          </span>
+        </div>
+
+        <CalculatorActionBar
+          summary={summary}
+          toolId="compound-interest"
+          historyLabel={`${formatINR(principal)} for ${years}y @ ${rate}%`}
+          historyData={{ principal, rate, years, freq, result }}
+        />
       </div>
     </div>
   );

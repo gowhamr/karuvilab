@@ -30,10 +30,10 @@ export default function HashGeneratorClient() {
       controller.signal
     ).then((res) => {
       setHashes({
-        md5: res["MD5"],
-        sha1: res["SHA-1"],
-        sha256: res["SHA-256"],
-        sha512: res["SHA-512"]
+        md5: res["MD5"]!,
+        sha1: res["SHA-1"]!,
+        sha256: res["SHA-256"]!,
+        sha512: res["SHA-512"]!
       });
       setProgress(null);
     }).catch(err => {

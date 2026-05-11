@@ -82,7 +82,7 @@ export default function FileValidatorClient() {
     const detectedExts = detected?.ext ?? [];
 
     if (detectedMime) {
-      const mimeMatch = file.type ? file.type === detectedMime || detectedMime.includes(file.type.split("/")[0]) : true;
+      const mimeMatch = file.type ? file.type === detectedMime || detectedMime.includes(file.type.split("/")[0]!) : true;
       const extMatch = ext ? detectedExts.includes(ext) : true;
       if (extMatch && mimeMatch) {
         checks.push({ label: "File Signature", status: "valid", value: `Magic bytes match .${ext} — OK` });

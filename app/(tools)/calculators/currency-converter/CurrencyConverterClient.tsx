@@ -162,7 +162,7 @@ export default function CurrencyConverterClient() {
                 <td className="px-4 py-3 font-mono font-bold text-text">{c}</td>
                 <td className="px-4 py-3 text-text-3">{CURRENCY_LABELS[c]}</td>
                 <td className={`px-4 py-3 text-right font-bold ${c === to ? "text-blue" : "text-text"}`}>
-                  {fmt(RATES[c], c)}
+                  {fmt(RATES[c]!, c)}
                 </td>
               </tr>
             ))}

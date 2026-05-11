@@ -41,9 +41,10 @@ export async function loadAny(file: File): Promise<HTMLImageElement | HTMLCanvas
 }
 
 export async function loadHeic(file: File): Promise<HTMLImageElement> {
-  if (typeof window === 'undefined' || !window.heic2any) throw new Error('HEIC decoder (heic2any) not loaded. Check your network connection.');
-  const result = await window.heic2any({ blob: file, toType: 'image/png', quality: 0.95 });
+  if (typeof window === 'undefined' || !(window as any).heic2any) throw new Error('HEIC decoder (heic2any) not loaded. Check your network connection.');
+  const result = await (window as any).heic2any({ blob: file, toType: 'image/png', quality: 0.95 });
   const pngBlob = Array.isArray(result) ? result[0] : result;
+  if (!pngBlob) throw new Error('HEIC conversion failed.');
   const url = URL.createObjectURL(pngBlob);
   const img = await Utils.loadImage(url);
   URL.revokeObjectURL(url);
@@ -51,13 +52,15 @@ export async function loadHeic(file: File): Promise<HTMLImageElement> {
 }
 
 export async function loadTiff(file: File): Promise<HTMLCanvasElement> {
-  if (typeof window === 'undefined' || !window.UTIF) throw new Error('TIFF decoder (UTIF) not loaded. Check your network connection.');
+  if (typeof window === 'undefined' || !(window as any).UTIF) throw new Error('TIFF decoder (UTIF) not loaded. Check your network connection.');
+  const UTIF = (window as any).UTIF;
   const ab   = await Utils.readAsArrayBuffer(file);
-  const ifds = window.UTIF.decode(ab);
+  const ifds = UTIF.decode(ab);
   if (!ifds.length) throw new Error('No images found in TIFF file.');
-  window.UTIF.decodeImage(ab, ifds[0]);
-  const rgba = window.UTIF.toRGBA8(ifds[0]);
-  const w = ifds[0].width, h = ifds[0].height;
+  const firstIfd = ifds[0]!;
+  UTIF.decodeImage(ab, firstIfd);
+  const rgba = UTIF.toRGBA8(firstIfd);
+  const w = firstIfd.width, h = firstIfd.height;
   const canvas = document.createElement('canvas');
   canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -68,10 +71,11 @@ export async function loadTiff(file: File): Promise<HTMLCanvasElement> {
 }
 
 export function encodeTiff(canvas: HTMLCanvasElement): Blob {
-  if (typeof window === 'undefined' || !window.UTIF) throw new Error('TIFF encoder (UTIF) not loaded.');
+  if (typeof window === 'undefined' || !(window as any).UTIF) throw new Error('TIFF encoder (UTIF) not loaded.');
+  const UTIF = (window as any).UTIF;
   const ctx     = canvas.getContext('2d') as CanvasRenderingContext2D;
   const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const tiffBuf = window.UTIF.encodeImage(imgData.data, canvas.width, canvas.height);
+  const tiffBuf = UTIF.encodeImage(imgData.data, canvas.width, canvas.height);
   return new Blob([tiffBuf], { type: 'image/tiff' });
 }
 
@@ -109,9 +113,9 @@ export function encodeBmp(canvas: HTMLCanvasElement): Blob {
   for (let y = h - 1; y >= 0; y--) {
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 4;
-      u8[off++] = data[i + 2];
-      u8[off++] = data[i + 1];
-      u8[off++] = data[i];
+      u8[off++] = data[i + 2]!;
+      u8[off++] = data[i + 1]!;
+      u8[off++] = data[i]!;
     }
     for (let p = 0; p < rowPad; p++) u8[off++] = 0;
   }
@@ -124,8 +128,8 @@ export function drawElement(
   maxW: number | null,
   maxH: number | null
 ): HTMLCanvasElement {
-  const w0 = (el as HTMLImageElement).naturalWidth  ?? (el as HTMLCanvasElement).width;
-  const h0 = (el as HTMLImageElement).naturalHeight ?? (el as HTMLCanvasElement).height;
+  const w0 = 'naturalWidth' in el ? el.naturalWidth : el.width;
+  const h0 = 'naturalHeight' in el ? el.naturalHeight : el.height;
   let w = w0, h = h0;
   if (maxW && w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
   if (maxH && h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
@@ -145,7 +149,7 @@ export function colorFor(ext: string): string {
 
 export function jsonToCsv(arr: Record<string, unknown>[]): string {
   if (!Array.isArray(arr) || !arr.length) return '';
-  const headers = Object.keys(arr[0]);
+  const headers = Object.keys(arr[0]!);
   const csvRows: string[] = [];
   csvRows.push(headers.join(','));
   for (const row of arr) {

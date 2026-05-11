@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 
@@ -17,6 +18,7 @@ function colorDiff(r1: number, g1: number, b1: number, r2: number, g2: number, b
 }
 
 export default function BgRemoverClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [bgColor, setBgColor] = useState("#ffffff");
@@ -27,8 +29,10 @@ export default function BgRemoverClient() {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleFile = (file: File) => {
-    const url = URL.createObjectURL(file);
+    if (originalUrl) revokeUrl(originalUrl);
+    const url = createUrl(file);
     setOriginalUrl(url);
+    if (resultUrl) revokeUrl(resultUrl);
     setResultUrl(null);
     setFileName(file.name.replace(/\.[^.]+$/, ""));
   };
@@ -48,24 +52,27 @@ export default function BgRemoverClient() {
       const [tr, tg, tb] = hexToRgb(bgColor);
 
       for (let i = 0; i < data.length; i += 4) {
-        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const r = data[i]!, g = data[i + 1]!, b = data[i + 2]!;
         const diff = colorDiff(r, g, b, tr, tg, tb);
         if (diff <= tolerance) {
           data[i + 3] = 0;
         } else if (diff <= tolerance * 1.5) {
           const alpha = Math.round(((diff - tolerance) / (tolerance * 0.5)) * 255);
-          data[i + 3] = Math.min(data[i + 3], alpha);
+          data[i + 3] = Math.min(data[i + 3]!, alpha);
         }
       }
 
       ctx.putImageData(imageData, 0, 0);
       canvas.toBlob(blob => {
-        if (blob) setResultUrl(URL.createObjectURL(blob));
+        if (blob) {
+          if (resultUrl) revokeUrl(resultUrl);
+          setResultUrl(createUrl(blob));
+        }
         setProcessing(false);
       }, "image/png");
     };
     img.src = originalUrl;
-  }, [originalUrl, bgColor, tolerance]);
+  }, [originalUrl, bgColor, tolerance, resultUrl, createUrl, revokeUrl]);
 
   const download = () => {
     if (!resultUrl) return;

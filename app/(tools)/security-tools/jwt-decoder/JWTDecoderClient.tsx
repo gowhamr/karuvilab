@@ -52,8 +52,8 @@ export default function JWTDecoderClient() {
     const parts = token.trim().split(".");
     if (parts.length !== 3) return { error: "Invalid JWT: expected 3 parts separated by dots." };
     try {
-      const header = JSON.parse(b64urlDecode(parts[0]));
-      const payload = JSON.parse(b64urlDecode(parts[1]));
+      const header = JSON.parse(b64urlDecode(parts[0]!));
+      const payload = JSON.parse(b64urlDecode(parts[1]!));
       const sig = parts[2];
       return { header, payload, sig };
     } catch (e) {

@@ -30,6 +30,15 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  resizeImage(
+    file: ArrayBuffer,
+    width: number,
+    height: number,
+    format: "image/jpeg" | "image/png" | "image/webp",
+    quality: number,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   // Developer Tasks
   minifyCode(
     code: string,

@@ -19,9 +19,9 @@ function computeDiff(a: string, b: string): DiffLine[] {
   for (let i = m - 1; i >= 0; i--) {
     for (let j = n - 1; j >= 0; j--) {
       if (linesA[i] === linesB[j]) {
-        dp[i][j] = dp[i + 1][j + 1] + 1;
+        dp[i]![j] = dp[i + 1]![j + 1]! + 1;
       } else {
-        dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
+        dp[i]![j] = Math.max(dp[i + 1]![j]!, dp[i]![j + 1]!);
       }
     }
   }
@@ -32,18 +32,18 @@ function computeDiff(a: string, b: string): DiffLine[] {
 
   while (i < m && j < n) {
     if (linesA[i] === linesB[j]) {
-      result.push({ type: "equal", text: linesA[i], lineA: lineA++, lineB: lineB++ });
+      result.push({ type: "equal", text: linesA[i]!, lineA: lineA++, lineB: lineB++ });
       i++; j++;
-    } else if (dp[i + 1][j] >= dp[i][j + 1]) {
-      result.push({ type: "removed", text: linesA[i], lineA: lineA++ });
+    } else if (dp[i + 1]![j]! >= dp[i]![j + 1]!) {
+      result.push({ type: "removed", text: linesA[i]!, lineA: lineA++ });
       i++;
     } else {
-      result.push({ type: "added", text: linesB[j], lineB: lineB++ });
+      result.push({ type: "added", text: linesB[j]!, lineB: lineB++ });
       j++;
     }
   }
-  while (i < m) { result.push({ type: "removed", text: linesA[i++], lineA: lineA++ }); }
-  while (j < n) { result.push({ type: "added", text: linesB[j++], lineB: lineB++ }); }
+  while (i < m) { result.push({ type: "removed", text: linesA[i++]!, lineA: lineA++ }); }
+  while (j < n) { result.push({ type: "added", text: linesB[j++]!, lineB: lineB++ }); }
 
   return result;
 }

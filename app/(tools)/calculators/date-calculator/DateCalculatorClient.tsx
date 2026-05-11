@@ -37,7 +37,7 @@ function addToDate(base: string, n: number, unit: "days" | "months" | "years", o
   if (unit === "days") d.setDate(d.getDate() + sign * n);
   else if (unit === "months") d.setMonth(d.getMonth() + sign * n);
   else d.setFullYear(d.getFullYear() + sign * n);
-  return d.toISOString().split("T")[0];
+  return d.toISOString().split("T")[0]!;
 }
 
 export default function DateCalculatorClient() {
@@ -55,12 +55,12 @@ export default function DateCalculatorClient() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toISOString().split("T")[0]!;
     const nextYear = new Date();
     nextYear.setFullYear(nextYear.getFullYear() + 1);
     
     setFromDate(today);
-    setToDate(nextYear.toISOString().split("T")[0]);
+    setToDate(nextYear.toISOString().split("T")[0]!);
     setBaseDate(today);
     setMounted(true);
   }, []);

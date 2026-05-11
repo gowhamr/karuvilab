@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -12,6 +13,7 @@ function parseRanges(input: string, maxPage: number): number[][] {
   for (const p of parts) {
     if (p.includes("-")) {
       const [a, b] = p.split("-").map(n => parseInt(n.trim()));
+      if (a === undefined || b === undefined) continue;
       if (!isNaN(a) && !isNaN(b) && a >= 1 && b <= maxPage && a <= b) {
         const pages: number[] = [];
         for (let i = a; i <= b; i++) pages.push(i - 1);
@@ -26,6 +28,7 @@ function parseRanges(input: string, maxPage: number): number[][] {
 }
 
 export default function SplitPdfClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [ranges, setRanges] = useState("1-3, 4-6");
@@ -64,17 +67,17 @@ export default function SplitPdfClient() {
 
       for (let g = 0; g < groups.length; g++) {
         const newDoc = await PDFDocument.create();
-        const pages = await newDoc.copyPages(srcDoc, groups[g]);
+        const pages = await newDoc.copyPages(srcDoc, groups[g]!);
         pages.forEach((p: any) => newDoc.addPage(p));
         const outBytes = await newDoc.save();
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
+        const url = createUrl(blob);
         const a = document.createElement("a");
         a.href = url;
-        const label = splitAll ? `page-${groups[g][0] + 1}` : `part-${g + 1}`;
+        const label = splitAll ? `page-${groups[g]![0]! + 1}` : `part-${g + 1}`;
         a.download = `${file.name.replace(/\.pdf$/i, "")}-${label}.pdf`;
         a.click();
-        URL.revokeObjectURL(url);
+        setTimeout(() => revokeUrl(url), 100);
         await new Promise(r => setTimeout(r, 150));
       }
     } catch (e: any) {

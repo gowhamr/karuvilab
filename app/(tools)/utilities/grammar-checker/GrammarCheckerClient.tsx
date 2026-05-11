@@ -56,13 +56,13 @@ function analyzeText(text: string): Issue[] {
   let m;
   const dsRe = /  +/g;
   while ((m = dsRe.exec(text)) !== null) {
-    issues.push({ type: "double-space", message: "Multiple spaces", original: m[0], suggestion: " ", start: m.index, end: m.index + m[0].length });
+    issues.push({ type: "double-space", message: "Multiple spaces", original: m[0]!, suggestion: " ", start: m.index, end: m.index + m[0]!.length });
   }
 
   // Missing space after punctuation
   const msRe = /([.!?,;:])([A-Za-z])/g;
   while ((m = msRe.exec(text)) !== null) {
-    issues.push({ type: "missing-space", message: `Missing space after "${m[1]}"`, original: m[0], suggestion: m[1] + " " + m[2], start: m.index, end: m.index + m[0].length });
+    issues.push({ type: "missing-space", message: `Missing space after "${m[1]!}"`, original: m[0]!, suggestion: m[1]! + " " + m[2]!, start: m.index, end: m.index + m[0]!.length });
   }
 
   // Sentences not starting with capital
@@ -73,7 +73,7 @@ function analyzeText(text: string): Issue[] {
     if (trimmed && /^[a-z]/.test(trimmed)) {
       const idx = text.indexOf(trimmed, pos);
       if (idx >= 0) {
-        issues.push({ type: "capitalization", message: "Sentence should start with a capital letter", original: trimmed[0], suggestion: trimmed[0].toUpperCase(), start: idx, end: idx + 1 });
+        issues.push({ type: "capitalization", message: "Sentence should start with a capital letter", original: trimmed[0]!, suggestion: trimmed[0]!.toUpperCase(), start: idx, end: idx + 1 });
       }
     }
     pos += sentence.length + 1;
@@ -83,7 +83,7 @@ function analyzeText(text: string): Issue[] {
   for (const [re, suggestion] of MISSPELLINGS) {
     re.lastIndex = 0;
     while ((m = re.exec(text)) !== null) {
-      issues.push({ type: "misspelling", message: `Possible misspelling: "${m[0]}"`, original: m[0], suggestion, start: m.index, end: m.index + m[0].length });
+      issues.push({ type: "misspelling", message: `Possible misspelling: "${m[0]}"`, original: m[0]!, suggestion, start: m.index, end: m.index + m[0]!.length });
     }
   }
 
@@ -91,7 +91,7 @@ function analyzeText(text: string): Issue[] {
   for (const pi of PASSIVE_INDICATORS) {
     const reP = new RegExp(`\\b${pi.replace(/\s/g, "\\s+")}\\b`, "gi");
     while ((m = reP.exec(text)) !== null) {
-      issues.push({ type: "passive", message: `Possible passive voice: "${m[0]}"`, original: m[0], start: m.index, end: m.index + m[0].length });
+      issues.push({ type: "passive", message: `Possible passive voice: "${m[0]!}"`, original: m[0]!, start: m.index, end: m.index + m[0]!.length });
     }
   }
 
@@ -127,7 +127,7 @@ export default function GrammarCheckerClient() {
 
   const counts = useMemo(() => {
     const c: Record<string, number> = { misspelling: 0, "double-space": 0, "missing-space": 0, capitalization: 0, passive: 0 };
-    issues.forEach(i => c[i.type]++);
+    issues.forEach(i => c[i.type] = (c[i.type] ?? 0) + 1);
     return c;
   }, [issues]);
 
@@ -171,7 +171,7 @@ export default function GrammarCheckerClient() {
                       <span
                         key={i}
                         className={`rounded px-0.5 cursor-help ${TYPE_STYLES[part.issue.type]}`}
-                        title={`${part.issue.message}${part.issue.suggestion ? " → " + part.issue.suggestion : ""}`}
+                        title={`${part.issue!.message}${part.issue!.suggestion ? " → " + part.issue!.suggestion : ""}`}
                         onMouseEnter={() => setHovered(i)}
                         onMouseLeave={() => setHovered(null)}
                       >

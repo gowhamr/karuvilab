@@ -107,11 +107,11 @@ function fmtNum(n: number): string {
 
 export default function UnitConverterClient() {
   const [catKey, setCatKey] = useState("length");
-  const category = CATEGORIES_DATA[catKey];
+  const category = CATEGORIES_DATA[catKey]!;
   const unitKeys = Object.keys(category.units);
 
-  const [from, setFrom] = useState(unitKeys[0]);
-  const [to, setTo] = useState(unitKeys[1]);
+  const [from, setFrom] = useState(unitKeys[0]!);
+  const [to, setTo] = useState(unitKeys[1]!);
   const [value, setValue] = useState("1");
 
   const result = useMemo(() => {
@@ -127,9 +127,9 @@ export default function UnitConverterClient() {
   // When category changes, reset from/to
   const handleCat = (k: string) => {
     setCatKey(k);
-    const keys = Object.keys(CATEGORIES_DATA[k].units);
-    setFrom(keys[0]);
-    setTo(keys[1]);
+    const keys = Object.keys(CATEGORIES_DATA[k]!.units);
+    setFrom(keys[0]!);
+    setTo(keys[1]!);
     setValue("1");
   };
 
@@ -164,7 +164,7 @@ export default function UnitConverterClient() {
             >
               {unitKeys.map((k) => (
                 <option key={k} value={k}>
-                  {category.units[k].label || k}
+                  {category.units[k]!.label || k}
                 </option>
               ))}
             </select>
@@ -199,7 +199,7 @@ export default function UnitConverterClient() {
             >
               {unitKeys.map((k) => (
                 <option key={k} value={k}>
-                  {category.units[k].label || k}
+                  {category.units[k]!.label || k}
                 </option>
               ))}
             </select>
@@ -229,9 +229,9 @@ export default function UnitConverterClient() {
             {unitKeys.map((k) => {
               const v = parseFloat(value);
               if (isNaN(v)) return null;
-              const fromUnit = category.units[from];
+              const fromUnit = category.units[from]!;
               const base = fromUnit.toBase(v);
-              const conv = category.units[k].fromBase(base);
+              const conv = category.units[k]!.fromBase(base);
               return (
                 <tr
                   key={k}
@@ -239,7 +239,7 @@ export default function UnitConverterClient() {
                     k === to ? "bg-blue/5 font-bold" : "hover:bg-surface"
                   }`}
                 >
-                  <td className="px-4 py-3 text-text-2">{category.units[k].label || k}</td>
+                  <td className="px-4 py-3 text-text-2">{category.units[k]!.label || k}</td>
                   <td className={`px-4 py-3 text-right font-bold ${k === to ? "text-blue" : "text-text"}`}>
                     {fmtNum(conv)}
                   </td>

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
-import { ClientLayout } from "@/components/ClientLayout";
 import { metadata } from "./metadata";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { PWARegistration } from "@/components/PWARegistration";
+import { ClientProviders } from "@/components/ClientProviders";
+import { Sidebar } from "@/components/Sidebar";
+import { Header } from "@/components/Header";
+import { BottomNav } from "@/components/BottomNav";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,14 +46,31 @@ export default function RootLayout({
               
               var f = localStorage.getItem('karuvi-font-size') || 'normal';
               document.documentElement.setAttribute('data-font-size', f);
+
+              if (localStorage.getItem('karuvi-high-contrast') === 'true') {
+                document.documentElement.classList.add('high-contrast');
+              }
             })();`,
           }}
         />
       </head>
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+        <ClientProviders>
+          <div className="flex min-h-screen">
+            <Sidebar />
+            
+            <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">
+              <Header />
+              
+              <main className="flex-1 pb-[72px] md:pb-0">
+                {children}
+              </main>
+
+              <Footer />
+              <BottomNav />
+            </div>
+          </div>
+        </ClientProviders>
         <Analytics />
         <SpeedInsights />
         <PWARegistration />
@@ -57,6 +78,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
-

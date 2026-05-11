@@ -118,7 +118,7 @@ console.log("Hello, world!");
                 if (!ta) return;
                 if (item.insert) insertAtCursor(ta, "", "", item.insert);
                 else if (item.prefix) insertAtCursor(ta, item.prefix, "");
-                else insertAtCursor(ta, item.wrap![0], item.wrap![1]);
+                else insertAtCursor(ta, item.wrap![0]!, item.wrap![1]!);
               }}
               className="px-2.5 py-1 text-xs font-mono font-bold bg-bg border border-border rounded-lg hover:border-blue hover:text-blue transition-all"
             >

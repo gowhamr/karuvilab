@@ -9,7 +9,7 @@ export default function AgeCalculatorClient() {
 
   useEffect(() => {
     // Set to client's local date after hydration to avoid SSR mismatch
-    setAsOf(new Date().toISOString().split("T")[0]);
+    setAsOf(new Date().toISOString().split("T")[0]!);
   }, []);
 
   const result = useMemo(() => {

@@ -48,38 +48,73 @@
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   
   .glass {
-    @apply bg-surface/60 backdrop-blur-xl border border-white/5;
+    @apply bg-surface/95 border border-white/5;
+  }
+  @media (min-width: 768px) {
+    .glass {
+      @apply bg-surface/60 backdrop-blur-xl;
+    }
   }
   
   .glass-dark {
-    @apply bg-black/40 backdrop-blur-2xl border border-white/10;
+    @apply bg-black/90 border border-white/10;
+  }
+  @media (min-width: 768px) {
+    .glass-dark {
+      @apply bg-black/40 backdrop-blur-2xl;
+    }
   }
 
   .sidebar-glass {
-    @apply bg-surface/80 dark:bg-[#0B0F1A]/80 backdrop-blur-3xl border-r border-border dark:border-white/5 shadow-2xl;
-    background-image: radial-gradient(circle at 0% 0%, var(--blue-glow) 0%, transparent 50%);
+    @apply bg-surface border-r border-border dark:bg-[#0B0F1A] dark:border-white/5 shadow-md;
+  }
+  @media (min-width: 768px) {
+    .sidebar-glass {
+      @apply bg-surface/80 dark:bg-[#0B0F1A]/80 backdrop-blur-3xl shadow-2xl;
+      background-image: radial-gradient(circle at 0% 0%, var(--blue-glow) 0%, transparent 50%);
+    }
   }
 
   .neon-glow {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+  }
+  @media (min-width: 768px) {
+    .neon-glow {
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
+    }
   }
 
   .premium-card-shadow {
-    box-shadow: 
-      0 0 0 1px rgba(0, 0, 0, 0.03),
-      0 2px 4px rgba(0, 0, 0, 0.05),
-      0 12px 24px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  @media (min-width: 768px) {
+    .premium-card-shadow {
+      box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.03),
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        0 12px 24px rgba(0, 0, 0, 0.05);
+    }
   }
 
   [data-theme="dark"] .premium-card-shadow {
-    box-shadow: 
-      0 0 0 1px rgba(255, 255, 255, 0.05),
-      0 2px 4px rgba(0, 0, 0, 0.2),
-      0 12px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  }
+  @media (min-width: 768px) {
+    [data-theme="dark"] .premium-card-shadow {
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 12px 24px rgba(0, 0, 0, 0.4);
+    }
   }
 
   .premium-gradient {
-    background: radial-gradient(circle at top center, var(--blue-glow), transparent 70%);
+    background: var(--blue-glow);
+  }
+  @media (min-width: 768px) {
+    .premium-gradient {
+      background: radial-gradient(circle at top center, var(--blue-glow), transparent 70%);
+    }
   }
 
   .brand-wordmark {

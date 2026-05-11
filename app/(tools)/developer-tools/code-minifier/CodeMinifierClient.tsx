@@ -1,129 +1,129 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { CopyButton } from "@/components/ui/CopyButton";
 import { workerManager } from "@/src/workers/manager";
-import { TaskProgress } from "@/src/workers/types";
+import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { BatchQueue } from "@/components/ui/BatchQueue";
+import { createZip, downloadBlob } from "@/src/lib/zip";
 
-const cat = CATEGORIES.find(c => c.id === "developer")!;
+const toolId = "code-minifier";
 
 type Lang = "css" | "js" | "html";
 
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  return `${(bytes / 1024).toFixed(1)} KB`;
-}
-
 export default function CodeMinifierClient() {
   const [lang, setLang] = useState<Lang>("css");
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [processing, setProcessing] = useState(false);
-  const [progress, setProgress] = useState<TaskProgress | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!input) {
-      setOutput("");
-      setProgress(null);
-      return;
-    }
+  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
+  const items = allItems[toolId] || [];
 
-    const controller = new AbortController();
-    setProcessing(true);
-    setProgress({ percent: 0, message: "Starting..." });
-
-    workerManager.minifyCode(
-      input,
+  const minifySingle = async (item: BatchItem): Promise<any> => {
+    const code = await item.file.text();
+    const result = await workerManager.minifyCode(
+      code,
       lang,
-      (p) => setProgress(p),
-      controller.signal
-    ).then(res => {
-      setOutput(res);
-      setProgress(null);
-    }).catch(err => {
-      if (err.message !== "Task cancelled") {
-        console.error("Minification failed", err);
-      }
-    }).finally(() => {
-      setProcessing(false);
+      (p) => {
+        updateItem(toolId, item.id, { progress: p.percent, message: p.message });
+      },
+      item.abortController?.signal
+    );
+
+    const blob = new Blob([result], { type: "text/plain" });
+    const name = item.file.name.replace(/\.[^.]+$/, "") + ".min" + (item.file.name.match(/\.[^.]+$/)?.[0] || "");
+
+    return {
+      name,
+      originalSize: item.file.size,
+      compressedSize: blob.size,
+      blob,
+    };
+  };
+
+  const handleFiles = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    addItems(toolId, Array.from(files));
+  };
+
+  const processAll = async () => {
+    setIsProcessing(true);
+    await startProcessing(toolId, minifySingle);
+    setIsProcessing(false);
+  };
+
+  const downloadAll = async () => {
+    const completed = items.filter(i => i.status === 'completed' && i.result);
+    if (completed.length === 0) return;
+
+    const files: Record<string, Blob> = {};
+    completed.forEach(item => {
+      files[item.result!.name] = item.result!.blob;
     });
 
-    return () => controller.abort();
-  }, [input, lang]);
+    const zipBlob = await createZip(files);
+    downloadBlob(zipBlob, `minified-code-${Date.now()}.zip`);
+  };
 
-  const originalSize = new TextEncoder().encode(input).length;
-  const minifiedSize = new TextEncoder().encode(output).length;
-  const reduction = originalSize > 0 ? Math.round((1 - minifiedSize / originalSize) * 100) : 0;
+  const downloadOne = (item: BatchItem) => {
+    if (item.result) {
+      downloadBlob(item.result.blob, item.result.name);
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <div className="flex gap-2">
-          {(["css", "js", "html"] as Lang[]).map(l => (
-            <button
-              key={l}
-              onClick={() => { setLang(l); setInput(""); }}
-              className={`px-5 py-2 rounded-xl text-sm font-bold uppercase transition-all ${lang === l ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-            >
-              {l}
-            </button>
-          ))}
+    <div className="space-y-8">
+      {/* Settings & Mode */}
+      <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm space-y-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <h2 className="text-xl font-black">Minifier Settings</h2>
+            <p className="text-xs text-text-4 font-black uppercase tracking-widest">Select language and upload files</p>
+          </div>
+          
+          <div className="flex gap-2 p-1 bg-bg border border-border rounded-2xl">
+            {(["css", "js", "html"] as Lang[]).map(l => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                  lang === l 
+                    ? "bg-blue text-white shadow-lg shadow-blue/20" 
+                    : "text-text-4 hover:text-text hover:bg-surface"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Input</label>
-          <textarea
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
-            rows={10}
-            placeholder={`Paste your ${lang.toUpperCase()} here…`}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-          />
+        <div
+          className="bg-bg border-2 border-dashed border-border rounded-3xl p-12 text-center cursor-pointer hover:border-blue hover:bg-blue/[0.01] transition-all group"
+          onClick={() => fileInput.current?.click()}
+          onDragOver={e => e.preventDefault()}
+          onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files); }}
+        >
+          <div className="w-16 h-16 bg-surface rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+            {lang === 'js' ? '📜' : lang === 'css' ? '🎨' : '🌐'}
+          </div>
+          <p className="font-bold text-text-2">Drop your {lang.toUpperCase()} files here</p>
+          <p className="text-xs text-text-4 mt-1">Multiple files supported</p>
+          <input ref={fileInput} type="file" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
         </div>
       </div>
 
-      {processing && (
-        <div className="bg-blue/5 border border-blue/10 p-4 rounded-xl flex items-center justify-between">
-          <span className="text-xs font-bold text-blue uppercase tracking-widest">{progress?.message || "Processing..."}</span>
-          <div className="w-32 h-1 bg-blue/10 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-blue transition-all duration-300" 
-              style={{ width: `${progress?.percent || 0}%` }}
-            />
-          </div>
-        </div>
-      )}
+      <BatchQueue 
+        toolId={toolId}
+        isProcessing={isProcessing}
+        onProcess={processAll}
+        onDownload={downloadOne}
+        onDownloadAll={downloadAll}
+      />
 
-      {output && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">Original</div>
-              <div className="text-xl font-black text-text">{formatSize(originalSize)}</div>
-            </div>
-            <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">Minified</div>
-              <div className="text-xl font-black text-blue">{formatSize(minifiedSize)}</div>
-            </div>
-            <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">Reduction</div>
-              <div className="text-xl font-black text-green-500">{reduction}%</div>
-            </div>
-          </div>
-
-          <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-text-2">Minified Output</label>
-              <CopyButton text={output} />
-            </div>
-            <textarea
-              readOnly
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text resize-none outline-none"
-              rows={8}
-              value={output}
-            />
-          </div>
+      {items.length === 0 && (
+        <div className="py-20 text-center space-y-4 opacity-40">
+          <div className="text-6xl">🛠️</div>
+          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-sm">Add files to start minifying</p>
         </div>
       )}
     </div>

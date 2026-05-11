@@ -3,10 +3,12 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 export default function WatermarkPdfClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [watermarkText, setWatermarkText] = useState("CONFIDENTIAL");
   const [opacity, setOpacity] = useState(0.3);
@@ -52,12 +54,12 @@ export default function WatermarkPdfClient() {
 
       const outBytes = await doc.save();
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = file.name.replace(/\.pdf$/i, "") + "-watermarked.pdf";
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => revokeUrl(url), 100);
     } catch (e: any) {
       setError(e?.message || "Failed to add watermark.");
     }

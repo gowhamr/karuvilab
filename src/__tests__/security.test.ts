@@ -43,7 +43,7 @@ function getPasswordStrength(password: string): { score: number; label: string; 
     { label: 'Strong',    pct: 100 },
   ];
   const index = Math.min(Math.floor(score / 6 * levels.length), levels.length - 1);
-  return { ...levels[index], score };
+  return { ...levels[index]!, score };
 }
 
 function decodeJWT(token: string): { valid: boolean; header?: unknown; payload?: unknown; error?: string } {
@@ -55,7 +55,7 @@ function decodeJWT(token: string): { valid: boolean; header?: unknown; payload?:
   try {
     const parts = token.split('.');
     if (parts.length !== 3) throw new Error('Invalid JWT format');
-    return { header: decodePart(parts[0]) ?? undefined, payload: decodePart(parts[1]) ?? undefined, valid: true };
+    return { header: decodePart(parts[0]!) ?? undefined, payload: decodePart(parts[1]!) ?? undefined, valid: true };
   } catch (e) {
     return { valid: false, error: (e as Error).message };
   }

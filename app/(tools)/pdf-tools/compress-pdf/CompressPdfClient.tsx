@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -13,6 +14,7 @@ function fmtSize(b: number) {
 }
 
 export default function CompressPdfClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [processing, setProcessing] = useState(false);
   const [resultSize, setResultSize] = useState(0);
@@ -24,7 +26,11 @@ export default function CompressPdfClient() {
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
+    
+    // Revoke previous result if any
+    if (resultUrl) revokeUrl(resultUrl);
     setResultUrl(null);
+
     try {
       const { PDFDocument } = PDFLib;
       const bytes = await file.arrayBuffer();
@@ -33,7 +39,7 @@ export default function CompressPdfClient() {
       const outBytes = await doc.save({ useObjectStreams: true });
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
       setResultSize(blob.size);
-      setResultUrl(URL.createObjectURL(blob));
+      setResultUrl(createUrl(blob));
     } catch (e: any) {
       setError(e?.message || "Failed to compress PDF.");
     }

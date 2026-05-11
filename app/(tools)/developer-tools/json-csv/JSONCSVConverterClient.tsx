@@ -46,7 +46,7 @@ function csvToJSON(csv: string): string {
     return result;
   }
 
-  const headers = parseCSVLine(lines[0]);
+  const headers = parseCSVLine(lines[0]!);
   const rows = lines.slice(1).map(line => {
     const values = parseCSVLine(line);
     return Object.fromEntries(headers.map((h, i) => [h, values[i] ?? ""]));

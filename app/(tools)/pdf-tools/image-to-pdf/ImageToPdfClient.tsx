@@ -26,10 +26,10 @@ export default function ImageToPdfClient() {
   };
 
   const remove = (i: number) => setImages(a => a.filter((_, idx) => idx !== i));
-  const moveUp = (i: number) => { if (i === 0) return; setImages(a => { const n = [...a]; [n[i-1], n[i]] = [n[i], n[i-1]]; return n; }); };
-  const moveDown = (i: number) => setImages(a => { if (i >= a.length - 1) return a; const n = [...a]; [n[i], n[i+1]] = [n[i+1], n[i]]; return n; });
+  const moveUp = (i: number) => { if (i === 0) return; setImages(a => { const n = [...a]; const t = n[i-1]!; n[i-1] = n[i]!; n[i] = t; return n; }); };
+  const moveDown = (i: number) => setImages(a => { if (i >= a.length - 1) return a; const n = [...a]; const t = n[i]!; n[i] = n[i+1]!; n[i+1] = t; return n; });
 
-  const PAGE_SIZES = { a4: [595.28, 841.89], letter: [612, 792] };
+  const PAGE_SIZES: Record<string, [number, number]> = { a4: [595.28, 841.89], letter: [612, 792] };
 
   const convert = async () => {
     if (images.length === 0) { setError("Please add at least one image."); return; }
@@ -46,8 +46,8 @@ export default function ImageToPdfClient() {
         else img = await pdf.embedJpg(bytes);
         const { width: iw, height: ih } = img;
         let pw = iw, ph = ih;
-        if (pageSize === "a4") { [pw, ph] = PAGE_SIZES.a4; }
-        else if (pageSize === "letter") { [pw, ph] = PAGE_SIZES.letter; }
+        if (pageSize === "a4") { [pw, ph] = PAGE_SIZES.a4!; }
+        else if (pageSize === "letter") { [pw, ph] = PAGE_SIZES.letter!; }
         const page = pdf.addPage([pw, ph]);
         const scale = Math.min(pw / iw, ph / ih);
         const dw = iw * scale, dh = ih * scale;

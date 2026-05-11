@@ -1,163 +1,170 @@
 "use client";
 import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 import { workerManager } from "@/src/workers/manager";
-import { TaskProgress } from "@/src/workers/types";
+import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { BatchQueue } from "@/components/ui/BatchQueue";
+import { createZip, downloadBlob } from "@/src/lib/zip";
 
-const cat = CATEGORIES.find(c => c.id === "image")!;
-
-interface CompressedImage {
-  name: string;
-  originalSize: number;
-  compressedSize: number;
-  originalUrl: string;
-  compressedUrl: string;
-  blob: Blob;
-  progress?: TaskProgress;
-}
-
-function fmtSize(bytes: number): string {
-  if (bytes < 1024) return bytes + " B";
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-}
+const toolId = "image-compressor";
 
 export default function ImageCompressorClient() {
+  const { createUrl } = useObjectUrlManager();
   const [quality, setQuality] = useState(80);
   const [format, setFormat] = useState<"image/jpeg" | "image/png" | "image/webp">("image/jpeg");
-  const [results, setResults] = useState<CompressedImage[]>([]);
-  const [processing, setProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const compressSingle = async (file: File): Promise<CompressedImage> => {
-    const buffer = await file.arrayBuffer();
+  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
+  const items = allItems[toolId] || [];
+
+  const compressSingle = async (item: BatchItem): Promise<any> => {
+    const buffer = await item.file.arrayBuffer();
     const resultBytes = await workerManager.compressImage(
       buffer,
       format,
       quality,
       (p) => {
-        // We can update individual progress if we want, but for now we'll just log it or use a global one
-      }
+        updateItem(toolId, item.id, { progress: p.percent, message: p.message });
+      },
+      item.abortController?.signal
     );
 
     const blob = new Blob([resultBytes as unknown as BlobPart], { type: format });
-    const compressedUrl = URL.createObjectURL(blob);
-    const originalUrl = URL.createObjectURL(file);
+    const url = createUrl(blob);
     const ext = format === "image/jpeg" ? ".jpg" : format === "image/webp" ? ".webp" : ".png";
-    const name = file.name.replace(/\.[^.]+$/, "") + ext;
+    const name = item.file.name.replace(/\.[^.]+$/, "") + ext;
 
     return {
       name,
-      originalSize: file.size,
+      originalSize: item.file.size,
       compressedSize: blob.size,
-      originalUrl,
-      compressedUrl,
+      url,
       blob,
     };
   };
 
-  const handleFiles = async (files: FileList | null) => {
+  const handleFiles = (files: FileList | null) => {
     if (!files || files.length === 0) return;
-    setProcessing(true);
-    setResults([]);
-    const arr = Array.from(files);
-    
-    try {
-      // Process in parallel with limited concurrency (handled by WorkerManager)
-      const out = await Promise.all(arr.map(file => compressSingle(file)));
-      setResults(out);
-    } catch (err) {
-      console.error("Compression failed", err);
-    } finally {
-      setProcessing(false);
+    addItems(toolId, Array.from(files));
+  };
+
+  const processAll = async () => {
+    setIsProcessing(true);
+    await startProcessing(toolId, compressSingle);
+    setIsProcessing(false);
+  };
+
+  const downloadAll = async () => {
+    const completed = items.filter(i => i.status === 'completed' && i.result);
+    if (completed.length === 0) return;
+
+    const files: Record<string, Blob> = {};
+    completed.forEach(item => {
+      files[item.result!.name] = item.result!.blob;
+    });
+
+    const zipBlob = await createZip(files);
+    downloadBlob(zipBlob, `compressed-images-${Date.now()}.zip`);
+  };
+
+  const downloadOne = (item: BatchItem) => {
+    if (item.result) {
+      downloadBlob(item.result.blob, item.result.name);
     }
   };
 
-  const download = (item: CompressedImage) => {
-    const a = document.createElement("a");
-    a.href = item.compressedUrl;
-    a.download = item.name;
-    a.click();
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Drop zone */}
       <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
+        className="bg-surface border-2 border-dashed border-border rounded-3xl p-12 text-center cursor-pointer hover:border-blue hover:bg-blue/[0.02] transition-all group"
         onClick={() => fileInput.current?.click()}
         onDragOver={e => e.preventDefault()}
         onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files); }}
       >
-        <div className="text-4xl mb-3">🖼️</div>
-        <p className="font-semibold text-text-2">Drop images here or click to select</p>
-        <p className="text-sm text-text-4 mt-1">Supports JPG, PNG, WebP</p>
+        <div className="w-20 h-20 bg-bg rounded-2xl flex items-center justify-center text-4xl mx-auto mb-6 group-hover:scale-110 transition-transform shadow-sm">
+          🖼️
+        </div>
+        <h3 className="text-xl font-black text-text mb-2">Drop images here</h3>
+        <p className="text-text-4 font-medium">or click to browse your files</p>
+        <p className="text-xs text-text-4 mt-4 bg-bg inline-block px-3 py-1 rounded-full border border-border">
+          Supports JPG, PNG, WebP up to 50MB
+        </p>
         <input ref={fileInput} type="file" accept="image/*" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
       </div>
 
       {/* Options */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm">
-        <div className="grid gap-6 sm:grid-cols-3">
-          <div className="space-y-2">
+      <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <div className="text-6xl font-black italic">OPTIONS</div>
+        </div>
+        
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Quality</label>
-              <span className="text-sm font-mono font-bold text-blue">{quality}%</span>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">Compression Quality</label>
+              <span className="text-sm font-mono font-black text-blue bg-blue/10 px-2 py-1 rounded-lg">{quality}%</span>
             </div>
-            <input type="range" min={1} max={100} value={quality} onChange={e => setQuality(Number(e.target.value))} className="w-full" />
+            <input 
+              type="range" 
+              min={1} 
+              max={100} 
+              value={quality} 
+              onChange={e => setQuality(Number(e.target.value))} 
+              className="w-full h-1.5 bg-bg rounded-lg appearance-none cursor-pointer accent-blue" 
+            />
+            <div className="flex justify-between text-[10px] font-black text-text-4 uppercase tracking-tighter">
+              <span>Smallest</span>
+              <span>Balanced</span>
+              <span>Best Quality</span>
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Output Format</label>
-            <select
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-              value={format}
-              onChange={e => setFormat(e.target.value as typeof format)}
-            >
-              <option value="image/jpeg">JPEG</option>
-              <option value="image/png">PNG</option>
-              <option value="image/webp">WebP</option>
-            </select>
+
+          <div className="space-y-4">
+            <label className="text-xs font-black uppercase tracking-widest text-text-4">Output Format</label>
+            <div className="grid grid-cols-3 gap-2">
+              {(["image/jpeg", "image/png", "image/webp"] as const).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFormat(f)}
+                  className={`py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
+                    format === f 
+                      ? "bg-blue text-white border-blue shadow-lg shadow-blue/20" 
+                      : "bg-bg text-text-3 border-border hover:border-blue/50"
+                  }`}
+                >
+                  {f.split("/")[1]}
+                </button>
+              ))}
+            </div>
           </div>
+
           <div className="flex items-end">
             <button
               onClick={() => fileInput.current?.click()}
-              className="w-full py-3 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all text-sm"
+              className="w-full py-4 bg-bg border-2 border-dashed border-border text-text-3 font-black uppercase tracking-widest rounded-xl hover:border-blue hover:text-blue transition-all text-xs"
             >
-              {processing ? "Compressing…" : "Select Files"}
+              + Add More Files
             </button>
           </div>
         </div>
       </div>
 
-      {/* Results */}
-      {results.length > 0 && (
-        <div className="space-y-4">
-          {results.map((item, i) => {
-            const saved = Math.round((1 - item.compressedSize / item.originalSize) * 100);
-            return (
-              <div key={i} className="bg-surface border border-border p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row gap-5">
-                <div className="flex gap-4 flex-1">
-                  <img src={item.compressedUrl} alt={item.name} className="w-20 h-20 object-cover rounded-xl flex-shrink-0" />
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <p className="font-semibold truncate text-sm">{item.name}</p>
-                    <div className="flex flex-wrap gap-3 text-xs">
-                      <span className="text-text-3">Original: <strong>{fmtSize(item.originalSize)}</strong></span>
-                      <span className="text-text-3">Compressed: <strong>{fmtSize(item.compressedSize)}</strong></span>
-                      <span className={saved > 0 ? "text-green-500 font-bold" : "text-red-500 font-bold"}>
-                        {saved > 0 ? `-${saved}% saved` : `+${Math.abs(saved)}% larger`}
-                      </span>
-                    </div>
-                    <div className="w-full bg-bg rounded-full h-2 mt-2">
-                      <div className="h-2 rounded-full bg-green-500 transition-all" style={{ width: `${Math.min(100, item.compressedSize / item.originalSize * 100)}%` }} />
-                    </div>
-                  </div>
-                </div>
-                <button onClick={() => download(item)} className="px-5 py-2 bg-blue text-white font-bold rounded-xl text-sm hover:opacity-90 self-start sm:self-center flex-shrink-0">
-                  Download
-                </button>
-              </div>
-            );
-          })}
+      {/* Batch Queue */}
+      <BatchQueue 
+        toolId={toolId}
+        isProcessing={isProcessing}
+        onProcess={processAll}
+        onDownload={downloadOne}
+        onDownloadAll={downloadAll}
+      />
+
+      {items.length === 0 && (
+        <div className="py-20 text-center space-y-4 opacity-40">
+          <div className="text-6xl">📥</div>
+          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-sm">Waiting for files...</p>
         </div>
       )}
     </div>

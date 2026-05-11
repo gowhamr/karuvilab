@@ -13,7 +13,7 @@ const BASES = [
   { base: 16, label: "Hexadecimal", prefix: "0x" },
 ];
 
-function isValidInBase(s: string, base: number): boolean {
+function isValidInBase(s: string | undefined, base: number): boolean {
   if (!s || s === "-") return false;
   const chars: Record<number, RegExp> = {
     2: /^-?[01]+$/,
@@ -33,7 +33,7 @@ export default function NumeralConverterClient() {
   const decimal = useMemo(() => {
     const s = inputs[activeBase];
     if (!isValidInBase(s, activeBase)) return null;
-    return parseInt(s, activeBase);
+    return parseInt(s!, activeBase);
   }, [inputs, activeBase]);
 
   const conversions = useMemo(() => {
@@ -92,7 +92,7 @@ export default function NumeralConverterClient() {
               )}
               <input
                 type="text"
-                value={inputs[base]}
+                value={inputs[base] || ""}
                 onChange={(e) => handleChange(base, e.target.value.toUpperCase())}
                 onFocus={() => setActiveBase(base)}
                 placeholder={`Enter ${label.toLowerCase()} number`}

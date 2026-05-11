@@ -53,7 +53,7 @@ describe('ALLOWED_FORMATS', () => {
 
 // ─── DOC_RULES format checks ────────────────────────────────────
 describe('checkFormat – passport_photo', () => {
-  const rule = DOC_RULES.passport_photo;
+  const rule = DOC_RULES.passport_photo!;
 
   it('accepts jpg/jpeg/png', () => {
     expect(checkFormat('jpg',  rule)).toBe(true);
@@ -69,7 +69,7 @@ describe('checkFormat – passport_photo', () => {
 });
 
 describe('checkFormat – general', () => {
-  const rule = DOC_RULES.general;
+  const rule = DOC_RULES.general!;
 
   it('accepts all listed formats', () => {
     ALLOWED_FORMATS.forEach(ext => {
@@ -80,7 +80,7 @@ describe('checkFormat – general', () => {
 
 // ─── DOC_RULES size checks ──────────────────────────────────────
 describe('checkSize – signature (4–50 KB)', () => {
-  const rule = DOC_RULES.signature;
+  const rule = DOC_RULES.signature!;
 
   it('accepts sizes within range', () => {
     expect(checkSize(4,  rule)).toBe(true);
@@ -100,7 +100,7 @@ describe('checkSize – signature (4–50 KB)', () => {
 });
 
 describe('checkSize – general (no size restriction)', () => {
-  const rule = DOC_RULES.general;
+  const rule = DOC_RULES.general!;
 
   it('accepts any size', () => {
     expect(checkSize(0,      rule)).toBe(true);
@@ -109,7 +109,7 @@ describe('checkSize – general (no size restriction)', () => {
 });
 
 describe('checkSize – passport_photo (10–200 KB)', () => {
-  const rule = DOC_RULES.passport_photo;
+  const rule = DOC_RULES.passport_photo!;
 
   it('accepts boundary values', () => {
     expect(checkSize(10,  rule)).toBe(true);
@@ -128,16 +128,16 @@ describe('checkSize – passport_photo (10–200 KB)', () => {
 // ─── DOC_RULES dimension rules present ──────────────────────────
 describe('DOC_RULES dimension correctness', () => {
   it('passport_photo has correct exact dimensions', () => {
-    expect(DOC_RULES.passport_photo.exactW).toBe(200);
-    expect(DOC_RULES.passport_photo.exactH).toBe(230);
+    expect(DOC_RULES.passport_photo!.exactW).toBe(200);
+    expect(DOC_RULES.passport_photo!.exactH).toBe(230);
   });
 
   it('signature has correct exact dimensions', () => {
-    expect(DOC_RULES.signature.exactW).toBe(140);
-    expect(DOC_RULES.signature.exactH).toBe(60);
+    expect(DOC_RULES.signature!.exactW).toBe(140);
+    expect(DOC_RULES.signature!.exactH).toBe(60);
   });
 
   it('general has maxWidthPx set', () => {
-    expect(DOC_RULES.general.maxWidthPx).toBe(2560);
+    expect(DOC_RULES.general!.maxWidthPx).toBe(2560);
   });
 });

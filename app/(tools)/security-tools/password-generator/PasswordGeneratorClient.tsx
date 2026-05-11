@@ -53,7 +53,7 @@ export default function PasswordGeneratorClient() {
       generatePassword(length, useUpper, useLower, useNums, useSyms)
     );
     setPasswords(newPasswords);
-    setHistory(prev => [newPasswords[0], ...prev].slice(0, 5));
+    setHistory(prev => [newPasswords[0]!, ...prev].slice(0, 5));
   }, [length, useUpper, useLower, useNums, useSyms]);
 
   const strength = passwords[0] ? getStrength(passwords[0]) : null;

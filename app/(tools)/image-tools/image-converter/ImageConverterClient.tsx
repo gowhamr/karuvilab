@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 type Format = "image/jpeg" | "image/png" | "image/webp" | "image/bmp";
@@ -28,6 +29,7 @@ function fmtSize(b: number) {
 }
 
 export default function ImageConverterClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [targetFmt, setTargetFmt] = useState<Format>("image/webp");
   const [quality, setQuality] = useState(85);
   const [results, setResults] = useState<ConvertedFile[]>([]);
@@ -39,21 +41,27 @@ export default function ImageConverterClient() {
   const convert = async (files: FileList | null) => {
     if (!files?.length) return;
     setProcessing(true);
+    
+    // Revoke previous URLs
+    results.forEach(res => revokeUrl(res.url));
     setResults([]);
+
     const out: ConvertedFile[] = [];
     for (const file of Array.from(files)) {
+      const tempUrl = createUrl(file);
       try {
-        const url = URL.createObjectURL(file);
         const img = await new Promise<HTMLImageElement>((res, rej) => {
           const i = new Image();
           i.onload = () => res(i);
           i.onerror = rej;
-          i.src = url;
+          i.src = tempUrl;
         });
         const canvas = document.createElement("canvas");
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         canvas.getContext("2d")!.drawImage(img, 0, 0);
+        revokeUrl(tempUrl);
+
         const blob = await new Promise<Blob>((res, rej) =>
           canvas.toBlob(b => b ? res(b) : rej(new Error("fail")), targetFmt, quality / 100)
         );
@@ -61,11 +69,12 @@ export default function ImageConverterClient() {
           name: file.name.replace(/\.[^.]+$/, "") + fmtInfo.ext,
           originalSize: file.size,
           newSize: blob.size,
-          url: URL.createObjectURL(blob),
+          url: createUrl(blob),
           blob,
         });
-        URL.revokeObjectURL(url);
-      } catch {}
+      } catch {
+        revokeUrl(tempUrl);
+      }
     }
     setResults(out);
     setProcessing(false);

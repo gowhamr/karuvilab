@@ -208,7 +208,7 @@ export function validateFile(file: File | null, allowedExtensions: string[] = []
 export function b64EncodeUtf8(text: string): string {
   const bytes = new TextEncoder().encode(text);
   let bin = '';
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]!);
   return btoa(bin);
 }
 
@@ -247,13 +247,18 @@ export function lenientJsonParse(text: string): { ok: true; value: unknown; sani
   let col: number | undefined;
   let pos: number | undefined;
   if (posMatch) {
-    pos = parseInt(posMatch[1], 10);
+    pos = parseInt(posMatch[1]!, 10);
     const upTo = text.slice(0, pos);
     line = upTo.split('\n').length;
     col = pos - upTo.lastIndexOf('\n');
   } else if (lineMatch) {
-    line = parseInt(lineMatch[1], 10);
-    if (colMatch) col = parseInt(colMatch[1], 10);
+    line = parseInt(lineMatch[1]!, 10);
+    if (colMatch) col = parseInt(colMatch[1]!, 10);
   }
-  return { ok: false, error: msg, line, col, pos };
+  
+  const result: any = { ok: false, error: msg };
+  if (line !== undefined) result.line = line;
+  if (col !== undefined) result.col = col;
+  if (pos !== undefined) result.pos = pos;
+  return result;
 }

@@ -17,14 +17,15 @@ interface WorkRow {
 
 let nextId = 1;
 
-function todayStr() {
-  return new Date().toISOString().split("T")[0];
+function todayStr(): string {
+  return new Date().toISOString().split("T")[0]!;
 }
 
 function calcHours(start: string, end: string, breakMins: number): number {
   if (!start || !end) return 0;
   const [sh, sm] = start.split(":").map(Number);
   const [eh, em] = end.split(":").map(Number);
+  if (sh === undefined || sm === undefined || eh === undefined || em === undefined) return 0;
   let mins = eh * 60 + em - (sh * 60 + sm) - breakMins;
   if (mins < 0) mins += 24 * 60; // next day
   return Math.max(0, mins / 60);

@@ -112,18 +112,7 @@ export const ALL_TOOLS: ToolEntry[] = [
     priority: 0.7,
     icon: '',
     related: ['date-calculator', 'time-calculator'],
-    status: 'stable',
-    seoContent: {
-      detailedDescription: "The Age Calculator is a precision tool for determining the exact time elapsed between two dates. While most people use it to find their current age in years, this tool goes much further by providing a detailed breakdown into months, weeks, days, and even total months or weeks.",
-      howTo: [
-        "Select your Date of Birth from the calendar picker.",
-        "Specify the 'Calculate As Of' date (defaults to today).",
-        "View your exact age in years, months, and days instantly."
-      ],
-      faq: [
-        { question: "Does this calculator account for leap years?", answer: "Yes, the tool correctly identifies leap years and adjusts the day count for February accordingly." }
-      ]
-    }
+    status: 'stable'
   },
   { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', keywords: ['compound','interest','savings','growth'] },
   { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', keywords: ['gst','tax','vat','india'] },

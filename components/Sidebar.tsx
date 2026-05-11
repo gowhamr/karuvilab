@@ -1,10 +1,10 @@
 "use client";
 
+import React, { memo, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES, getRecentTools, ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
-import { useState, useEffect } from "react";
 import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Zap, Layout, Heart } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
@@ -19,7 +19,17 @@ const SUPPORT_LINKS = [
   { href: "/disclaimer/", label: "Disclaimer", icon: Shield, key: 'common.disclaimer' },
 ];
 
-function SidebarContent({ pathname, recent, favorites, setIsOpen }: { pathname: string, recent: ToolEntry[], favorites: ToolEntry[], setIsOpen: (o: boolean) => void }) {
+const SidebarContent = memo(function SidebarContent({ 
+  pathname, 
+  recent, 
+  favorites, 
+  setIsOpen 
+}: { 
+  pathname: string, 
+  recent: ToolEntry[], 
+  favorites: ToolEntry[], 
+  setIsOpen: (o: boolean) => void 
+}) {
   const { t } = useI18n();
 
   return (
@@ -177,7 +187,7 @@ function SidebarContent({ pathname, recent, favorites, setIsOpen }: { pathname: 
       </div>
     </nav>
   );
-}
+});
 
 export function Sidebar() {
   const pathname = usePathname() ?? "";

@@ -89,9 +89,9 @@ function parseQuery(query: string): { value: number; from: string; to: string } 
   // Patterns: "5 kg to lbs", "100 USD to EUR", "3 feet in cm"
   const match = query.match(/^(-?\d+(?:\.\d+)?)\s+([a-zA-Z°\/\s]+?)\s+(?:to|in|into)\s+([a-zA-Z°\/\s]+)$/i);
   if (!match) return null;
-  const value = parseFloat(match[1]);
-  const fromKey = resolveUnit(match[2].trim());
-  const toKey = resolveUnit(match[3].trim());
+  const value = parseFloat(match[1]!);
+  const fromKey = resolveUnit(match[2]!.trim());
+  const toKey = resolveUnit(match[3]!.trim());
   if (!fromKey || !toKey) return null;
   return { value, from: fromKey, to: toKey };
 }

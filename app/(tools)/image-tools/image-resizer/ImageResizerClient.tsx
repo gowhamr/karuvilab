@@ -2,11 +2,13 @@
 import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 type Mode = "fit" | "fill" | "stretch";
 
 export default function ImageResizerClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [origW, setOrigW] = useState(0);
   const [origH, setOrigH] = useState(0);
@@ -23,9 +25,11 @@ export default function ImageResizerClient() {
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
   const handleFile = (file: File) => {
-    const url = URL.createObjectURL(file);
+    if (originalUrl) revokeUrl(originalUrl);
+    const url = createUrl(file);
     setOriginalUrl(url);
     setFileName(file.name.replace(/\.[^.]+$/, ""));
+    if (resizedUrl) revokeUrl(resizedUrl);
     setResizedUrl(null);
     const img = new Image();
     img.onload = () => {
@@ -82,7 +86,8 @@ export default function ImageResizerClient() {
       }
       canvas.toBlob(blob => {
         if (!blob) return;
-        setResizedUrl(URL.createObjectURL(blob));
+        if (resizedUrl) revokeUrl(resizedUrl);
+        setResizedUrl(createUrl(blob));
         setResizedSize((blob.size / 1024).toFixed(1) + " KB");
       }, "image/jpeg", 0.92);
     };

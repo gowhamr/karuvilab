@@ -184,7 +184,7 @@ describe('mimeFromExt', () => {
 function b64EncodeUtf8(text: string): string {
   const bytes = new TextEncoder().encode(text);
   let bin = '';
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]!);
   return btoa(bin);
 }
 function b64DecodeUtf8(b64: string): string {
@@ -244,12 +244,18 @@ function lenientJsonParse(text: string):
   let col: number | undefined;
   let pos: number | undefined;
   if (posMatch) {
-    pos = parseInt(posMatch[1], 10);
+    pos = parseInt(posMatch[1]!, 10);
     const upTo = text.slice(0, pos);
     line = upTo.split('\n').length;
     col = pos - upTo.lastIndexOf('\n');
   }
-  return { ok: false, error: msg, line, col, pos };
+  return { 
+    ok: false, 
+    error: msg,
+    ...(line !== undefined ? { line } : {}),
+    ...(col !== undefined ? { col } : {}),
+    ...(pos !== undefined ? { pos } : {}),
+  };
 }
 
 describe('lenientJsonParse', () => {

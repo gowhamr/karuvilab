@@ -49,7 +49,15 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 pb-24 px-4">
-      <StructuredData tool={currentTool} category={category} content={merged} />
+      <StructuredData 
+        {...(currentTool ? { tool: currentTool } : {})}
+        {...(category ? { category } : {})}
+        content={{
+          ...(merged.detailedDescription && { detailedDescription: merged.detailedDescription }),
+          ...(merged.faq && { faq: merged.faq }),
+          ...(merged.howTo && { howTo: merged.howTo }),
+        }}
+      />
 
       <header className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

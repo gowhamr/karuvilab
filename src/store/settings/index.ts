@@ -73,6 +73,9 @@ export const createSettingsStore: StateCreator<SettingsStore> = (set) => ({
       if (settings.fontScaling !== undefined) {
         localStorage.setItem('karuvi-font-size', settings.fontScaling.toString());
       }
+      if (settings.highContrast !== undefined) {
+        localStorage.setItem('karuvi-high-contrast', settings.highContrast.toString());
+      }
       return newState;
     }),
 
