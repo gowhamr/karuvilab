@@ -17,7 +17,13 @@ export const AppearanceSection = memo(function AppearanceSection() {
       >
         <SettingSelect 
           value={appearance.theme}
-          onChange={(theme) => updateAppearance({ theme })}
+          onChange={(theme) => {
+            updateAppearance({ theme });
+            const resolved = theme === "system"
+              ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+              : theme;
+            document.documentElement.setAttribute("data-theme", resolved);
+          }}
           options={[
             { label: 'Light', value: 'light' },
             { label: 'Dark', value: 'dark' },

@@ -3,8 +3,8 @@
 import { useState, memo } from "react";
 import dynamic from "next/dynamic";
 import { 
-  Sun, Shield, UserSearch, Zap, Star, 
-  Settings2, Globe, Terminal, RefreshCw,
+  Sun, Shield, UserSearch, Star, 
+  Settings2, RefreshCw,
   ChevronRight, ArrowLeft
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
@@ -15,21 +15,15 @@ import Link from "next/link";
 const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false });
 const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false });
 const AccessibilitySection = dynamic(() => import("./sections/AccessibilitySection").then(m => m.AccessibilitySection), { ssr: false });
-const PerformanceSection = dynamic(() => import("./sections/PerformanceSection").then(m => m.PerformanceSection), { ssr: false });
 const ToolPreferencesSection = dynamic(() => import("./sections/ToolPreferencesSection").then(m => m.ToolPreferencesSection), { ssr: false });
-const LanguageSection = dynamic(() => import("./sections/LanguageSection").then(m => m.LanguageSection), { ssr: false });
-const DeveloperSection = dynamic(() => import("./sections/DeveloperSection").then(m => m.DeveloperSection), { ssr: false });
 const FavoritesSection = dynamic(() => import("./sections/FavoritesSection").then(m => m.FavoritesSection), { ssr: false });
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density, animations' },
-  { id: 'performance', label: 'Performance', icon: Zap, desc: 'Lazy loading, motion, cache' },
-  { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast, screen reader' },
-  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, telemetry, history' },
+  { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast' },
+  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic, history' },
   { id: 'favorites', label: 'Favorites', icon: Star, desc: 'Pinned tools, recent history' },
   { id: 'tools', label: 'Tool Preferences', icon: Settings2, desc: 'Formats, inputs, auto-copy' },
-  { id: 'language', label: 'Language', icon: Globe, desc: 'Localization, RTL support' },
-  { id: 'developer', label: 'Developer', icon: Terminal, desc: 'Debug mode, diagnostics' },
 ];
 
 export default function SettingsClient() {
@@ -42,7 +36,7 @@ export default function SettingsClient() {
         <div className="w-full md:w-72 space-y-4">
           <div className="h-8 w-32 bg-surface rounded-lg" />
           <div className="space-y-2">
-            {[1,2,3,4,5,6].map(i => <div key={i} className="h-14 w-full bg-surface rounded-2xl" />)}
+            {[1,2,3,4,5].map(i => <div key={i} className="h-14 w-full bg-surface rounded-2xl" />)}
           </div>
         </div>
         <div className="flex-1 space-y-8">
@@ -67,7 +61,7 @@ export default function SettingsClient() {
           </Link>
           
           <div className="space-y-1">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-4 mb-4">Preference Modules</h2>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-4 mb-4">Settings</h2>
             <nav className="space-y-1">
               {MENU_ITEMS.map((item) => (
                 <button
@@ -104,10 +98,10 @@ export default function SettingsClient() {
         <div className="p-6 bg-gradient-to-br from-blue/5 to-transparent border border-blue/10 rounded-3xl space-y-4">
            <p className="text-[10px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
              <RefreshCw className="w-3 h-3" />
-             Local Sync Active
+             Local-First App
            </p>
            <p className="text-[10px] text-text-4 font-bold leading-relaxed">
-             Settings are updated instantly across all open tabs. Version 2.2.0
+             Settings are updated instantly and stored strictly on your device.
            </p>
         </div>
       </aside>
@@ -137,7 +131,7 @@ export default function SettingsClient() {
                 {MENU_ITEMS.find(m => m.id === activeSection)?.label}
               </h1>
               <p className="text-lg text-text-3 font-medium max-w-xl">
-                {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. These changes are applied in real-time.
+                {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. Changes are saved automatically.
               </p>
             </header>
 
@@ -145,10 +139,7 @@ export default function SettingsClient() {
               {activeSection === 'appearance' && <AppearanceSection />}
               {activeSection === 'privacy' && <PrivacySection />}
               {activeSection === 'accessibility' && <AccessibilitySection />}
-              {activeSection === 'performance' && <PerformanceSection />}
               {activeSection === 'tools' && <ToolPreferencesSection />}
-              {activeSection === 'language' && <LanguageSection />}
-              {activeSection === 'developer' && <DeveloperSection />}
               {activeSection === 'favorites' && <FavoritesSection />}
             </div>
           </m.div>
