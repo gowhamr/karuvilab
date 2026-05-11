@@ -3,15 +3,23 @@
 import { useState, useCallback, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import { Gauge, Zap, ArrowDown, ArrowUp, RefreshCw, Activity } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Gauge, Zap, ArrowDown, ArrowUp, RefreshCw, Activity, AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
+// Use multiple endpoints for redundancy
 const ENDPOINTS = {
-  download: "https://speed.cloudflare.com/__down",
-  upload: "https://speed.cloudflare.com/__up",
-  ping: "https://speed.cloudflare.com/__down?bytes=0"
+  cloudflare: {
+    download: "https://speed.cloudflare.com/__down",
+    upload: "https://speed.cloudflare.com/__up",
+    ping: "https://speed.cloudflare.com/__down?bytes=0"
+  },
+  // Fallbacks if Cloudflare is blocked/unavailable
+  cachefly: {
+    download: "https://cachefly.cachefly.net/10mb.test",
+    ping: "https://cachefly.cachefly.net/10mb.test?bytes=0"
+  }
 };
 
 type TestStatus = 'idle' | 'ping' | 'download' | 'upload' | 'completed' | 'error';
@@ -27,51 +35,119 @@ export default function InternetSpeedTestClient() {
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 10000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(id);
+      return response;
+    } catch (e) {
+      clearTimeout(id);
+      throw e;
+    }
+  };
+
   const runPingTest = async () => {
     const latencies: number[] = [];
-    for (let i = 0; i < 5; i++) {
+    const samples = 6;
+    
+    // Try cloudflare first, then generic ping
+    const url = ENDPOINTS.cloudflare.ping;
+
+    for (let i = 0; i < samples; i++) {
+      if (abortControllerRef.current?.signal.aborted) return;
+      
       const start = performance.now();
-      await fetch(ENDPOINTS.ping, { cache: 'no-store', mode: 'no-cors' });
-      latencies.push(performance.now() - start);
+      try {
+        await fetch(url, { 
+          cache: 'no-store', 
+          mode: 'no-cors',
+          signal: abortControllerRef.current?.signal ?? null
+        });
+        latencies.push(performance.now() - start);
+      } catch (e) {
+        // If ping fails once, keep going unless it's an abort
+        if (latencies.length === 0 && i === samples - 1) throw e;
+      }
+      // Small gap between pings
+      await new Promise(r => setTimeout(r, 100));
     }
+
+    if (latencies.length === 0) throw new Error("Latency test failed");
+
     const avg = latencies.reduce((a, b) => a + b) / latencies.length;
-    const jit = Math.max(...latencies) - Math.min(...latencies);
+    const sorted = [...latencies].sort((a, b) => a - b);
+    const jit = sorted[sorted.length - 1]! - sorted[0]!;
+    
     setPing(Math.round(avg));
     setJitter(Math.round(jit));
   };
 
   const runDownloadTest = async () => {
-    const sizes = [1000000, 5000000, 10000000]; // 1MB, 5MB, 10MB
+    // We'll try smaller chunks first for responsiveness
+    const chunks = [
+      { size: 1000000, url: ENDPOINTS.cloudflare.download + "?bytes=1000000" },
+      { size: 5000000, url: ENDPOINTS.cloudflare.download + "?bytes=5000000" },
+      { size: 10000000, url: ENDPOINTS.cloudflare.download + "?bytes=10000000" }
+    ];
+
     let totalBits = 0;
     let totalTime = 0;
 
-    for (const size of sizes) {
-      if (status as any === 'error') break;
+    for (let i = 0; i < chunks.length; i++) {
+      if (abortControllerRef.current?.signal.aborted) return;
+      
+      const chunk = chunks[i]!;
       const start = performance.now();
-      const response = await fetch(`${ENDPOINTS.download}?bytes=${size}`, { 
-        cache: 'no-store',
-        signal: abortControllerRef.current?.signal ?? null
-      });
-      if (!response.ok) throw new Error("Download failed");
-      await response.blob();
-      const end = performance.now();
-      
-      const durationSeconds = (end - start) / 1000;
-      const bits = size * 8;
-      totalBits += bits;
-      totalTime += durationSeconds;
-      
-      const currentMbps = (bits / durationSeconds) / 1000000;
-      setDownload(parseFloat(currentMbps.toFixed(2)));
-      setProgress(prev => Math.min(prev + 18, 75));
+      try {
+        const response = await fetch(chunk.url, { 
+          cache: 'no-store',
+          signal: abortControllerRef.current?.signal ?? null
+        });
+        
+        if (!response.ok) {
+           // If cloudflare fails, try CacheFly fallback for this chunk
+           const fbResponse = await fetch(ENDPOINTS.cachefly.download, { 
+             cache: 'no-store',
+             signal: abortControllerRef.current?.signal ?? null
+           });
+           if (!fbResponse.ok) throw new Error("Download failed");
+           await fbResponse.blob();
+        } else {
+           await response.blob();
+        }
+
+        const end = performance.now();
+        const durationSeconds = (end - start) / 1000;
+        const bits = chunk.size * 8;
+        
+        totalBits += bits;
+        totalTime += durationSeconds;
+        
+        const currentMbps = (bits / durationSeconds) / 1000000;
+        setDownload(parseFloat(currentMbps.toFixed(2)));
+        setProgress(20 + ((i + 1) / chunks.length) * 55);
+      } catch (e) {
+        if ((e as Error).name === 'AbortError') throw e;
+        // If one chunk fails, continue if we have data, otherwise throw
+        if (totalBits === 0) throw e;
+      }
     }
 
-    setDownload(parseFloat(((totalBits / totalTime) / 1000000).toFixed(2)));
+    if (totalTime > 0) {
+      setDownload(parseFloat(((totalBits / totalTime) / 1000000).toFixed(2)));
+    }
   };
 
   const runUploadTest = () => {
     return new Promise<void>((resolve, reject) => {
-      const size = 5000000; // 5MB is a good balance
+      // Browser-side upload is tricky due to CORS. 
+      // Cloudflare's __up is generally reliable if accessed correctly.
+      const size = 2000000; // 2MB
       const data = new Uint8Array(size);
       crypto.getRandomValues(data);
 
@@ -87,9 +163,7 @@ export default function InternetSpeedTestClient() {
             const mbps = (bits / durationSeconds) / 1000000;
             setUpload(parseFloat(mbps.toFixed(2)));
           }
-          const progressBase = 75;
-          const uploadProgress = (event.loaded / event.total) * 25;
-          setProgress(progressBase + uploadProgress);
+          setProgress(75 + (event.loaded / event.total) * 25);
         }
       };
 
@@ -104,17 +178,17 @@ export default function InternetSpeedTestClient() {
       };
 
       xhr.onerror = () => {
-        console.error("Upload test failed");
+        // Upload often fails due to CORS or ISP transparent proxies
+        // We set to 0 and resolve so the rest of the test isn't marked as "failed"
         setUpload(0);
-        resolve(); // Don't crash the whole test
-      };
-
-      xhr.onabort = () => {
         resolve();
       };
 
+      xhr.onabort = () => resolve();
+
       startTime = performance.now();
-      xhr.open('POST', ENDPOINTS.upload, true);
+      xhr.open('POST', ENDPOINTS.cloudflare.upload, true);
+      // We don't set headers to avoid preflight issues (Simple Request)
       xhr.send(data);
 
       if (abortControllerRef.current) {
@@ -138,10 +212,12 @@ export default function InternetSpeedTestClient() {
 
     try {
       await runPingTest();
+      if (abortControllerRef.current.signal.aborted) return;
       setProgress(20);
       
       setStatus('download');
       await runDownloadTest();
+      if (abortControllerRef.current.signal.aborted) return;
       
       setStatus('upload');
       await runUploadTest();
@@ -149,7 +225,8 @@ export default function InternetSpeedTestClient() {
       setStatus('completed');
     } catch (err: any) {
       if (err.name !== 'AbortError') {
-        setError("Test failed. Please check your connection and try again.");
+        console.error("Test Error:", err);
+        setError("Network Error: Could not reach speed test servers. Please check your internet connection or disable ad-blockers.");
         setStatus('error');
       }
     }
@@ -180,7 +257,9 @@ export default function InternetSpeedTestClient() {
           </div>
 
           <div className="mb-8 p-6 rounded-full bg-blue/5 text-blue">
-            {status === 'idle' || status === 'completed' ? (
+            {status === 'error' ? (
+              <AlertTriangle className="w-16 h-16 text-red-500" />
+            ) : status === 'idle' || status === 'completed' ? (
               <Gauge className="w-16 h-16" />
             ) : (
               <RefreshCw className="w-16 h-16 animate-spin-slow" />
@@ -194,7 +273,7 @@ export default function InternetSpeedTestClient() {
               {status === 'download' && "Testing Download Speed..."}
               {status === 'upload' && "Testing Upload Speed..."}
               {status === 'completed' && "Test Completed"}
-              {status === 'error' && "Error Occurred"}
+              {status === 'error' && "Test Interrupted"}
             </h2>
             
             <div className="flex flex-col items-center">
@@ -249,7 +328,7 @@ export default function InternetSpeedTestClient() {
           </div>
 
           {error && (
-            <div className="mt-8 text-red-500 text-sm font-bold bg-red-500/10 px-4 py-2 rounded-xl">
+            <div className="mt-8 text-red-500 text-sm font-bold bg-red-500/10 px-6 py-4 rounded-2xl border border-red-500/20 max-w-md">
               {error}
             </div>
           )}
@@ -266,19 +345,18 @@ export default function InternetSpeedTestClient() {
             </h3>
             <p className="text-text-3 text-sm leading-relaxed font-medium">
               Ping measures the round-trip time for data to reach its destination. Lower is better for gaming and video calls. 
-              <strong> Jitter</strong> ({jitter !== null ? jitter : '--'}ms) measures the variation in ping over time; high jitter can cause stuttering.
+              <strong> Jitter</strong> ({jitter !== null ? jitter : '--'}ms) measures the variation in ping over time.
             </p>
           </div>
           <div className="bg-surface border border-border p-8 rounded-[32px] space-y-4">
             <h3 className="text-lg font-black flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
-                <ArrowDown className="w-4 h-4" />
+                <AlertTriangle className="w-4 h-4" />
               </div>
-              Mbps vs MB/s
+              Privacy Notice
             </h3>
             <p className="text-text-3 text-sm leading-relaxed font-medium">
-              Internet speeds are measured in <strong>Megabits per second (Mbps)</strong>. To find your download speed in Megabytes per second (MB/s), divide the Mbps by 8. 
-              For example, 100 Mbps is roughly 12.5 MB/s.
+              Unlike other speed tests, we do not store your IP address or create a persistent tracking ID. Measurements are performed directly in your browser.
             </p>
           </div>
         </div>
