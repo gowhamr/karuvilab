@@ -3,40 +3,37 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
-export function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+import { useSettingsStore, useIsHydrated } from "@/src/store/settings/store";
 
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("karuvi-theme") as "light" | "dark" | "system" | null;
-    let initialTheme: "light" | "dark" = "light";
-    if (savedTheme && savedTheme !== "system") {
-      initialTheme = savedTheme as "light" | "dark";
-    } else {
-      initialTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    setTheme(initialTheme);
-  }, []);
+export function ThemeToggle() {
+  const isHydrated = useIsHydrated();
+  const { appearance, updateAppearance } = useSettingsStore();
+  const theme = appearance.theme;
 
   const toggleTheme = () => {
-    const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-    localStorage.setItem("karuvi-theme", nextTheme);
+    const resolvedTheme = theme === "system" 
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : theme;
+    const nextTheme = resolvedTheme === "light" ? "dark" : "light";
+    updateAppearance({ theme: nextTheme });
     document.documentElement.setAttribute("data-theme", nextTheme);
   };
 
-  if (!mounted) {
+  if (!isHydrated) {
     return <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface border border-border/10" />;
   }
+
+  const resolvedTheme = theme === "system" 
+    ? (typeof window !== 'undefined' && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    : theme;
 
   return (
     <button
       onClick={toggleTheme}
       className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border/10 hover:border-blue/30 hover:text-blue transition-all group"
-      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+      aria-label={`Switch to ${resolvedTheme === "light" ? "dark" : "light"} theme`}
     >
-      {theme === "light" ? (
+      {resolvedTheme === "light" ? (
         <Moon className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" aria-hidden="true" />
       ) : (
         <Sun className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" aria-hidden="true" />

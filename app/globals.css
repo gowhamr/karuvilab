@@ -120,6 +120,22 @@
     width: 100%;
     opacity: 0.5;
   }
+
+  .high-contrast {
+    --text: #000000;
+    --text-2: #000000;
+    --text-3: #111111;
+    --border: #000000;
+    --border-rgb: 0, 0, 0;
+  }
+
+  [data-theme="dark"] .high-contrast {
+    --text: #ffffff;
+    --text-2: #ffffff;
+    --text-3: #eeeeee;
+    --border: #ffffff;
+    --border-rgb: 255, 255, 255;
+  }
 }
 
 :root {
