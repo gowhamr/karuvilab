@@ -60,6 +60,7 @@ const SidebarContent = memo(function SidebarContent({
       <div className="space-y-2">
         <Link
           href="/"
+          onClick={() => setIsOpen(false)}
           aria-current={pathname === "/" ? "page" : undefined}
           className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-xs ${
             pathname === "/" 
@@ -76,7 +77,43 @@ const SidebarContent = memo(function SidebarContent({
         </Link>
       </div>
 
-      {/* Personal Favorites */}
+      {/* Categories - Moved up for stability */}
+      <div className="space-y-4">
+        <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 dark:text-white/30 uppercase tracking-[0.2em]">
+          <LayoutGrid className="w-3.5 h-3.5" />
+          Universal Tools
+        </div>
+        <div className="space-y-2">
+          {CATEGORIES.map((cat) => {
+            const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
+            return (
+              <Link
+                key={cat.id}
+                href={`/${cat.href}`}
+                onClick={() => setIsOpen(false)}
+                aria-current={isActive ? "page" : undefined}
+                className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
+                  isActive
+                    ? "bg-blue/10 text-blue shadow-sm shadow-blue/5"
+                    : "text-text-3 dark:text-white/60 hover:bg-blue/5 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"
+                }`}
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                  isActive ? "bg-blue text-white neon-glow" : "bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:bg-blue/10"
+                }`}>
+                  <ToolIcon category={cat.id} className="w-4 h-4" />
+                </div>
+                <span className="flex-1">{cat.label}</span>
+                {isActive && (
+                   <div className="w-1.5 h-1.5 rounded-full bg-blue animate-pulse" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Personal Favorites - Only show if hydrated and exists */}
       {favorites.length > 0 && (
         <div className="space-y-3">
           <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 dark:text-white/30 uppercase tracking-[0.2em]">
@@ -88,6 +125,7 @@ const SidebarContent = memo(function SidebarContent({
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
+                onClick={() => setIsOpen(false)}
                 className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                   pathname.includes(tool.href) 
                     ? "bg-blue/10 text-blue" 
@@ -116,6 +154,7 @@ const SidebarContent = memo(function SidebarContent({
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
+                onClick={() => setIsOpen(false)}
                 className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                   pathname.includes(tool.href) 
                     ? "bg-blue/10 text-blue" 
@@ -130,41 +169,6 @@ const SidebarContent = memo(function SidebarContent({
         </div>
       )}
 
-      {/* Categories */}
-      <div className="space-y-4">
-        <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 dark:text-white/30 uppercase tracking-[0.2em]">
-          <LayoutGrid className="w-3.5 h-3.5" />
-          Universal Tools
-        </div>
-        <div className="space-y-2">
-          {CATEGORIES.map((cat) => {
-            const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
-            return (
-              <Link
-                key={cat.id}
-                href={`/${cat.href}`}
-                aria-current={isActive ? "page" : undefined}
-                className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
-                  isActive
-                    ? "bg-blue/10 text-blue shadow-sm shadow-blue/5"
-                    : "text-text-3 dark:text-white/60 hover:bg-blue/5 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                  isActive ? "bg-blue text-white neon-glow" : "bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:bg-blue/10"
-                }`}>
-                  <ToolIcon category={cat.id} className="w-4 h-4" />
-                </div>
-                <span className="flex-1">{cat.label}</span>
-                {isActive && (
-                   <div className="w-1.5 h-1.5 rounded-full bg-blue animate-pulse" />
-                )}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Support */}
       <div className="pt-6 border-t border-border dark:border-white/5 space-y-1">
         {SUPPORT_LINKS.map(link => {
@@ -173,6 +177,7 @@ const SidebarContent = memo(function SidebarContent({
             <Link
               key={link.href}
               href={link.href}
+              onClick={() => setIsOpen(false)}
               className={`group flex items-center gap-3 h-[48px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                 pathname === link.href ? "text-blue bg-blue/5" : "text-text-4 dark:text-white/40 hover:text-blue dark:hover:text-white hover:bg-blue/5 dark:hover:bg-white/5"
               }`}
@@ -197,24 +202,25 @@ export function Sidebar() {
   const [favorites, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
+  // Initialize hydration
   useEffect(() => {
     setHydrated(true);
   }, []);
 
+  // Sync data on mount and changes
+  useEffect(() => {
+    if (hydrated) {
+      setRecent(getRecentTools().slice(0, 5));
+      setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
+    }
+  }, [pathname, favoriteIds, hydrated]);
+
   const x = useMotionValue(0);
   const opacity = useTransform(x, [0, -100], [1, 0]);
 
-  useEffect(() => {
-    setIsOpen(false);
-    setRecent(getRecentTools().slice(0, 5));
-    if (hydrated) {
-      setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
-    }
-  }, [pathname, setIsOpen, favoriteIds, hydrated]);
-
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {isOpen && (
           <>
             {/* Mobile Backdrop */}
@@ -222,7 +228,7 @@ export function Sidebar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60] md:hidden"
+              className="fixed inset-0 bg-black/40 z-[60] md:hidden"
               onClick={() => setIsOpen(false)}
             />
 
@@ -240,30 +246,27 @@ export function Sidebar() {
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-[82vw] max-w-[360px] rounded-r-[32px] sidebar-glass z-[70] flex flex-col md:hidden overflow-hidden touch-none"
+              transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
+              className="fixed top-0 left-0 bottom-0 w-[82vw] max-w-[320px] rounded-r-[32px] sidebar-glass z-[70] flex flex-col md:hidden overflow-hidden touch-none"
             >
               {/* Drag Handle */}
               <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-white/20 rounded-full md:hidden" />
 
-              <div className="h-20 flex items-center justify-between px-6 border-b border-border dark:border-white/5 bg-white/5">
-                <Link href="/" className="flex items-center gap-3 group">
-                  <div className="w-10 h-10 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
-                    <span className="brand-wordmark text-xl leading-none mt-0.5 drop-shadow-sm">K</span>
+              <div className="h-16 flex items-center justify-between px-6 border-b border-border dark:border-white/5 bg-white/5">
+                <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group">
+                  <div className="w-8 h-8 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
+                    <span className="brand-wordmark text-lg leading-none mt-0.5 drop-shadow-sm">K</span>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
-                      KaruviLab
-                    </span>
-                    <div className="hairline-rule mt-1" />
-                  </div>
+                  <span className="brand-wordmark text-lg tracking-tight leading-none text-text dark:text-white">
+                    KaruviLab
+                  </span>
                 </Link>
                 <button
-                  className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors text-text-4 dark:text-white/40"
+                  className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors text-text-4 dark:text-white/40"
                   onClick={() => setIsOpen(false)}
                   aria-label="Close sidebar"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
               <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
@@ -274,13 +277,13 @@ export function Sidebar() {
 
       {/* Desktop Permanent Sidebar */}
       <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] sidebar-glass z-30 flex-col overflow-hidden">
-        <div className="h-24 flex items-center px-8 border-b border-border dark:border-white/5 bg-white/5">
+        <div className="h-20 flex items-center px-8 border-b border-border dark:border-white/5 bg-white/5">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
-              <span className="brand-wordmark text-2xl leading-none mt-1 drop-shadow-sm">K</span>
+            <div className="w-9 h-9 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
+              <span className="brand-wordmark text-xl leading-none mt-1 drop-shadow-sm">K</span>
             </div>
             <div className="flex flex-col">
-              <span className="brand-wordmark text-2xl tracking-tight leading-none text-text dark:text-white">
+              <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
                 KaruviLab
               </span>
               <div className="hairline-rule mt-1" />
@@ -288,14 +291,14 @@ export function Sidebar() {
           </Link>
         </div>
         <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
-        <div className="p-6 border-t border-border dark:border-white/5 bg-white/5">
-           <div className="p-5 rounded-3xl bg-gradient-to-br from-blue/10 to-transparent border border-blue/20 space-y-3 relative overflow-hidden group">
+        <div className="p-4 border-t border-border dark:border-white/5 bg-white/5">
+           <div className="p-4 rounded-2xl bg-gradient-to-br from-blue/10 to-transparent border border-blue/20 space-y-2 relative overflow-hidden group">
               <div className="absolute -top-4 -right-4 w-12 h-12 bg-blue/10 blur-xl group-hover:bg-blue/20 transition-all rounded-full" />
-              <p className="text-[10px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
+              <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
                 <Shield className="w-3 h-3" />
-                Enterprise Ready
+                Local-First
               </p>
-              <p className="text-[10px] text-text-4 dark:text-white/40 font-bold leading-relaxed">Secure, local-first tools for high-performance workflows.</p>
+              <p className="text-[9px] text-text-4 dark:text-white/40 font-bold leading-tight">Private & secure data processing.</p>
            </div>
         </div>
       </aside>

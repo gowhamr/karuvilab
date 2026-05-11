@@ -18,6 +18,7 @@ export const translations = {
       help: "Help",
       privacy: "Privacy",
       terms: "Terms",
+      disclaimer: "Disclaimer",
     }
   },
   hi: {
@@ -39,6 +40,7 @@ export const translations = {
       help: "सहायता",
       privacy: "गोपनीयता",
       terms: "शर्तें",
+      disclaimer: "अस्वीकरण",
     }
   },
   ta: {
@@ -60,6 +62,7 @@ export const translations = {
       help: "உதவி",
       privacy: "தனியுரிமை",
       terms: "விதிமுறைகள்",
+      disclaimer: "பொறுப்புத் துறப்பு",
     }
   }
 };

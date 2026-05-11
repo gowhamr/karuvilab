@@ -63,36 +63,66 @@ export default function InternetSpeedTestClient() {
       
       const currentMbps = (bits / durationSeconds) / 1000000;
       setDownload(parseFloat(currentMbps.toFixed(2)));
-      setProgress(prev => prev + 25);
+      setProgress(prev => Math.min(prev + 18, 75));
     }
 
     setDownload(parseFloat(((totalBits / totalTime) / 1000000).toFixed(2)));
   };
 
-  const runUploadTest = async () => {
-    // Generate random data
-    const size = 2000000; // 2MB for upload test
-    const data = new Uint8Array(size);
-    crypto.getRandomValues(data);
+  const runUploadTest = () => {
+    return new Promise<void>((resolve, reject) => {
+      const size = 5000000; // 5MB is a good balance
+      const data = new Uint8Array(size);
+      crypto.getRandomValues(data);
 
-    const start = performance.now();
-    try {
-      const response = await fetch(ENDPOINTS.upload, {
-        method: 'POST',
-        body: data,
-        mode: 'no-cors',
-        signal: abortControllerRef.current?.signal ?? null
-      });
-      const end = performance.now();
-      const durationSeconds = (end - start) / 1000;
-      const mbps = ((size * 8) / durationSeconds) / 1000000;
-      setUpload(parseFloat(mbps.toFixed(2)));
-      setProgress(100);
-    } catch (e) {
-      console.error("Upload test failed", e);
-      // Fallback or ignore if no-cors still fails in some environments
-      setUpload(0);
-    }
+      const xhr = new XMLHttpRequest();
+      let startTime: number;
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const now = performance.now();
+          const durationSeconds = (now - startTime) / 1000;
+          if (durationSeconds > 0) {
+            const bits = event.loaded * 8;
+            const mbps = (bits / durationSeconds) / 1000000;
+            setUpload(parseFloat(mbps.toFixed(2)));
+          }
+          const progressBase = 75;
+          const uploadProgress = (event.loaded / event.total) * 25;
+          setProgress(progressBase + uploadProgress);
+        }
+      };
+
+      xhr.onload = () => {
+        const endTime = performance.now();
+        const durationSeconds = (endTime - startTime) / 1000;
+        const totalBits = size * 8;
+        const avgMbps = (totalBits / durationSeconds) / 1000000;
+        setUpload(parseFloat(avgMbps.toFixed(2)));
+        setProgress(100);
+        resolve();
+      };
+
+      xhr.onerror = () => {
+        console.error("Upload test failed");
+        setUpload(0);
+        resolve(); // Don't crash the whole test
+      };
+
+      xhr.onabort = () => {
+        resolve();
+      };
+
+      startTime = performance.now();
+      xhr.open('POST', ENDPOINTS.upload, true);
+      xhr.send(data);
+
+      if (abortControllerRef.current) {
+        abortControllerRef.current.signal.addEventListener('abort', () => {
+          xhr.abort();
+        });
+      }
+    });
   };
 
   const startTest = useCallback(async () => {
@@ -169,7 +199,7 @@ export default function InternetSpeedTestClient() {
             
             <div className="flex flex-col items-center">
               <div className="text-7xl md:text-8xl font-black tracking-tighter text-text tabular-nums">
-                {download || "00.0"}
+                {status === 'upload' ? (upload !== null ? upload : "00.0") : (download !== null ? download : "00.0")}
               </div>
               <div className="text-xl font-bold text-text-3 uppercase tracking-widest mt-2">Mbps</div>
             </div>
@@ -181,21 +211,21 @@ export default function InternetSpeedTestClient() {
                 <Activity className="w-4 h-4" />
                 <span className="text-[10px] font-black uppercase tracking-wider">Ping</span>
               </div>
-              <div className="text-2xl font-black text-text tabular-nums">{ping ? `${ping}ms` : '--'}</div>
+              <div className="text-2xl font-black text-text tabular-nums">{ping !== null ? `${ping}ms` : '--'}</div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-text-4">
                 <ArrowDown className="w-4 h-4" />
                 <span className="text-[10px] font-black uppercase tracking-wider">Download</span>
               </div>
-              <div className="text-2xl font-black text-text tabular-nums">{download ? `${download}` : '--'}</div>
+              <div className="text-2xl font-black text-text tabular-nums">{download !== null ? `${download}` : '--'}</div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-text-4">
                 <ArrowUp className="w-4 h-4" />
                 <span className="text-[10px] font-black uppercase tracking-wider">Upload</span>
               </div>
-              <div className="text-2xl font-black text-text tabular-nums">{upload ? `${upload}` : '--'}</div>
+              <div className="text-2xl font-black text-text tabular-nums">{upload !== null ? `${upload}` : '--'}</div>
             </div>
           </div>
 
@@ -236,7 +266,7 @@ export default function InternetSpeedTestClient() {
             </h3>
             <p className="text-text-3 text-sm leading-relaxed font-medium">
               Ping measures the round-trip time for data to reach its destination. Lower is better for gaming and video calls. 
-              <strong> Jitter</strong> ({jitter || '--'}ms) measures the variation in ping over time; high jitter can cause stuttering.
+              <strong> Jitter</strong> ({jitter !== null ? jitter : '--'}ms) measures the variation in ping over time; high jitter can cause stuttering.
             </p>
           </div>
           <div className="bg-surface border border-border p-8 rounded-[32px] space-y-4">
