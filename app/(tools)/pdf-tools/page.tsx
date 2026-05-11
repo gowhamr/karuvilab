@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "PDF Tools — Compress, Merge, and Convert PDFs",
@@ -17,6 +18,7 @@ export default function PdfToolsPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="space-y-2">
+        <Breadcrumbs category={cat} />
         <h1 className="text-4xl font-black">{cat.label}</h1>
         <p className="text-text-3 text-lg">Process PDF files entirely in your browser — no data leaves your device.</p>
       </div>

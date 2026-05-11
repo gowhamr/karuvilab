@@ -6,6 +6,7 @@ import { ToolIcon } from "@/components/ui/Icons";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { StructuredData } from "@/src/lib/seo";
 import { FavoriteButton } from "./FavoriteButton";
+import { Breadcrumbs } from "./Breadcrumbs";
 
 interface ToolShellProps {
   title: string;
@@ -61,17 +62,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
       <header className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <nav className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
-            <Link href="/" className="hover:text-blue transition-colors">Home</Link>
-            <span>/</span>
-            {category && (
-              <>
-                <Link href={`/${category.href}`} className="hover:text-blue transition-colors">{category.label}</Link>
-                <span>/</span>
-              </>
-            )}
-            <span className="text-text-3">{title}</span>
-          </nav>
+          <Breadcrumbs category={category} title={title} />
           {currentTool && <FavoriteButton toolId={currentTool.id} />}
         </div>
         
