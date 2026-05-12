@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useId } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 
 export default function AgeCalculatorClient() {
   const [dob, setDob] = useState("1995-01-01");
   const [asOf, setAsOf] = useState("");
+  const dobId = useId();
+  const asOfId = useId();
 
   useEffect(() => {
     // Set to client's local date after hydration to avoid SSR mismatch
@@ -54,8 +56,9 @@ export default function AgeCalculatorClient() {
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">Date of Birth</label>
+            <label htmlFor={dobId} className="text-sm font-bold text-text-2">Date of Birth</label>
             <input
+              id={dobId}
               type="date"
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
               value={dob}
@@ -63,8 +66,9 @@ export default function AgeCalculatorClient() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">Calculate As Of</label>
+            <label htmlFor={asOfId} className="text-sm font-bold text-text-2">Calculate As Of</label>
             <input
+              id={asOfId}
               type="date"
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
               value={asOf}

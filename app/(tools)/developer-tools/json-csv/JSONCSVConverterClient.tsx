@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -54,19 +54,44 @@ function csvToJSON(csv: string): string {
   return JSON.stringify(rows, null, 2);
 }
 
+import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
+import { useWorkflowStore, WorkflowItem } from "@/src/store/useWorkflowStore";
+import { findToolById, DataType } from "@/src/tool-registry";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
+
+const toolId = "json-csv";
+
 export default function JSONCSVConverterClient() {
   const [tab, setTab] = useState<"json-csv" | "csv-json">("json-csv");
   const [input, setInput] = useState("");
+
+  const { suggestedText } = useWorkflowIntegration(toolId);
+  const { setActiveItems, addToChain } = useWorkflowStore();
+
+  useEffect(() => {
+    if (suggestedText) setInput(suggestedText);
+  }, [suggestedText]);
 
   const { output, error } = useMemo(() => {
     if (!input.trim()) return { output: "", error: "" };
     try {
       const res = tab === "json-csv" ? jsonToCSV(input) : csvToJSON(input);
+      
+      // Update workflow store with output
+      const tool = findToolById(toolId);
+      const outType = tab === "json-csv" ? "csv" : "json";
+      setActiveItems([{
+        text: res,
+        name: `converted-${Date.now()}.${outType}`,
+        type: outType as DataType
+      }]);
+      addToChain(toolId);
+
       return { output: res, error: "" };
     } catch (e) {
       return { output: "", error: (e as Error).message };
     }
-  }, [input, tab]);
+  }, [input, tab, setActiveItems, addToChain]);
 
   const placeholders = {
     "json-csv": '[{"name":"Alice","age":30},{"name":"Bob","age":25}]',
@@ -121,6 +146,10 @@ export default function JSONCSVConverterClient() {
             value={output}
           />
         </div>
+      )}
+
+      {output && !error && (
+        <WorkflowSuggestions />
       )}
     </div>
   );

@@ -4,6 +4,8 @@ import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 interface ImageItem { name: string; file: File; url: string; }
@@ -13,9 +15,8 @@ export default function ImageToPdfClient() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const [pageSize, setPageSize] = useState<"a4" | "letter" | "fit">("fit");
-  const fileRef = useRef<HTMLInputElement>(null);
 
-  const addImages = (fl: FileList | null) => {
+  const addImages = (fl: FileList | File[] | null) => {
     if (!fl) return;
     const items: ImageItem[] = Array.from(fl).map(f => ({
       name: f.name,
@@ -69,17 +70,14 @@ export default function ImageToPdfClient() {
 
   return (
     <div className="space-y-6">
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-        onClick={() => fileRef.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); addImages(e.dataTransfer.files); }}
-      >
-        <div className="text-4xl mb-2">🖼️</div>
-        <p className="font-semibold text-text-2">Drop images here or click to select</p>
-        <p className="text-sm text-text-4 mt-1">JPG and PNG supported (WebP will be converted)</p>
-        <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={e => addImages(e.target.files)} />
-      </div>
+      <DropZone
+        onFilesSelected={addImages}
+        accept="image/jpeg,image/png,image/webp"
+        multiple
+        title="Drop images here or click to select"
+        description="JPG and PNG supported (WebP will be converted)"
+        icon={<div className="text-4xl">🖼️</div>}
+      />
 
       {images.length > 0 && (
         <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">

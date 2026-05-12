@@ -4,6 +4,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "image")!;
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -25,7 +27,6 @@ export default function BgRemoverClient() {
   const [tolerance, setTolerance] = useState(40);
   const [fileName, setFileName] = useState("image");
   const [processing, setProcessing] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleFile = (file: File) => {
@@ -91,23 +92,18 @@ export default function BgRemoverClient() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
-          <div
-            className="bg-surface border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-blue transition-colors"
-            onClick={() => fileRef.current?.click()}
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f); }}
-          >
-            {originalUrl ? (
+          <DropZone
+            onFilesSelected={(files) => {
+              const f = files instanceof FileList ? files[0] : files[0];
+              if (f) handleFile(f);
+            }}
+            accept="image/*"
+            title="Drop image here"
+            description="Best for solid/white backgrounds"
+            icon={originalUrl ? (
               <img src={originalUrl} alt="Original" className="mx-auto max-h-48 rounded-xl object-contain" />
-            ) : (
-              <>
-                <div className="text-4xl mb-2">🎨</div>
-                <p className="font-semibold text-text-2">Drop image here</p>
-                <p className="text-xs text-text-4 mt-1">Best for solid/white backgrounds</p>
-              </>
-            )}
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-          </div>
+            ) : undefined}
+          />
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Settings</h2>

@@ -7,6 +7,8 @@ import { TaskProgress } from "@/src/workers/types";
 
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 interface PdfFile { name: string; file: File; }
@@ -18,9 +20,8 @@ export default function MergePdfClient() {
   const [progress, setProgress] = useState<TaskProgress | null>(null);
   const [error, setError] = useState("");
   const [abortController, setAbortController] = useState<AbortController | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
 
-  const addFiles = (fl: FileList | null) => {
+  const addFiles = (fl: FileList | File[] | null) => {
     if (!fl) return;
     setFiles(prev => [...prev, ...Array.from(fl).map(f => ({ name: f.name, file: f }))]);
   };
@@ -82,17 +83,14 @@ export default function MergePdfClient() {
 
   return (
     <div className="space-y-6">
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-        onClick={() => fileRef.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); addFiles(e.dataTransfer.files); }}
-      >
-        <div className="text-4xl mb-2">📄</div>
-        <p className="font-semibold text-text-2">Drop PDF files here or click to add</p>
-        <p className="text-sm text-text-4 mt-1">Add multiple PDFs — they will be merged in order</p>
-        <input ref={fileRef} type="file" accept=".pdf,application/pdf" multiple className="hidden" onChange={e => addFiles(e.target.files)} />
-      </div>
+      <DropZone
+        onFilesSelected={addFiles}
+        accept=".pdf,application/pdf"
+        multiple
+        title="Drop PDF files here or click to add"
+        description="Add multiple PDFs — they will be merged in order"
+        icon={<div className="text-4xl">📄</div>}
+      />
 
       {files.length > 0 && (
         <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">

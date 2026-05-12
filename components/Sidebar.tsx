@@ -86,6 +86,7 @@ const SidebarContent = memo(function SidebarContent({
         <div className="space-y-2">
           {CATEGORIES.map((cat) => {
             const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
+            const color = cat.color;
             return (
               <Link
                 key={cat.id}
@@ -94,18 +95,29 @@ const SidebarContent = memo(function SidebarContent({
                 aria-current={isActive ? "page" : undefined}
                 className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
                   isActive
-                    ? "bg-blue/10 text-blue shadow-sm shadow-blue/5"
-                    : "text-text-3 dark:text-white/60 hover:bg-blue/5 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"
+                    ? "shadow-sm"
+                    : "text-text-3 dark:text-white/60 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"
                 }`}
+                style={{
+                  backgroundColor: isActive ? `${color}1A` : undefined,
+                  color: isActive ? color : undefined,
+                  boxShadow: isActive ? `0 4px 6px -1px ${color}1A` : undefined
+                }}
               >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                  isActive ? "bg-blue text-white neon-glow" : "bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:bg-blue/10"
-                }`}>
+                <div 
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                    isActive ? "text-white neon-glow" : "bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:bg-blue/10"
+                  }`}
+                  style={{
+                    backgroundColor: isActive ? color : undefined,
+                    boxShadow: isActive ? `0 0 15px ${color}66` : undefined,
+                  }}
+                >
                   <ToolIcon category={cat.id} className="w-4 h-4" />
                 </div>
                 <span className="flex-1">{cat.label}</span>
                 {isActive && (
-                   <div className="w-1.5 h-1.5 rounded-full bg-blue animate-pulse" />
+                   <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: color }} />
                 )}
               </Link>
             );

@@ -4,6 +4,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "image")!;
 
 const PRESETS = [
@@ -27,7 +29,6 @@ export default function ImageCropClient() {
   const [cropH, setCropH] = useState(0);
   const [preset, setPreset] = useState("Free");
   const [croppedUrl, setCroppedUrl] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
@@ -127,17 +128,16 @@ export default function ImageCropClient() {
     
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
-          {/* Upload */}
-          <div
-            className="bg-surface border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-blue transition-colors"
-            onClick={() => fileRef.current?.click()}
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f); }}
-          >
-            <div className="text-4xl mb-2">✂️</div>
-            <p className="font-semibold text-text-2">Drop image or click to select</p>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-          </div>
+          <DropZone
+            onFilesSelected={(files) => {
+              const f = files instanceof FileList ? files[0] : files[0];
+              if (f) handleFile(f);
+            }}
+            accept="image/*"
+            title={originalUrl ? fileName : "Drop image or click to select"}
+            description={originalUrl ? "Click to change image" : "Supports JPG, PNG, WebP"}
+            icon={<div className="text-4xl">{originalUrl ? "🖼️" : "✂️"}</div>}
+          />
 
           {/* Image preview with crop overlay */}
           {originalUrl && origW > 0 && (

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useId } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { d, formatINR, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const GST_RATES = [3, 5, 12, 18, 28];
 
@@ -14,6 +15,8 @@ const DEFAULT_STATE = {
 };
 
 export default function GSTCalculatorClient() {
+  const rateLabelId = useId();
+  const modeLabelId = useId();
   const [isLoaded, setIsLoaded] = useState(false);
   const [amount, setAmount] = useState<number>(DEFAULT_STATE.amount);
   const [gstRate, setGstRate] = useState(DEFAULT_STATE.gstRate);
@@ -83,25 +86,22 @@ Generated via KaruviLab`;
   return (
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Amount (₹)</label>
-          <input
-            type="number"
-            min={0}
-            placeholder="Enter amount"
-            value={amount || ""}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg font-bold"
-          />
-        </div>
+        <ToolInput
+          label="Amount (₹)"
+          type="number"
+          placeholder="Enter amount"
+          value={amount === 0 ? "" : amount.toString()}
+          onChange={(val) => setAmount(Number(val))}
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">GST Rate</label>
+        <div className="space-y-2" role="group" aria-labelledby={rateLabelId}>
+          <label id={rateLabelId} className="text-sm font-bold text-text-2">GST Rate</label>
           <div className="flex flex-wrap gap-2">
             {GST_RATES.map((r) => (
               <button
                 key={r}
                 onClick={() => setGstRate(r)}
+                aria-pressed={gstRate === r}
                 className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
                   gstRate === r
                     ? "bg-blue text-white border-blue"
@@ -114,11 +114,12 @@ Generated via KaruviLab`;
           </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Mode</label>
+        <div className="space-y-2" role="group" aria-labelledby={modeLabelId}>
+          <label id={modeLabelId} className="text-sm font-bold text-text-2">Mode</label>
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => setMode("add")}
+              aria-pressed={mode === "add"}
               className={`py-3 rounded-xl text-sm font-bold border transition-all ${
                 mode === "add"
                   ? "bg-blue text-white border-blue"
@@ -129,6 +130,7 @@ Generated via KaruviLab`;
             </button>
             <button
               onClick={() => setMode("remove")}
+              aria-pressed={mode === "remove"}
               className={`py-3 rounded-xl text-sm font-bold border transition-all ${
                 mode === "remove"
                   ? "bg-blue text-white border-blue"

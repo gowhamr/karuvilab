@@ -1,7 +1,8 @@
 "use client";
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+import { AlertTriangle, RefreshCw, Flag } from "lucide-react";
+import { useSupportStore } from "@/src/store/useSupportStore";
 
 interface Props {
   children: ReactNode;
@@ -30,7 +31,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex flex-col items-center justify-center p-12 bg-blue/5 border border-blue/10 rounded-3xl space-y-6 text-center">
+          <div className="flex flex-col items-center justify-center p-12 bg-blue/5 border border-blue/10 rounded-3xl space-y-6 text-center animate-in fade-in zoom-in-95 duration-500">
             <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
               <AlertTriangle className="w-8 h-8" />
             </div>
@@ -40,13 +41,23 @@ export class ErrorBoundary extends Component<Props, State> {
                 The tool encountered an unexpected error while processing. Your data remains private and was not sent anywhere.
               </p>
             </div>
-            <button
-              onClick={() => this.setState({ hasError: false })}
-              className="flex items-center gap-2 px-6 py-3 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Try Again
-            </button>
+            
+            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+              <button
+                onClick={() => this.setState({ hasError: false })}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Try Again
+              </button>
+              <button
+                onClick={() => useSupportStore.getState().openFeedback("bug", { error: this.state.error?.message || "Unknown error" })}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue/5 hover:text-blue hover:border-blue/20 transition-all"
+              >
+                <Flag className="w-4 h-4" />
+                Report
+              </button>
+            </div>
           </div>
         )
       );

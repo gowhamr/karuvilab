@@ -2945,6 +2945,91 @@ const internetSpeedTest: ToolContent = {
   alternatives: ["Speedtest.net", "Fast.com", "Cloudflare Speed Test"],
 };
 
+const numeralConverter: ToolContent = {
+  detailedDescription: "Convert numbers between different bases like Binary, Octal, Decimal, and Hexadecimal. This tool is essential for computer science students and developers working with low-level data, bitwise operations, or different numbering systems. It provides instant conversion as you type.",
+  howTo: [
+    "Select the input base (e.g., Decimal) from the options.",
+    "Enter the number you want to convert in the input field.",
+    "The tool will instantly show the equivalent values in Binary, Octal, Decimal, and Hexadecimal.",
+    "Copy the result you need using the copy button next to each output."
+  ],
+  faq: [
+    { question: "What bases are supported?", answer: "We support Binary (Base 2), Octal (Base 8), Decimal (Base 10), and Hexadecimal (Base 16)." },
+    { question: "Can it handle fractional numbers?", answer: "Currently, this tool is optimized for integers. Support for floating-point base conversion is planned for a future update." }
+  ],
+  useCases: [
+    "Converting memory addresses from hex to decimal",
+    "Understanding binary representations for bitwise flags",
+    "Computer science homework and learning base systems",
+    "Decoding data from low-level protocols"
+  ],
+  alternatives: ["RapidTables", "BinaryHexConverter", "Google search ('[num] hex to dec')"]
+};
+
+const smartConverter: ToolContent = {
+  detailedDescription: "A natural-language unit converter that understands requests like '10 km to miles' or '500g in lbs'. It uses a powerful parsing engine to identify the value, source unit, and target unit from your text, making conversions faster and more intuitive than traditional dropdown-based tools.",
+  howTo: [
+    "Type your conversion request in plain English (e.g., '5kg to lbs').",
+    "The tool parses your input and displays the result instantly.",
+    "Use the swap button to reverse the units if needed.",
+    "Refine your query if the engine doesn't catch it on the first try."
+  ],
+  faq: [
+    { question: "What units are supported?", answer: "It supports most common units of length, weight, volume, temperature, and area." },
+    { question: "Do I need to follow a specific format?", answer: "No, the 'Smart' engine is flexible. You can type '10km to miles', '10 km into mi', or just '10km miles'." }
+  ],
+  useCases: [
+    "Quickly converting kitchen measurements while cooking",
+    "Converting travel distances between miles and kilometres",
+    "Changing temperatures between Celsius and Fahrenheit",
+    "Converting currency (if supported) or large unit sets"
+  ],
+  alternatives: ["Google search bar", "Wolfram Alpha", "Siri/Alexa"]
+};
+
+const safeToSpend: ToolContent = {
+  detailedDescription: "Take control of your finances with the Safe-to-Spend budget planner. By subtracting your fixed expenses, savings goals, and variable costs from your total income, this tool calculates exactly how much 'guilt-free' money you have left for daily or weekly spending. It's a simple yet effective way to avoid overspending and reach your financial goals.",
+  howTo: [
+    "Enter your monthly after-tax income.",
+    "List your fixed expenses like rent, bills, and insurance.",
+    "Set a savings goal as a percentage of your total income.",
+    "Input your estimated variable expenses (groceries, transport).",
+    "View your remaining daily and weekly 'safe-to-spend' budget instantly."
+  ],
+  faq: [
+    { question: "How is the daily budget calculated?", answer: "It takes your total income, subtracts all expenses and savings, and divides the remainder by 30 to give you a daily limit." },
+    { question: "Is my financial data saved?", answer: "No, all inputs are processed locally in your browser and are not stored on any server or shared with third parties." }
+  ],
+  useCases: [
+    "Managing monthly discretionary spending",
+    "Planning for a savings goal while maintaining a lifestyle",
+    "Getting a reality check on monthly expenses",
+    "Daily expense tracking for students or professionals"
+  ],
+  alternatives: ["YNAB (You Need A Budget)", "Mint", "PocketGuard"]
+};
+
+const workHours: ToolContent = {
+  detailedDescription: "Track your daily work hours, including breaks and overtime, with this simple timesheet utility. It helps you calculate total hours worked between a start and end time, making it easy to fill out weekly logs or calculate pay for hourly work. All data is handled privately in your browser.",
+  howTo: [
+    "Enter your work start time and end time.",
+    "Specify any break duration in minutes (e.g., 30 for lunch).",
+    "Enter your hourly rate if you wish to see estimated earnings.",
+    "The tool calculates total work hours, decimal hours, and total pay."
+  ],
+  faq: [
+    { question: "Does it handle overnight shifts?", answer: "Yes, it correctly calculates the duration even if the shift ends on the next day after midnight." },
+    { question: "What are 'decimal hours'?", answer: "Decimal hours convert minutes into a fraction of an hour (e.g., 8 hours 30 mins = 8.5 hours), which is used by most payroll systems." }
+  ],
+  useCases: [
+    "Filling out weekly timesheets for work",
+    "Calculating pay for freelance or hourly gigs",
+    "Tracking study or project hours",
+    "Verifying payroll accuracy"
+  ],
+  alternatives: ["Clockify", "Toggl", "Harvest"]
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Registry export
 // ─────────────────────────────────────────────────────────────────────────────
@@ -3017,6 +3102,10 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "time-calculator": timeCalculator,
   "world-clock": worldClock,
   "utc-ist-converter": utcIstConverter,
+  "numeral-converter": numeralConverter,
+  "smart-converter": smartConverter,
+  "safe-to-spend": safeToSpend,
+  "work-hours": workHours,
 
   // SEO Tools
   "slug-generator": slugGenerator,

@@ -27,6 +27,7 @@ export function ToolInput({
 }: ToolInputProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
+  const descriptionId = `${id}-description`;
 
   const baseClasses = `
     w-full px-4 py-3 bg-bg border border-border rounded-xl outline-none transition-all
@@ -38,7 +39,14 @@ export function ToolInput({
     <div className="space-y-2">
       <div className="flex justify-between items-end">
         <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>
-        {description && <span className="text-[10px] text-text-4 uppercase font-bold tracking-wider">{description}</span>}
+        {description && (
+          <span 
+            id={descriptionId}
+            className="text-[10px] text-text-4 uppercase font-bold tracking-wider"
+          >
+            {description}
+          </span>
+        )}
       </div>
       {rows > 1 ? (
         <textarea
@@ -48,6 +56,7 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          aria-describedby={description ? descriptionId : undefined}
         />
       ) : (
         <input
@@ -57,6 +66,7 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          aria-describedby={description ? descriptionId : undefined}
         />
       )}
     </div>

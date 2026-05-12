@@ -15,7 +15,7 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>
-        <span className="text-sm font-black text-blue">{display}</span>
+        <span className="text-sm font-black text-blue" aria-hidden="true">{display}</span>
       </div>
       <input
         id={id}
@@ -26,8 +26,12 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
         value={value}
         onChange={e => onChange(Number(e.target.value))}
         className="w-full accent-blue"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        aria-valuetext={display}
       />
-      <div className="flex justify-between text-[10px] text-text-4">
+      <div className="flex justify-between text-[10px] text-text-4" aria-hidden="true">
         <span>{format ? format(min) : min}</span>
         <span>{format ? format(max) : max}</span>
       </div>

@@ -8,6 +8,8 @@ export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
+export type DataType = 'image' | 'pdf' | 'text' | 'json' | 'csv' | 'zip' | 'any-file' | 'none' | 'html' | 'url' | 'password';
+
 export interface SEOContent {
   detailedDescription: string;
   howTo: string[];
@@ -21,6 +23,10 @@ export interface ToolEntry {
   desc: string;
   href: string;
   category: Category;
+  
+  // Workflow Chaining
+  input?: DataType | DataType[];
+  output?: DataType | DataType[];
   
   // Discovery & SEO
   keywords: string[];
@@ -56,17 +62,31 @@ export interface CategoryEntry {
   href: string;
   emoji: string;
   description: string;
+  color: string;
 }
 
 export const CATEGORIES: CategoryEntry[] = [
-  { id: 'calculators', label: 'Calculators',     href: 'calculators/',     emoji: '', description: 'Precision tools for financial, date, and mathematical calculations.' },
-  { id: 'pdf',         label: 'PDF Tools',       href: 'pdf-tools/',       emoji: '', description: 'Fast, browser-side PDF merging, compression, and conversion.' },
-  { id: 'image',       label: 'Image Tools',     href: 'image-tools/',     emoji: '', description: 'Optimize, convert, and resize images without uploading them.' },
-  { id: 'security',    label: 'Security',        href: 'security-tools/',  emoji: '', description: 'Private password generators, encoders, and hash utilities.' },
-  { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '', description: 'Essential utilities for formatting, minifying, and debugging code.' },
-  { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.' },
-  { id: 'seo',         label: 'SEO Tools',       href: 'seo-tools/',       emoji: '', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.' },
+  { id: 'calculators', label: 'Calculators',     href: 'calculators/',     emoji: '', description: 'Precision tools for financial, date, and mathematical calculations.', color: '#4F46E5' },
+  { id: 'pdf',         label: 'PDF Tools',       href: 'pdf-tools/',       emoji: '', description: 'Fast, browser-side PDF merging, compression, and conversion.', color: '#EF4444' },
+  { id: 'image',       label: 'Image Tools',     href: 'image-tools/',     emoji: '', description: 'Optimize, convert, and resize images without uploading them.', color: '#F43F5E' },
+  { id: 'security',    label: 'Security',        href: 'security-tools/',  emoji: '', description: 'Private password generators, encoders, and hash utilities.', color: '#F59E0B' },
+  { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '', description: 'Essential utilities for formatting, minifying, and debugging code.', color: '#6366F1' },
+  { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.', color: '#64748B' },
+  { id: 'seo',         label: 'SEO Tools',       href: 'seo-tools/',       emoji: '', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.', color: '#06B6D4' },
 ];
+
+export const SUBCATEGORY_COLORS: Record<string, string> = {
+  'Financial': '#10B981',      // Green
+  'Date & Time': '#A855F7',    // Purple
+  'Math & Units': '#3B82F6',   // Blue
+};
+
+export function getToolColor(tool: ToolEntry): string {
+  if (tool.color) return tool.color;
+  const subCatColor = tool.subCategory ? SUBCATEGORY_COLORS[tool.subCategory] : undefined;
+  if (subCatColor) return subCatColor;
+  return CATEGORIES.find(c => c.id === tool.category)?.color || '#4F46E5';
+}
 
 export const ALL_TOOLS: ToolEntry[] = [
   // ── Calculators ────────────────────────────────────────────────────────────
@@ -120,22 +140,22 @@ export const ALL_TOOLS: ToolEntry[] = [
     related: ['date-calculator', 'time-calculator'],
     status: 'stable'
   },
-  { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', subCategory: 'Financial', keywords: ['compound','interest','savings','growth'] },
-  { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', subCategory: 'Financial', keywords: ['gst','tax','vat','india'] },
-  { id: 'currency-converter',     name: 'Currency Converter',     desc: 'Convert between world currencies',               href: 'calculators/currency-converter/',     category: 'calculators', subCategory: 'Math & Units', keywords: ['currency','exchange','forex','usd','eur','inr'] },
-  { id: 'discount-calculator',    name: 'Discount Calculator',    desc: 'Find sale price and savings',                    href: 'calculators/discount-calculator/',    category: 'calculators', subCategory: 'Financial', keywords: ['discount','sale','percent','savings'] },
-  { id: 'world-clock',            name: 'World Clock',            desc: 'Time across multiple cities',                    href: 'calculators/world-clock/',            category: 'calculators', subCategory: 'Date & Time', keywords: ['time','timezone','clock','utc'] },
-  { id: 'date-calculator',        name: 'Date Calculator',        desc: 'Add, subtract, or diff dates',                   href: 'calculators/date-calculator/',        category: 'calculators', subCategory: 'Date & Time', keywords: ['date','days','difference','add'] },
-  { id: 'time-calculator',        name: 'Time Calculator',        desc: 'Add or subtract hours and minutes',              href: 'calculators/time-calculator/',        category: 'calculators', subCategory: 'Date & Time', keywords: ['time','duration','hours','minutes'] },
-  { id: 'standard-calculator',    name: 'Standard Calculator',    desc: 'Quick arithmetic calculator',                    href: 'calculators/standard-calculator/',    category: 'calculators', subCategory: 'Math & Units', keywords: ['calculator','math','arithmetic'] },
-  { id: 'salary-calculator',      name: 'Salary Calculator',      desc: 'Indian take-home salary breakdown',              href: 'calculators/salary-calculator/',      category: 'calculators', subCategory: 'Financial', keywords: ['salary','ctc','take home','tax','india'] },
-  { id: 'percentage-calculator',  name: 'Percentage Calculator',  desc: 'Find percentages and ratios',                    href: 'calculators/percentage-calculator/',  category: 'calculators', subCategory: 'Math & Units', keywords: ['percent','percentage','ratio'] },
-  { id: 'unit-converter',         name: 'Unit Converter',         desc: 'Length, weight, volume, and more',               href: 'calculators/unit-converter/',         category: 'calculators', subCategory: 'Math & Units', keywords: ['unit','convert','length','weight','volume','metric'] },
-  { id: 'numeral-converter',      name: 'Numeral Converter',      desc: 'Convert numbers between bases',                  href: 'calculators/numeral-converter/',      category: 'calculators', subCategory: 'Math & Units', keywords: ['numeral','binary','hex','decimal','base'] },
-  { id: 'smart-converter',        name: 'Smart Unit Converter',   desc: 'Natural-language unit conversion',               href: 'calculators/smart-converter/',        category: 'calculators', subCategory: 'Math & Units', keywords: ['convert','smart','natural language'] },
-  { id: 'safe-to-spend',          name: 'Safe-to-Spend',          desc: 'Daily budget planner',                           href: 'calculators/safe-to-spend/',          category: 'calculators', subCategory: 'Financial', keywords: ['budget','spending','daily'] },
-  { id: 'work-hours',             name: 'Work Hours',             desc: 'Timesheet and overtime tracker',                 href: 'calculators/work-hours/',             category: 'calculators', subCategory: 'Date & Time', keywords: ['work','hours','timesheet','overtime'] },
-  { id: 'utc-ist-converter',      name: 'UTC ↔ IST',         desc: 'Convert between UTC and IST',                    href: 'calculators/utc-ist-converter/',      category: 'calculators', subCategory: 'Date & Time', keywords: ['utc','ist','timezone','india'] },
+  { id: 'compound-interest',      name: 'Compound Interest',      desc: 'Compounded growth over time',                    href: 'calculators/compound-interest/',      category: 'calculators', subCategory: 'Financial', keywords: ['compound','interest','savings','growth'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'gst-calculator',         name: 'GST Calculator',         desc: 'Add or remove GST from any amount',              href: 'calculators/gst-calculator/',         category: 'calculators', subCategory: 'Financial', keywords: ['gst','tax','vat','india'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'currency-converter',     name: 'Currency Converter',     desc: 'Convert between world currencies',               href: 'calculators/currency-converter/',     category: 'calculators', subCategory: 'Math & Units', keywords: ['currency','exchange','forex','usd','eur','inr'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'discount-calculator',    name: 'Discount Calculator',    desc: 'Find sale price and savings',                    href: 'calculators/discount-calculator/',    category: 'calculators', subCategory: 'Financial', keywords: ['discount','sale','percent','savings'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'world-clock',            name: 'World Clock',            desc: 'Time across multiple cities',                    href: 'calculators/world-clock/',            category: 'calculators', subCategory: 'Date & Time', keywords: ['time','timezone','clock','utc'], searchIntent: 'informational', schemaType: 'WebApplication' },
+  { id: 'date-calculator',        name: 'Date Calculator',        desc: 'Add, subtract, or diff dates',                   href: 'calculators/date-calculator/',        category: 'calculators', subCategory: 'Date & Time', keywords: ['date','days','difference','add'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'time-calculator',        name: 'Time Calculator',        desc: 'Add or subtract hours and minutes',              href: 'calculators/time-calculator/',        category: 'calculators', subCategory: 'Date & Time', keywords: ['time','duration','hours','minutes'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'standard-calculator',    name: 'Standard Calculator',    desc: 'Quick arithmetic calculator',                    href: 'calculators/standard-calculator/',    category: 'calculators', subCategory: 'Math & Units', keywords: ['calculator','math','arithmetic'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'salary-calculator',      name: 'Salary Calculator',      desc: 'Indian take-home salary breakdown',              href: 'calculators/salary-calculator/',      category: 'calculators', subCategory: 'Financial', keywords: ['salary','ctc','take home','tax','india'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'percentage-calculator',  name: 'Percentage Calculator',  desc: 'Find percentages and ratios',                    href: 'calculators/percentage-calculator/',  category: 'calculators', subCategory: 'Math & Units', keywords: ['percent','percentage','ratio'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'unit-converter',         name: 'Unit Converter',         desc: 'Length, weight, volume, and more',               href: 'calculators/unit-converter/',         category: 'calculators', subCategory: 'Math & Units', keywords: ['unit','convert','length','weight','volume','metric'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'numeral-converter',      name: 'Numeral Converter',      desc: 'Convert numbers between bases',                  href: 'calculators/numeral-converter/',      category: 'calculators', subCategory: 'Math & Units', keywords: ['numeral','binary','hex','decimal','base'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'smart-converter',        name: 'Smart Unit Converter',   desc: 'Natural-language unit conversion',               href: 'calculators/smart-converter/',        category: 'calculators', subCategory: 'Math & Units', keywords: ['convert','smart','natural language'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'safe-to-spend',          name: 'Safe-to-Spend',          desc: 'Daily budget planner',                           href: 'calculators/safe-to-spend/',          category: 'calculators', subCategory: 'Financial', keywords: ['budget','spending','daily'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'work-hours',             name: 'Work Hours',             desc: 'Timesheet and overtime tracker',                 href: 'calculators/work-hours/',             category: 'calculators', subCategory: 'Date & Time', keywords: ['work','hours','timesheet','overtime'], searchIntent: 'transactional', schemaType: 'WebApplication' },
+  { id: 'utc-ist-converter',      name: 'UTC ↔ IST',         desc: 'Convert between UTC and IST',                    href: 'calculators/utc-ist-converter/',      category: 'calculators', subCategory: 'Date & Time', keywords: ['utc','ist','timezone','india'], searchIntent: 'transactional', schemaType: 'WebApplication' },
   { 
     id: 'mutual-fund-returns', 
     name: 'Mutual Fund Returns', 
@@ -145,7 +165,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['mutual fund','returns','absolute','annualized','yield'], 
     difficulty: 'intermediate',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'lumpsum-calculator', 
@@ -156,7 +178,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['lumpsum','investment','future value','wealth'], 
     difficulty: 'beginner',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'ppf-calculator', 
@@ -167,7 +191,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['ppf','savings','tax saving','interest','maturity'], 
     difficulty: 'beginner',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'fd-calculator', 
@@ -178,7 +204,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['fd','fixed deposit','interest','savings'], 
     difficulty: 'beginner',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'rd-calculator', 
@@ -189,7 +217,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['rd','recurring deposit','savings','interest'], 
     difficulty: 'beginner',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'cagr-calculator', 
@@ -200,7 +230,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['cagr','growth','return','annualized'], 
     difficulty: 'intermediate',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'stock-average-calculator', 
@@ -211,7 +243,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['stock','average','buy price','trading','investing'], 
     difficulty: 'beginner',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'retirement-calculator', 
@@ -222,7 +256,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['retirement','planning','pension','corpus','savings'], 
     difficulty: 'intermediate',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'swp-calculator', 
@@ -233,7 +269,9 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['swp','withdrawal','pension','mutual fund','income'], 
     difficulty: 'intermediate',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
   { 
     id: 'inflation-calculator', 
@@ -244,30 +282,32 @@ export const ALL_TOOLS: ToolEntry[] = [
     subCategory: 'Financial',
     keywords: ['inflation','purchasing power','money','value'], 
     difficulty: 'beginner',
-    status: 'new'
+    status: 'new',
+    searchIntent: 'transactional',
+    schemaType: 'WebApplication'
   },
 
 
   // ── PDF Tools ──────────────────────────────────────────────────────────────
-  { id: 'compress-pdf',     name: 'Compress PDF',     desc: 'Reduce PDF file size',                href: 'pdf-tools/compress-pdf/',   category: 'pdf', keywords: ['pdf','compress','reduce','size'], popular: true, priority: 0.8 },
-  { id: 'merge-pdf',        name: 'Merge PDF',        desc: 'Combine multiple PDFs into one',      href: 'pdf-tools/merge-pdf/',      category: 'pdf', keywords: ['pdf','merge','combine','join'], popular: true, priority: 0.8 },
-  { id: 'split-pdf',        name: 'Split PDF',        desc: 'Extract pages from a PDF',            href: 'pdf-tools/split-pdf/',      category: 'pdf', keywords: ['pdf','split','extract','pages'] },
-  { id: 'image-to-pdf',     name: 'Image to PDF',     desc: 'Convert images into a single PDF',    href: 'pdf-tools/image-to-pdf/',   category: 'pdf', keywords: ['image','jpg','png','pdf','convert'] },
-  { id: 'pdf-to-word',      name: 'PDF to Word',      desc: 'Convert PDF text to editable Word',   href: 'pdf-tools/pdf-to-word/',    category: 'pdf', keywords: ['pdf','word','docx','convert'], popular: true },
-  { id: 'lock-unlock-pdf',  name: 'Lock / Unlock PDF',desc: 'Add or remove PDF passwords',         href: 'pdf-tools/lock-unlock/',    category: 'pdf', keywords: ['pdf','password','lock','unlock','encrypt'] },
-  { id: 'watermark-pdf',    name: 'Watermark PDF',    desc: 'Add text or image watermark',         href: 'pdf-tools/watermark-pdf/',  category: 'pdf', keywords: ['pdf','watermark','stamp'] },
-  { id: 'page-numbering',   name: 'Page Numbering',   desc: 'Add page numbers to PDF',             href: 'pdf-tools/page-numbering/', category: 'pdf', keywords: ['pdf','page','number'] },
-  { id: 'rotate-pdf',       name: 'Rotate PDF',       desc: 'Rotate one or all pages',             href: 'pdf-tools/rotate-pdf/',     category: 'pdf', keywords: ['pdf','rotate','flip','orientation'] },
-  { id: 'extract-images',   name: 'Extract Images',   desc: 'Pull images out of a PDF',            href: 'pdf-tools/extract-images/', category: 'pdf', keywords: ['pdf','extract','image'] },
+  { id: 'compress-pdf',     name: 'Compress PDF',     desc: 'Reduce PDF file size',                href: 'pdf-tools/compress-pdf/',   category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','compress','reduce','size'], popular: true, priority: 0.8 },
+  { id: 'merge-pdf',        name: 'Merge PDF',        desc: 'Combine multiple PDFs into one',      href: 'pdf-tools/merge-pdf/',      category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','merge','combine','join'], popular: true, priority: 0.8 },
+  { id: 'split-pdf',        name: 'Split PDF',        desc: 'Extract pages from a PDF',            href: 'pdf-tools/split-pdf/',      category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','split','extract','pages'] },
+  { id: 'image-to-pdf',     name: 'Image to PDF',     desc: 'Convert images into a single PDF',    href: 'pdf-tools/image-to-pdf/',   category: 'pdf', input: 'image', output: 'pdf', keywords: ['image','jpg','png','pdf','convert'] },
+  { id: 'pdf-to-word',      name: 'PDF to Word',      desc: 'Convert PDF text to editable Word',   href: 'pdf-tools/pdf-to-word/',    category: 'pdf', input: 'pdf', output: 'text', keywords: ['pdf','word','docx','convert'], popular: true },
+  { id: 'lock-unlock-pdf',  name: 'Lock / Unlock PDF',desc: 'Add or remove PDF passwords',         href: 'pdf-tools/lock-unlock/',    category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','password','lock','unlock','encrypt'] },
+  { id: 'watermark-pdf',    name: 'Watermark PDF',    desc: 'Add text or image watermark',         href: 'pdf-tools/watermark-pdf/',  category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','watermark','stamp'] },
+  { id: 'page-numbering',   name: 'Page Numbering',   desc: 'Add page numbers to PDF',             href: 'pdf-tools/page-numbering/', category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','page','number'] },
+  { id: 'rotate-pdf',       name: 'Rotate PDF',       desc: 'Rotate one or all pages',             href: 'pdf-tools/rotate-pdf/',     category: 'pdf', input: 'pdf', output: 'pdf', keywords: ['pdf','rotate','flip','orientation'] },
+  { id: 'extract-images',   name: 'Extract Images',   desc: 'Pull images out of a PDF',            href: 'pdf-tools/extract-images/', category: 'pdf', input: 'pdf', output: 'image', keywords: ['pdf','extract','image'] },
 
   // ── Image Tools ────────────────────────────────────────────────────────────
-  { id: 'image-compress',  name: 'Compress Image',     desc: 'Reduce image file size',                 href: 'image-tools/compress/',           category: 'image', keywords: ['image','compress','jpg','png','webp'], popular: true, priority: 0.8 },
-  { id: 'image-converter', name: 'Image Converter',    desc: 'Convert between JPG, PNG, WebP, AVIF',   href: 'image-tools/image-converter/',    category: 'image', keywords: ['image','convert','jpg','png','webp','avif'] },
-  { id: 'image-resizer',   name: 'Image Resizer',      desc: 'Resize images to exact dimensions',      href: 'image-tools/image-resizer/',      category: 'image', keywords: ['image','resize','dimensions'] },
-  { id: 'image-crop',      name: 'Image Crop',         desc: 'Crop images to ratio or freeform',       href: 'image-tools/image-crop/',         category: 'image', keywords: ['image','crop','trim'] },
-  { id: 'bulk-resizer',    name: 'Bulk Image Resize',  desc: 'Resize many images at once',             href: 'image-tools/bulk-resizer/', category: 'image', keywords: ['image','bulk','batch','resize'] },
-  { id: 'bg-remover',      name: 'Background Remover', desc: 'Remove image backgrounds locally',       href: 'image-tools/bg-remover/',   category: 'image', keywords: ['image','background','remove','transparent'], popular: true },
-  { id: 'image-base64',    name: 'Image to Base64',    desc: 'Encode images as Base64 data URIs',      href: 'image-tools/image-base64/',       category: 'image', keywords: ['image','base64','data uri'] },
+  { id: 'image-compress',  name: 'Compress Image',     desc: 'Reduce image file size',                 href: 'image-tools/compress/',           category: 'image', input: 'image', output: 'image', keywords: ['image','compress','jpg','png','webp'], popular: true, priority: 0.8 },
+  { id: 'image-converter', name: 'Image Converter',    desc: 'Convert between JPG, PNG, WebP, AVIF',   href: 'image-tools/image-converter/',    category: 'image', input: 'image', output: 'image', keywords: ['image','convert','jpg','png','webp','avif'] },
+  { id: 'image-resizer',   name: 'Image Resizer',      desc: 'Resize images to exact dimensions',      href: 'image-tools/image-resizer/',      category: 'image', input: 'image', output: 'image', keywords: ['image','resize','dimensions'] },
+  { id: 'image-crop',      name: 'Image Crop',         desc: 'Crop images to ratio or freeform',       href: 'image-tools/image-crop/',         category: 'image', input: 'image', output: 'image', keywords: ['image','crop','trim'] },
+  { id: 'bulk-resizer',    name: 'Bulk Image Resize',  desc: 'Resize many images at once',             href: 'image-tools/bulk-resizer/', category: 'image', input: 'image', output: 'image', keywords: ['image','bulk','batch','resize'] },
+  { id: 'bg-remover',      name: 'Background Remover', desc: 'Remove image backgrounds locally',       href: 'image-tools/bg-remover/',   category: 'image', input: 'image', output: 'image', keywords: ['image','background','remove','transparent'], popular: true },
+  { id: 'image-base64',    name: 'Image to Base64',    desc: 'Encode images as Base64 data URIs',      href: 'image-tools/image-base64/',       category: 'image', input: 'image', output: 'text', keywords: ['image','base64','data uri'] },
 
   // ── Developer Tools ────────────────────────────────────────────────────────
   { 
@@ -276,6 +316,8 @@ export const ALL_TOOLS: ToolEntry[] = [
     desc: 'Format and validate JSON', 
     href: 'developer-tools/json-formatter/', 
     category: 'developer', 
+    input: 'json',
+    output: 'json',
     keywords: ['json','format','pretty','validate'], 
     popular: true, 
     difficulty: 'beginner',

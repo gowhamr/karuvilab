@@ -6,6 +6,8 @@ import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const toolId = "code-minifier";
 
 type Lang = "css" | "js" | "html";
@@ -13,7 +15,6 @@ type Lang = "css" | "js" | "html";
 export default function CodeMinifierClient() {
   const [lang, setLang] = useState<Lang>("css");
   const [isProcessing, setIsProcessing] = useState(false);
-  const fileInput = useRef<HTMLInputElement>(null);
 
   const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
   const items = allItems[toolId] || [];
@@ -40,7 +41,7 @@ export default function CodeMinifierClient() {
     };
   };
 
-  const handleFiles = (files: FileList | null) => {
+  const handleFiles = (files: FileList | File[]) => {
     if (!files || files.length === 0) return;
     addItems(toolId, Array.from(files));
   };
@@ -97,19 +98,14 @@ export default function CodeMinifierClient() {
           </div>
         </div>
 
-        <div
-          className="bg-bg border-2 border-dashed border-border rounded-3xl p-12 text-center cursor-pointer hover:border-blue hover:bg-blue/[0.01] transition-all group"
-          onClick={() => fileInput.current?.click()}
-          onDragOver={e => e.preventDefault()}
-          onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files); }}
-        >
-          <div className="w-16 h-16 bg-surface rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
-            {lang === 'js' ? '📜' : lang === 'css' ? '🎨' : '🌐'}
-          </div>
-          <p className="font-bold text-text-2">Drop your {lang.toUpperCase()} files here</p>
-          <p className="text-xs text-text-4 mt-1">Multiple files supported</p>
-          <input ref={fileInput} type="file" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
-        </div>
+        <DropZone
+          onFilesSelected={handleFiles}
+          accept={lang === 'js' ? '.js,.mjs,.cjs' : lang === 'css' ? '.css' : '.html,.htm'}
+          multiple
+          title={`Drop your ${lang.toUpperCase()} files here`}
+          description="Multiple files supported"
+          icon={<div className="text-3xl">{lang === 'js' ? '📜' : lang === 'css' ? '🎨' : '🌐'}</div>}
+        />
       </div>
 
       <BatchQueue 

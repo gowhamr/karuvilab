@@ -4,6 +4,8 @@ import Script from "next/script";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 declare const pdfjsLib: any;
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
@@ -17,7 +19,6 @@ export default function ExtractImagesClient() {
   const [images, setImages] = useState<ExtractedImage[]>([]);
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const extract = async () => {
     if (!libReady) { setError("PDF library not loaded yet."); return; }
@@ -105,25 +106,16 @@ export default function ExtractImagesClient() {
           <strong>Note:</strong> Extracts raster images (JPEG, PNG) embedded in the PDF. Vector graphics and text-based content cannot be extracted as images.
         </div>
 
-        <div
-          className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-          onClick={() => fileRef.current?.click()}
-          onDragOver={e => e.preventDefault()}
-          onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) { setFile(f); setImages([]); } }}
-        >
-          {file ? (
-            <div className="space-y-1">
-              <p className="font-semibold text-text-2">{file.name}</p>
-              <p className="text-sm text-text-3">{(file.size / 1024).toFixed(0)} KB</p>
-            </div>
-          ) : (
-            <>
-              <div className="text-4xl mb-2">🖼️</div>
-              <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
-            </>
-          )}
-          <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) { setFile(f); setImages([]); } }} />
-        </div>
+        <DropZone
+          onFilesSelected={(files) => {
+            const f = files instanceof FileList ? files[0] : files[0];
+            if (f) { setFile(f); setImages([]); }
+          }}
+          accept=".pdf,application/pdf"
+          title={file ? file.name : "Drop a PDF here or click to select"}
+          description={file ? `${(file.size / 1024).toFixed(0)} KB` : "Supports standard PDF files"}
+          icon={<div className="text-4xl">{file ? "📄" : "🖼️"}</div>}
+        />
 
         {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
         {progress && <div className="p-4 bg-surface border border-border rounded-xl text-sm text-text-3 flex items-center gap-2"><span className="animate-spin">⏳</span>{progress}</div>}

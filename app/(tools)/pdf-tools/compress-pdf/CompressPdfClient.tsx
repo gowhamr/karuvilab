@@ -1,112 +1,95 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import * as PDFLib from "pdf-lib";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { BatchQueue } from "@/components/ui/BatchQueue";
+import { DropZone } from "@/components/ui/DropZone";
 
-const cat = CATEGORIES.find(c => c.id === "pdf")!;
-
-function fmtSize(b: number) {
-  if (b < 1024) return b + " B";
-  if (b < 1048576) return (b / 1024).toFixed(1) + " KB";
-  return (b / 1048576).toFixed(2) + " MB";
-}
+const toolId = "compress-pdf";
 
 export default function CompressPdfClient() {
-  const { createUrl, revokeUrl } = useObjectUrlManager();
-  const [file, setFile] = useState<File | null>(null);
-  const [processing, setProcessing] = useState(false);
-  const [resultSize, setResultSize] = useState(0);
-  const [resultUrl, setResultUrl] = useState<string | null>(null);
-  const [error, setError] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
+  const { createUrl } = useObjectUrlManager();
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const compress = async () => {
-    if (!file) { setError("Please select a PDF file."); return; }
-    setProcessing(true);
-    setError("");
-    
-    // Revoke previous result if any
-    if (resultUrl) revokeUrl(resultUrl);
-    setResultUrl(null);
+  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
+  const items = allItems[toolId] || [];
 
+  const compressSingle = async (item: BatchItem): Promise<any> => {
     try {
+      updateItem(toolId, item.id, { message: "Loading PDF..." });
       const { PDFDocument } = PDFLib;
-      const bytes = await file.arrayBuffer();
+      const bytes = await item.file.arrayBuffer();
       const doc = await PDFDocument.load(bytes, { updateMetadata: false });
+      
+      updateItem(toolId, item.id, { message: "Optimizing structure...", progress: 50 });
       // Re-save with pdf-lib (removes redundant objects, rebuilds xref)
       const outBytes = await doc.save({ useObjectStreams: true });
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
-      setResultSize(blob.size);
-      setResultUrl(createUrl(blob));
+      
+      const name = item.file.name.replace(/\.pdf$/i, "") + "-compressed.pdf";
+      const url = createUrl(blob);
+
+      return {
+        name,
+        originalSize: item.file.size,
+        compressedSize: blob.size,
+        url,
+        blob,
+      };
     } catch (e: any) {
-      setError(e?.message || "Failed to compress PDF.");
+      throw new Error(e?.message || "Failed to compress PDF");
     }
-    setProcessing(false);
   };
 
-  const download = () => {
-    if (!resultUrl || !file) return;
-    const a = document.createElement("a");
-    a.href = resultUrl;
-    a.download = file.name.replace(/\.pdf$/i, "") + "-compressed.pdf";
-    a.click();
+  const handleFiles = (files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    addItems(toolId, Array.from(files));
   };
 
-  const saved = file && resultSize ? Math.round((1 - resultSize / file.size) * 100) : 0;
+  const processAll = async () => {
+    setIsProcessing(true);
+    await startProcessing(toolId, compressSingle);
+    setIsProcessing(false);
+  };
+
+  const downloadOne = (item: BatchItem) => {
+    if (item.result) {
+      const a = document.createElement("a");
+      a.href = item.result.url;
+      a.download = item.result.name;
+      a.click();
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl text-sm text-yellow-700 dark:text-yellow-400">
+    <div className="space-y-8">
+      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl text-sm text-yellow-700 dark:text-yellow-400 font-medium">
         <strong>Note:</strong> Browser-based PDF compression re-encodes the PDF structure. Results vary — PDFs with large embedded images may not compress significantly without image re-encoding.
       </div>
 
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-        onClick={() => fileRef.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) setFile(f); }}
-      >
-        {file ? (
-          <div className="space-y-1">
-            <p className="font-semibold text-text-2">{file.name}</p>
-            <p className="text-sm text-text-3">{fmtSize(file.size)}</p>
-          </div>
-        ) : (
-          <>
-            <div className="text-4xl mb-2">📉</div>
-            <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
-          </>
-        )}
-        <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) { setFile(f); setResultUrl(null); } }} />
-      </div>
+      <DropZone
+        onFilesSelected={handleFiles}
+        accept=".pdf,application/pdf"
+        multiple
+        title="Drop PDF files here"
+        description="Supports multiple PDFs up to 100MB"
+        icon={<div className="text-4xl">📄</div>}
+      />
 
-      {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
+      <BatchQueue 
+        toolId={toolId}
+        isProcessing={isProcessing}
+        onProcess={processAll}
+        onDownload={downloadOne}
+      />
 
-      {resultUrl && file && (
-        <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">
-          <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Result</h2>
-          <div className="flex flex-wrap gap-4 text-sm">
-            <span>Original: <strong>{fmtSize(file.size)}</strong></span>
-            <span>Compressed: <strong>{fmtSize(resultSize)}</strong></span>
-            <span className={saved > 0 ? "text-green-500 font-bold" : "text-text-3"}>
-              {saved > 0 ? `-${saved}% saved` : "No size reduction (file already optimized)"}
-            </span>
-          </div>
-          <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
-            Download Compressed PDF
-          </button>
+      {items.length === 0 && (
+        <div className="py-20 text-center space-y-4 opacity-40">
+          <div className="text-6xl">📥</div>
+          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-sm">Waiting for PDFs...</p>
         </div>
       )}
-
-      <button
-        onClick={compress}
-        disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-      >
-        {processing ? "Compressing…" : "Compress PDF"}
-      </button>
     </div>
   );
 }

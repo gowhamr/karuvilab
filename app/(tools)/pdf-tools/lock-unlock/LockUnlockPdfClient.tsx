@@ -4,6 +4,8 @@ import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 export default function LockUnlockPdfClient() {
@@ -15,7 +17,6 @@ export default function LockUnlockPdfClient() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
@@ -82,25 +83,16 @@ export default function LockUnlockPdfClient() {
         ))}
       </div>
 
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-        onClick={() => fileRef.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) setFile(f); }}
-      >
-        {file ? (
-          <div className="space-y-1">
-            <p className="font-semibold text-text-2">{file.name}</p>
-            <p className="text-sm text-text-3">{(file.size / 1024).toFixed(0)} KB</p>
-          </div>
-        ) : (
-          <>
-            <div className="text-4xl mb-2">{mode === "lock" ? "🔒" : "🔓"}</div>
-            <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
-          </>
-        )}
-        <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) setFile(f); }} />
-      </div>
+      <DropZone
+        onFilesSelected={(files) => {
+          const f = files instanceof FileList ? files[0] : files[0];
+          if (f) setFile(f);
+        }}
+        accept=".pdf,application/pdf"
+        title={file ? file.name : "Drop a PDF here or click to select"}
+        description={file ? `${(file.size / 1024).toFixed(0)} KB` : "Supports standard PDF files"}
+        icon={<div className="text-4xl">{file ? "📄" : (mode === "lock" ? "🔒" : "🔓")}</div>}
+      />
 
       <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
         {mode === "lock" ? (

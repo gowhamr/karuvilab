@@ -41,31 +41,35 @@ export function CalculatorActionBar({
   };
 
   return (
-    <div className="bg-surface border border-border p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
+    <div className="bg-surface border border-border p-4 rounded-xl flex flex-wrap items-center justify-between gap-3" role="toolbar" aria-label="Tool actions">
       <div className="flex flex-wrap gap-2">
         <CopyButton text={summary} label="Summary" />
         <button
           onClick={handleShare}
-          className="flex items-center gap-2 px-3 py-2 text-sm font-bold bg-surface border border-border rounded-lg hover:border-blue hover:text-blue transition-all"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-bold bg-surface border border-border rounded-lg hover:border-blue hover:text-blue transition-all focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
           title="Share Result URL"
+          aria-label="Share current calculation link"
         >
-          <Share2 className="w-4 h-4" />
+          <Share2 className="w-4 h-4" aria-hidden="true" />
           Share
         </button>
         <button
           onClick={handleSaveHistory}
-          className="flex items-center gap-2 px-3 py-2 text-sm font-bold bg-surface border border-border rounded-lg hover:border-blue hover:text-blue transition-all"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-bold bg-surface border border-border rounded-lg hover:border-blue hover:text-blue transition-all focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
           title="Save to History"
+          aria-label="Save calculation to local history"
         >
-          <Save className="w-4 h-4" />
+          <Save className="w-4 h-4" aria-hidden="true" />
           Save
         </button>
         {onToggleProjection && (
           <button
             onClick={onToggleProjection}
-            className="flex items-center gap-2 px-3 py-2 text-sm font-bold bg-surface border border-border rounded-lg hover:border-blue hover:text-blue transition-all"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-bold bg-surface border border-border rounded-lg hover:border-blue hover:text-blue transition-all focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
+            aria-label={showProjection ? "Hide data projection" : "Show data projection"}
+            aria-expanded={showProjection}
           >
-            <FileText className="w-4 h-4" />
+            <FileText className="w-4 h-4" aria-hidden="true" />
             {showProjection ? "Hide" : "Show"} Projection
           </button>
         )}
@@ -73,9 +77,10 @@ export function CalculatorActionBar({
       {onExport && showProjection && (
         <button
           onClick={onExport}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-black uppercase tracking-widest bg-blue text-white rounded-lg hover:bg-blue/90 transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 text-xs font-black uppercase tracking-widest bg-blue text-white rounded-lg hover:bg-blue/90 transition-colors focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
+          aria-label="Export projection data as CSV"
         >
-          <Download className="w-3.5 h-3.5" />
+          <Download className="w-3.5 h-3.5" aria-hidden="true" />
           Export CSV
         </button>
       )}

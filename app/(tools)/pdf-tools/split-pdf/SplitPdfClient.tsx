@@ -5,6 +5,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 function parseRanges(input: string, maxPage: number): number[][] {
@@ -29,15 +31,17 @@ function parseRanges(input: string, maxPage: number): number[][] {
 
 export default function SplitPdfClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [ranges, setRanges] = useState("1-3, 4-6");
   const [splitAll, setSplitAll] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
 
-  const loadFile = async (f: File) => {
+  const loadFile = async (files: FileList | File[]) => {
+    const f = files[0];
+    if (!f) return;
     setFile(f);
     setError("");
     try {
@@ -92,7 +96,16 @@ export default function SplitPdfClient() {
         className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
         onClick={() => fileRef.current?.click()}
         onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f?.type === "application/pdf" || f?.name.endsWith(".pdf")) loadFile(f); }}
+        onDrop={e => { 
+          e.preventDefault(); 
+          const files = e.dataTransfer.files;
+          if (files && files.length > 0) {
+            const f = files[0];
+            if (f && (f.type === "application/pdf" || f.name.endsWith(".pdf"))) {
+              loadFile(files);
+            }
+          }
+        }}
       >
         {file ? (
           <div className="space-y-1">
@@ -105,7 +118,7 @@ export default function SplitPdfClient() {
             <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
           </>
         )}
-        <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) loadFile(f); }} />
+        <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { if (e.target.files) loadFile(e.target.files); }} />
       </div>
 
       <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">

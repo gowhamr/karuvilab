@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useId } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
@@ -20,6 +20,7 @@ const DEFAULT_STATE = {
 };
 
 export default function CompoundInterestClient() {
+  const freqLabelId = useId();
   const [isLoaded, setIsLoaded] = useState(false);
   const [principal, setPrincipal] = useState(DEFAULT_STATE.principal);
   const [rate, setRate] = useState(DEFAULT_STATE.rate);
@@ -107,13 +108,14 @@ Generated via KaruviLab`;
           format={(v) => v + " yr"}
         />
 
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Compounding Frequency</label>
+        <div className="space-y-2" role="group" aria-labelledby={freqLabelId}>
+          <label id={freqLabelId} className="text-sm font-bold text-text-2">Compounding Frequency</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {FREQ_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setFreq(opt.value)}
+                aria-pressed={freq === opt.value}
                 className={`py-2 px-3 rounded-xl text-sm font-semibold border transition-all ${
                   freq === opt.value
                     ? "bg-blue text-white border-blue"

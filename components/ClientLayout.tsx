@@ -7,6 +7,7 @@ import { ToastProvider } from "@/components/ui/Toast";
 import { LazyMotion, domAnimation } from "framer-motion";
 import { Footer } from "@/components/Footer";
 import dynamic from "next/dynamic";
+import { FeedbackModal } from "@/components/ui/FeedbackModal";
 
 const CommandPalette = dynamic(() => import("@/components/ui/CommandPalette").then(mod => mod.CommandPalette), {
   ssr: false
@@ -17,6 +18,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <LazyMotion features={domAnimation}>
       <ToastProvider>
         <CommandPalette />
+        <FeedbackModal />
         <div className="flex min-h-screen">
           <Sidebar />
           <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">

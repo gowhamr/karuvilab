@@ -1,0 +1,209 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { m, AnimatePresence } from "framer-motion";
+import { X, Send, AlertCircle, Sparkles, CheckCircle2, Monitor, Info, ChevronDown } from "lucide-react";
+import { useSupportStore, FeedbackType } from "@/src/store/useSupportStore";
+import { getSystemInfo, SystemInfo } from "@/src/lib/support-utils";
+import { cn } from "@/src/lib/utils";
+
+const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: any }[] = [
+  { value: "calculation", label: "Calculation Wrong", icon: AlertCircle },
+  { value: "bug", label: "UI Broken", icon: AlertCircle },
+  { value: "performance", label: "Performance Issue", icon: AlertCircle },
+  { value: "feature", label: "Feature Request", icon: Sparkles },
+  { value: "other", label: "Other", icon: Info },
+];
+
+export function FeedbackModal() {
+  const { isOpen, closeFeedback, type, context } = useSupportStore();
+  const setType = (t: FeedbackType) => useSupportStore.setState({ type: t });
+
+  const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [sysInfo, setSysInfo] = useState<SystemInfo | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setSysInfo(getSystemInfo());
+      setIsSuccess(false);
+      setDescription("");
+    }
+  }, [isOpen]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    
+    // Auto close after success
+    setTimeout(() => {
+      closeFeedback();
+    }, 2000);
+  };
+
+  return (
+    <Dialog.Root open={isOpen} onOpenChange={(open) => !open && closeFeedback()}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[300] bg-bg/60 backdrop-blur-sm animate-in fade-in duration-300" />
+        
+        <Dialog.Content className={cn(
+          "fixed z-[301] bg-surface border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300",
+          // Mobile: Bottom Sheet
+          "bottom-0 left-0 right-0 rounded-t-[32px] max-h-[90vh] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-0",
+          // Desktop: Centered Modal
+          "md:bottom-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[500px] md:rounded-[32px] md:max-h-[85vh]"
+        )}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-8 py-6 border-b border-border/50">
+            <div>
+              <Dialog.Title className="text-xl font-black tracking-tight">
+                {isSuccess ? "Thank You!" : "Feedback"}
+              </Dialog.Title>
+              <Dialog.Description className="text-[10px] font-black uppercase tracking-widest text-text-4">
+                {isSuccess ? "We've received your report" : "Help us improve KaruviLab"}
+              </Dialog.Description>
+            </div>
+            <Dialog.Close className="p-2 hover:bg-bg rounded-xl text-text-4 transition-all active:scale-90">
+              <X className="w-5 h-5" />
+            </Dialog.Close>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
+            <AnimatePresence mode="wait">
+              {isSuccess ? (
+                <m.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-12 flex flex-col items-center text-center space-y-4"
+                >
+                  <div className="w-20 h-20 rounded-full bg-blue/10 flex items-center justify-center text-blue">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-black text-lg">Report Submitted</h3>
+                    <p className="text-sm text-text-4 font-bold">Our team will review this shortly.</p>
+                  </div>
+                </m.div>
+              ) : (
+                <m.form 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  onSubmit={handleSubmit} 
+                  className="space-y-6"
+                >
+                  {/* Context Banner */}
+                  {context?.toolName && (
+                    <div className="p-4 bg-blue/5 border border-blue/10 rounded-2xl flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue flex items-center justify-center text-white">
+                        <Monitor className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[9px] font-black text-blue uppercase tracking-widest">Reporting For</p>
+                        <p className="text-xs font-bold text-text truncate">{context.toolName}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Issue Type */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Type of Feedback</label>
+                    <div className="relative">
+                      <select 
+                        value={type}
+                        onChange={(e) => setType(e.target.value as FeedbackType)}
+                        className="w-full h-[56px] px-5 pr-12 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm appearance-none"
+                      >
+                        {FEEDBACK_OPTIONS.map(opt => (
+                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
+                    <textarea 
+                      required
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="What happened? Any steps to reproduce?"
+                      className="w-full min-h-[120px] p-5 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm resize-none"
+                    />
+                  </div>
+
+                  {/* Screenshot (Mock) */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
+                    <div className="group relative w-full h-[80px] border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-bg/50 hover:bg-surface hover:border-blue/30 transition-all cursor-pointer">
+                       <div className="flex flex-col items-center gap-1">
+                          <Send className="w-4 h-4 text-text-4 rotate-[-45deg] group-hover:text-blue transition-colors" />
+                          <span className="text-[9px] font-bold text-text-4 uppercase tracking-widest">Click to upload or drag & drop</span>
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* System Info */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between ml-1">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Diagnostic Info</label>
+                       <span className="text-[9px] font-bold text-text-4 opacity-60 italic">Captured automatically</span>
+                    </div>
+                    <div className="p-4 bg-elevated/50 border border-border rounded-2xl space-y-2 text-[10px] font-bold text-text-3 font-mono">
+                      <div className="flex justify-between border-b border-border/50 pb-2">
+                        <span>Browser</span>
+                        <span className="text-text">{sysInfo?.browser}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-border/50 pb-2">
+                        <span>OS</span>
+                        <span className="text-text">{sysInfo?.os}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-border/50 pb-2">
+                        <span>Screen</span>
+                        <span className="text-text">{sysInfo?.screenSize}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Route</span>
+                        <span className="text-text truncate ml-4">{context?.route || "/"}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Submit */}
+                  <button 
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="w-full h-[64px] bg-blue text-white rounded-[20px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-blue/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                  >
+                    {isSubmitting ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        Submit Feedback
+                      </>
+                    )}
+                  </button>
+                </m.form>
+              )}
+            </AnimatePresence>
+          </div>
+          
+          <div className="p-6 bg-elevated/30 border-t border-border/50 flex items-center justify-center gap-2">
+             <Info className="w-3.5 h-3.5 text-text-4" />
+             <span className="text-[10px] font-bold text-text-4">KaruviLab values your privacy. No personal data is collected.</span>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}

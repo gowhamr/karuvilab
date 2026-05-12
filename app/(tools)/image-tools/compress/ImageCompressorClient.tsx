@@ -4,17 +4,21 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { workerManager } from "@/src/workers/manager";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 
-const toolId = "image-compressor";
+import { DropZone } from "@/components/ui/DropZone";
+
+const toolId = "image-compress"; // Updated to match registry ID
 
 export default function ImageCompressorClient() {
   const { createUrl } = useObjectUrlManager();
   const [quality, setQuality] = useState(80);
   const [format, setFormat] = useState<"image/jpeg" | "image/png" | "image/webp">("image/jpeg");
   const [isProcessing, setIsProcessing] = useState(false);
-  const fileInput = useRef<HTMLInputElement>(null);
+
+  useWorkflowIntegration(toolId);
 
   const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
   const items = allItems[toolId] || [];
@@ -45,7 +49,7 @@ export default function ImageCompressorClient() {
     };
   };
 
-  const handleFiles = (files: FileList | null) => {
+  const handleFiles = (files: FileList | File[]) => {
     if (!files || files.length === 0) return;
     addItems(toolId, Array.from(files));
   };
@@ -78,22 +82,15 @@ export default function ImageCompressorClient() {
   return (
     <div className="space-y-8">
       {/* Drop zone */}
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-3xl p-12 text-center cursor-pointer hover:border-blue hover:bg-blue/[0.02] transition-all group"
-        onClick={() => fileInput.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files); }}
-      >
-        <div className="w-20 h-20 bg-bg rounded-2xl flex items-center justify-center text-4xl mx-auto mb-6 group-hover:scale-110 transition-transform shadow-sm">
-          🖼️
-        </div>
-        <h3 className="text-xl font-black text-text mb-2">Drop images here</h3>
-        <p className="text-text-4 font-medium">or click to browse your files</p>
-        <p className="text-xs text-text-4 mt-4 bg-bg inline-block px-3 py-1 rounded-full border border-border">
-          Supports JPG, PNG, WebP up to 50MB
-        </p>
-        <input ref={fileInput} type="file" accept="image/*" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
-      </div>
+      <DropZone
+        onFilesSelected={handleFiles}
+        accept="image/*"
+        multiple
+        title="Drop images here"
+        description="Supports JPG, PNG, WebP up to 50MB"
+        icon={<div className="text-4xl">🖼️</div>}
+        maxSize={50 * 1024 * 1024}
+      />
 
       {/* Options */}
       <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm relative overflow-hidden">
@@ -142,12 +139,15 @@ export default function ImageCompressorClient() {
           </div>
 
           <div className="flex items-end">
-            <button
-              onClick={() => fileInput.current?.click()}
-              className="w-full py-4 bg-bg border-2 border-dashed border-border text-text-3 font-black uppercase tracking-widest rounded-xl hover:border-blue hover:text-blue transition-all text-xs"
-            >
-              + Add More Files
-            </button>
+            <DropZone
+              onFilesSelected={handleFiles}
+              accept="image/*"
+              multiple
+              title="+ Add More Files"
+              description="Click or drop here"
+              className="p-4"
+              icon={null}
+            />
           </div>
         </div>
       </div>

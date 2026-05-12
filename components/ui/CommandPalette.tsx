@@ -15,6 +15,7 @@ export function CommandPalette() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const listboxId = "command-palette-listbox";
 
   // Keyboard shortcut: Cmd+K
   useEffect(() => {
@@ -73,12 +74,18 @@ export function CommandPalette() {
           className="fixed left-1/2 top-[15%] -translate-x-1/2 z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-top-4 duration-200"
         >
           <div className="flex items-center px-6 border-b border-border bg-elevated/30">
-            <Search className="w-5 h-5 text-text-4" />
+            <Search className="w-5 h-5 text-text-4" aria-hidden="true" />
             <input
               autoFocus
               ref={inputRef}
               type="text"
               placeholder="Jump to a tool..."
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded={isPaletteOpen}
+              aria-haspopup="listbox"
+              aria-controls={listboxId}
+              aria-activedescendant={filteredTools.length > 0 ? `option-${filteredTools[selectedIndex]?.id}` : undefined}
               className="w-full px-4 py-5 bg-transparent outline-none text-lg text-text font-bold placeholder:text-text-4"
               value={query}
               onChange={(e) => {
@@ -88,36 +95,45 @@ export function CommandPalette() {
             />
             <Dialog.Close 
               aria-label="Close palette"
-              className="p-2 hover:bg-bg rounded-lg text-text-4 transition-colors"
+              className="p-2 hover:bg-bg rounded-lg text-text-4 transition-colors focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
             >
               <X className="w-4 h-4" />
             </Dialog.Close>
           </div>
 
-          <div ref={scrollRef} className="max-h-[50vh] overflow-y-auto p-2 space-y-1">
-            <div className="px-3 py-2 text-[9px] font-black text-text-4 uppercase tracking-[0.2em]">
+          <div 
+            id={listboxId}
+            role="listbox"
+            aria-label="Suggested tools"
+            ref={scrollRef} 
+            className="max-h-[50vh] overflow-y-auto p-2 space-y-1"
+          >
+            <div className="px-3 py-2 text-[9px] font-black text-text-4 uppercase tracking-[0.2em]" aria-hidden="true">
               {!query.trim() ? "Most Popular" : "Search Results"}
             </div>
             
             {filteredTools.length === 0 ? (
-              <div className="px-3 py-8 text-center text-text-4 text-xs font-bold">
+              <div className="px-3 py-8 text-center text-text-4 text-xs font-bold" role="status">
                 No tools found.
               </div>
             ) : (
               filteredTools.map((tool: ToolEntry, i: number) => (
                 <button
                   key={tool.id}
+                  id={`option-${tool.id}`}
+                  role="option"
+                  aria-selected={i === selectedIndex}
                   onMouseEnter={() => setSelectedIndex(i)}
                   onClick={() => handleSelect(tool)}
                   className={`
-                    w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all text-left group
+                    w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all text-left group outline-none
                     ${i === selectedIndex ? "bg-blue text-white shadow-lg shadow-blue/20" : "hover:bg-bg"}
                   `}
                 >
                   <div className={`
                     w-9 h-9 rounded-lg flex items-center justify-center text-xl flex-shrink-0 border transition-colors
                     ${i === selectedIndex ? "bg-white/20 border-white/10" : "bg-elevated border-border"}
-                  `}>
+                  `} aria-hidden="true">
                     <ToolIcon toolId={tool.id} category={tool.category} className={`w-4 h-4 ${i === selectedIndex ? "text-white" : "text-text-2"}`} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -127,7 +143,7 @@ export function CommandPalette() {
                     </div>
                   </div>
                   {i === selectedIndex && (
-                    <CornerDownLeft className="w-3.5 h-3.5 opacity-60" />
+                    <CornerDownLeft className="w-3.5 h-3.5 opacity-60" aria-hidden="true" />
                   )}
                 </button>
               ))

@@ -14,6 +14,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const cat = CATEGORIES.find(c => c.id === "developer")!;
 
 // ── Types & Constants ────────────────────────────────────────────────────────
@@ -61,7 +63,6 @@ export default function HtmlViewerClient() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const logIdRef = useRef(0);
 
   // Load from URL or LocalStorage
@@ -220,8 +221,8 @@ export default function HtmlViewerClient() {
     setCdns(cdns.filter(c => c !== url));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFiles = (files: FileList | File[]) => {
+    const file = files instanceof FileList ? files[0] : files[0];
     if (!file) return;
 
     const reader = new FileReader();
@@ -239,23 +240,6 @@ export default function HtmlViewerClient() {
       }
     };
     reader.readAsText(file);
-    // Reset input
-    e.target.value = "";
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      if (file.name.endsWith(".html")) setHtml(content);
-      else if (file.name.endsWith(".css")) setCss(content);
-      else if (file.name.endsWith(".js")) setJs(content);
-    };
-    reader.readAsText(file);
   };
 
   return (
@@ -264,20 +248,11 @@ export default function HtmlViewerClient() {
       description="Professional developer playground with multi-pane editor and secure real-time preview."
       category={cat}
     >
-      <input 
-        type="file" 
-        ref={fileInputRef} 
-        onChange={handleFileChange} 
-        accept=".html,.css,.js" 
-        className="hidden" 
-      />
       <div 
         className={cn(
-          "flex flex-col lg:flex-row h-[70vh] min-h-[600px] border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
+          "relative flex flex-col lg:flex-row h-[70vh] min-h-[600px] border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
           isFullscreen && "fixed inset-0 z-[100] h-screen w-screen rounded-none m-0"
         )}
-        onDragOver={e => e.preventDefault()}
-        onDrop={handleDrop}
       >
         {/* ── Editor Side ──────────────────────────────────────────────────── */}
         <div className="flex-1 flex flex-col min-w-0 border-r border-border dark:border-white/5">
@@ -301,13 +276,14 @@ export default function HtmlViewerClient() {
             </div>
             
             <div className="flex items-center gap-2">
-              <button 
-                onClick={() => fileInputRef.current?.click()}
-                className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors"
-                title="Upload File"
-              >
-                <Upload className="w-4 h-4" />
-              </button>
+              <DropZone
+                onFilesSelected={handleFiles}
+                accept=".html,.css,.js"
+                title="Import"
+                description=""
+                className="p-1 border-none bg-transparent hover:bg-blue/5 rounded-lg"
+                icon={<Upload className="w-4 h-4 text-text-4" />}
+              />
               <button 
                 onClick={handleCopyCode}
                 className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors"

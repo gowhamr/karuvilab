@@ -20,6 +20,8 @@ const ToolPreferencesSection = dynamic(() => import("./sections/ToolPreferencesS
 const FavoritesSection = dynamic(() => import("./sections/FavoritesSection").then(m => m.FavoritesSection), { ssr: false });
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
 const LanguageSection = dynamic(() => import("./sections/LanguageSection").then(m => m.LanguageSection), { ssr: false });
+const SupportSection = dynamic(() => import("./sections/SupportSection").then(m => m.SupportSection), { ssr: false });
+const AboutSection = dynamic(() => import("./sections/AboutSection").then(m => m.AboutSection), { ssr: false });
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density, animations' },
@@ -148,6 +150,8 @@ export default function SettingsClient() {
               {activeSection === 'tools' && <ToolPreferencesSection />}
               {activeSection === 'favorites' && <FavoritesSection />}
               {activeSection === 'language' && <LanguageSection />}
+              {activeSection === 'support' && <SupportSection />}
+              {activeSection === 'about' && <AboutSection />}
             </div>
           </m.div>
         </AnimatePresence>

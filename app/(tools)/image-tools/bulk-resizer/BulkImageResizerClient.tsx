@@ -7,6 +7,8 @@ import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 
+import { DropZone } from "@/components/ui/DropZone";
+
 const toolId = "bulk-resizer";
 
 export default function BulkImageResizerClient() {
@@ -15,7 +17,6 @@ export default function BulkImageResizerClient() {
   const [targetH, setTargetH] = useState("");
   const [lockRatio, setLockRatio] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const fileInput = useRef<HTMLInputElement>(null);
 
   const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
   const items = allItems[toolId] || [];
@@ -76,7 +77,7 @@ export default function BulkImageResizerClient() {
     };
   };
 
-  const handleFiles = (files: FileList | null) => {
+  const handleFiles = (files: FileList | File[]) => {
     if (!files || files.length === 0) return;
     addItems(toolId, Array.from(files));
   };
@@ -154,16 +155,15 @@ export default function BulkImageResizerClient() {
                 </label>
               </div>
 
-              <div
-                className="bg-blue/[0.03] border-2 border-dashed border-blue/20 rounded-2xl p-8 text-center cursor-pointer hover:border-blue transition-all group"
-                onClick={() => fileInput.current?.click()}
-                onDragOver={e => e.preventDefault()}
-                onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files); }}
-              >
-                <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">📁</div>
-                <p className="font-black text-xs uppercase tracking-widest text-blue">Add Images</p>
-                <input ref={fileInput} type="file" accept="image/*" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
-              </div>
+              <DropZone
+                onFilesSelected={handleFiles}
+                accept="image/*"
+                multiple
+                title="Add Images"
+                description="Drop here or click"
+                className="p-6"
+                icon={<div className="text-2xl">📁</div>}
+              />
             </div>
           </div>
         </div>
@@ -179,20 +179,15 @@ export default function BulkImageResizerClient() {
           />
 
           {items.length === 0 && (
-            <div className="bg-surface border border-border border-dashed rounded-3xl p-20 text-center space-y-6">
-              <div className="w-24 h-24 bg-bg rounded-3xl flex items-center justify-center text-5xl mx-auto shadow-sm">
-                📦
-              </div>
-              <div className="space-y-2">
-                <p className="text-xl font-black">Your queue is empty</p>
-                <p className="text-text-4 font-medium max-w-xs mx-auto">Upload multiple images to resize them all at once in your browser.</p>
-              </div>
-              <button 
-                onClick={() => fileInput.current?.click()}
-                className="px-8 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all text-xs"
-              >
-                Select Files
-              </button>
+            <div className="bg-surface border border-border border-dashed rounded-3xl p-12 text-center space-y-6">
+              <DropZone
+                onFilesSelected={handleFiles}
+                accept="image/*"
+                multiple
+                title="Your queue is empty"
+                description="Upload multiple images to resize them all at once in your browser."
+                icon={<div className="text-5xl">📦</div>}
+              />
             </div>
           )}
         </div>

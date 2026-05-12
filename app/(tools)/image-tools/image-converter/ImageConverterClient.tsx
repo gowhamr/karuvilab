@@ -1,10 +1,13 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { BatchQueue } from "@/components/ui/BatchQueue";
 
-const cat = CATEGORIES.find(c => c.id === "image")!;
+import { DropZone } from "@/components/ui/DropZone";
+
+const toolId = "image-converter";
 type Format = "image/jpeg" | "image/png" | "image/webp" | "image/bmp";
 
 const FORMATS: { label: string; value: Format; ext: string; lossy: boolean }[] = [
@@ -14,151 +17,136 @@ const FORMATS: { label: string; value: Format; ext: string; lossy: boolean }[] =
   { label: "BMP", value: "image/bmp", ext: ".bmp", lossy: false },
 ];
 
-interface ConvertedFile {
-  name: string;
-  originalSize: number;
-  newSize: number;
-  url: string;
-  blob: Blob;
-}
-
-function fmtSize(b: number) {
-  if (b < 1024) return b + " B";
-  if (b < 1048576) return (b / 1024).toFixed(1) + " KB";
-  return (b / 1048576).toFixed(2) + " MB";
-}
-
 export default function ImageConverterClient() {
-  const { createUrl, revokeUrl } = useObjectUrlManager();
+  const { createUrl } = useObjectUrlManager();
   const [targetFmt, setTargetFmt] = useState<Format>("image/webp");
   const [quality, setQuality] = useState(85);
-  const [results, setResults] = useState<ConvertedFile[]>([]);
-  const [processing, setProcessing] = useState(false);
-  const ref = useRef<HTMLInputElement>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
+  const items = allItems[toolId] || [];
 
   const fmtInfo = FORMATS.find(f => f.value === targetFmt)!;
 
-  const convert = async (files: FileList | null) => {
-    if (!files?.length) return;
-    setProcessing(true);
-    
-    // Revoke previous URLs
-    results.forEach(res => revokeUrl(res.url));
-    setResults([]);
+  const convertSingle = async (item: BatchItem): Promise<any> => {
+    const tempUrl = createUrl(item.file);
+    try {
+      const img = await new Promise<HTMLImageElement>((res, rej) => {
+        const i = new Image();
+        i.onload = () => res(i);
+        i.onerror = rej;
+        i.src = tempUrl;
+      });
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      canvas.getContext("2d")!.drawImage(img, 0, 0);
 
-    const out: ConvertedFile[] = [];
-    for (const file of Array.from(files)) {
-      const tempUrl = createUrl(file);
-      try {
-        const img = await new Promise<HTMLImageElement>((res, rej) => {
-          const i = new Image();
-          i.onload = () => res(i);
-          i.onerror = rej;
-          i.src = tempUrl;
-        });
-        const canvas = document.createElement("canvas");
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        canvas.getContext("2d")!.drawImage(img, 0, 0);
-        revokeUrl(tempUrl);
+      const blob = await new Promise<Blob>((res, rej) =>
+        canvas.toBlob(b => b ? res(b) : rej(new Error("fail")), targetFmt, quality / 100)
+      );
 
-        const blob = await new Promise<Blob>((res, rej) =>
-          canvas.toBlob(b => b ? res(b) : rej(new Error("fail")), targetFmt, quality / 100)
-        );
-        out.push({
-          name: file.name.replace(/\.[^.]+$/, "") + fmtInfo.ext,
-          originalSize: file.size,
-          newSize: blob.size,
-          url: createUrl(blob),
-          blob,
-        });
-      } catch {
-        revokeUrl(tempUrl);
-      }
+      const name = item.file.name.replace(/\.[^.]+$/, "") + fmtInfo.ext;
+      const url = createUrl(blob);
+
+      return {
+        name,
+        originalSize: item.file.size,
+        compressedSize: blob.size, // Using compressedSize for BatchQueue compatibility
+        url,
+        blob,
+      };
+    } finally {
+      URL.revokeObjectURL(tempUrl);
     }
-    setResults(out);
-    setProcessing(false);
   };
 
-  const dl = (item: ConvertedFile) => {
-    const a = document.createElement("a");
-    a.href = item.url;
-    a.download = item.name;
-    a.click();
+  const handleFiles = (files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    addItems(toolId, Array.from(files));
+  };
+
+  const processAll = async () => {
+    setIsProcessing(true);
+    await startProcessing(toolId, convertSingle);
+    setIsProcessing(false);
+  };
+
+  const downloadOne = (item: BatchItem) => {
+    if (item.result) {
+      const a = document.createElement("a");
+      a.href = item.result.url;
+      a.download = item.result.name;
+      a.click();
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
-        onClick={() => ref.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); convert(e.dataTransfer.files); }}
-      >
-        <div className="text-4xl mb-3">🔄</div>
-        <p className="font-semibold text-text-2">Drop images or click to select</p>
-        <p className="text-sm text-text-4 mt-1">Supports JPG, PNG, WebP, BMP</p>
-        <input ref={ref} type="file" accept="image/*" multiple className="hidden" onChange={e => convert(e.target.files)} />
-      </div>
+    <div className="space-y-8">
+      <DropZone
+        onFilesSelected={handleFiles}
+        accept="image/*"
+        multiple
+        title="Drop images here"
+        description="Supports JPG, PNG, WebP, BMP"
+        icon={<div className="text-4xl">🔄</div>}
+      />
 
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm">
-        <div className="grid gap-6 sm:grid-cols-3 items-end">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Convert To</label>
-            <div className="flex gap-2 flex-wrap">
+      <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <div className="text-6xl font-black italic">OPTIONS</div>
+        </div>
+        
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div className="space-y-4">
+            <label className="text-xs font-black uppercase tracking-widest text-text-4">Convert To</label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {FORMATS.map(f => (
                 <button
                   key={f.value}
                   onClick={() => setTargetFmt(f.value)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${targetFmt === f.value ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
+                  className={`py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
+                    targetFmt === f.value 
+                      ? "bg-blue text-white border-blue shadow-lg shadow-blue/20" 
+                      : "bg-bg text-text-3 border-border hover:border-blue/50"
+                  }`}
                 >
                   {f.label}
                 </button>
               ))}
             </div>
           </div>
+
           {fmtInfo.lossy && (
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium">Quality</label>
-                <span className="text-sm font-mono font-bold text-blue">{quality}%</span>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-black uppercase tracking-widest text-text-4">Quality</label>
+                <span className="text-sm font-mono font-black text-blue bg-blue/10 px-2 py-1 rounded-lg">{quality}%</span>
               </div>
-              <input type="range" min={1} max={100} value={quality} onChange={e => setQuality(Number(e.target.value))} className="w-full" />
+              <input 
+                type="range" 
+                min={1} 
+                max={100} 
+                value={quality} 
+                onChange={e => setQuality(Number(e.target.value))} 
+                className="w-full h-1.5 bg-bg rounded-lg appearance-none cursor-pointer accent-blue" 
+              />
             </div>
           )}
-          <button
-            onClick={() => ref.current?.click()}
-            className="w-full py-3 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all text-sm"
-          >
-            {processing ? "Converting…" : "Select Files"}
-          </button>
         </div>
       </div>
 
-      {results.length > 0 && (
-        <div className="space-y-3">
-          {results.map((item, i) => {
-            const diff = item.newSize - item.originalSize;
-            const pct = Math.abs(Math.round((diff / item.originalSize) * 100));
-            return (
-              <div key={i} className="bg-surface border border-border p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                <img src={item.url} alt="" className="w-16 h-16 object-cover rounded-xl flex-shrink-0" />
-                <div className="flex-1 min-w-0 space-y-1">
-                  <p className="font-semibold text-sm truncate">{item.name}</p>
-                  <div className="flex flex-wrap gap-3 text-xs text-text-3">
-                    <span>Before: <strong>{fmtSize(item.originalSize)}</strong></span>
-                    <span>After: <strong>{fmtSize(item.newSize)}</strong></span>
-                    <span className={diff < 0 ? "text-green-500 font-bold" : "text-text-3"}>
-                      {diff < 0 ? `-${pct}% smaller` : diff === 0 ? "Same size" : `+${pct}% larger`}
-                    </span>
-                  </div>
-                </div>
-                <button onClick={() => dl(item)} className="px-5 py-2 bg-blue text-white font-bold rounded-xl text-sm hover:opacity-90 flex-shrink-0">
-                  Download
-                </button>
-              </div>
-            );
-          })}
+      <BatchQueue 
+        toolId={toolId}
+        isProcessing={isProcessing}
+        onProcess={processAll}
+        onDownload={downloadOne}
+      />
+
+      {items.length === 0 && (
+        <div className="py-20 text-center space-y-4 opacity-40">
+          <div className="text-6xl">📥</div>
+          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-sm">Waiting for images...</p>
         </div>
       )}
     </div>

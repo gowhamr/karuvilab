@@ -1,8 +1,9 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useId } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
@@ -55,6 +56,8 @@ export default function CurrencyConverterClient() {
   const [amount, setAmount] = useState("100");
   const [from, setFrom] = useState("USD");
   const [to, setTo] = useState("INR");
+  const fromId = useId();
+  const toId = useId();
 
   const currencies = Object.keys(RATES);
 
@@ -72,22 +75,19 @@ export default function CurrencyConverterClient() {
       </div>
 
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Amount</label>
-          <input
-            type="number"
-            min={0}
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg font-bold"
-            placeholder="Enter amount"
-          />
-        </div>
+        <ToolInput
+          label="Amount"
+          type="number"
+          value={amount}
+          onChange={setAmount}
+          placeholder="Enter amount"
+        />
 
         <div className="grid grid-cols-2 gap-4 items-end">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">From</label>
+            <label htmlFor={fromId} className="text-sm font-bold text-text-2">From</label>
             <select
+              id={fromId}
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -103,6 +103,7 @@ export default function CurrencyConverterClient() {
           <div className="flex flex-col gap-2">
             <button
               onClick={() => { const t = from; setFrom(to); setTo(t); }}
+              aria-label="Swap currencies"
               className="self-end px-4 py-3 rounded-xl border border-border hover:border-blue hover:text-blue transition-colors text-sm font-bold"
             >
               ⇄ Swap
@@ -111,8 +112,9 @@ export default function CurrencyConverterClient() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">To</label>
+          <label htmlFor={toId} className="text-sm font-bold text-text-2">To</label>
           <select
+            id={toId}
             value={to}
             onChange={(e) => setTo(e.target.value)}
             className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"

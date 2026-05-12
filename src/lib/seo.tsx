@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import { ALL_TOOLS, CategoryEntry, ToolEntry } from "@/src/tool-registry";
 import { TOOL_CONTENT } from "@/src/tool-content";
 
@@ -27,11 +28,20 @@ export function generateToolMetadata(toolId: string): Metadata {
       description,
       url,
       type: "website",
+      images: [
+        {
+          url: `${BASE_URL}/icons/icon-512.png`,
+          width: 512,
+          height: 512,
+          alt: tool.name,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`${BASE_URL}/icons/icon-512.png`],
     },
   };
 }
@@ -123,14 +133,28 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     const registryContent = TOOL_CONTENT[tool.id as keyof typeof TOOL_CONTENT] || {};
     const detailedDesc = propsContent?.detailedDescription || (registryContent as any).detailedDescription || tool.desc;
     
+    const getApplicationCategory = (catId?: string) => {
+      switch (catId) {
+        case 'calculators': return 'FinanceApplication';
+        case 'developer':   return 'DeveloperApplication';
+        case 'seo':         return 'BusinessApplication';
+        case 'security':    
+        case 'pdf':
+        case 'image':
+        case 'utilities':   return 'UtilitiesApplication';
+        default:            return 'UtilitiesApplication';
+      }
+    };
+
     const toolSchema: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": tool.schemaType || "WebApplication",
       "name": tool.name,
       "description": detailedDesc,
       "url": `${BASE_URL}/${tool.href}`,
-      "applicationCategory": category?.label || "Utility",
+      "applicationCategory": getApplicationCategory(category?.id),
       "operatingSystem": "Any",
+      "softwareVersion": "1.0.0",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -139,12 +163,13 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       "author": {
         "@type": "Organization",
         "name": "KaruviLab"
-      }
+      },
+      "image": `${BASE_URL}/icons/icon-512.png`
     };
 
     scripts.push(toolSchema);
 
-    // 3. FAQ Schema
+    // 4. FAQ Schema
     const faqs = propsContent?.faq || (registryContent as any).faq;
     if (faqs && faqs.length > 0) {
       const faqSchema = {
@@ -162,13 +187,14 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       scripts.push(faqSchema);
     }
 
-    // 4. HowTo Schema
+    // 5. HowTo Schema
     const howTo = propsContent?.howTo || (registryContent as any).howTo;
     if (howTo && howTo.length > 0) {
       const howToSchema = {
         "@context": "https://schema.org",
         "@type": "HowTo",
         "name": `How to use ${tool.name}`,
+        "description": `Step-by-step guide on using the ${tool.name} tool on KaruviLab.`,
         "step": howTo.map((step: string, i: number) => ({
           "@type": "HowToStep",
           "position": i + 1,
@@ -183,8 +209,9 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
   return (
     <>
       {scripts.map((s, i) => (
-        <script
+        <Script
           key={i}
+          id={`json-ld-${tool?.id || 'site'}-${i}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
         />

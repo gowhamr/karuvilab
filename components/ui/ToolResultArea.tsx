@@ -47,10 +47,11 @@ export function ToolResultArea({
           {onClear && (
             <button
               onClick={onClear}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-4 hover:text-red-500 transition-colors rounded-lg"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-4 hover:text-red-500 transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none"
               title="Clear"
+              aria-label={`Clear ${label}`}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>
@@ -58,15 +59,16 @@ export function ToolResultArea({
           {onDownload && (
             <button
               onClick={handleDownload}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-4 hover:text-blue transition-colors rounded-lg"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-4 hover:text-blue transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
               title="Download"
+              aria-label={`Download ${label}`}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             </button>
           )}
-          <CopyButton text={value} />
+          <CopyButton text={value} aria-label={`Copy ${label}`} />
         </div>
       </div>
 
@@ -82,9 +84,13 @@ export function ToolResultArea({
           <div className="absolute inset-0 bg-blue/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
           <div 
             aria-live="polite"
-            className="w-full min-h-[120px] px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10"
+            role="region"
+            aria-label={`${label} result`}
+            tabIndex={0}
+            className="w-full min-h-[120px] px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10 outline-none focus:border-blue"
           >
-            {value || <span className="text-text-4 italic">Result will appear here...</span>}
+            {value || <span className="text-text-4 italic" aria-hidden="true">Result will appear here...</span>}
+            {!value && <span className="sr-only">Result will appear here.</span>}
           </div>
         </div>
       )}

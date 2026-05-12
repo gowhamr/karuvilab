@@ -78,9 +78,15 @@
   .neon-glow {
     box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
   }
+  .neon-glow-dynamic {
+    box-shadow: 0 0 15px var(--tool-color-glow, rgba(99, 102, 241, 0.4));
+  }
   @media (min-width: 768px) {
     .neon-glow {
       box-shadow: 0 0 15px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
+    }
+    .neon-glow-dynamic {
+      box-shadow: 0 0 15px var(--tool-color-glow, rgba(99, 102, 241, 0.4)), 0 0 30px var(--tool-color-glow-soft, rgba(99, 102, 241, 0.2));
     }
   }
 
