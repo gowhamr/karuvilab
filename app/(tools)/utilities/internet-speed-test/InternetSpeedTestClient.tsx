@@ -9,14 +9,16 @@ import { motion, AnimatePresence } from "framer-motion";
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
 const DOWNLOAD_FILES = [
-  "https://cdn.jsdelivr.net/gh/fastly/fastly-test-files@master/10mb.bin",
-  "https://cdn.jsdelivr.net/gh/leandromoreira/digital-video-benchmark@master/static/10mb.bin",
-  "https://cdn.jsdelivr.net/gh/fastly/fastly-test-files@master/50mb.bin"
+  "https://speed.cloudflare.com/__down?bytes=25000000",
+  "https://cdn.jsdelivr.net/gh/fastly/fastly-test-files@master/50mb.bin",
+  "https://speed.cloudflare.com/__down?bytes=50000000",
+  "https://cdn.jsdelivr.net/gh/leandromoreira/digital-video-benchmark@master/static/10mb.bin"
 ];
 
 const LATENCY_URLS = [
+  "https://speed.cloudflare.com/__down?bytes=0",
   "https://www.google.com/generate_204",
-  "https://cdn.jsdelivr.net/gh/fastly/fastly-test-files@master/10mb.bin"
+  "https://cloudflare.com/cdn-cgi/trace"
 ];
 
 type TestStatus = 'idle' | 'ping' | 'download' | 'upload' | 'completed' | 'error';
@@ -67,7 +69,8 @@ export default function InternetSpeedTestClient() {
           const controller = new AbortController();
           const timeout = setTimeout(() => controller.abort(), 2000);
           
-          await fetch(url + `?cb=${Date.now()}`, { 
+          const sep = url.includes('?') ? '&' : '?';
+          await fetch(`${url}${sep}cb=${Date.now()}`, { 
             cache: 'no-store', 
             mode: 'no-cors',
             signal: controller.signal
@@ -110,7 +113,8 @@ export default function InternetSpeedTestClient() {
 
     const downloadChunk = async (url: string) => {
       try {
-        const response = await fetch(url + `?cb=${Date.now()}`, { 
+        const sep = url.includes('?') ? '&' : '?';
+        const response = await fetch(`${url}${sep}cb=${Date.now()}`, { 
           cache: 'no-store',
           signal: abortControllerRef.current?.signal ?? null
         });
@@ -129,7 +133,7 @@ export default function InternetSpeedTestClient() {
           if (elapsed > 0) {
             const mbps = (totalBytes * 8 / elapsed) / 1000000;
             setDownload(parseFloat(mbps.toFixed(2)));
-            setProgress(20 + (elapsed / (testDuration / 1000)) * 40);
+            setProgress(20 + Math.min((elapsed / (testDuration / 1000)) * 40, 40));
             
             // Update history for chart
             if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 200) {
@@ -161,47 +165,52 @@ export default function InternetSpeedTestClient() {
     const startTime = performance.now();
     let totalBytes = 0;
     const testDuration = 6000; // 6 seconds
+    const concurrency = 3;
     
     historyRef.current = [];
     setHistory([]);
 
-    const uploadData = async () => {
-      const size = 5 * 1024 * 1024; // 5MB chunks
+    const uploadWorker = async () => {
+      const size = 2 * 1024 * 1024; // 2MB chunks
       const data = new Uint8Array(size);
       crypto.getRandomValues(data);
 
-      try {
-        const response = await fetch('/api/speedtest/upload', {
-          method: 'POST',
-          body: data,
-          signal: abortControllerRef.current?.signal ?? null
-        });
-        if (response.ok) {
-          totalBytes += size;
-          const now = performance.now();
-          const elapsed = (now - startTime) / 1000;
-          const mbps = (totalBytes * 8 / elapsed) / 1000000;
-          setUpload(parseFloat(mbps.toFixed(2)));
-          setProgress(60 + (elapsed / (testDuration / 1000)) * 40);
+      while (performance.now() - startTime < testDuration) {
+        if (abortControllerRef.current?.signal.aborted) break;
+        
+        try {
+          const response = await fetch('/api/speedtest/upload', {
+            method: 'POST',
+            body: data,
+            signal: abortControllerRef.current?.signal ?? null
+          });
           
-          if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 200) {
-            const point = { x: now, y: mbps };
-            historyRef.current = [...historyRef.current, point].slice(-50);
-            setHistory(historyRef.current);
+          if (response.ok) {
+            totalBytes += size;
+            const now = performance.now();
+            const elapsed = (now - startTime) / 1000;
+            const mbps = (totalBytes * 8 / elapsed) / 1000000;
+            setUpload(parseFloat(mbps.toFixed(2)));
+            setProgress(60 + Math.min((elapsed / (testDuration / 1000)) * 40, 40));
+            
+            if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 200) {
+              const point = { x: now, y: mbps };
+              historyRef.current = [...historyRef.current, point].slice(-50);
+              setHistory(historyRef.current);
+            }
           }
-
-          if (now - startTime < testDuration) {
-            await uploadData(); // Repeat for duration
-          }
+        } catch (e) {
+          if ((e as Error).name === 'AbortError') break;
+          await new Promise(r => setTimeout(r, 200));
         }
-      } catch (e) {
-         if ((e as Error).name !== 'AbortError') throw e;
       }
     };
 
-    await uploadData();
+    await Promise.allSettled(Array.from({ length: concurrency }).map(() => uploadWorker()));
     const finalTime = (performance.now() - startTime) / 1000;
-    setUpload(parseFloat((totalBytes * 8 / finalTime / 1000000).toFixed(2)));
+    if (totalBytes > 0) {
+      setUpload(parseFloat((totalBytes * 8 / finalTime / 1000000).toFixed(2)));
+    }
   };
 
   const startTest = useCallback(async () => {
@@ -234,7 +243,8 @@ export default function InternetSpeedTestClient() {
     } catch (err: any) {
       if (err.name !== 'AbortError') {
         console.error("Test Error:", err);
-        setError("Network Error: Could not reach speed test servers. Please check your internet connection.");
+        const msg = err.message || "Network Error: Could not reach speed test servers.";
+        setError(`${msg} Please check your connection and try again.`);
         setStatus('error');
       }
     }

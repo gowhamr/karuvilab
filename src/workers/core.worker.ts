@@ -79,8 +79,8 @@ const api: WorkerAPI = {
 
   async mergePdfs(files: ArrayBuffer[], onProgress) {
     const totalSize = files.reduce((acc, f) => acc + f.byteLength, 0);
-    if (totalSize > 50 * 1024 * 1024) {
-      throw new Error("Total PDF size too large (max 50MB)");
+    if (totalSize > 100 * 1024 * 1024) {
+      throw new Error("Total PDF size too large (max 100MB)");
     }
     const { PDFDocument } = await import("pdf-lib");
     const merged = await PDFDocument.create();
