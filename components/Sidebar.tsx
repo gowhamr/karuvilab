@@ -35,21 +35,21 @@ const SidebarContent = memo(function SidebarContent({
   return (
     <nav className="flex-1 overflow-y-auto p-4 space-y-8 no-scrollbar pb-24 md:pb-8">
       {/* Mobile Search (Sticky Layout) */}
-      <div className="md:hidden sticky top-0 z-20 bg-surface/50 backdrop-blur-xl -mx-4 px-4 py-3 mb-4 border-b border-border/10">
+      <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
         <button 
           onClick={() => {
             setIsOpen(false);
             window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
           }}
-          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg dark:bg-white/5 border border-border dark:border-white/5 rounded-2xl text-[11px] font-bold text-text-4 dark:text-white/40 hover:bg-blue/5 dark:hover:bg-white/10 transition-all group"
+          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hover:border-blue/30 transition-all group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-surface dark:bg-white/5 border border-border dark:border-white/5 flex items-center justify-center group-hover:bg-blue/10 transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hover:bg-blue/5 transition-colors">
               <Search className="w-4 h-4" />
             </div>
             <span>{t('common.search').split('...')[0]}</span>
           </div>
-          <div className="flex items-center gap-0.5 px-1.5 py-1 bg-surface dark:bg-black/40 border border-border dark:border-white/10 rounded-lg text-[8px] font-mono group-hover:border-blue/30">
+          <div className="flex items-center gap-0.5 px-1.5 py-1 bg-surface border border-border rounded-lg text-[8px] font-mono">
             <Command className="w-2.5 h-2.5" />
             <span>K</span>
           </div>
@@ -64,12 +64,12 @@ const SidebarContent = memo(function SidebarContent({
           aria-current={pathname === "/" ? "page" : undefined}
           className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-xs ${
             pathname === "/" 
-              ? "bg-blue text-white neon-glow" 
-              : "text-text-2 dark:text-white/60 hover:bg-blue/10 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"
+              ? "bg-blue text-white" 
+              : "text-text-2 hover:bg-blue/5 hover:text-blue"
           }`}
         >
           <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${
-            pathname === "/" ? "bg-white/20" : "bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:bg-blue/20"
+            pathname === "/" ? "bg-white/20" : "bg-bg border border-border group-hover:bg-blue/10"
           }`}>
             <Home className="w-4 h-4" />
           </div>
@@ -95,30 +95,24 @@ const SidebarContent = memo(function SidebarContent({
                 aria-current={isActive ? "page" : undefined}
                 className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
                   isActive
-                    ? "shadow-sm"
-                    : "text-text-3 dark:text-white/60 hover:text-blue dark:hover:bg-white/5 dark:hover:text-white"
+                    ? "bg-bg border border-border"
+                    : "text-text-3 hover:text-blue hover:bg-blue/5"
                 }`}
                 style={{
-                  backgroundColor: isActive ? `${color}1A` : undefined,
                   color: isActive ? color : undefined,
-                  boxShadow: isActive ? `0 4px 6px -1px ${color}1A` : undefined
                 }}
               >
                 <div 
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                    isActive ? "text-white neon-glow" : "bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:bg-blue/10"
+                    isActive ? "text-white" : "bg-bg border border-border group-hover:bg-blue/10"
                   }`}
                   style={{
                     backgroundColor: isActive ? color : undefined,
-                    boxShadow: isActive ? `0 0 15px ${color}66` : undefined,
                   }}
                 >
                   <ToolIcon category={cat.id} className="w-4 h-4" />
                 </div>
                 <span className="flex-1">{cat.label}</span>
-                {isActive && (
-                   <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: color }} />
-                )}
               </Link>
             );
           })}
@@ -264,17 +258,17 @@ export function Sidebar() {
               {/* Drag Handle */}
               <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-white/20 rounded-full md:hidden" />
 
-              <div className="h-16 flex items-center justify-between px-6 border-b border-border dark:border-white/5 bg-white/5">
+              <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
                 <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
-                    <span className="brand-wordmark text-lg leading-none mt-0.5 drop-shadow-sm">K</span>
+                  <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
+                    <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
                   </div>
-                  <span className="brand-wordmark text-lg tracking-tight leading-none text-text dark:text-white">
+                  <span className="brand-wordmark text-lg tracking-tight leading-none text-text">
                     KaruviLab
                   </span>
                 </Link>
                 <button
-                  className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors text-text-4 dark:text-white/40"
+                  className="w-8 h-8 flex items-center justify-center hover:bg-black/5 rounded-xl transition-colors text-text-4"
                   onClick={() => setIsOpen(false)}
                   aria-label="Close sidebar"
                 >
@@ -288,29 +282,27 @@ export function Sidebar() {
       </AnimatePresence>
 
       {/* Desktop Permanent Sidebar */}
-      <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] sidebar-glass z-30 flex-col overflow-hidden">
-        <div className="h-20 flex items-center px-8 border-b border-border dark:border-white/5 bg-white/5">
+      <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden">
+        <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
-              <span className="brand-wordmark text-xl leading-none mt-1 drop-shadow-sm">K</span>
+            <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
+              <span className="brand-wordmark text-xl leading-none mt-1">K</span>
             </div>
             <div className="flex flex-col">
-              <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
+              <span className="brand-wordmark text-xl tracking-tight leading-none text-text">
                 KaruviLab
               </span>
-              <div className="hairline-rule mt-1" />
             </div>
           </Link>
         </div>
         <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
-        <div className="p-4 border-t border-border dark:border-white/5 bg-white/5">
-           <div className="p-4 rounded-2xl bg-gradient-to-br from-blue/10 to-transparent border border-blue/20 space-y-2 relative overflow-hidden group">
-              <div className="absolute -top-4 -right-4 w-12 h-12 bg-blue/10 blur-xl group-hover:bg-blue/20 transition-all rounded-full" />
+        <div className="p-4 border-t border-border bg-bg">
+           <div className="p-4 rounded-2xl border border-border bg-surface space-y-2 relative overflow-hidden group">
               <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
                 <Shield className="w-3 h-3" />
                 Local-First
               </p>
-              <p className="text-[9px] text-text-4 dark:text-white/40 font-bold leading-tight">Private & secure data processing.</p>
+              <p className="text-[9px] text-text-4 font-bold leading-tight">Private & secure data processing.</p>
            </div>
         </div>
       </aside>

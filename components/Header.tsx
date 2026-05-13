@@ -14,9 +14,9 @@ export function Header() {
   
   const bg = useTransform(scrollY, [0, 50], [
     "rgba(var(--bg-rgb), 0)",
-    "rgba(var(--bg-rgb), 0.8)"
+    "rgba(var(--bg-rgb), 0.95)"
   ]);
-  const blurValue = useTransform(scrollY, [0, 50], [0, 16]);
+  const blurValue = useTransform(scrollY, [0, 50], [0, 8]);
   const blurFilter = useTransform(blurValue, (v) => v > 0 ? `blur(${v}px)` : "none");
   const border = useTransform(scrollY, [0, 50], [
     "rgba(var(--border-rgb), 0)",
@@ -31,7 +31,7 @@ export function Header() {
         WebkitBackdropFilter: blurFilter,
         borderBottomColor: border
       }}
-      className="sticky top-0 z-40 w-full border-b border-transparent transition-all duration-300 h-[60px] md:h-[72px]"
+      className="sticky top-0 z-40 w-full border-b border-transparent h-[60px] md:h-[72px]"
     >
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 md:gap-8">
@@ -44,14 +44,13 @@ export function Header() {
           </button>
 
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 group-active:scale-95 transition-all duration-300">
-              <span className="brand-wordmark text-lg leading-none mt-0.5 drop-shadow-sm">K</span>
+            <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
+              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
             </div>
             <div className="flex flex-col">
               <span className="brand-wordmark text-lg md:text-xl tracking-tight leading-none">
                 KaruviLab
               </span>
-              <div className="hairline-rule mt-1" />
             </div>
           </Link>
 
@@ -76,13 +75,13 @@ export function Header() {
           <button 
             onClick={() => setIsPaletteOpen(true)}
             aria-label="Search tools"
-            className="group flex items-center justify-between gap-3 px-3 py-1.5 md:min-w-[160px] lg:min-w-[240px] bg-surface border border-border rounded-lg text-[11px] font-bold text-text-4 shadow-sm hover:border-blue/30 hover:text-blue hover:bg-blue/5 transition-all"
+            className="group flex items-center justify-between gap-3 px-3 py-1.5 md:min-w-[160px] lg:min-w-[240px] bg-surface border border-border rounded-lg text-[11px] font-bold text-text-4 hover:border-blue/30 hover:text-blue transition-all"
           >
             <div className="flex items-center gap-2">
-              <Search className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+              <Search className="w-3.5 h-3.5" />
               <span className="hidden md:inline">Quick search...</span>
             </div>
-            <div className="hidden md:flex items-center gap-0.5 px-1 py-0.5 bg-bg border border-border rounded text-[9px] font-mono group-hover:border-blue/20">
+            <div className="hidden md:flex items-center gap-0.5 px-1 py-0.5 bg-bg border border-border rounded text-[9px] font-mono">
               <Command className="w-2.5 h-2.5" />
               <span>K</span>
             </div>
@@ -93,9 +92,9 @@ export function Header() {
           <AnimatePresence>
             {!isOnline && (
               <m.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
+                exit={{ opacity: 0, scale: 0.9 }}
                 className="flex items-center gap-1.5 px-2 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-[10px] font-bold uppercase tracking-wider"
               >
                 <WifiOff className="w-3 h-3" />

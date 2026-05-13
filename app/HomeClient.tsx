@@ -124,35 +124,30 @@ export default function HomeClient() {
       
       {/* ── 1. Hero Section (Compact & Command-First) ────────────────────────── */}
       <section className="relative pt-6 md:pt-12 flex flex-col items-center text-center space-y-6">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl aspect-square premium-gradient opacity-40 -z-10" />
-        
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="space-y-4 max-w-2xl"
         >
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue/5 border border-blue/10 text-[9px] font-black uppercase tracking-[0.2em] text-blue shadow-sm">
-            <Sparkles className="w-3 h-3" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface border border-border text-[9px] font-bold uppercase tracking-widest text-text-4">
+            <Sparkles className="w-3 h-3 text-blue" />
             <span>{t('hero.tag')}</span>
           </div>
           
           <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-[1.1] text-text">
             {t('hero.title')}<br />
-            <span className="opacity-40">{t('hero.subtitle')}</span>
+            <span className="text-text-4">{t('hero.subtitle')}</span>
           </h1>
           
-          <p className="text-xs md:text-sm text-text-3 font-bold max-w-md mx-auto leading-relaxed">
+          <p className="text-xs md:text-sm text-text-3 font-medium max-w-md mx-auto leading-relaxed">
             {t('hero.desc')}
-            <span className="block text-text-4">Fast. Secure. Local-first.</span>
+            <span className="block text-text-4 mt-1">Fast. Secure. Local-first.</span>
           </p>
         </m.div>
 
         <div className="w-full max-w-xl mx-auto space-y-3">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-blue/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          </div>
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
           
           {/* Inline Trust Strip */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-2">
@@ -164,7 +159,7 @@ export default function HomeClient() {
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
                 <item.icon className="w-3 h-3 text-blue" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-text-4">{item.text}</span>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-text-4">{item.text}</span>
               </div>
             ))}
           </div>
@@ -174,7 +169,7 @@ export default function HomeClient() {
       {/* ── 2. Content Area ─────────────────────────────────────────────────── */}
       <div className="relative">
         {/* Horizontal Category Chips */}
-        <div className="sticky top-[60px] md:top-[72px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 glass border-b border-border/10">
+        <div className="sticky top-[60px] md:top-[72px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 bg-surface/95 backdrop-blur-md border-b border-border">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
             <div className="flex-1 overflow-hidden">
               <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
@@ -182,7 +177,7 @@ export default function HomeClient() {
             {isSearching && (
               <button
                 onClick={() => { setSearchQuery(""); setActiveCategory(null); }}
-                className="text-[9px] font-black text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
+                className="text-[9px] font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
               >
                 Clear
               </button>

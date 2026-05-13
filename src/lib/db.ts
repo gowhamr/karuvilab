@@ -116,3 +116,47 @@ export async function getPreference(key: string) {
   if (!db) return null;
   return db.get('preferences', key);
 }
+
+/**
+ * Storage Quota and Governance
+ */
+export async function getStorageStats() {
+  if (typeof navigator === 'undefined' || !navigator.storage) {
+    return { quota: 0, usage: 0, percent: 0 };
+  }
+  const estimate = await navigator.storage.estimate();
+  const quota = estimate.quota || 0;
+  const usage = estimate.usage || 0;
+  return {
+    quota,
+    usage,
+    percent: quota > 0 ? (usage / quota) * 100 : 0
+  };
+}
+
+export async function clearOldCache(maxAgeMs: number = 7 * 24 * 60 * 60 * 1000) {
+  const db = await getDB();
+  if (!db) return;
+  const now = Date.now();
+  const tx = db.transaction(['cached-files', 'history'], 'readwrite');
+  
+  // Clear old cached files
+  const fileStore = tx.objectStore('cached-files');
+  const files = await fileStore.getAll();
+  for (const file of files) {
+    if (now - file.timestamp > maxAgeMs) {
+      await fileStore.delete(file.id);
+    }
+  }
+
+  // Clear old history
+  const historyStore = tx.objectStore('history');
+  const history = await historyStore.getAll();
+  for (const item of history) {
+    if (now - item.timestamp > maxAgeMs) {
+      await historyStore.delete(item.id!);
+    }
+  }
+
+  await tx.done;
+}

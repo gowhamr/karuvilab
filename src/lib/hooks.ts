@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getToolState, saveToolState } from './db';
+import { blobManager } from './blob-manager';
 
 /**
  * Hook to manage Blob URL lifecycles automatically.
@@ -10,29 +11,22 @@ export function useObjectUrlManager() {
   const urls = useRef<Set<string>>(new Set());
 
   const createUrl = useCallback((obj: Blob | MediaSource | File) => {
-    const url = URL.createObjectURL(obj);
+    const url = blobManager.create(obj);
     urls.current.add(url);
     return url;
   }, []);
 
   const revokeUrl = useCallback((url: string | null | undefined) => {
-    if (url && urls.current.has(url)) {
-      URL.revokeObjectURL(url);
+    if (url) {
+      blobManager.revoke(url);
       urls.current.delete(url);
-    } else if (url) {
-      // Still revoke even if not in our set, just in case
-      URL.revokeObjectURL(url);
     }
   }, []);
 
   useEffect(() => {
     return () => {
       urls.current.forEach(url => {
-        try {
-          URL.revokeObjectURL(url);
-        } catch (e) {
-          console.warn('Failed to revoke URL on unmount', e);
-        }
+        blobManager.revoke(url);
       });
       urls.current.clear();
     };

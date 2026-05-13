@@ -55,6 +55,9 @@ async function sha(algo: string, text: string): Promise<string> {
 
 const api: WorkerAPI = {
   async generateHashes(text: string, algos: string[], onProgress) {
+    if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
+      throw new Error("Input text too large or invalid (max 10MB)");
+    }
     const results: Record<string, string> = {};
     const total = algos.length;
     let current = 0;
@@ -75,6 +78,10 @@ const api: WorkerAPI = {
   },
 
   async mergePdfs(files: ArrayBuffer[], onProgress) {
+    const totalSize = files.reduce((acc, f) => acc + f.byteLength, 0);
+    if (totalSize > 50 * 1024 * 1024) {
+      throw new Error("Total PDF size too large (max 50MB)");
+    }
     const { PDFDocument } = await import("pdf-lib");
     const merged = await PDFDocument.create();
     const total = files.length;
@@ -94,6 +101,9 @@ const api: WorkerAPI = {
   },
 
   async compressImage(file: ArrayBuffer, format, quality, onProgress) {
+    if (file.byteLength > 25 * 1024 * 1024) {
+      throw new Error("Image size too large (max 25MB)");
+    }
     if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
     
     const blob = new Blob([file]);
@@ -159,6 +169,9 @@ const api: WorkerAPI = {
   },
 
   async minifyCode(code, lang, onProgress) {
+    if (typeof code !== "string" || code.length > 5 * 1024 * 1024) {
+      throw new Error("Code too large or invalid (max 5MB)");
+    }
     if (onProgress) onProgress({ percent: 10, message: `Minifying ${lang.toUpperCase()}...` });
     
     let result = "";

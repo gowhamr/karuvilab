@@ -81,7 +81,6 @@ export function ToolResultArea({
         </div>
       ) : (
         <div className="relative group">
-          <div className="absolute inset-0 bg-blue/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
           <div 
             aria-live="polite"
             role="region"

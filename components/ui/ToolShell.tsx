@@ -82,7 +82,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight">{title}</h1>
           {description && (
-            <p className="text-lg md:text-xl text-text-3 leading-relaxed max-w-3xl font-medium italic border-l-4 pl-6" style={{ borderColor: `${color}33` }}>
+            <p className="text-lg md:text-xl text-text-3 leading-relaxed max-w-3xl font-medium">
               {description}
             </p>
           )}
@@ -90,18 +90,17 @@ export function ToolShell({ title, description, category, children, toolId, cont
       </header>
 
       <section className="relative z-10">
-        <div className="absolute -inset-4 blur-3xl -z-10 rounded-full opacity-50" style={{ backgroundColor: `${color}0D` }} />
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8 border-t border-border/50">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8 border-t border-border">
         <div className="lg:col-span-2 space-y-12">
           {merged.detailedDescription && (
             <section className="space-y-4">
-              <h2 className="text-2xl font-black">Deep Dive</h2>
-              <div className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-medium">
+              <h2 className="text-2xl font-bold">Deep Dive</h2>
+              <div className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-normal">
                 <p>{merged.detailedDescription}</p>
               </div>
             </section>
@@ -109,11 +108,11 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
           {merged.useCases && merged.useCases.length > 0 && (
             <section className="space-y-5">
-              <h2 className="text-2xl font-black">Who uses this?</h2>
+              <h2 className="text-2xl font-bold">Who uses this?</h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {merged.useCases.map((uc, i) => (
-                  <li key={i} className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4 min-h-[52px]">
-                    <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: color }} />
+                  <li key={i} className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+                    <Check className="w-4 h-4 mt-0.5 flex-shrink-0 text-success" />
                     <span className="text-text-2 text-sm leading-relaxed">{uc}</span>
                   </li>
                 ))}
@@ -123,21 +122,21 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
           {merged.examples && merged.examples.length > 0 && (
             <section className="space-y-5">
-              <h2 className="text-2xl font-black">Examples</h2>
+              <h2 className="text-2xl font-bold">Examples</h2>
               <div className="space-y-4">
                 {merged.examples.map((ex, i) => (
                   <div key={i} className="bg-surface border border-border rounded-xl overflow-hidden">
                     <div className="px-4 py-2 border-b border-border bg-bg">
-                      <span className="text-[10px] font-black text-text-4 uppercase tracking-widest">{ex.label}</span>
+                      <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">{ex.label}</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-border">
                       <div className="p-4 space-y-1">
-                        <p className="text-[10px] font-black text-text-4 uppercase tracking-widest">Input</p>
+                        <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Input</p>
                         <code className="text-sm font-mono text-text-2 break-all">{ex.input}</code>
                       </div>
                       <div className="p-4 space-y-1">
-                        <p className="text-[10px] font-black text-text-4 uppercase tracking-widest">Output</p>
-                        <code className="text-sm font-mono break-all" style={{ color: color }}>{ex.output}</code>
+                        <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Output</p>
+                        <code className="text-sm font-mono break-all text-blue">{ex.output}</code>
                       </div>
                     </div>
                   </div>
@@ -148,16 +147,16 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
           {merged.commonErrors && merged.commonErrors.length > 0 && (
             <section className="space-y-5">
-              <h2 className="text-2xl font-black">Common Errors & Fixes</h2>
+              <h2 className="text-2xl font-bold">Common Errors & Fixes</h2>
               <div className="space-y-3">
                 {merged.commonErrors.map((item, i) => (
                   <div key={i} className="bg-surface border border-border rounded-xl overflow-hidden">
-                    <div className="flex items-start gap-3 p-4 border-b border-border/50">
-                      <X className="text-red-500 w-4 h-4 mt-0.5 flex-shrink-0" />
+                    <div className="flex items-start gap-3 p-4 border-b border-border">
+                      <X className="text-error w-4 h-4 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-text-2 font-medium">{item.error}</p>
                     </div>
                     <div className="flex items-start gap-3 p-4">
-                      <Check className="text-green-500 w-4 h-4 mt-0.5 flex-shrink-0" />
+                      <Check className="text-success w-4 h-4 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-text-3">{item.fix}</p>
                     </div>
                   </div>
@@ -168,11 +167,11 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
           {merged.faq && merged.faq.length > 0 && (
             <section className="space-y-6">
-              <h2 className="text-2xl font-black">Expert FAQ</h2>
+              <h2 className="text-2xl font-bold">Expert FAQ</h2>
               <div className="grid gap-4">
                 {merged.faq.map((item, i) => (
-                  <div key={i} className="group bg-surface border border-border rounded-2xl p-6 space-y-3 transition-all hover:border-[var(--tool-color)]">
-                    <h3 className="font-bold text-text transition-colors group-hover:text-[var(--tool-color)]">{item.question}</h3>
+                  <div key={i} className="bg-surface border border-border rounded-2xl p-6 space-y-3">
+                    <h3 className="font-bold text-text">{item.question}</h3>
                     <p className="text-text-3 text-sm leading-relaxed">{item.answer}</p>
                   </div>
                 ))}
@@ -183,18 +182,18 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
         <aside className="space-y-12">
           {merged.howTo && merged.howTo.length > 0 && (
-            <section className="border rounded-3xl p-8 space-y-8 h-fit sticky top-24" style={{ backgroundColor: `${color}0D`, borderColor: `${color}1A` }}>
+            <section className="border border-border rounded-3xl p-8 space-y-8 h-fit sticky top-24 bg-surface">
               <div className="space-y-2">
-                <h2 className="text-xl font-black">Quick Guide</h2>
-                <p className="text-[10px] font-black uppercase tracking-widest opacity-60" style={{ color: color }}>Step-by-step</p>
+                <h2 className="text-xl font-bold">Quick Guide</h2>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Step-by-step</p>
               </div>
               <ol className="space-y-6">
                 {merged.howTo.map((step, i) => (
                   <li key={i} className="flex gap-4 group">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-lg text-white flex items-center justify-center text-[10px] font-black group-hover:scale-110 transition-transform" style={{ backgroundColor: color }}>
+                    <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue text-white flex items-center justify-center text-[10px] font-bold">
                       {i + 1}
                     </span>
-                    <p className="text-text-2 text-sm font-bold leading-snug transition-colors group-hover:text-[var(--tool-color)]">{step}</p>
+                    <p className="text-text-2 text-sm font-medium leading-snug">{step}</p>
                   </li>
                 ))}
               </ol>
@@ -204,28 +203,23 @@ export function ToolShell({ title, description, category, children, toolId, cont
       </div>
 
       {related.length > 0 && (
-        <section className="pt-12 border-t border-border/50 space-y-8">
+        <section className="pt-12 border-t border-border space-y-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-black">Related Tools</h2>
-            <Link href="/" className="text-xs font-black uppercase tracking-[0.2em] hover:underline" style={{ color: color }}>View all →</Link>
+            <h2 className="text-2xl font-bold">Related Tools</h2>
+            <Link href="/" className="text-xs font-bold uppercase tracking-widest text-blue hover:underline">View all →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {related.map(tool => (
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
-                className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl transition-all active:scale-[0.98] hover:shadow-xl"
-                style={{ '--hover-border': color } as any}
+                className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl transition-all hover:border-blue/30"
               >
-                <style jsx>{`
-                  a:hover { border-color: var(--hover-border); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
-                  :global([data-theme="dark"]) a:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2); }
-                `}</style>
-                <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">
+                <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0">
                   <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-black text-text transition-colors text-sm truncate group-hover:text-[var(--tool-color)]">{tool.name}</div>
+                  <div className="font-bold text-text transition-colors text-sm truncate group-hover:text-blue">{tool.name}</div>
                   <div className="text-xs text-text-4 font-medium line-clamp-1">{tool.desc}</div>
                 </div>
               </Link>
@@ -234,10 +228,10 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </section>
       )}
 
-      <section className="pt-12 border-t border-border/50">
+      <section className="pt-12 border-t border-border">
         <div className="flex flex-col md:flex-row justify-between gap-12">
           <div className="space-y-4">
-            <h2 className="text-xl font-black tracking-tight">Need help?</h2>
+            <h2 className="text-xl font-bold tracking-tight">Need help?</h2>
             <p className="text-sm text-text-3 font-medium leading-relaxed max-w-sm">
               Encountered an issue or have an idea to make this tool better? We're listening.
             </p>

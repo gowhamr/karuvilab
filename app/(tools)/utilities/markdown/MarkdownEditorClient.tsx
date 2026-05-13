@@ -3,53 +3,9 @@ import { useState, useMemo, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { parseAndSanitizeMarkdownSync } from "@/src/lib/security";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
-
-function parseMarkdown(md: string): string {
-  let html = md
-    // Escape HTML special chars first (only in non-code contexts)
-    // Code blocks (fenced)
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
-      `<pre class="bg-bg border border-border rounded-xl p-4 overflow-auto my-4"><code class="text-sm font-mono text-text">${code.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>`
-    )
-    // Inline code
-    .replace(/`([^`]+)`/g, '<code class="font-mono text-sm bg-bg border border-border rounded px-1.5 py-0.5 text-blue">$1</code>')
-    // Headings
-    .replace(/^###### (.+)$/gm, '<h6 class="text-sm font-bold mt-4 mb-1">$1</h6>')
-    .replace(/^##### (.+)$/gm, '<h5 class="text-base font-bold mt-4 mb-1">$1</h5>')
-    .replace(/^#### (.+)$/gm, '<h4 class="text-lg font-bold mt-5 mb-1">$1</h4>')
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-6 mb-2">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-black mt-8 mb-2">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-black mt-8 mb-3">$1</h1>')
-    // Bold + italic
-    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-bold">$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em class="italic">$1</em>')
-    .replace(/__(.+?)__/g, '<strong class="font-bold">$1</strong>')
-    .replace(/_(.+?)_/g, '<em class="italic">$1</em>')
-    // Strikethrough
-    .replace(/~~(.+?)~~/g, '<del class="line-through text-text-4">$1</del>')
-    // HR
-    .replace(/^---+$/gm, '<hr class="border-border my-6" />')
-    // Blockquote
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-blue pl-4 my-2 text-text-3 italic">$1</blockquote>')
-    // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-blue underline hover:opacity-80">$1</a>')
-    // Images
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full rounded-xl my-2" />')
-    // Unordered list
-    .replace(/^\s*[-*+] (.+)$/gm, '<li class="ml-6 list-disc mb-1">$1</li>')
-    // Ordered list
-    .replace(/^\s*\d+\. (.+)$/gm, '<li class="ml-6 list-decimal mb-1">$1</li>')
-    // Wrap consecutive li tags
-    .replace(/((<li.*?<\/li>\n?)+)/g, '<ul class="my-2">$1</ul>')
-    // Paragraphs (double newline)
-    .replace(/\n\n+/g, "\n</p><p class=\"my-3\">\n")
-    .replace(/\n/g, "<br />");
-
-  return `<div class="prose"><p class="my-3">${html}</p></div>`;
-}
 
 const TOOLBAR_ITEMS = [
   { label: "B", title: "Bold", wrap: ["**", "**"] },
@@ -84,7 +40,7 @@ Type your **markdown** here and see a *live preview* on the right.
 console.log("Hello, world!");
 \`\`\``);
 
-  const preview = useMemo(() => parseMarkdown(md), [md]);
+  const preview = useMemo(() => parseAndSanitizeMarkdownSync(md), [md]);
 
   const insertAtCursor = useCallback((textarea: HTMLTextAreaElement, before: string, after = "", insert = "") => {
     const start = textarea.selectionStart;

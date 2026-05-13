@@ -57,7 +57,11 @@ class WorkerManager {
       return;
     }
 
+    const DEFAULT_TIMEOUT = 30000; // 30 seconds
+    let timeoutId: any;
+
     const onAbort = () => {
+      clearTimeout(timeoutId);
       workerEntry.worker.terminate();
       const idx = this.pool.indexOf(workerEntry);
       this.pool.splice(idx, 1);
@@ -67,20 +71,25 @@ class WorkerManager {
 
     task.abortSignal?.addEventListener("abort", onAbort);
 
+    timeoutId = setTimeout(() => {
+      console.error(`Worker task ${task.type} timed out after ${DEFAULT_TIMEOUT}ms`);
+      onAbort();
+    }, DEFAULT_TIMEOUT);
+
     try {
       const api = workerEntry.api as any;
       const progressProxy = task.onProgress ? Comlink.proxy(task.onProgress) : undefined;
       
-      // If there are transferables, we need to wrap the args with Comlink.transfer
-      // Currently we assume the first argument contains the data to transfer
       const args = [...task.args];
       if (task.transferables && task.transferables.length > 0) {
         args[0] = Comlink.transfer(args[0], task.transferables);
       }
 
       const result = await api[task.type](...args, progressProxy);
+      clearTimeout(timeoutId);
       task.resolve(result);
     } catch (err) {
+      clearTimeout(timeoutId);
       task.reject(err);
     } finally {
       task.abortSignal?.removeEventListener("abort", onAbort);
