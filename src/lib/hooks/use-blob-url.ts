@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { blobManager } from './blob-manager';
+import { blobManager } from '../blob-manager';
 
 /**
  * Hook to manage a Blob URL that should be revoked when the component unmounts.

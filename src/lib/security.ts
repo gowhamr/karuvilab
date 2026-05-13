@@ -28,8 +28,7 @@ export async function parseAndSanitizeMarkdown(md: string): Promise<string> {
 }
 
 /**
- * Synchronous version for use in useMemo if needed (but marked.parse can be async)
- * Marked.parse is actually sync if no async extensions are used.
+ * Synchronous version for use in useMemo if needed.
  */
 export function parseAndSanitizeMarkdownSync(md: string): string {
   const rawHtml = marked.parse(md, { async: false }) as string;

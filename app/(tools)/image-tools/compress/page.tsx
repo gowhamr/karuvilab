@@ -8,7 +8,7 @@ const ImageCompressorClient = dynamic(() => import("./ImageCompressorClient"), {
   loading: () => null,
 });
 
-export const metadata: Metadata = generateToolMetadata("compress");
+export const metadata: Metadata = generateToolMetadata("image-compress");
 
 export default function page() {
   const cat = CATEGORIES.find(c => c.id === "image")!;

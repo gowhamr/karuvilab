@@ -14,6 +14,7 @@ const toolId = "image-compress"; // Updated to match registry ID
 
 export default function ImageCompressorClient() {
   const { createUrl } = useObjectUrlManager();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [quality, setQuality] = useState(80);
   const [format, setFormat] = useState<"image/jpeg" | "image/png" | "image/webp">("image/jpeg");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -59,15 +60,18 @@ export default function ImageCompressorClient() {
     };
   };
 
-  const handleFiles = (files: FileList | File[]) => {
+  const handleFiles = (files: FileList | File[] | null) => {
     if (!files || files.length === 0) return;
     addItems(toolId, Array.from(files));
   };
 
   const processAll = async () => {
-    setIsProcessing(true);
-    await startProcessing(toolId, compressSingle);
-    setIsProcessing(false);
+    try {
+      setIsProcessing(true);
+      await startProcessing(toolId, compressSingle);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const downloadAll = async () => {
@@ -201,8 +205,16 @@ export default function ImageCompressorClient() {
 
           {/* Add More Action */}
           <div className="lg:col-span-3 flex flex-col justify-center">
+             <input
+               ref={fileInputRef}
+               type="file"
+               accept="image/*"
+               multiple
+               className="hidden"
+               onChange={(e) => handleFiles(e.target.files)}
+             />
              <button 
-               onClick={() => (document.querySelector('input[type="file"]') as any)?.click()}
+               onClick={() => fileInputRef.current?.click()}
                className="group w-full aspect-square md:aspect-auto md:h-full flex flex-col items-center justify-center gap-3 border-2 border-dashed border-border rounded-[32px] hover:border-blue/50 hover:bg-blue/[0.02] transition-all"
              >
                 <div className="w-12 h-12 rounded-2xl bg-bg border border-border flex items-center justify-center text-text-4 group-hover:text-blue group-hover:bg-blue/5 transition-colors">

@@ -15,8 +15,8 @@ class BlobManager {
   /**
    * Creates a Blob URL and registers it for management.
    */
-  create(blob: Blob | File, metadata?: any): string {
-    const url = URL.createObjectURL(blob);
+  create(blob: Blob | File | MediaSource, metadata?: any): string {
+    const url = URL.createObjectURL(blob as any);
     this.registry.set(url, {
       url,
       createdAt: Date.now(),
