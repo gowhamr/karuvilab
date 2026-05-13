@@ -14,7 +14,10 @@ const DOWNLOAD_FILES = [
   "https://cdn.jsdelivr.net/gh/fastly/fastly-test-files@master/50mb.bin"
 ];
 
-const LATENCY_URL = "https://www.google.com/generate_204";
+const LATENCY_URLS = [
+  "https://www.google.com/generate_204",
+  "https://cdn.jsdelivr.net/gh/fastly/fastly-test-files@master/10mb.bin"
+];
 
 type TestStatus = 'idle' | 'ping' | 'download' | 'upload' | 'completed' | 'error';
 
@@ -50,26 +53,44 @@ export default function InternetSpeedTestClient() {
 
   const runPingTest = async () => {
     const latencies: number[] = [];
-    const samples = 10;
+    const samples = 6;
     
-    for (let i = 0; i < samples; i++) {
-      if (abortControllerRef.current?.signal.aborted) return;
-      
-      const start = performance.now();
-      try {
-        await fetch(LATENCY_URL + `?cb=${Date.now()}`, { 
-          cache: 'no-store', 
-          mode: 'no-cors',
-          signal: abortControllerRef.current?.signal ?? null
-        });
-        latencies.push(performance.now() - start);
-      } catch (e) {
-        if (latencies.length === 0 && i === samples - 1) throw e;
+    // Try primary and fallback
+    for (const url of LATENCY_URLS) {
+      if (latencies.length > 0) break;
+
+      for (let i = 0; i < samples; i++) {
+        if (abortControllerRef.current?.signal.aborted) return;
+        
+        const start = performance.now();
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 2000);
+          
+          await fetch(url + `?cb=${Date.now()}`, { 
+            cache: 'no-store', 
+            mode: 'no-cors',
+            signal: controller.signal
+          });
+          clearTimeout(timeout);
+          latencies.push(performance.now() - start);
+        } catch (e) {
+          // Continue to next sample or URL
+        }
+        await new Promise(r => setTimeout(r, 50));
       }
-      await new Promise(r => setTimeout(r, 50));
     }
 
-    if (latencies.length === 0) throw new Error("Latency test failed");
+    if (latencies.length === 0) {
+      // Last resort: use current domain
+      const start = performance.now();
+      try {
+        await fetch(`/?cb=${Date.now()}`, { cache: 'no-store' });
+        latencies.push(performance.now() - start);
+      } catch (e) {
+        throw new Error("Latency test failed: All endpoints unreachable.");
+      }
+    }
 
     const avg = latencies.reduce((a, b) => a + b) / latencies.length;
     const sorted = [...latencies].sort((a, b) => a - b);
@@ -88,52 +109,49 @@ export default function InternetSpeedTestClient() {
     setHistory([]);
 
     const downloadChunk = async (url: string) => {
-      const response = await fetch(url + `?cb=${Date.now()}`, { 
-        cache: 'no-store',
-        signal: abortControllerRef.current?.signal ?? null
-      });
-      if (!response.ok) return;
-      
-      const reader = response.body?.getReader();
-      if (!reader) return;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        totalBytes += value.length;
+      try {
+        const response = await fetch(url + `?cb=${Date.now()}`, { 
+          cache: 'no-store',
+          signal: abortControllerRef.current?.signal ?? null
+        });
+        if (!response.ok) return;
         
-        const now = performance.now();
-        const elapsed = (now - startTime) / 1000;
-        if (elapsed > 0) {
-          const mbps = (totalBytes * 8 / elapsed) / 1000000;
-          setDownload(parseFloat(mbps.toFixed(2)));
-          setProgress(20 + (elapsed / (testDuration / 1000)) * 40);
+        const reader = response.body?.getReader();
+        if (!reader) return;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          totalBytes += value.length;
           
-          // Update history for chart
-          if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 200) {
-            const point = { x: now, y: mbps };
-            historyRef.current = [...historyRef.current, point].slice(-50);
-            setHistory(historyRef.current);
+          const now = performance.now();
+          const elapsed = (now - startTime) / 1000;
+          if (elapsed > 0) {
+            const mbps = (totalBytes * 8 / elapsed) / 1000000;
+            setDownload(parseFloat(mbps.toFixed(2)));
+            setProgress(20 + (elapsed / (testDuration / 1000)) * 40);
+            
+            // Update history for chart
+            if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 200) {
+              const point = { x: now, y: mbps };
+              historyRef.current = [...historyRef.current, point].slice(-50);
+              setHistory(historyRef.current);
+            }
+          }
+          
+          if (now - startTime > testDuration) {
+            break;
           }
         }
-        
-        if (now - startTime > testDuration) {
-          abortControllerRef.current?.abort(); // Stop early if we reached duration
-          break;
-        }
+      } catch (e) {
+        // Silently handle chunk failure if some chunks succeeded
       }
     };
 
-    try {
-      // Run multiple downloads in parallel to saturate the link
-      await Promise.all([
-        downloadChunk(DOWNLOAD_FILES[0]!),
-        downloadChunk(DOWNLOAD_FILES[1]!),
-        downloadChunk(DOWNLOAD_FILES[2]!)
-      ]);
-    } catch (e) {
-      if ((e as Error).name !== 'AbortError' && totalBytes === 0) throw e;
-    }
+    // Run multiple downloads in parallel to saturate the link
+    await Promise.allSettled(DOWNLOAD_FILES.map(url => downloadChunk(url)));
+
+    if (totalBytes === 0) throw new Error("Download test failed: Could not receive data.");
 
     const finalTime = (performance.now() - startTime) / 1000;
     setDownload(parseFloat((totalBytes * 8 / finalTime / 1000000).toFixed(2)));
