@@ -17,7 +17,7 @@ export function BottomNav() {
   const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden glass border-t border-border/10 rounded-t-[24px] h-[72px] px-6 shadow-premium">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface border-t border-border rounded-t-[24px] h-[72px] px-6 shadow-sm">
       <div className="flex items-center justify-between h-full">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
@@ -31,8 +31,8 @@ export function BottomNav() {
                 className="flex flex-col items-center gap-1 text-text-4 hover:text-blue transition-colors"
                 aria-label="Search"
               >
-                <div className="p-2 rounded-xl bg-blue/5 border border-blue/10">
-                  <Icon className="w-5 h-5 text-blue" />
+                <div className="p-2 rounded-xl bg-bg border border-border">
+                  <Icon className="w-5 h-5 text-text-3" />
                 </div>
               </button>
             );
@@ -46,7 +46,7 @@ export function BottomNav() {
                 className="flex flex-col items-center gap-1 text-text-4 hover:text-blue transition-colors"
                 aria-label="Menu"
               >
-                <div className="p-2 rounded-xl transition-all">
+                <div className="p-2 rounded-xl bg-bg border border-border">
                   <Icon className="w-5 h-5" />
                 </div>
               </button>
@@ -59,11 +59,11 @@ export function BottomNav() {
               href={item.href!}
               aria-label={item.label}
               className={`flex flex-col items-center gap-1 transition-all ${
-                isActive ? "text-blue scale-110" : "text-text-4 hover:text-text"
+                isActive ? "text-blue" : "text-text-4 hover:text-text"
               }`}
             >
-              <div className={`p-2 rounded-xl transition-all ${isActive ? "bg-blue/10" : ""}`}>
-                <Icon className={`w-5 h-5 ${isActive ? "fill-current" : ""}`} />
+              <div className={`p-2 rounded-xl border transition-all ${isActive ? "bg-blue/5 border-blue/20" : "bg-bg border-border"}`}>
+                <Icon className={`w-5 h-5 ${isActive ? "text-blue" : ""}`} />
               </div>
             </Link>
           );

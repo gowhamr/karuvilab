@@ -73,7 +73,7 @@ export function CommandPalette() {
           onKeyDown={handleKeyDown}
           className="fixed left-1/2 top-[15%] -translate-x-1/2 z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-top-4 duration-200"
         >
-          <div className="flex items-center px-6 border-b border-border bg-elevated/30">
+          <div className="flex items-center px-6 border-b border-border bg-bg/50">
             <Search className="w-5 h-5 text-text-4" aria-hidden="true" />
             <input
               autoFocus
@@ -132,7 +132,7 @@ export function CommandPalette() {
                 >
                   <div className={`
                     w-9 h-9 rounded-lg flex items-center justify-center text-xl flex-shrink-0 border transition-colors
-                    ${i === selectedIndex ? "bg-white/20 border-white/10" : "bg-elevated border-border"}
+                    ${i === selectedIndex ? "bg-white/20 border-white/10" : "bg-bg border-border"}
                   `} aria-hidden="true">
                     <ToolIcon toolId={tool.id} category={tool.category} className={`w-4 h-4 ${i === selectedIndex ? "text-white" : "text-text-2"}`} />
                   </div>
@@ -150,7 +150,7 @@ export function CommandPalette() {
             )}
           </div>
 
-          <div className="px-6 py-3 bg-elevated/50 border-t border-border flex items-center justify-between text-[9px] font-black uppercase tracking-[0.15em] text-text-4">
+          <div className="px-6 py-3 bg-bg/50 border-t border-border flex items-center justify-between text-[9px] font-black uppercase tracking-[0.15em] text-text-4">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5"><ArrowUp className="w-2.5 h-2.5" /><ArrowDown className="w-2.5 h-2.5" /> Move</span>
               <span className="px-1.5 py-0.5 bg-surface border border-border rounded">Enter</span>

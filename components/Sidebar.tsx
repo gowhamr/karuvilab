@@ -79,7 +79,7 @@ const SidebarContent = memo(function SidebarContent({
 
       {/* Categories - Moved up for stability */}
       <div className="space-y-4">
-        <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 dark:text-white/30 uppercase tracking-[0.2em]">
+        <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
           <LayoutGrid className="w-3.5 h-3.5" />
           Universal Tools
         </div>
@@ -122,7 +122,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Personal Favorites - Only show if hydrated and exists */}
       {favorites.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 dark:text-white/30 uppercase tracking-[0.2em]">
+          <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             {t('common.favorites')}
           </div>
@@ -135,7 +135,7 @@ const SidebarContent = memo(function SidebarContent({
                 className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                   pathname.includes(tool.href) 
                     ? "bg-blue/10 text-blue" 
-                    : "text-text-3 dark:text-white/60 hover:text-blue dark:hover:text-white hover:bg-blue/5 dark:hover:bg-white/5"
+                    : "text-text-3 hover:text-blue hover:bg-blue/5"
                 }`}
               >
                 <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hover:bg-red-500/20 transition-all">
@@ -151,7 +151,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Recently Used */}
       {recent.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 dark:text-white/30 uppercase tracking-[0.2em]">
+          <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
             <Clock className="w-3.5 h-3.5" />
             {t('common.recent')}
           </div>
@@ -164,7 +164,7 @@ const SidebarContent = memo(function SidebarContent({
                 className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                   pathname.includes(tool.href) 
                     ? "bg-blue/10 text-blue" 
-                    : "text-text-3 dark:text-white/60 hover:text-blue dark:hover:text-white hover:bg-blue/5 dark:hover:bg-white/5"
+                    : "text-text-3 hover:text-blue hover:bg-blue/5"
                 }`}
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-blue/20 group-hover:bg-blue mr-3 transition-all" />
@@ -176,7 +176,7 @@ const SidebarContent = memo(function SidebarContent({
       )}
 
       {/* Support */}
-      <div className="pt-6 border-t border-border dark:border-white/5 space-y-1">
+      <div className="pt-6 border-t border-border space-y-1">
         {SUPPORT_LINKS.map(link => {
           const Icon = link.icon;
           return (
@@ -185,10 +185,10 @@ const SidebarContent = memo(function SidebarContent({
               href={link.href}
               onClick={() => setIsOpen(false)}
               className={`group flex items-center gap-3 h-[48px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                pathname === link.href ? "text-blue bg-blue/5" : "text-text-4 dark:text-white/40 hover:text-blue dark:hover:text-white hover:bg-blue/5 dark:hover:bg-white/5"
+                pathname === link.href ? "text-blue bg-blue/5" : "text-text-4 hover:text-blue hover:bg-blue/5"
               }`}
             >
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-bg dark:bg-white/5 border border-border dark:border-white/5 group-hover:border-blue/20 transition-all">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-bg border border-border group-hover:border-blue/20 transition-all">
                 <Icon className="w-4 h-4" />
               </div>
               {t(link.key as any) || link.label}
@@ -253,7 +253,7 @@ export function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-              className="fixed top-0 left-0 bottom-0 w-[82vw] max-w-[320px] rounded-r-[32px] sidebar-glass z-[70] flex flex-col md:hidden overflow-hidden touch-none"
+              className="fixed top-0 left-0 bottom-0 w-[82vw] max-w-[320px] rounded-r-[32px] bg-surface border-r border-border z-[70] flex flex-col md:hidden overflow-hidden touch-none"
             >
               {/* Drag Handle */}
               <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-white/20 rounded-full md:hidden" />

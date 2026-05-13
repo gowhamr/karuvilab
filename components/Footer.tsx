@@ -7,14 +7,13 @@ export function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12">
         <div className="space-y-4 text-center md:text-left">
           <Link href="/" className="flex items-center gap-3 group justify-center md:justify-start">
-            <div className="w-9 h-9 rounded-xl glass-icon flex items-center justify-center text-white shadow-lg shadow-ocean/25 group-hover:scale-105 transition-all">
-              <span className="brand-wordmark text-lg leading-none mt-0.5 drop-shadow-sm">K</span>
+            <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
+              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
             </div>
             <div className="flex flex-col text-left">
-              <span className="brand-wordmark text-xl tracking-tight leading-none text-text dark:text-white">
+              <span className="brand-wordmark text-xl tracking-tight leading-none text-text">
                 KaruviLab
               </span>
-              <div className="hairline-rule mt-1" />
             </div>
           </Link>
           <p className="text-text-4 text-[10px] font-black uppercase tracking-[0.2em]">Built for the privacy-conscious developer.</p>

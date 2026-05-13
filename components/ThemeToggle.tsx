@@ -20,7 +20,7 @@ export function ThemeToggle() {
   };
 
   if (!isHydrated) {
-    return <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface border border-border/10" />;
+    return <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface border border-border" />;
   }
 
   const resolvedTheme = theme === "system" 
@@ -30,7 +30,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border/10 hover:border-blue/30 hover:text-blue transition-all group"
+      className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all group"
       aria-label={`Switch to ${resolvedTheme === "light" ? "dark" : "light"} theme`}
     >
       {resolvedTheme === "light" ? (
