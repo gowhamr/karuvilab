@@ -31,7 +31,11 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex flex-col items-center justify-center p-12 bg-blue/5 border border-blue/10 rounded-3xl space-y-6 text-center animate-in fade-in zoom-in-95 duration-500">
+          <div 
+            role="alert" 
+            aria-live="assertive"
+            className="flex flex-col items-center justify-center p-12 bg-blue/5 border border-blue/10 rounded-3xl space-y-6 text-center animate-in fade-in zoom-in-95 duration-500"
+          >
             <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
               <AlertTriangle className="w-8 h-8" />
             </div>

@@ -57,7 +57,28 @@ class WorkerManager {
       return;
     }
 
-    const DEFAULT_TIMEOUT = 30000; // 30 seconds
+    // Dynamic timeout based on task type and input size
+    const getTimeout = () => {
+      const BASE_TIMEOUT = 30000; // 30s
+      let multiplier = 1;
+      
+      // Heuristic: heavy tasks get more time
+      if (['mergePdfs', 'compressImage', 'resizeImage'].includes(task.type)) {
+        multiplier = 2; // 60s
+        
+        // Scale with size (if first arg is Buffer/Array)
+        const sizeArg = task.args[0];
+        if (sizeArg instanceof ArrayBuffer || Array.isArray(sizeArg)) {
+          const bytes = sizeArg instanceof ArrayBuffer ? sizeArg.byteLength : 0;
+          if (bytes > 50 * 1024 * 1024) multiplier = 4; // 120s for >50MB
+          if (bytes > 200 * 1024 * 1024) multiplier = 10; // 5min for >200MB
+        }
+      }
+      
+      return BASE_TIMEOUT * multiplier;
+    };
+
+    const timeoutMs = getTimeout();
     let timeoutId: any;
 
     const onAbort = () => {
@@ -65,16 +86,16 @@ class WorkerManager {
       workerEntry.worker.terminate();
       const idx = this.pool.indexOf(workerEntry);
       this.pool.splice(idx, 1);
-      task.reject(new Error("Task cancelled"));
+      task.reject(new Error("Task cancelled or timed out"));
       this.processQueue();
     };
 
     task.abortSignal?.addEventListener("abort", onAbort);
 
     timeoutId = setTimeout(() => {
-      console.error(`Worker task ${task.type} timed out after ${DEFAULT_TIMEOUT}ms`);
+      console.error(`Worker task ${task.type} timed out after ${timeoutMs}ms`);
       onAbort();
-    }, DEFAULT_TIMEOUT);
+    }, timeoutMs);
 
     try {
       const api = workerEntry.api as any;

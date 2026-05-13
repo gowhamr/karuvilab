@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
 
-type ToastType = "success" | "error" | "info";
+type ToastType = "success" | "error" | "info" | "warn";
 
 interface Toast {
   id: string;
@@ -47,11 +47,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               ${t.type === "success" ? "bg-surface border-green-500/20 text-green-600 dark:text-green-400" : ""}
               ${t.type === "error" ? "bg-surface border-red-500/20 text-red-600 dark:text-red-400" : ""}
               ${t.type === "info" ? "bg-surface border-blue/20 text-blue dark:text-blue-400" : ""}
+              ${t.type === "warn" ? "bg-surface border-orange-500/20 text-orange-600 dark:text-orange-400" : ""}
             `}
           >
             <div className={`w-2 h-2 rounded-full ${
               t.type === "success" ? "bg-green-500" : 
-              t.type === "error" ? "bg-red-500" : "bg-blue"
+              t.type === "error" ? "bg-red-500" : 
+              t.type === "warn" ? "bg-orange-500" : "bg-blue"
             }`} />
             <span className="text-sm font-bold">{t.message}</span>
           </div>

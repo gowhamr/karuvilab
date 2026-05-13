@@ -68,15 +68,32 @@ if (workbox) {
     })
   );
 
-  // Offline Fallback
+  // Critical App Shell Assets for proactive caching
+  const APP_SHELL = [
+    '/',
+    '/manifest.json',
+    '/favicon.ico',
+    '/icons/icon-192.png',
+    '/icons/icon-512.png',
+  ];
+
+  self.addEventListener('install', (event) => {
+    event.waitUntil(
+      caches.open(CACHE_NAMES.static).then((cache) => {
+        console.log('Precaching App Shell');
+        return cache.addAll(APP_SHELL);
+      }).then(() => self.skipWaiting())
+    );
+  });
+
+  // Offline Fallback for Navigation
   setCatchHandler(async ({ event }) => {
     if (event.request.mode === 'navigate') {
-      return caches.match('/');
+      return caches.match('/') || Response.error();
     }
     return Response.error();
   });
 
-  self.addEventListener('install', () => self.skipWaiting());
   self.addEventListener('activate', (event) => {
     event.waitUntil(
       caches.keys().then((keys) =>
@@ -87,7 +104,7 @@ if (workbox) {
             }
           })
         )
-      )
+      ).then(() => self.clients.claim())
     );
   });
 }

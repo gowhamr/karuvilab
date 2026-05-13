@@ -55,13 +55,6 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             {tool.desc}
           </p>
         </div>
-
-        {/* Bottom Section: Meta */}
-        <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-border">
-          <span className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-text-4 truncate">
-            {categoryLabel}
-          </span>
-        </div>
       </Link>
     </m.div>
   );
