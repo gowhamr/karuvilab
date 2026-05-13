@@ -9,12 +9,16 @@ const CommandPalette = dynamic(() => import("@/components/ui/CommandPalette").th
   ssr: false
 });
 
-export function ClientProviders({ children }: { children: React.ReactNode }) {
+function StorageMonitor() {
   useStorageMonitor();
+  return null;
+}
 
+export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <LazyMotion features={domAnimation}>
       <ToastProvider>
+        <StorageMonitor />
         <CommandPalette />
         {children}
       </ToastProvider>

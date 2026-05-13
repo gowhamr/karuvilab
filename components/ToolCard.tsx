@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import Link from "next/link";
-import { ToolEntry, CATEGORIES, getToolColor } from "@/src/tool-registry";
+import { ToolEntry } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { Zap } from "lucide-react";
 import { cn } from "@/src/lib/utils";
@@ -14,8 +14,6 @@ interface ToolCardProps {
 }
 
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
-  const categoryLabel = CATEGORIES.find(c => c.id === tool.category)?.label || tool.category;
-
   return (
     <m.div
       className="relative w-full h-[130px] md:h-[180px]"
