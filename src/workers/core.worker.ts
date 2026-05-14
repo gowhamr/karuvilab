@@ -1,8 +1,8 @@
 import * as Comlink from "comlink";
 import { WorkerAPI } from "./types";
 
-// MD5 implementation moved from page.tsx
-function md5(str: string): string {
+// MD5 implementation
+function md5(input: string | Uint8Array): string {
   function cmn(q: number, a: number, b: number, x: number, s: number, t: number) {
     a = (((a + q) & 0xFFFFFFFF) + ((x + t) & 0xFFFFFFFF)) & 0xFFFFFFFF;
     return (((a << s) | (a >>> (32 - s))) + b) & 0xFFFFFFFF;
@@ -12,7 +12,7 @@ function md5(str: string): string {
   function hh(a: number, b: number, c: number, d: number, x: number, s: number, t: number) { return cmn(b ^ c ^ d, a, b, x, s, t); }
   function ii(a: number, b: number, c: number, d: number, x: number, s: number, t: number) { return cmn(c ^ (b | ~d), a, b, x, s, t); }
 
-  const bytes = new TextEncoder().encode(str);
+  const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
   const len8 = bytes.length;
   const len64 = (((len8 + 8) >>> 6) + 1) << 4;
   const s = new Uint32Array(len64);
@@ -46,8 +46,9 @@ function md5(str: string): string {
     .join("");
 }
 
-async function sha(algo: string, text: string): Promise<string> {
-  const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+async function sha(algo: string, input: string | Uint8Array): Promise<string> {
+  const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
+  const buf = await crypto.subtle.digest(algo, bytes.buffer as ArrayBuffer);
   return Array.from(new Uint8Array(buf))
     .map(b => b.toString(16).padStart(2, "0"))
     .join("");
@@ -76,6 +77,23 @@ const api: WorkerAPI = {
     
     return results;
   },
+
+  async generateFileHash(file: ArrayBuffer, algo: string, onProgress) {
+    if (onProgress) onProgress({ percent: 10, message: "Starting hash computation..." });
+    
+    let result = "";
+    const bytes = new Uint8Array(file);
+    
+    if (algo === "MD5") {
+      result = md5(bytes);
+    } else {
+      result = await sha(algo, bytes);
+    }
+    
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return result;
+  },
+
 
   async mergePdfs(files: ArrayBuffer[], onProgress) {
     const totalSize = files.reduce((acc, f) => acc + f.byteLength, 0);

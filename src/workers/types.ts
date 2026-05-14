@@ -15,6 +15,12 @@ export interface WorkerAPI {
     algos: string[], 
     onProgress?: ProgressCallback
   ): Promise<Record<string, string>>;
+
+  generateFileHash(
+    file: ArrayBuffer,
+    algo: string,
+    onProgress?: ProgressCallback
+  ): Promise<string>;
   
   // PDF Tasks
   mergePdfs(

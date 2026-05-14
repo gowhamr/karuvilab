@@ -189,6 +189,15 @@ class WorkerManager {
     return this.enqueue("generateHashes", [text, algos], undefined, onProgress, abortSignal);
   }
 
+  async generateFileHash(
+    file: ArrayBuffer,
+    algo: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<string> {
+    return this.enqueue("generateFileHash", [file, algo], [file], onProgress, abortSignal);
+  }
+
   async mergePdfs(
     files: ArrayBuffer[], 
     onProgress?: ProgressCallback,
