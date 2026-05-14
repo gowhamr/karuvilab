@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Background Remover | KaruviLab",
+  title: "Background Remover | KV",
   description: "Remove image backgrounds locally in your browser using smart color detection. No data leaves your device.",
   keywords: ["background remover", "remove background", "transparent background", "image background", "bg remover"],
 };

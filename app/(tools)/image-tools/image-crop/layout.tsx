@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Image Crop Tool | KaruviLab",
+  title: "Image Crop Tool | KV",
   description: "Crop images to a specific aspect ratio or freeform selection, processed locally in your browser.",
   keywords: ["image crop", "crop image", "image cropper", "aspect ratio crop", "online image crop"],
 };

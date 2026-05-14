@@ -199,11 +199,12 @@ class WorkerManager {
   }
 
   async mergePdfs(
-    files: ArrayBuffer[], 
+    files: (Blob | ArrayBuffer)[], 
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return this.enqueue("mergePdfs", [files], files, onProgress, abortSignal);
+    // We don't use transferables for Blobs
+    return this.enqueue("mergePdfs", [files], undefined, onProgress, abortSignal);
   }
 
   async compressImage(
@@ -235,6 +236,15 @@ class WorkerManager {
     abortSignal?: AbortSignal
   ): Promise<string> {
     return this.enqueue("minifyCode", [code, lang], undefined, onProgress, abortSignal);
+  }
+
+  async computeDiff(
+    textA: string,
+    textB: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<any[]> {
+    return this.enqueue("computeDiff", [textA, textB], undefined, onProgress, abortSignal);
   }
 
   terminateAll() {

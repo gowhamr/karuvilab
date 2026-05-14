@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bulk Image Resizer | KaruviLab",
+  title: "Bulk Image Resizer | KV",
   description: "Resize multiple images at once to custom dimensions. Batch processing done entirely in your browser.",
   keywords: ["bulk image resizer", "batch image resize", "resize multiple images", "bulk resize", "batch photo resize"],
 };

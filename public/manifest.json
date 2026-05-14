@@ -1,7 +1,7 @@
 {
   "name": "KaruviLab",
-  "short_name": "KaruviLab",
-  "description": "100% private, browser-side tools for PDFs, Images, and Developers. Works offline.",
+  "short_name": "KV",
+  "description": "KV (KaruviLab) — 100% private, browser-side tools for PDFs, Images, and Developers. Works offline.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0F172A",

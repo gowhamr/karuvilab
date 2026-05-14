@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "UTC to IST Converter | KaruviLab",
+  title: "UTC to IST Converter | KV",
   description: "Instantly convert between UTC and Indian Standard Time (IST, UTC+5:30). Supports any date and time.",
   keywords: ["utc to ist", "ist to utc", "india time converter", "timezone converter", "utc ist"],
 };

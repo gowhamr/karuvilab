@@ -15,8 +15,11 @@ interface TreeNodeProps {
   depth?: number;
 }
 
+const MAX_ITEMS = 100;
+
 function TreeNode({ value, depth = 0 }: TreeNodeProps) {
-  const [collapsed, setCollapsed] = useState(depth > 2);
+  const [collapsed, setCollapsed] = useState(depth >= 10);
+  const [showAll, setShowAll] = useState(false);
   const indent = depth * 16;
 
   if (value === null) return <span className="text-text-4">null</span>;
@@ -26,6 +29,9 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
 
   if (Array.isArray(value)) {
     if (value.length === 0) return <span className="text-text-3">[]</span>;
+    const items = showAll ? value : value.slice(0, MAX_ITEMS);
+    const hasMore = value.length > MAX_ITEMS && !showAll;
+
     return (
       <span>
         <button onClick={() => setCollapsed(c => !c)} className="text-text-4 hover:text-blue font-mono text-xs mr-1">
@@ -36,9 +42,17 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
           ? <span className="text-text-4 cursor-pointer" onClick={() => setCollapsed(false)}> {value.length} items </span>
           : (
             <div style={{ marginLeft: indent + 16 }}>
-              {value.map((item, i) => (
+              {items.map((item, i) => (
                 <div key={i}><TreeNode value={item} depth={depth + 1} />{i < value.length - 1 ? <span className="text-text-4">,</span> : null}</div>
               ))}
+              {hasMore && (
+                <button 
+                  onClick={() => setShowAll(true)}
+                  className="text-blue hover:underline text-xs font-bold mt-1"
+                >
+                  ... show all {value.length} items
+                </button>
+              )}
             </div>
           )
         }
@@ -50,6 +64,10 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
   if (typeof value === "object") {
     const entries = Object.entries(value as Record<string, unknown>);
     if (entries.length === 0) return <span className="text-text-3">{"{}"}</span>;
+    
+    const items = showAll ? entries : entries.slice(0, MAX_ITEMS);
+    const hasMore = entries.length > MAX_ITEMS && !showAll;
+
     return (
       <span>
         <button onClick={() => setCollapsed(c => !c)} className="text-text-4 hover:text-blue font-mono text-xs mr-1">
@@ -60,7 +78,7 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
           ? <span className="text-text-4 cursor-pointer" onClick={() => setCollapsed(false)}> {entries.length} keys </span>
           : (
             <div style={{ marginLeft: indent + 16 }}>
-              {entries.map(([k, v], i) => (
+              {items.map(([k, v], i) => (
                 <div key={k}>
                   <span className="text-blue">"{k}"</span>
                   <span className="text-text-3">: </span>
@@ -68,6 +86,14 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
                   {i < entries.length - 1 ? <span className="text-text-4">,</span> : null}
                 </div>
               ))}
+              {hasMore && (
+                <button 
+                  onClick={() => setShowAll(true)}
+                  className="text-blue hover:underline text-xs font-bold mt-1"
+                >
+                  ... show all {entries.length} keys
+                </button>
+              )}
             </div>
           )
         }
@@ -196,8 +222,15 @@ export default function JSONFormatterClient() {
           </div>
 
           {treeView && parsed !== null ? (
-            <div className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text overflow-auto max-h-[400px]">
-              <TreeNode value={parsed} depth={0} />
+            <div className="space-y-3">
+              {input.length > 5 * 1024 * 1024 && (
+                <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-xs text-yellow-600 font-medium">
+                  <span className="font-bold">Large JSON detected ({">"}5MB):</span> Tree view may be slower. Deeply nested levels (depth {">"} 10) and large collections are truncated for performance. Expand manually to see more.
+                </div>
+              )}
+              <div className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text overflow-auto max-h-[500px]">
+                <TreeNode value={parsed} depth={0} />
+              </div>
             </div>
           ) : (
             <textarea

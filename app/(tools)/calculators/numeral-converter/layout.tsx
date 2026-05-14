@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Number Base Converter | KaruviLab",
+  title: "Number Base Converter | KV",
   description: "Convert numbers between binary, octal, decimal, and hexadecimal bases instantly.",
   keywords: ["number base converter", "binary to decimal", "hex to decimal", "numeral converter", "base conversion"],
 };

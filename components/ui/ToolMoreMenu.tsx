@@ -45,7 +45,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: `KaruviLab - ${toolName}`,
+          title: `KV - ${toolName}`,
           url: window.location.href,
         });
       } else {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Compound Interest Calculator | KaruviLab",
+  title: "Compound Interest Calculator | KV",
   description: "Calculate compound interest growth over time. Customize compounding frequency and see how your money grows.",
   keywords: ["compound interest", "compound interest calculator", "interest calculator", "savings calculator"],
 };

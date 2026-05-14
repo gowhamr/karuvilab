@@ -40,17 +40,28 @@ export default function MergePdfClient() {
   const merge = async () => {
     if (files.length < 2) { setError("Please add at least 2 PDF files to merge."); return; }
     
+    const totalSize = files.reduce((acc, f) => acc + f.file.size, 0);
+    const isLarge = totalSize > 30 * 1024 * 1024; // 30MB threshold
+
     const controller = new AbortController();
     setAbortController(controller);
     setProcessing(true);
     setError("");
-    setProgress({ percent: 0, message: "Preparing files..." });
+    setProgress({ 
+      percent: 0, 
+      message: isLarge ? "Large files detected. Merging sequentially to save memory..." : "Preparing files..." 
+    });
+    
+    // UI Warning for mobile
+    if (isLarge && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      setProgress(p => ({ ...p!, message: "Processing >30MB on mobile. Please keep the app open..." }));
+    }
     
     try {
-      const arrayBuffers = await Promise.all(files.map(f => f.file.arrayBuffer()));
-      
+      // Pass the File objects directly to the worker. 
+      // They are cloned (not read into memory yet) when passed.
       const bytes = await workerManager.mergePdfs(
-        arrayBuffers,
+        files.map(f => f.file),
         (p) => setProgress(p),
         controller.signal
       );

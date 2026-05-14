@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Discount Calculator | KaruviLab",
+  title: "Discount Calculator | KV",
   description: "Find the sale price, discount amount, and actual savings for any percentage off deal.",
   keywords: ["discount calculator", "sale price", "percentage off", "savings calculator"],
 };

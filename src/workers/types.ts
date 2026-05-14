@@ -51,4 +51,19 @@ export interface WorkerAPI {
     lang: "css" | "js" | "html",
     onProgress?: ProgressCallback
   ): Promise<string>;
+
+  computeDiff(
+    textA: string,
+    textB: string,
+    onProgress?: ProgressCallback
+  ): Promise<DiffLine[]>;
+}
+
+export type DiffType = 'added' | 'removed' | 'equal';
+
+export interface DiffLine {
+  type: DiffType;
+  text: string;
+  lineA?: number;
+  lineB?: number;
 }

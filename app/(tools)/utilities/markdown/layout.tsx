@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Markdown Editor | KaruviLab",
+  title: "Markdown Editor | KV",
   description: "Live-preview Markdown editor with side-by-side rendering. Export as HTML.",
   keywords: ["markdown editor", "markdown preview", "markdown to html", "live markdown", "md editor"],
 };

@@ -9,7 +9,7 @@ const WorldClockClient = dynamic(() => import("./WorldClockClient"), {
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
 export const metadata: Metadata = {
-  title: "World Clock | KaruviLab",
+  title: "World Clock | KV",
   description: "Current time across major cities worldwide. Real-time updates with business hour indicators.",
   keywords: ["world clock", "time zone", "current time", "global time", "utc offset"],
 };

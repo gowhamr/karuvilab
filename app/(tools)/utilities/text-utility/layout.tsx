@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Text Utility | KaruviLab",
+  title: "Text Utility | KV",
   description: "Transform and analyze text — case conversion, word count, whitespace cleanup, reverse text, and more.",
   keywords: ["text utility", "text tools", "word counter", "case converter", "text transformer"],
 };

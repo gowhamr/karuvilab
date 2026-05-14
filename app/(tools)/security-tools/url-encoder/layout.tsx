@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "URL Encoder / Decoder | KaruviLab",
+  title: "URL Encoder / Decoder | KV",
   description: "Percent-encode and decode URLs and query string parameters for safe use in web requests.",
   keywords: ["url encoder", "url decoder", "percent encode", "url encode decode", "query string encoder"],
 };

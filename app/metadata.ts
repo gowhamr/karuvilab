@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 const siteConfig = {
-  name: "KaruviLab",
-  description: "The world's fastest, most private browser-side toolkit. No uploads. No tracking. 100% local-first tools for developers, designers, and daily tasks.",
+  name: "KV",
+  fullName: "KaruviLab",
+  description: "KV (KaruviLab) — The world's fastest, most private browser-side toolkit. No uploads. No tracking. 100% local-first tools for developers, designers, and daily tasks.",
   url: "https://karuvilab.com",
   ogImage: "https://karuvilab.com/og-image.png",
   links: {
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
+    "KV",
+    "KaruviLab",
     "online tools",
     "privacy first",
     "browser tools",
@@ -29,9 +32,9 @@ export const metadata: Metadata = {
     "no-upload tools",
     "client-side processing"
   ],
-  authors: [{ name: "KaruviLab Team", url: siteConfig.url }],
-  creator: "KaruviLab",
-  publisher: "KaruviLab",
+  authors: [{ name: "KV Labs", url: siteConfig.url }],
+  creator: "KV Labs",
+  publisher: "KV Labs",
   formatDetection: {
     email: false,
     address: false,

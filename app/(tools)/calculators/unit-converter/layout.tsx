@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Unit Converter | KaruviLab",
+  title: "Unit Converter | KV",
   description: "Convert length, weight, volume, temperature, speed, and more between metric and imperial units.",
   keywords: ["unit converter", "length converter", "weight converter", "temperature converter", "metric imperial"],
 };

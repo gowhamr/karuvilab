@@ -95,24 +95,28 @@ const api: WorkerAPI = {
   },
 
 
-  async mergePdfs(files: ArrayBuffer[], onProgress) {
-    const totalSize = files.reduce((acc, f) => acc + f.byteLength, 0);
-    if (totalSize > 100 * 1024 * 1024) {
-      throw new Error("Total PDF size too large (max 100MB)");
+  async mergePdfs(files: (Blob | ArrayBuffer)[], onProgress) {
+    const totalSize = files.reduce((acc, f) => acc + (f instanceof ArrayBuffer ? f.byteLength : f.size), 0);
+    if (totalSize > 150 * 1024 * 1024) { // Slightly increased limit as we are now more memory-efficient
+      throw new Error("Total PDF size too large (max 150MB)");
     }
     const { PDFDocument } = await import("pdf-lib");
     const merged = await PDFDocument.create();
     const total = files.length;
     
     for (let i = 0; i < total; i++) {
-      const bytes = files[i]!;
-      if (onProgress) onProgress({ percent: (i / total) * 50, message: `Loading PDF ${i + 1}/${total}` });
+      const file = files[i]!;
+      if (onProgress) onProgress({ percent: (i / total) * 80, message: `Merging PDF ${i + 1}/${total}` });
+      
+      const bytes = file instanceof ArrayBuffer ? file : await file.arrayBuffer();
       const doc = await PDFDocument.load(bytes);
       const pages = await merged.copyPages(doc, doc.getPageIndices());
       pages.forEach(p => merged.addPage(p));
+      
+      // Explicitly nullify bytes to help GC if needed (though scoped)
     }
     
-    if (onProgress) onProgress({ percent: 75, message: "Saving merged PDF..." });
+    if (onProgress) onProgress({ percent: 90, message: "Saving merged PDF..." });
     const result = await merged.save();
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;
@@ -187,11 +191,26 @@ const api: WorkerAPI = {
   },
 
   async minifyCode(code, lang, onProgress) {
-    if (typeof code !== "string" || code.length > 5 * 1024 * 1024) {
-      throw new Error("Code too large or invalid (max 5MB)");
+    if (typeof code !== "string" || code.length > 10 * 1024 * 1024) {
+      throw new Error("Code too large or invalid (max 10MB)");
     }
     if (onProgress) onProgress({ percent: 10, message: `Minifying ${lang.toUpperCase()}...` });
     
+    if (lang === 'js') {
+      try {
+        const { minify } = await import("terser");
+        const result = await minify(code, {
+          compress: true,
+          mangle: true,
+          module: true
+        });
+        if (onProgress) onProgress({ percent: 100, message: "Done!" });
+        return result.code || code;
+      } catch (err) {
+        console.warn("Terser failed, falling back to basic minification", err);
+      }
+    }
+
     let result = "";
     if (lang === "css") {
       result = code
@@ -201,17 +220,43 @@ const api: WorkerAPI = {
         .replace(/\s+/g, " ")
         .trim();
     } else if (lang === "js") {
-      result = code
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/\/\/[^\n]*/g, "")
-        .replace(/\n+/g, "\n")
-        .split("\n")
-        .map(l => l.trim())
-        .filter(Boolean)
-        .join(" ")
-        .replace(/\s*([=+\-*/<>!&|?,;:{}()[\]])\s*/g, "$1")
-        .replace(/([;,{])\s+/g, "$1")
-        .trim();
+      try {
+        const { minify } = await import("terser");
+        const minified = await minify(code, {
+          compress: {
+            dead_code: true,
+            drop_debugger: true,
+            conditionals: true,
+            evaluate: true,
+            booleans: true,
+            loops: true,
+            unused: true,
+            hoist_funs: true,
+            keep_fargs: false,
+            hoist_vars: false,
+            if_return: true,
+            join_vars: true,
+            side_effects: true,
+          },
+          mangle: true,
+          module: true,
+        });
+        result = minified.code || code;
+      } catch (err: any) {
+        console.error("Terser minification failed, falling back to basic:", err);
+        // Fallback to basic if terser fails
+        result = code
+          .replace(/\/\*[\s\S]*?\*\//g, "")
+          .replace(/\/\/[^\n]*/g, "")
+          .replace(/\n+/g, "\n")
+          .split("\n")
+          .map(l => l.trim())
+          .filter(Boolean)
+          .join(" ")
+          .replace(/\s*([=+\-*/<>!&|?,;:{}()[\]])\s*/g, "$1")
+          .replace(/([;,{])\s+/g, "$1")
+          .trim();
+      }
     } else if (lang === "html") {
       result = code
         .replace(/<!--[\s\S]*?-->/g, "")
@@ -220,6 +265,59 @@ const api: WorkerAPI = {
         .trim();
     }
     
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return result;
+  },
+
+  async computeDiff(textA, textB, onProgress) {
+    const linesA = textA.split(/\r?\n/);
+    const linesB = textB.split(/\r?\n/);
+    const m = linesA.length;
+    const n = linesB.length;
+
+    if (onProgress) onProgress({ percent: 10, message: "Calculating difference..." });
+
+    // Myers-simplified or basic LCS
+    // For very large files, we fall back to a simpler view to prevent OOM
+    if (m * n > 10000000) { // Limit to 10M cells for safety (e.g. 3000x3000 lines)
+      if (onProgress) onProgress({ percent: 50, message: "Large file detected, performing fast diff..." });
+      const result: any[] = [];
+      linesA.forEach((l, i) => result.push({ type: 'removed', text: l, lineA: i + 1 }));
+      linesB.forEach((l, i) => result.push({ type: 'added', text: l, lineB: i + 1 }));
+      return result;
+    }
+
+    const dp = Array.from({ length: m + 1 }, () => new Int32Array(n + 1));
+    for (let i = 1; i <= m; i++) {
+      if (onProgress && i % 100 === 0) {
+        onProgress({ percent: 10 + (i / m) * 40, message: `Building diff matrix... (${i}/${m})` });
+      }
+      for (let j = 1; j <= n; j++) {
+        if (linesA[i - 1] === linesB[j - 1]) {
+          dp[i]![j] = dp[i - 1]![j - 1]! + 1;
+        } else {
+          dp[i]![j] = Math.max(dp[i - 1]![j]!, dp[i]![j - 1]!);
+        }
+      }
+    }
+
+    if (onProgress) onProgress({ percent: 60, message: "Reconstructing diff..." });
+
+    const result: any[] = [];
+    let i = m, j = n;
+    while (i > 0 || j > 0) {
+      if (i > 0 && j > 0 && linesA[i - 1] === linesB[j - 1]) {
+        result.unshift({ type: "equal", text: linesA[i - 1]!, lineA: i, lineB: j });
+        i--; j--;
+      } else if (j > 0 && (i === 0 || dp[i]![j - 1]! >= dp[i - 1]![j]!)) {
+        result.unshift({ type: "added", text: linesB[j - 1]!, lineB: j });
+        j--;
+      } else {
+        result.unshift({ type: "removed", text: linesA[i - 1]!, lineA: i });
+        i--;
+      }
+    }
+
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;
   }

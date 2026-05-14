@@ -1,0 +1,151 @@
+"use client";
+
+import React, { useState, useCallback } from 'react';
+import { useFileViewerStore } from '@/src/store/useFileViewerStore';
+import { readFileAsText, detectLanguage } from '@/src/lib/file-utils';
+import { workerManager } from '@/src/workers/manager';
+import { DropZone } from '@/components/ui/DropZone';
+import { DiffViewer } from './DiffViewer';
+import { DiffLine } from '@/src/workers/types';
+import { Zap, Loader2, ArrowRight, Trash2, Plus, Minus } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
+
+export function CompareTab() {
+  const { fileA, fileB, setFileA, setFileB } = useFileViewerStore();
+  const { toast } = useToast();
+  
+  const [diff, setDiff] = useState<DiffLine[] | null>(null);
+  const [isComputing, setIsComputing] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const handleFileA = useCallback(async (files: File[] | FileList) => {
+    const file = files instanceof FileList ? files[0] : files[0];
+    if (file) {
+      const content = await readFileAsText(file);
+      setFileA({ content, name: file.name, language: detectLanguage(file.name), size: file.size });
+    }
+  }, [setFileA]);
+
+  const handleFileB = useCallback(async (files: File[] | FileList) => {
+    const file = files instanceof FileList ? files[0] : files[0];
+    if (file) {
+      const content = await readFileAsText(file);
+      setFileB({ content, name: file.name, language: detectLanguage(file.name), size: file.size });
+    }
+  }, [setFileB]);
+
+  const computeDiff = async () => {
+    if (!fileA || !fileB) return;
+    
+    setIsComputing(true);
+    setProgress(0);
+    setDiff(null);
+
+    try {
+      const result = await workerManager.computeDiff(
+        fileA.content,
+        fileB.content,
+        (p) => setProgress(p.percent)
+      );
+      setDiff(result);
+    } catch (err) {
+      toast("Diff calculation failed", "error");
+    } finally {
+      setIsComputing(false);
+    }
+  };
+
+  const stats = React.useMemo(() => {
+    if (!diff) return null;
+    return {
+      added: diff.filter(d => d.type === 'added').length,
+      removed: diff.filter(d => d.type === 'removed').length,
+    };
+  }, [diff]);
+
+  return (
+    <div className="space-y-8">
+      {!diff ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4 px-2">Original File</h3>
+            {!fileA ? (
+              <DropZone onFilesSelected={handleFileA} accept="*" title="Upload Original" className="h-48" />
+            ) : (
+              <div className="bg-surface border border-border p-4 rounded-2xl flex items-center justify-between">
+                <div className="truncate flex-1 mr-4">
+                  <p className="text-xs font-bold text-text truncate">{fileA.name}</p>
+                  <p className="text-[10px] text-text-4 uppercase">{fileA.language}</p>
+                </div>
+                <button onClick={() => setFileA(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4 px-2">Modified File</h3>
+            {!fileB ? (
+              <DropZone onFilesSelected={handleFileB} accept="*" title="Upload Modified" className="h-48" />
+            ) : (
+              <div className="bg-surface border border-border p-4 rounded-2xl flex items-center justify-between">
+                <div className="truncate flex-1 mr-4">
+                  <p className="text-xs font-bold text-text truncate">{fileB.name}</p>
+                  <p className="text-[10px] text-text-4 uppercase">{fileB.language}</p>
+                </div>
+                <button onClick={() => setFileB(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="lg:col-span-2 flex justify-center py-4">
+            <button
+              onClick={computeDiff}
+              disabled={!fileA || !fileB || isComputing}
+              className="px-12 py-5 bg-blue text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale flex items-center gap-3"
+            >
+              {isComputing ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Computing... {Math.round(progress)}%</span>
+                </>
+              ) : (
+                <>
+                  <Zap className="w-5 h-5 fill-current" />
+                  Compare Files
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-4 py-2 bg-green-500/5 border border-green-500/10 rounded-full">
+                <Plus className="w-3.5 h-3.5 text-green-500" />
+                <span className="text-xs font-black text-green-600">{stats?.added} Additions</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-red-500/5 border border-red-500/10 rounded-full">
+                <Minus className="w-3.5 h-3.5 text-red-500" />
+                <span className="text-xs font-black text-red-600">{stats?.removed} Deletions</span>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setDiff(null)}
+              className="text-[10px] font-black uppercase tracking-widest text-blue hover:underline"
+            >
+              Start New Comparison
+            </button>
+          </div>
+
+          <DiffViewer diff={diff} />
+        </div>
+      )}
+    </div>
+  );
+}

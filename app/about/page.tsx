@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About KaruviLab — Privacy-First Browser Tools",
+  title: "About – KV",
   description: "Learn about KaruviLab — a privacy-first browser toolset built for compressing, converting, and validating files locally.",
   alternates: {
-    canonical: "/about/",
+    canonical: "/about",
   },
 };
 

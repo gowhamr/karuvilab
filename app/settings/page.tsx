@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import SettingsClient from "./SettingsClient";
 
 export const metadata: Metadata = {
-  title: "Settings | KaruviLab",
+  title: "Settings – KV",
   description: "Enterprise-grade customization and preferences for KaruviLab.",
 };
 

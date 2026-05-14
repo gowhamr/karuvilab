@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Help & FAQ — KaruviLab",
+  title: "Help & FAQ – KV",
   description: "Help, FAQ, and troubleshooting for KaruviLab. Learn how each browser-based tool works.",
 };
 

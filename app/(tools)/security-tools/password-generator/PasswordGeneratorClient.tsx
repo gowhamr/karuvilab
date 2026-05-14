@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 const cat = CATEGORIES.find(c => c.id === "security")!;
 
@@ -58,18 +59,6 @@ export default function PasswordGeneratorClient() {
 
   const strength = passwords[0] ? getStrength(passwords[0]) : null;
 
-  const CheckBox = ({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) => (
-    <label className="flex items-center gap-2 cursor-pointer select-none">
-      <div
-        onClick={onChange}
-        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${checked ? "bg-blue border-blue" : "border-border"}`}
-      >
-        {checked && <span className="text-white text-xs font-bold">✓</span>}
-      </div>
-      <span className="text-sm text-text-2">{label}</span>
-    </label>
-  );
-
   return (
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
@@ -92,10 +81,10 @@ export default function PasswordGeneratorClient() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <CheckBox checked={useUpper} onChange={() => setUseUpper(v => !v)} label="Uppercase (A-Z)" />
-          <CheckBox checked={useLower} onChange={() => setUseLower(v => !v)} label="Lowercase (a-z)" />
-          <CheckBox checked={useNums} onChange={() => setUseNums(v => !v)} label="Numbers (0-9)" />
-          <CheckBox checked={useSyms} onChange={() => setUseSyms(v => !v)} label="Symbols (!@#…)" />
+          <Checkbox checked={useUpper} onChange={() => setUseUpper(v => !v)} label="Uppercase (A-Z)" />
+          <Checkbox checked={useLower} onChange={() => setUseLower(v => !v)} label="Lowercase (a-z)" />
+          <Checkbox checked={useNums} onChange={() => setUseNums(v => !v)} label="Numbers (0-9)" />
+          <Checkbox checked={useSyms} onChange={() => setUseSyms(v => !v)} label="Symbols (!@#…)" />
         </div>
 
         <button

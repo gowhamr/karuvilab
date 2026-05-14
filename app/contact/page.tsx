@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Contact KaruviLab",
+  title: "Contact – KV",
   description: "Contact KaruviLab. Email us at wanderseven@proton.me for bug reports, feature requests or general enquiries.",
   alternates: {
-    canonical: "/contact/",
+    canonical: "/contact",
   },
 };
 

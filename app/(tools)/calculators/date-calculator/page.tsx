@@ -9,7 +9,7 @@ const DateCalculatorClient = dynamic(() => import("./DateCalculatorClient"), {
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
 export const metadata: Metadata = {
-  title: "Date Calculator | KaruviLab",
+  title: "Date Calculator | KV",
   description: "Calculate date differences or add/subtract time from any date. Supports years, months, weeks, and days.",
   keywords: ["date calculator", "date difference", "add days to date", "subtract days from date", "business days"],
 };

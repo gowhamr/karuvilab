@@ -41,6 +41,7 @@ export interface EmiResult {
  * Standard EMI formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
  */
 export function calculateEmi(p: number, r: number, n: number): number {
+  if (n <= 0) return 0;
   if (r === 0) return p / n;
   const monthlyRate = r / 12 / 100;
   return (p * monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);

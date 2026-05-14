@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Time Calculator | KaruviLab",
+  title: "Time Calculator | KV",
   description: "Add or subtract hours and minutes, or calculate the duration between two times.",
   keywords: ["time calculator", "hours calculator", "duration calculator", "time difference"],
 };

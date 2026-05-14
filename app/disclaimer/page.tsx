@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Disclaimer — KaruviLab",
+  title: "Disclaimer – KV",
   description: "Official Disclaimer for KaruviLab. Information regarding tool accuracy, government non-affiliation, and limitation of liability.",
   alternates: {
-    canonical: "/disclaimer/",
+    canonical: "/disclaimer",
   },
 };
 

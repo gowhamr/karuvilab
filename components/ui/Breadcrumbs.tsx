@@ -12,7 +12,7 @@ export function Breadcrumbs({ category, title }: BreadcrumbsProps) {
       aria-label="Breadcrumb"
       className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4 mb-6"
     >
-      <Link href="/" className="hover:text-blue transition-colors">Home</Link>
+      <Link href="/" aria-label="KV Home" className="hover:text-blue transition-colors">Home</Link>
       <span aria-hidden="true">/</span>
       {category && (
         <>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Code Formatter | KaruviLab",
+  title: "Code Formatter | KV",
   description: "Auto-format code in multiple languages including JavaScript, CSS, HTML, JSON, SQL, and Markdown.",
   keywords: ["code formatter", "prettier", "format code", "beautify code", "js formatter", "css formatter"],
 };

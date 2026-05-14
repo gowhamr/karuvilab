@@ -3,7 +3,7 @@ import Script from "next/script";
 import DataCalculatorWrapper from "./DataCalculatorWrapper";
 
 export const metadata: Metadata = {
-  title: "Advanced Data Calculator – File Size Converter, Transfer Time & Checksum | KaruviLab",
+  title: "Advanced Data Calculator – File Size Converter, Transfer Time & Checksum | KV",
   description: "Convert data units (SI/IEC), calculate download/upload times, estimate cloud storage costs, and generate checksums (MD5, SHA-256) – all offline and privacy-first. No uploads.",
   keywords: ["data calculator", "unit converter", "transfer time", "bandwidth calculator", "storage cost", "checksum generator", "md5", "sha256"],
 };

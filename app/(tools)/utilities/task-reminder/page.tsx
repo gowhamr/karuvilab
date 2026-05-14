@@ -9,7 +9,7 @@ const TaskReminderClient = dynamic(() => import("./TaskReminderClient"), {
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
 export const metadata: Metadata = {
-  title: "Task Reminder | KaruviLab",
+  title: "Task Reminder | KV",
   description: "A private, lightweight task list that stores your data locally in your browser. No registration required.",
   keywords: ["todo list", "task manager", "local storage", "private todo", "productivity"],
 };

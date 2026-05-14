@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Image Resizer | KaruviLab",
+  title: "Image Resizer | KV",
   description: "Resize images to exact pixel dimensions while preserving aspect ratio. All processing is local.",
   keywords: ["image resizer", "resize image", "image dimensions", "scale image", "resize photo"],
 };

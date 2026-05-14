@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
+import { KVLogo } from "@/components/ui/KVLogo";
 
 export function Footer() {
   return (
@@ -7,16 +8,15 @@ export function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12">
         <div className="space-y-4 text-center md:text-left">
           <Link href="/" className="flex items-center gap-3 group justify-center md:justify-start">
-            <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
-              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
-            </div>
+            <KVLogo size="md" />
             <div className="flex flex-col text-left">
+              <span className="text-[9px] font-black uppercase tracking-widest text-text-4 leading-none mb-1">Powered by</span>
               <span className="brand-wordmark text-xl tracking-tight leading-none text-text">
                 KaruviLab
               </span>
             </div>
           </Link>
-          <p className="text-text-4 text-[10px] font-black uppercase tracking-[0.2em]">Built for the privacy-conscious developer.</p>
+          <p className="text-text-4 text-[10px] font-black uppercase tracking-[0.2em]">100% Local-First Processing • Built for the privacy-conscious developer.</p>
         </div>
         <div className="flex items-center gap-8">
           <Link href="/privacy" className="text-[9px] font-black uppercase tracking-widest text-text-4 hover:text-blue">Privacy</Link>

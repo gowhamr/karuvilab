@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Safe-to-Spend Calculator | KaruviLab",
+  title: "Safe-to-Spend Calculator | KV",
   description: "Calculate your safe daily spending budget based on your income, bills, and savings goals.",
   keywords: ["safe to spend", "budget calculator", "daily budget", "spending budget", "personal finance"],
 };

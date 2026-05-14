@@ -302,6 +302,21 @@ export const ALL_TOOLS: ToolEntry[] = [
     popular: true,
     related: ['unit-converter', 'json-formatter', 'qrcode']
   },
+  { 
+    id: 'file-viewer-diff', 
+    name: 'File Viewer & Diff', 
+    desc: 'Local text editor and diff checker', 
+    href: 'file-tools/file-viewer-diff/', 
+    category: 'developer', 
+    input: ['any-file', 'text'],
+    output: ['any-file', 'text'],
+    keywords: ['file viewer','diff','compare','editor','source code'], 
+    featured: true,
+    popular: true,
+    difficulty: 'intermediate',
+    status: 'new',
+    schemaType: 'SoftwareApplication'
+  },
 
 
   // ── PDF Tools ──────────────────────────────────────────────────────────────
@@ -317,7 +332,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: 'extract-images',   name: 'Extract Images',   desc: 'Pull images out of a PDF',            href: 'pdf-tools/extract-images/', category: 'pdf', input: 'pdf', output: 'image', keywords: ['pdf','extract','image'] },
 
   // ── Image Tools ────────────────────────────────────────────────────────────
-  { id: 'image-compress',  name: 'Compress Image',     desc: 'Reduce image file size',                 href: 'image-tools/compress/',           category: 'image', input: 'image', output: 'image', keywords: ['image','compress','jpg','png','webp'], popular: true, priority: 0.8 },
+  { id: 'image-compress',  name: 'Compress Image',     desc: 'Reduce image file size',                 href: 'image-tools/image-compressor/',           category: 'image', input: 'image', output: 'image', keywords: ['image','compress','jpg','png','webp'], popular: true, priority: 0.8, difficulty: 'advanced' },
   { id: 'image-converter', name: 'Image Converter',    desc: 'Convert between JPG, PNG, WebP, AVIF',   href: 'image-tools/image-converter/',    category: 'image', input: 'image', output: 'image', keywords: ['image','convert','jpg','png','webp','avif'] },
   { id: 'image-resizer',   name: 'Image Resizer',      desc: 'Resize images to exact dimensions',      href: 'image-tools/image-resizer/',      category: 'image', input: 'image', output: 'image', keywords: ['image','resize','dimensions'] },
   { id: 'image-crop',      name: 'Image Crop',         desc: 'Crop images to ratio or freeform',       href: 'image-tools/image-crop/',         category: 'image', input: 'image', output: 'image', keywords: ['image','crop','trim'] },

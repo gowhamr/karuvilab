@@ -6,6 +6,7 @@ import { Search, Command, Menu, Laptop, WifiOff } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { m, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useOnlineStatus } from "@/src/lib/hooks";
+import { KVLogo } from "@/components/ui/KVLogo";
 
 export function Header() {
   const isOnline = useOnlineStatus();
@@ -43,15 +44,9 @@ export function Header() {
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
-              <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="brand-wordmark text-lg md:text-xl tracking-tight leading-none">
-                KaruviLab
-              </span>
-            </div>
+          <Link href="/">
+            <KVLogo withText size="md" className="hidden md:flex" />
+            <KVLogo size="md" className="md:hidden" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">

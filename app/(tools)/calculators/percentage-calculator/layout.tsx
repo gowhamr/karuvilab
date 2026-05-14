@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Percentage Calculator | KaruviLab",
+  title: "Percentage Calculator | KV",
   description: "Calculate percentages, percentage change, and what percent one number is of another.",
   keywords: ["percentage calculator", "percent calculator", "percentage change", "percent of number"],
 };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Standard Calculator | KaruviLab",
+  title: "Standard Calculator | KV",
   description: "A fast, clean calculator for quick arithmetic — addition, subtraction, multiplication, and division.",
   keywords: ["calculator", "online calculator", "standard calculator", "arithmetic calculator"],
 };

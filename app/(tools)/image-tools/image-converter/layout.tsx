@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Image Format Converter | KaruviLab",
+  title: "Image Format Converter | KV",
   description: "Convert images between JPG, PNG, WebP, and BMP formats entirely in your browser.",
   keywords: ["image converter", "jpg to png", "png to webp", "image format converter", "convert image"],
 };

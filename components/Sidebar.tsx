@@ -10,6 +10,7 @@ import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { m, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { useI18n } from "@/src/lib/i18n/store";
+import { KVLogo } from "@/components/ui/KVLogo";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About", icon: Info, key: 'common.about' },
@@ -259,13 +260,8 @@ export function Sidebar() {
               <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-white/20 rounded-full md:hidden" />
 
               <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
-                <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
-                    <span className="brand-wordmark text-lg leading-none mt-0.5">K</span>
-                  </div>
-                  <span className="brand-wordmark text-lg tracking-tight leading-none text-text">
-                    KaruviLab
-                  </span>
+                <Link href="/" onClick={() => setIsOpen(false)}>
+                  <KVLogo withText size="sm" />
                 </Link>
                 <button
                   className="w-8 h-8 flex items-center justify-center hover:bg-black/5 rounded-xl transition-colors text-text-4"
@@ -284,15 +280,8 @@ export function Sidebar() {
       {/* Desktop Permanent Sidebar */}
       <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden">
         <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center text-white transition-all">
-              <span className="brand-wordmark text-xl leading-none mt-1">K</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="brand-wordmark text-xl tracking-tight leading-none text-text">
-                KaruviLab
-              </span>
-            </div>
+          <Link href="/">
+            <KVLogo withText size="md" />
           </Link>
         </div>
         <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />

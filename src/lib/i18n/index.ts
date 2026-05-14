@@ -1,9 +1,9 @@
 export const translations = {
   en: {
     hero: {
-      title: "Every tool you need.",
+      title: "Build faster with KV.",
       subtitle: "Privacy you can trust.",
-      desc: "The world's most private browser-side toolkit.",
+      desc: "The world's most private browser-side toolkit. Local-first tools by KaruviLab.",
       tag: "Productivity Refined"
     },
     common: {
@@ -23,7 +23,7 @@ export const translations = {
   },
   hi: {
     hero: {
-      title: "आपकी ज़रूरत का हर उपकरण।",
+      title: "KV के साथ तेज़ी से बनाएँ।",
       subtitle: "गोपनीयता जिस पर आप भरोसा कर सकते हैं।",
       desc: "दुनिया का सबसे निजी ब्राउज़र-साइड टूलकिट।",
       tag: "उत्पादकता परिष्कृत"
@@ -45,7 +45,7 @@ export const translations = {
   },
   ta: {
     hero: {
-      title: "உங்களுக்குத் தேவையான அனைத்து கருவிகளும்.",
+      title: "KV உடன் வேகமாக உருவாக்குங்கள்.",
       subtitle: "நீங்கள் நம்பக்கூடிய தனியுரிமை.",
       desc: "உலகின் மிகவும் தனிப்பட்ட உலாவி-பக்க கருவித்தொகுப்பு.",
       tag: "உற்பத்தித்திறன் மேம்படுத்தப்பட்டது"

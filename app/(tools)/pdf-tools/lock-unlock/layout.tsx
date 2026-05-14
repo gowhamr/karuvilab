@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Lock / Unlock PDF | KaruviLab",
+  title: "Lock / Unlock PDF | KV",
   description: "Add a password to protect your PDF or remove an existing PDF password in your browser.",
   keywords: ["lock pdf", "unlock pdf", "pdf password", "encrypt pdf", "pdf protection", "remove pdf password"],
 };

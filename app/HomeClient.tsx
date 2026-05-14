@@ -69,10 +69,10 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
 });
 
 const FAQ = [
-  { q: "Is KaruviLab free for commercial use?", a: "Yes. All tools are 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
-  { q: "How secure is my data on this platform?", a: "Security is our core mission. All processing happens locally in your browser. Your files and text never leave your device." },
-  { q: "Can I use these tools offline?", a: "Most tools are designed to work offline once loaded. Since processing is 100% client-side, you can disconnect and keep working." },
-  { q: "Do you store any of my inputs or outputs?", a: "Absolutely not. We do not have a backend that processes your data. Everything stays in your browser's volatile memory." },
+  { q: "Is KV free for commercial use?", a: "Yes. KV (KaruviLab) is 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
+  { q: "How secure is my data on KV?", a: "Security is our core mission. All processing happens locally in your browser. Your files and text never leave your device." },
+  { q: "Can I use these tools offline?", a: "Most KV tools are designed to work offline once loaded. Since processing is 100% client-side, you can disconnect and keep working." },
+  { q: "Do you store any of my inputs or outputs?", a: "Absolutely not. KV does not have a backend that processes your data. Everything stays in your browser's volatile memory." },
 ];
 
 import { useI18n } from "@/src/lib/i18n/store";

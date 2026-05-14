@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Internet Speed Tester | KaruviLab",
+  title: "Internet Speed Tester | KV",
   description: "Measure your internet connection speed — download, upload, and ping latency. 100% browser-side measurement.",
   keywords: ["speed test", "internet speed", "wifi speed", "ping", "latency", "network test"],
 };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Regex Tester | KaruviLab",
+  title: "Regex Tester | KV",
   description: "Test and debug regular expressions with live match highlighting and capture group details.",
   keywords: ["regex tester", "regular expression tester", "regex debugger", "regex match", "regexp"],
 };

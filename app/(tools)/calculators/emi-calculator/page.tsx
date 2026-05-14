@@ -3,7 +3,7 @@ import Script from "next/script";
 import EmiCalculatorClientWrapper from "./EmiCalculatorClientWrapper";
 
 export const metadata: Metadata = {
-  title: "Advanced EMI Calculator – Home, Car, Personal Loan | Free & Offline | KaruviLab",
+  title: "Advanced EMI Calculator – Home, Car, Personal Loan | Free & Offline | KV",
   description: "Calculate loan EMIs, generate amortization schedules, compare scenarios, and test floating rate impact. Includes prepayment simulator & PDF export. Fully offline, zero data upload. Privacy-first.",
   keywords: ["emi calculator", "loan calculator", "amortization schedule", "prepayment simulator", "home loan emi", "car loan emi"],
 };

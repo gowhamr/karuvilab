@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Task Reminder | KaruviLab",
+  title: "Task Reminder | KV",
   description: "A lightweight, private to-do list stored in your browser. No account needed, no data sent.",
   keywords: ["task reminder", "to do list", "browser todo", "private tasks", "task manager"],
 };

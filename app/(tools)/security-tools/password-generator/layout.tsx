@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Password Generator | KaruviLab",
+  title: "Password Generator | KV",
   description: "Generate strong, random passwords with custom length, uppercase, numbers, and symbols.",
   keywords: ["password generator", "random password", "strong password", "secure password", "password maker"],
 };

@@ -68,7 +68,7 @@ export function FeedbackModal() {
                 {isSuccess ? "Thank You!" : "Feedback"}
               </Dialog.Title>
               <Dialog.Description className="text-[10px] font-black uppercase tracking-widest text-text-4">
-                {isSuccess ? "We've received your report" : "Help us improve KaruviLab"}
+                {isSuccess ? "We've received your report" : "Help us improve KV"}
               </Dialog.Description>
             </div>
             <Dialog.Close className="p-2 hover:bg-bg rounded-xl text-text-4 transition-all active:scale-90">
