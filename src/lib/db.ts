@@ -34,10 +34,19 @@ interface KaruviDB extends DBSchema {
       timestamp: number;
     };
   };
+  'emiScenarios': {
+    key: string;
+    value: {
+      id: string;
+      name: string;
+      config: any;
+      timestamp: number;
+    };
+  };
 }
 
 const DB_NAME = 'karuvilab-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Incremented version
 
 let dbPromise: Promise<IDBPDatabase<KaruviDB>> | null = null;
 
@@ -46,23 +55,29 @@ export const getDB = () => {
   
   if (!dbPromise) {
     dbPromise = openDB<KaruviDB>(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        // Tool states (current inputs)
-        db.createObjectStore('tool-states', { keyPath: 'toolId' });
-        
-        // History of calculations
-        const historyStore = db.createObjectStore('history', { 
-          keyPath: 'id', 
-          autoIncrement: true 
-        });
-        historyStore.createIndex('by-tool', 'toolId');
-        historyStore.createIndex('by-date', 'timestamp');
-        
-        // App preferences
-        db.createObjectStore('preferences');
-        
-        // File storage for offline access to generated files
-        db.createObjectStore('cached-files', { keyPath: 'id' });
+      upgrade(db, oldVersion) {
+        if (oldVersion < 1) {
+          // Tool states (current inputs)
+          db.createObjectStore('tool-states', { keyPath: 'toolId' });
+          
+          // History of calculations
+          const historyStore = db.createObjectStore('history', { 
+            keyPath: 'id', 
+            autoIncrement: true 
+          });
+          historyStore.createIndex('by-tool', 'toolId');
+          historyStore.createIndex('by-date', 'timestamp');
+          
+          // App preferences
+          db.createObjectStore('preferences');
+          
+          // File storage for offline access to generated files
+          db.createObjectStore('cached-files', { keyPath: 'id' });
+        }
+
+        if (oldVersion < 2) {
+          db.createObjectStore('emiScenarios', { keyPath: 'id' });
+        }
       },
     });
   }

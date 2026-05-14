@@ -45,7 +45,7 @@ export function SupportSection() {
       label: "Contact Email", 
       desc: "Talk to our team directly", 
       icon: Mail, 
-      href: "mailto:support@karuvilab.com" 
+      href: "mailto:KaruviLab@proton.me" 
     },
   ];
 

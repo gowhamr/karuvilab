@@ -240,7 +240,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
              {[
                { label: "Report Issue", type: "bug" as const },
                { label: "Suggest Improvement", type: "feature" as const },
-               { label: "Contact Support", href: "mailto:support@karuvilab.com" },
+               { label: "Contact Support", href: "mailto:KaruviLab@proton.me" },
              ].map((item, i) => {
                if ('href' in item) {
                  return (

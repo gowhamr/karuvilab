@@ -1,5 +1,7 @@
 import * as Comlink from "comlink";
 import { WorkerAPI, ProgressCallback } from "./types";
+import { EmiWorkerAPI } from "./emi.worker";
+import { EmiInputs, EmiResult } from "../lib/emi-calculations";
 
 interface QueuedTask {
   id: string;
@@ -14,6 +16,7 @@ interface QueuedTask {
 
 class WorkerManager {
   private pool: Array<{ worker: Worker; api: Comlink.Remote<WorkerAPI>; busy: boolean }> = [];
+  private emiPool: Array<{ worker: Worker; api: Comlink.Remote<EmiWorkerAPI>; busy: boolean }> = [];
   private queue: QueuedTask[] = [];
   private maxWorkers = typeof navigator !== "undefined" ? Math.min(navigator.hardwareConcurrency || 4, 4) : 4;
   private supported = typeof Worker !== "undefined";
@@ -39,6 +42,39 @@ class WorkerManager {
     }
 
     return null;
+  }
+
+  private async getAvailableEmiWorker() {
+    if (!this.supported) return null;
+
+    const idle = this.emiPool.find(w => !w.busy);
+    if (idle) return idle;
+
+    if (this.emiPool.length < 2) { // Cap EMI workers
+      const worker = new Worker(new URL("./emi.worker.ts", import.meta.url));
+      const api = Comlink.wrap<EmiWorkerAPI>(worker);
+      const entry = { worker, api, busy: false };
+      this.emiPool.push(entry);
+      return entry;
+    }
+
+    return null;
+  }
+
+  async calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult> {
+    const workerEntry = await this.getAvailableEmiWorker();
+    if (!workerEntry) {
+      // Fallback to main thread if workers fail
+      const { generateSchedule } = await import("../lib/emi-calculations");
+      return generateSchedule(inputs);
+    }
+
+    workerEntry.busy = true;
+    try {
+      return await workerEntry.api.calculateSchedule(inputs);
+    } finally {
+      workerEntry.busy = false;
+    }
   }
 
   private async processQueue() {
