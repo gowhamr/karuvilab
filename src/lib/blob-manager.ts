@@ -15,8 +15,8 @@ class BlobManager {
   /**
    * Creates a Blob URL and registers it for management.
    */
-  create(blob: Blob | File | MediaSource, metadata?: any): string {
-    const url = URL.createObjectURL(blob as any);
+  create(blob: Blob | File | any, metadata?: any): string {
+    const url = URL.createObjectURL(blob);
     this.registry.set(url, {
       url,
       createdAt: Date.now(),
@@ -72,8 +72,8 @@ class BlobManager {
 export const blobManager = new BlobManager();
 
 // Global cleanup on page hide/unload
-if (typeof window !== 'undefined') {
-  window.addEventListener('pagehide', () => {
+if (typeof globalThis !== 'undefined' && (globalThis as any).window) {
+  (globalThis as any).window.addEventListener('pagehide', () => {
     // We don't necessarily want to revoke everything on hide if it's a PWA,
     // but maybe on visibilitychange if it stays hidden for a long time.
   });

@@ -26,12 +26,16 @@ export const DATA_UNITS: DataUnit[] = [
   { id: 'MB',   label: 'megabytes (MB)',   factor: 8 * 1e6,     type: 'si' },
   { id: 'GB',   label: 'gigabytes (GB)',   factor: 8 * 1e9,     type: 'si' },
   { id: 'TB',   label: 'terabytes (TB)',   factor: 8 * 1e12,    type: 'si' },
+  { id: 'PB',   label: 'petabytes (PB)',   factor: 8 * 1e15,    type: 'si' },
+  { id: 'EB',   label: 'exabytes (EB)',    factor: 8 * 1e18,    type: 'si' },
   
   // Bytes (IEC)
   { id: 'KiB',  label: 'kibibytes (KiB)',  factor: 8 * 1024,    type: 'iec' },
   { id: 'MiB',  label: 'mebibytes (MiB)',  factor: 8 * 1024**2, type: 'iec' },
   { id: 'GiB',  label: 'gibibytes (GiB)',  factor: 8 * 1024**3, type: 'iec' },
   { id: 'TiB',  label: 'tebibytes (TiB)',  factor: 8 * 1024**4, type: 'iec' },
+  { id: 'PiB',  label: 'pebibytes (PiB)',  factor: 8 * 1024**5, type: 'iec' },
+  { id: 'EiB',  label: 'exbibytes (EiB)',  factor: 8 * 1024**6, type: 'iec' },
 ];
 
 export const BANDWIDTH_UNITS = [

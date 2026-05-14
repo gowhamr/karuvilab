@@ -52,12 +52,8 @@ export function StorageCostTab() {
                   onChange={(e) => setDataUnit(e.target.value)}
                   className="w-full px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"
                 >
-                  {DATA_UNITS.filter(u => ['GB', 'TB', 'GiB', 'TiB', 'PB', 'EB'].includes(u.id)).map((u) => (
+                  {DATA_UNITS.filter(u => u.factor >= 8 * 1e9).map((u) => (
                     <option key={u.id} value={u.id}>{u.label}</option>
-                  ))}
-                  {/* Fallback for others if needed */}
-                  {['MB', 'MiB'].map(id => (
-                    <option key={id} value={id}>{DATA_UNITS.find(u => u.id === id)?.label}</option>
                   ))}
                 </select>
               </div>
