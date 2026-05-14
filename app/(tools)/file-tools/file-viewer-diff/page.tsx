@@ -1,10 +1,6 @@
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import Script from "next/script";
-
-const FileViewerDiffClient = dynamic(() => import("@/components/tools/file-viewer-diff/FileViewerDiffClient"), {
-  ssr: false,
-});
+import FileViewerDiffClientWrapper from "./FileViewerDiffClientWrapper";
 
 export const metadata: Metadata = {
   title: "Online File Viewer & Diff Tool – Code Editor & Compare | KV",
@@ -31,7 +27,7 @@ export default function FileViewerDiffPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <FileViewerDiffClient />
+      <FileViewerDiffClientWrapper />
 
       <section className="mt-20 max-w-4xl mx-auto px-6 space-y-16 pb-20">
         <div className="space-y-6">
