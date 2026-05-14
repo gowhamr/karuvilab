@@ -410,21 +410,22 @@ export default function InternetSpeedTestClient() {
       const size = 1 * 1024 * 1024; // 1MB chunks
       const data = new Uint8Array(size);
       crypto.getRandomValues(data);
+      const blob = new Blob([data], { type: 'application/octet-stream' });
 
       while (performance.now() - startTime < testDuration) {
         if (abortControllerRef.current?.signal.aborted) break;
         
         const chunkController = new AbortController();
-        const timeoutId = setTimeout(() => chunkController.abort(), 15000);
+        const timeoutId = setTimeout(() => chunkController.abort(), 12000);
 
         try {
           const response = await fetch('/api/speedtest/upload', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/octet-stream' },
-            body: data,
-            duplex: 'half',
-            signal: chunkController.signal
-          } as any);
+            body: blob,
+            signal: chunkController.signal,
+            // Only use duplex: 'half' if body was a ReadableStream. 
+            // Since we use a Blob, it's not required and can cause TypeError in some browsers.
+          });
           
           clearTimeout(timeoutId);
           if (response.ok) {
@@ -440,17 +441,23 @@ export default function InternetSpeedTestClient() {
               historyRef.current = [...historyRef.current, point].slice(-60);
               setHistory(historyRef.current);
             }
+          } else {
+            // Wait slightly before retrying on server error
+            await new Promise(r => setTimeout(r, 500));
           }
         } catch (e) {
           clearTimeout(timeoutId);
-          if ((e as Error).name === 'AbortError' && !abortControllerRef.current?.signal.aborted) {
-            continue; 
+          const isAbort = (e as Error).name === 'AbortError';
+          if (isAbort && !abortControllerRef.current?.signal.aborted) {
+            continue; // Retry on individual chunk timeout
           }
-          break;
+          console.error("Upload chunk error:", e);
+          break; // Stop worker on fatal network error
         }
       }
     };
 
+    setUpload(0); // Initialize to 0 so it doesn't show '--'
     await Promise.allSettled(Array.from({ length: concurrency }).map(() => uploadWorker()));
     const finalTime = (performance.now() - startTime) / 1000;
     
