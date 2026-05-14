@@ -407,19 +407,26 @@ export default function InternetSpeedTestClient() {
     setHistory([]);
 
     const uploadWorker = async () => {
-      const size = 1 * 1024 * 1024; // Reduce to 1MB chunks for better compatibility
+      const size = 1 * 1024 * 1024; // 1MB chunks
       const data = new Uint8Array(size);
       crypto.getRandomValues(data);
 
       while (performance.now() - startTime < testDuration) {
         if (abortControllerRef.current?.signal.aborted) break;
+        
+        const chunkController = new AbortController();
+        const timeoutId = setTimeout(() => chunkController.abort(), 15000);
+
         try {
           const response = await fetch('/api/speedtest/upload', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/octet-stream' },
             body: data,
-            signal: abortControllerRef.current?.signal ?? null
-          });
+            duplex: 'half',
+            signal: chunkController.signal
+          } as any);
           
+          clearTimeout(timeoutId);
           if (response.ok) {
             totalBytes += size;
             const now = performance.now();
@@ -433,13 +440,13 @@ export default function InternetSpeedTestClient() {
               historyRef.current = [...historyRef.current, point].slice(-60);
               setHistory(historyRef.current);
             }
-          } else {
-            console.error(`Upload chunk failed with status: ${response.status}`);
           }
         } catch (e) {
-          if ((e as Error).name === 'AbortError') break;
-          console.error("Upload worker error:", e);
-          await new Promise(r => setTimeout(r, 200));
+          clearTimeout(timeoutId);
+          if ((e as Error).name === 'AbortError' && !abortControllerRef.current?.signal.aborted) {
+            continue; 
+          }
+          break;
         }
       }
     };
