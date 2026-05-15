@@ -29,17 +29,41 @@ export interface CompressionSettings {
   lossless: boolean;
 }
 
+export interface HashOptions {
+  algo: string;
+  hmacKey?: string;
+  encoding?: 'hex' | 'base64';
+}
+
 export interface WorkerAPI {
   // Hash Tasks
   generateHashes(
     text: string, 
     algos: string[], 
+    encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback
   ): Promise<Record<string, string>>;
 
   generateFileHash(
     file: ArrayBuffer,
     algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  generateHmac(
+    text: string,
+    key: string,
+    algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  generateFileHmac(
+    file: ArrayBuffer,
+    key: string,
+    algo: string,
+    encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback
   ): Promise<string>;
   

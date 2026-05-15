@@ -29,32 +29,23 @@ export function KVLogo({
     <div className={cn("flex items-center gap-3", className)} aria-label="KaruviLab" role="img">
       <div 
         className={cn(
-          "rounded-[28%] flex items-center justify-center transition-all duration-500 ease-expo",
+          "rounded-xl flex items-center justify-center transition-all duration-500 ease-expo overflow-hidden",
           sizes[size],
           variant === "full" 
-            ? "bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 text-white shadow-[0_8px_20px_-6px_rgba(79,70,229,0.5)] border border-white/20" 
-            : "bg-transparent text-current"
+            ? "bg-white/5 backdrop-blur-sm shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] border border-white/10" 
+            : "bg-transparent"
         )}
       >
-        <svg
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-[58%] h-[58%]"
-          aria-hidden="true"
-        >
-          <path
-            d="M26 20V80M54 20L26 50L54 80M62 20L76 80L90 20"
-            stroke="currentColor"
-            strokeWidth="12"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <img 
+          src="/logo.png" 
+          alt="KaruviLab" 
+          className="w-full h-full object-contain scale-90"
+          loading="eager"
+        />
       </div>
       {withText && (
         <div className="flex flex-col">
-          <span className={cn("brand-wordmark tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-br from-text via-text to-text/70", 
+          <span className={cn("brand-wordmark tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-br from-text via-text to-text/70 font-black", 
             size === "sm" ? "text-lg" : "text-xl",
             textClassName
           )}>

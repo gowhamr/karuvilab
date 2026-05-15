@@ -117,6 +117,22 @@ const SidebarContent = memo(function SidebarContent({
               </Link>
             );
           })}
+          <Link
+            href="/all-tools"
+            onClick={() => setIsOpen(false)}
+            className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
+              pathname === "/all-tools"
+                ? "bg-bg border border-border text-blue"
+                : "text-text-3 hover:text-blue hover:bg-blue/5"
+            }`}
+          >
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+              pathname === "/all-tools" ? "bg-blue text-white" : "bg-bg border border-border group-hover:bg-blue/10"
+            }`}>
+              <LayoutGrid className="w-4 h-4" />
+            </div>
+            <span className="flex-1">All Tools</span>
+          </Link>
         </div>
       </div>
 

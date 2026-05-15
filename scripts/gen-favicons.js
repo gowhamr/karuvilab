@@ -63,13 +63,8 @@ function iconPixel(x, y, size) {
   const s  = size;
   const cx = s / 2, cy = s / 2;
 
-  // Rounded-rect SDF – corner radius = 24 % of size
-  const cr = s * 0.24;
-  const hw = s / 2 - 0.5, hh = s / 2 - 0.5;
-  const rx = Math.abs(x - cx) - hw + cr;
-  const ry = Math.abs(y - cy) - hh + cr;
-  const dist = Math.min(Math.max(rx, ry), 0) +
-               Math.sqrt(Math.max(rx, 0) ** 2 + Math.max(ry, 0) ** 2) - cr;
+  // Circle SDF
+  const dist = Math.hypot(x - cx, y - cy) - (s / 2 - 0.5);
 
   if (dist > 1.2) return [0, 0, 0, 0]; // outside
   const baseAlpha = Math.round(Math.min(1, Math.max(0, 1.2 - dist)) * 255);

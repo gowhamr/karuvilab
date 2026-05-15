@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useToast } from "./Toast";
 
-export function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
+export function CopyButton({ text, label = "Copy", className }: { text: string; label?: string; className?: string }) {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
@@ -24,6 +24,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
       className={`
         min-h-[44px] px-3 py-2 text-sm font-bold rounded-lg transition-all border outline-none focus-visible:ring-2 focus-visible:ring-blue/20
         ${copied ? "bg-green-500/10 border-green-500/30 text-green-600" : "bg-surface border-border hover:border-blue hover:text-blue"}
+        ${className || ""}
       `}
     >
       <div className="flex items-center gap-2">

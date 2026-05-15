@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { blobManager } from '../lib/blob-manager';
 
 export type CompressionFormat = 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif';
 
@@ -70,8 +71,8 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     if (activeTab === 'single') {
       const currentItems = get().items;
       currentItems.forEach(item => {
-        URL.revokeObjectURL(item.previewUrl);
-        if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
+        blobManager.revoke(item.previewUrl);
+        if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
       });
     }
 
@@ -88,7 +89,7 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
             const item: ImageItem = {
               id: Math.random().toString(36).substring(7),
               file,
-              previewUrl: URL.createObjectURL(file),
+              previewUrl: blobManager.create(file),
               status: 'idle',
               progress: 0,
               originalSize: file.size,
@@ -98,10 +99,10 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
               settings: { ...globalSettings },
               dimensions: { width: img.width, height: img.height },
             };
-            URL.revokeObjectURL(img.src);
+            blobManager.revoke(img.src);
             resolve(item);
           };
-          img.src = URL.createObjectURL(file);
+          img.src = blobManager.create(file);
         });
       });
       
@@ -117,8 +118,8 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     set((state) => {
       const item = state.items.find((i) => i.id === id);
       if (item) {
-        URL.revokeObjectURL(item.previewUrl);
-        if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
+        blobManager.revoke(item.previewUrl);
+        if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
       }
       return {
         items: state.items.filter((i) => i.id !== id),
@@ -129,8 +130,8 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
   clearFiles: () => {
     const { items } = get();
     items.forEach((item) => {
-      URL.revokeObjectURL(item.previewUrl);
-      if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
+      blobManager.revoke(item.previewUrl);
+      if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
     });
     set({ items: [] });
   },
@@ -169,7 +170,7 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     set((state) => ({
       items: state.items.map((item) => {
         if (item.id === id) {
-          if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
+          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
           return {
             ...item,
             status: 'completed',
@@ -188,7 +189,7 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     set((state) => ({
       items: state.items.map((item) => {
         if (item.id === id) {
-          if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
+          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
           return { ...item, status: 'error', error };
         }
         return item;
@@ -204,7 +205,7 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     set((state) => ({
       items: state.items.map((item) => {
         if (item.id === id) {
-          if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
+          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
           const { error, ...rest } = item;
           return {
             ...rest,

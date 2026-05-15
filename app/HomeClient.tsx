@@ -226,7 +226,7 @@ export default function HomeClient() {
                     subtitle="Industry standards"
                     icon={TrendingUp}
                     badge="Hot"
-                    href="/calculators"
+                    href="/all-tools"
                   />
                   <div className="flex overflow-x-auto no-scrollbar gap-3 md:gap-4 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x">
                     {popularTools.map(tool => (
@@ -275,7 +275,7 @@ export default function HomeClient() {
                     title={t('common.all')} 
                     subtitle="Universal toolkit"
                     icon={LayoutGrid}
-                    href="/calculators"
+                    href="/all-tools"
                   />
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                     {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
@@ -284,7 +284,7 @@ export default function HomeClient() {
                   </div>
                   <div className="mt-8 flex justify-center">
                     <Link 
-                      href="/calculators"
+                      href="/all-tools"
                       className="inline-flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-[11px] font-black text-text hover:border-blue/30 hover:text-blue hover:shadow-lg transition-all shadow-sm uppercase tracking-widest"
                     >
                       Browse 100+ Tools <ArrowRight className="w-4 h-4" />

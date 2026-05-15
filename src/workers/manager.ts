@@ -13,19 +13,43 @@ class WorkerManager {
   async generateHashes(
     text: string, 
     algos: string[], 
+    encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Record<string, string>> {
-    return workerOrchestrator.run("generateHashes", [text, algos], undefined, onProgress, abortSignal);
+    return workerOrchestrator.run("generateHashes", [text, algos, encoding], undefined, onProgress, abortSignal);
   }
 
   async generateFileHash(
     file: ArrayBuffer,
     algo: string,
+    encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<string> {
-    return workerOrchestrator.run("generateFileHash", [file, algo], [file], onProgress, abortSignal);
+    return workerOrchestrator.run("generateFileHash", [file, algo, encoding], [file], onProgress, abortSignal);
+  }
+
+  async generateHmac(
+    text: string,
+    key: string,
+    algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<string> {
+    return workerOrchestrator.run("generateHmac", [text, key, algo, encoding], undefined, onProgress, abortSignal);
+  }
+
+  async generateFileHmac(
+    file: ArrayBuffer,
+    key: string,
+    algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<string> {
+    return workerOrchestrator.run("generateFileHmac", [file, key, algo, encoding], [file], onProgress, abortSignal);
   }
 
   async mergePdfs(

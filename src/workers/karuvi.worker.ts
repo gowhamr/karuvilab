@@ -46,17 +46,45 @@ function md5(input: string | Uint8Array): string {
     .join("");
 }
 
-async function sha(algo: string, input: string | Uint8Array): Promise<string> {
-  const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
-  const buf = await crypto.subtle.digest(algo, bytes.buffer as ArrayBuffer);
+function bufToHex(buf: ArrayBuffer): string {
   return Array.from(new Uint8Array(buf))
     .map(b => b.toString(16).padStart(2, "0"))
     .join("");
 }
 
+function bufToBase64(buf: ArrayBuffer): string {
+  let binary = "";
+  const bytes = new Uint8Array(buf);
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]!);
+  }
+  return btoa(binary);
+}
+
+async function sha(algo: string, input: string | Uint8Array): Promise<ArrayBuffer> {
+  const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
+  return await crypto.subtle.digest(algo, bytes.buffer as ArrayBuffer);
+}
+
+async function hmac(algo: string, key: string, input: string | Uint8Array): Promise<ArrayBuffer> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(key);
+  const data = typeof input === "string" ? encoder.encode(input) : input;
+  
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: { name: algo.replace("SHA-", "SHA") } },
+    false,
+    ["sign"]
+  );
+  
+  return await crypto.subtle.sign("HMAC", cryptoKey, data as any);
+}
+
 const api: WorkerAPI = {
   // Hash Tasks
-  async generateHashes(text: string, algos: string[], onProgress) {
+  async generateHashes(text: string, algos: string[], encoding: 'hex' | 'base64' = 'hex', onProgress) {
     if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
       throw new Error("Input text too large or invalid (max 10MB)");
     }
@@ -65,13 +93,16 @@ const api: WorkerAPI = {
     let current = 0;
     
     if (algos.includes("MD5")) {
-      results["MD5"] = md5(text);
+      results["MD5"] = md5(text); // MD5 is already hex string in this implementation
+      // TODO: if encoding is base64, convert MD5 hex to base64 if needed, 
+      // but usually MD5 is always hex.
       current++;
       if (onProgress) onProgress({ percent: (current / total) * 100, message: "Computed MD5" });
     }
     
     for (const algo of algos.filter(a => a !== "MD5")) {
-      results[algo] = await sha(algo, text);
+      const buf = await sha(algo, text);
+      results[algo] = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
       current++;
       if (onProgress) onProgress({ percent: (current / total) * 100, message: `Computed ${algo}` });
     }
@@ -79,15 +110,32 @@ const api: WorkerAPI = {
     return results;
   },
 
-  async generateFileHash(file: ArrayBuffer, algo: string, onProgress) {
+  async generateFileHash(file: ArrayBuffer, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress) {
     if (onProgress) onProgress({ percent: 10, message: "Starting hash computation..." });
     let result = "";
     const bytes = new Uint8Array(file);
     if (algo === "MD5") {
       result = md5(bytes);
     } else {
-      result = await sha(algo, bytes);
+      const buf = await sha(algo, bytes);
+      result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
     }
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return result;
+  },
+
+  async generateHmac(text: string, key: string, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress) {
+    if (onProgress) onProgress({ percent: 10, message: "Importing key..." });
+    const buf = await hmac(algo, key, text);
+    const result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return result;
+  },
+
+  async generateFileHmac(file: ArrayBuffer, key: string, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress) {
+    if (onProgress) onProgress({ percent: 10, message: "Importing key..." });
+    const buf = await hmac(algo, key, new Uint8Array(file));
+    const result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;
   },
