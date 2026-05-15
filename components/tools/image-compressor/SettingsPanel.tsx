@@ -2,6 +2,7 @@ import React from 'react';
 import { useImageCompressStore, CompressionFormat, ImageSettings } from '@/src/store/useImageCompressStore';
 import { getSupportedFormats } from '@/src/lib/image-compression-utils';
 import { Lock, Unlock, Monitor, Image as ImageIcon, Zap, ShieldCheck } from 'lucide-react';
+import { SliderField } from '@/components/ui/SliderField';
 
 export const SettingsPanel: React.FC<{ isGlobal?: boolean; itemId?: string }> = ({ isGlobal = true, itemId }) => {
   const { globalSettings, updateGlobalSettings, items, updateItemSettings } = useImageCompressStore();
@@ -53,20 +54,15 @@ export const SettingsPanel: React.FC<{ isGlobal?: boolean; itemId?: string }> = 
       </div>
 
       {/* Quality */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <label className="text-xs font-bold uppercase tracking-widest text-text-4">Quality</label>
-          <span className="text-sm font-black text-blue">{settings.quality}%</span>
-        </div>
-        <input
-          type="range"
-          min={1}
-          max={100}
-          value={settings.quality}
-          onChange={(e) => update({ quality: Number(e.target.value), lossless: false })}
-          className="w-full h-2 bg-bg border border-border rounded-full appearance-none cursor-pointer accent-blue"
-        />
-      </div>
+      <SliderField
+        label="Quality"
+        id={isGlobal ? "global-quality" : `item-quality-${itemId}`}
+        min={1}
+        max={100}
+        value={settings.quality}
+        onChange={(v) => update({ quality: v, lossless: false })}
+        format={(v) => `${v}%`}
+      />
 
       {/* Format */}
       <div className="space-y-3">

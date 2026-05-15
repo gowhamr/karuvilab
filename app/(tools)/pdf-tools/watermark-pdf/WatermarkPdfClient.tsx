@@ -4,6 +4,7 @@ import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { SliderField } from "@/components/ui/SliderField";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -106,27 +107,37 @@ export default function WatermarkPdfClient() {
                   <input type="text" className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none" value={color} onChange={e => setColor(e.target.value)} />
                 </div>
               </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Font Size: {fontSize}px</label>
-                <input type="range" min={20} max={150} value={fontSize} onChange={e => setFontSize(Number(e.target.value))} className="w-full mt-2" />
-              </div>
+              <SliderField
+                id="fontSize"
+                label="Font Size"
+                min={20}
+                max={150}
+                value={fontSize}
+                onChange={setFontSize}
+                format={v => `${v}px`}
+              />
             </div>
 
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <label className="font-medium">Opacity</label>
-                <span className="font-mono font-bold text-blue">{Math.round(opacity * 100)}%</span>
-              </div>
-              <input type="range" min={0.05} max={1} step={0.05} value={opacity} onChange={e => setOpacity(Number(e.target.value))} className="w-full" />
-            </div>
+            <SliderField
+              id="opacity"
+              label="Opacity"
+              min={0.05}
+              max={1}
+              step={0.05}
+              value={opacity}
+              onChange={setOpacity}
+              format={v => `${Math.round(v * 100)}%`}
+            />
 
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <label className="font-medium">Rotation</label>
-                <span className="font-mono font-bold text-blue">{angle}°</span>
-              </div>
-              <input type="range" min={-90} max={90} value={angle} onChange={e => setAngle(Number(e.target.value))} className="w-full" />
-            </div>
+            <SliderField
+              id="rotation"
+              label="Rotation"
+              min={-90}
+              max={90}
+              value={angle}
+              onChange={setAngle}
+              format={v => `${v}°`}
+            />
           </div>
         </div>
 

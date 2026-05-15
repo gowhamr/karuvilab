@@ -17,11 +17,14 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
   return (
     <m.div
       className="relative w-full h-[130px] md:h-[180px]"
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
     >
       <Link 
         href={`/${tool.href}`}
         className={cn(
-          "relative flex flex-col h-full bg-surface border border-border rounded-[24px] p-4 md:p-6 shadow-sm overflow-hidden transition-colors duration-300"
+          "relative flex flex-col h-full bg-surface border border-border rounded-[24px] p-4 md:p-6 shadow-sm overflow-hidden transition-all duration-300",
+          "hover:border-blue/30 hover:bg-blue/[0.02] active:scale-[0.98]"
         )}
       >
         {/* Top Section: Icon & Badge */}

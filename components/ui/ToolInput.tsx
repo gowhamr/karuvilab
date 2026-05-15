@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useId } from "react";
+import { cn } from "@/src/lib/utils";
 
 interface ToolInputProps {
   label: string;
@@ -8,8 +9,9 @@ interface ToolInputProps {
   onChange: (val: string) => void;
   placeholder?: string;
   rows?: number;
-  type?: "text" | "number" | "password";
+  type?: "text" | "number" | "password" | "date";
   description?: string;
+  error?: string;
   mono?: boolean;
   id?: string;
 }
@@ -22,18 +24,23 @@ export function ToolInput({
   rows = 1, 
   type = "text",
   description,
+  error,
   mono = false,
   id: providedId
 }: ToolInputProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
   const descriptionId = `${id}-description`;
+  const errorId = `${id}-error`;
 
-  const baseClasses = `
-    w-full px-4 py-3 bg-bg border border-border rounded-xl outline-none transition-all
-    focus:ring-4 focus:ring-blue/10 focus:border-blue placeholder:text-text-4
-    min-h-[48px] ${mono ? "font-mono text-sm" : "text-base"}
-  `;
+  const baseClasses = cn(
+    "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-[48px]",
+    mono ? "font-mono text-sm" : "text-base",
+    error 
+      ? "border-red-500 focus:ring-4 focus:ring-red-500/10 focus:border-red-500" 
+      : "border-border focus:ring-4 focus:ring-blue/10 focus:border-blue",
+    "placeholder:text-text-4"
+  );
 
   return (
     <div className="space-y-2">
@@ -56,7 +63,11 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          aria-describedby={description ? descriptionId : undefined}
+          aria-describedby={cn(
+            description ? descriptionId : undefined,
+            error ? errorId : undefined
+          )}
+          aria-invalid={!!error}
         />
       ) : (
         <input
@@ -66,8 +77,21 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          aria-describedby={description ? descriptionId : undefined}
+          aria-describedby={cn(
+            description ? descriptionId : undefined,
+            error ? errorId : undefined
+          )}
+          aria-invalid={!!error}
         />
+      )}
+      {error && (
+        <p 
+          id={errorId}
+          role="alert"
+          className="text-[10px] text-red-500 font-bold uppercase tracking-wider"
+        >
+          {error}
+        </p>
       )}
     </div>
   );

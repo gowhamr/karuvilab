@@ -3,6 +3,7 @@ import { useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { SliderField } from "@/components/ui/SliderField";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
@@ -57,24 +58,16 @@ export default function QRCodeGeneratorClient() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-text-2">Size</label>
-              <span className="text-sm font-mono font-bold text-blue">{size}×{size}px</span>
-            </div>
-            <input
-              type="range"
-              min={128}
-              max={512}
-              step={32}
-              value={size}
-              onChange={e => setSize(Number(e.target.value))}
-              className="w-full accent-blue"
-            />
-            <div className="flex justify-between text-xs text-text-4">
-              <span>128px</span><span>512px</span>
-            </div>
-          </div>
+          <SliderField
+            label="Size"
+            id="qr-size"
+            min={128}
+            max={512}
+            step={32}
+            value={size}
+            onChange={setSize}
+            format={(v) => `${v}×${v}px`}
+          />
 
           <div className="space-y-2">
             <label className="text-sm font-bold text-text-2">Error Correction</label>

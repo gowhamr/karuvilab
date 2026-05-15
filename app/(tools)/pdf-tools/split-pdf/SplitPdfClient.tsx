@@ -4,6 +4,8 @@ import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -93,7 +95,7 @@ export default function SplitPdfClient() {
   return (
     <div className="space-y-6">
       <div
-        className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors"
+        className="bg-surface border-2 border-dashed border-border rounded-[32px] p-10 text-center cursor-pointer hover:border-blue transition-colors group"
         onClick={() => fileRef.current?.click()}
         onDragOver={e => e.preventDefault()}
         onDrop={e => { 
@@ -109,45 +111,48 @@ export default function SplitPdfClient() {
       >
         {file ? (
           <div className="space-y-1">
-            <p className="font-semibold text-text-2">{file.name}</p>
-            <p className="text-sm text-text-3">{pageCount > 0 ? `${pageCount} pages · ` : ""}{(file.size / 1024).toFixed(0)} KB</p>
+            <p className="font-bold text-text-2">{file.name}</p>
+            <p className="text-xs font-bold text-text-4 uppercase tracking-wider">{pageCount > 0 ? `${pageCount} pages · ` : ""}{(file.size / 1024).toFixed(0)} KB</p>
           </div>
         ) : (
           <>
-            <div className="text-4xl mb-2">✂️</div>
-            <p className="font-semibold text-text-2">Drop a PDF here or click to select</p>
+            <div className="text-4xl mb-4 transition-transform group-hover:scale-110">✂️</div>
+            <p className="font-bold text-text-2">Drop a PDF here or click to select</p>
+            <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest mt-2">Maximum file size: 50MB</p>
           </>
         )}
         <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { if (e.target.files) loadFile(e.target.files); }} />
       </div>
 
-      <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
-        <label className="flex items-center gap-2 cursor-pointer text-sm font-medium">
-          <input type="checkbox" checked={splitAll} onChange={e => setSplitAll(e.target.checked)} className="rounded" />
-          Split into individual pages (one file per page)
-        </label>
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+        <Checkbox
+          label="Split into individual pages (one file per page)"
+          checked={splitAll}
+          onChange={e => setSplitAll(e.target.checked)}
+        />
         {!splitAll && (
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Page Ranges</label>
-            <input
-              type="text"
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
+          <div className="space-y-3">
+            <ToolInput
+              label="Page Ranges"
               value={ranges}
-              onChange={e => setRanges(e.target.value)}
+              onChange={setRanges}
               placeholder="e.g. 1-3, 5, 7-9"
+              mono
+              description={pageCount > 0 ? `${pageCount} total pages` : undefined}
             />
-            <p className="text-xs text-text-4">Each range becomes a separate PDF. Examples: <code>1-5</code>, <code>2</code>, <code>1-3, 5, 7-10</code>
-              {pageCount > 0 ? ` · ${pageCount} total pages` : ""}</p>
+            <p className="text-[10px] font-bold text-text-4 uppercase tracking-wider leading-relaxed">
+              Each range becomes a separate PDF. Examples: <code className="text-blue">1-5</code>, <code className="text-blue">2</code>, <code className="text-blue">1-3, 5, 7-10</code>
+            </p>
           </div>
         )}
       </div>
 
-      {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
+      {error && <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 text-xs font-bold uppercase tracking-wider text-center">{error}</div>}
 
       <button
         onClick={split}
         disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+        className="w-full py-4 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
       >
         {processing ? "Splitting…" : "Split PDF"}
       </button>

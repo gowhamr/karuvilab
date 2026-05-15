@@ -7,6 +7,7 @@ import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
 import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
+import { SliderField } from "@/components/ui/SliderField";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -126,26 +127,18 @@ export default function ImageCompressorClient() {
         <div className="relative z-10 grid gap-10 lg:grid-cols-12">
           {/* Quality Slider & Presets */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-widest text-text">Compression Level</h3>
-                <p className="text-[10px] font-bold text-text-4 uppercase tracking-tight">Lower % = Smaller file size</p>
-              </div>
-              <div className="text-2xl font-black text-blue tabular-nums bg-blue/5 px-4 py-2 rounded-2xl border border-blue/10">
-                {quality}<span className="text-sm opacity-40">%</span>
-              </div>
-            </div>
+            <SliderField
+              id="quality"
+              label="Compression Level"
+              min={1}
+              max={100}
+              value={quality}
+              onChange={setQuality}
+              format={v => `${v}%`}
+            />
+            <p className="text-[10px] font-bold text-text-4 uppercase tracking-tight -mt-4">Lower % = Smaller file size</p>
 
             <div className="space-y-6">
-              <input 
-                type="range" 
-                min={1} 
-                max={100} 
-                value={quality} 
-                onChange={e => setQuality(Number(e.target.value))} 
-                className="w-full h-2 bg-bg border border-border rounded-full appearance-none cursor-pointer accent-blue" 
-              />
-              
               <div className="grid grid-cols-4 gap-2">
                 {qualityPresets.map((p) => (
                   <button

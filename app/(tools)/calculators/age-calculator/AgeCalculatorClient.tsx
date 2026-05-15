@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect, useId } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 export default function AgeCalculatorClient() {
   const [dob, setDob] = useState("1995-01-01");
   const [asOf, setAsOf] = useState("");
-  const dobId = useId();
-  const asOfId = useId();
 
   useEffect(() => {
     // Set to client's local date after hydration to avoid SSR mismatch
@@ -52,34 +51,26 @@ export default function AgeCalculatorClient() {
   }, [dob, asOf]);
 
   return (
-    <>
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
+    <div className="space-y-6">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label htmlFor={dobId} className="text-sm font-bold text-text-2">Date of Birth</label>
-            <input
-              id={dobId}
-              type="date"
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor={asOfId} className="text-sm font-bold text-text-2">Calculate As Of</label>
-            <input
-              id={asOfId}
-              type="date"
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-              value={asOf}
-              onChange={(e) => setAsOf(e.target.value)}
-            />
-          </div>
+          <ToolInput
+            label="Date of Birth"
+            type="date"
+            value={dob}
+            onChange={setDob}
+          />
+          <ToolInput
+            label="Calculate As Of"
+            type="date"
+            value={asOf}
+            onChange={setAsOf}
+          />
         </div>
       </div>
 
       {result && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <MetricCard 
             label="Exact Age" 
             value={`${result.years} yr ${result.months} mo ${result.days} d`} 
@@ -93,6 +84,6 @@ export default function AgeCalculatorClient() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

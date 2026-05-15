@@ -4,6 +4,7 @@ import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { SliderField } from "@/components/ui/SliderField";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -124,10 +125,15 @@ export default function PageNumberingClient() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Font Size: {fontSize}px</label>
-                <input type="range" min={8} max={24} value={fontSize} onChange={e => setFontSize(Number(e.target.value))} className="w-full mt-1" />
-              </div>
+              <SliderField
+                id="fontSize"
+                label="Font Size"
+                min={8}
+                max={24}
+                value={fontSize}
+                onChange={setFontSize}
+                format={v => `${v}px`}
+              />
               <div className="space-y-1">
                 <label className="text-sm font-medium">Color</label>
                 <div className="flex items-center gap-2">

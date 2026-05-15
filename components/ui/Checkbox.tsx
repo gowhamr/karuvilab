@@ -13,15 +13,15 @@ export function Checkbox({ label, className, id, ...props }: CheckboxProps) {
 
   return (
     <div className={cn("flex items-center gap-3 cursor-pointer group", className)}>
-      <div className="relative flex items-center justify-center w-5 h-5">
+      <div className="relative flex items-center justify-center w-6 h-6">
         <input
           type="checkbox"
           id={finalId}
-          className="peer appearance-none w-5 h-5 rounded border-2 border-border bg-bg checked:bg-blue checked:border-blue transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-blue/20"
+          className="peer appearance-none w-6 h-6 rounded-lg border-2 border-border bg-bg checked:bg-blue checked:border-blue transition-all cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-blue/10"
           {...props}
         />
         <svg
-          className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]"
+          className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[4]"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"

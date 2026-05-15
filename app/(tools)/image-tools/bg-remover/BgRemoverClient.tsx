@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { SliderField } from "@/components/ui/SliderField";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -122,14 +123,15 @@ export default function BgRemoverClient() {
               <p className="text-xs text-text-4">Click the color swatch to pick, or type a hex value. Common: #ffffff (white), #000000 (black).</p>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium">Tolerance</label>
-                <span className="text-sm font-mono font-bold text-blue">{tolerance}</span>
-              </div>
-              <input type="range" min={0} max={255} value={tolerance} onChange={e => setTolerance(Number(e.target.value))} className="w-full" />
-              <p className="text-xs text-text-4">Higher tolerance removes more colors. Start at 40 for solid backgrounds.</p>
-            </div>
+            <SliderField
+              id="tolerance"
+              label="Tolerance"
+              min={0}
+              max={255}
+              value={tolerance}
+              onChange={setTolerance}
+            />
+            <p className="text-xs text-text-4 -mt-2">Higher tolerance removes more colors. Start at 40 for solid backgrounds.</p>
 
             <button
               onClick={removeBackground}

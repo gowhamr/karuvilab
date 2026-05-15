@@ -5,6 +5,7 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
@@ -35,21 +36,16 @@ export default function DiscountCalculatorClient() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="disc-price" className="text-sm font-bold text-text-2">
-            Original Price (₹)
-          </label>
-          <input
-            id="disc-price"
-            type="number"
-            min={0}
-            placeholder="Enter original price"
-            value={originalPrice}
-            onChange={(e) => setOriginalPrice(e.target.value)}
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg font-bold"
-          />
-        </div>
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
+        <ToolInput
+          label="Original Price (₹)"
+          id="disc-price"
+          type="number"
+          placeholder="Enter original price"
+          value={originalPrice}
+          onChange={setOriginalPrice}
+        />
+        
         <SliderField
           label="Discount %"
           id="disc-pct"
@@ -68,40 +64,45 @@ export default function DiscountCalculatorClient() {
         <MetricCard label="Effective Discount" value={fmt(forward.effectivePct) + "%"} />
       </div>
 
-      <div className="bg-surface border border-border p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
-        <span className="text-sm text-text-3">
+      <div className="bg-surface border border-border p-5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <span className="text-sm text-text-3 font-medium">
           Save <strong className="text-blue">₹{fmt(forward.savings)}</strong> on ₹{fmt(parseFloat(originalPrice) || 0)}
         </span>
-        <CopyButton text={summary} label="Copy Summary" />
+        <CopyButton text={summary} label="Copy Summary" className="bg-bg border border-border" />
       </div>
 
       {/* Reverse Calculator */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="text-base font-bold text-text-2">Reverse: What % off to reach target price?</h2>
-        <div className="space-y-2">
-          <label htmlFor="disc-target" className="text-sm font-bold text-text-2">
-            Target Price (₹)
-          </label>
-          <input
-            id="disc-target"
-            type="number"
-            min={0}
-            placeholder="Enter target price"
-            value={targetPrice}
-            onChange={(e) => setTargetPrice(e.target.value)}
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-          />
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+        <div className="flex items-center gap-3 border-b border-border pb-4">
+          <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
+            <span className="text-xl font-bold">↺</span>
+          </div>
+          <div>
+            <h2 className="text-sm font-black uppercase tracking-widest text-text">Reverse Calculator</h2>
+            <p className="text-[10px] font-bold text-text-4 uppercase">Find % off to reach target</p>
+          </div>
         </div>
-        <div className="p-4 bg-bg rounded-xl border border-border flex items-center justify-between">
-          <span className="text-sm text-text-3">Required discount</span>
-          <span className="text-2xl font-black text-blue">
+
+        <ToolInput
+          label="Target Price (₹)"
+          id="disc-target"
+          type="number"
+          placeholder="Enter target price"
+          value={targetPrice}
+          onChange={setTargetPrice}
+        />
+
+        <div className="p-6 bg-bg rounded-2xl border border-border flex items-center justify-between shadow-inner">
+          <span className="text-xs font-black uppercase tracking-widest text-text-4">Required discount</span>
+          <span className="text-3xl font-black text-blue tabular-nums">
             {reverse.pctOff > 0
-              ? fmt(reverse.pctOff) + "% off"
+              ? fmt(reverse.pctOff) + "%"
               : "—"}
           </span>
         </div>
+        
         {reverse.pctOff > 0 && (
-          <p className="text-sm text-text-3">
+          <p className="text-xs text-text-3 font-medium leading-relaxed">
             To reach ₹{fmt(parseFloat(targetPrice) || 0)} from ₹{fmt(parseFloat(originalPrice) || 0)}, you need a{" "}
             <strong className="text-blue">{fmt(reverse.pctOff)}% discount</strong>.
           </p>

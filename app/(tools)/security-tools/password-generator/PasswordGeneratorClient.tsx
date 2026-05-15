@@ -4,6 +4,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { SliderField } from "@/components/ui/SliderField";
 
 const cat = CATEGORIES.find(c => c.id === "security")!;
 
@@ -62,23 +63,14 @@ export default function PasswordGeneratorClient() {
   return (
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-bold text-text-2">Length</label>
-            <span className="text-sm font-mono font-bold text-blue">{length}</span>
-          </div>
-          <input
-            type="range"
-            min={8}
-            max={128}
-            value={length}
-            onChange={e => setLength(Number(e.target.value))}
-            className="w-full accent-blue"
-          />
-          <div className="flex justify-between text-xs text-text-4">
-            <span>8</span><span>128</span>
-          </div>
-        </div>
+        <SliderField
+          id="length"
+          label="Length"
+          min={8}
+          max={128}
+          value={length}
+          onChange={setLength}
+        />
 
         <div className="grid grid-cols-2 gap-3">
           <Checkbox checked={useUpper} onChange={() => setUseUpper(v => !v)} label="Uppercase (A-Z)" />

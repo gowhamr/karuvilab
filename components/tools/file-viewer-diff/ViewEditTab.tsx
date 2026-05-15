@@ -9,6 +9,7 @@ import { Download, FileText, Trash2, Copy } from 'lucide-react';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { useToast } from '@/components/ui/Toast';
 import { useObjectUrlManager } from '@/src/lib/hooks';
+import { SliderField } from '@/components/ui/SliderField';
 
 export function ViewEditTab() {
   const { fileA, setFileA, updateFileAContent, settings, updateSettings } = useFileViewerStore();
@@ -104,17 +105,20 @@ export function ViewEditTab() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-surface border border-border p-3 rounded-2xl">
-             <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Font Size</span>
-                <input 
-                  type="range" min="12" max="24" value={settings.fontSize} 
-                  onChange={(e) => updateSettings({ fontSize: Number(e.target.value) })}
-                  className="w-24 accent-blue"
+          <div className="flex flex-wrap items-center gap-4 bg-surface border border-border p-4 rounded-2xl">
+             <div className="flex-1 min-w-[200px]">
+                <SliderField
+                  label="Font Size"
+                  id="font-size"
+                  min={12}
+                  max={24}
+                  value={settings.fontSize}
+                  onChange={(v) => updateSettings({ fontSize: v })}
+                  format={(v) => `${v}px`}
                 />
              </div>
-             <div className="w-px h-4 bg-border" />
-             <label className="flex items-center gap-2 cursor-pointer">
+             <div className="hidden md:block w-px h-8 bg-border mx-2" />
+             <label className="flex items-center gap-2 cursor-pointer md:pt-6">
                 <input 
                   type="checkbox" checked={settings.wordWrap} 
                   onChange={(e) => updateSettings({ wordWrap: e.target.checked })}

@@ -5,6 +5,8 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
 import { DropZone } from "@/components/ui/DropZone";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 type Mode = "fit" | "fill" | "stretch";
@@ -21,8 +23,6 @@ export default function ImageResizerClient() {
   const [mode, setMode] = useState<Mode>("fit");
   const [resizedUrl, setResizedUrl] = useState<string | null>(null);
   const [resizedSize, setResizedSize] = useState("");
-
-  const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
   const handleFile = (file: File) => {
     if (originalUrl) revokeUrl(originalUrl);
@@ -126,37 +126,44 @@ export default function ImageResizerClient() {
           )}
 
           {/* Options */}
-          <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Width (px)</label>
-                <input type="number" className={inputClass} value={width} onChange={e => handleWidth(e.target.value)} placeholder="800" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Height (px)</label>
-                <input type="number" className={inputClass} value={height} onChange={e => handleHeight(e.target.value)} placeholder="600" />
-              </div>
+          <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <ToolInput
+                label="Width (px)"
+                type="number"
+                value={width}
+                onChange={handleWidth}
+                placeholder="800"
+              />
+              <ToolInput
+                label="Height (px)"
+                type="number"
+                value={height}
+                onChange={handleHeight}
+                placeholder="600"
+              />
             </div>
 
-            <label className="flex items-center gap-2 cursor-pointer text-sm">
-              <input type="checkbox" checked={lockRatio} onChange={e => setLockRatio(e.target.checked)} className="rounded" />
-              Lock aspect ratio
-            </label>
+            <Checkbox
+              label="Lock aspect ratio"
+              checked={lockRatio}
+              onChange={e => setLockRatio(e.target.checked)}
+            />
 
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Resize Mode</label>
+            <div className="space-y-3">
+              <label className="text-sm font-bold text-text-2">Resize Mode</label>
               <div className="flex gap-2">
                 {(["fit","fill","stretch"] as Mode[]).map(m => (
                   <button
                     key={m}
                     onClick={() => setMode(m)}
-                    className={`flex-1 py-2 rounded-xl text-xs font-semibold capitalize transition-colors ${mode === m ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
+                    className={`flex-1 py-3 rounded-xl text-xs font-bold capitalize transition-colors ${mode === m ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
                   >
                     {m}
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-text-4">
+              <p className="text-[10px] font-bold text-text-4 uppercase tracking-wider">
                 {mode === "fit" ? "Scale to fit within dimensions, maintaining ratio." : mode === "fill" ? "Fill dimensions, cropping excess to maintain ratio." : "Stretch to exact dimensions (may distort)."}
               </p>
             </div>
@@ -168,12 +175,12 @@ export default function ImageResizerClient() {
         </div>
 
         {/* Output */}
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-          <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Result</h2>
+        <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+          <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Result</h2>
           {resizedUrl ? (
             <>
               <img src={resizedUrl} alt="Resized" className="mx-auto max-h-64 rounded-xl object-contain border border-border" />
-              <div className="flex items-center justify-between text-sm text-text-3">
+              <div className="flex items-center justify-between text-xs font-bold text-text-4 uppercase tracking-wider">
                 <span>{width} × {height}px</span>
                 <span>{resizedSize}</span>
               </div>
@@ -182,7 +189,7 @@ export default function ImageResizerClient() {
               </button>
             </>
           ) : (
-            <div className="flex items-center justify-center h-64 text-text-4 text-sm border-2 border-dashed border-border rounded-xl">
+            <div className="flex items-center justify-center h-64 text-text-4 text-xs font-bold uppercase tracking-widest border-2 border-dashed border-border rounded-2xl">
               Resized image will appear here
             </div>
           )}

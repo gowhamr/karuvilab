@@ -1,7 +1,7 @@
 "use client";
 
 import { ToastProvider } from "@/components/ui/Toast";
-import { LazyMotion, domAnimation } from "framer-motion";
+import { LazyMotion, domAnimation, MotionConfig } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useStorageMonitor } from "@/src/lib/hooks/use-storage-monitor";
 import { FeedbackModal } from "@/components/ui/FeedbackModal";
@@ -18,12 +18,14 @@ function StorageMonitor() {
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <LazyMotion features={domAnimation}>
-      <ToastProvider>
-        <StorageMonitor />
-        <CommandPalette />
-        <FeedbackModal />
-        {children}
-      </ToastProvider>
+      <MotionConfig reducedMotion="user">
+        <ToastProvider>
+          <StorageMonitor />
+          <CommandPalette />
+          <FeedbackModal />
+          {children}
+        </ToastProvider>
+      </MotionConfig>
     </LazyMotion>
   );
 }

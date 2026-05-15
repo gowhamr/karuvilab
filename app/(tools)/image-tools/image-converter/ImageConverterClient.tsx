@@ -4,6 +4,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
+import { SliderField } from "@/components/ui/SliderField";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -118,20 +119,15 @@ export default function ImageConverterClient() {
           </div>
 
           {fmtInfo.lossy && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4">Quality</label>
-                <span className="text-sm font-mono font-black text-blue bg-blue/10 px-2 py-1 rounded-lg">{quality}%</span>
-              </div>
-              <input 
-                type="range" 
-                min={1} 
-                max={100} 
-                value={quality} 
-                onChange={e => setQuality(Number(e.target.value))} 
-                className="w-full h-1.5 bg-bg rounded-lg appearance-none cursor-pointer accent-blue" 
-              />
-            </div>
+            <SliderField
+              id="quality"
+              label="Quality"
+              min={1}
+              max={100}
+              value={quality}
+              onChange={setQuality}
+              format={v => `${v}%`}
+            />
           )}
         </div>
       </div>

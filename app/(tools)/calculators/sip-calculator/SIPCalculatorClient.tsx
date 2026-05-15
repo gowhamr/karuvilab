@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
+import { ToolInput } from "@/components/ui/ToolInput";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
 import { Settings2, Download, FileText } from "lucide-react";
@@ -138,7 +139,7 @@ Generated via KaruviLab`;
 
   return (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
         <SliderField
           label="Monthly SIP Amount"
           id="sip-monthly"
@@ -223,23 +224,15 @@ Generated via KaruviLab`;
           </AccordionItem>
         </Accordion>
 
-        <div className="space-y-2 pt-2 border-t border-border">
-          <div className="flex items-center justify-between">
-            <label htmlFor="sip-lumpsum" className="text-sm font-bold text-text-2">
-              One-time Lumpsum (optional)
-            </label>
-            <span className="text-sm font-black text-blue">{formatINR(lumpsum)}</span>
-          </div>
-          <input
-            id="sip-lumpsum"
-            type="number"
-            min={0}
-            placeholder="0"
-            value={lumpsum || ""}
-            onChange={(e) => setLumpsum(Math.max(0, Number(e.target.value)))}
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-          />
-        </div>
+        <ToolInput
+          label="One-time Lumpsum (optional)"
+          id="sip-lumpsum"
+          type="number"
+          placeholder="0"
+          value={String(lumpsum || "")}
+          onChange={(v) => setLumpsum(Math.max(0, Number(v)))}
+          description={formatINR(lumpsum)}
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
