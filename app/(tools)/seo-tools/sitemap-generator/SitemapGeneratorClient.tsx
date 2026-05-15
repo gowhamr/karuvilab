@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "seo")!;
 const CHANGEFREQS = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"];
@@ -46,14 +47,16 @@ ${entries}
 </urlset>`;
   }, [pages, priority, changefreq, includeDate, today]);
 
+  const { createUrl, revokeUrl } = useObjectUrlManager();
+
   const download = () => {
     const blob = new Blob([sitemap], { type: "application/xml" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "sitemap.xml";
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
   };
 
   return (

@@ -25,13 +25,13 @@ export default function ImageCompressorClient() {
     <div className="space-y-12 pb-20">
       <div className="space-y-8">
         <div className="flex justify-center">
-          <div className="inline-flex p-1 bg-surface border border-border rounded-2xl">
+          <div className="flex flex-col sm:inline-flex sm:flex-row p-1 bg-surface border border-border rounded-2xl w-full sm:w-auto">
             <button
               onClick={() => {
                 clearFiles();
                 setActiveTab('single');
               }}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+              className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                 activeTab === 'single' ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'text-text-4 hover:text-text-2'
               }`}
             >
@@ -43,7 +43,7 @@ export default function ImageCompressorClient() {
                 clearFiles();
                 setActiveTab('batch');
               }}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+              className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                 activeTab === 'batch' ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'text-text-4 hover:text-text-2'
               }`}
             >
@@ -65,7 +65,7 @@ export default function ImageCompressorClient() {
           { title: "Fast Engine", desc: "Uses Web Workers & OffscreenCanvas for peak performance.", icon: <Zap className="text-blue" /> },
           { title: "Modern Formats", desc: "Supports next-gen formats like WebP and AVIF.", icon: <ImageIcon className="text-blue" /> },
         ].map((f, i) => (
-          <div key={i} className="p-8 bg-surface border border-border rounded-[32px] space-y-4 hover:border-blue/30 transition-colors group">
+          <div key={i} className="p-6 sm:p-8 bg-surface border border-border rounded-[24px] sm:rounded-[32px] space-y-4 hover:border-blue/30 transition-colors group">
             <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center group-hover:scale-110 transition-transform">
               {f.icon}
             </div>

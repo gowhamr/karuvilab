@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { metadata } from "./metadata";
@@ -25,6 +25,17 @@ const dmSerif = DM_Serif_Display({
 });
 
 export { metadata };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F8FAFC" },
+    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+  ],
+};
 
 export default function RootLayout({
   children,
@@ -62,7 +73,7 @@ export default function RootLayout({
             <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">
               <Header />
               
-              <main className="flex-1 pb-[72px] md:pb-0">
+              <main className="flex-1 pb-20 md:pb-0">
                 {children}
               </main>
 

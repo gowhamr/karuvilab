@@ -3,6 +3,7 @@
 import React from "react";
 import { CopyButton } from "./CopyButton";
 import { useToast } from "./Toast";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 interface ToolResultAreaProps {
   label: string;
@@ -22,16 +23,17 @@ export function ToolResultArea({
   language
 }: ToolResultAreaProps) {
   const { toast } = useToast();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const handleDownload = () => {
     if (!value) return;
     const blob = new Blob([value], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `result-${Date.now()}.txt`;
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
     toast("Download started");
     onDownload?.();
   };

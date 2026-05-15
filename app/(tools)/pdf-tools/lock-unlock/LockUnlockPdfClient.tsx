@@ -3,12 +3,14 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 import { DropZone } from "@/components/ui/DropZone";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 export default function LockUnlockPdfClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [mode, setMode] = useState<"lock" | "unlock">("lock");
   const [password, setPassword] = useState("");
@@ -43,24 +45,24 @@ export default function LockUnlockPdfClient() {
           },
         } as any);
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
+        const url = createUrl(blob);
         const a = document.createElement("a");
         a.href = url;
         a.download = file.name.replace(/\.pdf$/i, "") + "-locked.pdf";
         a.click();
-        URL.revokeObjectURL(url);
+        revokeUrl(url);
         setSuccess("PDF locked successfully and downloaded.");
       } else {
         if (!unlockPassword) { setError("Please enter the PDF password."); setProcessing(false); return; }
         const doc = await PDFDocument.load(bytes, { password: unlockPassword } as any);
         const outBytes = await doc.save();
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
+        const url = createUrl(blob);
         const a = document.createElement("a");
         a.href = url;
         a.download = file.name.replace(/\.pdf$/i, "") + "-unlocked.pdf";
         a.click();
-        URL.revokeObjectURL(url);
+        revokeUrl(url);
         setSuccess("PDF unlocked successfully and downloaded.");
       }
     } catch (e: any) {

@@ -13,12 +13,13 @@ type Indent = 2 | 4 | "tab";
 interface TreeNodeProps {
   value: unknown;
   depth?: number;
+  maxAutoExpandDepth?: number;
 }
 
 const MAX_ITEMS = 100;
 
-function TreeNode({ value, depth = 0 }: TreeNodeProps) {
-  const [collapsed, setCollapsed] = useState(depth >= 10);
+function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) {
+  const [collapsed, setCollapsed] = useState(depth >= maxAutoExpandDepth);
   const [showAll, setShowAll] = useState(false);
   const indent = depth * 16;
 
@@ -43,7 +44,7 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
           : (
             <div style={{ marginLeft: indent + 16 }}>
               {items.map((item, i) => (
-                <div key={i}><TreeNode value={item} depth={depth + 1} />{i < value.length - 1 ? <span className="text-text-4">,</span> : null}</div>
+                <div key={i}><TreeNode value={item} depth={depth + 1} maxAutoExpandDepth={maxAutoExpandDepth} />{i < value.length - 1 ? <span className="text-text-4">,</span> : null}</div>
               ))}
               {hasMore && (
                 <button 
@@ -82,7 +83,7 @@ function TreeNode({ value, depth = 0 }: TreeNodeProps) {
                 <div key={k}>
                   <span className="text-blue">"{k}"</span>
                   <span className="text-text-3">: </span>
-                  <TreeNode value={v} depth={depth + 1} />
+                  <TreeNode value={v} depth={depth + 1} maxAutoExpandDepth={maxAutoExpandDepth} />
                   {i < entries.length - 1 ? <span className="text-text-4">,</span> : null}
                 </div>
               ))}
@@ -223,13 +224,13 @@ export default function JSONFormatterClient() {
 
           {treeView && parsed !== null ? (
             <div className="space-y-3">
-              {input.length > 5 * 1024 * 1024 && (
+              {(input.length > 2 * 1024 * 1024 || JSON.stringify(parsed).length > 2 * 1024 * 1024) && (
                 <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-xs text-yellow-600 font-medium">
-                  <span className="font-bold">Large JSON detected ({">"}5MB):</span> Tree view may be slower. Deeply nested levels (depth {">"} 10) and large collections are truncated for performance. Expand manually to see more.
+                  <span className="font-bold">Large JSON structure detected:</span> To prevent DOM explosion and maintain responsiveness, nested levels beyond depth 10 are initially collapsed. Large collections are truncated to {MAX_ITEMS} items.
                 </div>
               )}
               <div className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text overflow-auto max-h-[500px]">
-                <TreeNode value={parsed} depth={0} />
+                <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
               </div>
             </div>
           ) : (

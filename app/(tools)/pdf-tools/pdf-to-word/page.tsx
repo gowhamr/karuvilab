@@ -1,3 +1,4 @@
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
@@ -5,7 +6,7 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const PdfToWordClient = dynamic(() => import("./PdfToWordClient"), {
-  loading: () => null,
+  loading: () => <ToolSkeleton />,
 });
 
 export const metadata: Metadata = generateToolMetadata("pdf-to-word");

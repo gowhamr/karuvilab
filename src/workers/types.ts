@@ -1,4 +1,7 @@
 import * as Comlink from "comlink";
+import { EmiInputs, EmiResult } from "../lib/emi-calculations";
+
+export type { EmiInputs, EmiResult };
 
 export type TaskProgress = {
   percent: number;
@@ -7,6 +10,24 @@ export type TaskProgress = {
 };
 
 export type ProgressCallback = (progress: TaskProgress) => void;
+
+export type DiffType = 'added' | 'removed' | 'equal';
+
+export interface DiffLine {
+  type: DiffType;
+  text: string;
+  lineA?: number;
+  lineB?: number;
+}
+
+export interface CompressionSettings {
+  quality: number;
+  format: 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif';
+  resizeWidth: number | null;
+  resizeHeight: number | null;
+  maintainAspectRatio: boolean;
+  lossless: boolean;
+}
 
 export interface WorkerAPI {
   // Hash Tasks
@@ -24,11 +45,11 @@ export interface WorkerAPI {
   
   // PDF Tasks
   mergePdfs(
-    files: ArrayBuffer[], 
+    files: (Blob | ArrayBuffer)[], 
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
-  // Image Tasks
+  // Image Tasks (Standard)
   compressImage(
     file: ArrayBuffer, 
     format: "image/jpeg" | "image/png" | "image/webp",
@@ -45,6 +66,13 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  // Image Tasks (Specialized Batch)
+  compressImageBatch(
+    file: ArrayBuffer,
+    settings: CompressionSettings,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   // Developer Tasks
   minifyCode(
     code: string,
@@ -57,13 +85,7 @@ export interface WorkerAPI {
     textB: string,
     onProgress?: ProgressCallback
   ): Promise<DiffLine[]>;
-}
 
-export type DiffType = 'added' | 'removed' | 'equal';
-
-export interface DiffLine {
-  type: DiffType;
-  text: string;
-  lineA?: number;
-  lineB?: number;
+  // EMI Tasks
+  calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult>;
 }

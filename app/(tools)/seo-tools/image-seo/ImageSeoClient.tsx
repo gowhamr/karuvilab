@@ -3,6 +3,7 @@ import { useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "seo")!;
 
@@ -31,6 +32,7 @@ function toTitleCaseAlt(s: string): string {
 }
 
 export default function ImageSeoClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [tab, setTab] = useState<"alt" | "filename">("alt");
   // Alt text tab
   const [preview, setPreview] = useState<string | null>(null);
@@ -47,7 +49,8 @@ export default function ImageSeoClient() {
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
+    if (preview) revokeUrl(preview);
+    const url = createUrl(file);
     setPreview(url);
     const name = file.name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
     setContext(name);

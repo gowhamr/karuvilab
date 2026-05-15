@@ -5,20 +5,23 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Search, Command, Menu, Laptop, WifiOff } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { m, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useOnlineStatus } from "@/src/lib/hooks";
+import { usePerformanceSettings, useOnlineStatus } from "@/src/lib/hooks";
+import { usePathname } from "next/navigation";
 import { KVLogo } from "@/components/ui/KVLogo";
+import React from "react";
 
 export function Header() {
   const isOnline = useOnlineStatus();
   const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
   const { scrollY } = useScroll();
+  const { shouldBlur } = usePerformanceSettings();
   
   const bg = useTransform(scrollY, [0, 50], [
     "rgba(var(--bg-rgb), 0)",
     "rgba(var(--bg-rgb), 0.95)"
   ]);
   const blurValue = useTransform(scrollY, [0, 50], [0, 8]);
-  const blurFilter = useTransform(blurValue, (v) => v > 0 ? `blur(${v}px)` : "none");
+  const blurFilter = useTransform(blurValue, (v) => (shouldBlur && v > 0) ? `blur(${v}px)` : "none");
   const border = useTransform(scrollY, [0, 50], [
     "rgba(var(--border-rgb), 0)",
     "rgba(var(--border-rgb), 1)"
@@ -70,7 +73,7 @@ export function Header() {
           <button 
             onClick={() => setIsPaletteOpen(true)}
             aria-label="Search tools"
-            className="group flex items-center justify-between gap-3 px-3 py-1.5 md:min-w-[160px] lg:min-w-[240px] bg-surface border border-border rounded-lg text-[11px] font-bold text-text-4 hover:border-blue/30 hover:text-blue transition-all"
+            className="group flex items-center justify-between gap-3 p-2 sm:px-3 sm:py-1.5 md:min-w-[160px] lg:min-w-[240px] bg-surface border border-border rounded-lg text-[11px] font-bold text-text-4 hover:border-blue/30 hover:text-blue transition-all"
           >
             <div className="flex items-center gap-2">
               <Search className="w-3.5 h-3.5" />

@@ -13,6 +13,7 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { CATEGORIES } from "@/src/tool-registry";
 import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -46,6 +47,7 @@ const DEVICE_SIZES = {
 export default function HtmlViewerClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   
   // State
   const [html, setHtml] = useState(DEFAULT_CODE.html);
@@ -103,6 +105,9 @@ export default function HtmlViewerClient() {
   // Handle Logs from Iframe
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      // Security: Validate origin to prevent spoofing
+      if (event.origin !== window.location.origin) return;
+      
       if (event.data.source === "karuvi-sandbox") {
         const { type, payload } = event.data;
         setLogs(prev => [...prev, { 
@@ -202,12 +207,12 @@ export default function HtmlViewerClient() {
 
   const handleDownload = () => {
     const blob = new Blob([getCompiledDoc()], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "karuvilab-project.html";
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
   };
 
   const addCdn = () => {

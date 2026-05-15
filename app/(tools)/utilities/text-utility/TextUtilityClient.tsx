@@ -163,7 +163,7 @@ export default function TextUtilityClient() {
 
       <div className="bg-surface border border-border p-5 rounded-2xl">
         <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-3">Detailed Stats</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
           {[
             { label: "Words", value: stats.words },
             { label: "Characters", value: stats.chars },

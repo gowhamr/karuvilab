@@ -6,9 +6,11 @@ import { ImageQueue } from './ImageQueue';
 import { batchCoordinator } from '@/src/workers/batch-coordinator';
 import { createZip, downloadBlob } from '@/src/lib/zip';
 import { Loader2, Download, Trash2, Zap } from 'lucide-react';
+import { useObjectUrlManager } from '@/src/lib/hooks';
 
 export const BatchTab: React.FC = () => {
   const { items, addFiles, clearFiles, setItemStatus, setItemResult, setItemError, isProcessing, setIsProcessing } = useImageCompressStore();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const handleFiles = (files: File[] | FileList) => {
     const fileArray = files instanceof FileList ? Array.from(files) : files;
@@ -21,7 +23,9 @@ export const BatchTab: React.FC = () => {
     setIsProcessing(true);
     
     const toProcess = items.filter(item => item.status !== 'completed');
-    const CONCURRENCY_LIMIT = Math.min(typeof navigator !== 'undefined' ? (navigator.hardwareConcurrency || 3) : 3, 3);
+    
+    const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const CONCURRENCY_LIMIT = isMobile ? 2 : 3;
     
     const queue = [...toProcess];
     const processItem = async (item: typeof items[0]) => {
@@ -35,7 +39,7 @@ export const BatchTab: React.FC = () => {
         );
 
         const blob = new Blob([resultBytes as any], { type: item.settings.format });
-        const url = URL.createObjectURL(blob);
+        const url = createUrl(blob);
         setItemResult(item.id, blob, url);
       } catch (error: any) {
         setItemError(item.id, error.message || 'Failed');
@@ -69,12 +73,12 @@ export const BatchTab: React.FC = () => {
     const { zipSync } = await import('fflate');
     const zipped = zipSync(files as any);
     const blob = new Blob([zipped as any], { type: 'application/zip' });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `karuvilab-compressed-${Date.now()}.zip`;
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
   };
 
   return (

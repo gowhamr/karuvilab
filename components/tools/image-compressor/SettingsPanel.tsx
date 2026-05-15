@@ -30,11 +30,11 @@ export const SettingsPanel: React.FC<{ isGlobal?: boolean; itemId?: string }> = 
   ];
 
   return (
-    <div className="space-y-6 p-4 bg-surface border border-border rounded-2xl">
+    <div className="space-y-6 p-4 sm:p-6 bg-surface border border-border rounded-2xl">
       {/* Presets */}
       <div>
         <label className="text-xs font-bold uppercase tracking-widest text-text-4 mb-3 block">Presets</label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {presets.map((p) => (
             <button
               key={p.label}
@@ -71,7 +71,7 @@ export const SettingsPanel: React.FC<{ isGlobal?: boolean; itemId?: string }> = 
       {/* Format */}
       <div className="space-y-3">
         <label className="text-xs font-bold uppercase tracking-widest text-text-4">Output Format</label>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {(['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as CompressionFormat[]).map((fmt) => (
             <button
               key={fmt}
@@ -100,7 +100,7 @@ export const SettingsPanel: React.FC<{ isGlobal?: boolean; itemId?: string }> = 
             {settings.maintainAspectRatio ? <Lock size={14} /> : <Unlock size={14} />}
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <div className="relative">
             <input
               type="number"

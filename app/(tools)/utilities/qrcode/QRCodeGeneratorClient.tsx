@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
@@ -17,6 +18,7 @@ export default function QRCodeGeneratorClient() {
   const [size, setSize] = useState(256);
   const [ecc, setEcc] = useState("M");
   const [downloading, setDownloading] = useState(false);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const qrUrl = input
     ? `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(input)}&ecc=${ecc}&margin=2&color=000000`
@@ -28,12 +30,12 @@ export default function QRCodeGeneratorClient() {
     try {
       const res = await fetch(qrUrl);
       const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `qrcode-${Date.now()}.png`;
       a.click();
-      URL.revokeObjectURL(url);
+      revokeUrl(url);
     } catch {
       // silently fail
     }

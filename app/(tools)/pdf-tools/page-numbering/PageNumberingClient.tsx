@@ -3,12 +3,14 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 type Position = "bottom-center" | "bottom-right" | "bottom-left" | "top-center" | "top-right" | "top-left";
 
 export default function PageNumberingClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [startNum, setStartNum] = useState(1);
   const [prefix, setPrefix] = useState("");
@@ -56,12 +58,12 @@ export default function PageNumberingClient() {
 
       const outBytes = await doc.save();
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = file.name.replace(/\.pdf$/i, "") + "-numbered.pdf";
       a.click();
-      URL.revokeObjectURL(url);
+      revokeUrl(url);
     } catch (e: any) {
       setError(e?.message || "Failed to add page numbers.");
     }

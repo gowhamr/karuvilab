@@ -167,11 +167,19 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
   --border-focus:#6366F1;
 }
 
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
   transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   letter-spacing: -0.01em;
+  min-height: 100dvh;
+  min-height: 100svh;
+  overflow-x: hidden;
 }
 
 /* Animations */

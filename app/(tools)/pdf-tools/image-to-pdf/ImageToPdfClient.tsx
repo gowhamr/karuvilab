@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -11,6 +12,7 @@ const cat = CATEGORIES.find(c => c.id === "pdf")!;
 interface ImageItem { name: string; file: File; url: string; }
 
 export default function ImageToPdfClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [images, setImages] = useState<ImageItem[]>([]);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
@@ -21,12 +23,22 @@ export default function ImageToPdfClient() {
     const items: ImageItem[] = Array.from(fl).map(f => ({
       name: f.name,
       file: f,
-      url: URL.createObjectURL(f),
+      url: createUrl(f),
     }));
     setImages(prev => [...prev, ...items]);
   };
 
-  const remove = (i: number) => setImages(a => a.filter((_, idx) => idx !== i));
+  const remove = (i: number) => {
+    const item = images[i];
+    if (item) revokeUrl(item.url);
+    setImages(a => a.filter((_, idx) => idx !== i));
+  };
+  
+  const clearAll = () => {
+    images.forEach(img => revokeUrl(img.url));
+    setImages([]);
+  };
+
   const moveUp = (i: number) => { if (i === 0) return; setImages(a => { const n = [...a]; const t = n[i-1]!; n[i-1] = n[i]!; n[i] = t; return n; }); };
   const moveDown = (i: number) => setImages(a => { if (i >= a.length - 1) return a; const n = [...a]; const t = n[i]!; n[i] = n[i+1]!; n[i+1] = t; return n; });
 
@@ -56,12 +68,12 @@ export default function ImageToPdfClient() {
       }
       const bytes = await pdf.save();
       const blob = new Blob([bytes as any], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = "images.pdf";
       a.click();
-      URL.revokeObjectURL(url);
+      revokeUrl(url);
     } catch (e: any) {
       setError(e?.message || "Failed to create PDF.");
     }
@@ -83,7 +95,7 @@ export default function ImageToPdfClient() {
         <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Images ({images.length})</h2>
-            <button onClick={() => setImages([])} className="text-xs text-red-500 hover:text-red-600 font-medium">Clear all</button>
+            <button onClick={clearAll} className="text-xs text-red-500 hover:text-red-600 font-medium">Clear all</button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {images.map((img, i) => (

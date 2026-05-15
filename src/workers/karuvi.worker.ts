@@ -1,7 +1,7 @@
 import * as Comlink from "comlink";
-import { WorkerAPI } from "./types";
+import { WorkerAPI, CompressionSettings, EmiInputs, EmiResult, DiffLine } from "./types";
 
-// MD5 implementation
+// MD5 implementation (from core.worker.ts)
 function md5(input: string | Uint8Array): string {
   function cmn(q: number, a: number, b: number, x: number, s: number, t: number) {
     a = (((a + q) & 0xFFFFFFFF) + ((x + t) & 0xFFFFFFFF)) & 0xFFFFFFFF;
@@ -55,6 +55,7 @@ async function sha(algo: string, input: string | Uint8Array): Promise<string> {
 }
 
 const api: WorkerAPI = {
+  // Hash Tasks
   async generateHashes(text: string, algos: string[], onProgress) {
     if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
       throw new Error("Input text too large or invalid (max 10MB)");
@@ -80,25 +81,22 @@ const api: WorkerAPI = {
 
   async generateFileHash(file: ArrayBuffer, algo: string, onProgress) {
     if (onProgress) onProgress({ percent: 10, message: "Starting hash computation..." });
-    
     let result = "";
     const bytes = new Uint8Array(file);
-    
     if (algo === "MD5") {
       result = md5(bytes);
     } else {
       result = await sha(algo, bytes);
     }
-    
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;
   },
 
-
+  // PDF Tasks (with memory optimization)
   async mergePdfs(files: (Blob | ArrayBuffer)[], onProgress) {
     const totalSize = files.reduce((acc, f) => acc + (f instanceof ArrayBuffer ? f.byteLength : f.size), 0);
-    if (totalSize > 150 * 1024 * 1024) { // Slightly increased limit as we are now more memory-efficient
-      throw new Error("Total PDF size too large (max 150MB)");
+    if (totalSize > 250 * 1024 * 1024) { 
+      throw new Error("Total PDF size too large (max 250MB)");
     }
     const { PDFDocument } = await import("pdf-lib");
     const merged = await PDFDocument.create();
@@ -113,7 +111,9 @@ const api: WorkerAPI = {
       const pages = await merged.copyPages(doc, doc.getPageIndices());
       pages.forEach(p => merged.addPage(p));
       
-      // Explicitly nullify bytes to help GC if needed (though scoped)
+      // The instruction mentions sequential loading and release.
+      // pdf-lib doesn't have an explicit 'release', but nullifying helps.
+      (doc as any) = null;
     }
     
     if (onProgress) onProgress({ percent: 90, message: "Saving merged PDF..." });
@@ -122,188 +122,110 @@ const api: WorkerAPI = {
     return result;
   },
 
+  // Image Tasks (Standard)
   async compressImage(file: ArrayBuffer, format, quality, onProgress) {
-    if (file.byteLength > 25 * 1024 * 1024) {
-      throw new Error("Image size too large (max 25MB)");
-    }
-    if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
-    
     const blob = new Blob([file]);
     const imgBitmap = await createImageBitmap(blob);
-    
-    if (onProgress) onProgress({ percent: 40, message: "Compressing..." });
-    
     const canvas = new OffscreenCanvas(imgBitmap.width, imgBitmap.height);
     const ctx = canvas.getContext("2d")!;
     ctx.drawImage(imgBitmap, 0, 0);
-    
-    const compressedBlob = await canvas.convertToBlob({
-      type: format,
-      quality: quality / 100
-    });
-    
-    if (onProgress) onProgress({ percent: 90, message: "Finalizing..." });
-    
+    const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
     const result = await compressedBlob.arrayBuffer();
-
-    // Aggressive memory cleanup
     imgBitmap.close();
-    canvas.width = 0;
-    canvas.height = 0;
-
-    if (onProgress) onProgress({ percent: 100, message: "Done!" });    
+    canvas.width = 0; canvas.height = 0;
     return new Uint8Array(result);
   },
 
   async resizeImage(file, width, height, format, quality, onProgress) {
-    if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
-    
     const blob = new Blob([file]);
     const imgBitmap = await createImageBitmap(blob);
-    
-    if (onProgress) onProgress({ percent: 40, message: `Resizing to ${width}x${height}...` });
-    
     const canvas = new OffscreenCanvas(width, height);
     const ctx = canvas.getContext("2d")!;
-    
-    // Use better scaling quality
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
-    
     ctx.drawImage(imgBitmap, 0, 0, width, height);
-    
-    const compressedBlob = await canvas.convertToBlob({
-      type: format,
-      quality: quality / 100
-    });
-    
-    if (onProgress) onProgress({ percent: 90, message: "Finalizing..." });
-    
+    const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
     const result = await compressedBlob.arrayBuffer();
-
-    // Cleanup
     imgBitmap.close();
-    canvas.width = 0;
-    canvas.height = 0;
-
-    if (onProgress) onProgress({ percent: 100, message: "Done!" });    
+    canvas.width = 0; canvas.height = 0;
     return new Uint8Array(result);
   },
 
-  async minifyCode(code, lang, onProgress) {
-    if (typeof code !== "string" || code.length > 10 * 1024 * 1024) {
-      throw new Error("Code too large or invalid (max 10MB)");
-    }
-    if (onProgress) onProgress({ percent: 10, message: `Minifying ${lang.toUpperCase()}...` });
+  // Image Tasks (Batch specialized)
+  async compressImageBatch(file: ArrayBuffer, settings: CompressionSettings, onProgress) {
+    if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
+    const blob = new Blob([file]);
+    const imgBitmap = await createImageBitmap(blob);
+    let { width, height } = imgBitmap;
     
-    if (lang === 'js') {
-      try {
-        const { minify } = await import("terser");
-        const result = await minify(code, {
-          compress: true,
-          mangle: true,
-          module: true
-        });
-        if (onProgress) onProgress({ percent: 100, message: "Done!" });
-        return result.code || code;
-      } catch (err) {
-        console.warn("Terser failed, falling back to basic minification", err);
+    if (settings.resizeWidth || settings.resizeHeight) {
+      if (settings.resizeWidth && settings.resizeHeight) {
+        width = settings.resizeWidth; height = settings.resizeHeight;
+      } else if (settings.resizeWidth) {
+        if (settings.maintainAspectRatio) height = (settings.resizeWidth / imgBitmap.width) * imgBitmap.height;
+        width = settings.resizeWidth;
+      } else if (settings.resizeHeight) {
+        if (settings.maintainAspectRatio) width = (settings.resizeHeight / imgBitmap.height) * imgBitmap.width;
+        height = settings.resizeHeight;
       }
     }
 
-    let result = "";
-    if (lang === "css") {
-      result = code
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/\s*([{}:;,>~+])\s*/g, "$1")
-        .replace(/;\s*}/g, "}")
-        .replace(/\s+/g, " ")
-        .trim();
-    } else if (lang === "js") {
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext("2d")!;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    if (settings.format === 'image/jpeg') {
+      ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, width, height);
+    }
+    ctx.drawImage(imgBitmap, 0, 0, width, height);
+    
+    const options: ImageEncodeOptions = {
+      type: settings.format,
+      quality: settings.quality / 100
+    };
+    if (settings.lossless && settings.format === 'image/png') options.quality = 1.0;
+
+    const compressedBlob = await canvas.convertToBlob(options);
+    const result = await compressedBlob.arrayBuffer();
+    imgBitmap.close();
+    canvas.width = 0; canvas.height = 0;
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return new Uint8Array(result);
+  },
+
+  // Developer Tasks
+  async minifyCode(code, lang, onProgress) {
+    if (lang === 'js') {
       try {
         const { minify } = await import("terser");
-        const minified = await minify(code, {
-          compress: {
-            dead_code: true,
-            drop_debugger: true,
-            conditionals: true,
-            evaluate: true,
-            booleans: true,
-            loops: true,
-            unused: true,
-            hoist_funs: true,
-            keep_fargs: false,
-            hoist_vars: false,
-            if_return: true,
-            join_vars: true,
-            side_effects: true,
-          },
-          mangle: true,
-          module: true,
-        });
-        result = minified.code || code;
-      } catch (err: any) {
-        console.error("Terser minification failed, falling back to basic:", err);
-        // Fallback to basic if terser fails
-        result = code
-          .replace(/\/\*[\s\S]*?\*\//g, "")
-          .replace(/\/\/[^\n]*/g, "")
-          .replace(/\n+/g, "\n")
-          .split("\n")
-          .map(l => l.trim())
-          .filter(Boolean)
-          .join(" ")
-          .replace(/\s*([=+\-*/<>!&|?,;:{}()[\]])\s*/g, "$1")
-          .replace(/([;,{])\s+/g, "$1")
-          .trim();
-      }
-    } else if (lang === "html") {
-      result = code
-        .replace(/<!--[\s\S]*?-->/g, "")
-        .replace(/\s+/g, " ")
-        .replace(/>\s+</g, "><")
-        .trim();
+        const result = await minify(code, { compress: true, mangle: true, module: true });
+        return result.code || code;
+      } catch (err) { /* fallback */ }
     }
-    
-    if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return result;
+    // Basic fallback minifiers
+    if (lang === "css") return code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s*([{}:;,>~+])\s*/g, "$1").replace(/;\s*}/g, "}").replace(/\s+/g, " ").trim();
+    if (lang === "html") return code.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").replace(/>\s+</g, "><").trim();
+    return code;
   },
 
   async computeDiff(textA, textB, onProgress) {
     const linesA = textA.split(/\r?\n/);
     const linesB = textB.split(/\r?\n/);
-    const m = linesA.length;
-    const n = linesB.length;
-
-    if (onProgress) onProgress({ percent: 10, message: "Calculating difference..." });
-
-    // Myers-simplified or basic LCS
-    // For very large files, we fall back to a simpler view to prevent OOM
-    if (m * n > 10000000) { // Limit to 10M cells for safety (e.g. 3000x3000 lines)
-      if (onProgress) onProgress({ percent: 50, message: "Large file detected, performing fast diff..." });
-      const result: any[] = [];
+    const m = linesA.length, n = linesB.length;
+    if (m * n > 10000000) {
+      const result: DiffLine[] = [];
       linesA.forEach((l, i) => result.push({ type: 'removed', text: l, lineA: i + 1 }));
       linesB.forEach((l, i) => result.push({ type: 'added', text: l, lineB: i + 1 }));
       return result;
     }
-
     const dp = Array.from({ length: m + 1 }, () => new Int32Array(n + 1));
     for (let i = 1; i <= m; i++) {
-      if (onProgress && i % 100 === 0) {
-        onProgress({ percent: 10 + (i / m) * 40, message: `Building diff matrix... (${i}/${m})` });
-      }
       for (let j = 1; j <= n; j++) {
-        if (linesA[i - 1] === linesB[j - 1]) {
-          dp[i]![j] = dp[i - 1]![j - 1]! + 1;
-        } else {
-          dp[i]![j] = Math.max(dp[i - 1]![j]!, dp[i]![j - 1]!);
-        }
+        if (linesA[i - 1] === linesB[j - 1]) dp[i]![j] = dp[i - 1]![j - 1]! + 1;
+        else dp[i]![j] = Math.max(dp[i - 1]![j]!, dp[i]![j - 1]!);
       }
     }
-
-    if (onProgress) onProgress({ percent: 60, message: "Reconstructing diff..." });
-
-    const result: any[] = [];
+    const result: DiffLine[] = [];
     let i = m, j = n;
     while (i > 0 || j > 0) {
       if (i > 0 && j > 0 && linesA[i - 1] === linesB[j - 1]) {
@@ -317,10 +239,15 @@ const api: WorkerAPI = {
         i--;
       }
     }
-
-    if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;
+  },
+
+  // EMI Tasks
+  async calculateEmiSchedule(inputs) {
+    const { generateSchedule } = await import("../lib/emi-calculations");
+    return generateSchedule(inputs);
   }
 };
 
 Comlink.expose(api);
+export type UnifiedWorkerAPI = typeof api;

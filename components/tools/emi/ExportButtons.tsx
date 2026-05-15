@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Download, Printer, FileText } from "lucide-react";
 import { AmortizationEntry } from "@/src/lib/emi-calculations";
 import { formatCurrency } from "@/src/lib/utils";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 interface ExportButtonsProps {
   schedule: AmortizationEntry[];
@@ -12,6 +13,7 @@ interface ExportButtonsProps {
 
 export function ExportButtons({ schedule, loanName = "Loan_Scenario" }: ExportButtonsProps) {
   const [isExporting, setIsExporting] = useState(false);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const exportToCSV = () => {
     setIsExporting(true);
@@ -33,7 +35,7 @@ export function ExportButtons({ schedule, loanName = "Loan_Scenario" }: ExportBu
       ].join("\n");
 
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const link = document.createElement("a");
       const date = new Date().toISOString().split('T')[0];
       
@@ -42,6 +44,7 @@ export function ExportButtons({ schedule, loanName = "Loan_Scenario" }: ExportBu
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      revokeUrl(url);
       setIsExporting(false);
     }, 600);
   };

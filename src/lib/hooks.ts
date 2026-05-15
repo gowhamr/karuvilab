@@ -86,3 +86,19 @@ export function useOnlineStatus() {
 
   return isOnline;
 }
+
+export function usePerformanceSettings() {
+  const [shouldBlur, setShouldBlur] = useState(true);
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined') {
+      const isLowPerf = (navigator.hardwareConcurrency || 4) < 4;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (isLowPerf || prefersReducedMotion) {
+        setShouldBlur(false);
+      }
+    }
+  }, []);
+
+  return { shouldBlur };
+}

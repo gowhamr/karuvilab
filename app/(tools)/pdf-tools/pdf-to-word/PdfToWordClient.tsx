@@ -4,6 +4,7 @@ import Script from "next/script";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 declare const pdfjsLib: any;
 
@@ -17,6 +18,7 @@ export default function PdfToWordClient() {
   const [pageCount, setPageCount] = useState(0);
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const extract = async () => {
     if (!libReady) { setError("PDF library not loaded yet."); return; }
@@ -45,12 +47,12 @@ export default function PdfToWordClient() {
 
   const downloadTxt = () => {
     const blob = new Blob([text], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = (file?.name.replace(/\.pdf$/i, "") || "extracted") + ".txt";
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
   };
 
   return (

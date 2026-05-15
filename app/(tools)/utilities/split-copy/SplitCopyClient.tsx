@@ -70,7 +70,7 @@ export default function SplitCopyClient() {
 
         <div className="space-y-3">
           <label className="text-sm font-bold text-text-2">Split Method</label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
             {([
               ["equal", "Equal Parts"],
               ["chars", "By Char Count"],

@@ -63,4 +63,5 @@ export function exportToCSV(filename: string, headers: string[], rows: any[][]) 
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

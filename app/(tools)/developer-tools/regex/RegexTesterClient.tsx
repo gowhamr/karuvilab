@@ -180,7 +180,7 @@ export default function RegexTesterClient() {
 
       <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
         <h3 className="text-sm font-bold text-text-2">Example Patterns</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {EXAMPLE_PATTERNS.map(ex => (
             <button
               key={ex.label}

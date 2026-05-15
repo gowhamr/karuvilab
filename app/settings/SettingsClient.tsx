@@ -122,22 +122,22 @@ export default function SettingsClient() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-surface border border-border/40 rounded-[40px] p-8 md:p-12 shadow-premium relative overflow-hidden"
+            className="bg-surface border border-border/40 rounded-[24px] sm:rounded-[40px] p-4 sm:p-8 md:p-12 shadow-premium relative overflow-hidden"
           >
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
             
-            <header className="mb-12 space-y-3 relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-blue/5 flex items-center justify-center text-blue mb-6">
+            <header className="mb-8 sm:mb-12 space-y-3 relative z-10">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue/5 flex items-center justify-center text-blue mb-6">
                  {(() => {
                    const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Settings2;
-                   return <Icon className="w-7 h-7" />;
+                   return <Icon className="w-6 h-6 sm:w-7 sm:h-7" />;
                  })()}
               </div>
-              <h1 className="text-3xl md:text-4xl font-black tracking-tight flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight flex items-center gap-3">
                 {MENU_ITEMS.find(m => m.id === activeSection)?.label}
               </h1>
-              <p className="text-lg text-text-3 font-medium max-w-xl">
+              <p className="text-base sm:text-lg text-text-3 font-medium max-w-xl">
                 {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. Changes are saved automatically.
               </p>
             </header>

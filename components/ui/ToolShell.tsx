@@ -59,7 +59,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (
-    <div className="max-w-5xl mx-auto space-y-16 pb-24 px-4" style={{ '--tool-color': color } as React.CSSProperties}>
+    <div className="max-w-5xl mx-auto space-y-12 sm:space-y-16 pb-24 px-4 overflow-x-hidden" style={{ '--tool-color': color } as React.CSSProperties}>
       <StructuredData 
         {...(currentTool ? { tool: currentTool } : {})}
         {...(category ? { category } : {})}
@@ -80,9 +80,9 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </div>
         
         <div className="space-y-4">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight">{title}</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">{title}</h1>
           {description && (
-            <p className="text-lg md:text-xl text-text-3 leading-relaxed max-w-3xl font-medium">
+            <p className="text-base sm:text-lg md:text-xl text-text-3 leading-relaxed max-w-3xl font-medium">
               {description}
             </p>
           )}

@@ -8,10 +8,12 @@ import { SyntaxEditor } from './SyntaxEditor';
 import { Download, FileText, Trash2, Copy } from 'lucide-react';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { useToast } from '@/components/ui/Toast';
+import { useObjectUrlManager } from '@/src/lib/hooks';
 
 export function ViewEditTab() {
   const { fileA, setFileA, updateFileAContent, settings, updateSettings } = useFileViewerStore();
   const { toast } = useToast();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const handleFileSelect = useCallback(async (files: File[] | FileList) => {
     const file = files instanceof FileList ? files[0] : files[0];
@@ -38,12 +40,12 @@ export function ViewEditTab() {
   const handleDownload = () => {
     if (!fileA) return;
     const blob = new Blob([fileA.content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = fileA.name;
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
   };
 
   const handleCopy = () => {

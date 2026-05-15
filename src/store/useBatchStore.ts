@@ -111,8 +111,11 @@ export const useBatchStore = create<BatchState>((set, get) => ({
 
     if (pendingItems.length === 0) return;
 
-    // Process in parallel (WorkerManager handles the actual concurrency limit)
-    await Promise.all(pendingItems.map(async (item) => {
+    const { limitConcurrency } = await import('../lib/concurrency');
+    const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const concurrency = isMobile ? 2 : 3;
+
+    await limitConcurrency(pendingItems, concurrency, async (item) => {
       const abortController = new AbortController();
       get().updateItem(toolId, item.id, { 
         status: 'processing', 
@@ -130,7 +133,7 @@ export const useBatchStore = create<BatchState>((set, get) => ({
           result 
         });
       } catch (error: any) {
-        if (error.name === 'AbortError' || error.message === 'Task cancelled') {
+        if (error.name === 'AbortError' || error.message === 'Task cancelled' || error.message === 'Task aborted') {
           get().updateItem(toolId, item.id, { status: 'cancelled', message: 'Cancelled' });
         } else {
           get().updateItem(toolId, item.id, { 
@@ -140,6 +143,6 @@ export const useBatchStore = create<BatchState>((set, get) => ({
           });
         }
       }
-    }));
+    });
   },
 }));

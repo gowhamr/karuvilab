@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
@@ -67,6 +68,7 @@ export default function FileValidatorClient() {
   const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const handleFile = async (file: File) => {
     setLoading(true);
@@ -127,9 +129,9 @@ export default function FileValidatorClient() {
     if (file.type.startsWith("image/")) {
       imageInfo = await new Promise(resolve => {
         const img = new Image();
-        const url = URL.createObjectURL(file);
-        img.onload = () => { resolve({ width: img.naturalWidth, height: img.naturalHeight }); URL.revokeObjectURL(url); };
-        img.onerror = () => { resolve(null); URL.revokeObjectURL(url); };
+        const url = createUrl(file);
+        img.onload = () => { resolve({ width: img.naturalWidth, height: img.naturalHeight }); revokeUrl(url); };
+        img.onerror = () => { resolve(null); revokeUrl(url); };
         img.src = url;
       });
       if (imageInfo) {
@@ -204,11 +206,6 @@ export default function FileValidatorClient() {
           {fileInfo.imageInfo && (
             <div className="bg-surface border border-border p-5 rounded-2xl">
               <h3 className="text-sm font-bold text-text-2 mb-3">Image Preview</h3>
-              <img
-                src={URL.createObjectURL(new Blob([]))}
-                alt="preview"
-                className="hidden"
-              />
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-bg border border-border rounded-xl p-3 text-center">
                   <div className="text-xs font-bold text-text-4 mb-1">Width</div>

@@ -36,6 +36,12 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
         <div className="w-px h-4 bg-border mx-4" />
         <div className="flex-1">Modified</div>
       </div>
+
+      {diff.length > 5000 && (
+        <div className="px-4 py-2 bg-yellow-500/10 border-b border-border text-[10px] text-yellow-600 font-bold uppercase tracking-wider">
+          Large diff detected ({diff.length} lines). Virtualizing rendering for stability.
+        </div>
+      )}
       
       <div 
         className="overflow-auto max-h-[600px] overscroll-contain"

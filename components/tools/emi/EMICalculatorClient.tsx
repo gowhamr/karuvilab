@@ -54,7 +54,7 @@ export default function EMICalculatorClient() {
         {/* Top Section: Inputs & Summary */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-surface border border-border rounded-[32px] p-8 shadow-sm">
+            <div className="bg-surface border border-border rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 shadow-sm">
               <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue mb-8 flex items-center gap-3">
                 <Calculator className="w-4 h-4" />
                 Loan Configuration
@@ -93,12 +93,12 @@ export default function EMICalculatorClient() {
               icon={Calendar}
             />
 
-            <div className="p-6 bg-blue/5 border border-blue/10 rounded-[32px] space-y-3">
+            <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-[24px] sm:rounded-[32px] space-y-3">
               <div className="flex items-center gap-2 text-blue">
                 <Info className="w-4 h-4" />
                 <span className="text-[10px] font-black uppercase tracking-widest">Effective Tenure</span>
               </div>
-              <p className="text-3xl font-black text-text tabular-nums">
+              <p className="text-2xl sm:text-3xl font-black text-text tabular-nums">
                 {result?.effectiveTenure || 0} <span className="text-sm text-text-4 font-bold">Months</span>
               </p>
               <p className="text-[10px] text-text-3 font-medium leading-relaxed">

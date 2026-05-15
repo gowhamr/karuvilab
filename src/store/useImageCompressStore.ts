@@ -79,7 +79,9 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     
     // We'll use a Promise.all to get dimensions for all files
     const loadItems = async () => {
-      const promises = files.map(file => {
+      const { limitConcurrency } = await import('../lib/concurrency');
+      
+      const items = await limitConcurrency(files, 5, (file) => {
         return new Promise<ImageItem>((resolve) => {
           const img = new Image();
           img.onload = () => {
@@ -102,8 +104,6 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
           img.src = URL.createObjectURL(file);
         });
       });
-
-      const items = await Promise.all(promises);
       
       set((state) => ({
         items: activeTab === 'single' ? items.slice(-1) : [...state.items, ...items],

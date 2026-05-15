@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -15,6 +16,7 @@ export default function RotatePdfClient() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const loadFile = async (f: File) => {
     setFile(f);
@@ -47,12 +49,12 @@ export default function RotatePdfClient() {
       });
       const outBytes = await doc.save();
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = file.name.replace(/\.pdf$/i, "") + "-rotated.pdf";
       a.click();
-      URL.revokeObjectURL(url);
+      revokeUrl(url);
     } catch (e: any) {
       setError(e?.message || "Failed to rotate PDF.");
     }

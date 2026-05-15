@@ -5,10 +5,12 @@ import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSwitch } from "../components/SettingUI";
 import { Shield, HardDrive, LineChart, History, Trash2, Download, Upload, Check, RefreshCcw } from "lucide-react";
 import { useState } from "react";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 export const PrivacySection = memo(function PrivacySection() {
   const { privacy, updatePrivacy, resetAll } = useSettingsStore();
   const [isExporting, setIsExporting] = useState(false);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const exportSettings = () => {
     setIsExporting(true);
@@ -18,11 +20,12 @@ export const PrivacySection = memo(function PrivacySection() {
       data[k] = localStorage.getItem(k)!;
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `karuvilab-settings-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
+    revokeUrl(url);
     setTimeout(() => setIsExporting(false), 1000);
   };
 

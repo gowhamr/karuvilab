@@ -7,9 +7,11 @@ import { ToolIcon } from "@/components/ui/Icons";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { Search, Command, X, ArrowDown, ArrowUp, CornerDownLeft } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
+import { usePerformanceSettings } from "@/src/lib/hooks";
 
 export function CommandPalette() {
   const { isPaletteOpen, setIsPaletteOpen } = useSearchStore();
+  const { shouldBlur } = usePerformanceSettings();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
@@ -68,7 +70,10 @@ export function CommandPalette() {
   return (
     <Dialog.Root open={isPaletteOpen} onOpenChange={setIsPaletteOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[200] bg-bg/80 backdrop-blur-md animate-in fade-in duration-300" />
+        <Dialog.Overlay 
+          className="fixed inset-0 z-[200] bg-bg/80 animate-in fade-in duration-300 transition-all" 
+          style={{ backdropFilter: shouldBlur ? 'blur(12px)' : 'none' }}
+        />
         <Dialog.Content 
           onKeyDown={handleKeyDown}
           className="fixed left-1/2 top-[15%] -translate-x-1/2 z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-top-4 duration-200"

@@ -82,7 +82,7 @@ export default function URLCleanerClient() {
 
       {cleaned && (
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-surface border border-border p-4 rounded-xl text-center">
               <div className="text-2xl font-black text-blue">{removed.length}</div>
               <div className="text-xs text-text-4 mt-1">Parameters Removed</div>
@@ -134,7 +134,7 @@ export default function URLCleanerClient() {
 
       <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
         <h3 className="text-sm font-bold text-text-2">Tracked Parameter Categories</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-3">
           {[
             ["UTM Tags", "utm_source, utm_medium, utm_campaign…"],
             ["Google", "gclid, dclid, gclsrc"],

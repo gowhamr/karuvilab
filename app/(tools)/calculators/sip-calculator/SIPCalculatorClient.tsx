@@ -242,7 +242,7 @@ Generated via KaruviLab`;
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <MetricCard label="Net Total Value" value={formatINR(result.netValue)} accent sub="After Tax & Fees" />
         <MetricCard label="Total Invested" value={formatINR(result.totalInvested)} />
         <MetricCard label="Gross Gains" value={formatINR(result.totalGains)} />

@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "seo")!;
 
@@ -17,6 +18,7 @@ interface RuleSet {
 let nextId = 1;
 
 export default function RobotsTxtBuilderClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [rules, setRules] = useState<RuleSet[]>([
     { id: nextId++, userAgent: "*", allow: "/", disallow: "/admin, /private", crawlDelay: "" },
   ]);
@@ -57,12 +59,12 @@ export default function RobotsTxtBuilderClient() {
 
   const download = () => {
     const blob = new Blob([generated], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "robots.txt";
     a.click();
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
   };
 
   return (

@@ -146,7 +146,7 @@ export default function GrammarCheckerClient() {
 
       {text && (
         <div className="space-y-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-center text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-center text-sm">
             {[
               { key: "misspelling", label: "Misspellings", color: "text-red-500" },
               { key: "capitalization", label: "Capitalization", color: "text-blue" },
