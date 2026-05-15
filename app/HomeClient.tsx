@@ -172,7 +172,7 @@ export default function HomeClient() {
       <div className="relative">
         {/* Horizontal Category Chips */}
         <div 
-          className="sticky top-[60px] md:top-[72px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 bg-surface/95 border-b border-border transition-all"
+          className="relative sm:sticky top-[60px] md:top-[72px] z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-2 bg-surface/95 border-b border-border transition-all"
           style={{ backdropFilter: shouldBlur ? 'blur(12px)' : 'none' }}
         >
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -206,7 +206,7 @@ export default function HomeClient() {
                   icon={Search}
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                   {filteredTools.map(tool => (
                     <ToolCard key={tool.id} tool={tool} compact />
                   ))}
@@ -245,7 +245,7 @@ export default function HomeClient() {
                       subtitle="Your hand-picked toolkit"
                       icon={Heart}
                     />
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                       {favoriteTools.map(tool => (
                         <ToolCard key={tool.id} tool={tool} compact />
                       ))}
@@ -261,7 +261,7 @@ export default function HomeClient() {
                       subtitle="Pick up where you left off"
                       icon={TrendingUp}
                     />
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                       {recentTools.map(tool => (
                         <ToolCard key={tool.id} tool={tool} compact />
                       ))}
@@ -277,7 +277,7 @@ export default function HomeClient() {
                     icon={LayoutGrid}
                     href="/calculators"
                   />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                     {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
                       <ToolCard key={tool.id} tool={tool} compact />
                     ))}

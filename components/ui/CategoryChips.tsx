@@ -16,17 +16,17 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
       <div 
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 snap-x"
+        className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-1.5 py-1"
       >
         <button
           role="tab"
           aria-selected={!activeCategory}
           onClick={() => onCategoryChange(null)}
           className={`
-            relative flex-shrink-0 h-[38px] px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/20
+            relative flex-shrink-0 h-[38px] px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/20
             ${!activeCategory 
               ? "text-white" 
-              : "text-text-4 hover:text-text hover:bg-surface/80"}
+              : "text-text-4 hover:text-text hover:bg-surface/80 bg-surface/40 sm:bg-transparent"}
           `}
         >
           {!activeCategory && (
@@ -45,10 +45,10 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             aria-selected={activeCategory === cat.id}
             onClick={() => onCategoryChange(cat.id)}
             className={`
-              relative flex-shrink-0 h-[38px] flex items-center gap-2 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/20
+              relative flex-shrink-0 h-[38px] flex items-center gap-2 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20
               ${activeCategory === cat.id 
                 ? "text-white" 
-                : "text-text-4 hover:text-text hover:bg-surface/80"}
+                : "text-text-4 hover:text-text hover:bg-surface/80 bg-surface/40 sm:bg-transparent"}
             `}
           >
             {activeCategory === cat.id && (

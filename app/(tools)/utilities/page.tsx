@@ -22,7 +22,7 @@ export default function UtilitiesPage() {
         <h1 className="text-4xl font-black">{cat.label}</h1>
         <p className="text-text-3 text-lg">Everyday tools for text, links, tasks, and more — no account needed.</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         {tools.map(tool => <ToolCard key={tool.id} tool={tool} compact />)}
       </div>
     </div>
