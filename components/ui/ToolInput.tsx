@@ -10,8 +10,8 @@ interface ToolInputProps {
   placeholder?: string;
   rows?: number;
   type?: "text" | "number" | "password" | "date";
-  description?: string;
-  error?: string;
+  description?: string | undefined;
+  error?: string | undefined;
   mono?: boolean;
   id?: string;
 }

@@ -1,0 +1,53 @@
+{
+  "general": {
+    "planMode": true,
+    "autoApprove": false,
+    "verbose": false
+  },
+  "context": {
+    "fileName": [
+      "GEMINI.md",
+      "CLAUDE.md",
+      "AGENTS.md",
+      "README.md"
+    ],
+    "fileFiltering": {
+      "respectGitIgnore": true,
+      "respectGeminiIgnore": true,
+      "excludePatterns": [
+        "node_modules/**",
+        ".next/**",
+        "dist/**",
+        "public/icons/**",
+        "package-lock.json",
+        "*.log"
+      ]
+    },
+    "maxContextTokens": 200000,
+    "preferAttachedFiles": true
+  },
+  "model": {
+    "temperature": 0.0,
+    "topP": 1.0,
+    "maxOutputTokens": 8192
+  },
+  "output": {
+    "format": "text",
+    "showThinking": false,
+    "showCitations": false,
+    "codeBlockStyle": "markdown"
+  },
+  "commands": {
+    "default": "plan",
+    "aliases": {
+      "fix": "plan --approve",
+      "qa": "plan --role qa-engineer",
+      "audit": "plan --role principal-engineer"
+    }
+  },
+  "project": {
+    "name": "KaruviLab (KV)",
+    "stack": "Next.js 16, TypeScript, Tailwind v4, Radix UI, Framer Motion, Comlink Workers",
+    "philosophy": "Local-first, zero-upload, privacy-first, offline-capable, mobile-first"
+  }
+}
