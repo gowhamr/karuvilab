@@ -80,35 +80,56 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     
     // We'll use a Promise.all to get dimensions for all files
     const loadItems = async () => {
-      const { limitConcurrency } = await import('../lib/concurrency');
-      
-      const items = await limitConcurrency(files, 5, (file) => {
-        return new Promise<ImageItem>((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            const item: ImageItem = {
-              id: Math.random().toString(36).substring(7),
-              file,
-              previewUrl: blobManager.create(file),
-              status: 'idle',
-              progress: 0,
-              originalSize: file.size,
-              compressedSize: null,
-              compressedUrl: null,
-              compressedBlob: null,
-              settings: { ...globalSettings },
-              dimensions: { width: img.width, height: img.height },
+      try {
+        const { limitConcurrency } = await import('../lib/concurrency');
+        
+        const loadedItems = await limitConcurrency(files, 5, (file) => {
+          return new Promise<ImageItem>((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+              const item: ImageItem = {
+                id: Math.random().toString(36).substring(7),
+                file,
+                previewUrl: blobManager.create(file),
+                status: 'idle',
+                progress: 0,
+                originalSize: file.size,
+                compressedSize: null,
+                compressedUrl: null,
+                compressedBlob: null,
+                settings: { ...get().globalSettings },
+                dimensions: { width: img.width, height: img.height },
+              };
+              URL.revokeObjectURL(img.src);
+              resolve(item);
             };
-            blobManager.revoke(img.src);
-            resolve(item);
-          };
-          img.src = blobManager.create(file);
+            img.onerror = () => {
+               // Fallback for invalid images
+               resolve({
+                id: Math.random().toString(36).substring(7),
+                file,
+                previewUrl: '',
+                status: 'error',
+                error: 'Invalid image file',
+                progress: 0,
+                originalSize: file.size,
+                compressedSize: null,
+                compressedUrl: null,
+                compressedBlob: null,
+                settings: { ...get().globalSettings },
+                dimensions: { width: 0, height: 0 },
+               });
+            };
+            img.src = URL.createObjectURL(file);
+          });
         });
-      });
-      
-      set((state) => ({
-        items: activeTab === 'single' ? items.slice(-1) : [...state.items, ...items],
-      }));
+        
+        set((state) => ({
+          items: activeTab === 'single' ? loadedItems.slice(-1) : [...state.items, ...loadedItems],
+        }));
+      } catch (err) {
+        console.error("Failed to load images:", err);
+      }
     };
 
     loadItems();

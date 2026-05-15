@@ -31,13 +31,13 @@ export function ChecksumTab() {
     try {
       let result = "";
       if (typeof input === 'string') {
-        const res = await workerManager.generateHashes(input, [checksumAlgo], (p) => {
+        const res = await workerManager.generateHashes(input, [checksumAlgo], undefined, (p) => {
           setChecksumProgress(p.percent);
         });
         result = res[checksumAlgo] || "";
       } else {
         const buffer = await input.arrayBuffer();
-        result = await workerManager.generateFileHash(buffer, checksumAlgo, (p) => {
+        result = await workerManager.generateFileHash(buffer, checksumAlgo, undefined, (p) => {
           setChecksumProgress(p.percent);
         });
       }

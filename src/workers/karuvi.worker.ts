@@ -201,44 +201,58 @@ const api: WorkerAPI = {
 
   // Image Tasks (Batch specialized)
   async compressImageBatch(file: ArrayBuffer, settings: CompressionSettings, onProgress) {
-    if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
-    const blob = new Blob([file]);
-    const imgBitmap = await createImageBitmap(blob);
-    let { width, height } = imgBitmap;
-    
-    if (settings.resizeWidth || settings.resizeHeight) {
-      if (settings.resizeWidth && settings.resizeHeight) {
-        width = settings.resizeWidth; height = settings.resizeHeight;
-      } else if (settings.resizeWidth) {
-        if (settings.maintainAspectRatio) height = (settings.resizeWidth / imgBitmap.width) * imgBitmap.height;
-        width = settings.resizeWidth;
-      } else if (settings.resizeHeight) {
-        if (settings.maintainAspectRatio) width = (settings.resizeHeight / imgBitmap.height) * imgBitmap.width;
-        height = settings.resizeHeight;
+    let imgBitmap: ImageBitmap | null = null;
+    try {
+      if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
+      const blob = new Blob([file]);
+      imgBitmap = await createImageBitmap(blob);
+      
+      let { width, height } = imgBitmap;
+      
+      if (settings.resizeWidth || settings.resizeHeight) {
+        if (settings.resizeWidth && settings.resizeHeight) {
+          width = settings.resizeWidth; height = settings.resizeHeight;
+        } else if (settings.resizeWidth) {
+          if (settings.maintainAspectRatio) height = (settings.resizeWidth / imgBitmap.width) * imgBitmap.height;
+          width = settings.resizeWidth;
+        } else if (settings.resizeHeight) {
+          if (settings.maintainAspectRatio) width = (settings.resizeHeight / imgBitmap.height) * imgBitmap.width;
+          height = settings.resizeHeight;
+        }
       }
-    }
 
-    const canvas = new OffscreenCanvas(width, height);
-    const ctx = canvas.getContext("2d")!;
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    if (settings.format === 'image/jpeg') {
-      ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, width, height);
-    }
-    ctx.drawImage(imgBitmap, 0, 0, width, height);
-    
-    const options: ImageEncodeOptions = {
-      type: settings.format,
-      quality: settings.quality / 100
-    };
-    if (settings.lossless && settings.format === 'image/png') options.quality = 1.0;
+      // Ensure dimensions are valid positive integers
+      width = Math.max(1, Math.floor(width));
+      height = Math.max(1, Math.floor(height));
 
-    const compressedBlob = await canvas.convertToBlob(options);
-    const result = await compressedBlob.arrayBuffer();
-    imgBitmap.close();
-    canvas.width = 0; canvas.height = 0;
-    if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return new Uint8Array(result);
+      const canvas = new OffscreenCanvas(width, height);
+      const ctx = canvas.getContext("2d")!;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      
+      if (settings.format === 'image/jpeg') {
+        ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, width, height);
+      }
+      
+      ctx.drawImage(imgBitmap, 0, 0, width, height);
+      
+      const options: ImageEncodeOptions = {
+        type: settings.format,
+        quality: settings.quality / 100
+      };
+      
+      if (settings.lossless && settings.format === 'image/png') options.quality = 1.0;
+
+      const compressedBlob = await canvas.convertToBlob(options);
+      const result = await compressedBlob.arrayBuffer();
+      
+      if (onProgress) onProgress({ percent: 100, message: "Done!" });
+      return new Uint8Array(result);
+    } catch (err: any) {
+      throw new Error(`Compression failed: ${err.message || 'Unknown error'}`);
+    } finally {
+      if (imgBitmap) imgBitmap.close();
+    }
   },
 
   // Developer Tasks
