@@ -31,16 +31,18 @@ interface ImageCompressStore {
   items: ImageItem[];
   activeTab: 'single' | 'batch';
   globalSettings: ImageSettings;
+  isProcessing: boolean;
   
   setActiveTab: (tab: 'single' | 'batch') => void;
+  setIsProcessing: (isProcessing: boolean) => void;
   updateGlobalSettings: (settings: Partial<ImageSettings>) => void;
   addFiles: (files: File[]) => void;
   removeFile: (id: string) => void;
   clearFiles: () => void;
   updateItemSettings: (id: string, settings: Partial<ImageSettings>) => void;
-  updateItemStatus: (id: string, status: ImageItem['status'], progress?: number) => void;
-  updateItemResult: (id: string, blob: Blob, url: string) => void;
-  updateItemError: (id: string, error: string) => void;
+  setItemStatus: (id: string, status: ImageItem['status'], progress?: number) => void;
+  setItemResult: (id: string, blob: Blob, url: string) => void;
+  setItemError: (id: string, error: string) => void;
 }
 
 const DEFAULT_SETTINGS: ImageSettings = {
@@ -56,18 +58,18 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
   items: [],
   activeTab: 'single',
   globalSettings: DEFAULT_SETTINGS,
+  isProcessing: false,
 
   setActiveTab: (tab) => set({ activeTab: tab }),
+  setIsProcessing: (isProcessing) => set({ isProcessing }),
 
   updateGlobalSettings: (settings) => set((state) => ({
     globalSettings: { ...state.globalSettings, ...settings },
-    // If in batch mode, optionally apply to all (can be refined)
   })),
 
   addFiles: (files) => {
     const { activeTab } = get();
     
-    // We'll use a Promise.all to get dimensions for all files
     const loadItems = async () => {
       try {
         const { limitConcurrency } = await import('@/src/lib/concurrency');
@@ -143,7 +145,7 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
       if (item.previewUrl) blobManager.revoke(item.previewUrl);
       if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
     });
-    set({ items: [] });
+    set({ items: [], isProcessing: false });
   },
 
   updateItemSettings: (id, settings) => set((state) => ({
@@ -152,13 +154,13 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
     ),
   })),
 
-  updateItemStatus: (id, status, progress = 0) => set((state) => ({
+  setItemStatus: (id, status, progress = 0) => set((state) => ({
     items: state.items.map((item) =>
       item.id === id ? { ...item, status, progress } : item
     ),
   })),
 
-  updateItemResult: (id, blob, url) => set((state) => ({
+  setItemResult: (id, blob, url) => set((state) => ({
     items: state.items.map((item) =>
       item.id === id ? { 
         ...item, 
@@ -171,7 +173,7 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
     ),
   })),
 
-  updateItemError: (id, error) => set((state) => ({
+  setItemError: (id, error) => set((state) => ({
     items: state.items.map((item) =>
       item.id === id ? { ...item, status: 'error', error } : item
     ),
