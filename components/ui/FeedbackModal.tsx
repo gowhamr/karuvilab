@@ -21,8 +21,10 @@ export function FeedbackModal() {
   const setType = (t: FeedbackType) => useSupportStore.setState({ type: t });
 
   const [description, setDescription] = useState("");
+  const [fromEmail, setFromEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [sysInfo, setSysInfo] = useState<SystemInfo | null>(null);
 
   useEffect(() => {
@@ -30,23 +32,45 @@ export function FeedbackModal() {
       setSysInfo(getSystemInfo());
       setIsSuccess(false);
       setDescription("");
+      setFromEmail("");
+      setErrorMessage("");
     }
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    
-    // Auto close after success
-    setTimeout(() => {
-      closeFeedback();
-    }, 2000);
+    try {
+      const response = await fetch('/api/send-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fromEmail,
+          message: description,
+          category: type,
+          diagnosticInfo: JSON.stringify(sysInfo),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit feedback');
+      }
+
+      setIsSuccess(true);
+      setTimeout(() => {
+        closeFeedback();
+      }, 2000);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -129,6 +153,19 @@ export function FeedbackModal() {
                     </div>
                   </div>
 
+                  {/* Email Address */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Email Address</label>
+                    <input 
+                      type="email"
+                      required
+                      value={fromEmail}
+                      onChange={(e) => setFromEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="w-full h-[56px] px-5 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm"
+                    />
+                  </div>
+
                   {/* Description */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
@@ -178,29 +215,37 @@ export function FeedbackModal() {
                     </div>
                   </div>
 
+                  {/* Error Message */}
+                  {errorMessage && (
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500">
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                      <p className="text-xs font-bold">{errorMessage}</p>
+                    </div>
+                  )}
+
                   {/* Submit */}
-                  <button 
-                    disabled={isSubmitting}
-                    type="submit"
-                    className="w-full h-[64px] bg-blue text-white rounded-[20px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-blue/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
-                  >
-                    {isSubmitting ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        Submit Feedback
-                      </>
-                    )}
-                  </button>
+                  <div className="space-y-3">
+                    <button 
+                      disabled={isSubmitting}
+                      type="submit"
+                      className="w-full h-[64px] bg-blue text-white rounded-[20px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-blue/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                      {isSubmitting ? (
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Submit Feedback
+                        </>
+                      )}
+                    </button>
+                    <p className="text-[10px] text-center font-bold text-text-4">
+                      Your message will be transmitted securely to our support team. No file contents are ever included.
+                    </p>
+                  </div>
                 </m.form>
               )}
             </AnimatePresence>
-          </div>
-          
-          <div className="p-6 bg-elevated/30 border-t border-border/50 flex items-center justify-center gap-2">
-             <Info className="w-3.5 h-3.5 text-text-4" />
-             <span className="text-[10px] font-bold text-text-4">KaruviLab values your privacy. No personal data is collected.</span>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

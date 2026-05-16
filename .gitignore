@@ -9,3 +9,7 @@ out/
 
 # UI References
 .temp_ui_refs/
+
+# Local env files
+.env.local
+.env*.local
