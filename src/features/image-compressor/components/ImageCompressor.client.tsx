@@ -6,7 +6,7 @@ import { SingleTab } from './SingleTab';
 import { BatchTab } from './BatchTab';
 import { WorkflowSuggestions } from '@/components/ui/WorkflowSuggestions';
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
-import { ImageIcon, Layers, ShieldCheck, Zap } from 'lucide-react';
+import { Image as ImageIcon, Layers, ShieldCheck, Zap } from 'lucide-react';
 
 const toolId = 'image-compress';
 

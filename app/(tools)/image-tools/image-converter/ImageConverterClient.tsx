@@ -94,8 +94,8 @@ export default function ImageConverterClient() {
       />
 
       <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10">
-          <div className="text-6xl font-black italic">OPTIONS</div>
+        <div className="absolute top-0 right-0 p-6 opacity-[0.03] pointer-events-none">
+          <div className="text-8xl font-black italic tracking-tighter">OPTIONS</div>
         </div>
         
         <div className="grid gap-8 sm:grid-cols-2">

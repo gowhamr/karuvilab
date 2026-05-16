@@ -5,11 +5,10 @@ import { SettingsPanel } from './SettingsPanel';
 import { ComparisonView } from './ComparisonView';
 import { batchCoordinator } from '@/src/workers/batch-coordinator';
 import { Loader2 } from 'lucide-react';
-import { useObjectUrlManager } from '@/src/lib/hooks';
+import { blobManager } from '@/src/lib/blob-manager';
 
 export const SingleTab: React.FC = () => {
   const { items, addFiles, setItemStatus, setItemResult, setItemError, isProcessing, setIsProcessing } = useImageCompressStore();
-  const { createUrl } = useObjectUrlManager();
   const activeItem = items[0];
 
   const handleFiles = (files: File[] | FileList) => {
@@ -32,7 +31,7 @@ export const SingleTab: React.FC = () => {
       );
 
       const blob = new Blob([resultBytes as any], { type: activeItem.settings.format });
-      const url = createUrl(blob);
+      const url = blobManager.create(blob);
       setItemResult(activeItem.id, blob, url);
     } catch (error: any) {
       setItemError(activeItem.id, error.message || 'Compression failed');

@@ -32,6 +32,29 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
   const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
   const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0]!.clientX);
 
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        e.preventDefault();
+        setSliderPos(prev => Math.max(0, prev - 5));
+        break;
+      case 'ArrowRight':
+      case 'ArrowUp':
+        e.preventDefault();
+        setSliderPos(prev => Math.min(100, prev + 5));
+        break;
+      case 'Home':
+        e.preventDefault();
+        setSliderPos(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        setSliderPos(100);
+        break;
+    }
+  };
+
   if (!compressedUrl) {
     return (
       <div className="relative aspect-video bg-bg border border-border rounded-[32px] overflow-hidden flex items-center justify-center">
@@ -47,7 +70,14 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
     <div className="space-y-4">
       <div 
         ref={containerRef}
-        className="relative aspect-video bg-bg border border-border rounded-[32px] overflow-hidden cursor-col-resize select-none"
+        role="slider"
+        tabIndex={0}
+        aria-label="Image comparison slider"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(sliderPos)}
+        onKeyDown={onKeyDown}
+        className="relative aspect-video bg-bg border border-border rounded-[32px] overflow-hidden cursor-col-resize select-none outline-none focus:ring-4 focus:ring-blue/20 transition-all"
         onMouseMove={onMouseMove}
         onTouchMove={onTouchMove}
       >

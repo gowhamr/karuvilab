@@ -6,11 +6,10 @@ import { ImageQueue } from './ImageQueue';
 import { batchCoordinator } from '@/src/workers/batch-coordinator';
 import { createZip, downloadBlob } from '@/src/lib/zip';
 import { Loader2, Download, Trash2, Zap } from 'lucide-react';
-import { useObjectUrlManager } from '@/src/lib/hooks';
+import { blobManager } from '@/src/lib/blob-manager';
 
 export const BatchTab: React.FC = () => {
   const { items, addFiles, clearFiles, setItemStatus, setItemResult, setItemError, isProcessing, setIsProcessing } = useImageCompressStore();
-  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const handleFiles = (files: File[] | FileList) => {
     const fileArray = files instanceof FileList ? Array.from(files) : files;
@@ -39,7 +38,7 @@ export const BatchTab: React.FC = () => {
         );
 
         const blob = new Blob([resultBytes as any], { type: item.settings.format });
-        const url = createUrl(blob);
+        const url = blobManager.create(blob);
         setItemResult(item.id, blob, url);
       } catch (error: any) {
         setItemError(item.id, error.message || 'Failed');
@@ -61,24 +60,23 @@ export const BatchTab: React.FC = () => {
     const completedItems = items.filter(i => i.status === 'completed' && i.compressedBlob);
     if (completedItems.length === 0) return;
 
-    const files: Record<string, Uint8Array> = {};
-    for (const item of completedItems) {
-      const arrayBuffer = await item.compressedBlob!.arrayBuffer();
-      const ext = item.settings.format.split('/')[1];
-      const name = item.file.name.replace(/\.[^.]+$/, '') + `_compressed.${ext}`;
-      files[name] = new Uint8Array(arrayBuffer as any);
-    }
+    try {
+      setIsProcessing(true);
+      
+      const files: Record<string, Blob> = {};
+      for (const item of completedItems) {
+        const ext = item.settings.format.split('/')[1];
+        const name = item.file.name.replace(/\.[^.]+$/, '') + `_compressed.${ext}`;
+        files[name] = item.compressedBlob!;
+      }
 
-    // Need to import fflate for zip
-    const { zipSync } = await import('fflate');
-    const zipped = zipSync(files as any);
-    const blob = new Blob([zipped as any], { type: 'application/zip' });
-    const url = createUrl(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `karuvilab-compressed-${Date.now()}.zip`;
-    a.click();
-    revokeUrl(url);
+      const zipBlob = await createZip(files);
+      downloadBlob(zipBlob, `karuvilab-compressed-${Date.now()}.zip`);
+    } catch (error) {
+      console.error("ZIP generation failed:", error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
