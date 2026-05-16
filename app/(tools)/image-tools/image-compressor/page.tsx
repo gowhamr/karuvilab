@@ -14,7 +14,7 @@ export default function ImageCompressorPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Advanced Image Compressor",
+    "name": "Image Compressor",
     "description": "Browser‑based image compression and conversion tool. No file upload, offline capable.",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Any",
@@ -77,7 +77,7 @@ export default function ImageCompressorPage() {
 
   return (
     <ToolShell
-      title="Advanced Image Compressor"
+      title="Image Compressor"
       description="Professional-grade image optimization suite. Lossless compression, batch processing, and format conversion — all 100% private in your browser."
       category={cat}
     >

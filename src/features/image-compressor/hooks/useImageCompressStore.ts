@@ -9,7 +9,6 @@ export interface ImageSettings {
   resizeWidth: number | null;
   resizeHeight: number | null;
   maintainAspectRatio: boolean;
-  resizePercentage: number | null;
   lossless: boolean;
 }
 
@@ -24,59 +23,49 @@ export interface ImageItem {
   compressedUrl: string | null;
   compressedBlob: Blob | null;
   settings: ImageSettings;
-  dimensions: { width: number; height: number };
   error?: string;
+  dimensions?: { width: number; height: number };
 }
 
-interface ImageCompressState {
+interface ImageCompressStore {
   items: ImageItem[];
-  globalSettings: ImageSettings;
-  isProcessing: boolean;
   activeTab: 'single' | 'batch';
+  globalSettings: ImageSettings;
   
-  // Actions
+  setActiveTab: (tab: 'single' | 'batch') => void;
+  updateGlobalSettings: (settings: Partial<ImageSettings>) => void;
   addFiles: (files: File[]) => void;
   removeFile: (id: string) => void;
   clearFiles: () => void;
-  updateGlobalSettings: (settings: Partial<ImageSettings>) => void;
   updateItemSettings: (id: string, settings: Partial<ImageSettings>) => void;
-  setItemStatus: (id: string, status: ImageItem['status'], progress?: number) => void;
-  setItemResult: (id: string, blob: Blob, url: string) => void;
-  setItemError: (id: string, error: string) => void;
-  setIsProcessing: (isProcessing: boolean) => void;
-  setActiveTab: (tab: 'single' | 'batch') => void;
-  resetItem: (id: string) => void;
+  updateItemStatus: (id: string, status: ImageItem['status'], progress?: number) => void;
+  updateItemResult: (id: string, blob: Blob, url: string) => void;
+  updateItemError: (id: string, error: string) => void;
 }
 
 const DEFAULT_SETTINGS: ImageSettings = {
   quality: 80,
-  format: 'image/jpeg',
+  format: 'image/webp',
   resizeWidth: null,
   resizeHeight: null,
   maintainAspectRatio: true,
-  resizePercentage: null,
   lossless: false,
 };
 
-export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
+export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
   items: [],
-  globalSettings: DEFAULT_SETTINGS,
-  isProcessing: false,
   activeTab: 'single',
+  globalSettings: DEFAULT_SETTINGS,
+
+  setActiveTab: (tab) => set({ activeTab: tab }),
+
+  updateGlobalSettings: (settings) => set((state) => ({
+    globalSettings: { ...state.globalSettings, ...settings },
+    // If in batch mode, optionally apply to all (can be refined)
+  })),
 
   addFiles: (files) => {
-    const { globalSettings, activeTab } = get();
-    
-    // In single mode, we only keep the last file added
-    if (activeTab === 'single') {
-      const currentItems = get().items;
-      currentItems.forEach(item => {
-        blobManager.revoke(item.previewUrl);
-        if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
-      });
-    }
-
-    const newItems: ImageItem[] = [];
+    const { activeTab } = get();
     
     // We'll use a Promise.all to get dimensions for all files
     const loadItems = async () => {
@@ -86,11 +75,13 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
         const loadedItems = await limitConcurrency(files, 5, (file: File) => {
           return new Promise<ImageItem>((resolve) => {
             const img = new Image();
+            const previewUrl = blobManager.create(file);
+            
             img.onload = () => {
               const item: ImageItem = {
                 id: Math.random().toString(36).substring(7),
                 file,
-                previewUrl: blobManager.create(file),
+                previewUrl,
                 status: 'idle',
                 progress: 0,
                 originalSize: file.size,
@@ -100,15 +91,14 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
                 settings: { ...get().globalSettings },
                 dimensions: { width: img.width, height: img.height },
               };
-              URL.revokeObjectURL(img.src);
               resolve(item);
             };
+
             img.onerror = () => {
-               // Fallback for invalid images
-               resolve({
+              resolve({
                 id: Math.random().toString(36).substring(7),
                 file,
-                previewUrl: '',
+                previewUrl,
                 status: 'error',
                 error: 'Invalid image file',
                 progress: 0,
@@ -118,9 +108,10 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
                 compressedBlob: null,
                 settings: { ...get().globalSettings },
                 dimensions: { width: 0, height: 0 },
-               });
+              });
             };
-            img.src = URL.createObjectURL(file);
+
+            img.src = previewUrl;
           });
         });
         
@@ -139,106 +130,50 @@ export const useImageCompressStore = create<ImageCompressState>((set, get) => ({
     set((state) => {
       const item = state.items.find((i) => i.id === id);
       if (item) {
-        blobManager.revoke(item.previewUrl);
+        if (item.previewUrl) blobManager.revoke(item.previewUrl);
         if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
       }
-      return {
-        items: state.items.filter((i) => i.id !== id),
-      };
+      return { items: state.items.filter((i) => i.id !== id) };
     });
   },
 
   clearFiles: () => {
     const { items } = get();
     items.forEach((item) => {
-      blobManager.revoke(item.previewUrl);
+      if (item.previewUrl) blobManager.revoke(item.previewUrl);
       if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
     });
     set({ items: [] });
   },
 
-  updateGlobalSettings: (settings) => {
-    set((state) => {
-      const newGlobal = { ...state.globalSettings, ...settings };
-      // Also update all items that don't have individual overrides (for simplicity, we update all)
-      return {
-        globalSettings: newGlobal,
-        items: state.items.map((item) => ({
-          ...item,
-          settings: { ...item.settings, ...settings },
-        })),
-      };
-    });
-  },
+  updateItemSettings: (id, settings) => set((state) => ({
+    items: state.items.map((item) =>
+      item.id === id ? { ...item, settings: { ...item.settings, ...settings }, status: 'idle', progress: 0 } : item
+    ),
+  })),
 
-  updateItemSettings: (id, settings) => {
-    set((state) => ({
-      items: state.items.map((item) =>
-        item.id === id ? { ...item, settings: { ...item.settings, ...settings } } : item
-      ),
-    }));
-  },
+  updateItemStatus: (id, status, progress = 0) => set((state) => ({
+    items: state.items.map((item) =>
+      item.id === id ? { ...item, status, progress } : item
+    ),
+  })),
 
-  setItemStatus: (id, status, progress = 0) => {
-    set((state) => ({
-      items: state.items.map((item) =>
-        item.id === id ? { ...item, status, progress } : item
-      ),
-    }));
-  },
+  updateItemResult: (id, blob, url) => set((state) => ({
+    items: state.items.map((item) =>
+      item.id === id ? { 
+        ...item, 
+        status: 'completed', 
+        progress: 100, 
+        compressedBlob: blob, 
+        compressedUrl: url, 
+        compressedSize: blob.size 
+      } : item
+    ),
+  })),
 
-  setItemResult: (id, blob, url) => {
-    set((state) => ({
-      items: state.items.map((item) => {
-        if (item.id === id) {
-          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
-          return {
-            ...item,
-            status: 'completed',
-            progress: 100,
-            compressedSize: blob.size,
-            compressedUrl: url,
-            compressedBlob: blob,
-          };
-        }
-        return item;
-      }),
-    }));
-  },
-
-  setItemError: (id, error) => {
-    set((state) => ({
-      items: state.items.map((item) => {
-        if (item.id === id) {
-          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
-          return { ...item, status: 'error', error };
-        }
-        return item;
-      }),
-    }));
-  },
-
-  setIsProcessing: (isProcessing) => set({ isProcessing }),
-
-  setActiveTab: (activeTab) => set({ activeTab }),
-
-  resetItem: (id) => {
-    set((state) => ({
-      items: state.items.map((item) => {
-        if (item.id === id) {
-          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
-          const { error, ...rest } = item;
-          return {
-            ...rest,
-            status: 'idle',
-            progress: 0,
-            compressedSize: null,
-            compressedUrl: null,
-            compressedBlob: null,
-          };
-        }
-        return item;
-      }),
-    }));
-  },
+  updateItemError: (id, error) => set((state) => ({
+    items: state.items.map((item) =>
+      item.id === id ? { ...item, status: 'error', error } : item
+    ),
+  })),
 }));

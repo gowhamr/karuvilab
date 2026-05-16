@@ -702,21 +702,21 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
               {/* Action Area */}
               <div className="flex flex-wrap items-center gap-4">
                 {status === 'idle' || status === 'completed' || status === 'error' ? (
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <button
                       onClick={isSimulated ? runSimulation : startTest}
-                      className="group relative px-10 py-5 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3 text-sm overflow-hidden"
+                      className="group relative px-8 py-5 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3 text-sm overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
                       <Zap className="w-5 h-5 fill-current" />
-                      {status === 'idle' ? (isSimulated ? "Start Simulation" : "Run Diagnostics") : "New Test Sequence"}
+                      {status === 'idle' ? (isSimulated ? "Start Simulation" : "Start") : "New Test"}
                     </button>
                     
                     {status === 'idle' && (
                       <button
                         onClick={() => setIsSimulated(!isSimulated)}
                         className={cn(
-                          "px-6 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all border",
+                          "px-6 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all border whitespace-nowrap",
                           isSimulated 
                             ? "bg-blue/10 border-blue text-blue" 
                             : "bg-surface border-border text-text-4 hover:border-blue/30"
@@ -731,7 +731,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                     onClick={cancelTest}
                     className="px-10 py-5 bg-surface border border-border text-text-2 font-black uppercase tracking-widest rounded-2xl hover:bg-red-500/5 hover:text-red-500 hover:border-red-500/20 active:scale-95 transition-all text-sm"
                   >
-                    Abort Sequence
+                    Stop
                   </button>
                 )}
 
