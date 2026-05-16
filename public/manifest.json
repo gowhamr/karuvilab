@@ -2,11 +2,11 @@
   "name": "KaruviLab",
   "short_name": "KV",
   "description": "KV (KaruviLab) — 100% private, browser-side tools for PDFs, Images, and Developers. Works offline.",
-  "start_url": "/",
+  "start_url": "/?utm_source=pwa",
   "display": "standalone",
   "background_color": "#0F172A",
   "theme_color": "#6366F1",
-  "orientation": "portrait",
+  "orientation": "any",
   "scope": "/",
   "icons": [
     {

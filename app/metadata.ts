@@ -82,5 +82,10 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/icons/icon-180.png",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: siteConfig.fullName,
+  },
   manifest: "/manifest.json",
 };

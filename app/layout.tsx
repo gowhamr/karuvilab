@@ -81,10 +81,10 @@ export default function RootLayout({
               <BottomNav />
             </div>
           </div>
+          <PWARegistration />
         </ClientProviders>
         <Analytics />
         <SpeedInsights />
-        <PWARegistration />
       </body>
     </html>
   );

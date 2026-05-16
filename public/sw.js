@@ -71,6 +71,7 @@ if (workbox) {
   // Critical App Shell Assets for proactive caching
   const APP_SHELL = [
     '/',
+    '/offline',
     '/manifest.json',
     '/favicon.ico',
     '/icons/icon-192.png',
@@ -89,7 +90,7 @@ if (workbox) {
   // Offline Fallback for Navigation
   setCatchHandler(async ({ event }) => {
     if (event.request.mode === 'navigate') {
-      return caches.match('/') || Response.error();
+      return caches.match('/offline') || caches.match('/') || Response.error();
     }
     return Response.error();
   });
