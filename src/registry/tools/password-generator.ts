@@ -1,0 +1,25 @@
+import { ToolEntry } from '../types';
+
+export const password_generator: ToolEntry = {
+  "id": "password-generator",
+  "name": "Password Generator",
+  "desc": "Strong, random passwords",
+  "href": "security-tools/password-generator/",
+  "category": "security",
+  "keywords": [
+    "password",
+    "random",
+    "strong",
+    "generator"
+  ],
+  "popular": true,
+  "difficulty": "beginner",
+  "searchIntent": "transactional",
+  "priority": 0.9,
+  "icon": "",
+  "related": [
+    "hash-generator",
+    "base64"
+  ],
+  "status": "stable"
+};
