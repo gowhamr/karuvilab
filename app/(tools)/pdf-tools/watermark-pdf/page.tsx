@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const WatermarkPdfClient = dynamic(() => import("./WatermarkPdfClient"), {
+const WatermarkPdfClient = dynamic(() => import("@/src/features/watermark-pdf"), {
   loading: () => <ToolSkeleton />,
 });
 

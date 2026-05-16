@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const RegexTesterClient = dynamic(() => import("./RegexTesterClient"), {
+const RegexTesterClient = dynamic(() => import("@/src/features/regex"), {
   loading: () => <ToolSkeleton />,
 });
 

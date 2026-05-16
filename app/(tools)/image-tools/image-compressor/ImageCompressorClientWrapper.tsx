@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const ImageCompressorClient = dynamic(() => import('@/components/tools/image-compressor/ImageCompressor.client'), {
+const ImageCompressorClient = dynamic(() => import('@/src/features/image-compressor/components/ImageCompressor.client'), {
   ssr: false,
   loading: () => (
     <div className="w-full aspect-video bg-surface border border-border rounded-[32px] flex items-center justify-center animate-pulse">

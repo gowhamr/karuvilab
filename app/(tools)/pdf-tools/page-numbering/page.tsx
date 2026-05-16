@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const PageNumberingClient = dynamic(() => import("./PageNumberingClient"), {
+const PageNumberingClient = dynamic(() => import("@/src/features/page-numbering"), {
   loading: () => <ToolSkeleton />,
 });
 

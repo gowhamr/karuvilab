@@ -1,0 +1,21 @@
+import { ToolContent } from '../../registry/types';
+
+export const lumpsumCalculator: ToolContent = {
+  detailedDescription: "Calculate the future value of a one-time investment using the power of compounding. This tool is perfect for seeing how a single deposit grows over several years at a fixed interest rate. It's ideal for planning fixed deposits or one-time mutual fund investments.",
+  howTo: [
+    "Enter the one-time investment amount.",
+    "Enter the expected annual interest/return rate.",
+    "Enter the number of years you plan to stay invested.",
+    "The tool displays the total maturity value and total interest earned."
+  ],
+  faq: [
+    { question: "What formula is used for lumpsum calculations?", answer: "FV = PV × (1 + r)^n, where FV is future value, PV is principal, r is annual interest rate, and n is number of years." },
+    { question: "Is compounding annual?", answer: "Yes, this standard lumpsum calculator assumes annual compounding." }
+  ],
+  useCases: [
+    "Estimating the maturity of a one-time fixed deposit",
+    "Planning for a goal with a single large investment",
+    "Visualizing the impact of long-term compounding"
+  ],
+  alternatives: ["Calculator.net", "Investopedia"]
+};

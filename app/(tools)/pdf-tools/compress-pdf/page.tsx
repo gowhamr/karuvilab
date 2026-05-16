@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const CompressPdfClient = dynamic(() => import("./CompressPdfClient"), {
+const CompressPdfClient = dynamic(() => import("@/src/features/compress-pdf"), {
   loading: () => <ToolSkeleton />,
 });
 

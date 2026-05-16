@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const PdfToWordClient = dynamic(() => import("./PdfToWordClient"), {
+const PdfToWordClient = dynamic(() => import("@/src/features/pdf-to-word"), {
   loading: () => <ToolSkeleton />,
 });
 

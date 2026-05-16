@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const LockUnlockPdfClient = dynamic(() => import("./LockUnlockPdfClient"), {
+const LockUnlockPdfClient = dynamic(() => import("@/src/features/lock-unlock"), {
   loading: () => <ToolSkeleton />,
 });
 

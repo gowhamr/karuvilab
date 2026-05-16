@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const MergePdfClient = dynamic(() => import("./MergePdfClient"), {
+const MergePdfClient = dynamic(() => import("@/src/features/merge-pdf"), {
   loading: () => <ToolSkeleton />,
 });
 

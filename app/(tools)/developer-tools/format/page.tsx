@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const CodeFormatterClient = dynamic(() => import("./CodeFormatterClient"), {
+const CodeFormatterClient = dynamic(() => import("@/src/features/format"), {
   loading: () => <ToolSkeleton />,
 });
 

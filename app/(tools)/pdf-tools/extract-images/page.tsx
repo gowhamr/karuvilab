@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const ExtractImagesClient = dynamic(() => import("./ExtractImagesClient"), {
+const ExtractImagesClient = dynamic(() => import("@/src/features/extract-images"), {
   loading: () => <ToolSkeleton />,
 });
 

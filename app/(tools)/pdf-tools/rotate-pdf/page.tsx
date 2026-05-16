@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const RotatePdfClient = dynamic(() => import("./RotatePdfClient"), {
+const RotatePdfClient = dynamic(() => import("@/src/features/rotate-pdf"), {
   loading: () => <ToolSkeleton />,
 });
 

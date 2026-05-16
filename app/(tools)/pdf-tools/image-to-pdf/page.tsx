@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const ImageToPdfClient = dynamic(() => import("./ImageToPdfClient"), {
+const ImageToPdfClient = dynamic(() => import("@/src/features/image-to-pdf"), {
   loading: () => <ToolSkeleton />,
 });
 

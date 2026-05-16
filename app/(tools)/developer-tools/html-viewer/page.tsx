@@ -2,7 +2,7 @@ import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
 import { generateToolMetadata } from "@/src/lib/seo";
 import dynamic from "next/dynamic";
-const HtmlViewerClient = dynamic(() => import("./HtmlViewerClient"), {
+const HtmlViewerClient = dynamic(() => import("@/src/features/html-viewer"), {
   loading: () => <ToolSkeleton />,
 });
 import { Suspense } from "react";

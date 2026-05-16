@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SplitPdfClient = dynamic(() => import("./SplitPdfClient"), {
+const SplitPdfClient = dynamic(() => import("@/src/features/split-pdf"), {
   loading: () => <ToolSkeleton />,
 });
 
