@@ -17,11 +17,15 @@ export async function sendFeedbackEmail({
 }: FeedbackEmailProps) {
   const { data, error } = await resend.emails.send({
     from: 'KaruviLab Feedback <onboarding@resend.dev>',
-    to: ['support@karuvilab.com'],
+    to: ['gowtham.rg@outlook.com'],
     subject: `[KaruviLab ${category}] New feedback from ${fromEmail}`,
     text: `Message: ${message}\n\nDiagnostic Info: ${diagnosticInfo || 'None'}`,
   });
 
-  if (error) throw new Error('Failed to send feedback');
+  if (error) {
+    console.error('Resend SDK Error:', error);
+    throw new Error(error.message || 'Failed to send email via Resend');
+  }
+  
   return { success: true, data };
 }

@@ -27,9 +27,14 @@ export async function POST(request: NextRequest) {
       { success: true, message: 'Feedback sent successfully' },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Feedback Error:', error);
     return NextResponse.json(
-      { error: 'Internal server error. Please try again later.' },
+      { 
+        error: 'Internal server error', 
+        details: error.message || 'Unknown error',
+        resend_error: error.response?.data || undefined
+      },
       { status: 500 }
     );
   }
