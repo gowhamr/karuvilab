@@ -228,46 +228,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </section>
       )}
 
-      <section className="pt-12 border-t border-border">
-        <div className="flex flex-col md:flex-row justify-between gap-12">
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold tracking-tight">Need help?</h2>
-            <p className="text-sm text-text-3 font-medium leading-relaxed max-w-sm">
-              Encountered an issue or have an idea to make this tool better? We're listening.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-             {[
-               { label: "Report Issue", type: "bug" as const },
-               { label: "Suggest Improvement", type: "feature" as const },
-               { label: "Contact Support", href: "mailto:KaruviLab@proton.me" },
-             ].map((item, i) => {
-               if ('href' in item) {
-                 return (
-                    <a 
-                      key={i}
-                      href={item.href}
-                      className="group flex items-center justify-between p-5 bg-surface border border-border rounded-2xl hover:border-blue/30 transition-all"
-                    >
-                      <span className="text-xs font-bold text-text-2 group-hover:text-blue transition-colors">{item.label}</span>
-                      <ArrowUpRight className="w-4 h-4 text-text-4 group-hover:text-blue group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                    </a>
-                 )
-               }
-               return (
-                 <button 
-                  key={i}
-                  onClick={() => useSupportStore.getState().openFeedback(item.type, { toolId: finalToolId, toolName: title })}
-                  className="group flex items-center justify-between p-5 bg-surface border border-border rounded-2xl hover:border-blue/30 transition-all text-left"
-                 >
-                    <span className="text-xs font-bold text-text-2 group-hover:text-blue transition-colors">{item.label}</span>
-                    <ChevronRight className="w-4 h-4 text-text-4 group-hover:text-blue group-hover:translate-x-0.5 transition-all" />
-                 </button>
-               )
-             })}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
