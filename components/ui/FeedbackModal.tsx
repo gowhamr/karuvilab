@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { m, AnimatePresence } from "framer-motion";
-import { X, Send, AlertCircle, Sparkles, CheckCircle2, Monitor, Info, ChevronDown } from "lucide-react";
+import { X, Send, CircleAlert as AlertCircle, Sparkles, CircleCheckBig as CheckCircle2, Monitor, Info, ChevronDown } from "lucide-react";
 import { useSupportStore, FeedbackType } from "@/src/store/useSupportStore";
 import { getSystemInfo, SystemInfo } from "@/src/lib/support-utils";
 import { cn } from "@/src/lib/utils";

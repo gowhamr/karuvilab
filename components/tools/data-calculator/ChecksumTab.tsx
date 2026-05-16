@@ -5,7 +5,7 @@ import { useDataCalcStore } from "@/src/store/useDataCalcStore";
 import { workerManager } from "@/src/workers/manager";
 import { DropZone } from "@/components/ui/DropZone";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Fingerprint, Loader2, FileText, Type, ShieldCheck, AlertCircle } from "lucide-react";
+import { Fingerprint, LoaderCircle as Loader2, FileText, Type, ShieldCheck, CircleAlert as AlertCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 
 const ALGOS = ["MD5", "SHA-1", "SHA-256", "SHA-512"];

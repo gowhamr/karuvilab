@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useCallback } from "react";
-import { Upload, File, X, AlertCircle } from "lucide-react";
+import { Upload, File, X, CircleAlert as AlertCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 
 interface DropZoneProps {

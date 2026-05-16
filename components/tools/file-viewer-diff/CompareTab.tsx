@@ -7,7 +7,7 @@ import { workerManager } from '@/src/workers/manager';
 import { DropZone } from '@/components/ui/DropZone';
 import { DiffViewer } from './DiffViewer';
 import { DiffLine } from '@/src/workers/types';
-import { Zap, Loader2, ArrowRight, Trash2, Plus, Minus } from 'lucide-react';
+import { Zap, LoaderCircle as Loader2, ArrowRight, Trash2, Plus, Minus } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 
 export function CompareTab() {

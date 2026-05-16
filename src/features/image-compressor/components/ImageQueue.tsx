@@ -1,7 +1,7 @@
 import React from 'react';
 import { useImageCompressStore, ImageItem } from '../hooks/useImageCompressStore';
 import { formatSize, getReduction } from '../utils/image-compression-utils';
-import { X, CheckCircle, AlertCircle, Loader2, Download } from 'lucide-react';
+import { X, CircleCheck, CircleAlert, LoaderCircle, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ImageQueue: React.FC = () => {
@@ -78,13 +78,13 @@ export const ImageQueue: React.FC = () => {
                   )}
                   {item.status === 'completed' && (
                     <div className="flex items-center gap-1 text-green-600 text-[9px] font-black uppercase">
-                      <CheckCircle size={10} />
+                      <CircleCheck size={10} />
                       Completed
                     </div>
                   )}
                   {item.status === 'error' && (
                     <div className="flex items-center gap-1 text-red-500 text-[9px] font-black uppercase">
-                      <AlertCircle size={10} />
+                      <CircleAlert size={10} />
                       Error
                     </div>
                   )}

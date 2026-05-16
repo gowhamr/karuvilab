@@ -4,7 +4,7 @@ import { DropZone } from '@/components/ui/DropZone';
 import { SettingsPanel } from './SettingsPanel';
 import { ComparisonView } from './ComparisonView';
 import { batchCoordinator } from '@/src/workers/batch-coordinator';
-import { Loader2 } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import { blobManager } from '@/src/lib/blob-manager';
 
 export const SingleTab: React.FC = () => {
@@ -81,7 +81,7 @@ export const SingleTab: React.FC = () => {
         >
           {isProcessing ? (
             <>
-              <Loader2 className="animate-spin" size={18} />
+              <LoaderCircle className="animate-spin" size={18} />
               Processing...
             </>
           ) : (

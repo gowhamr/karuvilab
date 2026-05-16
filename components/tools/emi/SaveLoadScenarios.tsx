@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Save, FolderOpen, Trash2, CheckCircle2 } from "lucide-react";
+import { Save, FolderOpen, Trash2, CircleCheckBig as CheckCircle2 } from "lucide-react";
 import { useEmiStore } from "@/src/store/useEmiStore";
 import { formatCurrency } from "@/src/lib/utils";
 

@@ -2,7 +2,7 @@
 
 import { 
   Calculator, FileText, Image as ImageIcon, ShieldCheck, Code, Wrench, Search,
-  CheckCircle2, Lock, Zap, Smartphone, Landmark, TrendingUp, Calendar, 
+  CircleCheckBig as CheckCircle2, Lock, Zap, Smartphone, Landmark, TrendingUp, Calendar, 
   Coins, Tag, Clock, Hash, Percent, Layers, Gauge, Briefcase, FileArchive, 
   Combine, Scissors, FileImage, FileType, Key, Droplet, Hash as HashIcon, 
   RefreshCw, Crop, Users, Wand2, Braces, Table, Terminal, FileCode, GitCompare, 
