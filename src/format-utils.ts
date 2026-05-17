@@ -45,9 +45,9 @@ export async function loadHeic(file: File): Promise<HTMLImageElement> {
   const result = await (window as any).heic2any({ blob: file, toType: 'image/png', quality: 0.95 });
   const pngBlob = Array.isArray(result) ? result[0] : result;
   if (!pngBlob) throw new Error('HEIC conversion failed.');
-  const url = URL.createObjectURL(pngBlob);
+  const url = Utils.createObjectURL(pngBlob);
   const img = await Utils.loadImage(url);
-  URL.revokeObjectURL(url);
+  Utils.revokeObjectURL(url);
   return img;
 }
 

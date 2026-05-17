@@ -219,8 +219,9 @@ const SidebarContent = memo(function SidebarContent({
 
 export function Sidebar() {
   const pathname = usePathname() ?? "";
-  const { isSidebarOpen: isOpen, setIsSidebarOpen: setIsOpen } = useSearchStore();
-  const { favorites: favoriteIds } = useFavoriteStore();
+  const isOpen = useSearchStore(state => state.isSidebarOpen);
+  const setIsOpen = useSearchStore(state => state.setIsSidebarOpen);
+  const favoriteIds = useFavoriteStore(state => state.favorites);
   const [recent, setRecent] = useState<ToolEntry[]>([]);
   const [favorites, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);

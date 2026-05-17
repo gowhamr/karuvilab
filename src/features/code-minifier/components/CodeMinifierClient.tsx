@@ -9,6 +9,7 @@ import { createZip, downloadBlob } from "@/src/lib/zip";
 import { DropZone } from "@/components/ui/DropZone";
 
 const toolId = "code-minifier";
+const EMPTY_ARRAY: any[] = [];
 
 type Lang = "css" | "js" | "html";
 
@@ -16,8 +17,12 @@ export default function CodeMinifierClient() {
   const [lang, setLang] = useState<Lang>("css");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
-  const items = allItems[toolId] || [];
+  const allItems = useBatchStore(state => state.items);
+  const addItems = useBatchStore(state => state.addItems);
+  const startProcessing = useBatchStore(state => state.startProcessing);
+  const updateItem = useBatchStore(state => state.updateItem);
+
+  const items = allItems[toolId] || EMPTY_ARRAY;
 
   const minifySingle = async (item: BatchItem): Promise<any> => {
     const code = await item.file.text();

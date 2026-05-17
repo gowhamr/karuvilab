@@ -66,7 +66,8 @@ export default function JSONCSVConverterClient() {
   const [input, setInput] = useState("");
 
   const { suggestedText } = useWorkflowIntegration(toolId);
-  const { setActiveItems, addToChain } = useWorkflowStore();
+  const setActiveItems = useWorkflowStore(state => state.setActiveItems);
+  const addToChain = useWorkflowStore(state => state.addToChain);
 
   useEffect(() => {
     if (suggestedText) setInput(suggestedText);
@@ -76,22 +77,25 @@ export default function JSONCSVConverterClient() {
     if (!input.trim()) return { output: "", error: "" };
     try {
       const res = tab === "json-csv" ? jsonToCSV(input) : csvToJSON(input);
-      
-      // Update workflow store with output
-      const tool = findToolById(toolId);
-      const outType = tab === "json-csv" ? "csv" : "json";
-      setActiveItems([{
-        text: res,
-        name: `converted-${Date.now()}.${outType}`,
-        type: outType as DataType
-      }]);
-      addToChain(toolId);
-
       return { output: res, error: "" };
     } catch (e) {
       return { output: "", error: (e as Error).message };
     }
-  }, [input, tab, setActiveItems, addToChain]);
+  }, [input, tab]);
+
+  // Update workflow store when output changes
+  useEffect(() => {
+    if (output && !error) {
+      const outType = tab === "json-csv" ? "csv" : "json";
+      setActiveItems([{
+        text: output,
+        name: `converted-${Date.now()}.${outType}`,
+        type: outType as DataType
+      }]);
+      addToChain(toolId);
+    }
+  }, [output, error, tab, setActiveItems, addToChain]);
+
 
   const placeholders = {
     "json-csv": '[{"name":"Alice","age":30},{"name":"Bob","age":25}]',

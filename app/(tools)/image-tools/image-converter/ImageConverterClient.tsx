@@ -26,8 +26,10 @@ export default function ImageConverterClient() {
   const [quality, setQuality] = useState(85);
   const [isProcessing, setIsProcessing] = useAsyncSafeState(false);
 
-  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
-  const items = allItems[toolId] || [];
+  const addItems = useBatchStore(state => state.addItems);
+  const startProcessing = useBatchStore(state => state.startProcessing);
+  const updateItem = useBatchStore(state => state.updateItem);
+  const items = useBatchStore(state => state.items[toolId] || []);
 
   const fmtInfo = FORMATS.find(f => f.value === targetFmt)!;
 

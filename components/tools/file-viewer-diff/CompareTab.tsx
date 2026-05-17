@@ -11,7 +11,10 @@ import { Zap, LoaderCircle as Loader2, ArrowRight, Trash2, Plus, Minus } from 'l
 import { useToast } from '@/components/ui/Toast';
 
 export function CompareTab() {
-  const { fileA, fileB, setFileA, setFileB } = useFileViewerStore();
+  const fileA = useFileViewerStore(state => state.fileA);
+  const fileB = useFileViewerStore(state => state.fileB);
+  const setFileA = useFileViewerStore(state => state.setFileA);
+  const setFileB = useFileViewerStore(state => state.setFileB);
   const { toast } = useToast();
   
   const [diff, setDiff] = useState<DiffLine[] | null>(null);

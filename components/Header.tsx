@@ -12,7 +12,8 @@ import React from "react";
 
 export function Header() {
   const isOnline = useOnlineStatus();
-  const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
+  const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
+  const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
   const { scrollY } = useScroll();
   const { shouldBlur } = usePerformanceSettings();
   

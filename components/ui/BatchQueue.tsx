@@ -45,8 +45,16 @@ function formatBytes(bytes: number, decimals = 2) {
 }
 
 export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isProcessing }: BatchQueueProps) {
-  const { items: allItems, removeItem, clearItems, clearCompletedItems, cancelItem, cancelAll } = useBatchStore();
-  const { setActiveItems, addToChain } = useWorkflowStore();
+  const allItems = useBatchStore(state => state.items);
+  const removeItem = useBatchStore(state => state.removeItem);
+  const clearItems = useBatchStore(state => state.clearItems);
+  const clearCompletedItems = useBatchStore(state => state.clearCompletedItems);
+  const cancelItem = useBatchStore(state => state.cancelItem);
+  const cancelAll = useBatchStore(state => state.cancelAll);
+
+  const setActiveItems = useWorkflowStore(state => state.setActiveItems);
+  const addToChain = useWorkflowStore(state => state.addToChain);
+  
   const items = allItems[toolId] || [];
 
   const stats = useMemo(() => {

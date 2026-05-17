@@ -50,13 +50,13 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 export function downloadBlob(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob);
+  const url = createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
-  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+  setTimeout(() => { document.body.removeChild(a); revokeObjectURL(url); }, 1000);
 }
 
 export function drawResized(img: HTMLImageElement, maxW: number | null, maxH: number | null): HTMLCanvasElement {

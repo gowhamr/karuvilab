@@ -71,7 +71,9 @@ function isBusinessHours(tz: string, now: Date): boolean {
 
 export default function WorldClockClient() {
   const [now, setNow] = useState<Date | null>(null);
-  const { clocks, addClock, removeClock } = useWorldClockStore();
+  const clocks = useWorldClockStore(state => state.clocks);
+  const addClock = useWorldClockStore(state => state.addClock);
+  const removeClock = useWorldClockStore(state => state.removeClock);
   const [search, setSearch] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 

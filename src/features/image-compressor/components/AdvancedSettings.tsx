@@ -8,7 +8,12 @@ import { Lock, Unlock, Monitor, Zap, ShieldCheck } from 'lucide-react';
 import { SliderField } from '@/components/ui/SliderField';
 
 export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ itemId }) => {
-  const { globalSettings, updateGlobalSettings, items, updateItemSettings, ui } = useImageCompressStore();
+  const globalSettings = useImageCompressStore(state => state.globalSettings);
+  const updateGlobalSettings = useImageCompressStore(state => state.updateGlobalSettings);
+  const items = useImageCompressStore(state => state.items);
+  const updateItemSettings = useImageCompressStore(state => state.updateItemSettings);
+  const uiMode = useImageCompressStore(state => state.ui.mode);
+
   const [supportedFormats, setSupportedFormats] = React.useState<string[]>(['image/jpeg', 'image/png']);
 
   const settings = itemId 
@@ -19,13 +24,13 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
     getSupportedFormats().then(setSupportedFormats);
   }, []);
 
-  const update = (patch: Partial<typeof globalSettings>) => {
+  const update = React.useCallback((patch: Partial<typeof globalSettings>) => {
     if (itemId) {
       updateItemSettings(itemId, patch);
     } else {
       updateGlobalSettings(patch);
     }
-  };
+  }, [itemId, updateItemSettings, updateGlobalSettings]);
 
   const presets = [
     { label: 'Balanced', quality: 80, lossless: false, icon: <Monitor size={14} /> },
@@ -33,7 +38,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
     { label: 'Lossless', quality: 100, lossless: true, icon: <ShieldCheck size={14} /> },
   ];
 
-  if (ui.mode === 'simple' && !itemId) return null;
+  if (uiMode === 'simple' && !itemId) return null;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">

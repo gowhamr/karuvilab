@@ -7,7 +7,10 @@ import { useEmiStore } from "@/src/store/useEmiStore";
 import { formatCurrency } from "@/src/lib/utils";
 
 export function PrepaymentSection({ savings }: { savings?: { interest: number; months: number } | undefined }) {
-  const { inputs, setInputs, showPrepayment, toggleSection } = useEmiStore();
+  const inputs = useEmiStore(state => state.inputs);
+  const setInputs = useEmiStore(state => state.setInputs);
+  const showPrepayment = useEmiStore(state => state.showPrepayment);
+  const toggleSection = useEmiStore(state => state.toggleSection);
 
   return (
     <div className="bg-surface border border-border rounded-2xl p-6">

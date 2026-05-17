@@ -18,8 +18,10 @@ export default function BulkImageResizerClient() {
   const [lockRatio, setLockRatio] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
-  const items = allItems[toolId] || [];
+  const addItems = useBatchStore(state => state.addItems);
+  const startProcessing = useBatchStore(state => state.startProcessing);
+  const updateItem = useBatchStore(state => state.updateItem);
+  const items = useBatchStore(state => state.items[toolId] || []);
 
   const resizeSingle = async (item: BatchItem): Promise<any> => {
     // We need to get original dimensions first

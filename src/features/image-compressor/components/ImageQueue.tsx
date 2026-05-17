@@ -7,7 +7,9 @@ import { X, CheckCircle2, AlertCircle, Download, RefreshCw } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ImageQueue: React.FC = () => {
-  const { items, removeFile, compressItem } = useImageCompressStore();
+  const items = useImageCompressStore(state => state.items);
+  const removeFile = useImageCompressStore(state => state.removeFile);
+  const compressItem = useImageCompressStore(state => state.compressItem);
 
   if (items.length === 0) return null;
 

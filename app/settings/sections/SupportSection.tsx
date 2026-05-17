@@ -8,7 +8,7 @@ import {
 import { useSupportStore } from "@/src/store/useSupportStore";
 
 export function SupportSection() {
-  const { openFeedback } = useSupportStore();
+  const openFeedback = useSupportStore(state => state.openFeedback);
 
   const links = [
     { 

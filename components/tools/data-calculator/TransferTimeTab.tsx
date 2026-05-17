@@ -9,7 +9,10 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { Clock, Wifi, FileText, Settings2 } from "lucide-react";
 
 export function TransferTimeTab() {
-  const { bandwidthUnit, setBandwidthUnit, overhead, setOverhead } = useDataCalcStore();
+  const bandwidthUnit = useDataCalcStore(state => state.bandwidthUnit);
+  const setBandwidthUnit = useDataCalcStore(state => state.setBandwidthUnit);
+  const overhead = useDataCalcStore(state => state.overhead);
+  const setOverhead = useDataCalcStore(state => state.setOverhead);
   
   const [fileSize, setFileSize] = useState("1");
   const [fileUnit, setFileUnit] = useState("GB");

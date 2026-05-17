@@ -17,7 +17,8 @@ const TABS = [
 ];
 
 export default function FileViewerDiffClient() {
-  const { activeTab, setActiveTab } = useFileViewerStore();
+  const activeTab = useFileViewerStore(state => state.activeTab);
+  const setActiveTab = useFileViewerStore(state => state.setActiveTab);
 
   const ActiveComponent = TABS.find(t => t.id === activeTab)?.component || ViewEditTab;
 

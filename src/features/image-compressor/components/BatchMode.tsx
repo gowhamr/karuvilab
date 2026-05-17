@@ -9,15 +9,23 @@ import { Loader2, Download, Trash2, Zap, AlertTriangle } from 'lucide-react';
 import { getDeviceCapabilities, isLargeBatch } from '@/src/utils';
 
 export const BatchMode: React.FC = () => {
-  const { items, addFiles, clearFiles, compressAll, downloadBatch, isProcessing, zipProgress } = useImageCompressStore();
+  const items = useImageCompressStore(state => state.items);
+  const addFiles = useImageCompressStore(state => state.addFiles);
+  const clearFiles = useImageCompressStore(state => state.clearFiles);
+  const compressAll = useImageCompressStore(state => state.compressAll);
+  const downloadBatch = useImageCompressStore(state => state.downloadBatch);
+  const isProcessing = useImageCompressStore(state => state.isProcessing);
+  const zipProgress = useImageCompressStore(state => state.zipProgress);
 
-  const handleFiles = (files: File[] | FileList) => {
+  const handleFiles = React.useCallback((files: File[] | FileList) => {
     const fileArray = files instanceof FileList ? Array.from(files) : files;
     addFiles(fileArray);
-  };
+  }, [addFiles]);
 
   const { isMobile } = getDeviceCapabilities();
-  const showLargeBatchWarning = isMobile && isLargeBatch(items.map(i => i.file), 50);
+  const showLargeBatchWarning = React.useMemo(() => 
+    isMobile && isLargeBatch(items.map(i => i.file), 50)
+  , [isMobile, items]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

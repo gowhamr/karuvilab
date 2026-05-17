@@ -9,12 +9,12 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
   const [sliderPos, setSliderPos] = React.useState(50);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleMove = (clientX: number) => {
+  const handleMove = React.useCallback((clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     setSliderPos((x / rect.width) * 100);
-  };
+  }, []);
 
   const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
   const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0]!.clientX);

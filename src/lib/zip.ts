@@ -1,4 +1,5 @@
 import { workerManager } from '../workers/manager';
+import { createObjectURL, revokeObjectURL } from '../utils';
 
 /**
  * Creates a ZIP file from a collection of Blobs using a Web Worker.
@@ -20,10 +21,10 @@ export async function createZip(files: Record<string, Blob>): Promise<Blob> {
  * Downloads a Blob as a file.
  */
 export function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
+  const url = createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 100);
+  setTimeout(() => revokeObjectURL(url), 100);
 }

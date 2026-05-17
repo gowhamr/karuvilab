@@ -12,7 +12,11 @@ import { useObjectUrlManager } from '@/src/lib/hooks';
 import { SliderField } from '@/components/ui/SliderField';
 
 export function ViewEditTab() {
-  const { fileA, setFileA, updateFileAContent, settings, updateSettings } = useFileViewerStore();
+  const fileA = useFileViewerStore(state => state.fileA);
+  const setFileA = useFileViewerStore(state => state.setFileA);
+  const updateFileAContent = useFileViewerStore(state => state.updateFileAContent);
+  const settings = useFileViewerStore(state => state.settings);
+  const updateSettings = useFileViewerStore(state => state.updateSettings);
   const { toast } = useToast();
   const { createUrl, revokeUrl } = useObjectUrlManager();
 

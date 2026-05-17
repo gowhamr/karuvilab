@@ -21,7 +21,7 @@ import { Calculator, TrendingDown, Receipt, Calendar, Info } from "lucide-react"
 const cat = CATEGORIES.find(c => c.id === "calculators")!;
 
 export default function EMICalculatorClient() {
-  const { inputs } = useEmiStore();
+  const inputs = useEmiStore(state => state.inputs);
   const [result, setResult] = useState<EmiResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 

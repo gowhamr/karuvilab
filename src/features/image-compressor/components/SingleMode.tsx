@@ -8,18 +8,22 @@ import { ComparisonView } from './ComparisonView';
 import { Loader2, AlertCircle, RefreshCw, Zap } from 'lucide-react';
 
 export const SingleMode: React.FC = () => {
-  const state = useImageCompressStore();
-  const { items, addFiles, compressItem } = state;
-  const activeItem = items && items.length > 0 ? items[0] : undefined;
+  const items = useImageCompressStore(state => state.items);
+  const addFiles = useImageCompressStore(state => state.addFiles);
+  const compressItem = useImageCompressStore(state => state.compressItem);
 
-  const handleFiles = (files: File[] | FileList) => {
+  const activeItem = React.useMemo(() => 
+    items && items.length > 0 ? items[0] : undefined
+  , [items]);
+
+  const handleFiles = React.useCallback((files: File[] | FileList) => {
     try {
       const fileArray = files instanceof FileList ? Array.from(files) : files;
       if (addFiles) addFiles(fileArray);
     } catch (err) {
       console.error("Failed to add files:", err);
     }
-  };
+  }, [addFiles]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

@@ -8,7 +8,13 @@ import { ArrowUpDown, History as HistoryIcon, Trash2 } from "lucide-react";
 import { formatCurrency } from "@/src/lib/utils";
 
 export function UnitConverterTab() {
-  const { fromUnit, toUnit, setFromUnit, setToUnit, history, addToHistory, clearHistory } = useDataCalcStore();
+  const fromUnit = useDataCalcStore(state => state.fromUnit);
+  const toUnit = useDataCalcStore(state => state.toUnit);
+  const setFromUnit = useDataCalcStore(state => state.setFromUnit);
+  const setToUnit = useDataCalcStore(state => state.setToUnit);
+  const history = useDataCalcStore(state => state.history);
+  const addToHistory = useDataCalcStore(state => state.addToHistory);
+  const clearHistory = useDataCalcStore(state => state.clearHistory);
   const [value, setValue] = useState("1");
   
   const result = useMemo(() => {

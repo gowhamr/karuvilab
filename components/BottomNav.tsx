@@ -14,7 +14,8 @@ const NAV_ITEMS = [
 
 export function BottomNav() {
   const pathname = usePathname();
-  const { setIsPaletteOpen, setIsSidebarOpen } = useSearchStore();
+  const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
+  const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface border-t border-border rounded-t-[24px] h-16 sm:h-[72px] px-6 shadow-sm pb-[env(safe-area-inset-bottom)]">

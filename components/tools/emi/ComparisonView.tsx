@@ -8,7 +8,10 @@ import { formatCurrency } from "@/src/lib/utils";
 import { cn } from "@/src/lib/utils";
 
 export function ComparisonView() {
-  const { comparisonList, removeFromComparison, addToComparison, clearComparison } = useEmiStore();
+  const comparisonList = useEmiStore(state => state.comparisonList);
+  const removeFromComparison = useEmiStore(state => state.removeFromComparison);
+  const addToComparison = useEmiStore(state => state.addToComparison);
+  const clearComparison = useEmiStore(state => state.clearComparison);
 
   const comparisonData = useMemo(() => {
     return comparisonList.map(item => {

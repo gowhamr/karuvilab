@@ -10,7 +10,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { usePerformanceSettings } from "@/src/lib/hooks";
 
 export function CommandPalette() {
-  const { isPaletteOpen, setIsPaletteOpen } = useSearchStore();
+  const isPaletteOpen = useSearchStore(state => state.isPaletteOpen);
+  const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
   const { shouldBlur } = usePerformanceSettings();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);

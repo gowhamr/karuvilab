@@ -7,13 +7,18 @@ import { BatchQueue } from "@/components/ui/BatchQueue";
 import { DropZone } from "@/components/ui/DropZone";
 
 const toolId = "compress-pdf";
+const EMPTY_ARRAY: any[] = [];
 
 export default function CompressPdfClient() {
   const { createUrl } = useObjectUrlManager();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
-  const items = allItems[toolId] || [];
+  const allItems = useBatchStore(state => state.items);
+  const addItems = useBatchStore(state => state.addItems);
+  const startProcessing = useBatchStore(state => state.startProcessing);
+  const updateItem = useBatchStore(state => state.updateItem);
+  
+  const items = allItems[toolId] || EMPTY_ARRAY;
 
   const compressSingle = async (item: BatchItem): Promise<any> => {
     try {

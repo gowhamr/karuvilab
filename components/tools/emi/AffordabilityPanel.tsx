@@ -8,7 +8,10 @@ import { checkAffordability } from "@/src/lib/emi-calculations";
 import { cn } from "@/src/lib/utils";
 
 export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
-  const { affordability, setAffordability, showAffordability, toggleSection } = useEmiStore();
+  const affordability = useEmiStore(state => state.affordability);
+  const setAffordability = useEmiStore(state => state.setAffordability);
+  const showAffordability = useEmiStore(state => state.showAffordability);
+  const toggleSection = useEmiStore(state => state.toggleSection);
 
   const result = useMemo(() => 
     checkAffordability(currentEmi, affordability), 

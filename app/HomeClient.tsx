@@ -81,8 +81,12 @@ import { usePerformanceSettings } from "@/src/lib/hooks";
 // ── Page Component ───────────────────────────────────────────────────────────
 
 export default function HomeClient() {
-  const { searchQuery, setSearchQuery, activeCategory, setActiveCategory } = useSearchStore();
-  const { favorites: favoriteIds } = useFavoriteStore();
+  const searchQuery = useSearchStore(state => state.searchQuery);
+  const setSearchQuery = useSearchStore(state => state.setSearchQuery);
+  const activeCategory = useSearchStore(state => state.activeCategory);
+  const setActiveCategory = useSearchStore(state => state.setActiveCategory);
+  
+  const favoriteIds = useFavoriteStore(state => state.favorites);
   const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
   const [favoriteTools, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);

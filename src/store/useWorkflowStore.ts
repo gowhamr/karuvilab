@@ -21,6 +21,8 @@ interface WorkflowState {
   getSuggestions: () => ToolEntry[];
 }
 
+const EMPTY_SUGGESTIONS: ToolEntry[] = [];
+
 export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   chain: [],
   activeItems: [],
@@ -43,7 +45,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
 
   getSuggestions: () => {
     const { chain, activeItems } = get();
-    if (chain.length === 0 && activeItems.length === 0) return [];
+    if (chain.length === 0 && activeItems.length === 0) return EMPTY_SUGGESTIONS;
 
     const lastToolId = chain[chain.length - 1];
     const lastTool = lastToolId ? findToolById(lastToolId) : null;
@@ -57,15 +59,17 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       outputTypes = Array.from(new Set(activeItems.map(i => i.type)));
     }
 
-    if (outputTypes.length === 0) return [];
+    if (outputTypes.length === 0) return EMPTY_SUGGESTIONS;
 
     // Find tools that accept these output types as input
-    return ALL_TOOLS.filter(tool => {
+    const suggestions = ALL_TOOLS.filter(tool => {
       if (tool.id === lastToolId) return false; // Don't suggest the same tool
       if (!tool.input) return false;
       
       const inputTypes = Array.isArray(tool.input) ? tool.input : [tool.input];
       return outputTypes.some(ot => inputTypes.includes(ot) || inputTypes.includes('any-file'));
     }).slice(0, 4); // Limit to 4 suggestions
+
+    return suggestions.length === 0 ? EMPTY_SUGGESTIONS : suggestions;
   },
 }));

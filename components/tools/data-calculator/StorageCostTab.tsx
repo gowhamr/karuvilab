@@ -10,7 +10,11 @@ import { HardDrive, DollarSign, Calendar, Info } from "lucide-react";
 import { formatCurrency } from "@/src/lib/utils";
 
 export function StorageCostTab() {
-  const { costPerGB, setCostPerGB, durationMonths, setDurationMonths, provider } = useDataCalcStore();
+  const costPerGB = useDataCalcStore(state => state.costPerGB);
+  const setCostPerGB = useDataCalcStore(state => state.setCostPerGB);
+  const durationMonths = useDataCalcStore(state => state.durationMonths);
+  const setDurationMonths = useDataCalcStore(state => state.setDurationMonths);
+  const provider = useDataCalcStore(state => state.provider);
   
   const [dataSize, setDataSize] = useState("1");
   const [dataUnit, setDataUnit] = useState("TB");

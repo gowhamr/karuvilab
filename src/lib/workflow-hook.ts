@@ -5,10 +5,15 @@ import { useWorkflowStore } from '../store/useWorkflowStore';
 import { useBatchStore } from '../store/useBatchStore';
 import { findToolById, DataType } from '../tool-registry';
 
+const EMPTY_ARRAY: any[] = [];
+
 export function useWorkflowIntegration(toolId: string) {
-  const { activeItems, clearWorkflow } = useWorkflowStore();
-  const { addItems, items } = useBatchStore();
+  const activeItems = useWorkflowStore(state => state.activeItems);
+  const addItems = useBatchStore(state => state.addItems);
+  const currentItems = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
+  
   const [suggestedText, setSuggestedText] = useState<string | null>(null);
+
   const loadedRef = useRef(false);
 
   useEffect(() => {
@@ -26,9 +31,11 @@ export function useWorkflowIntegration(toolId: string) {
     );
 
     if (compatibleFiles.length > 0) {
-      const currentFiles = items[toolId] || [];
       const alreadyLoaded = compatibleFiles.every(ci => 
-        currentFiles.some(cf => cf.file.name === ci.name && cf.file.size === ci.blob?.size)
+        currentItems.some(cf => 
+          cf.file.name === ci.name && 
+          Math.abs(cf.file.size - (ci.blob?.size || 0)) < 2 // Allow 1-2 byte difference just in case
+        )
       );
 
       if (!alreadyLoaded) {
@@ -50,7 +57,8 @@ export function useWorkflowIntegration(toolId: string) {
       setSuggestedText(compatibleText.text!);
       loadedRef.current = true;
     }
-  }, [toolId, activeItems, addItems, items]);
+  }, [toolId, activeItems, addItems, currentItems]);
 
   return { activeItems, suggestedText };
 }
+

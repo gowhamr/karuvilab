@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js';
+import { createObjectURL, revokeObjectURL } from '../utils';
 
 export { Decimal };
 export const d = (n: number | string | Decimal) => new Decimal(n);
@@ -55,7 +56,7 @@ export function exportToCSV(filename: string, headers: string[], rows: any[][]) 
   ].join('\n');
   
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
+  const url = createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);
   link.setAttribute("download", filename);
@@ -63,5 +64,5 @@ export function exportToCSV(filename: string, headers: string[], rows: any[][]) 
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  setTimeout(() => revokeObjectURL(url), 1000);
 }
