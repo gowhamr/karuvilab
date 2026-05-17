@@ -417,6 +417,16 @@ const api: WorkerAPI = {
     return result;
   },
 
+  async createZip(files, onProgress) {
+    const fflate = await import("fflate");
+    return new Promise((resolve, reject) => {
+      fflate.zip(files, (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
+    });
+  },
+
   // EMI Tasks
   async calculateEmiSchedule(inputs) {
     const { generateSchedule } = await import("../lib/emi-calculations");

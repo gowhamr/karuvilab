@@ -76,6 +76,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(sliderPos)}
+        aria-valuetext={`${Math.round(sliderPos)}% original visible`}
         onKeyDown={onKeyDown}
         className="relative aspect-video bg-bg border border-border rounded-[32px] overflow-hidden cursor-col-resize select-none outline-none focus:ring-4 focus:ring-blue/20 transition-all"
         onMouseMove={onMouseMove}

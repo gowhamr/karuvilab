@@ -1,9 +1,8 @@
-import * as fflate from 'fflate';
+import { workerManager } from '../workers/manager';
 
 /**
- * Creates a ZIP file from a collection of Blobs.
- * @param files A record where keys are filenames and values are Blobs.
- * @returns A Blob representing the ZIP file.
+ * Creates a ZIP file from a collection of Blobs using a Web Worker.
+ * (IMG-RUNTIME-007) Non-blocking ZIP generation for large batches.
  */
 export async function createZip(files: Record<string, Blob>): Promise<Blob> {
   const zipData: Record<string, Uint8Array> = {};
@@ -13,15 +12,8 @@ export async function createZip(files: Record<string, Blob>): Promise<Blob> {
     zipData[name] = new Uint8Array(buffer);
   }
 
-  return new Promise((resolve, reject) => {
-    fflate.zip(zipData, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(new Blob([data as any], { type: 'application/zip' }));
-      }
-    });
-  });
+  const result = await workerManager.runZip(zipData);
+  return new Blob([result as any], { type: 'application/zip' });
 }
 
 /**

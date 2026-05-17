@@ -110,6 +110,14 @@ class WorkerManager {
     return workerOrchestrator.run("computeDiff", [textA, textB], undefined, onProgress, abortSignal);
   }
 
+  async runZip(
+    files: Record<string, Uint8Array>,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("createZip", [files], undefined, onProgress, abortSignal);
+  }
+
   terminateAll() {
     workerOrchestrator.terminateAll();
   }

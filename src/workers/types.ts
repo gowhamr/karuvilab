@@ -117,6 +117,11 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<DiffLine[]>;
 
+  createZip(
+    files: Record<string, Uint8Array>,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   // EMI Tasks
   calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult>;
 }
