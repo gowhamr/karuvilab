@@ -94,6 +94,14 @@ class WorkerOrchestrator {
     workerEntry.busy = true;
     workerEntry.lastHeard = Date.now();
 
+    const onAbort = (reason = "Task aborted") => {
+      if (timeoutId) clearTimeout(timeoutId);
+      workerEntry.worker.terminate();
+      this.handleWorkerCrash(workerEntry.worker);
+      task.reject(new Error(reason));
+      this.processQueue();
+    };
+
     if (task.abortSignal?.aborted) {
       workerEntry.busy = false;
       task.reject(new Error("Task cancelled"));
@@ -107,14 +115,6 @@ class WorkerOrchestrator {
       console.error(`[WorkerOrchestrator] Task ${task.method} timed out after ${timeoutDuration}ms`);
       onAbort("Task timed out");
     }, timeoutDuration);
-
-    const onAbort = (reason = "Task aborted") => {
-      clearTimeout(timeoutId);
-      workerEntry.worker.terminate();
-      this.handleWorkerCrash(workerEntry.worker);
-      task.reject(new Error(reason));
-      this.processQueue();
-    };
 
     const abortHandler = () => onAbort("Task cancelled");
     task.abortSignal?.addEventListener('abort', abortHandler);
@@ -132,10 +132,16 @@ class WorkerOrchestrator {
       }
 
       const result = await (workerEntry.api[task.method] as any)(...args, progressProxy);
-      clearTimeout(timeoutId);
+      
+      if (progressProxy) {
+        (progressProxy as any)[Comlink.releaseProxy]();
+      }
+      
+      if (timeoutId) clearTimeout(timeoutId);
       task.resolve(result);
     } catch (err) {
-      clearTimeout(timeoutId);
+      if (timeoutId) clearTimeout(timeoutId);
+      console.error(`[WorkerOrchestrator] Task ${task.method} failed:`, err);
       if (!task.abortSignal?.aborted) {
         task.reject(err);
       }

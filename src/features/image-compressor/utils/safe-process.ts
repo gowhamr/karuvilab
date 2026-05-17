@@ -42,7 +42,10 @@ export async function safeImageProcess<T>(
         message = "The image is too large to process on this device.";
       } else if (err.message.includes("format") || err.message.includes("MIME")) {
         code = "INVALID_FORMAT";
-        message = "The image format is invalid or corrupted.";
+        message = "The image format is invalid or unsupported in this browser.";
+      } else if (err.message.includes("OffscreenCanvas")) {
+        code = "UNSUPPORTED_BROWSER";
+        message = "Your browser does not support high-performance image processing in workers.";
       } else {
         code = "RUNTIME_EXCEPTION";
         message = err.message;

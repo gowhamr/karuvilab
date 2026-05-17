@@ -193,7 +193,8 @@ const api: WorkerAPI = {
       if (!compressedBlob) throw new Error("Canvas export failed: Blob is null");
 
       const result = await compressedBlob.arrayBuffer();
-      return Comlink.transfer(new Uint8Array(result), [result]);
+      const bytes = new Uint8Array(result);
+      return Comlink.transfer(bytes, [bytes.buffer]);
     } catch (err: any) {
       throw new Error(`Compression failed: ${err.message || 'Unknown error'}`);
     } finally {
@@ -226,7 +227,8 @@ const api: WorkerAPI = {
       if (!compressedBlob) throw new Error("Canvas export failed");
 
       const result = await compressedBlob.arrayBuffer();
-      return Comlink.transfer(new Uint8Array(result), [result]);
+      const bytes = new Uint8Array(result);
+      return Comlink.transfer(bytes, [bytes.buffer]);
     } catch (err: any) {
       throw new Error(`Resize failed: ${err.message || 'Unknown error'}`);
     } finally {
@@ -276,7 +278,8 @@ const api: WorkerAPI = {
       if (!resultBlob) throw new Error("Canvas export failed");
 
       const result = await resultBlob.arrayBuffer();
-      return Comlink.transfer(new Uint8Array(result), [result]);
+      const bytes = new Uint8Array(result);
+      return Comlink.transfer(bytes, [bytes.buffer]);
     } catch (err: any) {
       throw new Error(`Background removal failed: ${err.message || 'Unknown error'}`);
     } finally {
@@ -344,10 +347,12 @@ const api: WorkerAPI = {
       if (!compressedBlob) throw new Error("Canvas export failed: Resulting blob is null");
 
       const result = await compressedBlob.arrayBuffer();
+      const bytes = new Uint8Array(result);
       
       if (onProgress) onProgress({ percent: 100, message: "Done!" });
-      return Comlink.transfer(new Uint8Array(result), [result]);
+      return Comlink.transfer(bytes, [bytes.buffer]);
     } catch (err: any) {
+      console.error("[Worker] Compression task failed:", err);
       throw new Error(`Compression failed: ${err.message || 'Unknown error'}`);
     } finally {
       if (imgBitmap) imgBitmap.close();
