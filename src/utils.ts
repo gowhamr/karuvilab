@@ -151,6 +151,36 @@ export function debounce<T extends (...args: unknown[]) => void>(func: T, wait: 
   };
 }
 
+export interface DeviceCapabilities {
+  isMobile: boolean;
+  isLowMemory: boolean;
+  concurrency: number;
+  offscreenCanvas: boolean;
+}
+
+export function getDeviceCapabilities(): DeviceCapabilities {
+  if (typeof window === 'undefined') {
+    return { isMobile: false, isLowMemory: false, concurrency: 4, offscreenCanvas: false };
+  }
+  
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const cores = navigator.hardwareConcurrency || 4;
+  const memory = (navigator as any).deviceMemory || 8;
+  const isLowMemory = memory < 4 || cores < 4;
+  
+  return {
+    isMobile,
+    isLowMemory,
+    concurrency: isLowMemory ? (isMobile ? 1 : 2) : (isMobile ? 2 : Math.min(cores, 4)),
+    offscreenCanvas: typeof OffscreenCanvas !== 'undefined',
+  };
+}
+
+export function isLargeBatch(files: File[], thresholdMB: number = 50): boolean {
+  const totalSize = files.reduce((acc, f) => acc + f.size, 0);
+  return totalSize > thresholdMB * 1024 * 1024;
+}
+
 // ── Blob URL registry – tracks all object URLs so they can be revoked ──
 const _blobUrls: string[] = [];
 

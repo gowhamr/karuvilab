@@ -172,31 +172,116 @@ const api: WorkerAPI = {
 
   // Image Tasks (Standard)
   async compressImage(file: ArrayBuffer, format, quality, onProgress) {
-    const blob = new Blob([file]);
-    const imgBitmap = await createImageBitmap(blob);
-    const canvas = new OffscreenCanvas(imgBitmap.width, imgBitmap.height);
-    const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(imgBitmap, 0, 0);
-    const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
-    const result = await compressedBlob.arrayBuffer();
-    imgBitmap.close();
-    canvas.width = 0; canvas.height = 0;
-    return new Uint8Array(result);
+    let imgBitmap: ImageBitmap | null = null;
+    try {
+      const blob = new Blob([file]);
+      imgBitmap = await createImageBitmap(blob);
+      
+      const width = Math.max(1, imgBitmap.width);
+      const height = Math.max(1, imgBitmap.height);
+
+      if (typeof OffscreenCanvas === 'undefined') {
+        throw new Error("OffscreenCanvas not supported in this browser. Please use a modern browser.");
+      }
+
+      const canvas = new OffscreenCanvas(width, height);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Could not get 2D context from OffscreenCanvas");
+
+      ctx.drawImage(imgBitmap, 0, 0);
+      const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
+      if (!compressedBlob) throw new Error("Canvas export failed: Blob is null");
+
+      const result = await compressedBlob.arrayBuffer();
+      return Comlink.transfer(new Uint8Array(result), [result]);
+    } catch (err: any) {
+      throw new Error(`Compression failed: ${err.message || 'Unknown error'}`);
+    } finally {
+      if (imgBitmap) imgBitmap.close();
+    }
   },
 
   async resizeImage(file, width, height, format, quality, onProgress) {
-    const blob = new Blob([file]);
-    const imgBitmap = await createImageBitmap(blob);
-    const canvas = new OffscreenCanvas(width, height);
-    const ctx = canvas.getContext("2d")!;
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(imgBitmap, 0, 0, width, height);
-    const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
-    const result = await compressedBlob.arrayBuffer();
-    imgBitmap.close();
-    canvas.width = 0; canvas.height = 0;
-    return new Uint8Array(result);
+    let imgBitmap: ImageBitmap | null = null;
+    try {
+      const blob = new Blob([file]);
+      imgBitmap = await createImageBitmap(blob);
+      
+      const targetW = Math.max(1, Math.floor(width));
+      const targetH = Math.max(1, Math.floor(height));
+
+      if (typeof OffscreenCanvas === 'undefined') {
+        throw new Error("OffscreenCanvas not supported in this browser.");
+      }
+
+      const canvas = new OffscreenCanvas(targetW, targetH);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Could not get 2D context");
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(imgBitmap, 0, 0, targetW, targetH);
+      
+      const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
+      if (!compressedBlob) throw new Error("Canvas export failed");
+
+      const result = await compressedBlob.arrayBuffer();
+      return Comlink.transfer(new Uint8Array(result), [result]);
+    } catch (err: any) {
+      throw new Error(`Resize failed: ${err.message || 'Unknown error'}`);
+    } finally {
+      if (imgBitmap) imgBitmap.close();
+    }
+  },
+
+  async removeBackground(file, bgColor, tolerance, onProgress) {
+    let imgBitmap: ImageBitmap | null = null;
+    try {
+      const blob = new Blob([file]);
+      imgBitmap = await createImageBitmap(blob);
+      const width = imgBitmap.width;
+      const height = imgBitmap.height;
+
+      if (typeof OffscreenCanvas === 'undefined') {
+        throw new Error("OffscreenCanvas not supported");
+      }
+
+      const canvas = new OffscreenCanvas(width, height);
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) throw new Error("Could not get 2D context");
+
+      ctx.drawImage(imgBitmap, 0, 0);
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const data = imageData.data;
+
+      // Color matching logic
+      const r_target = parseInt(bgColor.slice(1, 3), 16);
+      const g_target = parseInt(bgColor.slice(3, 5), 16);
+      const b_target = parseInt(bgColor.slice(5, 7), 16);
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i]!, g = data[i + 1]!, b = data[i + 2]!;
+        const diff = Math.sqrt((r - r_target) ** 2 + (g - g_target) ** 2 + (b - b_target) ** 2);
+        
+        if (diff <= tolerance) {
+          data[i + 3] = 0;
+        } else if (diff <= tolerance * 1.5) {
+          const alpha = Math.round(((diff - tolerance) / (tolerance * 0.5)) * 255);
+          data[i + 3] = Math.min(data[i + 3]!, alpha);
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      const resultBlob = await canvas.convertToBlob({ type: 'image/png' });
+      if (!resultBlob) throw new Error("Canvas export failed");
+
+      const result = await resultBlob.arrayBuffer();
+      return Comlink.transfer(new Uint8Array(result), [result]);
+    } catch (err: any) {
+      throw new Error(`Background removal failed: ${err.message || 'Unknown error'}`);
+    } finally {
+      if (imgBitmap) imgBitmap.close();
+    }
   },
 
   // Image Tasks (Batch specialized)
@@ -205,7 +290,13 @@ const api: WorkerAPI = {
     try {
       if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
       const blob = new Blob([file]);
-      imgBitmap = await createImageBitmap(blob);
+      
+      // Wrap createImageBitmap in try/catch (IMG-RUNTIME-005)
+      try {
+        imgBitmap = await createImageBitmap(blob);
+      } catch (e) {
+        throw new Error("Failed to decode image. The file might be corrupted or in an unsupported format.");
+      }
       
       let { width, height } = imgBitmap;
       
@@ -221,12 +312,18 @@ const api: WorkerAPI = {
         }
       }
 
-      // Ensure dimensions are valid positive integers
+      // Ensure dimensions are valid positive integers (IMG-RUNTIME-005)
       width = Math.max(1, Math.floor(width));
       height = Math.max(1, Math.floor(height));
 
+      if (typeof OffscreenCanvas === 'undefined') {
+        throw new Error("OffscreenCanvas not supported");
+      }
+
       const canvas = new OffscreenCanvas(width, height);
-      const ctx = canvas.getContext("2d")!;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Could not get 2D context");
+
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
       
@@ -244,10 +341,12 @@ const api: WorkerAPI = {
       if (settings.lossless && settings.format === 'image/png') options.quality = 1.0;
 
       const compressedBlob = await canvas.convertToBlob(options);
+      if (!compressedBlob) throw new Error("Canvas export failed: Resulting blob is null");
+
       const result = await compressedBlob.arrayBuffer();
       
       if (onProgress) onProgress({ percent: 100, message: "Done!" });
-      return new Uint8Array(result);
+      return Comlink.transfer(new Uint8Array(result), [result]);
     } catch (err: any) {
       throw new Error(`Compression failed: ${err.message || 'Unknown error'}`);
     } finally {

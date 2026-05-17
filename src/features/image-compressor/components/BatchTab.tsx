@@ -7,6 +7,9 @@ import { batchCoordinator } from '@/src/workers/batch-coordinator';
 import { createZip, downloadBlob } from '@/src/lib/zip';
 import { LoaderCircle, Download, Trash2, Zap } from 'lucide-react';
 import { blobManager } from '@/src/lib/blob-manager';
+import { safeImageProcess } from '../utils/safe-process';
+import { getDeviceCapabilities, isLargeBatch } from '@/src/utils';
+import { useSupportStore } from '@/src/store/useSupportStore';
 
 export const BatchTab: React.FC = () => {
   const { items, addFiles, clearFiles, setItemStatus, setItemResult, setItemError, isProcessing, setIsProcessing } = useImageCompressStore();
@@ -19,16 +22,20 @@ export const BatchTab: React.FC = () => {
   const compressAll = async () => {
     if (items.length === 0) return;
 
+    const { isMobile, isLowMemory, concurrency } = getDeviceCapabilities();
+    
+    // IMG-RUNTIME-004: Memory warning toast
+    if (isMobile && isLargeBatch(items.map(i => i.file), 50)) {
+      alert("Large batch detected. Processing might take longer on mobile to ensure stability.");
+    }
+
     setIsProcessing(true);
     
     const toProcess = items.filter(item => item.status !== 'completed');
     
-    const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const CONCURRENCY_LIMIT = isMobile ? 2 : 3;
-    
     const queue = [...toProcess];
     const processItem = async (item: typeof items[0]) => {
-      try {
+      const result = await safeImageProcess(async () => {
         setItemStatus(item.id, 'processing', 0);
         const buffer = await item.file.arrayBuffer();
         const resultBytes = await batchCoordinator.enqueue(
@@ -39,13 +46,17 @@ export const BatchTab: React.FC = () => {
 
         const blob = new Blob([resultBytes as any], { type: item.settings.format });
         const url = blobManager.create(blob);
-        setItemResult(item.id, blob, url);
-      } catch (error: any) {
-        setItemError(item.id, error.message || 'Failed');
+        return { blob, url };
+      }, `image-compress-batch-${item.id}`);
+
+      if (result.success && result.data) {
+        setItemResult(item.id, result.data.blob, result.data.url);
+      } else {
+        setItemError(item.id, result.error?.message || 'Failed');
       }
     };
 
-    const workers = Array.from({ length: CONCURRENCY_LIMIT }, async () => {
+    const workers = Array.from({ length: concurrency }, async () => {
       while (queue.length > 0) {
         const item = queue.shift();
         if (item) await processItem(item);

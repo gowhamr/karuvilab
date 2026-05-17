@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { SliderField } from "@/components/ui/SliderField";
+import { workerManager } from "@/src/workers/manager";
+import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -22,7 +24,7 @@ export default function ImageConverterClient() {
   const { createUrl } = useObjectUrlManager();
   const [targetFmt, setTargetFmt] = useState<Format>("image/webp");
   const [quality, setQuality] = useState(85);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useAsyncSafeState(false);
 
   const { addItems, startProcessing, updateItem, items: allItems } = useBatchStore();
   const items = allItems[toolId] || [];
@@ -30,35 +32,35 @@ export default function ImageConverterClient() {
   const fmtInfo = FORMATS.find(f => f.value === targetFmt)!;
 
   const convertSingle = async (item: BatchItem): Promise<any> => {
-    const tempUrl = createUrl(item.file);
-    try {
-      const img = await new Promise<HTMLImageElement>((res, rej) => {
-        const i = new Image();
-        i.onload = () => res(i);
-        i.onerror = rej;
-        i.src = tempUrl;
-      });
-      const canvas = document.createElement("canvas");
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      canvas.getContext("2d")!.drawImage(img, 0, 0);
-
-      const blob = await new Promise<Blob>((res, rej) =>
-        canvas.toBlob(b => b ? res(b) : rej(new Error("fail")), targetFmt, quality / 100)
+    const result = await safeImageProcess(async () => {
+      const buffer = await item.file.arrayBuffer();
+      const resultBytes = await workerManager.compressImage(
+        buffer,
+        targetFmt as any,
+        quality,
+        (p) => {
+          updateItem(toolId, item.id, { progress: p.percent, message: p.message });
+        },
+        item.abortController?.signal
       );
 
+      const blob = new Blob([resultBytes as any], { type: targetFmt });
       const name = item.file.name.replace(/\.[^.]+$/, "") + fmtInfo.ext;
       const url = createUrl(blob);
 
       return {
         name,
         originalSize: item.file.size,
-        compressedSize: blob.size, // Using compressedSize for BatchQueue compatibility
+        compressedSize: blob.size,
         url,
         blob,
       };
-    } finally {
-      URL.revokeObjectURL(tempUrl);
+    }, 'image-converter');
+
+    if (result.success && result.data) {
+      return result.data;
+    } else {
+      throw new Error(result.error?.message || "Conversion failed");
     }
   };
 

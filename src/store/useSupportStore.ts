@@ -7,6 +7,7 @@ interface FeedbackContext {
   toolName?: string;
   route: string;
   error?: string;
+  stack?: string | undefined;
 }
 
 interface SupportState {

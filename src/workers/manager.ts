@@ -82,6 +82,16 @@ class WorkerManager {
     return workerOrchestrator.run("resizeImage", [file, width, height, format, quality], [file], onProgress, abortSignal);
   }
 
+  async removeBackground(
+    file: ArrayBuffer,
+    bgColor: string,
+    tolerance: number,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("removeBackground", [file, bgColor, tolerance], [file], onProgress, abortSignal);
+  }
+
   async minifyCode(
     code: string,
     lang: "css" | "js" | "html",

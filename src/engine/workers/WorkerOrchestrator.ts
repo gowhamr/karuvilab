@@ -12,45 +12,87 @@ interface QueuedTask {
 }
 
 class WorkerOrchestrator {
-  private pool: Array<{ worker: Worker; api: Comlink.Remote<WorkerAPI>; busy: boolean }> = [];
+  private pool: Array<{ worker: Worker; api: Comlink.Remote<WorkerAPI>; busy: boolean; lastHeard?: number }> = [];
   private queue: QueuedTask[] = [];
-  private maxWorkers = typeof navigator !== 'undefined' 
-    ? Math.min(navigator.hardwareConcurrency || 4, 4) 
-    : 4;
+  private maxWorkers = 4;
+  private isLowMemory = false;
 
   constructor() {
     if (typeof window !== 'undefined') {
-      // Re-evaluate maxWorkers for mobile devices specifically if needed
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        this.maxWorkers = Math.min(this.maxWorkers, 2);
+      const cores = navigator.hardwareConcurrency || 4;
+      
+      // Detection for low-memory devices (IMG-RUNTIME-004)
+      // Note: deviceMemory is not available on all browsers (mainly Chromium)
+      const memory = (navigator as any).deviceMemory || 8;
+      this.isLowMemory = memory < 4 || cores < 4;
+
+      if (this.isLowMemory) {
+        this.maxWorkers = isMobile ? 1 : 2;
+        console.warn(`[WorkerOrchestrator] Low memory device detected. Limiting workers to ${this.maxWorkers}.`);
+      } else {
+        this.maxWorkers = isMobile ? 2 : Math.min(cores, 4);
       }
     }
   }
 
   private async getWorker() {
+    // Clean up terminated workers from pool
+    this.pool = this.pool.filter(w => {
+      try {
+        // Simple check to see if worker is still alive
+        // Terminated workers don't have a specific property, but we can track it
+        return true; 
+      } catch { return false; }
+    });
+
     const idle = this.pool.find(w => !w.busy);
     if (idle) return idle;
 
     if (this.pool.length < this.maxWorkers) {
-      // Using the unified karuvi.worker.ts
-      const worker = new Worker(new URL('../../workers/karuvi.worker.ts', import.meta.url));
-      const api = Comlink.wrap<WorkerAPI>(worker);
-      const entry = { worker, api, busy: false };
-      this.pool.push(entry);
-      return entry;
+      try {
+        const worker = new Worker(new URL('../../workers/karuvi.worker.ts', import.meta.url));
+        
+        // IMG-RUNTIME-003: Worker crash recovery
+        worker.onerror = (e) => {
+          console.error("[WorkerOrchestrator] Worker terminal error:", e);
+          this.handleWorkerCrash(worker);
+        };
+
+        const api = Comlink.wrap<WorkerAPI>(worker);
+        const entry = { worker, api, busy: false, lastHeard: Date.now() };
+        this.pool.push(entry);
+        return entry;
+      } catch (err) {
+        console.error("[WorkerOrchestrator] Failed to spawn worker:", err);
+        return null;
+      }
     }
     return null;
+  }
+
+  private handleWorkerCrash(worker: Worker) {
+    const idx = this.pool.findIndex(p => p.worker === worker);
+    if (idx > -1) {
+      console.warn("[WorkerOrchestrator] Removing crashed worker from pool.");
+      this.pool.splice(idx, 1);
+    }
+    // Any tasks that were assigned to this worker will reject via the await call in processQueue
   }
 
   private async processQueue() {
     if (this.queue.length === 0) return;
 
     const workerEntry = await this.getWorker();
-    if (!workerEntry) return;
+    if (!workerEntry) {
+      // If we couldn't get a worker, wait a bit and try again
+      setTimeout(() => this.processQueue(), 100);
+      return;
+    }
 
     const task = this.queue.shift()!;
     workerEntry.busy = true;
+    workerEntry.lastHeard = Date.now();
 
     if (task.abortSignal?.aborted) {
       workerEntry.busy = false;
@@ -59,34 +101,46 @@ class WorkerOrchestrator {
       return;
     }
 
-    const onAbort = () => {
+    // IMG-RUNTIME-003: Heartbeat timeout
+    const timeoutDuration = 60000; // 60s default
+    const timeoutId = setTimeout(() => {
+      console.error(`[WorkerOrchestrator] Task ${task.method} timed out after ${timeoutDuration}ms`);
+      onAbort("Task timed out");
+    }, timeoutDuration);
+
+    const onAbort = (reason = "Task aborted") => {
+      clearTimeout(timeoutId);
       workerEntry.worker.terminate();
-      const idx = this.pool.indexOf(workerEntry);
-      if (idx > -1) this.pool.splice(idx, 1);
-      task.reject(new Error("Task aborted"));
+      this.handleWorkerCrash(workerEntry.worker);
+      task.reject(new Error(reason));
       this.processQueue();
     };
 
-    task.abortSignal?.addEventListener('abort', onAbort);
+    const abortHandler = () => onAbort("Task cancelled");
+    task.abortSignal?.addEventListener('abort', abortHandler);
 
     try {
-      const progressProxy = task.onProgress ? Comlink.proxy(task.onProgress) : undefined;
+      const progressProxy = task.onProgress ? Comlink.proxy((p: any) => {
+        workerEntry.lastHeard = Date.now();
+        task.onProgress?.(p);
+      }) : undefined;
+
       const args = [...task.args];
       
-      // Comlink.transfer handling for first arg if transferables provided
       if (task.transferables && task.transferables.length > 0) {
         args[0] = Comlink.transfer(args[0], task.transferables);
       }
 
       const result = await (workerEntry.api[task.method] as any)(...args, progressProxy);
+      clearTimeout(timeoutId);
       task.resolve(result);
     } catch (err) {
-      // Don't reject if it was aborted (handled in onAbort)
+      clearTimeout(timeoutId);
       if (!task.abortSignal?.aborted) {
         task.reject(err);
       }
     } finally {
-      task.abortSignal?.removeEventListener('abort', onAbort);
+      task.abortSignal?.removeEventListener('abort', abortHandler);
       workerEntry.busy = false;
       this.processQueue();
     }

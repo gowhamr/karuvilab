@@ -90,6 +90,13 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  removeBackground(
+    file: ArrayBuffer,
+    bgColor: string,
+    tolerance: number,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   // Image Tasks (Specialized Batch)
   compressImageBatch(
     file: ArrayBuffer,

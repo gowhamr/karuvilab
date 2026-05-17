@@ -46,16 +46,33 @@ export class ErrorBoundary extends Component<Props, State> {
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
               <button
-                onClick={() => this.setState({ hasError: false })}
+                onClick={() => {
+                  this.setState({ hasError: false });
+                  // Optionally trigger a re-render or notification
+                }}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
               >
                 <RefreshCw className="w-4 h-4" />
-                Try Again
+                Retry Operation
               </button>
               <button
-                onClick={() => useSupportStore.getState().openFeedback("bug", { error: this.state.error?.message || "Unknown error" })}
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    window.location.reload();
+                  }
+                }}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue/5 hover:text-blue hover:border-blue/20 transition-all"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Reset Tool
+              </button>
+              <button
+                onClick={() => useSupportStore.getState().openFeedback("bug", { 
+                  error: this.state.error?.message || "Unknown error",
+                  stack: this.state.error?.stack
+                })}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue/5 hover:text-blue hover:border-blue/20 transition-all"
               >
                 <Flag className="w-4 h-4" />

@@ -6,6 +6,7 @@ import { ComparisonView } from './ComparisonView';
 import { batchCoordinator } from '@/src/workers/batch-coordinator';
 import { LoaderCircle } from 'lucide-react';
 import { blobManager } from '@/src/lib/blob-manager';
+import { safeImageProcess } from '../utils/safe-process';
 
 export const SingleTab: React.FC = () => {
   const { items, addFiles, setItemStatus, setItemResult, setItemError, isProcessing, setIsProcessing } = useImageCompressStore();
@@ -19,10 +20,10 @@ export const SingleTab: React.FC = () => {
   const handleCompress = async () => {
     if (!activeItem) return;
 
-    try {
-      setIsProcessing(true);
-      setItemStatus(activeItem.id, 'processing', 0);
+    setIsProcessing(true);
+    setItemStatus(activeItem.id, 'processing', 0);
 
+    const result = await safeImageProcess(async () => {
       const buffer = await activeItem.file.arrayBuffer();
       const resultBytes = await batchCoordinator.enqueue(
         buffer,
@@ -32,12 +33,16 @@ export const SingleTab: React.FC = () => {
 
       const blob = new Blob([resultBytes as any], { type: activeItem.settings.format });
       const url = blobManager.create(blob);
-      setItemResult(activeItem.id, blob, url);
-    } catch (error: any) {
-      setItemError(activeItem.id, error.message || 'Compression failed');
-    } finally {
-      setIsProcessing(false);
+      return { blob, url };
+    }, 'image-compress-single');
+
+    if (result.success && result.data) {
+      setItemResult(activeItem.id, result.data.blob, result.data.url);
+    } else {
+      setItemError(activeItem.id, result.error?.message || 'Compression failed');
     }
+    
+    setIsProcessing(false);
   };
 
   return (

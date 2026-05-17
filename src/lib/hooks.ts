@@ -6,15 +6,18 @@ import { blobManager } from './blob-manager';
  * Hook to manage Blob URL lifecycles automatically.
  * Returns a createUrl function that tracks the URL and revokes it on unmount,
  * and a revokeUrl function to manually clean up.
+ * Use { autoRevoke: false } for URLs that should persist across navigation.
  */
-export function useObjectUrlManager() {
+export function useObjectUrlManager(options: { autoRevoke?: boolean } = { autoRevoke: true }) {
   const urls = useRef<Set<string>>(new Set());
 
   const createUrl = useCallback((obj: Blob | MediaSource | File) => {
     const url = blobManager.create(obj);
-    urls.current.add(url);
+    if (options.autoRevoke) {
+      urls.current.add(url);
+    }
     return url;
-  }, []);
+  }, [options.autoRevoke]);
 
   const revokeUrl = useCallback((url: string | null | undefined) => {
     if (url) {
@@ -25,14 +28,43 @@ export function useObjectUrlManager() {
 
   useEffect(() => {
     return () => {
-      urls.current.forEach(url => {
-        blobManager.revoke(url);
-      });
-      urls.current.clear();
+      if (options.autoRevoke) {
+        urls.current.forEach(url => {
+          blobManager.revoke(url);
+        });
+        urls.current.clear();
+      }
     };
-  }, []);
+  }, [options.autoRevoke]);
 
   return { createUrl, revokeUrl };
+}
+
+/**
+ * Hook to prevent state updates after a component has unmounted.
+ * (IMG-RUNTIME-006)
+ */
+export function useIsMounted() {
+  const isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+  return useCallback(() => isMounted.current, []);
+}
+
+export function useAsyncSafeState<T>(initialValue: T): [T, (val: T) => void] {
+  const [state, setState] = useState<T>(initialValue);
+  const isMounted = useIsMounted();
+
+  const safeSetState = useCallback((val: T) => {
+    if (isMounted()) {
+      setState(val);
+    }
+  }, [isMounted]);
+
+  return [state, safeSetState];
 }
 
 export function usePersistentState<T extends Record<string, unknown>>(toolId: string, initialState: T) {

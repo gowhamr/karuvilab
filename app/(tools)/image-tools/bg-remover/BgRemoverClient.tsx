@@ -2,23 +2,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
-
+import { workerManager } from "@/src/workers/manager";
+import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
 import { DropZone } from "@/components/ui/DropZone";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
-
-function hexToRgb(hex: string): [number, number, number] {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return [r, g, b];
-}
-
-function colorDiff(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number): number {
-  return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
-}
 
 export default function BgRemoverClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -27,54 +17,41 @@ export default function BgRemoverClient() {
   const [bgColor, setBgColor] = useState("#ffffff");
   const [tolerance, setTolerance] = useState(40);
   const [fileName, setFileName] = useState("image");
-  const [processing, setProcessing] = useState(false);
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [processing, setProcessing] = useAsyncSafeState(false);
+  const [file, setFile] = useState<File | null>(null);
 
-  const handleFile = (file: File) => {
+  const handleFile = (selectedFile: File) => {
     if (originalUrl) revokeUrl(originalUrl);
-    const url = createUrl(file);
+    const url = createUrl(selectedFile);
     setOriginalUrl(url);
+    setFile(selectedFile);
     if (resultUrl) revokeUrl(resultUrl);
     setResultUrl(null);
-    setFileName(file.name.replace(/\.[^.]+$/, ""));
+    setFileName(selectedFile.name.replace(/\.[^.]+$/, ""));
   };
 
-  const removeBackground = useCallback(() => {
-    if (!originalUrl) return;
+  const removeBackground = useCallback(async () => {
+    if (!file) return;
     setProcessing(true);
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext("2d")!;
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      const [tr, tg, tb] = hexToRgb(bgColor);
 
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i]!, g = data[i + 1]!, b = data[i + 2]!;
-        const diff = colorDiff(r, g, b, tr, tg, tb);
-        if (diff <= tolerance) {
-          data[i + 3] = 0;
-        } else if (diff <= tolerance * 1.5) {
-          const alpha = Math.round(((diff - tolerance) / (tolerance * 0.5)) * 255);
-          data[i + 3] = Math.min(data[i + 3]!, alpha);
-        }
-      }
+    const result = await safeImageProcess(async () => {
+      const buffer = await file.arrayBuffer();
+      const resultBytes = await workerManager.removeBackground(buffer, bgColor, tolerance);
+      const blob = new Blob([resultBytes as any], { type: 'image/png' });
+      return createUrl(blob);
+    }, 'bg-remover');
 
-      ctx.putImageData(imageData, 0, 0);
-      canvas.toBlob(blob => {
-        if (blob) {
-          if (resultUrl) revokeUrl(resultUrl);
-          setResultUrl(createUrl(blob));
-        }
-        setProcessing(false);
-      }, "image/png");
-    };
-    img.src = originalUrl;
-  }, [originalUrl, bgColor, tolerance, resultUrl, createUrl, revokeUrl]);
+    if (result.success && result.data) {
+      if (resultUrl) revokeUrl(resultUrl);
+      setResultUrl(result.data);
+    } else {
+      // Friendly error handling is already in the ErrorBoundary if it crashes,
+      // but here we just stop processing.
+      console.error(result.error?.message);
+    }
+    
+    setProcessing(false);
+  }, [file, bgColor, tolerance, resultUrl, createUrl, revokeUrl, setProcessing]);
 
   const download = () => {
     if (!resultUrl) return;
