@@ -1,13 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-
-const ImageCompressorClient = dynamic(() => import("./ImageCompressorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+import ImageCompressorClientWrapper from "../image-compressor/ImageCompressorClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("image-compress");
 
@@ -16,10 +11,10 @@ export default function page() {
   return (
     <ToolShell
       title="Image Compressor"
-      description="Compress images in your browser using canvas — no upload needed."
+      description="Professional image optimization tool. 100% private, browser-based compression."
       category={cat}
     >
-      <ImageCompressorClient />
+      <ImageCompressorClientWrapper />
     </ToolShell>
   );
 }

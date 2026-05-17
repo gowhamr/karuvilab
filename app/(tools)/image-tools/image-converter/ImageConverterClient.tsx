@@ -60,7 +60,7 @@ export default function ImageConverterClient() {
     if (result.success && result.data) {
       return result.data;
     } else {
-      throw new Error(result.error?.message || "Conversion failed");
+      throw new Error(result.error || "Conversion failed");
     }
   };
 

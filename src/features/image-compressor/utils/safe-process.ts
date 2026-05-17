@@ -1,64 +1,42 @@
 /**
- * Utility for safe processing of image worker tasks.
- * Prevents raw exceptions from reaching the UI and provides consistent error reporting.
+ * FIX-1: Worker exception safety boundary.
+ * Every worker call in the image compressor feature goes through this.
  */
 
 export interface ProcessResult<T> {
   success: boolean;
   data?: T;
-  error?: {
-    code: string;
-    message: string;
-    details?: any;
-  };
+  error?: string;
 }
 
-/**
- * Wraps an async image processing operation in a safety boundary.
- */
-export async function safeImageProcess<T>(
+export async function safeProcessor<T>(
   operation: () => Promise<T>,
-  context: string = 'image-processing'
+  context: string = 'image-compressor'
 ): Promise<ProcessResult<T>> {
   try {
     const data = await operation();
-    return {
-      success: true,
-      data,
-    };
+    return { success: true, data };
   } catch (err: any) {
-    console.error(`[${context}] Runtime failure:`, err);
+    console.error(`[${context}] Critical failure:`, err);
     
-    // Normalize error message
-    let message = "The tool encountered an unexpected error while processing.";
-    let code = "UNKNOWN_ERROR";
-
+    let message = "An unexpected error occurred.";
     if (err.message) {
       if (err.message.includes("cancelled") || err.message.includes("aborted")) {
-        code = "CANCELLED";
         message = "Operation was cancelled.";
       } else if (err.message.includes("memory") || err.message.includes("allocation")) {
-        code = "MEMORY_EXHAUSTION";
-        message = "The image is too large to process on this device.";
+        message = "Image is too large for this device's memory.";
       } else if (err.message.includes("format") || err.message.includes("MIME")) {
-        code = "INVALID_FORMAT";
-        message = "The image format is invalid or unsupported in this browser.";
-      } else if (err.message.includes("OffscreenCanvas")) {
-        code = "UNSUPPORTED_BROWSER";
-        message = "Your browser does not support high-performance image processing in workers.";
+        message = "Unsupported or corrupted image format.";
       } else {
-        code = "RUNTIME_EXCEPTION";
         message = err.message;
       }
     }
-
-    return {
-      success: false,
-      error: {
-        code,
-        message,
-        details: err,
-      },
-    };
+    
+    return { success: false, error: message };
   }
 }
+
+/**
+ * Backward compatibility alias for safeProcessor.
+ */
+export const safeImageProcess = safeProcessor;

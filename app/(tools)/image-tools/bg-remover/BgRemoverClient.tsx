@@ -45,9 +45,7 @@ export default function BgRemoverClient() {
       if (resultUrl) revokeUrl(resultUrl);
       setResultUrl(result.data);
     } else {
-      // Friendly error handling is already in the ErrorBoundary if it crashes,
-      // but here we just stop processing.
-      console.error(result.error?.message);
+      console.error(result.error);
     }
     
     setProcessing(false);

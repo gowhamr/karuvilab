@@ -89,6 +89,8 @@ export default function ImageResizerClient() {
       if (resizedUrl) revokeUrl(resizedUrl);
       setResizedUrl(result.data.url);
       setResizedSize(result.data.size);
+    } else {
+      console.error(result.error);
     }
 
     setProcessing(false);
