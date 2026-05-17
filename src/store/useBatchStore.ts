@@ -3,19 +3,21 @@ import { TaskProgress } from '../workers/types';
 
 export type BatchItemStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
 
+export interface BatchResult {
+  blob: Blob;
+  name: string;
+  originalSize: number;
+  compressedSize: number;
+  url: string;
+}
+
 export interface BatchItem {
   id: string;
   file: File;
   status: BatchItemStatus;
   progress: number;
   message?: string | undefined;
-  result?: {
-    blob: Blob;
-    name: string;
-    originalSize: number;
-    compressedSize: number;
-    url: string;
-  } | undefined;
+  result?: BatchResult | undefined;
   error?: string | undefined;
   abortController?: AbortController | undefined;
 }
@@ -27,7 +29,7 @@ interface BatchState {
   clearItems: (toolId: string) => void;
   clearCompletedItems: (toolId: string) => void;
   updateItem: (toolId: string, itemId: string, updates: Partial<BatchItem>) => void;
-  startProcessing: (toolId: string, processor: (item: BatchItem) => Promise<any>) => Promise<void>;
+  startProcessing: (toolId: string, processor: (item: BatchItem) => Promise<BatchResult>) => Promise<void>;
   cancelItem: (toolId: string, itemId: string) => void;
   cancelAll: (toolId: string) => void;
 }

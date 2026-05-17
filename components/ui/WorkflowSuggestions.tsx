@@ -7,7 +7,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export function WorkflowSuggestions() {
-  const suggestions = useWorkflowStore(state => state.getSuggestions());
+  const suggestions = useWorkflowStore(state => state.suggestions);
 
   if (suggestions.length === 0) return null;
 

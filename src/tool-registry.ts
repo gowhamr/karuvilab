@@ -4,6 +4,8 @@
  * Defines metadata, SEO, UI hints, and relationships for every tool.
  */
 
+import { ALL_TOOLS as ALL_TOOLS_IMPORT } from './registry';
+
 export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'seo';
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
@@ -88,8 +90,7 @@ export function getToolColor(tool: ToolEntry): string {
   return CATEGORIES.find(c => c.id === tool.category)?.color || '#4F46E5';
 }
 
-import { ALL_TOOLS as ALL_TOOLS_IMPORT } from './registry';
-export const ALL_TOOLS = ALL_TOOLS_IMPORT;;
+export const ALL_TOOLS = ALL_TOOLS_IMPORT;
 
 export const RECENT_PATH_KEY = 'karuvi.recent.paths';
 

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Script from "next/script";
 import { ALL_TOOLS, CategoryEntry, ToolEntry } from "@/src/tool-registry";
-import { TOOL_CONTENT } from "@/src/tool-content";
+import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
 
 const BASE_URL = "https://karuvilab.com";
 
@@ -59,7 +59,7 @@ interface StructuredDataProps {
 /**
  * Renders JSON-LD structured data for Tools, Breadcrumbs, FAQ, and HowTo.
  */
-export function StructuredData({ tool, category, content: propsContent }: StructuredDataProps) {
+export function StructuredData({ tool, category, content: propsContent }: StructuredDataProps): React.JSX.Element {
   const scripts: Record<string, unknown>[] = [];
 
   // 1. Breadcrumb Schema
@@ -130,8 +130,8 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
 
   // 3. Tool / SoftwareApplication Schema
   if (tool) {
-    const registryContent = TOOL_CONTENT[tool.id as keyof typeof TOOL_CONTENT] || {};
-    const detailedDesc = propsContent?.detailedDescription || (registryContent as any).detailedDescription || tool.desc;
+    const registryContent = (TOOL_CONTENT[tool.id as keyof typeof TOOL_CONTENT] || {}) as ToolContent;
+    const detailedDesc = propsContent?.detailedDescription || registryContent.detailedDescription || tool.desc;
     
     const getApplicationCategory = (catId?: string) => {
       switch (catId) {
@@ -170,7 +170,7 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     scripts.push(toolSchema);
 
     // 4. FAQ Schema
-    const faqs = propsContent?.faq || (registryContent as any).faq;
+    const faqs = propsContent?.faq || registryContent.faq;
     if (faqs && faqs.length > 0) {
       const faqSchema = {
         "@context": "https://schema.org",
@@ -188,7 +188,7 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     }
 
     // 5. HowTo Schema
-    const howTo = propsContent?.howTo || (registryContent as any).howTo;
+    const howTo = propsContent?.howTo || registryContent.howTo;
     if (howTo && howTo.length > 0) {
       const howToSchema = {
         "@context": "https://schema.org",

@@ -126,19 +126,6 @@ export function escHtml(str: unknown): string {
     .replace(/"/g, '&quot;');
 }
 
-export function spinnerHTML(): string {
-  return '<span class="spinner"></span>';
-}
-
-export function sizeBars(originalBytes: number, newBytes: number): string {
-  const pct = Math.min(100, Math.round(newBytes / originalBytes * 100));
-  const cls = pct < 70 ? 'fill-ok' : pct < 95 ? 'fill-warn' : 'fill-bad';
-  return `<div class="size-bar-wrap">
-    <div class="size-bar-label">${formatBytes(originalBytes)} → <strong>${formatBytes(newBytes)}</strong> (${pct}%)</div>
-    <div class="size-bar"><div class="size-bar-fill ${cls}" style="width:${pct}%"></div></div>
-  </div>`;
-}
-
 export function debounce<T extends (...args: unknown[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | undefined;
   return function executedFunction(...args: Parameters<T>) {
@@ -251,11 +238,14 @@ export function b64DecodeUtf8(b64: string): string {
   return new TextDecoder('utf-8', { fatal: false }).decode(bytes);
 }
 
-export function lenientJsonParse(text: string): { ok: true; value: unknown; sanitized: boolean }
-                                        | { ok: false; error: string; line?: number; col?: number; pos?: number } {
-  function tryParse(t: string) {
-    try { return { ok: true as const, value: JSON.parse(t) }; }
-    catch (e) { return { ok: false as const, error: (e as Error).message }; }
+export type ParseResult<T> = 
+  | { ok: true; value: T; sanitized: boolean } 
+  | { ok: false; error: string; line?: number | undefined; col?: number | undefined; pos?: number | undefined };
+
+export function lenientJsonParse(text: string): ParseResult<unknown> {
+  function tryParse(t: string): { ok: boolean; value?: any; error?: string } {
+    try { return { ok: true, value: JSON.parse(t) }; }
+    catch (e) { return { ok: false, error: (e as Error).message }; }
   }
   const first = tryParse(text);
   if (first.ok) return { ok: true, value: first.value, sanitized: false };
@@ -269,7 +259,7 @@ export function lenientJsonParse(text: string): { ok: true; value: unknown; sani
     if (second.ok) return { ok: true, value: second.value, sanitized: true };
   }
 
-  const msg = first.error;
+  const msg = first.error!;
   const posMatch = msg.match(/position\s+(\d+)/i);
   const lineMatch = msg.match(/line\s+(\d+)/i);
   const colMatch = msg.match(/column\s+(\d+)/i);
@@ -286,9 +276,5 @@ export function lenientJsonParse(text: string): { ok: true; value: unknown; sani
     if (colMatch) col = parseInt(colMatch[1]!, 10);
   }
   
-  const result: any = { ok: false, error: msg };
-  if (line !== undefined) result.line = line;
-  if (col !== undefined) result.col = col;
-  if (pos !== undefined) result.pos = pos;
-  return result;
+  return { ok: false, error: msg, line, col, pos };
 }

@@ -31,7 +31,19 @@ interface ToolShellProps {
   };
 }
 
-export function ToolShell({ title, description, category, children, toolId, content }: ToolShellProps) {
+/**
+ * Foundational layout wrapper for all KaruviLab tools.
+ * Handles SEO metadata, breadcrumbs, favorite status, workflow integration, 
+ * and provides a consistent structure for tool content and documentation.
+ *
+ * @param title - The primary heading and tool name.
+ * @param description - Short summary of tool capability.
+ * @param category - The parent category for routing and styling.
+ * @param children - The interactive tool client component.
+ * @param toolId - Optional explicit tool ID for registry lookups.
+ * @param content - Optional detailed documentation and FAQ data.
+ */
+export function ToolShell({ title, description, category, children, toolId, content }: ToolShellProps): React.JSX.Element {
   const currentTool = ALL_TOOLS.find(t =>
     t.id === toolId ||
     t.name === title ||

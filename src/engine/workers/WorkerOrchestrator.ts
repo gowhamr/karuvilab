@@ -3,10 +3,10 @@ import { WorkerAPI, ProgressCallback } from "../../workers/types";
 
 interface QueuedTask {
   method: keyof WorkerAPI;
-  args: any[];
+  args: unknown[];
   transferables?: Transferable[] | undefined;
-  resolve: (value: any) => void;
-  reject: (reason?: any) => void;
+  resolve: (value: unknown) => void;
+  reject: (reason?: unknown) => void;
   onProgress?: ProgressCallback | undefined;
   abortSignal?: AbortSignal | undefined;
 }
@@ -88,7 +88,7 @@ class WorkerOrchestrator {
     workerEntry.busy = true;
     workerEntry.lastHeard = Date.now();
 
-    let timeoutId: any = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let isFinished = false;
 
     const cleanup = () => {
@@ -131,7 +131,10 @@ class WorkerOrchestrator {
         args[0] = Comlink.transfer(args[0], task.transferables);
       }
 
-      const result = await (workerEntry.api[task.method] as any)(...args, progressProxy);
+      // STYLE-002: Strongly typed worker API invocation.
+      // We cast to a callable function with unknown parameters to remove 'any'.
+      const method = workerEntry.api[task.method] as unknown as (...args: unknown[]) => Promise<unknown>;
+      const result = await method(...args, progressProxy);
       
       if (progressProxy) {
         try { (progressProxy as any)[Comlink.releaseProxy](); } catch (e) {}
@@ -151,20 +154,31 @@ class WorkerOrchestrator {
     }
   }
 
+  /**
+   * Runs a worker task from the pool.
+   */
   run<T>(
     method: keyof WorkerAPI,
-    args: any[],
+    args: unknown[],
     transferables?: Transferable[],
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.queue.push({ method, args, transferables, resolve, reject, onProgress, abortSignal });
+      this.queue.push({ 
+        method, 
+        args, 
+        transferables, 
+        resolve: resolve as (v: unknown) => void, 
+        reject, 
+        onProgress, 
+        abortSignal 
+      });
       this.processQueue();
     });
   }
 
-  terminateAll() {
+  terminateAll(): void {
     this.pool.forEach(p => p.worker.terminate());
     this.pool = [];
     this.queue = [];

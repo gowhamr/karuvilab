@@ -13,12 +13,17 @@ export function useWorkflowIntegration(toolId: string) {
   const currentItems = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
   
   const [suggestedText, setSuggestedText] = useState<string | null>(null);
-
-  const loadedRef = useRef(false);
+  const loadedRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (loadedRef.current) return;
-    if (activeItems.length === 0) return;
+    // Only run once per toolId + activeItems fingerprint
+    const fingerprint = `${toolId}-${activeItems.length}-${activeItems.map(i => i.name).join(',')}`;
+    if (loadedRef.current === fingerprint) return;
+    if (activeItems.length === 0) {
+      loadedRef.current = fingerprint;
+      return;
+    }
+
 
     const tool = findToolById(toolId);
     if (!tool || !tool.input) return;
@@ -44,7 +49,7 @@ export function useWorkflowIntegration(toolId: string) {
           .map(ci => new File([ci.blob!], ci.name, { type: ci.blob!.type }));
         
         addItems(toolId, files);
-        loadedRef.current = true;
+        loadedRef.current = fingerprint;
       }
     }
 
@@ -53,9 +58,9 @@ export function useWorkflowIntegration(toolId: string) {
       item.text && (inputTypes.includes(item.type) || (item.type === 'text' && inputTypes.includes('text')))
     );
 
-    if (compatibleText && !loadedRef.current) {
+    if (compatibleText) {
       setSuggestedText(compatibleText.text!);
-      loadedRef.current = true;
+      loadedRef.current = fingerprint;
     }
   }, [toolId, activeItems, addItems, currentItems]);
 
