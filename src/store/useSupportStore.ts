@@ -8,6 +8,7 @@ interface FeedbackContext {
   route: string;
   error?: string;
   stack?: string | undefined;
+  metadata?: Record<string, any> | undefined;
 }
 
 interface SupportState {

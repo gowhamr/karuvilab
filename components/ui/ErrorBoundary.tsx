@@ -11,7 +11,7 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  error?: Error;
+  error?: Error | undefined;
   showDetails: boolean;
 }
 
@@ -76,8 +76,10 @@ export class ErrorBoundary extends Component<Props, State> {
                   onClick={() => useSupportStore.getState().openFeedback("bug", { 
                     error: errorMsg,
                     stack: errorStack,
-                    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
-                    url: typeof window !== 'undefined' ? window.location.href : 'unknown'
+                    metadata: {
+                      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+                      url: typeof window !== 'undefined' ? window.location.href : 'unknown'
+                    }
                   })}
                   className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-red-500/30 hover:text-red-500 transition-all"
                 >
