@@ -8,12 +8,17 @@ import { ComparisonView } from './ComparisonView';
 import { Loader2, AlertCircle, RefreshCw, Zap } from 'lucide-react';
 
 export const SingleMode: React.FC = () => {
-  const { items, addFiles, compressItem, isProcessing } = useImageCompressStore();
-  const activeItem = items[0];
+  const state = useImageCompressStore();
+  const { items, addFiles, compressItem } = state;
+  const activeItem = items && items.length > 0 ? items[0] : undefined;
 
   const handleFiles = (files: File[] | FileList) => {
-    const fileArray = files instanceof FileList ? Array.from(files) : files;
-    addFiles(fileArray);
+    try {
+      const fileArray = files instanceof FileList ? Array.from(files) : files;
+      if (addFiles) addFiles(fileArray);
+    } catch (err) {
+      console.error("Failed to add files:", err);
+    }
   };
 
   return (
