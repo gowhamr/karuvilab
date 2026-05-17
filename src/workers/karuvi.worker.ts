@@ -63,7 +63,11 @@ function bufToBase64(buf: ArrayBuffer): string {
 
 async function sha(algo: string, input: string | Uint8Array): Promise<ArrayBuffer> {
   const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
-  return await crypto.subtle.digest(algo, bytes.buffer as ArrayBuffer);
+  const cryptoProvider = self.crypto || (globalThis as any).crypto;
+  if (!cryptoProvider?.subtle) {
+    throw new Error("Web Crypto API (subtle) is not available in this environment.");
+  }
+  return await cryptoProvider.subtle.digest(algo.replace("SHA-", "SHA-"), bytes.buffer as ArrayBuffer);
 }
 
 async function hmac(algo: string, key: string, input: string | Uint8Array): Promise<ArrayBuffer> {
@@ -71,7 +75,12 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
   const keyData = encoder.encode(key);
   const data = typeof input === "string" ? encoder.encode(input) : input;
   
-  const cryptoKey = await crypto.subtle.importKey(
+  const cryptoProvider = self.crypto || (globalThis as any).crypto;
+  if (!cryptoProvider?.subtle) {
+    throw new Error("Web Crypto API (subtle) is not available.");
+  }
+
+  const cryptoKey = await cryptoProvider.subtle.importKey(
     "raw",
     keyData,
     { name: "HMAC", hash: { name: algo.replace("SHA-", "SHA") } },
@@ -79,7 +88,7 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
     ["sign"]
   );
   
-  return await crypto.subtle.sign("HMAC", cryptoKey, data as any);
+  return await cryptoProvider.subtle.sign("HMAC", cryptoKey, data as any);
 }
 
 const api: WorkerAPI = {

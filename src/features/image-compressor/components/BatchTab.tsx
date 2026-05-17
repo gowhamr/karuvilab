@@ -5,7 +5,7 @@ import { SettingsPanel } from './SettingsPanel';
 import { ImageQueue } from './ImageQueue';
 import { batchCoordinator } from '@/src/workers/batch-coordinator';
 import { createZip, downloadBlob } from '@/src/lib/zip';
-import { LoaderCircle, Download, Trash2, Zap } from 'lucide-react';
+import { Loader2, Download, Trash2, Zap } from 'lucide-react';
 import { blobManager } from '@/src/lib/blob-manager';
 import { safeImageProcess } from '../utils/safe-process';
 import { getDeviceCapabilities, isLargeBatch } from '@/src/utils';
@@ -117,7 +117,7 @@ export const BatchTab: React.FC = () => {
             >
               {isProcessing ? (
                 <>
-                  <LoaderCircle className="animate-spin" size={18} />
+                  <Loader2 className="animate-spin" size={18} />
                   Processing...
                 </>
               ) : (

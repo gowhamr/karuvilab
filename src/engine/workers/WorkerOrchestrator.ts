@@ -1,12 +1,12 @@
-import * as Comlink from 'comlink';
-import { WorkerAPI, ProgressCallback } from '../../workers/types';
+import * as Comlink from "comlink";
+import { WorkerAPI, ProgressCallback } from "../../workers/types";
 
 interface QueuedTask {
   method: keyof WorkerAPI;
   args: any[];
   transferables?: Transferable[] | undefined;
-  resolve: (val: any) => void;
-  reject: (err: any) => void;
+  resolve: (value: any) => void;
+  reject: (reason?: any) => void;
   onProgress?: ProgressCallback | undefined;
   abortSignal?: AbortSignal | undefined;
 }
@@ -16,44 +16,41 @@ class WorkerOrchestrator {
   private queue: QueuedTask[] = [];
   private maxWorkers = 4;
   private isLowMemory = false;
+  private initialized = false;
 
-  constructor() {
-    if (typeof window !== 'undefined') {
+  private init() {
+    if (this.initialized || typeof window === 'undefined' || typeof navigator === 'undefined') return;
+    
+    try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const cores = navigator.hardwareConcurrency || 4;
-      
-      // Detection for low-memory devices (IMG-RUNTIME-004)
-      // Note: deviceMemory is not available on all browsers (mainly Chromium)
       const memory = (navigator as any).deviceMemory || 8;
       this.isLowMemory = memory < 4 || cores < 4;
 
       if (this.isLowMemory) {
         this.maxWorkers = isMobile ? 1 : 2;
-        console.warn(`[WorkerOrchestrator] Low memory device detected. Limiting workers to ${this.maxWorkers}.`);
       } else {
         this.maxWorkers = isMobile ? 2 : Math.min(cores, 4);
       }
+      this.initialized = true;
+    } catch (e) {
+      console.error("[WorkerOrchestrator] Init error:", e);
     }
   }
 
   private async getWorker() {
-    // Clean up terminated workers from pool
-    this.pool = this.pool.filter(w => {
-      try {
-        // Simple check to see if worker is still alive
-        // Terminated workers don't have a specific property, but we can track it
-        return true; 
-      } catch { return false; }
-    });
-
+    this.init();
+    
     const idle = this.pool.find(w => !w.busy);
     if (idle) return idle;
 
     if (this.pool.length < this.maxWorkers) {
       try {
-        const worker = new Worker(new URL('../../workers/karuvi.worker.ts', import.meta.url));
+        const worker = new Worker(
+          new URL('../../workers/karuvi.worker.ts', import.meta.url),
+          { type: 'module' }
+        );
         
-        // IMG-RUNTIME-003: Worker crash recovery
         worker.onerror = (e) => {
           console.error("[WorkerOrchestrator] Worker terminal error:", e);
           this.handleWorkerCrash(worker);
@@ -74,10 +71,8 @@ class WorkerOrchestrator {
   private handleWorkerCrash(worker: Worker) {
     const idx = this.pool.findIndex(p => p.worker === worker);
     if (idx > -1) {
-      console.warn("[WorkerOrchestrator] Removing crashed worker from pool.");
       this.pool.splice(idx, 1);
     }
-    // Any tasks that were assigned to this worker will reject via the await call in processQueue
   }
 
   private async processQueue() {
@@ -85,7 +80,6 @@ class WorkerOrchestrator {
 
     const workerEntry = await this.getWorker();
     if (!workerEntry) {
-      // If we couldn't get a worker, wait a bit and try again
       setTimeout(() => this.processQueue(), 100);
       return;
     }
@@ -94,30 +88,37 @@ class WorkerOrchestrator {
     workerEntry.busy = true;
     workerEntry.lastHeard = Date.now();
 
-    const onAbort = (reason = "Task aborted") => {
+    let timeoutId: any = null;
+    let isFinished = false;
+
+    const cleanup = () => {
+      if (isFinished) return;
+      isFinished = true;
       if (timeoutId) clearTimeout(timeoutId);
-      workerEntry.worker.terminate();
-      this.handleWorkerCrash(workerEntry.worker);
-      task.reject(new Error(reason));
+      workerEntry.busy = false;
       this.processQueue();
     };
 
+    const onAbort = (reason = "Task aborted") => {
+      if (isFinished) return;
+      workerEntry.worker.terminate();
+      this.handleWorkerCrash(workerEntry.worker);
+      task.reject(new Error(reason));
+      cleanup();
+    };
+
     if (task.abortSignal?.aborted) {
-      workerEntry.busy = false;
       task.reject(new Error("Task cancelled"));
-      this.processQueue();
+      cleanup();
       return;
     }
 
-    // IMG-RUNTIME-003: Heartbeat timeout
-    const timeoutDuration = 60000; // 60s default
-    const timeoutId = setTimeout(() => {
-      console.error(`[WorkerOrchestrator] Task ${task.method} timed out after ${timeoutDuration}ms`);
-      onAbort("Task timed out");
-    }, timeoutDuration);
-
     const abortHandler = () => onAbort("Task cancelled");
     task.abortSignal?.addEventListener('abort', abortHandler);
+
+    timeoutId = setTimeout(() => {
+      onAbort("Task timed out");
+    }, 60000);
 
     try {
       const progressProxy = task.onProgress ? Comlink.proxy((p: any) => {
@@ -126,7 +127,6 @@ class WorkerOrchestrator {
       }) : undefined;
 
       const args = [...task.args];
-      
       if (task.transferables && task.transferables.length > 0) {
         args[0] = Comlink.transfer(args[0], task.transferables);
       }
@@ -134,21 +134,20 @@ class WorkerOrchestrator {
       const result = await (workerEntry.api[task.method] as any)(...args, progressProxy);
       
       if (progressProxy) {
-        (progressProxy as any)[Comlink.releaseProxy]();
+        try { (progressProxy as any)[Comlink.releaseProxy](); } catch (e) {}
       }
       
-      if (timeoutId) clearTimeout(timeoutId);
-      task.resolve(result);
+      if (!isFinished) {
+        task.resolve(result);
+        cleanup();
+      }
     } catch (err) {
-      if (timeoutId) clearTimeout(timeoutId);
-      console.error(`[WorkerOrchestrator] Task ${task.method} failed:`, err);
-      if (!task.abortSignal?.aborted) {
-        task.reject(err);
+      if (!isFinished) {
+        if (!task.abortSignal?.aborted) task.reject(err);
+        cleanup();
       }
     } finally {
       task.abortSignal?.removeEventListener('abort', abortHandler);
-      workerEntry.busy = false;
-      this.processQueue();
     }
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useImageCompressStore, ImageItem } from '../hooks/useImageCompressStore';
 import { formatSize, getReduction } from '../utils/image-compression-utils';
-import { X, CircleCheck, CircleAlert, LoaderCircle, Download } from 'lucide-react';
+import { X, CircleCheck, CircleAlert, Loader2, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ImageQueue: React.FC = () => {
