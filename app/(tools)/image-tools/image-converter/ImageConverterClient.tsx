@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
-import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { SliderField } from "@/components/ui/SliderField";
 import { workerManager } from "@/src/workers/manager";
@@ -29,7 +29,7 @@ export default function ImageConverterClient() {
   const addItems = useBatchStore(state => state.addItems);
   const startProcessing = useBatchStore(state => state.startProcessing);
   const updateItem = useBatchStore(state => state.updateItem);
-  const items = useBatchStore(state => state.items[toolId] || []);
+  const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
 
   const fmtInfo = FORMATS.find(f => f.value === targetFmt)!;
 

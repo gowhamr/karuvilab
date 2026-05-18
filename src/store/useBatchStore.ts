@@ -22,6 +22,8 @@ export interface BatchItem {
   abortController?: AbortController | undefined;
 }
 
+export const EMPTY_BATCH_ITEMS: BatchItem[] = [];
+
 interface BatchState {
   items: Record<string, BatchItem[]>; // toolId -> items
   addItems: (toolId: string, files: File[]) => void;

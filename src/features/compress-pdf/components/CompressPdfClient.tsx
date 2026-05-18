@@ -2,24 +2,20 @@
 import { useState } from "react";
 import * as PDFLib from "pdf-lib";
 import { useObjectUrlManager } from "@/src/lib/hooks";
-import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { DropZone } from "@/components/ui/DropZone";
 
 const toolId = "compress-pdf";
-const EMPTY_ARRAY: any[] = [];
 
 export default function CompressPdfClient() {
   const { createUrl } = useObjectUrlManager();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const allItems = useBatchStore(state => state.items);
   const addItems = useBatchStore(state => state.addItems);
   const startProcessing = useBatchStore(state => state.startProcessing);
   const updateItem = useBatchStore(state => state.updateItem);
-  
-  const items = allItems[toolId] || EMPTY_ARRAY;
-
+  const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
   const compressSingle = async (item: BatchItem): Promise<any> => {
     try {
       updateItem(toolId, item.id, { message: "Loading PDF..." });

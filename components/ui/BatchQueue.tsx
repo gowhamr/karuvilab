@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   File, 
@@ -16,7 +16,7 @@ import {
   RefreshCw,
   Clock
 } from 'lucide-react';
-import { BatchItem, useBatchStore } from '@/src/store/useBatchStore';
+import { BatchItem, useBatchStore, EMPTY_BATCH_ITEMS } from '@/src/store/useBatchStore';
 import { useWorkflowStore, WorkflowItem } from '@/src/store/useWorkflowStore';
 import { findToolById, DataType } from '@/src/tool-registry';
 import { WorkflowSuggestions } from './WorkflowSuggestions';
@@ -44,8 +44,10 @@ function formatBytes(bytes: number, decimals = 2) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+const EMPTY_ARRAY: any[] = [];
+
 export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isProcessing }: BatchQueueProps) {
-  const allItems = useBatchStore(state => state.items);
+  const items = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
   const removeItem = useBatchStore(state => state.removeItem);
   const clearItems = useBatchStore(state => state.clearItems);
   const clearCompletedItems = useBatchStore(state => state.clearCompletedItems);
@@ -55,7 +57,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
   const setActiveItems = useWorkflowStore(state => state.setActiveItems);
   const addToChain = useWorkflowStore(state => state.addToChain);
   
-  const items = allItems[toolId] || [];
+  const syncedRef = useRef<string[]>([]);
 
   const stats = useMemo(() => {
     const total = items.length;
@@ -77,15 +79,25 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       const tool = findToolById(toolId);
       const outputType = (Array.isArray(tool?.output) ? tool?.output[0] : tool?.output) || 'any-file';
       
-      const workflowItems: WorkflowItem[] = items
-        .filter(i => i.status === 'completed' && i.result)
-        .map(i => ({
-          blob: i.result!.blob,
-          name: i.result!.name,
-          type: outputType as DataType
-        }));
+      const completedItems = items.filter(i => i.status === 'completed' && i.result);
+      const completedIds = completedItems.map(i => i.id);
+      
+      // Check if we've already synced these exact items
+      if (
+        syncedRef.current.length === completedIds.length &&
+        syncedRef.current.every((id, idx) => id === completedIds[idx])
+      ) {
+        return;
+      }
+
+      const workflowItems: WorkflowItem[] = completedItems.map(i => ({
+        blob: i.result!.blob,
+        name: i.result!.name,
+        type: outputType as DataType
+      }));
       
       if (workflowItems.length > 0) {
+        syncedRef.current = completedIds;
         setActiveItems(workflowItems);
         addToChain(toolId);
       }

@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { workerManager } from "@/src/workers/manager";
 import { useObjectUrlManager } from "@/src/lib/hooks";
-import { useBatchStore, BatchItem } from "@/src/store/useBatchStore";
+import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 
@@ -21,7 +21,7 @@ export default function BulkImageResizerClient() {
   const addItems = useBatchStore(state => state.addItems);
   const startProcessing = useBatchStore(state => state.startProcessing);
   const updateItem = useBatchStore(state => state.updateItem);
-  const items = useBatchStore(state => state.items[toolId] || []);
+  const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
 
   const resizeSingle = async (item: BatchItem): Promise<any> => {
     // We need to get original dimensions first

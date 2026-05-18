@@ -43,10 +43,20 @@ interface KaruviDB extends DBSchema {
       timestamp: number;
     };
   };
+  'currency-rates': {
+    key: string;
+    value: {
+      base: string;
+      rates: Record<string, number>;
+      timestamp: number;
+      source: string;
+      expiresAt: number;
+    };
+  };
 }
 
 const DB_NAME = 'karuvilab-db';
-const DB_VERSION = 2; // Incremented version
+const DB_VERSION = 3; // Incremented version
 
 let dbPromise: Promise<IDBPDatabase<KaruviDB>> | null = null;
 
@@ -78,11 +88,50 @@ export const getDB = () => {
         if (oldVersion < 2) {
           db.createObjectStore('emiScenarios', { keyPath: 'id' });
         }
+
+        if (oldVersion < 3) {
+          db.createObjectStore('currency-rates', { keyPath: 'base' });
+        }
       },
     });
   }
   return dbPromise;
 };
+
+export async function saveCurrencyRates(data: {
+  base: string;
+  rates: Record<string, number>;
+  timestamp: number;
+  source: string;
+  expiresAt: number;
+}) {
+  const db = await getDB();
+  if (!db) return;
+  await db.put('currency-rates', data);
+}
+
+export async function getCurrencyRates(base: string) {
+  const db = await getDB();
+  if (!db) return null;
+  return db.get('currency-rates', base);
+}
+
+export async function clearExpiredCurrencyRates() {
+  const db = await getDB();
+  if (!db) return;
+  const now = Date.now();
+  const tx = db.transaction('currency-rates', 'readwrite');
+  const store = tx.objectStore('currency-rates');
+  const all = await store.getAll();
+  for (const entry of all) {
+    // Prune if older than 72 hours (max stale duration)
+    if (now - entry.timestamp > 72 * 60 * 60 * 1000) {
+      await store.delete(entry.base);
+    }
+  }
+  await tx.done;
+}
+
 
 export async function saveToolState(toolId: string, state: Record<string, unknown>) {
   const db = await getDB();

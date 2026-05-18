@@ -6,12 +6,14 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { 
   Gauge, Zap, ArrowDown, ArrowUp, RefreshCw, Activity, AlertTriangle, 
   MapPin, Globe, Server, History, Share2, CheckCircle2, Video, 
-  Gamepad2, MonitorPlay, Download, Wifi, SignalHigh, Timer, Send
+  Gamepad2, MonitorPlay, Download, Wifi, SignalHigh, Timer, Send, Info
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
+import { useSupportStore } from "@/src/store/useSupportStore";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
+// ... (omitting lines for brevity in thought, but I must provide full new_string in real replace)
 
 const DOWNLOAD_FILES = [
   "https://speed.cloudflare.com/__down?bytes=25000000",
@@ -162,6 +164,8 @@ export default function InternetSpeedTestClient() {
   const [maxDownload, setMaxDownload] = useState(0);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [errorDetails, setErrorDetails] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null);
   const [isSimulated, setIsSimulated] = useState(false);
   const [history, setHistory] = useState<{ x: number, y: number }[]>([]);
@@ -321,7 +325,10 @@ export default function InternetSpeedTestClient() {
       }
     }
 
-    if (latencies.length === 0) throw new Error("Latency test failed: Endpoints unreachable.");
+    if (latencies.length === 0) {
+      setErrorDetails(`All latency endpoints failed: ${LATENCY_URLS.join(', ')}`);
+      throw new Error("Latency test failed: Endpoints unreachable.");
+    }
 
     const avg = latencies.reduce((a, b) => a + b) / latencies.length;
     const sorted = [...latencies].sort((a, b) => a - b);
@@ -406,7 +413,10 @@ export default function InternetSpeedTestClient() {
     await Promise.allSettled(streams.map(url => downloadChunk(url)));
     clearTimeout(loadedLatencyTimer);
 
-    if (totalBytes === 0) throw new Error("Download test failed: No data received.");
+    if (totalBytes === 0) {
+      setErrorDetails(`Failed to receive any data from ${DOWNLOAD_FILES.length} stream sources.`);
+      throw new Error("Download test failed: No data received.");
+    }
     const finalTime = (performance.now() - startTime) / 1000;
     const finalMbps = totalBytes * 8 / finalTime / 1000000;
     setDownload(parseFloat(finalMbps.toFixed(2)));
@@ -421,6 +431,8 @@ export default function InternetSpeedTestClient() {
     
     historyRef.current = [];
     setHistory([]);
+
+    let lastError: string | null = null;
 
     const uploadWorker = async () => {
       const size = 256 * 1024; // Smaller 256KB chunks for better stability
@@ -457,6 +469,7 @@ export default function InternetSpeedTestClient() {
           } else {
             // Log non-ok response
             const errBody = await response.text().catch(() => "Unknown error");
+            lastError = `Status ${response.status}: ${errBody}`;
             console.warn(`Upload chunk failed with status ${response.status}: ${errBody}`);
             await new Promise(r => setTimeout(r, 500));
           }
@@ -466,6 +479,7 @@ export default function InternetSpeedTestClient() {
             console.warn("Upload chunk timed out, retrying...");
             continue;
           }
+          lastError = (e as Error).message || "Fetch failed";
           console.error("Upload worker fatal error:", e);
           break;
         } finally {
@@ -479,6 +493,7 @@ export default function InternetSpeedTestClient() {
     const finalTime = (performance.now() - startTime) / 1000;
     
     if (totalBytes === 0) {
+      if (lastError) setErrorDetails(`Upload Failed - ${lastError}`);
       throw new Error("Upload test failed: No data could be transmitted.");
     }
     
@@ -497,6 +512,8 @@ export default function InternetSpeedTestClient() {
     setMaxDownload(0);
     setProgress(0);
     setError(null);
+    setErrorDetails(null);
+    setShowDetails(false);
     setHistory([]);
     
     abortControllerRef.current = new AbortController();
@@ -516,6 +533,7 @@ export default function InternetSpeedTestClient() {
     } catch (err: any) {
       if (err.name !== 'AbortError') {
         setError(err.message || "Network Error: Speed test interrupted.");
+        if (!errorDetails) setErrorDetails(err.stack || err.toString());
         setStatus('error');
       }
     }
@@ -876,12 +894,50 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-12 p-6 bg-red-500/5 border border-red-500/10 rounded-[32px] flex items-center gap-4"
+              className="mt-12 p-6 bg-red-500/5 border border-red-500/10 rounded-[32px] flex flex-col gap-4"
             >
-              <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500">
-                 <AlertTriangle className="w-6 h-6" />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 flex-shrink-0">
+                   <AlertTriangle className="w-6 h-6" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-red-600 dark:text-red-400">{error}</p>
+                </div>
+                <button 
+                  onClick={() => useSupportStore.getState().openFeedback('bug', { 
+                    toolId: 'internet-speed-test', 
+                    toolName: 'Speed Tester Pro',
+                    error: error,
+                    metadata: { details: errorDetails }
+                  })}
+                  className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap"
+                >
+                  Report Issue
+                </button>
               </div>
-              <p className="text-sm font-bold text-red-600 dark:text-red-400">{error}</p>
+
+              {errorDetails && (
+                <div className="pt-4 border-t border-red-500/10">
+                   <button 
+                     onClick={() => setShowDetails(!showDetails)}
+                     className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 transition-colors"
+                   >
+                     <Info className="w-3 h-3" />
+                     {showDetails ? "Hide Diagnostic Info" : "View Error Details"}
+                   </button>
+                   {showDetails && (
+                     <motion.div 
+                       initial={{ opacity: 0, height: 0 }}
+                       animate={{ opacity: 1, height: 'auto' }}
+                       className="mt-3"
+                     >
+                       <pre className="p-4 bg-bg/50 rounded-2xl text-[10px] font-mono text-red-400/80 overflow-x-auto whitespace-pre-wrap break-all border border-red-500/5">
+                          {errorDetails}
+                       </pre>
+                     </motion.div>
+                   )}
+                </div>
+              )}
             </motion.div>
           )}
         </div>
