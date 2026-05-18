@@ -831,6 +831,26 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
+                    <ArrowDown className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Download</span>
+                  </div>
+                  <div className="text-2xl font-black text-text tabular-nums">
+                    {download !== null ? download.toFixed(1) : '--'}
+                    {download !== null && <span className="text-[10px] ml-1 opacity-40">Mbps</span>}
+                  </div>
+                </div>
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                  <div className="flex items-center gap-2 text-text-4">
+                    <ArrowUp className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Upload</span>
+                  </div>
+                  <div className="text-2xl font-black text-text tabular-nums">
+                    {upload !== null ? upload.toFixed(1) : '--'}
+                    {upload !== null && <span className="text-[10px] ml-1 opacity-40">Mbps</span>}
+                  </div>
+                </div>
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                  <div className="flex items-center gap-2 text-text-4">
                     <Activity className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
                     <span className="text-[9px] font-black uppercase tracking-widest">Latency (Idle)</span>
                   </div>
@@ -852,27 +872,13 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 </div>
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <History className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Samples</span>
+                    <Timer className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Loaded Latency</span>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">{history.length || '--'}</div>
+                  <div className="text-2xl font-black text-text tabular-nums">
+                    {loadedLatency !== null ? `${loadedLatency}ms` : status === 'download' ? "..." : '--'}
+                  </div>
                 </div>
-              </div>
-
-              {/* Advanced Diagnostic: Loaded Latency / Bufferbloat */}
-              <div className="bg-blue/5 border border-blue/10 p-5 rounded-[24px] flex items-center justify-between group hover:bg-blue/10 transition-all">
-                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue group-hover:scale-110 transition-transform">
-                       <Timer className="w-5 h-5" />
-                    </div>
-                    <div>
-                       <div className="text-[9px] font-black text-blue uppercase tracking-widest">Loaded Latency</div>
-                       <div className="text-[10px] font-medium text-text-3">Response during stress</div>
-                    </div>
-                 </div>
-                 <div className="text-xl font-black text-blue tabular-nums">
-                    {loadedLatency !== null ? `${loadedLatency}ms` : status === 'download' ? "Active..." : '--'}
-                 </div>
               </div>
 
               {/* Provider Information */}
