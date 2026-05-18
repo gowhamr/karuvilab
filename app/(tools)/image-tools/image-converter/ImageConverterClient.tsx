@@ -100,12 +100,11 @@ export default function ImageConverterClient() {
     try {
       const zipBytes = await createBatchZip(items);
       const blob = new Blob([zipBytes as BlobPart], { type: "application/zip" });
-      const url = URL.createObjectURL(blob);
+      const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `karuvilab-images-${Date.now()}.zip`;
       a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
       toast("ZIP archive downloaded successfully!");
     } catch (err: any) {
       console.error("ZIP creation failed:", err);
@@ -113,7 +112,7 @@ export default function ImageConverterClient() {
     } finally {
       setIsZipping(false);
     }
-  }, [items, toast]);
+  }, [items, toast, createUrl]);
 
   const handleDownloadAll = useCallback(() => {
     downloadAll();
@@ -266,14 +265,15 @@ export default function ImageConverterClient() {
 }
 
 function ThumbnailPreview({ file }: { file: File }) {
+  const { createUrl } = useObjectUrlManager();
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(file);
+    const objectUrl = createUrl(file);
     setUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [file]);
+    // useObjectUrlManager handles revocation on unmount automatically
+  }, [file, createUrl]);
 
   if (error || !url) return <ImageIcon className="w-6 h-6 text-text-4" />;
 

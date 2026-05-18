@@ -38,6 +38,12 @@ interface ClientInfo {
   org: string;
 }
 
+interface NavigatorWithConnection extends Navigator {
+  connection?: {
+    effectiveType: string;
+  };
+}
+
 interface TestResult {
   id: string;
   timestamp: number;
@@ -1032,7 +1038,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                   <div className="px-4 py-2 bg-blue/5 border border-blue/10 rounded-2xl flex flex-col items-center">
                      <span className="text-[8px] font-black text-blue uppercase tracking-widest">Network Type</span>
                      <span className="text-xs font-bold text-text uppercase">
-                        {(navigator as any).connection?.effectiveType || 'Broadband'}
+                        {(navigator as NavigatorWithConnection).connection?.effectiveType || 'Broadband'}
                      </span>
                   </div>
                   <div className="px-4 py-2 bg-green-500/5 border border-green-500/10 rounded-2xl flex flex-col items-center">

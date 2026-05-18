@@ -6,7 +6,8 @@ import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingU
 import { Star, Clock, LayoutGrid } from "lucide-react";
 
 export const FavoritesSection = memo(function FavoritesSection() {
-  const { favorites, updateFavorites } = useSettingsStore();
+  const favorites = useSettingsStore(state => state.favorites);
+  const updateFavorites = useSettingsStore(state => state.updateFavorites);
 
   return (
     <div className="space-y-2">

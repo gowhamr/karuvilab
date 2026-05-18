@@ -84,16 +84,16 @@ export default function StandardCalculatorClient() {
     setWaitNext(true);
   }, [current, previous, operator]);
 
-  const handleAC = () => { setCurrent("0"); setPrevious(null); setOperator(null); setWaitNext(false); };
-  const handleCE = () => { setCurrent("0"); setWaitNext(false); };
-  const handleToggleSign = () => {
+  const handleAC = useCallback(() => { setCurrent("0"); setPrevious(null); setOperator(null); setWaitNext(false); }, []);
+  const handleCE = useCallback(() => { setCurrent("0"); setWaitNext(false); }, []);
+  const handleToggleSign = useCallback(() => {
     if (current === "Error" || current === "0") return;
     setCurrent((c) => c.startsWith("-") ? c.slice(1) : "-" + c);
-  };
-  const handlePercent = () => {
+  }, [current]);
+  const handlePercent = useCallback(() => {
     const n = parseFloat(current);
     if (!isNaN(n)) setCurrent(String(n / 100));
-  };
+  }, [current]);
 
   // Keyboard support
   useEffect(() => {
@@ -116,8 +116,7 @@ export default function StandardCalculatorClient() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleDigit, handleOp, handleEquals]);
+  }, [handleDigit, handleOp, handleEquals, handleAC, handlePercent]);
 
   const opLabel: Record<string, string> = { "+": "+", "-": "−", "*": "×", "/": "÷" };
 

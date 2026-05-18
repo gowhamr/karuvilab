@@ -6,7 +6,8 @@ import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingU
 import { FileCode, Edit3, Copy, Download } from "lucide-react";
 
 export const ToolPreferencesSection = memo(function ToolPreferencesSection() {
-  const { tools, updateTools } = useSettingsStore();
+  const tools = useSettingsStore(state => state.tools);
+  const updateTools = useSettingsStore(state => state.updateTools);
 
   return (
     <div className="space-y-2">

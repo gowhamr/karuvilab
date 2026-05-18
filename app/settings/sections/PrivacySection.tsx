@@ -8,7 +8,9 @@ import { useState } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
 export const PrivacySection = memo(function PrivacySection() {
-  const { privacy, updatePrivacy, resetAll } = useSettingsStore();
+  const privacy = useSettingsStore(state => state.privacy);
+  const updatePrivacy = useSettingsStore(state => state.updatePrivacy);
+  const resetAll = useSettingsStore(state => state.resetAll);
   const [isExporting, setIsExporting] = useState(false);
   const { createUrl, revokeUrl } = useObjectUrlManager();
 

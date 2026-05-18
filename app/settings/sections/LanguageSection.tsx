@@ -9,7 +9,8 @@ import { useI18n } from "@/src/lib/i18n/store";
 import { Locale } from "@/src/lib/i18n";
 
 export const LanguageSection = memo(function LanguageSection() {
-  const { language, updateLanguage } = useSettingsStore();
+  const language = useSettingsStore(state => state.language);
+  const updateLanguage = useSettingsStore(state => state.updateLanguage);
   const { setLocale } = useI18n();
 
   return (

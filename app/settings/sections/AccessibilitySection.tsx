@@ -6,7 +6,8 @@ import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingU
 import { Type, Eye, Keyboard, UserSearch, Target } from "lucide-react";
 
 export const AccessibilitySection = memo(function AccessibilitySection() {
-  const { accessibility, updateAccessibility } = useSettingsStore();
+  const accessibility = useSettingsStore(state => state.accessibility);
+  const updateAccessibility = useSettingsStore(state => state.updateAccessibility);
 
   return (
     <div className="space-y-2">

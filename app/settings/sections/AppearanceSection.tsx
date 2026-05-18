@@ -6,7 +6,8 @@ import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingU
 import { Sun, Maximize, Zap, LayoutPanelTop } from "lucide-react";
 
 export const AppearanceSection = memo(function AppearanceSection() {
-  const { appearance, updateAppearance } = useSettingsStore();
+  const appearance = useSettingsStore(state => state.appearance);
+  const updateAppearance = useSettingsStore(state => state.updateAppearance);
 
   return (
     <div className="space-y-2">

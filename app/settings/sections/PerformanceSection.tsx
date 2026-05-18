@@ -6,7 +6,8 @@ import { SettingRow, SettingSwitch } from "../components/SettingUI";
 import { Zap, Boxes, Database, Cpu } from "lucide-react";
 
 export const PerformanceSection = memo(function PerformanceSection() {
-  const { performance, updatePerformance } = useSettingsStore();
+  const performance = useSettingsStore(state => state.performance);
+  const updatePerformance = useSettingsStore(state => state.updatePerformance);
 
   return (
     <div className="space-y-2">

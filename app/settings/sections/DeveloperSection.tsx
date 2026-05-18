@@ -6,7 +6,8 @@ import { SettingRow, SettingSwitch } from "../components/SettingUI";
 import { Terminal, Activity, FlaskConical, Flag } from "lucide-react";
 
 export const DeveloperSection = memo(function DeveloperSection() {
-  const { developer, updateDeveloper } = useSettingsStore();
+  const developer = useSettingsStore(state => state.developer);
+  const updateDeveloper = useSettingsStore(state => state.updateDeveloper);
 
   return (
     <div className="space-y-2">

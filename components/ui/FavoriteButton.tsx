@@ -5,7 +5,8 @@ import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useState, useEffect } from "react";
 
 export function FavoriteButton({ toolId }: { toolId: string }) {
-  const { isFavorite, toggleFavorite } = useFavoriteStore();
+  const isFavorite = useFavoriteStore(state => state.isFavorite);
+  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
