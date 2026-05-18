@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, memo } from "react";
+import { useState, useMemo, memo } from "react";
 import dynamic from "next/dynamic";
 import { 
   Sun, Shield, UserSearch, Star, 
   Settings2, RefreshCw,
   ChevronRight, ArrowLeft, Globe,
-  History as HistoryIcon
+  History as HistoryIcon, Search, Zap, Terminal, Info
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useIsHydrated } from "@/src/store/settings/store";
@@ -22,28 +22,56 @@ const HistorySection = dynamic(() => import("./sections/HistorySection").then(m 
 const LanguageSection = dynamic(() => import("./sections/LanguageSection").then(m => m.LanguageSection), { ssr: false });
 const SupportSection = dynamic(() => import("./sections/SupportSection").then(m => m.SupportSection), { ssr: false });
 const AboutSection = dynamic(() => import("./sections/AboutSection").then(m => m.AboutSection), { ssr: false });
+const PerformanceSection = dynamic(() => import("./sections/PerformanceSection").then(m => m.PerformanceSection), { ssr: false });
+const DeveloperSection = dynamic(() => import("./sections/DeveloperSection").then(m => m.DeveloperSection), { ssr: false });
 
 const MENU_ITEMS = [
-  { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density, animations' },
-  { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast' },
-  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic, history' },
-  { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations, logs' },
-  { id: 'favorites', label: 'Favorites', icon: Star, desc: 'Pinned tools, recent history' },
-  { id: 'tools', label: 'Tool Preferences', icon: Settings2, desc: 'Formats, inputs, auto-copy' },
-  { id: 'language', label: 'Language', icon: Globe, desc: 'Localization, RTL support' },
+  { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density, animations', group: 'Personalization' },
+  { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast', group: 'Personalization' },
+  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic, history', group: 'Application' },
+  { id: 'performance', label: 'Performance', icon: Zap, desc: 'Speed, cache, motion', group: 'Application' },
+  { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations, logs', group: 'History & PINS' },
+  { id: 'favorites', label: 'Favorites', icon: Star, desc: 'Pinned tools, recent history', group: 'History & PINS' },
+  { id: 'tools', label: 'Tool Preferences', icon: Settings2, desc: 'Formats, inputs, auto-copy', group: 'Tools' },
+  { id: 'language', label: 'Language', icon: Globe, desc: 'Localization, RTL support', group: 'Preferences' },
+  { id: 'developer', label: 'Developer', icon: Terminal, desc: 'Debug mode, diagnostics', group: 'System' },
+  { id: 'about', label: 'About', icon: Info, desc: 'Version, device info', group: 'System' },
 ];
 
 export default function SettingsClient() {
   const isHydrated = useIsHydrated();
   const [activeSection, setActiveSection] = useState('appearance');
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredItems = useMemo(() => {
+    if (!searchQuery) return MENU_ITEMS;
+    const q = searchQuery.toLowerCase();
+    return MENU_ITEMS.filter(item => 
+      item.label.toLowerCase().includes(q) || 
+      item.desc.toLowerCase().includes(q) ||
+      item.group.toLowerCase().includes(q)
+    );
+  }, [searchQuery]);
+
+  const groupedItems = useMemo(() => {
+    const groups: Record<string, typeof MENU_ITEMS> = {};
+    filteredItems.forEach(item => {
+      const groupName = item.group;
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(item);
+    });
+    return groups;
+  }, [filteredItems]);
 
   if (!isHydrated) {
     return (
-      <div className="flex flex-col md:flex-row gap-12 animate-pulse">
-        <div className="w-full md:w-72 space-y-4">
+      <div className="flex flex-col lg:flex-row gap-12 animate-pulse">
+        <div className="w-full lg:w-80 space-y-4">
           <div className="h-8 w-32 bg-surface rounded-lg" />
           <div className="space-y-2">
-            {[1,2,3,4,5].map(i => <div key={i} className="h-14 w-full bg-surface rounded-2xl" />)}
+            {[1,2,3,4,5,6].map(i => <div key={i} className="h-14 w-full bg-surface rounded-2xl" />)}
           </div>
         </div>
         <div className="flex-1 space-y-8">
@@ -54,55 +82,80 @@ export default function SettingsClient() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-12 min-h-[700px]">
+    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 min-h-screen">
       
       {/* ── Sidebar Navigation ─────────────────────────────────────────── */}
-      <aside className="w-full md:w-72 flex-shrink-0 space-y-8">
+      <aside className="w-full lg:w-80 flex-shrink-0 space-y-8">
         <div className="space-y-6">
-          <Link 
-            href="/"
-            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4 hover:text-blue transition-colors px-4"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Dashboard
-          </Link>
-          
-          <div className="space-y-1">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-4 mb-4">Settings</h2>
-            <nav className="space-y-1">
-              {MENU_ITEMS.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`
-                    w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative
-                    ${activeSection === item.id 
-                      ? 'bg-blue text-white shadow-lg shadow-blue/20' 
-                      : 'hover:bg-blue/5 text-text-2'}
-                  `}
-                >
-                  <div className={`
-                    w-10 h-10 rounded-xl flex items-center justify-center transition-colors
-                    ${activeSection === item.id ? 'bg-white/20' : 'bg-surface border border-border group-hover:bg-blue/10'}
-                  `}>
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[11px] font-black uppercase tracking-widest leading-none mb-1">{item.label}</div>
-                    <div className={`text-[10px] truncate font-medium ${activeSection === item.id ? 'text-white/60' : 'text-text-4'}`}>
-                      {item.desc}
-                    </div>
-                  </div>
-                  {activeSection === item.id && (
-                    <ChevronRight className="w-4 h-4 opacity-60" />
-                  )}
-                </button>
-              ))}
-            </nav>
+          <div className="px-4 space-y-6">
+            <Link 
+              href="/"
+              className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4 hover:text-blue transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Back to Dashboard
+            </Link>
+
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-text-4 group-focus-within:text-blue transition-colors">
+                <Search className="w-4 h-4" />
+              </div>
+              <input 
+                type="text"
+                placeholder="Search settings..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-12 pl-11 pr-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text placeholder:text-text-4 focus:border-blue/40 outline-none transition-all"
+              />
+            </div>
           </div>
+          
+          <nav className="space-y-8 max-h-[calc(100vh-250px)] overflow-y-auto no-scrollbar px-1">
+            {Object.entries(groupedItems).map(([group, items]) => (
+              <div key={group} className="space-y-2">
+                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-4">{group}</h2>
+                <div className="space-y-1">
+                  {items.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveSection(item.id)}
+                      className={`
+                        w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative
+                        ${activeSection === item.id 
+                          ? 'bg-blue text-white shadow-lg shadow-blue/20' 
+                          : 'hover:bg-blue/5 text-text-2'}
+                      `}
+                    >
+                      <div className={`
+                        w-10 h-10 rounded-xl flex items-center justify-center transition-colors
+                        ${activeSection === item.id ? 'bg-white/20' : 'bg-surface border border-border group-hover:bg-blue/10'}
+                      `}>
+                        <item.icon className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[11px] font-black uppercase tracking-widest leading-none mb-1">{item.label}</div>
+                        <div className={`text-[10px] truncate font-medium ${activeSection === item.id ? 'text-white/60' : 'text-text-4'}`}>
+                          {item.desc}
+                        </div>
+                      </div>
+                      {activeSection === item.id && (
+                        <ChevronRight className="w-4 h-4 opacity-60" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {filteredItems.length === 0 && (
+              <div className="px-4 py-8 text-center space-y-2">
+                <p className="text-xs font-black text-text-4 uppercase tracking-widest">No results found</p>
+                <p className="text-[10px] text-text-4 opacity-60">Try searching for theme, cache, or privacy.</p>
+              </div>
+            )}
+          </nav>
         </div>
 
-        <div className="p-6 bg-gradient-to-br from-blue/5 to-transparent border border-blue/10 rounded-3xl space-y-4">
+        <div className="hidden lg:block p-6 bg-gradient-to-br from-blue/5 to-transparent border border-blue/10 rounded-3xl space-y-4">
            <p className="text-[10px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
              <RefreshCw className="w-3 h-3" />
              Local-First App
@@ -114,37 +167,45 @@ export default function SettingsClient() {
       </aside>
 
       {/* ── Active Section Content ────────────────────────────────────────── */}
-      <main className="flex-1 min-w-0 pb-24 md:pb-0">
+      <main className="flex-1 min-w-0 pb-32 lg:pb-0">
         <AnimatePresence mode="wait">
           <m.div
             key={activeSection}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-surface border border-border/40 rounded-[24px] sm:rounded-[40px] p-4 sm:p-8 md:p-12 shadow-premium relative overflow-hidden"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="bg-surface border border-border/40 rounded-[32px] lg:rounded-[48px] p-6 md:p-10 lg:p-16 shadow-premium relative overflow-hidden"
           >
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
             
-            <header className="mb-8 sm:mb-12 space-y-3 relative z-10">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue/5 flex items-center justify-center text-blue mb-6">
-                 {(() => {
-                   const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Settings2;
-                   return <Icon className="w-6 h-6 sm:w-7 sm:h-7" />;
-                 })()}
+            <header className="mb-10 lg:mb-16 space-y-4 relative z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-[20px] lg:rounded-[24px] bg-blue/5 flex items-center justify-center text-blue shadow-inner shadow-blue/10">
+                   {(() => {
+                     const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Settings2;
+                     return <Icon className="w-6 h-6 lg:w-8 lg:h-8" />;
+                   })()}
+                </div>
+                <div>
+                  <h1 className="text-2xl lg:text-4xl font-black tracking-tight">
+                    {MENU_ITEMS.find(m => m.id === activeSection)?.label}
+                  </h1>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-text-4 mt-1">
+                    {MENU_ITEMS.find(m => m.id === activeSection)?.group}
+                  </p>
+                </div>
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight flex items-center gap-3">
-                {MENU_ITEMS.find(m => m.id === activeSection)?.label}
-              </h1>
-              <p className="text-base sm:text-lg text-text-3 font-medium max-w-xl">
-                {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. Changes are saved automatically.
+              <p className="text-base lg:text-lg text-text-3 font-medium max-w-2xl leading-relaxed pt-2">
+                {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. These preferences are synced across your local sessions automatically.
               </p>
             </header>
 
-            <div className="relative z-10">
+            <div className="relative z-10 min-h-[400px]">
               {activeSection === 'appearance' && <AppearanceSection />}
               {activeSection === 'privacy' && <PrivacySection />}
+              {activeSection === 'performance' && <PerformanceSection />}
               {activeSection === 'history' && <HistorySection />}
               {activeSection === 'accessibility' && <AccessibilitySection />}
               {activeSection === 'tools' && <ToolPreferencesSection />}
@@ -152,6 +213,7 @@ export default function SettingsClient() {
               {activeSection === 'language' && <LanguageSection />}
               {activeSection === 'support' && <SupportSection />}
               {activeSection === 'about' && <AboutSection />}
+              {activeSection === 'developer' && <DeveloperSection />}
             </div>
           </m.div>
         </AnimatePresence>

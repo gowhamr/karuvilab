@@ -15,6 +15,7 @@ interface WorkflowState {
   // Actions
   addToChain: (toolId: string) => void;
   setActiveItems: (items: WorkflowItem[]) => void;
+  syncToolOutput: (toolId: string, items: WorkflowItem[]) => void;
   clearWorkflow: () => void;
   
   // Helpers
@@ -32,16 +33,27 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
 
   addToChain: (toolId) => {
     set(state => {
-      // Don't add duplicate consecutive tools
       if (state.chain[state.chain.length - 1] === toolId) return state;
-      const nextChain = [...state.chain, toolId];
-      return { chain: nextChain };
+      return { chain: [...state.chain, toolId] };
     });
     get().updateSuggestions();
   },
 
   setActiveItems: (items) => {
     set({ activeItems: items });
+    get().updateSuggestions();
+  },
+
+  syncToolOutput: (toolId, items) => {
+    set(state => {
+      const nextChain = state.chain[state.chain.length - 1] === toolId 
+        ? state.chain 
+        : [...state.chain, toolId];
+      return { 
+        chain: nextChain,
+        activeItems: items 
+      };
+    });
     get().updateSuggestions();
   },
 

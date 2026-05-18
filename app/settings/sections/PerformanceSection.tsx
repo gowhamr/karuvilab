@@ -15,6 +15,7 @@ export const PerformanceSection = memo(function PerformanceSection() {
         label="Reduced Motion" 
         description="Minimize animations and transitions for a faster feel and better battery life."
         icon={Zap}
+        helpText="Essential for users with motion sensitivity or when using power-save modes."
       >
         <SettingSwitch 
           checked={performance.reducedMotion}
@@ -26,6 +27,7 @@ export const PerformanceSection = memo(function PerformanceSection() {
         label="Lazy Rendering" 
         description="Only render off-screen components when they enter the viewport."
         icon={Boxes}
+        helpText="Significantly improves initial load time and scroll smoothness on long pages."
       >
         <SettingSwitch 
           checked={performance.lazyRendering}
@@ -37,6 +39,7 @@ export const PerformanceSection = memo(function PerformanceSection() {
         label="Persistent Cache" 
         description="Store calculated results and tool states locally to avoid re-computation."
         icon={Database}
+        helpText="Speeds up repeated operations by remembering the last successful results."
       >
         <SettingSwitch 
           checked={performance.cachePreferences}

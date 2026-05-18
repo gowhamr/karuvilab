@@ -15,6 +15,7 @@ export const DeveloperSection = memo(function DeveloperSection() {
         label="Debug Mode" 
         description="Enable verbose logging and internal tool state visibility."
         icon={Terminal}
+        helpText="Logs all internal events to the browser console. Useful for troubleshooting errors."
       >
         <SettingSwitch 
           checked={developer.debugMode}
@@ -26,6 +27,7 @@ export const DeveloperSection = memo(function DeveloperSection() {
         label="Render Diagnostics" 
         description="Show component re-render counts and performance metrics in the UI."
         icon={Activity}
+        helpText="Overlays performance stats on every page. May slightly impact UI responsiveness."
       >
         <SettingSwitch 
           checked={developer.renderDiagnostics}
@@ -37,6 +39,7 @@ export const DeveloperSection = memo(function DeveloperSection() {
         label="Experimental Features" 
         description="Try out new features before they are officially released. May be unstable."
         icon={FlaskConical}
+        helpText="Enable this to test upcoming tools. Note that these may crash or lose data."
       >
         <SettingSwitch 
           checked={developer.experimentalFeatures}

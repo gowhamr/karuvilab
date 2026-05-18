@@ -55,10 +55,10 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
   const cancelItem = useBatchStore(state => state.cancelItem);
   const cancelAll = useBatchStore(state => state.cancelAll);
 
-  const setActiveItems = useWorkflowStore(state => state.setActiveItems);
-  const addToChain = useWorkflowStore(state => state.addToChain);
+  const syncToolOutput = useWorkflowStore(state => state.syncToolOutput);
   
   const syncedRef = useRef<string[]>([]);
+  const prevProcessingRef = useRef<boolean>(false);
 
   const stats = useMemo(() => {
     const total = items.length;
@@ -76,7 +76,10 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
 
   // Sync with workflow store when processing finishes
   useEffect(() => {
-    if (stats.completed > 0 && !isProcessing) {
+    const wasProcessing = prevProcessingRef.current;
+    prevProcessingRef.current = isProcessing;
+
+    if (stats.completed > 0 && (!isProcessing || (wasProcessing && !isProcessing))) {
       const tool = findToolById(toolId);
       const outputType = (Array.isArray(tool?.output) ? tool?.output[0] : tool?.output) || 'any-file';
       
@@ -84,12 +87,10 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       const completedIds = completedItems.map(i => i.id);
       
       // Check if we've already synced these exact items
-      if (
-        syncedRef.current.length === completedIds.length &&
-        syncedRef.current.every((id, idx) => id === completedIds[idx])
-      ) {
-        return;
-      }
+      const alreadySynced = syncedRef.current.length === completedIds.length &&
+                           syncedRef.current.every((id, idx) => id === completedIds[idx]);
+
+      if (alreadySynced) return;
 
       const workflowItems: WorkflowItem[] = completedItems.map(i => ({
         blob: i.result!.blob,
@@ -99,11 +100,10 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       
       if (workflowItems.length > 0) {
         syncedRef.current = completedIds;
-        setActiveItems(workflowItems);
-        addToChain(toolId);
+        syncToolOutput(toolId, workflowItems);
       }
     }
-  }, [stats.completed, isProcessing, toolId, items, setActiveItems, addToChain]);
+  }, [stats.completed, isProcessing, toolId, items.length, syncToolOutput]);
 
   if (items.length === 0) return null;
 

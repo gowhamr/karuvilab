@@ -6,13 +6,14 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
+import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
 
 import { DropZone } from "@/components/ui/DropZone";
 
 const toolId = "bulk-resizer";
 
 export default function BulkImageResizerClient() {
-  const { createUrl } = useObjectUrlManager();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [targetW, setTargetW] = useState("800");
   const [targetH, setTargetH] = useState("");
   const [lockRatio, setLockRatio] = useState(true);
@@ -24,59 +25,64 @@ export default function BulkImageResizerClient() {
   const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
 
   const resizeSingle = async (item: BatchItem): Promise<any> => {
-    // We need to get original dimensions first
-    const tempUrl = createUrl(item.file);
-    const img = await new Promise<HTMLImageElement>((res, rej) => {
-      const im = new Image();
-      im.onload = () => res(im);
-      im.onerror = rej;
-      im.src = tempUrl;
-    });
+    const result = await safeImageProcess(async () => {
+      // We need to get original dimensions first
+      const tempUrl = createUrl(item.file);
+      const img = await new Promise<HTMLImageElement>((res, rej) => {
+        const im = new Image();
+        im.onload = () => res(im);
+        im.onerror = rej;
+        im.src = tempUrl;
+      });
 
-    const origW = img.naturalWidth;
-    const origH = img.naturalHeight;
-    URL.revokeObjectURL(tempUrl);
+      const origW = img.naturalWidth;
+      const origH = img.naturalHeight;
+      revokeUrl(tempUrl);
 
-    let nw = parseInt(targetW) || 0;
-    let nh = parseInt(targetH) || 0;
+      let nw = parseInt(targetW) || 0;
+      let nh = parseInt(targetH) || 0;
 
-    if (lockRatio) {
-      if (nw && !nh) nh = Math.round(nw * origH / origW);
-      else if (nh && !nw) nw = Math.round(nh * origW / origH);
-      else if (nw && nh) {
-        const scale = Math.min(nw / origW, nh / origH);
-        nw = Math.round(origW * scale);
-        nh = Math.round(origH * scale);
+      if (lockRatio) {
+        if (nw && !nh) nh = Math.round(nw * origH / origW);
+        else if (nh && !nw) nw = Math.round(nh * origW / origH);
+        else if (nw && nh) {
+          const scale = Math.min(nw / origW, nh / origH);
+          nw = Math.round(origW * scale);
+          nh = Math.round(origH * scale);
+        }
       }
-    }
-    if (!nw) nw = origW;
-    if (!nh) nh = origH;
+      if (!nw) nw = origW;
+      if (!nh) nh = origH;
 
-    const buffer = await item.file.arrayBuffer();
-    const resultBytes = await workerManager.resizeImage(
-      buffer,
-      nw,
-      nh,
-      "image/jpeg",
-      90,
-      (p) => {
-        updateItem(toolId, item.id, { progress: p.percent, message: p.message });
-      },
-      item.abortController?.signal
-    );
+      const buffer = await item.file.arrayBuffer();
+      const resultBytes = await workerManager.resizeImage(
+        buffer,
+        nw,
+        nh,
+        "image/jpeg",
+        90,
+        (p) => {
+          updateItem(toolId, item.id, { progress: p.percent, message: p.message });
+        },
+        item.abortController?.signal
+      );
 
-    const blob = new Blob([resultBytes as unknown as BlobPart], { type: "image/jpeg" });
-    const url = createUrl(blob);
-    const name = item.file.name.replace(/\.[^.]+$/, "") + "-resized.jpg";
+      const blob = new Blob([resultBytes as unknown as BlobPart], { type: "image/jpeg" });
+      const url = createUrl(blob);
+      const name = item.file.name.replace(/\.[^.]+$/, "") + "-resized.jpg";
 
-    return {
-      name,
-      originalSize: item.file.size,
-      compressedSize: blob.size,
-      url,
-      blob,
-      dimensions: `${nw}x${nh}`
-    };
+      return {
+        name,
+        originalSize: item.file.size,
+        compressedSize: blob.size,
+        url,
+        blob,
+        dimensions: `${nw}x${nh}`
+      };
+    }, 'bulk-resizer');
+
+    if (!result.success) throw new Error(result.error);
+    return result.data;
   };
 
   const handleFiles = (files: FileList | File[]) => {

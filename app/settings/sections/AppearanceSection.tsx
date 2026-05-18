@@ -15,6 +15,7 @@ export const AppearanceSection = memo(function AppearanceSection() {
         label="Theme Preference" 
         description="Choose how KaruviLab looks to you. System will follow your device settings."
         icon={Sun}
+        helpText="Dark mode is optimized for low-light environments and reduces eye strain. Light mode provides high contrast for daytime use."
       >
         <SettingSelect 
           value={appearance.theme}
@@ -37,6 +38,7 @@ export const AppearanceSection = memo(function AppearanceSection() {
         label="Density Mode" 
         description="Comfortable is standard, Compact shows more content at once."
         icon={Maximize}
+        helpText="Compact mode reduces whitespace between elements, ideal for power users and small screens."
       >
         <SettingSelect 
           value={appearance.density}
@@ -52,6 +54,7 @@ export const AppearanceSection = memo(function AppearanceSection() {
         label="Interface Animations" 
         description="Enable smooth transitions and micro-interactions throughout the app."
         icon={Zap}
+        helpText="Disabling animations can make the app feel faster on older devices and saves battery."
       >
         <SettingSwitch 
           checked={appearance.animationsEnabled}

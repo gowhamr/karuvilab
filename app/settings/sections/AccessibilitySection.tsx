@@ -15,6 +15,7 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
         label="Font Scaling" 
         description="Adjust the base font size for better readability."
         icon={Type}
+        helpText="Increases or decreases the size of all text throughout the application. 100% is the default."
       >
         <SettingSelect 
           value={accessibility.fontScaling.toString()}
@@ -32,6 +33,7 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
         label="High Contrast" 
         description="Enhance visibility by using higher contrast colors and borders."
         icon={Eye}
+        helpText="Makes text and icons stand out more against the background, improving visibility for users with low vision."
       >
         <SettingSwitch 
           checked={accessibility.highContrast}
@@ -43,6 +45,7 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
         label="Screen Reader Mode" 
         description="Optimize the layout and semantic structure for assistive technologies."
         icon={UserSearch}
+        helpText="Forces the UI to be more linear and descriptive, ensuring compatibility with screen readers like NVDA or VoiceOver."
       >
         <SettingSwitch 
           checked={accessibility.screenReaderOptimized}

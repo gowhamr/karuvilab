@@ -69,6 +69,7 @@ export const PrivacySection = memo(function PrivacySection() {
         label="Local-First Processing" 
         description="All tool logic runs strictly in your browser. This setting cannot be disabled."
         icon={Shield}
+        helpText="This is our core promise. We don't have a backend that sees your files or data. Everything happens in your browser's memory and workers."
       >
         <SettingSwitch checked={true} onChange={() => {}} disabled />
       </SettingRow>
@@ -93,6 +94,7 @@ export const PrivacySection = memo(function PrivacySection() {
         label="Clear Tool Data" 
         description="Wipe all locally stored tool inputs and processing history."
         icon={RefreshCcw}
+        helpText="This will empty your local tool cache. Your theme preferences and favorites are kept safe."
       >
         <button 
           onClick={clearCache}
@@ -106,6 +108,7 @@ export const PrivacySection = memo(function PrivacySection() {
         label="Action History" 
         description="Remember your last used tools and inputs for a faster workflow."
         icon={History}
+        helpText="If disabled, the app won't show 'Recent Tools' or restore your last typed values when you return to a tool."
       >
         <SettingSwitch 
           checked={privacy.historyEnabled}

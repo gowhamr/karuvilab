@@ -19,6 +19,7 @@ export const LanguageSection = memo(function LanguageSection() {
         label="App Language" 
         description="Choose your preferred language for the interface. More languages coming soon."
         icon={Languages}
+        helpText="We are actively working on expanding our language support. Your choice is saved locally."
       >
         <SettingSelect 
           value={language.locale}
@@ -38,6 +39,7 @@ export const LanguageSection = memo(function LanguageSection() {
         label="RTL Support" 
         description="Optimize the interface for Right-to-Left languages like Arabic or Hebrew."
         icon={Globe}
+        helpText="Mirrors the layout and adjusts text alignment for a natural reading experience in RTL languages."
       >
         <SettingSwitch 
           checked={language.rtl}
@@ -49,6 +51,7 @@ export const LanguageSection = memo(function LanguageSection() {
         label="Auto-Detect" 
         description="Automatically switch language based on your browser's primary locale."
         icon={Target}
+        helpText="Uses the 'navigator.language' API to set your locale on the first visit."
       >
         <SettingSwitch 
           checked={language.autoDetect}
