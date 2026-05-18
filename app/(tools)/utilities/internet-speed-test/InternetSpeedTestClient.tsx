@@ -435,19 +435,20 @@ export default function InternetSpeedTestClient() {
     let lastError: string | null = null;
 
     const uploadWorker = async () => {
-      const size = 256 * 1024; // Smaller 256KB chunks for better stability
+      const size = 128 * 1024; // 128KB chunks for better stability
       const data = new Uint8Array(size);
       crypto.getRandomValues(data);
-      const blob = new Blob([data], { type: 'application/octet-stream' });
+      const blob = new Blob([data], { type: 'text/plain' });
 
       while (performance.now() - startTime < testDuration) {
         if (abortControllerRef.current?.signal.aborted) break;
         
         const chunkController = new AbortController();
-        const timeoutId = setTimeout(() => chunkController.abort(), 10000); // 10s timeout for 256KB
+        const timeoutId = setTimeout(() => chunkController.abort(), 12000); 
 
         try {
-          const response = await fetch('/api/speedtest/upload', {
+          // Use exact URL with trailing slash to match next.config.ts
+          const response = await fetch('/api/speedtest/upload/', {
             method: 'POST',
             body: blob,
             signal: chunkController.signal,
@@ -467,20 +468,17 @@ export default function InternetSpeedTestClient() {
               setHistory(historyRef.current);
             }
           } else {
-            // Log non-ok response
             const errBody = await response.text().catch(() => "Unknown error");
             lastError = `Status ${response.status}: ${errBody}`;
-            console.warn(`Upload chunk failed with status ${response.status}: ${errBody}`);
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 1000));
           }
         } catch (e) {
           const isAbort = (e as Error).name === 'AbortError';
           if (isAbort && !abortControllerRef.current?.signal.aborted) {
-            console.warn("Upload chunk timed out, retrying...");
+            lastError = "Chunk timeout";
             continue;
           }
           lastError = (e as Error).message || "Fetch failed";
-          console.error("Upload worker fatal error:", e);
           break;
         } finally {
           clearTimeout(timeoutId);
@@ -494,7 +492,7 @@ export default function InternetSpeedTestClient() {
     
     if (totalBytes === 0) {
       if (lastError) setErrorDetails(`Upload Failed - ${lastError}`);
-      throw new Error("Upload test failed: No data could be transmitted.");
+      throw new Error(`Upload test failed: No data could be transmitted. (${lastError || 'Unknown Error'})`);
     }
     
     const finalMbps = (totalBytes * 8 / finalTime) / 1000000;

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs'; // Use Node.js runtime for more stable body handling
 export const dynamic = 'force-dynamic';
 
 const corsHeaders = {
@@ -12,10 +12,18 @@ const corsHeaders = {
 
 export async function POST(request: Request) {
   try {
-    // Consume the body to measure upload speed
-    await request.arrayBuffer();
+    // Force consumption of the entire body
+    const body = await request.arrayBuffer();
+    
+    // Validate that we actually received some data
+    if (!body || body.byteLength === 0) {
+      return NextResponse.json({ success: false, error: 'Empty body' }, { 
+        status: 400,
+        headers: corsHeaders 
+      });
+    }
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, size: body.byteLength }), {
       status: 200,
       headers: {
         ...corsHeaders,
@@ -25,12 +33,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Upload API Error:', error);
-    return new Response(JSON.stringify({ success: false, error: 'Failed to consume upload body' }), { 
-      status: 500,
-      headers: { 
-        ...corsHeaders,
-        'Content-Type': 'application/json' 
-      }
+    return NextResponse.json({ success: false, error: (error as Error).message }, { 
+      status: 500, 
+      headers: corsHeaders 
     });
   }
 }

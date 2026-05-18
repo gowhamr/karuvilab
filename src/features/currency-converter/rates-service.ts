@@ -34,7 +34,11 @@ async function fetchFromPrimary(base: string): Promise<RatesData> {
   const response = await fetchWithTimeout(`${PRIMARY_API_URL}${base}`);
   if (!response.ok) throw new Error(`Primary API failed with status ${response.status}`);
   
-  const json: RatesApiResponse = await response.json();
+  const json: any = await response.json();
+  
+  if (json.result === 'error') {
+    throw new Error(`Primary API returned error: ${json['error-type']}`);
+  }
   
   if (!json.rates || typeof json.rates !== 'object') {
     throw new Error('Malformed rates payload from primary API');
@@ -77,21 +81,25 @@ export async function getLiveRates(
 ): Promise<RatesData> {
   // 1. Check cache first unless forceRefresh
   if (!forceRefresh) {
-    const cached = await getCurrencyRates(base);
-    if (cached) {
-      const now = Date.now();
-      const isFresh = now < cached.expiresAt;
-      const isTooStale = now - cached.timestamp > MAX_STALE_DURATION;
+    try {
+      const cached = await getCurrencyRates(base);
+      if (cached) {
+        const now = Date.now();
+        const isFresh = now < cached.expiresAt;
+        const isTooStale = now - cached.timestamp > MAX_STALE_DURATION;
 
-      if (isFresh) {
-        return { ...cached, source: 'cache' } as RatesData;
-      }
+        if (isFresh) {
+          return { ...cached, source: 'cache' } as RatesData;
+        }
 
-      // If stale but not too stale, return cached data and trigger refresh in background
-      if (!isTooStale) {
-        refreshRatesInBackground(base, onBackgroundUpdate);
-        return { ...cached, source: 'cache' } as RatesData;
+        // If stale but not too stale, return cached data and trigger refresh in background
+        if (!isTooStale) {
+          refreshRatesInBackground(base, onBackgroundUpdate);
+          return { ...cached, source: 'cache' } as RatesData;
+        }
       }
+    } catch (err) {
+      console.warn('Cache read failed:', err);
     }
   }
 
@@ -103,16 +111,21 @@ export async function getLiveRates(
   // 3. Fetch fresh data
   const fetchPromise = (async () => {
     try {
+      let data: RatesData;
       try {
-        const data = await fetchFromPrimary(base);
-        await saveCurrencyRates(data);
-        return data;
+        data = await fetchFromPrimary(base);
       } catch (primaryErr) {
         console.warn('Primary currency API failed, trying fallback...', primaryErr);
-        const data = await fetchFromFallback(base);
-        await saveCurrencyRates(data);
-        return data;
+        data = await fetchFromFallback(base);
       }
+      
+      try {
+        await saveCurrencyRates(data);
+      } catch (cacheErr) {
+        console.warn('Cache write failed:', cacheErr);
+      }
+      
+      return data;
     } finally {
       inFlightRequests.delete(base);
     }
