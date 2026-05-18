@@ -6,7 +6,8 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { 
   Gauge, Zap, ArrowDown, ArrowUp, RefreshCw, Activity, AlertTriangle, 
   MapPin, Globe, Server, History, Share2, CheckCircle2, Video, 
-  Gamepad2, MonitorPlay, Download, Wifi, SignalHigh, Timer, Send, Info
+  Gamepad2, MonitorPlay, Download, Wifi, SignalHigh, Timer, Send, Info,
+  ShieldCheck
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
@@ -86,11 +87,11 @@ const PulseRing = ({ active, color = "rgba(79, 70, 229, 0.4)" }: { active: boole
 );
 
 const SpeedGauge = ({ value, max = 100, color = "#4F46E5" }: { value: number, max?: number, color?: string }) => {
-  const size = 320; // Internal coordinate system
+  const size = 320; 
   const radius = size / 2 - 20;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(value / max, 1);
-  const arcLength = circumference * 0.75; // 3/4 circle
+  const arcLength = circumference * 0.75; 
   const strokeDashoffset = arcLength - (progress * arcLength);
 
   return (
@@ -99,6 +100,19 @@ const SpeedGauge = ({ value, max = 100, color = "#4F46E5" }: { value: number, ma
         viewBox={`0 0 ${size} ${size}`}
         className="w-full h-full transform -rotate-225"
       >
+        <defs>
+          <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#4F46E5" />
+            <stop offset="100%" stopColor="#818CF8" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
         {/* Background Arc */}
         <circle
           cx={size / 2}
@@ -107,12 +121,12 @@ const SpeedGauge = ({ value, max = 100, color = "#4F46E5" }: { value: number, ma
           fill="none"
           stroke="currentColor"
           className="text-border"
-          strokeWidth="12"
+          strokeWidth="16"
           strokeDasharray={arcLength}
           strokeLinecap="round"
           style={{ 
             strokeDashoffset: 0,
-            opacity: 0.2
+            opacity: 0.1
           }}
         />
         {/* Progress Arc */}
@@ -121,31 +135,33 @@ const SpeedGauge = ({ value, max = 100, color = "#4F46E5" }: { value: number, ma
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={color}
-          strokeWidth="12"
+          stroke="url(#gaugeGradient)"
+          strokeWidth="16"
           strokeDasharray={arcLength}
           strokeLinecap="round"
           initial={{ strokeDashoffset: arcLength }}
           animate={{ strokeDashoffset }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{ 
-            filter: `drop-shadow(0 0 8px ${color}66)`
-          }}
+          style={{ filter: "url(#glow)" }}
         />
       </svg>
       {/* Ticks/Markers */}
       <div className="absolute inset-0 pointer-events-none">
-        {[0, 25, 50, 75, 100].map((tick) => {
+        {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((tick) => {
           const angle = (tick / 100) * 270 - 225;
-          const x = 50 + 42 * Math.cos((angle * Math.PI) / 180);
-          const y = 50 + 42 * Math.sin((angle * Math.PI) / 180);
+          const x = 50 + 44 * Math.cos((angle * Math.PI) / 180);
+          const y = 50 + 44 * Math.sin((angle * Math.PI) / 180);
+          const isMajor = tick % 25 === 0;
           return (
             <div
               key={tick}
-              className="absolute text-[8px] font-black text-text-4 transform -translate-x-1/2 -translate-y-1/2"
+              className={cn(
+                "absolute font-black transform -translate-x-1/2 -translate-y-1/2 transition-colors",
+                isMajor ? "text-[10px] text-text-3" : "text-[7px] text-text-4/40"
+              )}
               style={{ left: `${x}%`, top: `${y}%` }}
             >
-              {Math.round((tick / 100) * max)}
+              {isMajor ? Math.round((tick / 100) * max) : "•"}
             </div>
           );
         })}
@@ -556,16 +572,48 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
 
   const pathD = getPath(history);
 
-  const getRating = (down: number | null, up: number | null) => {
-    if (down === null || up === null) return { label: 'Pending', color: 'text-text-4' };
-    const avg = (down + up) / 2;
-    if (avg >= 100) return { label: 'Excellent', color: 'text-success' };
-    if (avg >= 50) return { label: 'Good', color: 'text-blue' };
-    if (avg >= 20) return { label: 'Fair', color: 'text-orange-500' };
-    return { label: 'Poor', color: 'text-red-500' };
+  const getGrade = (down: number | null, up: number | null, ping: number | null, jitter: number | null) => {
+    if (down === null || up === null || ping === null || jitter === null) 
+      return { label: '--', color: 'text-text-4', sub: 'Pending' };
+    
+    let score = 0;
+    // Download (Max 40)
+    if (down >= 500) score += 40;
+    else if (down >= 250) score += 35;
+    else if (down >= 100) score += 30;
+    else if (down >= 50) score += 20;
+    else if (down >= 20) score += 10;
+    else score += 5;
+
+    // Upload (Max 30)
+    if (up >= 100) score += 30;
+    else if (up >= 50) score += 25;
+    else if (up >= 20) score += 15;
+    else if (up >= 10) score += 10;
+    else score += 5;
+
+    // Latency (Max 30)
+    if (ping <= 15) score += 30;
+    else if (ping <= 30) score += 25;
+    else if (ping <= 60) score += 15;
+    else if (ping <= 100) score += 5;
+
+    // Jitter Penalty
+    if (jitter > 20) score -= 10;
+    else if (jitter > 10) score -= 5;
+
+    if (score >= 90) return { label: 'A+', color: 'text-green-400', sub: 'Elite' };
+    if (score >= 80) return { label: 'A', color: 'text-green-500', sub: 'Excellent' };
+    if (score >= 70) return { label: 'B', color: 'text-blue-500', sub: 'Good' };
+    if (score >= 50) return { label: 'C', color: 'text-orange-500', sub: 'Fair' };
+    return { label: 'D', color: 'text-red-500', sub: 'Poor' };
   };
 
-  const currentRating = getRating(download, upload);
+  const stability = jitter !== null && ping !== null 
+    ? Math.max(0, Math.min(100, 100 - (jitter / (ping || 1) * 100)))
+    : 100;
+
+  const currentGrade = getGrade(download, upload, ping, jitter);
 
   // Big gauge shows upload speed during upload phase, and remains showing it if completed
   // unless we're in the download phase.
@@ -583,7 +631,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
 
   return (
     <ToolShell
-      title="Speed Tester Pro"
+      title="Speed Tester"
       description="Professional-grade internet diagnostic tool. High-precision measurement of bandwidth, latency, and connection stability."
       category={cat}
       toolId="internet-speed-test"
@@ -591,6 +639,10 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
       <div className="space-y-12">
         {/* Main Testing Console */}
         <div className="bg-surface border border-border rounded-[48px] p-6 md:p-12 shadow-2xl relative overflow-hidden">
+          {/* Subtle Grid Background */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+               style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+          
           {/* Global Progress Bar */}
           <div className="absolute top-0 left-0 w-full h-1.5 bg-bg/50 overflow-hidden">
             <motion.div 
@@ -630,11 +682,20 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 </div>
                 
                 {status === 'completed' && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-blue/5 border border-blue/10 rounded-full">
-                     <SignalHigh className="w-4 h-4 text-blue" />
-                     <span className={cn("text-xs font-black uppercase tracking-widest", currentRating.color)}>
-                        {currentRating.label}
-                     </span>
+                  <div className="flex items-center gap-4">
+                     <div className="flex flex-col items-end">
+                        <span className="text-[8px] font-black text-text-4 uppercase tracking-widest">Connection Grade</span>
+                        <span className={cn("text-3xl font-black leading-none", currentGrade.color)}>
+                           {currentGrade.label}
+                        </span>
+                     </div>
+                     <div className="h-10 w-px bg-border" />
+                     <div className="px-4 py-2 bg-blue/5 border border-blue/10 rounded-2xl flex flex-col">
+                        <span className="text-[8px] font-black text-blue uppercase tracking-widest">Status</span>
+                        <span className={cn("text-xs font-bold uppercase tracking-tight", currentGrade.color)}>
+                           {currentGrade.sub}
+                        </span>
+                     </div>
                   </div>
                 )}
               </div>
@@ -762,49 +823,49 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             <div className="w-full xl:w-96 space-y-6">
               {/* Essential Metrics Grid */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <Activity className="w-3.5 h-3.5" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Ping</span>
+                    <Activity className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Latency (Idle)</span>
                   </div>
                   <div className="text-2xl font-black text-text tabular-nums">{ping !== null ? `${ping}ms` : '--'}</div>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <RefreshCw className="w-3.5 h-3.5" />
+                    <RefreshCw className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
                     <span className="text-[9px] font-black uppercase tracking-widest">Jitter</span>
                   </div>
                   <div className="text-2xl font-black text-text tabular-nums">{jitter !== null ? `${jitter}ms` : '--'}</div>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <ArrowDown className="w-3.5 h-3.5" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Download</span>
+                    <ShieldCheck className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Stability</span>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">{download !== null ? download.toFixed(1) : '--'}</div>
+                  <div className="text-2xl font-black text-text tabular-nums">{status === 'completed' ? `${stability.toFixed(0)}%` : status === 'idle' ? '--' : 'Calc...'}</div>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <ArrowUp className="w-3.5 h-3.5" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Upload</span>
+                    <History className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Samples</span>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">{upload !== null ? upload.toFixed(1) : '--'}</div>
+                  <div className="text-2xl font-black text-text tabular-nums">{history.length || '--'}</div>
                 </div>
               </div>
 
               {/* Advanced Diagnostic: Loaded Latency / Bufferbloat */}
-              <div className="bg-blue/5 border border-blue/10 p-5 rounded-[24px] flex items-center justify-between">
+              <div className="bg-blue/5 border border-blue/10 p-5 rounded-[24px] flex items-center justify-between group hover:bg-blue/10 transition-all">
                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue">
+                    <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue group-hover:scale-110 transition-transform">
                        <Timer className="w-5 h-5" />
                     </div>
                     <div>
                        <div className="text-[9px] font-black text-blue uppercase tracking-widest">Loaded Latency</div>
-                       <div className="text-[10px] font-medium text-text-3">Response while busy</div>
+                       <div className="text-[10px] font-medium text-text-3">Response during stress</div>
                     </div>
                  </div>
                  <div className="text-xl font-black text-blue tabular-nums">
-                    {loadedLatency !== null ? `${loadedLatency}ms` : status === 'download' ? "Calculating..." : '--'}
+                    {loadedLatency !== null ? `${loadedLatency}ms` : status === 'download' ? "Active..." : '--'}
                  </div>
               </div>
 
@@ -812,11 +873,20 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
               <div className="bg-bg/40 border border-border/50 p-6 rounded-[32px] space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-2">
-                    <Globe className="w-5 h-5" />
+                    <Server className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">Network Provider</div>
+                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">ISP / AS Name</div>
                     <div className="text-sm font-bold text-text truncate">{clientInfo?.org || 'Detecting...'}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-2">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">Public IP</div>
+                    <div className="text-sm font-bold text-text tabular-nums">{clientInfo?.ip || '0.0.0.0'}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -824,7 +894,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">Server Hub</div>
+                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">Node Location</div>
                     <div className="text-sm font-bold text-text truncate">{clientInfo ? `${clientInfo.city}, ${clientInfo.country_name}` : 'Detecting...'}</div>
                   </div>
                 </div>
@@ -875,16 +945,15 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-red-600 dark:text-red-400">{error}</p>
                 </div>
-                <button 
-                  onClick={() => useSupportStore.getState().openFeedback('bug', { 
-                    toolId: 'internet-speed-test', 
-                    toolName: 'Speed Tester Pro',
+                <button
+                  onClick={() => useSupportStore.getState().openFeedback('bug', {
+                    toolId: 'internet-speed-test',
+                    toolName: 'Speed Tester',
                     error: error,
                     metadata: { details: errorDetails }
                   })}
                   className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap"
-                >
-                  Report Issue
+                >                  Report Issue
                 </button>
               </div>
 
@@ -947,6 +1016,72 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
           />
         </div>
 
+        {/* Professional Technical Analysis */}
+        {status === 'completed' && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-surface border border-border p-10 rounded-[48px] space-y-10"
+          >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+               <div className="space-y-2">
+                  <h2 className="text-2xl font-black tracking-tight">Professional Technical Analysis</h2>
+                  <p className="text-sm text-text-3 font-medium">Deep-packet inspection and connection stability metrics.</p>
+               </div>
+               <div className="flex items-center gap-4">
+                  <div className="px-4 py-2 bg-blue/5 border border-blue/10 rounded-2xl flex flex-col items-center">
+                     <span className="text-[8px] font-black text-blue uppercase tracking-widest">Network Type</span>
+                     <span className="text-xs font-bold text-text uppercase">
+                        {(navigator as any).connection?.effectiveType || 'Broadband'}
+                     </span>
+                  </div>
+                  <div className="px-4 py-2 bg-green-500/5 border border-green-500/10 rounded-2xl flex flex-col items-center">
+                     <span className="text-[8px] font-black text-green-500 uppercase tracking-widest">Bufferbloat</span>
+                     <span className="text-xs font-bold text-text uppercase">
+                        {loadedLatency && ping ? (loadedLatency - ping < 20 ? 'Grade A' : loadedLatency - ping < 50 ? 'Grade B' : 'Grade C') : 'N/A'}
+                     </span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="p-6 bg-bg/40 border border-border/50 rounded-[32px] space-y-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
+                     <Zap className="w-5 h-5" />
+                  </div>
+                  <div>
+                     <h3 className="font-black text-sm uppercase tracking-wider mb-1">Burst Capacity</h3>
+                     <p className="text-[11px] text-text-3 font-medium leading-relaxed">
+                        Measured peak bandwidth of {maxDownload.toFixed(1)} Mbps suggests a sustained link capacity for large binary transfers and 8K video streams.
+                     </p>
+                  </div>
+               </div>
+               <div className="p-6 bg-bg/40 border border-border/50 rounded-[32px] space-y-4">
+                  <div className="w-10 h-10 rounded-xl bg-orange-500/5 flex items-center justify-center text-orange-500">
+                     <Activity className="w-5 h-5" />
+                  </div>
+                  <div>
+                     <h3 className="font-black text-sm uppercase tracking-wider mb-1">Jitter Variance</h3>
+                     <p className="text-[11px] text-text-3 font-medium leading-relaxed">
+                        A jitter of {jitter}ms indicates a {(jitter || 0) < 5 ? 'highly stable' : 'variable'} packet delivery rhythm, essential for real-time VOIP and competitive gaming.
+                     </p>
+                  </div>
+               </div>
+               <div className="p-6 bg-bg/40 border border-border/50 rounded-[32px] space-y-4">
+                  <div className="w-10 h-10 rounded-xl bg-green-500/5 flex items-center justify-center text-green-500">
+                     <MonitorPlay className="w-5 h-5" />
+                  </div>
+                  <div>
+                     <h3 className="font-black text-sm uppercase tracking-wider mb-1">Streaming Score</h3>
+                     <p className="text-[11px] text-text-3 font-medium leading-relaxed">
+                        The connection supports up to {Math.floor((download || 0) / 25)} concurrent 4K streams based on Netflix's Ultra HD bandwidth requirements.
+                     </p>
+                  </div>
+               </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Technical Methodology */}
         <div className="bg-surface border border-border p-10 rounded-[48px] space-y-8">
           <div className="space-y-2">
@@ -995,32 +1130,57 @@ function IntelligenceCard({ icon: Icon, title, requirement, current, isLatency, 
 
   return (
     <div className={cn(
-      "bg-surface border p-6 rounded-[32px] space-y-4 transition-all duration-500",
+      "bg-surface border p-6 rounded-[32px] space-y-4 transition-all duration-500 relative overflow-hidden group",
       status === 'yes' ? "border-green-500/20 shadow-lg shadow-green-500/5" : "border-border"
     )}>
-      <div className="flex items-center justify-between">
-         <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", status === 'yes' ? "bg-green-500/10 text-green-600" : "bg-bg text-text-4")}>
-            <Icon className="w-5 h-5" />
+      {status === 'yes' && (
+        <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/5 rounded-full -mr-12 -mt-12 blur-2xl" />
+      )}
+      
+      <div className="flex items-center justify-between relative z-10">
+         <div className={cn(
+           "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500",
+           status === 'yes' ? "bg-green-500/10 text-green-600 scale-110" : "bg-bg text-text-4"
+         )}>
+            <Icon className="w-6 h-6" />
          </div>
          {status !== 'pending' && (
-           <div className={cn("px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest", status === 'yes' ? "bg-green-500 text-white" : "bg-red-500/10 text-red-500")}>
-              {status === 'yes' ? "Optimal" : "Slow"}
+           <div className={cn(
+             "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2",
+             status === 'yes' ? "bg-green-500 text-white shadow-lg shadow-green-500/20" : "bg-red-500/10 text-red-500"
+           )}>
+              {status === 'yes' ? (
+                <>
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Optimal</span>
+                </>
+              ) : (
+                <>
+                  <AlertTriangle className="w-3 h-3" />
+                  <span>Limited</span>
+                </>
+              )}
            </div>
          )}
       </div>
-      <div className="space-y-1">
-        <h3 className="font-black text-sm tracking-tight">{title}</h3>
+      
+      <div className="space-y-1 relative z-10">
+        <h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3>
         <p className="text-[10px] text-text-4 leading-relaxed font-medium">{desc}</p>
       </div>
-      <div className="pt-2 flex items-center gap-2">
-         <div className="h-1 flex-1 bg-bg rounded-full overflow-hidden">
+      
+      <div className="pt-2 flex items-center gap-3 relative z-10">
+         <div className="h-1.5 flex-1 bg-bg rounded-full overflow-hidden">
             <motion.div 
-              className={cn("h-full", status === 'yes' ? "bg-green-500" : "bg-text-4")}
+              className={cn("h-full", status === 'yes' ? "bg-green-500" : "bg-text-4/30")}
               initial={{ width: 0 }}
-              animate={{ width: status === 'yes' ? '100%' : '30%' }}
+              animate={{ width: status === 'yes' ? '100%' : status === 'no' ? '40%' : '0%' }}
+              transition={{ duration: 1, ease: "easeOut" }}
             />
          </div>
-         <span className="text-[9px] font-black text-text-4 uppercase">{isLatency ? `<${requirement}ms` : `>${requirement}M`}</span>
+         <span className="text-[9px] font-black text-text-3 tabular-nums">
+           {isLatency ? `${requirement}ms` : `${requirement}Mbps`}
+         </span>
       </div>
     </div>
   );

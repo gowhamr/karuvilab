@@ -62,7 +62,7 @@ class WorkerManager {
 
   async compressImage(
     file: ArrayBuffer, 
-    format: "image/jpeg" | "image/png" | "image/webp",
+    format: "image/jpeg" | "image/png" | "image/webp" | "image/avif" | "image/bmp",
     quality: number,
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
@@ -74,7 +74,7 @@ class WorkerManager {
     file: ArrayBuffer,
     width: number,
     height: number,
-    format: "image/jpeg" | "image/png" | "image/webp",
+    format: "image/jpeg" | "image/png" | "image/webp" | "image/avif" | "image/bmp",
     quality: number,
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal

@@ -30,9 +30,10 @@ function cn(...inputs: ClassValue[]) {
 interface BatchQueueProps {
   toolId: string;
   onDownload: (item: BatchItem) => void;
-  onDownloadAll?: () => void;
+  onDownloadAll?: (() => void) | undefined;
   onProcess: () => Promise<void>;
   isProcessing: boolean;
+  renderThumbnail?: ((item: BatchItem) => React.ReactNode) | undefined;
 }
 
 function formatBytes(bytes: number, decimals = 2) {
@@ -46,7 +47,7 @@ function formatBytes(bytes: number, decimals = 2) {
 
 const EMPTY_ARRAY: any[] = [];
 
-export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isProcessing }: BatchQueueProps) {
+export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isProcessing, renderThumbnail }: BatchQueueProps) {
   const items = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
   const removeItem = useBatchStore(state => state.removeItem);
   const clearItems = useBatchStore(state => state.clearItems);
@@ -201,14 +202,16 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
               )}
             >
               <div className={cn(
-                "w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0",
+                "w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0 overflow-hidden",
                 item.status === 'completed' ? "bg-green-500/10 text-green-500" : 
                 item.status === 'failed' ? "bg-red-500/10 text-red-500" : "bg-bg text-text-4"
               )} aria-hidden="true">
-                {item.status === 'completed' ? <CheckCircle2 className="w-6 h-6" /> :
-                 item.status === 'failed' ? <AlertCircle className="w-6 h-6" /> :
-                 item.status === 'processing' ? <Loader2 className="w-6 h-6 animate-spin text-blue" /> :
-                 <File className="w-6 h-6" />}
+                {renderThumbnail ? renderThumbnail(item) : (
+                  item.status === 'completed' ? <CheckCircle2 className="w-6 h-6" /> :
+                  item.status === 'failed' ? <AlertCircle className="w-6 h-6" /> :
+                  item.status === 'processing' ? <Loader2 className="w-6 h-6 animate-spin text-blue" /> :
+                  <File className="w-6 h-6" />
+                )}
               </div>
 
               <div className="flex-1 min-w-0 space-y-1">

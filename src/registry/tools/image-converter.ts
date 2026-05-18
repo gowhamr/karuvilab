@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const image_converter: ToolEntry = {
   "id": "image-converter",
   "name": "Image Converter",
-  "desc": "Convert between JPG, PNG, WebP, AVIF",
+  "desc": "Convert between JPG, PNG, WebP, AVIF, and BMP",
   "href": "image-tools/image-converter/",
   "category": "image",
   "input": "image",
@@ -14,6 +14,7 @@ export const image_converter: ToolEntry = {
     "jpg",
     "png",
     "webp",
-    "avif"
+    "avif",
+    "bmp"
   ]
 };
