@@ -337,48 +337,63 @@ export default function InternetSpeedTestClient() {
     const startTime = performance.now();
     let totalBytes = 0;
     const testDuration = 10000; // 10 seconds
-    const concurrency = 4;
+    const concurrency = 2; // Reduced from 4 to avoid clogging
     let maxFound = 0;
     
     historyRef.current = [];
     setHistory([]);
 
     const downloadChunk = async (url: string) => {
+      const chunkController = new AbortController();
+      const timeoutId = setTimeout(() => chunkController.abort(), testDuration + 2000);
+      
       try {
         const sep = url.includes('?') ? '&' : '?';
         const response = await fetch(`${url}${sep}cb=${Date.now()}`, { 
           cache: 'no-store',
-          signal: abortControllerRef.current?.signal ?? null
+          signal: chunkController.signal
         });
+        
         if (!response.ok) return;
         const reader = response.body?.getReader();
         if (!reader) return;
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          totalBytes += value.length;
-          
-          const now = performance.now();
-          const elapsed = (now - startTime) / 1000;
-          if (elapsed > 0) {
-            const mbps = (totalBytes * 8 / elapsed) / 1000000;
-            if (mbps > maxFound) {
-              maxFound = mbps;
-              setMaxDownload(mbps);
-            }
-            setDownload(parseFloat(mbps.toFixed(2)));
-            setProgress(20 + Math.min((elapsed / (testDuration / 1000)) * 40, 40));
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            totalBytes += value.length;
             
-            if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 150) {
-              const point = { x: now, y: mbps };
-              historyRef.current = [...historyRef.current, point].slice(-60);
-              setHistory(historyRef.current);
+            const now = performance.now();
+            const elapsed = (now - startTime) / 1000;
+            if (elapsed > 0) {
+              const mbps = (totalBytes * 8 / elapsed) / 1000000;
+              if (mbps > maxFound) {
+                maxFound = mbps;
+                setMaxDownload(mbps);
+              }
+              setDownload(parseFloat(mbps.toFixed(2)));
+              setProgress(20 + Math.min((elapsed / (testDuration / 1000)) * 40, 40));
+              
+              if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 150) {
+                const point = { x: now, y: mbps };
+                historyRef.current = [...historyRef.current, point].slice(-60);
+                setHistory(historyRef.current);
+              }
+            }
+            if (performance.now() - startTime > testDuration) {
+              chunkController.abort();
+              break;
             }
           }
-          if (now - startTime > testDuration) break;
+        } finally {
+          reader.releaseLock();
         }
-      } catch (e) {}
+      } catch (e) {
+        // Silently handle chunk failures
+      } finally {
+        clearTimeout(timeoutId);
+      }
     };
 
     // Measure loaded latency in background
@@ -387,10 +402,11 @@ export default function InternetSpeedTestClient() {
       if (l) setLoadedLatency(Math.round(l));
     }, 3000);
 
-    await Promise.allSettled(Array.from({ length: concurrency }).flatMap(() => DOWNLOAD_FILES).map(url => downloadChunk(url)));
+    const streams = Array.from({ length: concurrency }).flatMap(() => DOWNLOAD_FILES);
+    await Promise.allSettled(streams.map(url => downloadChunk(url)));
     clearTimeout(loadedLatencyTimer);
 
-    if (totalBytes === 0) throw new Error("Download test failed.");
+    if (totalBytes === 0) throw new Error("Download test failed: No data received.");
     const finalTime = (performance.now() - startTime) / 1000;
     const finalMbps = totalBytes * 8 / finalTime / 1000000;
     setDownload(parseFloat(finalMbps.toFixed(2)));
@@ -401,7 +417,7 @@ export default function InternetSpeedTestClient() {
     const startTime = performance.now();
     let totalBytes = 0;
     const testDuration = 8000; // 8 seconds
-    const concurrency = 3;
+    const concurrency = 2; // Reduced from 3
     
     historyRef.current = [];
     setHistory([]);
@@ -416,18 +432,17 @@ export default function InternetSpeedTestClient() {
         if (abortControllerRef.current?.signal.aborted) break;
         
         const chunkController = new AbortController();
-        const timeoutId = setTimeout(() => chunkController.abort(), 12000);
+        const timeoutId = setTimeout(() => chunkController.abort(), 15000); // 15s timeout for 1MB
 
         try {
           const response = await fetch('/api/speedtest/upload', {
             method: 'POST',
             body: blob,
             signal: chunkController.signal,
-            // Only use duplex: 'half' if body was a ReadableStream. 
-            // Since we use a Blob, it's not required and can cause TypeError in some browsers.
+            // @ts-ignore - duplex is required for some environments when sending body
+            duplex: 'half',
           });
           
-          clearTimeout(timeoutId);
           if (response.ok) {
             totalBytes += size;
             const now = performance.now();
@@ -442,22 +457,21 @@ export default function InternetSpeedTestClient() {
               setHistory(historyRef.current);
             }
           } else {
-            // Wait slightly before retrying on server error
             await new Promise(r => setTimeout(r, 500));
           }
         } catch (e) {
-          clearTimeout(timeoutId);
           const isAbort = (e as Error).name === 'AbortError';
           if (isAbort && !abortControllerRef.current?.signal.aborted) {
-            continue; // Retry on individual chunk timeout
+            continue;
           }
-          console.error("Upload chunk error:", e);
-          break; // Stop worker on fatal network error
+          break;
+        } finally {
+          clearTimeout(timeoutId);
         }
       }
     };
 
-    setUpload(0); // Initialize to 0 so it doesn't show '--'
+    setUpload(0);
     await Promise.allSettled(Array.from({ length: concurrency }).map(() => uploadWorker()));
     const finalTime = (performance.now() - startTime) / 1000;
     
@@ -465,7 +479,7 @@ export default function InternetSpeedTestClient() {
       throw new Error("Upload test failed: No data could be transmitted.");
     }
     
-    const finalMbps = totalBytes * 8 / finalTime / 1000000;
+    const finalMbps = (totalBytes * 8 / finalTime) / 1000000;
     setUpload(parseFloat(finalMbps.toFixed(2)));
     resultsRef.current.upload = parseFloat(finalMbps.toFixed(2));
   };
@@ -549,17 +563,22 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
 
   const pathD = getPath(history);
 
-  const getRating = (speed: number | null) => {
-    if (speed === null) return { label: 'Pending', color: 'text-text-4' };
-    if (speed >= 100) return { label: 'Excellent', color: 'text-success' };
-    if (speed >= 50) return { label: 'Good', color: 'text-blue' };
-    if (speed >= 20) return { label: 'Fair', color: 'text-orange-500' };
+  const getRating = (down: number | null, up: number | null) => {
+    if (down === null || up === null) return { label: 'Pending', color: 'text-text-4' };
+    const avg = (down + up) / 2;
+    if (avg >= 100) return { label: 'Excellent', color: 'text-success' };
+    if (avg >= 50) return { label: 'Good', color: 'text-blue' };
+    if (avg >= 20) return { label: 'Fair', color: 'text-orange-500' };
     return { label: 'Poor', color: 'text-red-500' };
   };
 
-  const currentRating = getRating(download);
+  const currentRating = getRating(download, upload);
 
-  const currentSpeed = status === 'upload' ? (upload || 0) : (download || 0);
+  // Big gauge shows upload speed during upload phase, and remains showing it if completed
+  // unless we're in the download phase.
+  const currentSpeed = status === 'upload' || (status === 'completed' && upload !== null)
+    ? (upload || 0) 
+    : (download || 0);
   const getGaugeMax = (val: number) => {
     if (val <= 100) return 100;
     if (val <= 250) return 250;

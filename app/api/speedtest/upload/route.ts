@@ -1,26 +1,24 @@
 import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    if (request.body) {
-      const reader = request.body.getReader();
-      while (true) {
-        const { done } = await reader.read();
-        if (done) break;
-      }
-    }
+    // Consume the body to measure upload speed
+    await request.arrayBuffer();
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
       },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ success: false }), { 
+    console.error('Upload API Error:', error);
+    return new Response(JSON.stringify({ success: false, error: 'Failed to consume upload body' }), { 
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
