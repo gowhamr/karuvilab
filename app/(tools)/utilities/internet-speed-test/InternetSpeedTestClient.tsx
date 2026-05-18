@@ -423,7 +423,7 @@ export default function InternetSpeedTestClient() {
     setHistory([]);
 
     const uploadWorker = async () => {
-      const size = 1 * 1024 * 1024; // 1MB chunks
+      const size = 256 * 1024; // Smaller 256KB chunks for better stability
       const data = new Uint8Array(size);
       crypto.getRandomValues(data);
       const blob = new Blob([data], { type: 'application/octet-stream' });
@@ -432,15 +432,13 @@ export default function InternetSpeedTestClient() {
         if (abortControllerRef.current?.signal.aborted) break;
         
         const chunkController = new AbortController();
-        const timeoutId = setTimeout(() => chunkController.abort(), 15000); // 15s timeout for 1MB
+        const timeoutId = setTimeout(() => chunkController.abort(), 10000); // 10s timeout for 256KB
 
         try {
           const response = await fetch('/api/speedtest/upload', {
             method: 'POST',
             body: blob,
             signal: chunkController.signal,
-            // @ts-ignore - duplex is required for some environments when sending body
-            duplex: 'half',
           });
           
           if (response.ok) {
@@ -457,13 +455,18 @@ export default function InternetSpeedTestClient() {
               setHistory(historyRef.current);
             }
           } else {
+            // Log non-ok response
+            const errBody = await response.text().catch(() => "Unknown error");
+            console.warn(`Upload chunk failed with status ${response.status}: ${errBody}`);
             await new Promise(r => setTimeout(r, 500));
           }
         } catch (e) {
           const isAbort = (e as Error).name === 'AbortError';
           if (isAbort && !abortControllerRef.current?.signal.aborted) {
+            console.warn("Upload chunk timed out, retrying...");
             continue;
           }
+          console.error("Upload worker fatal error:", e);
           break;
         } finally {
           clearTimeout(timeoutId);
