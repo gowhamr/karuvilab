@@ -261,6 +261,10 @@ export default function InternetSpeedTestClient() {
         console.error("Failed to load history");
       }
     }
+
+    return () => {
+      abortControllerRef.current?.abort();
+    };
   }, []);
 
   const saveToHistory = (res: Omit<TestResult, 'id' | 'timestamp'>) => {
@@ -424,80 +428,50 @@ export default function InternetSpeedTestClient() {
   };
 
   const runUploadTest = async () => {
-    const startTime = performance.now();
-    let totalBytes = 0;
-    const testDuration = 8000; // 8 seconds
-    const concurrency = 2; // Reduced from 3
+    if (!navigator.onLine) {
+      throw new Error("Upload test requires an internet connection.");
+    }
+
+    const { testUpload } = await import('@onlyrex/pulse');
     
     historyRef.current = [];
     setHistory([]);
-
-    let lastError: string | null = null;
-
-    const uploadWorker = async () => {
-      const size = 128 * 1024; // 128KB chunks for better stability
-      const data = new Uint8Array(size);
-      crypto.getRandomValues(data);
-      const blob = new Blob([data], { type: 'text/plain' });
-
-      while (performance.now() - startTime < testDuration) {
-        if (abortControllerRef.current?.signal.aborted) break;
-        
-        const chunkController = new AbortController();
-        const timeoutId = setTimeout(() => chunkController.abort(), 12000); 
-
-        try {
-          // Use exact URL with trailing slash to match next.config.ts
-          const response = await fetch('/api/speedtest/upload/', {
-            method: 'POST',
-            body: blob,
-            signal: chunkController.signal,
-          });
-          
-          if (response.ok) {
-            totalBytes += size;
-            const now = performance.now();
-            const elapsed = (now - startTime) / 1000;
-            const mbps = (totalBytes * 8 / elapsed) / 1000000;
-            setUpload(parseFloat(mbps.toFixed(2)));
-            setProgress(60 + Math.min((elapsed / (testDuration / 1000)) * 40, 40));
-            
-            if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 150) {
-              const point = { x: now, y: mbps };
-              historyRef.current = [...historyRef.current, point].slice(-60);
-              setHistory(historyRef.current);
-            }
-          } else {
-            const errBody = await response.text().catch(() => "Unknown error");
-            lastError = `Status ${response.status}: ${errBody}`;
-            await new Promise(r => setTimeout(r, 1000));
-          }
-        } catch (e) {
-          const isAbort = (e as Error).name === 'AbortError';
-          if (isAbort && !abortControllerRef.current?.signal.aborted) {
-            lastError = "Chunk timeout";
-            continue;
-          }
-          lastError = (e as Error).message || "Fetch failed";
-          break;
-        } finally {
-          clearTimeout(timeoutId);
-        }
-      }
-    };
-
     setUpload(0);
-    await Promise.allSettled(Array.from({ length: concurrency }).map(() => uploadWorker()));
-    const finalTime = (performance.now() - startTime) / 1000;
-    
-    if (totalBytes === 0) {
-      if (lastError) setErrorDetails(`Upload Failed - ${lastError}`);
-      throw new Error(`Upload test failed: No data could be transmitted. (${lastError || 'Unknown Error'})`);
+    const startTime = performance.now();
+
+    try {
+      const result = await testUpload({
+        // @ts-ignore - sizeMB is supported by @onlyrex/pulse but missing from its type definitions
+        sizeMB: 5,
+        url: 'https://httpbin.org/post',
+        onProgress: (mbps) => {
+          if (abortControllerRef.current?.signal.aborted) return;
+          const currentMbps = parseFloat(mbps);
+          setUpload(currentMbps);
+          
+          const now = performance.now();
+          const elapsed = (now - startTime) / 1000;
+          // Estimate progress: 60% -> 95% over the test duration
+          setProgress(60 + Math.min((elapsed / 8) * 35, 35));
+
+          if (historyRef.current.length === 0 || now - historyRef.current[historyRef.current.length - 1]!.x > 150) {
+            const point = { x: now, y: currentMbps };
+            historyRef.current = [...historyRef.current, point].slice(-60);
+            setHistory(historyRef.current);
+          }
+        }
+      });
+
+      if (abortControllerRef.current?.signal.aborted) return;
+
+      const finalMbps = parseFloat(result);
+      setUpload(finalMbps);
+      resultsRef.current.upload = finalMbps;
+      setProgress(100);
+    } catch (e: any) {
+      if (e.name === 'AbortError' || abortControllerRef.current?.signal.aborted) return;
+      throw e;
     }
-    
-    const finalMbps = (totalBytes * 8 / finalTime) / 1000000;
-    setUpload(parseFloat(finalMbps.toFixed(2)));
-    resultsRef.current.upload = parseFloat(finalMbps.toFixed(2));
   };
 
   const startTest = useCallback(async () => {
