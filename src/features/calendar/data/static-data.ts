@@ -2,7 +2,7 @@ export interface GlobalFestival {
   name: string;
   month: number; // 1-12
   day: number;
-  type: 'global' | 'indian' | 'tamil';
+  type: 'global' | 'indian';
   emoji?: string;
 }
 
@@ -18,12 +18,6 @@ export const GLOBAL_FESTIVALS: GlobalFestival[] = [
   { name: 'Republic Day', month: 1, day: 26, type: 'indian', emoji: '🇮🇳' },
   { name: 'Independence Day', month: 8, day: 15, type: 'indian', emoji: '🇮🇳' },
   { name: 'Gandhi Jayanti', month: 10, day: 2, type: 'indian', emoji: '👓' },
-
-  // Fixed Tamil (Solar) - Some are actually variable but many follow solar calendar
-  { name: 'Puthandu (Tamil New Year)', month: 4, day: 14, type: 'tamil', emoji: '🪔' },
-  { name: 'Pongal', month: 1, day: 14, type: 'tamil', emoji: '🌾' },
-  { name: 'Mattu Pongal', month: 1, day: 15, type: 'tamil', emoji: '🐂' },
-  { name: 'Kaanum Pongal', month: 1, day: 16, type: 'tamil', emoji: '👨‍👩-👧‍👦' },
 ];
 
 export interface GlobalObservance {

@@ -22,13 +22,3 @@ export interface CalendarEvent {
   createdAt: number;
   updatedAt: number;
 }
-
-export interface TamilDateInfo {
-  year: number;
-  month: number; // 0-11
-  day: number;
-  monthName: string;
-  weekday: string;
-  isFestival?: boolean;
-  festivalName?: string;
-}

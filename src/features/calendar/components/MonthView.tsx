@@ -3,7 +3,6 @@
 import { useCalendarStore } from "../store";
 import { format, isSameMonth, isSameDay, startOfMonth } from "date-fns";
 import { getMonthDays, getEventsForDay, getFestivalsForDay, getObservancesForDay } from "../utils";
-import { useTamilCalendar } from "../hooks/useTamilCalendar";
 import { COLOR_MAP } from "../constants";
 import { cn } from "@/src/lib/utils";
 
@@ -11,7 +10,7 @@ import { useState } from "react";
 import { DayDetailsSheet } from "./DayDetailsSheet";
 
 export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) {
-  const { currentDate, events, tamilModeEnabled } = useCalendarStore();
+  const { currentDate, events } = useCalendarStore();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const days = getMonthDays(currentDate);
   const monthStart = startOfMonth(currentDate);
@@ -25,29 +24,33 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-surface border border-border/40 rounded-[32px] overflow-hidden shadow-premium">
-      {/* Weekday Headers */}
-      <div className="grid grid-cols-7 border-b border-border/40 bg-bg/50">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
-          <div key={day} className="py-4 text-center">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
-              {tamilModeEnabled ? ['Gnayiru', 'Thingal', 'Sevvai', 'Budhan', 'Vyazhan', 'Velli', 'Sani'][i] : day}
-            </span>
+    <div className="flex-1 flex flex-col min-h-0 bg-surface/60 backdrop-blur-xl border border-border/30 rounded-[32px] overflow-hidden shadow-premium">
+      <div className="flex-1 flex flex-col overflow-x-auto no-scrollbar">
+        <div className="min-w-[700px] md:min-w-full flex-1 flex flex-col">
+          {/* Weekday Headers */}
+          <div className="grid grid-cols-7 border-b border-border/30 bg-bg/50 sticky top-0 z-20 backdrop-blur-md">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
+              <div key={day} className="py-5 text-center">
+                <span className="text-[11px] font-black uppercase tracking-[0.25em] text-text-4">
+                  {day}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-7 flex-1">
-        {days.map((day) => (
-          <DayCell 
-            key={day.toISOString()} 
-            day={day} 
-            isCurrentMonth={isSameMonth(day, monthStart)}
-            onClick={() => handleDayClick(day)}
-            onAddEvent={onAddEvent}
-          />
-        ))}
+          {/* Grid */}
+          <div className="grid grid-cols-7 flex-1">
+            {days.map((day) => (
+              <DayCell 
+                key={day.toISOString()} 
+                day={day} 
+                isCurrentMonth={isSameMonth(day, monthStart)}
+                onClick={() => handleDayClick(day)}
+                onAddEvent={onAddEvent}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
       <DayDetailsSheet 
@@ -61,14 +64,13 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
 }
 
 function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCurrentMonth: boolean, onClick: () => void, onAddEvent: (date: Date) => void }) {
-  const { events, tamilModeEnabled, setSelectedEvent } = useCalendarStore();
+  const { events, setSelectedEvent } = useCalendarStore();
   const isToday = isSameDay(day, new Date());
   const dayEvents = getEventsForDay(day, events);
   const festivals = getFestivalsForDay(day);
   const observances = getObservancesForDay(day);
-  const tamil = useTamilCalendar(day);
 
-  const hasSpecialDay = festivals.length > 0 || observances.length > 0 || tamil.festival;
+  const hasSpecialDay = festivals.length > 0 || observances.length > 0;
 
   return (
     <div
@@ -77,7 +79,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
         "min-h-[100px] md:min-h-[140px] p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all",
         !isCurrentMonth && "bg-bg/20 opacity-40",
         isCurrentMonth && "hover:bg-indigo-500/5",
-        isToday && "bg-indigo-500/[0.02]"
+        isToday && "bg-indigo-500/[0.05]"
       )}
     >
       <div className="flex justify-between items-start mb-2">
@@ -88,26 +90,9 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
           )}>
             {format(day, 'd')}
           </span>
-          
-          {tamilModeEnabled && (
-            <div className="flex items-center gap-1 mt-1 ml-1">
-              <span className="text-[9px] font-bold text-indigo-500/80">
-                {tamil.tamilDayNumeral}
-              </span>
-              {tamil.festival && (
-                <span title={tamil.festival} className="text-[10px] cursor-help">🌾</span>
-              )}
-            </div>
-          )}
         </div>
 
         <div className="flex flex-col items-end gap-1">
-          {tamilModeEnabled && tamil.day === 1 && (
-            <span className="text-[8px] font-black uppercase tracking-widest text-indigo-500/60 bg-indigo-500/5 px-2 py-0.5 rounded-lg border border-indigo-500/10">
-              {tamil.monthName}
-            </span>
-          )}
-          
           <div className="flex gap-0.5">
             {festivals.map((f, i) => (
               <span key={i} title={f.name} className="text-xs">{f.emoji}</span>
@@ -121,7 +106,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
 
       <div className="space-y-1 overflow-hidden">
         {/* Festivals and Observances as mini-badges if no emoji */}
-        {!tamilModeEnabled && festivals.map((f, i) => (
+        {festivals.map((f, i) => (
           <div key={`f-${i}`} className="px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-[8px] font-bold truncate">
             {f.name}
           </div>

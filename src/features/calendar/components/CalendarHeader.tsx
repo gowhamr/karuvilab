@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import * as Popover from "@radix-ui/react-popover";
-import { TamilCalendarToggle } from "./TamilCalendarToggle";
 import { MiniCalendar } from "./MiniCalendar";
 import { cn } from "@/src/lib/utils";
 import { useState } from "react";
@@ -38,70 +37,70 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
   const handleToday = () => setCurrentDate(new Date());
 
   return (
-    <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-border/40">
-      <div className="flex items-center gap-6">
-        <div className="flex flex-col">
+    <header className="flex flex-col gap-6 md:gap-8 pb-8 border-b border-border/20">
+      {/* Top Row: Navigation and Action */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="flex items-center justify-between md:justify-start gap-4 md:gap-8">
           <Popover.Root open={isPickerOpen} onOpenChange={setIsPickerOpen}>
             <Popover.Trigger asChild>
-              <button className="text-left group outline-none">
-                <h1 className="text-3xl md:text-4xl font-black tracking-tight font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-3">
-                  {format(currentDate, 'MMMM')} <span className="text-text-4 font-sans font-medium">{format(currentDate, 'yyyy')}</span>
-                  <ChevronDown className="w-5 h-5 text-text-4 opacity-0 group-hover:opacity-100 transition-all" />
+              <button className="text-left group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-2xl p-1 -m-1 transition-all">
+                <h1 className="text-3xl md:text-5xl font-black tracking-tighter font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-3">
+                  {format(currentDate, 'MMMM')} <span className="text-text-4 font-sans font-normal opacity-50">{format(currentDate, 'yyyy')}</span>
+                  <ChevronDown className="w-6 h-6 text-text-4 opacity-40 group-hover:opacity-100 transition-all" />
                 </h1>
               </button>
             </Popover.Trigger>
             <Popover.Portal>
-              <Popover.Content className="z-50 animate-in fade-in zoom-in-95 duration-200" sideOffset={10} align="start">
+              <Popover.Content className="z-50 animate-in fade-in zoom-in-95 duration-200" sideOffset={12} align="start">
                 <MiniCalendar onSelect={() => setIsPickerOpen(false)} />
               </Popover.Content>
             </Popover.Portal>
           </Popover.Root>
+
+          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-[20px] p-1.5 shadow-sm">
+            <button
+              onClick={handlePrev}
+              className="p-2 hover:bg-surface rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleToday}
+              className="px-4 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-text-4 hover:text-indigo-600 transition-colors"
+            >
+              Today
+            </button>
+            <button
+              onClick={handleNext}
+              className="p-2 hover:bg-surface rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center bg-surface border border-border rounded-2xl p-1">
-          <button
-            onClick={handlePrev}
-            className="p-2 hover:bg-bg rounded-xl text-text-3 hover:text-text transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={handleToday}
-            className="px-4 py-1 text-[10px] font-black uppercase tracking-widest text-text-4 hover:text-blue transition-colors"
-          >
-            Today
-          </button>
-          <button
-            onClick={handleNext}
-            className="p-2 hover:bg-bg rounded-xl text-text-3 hover:text-text transition-colors"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+        <button
+          onClick={onAddEvent}
+          className="flex items-center justify-center gap-2.5 px-8 py-4 bg-indigo-600 text-white rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/30 active:scale-95 group"
+        >
+          <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+          <span>New Event</span>
+        </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4">
-        <TamilCalendarToggle />
-
+      {/* Bottom Row: View Switching */}
+      <div className="overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
         <ToggleGroup.Root
           type="single"
           value={currentView}
           onValueChange={(value) => value && setCurrentView(value as any)}
-          className="flex bg-surface border border-border rounded-2xl p-1"
+          className="flex bg-surface/30 backdrop-blur-xl border border-border/20 rounded-[24px] p-1.5 w-max md:w-auto"
         >
           <ToggleGroupItem value="month" icon={LayoutGrid} label="Month" />
           <ToggleGroupItem value="week" icon={Rows} label="Week" />
           <ToggleGroupItem value="day" icon={CalendarIcon} label="Day" />
           <ToggleGroupItem value="agenda" icon={List} label="Agenda" />
         </ToggleGroup.Root>
-
-        <button
-          onClick={onAddEvent}
-          className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">New Event</span>
-        </button>
       </div>
     </header>
   );
@@ -112,14 +111,14 @@ function ToggleGroupItem({ value, icon: Icon, label }: { value: string, icon: an
     <ToggleGroup.Item
       value={value}
       className={cn(
-        "flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-        "data-[state=on]:bg-indigo-500/10 data-[state=on]:text-indigo-600 dark:data-[state=on]:text-indigo-400",
-        "data-[state=off]:text-text-4 data-[state=off]:hover:bg-bg"
+        "flex items-center gap-3 px-6 py-3 rounded-[18px] text-[11px] font-black uppercase tracking-[0.15em] transition-all relative group",
+        "data-[state=on]:bg-indigo-600 data-[state=on]:text-white data-[state=on]:shadow-lg data-[state=on]:shadow-indigo-500/20",
+        "data-[state=off]:text-text-4 data-[state=off]:hover:bg-surface/50 data-[state=off]:hover:text-text-2"
       )}
       title={label}
     >
       <Icon className="w-4 h-4" />
-      <span className="hidden lg:inline">{label}</span>
+      <span>{label}</span>
     </ToggleGroup.Item>
   );
 }

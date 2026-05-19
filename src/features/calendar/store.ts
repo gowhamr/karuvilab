@@ -7,14 +7,12 @@ interface CalendarState {
   currentView: CalendarView;
   events: CalendarEvent[];
   selectedEventId: string | null;
-  tamilModeEnabled: boolean;
   isLoading: boolean;
   isModalOpen: boolean;
   
   // Actions
   setCurrentDate: (date: Date) => void;
   setCurrentView: (view: CalendarView) => void;
-  setTamilMode: (enabled: boolean) => void;
   setSelectedEvent: (id: string | null) => void;
   setIsModalOpen: (open: boolean) => void;
   
@@ -29,13 +27,11 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
   currentView: 'month',
   events: [],
   selectedEventId: null,
-  tamilModeEnabled: false,
   isLoading: false,
   isModalOpen: false,
 
   setCurrentDate: (currentDate) => set({ currentDate }),
   setCurrentView: (currentView) => set({ currentView }),
-  setTamilMode: (tamilModeEnabled) => set({ tamilModeEnabled }),
   setSelectedEvent: (selectedEventId) => set({ selectedEventId, isModalOpen: !!selectedEventId }),
   setIsModalOpen: (isModalOpen) => {
     if (!isModalOpen) set({ selectedEventId: null });

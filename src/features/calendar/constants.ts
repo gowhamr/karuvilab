@@ -18,12 +18,3 @@ export const RECURRENCE_LABELS: Record<RecurrenceType, string> = {
   monthly: 'Monthly',
   yearly: 'Yearly',
 };
-
-export const TAMIL_MONTHS = [
-  'Chithirai', 'Vaikasi', 'Aani', 'Aadi', 'Aavani', 'Purattasi',
-  'Aippasi', 'Karthigai', 'Margazhi', 'Thai', 'Maasi', 'Panguni'
-];
-
-export const TAMIL_WEEKDAYS = [
-  'Gnayiru', 'Thingal', 'Sevvai', 'Budhan', 'Vyazhan', 'Velli', 'Sani'
-];

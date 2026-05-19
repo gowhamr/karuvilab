@@ -87,17 +87,17 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-8 min-h-[800px] flex flex-col">
+    <div className="max-w-[1600px] mx-auto px-4 md:px-8 space-y-6 md:space-y-8 min-h-screen flex flex-col pb-10">
       <CalendarHeader onAddEvent={() => handleAddEvent()} />
 
       <main className="flex-1 flex flex-col min-h-0 relative">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentView}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 flex flex-col min-h-0"
           >
             {currentView === 'month' && <MonthView onAddEvent={handleAddEvent} />}
@@ -108,8 +108,8 @@ export default function CalendarPage() {
         </AnimatePresence>
 
         {isLoading && (
-          <div className="absolute inset-0 bg-surface/40 backdrop-blur-[2px] flex items-center justify-center z-40 rounded-[32px]">
-            <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+          <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-[32px] border border-border/20">
+            <div className="w-14 h-14 border-[5px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin shadow-lg shadow-indigo-500/20" />
           </div>
         )}
       </main>
