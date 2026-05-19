@@ -53,10 +53,28 @@ interface KaruviDB extends DBSchema {
       expiresAt: number;
     };
   };
+  'calendar-events': {
+    key: string;
+    value: {
+      id: string;
+      title: string;
+      description?: string;
+      startDate: string;
+      endDate: string;
+      allDay: boolean;
+      location?: string;
+      color: string;
+      recurrence?: any;
+      reminderMinutes?: number;
+      createdAt: number;
+      updatedAt: number;
+    };
+    indexes: { 'by-start': string };
+  };
 }
 
 const DB_NAME = 'karuvilab-db';
-const DB_VERSION = 3; // Incremented version
+const DB_VERSION = 4; // Incremented version
 
 let dbPromise: Promise<IDBPDatabase<KaruviDB>> | null = null;
 
@@ -92,11 +110,34 @@ export const getDB = () => {
         if (oldVersion < 3) {
           db.createObjectStore('currency-rates', { keyPath: 'base' });
         }
+
+        if (oldVersion < 4) {
+          const calendarStore = db.createObjectStore('calendar-events', { keyPath: 'id' });
+          calendarStore.createIndex('by-start', 'startDate');
+        }
       },
     });
   }
   return dbPromise;
 };
+
+export async function saveCalendarEvent(event: any) {
+  const db = await getDB();
+  if (!db) return;
+  await db.put('calendar-events', event);
+}
+
+export async function getCalendarEvents() {
+  const db = await getDB();
+  if (!db) return [];
+  return db.getAll('calendar-events');
+}
+
+export async function deleteCalendarEvent(id: string) {
+  const db = await getDB();
+  if (!db) return;
+  await db.delete('calendar-events', id);
+}
 
 export async function saveCurrencyRates(data: {
   base: string;

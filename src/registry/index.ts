@@ -76,6 +76,7 @@ import { robots_txt } from './tools/robots-txt';
 import { image_seo } from './tools/image-seo';
 import { slug_generator } from './tools/slug-generator';
 import { seo_title } from './tools/seo-title';
+import { calendar } from './tools/calendar';
 
 export const ALL_TOOLS: ToolEntry[] = [
   emi_calculator,
@@ -155,4 +156,5 @@ export const ALL_TOOLS: ToolEntry[] = [
   image_seo,
   slug_generator,
   seo_title,
+  calendar,
 ];
