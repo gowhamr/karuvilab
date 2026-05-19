@@ -11,6 +11,9 @@ import { EventColor, RecurrenceType } from "../types";
 import { generateId } from "../utils";
 import { cn } from "@/src/lib/utils";
 
+import { Checkbox } from "@/components/ui/Checkbox";
+import { RECURRENCE_LABELS } from "../constants";
+
 export function EventModal({ 
   isOpen, 
   onClose, 
@@ -21,7 +24,7 @@ export function EventModal({
   initialDate?: Date 
 }) {
   const { addEvent, events, selectedEventId, setSelectedEvent, updateEvent, removeEvent } = useCalendarStore();
-  
+
   const editingEvent = selectedEventId ? events.find(e => e.id === selectedEventId) : null;
 
   const [title, setTitle] = useState("");
@@ -31,6 +34,7 @@ export function EventModal({
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [color, setColor] = useState<EventColor>("indigo");
+  const [recurrence, setRecurrence] = useState<RecurrenceType>("none");
 
   useEffect(() => {
     if (editingEvent) {
@@ -41,6 +45,7 @@ export function EventModal({
       setLocation(editingEvent.location || "");
       setDescription(editingEvent.description || "");
       setColor(editingEvent.color);
+      setRecurrence(editingEvent.recurrence?.type || "none");
     } else if (initialDate) {
       const start = startOfHour(initialDate);
       const end = addHours(start, 1);
@@ -51,6 +56,7 @@ export function EventModal({
       setLocation("");
       setDescription("");
       setColor("indigo");
+      setRecurrence("none");
     }
   }, [editingEvent, initialDate, isOpen]);
 
@@ -58,7 +64,7 @@ export function EventModal({
     e.preventDefault();
     if (!title) return;
 
-    const eventData = {
+    const eventData: any = {
       id: editingEvent?.id || generateId(),
       title,
       startDate: new Date(startDate).toISOString(),
@@ -69,19 +75,25 @@ export function EventModal({
       color,
     };
 
+    if (recurrence !== "none") {
+      eventData.recurrence = { type: recurrence };
+    }
+
     if (editingEvent) {
       await updateEvent({ ...editingEvent, ...eventData, updatedAt: Date.now() });
     } else {
       await addEvent(eventData);
     }
-    
+
     onClose();
   };
 
   const handleDelete = async () => {
     if (editingEvent) {
-      await removeEvent(editingEvent.id);
-      onClose();
+      if (confirm("Are you sure you want to delete this event?")) {
+        await removeEvent(editingEvent.id);
+        onClose();
+      }
     }
   };
 
@@ -89,11 +101,16 @@ export function EventModal({
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 animate-in fade-in" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-surface border border-border rounded-[32px] p-8 shadow-2xl z-50 animate-in zoom-in-95 duration-200">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-surface border border-border rounded-[32px] p-8 shadow-2xl z-50 animate-in zoom-in-95 duration-200 overflow-hidden">
           <div className="flex items-center justify-between mb-8">
-            <Dialog.Title className="text-xl font-black tracking-tight text-text">
-              {editingEvent ? "Edit Event" : "Create Event"}
-            </Dialog.Title>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-600">
+                <CalendarIcon className="w-5 h-5" />
+              </div>
+              <Dialog.Title className="text-xl font-black tracking-tight text-text">
+                {editingEvent ? "Edit Event" : "Create Event"}
+              </Dialog.Title>
+            </div>
             <Dialog.Close asChild>
               <button className="p-2 hover:bg-bg rounded-xl text-text-4 transition-colors">
                 <X className="w-5 h-5" />
@@ -101,84 +118,121 @@ export function EventModal({
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2 no-scrollbar">
             <ToolInput
               label="Event Title"
               value={title}
               onChange={setTitle}
-              placeholder="E.g. Design Sync"
+              placeholder="E.g. Weekly Review"
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-4">Start</label>
-                <input
-                  type="datetime-local"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full h-12 px-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all"
-                />
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 ml-4">Start Time</label>
+                <div className="relative group">
+                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                  <input
+                    type="datetime-local"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all"
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-4">End</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 ml-4">End Time</label>
+                <div className="relative group">
+                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                  <input
+                    type="datetime-local"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-6 px-4 py-2 bg-bg/50 rounded-2xl border border-border/40">
+              <div className="flex items-center gap-3">
+                <Checkbox 
+                  id="allDay" 
+                  label="All Day"
+                  checked={allDay} 
+                  onChange={(e) => setAllDay(e.target.checked)}
+                />
+              </div>
+
+              <div className="flex items-center gap-3 border-l border-border/40 pl-6">
+                <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Repeat</span>
+                <select
+                  value={recurrence}
+                  onChange={(e) => setRecurrence(e.target.value as RecurrenceType)}
+                  className="bg-transparent text-xs font-bold text-indigo-600 outline-none cursor-pointer"
+                >
+                  {(Object.keys(RECURRENCE_LABELS) as RecurrenceType[]).map(type => (
+                    <option key={type} value={type}>{RECURRENCE_LABELS[type]}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="relative group">
+                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
                 <input
-                  type="datetime-local"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full h-12 px-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Add location"
+                  className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all placeholder:text-text-4"
+                />
+              </div>
+
+              <div className="relative group">
+                <AlignLeft className="absolute left-4 top-4 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Add description or notes"
+                  rows={3}
+                  className="w-full pl-12 pr-4 py-3 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all placeholder:text-text-4 resize-none"
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-3 px-4">
-              <input 
-                type="checkbox" 
-                id="allDay" 
-                checked={allDay} 
-                onChange={(e) => setAllDay(e.target.checked)}
-                className="w-4 h-4 rounded border-border text-indigo-600 focus:ring-indigo-500"
-              />
-              <label htmlFor="allDay" className="text-xs font-bold text-text-2">All Day Event</label>
-            </div>
-
-            <ToolInput
-              label="Location"
-              value={location}
-              onChange={setLocation}
-              placeholder="Add location"
-            />
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-4">Color Category</label>
-              <div className="flex flex-wrap gap-2 px-2">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 ml-4">Category Color</label>
+              <div className="flex flex-wrap gap-3 px-2">
                 {(Object.keys(COLOR_MAP) as EventColor[]).map((c) => (
                   <button
                     key={c}
                     type="button"
                     onClick={() => setColor(c)}
                     className={cn(
-                      "w-8 h-8 rounded-full border-2 transition-all",
-                      color === c ? "border-text scale-110" : "border-transparent opacity-60 hover:opacity-100"
+                      "w-10 h-10 rounded-2xl border-2 transition-all flex items-center justify-center",
+                      color === c ? "border-text scale-110 shadow-lg" : "border-transparent opacity-40 hover:opacity-100"
                     )}
                     style={{ backgroundColor: COLOR_MAP[c].hex }}
-                  />
+                  >
+                    {color === c && <div className="w-2 h-2 rounded-full bg-white shadow-sm" />}
+                  </button>
                 ))}
               </div>
             </div>
 
-            <div className="pt-6 flex gap-3">
+            <div className="pt-6 flex gap-4">
               {editingEvent && (
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="px-6 h-12 bg-red-500/10 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all"
+                  className="px-6 h-14 bg-red-500/10 text-red-500 rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all active:scale-95"
                 >
                   Delete
                 </button>
               )}
               <button
                 type="submit"
-                className="flex-1 h-12 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+                className="flex-1 h-14 bg-indigo-600 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20 active:scale-95"
               >
                 {editingEvent ? "Save Changes" : "Create Event"}
               </button>
@@ -189,3 +243,4 @@ export function EventModal({
     </Dialog.Root>
   );
 }
+

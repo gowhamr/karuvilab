@@ -9,9 +9,12 @@ import {
   parseISO,
   isWithinInterval,
   startOfDay,
-  endOfDay
+  endOfDay,
+  getMonth,
+  getDate
 } from 'date-fns';
 import { CalendarEvent } from './types';
+import { GLOBAL_FESTIVALS, GLOBAL_OBSERVANCES } from './data/static-data';
 
 export const getMonthDays = (date: Date) => {
   const start = startOfWeek(startOfMonth(date));
@@ -37,6 +40,18 @@ export const getEventsForDay = (date: Date, events: CalendarEvent[]) => {
     const start = parseISO(event.startDate);
     return isSameDay(start, date);
   });
+};
+
+export const getFestivalsForDay = (date: Date) => {
+  const m = getMonth(date) + 1;
+  const d = getDate(date);
+  return GLOBAL_FESTIVALS.filter(f => f.month === m && f.day === d);
+};
+
+export const getObservancesForDay = (date: Date) => {
+  const m = getMonth(date) + 1;
+  const d = getDate(date);
+  return GLOBAL_OBSERVANCES.filter(o => o.month === m && o.day === d);
 };
 
 export const getEventsInInterval = (start: Date, end: Date, events: CalendarEvent[]) => {

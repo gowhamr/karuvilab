@@ -10,10 +10,19 @@ import { AgendaView } from "./components/AgendaView";
 import { EventModal } from "./components/EventModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReminders } from "./hooks/useReminders";
+import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from "date-fns";
 
 export default function CalendarPage() {
-  const { currentView, fetchEvents, isLoading } = useCalendarStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { 
+    currentView, 
+    setCurrentView, 
+    currentDate, 
+    setCurrentDate, 
+    fetchEvents, 
+    isLoading,
+    isModalOpen,
+    setIsModalOpen
+  } = useCalendarStore();
   const [initialDate, setInitialDate] = useState<Date>(new Date());
 
   useReminders();
@@ -21,6 +30,56 @@ export default function CalendarPage() {
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
+
+  // Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if user is typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      switch (e.key.toLowerCase()) {
+        case 't':
+          setCurrentDate(new Date());
+          break;
+        case 'n':
+          handleAddEvent();
+          break;
+        case 'm':
+          setCurrentView('month');
+          break;
+        case 'w':
+          setCurrentView('week');
+          break;
+        case 'd':
+          setCurrentView('day');
+          break;
+        case 'a':
+          setCurrentView('agenda');
+          break;
+        case 'arrowleft':
+          handlePrev();
+          break;
+        case 'arrowright':
+          handleNext();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentView, currentDate]);
+
+  const handlePrev = () => {
+    if (currentView === 'month') setCurrentDate(subMonths(currentDate, 1));
+    else if (currentView === 'week') setCurrentDate(subWeeks(currentDate, 1));
+    else setCurrentDate(subDays(currentDate, 1));
+  };
+
+  const handleNext = () => {
+    if (currentView === 'month') setCurrentDate(addMonths(currentDate, 1));
+    else if (currentView === 'week') setCurrentDate(addWeeks(currentDate, 1));
+    else setCurrentDate(addDays(currentDate, 1));
+  };
 
   const handleAddEvent = (date?: Date) => {
     setInitialDate(date || new Date());
