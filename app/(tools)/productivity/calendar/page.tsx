@@ -10,7 +10,7 @@ export default function page() {
   const cat = CATEGORIES.find(c => c.id === "productivity")!;
   return (
     <ToolShell
-      title="KV Calendar"
+      title="Calendar"
       description="Professional, fully local-first calendar for managing your time privately."
       category={cat}
     >

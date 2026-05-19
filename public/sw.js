@@ -52,6 +52,7 @@ if (workbox) {
     ({ request }) => request.mode === 'navigate',
     new NetworkFirst({
       cacheName: CACHE_NAMES.pages,
+      networkTimeoutSeconds: 3,
       plugins: [
         new CacheableResponsePlugin({
           statuses: [0, 200],
@@ -90,7 +91,12 @@ if (workbox) {
   // Offline Fallback for Navigation
   setCatchHandler(async ({ event }) => {
     if (event.request.mode === 'navigate') {
-      return caches.match('/offline') || caches.match('/') || Response.error();
+      // 1. Try to find the exact request in ANY cache (covers / and visited tools)
+      const cachedResponse = await caches.match(event.request);
+      if (cachedResponse) return cachedResponse;
+
+      // 2. Fallback to /offline page for non-cached pages
+      return caches.match('/offline') || Response.error();
     }
     return Response.error();
   });

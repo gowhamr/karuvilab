@@ -19,7 +19,7 @@ export default function OfflinePage() {
       <div className="space-y-3 max-w-md">
         <h1 className="text-3xl font-black uppercase tracking-tight">You're Offline</h1>
         <p className="text-text-4 font-medium leading-relaxed">
-          It looks like you've lost your connection. Some tools might still work if you've visited them before, but this page hasn't been cached yet.
+          This page hasn't been cached yet. Most KaruviLab tools will work completely offline after your first visit.
         </p>
       </div>
 

@@ -19,6 +19,7 @@ export const CATEGORY_ICONS: Record<string, any> = {
   developer: Code,
   utilities: Wrench,
   seo: Search,
+  productivity: LayoutTemplate,
 };
 
 export const TOOL_ICONS: Record<string, any> = {
@@ -100,6 +101,7 @@ export const TOOL_ICONS: Record<string, any> = {
   "image-seo": Search,
   "slug-generator": Link2,
   "seo-title": Type,
+  "calendar": Calendar,
 };
 
 export const TRUST_INDICATORS = [
@@ -124,4 +126,5 @@ const CATEGORIES_FALLBACK: Record<string, any> = {
   developer: Code,
   utilities: Wrench,
   seo: Search,
+  productivity: LayoutTemplate,
 };

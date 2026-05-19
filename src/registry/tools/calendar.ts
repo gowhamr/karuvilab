@@ -2,7 +2,7 @@ import { ToolEntry } from '../types';
 
 export const calendar: ToolEntry = {
   "id": "calendar",
-  "name": "KV Calendar",
+  "name": "Calendar",
   "desc": "Professional, local-first calendar with Tamil mode support.",
   "href": "productivity/calendar/",
   "category": "productivity",
