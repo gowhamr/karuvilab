@@ -63,16 +63,16 @@ const SidebarContent = memo(function SidebarContent({
           href="/"
           onClick={() => setIsOpen(false)}
           aria-current={pathname === "/" ? "page" : undefined}
-          className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-xs ${
+          className={`group flex items-center gap-3 h-[56px] px-4 rounded-2xl transition-all font-bold text-sm ${
             pathname === "/" 
-              ? "bg-blue text-white" 
+              ? "bg-blue/10 text-blue" 
               : "text-text-2 hover:bg-blue/5 hover:text-blue"
           }`}
         >
-          <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${
-            pathname === "/" ? "bg-white/20" : "bg-bg border border-border group-hover:bg-blue/10"
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+            pathname === "/" ? "bg-blue/20" : "bg-transparent group-hover:bg-blue/10"
           }`}>
-            <Home className="w-4 h-4" />
+            <Home className="w-5 h-5" />
           </div>
           {t('common.home')}
         </Link>
@@ -80,11 +80,11 @@ const SidebarContent = memo(function SidebarContent({
 
       {/* Categories - Moved up for stability */}
       <div className="space-y-4">
-        <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
-          <LayoutGrid className="w-3.5 h-3.5" />
+        <div className="px-5 flex items-center gap-2 text-[11px] font-black text-text-4 uppercase tracking-[0.15em]">
+          <LayoutGrid className="w-4 h-4" />
           Universal Tools
         </div>
-        <div className="space-y-2">
+        <div className="space-y-1">
           {CATEGORIES.map((cat) => {
             const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
             const color = cat.color;
@@ -94,24 +94,25 @@ const SidebarContent = memo(function SidebarContent({
                 href={`/${cat.href}`}
                 onClick={() => setIsOpen(false)}
                 aria-current={isActive ? "page" : undefined}
-                className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
+                className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
                   isActive
-                    ? "bg-bg border border-border"
-                    : "text-text-3 hover:text-blue hover:bg-blue/5"
+                    ? "bg-blue/5 text-blue"
+                    : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
                 }`}
                 style={{
                   color: isActive ? color : undefined,
+                  backgroundColor: isActive ? `${color}15` : undefined, // 15 hex is ~8% opacity
                 }}
               >
                 <div 
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                    isActive ? "text-white" : "bg-bg border border-border group-hover:bg-blue/10"
+                    isActive ? "" : "bg-transparent group-hover:scale-105"
                   }`}
                   style={{
-                    backgroundColor: isActive ? color : undefined,
+                    color: isActive ? color : undefined,
                   }}
                 >
-                  <ToolIcon category={cat.id} className="w-4 h-4" />
+                  <ToolIcon category={cat.id} className="w-5 h-5" />
                 </div>
                 <span className="flex-1">{cat.label}</span>
               </Link>
@@ -120,16 +121,16 @@ const SidebarContent = memo(function SidebarContent({
           <Link
             href="/all-tools"
             onClick={() => setIsOpen(false)}
-            className={`group flex items-center gap-3 h-[52px] px-4 rounded-2xl transition-all font-bold text-[11px] ${
+            className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
               pathname === "/all-tools"
-                ? "bg-bg border border-border text-blue"
-                : "text-text-3 hover:text-blue hover:bg-blue/5"
+                ? "bg-blue/10 text-blue"
+                : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
             }`}
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              pathname === "/all-tools" ? "bg-blue text-white" : "bg-bg border border-border group-hover:bg-blue/10"
+              pathname === "/all-tools" ? "text-blue" : "bg-transparent group-hover:scale-105"
             }`}>
-              <LayoutGrid className="w-4 h-4" />
+              <LayoutGrid className="w-5 h-5" />
             </div>
             <span className="flex-1">All Tools</span>
           </Link>

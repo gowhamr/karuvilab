@@ -74,14 +74,14 @@ export function Header() {
           <button 
             onClick={() => setIsPaletteOpen(true)}
             aria-label="Search tools"
-            className="group flex items-center justify-between gap-3 p-2 sm:px-3 sm:py-1.5 md:min-w-[160px] lg:min-w-[240px] bg-surface border border-border rounded-lg text-[11px] font-bold text-text-4 hover:border-blue/30 hover:text-blue transition-all"
+            className="group flex items-center justify-between gap-3 p-3 sm:px-4 sm:py-2.5 md:min-w-[240px] lg:min-w-[340px] bg-surface shadow-sm border border-border/50 rounded-2xl text-[12px] font-medium text-text-4 hover:border-blue/30 hover:shadow-md transition-all"
           >
-            <div className="flex items-center gap-2">
-              <Search className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Quick search...</span>
+            <div className="flex items-center gap-2.5">
+              <Search className="w-4 h-4 text-text-3 group-hover:text-blue transition-colors" />
+              <span className="hidden md:inline">Search tools, calculations...</span>
             </div>
-            <div className="hidden md:flex items-center gap-0.5 px-1 py-0.5 bg-bg border border-border rounded text-[9px] font-mono">
-              <Command className="w-2.5 h-2.5" />
+            <div className="hidden md:flex items-center gap-1 px-1.5 py-0.5 bg-bg border border-border rounded-lg text-[10px] font-mono font-bold text-text-3 group-hover:text-blue transition-colors">
+              <Command className="w-3 h-3" />
               <span>K</span>
             </div>
           </button>
