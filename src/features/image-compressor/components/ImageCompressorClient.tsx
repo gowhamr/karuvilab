@@ -7,6 +7,7 @@ import { BatchMode } from './BatchMode';
 import { WorkflowSuggestions } from '@/components/ui/WorkflowSuggestions';
 import { Image as ImageIcon, Layers, Settings2, ShieldCheck, Zap, AlertTriangle } from 'lucide-react';
 import { useBatchStore } from '@/src/store/useBatchStore';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 
 const toolId = 'image-compress';
 const EMPTY_ARRAY: any[] = [];
@@ -51,38 +52,23 @@ export default function ImageCompressorClient() {
       <div className="space-y-8">
         {/* Navigation & Mode Toggle */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex p-1 bg-surface border border-border rounded-2xl">
-            <button
-              onClick={() => setActiveTab('single')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                ui.activeTab === 'single' ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'text-text-4 hover:text-text-2'
-              }`}
-            >
-              <ImageIcon size={16} />
-              Single
-            </button>
-            <button
-              onClick={() => setActiveTab('batch')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                ui.activeTab === 'batch' ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'text-text-4 hover:text-text-2'
-              }`}
-            >
-              <Layers size={16} />
-              Batch
-            </button>
-          </div>
+          <SegmentedControl
+            activeId={ui.activeTab}
+            onChange={(id) => setActiveTab(id as 'single' | 'batch')}
+            options={[
+              { id: 'single', label: 'Single', icon: <ImageIcon size={14} /> },
+              { id: 'batch', label: 'Batch', icon: <Layers size={14} /> },
+            ]}
+          />
 
-          <button
-            onClick={() => setUIMode(ui.mode === 'simple' ? 'advanced' : 'simple')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
-              ui.mode === 'advanced' 
-                ? 'bg-blue/5 border-blue/20 text-blue' 
-                : 'bg-surface border-border text-text-4 hover:border-blue/30'
-            }`}
-          >
-            <Settings2 size={14} />
-            {ui.mode === 'advanced' ? 'Advanced Options' : 'Simple Mode'}
-          </button>
+          <SegmentedControl
+            activeId={ui.mode}
+            onChange={(id) => setUIMode(id as 'simple' | 'advanced')}
+            options={[
+              { id: 'simple', label: 'Simple' },
+              { id: 'advanced', label: 'Advanced', icon: <Settings2 size={14} /> },
+            ]}
+          />
         </div>
 
         {/* Core Experience */}

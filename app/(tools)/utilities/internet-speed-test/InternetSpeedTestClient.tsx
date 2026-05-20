@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 import { 
   Gauge, Zap, ArrowDown, ArrowUp, RefreshCw, Activity, AlertTriangle, 
   MapPin, Globe, Server, History, Share2, CheckCircle2, Video, 
@@ -636,15 +635,9 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
   const gaugeMax = getGaugeMax(Math.max(currentSpeed, maxDownload));
 
   return (
-    <ToolShell
-      title="Speed Tester"
-      description="Professional-grade internet diagnostic tool. High-precision measurement of bandwidth, latency, and connection stability."
-      category={cat}
-      toolId="internet-speed-test"
-    >
-      <div className="space-y-12">
-        {/* Main Testing Console */}
-        <div className="bg-surface border border-border rounded-[48px] p-6 md:p-12 shadow-2xl relative overflow-hidden">
+    <div className="space-y-12">
+      {/* Main Testing Console */}
+      <div className="bg-surface border border-border rounded-[48px] p-6 md:p-12 shadow-2xl relative overflow-hidden">
           {/* Subtle Grid Background */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
                style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '24px 24px' }} />
@@ -1093,46 +1086,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             </div>
           </motion.div>
         )}
-
-        {/* Technical Methodology */}
-        <div className="bg-surface border border-border p-10 rounded-[48px] space-y-8">
-          <div className="space-y-2">
-             <h2 className="text-2xl font-black tracking-tight">Technical Methodology</h2>
-             <p className="text-sm text-text-3 font-medium">How we ensure professional-grade measurement accuracy.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-             <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue">
-                   <Server className="w-6 h-6" />
-                </div>
-                <h3 className="font-black text-lg">Adaptive Multithreading</h3>
-                <p className="text-xs text-text-3 leading-relaxed font-medium">
-                   Our engine dynamically adjusts concurrency (up to 6 parallel streams) based on your link capacity. This ensures we saturate fiber connections without overwhelming low-end hardware.
-                </p>
-             </div>
-             <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-green-500/5 flex items-center justify-center text-green-500">
-                   <Activity className="w-6 h-6" />
-                </div>
-                <h3 className="font-black text-lg">Bufferbloat Analysis</h3>
-                <p className="text-xs text-text-3 leading-relaxed font-medium">
-                   We measure "Loaded Latency" – your ping while the connection is under heavy load. High variance here indicates network congestion or poor router quality.
-                </p>
-             </div>
-             <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/5 flex items-center justify-center text-orange-500">
-                   <CheckCircle2 className="w-6 h-6" />
-                </div>
-                <h3 className="font-black text-lg">Local-Only Processing</h3>
-                <p className="text-xs text-text-3 leading-relaxed font-medium">
-                   Calculations happen entirely in your browser using high-resolution performance APIs. Your raw data never touches third-party tracking pixels.
-                </p>
-             </div>
-          </div>
-        </div>
       </div>
-    </ToolShell>
   );
 }
 

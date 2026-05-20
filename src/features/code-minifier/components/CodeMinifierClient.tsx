@@ -7,6 +7,7 @@ import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 
 import { DropZone } from "@/components/ui/DropZone";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 
 const toolId = "code-minifier";
 
@@ -83,21 +84,15 @@ export default function CodeMinifierClient() {
             <p className="text-xs text-text-4 font-black uppercase tracking-widest">Select language and upload files</p>
           </div>
           
-          <div className="flex gap-2 p-1 bg-bg border border-border rounded-2xl">
-            {(["css", "js", "html"] as Lang[]).map(l => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                  lang === l 
-                    ? "bg-blue text-white shadow-lg shadow-blue/20" 
-                    : "text-text-4 hover:text-text hover:bg-surface"
-                }`}
-              >
-                {l}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            options={[
+              { id: "css", label: "CSS" },
+              { id: "js", label: "JS" },
+              { id: "html", label: "HTML" },
+            ]}
+            activeId={lang}
+            onChange={(id) => setLang(id as Lang)}
+          />
         </div>
 
         <DropZone

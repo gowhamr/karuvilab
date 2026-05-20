@@ -14,6 +14,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -417,20 +418,15 @@ export default function HtmlViewerClient() {
         <div className="flex-1 flex flex-col min-w-0 bg-bg dark:bg-white/[0.02]">
           {/* Preview Header */}
           <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5">
-             <div className="flex gap-1">
-              {(["desktop", "tablet", "mobile"] as Device[]).map(d => (
-                <button
-                  key={d}
-                  onClick={() => setDevice(d)}
-                  className={cn(
-                    "p-2 rounded-lg transition-all",
-                    device === d ? "bg-blue/10 text-blue" : "text-text-4 hover:text-blue"
-                  )}
-                >
-                  {d === "desktop" ? <Laptop className="w-4 h-4" /> : d === "tablet" ? <Tablet className="w-4 h-4" /> : <Smartphone className="w-4 h-4" />}
-                </button>
-              ))}
-            </div>
+             <SegmentedControl
+                activeId={device}
+                onChange={(id) => setDevice(id as Device)}
+                options={[
+                  { id: "desktop", label: "Desktop", icon: <Laptop size={14} /> },
+                  { id: "tablet", label: "Tablet", icon: <Tablet size={14} /> },
+                  { id: "mobile", label: "Mobile", icon: <Smartphone size={14} /> },
+                ]}
+             />
 
             <div className="flex items-center gap-2">
               <button 
