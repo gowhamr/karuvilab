@@ -189,4 +189,8 @@ export const ALL_TOOLS: ToolEntry[] = [
   chart_generator,
   typing_speed_test,
   barcode_scanner,
+  word_counter,
+  text_case_converter,
+  invoice_generator,
+  color_converter,
 ];

@@ -9,7 +9,7 @@ const RegexTesterClient = dynamic(() => import("@/src/features/regex"), {
   loading: () => <ToolSkeleton />,
 });
 
-export const metadata: Metadata = generateToolMetadata("regex");
+export const metadata: Metadata = generateToolMetadata("regex-tester");
 
 export default function page() {
   const cat = CATEGORIES.find(c => c.id === "developer")!;

@@ -4,7 +4,7 @@ import React, { useId } from "react";
 import { cn } from "@/src/lib/utils";
 
 interface ToolInputProps {
-  label: string;
+  label?: string;
   value: string;
   onChange: (val: string) => void;
   placeholder?: string;
@@ -14,6 +14,8 @@ interface ToolInputProps {
   error?: string | undefined;
   mono?: boolean;
   id?: string;
+  readOnly?: boolean;
+  className?: string;
 }
 
 export function ToolInput({ 
@@ -26,7 +28,9 @@ export function ToolInput({
   description,
   error,
   mono = false,
-  id: providedId
+  id: providedId,
+  readOnly,
+  className
 }: ToolInputProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
@@ -39,22 +43,26 @@ export function ToolInput({
     error 
       ? "border-red-500 focus:ring-4 focus:ring-red-500/10 focus:border-red-500" 
       : "border-border focus:ring-4 focus:ring-blue/10 focus:border-blue",
-    "placeholder:text-text-3/60"
+    "placeholder:text-text-3/60",
+    readOnly && "bg-surface cursor-default",
+    className
   );
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-end">
-        <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>
-        {description && (
-          <span 
-            id={descriptionId}
-            className="text-[11px] text-text-3 uppercase font-bold tracking-wider"
-          >
-            {description}
-          </span>
-        )}
-      </div>
+      {label && (
+        <div className="flex justify-between items-end">
+          <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>
+          {description && (
+            <span 
+              id={descriptionId}
+              className="text-[11px] text-text-3 uppercase font-bold tracking-wider"
+            >
+              {description}
+            </span>
+          )}
+        </div>
+      )}
       {rows > 1 ? (
         <textarea
           id={id}
@@ -63,6 +71,7 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          readOnly={readOnly}
           aria-describedby={cn(
             description ? descriptionId : undefined,
             error ? errorId : undefined
@@ -77,6 +86,7 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          readOnly={readOnly}
           aria-describedby={cn(
             description ? descriptionId : undefined,
             error ? errorId : undefined

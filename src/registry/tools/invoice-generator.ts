@@ -4,7 +4,7 @@ export const invoice_generator: ToolEntry = {
   id: 'invoice-generator',
   name: 'Invoice Generator',
   desc: 'Create and download professional invoices as PDF completely in your browser.',
-  href: 'financial/invoice-generator/',
+  href: 'calculators/invoice-generator/',
   category: 'calculators',
   subCategory: 'Financial',
   input: 'none',

@@ -9,7 +9,7 @@ const LockUnlockPdfClient = dynamic(() => import("@/src/features/lock-unlock"), 
   loading: () => <ToolSkeleton />,
 });
 
-export const metadata: Metadata = generateToolMetadata("lock-unlock");
+export const metadata: Metadata = generateToolMetadata("lock-unlock-pdf");
 
 export default function page() {
   const cat = CATEGORIES.find(c => c.id === "pdf")!;
