@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const world_clock: ToolEntry = {
   "id": "world-clock",
   "name": "World Clock",
-  "desc": "Time across multiple cities",
+  "desc": "Track time across multiple cities with business hour indicators. Ideal for global teams.",
   "href": "calculators/world-clock/",
   "category": "calculators",
   "subCategory": "Date & Time",
@@ -11,7 +11,10 @@ export const world_clock: ToolEntry = {
     "time",
     "timezone",
     "clock",
-    "utc"
+    "utc",
+    "global time",
+    "time zone converter",
+    "meeting planner"
   ],
   "searchIntent": "informational",
   "schemaType": "WebApplication"

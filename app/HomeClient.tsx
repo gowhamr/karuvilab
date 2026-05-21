@@ -281,11 +281,19 @@ export default function HomeClient() {
                     icon={LayoutGrid}
                     href="/all-tools"
                   />
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                  <m.div 
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
+                  >
                     {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
-                      <ToolCard key={tool.id} tool={tool} compact />
+                      <m.div key={tool.id} variants={itemVariants}>
+                        <ToolCard tool={tool} compact />
+                      </m.div>
                     ))}
-                  </div>
+                  </m.div>
                   <div className="mt-8 flex justify-center">
                     <Link 
                       href="/all-tools"

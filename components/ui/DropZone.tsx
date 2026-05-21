@@ -3,6 +3,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import { Upload, File, X, CircleAlert as AlertCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { m, AnimatePresence } from "framer-motion";
 
 interface DropZoneProps {
   onFilesSelected: (files: FileList | File[]) => void;
@@ -73,14 +74,17 @@ export function DropZone({
 
   return (
     <div className="w-full space-y-2">
-      <div
+      <m.div
+        whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.995 }}
+        animate={{ 
+          scale: isDragging ? 1.02 : 1,
+          borderColor: isDragging ? "var(--blue)" : error ? "rgb(239, 68, 68)" : "var(--border)",
+          backgroundColor: isDragging ? "var(--blue-glow)" : error ? "rgba(239, 68, 68, 0.05)" : "var(--surface)"
+        }}
         className={cn(
-          "relative group cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-300",
-          "flex flex-col items-center justify-center p-8 text-center",
-          isDragging
-            ? "border-blue bg-blue/5 scale-[1.01]"
-            : "border-border bg-surface hover:border-blue/50 hover:bg-blue/[0.02]",
-          error ? "border-red-500/50 bg-red-500/5" : "",
+          "relative group cursor-pointer overflow-hidden rounded-3xl border-2 border-dashed transition-colors duration-300",
+          "flex flex-col items-center justify-center p-10 text-center",
           className
         )}
         onDragOver={onDragOver}
@@ -99,28 +103,51 @@ export function DropZone({
         aria-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
       >
-        <div
+        <m.div
+          animate={{ 
+            scale: isDragging ? 1.2 : 1,
+            rotate: isDragging ? [0, -10, 10, 0] : 0
+          }}
+          transition={{ 
+            rotate: isDragging ? { repeat: Infinity, duration: 2, ease: "linear" } : { duration: 0.3 }
+          }}
           className={cn(
-            "mb-4 rounded-full p-4 transition-transform duration-300 group-hover:scale-110",
-            isDragging ? "bg-blue text-white" : "bg-bg text-text-4 group-hover:text-blue"
+            "mb-4 rounded-2xl p-4 transition-all duration-300",
+            isDragging ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-bg text-text-4 group-hover:text-blue group-hover:bg-blue/5"
           )}
           aria-hidden="true"
         >
           {icon || <Upload className="w-8 h-8" />}
-        </div>
+        </m.div>
 
         <div className="space-y-1">
-          <p className="font-bold text-text-2 group-hover:text-blue transition-colors">
+          <p className="font-bold text-lg text-text-2 group-hover:text-blue transition-colors">
             {title}
           </p>
-          <p className="text-sm text-text-4 font-medium italic">
+          <p className="text-sm text-text-4 font-medium italic opacity-70">
             {description}
           </p>
         </div>
 
-        {isDragging && (
-          <div className="absolute inset-0 bg-blue/10 pointer-events-none animate-pulse" />
-        )}
+        <AnimatePresence>
+          {isDragging && (
+            <m.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-blue/5 pointer-events-none"
+            >
+              <m.div 
+                animate={{ 
+                  opacity: [0.1, 0.2, 0.1],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="absolute inset-0 border-4 border-blue/20 rounded-3xl"
+              />
+            </m.div>
+          )}
+        </AnimatePresence>
 
         <input
           ref={fileInputRef}
@@ -135,18 +162,23 @@ export function DropZone({
             }
           }}
         />
-      </div>
+      </m.div>
       
-      {error && (
-        <div 
-          id={errorId}
-          role="alert"
-          className="flex items-center gap-2 text-xs font-bold text-red-500 bg-red-500/5 p-3 rounded-xl border border-red-500/20"
-        >
-          <AlertCircle className="w-4 h-4" />
-          {error}
-        </div>
-      )}
+      <AnimatePresence>
+        {error && (
+          <m.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            id={errorId}
+            role="alert"
+            className="flex items-center gap-2 text-xs font-bold text-red-500 bg-red-500/5 p-3 rounded-xl border border-red-500/20 overflow-hidden"
+          >
+            <AlertCircle className="w-4 h-4" />
+            {error}
+          </m.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

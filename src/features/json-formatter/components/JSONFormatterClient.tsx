@@ -1,12 +1,12 @@
 "use client";
+
 import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
-
+import { ToolInput } from "@/components/ui/ToolInput";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { usePersistentState } from "@/src/lib/hooks";
-
-const cat = CATEGORIES.find(c => c.id === "developer")!;
+import { Code, Network, Info, FileJson, Layers, Sparkles } from "lucide-react";
+import { cn } from "@/src/lib/utils";
 
 type Indent = 2 | 4 | "tab";
 
@@ -24,9 +24,9 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
   const indent = depth * 16;
 
   if (value === null) return <span className="text-text-4">null</span>;
-  if (typeof value === "boolean") return <span className="text-blue">{String(value)}</span>;
-  if (typeof value === "number") return <span className="text-green-500">{value}</span>;
-  if (typeof value === "string") return <span className="text-yellow-500">"{value}"</span>;
+  if (typeof value === "boolean") return <span className="text-blue font-bold">{String(value)}</span>;
+  if (typeof value === "number") return <span className="text-emerald-500 font-mono">{value}</span>;
+  if (typeof value === "string") return <span className="text-amber-500">"{value}"</span>;
 
   if (Array.isArray(value)) {
     if (value.length === 0) return <span className="text-text-3">[]</span>;
@@ -34,24 +34,27 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
     const hasMore = value.length > MAX_ITEMS && !showAll;
 
     return (
-      <span>
-        <button onClick={() => setCollapsed(c => !c)} className="text-text-4 hover:text-blue font-mono text-xs mr-1">
+      <span className="font-mono">
+        <button 
+          onClick={() => setCollapsed(c => !c)} 
+          className="text-text-4 hover:text-blue transition-colors text-[10px] mr-1 inline-flex items-center justify-center w-4 h-4 rounded hover:bg-blue/5"
+        >
           {collapsed ? "▶" : "▼"}
         </button>
         <span className="text-text-3">{"["}</span>
         {collapsed
-          ? <span className="text-text-4 cursor-pointer" onClick={() => setCollapsed(false)}> {value.length} items </span>
+          ? <span className="text-text-4 cursor-pointer hover:text-text transition-colors italic text-xs px-1" onClick={() => setCollapsed(false)}> {value.length} items </span>
           : (
-            <div style={{ marginLeft: indent + 16 }}>
+            <div style={{ marginLeft: 16 }}>
               {items.map((item, i) => (
                 <div key={i}><TreeNode value={item} depth={depth + 1} maxAutoExpandDepth={maxAutoExpandDepth} />{i < value.length - 1 ? <span className="text-text-4">,</span> : null}</div>
               ))}
               {hasMore && (
                 <button 
                   onClick={() => setShowAll(true)}
-                  className="text-blue hover:underline text-xs font-bold mt-1"
+                  className="text-blue hover:underline text-[10px] font-black uppercase tracking-widest mt-2 block"
                 >
-                  ... show all {value.length} items
+                  + Show all {value.length} items
                 </button>
               )}
             </div>
@@ -70,19 +73,22 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
     const hasMore = entries.length > MAX_ITEMS && !showAll;
 
     return (
-      <span>
-        <button onClick={() => setCollapsed(c => !c)} className="text-text-4 hover:text-blue font-mono text-xs mr-1">
+      <span className="font-mono">
+        <button 
+          onClick={() => setCollapsed(c => !c)} 
+          className="text-text-4 hover:text-blue transition-colors text-[10px] mr-1 inline-flex items-center justify-center w-4 h-4 rounded hover:bg-blue/5"
+        >
           {collapsed ? "▶" : "▼"}
         </button>
         <span className="text-text-3">{"{"}</span>
         {collapsed
-          ? <span className="text-text-4 cursor-pointer" onClick={() => setCollapsed(false)}> {entries.length} keys </span>
+          ? <span className="text-text-4 cursor-pointer hover:text-text transition-colors italic text-xs px-1" onClick={() => setCollapsed(false)}> {entries.length} keys </span>
           : (
-            <div style={{ marginLeft: indent + 16 }}>
+            <div style={{ marginLeft: 16 }}>
               {items.map(([k, v], i) => (
-                <div key={k}>
-                  <span className="text-blue">"{k}"</span>
-                  <span className="text-text-3">: </span>
+                <div key={k} className="flex items-start gap-1">
+                  <span className="text-blue font-bold flex-shrink-0">"{k}"</span>
+                  <span className="text-text-3 flex-shrink-0">: </span>
                   <TreeNode value={v} depth={depth + 1} maxAutoExpandDepth={maxAutoExpandDepth} />
                   {i < entries.length - 1 ? <span className="text-text-4">,</span> : null}
                 </div>
@@ -90,9 +96,9 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
               {hasMore && (
                 <button 
                   onClick={() => setShowAll(true)}
-                  className="text-blue hover:underline text-xs font-bold mt-1"
+                  className="text-blue hover:underline text-[10px] font-black uppercase tracking-widest mt-2 block"
                 >
-                  ... show all {entries.length} keys
+                  + Show all {entries.length} keys
                 </button>
               )}
             </div>
@@ -108,25 +114,25 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
 
 export default function JSONFormatterClient() {
   const [state, setState, isLoaded] = usePersistentState('json-formatter', {
-    tab: "beautify" as "beautify" | "minify",
+    mode: "beautify" as "beautify" | "minify",
     input: "",
     indent: 2 as Indent,
-    treeView: false
+    view: "raw" as "raw" | "tree"
   });
 
-  const { tab, input, indent, treeView } = state;
+  const { mode, input, indent, view } = state;
 
-  const setTab = (t: "beautify" | "minify") => setState(prev => ({ ...prev, tab: t, treeView: false }));
+  const setMode = (m: "beautify" | "minify") => setState(prev => ({ ...prev, mode: m, view: "raw" }));
   const setInput = (i: string) => setState(prev => ({ ...prev, input: i }));
   const setIndent = (v: Indent) => setState(prev => ({ ...prev, indent: v }));
-  const setTreeView = (v: boolean) => setState(prev => ({ ...prev, treeView: v }));
+  const setView = (v: "raw" | "tree") => setState(prev => ({ ...prev, view: v }));
 
   const { output, error, parsed } = useMemo(() => {
     if (!input.trim()) return { output: "", error: null, parsed: null };
     try {
       const obj = JSON.parse(input);
       let out = "";
-      if (tab === "minify") {
+      if (mode === "minify") {
         out = JSON.stringify(obj);
       } else {
         const spaces = indent === "tab" ? "\t" : indent;
@@ -144,103 +150,139 @@ export default function JSONFormatterClient() {
       }
       return { output: "", error: errorData, parsed: null };
     }
-  }, [input, tab, indent]);
+  }, [input, mode, indent]);
 
-  if (!isLoaded) return <div className="animate-pulse h-[400px] bg-surface/50 rounded-2xl" />;
+  if (!isLoaded) return <div className="animate-pulse h-[500px] bg-surface/50 rounded-[32px] border border-border" />;
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <div className="flex flex-wrap gap-2 items-center justify-between">
-          <div className="flex gap-2">
-            {(["beautify", "minify"] as const).map(t => (
-              <button
-                key={t}
-                onClick={() => { setTab(t); setTreeView(false); }}
-                className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${tab === t ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-              >
-                {t === "beautify" ? "Beautify" : "Minify"}
-              </button>
-            ))}
-          </div>
-
-          {tab === "beautify" && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-text-4">Indent:</span>
-              {([2, 4, "tab"] as Indent[]).map(v => (
-                <button
-                  key={String(v)}
-                  onClick={() => setIndent(v)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${indent === v ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-                >
-                  {v === "tab" ? "Tab" : `${v} spaces`}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <textarea
-          className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
-          rows={10}
-          placeholder='Paste JSON here, e.g. {"name":"KaruviLab"}'
-          value={input}
-          onChange={e => setInput(e.target.value)}
-        />
-
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-sm text-red-500 font-mono">
-            {error.line ? <span className="font-bold">Line {error.line}: </span> : null}
-            {error.message}
-          </div>
-        )}
-
-        {!error && input && (
-          <div className="flex items-center gap-2 text-xs text-green-600 font-bold">
-            <span>✓</span><span>Valid JSON</span>
-          </div>
-        )}
-      </div>
-
-      {output && !error && (
-        <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex gap-2">
-              <button
-                onClick={() => setTreeView(false)}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${!treeView ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-              >
-                Raw
-              </button>
-              <button
-                onClick={() => setTreeView(true)}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${treeView ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-              >
-                Tree
-              </button>
-            </div>
-            <CopyButton text={output} />
-          </div>
-
-          {treeView && parsed !== null ? (
-            <div className="space-y-3">
-              {(input.length > 2 * 1024 * 1024 || JSON.stringify(parsed).length > 2 * 1024 * 1024) && (
-                <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-xs text-yellow-600 font-medium">
-                  <span className="font-bold">Large JSON structure detected:</span> To prevent DOM explosion and maintain responsiveness, nested levels beyond depth 10 are initially collapsed. Large collections are truncated to {MAX_ITEMS} items.
-                </div>
-              )}
-              <div className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text overflow-auto max-h-[500px]">
-                <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
+    <div className="space-y-12">
+      {/* Configuration & Input Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="lg:col-span-2 space-y-8">
+          <div className="bg-surface border border-border rounded-[32px] p-6 sm:p-8 shadow-sm space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+              <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+                <FileJson className="w-4 h-4" />
+                Source JSON
+              </h2>
+              
+              <div className="flex items-center gap-4">
+                 <SegmentedControl
+                   options={[
+                     { id: "beautify", label: "Beautify", icon: <Sparkles className="w-3 h-3" /> },
+                     { id: "minify", label: "Minify", icon: <Layers className="w-3 h-3" /> }
+                   ]}
+                   activeId={mode}
+                   onChange={setMode}
+                 />
               </div>
             </div>
-          ) : (
-            <textarea
-              readOnly
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text resize-none outline-none"
+
+            <ToolInput
+              label="Input Data"
+              value={input}
+              onChange={setInput}
+              placeholder='Paste JSON here, e.g. {"name":"KaruviLab"}'
               rows={12}
-              value={output}
+              mono
+              error={error?.message}
+              description={error?.line ? `Error on line ${error.line}` : undefined}
             />
-          )}
+
+            {!error && input && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl w-fit">
+                <span className="text-emerald-500 text-xs">✓</span>
+                <span className="text-[10px] text-emerald-600 font-black uppercase tracking-widest">Valid JSON Structure</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-6 lg:sticky lg:top-8">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2">Settings</h2>
+          
+          <div className="bg-surface border border-border rounded-[32px] p-6 space-y-6 shadow-sm">
+            {mode === "beautify" && (
+              <div className="space-y-4">
+                <label className="text-[10px] font-black uppercase tracking-widest text-text-3">Indentation</label>
+                <div className="flex flex-wrap gap-2">
+                  {([2, 4, "tab"] as Indent[]).map(v => (
+                    <button
+                      key={String(v)}
+                      onClick={() => setIndent(v)}
+                      className={cn(
+                        "px-4 py-2 rounded-xl text-xs font-bold transition-all border",
+                        indent === v 
+                          ? "bg-blue border-blue text-white shadow-lg shadow-blue/20" 
+                          : "bg-bg border-border text-text-2 hover:border-blue/30"
+                      )}
+                    >
+                      {v === "tab" ? "Tab" : `${v} Spc`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="p-4 bg-blue/5 border border-blue/10 rounded-2xl space-y-3">
+              <div className="flex items-center gap-2 text-blue">
+                <Info className="w-3 h-3" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-blue-dark">Pro Tip</span>
+              </div>
+              <p className="text-[11px] text-text-3 leading-relaxed font-medium">
+                Switch to <span className="text-blue font-bold">Tree View</span> in the results area to explore complex nested objects without losing context.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Output & Visualization Section */}
+      {output && !error && (
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+              <Code className="w-4 h-4" />
+              Processed Output
+            </h2>
+            <div className="flex items-center gap-3">
+              <SegmentedControl
+                options={[
+                  { id: "raw", label: "Raw", icon: <FileJson className="w-3 h-3" /> },
+                  { id: "tree", label: "Tree", icon: <Network className="w-3 h-3" /> }
+                ]}
+                activeId={view}
+                onChange={setView}
+              />
+              <CopyButton text={output} />
+            </div>
+          </div>
+
+          <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px]">
+            {view === "tree" && parsed !== null ? (
+              <div className="p-6 space-y-6">
+                {(input.length > 2 * 1024 * 1024 || JSON.stringify(parsed).length > 2 * 1024 * 1024) && (
+                  <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-start gap-3">
+                    <Info className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-amber-700 font-medium leading-relaxed">
+                      <span className="font-black uppercase tracking-widest text-[10px] block mb-1">Performance Mode</span>
+                      Large JSON structure detected. To maintain responsiveness, nested levels beyond depth 10 are collapsed and large collections are truncated to {MAX_ITEMS} items.
+                    </p>
+                  </div>
+                )}
+                <div className="w-full px-6 py-4 bg-bg border border-border rounded-2xl overflow-auto max-h-[600px] custom-scrollbar">
+                  <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
+                </div>
+              </div>
+            ) : (
+              <textarea
+                readOnly
+                className="w-full min-h-[400px] p-6 sm:p-8 bg-transparent font-mono text-sm text-text-2 resize-none outline-none custom-scrollbar"
+                value={output}
+                placeholder="Results will appear here..."
+              />
+            )}
+          </div>
         </div>
       )}
     </div>

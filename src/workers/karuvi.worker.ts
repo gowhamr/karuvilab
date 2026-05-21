@@ -368,6 +368,105 @@ const api: WorkerAPI = {
     }
   },
 
+  async extractColorPalette(file, k = 5, onProgress) {
+    let imgBitmap: ImageBitmap | null = null;
+    try {
+      if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
+      const blob = new Blob([file]);
+      imgBitmap = await createImageBitmap(blob);
+
+      const MAX_WIDTH = 100;
+      const scale = Math.min(MAX_WIDTH / imgBitmap.width, 1);
+      const width = Math.round(imgBitmap.width * scale);
+      const height = Math.round(imgBitmap.height * scale);
+
+      const canvas = new OffscreenCanvas(width, height);
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) throw new Error("Could not get 2D context");
+      
+      ctx.drawImage(imgBitmap, 0, 0, width, height);
+      const imageData = ctx.getImageData(0, 0, width, height).data;
+
+      if (onProgress) onProgress({ percent: 30, message: "Sampling pixels..." });
+      const pixels: [number, number, number][] = [];
+      for (let i = 0; i < imageData.length; i += 4) {
+        if (imageData[i+3]! > 128) { // Ignore transparent pixels
+          pixels.push([imageData[i]!, imageData[i+1]!, imageData[i+2]!]);
+        }
+      }
+
+      if (pixels.length === 0) return [];
+
+      if (onProgress) onProgress({ percent: 50, message: "Clustering colors (k-means)..." });
+      
+      // k-means implementation
+      let centroids: [number, number, number][] = [];
+      for(let i=0; i<k; i++) {
+        centroids.push(pixels[Math.floor(Math.random() * pixels.length)]!);
+      }
+
+      let assignments = new Array(pixels.length);
+      const MAX_ITERATIONS = 10;
+
+      for (let iter = 0; iter < MAX_ITERATIONS; iter++) {
+        // Assign pixels to closest centroid
+        for (let i = 0; i < pixels.length; i++) {
+          let min_dist = Infinity;
+          let best_centroid = 0;
+          for (let j = 0; j < k; j++) {
+            const dist = Math.sqrt(
+              (pixels[i]![0] - centroids[j]![0]) ** 2 +
+              (pixels[i]![1] - centroids[j]![1]) ** 2 +
+              (pixels[i]![2] - centroids[j]![2]) ** 2
+            );
+            if (dist < min_dist) {
+              min_dist = dist;
+              best_centroid = j;
+            }
+          }
+          assignments[i] = best_centroid;
+        }
+
+        // Update centroids
+        const new_centroids: [number, number, number][] = new Array(k).fill(0).map(() => [0, 0, 0]);
+        const counts = new Array(k).fill(0);
+        for (let i = 0; i < pixels.length; i++) {
+          const centroid_index = assignments[i]!;
+          new_centroids[centroid_index]![0] += pixels[i]![0];
+          new_centroids[centroid_index]![1] += pixels[i]![1];
+          new_centroids[centroid_index]![2] += pixels[i]![2];
+          counts[centroid_index]++;
+        }
+
+        for (let i = 0; i < k; i++) {
+          if (counts[i] > 0) {
+            new_centroids[i]![0] /= counts[i];
+            new_centroids[i]![1] /= counts[i];
+            new_centroids[i]![2] /= counts[i];
+          } else {
+             // Re-initialize if a cluster becomes empty
+             new_centroids[i] = pixels[Math.floor(Math.random() * pixels.length)]!;
+          }
+        }
+        centroids = new_centroids;
+      }
+      
+      if (onProgress) onProgress({ percent: 90, message: "Finalizing palette..." });
+      
+      return centroids.map(c => {
+        const r = Math.round(c[0]).toString(16).padStart(2, '0');
+        const g = Math.round(c[1]).toString(16).padStart(2, '0');
+        const b = Math.round(c[2]).toString(16).padStart(2, '0');
+        return `#${r}${g}${b}`;
+      });
+
+    } catch (err: any) {
+      throw new Error(`Color extraction failed: ${err.message || 'Unknown error'}`);
+    } finally {
+      if (imgBitmap) imgBitmap.close();
+    }
+  },
+
   // Developer Tasks
   async minifyCode(code, lang, onProgress) {
     if (lang === 'js') {
@@ -415,6 +514,27 @@ const api: WorkerAPI = {
       }
     }
     return result;
+  },
+
+  async processYaml(input, action) {
+    const YAML = await import("yaml");
+    try {
+      if (action === 'validate') {
+        YAML.parse(input);
+        return { result: 'Valid YAML' };
+      }
+      if (action === 'yaml_to_json') {
+        const doc = YAML.parse(input);
+        return { result: JSON.stringify(doc, null, 2) };
+      }
+      if (action === 'json_to_yaml') {
+        const doc = JSON.parse(input);
+        return { result: YAML.stringify(doc) };
+      }
+      return { error: 'Invalid action' };
+    } catch (e: any) {
+      return { error: e.message || 'An unknown error occurred' };
+    }
   },
 
   async createZip(files, onProgress) {

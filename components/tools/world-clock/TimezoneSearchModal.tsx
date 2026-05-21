@@ -1,0 +1,139 @@
+"use client";
+
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, X, Globe, Plus } from 'lucide-react';
+import { getAllTimezones, COMMON_CITIES } from '@/src/lib/timezone-data';
+import { useWorldClockStore } from '@/src/store/useWorldClockStore';
+
+interface TimezoneSearchModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+/**
+ * A full-screen modal for searching and adding timezones.
+ * Provides a focused, keyboard-friendly search experience.
+ */
+export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen, onClose }) => {
+  const [search, setSearch] = useState('');
+  const addClock = useWorldClockStore(state => state.addClock);
+
+  const allZones = useMemo(() => getAllTimezones(), []);
+
+  const filteredZones = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    if (!q) return COMMON_CITIES;
+
+    return allZones
+      .filter(z => 
+        z.city.toLowerCase().includes(q) || 
+        z.country?.toLowerCase().includes(q) || 
+        z.tz.toLowerCase().replace(/_/g, ' ').includes(q)
+      )
+      .slice(0, 50);
+  }, [search, allZones]);
+
+  const handleAddClock = (zone: typeof COMMON_CITIES[0]) => {
+    addClock({ city: zone.city, country: zone.country || '', tz: zone.tz });
+    setSearch('');
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-lg flex items-start justify-center p-4 sm:p-16"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+            className="w-full max-w-2xl bg-surface border border-border rounded-3xl shadow-2xl flex flex-col max-h-[80vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="p-6 flex items-center justify-between border-b border-border">
+              <div className="flex items-center gap-3">
+                <Globe className="w-5 h-5 text-blue" />
+                <h2 className="text-lg font-black text-text">Add Timezone</h2>
+              </div>
+              <button onClick={onClose} className="p-2 text-text-4 hover:text-text rounded-full transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="p-6">
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-text-4">
+                  <Search className="w-5 h-5" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search city, country, or timezone..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
+                  className="w-full h-14 pl-12 pr-6 bg-bg border-2 border-border rounded-2xl text-base font-bold focus:border-blue outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Results */}
+            <div className="flex-1 overflow-y-auto px-6 pb-6 no-scrollbar">
+              <AnimatePresence>
+                {filteredZones.length > 0 ? (
+                  <motion.ul
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="space-y-2"
+                  >
+                    {filteredZones.map((zone) => (
+                      <motion.li
+                        key={zone.tz}
+                        layout
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ type: 'spring', bounce: 0 }}
+                      >
+                        <button
+                          onClick={() => handleAddClock(zone)}
+                          className="w-full p-4 flex items-center justify-between bg-bg/50 border border-border rounded-xl hover:border-blue hover:bg-blue/5 transition-all group"
+                        >
+                          <div>
+                            <p className="text-base font-bold text-text group-hover:text-blue">{zone.city}</p>
+                            <p className="text-xs text-text-4">{zone.country || ''}</p>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <p className="text-xs font-mono text-text-4">{zone.tz.replace(/_/g, ' ')}</p>
+                            <Plus className="w-5 h-5 text-text-4 group-hover:text-blue transition-transform group-hover:scale-125" />
+                          </div>
+                        </button>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-12"
+                  >
+                    <p className="font-bold text-text">No results found.</p>
+                    <p className="text-sm text-text-4">Try a different search term.</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};

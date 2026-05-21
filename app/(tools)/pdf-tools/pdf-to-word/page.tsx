@@ -16,7 +16,7 @@ export default function page() {
   return (
     <ToolShell
       title="PDF to Word"
-      description="Extract text from PDF files. Full Word conversion requires server-side processing; this tool outputs plain text."
+      description="Extract text from PDF files and convert them into editable Microsoft Word (.docx) documents completely in your browser."
       category={cat}
     >
       <PdfToWordClient />

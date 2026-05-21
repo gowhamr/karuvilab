@@ -146,21 +146,22 @@ const SidebarContent = memo(function SidebarContent({
           </div>
           <div className="space-y-1">
             {favorites.map(tool => (
-              <Link
-                key={tool.id}
-                href={`/${tool.href}`}
-                onClick={() => setIsOpen(false)}
-                className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                  pathname.includes(tool.href) 
-                    ? "bg-blue/10 text-blue" 
-                    : "text-text-3 hover:text-blue hover:bg-blue/5"
-                }`}
-              >
-                <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hover:bg-red-500/20 transition-all">
-                  <ToolIcon toolId={tool.id} category={tool.category} className="w-3.5 h-3.5 text-red-500" />
-                </div>
-                {tool.name}
-              </Link>
+              <m.div key={tool.id} whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href={`/${tool.href}`}
+                  onClick={() => setIsOpen(false)}
+                  className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
+                    pathname.includes(tool.href) 
+                      ? "bg-blue/10 text-blue" 
+                      : "text-text-3 hover:text-blue hover:bg-blue/5"
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hover:bg-red-500/20 transition-all">
+                    <ToolIcon toolId={tool.id} category={tool.category} className="w-3.5 h-3.5 text-red-500" />
+                  </div>
+                  {tool.name}
+                </Link>
+              </m.div>
             ))}
           </div>
         </div>
@@ -175,19 +176,20 @@ const SidebarContent = memo(function SidebarContent({
           </div>
           <div className="space-y-1">
             {recent.map(tool => (
-              <Link
-                key={tool.id}
-                href={`/${tool.href}`}
-                onClick={() => setIsOpen(false)}
-                className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                  pathname.includes(tool.href) 
-                    ? "bg-blue/10 text-blue" 
-                    : "text-text-3 hover:text-blue hover:bg-blue/5"
-                }`}
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-blue/20 group-hover:bg-blue mr-3 transition-all" />
-                {tool.name}
-              </Link>
+              <m.div key={tool.id} whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href={`/${tool.href}`}
+                  onClick={() => setIsOpen(false)}
+                  className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
+                    pathname.includes(tool.href) 
+                      ? "bg-blue/10 text-blue" 
+                      : "text-text-3 hover:text-blue hover:bg-blue/5"
+                  }`}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue/20 group-hover:bg-blue mr-3 transition-all" />
+                  {tool.name}
+                </Link>
+              </m.div>
             ))}
           </div>
         </div>

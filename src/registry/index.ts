@@ -77,6 +77,24 @@ import { image_seo } from './tools/image-seo';
 import { slug_generator } from './tools/slug-generator';
 import { seo_title } from './tools/seo-title';
 import { calendar } from './tools/calendar';
+import { yaml_validator } from './tools/yaml-validator';
+import { pomodoro_timer } from './tools/pomodoro-timer';
+import { color_palette_extractor } from './tools/color-palette-extractor';
+import { word_counter } from './tools/word-counter';
+import { text_case_converter } from './tools/text-case-converter';
+import { invoice_generator } from './tools/invoice-generator';
+import { color_converter } from './tools/color-converter';
+import { format_hub } from './tools/format-hub';
+import { timezone_converter } from './tools/timezone-converter';
+import { fake_data_generator } from './tools/fake-data-generator';
+import { scientific_calculator } from './tools/scientific-calculator';
+import { text_sorter_deduper } from './tools/text-sorter-deduper';
+import { mic_camera_tester } from './tools/mic-camera-tester';
+import { wifi_qr_code } from './tools/wifi-qr-code';
+import { phone_mockup_generator } from './tools/phone-mockup-generator';
+import { chart_generator } from './tools/chart-generator';
+import { typing_speed_test } from './tools/typing-speed-test';
+import { barcode_scanner } from './tools/barcode-scanner';
 
 export const ALL_TOOLS: ToolEntry[] = [
   emi_calculator,
@@ -157,4 +175,18 @@ export const ALL_TOOLS: ToolEntry[] = [
   slug_generator,
   seo_title,
   calendar,
+  yaml_validator,
+  pomodoro_timer,
+  color_palette_extractor,
+  format_hub,
+  timezone_converter,
+  fake_data_generator,
+  scientific_calculator,
+  text_sorter_deduper,
+  mic_camera_tester,
+  wifi_qr_code,
+  phone_mockup_generator,
+  chart_generator,
+  typing_speed_test,
+  barcode_scanner,
 ];

@@ -1,5 +1,8 @@
+"use client";
+
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { m } from "framer-motion";
 
 interface MetricCardProps {
   label: string;
@@ -17,27 +20,43 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, accent = false, sub, icon: Icon, className, trend }: MetricCardProps) {
   return (
-    <dl className={cn("bg-surface border border-border p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] space-y-3 min-w-0 overflow-hidden", className)}>
+    <m.dl 
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      className={cn("bg-surface border border-border p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] space-y-3 min-w-0 overflow-hidden shadow-sm hover:shadow-lg dark:hover:shadow-blue/5 transition-shadow duration-300", className)}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-text-3">
-          {Icon && <Icon className="w-3.5 h-3.5" />}
-          <dt className="text-[10px] font-black uppercase tracking-widest truncate">{label}</dt>
+          {Icon && <Icon className="w-4 h-4" />}
+          <dt className="text-[11px] font-black uppercase tracking-widest truncate">{label}</dt>
         </div>
         {trend && (
-          <div className={cn(
-            "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex-shrink-0",
-            trend.isPositive ? "bg-success/10 text-success" : "bg-error/10 text-error"
-          )}>
+          <m.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className={cn(
+              "flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider flex-shrink-0",
+              trend.isPositive ? "bg-success/10 text-success" : "bg-error/10 text-error"
+            )}
+          >
             {trend.value}
-          </div>
+          </m.div>
         )}
       </div>
-      <dd className={cn("text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight", accent ? "text-blue" : "text-text")}>{value}</dd>
+      <m.dd 
+        initial={{ scale: 0.95 }}
+        whileInView={{ scale: 1 }}
+        className={cn("text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight", accent ? "text-blue" : "text-text")}
+      >
+        {value}
+      </m.dd>
       {(sub || trend?.label) && (
-        <dd className="text-[10px] text-text-3 font-medium leading-relaxed line-clamp-2">
+        <dd className="text-[11px] text-text-3 font-bold leading-relaxed line-clamp-2">
           {trend?.label ? `${trend.label}: ${sub || ""}` : sub}
         </dd>
       )}
-    </dl>
+    </m.dl>
   );
 }

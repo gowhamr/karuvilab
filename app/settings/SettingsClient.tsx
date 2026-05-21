@@ -16,26 +16,13 @@ import Link from "next/link";
 const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false });
 const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false });
 const AccessibilitySection = dynamic(() => import("./sections/AccessibilitySection").then(m => m.AccessibilitySection), { ssr: false });
-const ToolPreferencesSection = dynamic(() => import("./sections/ToolPreferencesSection").then(m => m.ToolPreferencesSection), { ssr: false });
-const FavoritesSection = dynamic(() => import("./sections/FavoritesSection").then(m => m.FavoritesSection), { ssr: false });
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
-const LanguageSection = dynamic(() => import("./sections/LanguageSection").then(m => m.LanguageSection), { ssr: false });
-const SupportSection = dynamic(() => import("./sections/SupportSection").then(m => m.SupportSection), { ssr: false });
-const AboutSection = dynamic(() => import("./sections/AboutSection").then(m => m.AboutSection), { ssr: false });
-const PerformanceSection = dynamic(() => import("./sections/PerformanceSection").then(m => m.PerformanceSection), { ssr: false });
-const DeveloperSection = dynamic(() => import("./sections/DeveloperSection").then(m => m.DeveloperSection), { ssr: false });
 
 const MENU_ITEMS = [
-  { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density, animations', group: 'Personalization' },
+  { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density', group: 'Personalization' },
   { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast', group: 'Personalization' },
-  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic, history', group: 'Application' },
-  { id: 'performance', label: 'Performance', icon: Zap, desc: 'Speed, cache, motion', group: 'Application' },
+  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic', group: 'Application' },
   { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations, logs', group: 'History & PINS' },
-  { id: 'favorites', label: 'Favorites', icon: Star, desc: 'Pinned tools, recent history', group: 'History & PINS' },
-  { id: 'tools', label: 'Tool Preferences', icon: Settings2, desc: 'Formats, inputs, auto-copy', group: 'Tools' },
-  { id: 'language', label: 'Language', icon: Globe, desc: 'Localization, RTL support', group: 'Preferences' },
-  { id: 'developer', label: 'Developer', icon: Terminal, desc: 'Debug mode, diagnostics', group: 'System' },
-  { id: 'about', label: 'About', icon: Info, desc: 'Version, device info', group: 'System' },
 ];
 
 export default function SettingsClient() {
@@ -205,15 +192,8 @@ export default function SettingsClient() {
             <div className="relative z-10 min-h-[400px]">
               {activeSection === 'appearance' && <AppearanceSection />}
               {activeSection === 'privacy' && <PrivacySection />}
-              {activeSection === 'performance' && <PerformanceSection />}
               {activeSection === 'history' && <HistorySection />}
               {activeSection === 'accessibility' && <AccessibilitySection />}
-              {activeSection === 'tools' && <ToolPreferencesSection />}
-              {activeSection === 'favorites' && <FavoritesSection />}
-              {activeSection === 'language' && <LanguageSection />}
-              {activeSection === 'support' && <SupportSection />}
-              {activeSection === 'about' && <AboutSection />}
-              {activeSection === 'developer' && <DeveloperSection />}
             </div>
           </m.div>
         </AnimatePresence>

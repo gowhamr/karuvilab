@@ -2,8 +2,8 @@
 
 import { memo } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
-import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingUI";
-import { Sun, Maximize, Zap, LayoutPanelTop } from "lucide-react";
+import { SettingRow, SettingSelect } from "../components/SettingUI";
+import { Sun, Maximize } from "lucide-react";
 
 export const AppearanceSection = memo(function AppearanceSection() {
   const appearance = useSettingsStore(state => state.appearance);
@@ -47,29 +47,6 @@ export const AppearanceSection = memo(function AppearanceSection() {
             { label: 'Comfortable', value: 'comfortable' },
             { label: 'Compact', value: 'compact' }
           ]}
-        />
-      </SettingRow>
-
-      <SettingRow 
-        label="Interface Animations" 
-        description="Enable smooth transitions and micro-interactions throughout the app."
-        icon={Zap}
-        helpText="Disabling animations can make the app feel faster on older devices and saves battery."
-      >
-        <SettingSwitch 
-          checked={appearance.animationsEnabled}
-          onChange={(animationsEnabled) => updateAppearance({ animationsEnabled })}
-        />
-      </SettingRow>
-
-      <SettingRow 
-        label="Compact Sidebar" 
-        description="Always keep the navigation sidebar in a collapsed state."
-        icon={LayoutPanelTop}
-      >
-        <SettingSwitch 
-          checked={appearance.compactMode}
-          onChange={(compactMode) => updateAppearance({ compactMode })}
         />
       </SettingRow>
     </div>

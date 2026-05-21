@@ -104,18 +104,6 @@ export const PrivacySection = memo(function PrivacySection() {
         </button>
       </SettingRow>
 
-      <SettingRow 
-        label="Action History" 
-        description="Remember your last used tools and inputs for a faster workflow."
-        icon={History}
-        helpText="If disabled, the app won't show 'Recent Tools' or restore your last typed values when you return to a tool."
-      >
-        <SettingSwitch 
-          checked={privacy.historyEnabled}
-          onChange={(historyEnabled) => updatePrivacy({ historyEnabled })}
-        />
-      </SettingRow>
-
       <div className="pt-12 border-t border-border/40 mt-8">
         <h4 className="text-xs font-black uppercase tracking-widest text-red-500/60 mb-4">Danger Zone</h4>
         <button

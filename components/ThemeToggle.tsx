@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { m, AnimatePresence } from "framer-motion";
 
 import { useSettingsStore, useIsHydrated } from "@/src/store/settings/store";
 
@@ -20,7 +21,7 @@ export function ThemeToggle() {
   };
 
   if (!isHydrated) {
-    return <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface border border-border" />;
+    return <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface border border-border shimmer-wrapper" />;
   }
 
   const resolvedTheme = theme === "system" 
@@ -28,16 +29,28 @@ export function ThemeToggle() {
     : theme;
 
   return (
-    <button
+    <m.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.9, rotate: 15 }}
       onClick={toggleTheme}
-      className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all group"
+      className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-colors group relative overflow-hidden"
       aria-label={`Switch to ${resolvedTheme === "light" ? "dark" : "light"} theme`}
     >
-      {resolvedTheme === "light" ? (
-        <Moon className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" aria-hidden="true" />
-      ) : (
-        <Sun className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" aria-hidden="true" />
-      )}
-    </button>
+      <AnimatePresence mode="wait" initial={false}>
+        <m.div
+          key={resolvedTheme}
+          initial={{ y: 20, opacity: 0, rotate: -90 }}
+          animate={{ y: 0, opacity: 1, rotate: 0 }}
+          exit={{ y: -20, opacity: 0, rotate: 90 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+        >
+          {resolvedTheme === "light" ? (
+            <Moon className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
+          ) : (
+            <Sun className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
+          )}
+        </m.div>
+      </AnimatePresence>
+    </m.button>
   );
 }

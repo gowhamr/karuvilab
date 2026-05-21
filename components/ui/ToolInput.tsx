@@ -34,12 +34,12 @@ export function ToolInput({
   const errorId = `${id}-error`;
 
   const baseClasses = cn(
-    "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-[48px]",
+    "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-[48px] text-text",
     mono ? "font-mono text-sm" : "text-base",
     error 
       ? "border-red-500 focus:ring-4 focus:ring-red-500/10 focus:border-red-500" 
       : "border-border focus:ring-4 focus:ring-blue/10 focus:border-blue",
-    "placeholder:text-text-4"
+    "placeholder:text-text-3/60"
   );
 
   return (
@@ -49,7 +49,7 @@ export function ToolInput({
         {description && (
           <span 
             id={descriptionId}
-            className="text-[10px] text-text-4 uppercase font-bold tracking-wider"
+            className="text-[11px] text-text-3 uppercase font-bold tracking-wider"
           >
             {description}
           </span>

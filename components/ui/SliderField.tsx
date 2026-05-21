@@ -43,7 +43,7 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
         />
       </Slider.Root>
 
-      <div className="flex justify-between text-[10px] text-text-4 font-bold uppercase tracking-wider" aria-hidden="true">
+      <div className="flex justify-between text-[11px] text-text-3 font-bold uppercase tracking-wider" aria-hidden="true">
         <span>{format ? format(min) : min}</span>
         <span>{format ? format(max) : max}</span>
       </div>

@@ -12,6 +12,7 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { ToolMoreMenu } from "./ToolMoreMenu";
 import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
 import { useSupportStore } from "@/src/store/useSupportStore";
+import { m } from "framer-motion";
 
 interface ToolShellProps {
   title: string;
@@ -71,7 +72,12 @@ export function ToolShell({ title, description, category, children, toolId, cont
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 sm:px-6 lg:px-8 overflow-x-hidden" style={{ '--tool-color': color } as React.CSSProperties}>
+    <m.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 sm:px-6 lg:px-8 overflow-x-hidden" 
+      style={{ '--tool-color': color } as React.CSSProperties}
+    >
       <StructuredData 
         {...(currentTool ? { tool: currentTool } : {})}
         {...(category ? { category } : {})}
@@ -110,12 +116,17 @@ export function ToolShell({ title, description, category, children, toolId, cont
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8 border-t border-border">
         <div className="lg:col-span-2 space-y-12">
           {merged.detailedDescription && (
-            <section className="space-y-4">
+            <m.section 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="space-y-4"
+            >
               <h2 className="text-2xl font-bold">Deep Dive</h2>
               <div className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-normal">
                 <p>{merged.detailedDescription}</p>
               </div>
-            </section>
+            </m.section>
           )}
 
           {merged.useCases && merged.useCases.length > 0 && (
@@ -123,10 +134,14 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <h2 className="text-2xl font-bold">Who uses this?</h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {merged.useCases.map((uc, i) => (
-                  <li key={i} className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4">
+                  <m.li 
+                    key={i} 
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4 transition-colors hover:border-blue/30"
+                  >
                     <Check className="w-4 h-4 mt-0.5 flex-shrink-0 text-success" />
                     <span className="text-text-2 text-sm leading-relaxed">{uc}</span>
-                  </li>
+                  </m.li>
                 ))}
               </ul>
             </section>
@@ -194,19 +209,23 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
         <aside className="space-y-12">
           {merged.howTo && merged.howTo.length > 0 && (
-            <section className="border border-border rounded-3xl p-8 space-y-8 h-fit sticky top-24 bg-surface">
+            <section className="border border-border rounded-3xl p-8 space-y-8 h-fit sticky top-24 bg-surface shadow-sm">
               <div className="space-y-2">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Step-by-step</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Step-by-step</p>
               </div>
               <ol className="space-y-6">
                 {merged.howTo.map((step, i) => (
-                  <li key={i} className="flex gap-4 group">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue text-white flex items-center justify-center text-[10px] font-bold">
+                  <m.li 
+                    key={i} 
+                    whileHover={{ x: 5 }}
+                    className="flex gap-4 group cursor-default"
+                  >
+                    <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue text-white flex items-center justify-center text-[10px] font-bold group-hover:scale-110 transition-transform">
                       {i + 1}
                     </span>
-                    <p className="text-text-2 text-sm font-medium leading-snug">{step}</p>
-                  </li>
+                    <p className="text-text-2 text-sm font-medium leading-snug group-hover:text-text transition-colors">{step}</p>
+                  </m.li>
                 ))}
               </ol>
             </section>
@@ -222,24 +241,29 @@ export function ToolShell({ title, description, category, children, toolId, cont
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {related.map(tool => (
-              <Link
+              <m.div
                 key={tool.id}
-                href={`/${tool.href}`}
-                className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl transition-all hover:border-blue/30"
+                whileHover={{ y: -4, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0">
-                  <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="font-bold text-text transition-colors text-sm truncate group-hover:text-blue">{tool.name}</div>
-                  <div className="text-xs text-text-4 font-medium line-clamp-1">{tool.desc}</div>
-                </div>
-              </Link>
+                <Link
+                  href={`/${tool.href}`}
+                  className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl transition-all hover:border-blue/30 hover:shadow-lg dark:hover:shadow-blue/5"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0 group-hover:bg-blue/5 transition-colors">
+                    <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-bold text-text transition-colors text-sm truncate group-hover:text-blue">{tool.name}</div>
+                    <div className="text-xs text-text-4 font-medium line-clamp-1">{tool.desc}</div>
+                  </div>
+                </Link>
+              </m.div>
             ))}
           </div>
         </section>
       )}
 
-    </div>
+    </m.div>
   );
 }

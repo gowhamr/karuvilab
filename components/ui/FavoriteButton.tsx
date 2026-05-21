@@ -3,6 +3,7 @@
 import { Heart } from "lucide-react";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useState, useEffect } from "react";
+import { m } from "framer-motion";
 
 export function FavoriteButton({ toolId }: { toolId: string }) {
   const isFavorite = useFavoriteStore(state => state.isFavorite);
@@ -15,14 +16,16 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
 
   if (!hydrated) {
     return (
-      <div className="w-32 h-10 bg-surface border border-border rounded-xl animate-pulse" />
+      <div className="w-32 h-10 bg-surface border border-border rounded-xl shimmer-wrapper" />
     );
   }
 
   const active = isFavorite(toolId);
 
   return (
-    <button
+    <m.button
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.95 }}
       onClick={() => toggleFavorite(toolId)}
       className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
         active
@@ -30,8 +33,13 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
           : "bg-surface border border-border text-text-4 hover:border-red-500/30 hover:text-red-500"
       }`}
     >
-      <Heart className={`w-3 h-3 ${active ? "fill-current" : ""}`} />
+      <m.div
+        animate={active ? { scale: [1, 1.3, 1] } : {}}
+        transition={{ duration: 0.3 }}
+      >
+        <Heart className={`w-3 h-3 ${active ? "fill-current" : ""}`} />
+      </m.div>
       {active ? "Favorited" : "Add to Favorites"}
-    </button>
+    </m.button>
   );
 }

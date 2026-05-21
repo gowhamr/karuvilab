@@ -70,6 +70,10 @@ import { numeralConverter } from './tools/numeral-converter';
 import { smartConverter } from './tools/smart-converter';
 import { safeToSpend } from './tools/safe-to-spend';
 import { workHours } from './tools/work-hours';
+import { wordCounter } from './tools/word-counter';
+import { textCaseConverter } from './tools/text-case-converter';
+import { invoiceGenerator } from './tools/invoice-generator';
+import { colorConverter } from './tools/color-converter';
 
 export const TOOL_CONTENT: Record<string, ToolContent> = {
   "hash-generator": hashGenerator,

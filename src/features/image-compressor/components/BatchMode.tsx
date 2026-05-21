@@ -42,7 +42,7 @@ export const BatchMode: React.FC = () => {
         {showLargeBatchWarning && (
           <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center gap-3 text-amber-600">
             <AlertTriangle size={18} />
-            <p className="text-[10px] font-bold uppercase tracking-widest">Large batch detected. Mobile devices may throttle processing.</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest">Large batch detected. Mobile devices may throttle processing.</p>
           </div>
         )}
 
@@ -54,7 +54,7 @@ export const BatchMode: React.FC = () => {
           <div className="p-6 bg-surface border border-border rounded-[32px] space-y-6">
             <div className="space-y-2">
               <h3 className="text-sm font-black uppercase tracking-widest">Global Settings</h3>
-              <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Apply to all queued images</p>
+              <p className="text-[11px] font-bold text-text-3 uppercase tracking-widest">Apply to all queued images</p>
             </div>
 
             <AdvancedSettings />

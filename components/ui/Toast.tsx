@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { m, AnimatePresence } from "framer-motion";
+import { X, CheckCircle2, AlertCircle, Info, AlertTriangle } from "lucide-react";
 
 type ToastType = "success" | "error" | "info" | "warn";
 
@@ -30,34 +32,56 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3000);
+    }, 4000); // Slightly longer duration for better readability
   }, []);
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const icons = {
+    success: <CheckCircle2 className="w-4 h-4 text-green-500" />,
+    error: <AlertCircle className="w-4 h-4 text-red-500" />,
+    info: <Info className="w-4 h-4 text-blue" />,
+    warn: <AlertTriangle className="w-4 h-4 text-orange-500" />,
+  };
 
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
       {/* Toast Container */}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`
-              pointer-events-auto px-4 py-3 rounded-xl shadow-lg border flex items-center gap-3 min-w-[280px]
-              animate-in slide-in-from-right-10 fade-in duration-300
-              ${t.type === "success" ? "bg-surface border-green-500/20 text-green-600 dark:text-green-400" : ""}
-              ${t.type === "error" ? "bg-surface border-red-500/20 text-red-600 dark:text-red-400" : ""}
-              ${t.type === "info" ? "bg-surface border-blue/20 text-blue dark:text-blue-400" : ""}
-              ${t.type === "warn" ? "bg-surface border-orange-500/20 text-orange-600 dark:text-orange-400" : ""}
-            `}
-          >
-            <div className={`w-2 h-2 rounded-full ${
-              t.type === "success" ? "bg-green-500" : 
-              t.type === "error" ? "bg-red-500" : 
-              t.type === "warn" ? "bg-orange-500" : "bg-blue"
-            }`} />
-            <span className="text-sm font-bold">{t.message}</span>
-          </div>
-        ))}
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none items-end">
+        <AnimatePresence mode="popLayout">
+          {toasts.map((t) => (
+            <m.div
+              key={t.id}
+              layout
+              initial={{ opacity: 0, y: 20, scale: 0.9, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className={`
+                pointer-events-auto px-4 py-3 rounded-2xl shadow-xl border flex items-center gap-3 min-w-[280px] max-w-[400px]
+                bg-surface/90 backdrop-blur-md
+                ${t.type === "success" ? "border-green-500/20" : ""}
+                ${t.type === "error" ? "border-red-500/20" : ""}
+                ${t.type === "info" ? "border-blue/20" : ""}
+                ${t.type === "warn" ? "border-orange-500/20" : ""}
+              `}
+              role="alert"
+            >
+              <div className="flex-shrink-0">{icons[t.type]}</div>
+              <span className="text-sm font-bold text-text flex-1">{t.message}</span>
+              <button 
+                onClick={() => removeToast(t.id)}
+                className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-text-4"
+                aria-label="Close"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </m.div>
+          ))}
+        </AnimatePresence>
       </div>
     </ToastContext.Provider>
   );

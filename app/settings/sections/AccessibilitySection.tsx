@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingUI";
-import { Type, Eye, Keyboard, UserSearch, Target } from "lucide-react";
+import { Type, Eye } from "lucide-react";
 
 export const AccessibilitySection = memo(function AccessibilitySection() {
   const accessibility = useSettingsStore(state => state.accessibility);
@@ -38,40 +38,6 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
         <SettingSwitch 
           checked={accessibility.highContrast}
           onChange={(highContrast) => updateAccessibility({ highContrast })}
-        />
-      </SettingRow>
-
-      <SettingRow 
-        label="Screen Reader Mode" 
-        description="Optimize the layout and semantic structure for assistive technologies."
-        icon={UserSearch}
-        helpText="Forces the UI to be more linear and descriptive, ensuring compatibility with screen readers like NVDA or VoiceOver."
-      >
-        <SettingSwitch 
-          checked={accessibility.screenReaderOptimized}
-          onChange={(screenReaderOptimized) => updateAccessibility({ screenReaderOptimized })}
-        />
-      </SettingRow>
-
-      <SettingRow 
-        label="Enhanced Focus" 
-        description="Make the keyboard focus state more prominent and easy to track."
-        icon={Target}
-      >
-        <SettingSwitch 
-          checked={accessibility.focusVisible}
-          onChange={(focusVisible) => updateAccessibility({ focusVisible })}
-        />
-      </SettingRow>
-
-      <SettingRow 
-        label="Keyboard Navigation" 
-        description="Enable advanced keyboard shortcuts and navigation patterns."
-        icon={Keyboard}
-      >
-        <SettingSwitch 
-          checked={accessibility.keyboardNavigationEnabled}
-          onChange={(keyboardNavigationEnabled) => updateAccessibility({ keyboardNavigationEnabled })}
         />
       </SettingRow>
     </div>

@@ -1,13 +1,12 @@
 "use client";
-import { useState, useRef } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
+import { useState } from "react";
 import { workerManager } from "@/src/workers/manager";
 import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
-
 import { DropZone } from "@/components/ui/DropZone";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { Layers, Code, FileCode, Zap } from "lucide-react";
 
 const toolId = "code-minifier";
 
@@ -75,20 +74,20 @@ export default function CodeMinifierClient() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Settings & Mode */}
-      <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-1">
-            <h2 className="text-xl font-black">Minifier Settings</h2>
-            <p className="text-xs text-text-4 font-black uppercase tracking-widest">Select language and upload files</p>
-          </div>
+      <div className="bg-surface border border-border p-6 sm:p-8 rounded-[32px] shadow-sm space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+            <Layers className="w-4 h-4" />
+            Minification Engine
+          </h2>
           
           <SegmentedControl
             options={[
-              { id: "css", label: "CSS" },
-              { id: "js", label: "JS" },
-              { id: "html", label: "HTML" },
+              { id: "css", label: "CSS", icon: <Code className="w-3 h-3" /> },
+              { id: "js", label: "JS", icon: <FileCode className="w-3 h-3" /> },
+              { id: "html", label: "HTML", icon: <Layers className="w-3 h-3" /> },
             ]}
             activeId={lang}
             onChange={(id) => setLang(id as Lang)}
@@ -100,23 +99,30 @@ export default function CodeMinifierClient() {
           accept={lang === 'js' ? '.js,.mjs,.cjs' : lang === 'css' ? '.css' : '.html,.htm'}
           multiple
           title={`Drop your ${lang.toUpperCase()} files here`}
-          description="Multiple files supported"
-          icon={<div className="text-3xl">{lang === 'js' ? '📜' : lang === 'css' ? '🎨' : '🌐'}</div>}
+          description="Local-first processing. No files are uploaded to any server."
         />
       </div>
 
-      <BatchQueue 
-        toolId={toolId}
-        isProcessing={isProcessing}
-        onProcess={processAll}
-        onDownload={downloadOne}
-        onDownloadAll={downloadAll}
-      />
+      <div className="space-y-6">
+        <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2 flex items-center gap-2">
+          <Zap className="w-3 h-3" />
+          Processing Queue
+        </h2>
+        <BatchQueue 
+          toolId={toolId}
+          isProcessing={isProcessing}
+          onProcess={processAll}
+          onDownload={downloadOne}
+          onDownloadAll={downloadAll}
+        />
+      </div>
 
       {items.length === 0 && (
         <div className="py-20 text-center space-y-4 opacity-40">
-          <div className="text-6xl">🛠️</div>
-          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-sm">Add files to start minifying</p>
+          <div className="w-16 h-16 bg-blue/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue/10">
+            <Code className="w-8 h-8 text-blue" />
+          </div>
+          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-xs">Add files to start minifying</p>
         </div>
       )}
     </div>

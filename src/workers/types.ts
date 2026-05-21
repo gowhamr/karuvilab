@@ -104,6 +104,12 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  extractColorPalette(
+    file: ArrayBuffer,
+    k: number,
+    onProgress?: ProgressCallback
+  ): Promise<string[]>;
+
   // Developer Tasks
   minifyCode(
     code: string,
@@ -116,6 +122,11 @@ export interface WorkerAPI {
     textB: string,
     onProgress?: ProgressCallback
   ): Promise<DiffLine[]>;
+
+  processYaml(
+    input: string,
+    action: 'validate' | 'json_to_yaml' | 'yaml_to_json'
+  ): Promise<{ result?: string; error?: string }>;
 
   createZip(
     files: Record<string, Uint8Array>,

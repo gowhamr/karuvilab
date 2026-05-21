@@ -7,26 +7,27 @@ const WorldClockClient = dynamic(() => import("./WorldClockClient"), {
   loading: () => <ToolSkeleton />,
 });
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
+const toolId = "world-clock";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-export const metadata: Metadata = {
-  title: "World Clock | KV",
-  description: "Current time across major cities worldwide. Real-time updates with business hour indicators.",
-  keywords: ["world clock", "time zone", "current time", "global time", "utc offset"],
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function WorldClock() {
   return (
     <ToolShell
+      toolId={toolId}
       title="World Clock"
-      description="Current time across major cities worldwide. Updates every second."
+      description="Track time across multiple cities with business hour indicators. Ideal for global teams and meeting planning."
       category={cat}
       content={{
         detailedDescription: "The World Clock tool provides a comprehensive view of the current time in key financial and business hubs across the globe. It automatically calculates UTC offsets and identifies business hours (9:00 AM to 6:00 PM, Monday through Friday) for each location, making it an essential tool for scheduling international meetings or monitoring global markets. The interface is optimized for high-frequency updates, ensuring that every second is accounted for with millisecond precision in the underlying logic.",
         howTo: [
-          "Scan the grid to find the current time in major cities like Mumbai, New York, London, and Tokyo.",
-          "Look for the status indicator (green dot) to see if a city is currently within standard business hours.",
-          "Check the bottom of each card for the current local date and UTC offset.",
+          "Click 'Add Clock' to open the timezone search modal.",
+          "Search for a city or timezone and select it to add a new clock to your dashboard.",
+          "Your local time is automatically highlighted with a blue border.",
+          "Look for the 'Open'/'Closed' indicator to see if a city is within standard business hours.",
           "The clock updates automatically every second; no manual refresh is required."
         ],
         faq: [

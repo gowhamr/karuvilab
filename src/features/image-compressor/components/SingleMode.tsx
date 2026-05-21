@@ -69,7 +69,7 @@ export const SingleMode: React.FC = () => {
           <div className="p-6 bg-surface border border-border rounded-[32px] space-y-6">
             <div className="space-y-2">
               <h3 className="text-sm font-black uppercase tracking-widest">Settings</h3>
-              <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Adjust output quality and format</p>
+              <p className="text-[11px] font-bold text-text-3 uppercase tracking-widest">Adjust output quality and format</p>
             </div>
             
             <AdvancedSettings itemId={activeItem ? activeItem.id : undefined} />

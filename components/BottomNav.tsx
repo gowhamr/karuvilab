@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, LayoutGrid, Settings, Laptop } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
+import { m } from "framer-motion";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
@@ -26,47 +27,50 @@ export function BottomNav() {
 
           if (item.action === "search") {
             return (
-              <button
+              <m.button
                 key={item.label}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setIsPaletteOpen(true)}
                 className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Search"
               >
-                <div className="p-2.5 rounded-xl bg-bg border border-border">
+                <div className="p-2.5 rounded-xl bg-bg border border-border group-active:bg-blue/5">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
-              </button>
+              </m.button>
             );
           }
 
           if (item.action === "menu") {
             return (
-              <button
+              <m.button
                 key={item.label}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setIsSidebarOpen(true)}
                 className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Menu"
               >
-                <div className="p-2.5 rounded-xl bg-bg border border-border">
+                <div className="p-2.5 rounded-xl bg-bg border border-border group-active:bg-blue/5">
                   <Icon className="w-5 h-5" />
                 </div>
-              </button>
+              </m.button>
             );
           }
 
           return (
-            <Link
-              key={item.label}
-              href={item.href!}
-              aria-label={item.label}
-              className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] ${
-                isActive ? "text-blue" : "text-text-4 hover:text-text"
-              }`}
-            >
-              <div className={`p-2.5 rounded-xl border transition-all ${isActive ? "bg-blue/5 border-blue/20" : "bg-bg border-border"}`}>
-                <Icon className={`w-5 h-5 ${isActive ? "text-blue" : ""}`} />
-              </div>
-            </Link>
+            <m.div key={item.label} whileTap={{ scale: 0.9 }}>
+              <Link
+                href={item.href!}
+                aria-label={item.label}
+                className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] ${
+                  isActive ? "text-blue" : "text-text-4 hover:text-text"
+                }`}
+              >
+                <div className={`p-2.5 rounded-xl border transition-all ${isActive ? "bg-blue/5 border-blue/20 shadow-[0_0_15px_rgba(79,70,229,0.1)]" : "bg-bg border-border"}`}>
+                  <Icon className={`w-5 h-5 ${isActive ? "text-blue" : ""}`} />
+                </div>
+              </Link>
+            </m.div>
           );
         })}
       </div>
