@@ -45,9 +45,15 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
       
       <div 
         className="overflow-auto max-h-[600px] overscroll-contain"
-        style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' } as any}
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px', contain: 'layout paint' } as any}
       >
-        <table className="w-full border-collapse">
+        <table className="w-full border-collapse table-fixed">
+          <colgroup>
+            <col className="w-10" />
+            <col />
+            <col className="w-10" />
+            <col />
+          </colgroup>
           <tbody>
             {diff.slice(0, visibleCount).map((line, i) => (
               <tr key={i} className={cn(

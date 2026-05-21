@@ -5,8 +5,7 @@ import { generateToolMetadata } from "@/src/lib/seo";
 import FileViewerDiffClientWrapper from "./FileViewerDiffClientWrapper";
 
 const toolId = "file-viewer-diff";
-const cat = CATEGORIES.find((c) => c.id === "utilities")!; // Actually it might be developer tools, but tool-registry says utilities for this one? 
-// Let's check tool-registry again. It says 'utilities'.
+const cat = CATEGORIES.find((c) => c.id === "developer")!;
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 

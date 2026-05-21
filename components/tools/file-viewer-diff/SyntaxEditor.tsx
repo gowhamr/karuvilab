@@ -34,16 +34,24 @@ export function SyntaxEditor({
     }
   };
 
-  const highlighted = useMemo(() => highlightCode(value, language), [value, language]);
-  const lines = useMemo(() => value.split('\n'), [value]);
+  const isTooLarge = value.length > 100000; // 100KB threshold
+  const highlighted = useMemo(() => {
+    if (isTooLarge) return highlightCode(value.slice(0, 1000) + "\n... [Highlighting disabled for large file for performance] ...", language);
+    return highlightCode(value, language);
+  }, [value, language, isTooLarge]);
+
+  const lineCount = useMemo(() => value.split('\n').length, [value]);
 
   return (
     <div className={cn("relative font-mono rounded-xl border border-border bg-bg overflow-hidden flex", className)} style={{ fontSize }}>
       {/* Line Numbers */}
-      <div className="bg-surface border-r border-border text-text-4 text-right py-4 px-3 select-none flex-shrink-0 min-w-[3rem]">
-        {lines.map((_, i) => (
-          <div key={i} className="leading-6 h-6">{i + 1}</div>
-        ))}
+      <div className="bg-surface border-r border-border text-text-4 text-right py-4 px-3 select-none flex-shrink-0 min-w-[3rem] hidden sm:block">
+        <div className="leading-6 overflow-hidden" style={{ height: lineCount * 24 }}>
+          {Array.from({ length: Math.min(lineCount, 1000) }).map((_, i) => (
+            <div key={i} className="h-6">{i + 1}</div>
+          ))}
+          {lineCount > 1000 && <div className="h-6">...</div>}
+        </div>
       </div>
 
       <div className="relative flex-1 overflow-hidden">
