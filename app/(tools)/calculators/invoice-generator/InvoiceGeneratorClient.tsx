@@ -17,7 +17,7 @@ export default function InvoiceGeneratorClient() {
   const { toast } = useToast();
   const [from, setFrom] = useState({ name: "", email: "", address: "" });
   const [to, setTo] = useState({ name: "", email: "", address: "" });
-  const [meta, setMeta] = useState({ number: "INV-001", date: new Date().toISOString().split('T')[0] });
+  const [meta, setMeta] = useState({ number: "INV-001", date: new Date().toISOString().split('T')[0] || "" });
   const [items, setItems] = useState<LineItem[]>([{ id: '1', desc: "Service Description", qty: 1, price: 100 }]);
   const [taxRate, setTaxRate] = useState(0);
   const [notes, setNotes] = useState("");
@@ -139,14 +139,14 @@ export default function InvoiceGeneratorClient() {
             <h3 className="text-sm font-black uppercase tracking-widest text-blue">From</h3>
             <ToolInput placeholder="Your Name / Business" value={from.name} onChange={(v) => setFrom({ ...from, name: v })} />
             <ToolInput placeholder="Email Address" value={from.email} onChange={(v) => setFrom({ ...from, email: v })} />
-            <ToolInput placeholder="Address" variant="textarea" rows={2} value={from.address} onChange={(v) => setFrom({ ...from, address: v })} />
+            <ToolInput placeholder="Address" rows={2} value={from.address} onChange={(v) => setFrom({ ...from, address: v })} />
           </div>
 
           <div className="space-y-4 p-6 bg-surface border border-border rounded-[24px]">
             <h3 className="text-sm font-black uppercase tracking-widest text-blue">Bill To</h3>
             <ToolInput placeholder="Client Name" value={to.name} onChange={(v) => setTo({ ...to, name: v })} />
             <ToolInput placeholder="Client Email" value={to.email} onChange={(v) => setTo({ ...to, email: v })} />
-            <ToolInput placeholder="Client Address" variant="textarea" rows={2} value={to.address} onChange={(v) => setTo({ ...to, address: v })} />
+            <ToolInput placeholder="Client Address" rows={2} value={to.address} onChange={(v) => setTo({ ...to, address: v })} />
           </div>
         </div>
 
@@ -210,7 +210,7 @@ export default function InvoiceGeneratorClient() {
 
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Notes / Terms</label>
-            <ToolInput variant="textarea" rows={3} placeholder="Thank you for your business!" value={notes} onChange={setNotes} />
+            <ToolInput rows={3} placeholder="Thank you for your business!" value={notes} onChange={setNotes} />
           </div>
 
           <button 
