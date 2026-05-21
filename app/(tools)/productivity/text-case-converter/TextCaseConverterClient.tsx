@@ -75,7 +75,6 @@ export default function TextCaseConverterClient() {
           value={input}
           onChange={setInput}
           placeholder="Paste or type your text here..."
-          variant="textarea"
           rows={8}
         />
       </div>

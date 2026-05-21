@@ -68,7 +68,6 @@ export default function WordCounterClient() {
             value={text}
             onChange={setText}
             placeholder="Type, paste, or drop a text or .docx file here..."
-            variant="textarea"
             rows={12}
           />
         </div>
