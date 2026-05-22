@@ -18,7 +18,8 @@ const hubTools = [
 ];
 
 export default function FormatHubPage() {
-  const cat = CATEGORIES.find(c => c.id === 'developer-tools')!;
+  const cat = CATEGORIES.find(c => c.id === "developer")!;
+
   
   return (
     <ToolShell

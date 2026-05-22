@@ -12,7 +12,8 @@ const YamlClient = dynamic(() => import("./YamlValidatorClient"), {
 export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function YamlValidatorPage() {
-  const cat = CATEGORIES.find(c => c.id === 'developer-tools')!;
+  const cat = CATEGORIES.find(c => c.id === "developer")!;
+
   
   return (
     <ToolShell

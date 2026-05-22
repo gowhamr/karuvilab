@@ -9,5 +9,5 @@ export const yaml_validator: ToolEntry = {
   subCategory: 'Format & Convert',
   keywords: ['yaml', 'json', 'converter', 'validator', 'parser', 'formatter'],
   searchIntent: 'action',
-  relatedTools: ['json-formatter', 'diff-checker', 'code-minifier'],
+  related: ['json-formatter', 'diff-checker', 'code-minifier'],
 };

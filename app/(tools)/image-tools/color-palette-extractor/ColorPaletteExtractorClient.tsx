@@ -12,9 +12,9 @@ export default function ColorPaletteExtractorClient() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState({ percent: 0, message: '' });
+  const [progress, setProgress] = useState<{ percent: number; message?: string }>({ percent: 0, message: '' });
 
-  const handleFile = useCallback(async (file: File) => {
+  const handleFile = useCallback(async (file: File | undefined) => {
     if (!file) return;
 
     setIsLoading(true);

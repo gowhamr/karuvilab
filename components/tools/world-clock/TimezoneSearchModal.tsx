@@ -34,8 +34,13 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen
       .slice(0, 50);
   }, [search, allZones]);
 
-  const handleAddClock = (zone: typeof COMMON_CITIES[0]) => {
-    addClock({ city: zone.city, country: zone.country || '', tz: zone.tz });
+  const handleAddClock = (zone: { city: string; country: string | undefined; tz: string }) => {
+    addClock({ 
+      id: Math.random().toString(36).substring(7),
+      city: zone.city, 
+      country: zone.country || '', 
+      tz: zone.tz 
+    });
     setSearch('');
     onClose();
   };

@@ -40,7 +40,7 @@ export default function EMICalculatorClient() {
     const calculate = async () => {
       setIsLoading(true);
       try {
-        const res = await workerOrchestrator.run('calculateEmiSchedule', [inputs]);
+        const res = await workerOrchestrator.run('calculateEmiSchedule', [inputs]) as EmiResult;
         if (active) setResult(res);
       } catch (err) {
         console.error("Calculation failed:", err);
@@ -55,10 +55,15 @@ export default function EMICalculatorClient() {
 
   const handleClearSession = () => {
     clearState('emi-calculator');
-    const defaultInputs = { principal: 100000, rate: 8.5, tenure: 240, type: "reducing" as "reducing" | "flat" };
+    const defaultInputs: Partial<EmiInputsType> = { 
+      loanAmount: 5000000, 
+      interestRate: 8.5, 
+      tenureMonths: 240 
+    };
     setInputs(defaultInputs);
     setShowRestoredBanner(false);
   };
+
 
   return (
     <div className="relative space-y-12">

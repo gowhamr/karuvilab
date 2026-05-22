@@ -32,8 +32,8 @@ export default function FakeDataGeneratorClient() {
 
     for (let i = 0; i < n; i++) {
       const row: any = {};
-      const fName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
-      const lName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)];
+      const fName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)] || "John";
+      const lName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)] || "Doe";
       
       if (selectedFields.includes("id")) row.id = crypto.randomUUID();
       if (selectedFields.includes("firstName")) row.firstName = fName;

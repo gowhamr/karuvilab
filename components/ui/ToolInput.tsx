@@ -6,7 +6,7 @@ import { cn } from "@/src/lib/utils";
 interface ToolInputProps {
   label?: string;
   value: string;
-  onChange: (val: string) => void;
+  onChange?: (val: string) => void;
   placeholder?: string;
   rows?: number;
   type?: "text" | "number" | "password" | "date";
@@ -70,7 +70,7 @@ export function ToolInput({
           rows={rows}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => onChange?.(e.target.value)}
           readOnly={readOnly}
           aria-describedby={cn(
             description ? descriptionId : undefined,
@@ -85,7 +85,7 @@ export function ToolInput({
           className={baseClasses}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => onChange?.(e.target.value)}
           readOnly={readOnly}
           aria-describedby={cn(
             description ? descriptionId : undefined,

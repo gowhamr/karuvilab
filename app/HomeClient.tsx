@@ -78,6 +78,31 @@ const FAQ = [
 import { useI18n } from "@/src/lib/i18n/store";
 import { usePerformanceSettings } from "@/src/lib/hooks";
 
+// ── Animation Variants ───────────────────────────────────────────────────────
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+} as const;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 260,
+      damping: 20
+    }
+  }
+} as const;
+
 // ── Page Component ───────────────────────────────────────────────────────────
 
 export default function HomeClient() {

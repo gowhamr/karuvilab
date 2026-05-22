@@ -9,5 +9,5 @@ export const color_palette_extractor: ToolEntry = {
   subCategory: 'Analysis',
   keywords: ['color', 'palette', 'extractor', 'image', 'design', 'hex'],
   searchIntent: 'action',
-  relatedTools: ['image-compressor', 'image-converter', 'image-resizer'],
+  related: ['image-compressor', 'image-converter', 'image-resizer'],
 };

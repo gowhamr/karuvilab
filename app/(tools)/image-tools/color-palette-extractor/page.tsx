@@ -12,7 +12,8 @@ const ColorPaletteClient = dynamic(() => import("./ColorPaletteExtractorClient")
 export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function ColorPaletteExtractorPage() {
-  const cat = CATEGORIES.find(c => c.id === 'image-tools')!;
+  const cat = CATEGORIES.find(c => c.id === "image")!;
+
   
   return (
     <ToolShell
