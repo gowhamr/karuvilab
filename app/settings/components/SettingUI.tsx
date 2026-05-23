@@ -26,7 +26,7 @@ export const SettingRow = memo(function SettingRow({ label, description, childre
             <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-text">{label}</h3>
             {helpText && <SettingHelp text={helpText} />}
           </div>
-          {description && <p className="text-sm text-text-4 font-medium leading-relaxed max-w-lg">{description}</p>}
+          {description && <p className="text-sm text-text-3 font-medium leading-relaxed max-w-lg">{description}</p>}
         </div>
       </div>
       <div className="flex-shrink-0 pl-17 sm:pl-0">

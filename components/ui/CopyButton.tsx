@@ -3,11 +3,22 @@ import { useState } from "react";
 import { useToast } from "./Toast";
 import { m } from "framer-motion";
 
-export function CopyButton({ text, label = "Copy", className }: { text: string; label?: string; className?: string }) {
+export function CopyButton({ 
+  text, 
+  label = "Copy", 
+  className,
+  disabled 
+}: { 
+  text: string; 
+  label?: string; 
+  className?: string;
+  disabled?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
   const handleCopy = async () => {
+    if (disabled) return;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -18,15 +29,21 @@ export function CopyButton({ text, label = "Copy", className }: { text: string; 
     }
   };
 
+  const motionProps = !disabled ? {
+    whileHover: { scale: 1.02 },
+    whileTap: { scale: 0.95 }
+  } : {};
+
   return (
     <m.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.95 }}
+      {...motionProps}
       onClick={handleCopy}
+      disabled={disabled}
       aria-label={copied ? "Copied!" : `Copy ${label}`}
       className={`
         min-h-[44px] px-3 py-2 text-sm font-bold rounded-lg transition-all border outline-none focus-visible:ring-2 focus-visible:ring-blue/20
-        ${copied ? "bg-green-500/10 border-green-500/30 text-green-600" : "bg-surface border-border hover:border-blue hover:text-blue"}
+        ${copied ? "bg-green-500/10 border-green-500/30 text-green-600" : "bg-surface border-border hov:border-blue hov:text-blue"}
+        ${disabled ? "opacity-40 cursor-not-allowed grayscale" : ""}
         ${className || ""}
       `}
     >

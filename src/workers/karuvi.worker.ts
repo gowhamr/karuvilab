@@ -537,6 +537,22 @@ const api: WorkerAPI = {
     }
   },
 
+  async processJson(input, mode, indent) {
+    try {
+      const obj = JSON.parse(input);
+      let out = "";
+      if (mode === "minify") {
+        out = JSON.stringify(obj);
+      } else {
+        const spaces = indent === "tab" ? "\t" : indent;
+        out = JSON.stringify(obj, null, spaces);
+      }
+      return { output: out, parsed: obj, error: null };
+    } catch (e: any) {
+      return { output: "", parsed: null, error: { message: e.message } };
+    }
+  },
+
   async createZip(files, onProgress) {
     const fflate = await import("fflate");
     return new Promise((resolve, reject) => {

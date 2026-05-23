@@ -15,6 +15,7 @@ interface SegmentedControlProps<T> {
   activeId: T;
   onChange: (id: T) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -26,12 +27,14 @@ export function SegmentedControl<T extends string | number>({
   activeId,
   onChange,
   className,
+  disabled
 }: SegmentedControlProps<T>) {
   return (
     <div
       role="tablist"
       className={cn(
         "flex p-1 bg-bg border border-border rounded-2xl w-fit",
+        disabled && "opacity-50 pointer-events-none",
         className
       )}
     >
@@ -42,10 +45,12 @@ export function SegmentedControl<T extends string | number>({
             key={option.id}
             role="tab"
             aria-selected={isActive}
-            onClick={() => onChange(option.id)}
+            disabled={disabled}
+            onClick={() => !disabled && onChange(option.id)}
             className={cn(
               "relative flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20",
-              isActive ? "text-white" : "text-text-3 hover:text-text hover:bg-surface/50"
+              isActive ? "text-white" : "text-text-3 hover:text-text hover:bg-surface/50",
+              disabled && "cursor-not-allowed"
             )}
           >
             {isActive && (

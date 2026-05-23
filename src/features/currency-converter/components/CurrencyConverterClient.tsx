@@ -146,6 +146,16 @@ export default function CurrencyConverterClient() {
         </div>
       )}
 
+      {ratesData && (isOffline || ratesData.source === 'cache') && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-xs font-bold text-amber-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-2" role="alert">
+          <AlertTriangle size={16} className="shrink-0" />
+          <div className="flex-1">
+            Using cached rates – go online for live updates. 
+            <span className="block mt-0.5 opacity-80 font-medium">Last updated: {new Date(ratesData.timestamp).toLocaleString()}</span>
+          </div>
+        </div>
+      )}
+
       {(ratesData || isLoading) && (
         <>
           <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5 relative overflow-hidden">

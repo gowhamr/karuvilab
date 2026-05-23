@@ -101,6 +101,15 @@ class WorkerManager {
     return workerOrchestrator.run("minifyCode", [code, lang], undefined, onProgress, abortSignal);
   }
 
+  async processJson(
+    input: string,
+    mode: "beautify" | "minify",
+    indent: number | "tab",
+    abortSignal?: AbortSignal
+  ): Promise<{ output: string; parsed: any; error: any }> {
+    return workerOrchestrator.run("processJson", [input, mode, indent], undefined, undefined, abortSignal);
+  }
+
   async computeDiff(
     textA: string,
     textB: string,

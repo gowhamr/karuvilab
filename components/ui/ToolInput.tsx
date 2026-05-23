@@ -16,6 +16,7 @@ interface ToolInputProps {
   id?: string;
   readOnly?: boolean;
   className?: string;
+  loading?: boolean;
 }
 
 export function ToolInput({ 
@@ -30,7 +31,8 @@ export function ToolInput({
   mono = false,
   id: providedId,
   readOnly,
-  className
+  className,
+  loading
 }: ToolInputProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
@@ -44,7 +46,8 @@ export function ToolInput({
       ? "border-red-500 focus:ring-4 focus:ring-red-500/10 focus:border-red-500" 
       : "border-border focus:ring-4 focus:ring-blue/10 focus:border-blue",
     "placeholder:text-text-3/60",
-    readOnly && "bg-surface cursor-default",
+    (readOnly || loading) && "bg-surface cursor-default",
+    loading && "opacity-50 pointer-events-none",
     className
   );
 
@@ -71,7 +74,7 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          readOnly={readOnly}
+          readOnly={readOnly || loading}
           aria-describedby={cn(
             description ? descriptionId : undefined,
             error ? errorId : undefined
@@ -86,7 +89,7 @@ export function ToolInput({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          readOnly={readOnly}
+          readOnly={readOnly || loading}
           aria-describedby={cn(
             description ? descriptionId : undefined,
             error ? errorId : undefined

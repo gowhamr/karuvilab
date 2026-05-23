@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { usePersistentState } from "@/src/lib/hooks";
-import { Code, Network, Info, FileJson, Layers, Sparkles } from "lucide-react";
+import { Code, Network, Info, FileJson, Layers, Sparkles, RefreshCw } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { workerManager } from "@/src/workers/manager";
 
 type Indent = 2 | 4 | "tab";
 
@@ -121,36 +122,82 @@ export default function JSONFormatterClient() {
   });
 
   const { mode, input, indent, view } = state;
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [result, setResult] = useState<{ output: string; error: any; parsed: any }>({ 
+    output: "", error: null, parsed: null 
+  });
 
   const setMode = (m: "beautify" | "minify") => setState(prev => ({ ...prev, mode: m, view: "raw" }));
   const setInput = (i: string) => setState(prev => ({ ...prev, input: i }));
   const setIndent = (v: Indent) => setState(prev => ({ ...prev, indent: v }));
   const setView = (v: "raw" | "tree") => setState(prev => ({ ...prev, view: v }));
 
-  const { output, error, parsed } = useMemo(() => {
-    if (!input.trim()) return { output: "", error: null, parsed: null };
-    try {
-      const obj = JSON.parse(input);
-      let out = "";
-      if (mode === "minify") {
-        out = JSON.stringify(obj);
-      } else {
-        const spaces = indent === "tab" ? "\t" : indent;
-        out = JSON.stringify(obj, null, spaces);
-      }
-      return { output: out, error: null, parsed: obj };
-    } catch (e) {
-      const msg = (e as Error).message;
-      const lineMatch = msg.match(/position (\d+)/);
-      let errorData: { message: string; line?: number } = { message: msg };
-      if (lineMatch) {
-        const pos = Number(lineMatch[1]);
-        const line = input.slice(0, pos).split("\n").length;
-        errorData = { message: msg, line };
-      }
-      return { output: "", error: errorData, parsed: null };
+  useEffect(() => {
+    if (!input.trim()) {
+      setResult({ output: "", error: null, parsed: null });
+      setIsProcessing(false);
+      return;
     }
+
+    const abortController = new AbortController();
+
+    const run = async () => {
+      // Threshold: 500KB
+      if (input.length < 500 * 1024) {
+        setIsProcessing(false);
+        try {
+          const obj = JSON.parse(input);
+          let out = "";
+          if (mode === "minify") {
+            out = JSON.stringify(obj);
+          } else {
+            const spaces = indent === "tab" ? "\t" : indent;
+            out = JSON.stringify(obj, null, spaces);
+          }
+          setResult({ output: out, error: null, parsed: obj });
+        } catch (e) {
+          const msg = (e as Error).message;
+          const lineMatch = msg.match(/position (\d+)/);
+          let errorData: { message: string; line?: number } = { message: msg };
+          if (lineMatch) {
+            const pos = Number(lineMatch[1]);
+            const line = input.slice(0, pos).split("\n").length;
+            errorData = { message: msg, line };
+          }
+          setResult({ output: "", error: errorData, parsed: null });
+        }
+      } else {
+        setIsProcessing(true);
+        try {
+          const res = await workerManager.processJson(input, mode, indent, abortController.signal);
+          if (!abortController.signal.aborted) {
+            // Re-calculate line error for worker result if needed (worker returns raw message)
+            if (res.error) {
+              const msg = res.error.message;
+              const lineMatch = msg.match(/position (\d+)/);
+              if (lineMatch) {
+                const pos = Number(lineMatch[1]);
+                res.error.line = input.slice(0, pos).split("\n").length;
+              }
+            }
+            setResult(res);
+            setIsProcessing(false);
+          }
+        } catch (err: any) {
+          if (!abortController.signal.aborted) {
+            setResult({ output: "", error: { message: err.message || "Formatting failed" }, parsed: null });
+            setIsProcessing(false);
+          }
+        }
+      }
+    };
+
+    run();
+
+    return () => abortController.abort();
   }, [input, mode, indent]);
+
+  const { output, error, parsed } = result;
 
   if (!isLoaded) return <div className="animate-pulse h-[500px] bg-surface/50 rounded-[32px] border border-border" />;
 
@@ -159,7 +206,13 @@ export default function JSONFormatterClient() {
       {/* Configuration & Input Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-surface border border-border rounded-[32px] p-6 sm:p-8 shadow-sm space-y-8">
+          <div className="bg-surface border border-border rounded-[32px] p-6 sm:p-8 shadow-sm space-y-8 relative overflow-hidden">
+            {isProcessing && (
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue/10 overflow-hidden">
+                <div className="h-full bg-blue animate-progress w-full" />
+              </div>
+            )}
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
                 <FileJson className="w-4 h-4" />
@@ -187,9 +240,10 @@ export default function JSONFormatterClient() {
               mono
               error={error?.message}
               description={error?.line ? `Error on line ${error.line}` : undefined}
+              loading={isProcessing}
             />
 
-            {!error && input && (
+            {!error && input && !isProcessing && (
               <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl w-fit">
                 <span className="text-emerald-500 text-xs">✓</span>
                 <span className="text-[10px] text-emerald-600 font-black uppercase tracking-widest">Valid JSON Structure</span>
@@ -238,12 +292,13 @@ export default function JSONFormatterClient() {
       </div>
 
       {/* Output & Visualization Section */}
-      {output && !error && (
+      {(output || isProcessing) && !error && (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
               <Code className="w-4 h-4" />
               Processed Output
+              {isProcessing && <RefreshCw className="w-3 h-3 animate-spin" />}
             </h2>
             <div className="flex items-center gap-3">
               <SegmentedControl
@@ -253,13 +308,24 @@ export default function JSONFormatterClient() {
                 ]}
                 activeId={view}
                 onChange={setView}
+                disabled={isProcessing}
               />
-              <CopyButton text={output} />
+              <CopyButton text={output} disabled={isProcessing || !output} />
             </div>
           </div>
 
-          <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px]">
-            {view === "tree" && parsed !== null ? (
+          <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px] relative">
+            {isProcessing ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">
+                <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center animate-pulse">
+                  <FileJson size={24} />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-black uppercase tracking-widest text-text">Processing Data</p>
+                  <p className="text-xs text-text-4 font-bold uppercase tracking-wider">Formatting large JSON payload in background...</p>
+                </div>
+              </div>
+            ) : view === "tree" && parsed !== null ? (
               <div className="p-6 space-y-6">
                 {(input.length > 2 * 1024 * 1024 || JSON.stringify(parsed).length > 2 * 1024 * 1024) && (
                   <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-start gap-3">

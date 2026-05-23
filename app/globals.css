@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant hov (@media (hover: hover) { &:hover });
+@custom-variant group-hov (@media (hover: hover) { .group:hover & });
 
 @theme {
   --color-blue: var(--blue);

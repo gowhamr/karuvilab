@@ -42,10 +42,10 @@ const SidebarContent = memo(function SidebarContent({
             setIsOpen(false);
             window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
           }}
-          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hover:border-blue/30 transition-all group"
+          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hov:border-blue/30 transition-all group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hover:bg-blue/5 transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hov:bg-blue/5 transition-colors">
               <Search className="w-4 h-4" />
             </div>
             <span>{t('common.search').split('...')[0]}</span>
@@ -67,11 +67,11 @@ const SidebarContent = memo(function SidebarContent({
             className={`group flex items-center gap-3 h-[56px] px-4 rounded-2xl transition-all font-bold text-sm ${
               pathname === "/" 
                 ? "bg-blue/10 text-blue" 
-                : "text-text-2 hover:bg-blue/5 hover:text-blue"
+                : "text-text-2 hov:bg-blue/5 hov:text-blue"
             }`}
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              pathname === "/" ? "bg-blue/20" : "bg-transparent group-hover:bg-blue/10"
+              pathname === "/" ? "bg-blue/20" : "bg-transparent group-hov:bg-blue/10"
             }`}>
               <Home className="w-5 h-5" />
             </div>
@@ -99,7 +99,7 @@ const SidebarContent = memo(function SidebarContent({
                   className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
                     isActive
                       ? "bg-blue/5 text-blue"
-                      : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
+                      : "text-text-3 hov:text-text hov:bg-black/5 dark:hov:bg-white/5"
                   }`}
                   style={{
                     color: isActive ? color : undefined,
@@ -108,7 +108,7 @@ const SidebarContent = memo(function SidebarContent({
                 >
                   <div 
                     className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                      isActive ? "" : "bg-transparent group-hover:scale-105"
+                      isActive ? "" : "bg-transparent group-hov:scale-105"
                     }`}
                     style={{
                       color: isActive ? color : undefined,
@@ -128,11 +128,11 @@ const SidebarContent = memo(function SidebarContent({
               className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
                 pathname === "/all-tools"
                   ? "bg-blue/10 text-blue"
-                  : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
+                  : "text-text-3 hov:text-text hov:bg-black/5 dark:hov:bg-white/5"
               }`}
             >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                pathname === "/all-tools" ? "text-blue" : "bg-transparent group-hover:scale-105"
+                pathname === "/all-tools" ? "text-blue" : "bg-transparent group-hov:scale-105"
               }`}>
                 <LayoutGrid className="w-5 h-5" />
               </div>
@@ -158,10 +158,10 @@ const SidebarContent = memo(function SidebarContent({
                   className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                     pathname.includes(tool.href) 
                       ? "bg-blue/10 text-blue" 
-                      : "text-text-3 hover:text-blue hover:bg-blue/5"
+                      : "text-text-3 hov:text-blue hov:bg-blue/5"
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hover:bg-red-500/20 transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hov:bg-red-500/20 transition-all">
                     <ToolIcon toolId={tool.id} category={tool.category} className="w-3.5 h-3.5 text-red-500" />
                   </div>
                   {tool.name}
@@ -188,10 +188,10 @@ const SidebarContent = memo(function SidebarContent({
                   className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
                     pathname.includes(tool.href) 
                       ? "bg-blue/10 text-blue" 
-                      : "text-text-3 hover:text-blue hover:bg-blue/5"
+                      : "text-text-3 hov:text-blue hov:bg-blue/5"
                   }`}
                 >
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue/20 group-hover:bg-blue mr-3 transition-all" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue/20 group-hov:bg-blue mr-3 transition-all" />
                   {tool.name}
                 </Link>
               </m.div>
@@ -210,10 +210,10 @@ const SidebarContent = memo(function SidebarContent({
               href={link.href}
               onClick={() => setIsOpen(false)}
               className={`group flex items-center gap-3 h-[48px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                pathname === link.href ? "text-blue bg-blue/5" : "text-text-4 hover:text-blue hover:bg-blue/5"
+                pathname === link.href ? "text-blue bg-blue/5" : "text-text-4 hov:text-blue hov:bg-blue/5"
               }`}
             >
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-bg border border-border group-hover:border-blue/20 transition-all">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-bg border border-border group-hov:border-blue/20 transition-all">
                 <Icon className="w-4 h-4" />
               </div>
               {t(link.key as any) || link.label}
@@ -289,7 +289,7 @@ export function Sidebar() {
                   <KVLogo withText size="sm" />
                 </Link>
                 <button
-                  className="w-8 h-8 flex items-center justify-center hover:bg-black/5 rounded-xl transition-colors text-text-4"
+                  className="w-8 h-8 flex items-center justify-center hov:bg-black/5 rounded-xl transition-colors text-text-4"
                   onClick={() => setIsOpen(false)}
                   aria-label="Close sidebar"
                 >

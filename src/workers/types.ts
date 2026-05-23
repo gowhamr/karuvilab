@@ -128,6 +128,12 @@ export interface WorkerAPI {
     action: 'validate' | 'json_to_yaml' | 'yaml_to_json'
   ): Promise<{ result?: string; error?: string }>;
 
+  processJson(
+    input: string,
+    mode: "beautify" | "minify",
+    indent: number | "tab"
+  ): Promise<{ output: string; parsed: any; error: any }>;
+
   createZip(
     files: Record<string, Uint8Array>,
     onProgress?: ProgressCallback
