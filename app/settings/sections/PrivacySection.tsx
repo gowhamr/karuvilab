@@ -76,7 +76,10 @@ export const PrivacySection = memo(function PrivacySection() {
         icon={Shield}
         helpText="This is our core promise. We don't have a backend that sees your files or data. Everything happens in your browser's memory and workers."
       >
-        <SettingSwitch checked={true} onChange={() => {}} disabled />
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-blue/5 border border-blue/10 rounded-lg text-blue">
+          <Shield className="w-3.5 h-3.5" />
+          <span className="text-[10px] font-black uppercase tracking-widest">Always Active</span>
+        </div>
       </SettingRow>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">

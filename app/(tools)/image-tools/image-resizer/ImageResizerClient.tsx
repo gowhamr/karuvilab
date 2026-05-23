@@ -73,10 +73,9 @@ export default function ImageResizerClient() {
 
     const result = await safeImageProcess(async () => {
       const buffer = await file.arrayBuffer();
-      // Using resizeImage in worker. Note: 'mode' (fit/fill/stretch) might need 
-      // support in worker if we want to be exact, but standard resize is usually enough.
-      // For now, we'll use the worker's resizeImage which currently doesn't handle modes.
-      // TODO: Add mode support to worker if needed.
+      // NOTE: The worker currently only supports standard (fit-inside) resize. 
+      // Do not expose mode selectors (fit/fill/stretch) in the UI until the 
+      // worker is updated to handle these parameters.
       const resultBytes = await workerManager.resizeImage(buffer, w, h, "image/jpeg", 92);
       const blob = new Blob([resultBytes as any], { type: "image/jpeg" });
       return {
@@ -151,24 +150,6 @@ export default function ImageResizerClient() {
               checked={lockRatio}
               onChange={e => setLockRatio(e.target.checked)}
             />
-
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-text-2">Resize Mode</label>
-              <div className="flex gap-2">
-                {(["fit","fill","stretch"] as Mode[]).map(m => (
-                  <button
-                    key={m}
-                    onClick={() => setMode(m)}
-                    className={`flex-1 py-3 rounded-xl text-xs font-bold capitalize transition-colors ${mode === m ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
-                  >
-                    {m}
-                  </button>
-                ))}
-              </div>
-              <p className="text-[10px] font-bold text-text-4 uppercase tracking-wider">
-                {mode === "fit" ? "Scale to fit within dimensions, maintaining ratio." : mode === "fill" ? "Fill dimensions, cropping excess to maintain ratio." : "Stretch to exact dimensions (may distort)."}
-              </p>
-            </div>
 
             <button onClick={resize} disabled={!originalUrl || processing} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">
               {processing ? "Processing…" : "Resize Image"}

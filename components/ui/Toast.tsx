@@ -56,13 +56,21 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <m.div
               key={t.id}
               layout
-              initial={{ opacity: 0, y: 20, scale: 0.9, filter: "blur(4px)" }}
-              animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 300 }}
+              dragElastic={{ left: 0.1, right: 0.8 }}
+              onDragEnd={(_, info) => {
+                if (info.offset.x > 150 || info.velocity.x > 500) {
+                  removeToast(t.id);
+                }
+              }}
+              initial={{ opacity: 0, x: 50, scale: 0.9, filter: "blur(4px)" }}
+              animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.9, x: 20, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className={`
                 pointer-events-auto px-4 py-3 rounded-2xl shadow-xl border flex items-center gap-3 min-w-[280px] max-w-[400px]
-                bg-surface/90 backdrop-blur-md
+                bg-surface/90 backdrop-blur-md touch-none
                 ${t.type === "success" ? "border-green-500/20" : ""}
                 ${t.type === "error" ? "border-red-500/20" : ""}
                 ${t.type === "info" ? "border-blue/20" : ""}
@@ -70,11 +78,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               `}
               role="alert"
             >
-              <div className="flex-shrink-0">{icons[t.type]}</div>
+              <div className={`w-1 absolute left-0 top-3 bottom-3 rounded-full ${
+                t.type === "success" ? "bg-green-500" :
+                t.type === "error" ? "bg-red-500" :
+                t.type === "info" ? "bg-blue" :
+                "bg-orange-500"
+              }`} />
+              <div className="flex-shrink-0 ml-1">{icons[t.type]}</div>
               <span className="text-sm font-bold text-text flex-1">{t.message}</span>
               <button 
                 onClick={() => removeToast(t.id)}
-                className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-text-4"
+                className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-text-4 pointer-events-auto"
                 aria-label="Close"
               >
                 <X className="w-3.5 h-3.5" />

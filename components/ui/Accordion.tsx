@@ -4,6 +4,7 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/src/lib/utils";
+import { m, AnimatePresence } from "framer-motion";
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -45,12 +46,19 @@ const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    className="overflow-hidden text-sm"
     {...props}
   >
-    <div className={cn("pb-4 pt-0 text-text-2 font-medium leading-relaxed", className)}>
-      {children}
-    </div>
+    <m.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{ height: "auto", opacity: 1 }}
+      exit={{ height: 0, opacity: 0 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className={cn("pb-4 pt-0 text-text-2 font-medium leading-relaxed", className)}>
+        {children}
+      </div>
+    </m.div>
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;

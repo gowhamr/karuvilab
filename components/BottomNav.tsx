@@ -29,7 +29,7 @@ export function BottomNav() {
             return (
               <m.button
                 key={item.label}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 25 } }}
                 onClick={() => setIsPaletteOpen(true)}
                 className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Search"
@@ -45,7 +45,7 @@ export function BottomNav() {
             return (
               <m.button
                 key={item.label}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 25 } }}
                 onClick={() => setIsSidebarOpen(true)}
                 className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Menu"
@@ -58,7 +58,7 @@ export function BottomNav() {
           }
 
           return (
-            <m.div key={item.label} whileTap={{ scale: 0.9 }}>
+            <m.div key={item.label} whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 25 } }}>
               <Link
                 href={item.href!}
                 aria-label={item.label}

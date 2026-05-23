@@ -25,7 +25,15 @@ const FAQS = [
   },
   {
     q: "A tool failed. What now?",
-    a: "First, refresh the page. If the problem persists, try a different browser or contact us via the contact page.",
+    a: (
+      <span>
+        First, refresh the page. If the problem persists, try a different browser or contact us via the{" "}
+        <Link href="/contact" className="text-blue hover:underline">
+          contact page
+        </Link>
+        .
+      </span>
+    ),
   },
   {
     q: "Are there file size limits?",

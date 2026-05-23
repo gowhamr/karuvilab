@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState } from "react";
-import { getHistory, addToHistory } from "@/src/lib/db";
+import { getHistory, addToHistory, clearAllHistory } from "@/src/lib/db";
 import { History, Trash2, ExternalLink, Calendar, ChevronRight } from "lucide-react";
 import { formatINR } from "@/src/lib/calculator-utils";
 import Link from "next/link";
@@ -23,9 +23,13 @@ export const HistorySection = memo(function HistorySection() {
 
   const clearHistory = async () => {
     if (!confirm("Are you sure you want to clear all calculation history?")) return;
-    // In a real app, we'd have a clearAllHistory in db.ts
-    // For now, let's just alert that it's not implemented yet or implement it.
-    alert("Clear history feature coming soon. You can use 'Factory Reset' in Data & Privacy for now.");
+    try {
+      await clearAllHistory();
+      setHistory([]);
+    } catch (error) {
+      console.error("Failed to clear history:", error);
+      alert("Failed to clear history. Please try again.");
+    }
   };
 
   if (isLoading) return <div className="animate-pulse space-y-4">

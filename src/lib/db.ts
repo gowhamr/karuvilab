@@ -265,3 +265,9 @@ export async function clearOldCache(maxAgeMs: number = 7 * 24 * 60 * 60 * 1000) 
 
   await tx.done;
 }
+
+export async function clearAllHistory() {
+  const db = await getDB();
+  if (!db) return;
+  await db.clear('history');
+}

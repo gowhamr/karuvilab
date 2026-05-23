@@ -111,7 +111,10 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     <div className="space-y-6" role="region" aria-label="Processing Queue">
       {/* Header / Stats */}
       <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm overflow-hidden relative">
-        <div className="absolute top-0 left-0 h-1 bg-blue transition-all duration-500" 
+        <div className={cn(
+          "absolute top-0 left-0 h-1 bg-blue transition-all duration-500",
+          isProcessing && "shimmer-wrapper"
+        )} 
              style={{ width: `${stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}%` }}
              role="progressbar"
              aria-valuenow={stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}

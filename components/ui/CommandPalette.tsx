@@ -8,6 +8,7 @@ import { useSearchStore } from "@/src/store/useSearchStore";
 import { Search, Command, X, ArrowDown, ArrowUp, CornerDownLeft } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { usePerformanceSettings } from "@/src/lib/hooks";
+import { m, AnimatePresence } from "framer-motion";
 
 export function CommandPalette() {
   const isPaletteOpen = useSearchStore(state => state.isPaletteOpen);
@@ -71,14 +72,27 @@ export function CommandPalette() {
   return (
     <Dialog.Root open={isPaletteOpen} onOpenChange={setIsPaletteOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay 
-          className="fixed inset-0 z-[200] bg-bg/80 animate-in fade-in duration-300 transition-all" 
-          style={{ backdropFilter: shouldBlur ? 'blur(12px)' : 'none' }}
-        />
-        <Dialog.Content 
-          onKeyDown={handleKeyDown}
-          className="fixed left-1/2 top-[15%] -translate-x-1/2 z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-top-4 duration-200"
-        >
+        <AnimatePresence>
+          {isPaletteOpen && (
+            <>
+              <Dialog.Overlay asChild>
+                <m.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[200] bg-bg/80" 
+                  style={{ backdropFilter: shouldBlur ? 'blur(12px)' : 'none' }}
+                />
+              </Dialog.Overlay>
+              <Dialog.Content asChild>
+                <m.div 
+                  onKeyDown={handleKeyDown}
+                  initial={{ opacity: 0, scale: 0.95, y: -20, x: "-50%" }}
+                  animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
+                  exit={{ opacity: 0, scale: 0.95, y: -20, x: "-50%" }}
+                  transition={{ type: "spring", damping: 25, stiffness: 400 }}
+                  className="fixed left-1/2 top-[15%] z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden outline-none"
+                >
           <div className="flex items-center px-6 border-b border-border bg-bg/50">
             <Search className="w-5 h-5 text-text-4" aria-hidden="true" />
             <input
@@ -166,8 +180,12 @@ export function CommandPalette() {
                <span>Professional Suite</span>
             </div>
           </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+            </m.div>
+          </Dialog.Content>
+            </>
+          )}
+        </AnimatePresence>
+    </Dialog.Portal>
+  </Dialog.Root>
   );
 }

@@ -59,23 +59,25 @@ const SidebarContent = memo(function SidebarContent({
 
       {/* Core Links */}
       <div className="space-y-2">
-        <Link
-          href="/"
-          onClick={() => setIsOpen(false)}
-          aria-current={pathname === "/" ? "page" : undefined}
-          className={`group flex items-center gap-3 h-[56px] px-4 rounded-2xl transition-all font-bold text-sm ${
-            pathname === "/" 
-              ? "bg-blue/10 text-blue" 
-              : "text-text-2 hover:bg-blue/5 hover:text-blue"
-          }`}
-        >
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-            pathname === "/" ? "bg-blue/20" : "bg-transparent group-hover:bg-blue/10"
-          }`}>
-            <Home className="w-5 h-5" />
-          </div>
-          {t('common.home')}
-        </Link>
+        <m.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+          <Link
+            href="/"
+            onClick={() => setIsOpen(false)}
+            aria-current={pathname === "/" ? "page" : undefined}
+            className={`group flex items-center gap-3 h-[56px] px-4 rounded-2xl transition-all font-bold text-sm ${
+              pathname === "/" 
+                ? "bg-blue/10 text-blue" 
+                : "text-text-2 hover:bg-blue/5 hover:text-blue"
+            }`}
+          >
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+              pathname === "/" ? "bg-blue/20" : "bg-transparent group-hover:bg-blue/10"
+            }`}>
+              <Home className="w-5 h-5" />
+            </div>
+            {t('common.home')}
+          </Link>
+        </m.div>
       </div>
 
       {/* Categories - Moved up for stability */}
@@ -89,51 +91,54 @@ const SidebarContent = memo(function SidebarContent({
             const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
             const color = cat.color;
             return (
-              <Link
-                key={cat.id}
-                href={`/${cat.href}`}
-                onClick={() => setIsOpen(false)}
-                aria-current={isActive ? "page" : undefined}
-                className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
-                  isActive
-                    ? "bg-blue/5 text-blue"
-                    : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
-                }`}
-                style={{
-                  color: isActive ? color : undefined,
-                  backgroundColor: isActive ? `${color}15` : undefined, // 15 hex is ~8% opacity
-                }}
-              >
-                <div 
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                    isActive ? "" : "bg-transparent group-hover:scale-105"
+              <m.div key={cat.id} whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href={`/${cat.href}`}
+                  onClick={() => setIsOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
+                    isActive
+                      ? "bg-blue/5 text-blue"
+                      : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
                   }`}
                   style={{
                     color: isActive ? color : undefined,
+                    backgroundColor: isActive ? `${color}15` : undefined, // 15 hex is ~8% opacity
                   }}
                 >
-                  <ToolIcon category={cat.id} className="w-5 h-5" />
-                </div>
-                <span className="flex-1">{cat.label}</span>
-              </Link>
+                  <div 
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                      isActive ? "" : "bg-transparent group-hover:scale-105"
+                    }`}
+                    style={{
+                      color: isActive ? color : undefined,
+                    }}
+                  >
+                    <ToolIcon category={cat.id} className="w-5 h-5" />
+                  </div>
+                  <span className="flex-1">{cat.label}</span>
+                </Link>
+              </m.div>
             );
           })}
-          <Link
-            href="/all-tools"
-            onClick={() => setIsOpen(false)}
-            className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
-              pathname === "/all-tools"
-                ? "bg-blue/10 text-blue"
-                : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
-            }`}
-          >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              pathname === "/all-tools" ? "text-blue" : "bg-transparent group-hover:scale-105"
-            }`}>
-              <LayoutGrid className="w-5 h-5" />
-            </div>
-            <span className="flex-1">All Tools</span>
-          </Link>
+          <m.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+            <Link
+              href="/all-tools"
+              onClick={() => setIsOpen(false)}
+              className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
+                pathname === "/all-tools"
+                  ? "bg-blue/10 text-blue"
+                  : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"
+              }`}
+            >
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                pathname === "/all-tools" ? "text-blue" : "bg-transparent group-hover:scale-105"
+              }`}>
+                <LayoutGrid className="w-5 h-5" />
+              </div>
+              <span className="flex-1">All Tools</span>
+            </Link>
+          </m.div>
         </div>
       </div>
 

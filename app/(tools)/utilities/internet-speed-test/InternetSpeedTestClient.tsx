@@ -188,7 +188,6 @@ export default function InternetSpeedTestClient() {
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null);
-  const [isSimulated, setIsSimulated] = useState(false);
   const [history, setHistory] = useState<{ x: number, y: number }[]>([]);
   const [pastResults, setPastResults] = useState<TestResult[]>([]);
 
@@ -197,77 +196,6 @@ export default function InternetSpeedTestClient() {
   const resultsRef = useRef<{ download: number; upload: number; ping: number; jitter: number; loadedLatency?: number }>({
     download: 0, upload: 0, ping: 0, jitter: 0
   });
-
-  const runSimulation = async () => {
-    setStatus('ping');
-    setPing(null);
-    setDownload(null);
-    setUpload(null);
-    setJitter(null);
-    setLoadedLatency(null);
-    setMaxDownload(0);
-    setProgress(0);
-    setHistory([]);
-    
-    // 1. Simulate Ping
-    await new Promise(r => setTimeout(r, 1500));
-    if (abortControllerRef.current?.signal.aborted) return;
-    const mockPing = Math.floor(Math.random() * 15) + 12;
-    const mockJitter = Math.floor(Math.random() * 4) + 1;
-    setPing(mockPing);
-    setJitter(mockJitter);
-    resultsRef.current.ping = mockPing;
-    resultsRef.current.jitter = mockJitter;
-    setProgress(20);
-
-    // 2. Simulate Download
-    setStatus('download');
-    const targetDown = Math.floor(Math.random() * (240 - 60)) + 60;
-    const downSteps = 60;
-    for (let i = 0; i <= downSteps; i++) {
-      if (abortControllerRef.current?.signal.aborted) return;
-      const t = i / downSteps;
-      const easing = 1 - Math.pow(1 - t, 3); // Cubic Ease Out
-      const current = targetDown * easing;
-      setDownload(parseFloat(current.toFixed(1)));
-      setProgress(20 + (t * 40));
-      
-      const now = Date.now();
-      const point = { x: now, y: current };
-      historyRef.current = [...historyRef.current, point].slice(-60);
-      setHistory(historyRef.current);
-      
-      await new Promise(r => setTimeout(r, 50));
-    }
-    resultsRef.current.download = targetDown;
-    setMaxDownload(targetDown + (Math.random() * 10));
-
-    // 3. Simulate Upload
-    historyRef.current = [];
-    setHistory([]);
-    setStatus('upload');
-    const targetUp = Math.floor(Math.random() * (80 - 20)) + 20;
-    const upSteps = 50;
-    for (let i = 0; i <= upSteps; i++) {
-      if (abortControllerRef.current?.signal.aborted) return;
-      const t = i / upSteps;
-      const easing = 1 - Math.pow(1 - t, 3);
-      const current = targetUp * easing;
-      setUpload(parseFloat(current.toFixed(1)));
-      setProgress(60 + (t * 40));
-      
-      const now = Date.now();
-      const point = { x: now, y: current };
-      historyRef.current = [...historyRef.current, point].slice(-60);
-      setHistory(historyRef.current);
-
-      await new Promise(r => setTimeout(r, 60));
-    }
-    resultsRef.current.upload = targetUp;
-
-    setStatus('completed');
-    saveToHistory(resultsRef.current);
-  };
 
   useEffect(() => {
     // Fetch client info
@@ -662,7 +590,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 <div className="space-y-1">
                   <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue">
                     {status === 'idle' && "System Ready"}
-                    {status === 'ping' && (isSimulated ? "Connecting to Mumbai Edge..." : "Pinging Global Edge...")}
+                    {status === 'ping' && "Pinging Global Edge..."}
                     {status === 'download' && "Stream Download Active"}
                     {status === 'upload' && "Encrypted Upload Active"}
                     {status === 'completed' && "Diagnostic Complete"}
@@ -774,32 +702,18 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 </div>
               </div>
 
-              {/* Action Area */}
+            {/* Action Area */}
               <div className="flex flex-wrap items-center gap-4">
                 {status === 'idle' || status === 'completed' || status === 'error' ? (
                   <div className="flex flex-wrap items-center gap-4">
                     <button
-                      onClick={isSimulated ? runSimulation : startTest}
+                      onClick={startTest}
                       className="group relative px-8 py-5 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3 text-sm overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
                       <Zap className="w-5 h-5 fill-current" />
-                      {status === 'idle' ? (isSimulated ? "Start Simulation" : "Start") : "New Test"}
+                      {status === 'idle' ? "Start" : "New Test"}
                     </button>
-                    
-                    {status === 'idle' && (
-                      <button
-                        onClick={() => setIsSimulated(!isSimulated)}
-                        className={cn(
-                          "px-6 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all border whitespace-nowrap",
-                          isSimulated 
-                            ? "bg-blue/10 border-blue text-blue" 
-                            : "bg-surface border-border text-text-4 hover:border-blue/30"
-                        )}
-                      >
-                        {isSimulated ? "Simulation On" : "Simulation Off"}
-                      </button>
-                    )}
                   </div>
                 ) : (
                   <button

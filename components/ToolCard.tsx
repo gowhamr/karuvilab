@@ -19,15 +19,19 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
       className="relative w-full h-[130px] md:h-[180px] group"
       whileHover={{ 
         y: -4,
-        transition: { duration: 0.2, ease: "easeOut" }
+        scale: 1.02,
+        transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] }
       }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ 
+        scale: 0.98,
+        transition: { type: "spring", stiffness: 400, damping: 25 }
+      }}
     >
       <Link 
         href={`/${tool.href}`}
         className={cn(
           "relative flex flex-col h-full bg-surface border border-border rounded-[24px] p-4 md:p-6 shadow-sm overflow-hidden transition-all duration-300",
-          "hover:border-blue/30 hover:bg-blue/[0.01] hover:shadow-lg dark:hover:shadow-blue/5"
+          "hover:border-blue/30 hover:bg-blue/[0.01] hover:shadow-xl dark:hover:shadow-blue/10"
         )}
       >
         {/* Top Section: Icon & Badge */}
@@ -41,13 +45,21 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           
           {tool.popular && (
             <m.div 
-              initial={{ opacity: 0.8, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ 
+                opacity: 1, 
+                x: 0,
+                scale: [1, 1.05, 1]
+              }}
+              transition={{ 
+                scale: { repeat: Infinity, duration: 3, ease: "easeInOut" },
+                opacity: { duration: 0.3 }
+              }}
+              whileHover={{ scale: 1.1 }}
               className="px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 flex items-center gap-1"
               aria-label="Popular tool"
             >
-              <Zap className="w-2.5 h-2.5 fill-current text-blue animate-pulse" aria-hidden="true" />
+              <Zap className="w-2.5 h-2.5 fill-current text-blue" aria-hidden="true" />
               <span className="text-[7px] font-bold uppercase tracking-widest hidden md:inline text-blue">Hot</span>
             </m.div>
           )}

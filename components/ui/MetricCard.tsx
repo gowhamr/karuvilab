@@ -11,6 +11,7 @@ interface MetricCardProps {
   sub?: string | undefined;
   icon?: LucideIcon | undefined;
   className?: string | undefined;
+  loading?: boolean;
   trend?: {
     value: string;
     isPositive: boolean;
@@ -18,21 +19,30 @@ interface MetricCardProps {
   } | undefined;
 }
 
-export function MetricCard({ label, value, accent = false, sub, icon: Icon, className, trend }: MetricCardProps) {
+export function MetricCard({ label, value, accent = false, sub, icon: Icon, className, trend, loading }: MetricCardProps) {
   return (
     <m.dl 
+      layout
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className={cn("bg-surface border border-border p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] space-y-3 min-w-0 overflow-hidden shadow-sm hover:shadow-lg dark:hover:shadow-blue/5 transition-shadow duration-300", className)}
+      whileHover={{ 
+        y: -4, 
+        scale: 1.01,
+        transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } 
+      }}
+      className={cn(
+        "bg-surface border border-border p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] space-y-3 min-w-0 overflow-hidden shadow-sm hover:shadow-xl dark:hover:shadow-blue/10 transition-all duration-300", 
+        loading && "shimmer-wrapper",
+        className
+      )}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-text-3">
           {Icon && <Icon className="w-4 h-4" />}
           <dt className="text-[11px] font-black uppercase tracking-widest truncate">{label}</dt>
         </div>
-        {trend && (
+        {trend && !loading && (
           <m.div 
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -46,15 +56,20 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         )}
       </div>
       <m.dd 
-        initial={{ scale: 0.95 }}
-        whileInView={{ scale: 1 }}
-        className={cn("text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight", accent ? "text-blue" : "text-text")}
+        className={cn(
+          "text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight transition-all", 
+          accent ? "text-blue" : "text-text",
+          loading && "opacity-20"
+        )}
       >
-        {value}
+        {loading ? "---" : value}
       </m.dd>
       {(sub || trend?.label) && (
-        <dd className="text-[11px] text-text-3 font-bold leading-relaxed line-clamp-2">
-          {trend?.label ? `${trend.label}: ${sub || ""}` : sub}
+        <dd className={cn(
+          "text-[11px] text-text-3 font-bold leading-relaxed line-clamp-2 transition-all",
+          loading && "opacity-20"
+        )}>
+          {loading ? "Calculating..." : (trend?.label ? `${trend.label}: ${sub || ""}` : sub)}
         </dd>
       )}
     </m.dl>

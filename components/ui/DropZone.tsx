@@ -106,10 +106,10 @@ export function DropZone({
         <m.div
           animate={{ 
             scale: isDragging ? 1.2 : 1,
-            rotate: isDragging ? [0, -10, 10, 0] : 0
+            y: isDragging ? [0, -10, 0] : 0
           }}
           transition={{ 
-            rotate: isDragging ? { repeat: Infinity, duration: 2, ease: "linear" } : { duration: 0.3 }
+            y: isDragging ? { repeat: Infinity, duration: 0.6, ease: "easeInOut" } : { duration: 0.3 }
           }}
           className={cn(
             "mb-4 rounded-2xl p-4 transition-all duration-300",
