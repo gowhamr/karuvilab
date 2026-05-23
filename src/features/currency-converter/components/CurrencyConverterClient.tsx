@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useId, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -329,14 +329,15 @@ export default function CurrencyConverterClient() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <MetricCard
-              label={`${amount} ${from} =`}
+              label={`Converted Amount (${to})`}
               value={ratesData ? fmt(result, to) : '--'}
               accent
             />
             <MetricCard
-              label={`1 ${from} = ? ${to}`}
+              label={`Current Exchange Rate`}
+              sub={`1 ${from} = ${ratesData ? fmt(rate, to) : '--'}`}
               value={ratesData ? fmt(rate, to) : '--'}
             />
           </div>
