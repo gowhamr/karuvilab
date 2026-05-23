@@ -30,8 +30,15 @@ const formatTime = (seconds: number) => {
 };
 
 export default function PomodoroTimerClient() {
-  const { focusDuration, breakDuration, longBreakDuration, setDurations, addSession } = usePomodoroStore();
-  const { saveState, loadState, clearState } = useSessionStore();
+  const focusDuration = usePomodoroStore(state => state.focusDuration);
+  const breakDuration = usePomodoroStore(state => state.breakDuration);
+  const longBreakDuration = usePomodoroStore(state => state.longBreakDuration);
+  const setDurations = usePomodoroStore(state => state.setDurations);
+  const addSession = usePomodoroStore(state => state.addSession);
+
+  const saveState = useSessionStore(state => state.saveState);
+  const loadState = useSessionStore(state => state.loadState);
+  const clearState = useSessionStore(state => state.clearState);
   const [showRestoredBanner, setShowRestoredBanner] = useState(false);
 
   const [mode, setMode] = useState<'focus' | 'break'>('focus');

@@ -5,7 +5,7 @@ import { useCalendarStore } from "../store";
 import { parseISO, differenceInMinutes, isFuture } from "date-fns";
 
 export function useReminders() {
-  const { events } = useCalendarStore();
+  const events = useCalendarStore(state => state.events);
   const notifiedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {

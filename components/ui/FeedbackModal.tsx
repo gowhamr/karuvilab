@@ -17,7 +17,10 @@ const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: any }[] = [
 ];
 
 export function FeedbackModal() {
-  const { isOpen, closeFeedback, type, context } = useSupportStore();
+  const isOpen = useSupportStore(state => state.isOpen);
+  const closeFeedback = useSupportStore(state => state.closeFeedback);
+  const type = useSupportStore(state => state.type);
+  const context = useSupportStore(state => state.context);
   const setType = (t: FeedbackType) => useSupportStore.setState({ type: t });
 
   const [description, setDescription] = useState("");

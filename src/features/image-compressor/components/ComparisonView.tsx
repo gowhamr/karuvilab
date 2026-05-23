@@ -16,8 +16,8 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
     setSliderPos((x / rect.width) * 100);
   }, []);
 
-  const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
-  const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0]!.clientX);
+  const onMouseMove = React.useCallback((e: React.MouseEvent) => handleMove(e.clientX), [handleMove]);
+  const onTouchMove = React.useCallback((e: React.TouchEvent) => handleMove(e.touches[0]!.clientX), [handleMove]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     switch (e.key) {

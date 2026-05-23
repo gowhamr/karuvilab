@@ -46,6 +46,10 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
   const totalHeight = filteredSchedule.length * rowHeight;
   const offset = visibleRange.start * rowHeight;
 
+  const handleScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setScrollTop(e.currentTarget.scrollTop);
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -76,7 +80,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
 
         <div 
           ref={containerRef}
-          onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}
+          onScroll={handleScroll}
           className="relative overflow-auto"
           style={{ height: viewportHeight }}
         >

@@ -11,7 +11,7 @@ import { CalendarEvent } from "../types";
 import { GlobalFestival, GlobalObservance } from "../data/static-data";
 
 export function AgendaView() {
-  const { events } = useCalendarStore();
+  const events = useCalendarStore(state => state.events);
 
   // Show next 14 days
   const today = startOfDay(new Date());
@@ -77,21 +77,21 @@ function AgendaDay({
       <div className="space-y-4">
         {/* Festivals and Observances */}
         {festivals.map((f, i) => (
-          <div key={`f-${i}`} className="bg-amber-500/5 backdrop-blur-md border border-amber-500/10 p-6 rounded-[32px] flex items-center gap-5 shadow-sm">
-            <span className="text-3xl drop-shadow-sm">{f.emoji}</span>
+          <div key={`f-${i}`} className="bg-amber-500/5 backdrop-blur-md border border-amber-500/10 p-4 md:p-6 rounded-2xl md:rounded-[32px] flex items-center gap-4 md:gap-5 shadow-sm">
+            <span className="text-2xl md:text-3xl drop-shadow-sm">{f.emoji}</span>
             <div>
-              <h4 className="text-base font-black text-amber-700 dark:text-amber-400">{f.name}</h4>
-              <p className="text-[10px] font-bold text-amber-600/60 uppercase tracking-widest mt-0.5">Festival</p>
+              <h4 className="text-sm md:text-base font-black text-amber-700 dark:text-amber-400">{f.name}</h4>
+              <p className="text-[9px] md:text-[10px] font-bold text-amber-600/60 uppercase tracking-widest mt-0.5">Festival</p>
             </div>
           </div>
         ))}
 
         {observances.map((o, i) => (
-          <div key={`o-${i}`} className="bg-blue-500/5 backdrop-blur-md border border-blue-500/10 p-6 rounded-[32px] flex items-center gap-5 shadow-sm">
-            <span className="text-3xl drop-shadow-sm">{o.emoji}</span>
+          <div key={`o-${i}`} className="bg-blue-500/5 backdrop-blur-md border border-blue-500/10 p-4 md:p-6 rounded-2xl md:rounded-[32px] flex items-center gap-4 md:gap-5 shadow-sm">
+            <span className="text-2xl md:text-3xl drop-shadow-sm">{o.emoji}</span>
             <div>
-              <h4 className="text-base font-black text-blue-700 dark:text-blue-400">{o.name}</h4>
-              <p className="text-[10px] font-bold text-blue-600/60 uppercase tracking-widest mt-0.5">Global Observance</p>
+              <h4 className="text-sm md:text-base font-black text-blue-700 dark:text-blue-400">{o.name}</h4>
+              <p className="text-[9px] md:text-[10px] font-bold text-blue-600/60 uppercase tracking-widest mt-0.5">Global Observance</p>
             </div>
           </div>
         ))}
@@ -105,25 +105,25 @@ function AgendaDay({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="group bg-surface/40 backdrop-blur-xl border border-border/30 p-6 rounded-[32px] flex items-center gap-6 hover:border-indigo-500/30 transition-all shadow-md hover:shadow-xl active:scale-[0.98]"
+              className="group bg-surface/40 backdrop-blur-xl border border-border/30 p-4 md:p-6 rounded-2xl md:rounded-[32px] flex items-center gap-4 md:gap-6 hover:border-indigo-500/30 transition-all shadow-md hover:shadow-xl active:scale-[0.98]"
             >
-              <div className="w-20 flex-shrink-0 text-center border-r border-border/20 pr-6">
-                <div className="text-sm font-black text-text tabular-nums">
+              <div className="w-14 md:w-20 flex-shrink-0 text-center border-r border-border/20 pr-4 md:pr-6">
+                <div className="text-xs md:text-sm font-black text-text tabular-nums">
                   {event.allDay ? 'All Day' : format(parseISO(event.startDate), 'h:mm')}
                 </div>
                 {!event.allDay && (
-                  <div className="text-[10px] font-bold text-text-4 uppercase tracking-wider mt-0.5">
+                  <div className="text-[8px] md:text-[10px] font-bold text-text-4 uppercase tracking-wider mt-0.5">
                     {format(parseISO(event.startDate), 'a')}
                   </div>
                 )}
               </div>
 
               <div className="flex-1 min-w-0">
-                <h4 className="text-lg font-black text-text truncate group-hover:text-indigo-600 transition-colors">
+                <h4 className="text-base md:text-lg font-black text-text truncate group-hover:text-indigo-600 transition-colors">
                   {event.title}
                 </h4>
                 {(event.location || event.description) && (
-                  <p className="text-[12px] font-medium text-text-4 truncate mt-1.5 flex items-center gap-2.5">
+                  <p className="text-[10px] md:text-[12px] font-medium text-text-4 truncate mt-1 md:mt-1.5 flex items-center gap-2 md:gap-2.5">
                     {event.location && <><span className="text-indigo-500/80">📍</span> {event.location}</>}
                     {event.description && <><span className="text-text-4/20">|</span> {event.description}</>}
                   </p>
@@ -133,13 +133,13 @@ function AgendaDay({
               <button
                 onClick={() => useCalendarStore.getState().setSelectedEvent(event.id)}
                 className={cn(
-                  "w-12 h-12 rounded-2xl flex items-center justify-center border opacity-0 group-hover:opacity-100 transition-all active:scale-90",
+                  "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center border md:opacity-0 group-hover:opacity-100 transition-all active:scale-90 flex-shrink-0",
                   (COLOR_MAP as any)[event.color].bg,
                   (COLOR_MAP as any)[event.color].border,
                   (COLOR_MAP as any)[event.color].text
                 )}
               >
-                <span className="text-lg font-black">✎</span>
+                <span className="text-base md:text-lg font-black">✎</span>
               </button>
             </motion.div>
           ))}

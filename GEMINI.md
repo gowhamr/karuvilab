@@ -69,11 +69,11 @@ Welcome to **KaruviLab (KV)**. This document is the single source of truth for t
 ### 🖼️ Image Tools (7)
 - Compress Image, Image Converter, Image Resizer, Image Crop, Bulk Image Resize, Background Remover, Image to Base64.
 
-### 💻 Developer Tools (8)
-- JSON Formatter, JSON ↔ CSV, Regex Tester, Code Minifier, Diff Checker, Code Formatter, HTML Online Viewer, File Viewer & Diff.
+### 💻 Developer Tools (13)
+- JSON Formatter, JSON ↔ CSV, Regex Tester, Code Minifier, Diff Checker, Code Formatter, HTML Online Viewer, File Viewer & Diff, Base64 Encode/Decode, URL Encoder, YAML Validator & Converter, Color Converter, Fake Data Generator.
 
-### 🛡️ Security & Encoding (6)
-- Base64 Encode/Decode, Password Generator, Hash Generator (MD5/SHA/HMAC), URL Encoder, HTML Entities, JWT Decoder.
+### 🛡️ Security & Encoding (4)
+- Password Generator, Hash Generator (MD5/SHA/HMAC), HTML Entities, JWT Decoder.
 
 ### 🛠️ Daily Utilities (9)
 - QR Code Generator, Split & Copy, Text Utility, Grammar Checker, Task Reminder, Markdown Editor, URL Cleaner, File Validator, Speed Tester.

@@ -4,8 +4,8 @@ export const url_encoder: ToolEntry = {
   "id": "url-encoder",
   "name": "URL Encoder",
   "desc": "Percent-encode and decode URLs",
-  "href": "security-tools/url-encoder/",
-  "category": "security",
+  "href": "developer-tools/url-encoder/",
+  "category": "developer",
   "keywords": [
     "url",
     "encode",

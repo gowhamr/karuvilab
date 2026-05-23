@@ -18,7 +18,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = `menu-${toolId}`;
-  const { openFeedback } = useSupportStore();
+  const openFeedback = useSupportStore(state => state.openFeedback);
   const { toast } = useToast();
 
   useEffect(() => {

@@ -46,7 +46,8 @@ export default function WordCounterClient() {
       reader.readAsText(file);
     } else if (file.name.endsWith(".docx")) {
       try {
-        const mammoth = await new Function('return import("https://esm.sh/mammoth")')();
+        // @ts-ignore - dynamic import from URL
+        const mammoth = await import(/* webpackIgnore: true */ "https://esm.sh/mammoth");
         const arrayBuffer = await file.arrayBuffer();
         const result = await mammoth.extractRawText({ arrayBuffer });
         setText(result.value);

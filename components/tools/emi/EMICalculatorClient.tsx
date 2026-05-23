@@ -19,8 +19,11 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { Calculator, TrendingDown, Receipt, Calendar, Info } from "lucide-react";
 
 export default function EMICalculatorClient() {
-  const { inputs, setInputs } = useEmiStore();
-  const { saveState, loadState, clearState } = useSessionStore();
+  const inputs = useEmiStore(state => state.inputs);
+  const setInputs = useEmiStore(state => state.setInputs);
+  const saveState = useSessionStore(state => state.saveState);
+  const loadState = useSessionStore(state => state.loadState);
+  const clearState = useSessionStore(state => state.clearState);
   const [result, setResult] = useState<EmiResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showRestoredBanner, setShowRestoredBanner] = useState(false);

@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export function TimeGridView({ days }: { days: Date[] }) {
-  const { events } = useCalendarStore();
+  const events = useCalendarStore(state => state.events);
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -20,16 +20,16 @@ export function TimeGridView({ days }: { days: Date[] }) {
   const hours = Array.from({ length: 24 }, (_, i) => addHours(startOfDay(new Date()), i));
 
   return (
-    <div className="flex-1 flex flex-col bg-surface/60 backdrop-blur-xl border border-border/30 rounded-[32px] overflow-hidden shadow-premium relative">
+    <div className="flex-1 flex flex-col bg-surface/60 backdrop-blur-xl border border-border/30 rounded-[24px] md:rounded-[32px] overflow-hidden shadow-premium relative">
       {/* Scrollable Container for Mobile */}
       <div className="flex-1 flex flex-col overflow-x-auto no-scrollbar">
         <div className={cn(
           "flex flex-col min-w-full",
           days.length > 1 ? "md:min-w-0" : ""
-        )} style={{ minWidth: days.length > 1 ? '1000px' : 'auto' }}>
+        )} style={{ minWidth: days.length > 1 ? (typeof window !== 'undefined' && window.innerWidth < 768 ? '700px' : '1000px') : 'auto' }}>
           {/* Headers */}
           <div className="flex border-b border-border/30 bg-bg/50 sticky top-0 z-30 backdrop-blur-md">
-            <div className="w-16 border-r border-border/20 flex-shrink-0" />
+            <div className="w-12 md:w-16 border-r border-border/20 flex-shrink-0" />
             <div className={cn("grid flex-1", days.length > 1 ? "grid-cols-7" : "grid-cols-1")}>
               {days.map(day => (
                 <HeaderCell key={day.toISOString()} day={day} />
@@ -40,16 +40,16 @@ export function TimeGridView({ days }: { days: Date[] }) {
           {/* Grid Content */}
           <div className="flex-1 overflow-y-auto no-scrollbar relative min-h-[600px]">
             {/* Time Labels */}
-            <div className="absolute top-0 left-0 bottom-0 w-16 border-r border-border/20 bg-bg/20 z-10">
+            <div className="absolute top-0 left-0 bottom-0 w-12 md:w-16 border-r border-border/20 bg-bg/20 z-10">
               {hours.map(hour => (
-                <div key={hour.toISOString()} className="h-[80px] px-2 pt-1 text-[9px] font-black text-text-4 uppercase text-right">
+                <div key={hour.toISOString()} className="h-[80px] px-1 md:px-2 pt-1 text-[8px] md:text-[9px] font-black text-text-4 uppercase text-right">
                   {format(hour, 'h a')}
                 </div>
               ))}
             </div>
 
             {/* Columns & Event Cards */}
-            <div className={cn("grid flex-1 ml-16 relative", days.length > 1 ? "grid-cols-7" : "grid-cols-1")}>
+            <div className={cn("grid flex-1 ml-12 md:ml-16 relative", days.length > 1 ? "grid-cols-7" : "grid-cols-1")}>
               {/* Background Lines */}
               {hours.map((hour, i) => (
                 <div
@@ -132,15 +132,15 @@ function HeaderCell({ day }: { day: Date }) {
   const isToday = format(day, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
 
   return (
-    <div className="py-5 text-center border-r border-border/20 last:border-r-0 relative group">
-      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 block mb-1.5">
+    <div className="py-3 md:py-5 text-center border-r border-border/20 last:border-r-0 relative group">
+      <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 block mb-1 md:mb-1.5">
         {format(day, 'EEE')}
       </span>
       <div className="flex flex-col items-center">
         <span className={cn(
-          "w-10 h-10 inline-flex items-center justify-center rounded-2xl text-base font-black transition-all",
+          "w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-xl md:rounded-2xl text-sm md:text-base font-black transition-all",
           isToday
-            ? "bg-indigo-600 text-white shadow-xl shadow-indigo-500/40"
+            ? "bg-indigo-600 text-white shadow-lg md:shadow-xl shadow-indigo-500/40"
             : "text-text-2 group-hover:text-indigo-600 group-hover:bg-indigo-500/5"
         )}>
           {format(day, 'd')}

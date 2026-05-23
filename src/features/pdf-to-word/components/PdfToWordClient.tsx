@@ -50,8 +50,8 @@ export default function PdfToWordClient() {
     if (!text) return;
     setProcessing(true);
     try {
-      // Dynamically import docx from esm.sh
-      const docx = await new Function('return import("https://esm.sh/docx")')();
+      // @ts-ignore - dynamic import from URL
+      const docx = await import(/* webpackIgnore: true */ "https://esm.sh/docx");
       const { Document, Packer, Paragraph, TextRun } = docx;
 
       const doc = new Document({

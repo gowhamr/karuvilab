@@ -3,10 +3,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DropZone } from "@/components/ui/DropZone";
 import { ToolResultArea } from "@/components/ui/ToolResultArea";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 import { Camera, Image as ImageIcon, VideoOff, ScanLine, Copy, ExternalLink } from "lucide-react";
 import { m } from "framer-motion";
 
 export default function BarcodeScannerClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [mode, setMode] = useState<"camera" | "image">("camera");
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -84,7 +86,8 @@ export default function BarcodeScannerClient() {
     if (!file) return;
 
     const img = new Image();
-    img.src = URL.createObjectURL(file);
+    const url = createUrl(file);
+    img.src = url;
     await new Promise(r => img.onload = r);
 
     if ('BarcodeDetector' in window) {
@@ -103,7 +106,7 @@ export default function BarcodeScannerClient() {
     } else {
       setError("Native BarcodeDetector API not supported in this browser.");
     }
-    URL.revokeObjectURL(img.src);
+    revokeUrl(url);
   };
 
   return (

@@ -30,7 +30,11 @@ export function SessionRestoredBanner({ isVisible, onClear, onDismiss }: Session
         >
           <p className="text-sm font-bold">Previous session restored.</p>
           <button onClick={onClear} className="text-sm font-bold underline hover:text-blue-200">Clear</button>
-          <button onClick={onDismiss} className="p-1 rounded-full hover:bg-white/20">
+          <button 
+            aria-label="Dismiss banner"
+            onClick={onDismiss} 
+            className="p-2 -m-1 rounded-full hover:bg-white/20 transition-colors"
+          >
             <X className="w-4 h-4" />
           </button>
         </motion.div>

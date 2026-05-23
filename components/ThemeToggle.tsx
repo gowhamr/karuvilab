@@ -8,8 +8,8 @@ import { useSettingsStore, useIsHydrated } from "@/src/store/settings/store";
 
 export function ThemeToggle() {
   const isHydrated = useIsHydrated();
-  const { appearance, updateAppearance } = useSettingsStore();
-  const theme = appearance.theme;
+  const theme = useSettingsStore(state => state.appearance.theme);
+  const updateAppearance = useSettingsStore(state => state.updateAppearance);
 
   const toggleTheme = () => {
     const resolvedTheme = theme === "system" 

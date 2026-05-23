@@ -18,8 +18,11 @@ export const PrivacySection = memo(function PrivacySection() {
     setIsExporting(true);
     const data: Record<string, string> = {};
     for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i)!;
-      data[k] = localStorage.getItem(k)!;
+      const k = localStorage.key(i);
+      if (k) {
+        const val = localStorage.getItem(k);
+        if (val) data[k] = val;
+      }
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = createUrl(blob);
@@ -53,10 +56,12 @@ export const PrivacySection = memo(function PrivacySection() {
     
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i)!;
-      // Preserve critical settings
-      if (!k.startsWith("karuvi-theme") && !k.startsWith("karuvi-font-size") && !k.startsWith("karuvi-settings") && !k.startsWith("karuvi-favorites")) {
-        keysToRemove.push(k);
+      const k = localStorage.key(i);
+      if (k) {
+        // Preserve critical settings
+        if (!k.startsWith("karuvi-theme") && !k.startsWith("karuvi-font-size") && !k.startsWith("karuvi-settings") && !k.startsWith("karuvi-favorites")) {
+          keysToRemove.push(k);
+        }
       }
     }
     keysToRemove.forEach(k => localStorage.removeItem(k));

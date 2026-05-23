@@ -23,7 +23,12 @@ export function EventModal({
   onClose: () => void; 
   initialDate?: Date 
 }) {
-  const { addEvent, events, selectedEventId, setSelectedEvent, updateEvent, removeEvent } = useCalendarStore();
+  const addEvent = useCalendarStore(state => state.addEvent);
+  const events = useCalendarStore(state => state.events);
+  const selectedEventId = useCalendarStore(state => state.selectedEventId);
+  const setSelectedEvent = useCalendarStore(state => state.setSelectedEvent);
+  const updateEvent = useCalendarStore(state => state.updateEvent);
+  const removeEvent = useCalendarStore(state => state.removeEvent);
 
   const editingEvent = selectedEventId ? events.find(e => e.id === selectedEventId) : null;
 

@@ -211,6 +211,7 @@ export default function InternetSpeedTestClient() {
     
     // 1. Simulate Ping
     await new Promise(r => setTimeout(r, 1500));
+    if (abortControllerRef.current?.signal.aborted) return;
     const mockPing = Math.floor(Math.random() * 15) + 12;
     const mockJitter = Math.floor(Math.random() * 4) + 1;
     setPing(mockPing);
@@ -224,6 +225,7 @@ export default function InternetSpeedTestClient() {
     const targetDown = Math.floor(Math.random() * (240 - 60)) + 60;
     const downSteps = 60;
     for (let i = 0; i <= downSteps; i++) {
+      if (abortControllerRef.current?.signal.aborted) return;
       const t = i / downSteps;
       const easing = 1 - Math.pow(1 - t, 3); // Cubic Ease Out
       const current = targetDown * easing;
@@ -247,6 +249,7 @@ export default function InternetSpeedTestClient() {
     const targetUp = Math.floor(Math.random() * (80 - 20)) + 20;
     const upSteps = 50;
     for (let i = 0; i <= upSteps; i++) {
+      if (abortControllerRef.current?.signal.aborted) return;
       const t = i / upSteps;
       const easing = 1 - Math.pow(1 - t, 3);
       const current = targetUp * easing;

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { m } from "framer-motion";
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 
 export default function ScientificCalculatorClient() {
   const [display, setDisplay] = useState("0");
@@ -21,11 +22,8 @@ export default function ScientificCalculatorClient() {
     setExpression("");
   };
 
-  const calculate = () => {
+  const calculate = async () => {
     try {
-      // Basic implementation using eval for demonstration, 
-      // in production a math parser like math.js or a custom one is better.
-      // We replace functions with Math. equivalents
       let expr = display
         .replace(/sin\(/g, `Math.sin(${mode === 'deg' ? 'Math.PI/180*' : ''}`)
         .replace(/cos\(/g, `Math.cos(${mode === 'deg' ? 'Math.PI/180*' : ''}`)
@@ -37,7 +35,7 @@ export default function ScientificCalculatorClient() {
         .replace(/e/g, "Math.E")
         .replace(/\^/g, "**");
 
-      const result = eval(expr);
+      const result = await workerOrchestrator.run<number>("evaluateMath", [expr]);
       setExpression(display + " =");
       setDisplay(String(Number(result.toFixed(10))));
     } catch (e) {

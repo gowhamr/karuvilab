@@ -4,12 +4,14 @@ import { useState, useCallback } from 'react';
 import { workerOrchestrator } from '@/src/engine/workers/WorkerOrchestrator';
 import { DropZone } from '@/components/ui/DropZone';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { useObjectUrlManager } from '@/src/lib/hooks';
 import { Image as ImageIcon, Loader, Palette } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function ColorPaletteExtractorClient() {
   const [palette, setPalette] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<{ percent: number; message?: string }>({ percent: 0, message: '' });
@@ -20,8 +22,9 @@ export default function ColorPaletteExtractorClient() {
     setIsLoading(true);
     setError(null);
     setPalette([]);
-    if (imageUrl) URL.revokeObjectURL(imageUrl);
-    setImageUrl(URL.createObjectURL(file));
+    if (imageUrl) revokeUrl(imageUrl);
+    const url = createUrl(file);
+    setImageUrl(url);
 
     try {
       const buffer = await file.arrayBuffer();

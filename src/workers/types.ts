@@ -133,6 +133,9 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  // Math Tasks
+  evaluateMath(expr: string): Promise<number>;
+
   // EMI Tasks
   calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult>;
 }

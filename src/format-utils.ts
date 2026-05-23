@@ -56,8 +56,9 @@ export async function loadTiff(file: File): Promise<HTMLCanvasElement> {
   const UTIF = (window as any).UTIF;
   const ab   = await Utils.readAsArrayBuffer(file);
   const ifds = UTIF.decode(ab);
-  if (!ifds.length) throw new Error('No images found in TIFF file.');
-  const firstIfd = ifds[0]!;
+  if (!ifds || !ifds.length) throw new Error('No images found in TIFF file.');
+  const firstIfd = ifds[0];
+  if (!firstIfd) throw new Error('Invalid TIFF structure.');
   UTIF.decodeImage(ab, firstIfd);
   const rgba = UTIF.toRGBA8(firstIfd);
   const w = firstIfd.width, h = firstIfd.height;
@@ -113,9 +114,9 @@ export function encodeBmp(canvas: HTMLCanvasElement): Blob {
   for (let y = h - 1; y >= 0; y--) {
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 4;
-      u8[off++] = data[i + 2]!;
-      u8[off++] = data[i + 1]!;
-      u8[off++] = data[i]!;
+      u8[off++] = data[i + 2] ?? 0;
+      u8[off++] = data[i + 1] ?? 0;
+      u8[off++] = data[i] ?? 0;
     }
     for (let p = 0; p < rowPad; p++) u8[off++] = 0;
   }
@@ -149,7 +150,9 @@ export function colorFor(ext: string): string {
 
 export function jsonToCsv(arr: Record<string, unknown>[]): string {
   if (!Array.isArray(arr) || !arr.length) return '';
-  const headers = Object.keys(arr[0]!);
+  const firstRow = arr[0];
+  if (!firstRow) return '';
+  const headers = Object.keys(firstRow);
   const csvRows: string[] = [];
   csvRows.push(headers.join(','));
   for (const row of arr) {

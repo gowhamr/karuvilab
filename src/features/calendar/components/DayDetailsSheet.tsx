@@ -19,7 +19,8 @@ export function DayDetailsSheet({
   onClose: () => void;
   onAddEvent: (date: Date) => void;
 }) {
-  const { events, setSelectedEvent } = useCalendarStore();
+  const events = useCalendarStore(state => state.events);
+  const setSelectedEvent = useCalendarStore(state => state.setSelectedEvent);
   const dayEvents = events.filter(e => isSameDay(parseISO(e.startDate), date));
   const festivals = getFestivalsForDay(date);
   const observances = getObservancesForDay(date);

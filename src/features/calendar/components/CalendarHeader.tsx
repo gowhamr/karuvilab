@@ -19,7 +19,10 @@ import { cn } from "@/src/lib/utils";
 import { useState } from "react";
 
 export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
-  const { currentDate, setCurrentDate, currentView, setCurrentView } = useCalendarStore();
+  const currentDate = useCalendarStore(state => state.currentDate);
+  const setCurrentDate = useCalendarStore(state => state.setCurrentDate);
+  const currentView = useCalendarStore(state => state.currentView);
+  const setCurrentView = useCalendarStore(state => state.setCurrentView);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const handlePrev = () => {
@@ -43,10 +46,13 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
         <div className="flex items-center justify-between md:justify-start gap-4 md:gap-8">
           <Popover.Root open={isPickerOpen} onOpenChange={setIsPickerOpen}>
             <Popover.Trigger asChild>
-              <button className="text-left group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-2xl p-1 -m-1 transition-all">
-                <h1 className="text-3xl md:text-5xl font-black tracking-tighter font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-3">
+              <button 
+                aria-label="Open date picker"
+                className="text-left group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-2xl p-2 -m-2 transition-all"
+              >
+                <h1 className="text-2xl md:text-5xl font-black tracking-tighter font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-2 md:gap-3">
                   {format(currentDate, 'MMMM')} <span className="text-text-4 font-sans font-normal opacity-50">{format(currentDate, 'yyyy')}</span>
-                  <ChevronDown className="w-6 h-6 text-text-4 opacity-40 group-hover:opacity-100 transition-all" />
+                  <ChevronDown className="w-4 h-4 md:w-6 md:h-6 text-text-4 opacity-40 group-hover:opacity-100 transition-all" />
                 </h1>
               </button>
             </Popover.Trigger>
@@ -57,33 +63,33 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
             </Popover.Portal>
           </Popover.Root>
 
-          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-[20px] p-1.5 shadow-sm">
+          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-xl md:rounded-[20px] p-1 md:p-1.5 shadow-sm">
             <button
               onClick={handlePrev}
-              className="p-2 hover:bg-surface rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
+              className="p-1.5 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
             </button>
             <button
               onClick={handleToday}
-              className="px-4 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-text-4 hover:text-indigo-600 transition-colors"
+              className="px-2 md:px-4 py-1 text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 hover:text-indigo-600 transition-colors"
             >
               Today
             </button>
             <button
               onClick={handleNext}
-              className="p-2 hover:bg-surface rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
+              className="p-1.5 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
             </button>
           </div>
         </div>
 
         <button
           onClick={onAddEvent}
-          className="flex items-center justify-center gap-2.5 px-8 py-4 bg-indigo-600 text-white rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/30 active:scale-95 group"
+          className="flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-indigo-600 text-white rounded-2xl md:rounded-[24px] font-black text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group"
         >
-          <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+          <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform duration-300" />
           <span>New Event</span>
         </button>
       </div>

@@ -3,8 +3,8 @@
 import React, { useState, useMemo } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { Plus, Trash2, Download, Printer } from "lucide-react";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { useToast } from "@/components/ui/Toast";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 interface LineItem {
   id: string;
@@ -15,6 +15,7 @@ interface LineItem {
 
 export default function InvoiceGeneratorClient() {
   const { toast } = useToast();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [from, setFrom] = useState({ name: "", email: "", address: "" });
   const [to, setTo] = useState({ name: "", email: "", address: "" });
   const [meta, setMeta] = useState({ number: "INV-001", date: new Date().toISOString().split('T')[0] || "" });
@@ -45,6 +46,7 @@ export default function InvoiceGeneratorClient() {
 
   const generatePDF = async () => {
     try {
+      const { PDFDocument, rgb, StandardFonts } = await import("pdf-lib");
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([600, 800]);
       const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -109,10 +111,12 @@ export default function InvoiceGeneratorClient() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
+      const url = createUrl(blob);
+      link.href = url;
       link.download = `Invoice-${meta.number}.pdf`;
       link.click();
       toast("Invoice downloaded successfully!");
+      setTimeout(() => revokeUrl(url), 1000);
     } catch (err) {
       console.error(err);
       toast("Failed to generate PDF", "error");

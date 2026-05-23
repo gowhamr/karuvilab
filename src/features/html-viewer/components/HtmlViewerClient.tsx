@@ -107,7 +107,8 @@ export default function HtmlViewerClient() {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       // Security: Validate origin to prevent spoofing
-      if (event.origin !== window.location.origin) return;
+      // Note: 'null' is allowed because sandboxed iframes without 'allow-same-origin' have a null origin.
+      if (event.origin !== window.location.origin && event.origin !== "null") return;
       
       if (event.data.source === "karuvi-sandbox") {
         const { type, payload } = event.data;

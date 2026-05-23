@@ -84,7 +84,6 @@ import { word_counter } from './tools/word-counter';
 import { text_case_converter } from './tools/text-case-converter';
 import { invoice_generator } from './tools/invoice-generator';
 import { color_converter } from './tools/color-converter';
-import { format_hub } from './tools/format-hub';
 import { timezone_converter } from './tools/timezone-converter';
 import { fake_data_generator } from './tools/fake-data-generator';
 import { scientific_calculator } from './tools/scientific-calculator';
@@ -178,7 +177,6 @@ export const ALL_TOOLS: ToolEntry[] = [
   yaml_validator,
   pomodoro_timer,
   color_palette_extractor,
-  format_hub,
   timezone_converter,
   fake_data_generator,
   scientific_calculator,

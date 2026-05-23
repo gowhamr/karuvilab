@@ -18,7 +18,8 @@ import { cn } from "@/src/lib/utils";
 import { useState } from "react";
 
 export function MiniCalendar({ onSelect }: { onAddEvent?: () => void, onSelect?: (date: Date) => void }) {
-  const { currentDate, setCurrentDate } = useCalendarStore();
+  const currentDate = useCalendarStore(state => state.currentDate);
+  const setCurrentDate = useCalendarStore(state => state.setCurrentDate);
   const [viewDate, setViewDate] = useState(currentDate);
 
   const start = startOfWeek(startOfMonth(viewDate));
@@ -32,10 +33,18 @@ export function MiniCalendar({ onSelect }: { onAddEvent?: () => void, onSelect?:
           {format(viewDate, 'MMMM yyyy')}
         </h4>
         <div className="flex gap-1">
-          <button onClick={() => setViewDate(subMonths(viewDate, 1))} className="p-1 hover:bg-bg rounded-lg">
+          <button 
+            aria-label="Previous month"
+            onClick={() => setViewDate(subMonths(viewDate, 1))} 
+            className="p-2 -m-1 hover:bg-bg rounded-lg"
+          >
             <ChevronLeft className="w-4 h-4 text-text-4" />
           </button>
-          <button onClick={() => setViewDate(addMonths(viewDate, 1))} className="p-1 hover:bg-bg rounded-lg">
+          <button 
+            aria-label="Next month"
+            onClick={() => setViewDate(addMonths(viewDate, 1))} 
+            className="p-2 -m-1 hover:bg-bg rounded-lg"
+          >
             <ChevronRight className="w-4 h-4 text-text-4" />
           </button>
         </div>

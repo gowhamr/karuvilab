@@ -5,6 +5,7 @@ import { ToolInput } from "@/components/ui/ToolInput";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { Download, RefreshCw, FileJson, Table as TableIcon } from "lucide-react";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const FIRST_NAMES = ["James", "Mary", "Robert", "Patricia", "John", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah", "Christopher", "Karen"];
 const LAST_NAMES = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin"];
@@ -21,6 +22,7 @@ const FIELDS = [
 ];
 
 export default function FakeDataGeneratorClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [count, setCount] = useState("10");
   const [selectedFields, setSelectedFields] = useState<string[]>(["id", "firstName", "lastName", "email"]);
   const [format, setFormat] = useState<"json" | "csv">("json");
@@ -65,14 +67,14 @@ export default function FakeDataGeneratorClient() {
 
   const downloadFile = () => {
     const blob = new Blob([result], { type: format === "json" ? "application/json" : "text/csv" });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `fake-data.${format}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    setTimeout(() => revokeUrl(url), 1000);
   };
 
   return (
