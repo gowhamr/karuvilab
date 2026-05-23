@@ -5,12 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES, getRecentTools, ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
-import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Zap, Layout, Heart } from "lucide-react";
+import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Heart } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
-import { m, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { m } from "framer-motion";
 import { useI18n } from "@/src/lib/i18n/store";
 import { KVLogo } from "@/components/ui/KVLogo";
+import { MobileSidebar } from "./layout/MobileSidebar";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About", icon: Info, key: 'common.about' },
@@ -80,7 +81,7 @@ const SidebarContent = memo(function SidebarContent({
         </m.div>
       </div>
 
-      {/* Categories - Moved up for stability */}
+      {/* Categories */}
       <div className="space-y-4">
         <div className="px-5 flex items-center gap-2 text-[11px] font-black text-text-4 uppercase tracking-[0.15em]">
           <LayoutGrid className="w-4 h-4" />
@@ -103,7 +104,7 @@ const SidebarContent = memo(function SidebarContent({
                   }`}
                   style={{
                     color: isActive ? color : undefined,
-                    backgroundColor: isActive ? `${color}15` : undefined, // 15 hex is ~8% opacity
+                    backgroundColor: isActive ? `${color}15` : undefined,
                   }}
                 >
                   <div 
@@ -142,7 +143,7 @@ const SidebarContent = memo(function SidebarContent({
         </div>
       </div>
 
-      {/* Personal Favorites - Only show if hydrated and exists */}
+      {/* Personal Favorites */}
       {favorites.length > 0 && (
         <div className="space-y-3">
           <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
@@ -227,19 +228,16 @@ const SidebarContent = memo(function SidebarContent({
 
 export function Sidebar() {
   const pathname = usePathname() ?? "";
-  const isOpen = useSearchStore(state => state.isSidebarOpen);
   const setIsOpen = useSearchStore(state => state.setIsSidebarOpen);
   const favoriteIds = useFavoriteStore(state => state.favorites);
   const [recent, setRecent] = useState<ToolEntry[]>([]);
   const [favorites, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  // Initialize hydration
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  // Sync data on mount and changes
   useEffect(() => {
     if (hydrated) {
       setRecent(getRecentTools().slice(0, 5));
@@ -247,60 +245,23 @@ export function Sidebar() {
     }
   }, [pathname, favoriteIds, hydrated]);
 
-  const x = useMotionValue(0);
-  const opacity = useTransform(x, [0, -100], [1, 0]);
-
   return (
     <>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <>
-            {/* Mobile Backdrop */}
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/40 z-[60] md:hidden"
-              onClick={() => setIsOpen(false)}
-            />
-
-            {/* Mobile Drawer */}
-            <m.aside
-              drag="x"
-              dragConstraints={{ left: -300, right: 0 }}
-              dragElastic={0.05}
-              onDragEnd={(_, info) => {
-                if (info.offset.x < -100 || info.velocity.x < -500) {
-                  setIsOpen(false);
-                }
-              }}
-              style={{ x, opacity }}
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-              className="fixed top-0 left-0 bottom-0 w-[82vw] max-w-[320px] rounded-r-[32px] bg-surface border-r border-border z-[70] flex flex-col md:hidden overflow-hidden touch-none"
-            >
-              {/* Drag Handle */}
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-white/20 rounded-full md:hidden" />
-
-              <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
-                <Link href="/" onClick={() => setIsOpen(false)}>
-                  <KVLogo withText size="sm" />
-                </Link>
-                <button
-                  className="w-8 h-8 flex items-center justify-center hov:bg-black/5 rounded-xl transition-colors text-text-4"
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close sidebar"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
-            </m.aside>
-          </>
-        )}
-      </AnimatePresence>
+      <MobileSidebar>
+        <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
+          <Link href="/" onClick={() => setIsOpen(false)}>
+            <KVLogo withText size="sm" />
+          </Link>
+          <button
+            className="w-8 h-8 flex items-center justify-center hov:bg-black/5 rounded-xl transition-colors text-text-4"
+            onClick={() => setIsOpen(false)}
+            aria-label="Close sidebar"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
+      </MobileSidebar>
 
       {/* Desktop Permanent Sidebar */}
       <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden">

@@ -1,8 +1,21 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
-@custom-variant hov (@media (hover: hover) { &:hover });
-@custom-variant group-hov (@media (hover: hover) { .group:hover & });
+@custom-variant hov {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+@custom-variant group-hov {
+  @media (hover: hover) {
+    .group:hover & {
+      @slot;
+    }
+  }
+}
 
 @theme {
   --color-blue: var(--blue);
@@ -182,6 +195,10 @@ body {
   min-height: 100dvh;
   min-height: 100svh;
   overflow-x: hidden;
+}
+
+body.sidebar-open {
+  overflow: hidden;
 }
 
 /* Animations */

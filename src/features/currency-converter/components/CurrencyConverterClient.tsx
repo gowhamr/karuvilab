@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useId } from "react";
+import React, { useEffect, useMemo, useId, useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -12,7 +12,11 @@ import {
   Clock, 
   ArrowRightLeft,
   Globe,
-  WifiOff
+  WifiOff,
+  Terminal,
+  ChevronUp,
+  ExternalLink,
+  Activity
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 
@@ -68,6 +72,7 @@ export default function CurrencyConverterClient() {
   const setTo = useCurrencyStore(state => state.setTo);
   const swapCurrencies = useCurrencyStore(state => state.swapCurrencies);
 
+  const [showDebug, setShowDebug] = useState(false);
   const fromId = useId();
   const toId = useId();
 
@@ -122,9 +127,20 @@ export default function CurrencyConverterClient() {
     <div className="space-y-6">
       {/* Network/Status Banners */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-xs font-bold text-red-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-2" role="alert">
-          <AlertTriangle size={16} />
-          {error}
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-xs font-bold text-red-600 space-y-2 animate-in fade-in slide-in-from-top-2" role="alert">
+          <div className="flex items-center gap-3">
+            <AlertTriangle size={16} />
+            {error}
+          </div>
+          {ratesData?.debugInfo && (
+            <button 
+              onClick={() => setShowDebug(true)}
+              className="ml-7 text-[10px] uppercase tracking-widest text-red-700 hover:underline flex items-center gap-1"
+            >
+              <Terminal size={10} />
+              View Technical Details
+            </button>
+          )}
         </div>
       )}
 
@@ -146,12 +162,71 @@ export default function CurrencyConverterClient() {
         </div>
       )}
 
-      {ratesData && (isOffline || ratesData.source === 'cache') && (
+      {ratesData && (isOffline || (ratesData.source === 'cache' && isStale)) && (
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-xs font-bold text-amber-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-2" role="alert">
           <AlertTriangle size={16} className="shrink-0" />
           <div className="flex-1">
-            Using cached rates – go online for live updates. 
+            {isOffline ? "You are currently offline." : "Using cached rates – go online for live updates."} 
             <span className="block mt-0.5 opacity-80 font-medium">Last updated: {new Date(ratesData.timestamp).toLocaleString()}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Debug Console */}
+      {showDebug && ratesData?.debugInfo && (
+        <div className="bg-[#0F172A] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="px-5 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+            <div className="flex items-center gap-2 text-slate-400">
+              <Terminal size={14} />
+              <span className="text-[10px] font-black uppercase tracking-widest">Network Diagnostics</span>
+            </div>
+            <button 
+              onClick={() => setShowDebug(false)}
+              className="text-slate-500 hover:text-white transition-colors"
+            >
+              <ChevronUp size={16} />
+            </button>
+          </div>
+          <div className="p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/50">
+                <span className="block text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Total Latency</span>
+                <span className="text-blue-400 font-mono text-sm font-bold">{ratesData.debugInfo.latency || 'N/A'}ms</span>
+              </div>
+              <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/50">
+                <span className="block text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Active Source</span>
+                <span className="text-emerald-400 font-mono text-sm font-bold uppercase">{ratesData.source}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest px-1">Fetch Attempts</span>
+              {ratesData.debugInfo.attempts.map((attempt, i) => (
+                <div key={i} className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/50 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={cn(
+                        "w-1.5 h-1.5 rounded-full",
+                        attempt.success ? "bg-emerald-500" : "bg-red-500"
+                      )} />
+                      <span className="text-[10px] font-bold text-slate-300 uppercase">{attempt.source}</span>
+                    </div>
+                    {attempt.latency && <span className="text-[10px] font-mono text-slate-500">{attempt.latency}ms</span>}
+                  </div>
+                  {attempt.url && (
+                    <div className="flex items-center gap-1.5 opacity-50 overflow-hidden">
+                      <ExternalLink size={10} className="shrink-0" />
+                      <span className="text-[9px] font-mono truncate text-slate-400">{attempt.url}</span>
+                    </div>
+                  )}
+                  {attempt.error && (
+                    <div className="text-[9px] font-mono text-red-400/80 leading-relaxed bg-red-500/5 p-2 rounded-lg border border-red-500/10">
+                      ERR: {attempt.error} {attempt.status && `(HTTP ${attempt.status})`}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -232,6 +307,16 @@ export default function CurrencyConverterClient() {
                       Rates updated: {getTimeAgo(ratesData.timestamp)}
                       {isStale && " (May be outdated)"}
                     </span>
+                    <button 
+                      onClick={() => setShowDebug(!showDebug)}
+                      className={cn(
+                        "ml-2 flex items-center gap-1 transition-colors",
+                        showDebug ? "text-blue" : "hover:text-blue opacity-50 hover:opacity-100"
+                      )}
+                    >
+                      <Activity size={10} />
+                      Diagnostics
+                    </button>
                   </>
                 ) : null}
               </div>

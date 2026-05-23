@@ -1,11 +1,25 @@
 export type RatesSource = 'primary' | 'fallback' | 'cache';
 
+export interface DebugInfo {
+  latency?: number;
+  attempts: {
+    source: RatesSource;
+    success: boolean;
+    error?: string;
+    status?: number;
+    url?: string;
+    latency?: number;
+  }[];
+  lastFetchTime: number;
+}
+
 export interface RatesData {
   base: string;
   rates: Record<string, number>;
   timestamp: number;
   source: RatesSource;
   expiresAt: number;
+  debugInfo?: DebugInfo;
 }
 
 export interface RatesApiResponse {

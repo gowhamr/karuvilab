@@ -51,10 +51,16 @@ export const useCurrencyStore = create<CurrencyState>((set, get) => ({
         }
       });
       set({ ratesData: data, isLoading: false });
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to fetch currency rates:', err);
+      
+      const debugInfo = err.debugInfo || {
+        attempts: [{ source: 'network', success: false, error: err.message }],
+        lastFetchTime: Date.now()
+      };
+
       set({ 
-        error: 'Failed to load live rates. Using cached or estimated data.', 
+        error: err.message || 'Failed to load live rates. Using cached or estimated data.', 
         isLoading: false 
       });
       
@@ -66,9 +72,15 @@ export const useCurrencyStore = create<CurrencyState>((set, get) => ({
             rates: DEFAULT_RATES,
             timestamp: Date.now(),
             source: 'cache',
-            expiresAt: Date.now() - 1 // Expired
+            expiresAt: Date.now() - 1, // Expired
+            debugInfo
           }
         });
+      } else {
+        // Update existing data with new debug info if it failed to refresh
+        set((state) => ({
+          ratesData: state.ratesData ? { ...state.ratesData, debugInfo } : null
+        }));
       }
     }
   },
