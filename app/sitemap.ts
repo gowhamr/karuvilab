@@ -3,51 +3,44 @@ import { ALL_TOOLS, CATEGORIES } from '@/src/tool-registry';
 
 const BASE_URL = 'https://karuvilab.com';
 
-export async function generateSitemaps() {
-  // We'll create one sitemap index segment per category + one for static pages
-  return [
-    { id: 'main' },
-    ...CATEGORIES.map(cat => ({ id: cat.id }))
-  ];
-}
+/**
+ * Generates a single, comprehensive sitemap for all KaruviLab pages.
+ * Consolidating into one file for simplicity and reliability.
+ */
+export default function sitemap(): MetadataRoute.Sitemap {
+  // 1. Static Pages
+  const staticPages: MetadataRoute.Sitemap = [
+    '',
+    '/about',
+    '/help',
+    '/settings',
+    '/privacy',
+    '/terms',
+    '/disclaimer',
+    '/contact',
+    '/all-tools',
+  ].map(route => ({
+    url: `${BASE_URL}${route}/`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: route === '' ? 1.0 : 0.8,
+  }));
 
-export default function sitemap({ id }: { id: string }): MetadataRoute.Sitemap {
-  // 1. Main sitemap: Static pages and Category hubs
-  if (id === 'main') {
-    const staticPages = [
-      '',
-      '/about',
-      '/help',
-      '/settings',
-      '/privacy',
-      '/terms',
-      '/disclaimer',
-      '/contact',
-      '/all-tools',
-    ].map(route => ({
-      url: `${BASE_URL}${route}/`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: route === '' ? 1.0 : 0.8,
-    }));
+  // 2. Category Hubs
+  const categoryPages: MetadataRoute.Sitemap = CATEGORIES.map(cat => ({
+    url: `${BASE_URL}/${cat.href.replace(/\/$/, '')}/`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.9,
+  }));
 
-    const categoryPages = CATEGORIES.map(cat => ({
-      url: `${BASE_URL}/${cat.href.replace(/\/$/, '')}/`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.9,
-    }));
-
-    return [...staticPages, ...categoryPages];
-  }
-
-  // 2. Category-specific sitemaps for tools
-  const toolsInCategory = ALL_TOOLS.filter(t => t.category === id);
-  
-  return toolsInCategory.map(tool => ({
+  // 3. Individual Tools
+  const toolPages: MetadataRoute.Sitemap = ALL_TOOLS.map(tool => ({
     url: `${BASE_URL}/${tool.href.replace(/\/$/, '')}/`,
     lastModified: tool.lastUpdated ? new Date(tool.lastUpdated) : new Date(),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: 'monthly',
     priority: tool.priority || 0.8,
   }));
+
+  return [...staticPages, ...categoryPages, ...toolPages];
 }

@@ -72,10 +72,10 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   const handleDragEnd = (_: any, info: PanInfo) => {
     const { offset, velocity } = info;
     
-    // Snapping logic inspired by DeepSeek / native apps
-    if (offset.x > 100 || velocity.x > 500) {
+    // Snapping logic: easier to trigger
+    if (offset.x > 50 || velocity.x > 300) {
       setIsOpen(true);
-    } else if (offset.x < -100 || velocity.x < -500) {
+    } else if (offset.x < -50 || velocity.x < -300) {
       setIsOpen(false);
     } else {
       // Return to current state
@@ -83,46 +83,17 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
     }
   };
 
-  // Edge gesture hint state
-  const [showHint, setShowHint] = useState(false);
-  useEffect(() => {
-    const hintSeen = localStorage.getItem("kv-sidebar-hint");
-    if (!hintSeen) {
-      const timer = setTimeout(() => setShowHint(true), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  const dismissHint = () => {
-    setShowHint(false);
-    localStorage.setItem("kv-sidebar-hint", "true");
-  };
-
   return (
     <div className="md:hidden">
-      {/* Edge Trigger Zone (20px) */}
+      {/* Edge Trigger Zone (Larger hit area, higher z-index) */}
       {!isOpen && (
         <div 
-          className="fixed top-0 left-0 bottom-0 w-5 z-[55] touch-none"
+          className="fixed top-0 left-0 bottom-0 w-8 z-[100] touch-none"
           onPointerDown={(e) => {
             dragControls.start(e);
-            dismissHint();
           }}
         />
       )}
-
-      {/* Visual Hint */}
-      <AnimatePresence>
-        {showHint && !isOpen && (
-          <m.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: [0, 1, 0], x: [0, 10, 0] }}
-            exit={{ opacity: 0 }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="fixed left-0 top-1/2 -translate-y-1/2 w-1 h-32 bg-blue/40 rounded-r-full z-[56] pointer-events-none"
-          />
-        )}
-      </AnimatePresence>
 
       {/* Backdrop */}
       <AnimatePresence>
@@ -137,7 +108,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         drag="x"
         dragControls={dragControls}
         dragConstraints={{ left: -SIDEBAR_WIDTH, right: 0 }}
-        dragElastic={0.05}
+        dragElastic={0.1}
         dragMomentum={false}
         onDragEnd={handleDragEnd}
         style={{ x }}
