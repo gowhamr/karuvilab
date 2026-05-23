@@ -7,19 +7,36 @@ import { workerManager } from '@/src/workers/manager';
 import { DropZone } from '@/components/ui/DropZone';
 import { DiffViewer } from './DiffViewer';
 import { DiffLine } from '@/src/workers/types';
-import { Zap, LoaderCircle as Loader2, ArrowRight, Trash2, Plus, Minus } from 'lucide-react';
+import { Zap, LoaderCircle as Loader2, ArrowRight, Trash2, Plus, Minus, Sparkles } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
+import { beautify } from '@/src/lib/formatter-utils';
 
 export function CompareTab() {
   const fileA = useFileViewerStore(state => state.fileA);
   const fileB = useFileViewerStore(state => state.fileB);
   const setFileA = useFileViewerStore(state => state.setFileA);
   const setFileB = useFileViewerStore(state => state.setFileB);
+  const updateFileAContent = useFileViewerStore(state => state.updateFileAContent);
+  const updateFileBContent = useFileViewerStore(state => state.updateFileBContent);
   const { toast } = useToast();
   
   const [diff, setDiff] = useState<DiffLine[] | null>(null);
   const [isComputing, setIsComputing] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const handleBeautifyA = () => {
+    if (!fileA) return;
+    const formatted = beautify(fileA.content, fileA.language);
+    updateFileAContent(formatted);
+    toast("Original file beautified", "success");
+  };
+
+  const handleBeautifyB = () => {
+    if (!fileB) return;
+    const formatted = beautify(fileB.content, fileB.language);
+    updateFileBContent(formatted);
+    toast("Modified file beautified", "success");
+  };
 
   const handleFileA = useCallback(async (files: File[] | FileList) => {
     const file = files instanceof FileList ? files[0] : files[0];
@@ -88,9 +105,16 @@ export function CompareTab() {
                   <p className="text-xs font-bold text-text truncate">{fileA.name}</p>
                   <p className="text-[10px] text-text-4 uppercase">{fileA.language}</p>
                 </div>
-                <button onClick={() => setFileA(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
+                    <button onClick={handleBeautifyA} title="Beautify" className="p-2 hover:bg-blue/5 text-blue rounded-lg">
+                      <Sparkles className="w-4 h-4" />
+                    </button>
+                  )}
+                  <button onClick={() => setFileA(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             )}
           </div>

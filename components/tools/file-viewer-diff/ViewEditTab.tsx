@@ -5,11 +5,12 @@ import { useFileViewerStore } from '@/src/store/useFileViewerStore';
 import { readFileAsText, detectLanguage, formatFileSize, isBinaryFile } from '@/src/lib/file-utils';
 import { DropZone } from '@/components/ui/DropZone';
 import { SyntaxEditor } from './SyntaxEditor';
-import { Download, FileText, Trash2, Copy } from 'lucide-react';
+import { Download, FileText, Trash2, Copy, Sparkles } from 'lucide-react';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { useToast } from '@/components/ui/Toast';
 import { useObjectUrlManager } from '@/src/lib/hooks';
 import { SliderField } from '@/components/ui/SliderField';
+import { beautify } from '@/src/lib/formatter-utils';
 
 export function ViewEditTab() {
   const fileA = useFileViewerStore(state => state.fileA);
@@ -19,6 +20,17 @@ export function ViewEditTab() {
   const updateSettings = useFileViewerStore(state => state.updateSettings);
   const { toast } = useToast();
   const { createUrl, revokeUrl } = useObjectUrlManager();
+
+  const handleBeautify = () => {
+    if (!fileA) return;
+    const formatted = beautify(fileA.content, fileA.language);
+    if (formatted === fileA.content) {
+      toast("Already formatted or language not supported", "info");
+      return;
+    }
+    updateFileAContent(formatted);
+    toast("Content beautified", "success");
+  };
 
   const handleFileSelect = useCallback(async (files: File[] | FileList) => {
     const file = files instanceof FileList ? files[0] : files[0];
@@ -91,6 +103,16 @@ export function ViewEditTab() {
             </div>
 
             <div className="flex items-center gap-2">
+              {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
+                <button
+                  onClick={handleBeautify}
+                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue hover:text-white transition-all flex items-center gap-2"
+                  title="Beautify / Format"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Beautify</span>
+                </button>
+              )}
               <button
                 onClick={handleCopy}
                 className="p-2.5 bg-surface border border-border rounded-xl text-text-3 hover:text-blue transition-all"
