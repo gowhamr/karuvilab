@@ -63,8 +63,10 @@ export default function PomodoroTimerClient() {
   }, [focusDuration, breakDuration, longBreakDuration, saveState]);
 
   useEffect(() => {
-    setTimeLeft(focusDuration * 60);
-  }, [focusDuration]);
+    if (!isActive) {
+      setTimeLeft((mode === 'focus' ? focusDuration : breakDuration) * 60);
+    }
+  }, [focusDuration, breakDuration, mode, isActive]);
 
   const handleTimerEnd = useCallback(() => {
     playSound();
@@ -105,6 +107,11 @@ export default function PomodoroTimerClient() {
     setIsActive(false);
     setTimeLeft((mode === 'focus' ? focusDuration : breakDuration) * 60);
   };
+
+  const switchMode = (newMode: 'focus' | 'break') => {
+    setIsActive(false);
+    setMode(newMode);
+  };
   
   const requestNotificationPermission = () => {
     if ('Notification' in window && Notification.permission !== 'granted') {
@@ -125,6 +132,23 @@ export default function PomodoroTimerClient() {
         onClear={handleClearSession}
         onDismiss={() => setShowRestoredBanner(false)}
       />
+
+      {/* Mode Switcher */}
+      <div className="flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
+        {(['focus', 'break'] as const).map((m) => (
+          <button
+            key={m}
+            onClick={() => switchMode(m)}
+            className={cn(
+              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+              mode === m ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-4 hover:text-text"
+            )}
+          >
+            {m}
+          </button>
+        ))}
+      </div>
+
       {/* Timer Card */}
       <div className="relative w-full max-w-sm aspect-square rounded-full bg-black/10 dark:bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl flex items-center justify-center">
         <motion.div
