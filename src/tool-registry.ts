@@ -56,6 +56,7 @@ export interface ToolEntry {
   // Analytics & Management
   analyticsId?: string;
   status?: 'stable' | 'beta' | 'deprecated' | 'new';
+  lastUpdated?: string; // ISO format: YYYY-MM-DD
 }
 
 export interface CategoryEntry {

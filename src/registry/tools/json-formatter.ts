@@ -25,5 +25,6 @@ export const json_formatter: ToolEntry = {
     "format"
   ],
   "status": "stable",
-  "schemaType": "SoftwareApplication"
+  "schemaType": "SoftwareApplication",
+  "lastUpdated": "2024-05-22"
 };

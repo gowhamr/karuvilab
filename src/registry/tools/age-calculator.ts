@@ -20,5 +20,6 @@ export const age_calculator: ToolEntry = {
     "date-calculator",
     "time-calculator"
   ],
-  "status": "stable"
+  "status": "stable",
+  "lastUpdated": "2024-05-15"
 };

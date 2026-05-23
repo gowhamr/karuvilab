@@ -27,5 +27,6 @@ export const emi_calculator: ToolEntry = {
     "compound-interest"
   ],
   "status": "stable",
-  "schemaType": "WebApplication"
+  "schemaType": "WebApplication",
+  "lastUpdated": "2024-05-20"
 };

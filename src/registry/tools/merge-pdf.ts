@@ -15,5 +15,7 @@ export const merge_pdf: ToolEntry = {
     "join"
   ],
   "popular": true,
-  "priority": 0.8
+  "priority": 0.8,
+  "status": "stable",
+  "lastUpdated": "2024-05-18"
 };

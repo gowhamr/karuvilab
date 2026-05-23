@@ -155,6 +155,8 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       "applicationCategory": getApplicationCategory(category?.id),
       "operatingSystem": "Any",
       "softwareVersion": "1.0.0",
+      "datePublished": new Date("2026-05-01").toISOString(),
+      "dateModified": tool.lastUpdated ? new Date(tool.lastUpdated).toISOString() : new Date().toISOString(),
       "offers": {
         "@type": "Offer",
         "price": "0",

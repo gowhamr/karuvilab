@@ -19,8 +19,11 @@ import {
   Activity
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { CurrencySelect } from "./CurrencySelect";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+
+const POPULAR_CURRENCIES = ["USD", "EUR", "INR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "SGD", "AED"];
 
 const CURRENCY_LABELS: Record<string, string> = {
   USD: "US Dollar",
@@ -73,8 +76,6 @@ export default function CurrencyConverterClient() {
   const swapCurrencies = useCurrencyStore(state => state.swapCurrencies);
 
   const [showDebug, setShowDebug] = useState(false);
-  const fromId = useId();
-  const toId = useId();
 
   // Initial fetch
   useEffect(() => {
@@ -88,6 +89,13 @@ export default function CurrencyConverterClient() {
     // Combine known labels with any extra from API
     return Array.from(new Set([...Object.keys(CURRENCY_LABELS), ...apiCurrencies])).sort();
   }, [ratesData]);
+
+  const currencyOptions = useMemo(() => {
+    return currencies.map(code => ({
+      code,
+      name: CURRENCY_LABELS[code] || "Currency"
+    }));
+  }, [currencies]);
 
   const convert = (val: number, f: string, t: string) => {
     if (!ratesData) return 0;
@@ -249,20 +257,14 @@ export default function CurrencyConverterClient() {
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-end">
-              <div className="sm:col-span-5 space-y-2">
-                <label htmlFor={fromId} className="text-[10px] font-black uppercase tracking-widest text-text-4">From</label>
-                <select
-                  id={fromId}
+              <div className="sm:col-span-5">
+                <CurrencySelect
+                  label="From"
                   value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                  className="w-full px-4 py-4 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-bold"
-                >
-                  {currencies.map((c) => (
-                    <option key={c} value={c}>
-                      {c} — {CURRENCY_LABELS[c] || 'Currency'}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setFrom}
+                  options={currencyOptions}
+                  popularCodes={POPULAR_CURRENCIES}
+                />
               </div>
 
               <div className="sm:col-span-1 flex justify-center pb-2">
@@ -275,20 +277,14 @@ export default function CurrencyConverterClient() {
                 </button>
               </div>
 
-              <div className="sm:col-span-5 space-y-2">
-                <label htmlFor={toId} className="text-[10px] font-black uppercase tracking-widest text-text-4">To</label>
-                <select
-                  id={toId}
+              <div className="sm:col-span-5">
+                <CurrencySelect
+                  label="To"
                   value={to}
-                  onChange={(e) => setTo(e.target.value)}
-                  className="w-full px-4 py-4 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-bold"
-                >
-                  {currencies.map((c) => (
-                    <option key={c} value={c}>
-                      {c} — {CURRENCY_LABELS[c] || 'Currency'}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setTo}
+                  options={currencyOptions}
+                  popularCodes={POPULAR_CURRENCIES}
+                />
               </div>
             </div>
 
