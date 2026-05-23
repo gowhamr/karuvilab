@@ -28,6 +28,42 @@ export function detectLanguage(fileName: string): string {
   return (ext && EXTENSION_TO_LANG[ext]) || 'text';
 }
 
+export async function isBinaryFile(file: File): Promise<boolean> {
+  // Check common binary mime types
+  const binaryMimeTypes = [
+    'image/',
+    'video/',
+    'audio/',
+    'application/pdf',
+    'application/zip',
+    'application/x-zip-compressed',
+    'application/octet-stream',
+    'application/x-executable',
+  ];
+  
+  if (binaryMimeTypes.some(type => file.type.startsWith(type))) {
+    return true;
+  }
+
+  // Check for null bytes in the first 8KB
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const arrayBuffer = reader.result as ArrayBuffer;
+      const uint8Array = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < uint8Array.length; i++) {
+        if (uint8Array[i] === 0) {
+          resolve(true);
+          return;
+        }
+      }
+      resolve(false);
+    };
+    reader.onerror = () => resolve(false);
+    reader.readAsArrayBuffer(file.slice(0, 8192));
+  });
+}
+
 export async function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

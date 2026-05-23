@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useFileViewerStore } from '@/src/store/useFileViewerStore';
-import { readFileAsText, detectLanguage } from '@/src/lib/file-utils';
+import { readFileAsText, detectLanguage, isBinaryFile } from '@/src/lib/file-utils';
 import { workerManager } from '@/src/workers/manager';
 import { DropZone } from '@/components/ui/DropZone';
 import { DiffViewer } from './DiffViewer';
@@ -24,18 +24,26 @@ export function CompareTab() {
   const handleFileA = useCallback(async (files: File[] | FileList) => {
     const file = files instanceof FileList ? files[0] : files[0];
     if (file) {
+      if (await isBinaryFile(file)) {
+        toast("Binary files not supported", "error");
+        return;
+      }
       const content = await readFileAsText(file);
       setFileA({ content, name: file.name, language: detectLanguage(file.name), size: file.size });
     }
-  }, [setFileA]);
+  }, [setFileA, toast]);
 
   const handleFileB = useCallback(async (files: File[] | FileList) => {
     const file = files instanceof FileList ? files[0] : files[0];
     if (file) {
+      if (await isBinaryFile(file)) {
+        toast("Binary files not supported", "error");
+        return;
+      }
       const content = await readFileAsText(file);
       setFileB({ content, name: file.name, language: detectLanguage(file.name), size: file.size });
     }
-  }, [setFileB]);
+  }, [setFileB, toast]);
 
   const computeDiff = async () => {
     if (!fileA || !fileB) return;

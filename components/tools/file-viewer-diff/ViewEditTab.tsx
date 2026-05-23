@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { useFileViewerStore } from '@/src/store/useFileViewerStore';
-import { readFileAsText, detectLanguage, formatFileSize } from '@/src/lib/file-utils';
+import { readFileAsText, detectLanguage, formatFileSize, isBinaryFile } from '@/src/lib/file-utils';
 import { DropZone } from '@/components/ui/DropZone';
 import { SyntaxEditor } from './SyntaxEditor';
 import { Download, FileText, Trash2, Copy } from 'lucide-react';
@@ -26,6 +26,12 @@ export function ViewEditTab() {
 
     if (file.size > 10 * 1024 * 1024) {
       toast("File too large (max 10MB)", "error");
+      return;
+    }
+
+    const binary = await isBinaryFile(file);
+    if (binary) {
+      toast("Binary or image files are not supported for viewing/editing.", "error");
       return;
     }
 
