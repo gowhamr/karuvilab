@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSelect } from "../components/SettingUI";
-import { Sun, Maximize } from "lucide-react";
+import { Sun } from "lucide-react";
 
 export const AppearanceSection = memo(function AppearanceSection() {
   const appearance = useSettingsStore(state => state.appearance);
@@ -30,22 +30,6 @@ export const AppearanceSection = memo(function AppearanceSection() {
             { label: 'Light', value: 'light' },
             { label: 'Dark', value: 'dark' },
             { label: 'System', value: 'system' }
-          ]}
-        />
-      </SettingRow>
-
-      <SettingRow 
-        label="Density Mode" 
-        description="Comfortable is standard, Compact shows more content at once."
-        icon={Maximize}
-        helpText="Compact mode reduces whitespace between elements, ideal for power users and small screens."
-      >
-        <SettingSelect 
-          value={appearance.density}
-          onChange={(density) => updateAppearance({ density })}
-          options={[
-            { label: 'Comfortable', value: 'comfortable' },
-            { label: 'Compact', value: 'compact' }
           ]}
         />
       </SettingRow>

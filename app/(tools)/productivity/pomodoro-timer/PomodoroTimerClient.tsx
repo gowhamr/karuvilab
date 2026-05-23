@@ -7,6 +7,7 @@ import { SessionRestoredBanner } from '@/components/ui/SessionRestoredBanner';
 import { motion } from 'framer-motion';
 import { Play, Pause, RotateCcw, Settings, Bell } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { PomodoroSettings } from './PomodoroSettings';
 
 // Simple audio beep
 const playSound = () => {
@@ -44,6 +45,7 @@ export default function PomodoroTimerClient() {
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
   const [isActive, setIsActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(focusDuration * 60);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const totalDuration = (mode === 'focus' ? focusDuration : breakDuration) * 60;
@@ -144,7 +146,7 @@ export default function PomodoroTimerClient() {
         <button onClick={toggleTimer} className="w-24 h-24 rounded-full bg-blue text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-blue/30">
           {isActive ? <Pause className="w-10 h-10" /> : <Play className="w-10 h-10" />}
         </button>
-        <button onClick={() => { /* Open settings modal later */ }} className="p-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors"><Settings /></button>
+        <button onClick={() => setIsSettingsOpen(true)} className="p-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors"><Settings /></button>
       </div>
       
       {/* Notification Button */}
@@ -154,6 +156,11 @@ export default function PomodoroTimerClient() {
       >
         <Bell className="w-4 h-4" /> Enable Notifications
       </button>
+
+      <PomodoroSettings 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+      />
     </div>
   );
 }

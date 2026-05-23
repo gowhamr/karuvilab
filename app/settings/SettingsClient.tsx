@@ -3,10 +3,10 @@
 import { useState, useMemo, memo } from "react";
 import dynamic from "next/dynamic";
 import { 
-  Sun, Shield, UserSearch, Star, 
-  Settings2, RefreshCw,
-  ChevronRight, ArrowLeft, Globe,
-  History as HistoryIcon, Search, Zap, Terminal, Info
+  Sun, Shield, UserSearch, 
+  RefreshCw,
+  ChevronRight, ArrowLeft,
+  History as HistoryIcon, Search
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useIsHydrated } from "@/src/store/settings/store";
@@ -19,10 +19,10 @@ const AccessibilitySection = dynamic(() => import("./sections/AccessibilitySecti
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
 
 const MENU_ITEMS = [
-  { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes, density', group: 'Personalization' },
+  { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes & modes', group: 'Personalization' },
   { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast', group: 'Personalization' },
-  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, logic', group: 'Application' },
-  { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations, logs', group: 'History & PINS' },
+  { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
+  { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History & PINS' },
 ];
 
 export default function SettingsClient() {
@@ -171,7 +171,7 @@ export default function SettingsClient() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-[20px] lg:rounded-[24px] bg-blue/5 flex items-center justify-center text-blue shadow-inner shadow-blue/10">
                    {(() => {
-                     const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Settings2;
+                     const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Sun;
                      return <Icon className="w-6 h-6 lg:w-8 lg:h-8" />;
                    })()}
                 </div>

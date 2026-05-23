@@ -55,7 +55,7 @@ export default function RootLayout({
               }
               document.documentElement.setAttribute('data-theme', r);
               
-              var f = localStorage.getItem('karuvi-font-size') || 'normal';
+              var f = localStorage.getItem('karuvi-font-size') || '1.0';
               document.documentElement.setAttribute('data-font-size', f);
 
               if (localStorage.getItem('karuvi-high-contrast') === 'true') {
