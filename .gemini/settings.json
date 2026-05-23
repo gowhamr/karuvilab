@@ -7,9 +7,7 @@
   "context": {
     "fileName": [
       "GEMINI.md",
-      "CLAUDE.md",
-      "AGENTS.md",
-      "README.md"
+      "MEMORY.md"
     ],
     "fileFiltering": {
       "respectGitIgnore": true,
@@ -19,23 +17,16 @@
         ".next/**",
         "dist/**",
         "public/icons/**",
-        "package-lock.json",
-        "*.log"
+        "package-lock.json"
       ]
-    },
-    "maxContextTokens": 200000,
-    "preferAttachedFiles": true
+    }
   },
   "model": {
-    "temperature": 0.0,
-    "topP": 1.0,
-    "maxOutputTokens": 8192
+    "temperature": 0.0
   },
   "output": {
     "format": "text",
-    "showThinking": false,
-    "showCitations": false,
-    "codeBlockStyle": "markdown"
+    "showThinking": false
   },
   "commands": {
     "default": "plan",
@@ -43,11 +34,38 @@
       "fix": "plan --approve",
       "qa": "plan --role qa-engineer",
       "audit": "plan --role principal-engineer"
-    }
+    },
+    "auto_approve": [
+      "npm run typecheck",
+      "npm run lint",
+      "npm run build --dry-run",
+      "ls",
+      "cat",
+      "head",
+      "tail",
+      "grep",
+      "find"
+    ],
+    "manual_confirm": [
+      "git push",
+      "npm run deploy",
+      "rm -rf",
+      "chmod"
+    ]
   },
   "project": {
     "name": "KaruviLab (KV)",
-    "stack": "Next.js 16, TypeScript, Tailwind v4, Radix UI, Framer Motion, Comlink Workers",
-    "philosophy": "Local-first, zero-upload, privacy-first, offline-capable, mobile-first"
+    "description": "Browser-Native Local-First Productivity Platform",
+    "manifesto": [
+      "KL-01: No raw URL.createObjectURL",
+      "KL-02: Worker concurrency max 4 (desktop) / 2 (mobile)",
+      "KL-03: Suspense boundaries for all dynamic imports",
+      "KL-04: postMessage origin validation",
+      "KL-05: AbortSignal propagation everywhere",
+      "KL-06: Store-owned Blob URLs only",
+      "PERF-01: No synchronous heavy computation on main thread",
+      "PERF-02: Transferable objects for ArrayBuffers",
+      "PERF-03: Main-thread responsiveness (60fps)"
+    ]
   }
 }
