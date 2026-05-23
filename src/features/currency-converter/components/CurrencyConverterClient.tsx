@@ -256,7 +256,7 @@ export default function CurrencyConverterClient() {
               placeholder="Enter amount"
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-end relative z-20">
               <div className="sm:col-span-5">
                 <CurrencySelect
                   label="From"

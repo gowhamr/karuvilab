@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useFileViewerStore } from '@/src/store/useFileViewerStore';
-import { readFileAsText, detectLanguage, isBinaryFile } from '@/src/lib/file-utils';
+import { readFileAsText, detectLanguage, isBinaryFile, EXTENSION_TO_LANG } from '@/src/lib/file-utils';
 import { workerManager } from '@/src/workers/manager';
 import { DropZone } from '@/components/ui/DropZone';
 import { DiffViewer } from './DiffViewer';
@@ -11,6 +11,8 @@ import { Zap, LoaderCircle as Loader2, ArrowRight, Trash2, Plus, Minus, Sparkles
 import { useToast } from '@/components/ui/Toast';
 import { beautify } from '@/src/lib/formatter-utils';
 
+const LANG_OPTIONS = Array.from(new Set(Object.values(EXTENSION_TO_LANG))).sort();
+
 export function CompareTab() {
   const fileA = useFileViewerStore(state => state.fileA);
   const fileB = useFileViewerStore(state => state.fileB);
@@ -18,6 +20,9 @@ export function CompareTab() {
   const setFileB = useFileViewerStore(state => state.setFileB);
   const updateFileAContent = useFileViewerStore(state => state.updateFileAContent);
   const updateFileBContent = useFileViewerStore(state => state.updateFileBContent);
+  const setFileALanguage = useFileViewerStore(state => state.setFileALanguage);
+  const setFileBLanguage = useFileViewerStore(state => state.setFileBLanguage);
+
   const { toast } = useToast();
   
   const [diff, setDiff] = useState<DiffLine[] | null>(null);
@@ -103,7 +108,13 @@ export function CompareTab() {
               <div className="bg-surface border border-border p-4 rounded-2xl flex items-center justify-between">
                 <div className="truncate flex-1 mr-4">
                   <p className="text-xs font-bold text-text truncate">{fileA.name}</p>
-                  <p className="text-[10px] text-text-4 uppercase">{fileA.language}</p>
+                  <select
+                    value={fileA.language}
+                    onChange={(e) => setFileALanguage(e.target.value)}
+                    className="text-[10px] text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
+                  >
+                    {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
+                  </select>
                 </div>
                 <div className="flex items-center gap-2">
                   {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
@@ -127,11 +138,24 @@ export function CompareTab() {
               <div className="bg-surface border border-border p-4 rounded-2xl flex items-center justify-between">
                 <div className="truncate flex-1 mr-4">
                   <p className="text-xs font-bold text-text truncate">{fileB.name}</p>
-                  <p className="text-[10px] text-text-4 uppercase">{fileB.language}</p>
+                  <select
+                    value={fileB.language}
+                    onChange={(e) => setFileBLanguage(e.target.value)}
+                    className="text-[10px] text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
+                  >
+                    {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
+                  </select>
                 </div>
-                <button onClick={() => setFileB(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileB.language.toLowerCase()) && (
+                    <button onClick={handleBeautifyB} title="Beautify" className="p-2 hover:bg-blue/5 text-blue rounded-lg">
+                      <Sparkles className="w-4 h-4" />
+                    </button>
+                  )}
+                  <button onClick={() => setFileB(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             )}
           </div>

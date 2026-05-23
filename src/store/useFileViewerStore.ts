@@ -5,6 +5,7 @@ export type EditorSettings = {
   wordWrap: boolean;
   fontSize: number;
   theme: 'light' | 'dark' | 'system';
+  showLineNumbers: boolean;
 };
 
 export type FileData = {
@@ -19,11 +20,13 @@ interface FileViewerState {
   fileA: FileData | null;
   setFileA: (file: FileData | null) => void;
   updateFileAContent: (content: string) => void;
+  setFileALanguage: (language: string) => void;
 
   // Compare Tab
   fileB: FileData | null;
   setFileB: (file: FileData | null) => void;
   updateFileBContent: (content: string) => void;
+  setFileBLanguage: (language: string) => void;
 
   // Global Settings
   settings: EditorSettings;
@@ -43,6 +46,10 @@ export const useFileViewerStore = create<FileViewerState>()(
         set((state) => ({
           fileA: state.fileA ? { ...state.fileA, content, size: new Blob([content]).size } : null
         })),
+      setFileALanguage: (language) =>
+        set((state) => ({
+          fileA: state.fileA ? { ...state.fileA, language } : null
+        })),
 
       fileB: null,
       setFileB: (file) => set({ fileB: file }),
@@ -50,11 +57,16 @@ export const useFileViewerStore = create<FileViewerState>()(
         set((state) => ({
           fileB: state.fileB ? { ...state.fileB, content, size: new Blob([content]).size } : null
         })),
+      setFileBLanguage: (language) =>
+        set((state) => ({
+          fileB: state.fileB ? { ...state.fileB, language } : null
+        })),
 
       settings: {
         wordWrap: true,
         fontSize: 14,
-        theme: 'system',
+        theme: 'dark',
+        showLineNumbers: true,
       },
       updateSettings: (newSettings) => 
         set((state) => ({ settings: { ...state.settings, ...newSettings } })),

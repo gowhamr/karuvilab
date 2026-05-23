@@ -4,72 +4,13 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
 
+import { beautify, Language } from "@/src/lib/formatter-utils";
+
 const cat = CATEGORIES.find(c => c.id === "developer")!;
 
-type Lang = "json" | "html" | "css" | "sql" | "markdown";
+type Lang = Extract<Language, "json" | "html" | "css" | "sql" | "markdown" | "xml">;
 
-function formatJSON(code: string): string {
-  return JSON.stringify(JSON.parse(code), null, 2);
-}
-
-function formatHTML(html: string): string {
-  let indent = 0;
-  const voids = new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
-  return html
-    .replace(/>\s+</g, "><")
-    .replace(/(<\/?[^>]+>)/g, "\n$1\n")
-    .split("\n")
-    .map(l => l.trim())
-    .filter(Boolean)
-    .map(line => {
-      if (/^<\//.test(line)) { indent = Math.max(0, indent - 1); }
-      const out = "  ".repeat(indent) + line;
-      const tag = line.match(/^<([a-zA-Z]+)/)?.[1]?.toLowerCase() ?? "";
-      if (/^<[^/]/.test(line) && !/\/>$/.test(line) && !voids.has(tag)) { indent++; }
-      return out;
-    })
-    .join("\n");
-}
-
-function formatCSS(css: string): string {
-  return css
-    .replace(/\s*\{\s*/g, " {\n  ")
-    .replace(/\s*;\s*/g, ";\n  ")
-    .replace(/\s*\}\s*/g, "\n}\n")
-    .replace(/  \n}/g, "\n}")
-    .replace(/,\s*/g, ",\n")
-    .split("\n")
-    .map(l => l.trimEnd())
-    .filter(l => l.trim() !== "")
-    .join("\n");
-}
-
-function formatSQL(sql: string): string {
-  const keywords = ["SELECT","FROM","WHERE","AND","OR","JOIN","LEFT JOIN","RIGHT JOIN","INNER JOIN","GROUP BY","ORDER BY","HAVING","LIMIT","OFFSET","INSERT INTO","VALUES","UPDATE","SET","DELETE","CREATE TABLE","DROP TABLE","ALTER TABLE","ON","AS"];
-  let result = sql.replace(/\s+/g, " ").trim();
-  keywords.forEach(kw => {
-    result = result.replace(new RegExp(`\\b${kw}\\b`, "gi"), `\n${kw}`);
-  });
-  return result.trim().split("\n").map(l => l.trim()).filter(Boolean).join("\n");
-}
-
-function formatMarkdown(md: string): string {
-  return md
-    .split("\n")
-    .map(l => l.trimEnd())
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .replace(/^(#{1,6})\s*/gm, (_, h) => `${h} `)
-    .trim();
-}
-
-const FORMATTERS: Record<Lang, (code: string) => string> = {
-  json: formatJSON,
-  html: formatHTML,
-  css: formatCSS,
-  sql: formatSQL,
-  markdown: formatMarkdown,
-};
+const LANGS: Lang[] = ["json", "html", "xml", "css", "sql", "markdown"];
 
 export default function CodeFormatterClient() {
   const [lang, setLang] = useState<Lang>("json");
@@ -78,7 +19,8 @@ export default function CodeFormatterClient() {
   const { output, error } = useMemo(() => {
     if (!input.trim()) return { output: "", error: "" };
     try {
-      return { output: FORMATTERS[lang](input), error: "" };
+      const formatted = beautify(input, lang);
+      return { output: formatted, error: "" };
     } catch (e) {
       return { output: "", error: (e as Error).message };
     }
@@ -91,7 +33,7 @@ export default function CodeFormatterClient() {
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="flex flex-wrap gap-2">
-          {(["json", "html", "css", "sql", "markdown"] as Lang[]).map(l => (
+          {LANGS.map(l => (
             <button
               key={l}
               onClick={() => { setLang(l); setInput(""); }}

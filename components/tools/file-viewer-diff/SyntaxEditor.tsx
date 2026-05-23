@@ -13,6 +13,7 @@ interface SyntaxEditorProps {
   wordWrap?: boolean;
   fontSize?: number;
   readOnly?: boolean;
+  showLineNumbers?: boolean;
 }
 
 export function SyntaxEditor({
@@ -23,6 +24,7 @@ export function SyntaxEditor({
   wordWrap = true,
   fontSize = 14,
   readOnly = false,
+  showLineNumbers = true,
 }: SyntaxEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
@@ -71,14 +73,16 @@ export function SyntaxEditor({
       )}
       <div className={cn("relative font-mono rounded-xl border border-border bg-bg overflow-hidden flex flex-1", className)} style={{ fontSize }}>
         {/* Line Numbers */}
-        <div 
-          ref={lineNumbersRef}
-          className="bg-surface border-r border-border text-text-4 text-right py-4 px-3 select-none flex-shrink-0 min-w-[3.5rem] hidden sm:block overflow-hidden"
-        >
-          <pre className="leading-6 m-0 whitespace-pre opacity-50" style={{ fontSize: 'inherit' }}>
-            {lineNumbersString}
-          </pre>
-        </div>
+        {showLineNumbers && (
+          <div 
+            ref={lineNumbersRef}
+            className="bg-surface border-r border-border text-text-4 text-right py-4 px-3 select-none flex-shrink-0 min-w-[3.5rem] hidden sm:block overflow-hidden"
+          >
+            <pre className="leading-6 m-0 whitespace-pre opacity-50" style={{ fontSize: 'inherit' }}>
+              {lineNumbersString}
+            </pre>
+          </div>
+        )}
 
         <div className="relative flex-1 overflow-hidden">
           {/* Highlighted Layer */}

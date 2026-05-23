@@ -2,10 +2,12 @@
 
 import React, { useCallback } from 'react';
 import { useFileViewerStore } from '@/src/store/useFileViewerStore';
-import { readFileAsText, detectLanguage, formatFileSize, isBinaryFile } from '@/src/lib/file-utils';
+import { readFileAsText, detectLanguage, formatFileSize, isBinaryFile, EXTENSION_TO_LANG } from '@/src/lib/file-utils';
 import { DropZone } from '@/components/ui/DropZone';
 import { SyntaxEditor } from './SyntaxEditor';
-import { Download, FileText, Trash2, Copy, Sparkles } from 'lucide-react';
+import { Download, FileText, Trash2, Copy, Sparkles, Hash } from 'lucide-react';
+
+const LANG_OPTIONS = Array.from(new Set(Object.values(EXTENSION_TO_LANG))).sort();
 import { MetricCard } from '@/components/ui/MetricCard';
 import { useToast } from '@/components/ui/Toast';
 import { useObjectUrlManager } from '@/src/lib/hooks';
@@ -16,6 +18,7 @@ export function ViewEditTab() {
   const fileA = useFileViewerStore(state => state.fileA);
   const setFileA = useFileViewerStore(state => state.setFileA);
   const updateFileAContent = useFileViewerStore(state => state.updateFileAContent);
+  const setFileALanguage = useFileViewerStore(state => state.setFileALanguage);
   const settings = useFileViewerStore(state => state.settings);
   const updateSettings = useFileViewerStore(state => state.updateSettings);
   const { toast } = useToast();
@@ -149,15 +152,37 @@ export function ViewEditTab() {
                   format={(v) => `${v}px`}
                 />
              </div>
-             <div className="hidden md:block w-px h-8 bg-border mx-2" />
-             <label className="flex items-center gap-2 cursor-pointer md:pt-6">
-                <input 
-                  type="checkbox" checked={settings.wordWrap} 
-                  onChange={(e) => updateSettings({ wordWrap: e.target.checked })}
-                  className="accent-blue"
-                />
-                <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Word Wrap</span>
-             </label>
+             
+             <div className="flex flex-wrap items-center gap-6">
+               <div className="space-y-1">
+                 <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Language</label>
+                 <select
+                   value={fileA.language}
+                   onChange={(e) => setFileALanguage(e.target.value)}
+                   className="block w-32 px-3 py-1.5 bg-bg border border-border rounded-xl text-[10px] font-bold outline-none focus:ring-2 focus:ring-blue"
+                 >
+                   {LANG_OPTIONS.map(l => <option key={l} value={l}>{l.toUpperCase()}</option>)}
+                 </select>
+               </div>
+
+               <label className="flex items-center gap-2 cursor-pointer pt-4">
+                  <input 
+                    type="checkbox" checked={settings.wordWrap} 
+                    onChange={(e) => updateSettings({ wordWrap: e.target.checked })}
+                    className="accent-blue"
+                  />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Word Wrap</span>
+               </label>
+
+               <label className="flex items-center gap-2 cursor-pointer pt-4">
+                  <input 
+                    type="checkbox" checked={settings.showLineNumbers} 
+                    onChange={(e) => updateSettings({ showLineNumbers: e.target.checked })}
+                    className="accent-blue"
+                  />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Lines</span>
+               </label>
+             </div>
           </div>
 
           <SyntaxEditor
@@ -166,6 +191,7 @@ export function ViewEditTab() {
             language={fileA.language}
             fontSize={settings.fontSize}
             wordWrap={settings.wordWrap}
+            showLineNumbers={settings.showLineNumbers}
             className="h-[600px]"
           />
         </div>

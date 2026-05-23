@@ -76,7 +76,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 sm:px-6 lg:px-8 overflow-x-hidden" 
+      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 sm:px-6 lg:px-8" 
       style={{ '--tool-color': color } as any}
     >
       <StructuredData 
