@@ -63,6 +63,10 @@ export interface ToolContent {
   howTo?: string[];
   faq?: { question: string; answer: string }[];
   useCases?: string[];
+  /** 
+   * Examples are mandatory for SEO and AdSense compliance.
+   * Provide 2-3 practical real-world scenarios.
+   */
   examples?: { label?: string; input: string; output: string; description?: string }[];
   commonErrors?: { error: string; fix: string }[];
   alternatives?: string[];
