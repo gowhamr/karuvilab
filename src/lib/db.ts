@@ -71,10 +71,27 @@ interface KaruviDB extends DBSchema {
     };
     indexes: { 'by-start': string };
   };
+  'notes': {
+    key: string;
+    value: {
+      id: string;
+      title: string;
+      content: string;
+      tags: string[];
+      pinned: boolean;
+      isArchived: boolean;
+      isDeleted: boolean;
+      isChecklist: boolean;
+      checklistItems: { id: string; text: string; checked: boolean }[];
+      createdAt: number;
+      updatedAt: number;
+    };
+    indexes: { 'by-updated': number };
+  };
 }
 
 const DB_NAME = 'karuvilab-db';
-const DB_VERSION = 4; // Incremented version
+const DB_VERSION = 5; // Incremented version
 
 let dbPromise: Promise<IDBPDatabase<KaruviDB>> | null = null;
 
@@ -115,11 +132,34 @@ export const getDB = () => {
           const calendarStore = db.createObjectStore('calendar-events', { keyPath: 'id' });
           calendarStore.createIndex('by-start', 'startDate');
         }
+
+        if (oldVersion < 5) {
+          const notesStore = db.createObjectStore('notes', { keyPath: 'id' });
+          notesStore.createIndex('by-updated', 'updatedAt');
+        }
       },
     });
   }
   return dbPromise;
 };
+
+export async function saveNote(note: any) {
+  const db = await getDB();
+  if (!db) return;
+  await db.put('notes', note);
+}
+
+export async function getNotes() {
+  const db = await getDB();
+  if (!db) return [];
+  return db.getAll('notes');
+}
+
+export async function deleteNote(id: string) {
+  const db = await getDB();
+  if (!db) return;
+  await db.delete('notes', id);
+}
 
 export async function saveCalendarEvent(event: any) {
   const db = await getDB();

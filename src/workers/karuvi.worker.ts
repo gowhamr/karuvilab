@@ -565,10 +565,22 @@ const api: WorkerAPI = {
 
   // Math Tasks
   async evaluateMath(expr: string) {
-    // Basic validation to prevent arbitrary JS execution even in the worker
-    if (!/^[0-9+\-*/.() \t]|Math\.[a-z0-9]+|\^|\*\*|PI|E]+$/i.test(expr)) {
+    // Injected helpers for eval
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const factorial = (n: number): number => {
+      if (n < 0 || n > 170) return NaN;
+      if (n === 0) return 1;
+      let res = 1;
+      for (let i = 2; i <= Math.floor(n); i++) res *= i;
+      return res;
+    };
+
+    // Basic validation to prevent arbitrary JS execution (KL-Security)
+    // Only allows digits, operators, parentheses, Math functions, and factorial helper
+    if (!/^(?:[0-9+\-*/.%() \t]|Math\.[a-z0-9]+|\*\*|factorial)+$/i.test(expr)) {
       throw new Error("Invalid characters in expression");
     }
+    
     // Using eval here as it's a trusted worker environment (KL-Security)
     // eslint-disable-next-line no-eval
     const result = eval(expr);

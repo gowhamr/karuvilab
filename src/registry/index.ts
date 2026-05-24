@@ -94,6 +94,7 @@ import { phone_mockup_generator } from './tools/phone-mockup-generator';
 import { chart_generator } from './tools/chart-generator';
 import { typing_speed_test } from './tools/typing-speed-test';
 import { barcode_scanner } from './tools/barcode-scanner';
+import { notes } from './tools/notes';
 
 export const ALL_TOOLS: ToolEntry[] = [
   emi_calculator,
@@ -187,6 +188,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   chart_generator,
   typing_speed_test,
   barcode_scanner,
+  notes,
   word_counter,
   text_case_converter,
   invoice_generator,
