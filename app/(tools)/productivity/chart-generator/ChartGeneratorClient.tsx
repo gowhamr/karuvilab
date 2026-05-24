@@ -1,181 +1,245 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { ToolInput } from "@/components/ui/ToolInput";
-import { BarChart, PieChart, Download, Plus, Trash2, Palette } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Download, Copy, Check, Palette, LayoutGrid } from "lucide-react";
 import { m } from "framer-motion";
-
-interface DataPoint {
-  label: string;
-  value: number;
-  color: string;
-}
-
-const COLORS = ["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"];
+import { useToast } from "@/components/ui/Toast";
+import { DataPoint, ChartType, PALETTES, ChartOptions } from "./types";
+import ChartPreview from "./ChartPreview";
+import ChartControls from "./ChartControls";
 
 export default function ChartGeneratorClient() {
+  const { toast } = useToast();
   const [data, setData] = useState<DataPoint[]>([
-    { label: "Apples", value: 45, color: COLORS[0]! },
-    { label: "Oranges", value: 30, color: COLORS[1]! },
-    { label: "Bananas", value: 25, color: COLORS[2]! },
+    { id: "1", label: "Q1", value: 450, color: PALETTES[4]!.colors[0]! },
+    { id: "2", label: "Q2", value: 680, color: PALETTES[4]!.colors[1]! },
+    { id: "3", label: "Q3", value: 520, color: PALETTES[4]!.colors[2]! },
+    { id: "4", label: "Q4", value: 890, color: PALETTES[4]!.colors[3]! },
   ]);
-  const [type, setType] = useState<"bar" | "pie">("bar");
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  const [type, setType] = useState<ChartType>("bar");
+  const [options, setOptions] = useState<ChartOptions>({
+    showValues: true,
+    smoothLines: true,
+    showGrid: true,
+    activePalette: 4,
+    title: "Sales Performance 2026"
+  });
+  
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [copied, setCopied] = useState(false);
 
+  // Actions
   const addPoint = () => {
-    setData([...data, { label: "New", value: 0, color: COLORS[data.length % COLORS.length]! }]);
+    const nextColor = PALETTES[options.activePalette]!.colors[data.length % PALETTES[options.activePalette]!.colors.length]!;
+    setData([...data, { 
+      id: Math.random().toString(36).substring(7), 
+      label: `Point ${data.length + 1}`, 
+      value: 100, 
+      color: nextColor
+    }]);
   };
 
-  const updatePoint = (index: number, key: keyof DataPoint, val: any) => {
-    const newData = [...data];
-    newData[index] = { ...newData[index]!, [key]: val };
-    setData(newData);
+  const updatePoint = (id: string, key: keyof DataPoint, val: any) => {
+    setData(data.map(p => p.id === id ? { ...p, [key]: val } : p));
   };
 
-  const removePoint = (index: number) => {
-    setData(data.filter((_, i) => i !== index));
-  };
-
-  useEffect(() => {
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const W = 800;
-      const H = 600;
-      canvas.width = W;
-      canvas.height = H;
-      ctx.clearRect(0, 0, W, H);
-
-      // Background
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(0, 0, W, H);
-
-      if (type === "bar") {
-        const margin = 80;
-        const chartW = W - margin * 2;
-        const chartH = H - margin * 2;
-        const maxVal = Math.max(...data.map(d => d.value), 1);
-        const barW = (chartW / data.length) * 0.7;
-        const spacing = (chartW / data.length) * 0.3;
-
-        data.forEach((d, i) => {
-          const h = (d.value / maxVal) * chartH;
-          const x = margin + i * (barW + spacing) + spacing / 2;
-          const y = H - margin - h;
-
-          ctx.fillStyle = d.color;
-          ctx.beginPath();
-          ctx.roundRect(x, y, barW, h, [8, 8, 0, 0]);
-          ctx.fill();
-
-          // Labels
-          ctx.fillStyle = "#64748B";
-          ctx.font = "bold 14px Inter";
-          ctx.textAlign = "center";
-          ctx.fillText(d.label, x + barW / 2, H - margin + 25);
-          ctx.fillText(String(d.value), x + barW / 2, y - 10);
-        });
-      } else {
-        const centerX = W / 2;
-        const centerY = H / 2;
-        const radius = 200;
-        const total = data.reduce((a, b) => a + b.value, 0);
-        let startAngle = -Math.PI / 2;
-
-        data.forEach(d => {
-          const sliceAngle = (d.value / total) * Math.PI * 2;
-          ctx.fillStyle = d.color;
-          ctx.beginPath();
-          ctx.moveTo(centerX, centerY);
-          ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
-          ctx.closePath();
-          ctx.fill();
-
-          // Labels
-          const midAngle = startAngle + sliceAngle / 2;
-          const lx = centerX + Math.cos(midAngle) * (radius + 40);
-          const ly = centerY + Math.sin(midAngle) * (radius + 40);
-          
-          ctx.fillStyle = "#0F172A";
-          ctx.font = "bold 14px Inter";
-          ctx.textAlign = "center";
-          ctx.fillText(`${d.label} (${Math.round((d.value/total)*100)}%)`, lx, ly);
-
-          startAngle += sliceAngle;
-        });
-      }
+  const removePoint = (id: string) => {
+    if (data.length <= 1) {
+      toast("Keep at least one data point", "error");
+      return;
     }
-  }, [data, type]);
+    setData(data.filter(p => p.id !== id));
+  };
 
-  const download = () => {
-    if (canvasRef.current) {
-      const url = canvasRef.current.toDataURL("image/png");
+  const applyPalette = (index: number) => {
+    setOptions({ ...options, activePalette: index });
+    const palette = PALETTES[index]!.colors;
+    setData(data.map((p, i) => ({
+      ...p,
+      color: palette[i % palette.length]!
+    })));
+  };
+
+  // Export logic
+  const downloadPNG = () => {
+    if (!svgRef.current) return;
+    
+    const svgData = new XMLSerializer().serializeToString(svgRef.current);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    canvas.width = 1600;
+    canvas.height = 1200;
+    
+    img.onload = () => {
+      if (!ctx) return;
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, 1600, 1200);
+      const url = canvas.toDataURL("image/png");
       const a = document.createElement("a");
       a.href = url;
-      a.download = "chart.png";
+      a.download = `${options.title.toLowerCase().replace(/\s+/g, '-') || 'chart'}.png`;
       a.click();
+      toast("Chart exported as PNG", "success");
+    };
+    
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+  };
+
+  const copySVG = async () => {
+    if (!svgRef.current) return;
+    const svgData = new XMLSerializer().serializeToString(svgRef.current);
+    try {
+      await navigator.clipboard.writeText(svgData);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast("SVG code copied to clipboard", "success");
+    } catch (err) {
+      toast("Failed to copy", "error");
     }
+  };
+
+  const copyImage = async () => {
+    if (!svgRef.current) return;
+    
+    const svgData = new XMLSerializer().serializeToString(svgRef.current);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    canvas.width = 1600;
+    canvas.height = 1200;
+    
+    img.onload = async () => {
+      if (!ctx) return;
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, 1600, 1200);
+      
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob })
+          ]);
+          toast("Image copied to clipboard", "success");
+        } catch (err) {
+          toast("Failed to copy image", "error");
+        }
+      });
+    };
+    
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   };
 
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 space-y-6 p-6 bg-surface border border-border rounded-[32px] overflow-y-auto max-h-[600px]">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold">Chart Data</h3>
-            <div className="flex gap-2">
-              <button onClick={() => setType("bar")} className={`p-2 rounded-lg ${type === "bar" ? "bg-blue text-white" : "bg-bg text-text-4"}`}><BarChart className="w-4 h-4" /></button>
-              <button onClick={() => setType("pie")} className={`p-2 rounded-lg ${type === "pie" ? "bg-blue text-white" : "bg-bg text-text-4"}`}><PieChart className="w-4 h-4" /></button>
+    <div className="space-y-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+        
+        {/* Sidebar Controls */}
+        <div className="xl:col-span-4">
+          <ChartControls 
+            data={data}
+            type={type}
+            options={options}
+            setData={setData}
+            setType={setType}
+            setOptions={setOptions}
+            addPoint={addPoint}
+            updatePoint={updatePoint}
+            removePoint={removePoint}
+            applyPalette={applyPalette}
+          />
+        </div>
+
+        {/* Chart Preview */}
+        <div className="xl:col-span-8 space-y-6">
+          <div className="p-8 md:p-12 bg-surface border border-border rounded-[48px] shadow-sm flex flex-col items-center justify-center min-h-[600px] relative overflow-hidden group/canvas">
+            
+            {/* Background Texture */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+
+            <div className="relative z-10 w-full flex flex-col items-center gap-12">
+              {options.title && (
+                <m.h2 
+                  key={options.title}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-2xl md:text-3xl font-black tracking-tight text-center max-w-lg"
+                >
+                  {options.title}
+                </m.h2>
+              )}
+
+              <ChartPreview 
+                data={data}
+                type={type}
+                options={options}
+                svgRef={svgRef}
+              />
+              
+              {/* Legend */}
+              <div className="flex flex-wrap justify-center gap-6 max-w-xl">
+                {data.map((d) => (
+                  <div key={d.id} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: d.color }} />
+                    <span className="text-xs font-bold text-text-2">{d.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Float Actions */}
+            <div className="absolute top-6 right-6 flex items-center gap-3 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
+              <button 
+                onClick={copySVG}
+                className="p-3 bg-surface border border-border rounded-2xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm"
+                title="Copy SVG Code"
+              >
+                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+              </button>
+              <button 
+                onClick={copyImage}
+                className="p-3 bg-surface border border-border rounded-2xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm"
+                title="Copy Image"
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={downloadPNG}
+                className="flex items-center gap-2 px-6 py-3 bg-blue text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
+              >
+                <Download className="w-4 h-4" /> Export PNG
+              </button>
             </div>
           </div>
 
-          <div className="space-y-4">
-            {data.map((d, i) => (
-              <div key={i} className="p-4 bg-bg border border-border rounded-2xl space-y-3 relative group">
-                <button onClick={() => removePoint(i)} className="absolute top-4 right-4 text-text-4 hover:text-error opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={d.label} 
-                    onChange={e => updatePoint(i, "label", e.target.value)}
-                    className="flex-1 bg-transparent border-none outline-none font-bold text-sm"
-                    placeholder="Label"
-                  />
-                  <input 
-                    type="number" 
-                    value={d.value} 
-                    onChange={e => updatePoint(i, "value", Number(e.target.value))}
-                    className="w-16 bg-transparent border-none outline-none font-bold text-sm text-blue text-right"
-                  />
-                </div>
-                <div className="flex gap-1">
-                  {COLORS.map(c => (
-                    <button 
-                      key={c} 
-                      onClick={() => updatePoint(i, "color", c)}
-                      className={`w-6 h-6 rounded-full border ${d.color === c ? 'border-blue scale-110' : 'border-transparent'}`}
-                      style={{ backgroundColor: c }}
-                    />
-                  ))}
-                </div>
+          {/* Empty State / Tips */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 bg-surface border border-border rounded-[32px] flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
+                <Palette className="w-6 h-6" />
               </div>
-            ))}
+              <div>
+                <h4 className="font-bold text-sm">Visual Palettes</h4>
+                <p className="text-xs text-text-4">Apply curated color schemes for consistent brand aesthetics.</p>
+              </div>
+            </div>
+            <div className="p-6 bg-surface border border-border rounded-[32px] flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
+                <LayoutGrid className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-sm">Vector Precision</h4>
+                <p className="text-xs text-text-4">Charts are rendered as high-fidelity SVGs for maximum crispness.</p>
+              </div>
+            </div>
           </div>
-
-          <button onClick={addPoint} className="w-full py-4 bg-bg border border-dashed border-border rounded-2xl text-text-3 font-bold flex items-center justify-center gap-2 hover:border-blue hover:text-blue transition-all">
-            <Plus className="w-4 h-4" /> Add Data Point
-          </button>
-
-          <button onClick={download} className="w-full py-4 bg-blue text-white rounded-2xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2">
-            <Download className="w-5 h-5" /> Download Chart
-          </button>
         </div>
 
-        <div className="lg:col-span-2 flex items-center justify-center p-8 bg-surface border border-border rounded-[32px]">
-          <canvas ref={canvasRef} className="max-w-full h-auto rounded-2xl shadow-xl" />
-        </div>
       </div>
     </div>
   );
