@@ -2,6 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
+import { StatusBadge } from "@/components/system/StatusBadge";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { formatError } from "@/src/lib/formatError";
 import { 
   Gauge, Zap, ArrowDown, ArrowUp, RefreshCw, Activity, AlertTriangle, 
   MapPin, Globe, Server, History, Share2, CheckCircle2, Video, 
@@ -456,7 +459,7 @@ export default function InternetSpeedTestClient() {
       saveToHistory(resultsRef.current);
     } catch (err: any) {
       if (err.name !== 'AbortError') {
-        setError(err.message || "Network Error: Speed test interrupted.");
+        setError(formatError(err));
         if (!errorDetails) setErrorDetails(err.stack || err.toString());
         setStatus('error');
       }

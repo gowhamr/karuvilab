@@ -26,18 +26,30 @@ export default function BulkImageResizerClient() {
 
   const resizeSingle = async (item: BatchItem): Promise<any> => {
     const result = await safeImageProcess(async () => {
-      // We need to get original dimensions first
-      const tempUrl = createUrl(item.file);
-      const img = await new Promise<HTMLImageElement>((res, rej) => {
-        const im = new Image();
-        im.onload = () => res(im);
-        im.onerror = rej;
-        im.src = tempUrl;
-      });
+      let origW = 0;
+      let origH = 0;
 
-      const origW = img.naturalWidth;
-      const origH = img.naturalHeight;
-      revokeUrl(tempUrl);
+      try {
+        if ('createImageBitmap' in window) {
+          const bmp = await createImageBitmap(item.file);
+          origW = bmp.width;
+          origH = bmp.height;
+          bmp.close();
+        } else {
+          throw new Error('Fallback to Image');
+        }
+      } catch (e) {
+        const tempUrl = createUrl(item.file);
+        const img = await new Promise<HTMLImageElement>((res, rej) => {
+          const im = new Image();
+          im.onload = () => res(im);
+          im.onerror = rej;
+          im.src = tempUrl;
+        });
+        origW = img.naturalWidth;
+        origH = img.naturalHeight;
+        revokeUrl(tempUrl);
+      }
 
       let nw = parseInt(targetW) || 0;
       let nh = parseInt(targetH) || 0;

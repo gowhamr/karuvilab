@@ -32,13 +32,27 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
     for (const file of files) {
       const previewUrl = blobManager.create(file);
       
-      // Basic image dimension extraction
-      const dimensions = await new Promise<{ width: number; height: number }>((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve({ width: img.width, height: img.height });
-        img.onerror = () => resolve({ width: 0, height: 0 });
-        img.src = previewUrl;
-      });
+      // Basic image dimension extraction using async createImageBitmap (off-main-thread)
+      const dimensions = await (async () => {
+        try {
+          if ('createImageBitmap' in window) {
+            const bmp = await createImageBitmap(file);
+            const w = bmp.width;
+            const h = bmp.height;
+            bmp.close();
+            return { width: w, height: h };
+          }
+        } catch (e) {
+          // Fallback if createImageBitmap fails (e.g., unsupported format)
+        }
+        
+        return new Promise<{ width: number; height: number }>((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve({ width: img.width, height: img.height });
+          img.onerror = () => resolve({ width: 0, height: 0 });
+          img.src = previewUrl;
+        });
+      })();
 
       newItems.push({
         id: Math.random().toString(36).substring(7),
@@ -55,9 +69,25 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
       });
     }
 
-    set((state) => ({
-      items: ui.activeTab === 'single' ? newItems.slice(-1) : [...state.items, ...newItems],
-    }));
+    set((state) => {
+      let combined = ui.activeTab === 'single' ? newItems.slice(-1) : [...state.items, ...newItems];
+      
+      // Max active previews: 10
+      // If we have more than 10, revoke the older previewUrls
+      if (combined.length > 10) {
+        combined = combined.map((item, index) => {
+          // Keep the 10 newest
+          if (index < combined.length - 10) {
+            if (item.previewUrl) {
+              blobManager.revoke(item.previewUrl);
+            }
+            return { ...item, previewUrl: '' };
+          }
+          return item;
+        });
+      }
+      return { items: combined };
+    });
   },
 
   removeFile: (id) => {

@@ -7,6 +7,11 @@ import { SliderField } from "@/components/ui/SliderField";
 import { workerManager } from "@/src/workers/manager";
 import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
 import { DropZone } from "@/components/ui/DropZone";
+import { StatusBadge } from "@/components/system/StatusBadge";
+import { EmptyState } from "@/components/system/EmptyState";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { formatError } from "@/src/lib/formatError";
+import { ImageIcon } from "lucide-react";
 
 const cat = CATEGORIES.find(c => c.id === "image")!;
 
@@ -19,6 +24,7 @@ export default function BgRemoverClient() {
   const [fileName, setFileName] = useState("image");
   const [processing, setProcessing] = useAsyncSafeState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFile = (selectedFile: File) => {
     if (originalUrl) revokeUrl(originalUrl);
@@ -28,11 +34,13 @@ export default function BgRemoverClient() {
     if (resultUrl) revokeUrl(resultUrl);
     setResultUrl(null);
     setFileName(selectedFile.name.replace(/\.[^.]+$/, ""));
+    setError(null);
   };
 
   const removeBackground = useCallback(async () => {
     if (!file) return;
     setProcessing(true);
+    setError(null);
 
     const result = await safeImageProcess(async () => {
       const buffer = await file.arrayBuffer();
@@ -45,7 +53,7 @@ export default function BgRemoverClient() {
       if (resultUrl) revokeUrl(resultUrl);
       setResultUrl(result.data);
     } else {
-      console.error(result.error);
+      setError(formatError(result.error));
     }
     
     setProcessing(false);
@@ -80,9 +88,21 @@ export default function BgRemoverClient() {
               <img src={originalUrl} alt="Original" className="mx-auto max-h-48 rounded-xl object-contain" />
             ) : undefined}
           />
+          <div className="flex justify-center">
+            <PrivacyBadge message="Processed locally in your browser" />
+          </div>
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Settings</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Settings</h2>
+              <StatusBadge status={processing ? "processing" : error ? "error" : resultUrl ? "complete" : "idle"} />
+            </div>
+            
+            {error && (
+              <div className="p-3 bg-red-500/10 text-red-500 text-xs rounded-xl border border-red-500/20">
+                {error}
+              </div>
+            )}
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Background Color to Remove</label>
@@ -113,7 +133,7 @@ export default function BgRemoverClient() {
               disabled={!originalUrl || processing}
               className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
             >
-              {processing ? "Processing…" : "Remove Background"}
+              Remove Background
             </button>
           </div>
         </div>
@@ -131,9 +151,13 @@ export default function BgRemoverClient() {
                 </button>
               </>
             ) : (
-              <div className="flex items-center justify-center h-64 border-2 border-dashed border-border rounded-xl text-text-4 text-sm text-center p-6">
-                Result with transparent background will appear here
-              </div>
+              <EmptyState 
+                title="No Result Yet"
+                description="Upload an image and click 'Remove Background' to see the result here."
+                icon={<ImageIcon className="w-6 h-6" />}
+                workflow={["Upload an image", "Adjust color and tolerance", "Download transparent PNG"]}
+                className="h-64"
+              />
             )}
           </div>
 

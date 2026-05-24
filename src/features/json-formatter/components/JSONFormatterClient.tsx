@@ -8,6 +8,10 @@ import { usePersistentState } from "@/src/lib/hooks";
 import { Code, Network, Info, FileJson, Layers, Sparkles, RefreshCw } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { workerManager } from "@/src/workers/manager";
+import { StatusBadge } from "@/components/system/StatusBadge";
+import { EmptyState } from "@/components/system/EmptyState";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { formatError } from "@/src/lib/formatError";
 
 type Indent = 2 | 4 | "tab";
 
@@ -185,11 +189,10 @@ export default function JSONFormatterClient() {
           }
         } catch (err: any) {
           if (!abortController.signal.aborted) {
-            setResult({ output: "", error: { message: err.message || "Formatting failed" }, parsed: null });
+            setResult({ output: "", error: { message: formatError(err) }, parsed: null });
             setIsProcessing(false);
           }
-        }
-      }
+        }      }
     };
 
     run();
@@ -292,65 +295,73 @@ export default function JSONFormatterClient() {
       </div>
 
       {/* Output & Visualization Section */}
-      {(output || isProcessing) && !error && (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center justify-between">
+      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
               <Code className="w-4 h-4" />
               Processed Output
-              {isProcessing && <RefreshCw className="w-3 h-3 animate-spin" />}
             </h2>
-            <div className="flex items-center gap-3">
-              <SegmentedControl
-                options={[
-                  { id: "raw", label: "Raw", icon: <FileJson className="w-3 h-3" /> },
-                  { id: "tree", label: "Tree", icon: <Network className="w-3 h-3" /> }
-                ]}
-                activeId={view}
-                onChange={setView}
-                disabled={isProcessing}
-              />
-              <CopyButton text={output} disabled={isProcessing || !output} />
-            </div>
+            <StatusBadge status={isProcessing ? "processing" : error ? "error" : output ? "complete" : "idle"} />
+            <PrivacyBadge message="Local processing" className="ml-2 hidden sm:inline-flex" />
           </div>
-
-          <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px] relative">
-            {isProcessing ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">
-                <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center animate-pulse">
-                  <FileJson size={24} />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-black uppercase tracking-widest text-text">Processing Data</p>
-                  <p className="text-xs text-text-4 font-bold uppercase tracking-wider">Formatting large JSON payload in background...</p>
-                </div>
-              </div>
-            ) : view === "tree" && parsed !== null ? (
-              <div className="p-6 space-y-6">
-                {(input.length > 2 * 1024 * 1024 || JSON.stringify(parsed).length > 2 * 1024 * 1024) && (
-                  <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-start gap-3">
-                    <Info className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-amber-700 font-medium leading-relaxed">
-                      <span className="font-black uppercase tracking-widest text-[10px] block mb-1">Performance Mode</span>
-                      Large JSON structure detected. To maintain responsiveness, nested levels beyond depth 10 are collapsed and large collections are truncated to {MAX_ITEMS} items.
-                    </p>
-                  </div>
-                )}
-                <div className="w-full px-6 py-4 bg-bg border border-border rounded-2xl overflow-auto max-h-[600px] custom-scrollbar">
-                  <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
-                </div>
-              </div>
-            ) : (
-              <textarea
-                readOnly
-                className="w-full min-h-[400px] p-6 sm:p-8 bg-transparent font-mono text-sm text-text-2 resize-none outline-none custom-scrollbar"
-                value={output}
-                placeholder="Results will appear here..."
-              />
-            )}
+          <div className="flex items-center gap-3">
+            <SegmentedControl
+              options={[
+                { id: "raw", label: "Raw", icon: <FileJson className="w-3 h-3" /> },
+                { id: "tree", label: "Tree", icon: <Network className="w-3 h-3" /> }
+              ]}
+              activeId={view}
+              onChange={setView}
+              disabled={isProcessing}
+            />
+            <CopyButton text={output} disabled={isProcessing || !output} />
           </div>
         </div>
-      )}
+
+        <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px] relative">
+          {(!output && !isProcessing && !error) ? (
+            <EmptyState 
+              title="No Data"
+              description="Enter JSON in the input field to see the formatted output here."
+              icon={<Code className="w-6 h-6" />}
+              workflow={["Paste your JSON payload", "Choose Beautify or Minify", "Explore in Tree View"]}
+            />
+          ) : isProcessing ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">
+              <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center animate-pulse">
+                <FileJson size={24} />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-black uppercase tracking-widest text-text">Processing Data</p>
+                <p className="text-xs text-text-4 font-bold uppercase tracking-wider">Formatting large JSON payload in background...</p>
+              </div>
+            </div>
+          ) : view === "tree" && parsed !== null ? (
+            <div className="p-6 space-y-6">
+              {(input.length > 2 * 1024 * 1024 || JSON.stringify(parsed).length > 2 * 1024 * 1024) && (
+                <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl flex items-start gap-3">
+                  <Info className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-amber-700 font-medium leading-relaxed">
+                    <span className="font-black uppercase tracking-widest text-[10px] block mb-1">Performance Mode</span>
+                    Large JSON structure detected. To maintain responsiveness, nested levels beyond depth 10 are collapsed and large collections are truncated to {MAX_ITEMS} items.
+                  </p>
+                </div>
+              )}
+              <div className="w-full px-6 py-4 bg-bg border border-border rounded-2xl overflow-auto max-h-[600px] custom-scrollbar">
+                <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
+              </div>
+            </div>
+          ) : (
+            <textarea
+              readOnly
+              className="w-full min-h-[400px] p-6 sm:p-8 bg-transparent font-mono text-sm text-text-2 resize-none outline-none custom-scrollbar"
+              value={output}
+              placeholder="Results will appear here..."
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

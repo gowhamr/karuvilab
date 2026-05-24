@@ -5,6 +5,9 @@ import { ToolInput } from "@/components/ui/ToolInput";
 import { Plus, Trash2, Download, Printer } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { StatusBadge } from "@/components/system/StatusBadge";
+import { formatError } from "@/src/lib/formatError";
 
 interface LineItem {
   id: string;
@@ -22,6 +25,7 @@ export default function InvoiceGeneratorClient() {
   const [items, setItems] = useState<LineItem[]>([{ id: '1', desc: "Service Description", qty: 1, price: 100 }]);
   const [taxRate, setTaxRate] = useState(0);
   const [notes, setNotes] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const totals = useMemo(() => {
     const subtotal = items.reduce((acc, item) => acc + (item.qty * item.price), 0);
@@ -46,6 +50,7 @@ export default function InvoiceGeneratorClient() {
 
   const generatePDF = async () => {
     try {
+      setIsGenerating(true);
       const { PDFDocument, rgb, StandardFonts } = await import("pdf-lib");
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([600, 800]);
@@ -119,12 +124,19 @@ export default function InvoiceGeneratorClient() {
       setTimeout(() => revokeUrl(url), 1000);
     } catch (err) {
       console.error(err);
-      toast("Failed to generate PDF", "error");
+      toast(formatError(err), "error");
+    } finally {
+      setIsGenerating(false);
     }
   };
 
   return (
     <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <PrivacyBadge message="Generated locally. No data leaves your device." />
+        <StatusBadge status={isGenerating ? "processing" : "idle"} label="Generating PDF..." />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Form */}
         <div className="space-y-6">
@@ -219,9 +231,10 @@ export default function InvoiceGeneratorClient() {
 
           <button 
             onClick={generatePDF}
-            className="w-full flex items-center justify-center gap-3 py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:opacity-90 active:scale-95 transition-all"
+            disabled={isGenerating}
+            className="w-full flex items-center justify-center gap-3 py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
           >
-            <Download className="w-5 h-5" /> Download PDF
+            <Download className="w-5 h-5" /> {isGenerating ? "Generating..." : "Download PDF"}
           </button>
         </div>
       </div>

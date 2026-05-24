@@ -9,13 +9,7 @@ const SkeletonBlock = ({ className }: { className?: string }) => (
 
 export function ToolSkeleton() {
   return (
-    <div className="w-full space-y-8 sm:space-y-12">
-      {/* Header Area */}
-      <div className="space-y-4">
-        <SkeletonBlock className="h-12 w-1/3 bg-blue/5 border-blue/10 rounded-2xl sm:rounded-[32px]" />
-        <SkeletonBlock className="h-4 w-2/3 bg-text-4/5 rounded-xl border-none" />
-      </div>
-
+    <div className="w-full space-y-8 sm:space-y-12 animate-in fade-in duration-500">
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
         <div className="space-y-6 sm:space-y-8">

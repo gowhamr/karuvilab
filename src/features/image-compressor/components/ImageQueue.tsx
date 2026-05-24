@@ -3,7 +3,7 @@
 import React from 'react';
 import { useImageCompressStore } from '../store';
 import { formatSize, getReduction } from '../utils';
-import { X, CheckCircle2, AlertCircle, Download, RefreshCw } from 'lucide-react';
+import { X, CheckCircle2, AlertCircle, Download, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ImageQueue: React.FC = () => {
@@ -41,8 +41,12 @@ export const ImageQueue: React.FC = () => {
               )}
 
               {/* Thumbnail */}
-              <div className="w-14 h-14 rounded-xl overflow-hidden bg-bg border border-border shrink-0 relative z-10">
-                <img src={item.previewUrl} alt="Preview" className="w-full h-full object-cover" />
+              <div className="w-14 h-14 rounded-xl overflow-hidden bg-bg border border-border shrink-0 relative z-10 flex items-center justify-center text-text-4">
+                {item.previewUrl ? (
+                  <img src={item.previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <ImageIcon size={24} />
+                )}
               </div>
 
               {/* Info */}
