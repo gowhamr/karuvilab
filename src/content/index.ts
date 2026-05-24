@@ -78,6 +78,26 @@ import { scientificCalculator } from './tools/scientific-calculator';
 import { pomodoroTimer } from './tools/pomodoro-timer';
 import { notesContent } from './tools/notes';
 
+// Missing imports
+import { pdfToWordContent } from './tools/pdf-to-word';
+import { lockUnlockPdfContent } from './tools/lock-unlock-pdf';
+import { watermarkPdfContent } from './tools/watermark-pdf';
+import { pageNumberingContent } from './tools/page-numbering';
+import { rotatePdfContent } from './tools/rotate-pdf';
+import { extractImagesContent } from './tools/extract-images';
+import { calendarContent } from './tools/calendar';
+import { yamlValidatorContent } from './tools/yaml-validator';
+import { colorPaletteExtractorContent } from './tools/color-palette-extractor';
+import { timezoneConverterContent } from './tools/timezone-converter';
+import { fakeDataGeneratorContent } from './tools/fake-data-generator';
+import { textSorterDeduperContent } from './tools/text-sorter-deduper';
+import { micCameraTesterContent } from './tools/mic-camera-tester';
+import { wifiQrCodeContent } from './tools/wifi-qr-code';
+import { phoneMockupGeneratorContent } from './tools/phone-mockup-generator';
+import { chartGeneratorContent } from './tools/chart-generator';
+import { typingSpeedTestContent } from './tools/typing-speed-test';
+import { barcodeScannerContent } from './tools/barcode-scanner';
+
 export const TOOL_CONTENT: Record<string, ToolContent> = {
   "hash-generator": hashGenerator,
   "password-generator": passwordGenerator,
@@ -151,5 +171,23 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "work-hours": workHours,
   "notes": notesContent,
   "scientific-calculator": scientificCalculator,
-  "pomodoro-timer": pomodoroTimer
+  "pomodoro-timer": pomodoroTimer,
+  "pdf-to-word": pdfToWordContent,
+  "lock-unlock-pdf": lockUnlockPdfContent,
+  "watermark-pdf": watermarkPdfContent,
+  "page-numbering": pageNumberingContent,
+  "rotate-pdf": rotatePdfContent,
+  "extract-images": extractImagesContent,
+  "calendar": calendarContent,
+  "yaml-validator": yamlValidatorContent,
+  "color-palette-extractor": colorPaletteExtractorContent,
+  "timezone-converter": timezoneConverterContent,
+  "fake-data-generator": fakeDataGeneratorContent,
+  "text-sorter-deduper": textSorterDeduperContent,
+  "mic-camera-tester": micCameraTesterContent,
+  "wifi-qr-code": wifiQrCodeContent,
+  "phone-mockup-generator": phoneMockupGeneratorContent,
+  "chart-generator": chartGeneratorContent,
+  "typing-speed-test": typingSpeedTestContent,
+  "barcode-scanner": barcodeScannerContent
 };

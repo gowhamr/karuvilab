@@ -3,7 +3,7 @@
 import { useState, useMemo, memo } from "react";
 import dynamic from "next/dynamic";
 import { 
-  Sun, Shield, UserSearch, 
+  Sun, Shield, 
   RefreshCw,
   ChevronRight, ArrowLeft,
   History as HistoryIcon, Search
@@ -15,12 +15,10 @@ import Link from "next/link";
 // --- Lazy Load Sections ---
 const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false });
 const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false });
-const AccessibilitySection = dynamic(() => import("./sections/AccessibilitySection").then(m => m.AccessibilitySection), { ssr: false });
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes & modes', group: 'Personalization' },
-  { id: 'accessibility', label: 'Accessibility', icon: UserSearch, desc: 'Font size, contrast', group: 'Personalization' },
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
   { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History & PINS' },
 ];
@@ -195,7 +193,6 @@ export default function SettingsClient() {
               {activeSection === 'appearance' && <AppearanceSection />}
               {activeSection === 'privacy' && <PrivacySection />}
               {activeSection === 'history' && <HistorySection />}
-              {activeSection === 'accessibility' && <AccessibilitySection />}
             </div>
           </m.div>
         </AnimatePresence>
