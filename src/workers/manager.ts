@@ -57,7 +57,8 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("mergePdfs", [files], undefined, onProgress, abortSignal);
+    // PDF merge is idempotent: safe to retry if worker crashes.
+    return workerOrchestrator.run("mergePdfs", [files], undefined, onProgress, abortSignal, true, 2);
   }
 
   async compressImage(
@@ -67,7 +68,7 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("compressImage", [file, format, quality], [file], onProgress, abortSignal);
+    return workerOrchestrator.run("compressImage", [file, format, quality], [file], onProgress, abortSignal, true, 2);
   }
 
   async resizeImage(
@@ -79,7 +80,7 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("resizeImage", [file, width, height, format, quality], [file], onProgress, abortSignal);
+    return workerOrchestrator.run("resizeImage", [file, width, height, format, quality], [file], onProgress, abortSignal, true, 2);
   }
 
   async removeBackground(
@@ -89,7 +90,7 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("removeBackground", [file, bgColor, tolerance], [file], onProgress, abortSignal);
+    return workerOrchestrator.run("removeBackground", [file, bgColor, tolerance], [file], onProgress, abortSignal, true, 2);
   }
 
   async minifyCode(
@@ -98,7 +99,7 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<string> {
-    return workerOrchestrator.run("minifyCode", [code, lang], undefined, onProgress, abortSignal);
+    return workerOrchestrator.run("minifyCode", [code, lang], undefined, onProgress, abortSignal, true, 2);
   }
 
   async processJson(
@@ -116,7 +117,7 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<any[]> {
-    return workerOrchestrator.run("computeDiff", [textA, textB], undefined, onProgress, abortSignal);
+    return workerOrchestrator.run("computeDiff", [textA, textB], undefined, onProgress, abortSignal, true, 2);
   }
 
   async runZip(
@@ -124,7 +125,7 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("createZip", [files], undefined, onProgress, abortSignal);
+    return workerOrchestrator.run("createZip", [files], undefined, onProgress, abortSignal, true, 2);
   }
 
   terminateAll() {
