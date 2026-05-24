@@ -218,16 +218,18 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <ol className="space-y-6">
                 {merged.howTo.map((step, i) => (
                   <m.li 
-                    key={i} 
-                    whileHover={{ x: 5 }}
-                    className="flex gap-4 group cursor-default"
+                  key={i} 
+                  whileHover={{ x: 5 }}
+                  className="flex gap-4 group cursor-default"
                   >
-                    <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue text-white flex items-center justify-center text-[10px] font-bold group-hover:scale-110 transition-transform">
-                      {i + 1}
-                    </span>
-                    <p className="text-text-2 text-sm font-medium leading-snug group-hover:text-text transition-colors">{step}</p>
-                  </m.li>
-                ))}
+                  <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue text-white flex items-center justify-center text-[10px] font-bold group-hover:scale-110 transition-transform">
+                    {i + 1}
+                  </span>
+                  <p 
+                    className="text-text-2 text-sm font-medium leading-snug group-hover:text-text transition-colors"
+                    dangerouslySetInnerHTML={{ __html: step }}
+                  />
+                  </m.li>                ))}
               </ol>
             </section>
           )}
