@@ -591,14 +591,20 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             <div className="flex-1 w-full space-y-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue">
-                    {status === 'idle' && "System Ready"}
-                    {status === 'ping' && "Pinging Global Edge..."}
-                    {status === 'download' && "Stream Download Active"}
-                    {status === 'upload' && "Encrypted Upload Active"}
-                    {status === 'completed' && "Diagnostic Complete"}
-                    {status === 'error' && "Diagnostic Failure"}
-                  </h2>
+                  <div className="flex items-center gap-3 mb-2">
+                     <PrivacyBadge message="Browser-based diagnostic" />
+                     <StatusBadge 
+                        status={status === 'completed' ? 'complete' : status === 'error' ? 'error' : status === 'idle' ? 'idle' : 'processing'} 
+                        label={
+                           status === 'idle' ? "Ready" : 
+                           status === 'ping' ? "Pinging..." :
+                           status === 'download' ? "Downloading..." :
+                           status === 'upload' ? "Uploading..." :
+                           status === 'completed' ? "Complete" :
+                           "Error"
+                        }
+                     />
+                  </div>
                   <div className="flex items-center gap-3">
                      <div className={cn("w-2 h-2 rounded-full", status !== 'idle' && status !== 'completed' ? "bg-blue animate-pulse shadow-[0_0_8px_#4F46E5]" : "bg-text-4")} />
                      <div className="flex flex-col">

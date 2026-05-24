@@ -1,83 +1,23 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import { StructuredData } from "@/src/lib/seo";
+## Privacy Policy
 
-export const metadata: Metadata = {
-  title: "Privacy Policy – KV",
-  description: "Privacy Policy for KaruviLab. No files are collected or uploaded. All processing runs locally in your browser.",
-  alternates: {
-    canonical: "/privacy",
-  },
-};
+**Effective Date: May 24, 2026**
 
-export default function PrivacyPage() {
-  return (
-    <div className="max-w-4xl mx-auto space-y-8 py-6">
-      <StructuredData />
-      <div className="space-y-2">
-        <nav className="flex items-center gap-2 text-sm text-text-4">
-          <Link href="/" className="hover:text-blue transition-colors">Home</Link>
-          <span>/</span>
-          <span className="text-text-3">Privacy Policy</span>
-        </nav>
-        <h1 className="text-3xl font-black">Privacy Policy</h1>
-        <p className="text-text-3">Last updated: April 30, 2026</p>
-      </div>
+Welcome to KaruviLab (KV). We are committed to your privacy. This policy outlines how KaruviLab collects, uses, and protects your information.
 
-      <div className="bg-blue/10 border border-blue/30 p-5 rounded-2xl flex items-start gap-4">
-        <span className="text-2xl flex-shrink-0">🔒</span>
-        <div>
-          <p className="font-bold">Privacy Promise</p>
-          <p className="text-sm text-text-2 mt-1">We believe your data is your own. KaruviLab is a &ldquo;Serverless Utility&rdquo; — every operation happens 100% on your device. We do not collect, store, or see your files.</p>
-        </div>
-      </div>
+### 1. Data Processing and Privacy
+**Zero-Server-Upload:** All processing (file conversion, image editing, PDF manipulation, and calculations) happens entirely within your web browser on your local device. KaruviLab does not upload, store, transmit, or process your files or data on any server. Your data stays on your device.
 
-      <div className="space-y-4">
-        {[
-          {
-            title: "1. 100% Local Processing",
-            body: "KaruviLab is built on the principle of client-side processing. Your files are never sent to a server. They stay in your device's memory until the process is complete.",
-          },
-          {
-            title: "2. Data We Do NOT Collect",
-            list: [
-              { label: "No Content Logging", detail: "We do not log the contents of your text, images, or documents." },
-              { label: "No Personal Information", detail: "We do not ask for your name, email, or phone number." },
-              { label: "No Tracking", detail: "We do not use Google Analytics or tracking pixels." },
-            ],
-          },
-          {
-            title: "3. Cookies & Local Storage",
-            body: "KaruviLab does not use cookies for tracking. We use the browser's localStorage only to remember your preferred theme (Light/Dark mode) and recently visited tools. This data never leaves your device.",
-          },
-          {
-            title: "4. Contact Us",
-            body: null,
-            contact: true,
-          },
-        ].map(section => (
-          <div key={section.title} className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-3">
-            <h2 className="text-xl font-bold">{section.title}</h2>
-            {section.body && <p className="text-text-2 leading-relaxed">{section.body}</p>}
-            {section.list && (
-              <ul className="space-y-2">
-                {section.list.map(item => (
-                  <li key={item.label} className="flex items-start gap-2 text-sm text-text-2">
-                    <span className="text-blue font-bold flex-shrink-0">•</span>
-                    <span><strong>{item.label}:</strong> {item.detail}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {section.contact && (
-              <p className="text-text-2 text-sm">
-                If you have any questions about our privacy-first approach, feel free to reach out to <strong>R Gowtham</strong> at{" "}
-                <a href="mailto:wanderseven@proton.me" className="text-blue hover:underline">wanderseven@proton.me</a>.
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+### 2. Third‑Party Advertising and Cookies
+KaruviLab may display advertisements served by third‑party vendors, including Google, via the Google AdSense program. These third‑party vendors may use cookies and similar technologies (such as web beacons) to serve personalized advertisements based on your prior visits to this website and other websites.
+
+**What data is collected:** Third‑party vendors, including Google, may collect non‑personally identifiable information such as your IP address, browser type, device information, and browsing behavior to serve relevant ads. KaruviLab itself does not collect, store, or transmit any personal data or the content you process using our tools.
+
+**How to opt out:** You can opt out of personalized advertising by visiting [Google's Ads Settings](https://adssettings.google.com) or by using browser‑level cookie controls. You may also disable cookies for interest‑based advertising by visiting the [Network Advertising Initiative opt‑out page](https://optout.networkadvertising.org). Disabling personalized ads will not affect the core functionality of KaruviLab tools.
+
+**Consent:** For users in the European Economic Area (EEA) and the United Kingdom (UK), a cookie consent banner is displayed before any advertising cookies are placed. You may accept or reject personalized advertising cookies through this banner.
+
+### 3. Changes to This Policy
+We may update this Privacy Policy from time to time. Your continued use of KaruviLab constitutes your acceptance of the updated policy.
+
+### 4. Contact Us
+If you have any questions, please contact us at gowthamrajaone@gmail.com.

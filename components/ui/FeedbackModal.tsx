@@ -7,6 +7,7 @@ import { X, Send, CircleAlert as AlertCircle, Sparkles, CircleCheckBig as CheckC
 import { useSupportStore, FeedbackType } from "@/src/store/useSupportStore";
 import { getSystemInfo, SystemInfo } from "@/src/lib/support-utils";
 import { cn } from "@/src/lib/utils";
+import { FileUpload } from "./FileUpload";
 
 const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: any }[] = [
   { value: "calculation", label: "Calculation Wrong", icon: AlertCircle },
@@ -26,6 +27,7 @@ export function FeedbackModal() {
 
   const [description, setDescription] = useState("");
   const [fromEmail, setFromEmail] = useState("");
+  const [screenshot, setScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,6 +39,7 @@ export function FeedbackModal() {
       setIsSuccess(false);
       setDescription("");
       setFromEmail("");
+      setScreenshot(null);
       setErrorMessage("");
     }
   }, [isOpen]);
@@ -184,15 +187,13 @@ export function FeedbackModal() {
                     />
                   </div>
 
-                  {/* Screenshot (Mock) */}
+                  {/* Screenshot */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
-                    <div className="group relative w-full h-[80px] border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-bg/50 hover:bg-surface hover:border-blue/30 transition-all cursor-pointer">
-                       <div className="flex flex-col items-center gap-1">
-                          <Send className="w-4 h-4 text-text-4 rotate-[-45deg] group-hover:text-blue transition-colors" />
-                          <span className="text-[9px] font-bold text-text-4 uppercase tracking-widest">Click to upload or drag & drop</span>
-                       </div>
-                    </div>
+                    <FileUpload 
+                      onFileSelect={setScreenshot}
+                      className="group relative w-full h-[80px] border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-bg/50 hover:bg-surface hover:border-blue/30 transition-all cursor-pointer"
+                    />
                   </div>
 
                   {/* System Info */}

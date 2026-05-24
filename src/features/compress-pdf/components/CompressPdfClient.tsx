@@ -5,6 +5,10 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { DropZone } from "@/components/ui/DropZone";
+import { EmptyState } from "@/components/system/EmptyState";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { formatError } from "@/src/lib/formatError";
+import { FileText } from "lucide-react";
 
 const toolId = "compress-pdf";
 
@@ -39,7 +43,7 @@ export default function CompressPdfClient() {
         blob,
       };
     } catch (e: any) {
-      throw new Error(e?.message || "Failed to compress PDF");
+      throw new Error(formatError(e));
     }
   };
 
@@ -65,6 +69,7 @@ export default function CompressPdfClient() {
 
   return (
     <div className="space-y-8">
+      <PrivacyBadge message="Local processing – No files uploaded to servers" />
       <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl text-sm text-yellow-700 dark:text-yellow-400 font-medium">
         <strong>Note:</strong> Browser-based PDF compression re-encodes the PDF structure. Results vary — PDFs with large embedded images may not compress significantly without image re-encoding.
       </div>
@@ -86,10 +91,12 @@ export default function CompressPdfClient() {
       />
 
       {items.length === 0 && (
-        <div className="py-20 text-center space-y-4 opacity-40">
-          <div className="text-6xl">📥</div>
-          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-sm">Waiting for PDFs...</p>
-        </div>
+        <EmptyState 
+          title="Waiting for PDFs"
+          description="Drop one or more PDF files above to begin compression."
+          icon={<FileText className="w-6 h-6" />}
+          workflow={["Drop PDF files", "Click 'Process All'", "Download optimized PDFs"]}
+        />
       )}
     </div>
   );
