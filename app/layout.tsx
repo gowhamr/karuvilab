@@ -10,6 +10,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
+import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -67,6 +68,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
         <ClientProviders>
+          <RecoveryBanner />
           <div className="flex min-h-screen">
             <Sidebar />
             

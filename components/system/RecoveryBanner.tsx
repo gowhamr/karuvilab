@@ -1,0 +1,57 @@
+"use client";
+
+import { useRecoveryStore } from '@/src/store/useRecoveryStore';
+import { AlertCircle, X, RefreshCw, AlertTriangle } from 'lucide-react';
+import { m, AnimatePresence } from 'framer-motion';
+
+export function RecoveryBanner() {
+  const { isVisible, type, message, action, dismissBanner } = useRecoveryStore();
+
+  if (!isVisible) return null;
+
+  const isError = type === 'idb_error' || type === 'worker_crash' || type === 'queue_error';
+  const Icon = isError ? AlertCircle : AlertTriangle;
+
+  return (
+    <AnimatePresence>
+      <m.div
+        role="alert"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="fixed top-20 left-1/2 -translate-x-1/2 z-[500] w-[90%] max-w-lg"
+      >
+        <div className={`p-4 rounded-2xl shadow-xl border flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between backdrop-blur-md ${isError ? 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400' : 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400'}`}>
+          <div className="flex items-start gap-3">
+            <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h3 className="font-bold text-sm tracking-tight">System Notice</h3>
+              <p className="text-xs font-medium opacity-80 leading-relaxed">{message}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+            {action && (
+              <button
+                onClick={() => {
+                  action.onClick();
+                  dismissBanner();
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${isError ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-amber-500 text-white hover:bg-amber-600'}`}
+              >
+                {action.label}
+              </button>
+            )}
+            <button
+              onClick={dismissBanner}
+              className="p-1.5 rounded-lg opacity-60 hover:opacity-100 transition-opacity hover:bg-black/5 dark:hover:bg-white/5"
+              aria-label="Dismiss alert"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </m.div>
+    </AnimatePresence>
+  );
+}

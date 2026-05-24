@@ -9,11 +9,15 @@ interface QueuedTask {
   reject: (reason?: unknown) => void;
   onProgress?: ProgressCallback | undefined;
   abortSignal?: AbortSignal | undefined;
+  idempotent?: boolean;
+  retriesLeft?: number;
+  activeWorker?: Worker;
 }
 
 class WorkerOrchestrator {
   private pool: Array<{ worker: Worker; api: Comlink.Remote<WorkerAPI>; busy: boolean; lastHeard?: number }> = [];
   private queue: QueuedTask[] = [];
+  private activeTasks = new Map<Worker, QueuedTask>();
   private maxWorkers = 4;
   private isLowMemory = false;
   private initialized = false;
@@ -73,6 +77,23 @@ class WorkerOrchestrator {
     if (idx > -1) {
       this.pool.splice(idx, 1);
     }
+    const task = this.activeTasks.get(worker);
+    if (task) {
+      this.activeTasks.delete(worker);
+      if (task.idempotent && (task.retriesLeft || 0) > 0) {
+        task.retriesLeft! -= 1;
+        this.queue.unshift(task); // Re-queue at the front
+        import('@/src/store/useRecoveryStore').then(({ useRecoveryStore }) => {
+          useRecoveryStore.getState().showBanner('worker_crash', 'Worker recovered automatically. Retrying task...');
+        });
+        this.processQueue();
+      } else {
+        task.reject(new Error("Task failed due to a worker crash."));
+        import('@/src/store/useRecoveryStore').then(({ useRecoveryStore }) => {
+          useRecoveryStore.getState().showBanner('worker_crash', 'Task failed due to a worker crash.');
+        });
+      }
+    }
   }
 
   private async processQueue() {
@@ -87,6 +108,7 @@ class WorkerOrchestrator {
     const task = this.queue.shift()!;
     workerEntry.busy = true;
     workerEntry.lastHeard = Date.now();
+    this.activeTasks.set(workerEntry.worker, task);
 
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let isFinished = false;
@@ -96,6 +118,7 @@ class WorkerOrchestrator {
       isFinished = true;
       if (timeoutId) clearTimeout(timeoutId);
       workerEntry.busy = false;
+      this.activeTasks.delete(workerEntry.worker);
       this.processQueue();
     };
 
@@ -103,7 +126,6 @@ class WorkerOrchestrator {
       if (isFinished) return;
       workerEntry.worker.terminate();
       this.handleWorkerCrash(workerEntry.worker);
-      task.reject(new Error(reason));
       cleanup();
     };
 
@@ -162,7 +184,9 @@ class WorkerOrchestrator {
     args: unknown[],
     transferables?: Transferable[],
     onProgress?: ProgressCallback,
-    abortSignal?: AbortSignal
+    abortSignal?: AbortSignal,
+    idempotent: boolean = true,
+    retriesLeft: number = 1
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       this.queue.push({ 
@@ -172,7 +196,9 @@ class WorkerOrchestrator {
         resolve: resolve as (v: unknown) => void, 
         reject, 
         onProgress, 
-        abortSignal 
+        abortSignal,
+        idempotent,
+        retriesLeft
       });
       this.processQueue();
     });

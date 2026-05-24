@@ -336,3 +336,55 @@ export async function clearAllHistory() {
   if (!db) return;
   await db.clear('history');
 }
+
+/**
+ * Safe IndexedDB operations that handle quota exceeded, version mismatch, etc.
+ */
+export async function safePut(storeName: any, value: any, key?: any) {
+  try {
+    const db = await getDB();
+    if (!db) return false;
+    await db.put(storeName, value, key);
+    return true;
+  } catch (error: any) {
+    console.error(`[DB Error] safePut failed on ${storeName}:`, error);
+    if (error.name === 'QuotaExceededError') {
+      import('@/src/store/useRecoveryStore').then(({ useRecoveryStore }) => {
+        useRecoveryStore.getState().showBanner('idb_quota', 'Storage full. Please clear space or some data may not be saved.', {
+          label: 'Clear Data',
+          onClick: () => clearOldCache(0)
+        });
+        useRecoveryStore.getState().setReducedPersistence(true);
+      });
+    } else {
+      import('@/src/store/useRecoveryStore').then(({ useRecoveryStore }) => {
+        useRecoveryStore.getState().showBanner('idb_error', 'Database error occurred. In-memory work is preserved.');
+      });
+    }
+    return false;
+  }
+}
+
+export async function safeGet(storeName: any, key: any) {
+  try {
+    const db = await getDB();
+    if (!db) return null;
+    return await db.get(storeName, key);
+  } catch (error) {
+    console.error(`[DB Error] safeGet failed on ${storeName}:`, error);
+    return null;
+  }
+}
+
+export async function safeDelete(storeName: any, key: any) {
+  try {
+    const db = await getDB();
+    if (!db) return false;
+    await db.delete(storeName, key);
+    return true;
+  } catch (error) {
+    console.error(`[DB Error] safeDelete failed on ${storeName}:`, error);
+    return false;
+  }
+}
+
