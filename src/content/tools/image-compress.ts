@@ -1,46 +1,64 @@
 import { ToolContent } from '../../registry/types';
 
 export const imageCompress: ToolContent = {
-  detailedDescription:
-    "Reduce image file sizes using HTML5 Canvas re-encoding with adjustable quality settings. Supports JPEG, PNG, and WebP inputs. Preview the compressed image and compare file sizes before downloading. All processing happens in your browser — images are never uploaded.",
+  detailedDescription: `
+    <p>The Image Compressor is a powerful, browser-based utility designed to reduce image file sizes without compromising visual quality. Whether you are a web developer looking to speed up a website, a photographer prepping images for a portfolio, or just a user needing to shrink photos for email attachments, this tool offers the precise control you need.</p>
+    
+    <p>Unlike many online tools that force you to upload your sensitive images to a remote server, our Image Compressor performs every operation locally. Because your files never leave your device, you can compress private photos or confidential documents with absolute peace of mind. By leveraging advanced HTML5 Canvas re-encoding and adjustable quality parameters, you get the optimal balance between performance and fidelity.</p>
+
+    <p>The tool supports a wide array of formats, including JPEG, PNG, and WebP, and allows you to preview the results in real-time. This ensures that you can find the perfect 'sweet spot' where your file size is significantly smaller but your image remains sharp and crisp. Perfect for achieving high Google PageSpeed scores, reducing server storage costs, or simply managing your device's limited storage space.</p>
+  `,
   howTo: [
-    "Click or drag-and-drop an image file onto the upload area.",
-    "Adjust the quality slider (lower = smaller file, higher = better quality).",
-    "Preview the result side by side with the original.",
-    "Click 'Download' to save the compressed image.",
+    "<strong>Upload:</strong> Drag and drop your image file onto the main upload area or click to select from your device.",
+    "<strong>Customize:</strong> Use the quality slider to find your preferred balance. Moving the slider left reduces file size drastically, while moving it right increases image fidelity.",
+    "<strong>Compare:</strong> Utilize the split-screen preview to see the original and compressed images side-by-side.",
+    "<strong>Download:</strong> Click the 'Download' button to save your newly optimized image to your local storage.",
   ],
   faq: [
     {
-      question: "What formats are supported?",
-      answer:
-        "Input: JPEG, PNG, WebP, BMP. Output: JPEG or WebP (lossy), PNG (lossless). PNG compression has limits since PNG is already lossless.",
+      question: "Is this tool truly private?",
+      answer: "Yes. KaruviLab tools are built on a local-first, zero-upload architecture. Your image data is processed entirely in your browser's memory and is never transmitted to or stored on any server.",
     },
     {
-      question: "Why isn't the PNG getting smaller?",
-      answer:
-        "PNG is a lossless format. Canvas re-encoding cannot reduce its size the way JPEG quality reduction can. Consider converting to WebP for better compression.",
+      question: "Which formats are supported?",
+      answer: "We support JPEG, PNG, and WebP input. The tool allows you to convert and export images into optimized JPEG or WebP formats, depending on your needs.",
     },
     {
-      question: "Is there a file size limit?",
-      answer:
-        "Very large images (over 20 MP) may slow or crash the browser tab due to canvas memory limits. Resize the image first if needed.",
+      question: "Why isn't my PNG getting smaller?",
+      answer: "PNG is a 'lossless' format, which means it cannot be aggressively compressed like JPEG without losing image data. If you need smaller file sizes, we recommend converting your PNG to WebP format using our tool.",
+    },
+    {
+      question: "Is there a maximum image size?",
+      answer: "To ensure a smooth experience, we recommend images under 20MB. Very large files may hit browser memory limitations. If you encounter issues, try resizing the image to smaller dimensions first.",
     },
   ],
   useCases: [
-    "Compressing product photos before uploading to an online store",
-    "Reducing blog post images to improve page load speed",
-    "Shrinking screenshots for email attachments",
-    "Optimizing images to pass a website performance audit",
+    "Optimizing e-commerce product photos for faster load times.",
+    "Reducing high-resolution camera shots for web-based portfolios.",
+    "Shrinking screenshots for email attachments or forum posts.",
+    "Passing Core Web Vitals performance benchmarks for SEO.",
+  ],
+  examples: [
+    {
+      input: "High-res JPEG (5MB)",
+      output: "Compressed JPEG (800KB)",
+      description: "Reducing a DSLR photo by 80% while retaining nearly indistinguishable visual quality for web use."
+    },
+    {
+      input: "PNG Screenshot (2MB)",
+      output: "WebP (300KB)",
+      description: "Converting a lossless PNG to WebP can significantly reduce file size while maintaining excellent quality."
+    }
   ],
   commonErrors: [
     {
-      error: "Compressed file is larger than the original",
-      fix: "This can happen if the original JPEG was already highly compressed. Lower the quality setting further or try WebP output.",
+      error: "Compressed file looks slightly blurry",
+      fix: "Your quality slider may be set too low. Try moving the quality parameter higher (e.g., from 60% to 80%) to retain more detail.",
     },
     {
-      error: "Transparent areas turn black after compression",
-      fix: "JPEG does not support transparency. Use PNG or WebP output format to preserve alpha channels.",
+      error: "Transparency is lost",
+      fix: "JPEG format does not support transparency. If you need to keep transparent backgrounds, ensure you are exporting to PNG or WebP.",
     },
   ],
-  alternatives: ["Squoosh.app", "TinyPNG", "ImageOptim (macOS)"],
+  alternatives: ["Squoosh.app", "TinyPNG", "ImageOptim (macOS desktop tool)"],
 };
