@@ -1,0 +1,3 @@
+# ads.txt for KaruviLab (KV)
+# Replace PUBLISHER_ID with your actual Google AdSense publisher ID after approval
+# google.com, pub-PUBLISHER_ID, DIRECT, f08c47fec0942fa0
