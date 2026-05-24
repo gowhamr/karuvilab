@@ -115,7 +115,7 @@ export interface WorkerAPI {
     code: string,
     lang: "css" | "js" | "html",
     onProgress?: ProgressCallback
-  ): Promise<string>;
+  ): Promise<{ code: string; error: { type: string; message: string } | null }>;
 
   computeDiff(
     textA: string,

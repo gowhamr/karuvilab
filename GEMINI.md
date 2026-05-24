@@ -16,6 +16,8 @@ The following patterns are **NEVER** allowed unless explicitly approved through 
 - New dependencies without bundle-size justification.
 - Server-side processing for local tools – everything happens in the browser.
 - Client components importing Node‑only APIs (e.g., `fs`, `path`).
+- Silent fallback to degraded mode without user notification (e.g., falling back to unminified code without warning).
+- Dead UI elements (visible interactive elements that do nothing).
 
 ## 1. Project Identity & Philosophy
 
@@ -86,6 +88,54 @@ The following patterns are **NEVER** allowed unless explicitly approved through 
 - Avoid passing inline objects/arrays as props.
 - Framer Motion layout animations should only be used where necessary; prefer opacity/transform transitions.
 
+### Server-Side Rendering (SSR) Policy
+
+- **KL-07 (Mandatory `ssr: false`):** Any tool utilizing browser-only APIs (Canvas, Web Workers, BarcodeDetector), heavy external libraries (Monaco, PDF.js), or direct DOM manipulation MUST be loaded via `next/dynamic` with `ssr: false` in a client wrapper. This prevents hydration mismatches and silent initialization failures.
+- The `ssr: false` directive must be in the page route (`app/(tools)/.../page.tsx`), not hidden inside a child component.
+
+#### Window/API Guards
+- Code that accesses `window`, `navigator`, `document`, or any browser‑specific API must either be wrapped in a `useEffect` (or `useLayoutEffect`), or be guarded by `typeof window !== 'undefined'` if unavoidable in the render body.
+
+#### No Node.js APIs in Client Components
+- Client components must never import or use Node.js‑specific modules (`fs`, `path`, `process.env.NEXT_RUNTIME`, etc.).
+
+**Pattern:**
+```typescript
+import dynamic from 'next/dynamic';
+
+const ToolClient = dynamic(
+  () => import('@/features/[tool]/components/ToolClient'),
+  { ssr: false }
+);
+```
+
+### Worker & Engine Loading Standard
+
+#### EngineLoader Component
+All tools that load an external worker, WASM module, or CDN dependency must use the shared `<EngineLoader>` component (`components/system/EngineLoader.tsx`).
+- **Props:** `loadingMessage`, `errorMessage`, `onReady`, `timeout` (default 10s), `onRetry`.
+- **Behavior:** Shows a spinner; if `onReady` isn't called within `timeout`, displays `errorMessage` with a Retry button. Never hangs indefinitely.
+
+#### Worker File Loading Pattern
+Every external worker file must be:
+1. Copied to `public/` via `scripts/sync-workers.js`.
+2. Referenced with an absolute path (`/pdf.worker.min.mjs`).
+3. Backed by a CDN fallback if the local file fails.
+
+```typescript
+try {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+} catch {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
+}
+```
+
+#### Initialization Error Handling
+Every async engine initialization must have a `try/catch` block that sets a user‑visible error state and a Retry action. Silent fallbacks are **forbidden**.
+- **Forbidden:** Catching an error and returning a `defaultResult` without notifying the user.
+- **Required:** Catching an error, setting an error state, and notifying the user.
+
 ## 6. Immutable Architectural Guardrails (KL‑Series)
 
 These rules **cannot** be reverted. They were established to prevent critical production failures.
@@ -141,7 +191,98 @@ These rules **cannot** be reverted. They were established to prevent critical pr
 - Color contrast ≥4.5:1 in all themes (dark, light, high‑contrast).
 - `prefers-reduced-motion` must completely disable animations.
 
-## 10. Security Standards
+## 10. SEO Standards
+
+### Metadata & Structured Data
+Every tool page must have:
+- A unique `<title>` tag following the pattern `[Tool Name] – KV`.
+- A unique `<meta name='description'>` of 120‑160 characters.
+- Valid Open Graph and Twitter Card tags.
+- `WebApplication` or `SoftwareApplication` JSON‑LD structured data with `datePublished`, `dateModified`, `applicationCategory`, `operatingSystem`, `offers`.
+- `FAQPage` JSON‑LD structured data if the tool page includes an FAQ section.
+- `BreadcrumbList` JSON‑LD structured data with canonical URL normalization.
+
+### Canonical URLs
+- Every page must have a self‑referencing `<link rel='canonical'>` with a trailing slash (`https://karuvilab.com/tools/[category]/[tool-id]/`).
+- No duplicate pages with differing URL patterns.
+
+### Internal Linking
+- Every tool must link to at least 3‑5 related tools via the `relatedTools` registry field.
+- The ToolShell component must render a 'Related Tools' section when related data is present.
+- Cross‑category linking is encouraged where logical (e.g., Image Compressor → Image SEO).
+
+### Sitemap & Crawling
+- The dynamic sitemap (`app/sitemap.ts`) must include all tool pages with appropriate `priority` values (1.0 homepage, 0.9 category hubs, 0.8 tool pages).
+- `robots.txt` must allow all crawlers and reference the sitemap index.
+- No `noindex` tags on public tool pages.
+
+### Content Quality (E‑E‑A‑T)
+- Every tool page must have ≥400 words of original, server‑rendered descriptive content.
+- Sections required: Introduction (2‑3 paragraphs), How‑To‑Use (numbered steps), Examples (2‑3 use cases), FAQ (4‑6 questions).
+- All content must be original and written in natural language; no AI‑generated placeholder text.
+
+## 11. UI/UX Quality Standards
+
+### Zero Dead Elements
+- Every visible button, icon, link, toggle, slider, and menu item must perform a functional action (navigation, state change, computation, or feedback).
+- Elements that appear interactive but do nothing are **forbidden**.
+- All tool pages must pass the Dead Element Strike audit before merging.
+
+### Consistent Micro‑interactions
+- **Hover (desktop):** Subtle lift (1‑2px), shadow elevation change, or border accent on cards and buttons. Duration <200ms.
+- **Active/press:** Scale down to 0.98 with spring feedback.
+- **Touch feedback:** Ripple or scale effect on primary actions and FABs.
+- **Loading:** Shimmer skeletons matching content dimensions; no blank screens or spinners without context.
+- **Transitions:** View changes, modals, and accordions animated with Framer Motion springs (stiffness: 300, damping: 30).
+- All animations respect `prefers‑reduced‑motion`.
+
+### Smart Empty States
+- Every tool must show a friendly empty state with a clear call‑to‑action when in its initial state.
+- No blank canvases; use the shared `<EmptyState>` component.
+
+### Error & Recovery UX
+- All errors must show human‑friendly messages with a Retry action (use `<RecoveryBanner>`).
+- No raw stack traces or 'Unhandled Error' messages.
+- Silent failures are **forbidden**.
+
+### Status Communication
+- Use the shared `<StatusBadge>` component for all processing states (Queued, Processing, Complete, Error).
+- All status changes must be announced via `aria‑live` regions.
+
+### Design Token Compliance
+- All visual primitives must use the design token system (`src/theme/`).
+- No hardcoded colors, border radii, shadows, or spacing values.
+- `rounded-[18px]` or similar arbitrary values are **forbidden**.
+
+## 12. User‑Friendly Design Principles
+
+### Clarity & Predictability
+- Tool purpose must be immediately clear from the title, description, and empty state.
+- All inputs must have visible labels and helper text.
+- Primary actions must be visually dominant; secondary actions de‑emphasized.
+- Navigation must be consistent across all tools (breadcrumb, sidebar, command palette).
+
+### Privacy Transparency
+- File‑processing tools must display a `<PrivacyBadge>` indicating 'Processed entirely in your browser'.
+- The Currency Converter must show data freshness (live, cached, stale) with timestamps.
+- No tool should silently access hardware (camera, mic) without explicit user permission and clear messaging.
+
+### Keyboard‑First Productivity
+- All interactive elements must be keyboard accessible (Tab, Enter, Escape, Arrow keys).
+- Global shortcuts: Ctrl+K (Command Palette), Esc (close modal/drawer), Ctrl+Enter (run/execute), Ctrl+S (save/export).
+- Shortcuts must be consistent across all tools.
+
+### Mobile‑First Ergonomics
+- Touch targets must be ≥44x44px.
+- Bottom navigation must respect safe‑area insets (`pb-[env(safe-area-inset-bottom)]`).
+- FAB (floating action button) placed `bottom-24` on mobile to avoid overlap.
+- No horizontal overflow at 320px width.
+
+### Trust Messaging
+- Subtle trust indicators: 'No Upload', 'Offline Capable', 'Private by Design' where appropriate.
+- No deceptive patterns, dark patterns, or misleading CTAs.
+
+## 13. Security Standards
 
 - **DOMPurify** must be applied to all user‑provided HTML/Markdown before rendering.
 - `postMessage` listeners must check `event.origin`.
@@ -150,7 +291,7 @@ These rules **cannot** be reverted. They were established to prevent critical pr
 - Web Crypto API is the preferred cryptographic library.
 - No sensitive personal data persisted in IndexedDB without encryption.
 
-## 11. Motion Standards
+## 14. Motion Standards
 
 **Allowed animated properties:**
 - `transform` (translate, scale, rotate)
@@ -163,7 +304,7 @@ These rules **cannot** be reverted. They were established to prevent critical pr
 
 Always respect `prefers-reduced-motion`. Framer Motion's `MotionConfig` is already set globally to `reducedMotion="user"`.
 
-## 12. AI Coding Workflow
+## 15. AI Coding Workflow
 
 **Before modifying code:**
 1. Check for existing architectural utilities (`blobManager`, `WorkerOrchestrator`, `ToolShell`).
@@ -180,7 +321,7 @@ Always respect `prefers-reduced-motion`. Framer Motion's `MotionConfig` is alrea
 4. Validate `AbortSignal` propagation.
 5. Validate accessibility semantics (ARIA labels, keyboard nav).
 
-## 13. State Management Architecture
+## 16. State Management Architecture
 
 ### Global Stores (used across tools)
 Only for:
@@ -197,21 +338,25 @@ Must remain isolated per tool. Never share raw state across tools.
 - Never persist: `Blob` objects, `File` objects, raw `ArrayBuffer`, transient worker state.
 - Zustand `persist` middleware is used for serialisable state.
 
-## 14. Tool Production Quality Gates
+## 17. Tool Production Quality Gates
 
 A tool is considered **production‑ready** only if:
-- Zero TypeScript errors.
-- Zero unhandled promise rejections.
-- Works offline after first visit.
-- Responsive and usable at 320px width.
-- Keyboard accessible.
+- Zero TypeScript errors and zero unhandled promise rejections.
+- Works offline after first visit and responsive/usable at 320px width.
+- Keyboard accessible (WCAG 2.2 AA) and screen reader friendly.
 - No memory leaks (verified via DevTools heap snapshots).
 - CPU‑intensive work is offloaded to a Worker.
-- Uses `ToolShell` as the standard layout wrapper.
-- Uses atomic Zustand selectors exclusively.
+- Uses `ToolShell` as the standard layout wrapper and atomic Zustand selectors exclusively.
 - Gracefully recovers from errors (ErrorBoundary with retry).
+- **Zero dead UI elements:** Every visible interactive element must perform a functional action (verified via Dead Element Strike).
+- **SEO Ready:** All SEO requirements met (metadata, structured data, canonical, FAQ section).
+- **SSR Safety:** If the tool uses browser‑only APIs, it must have `ssr: false` in the page route.
+- **Worker Loading:** If the tool loads a worker or WASM file, it must use the standard worker loading pattern (local copy + CDN fallback + error state).
+- **Engine Loading:** If the tool loads an external CDN dependency, it must use `<EngineLoader>` or an equivalent timeout/error mechanism.
+- **No Silent Fallbacks:** The user must be notified of any critical loading failure. Silent fallbacks are forbidden.
+- **Build Quality:** The tool must pass `npm run typecheck` and `npm run build`.
 
-## 15. Development Workflow & Registry
+## 18. Development Workflow & Registry
 
 1. Add tool metadata to `src/registry/tools/[tool-id].ts`.
 2. Create route in `/app/(tools)/[category]/[tool-id]/`.
@@ -219,7 +364,23 @@ A tool is considered **production‑ready** only if:
 4. Implement client component (`.client.tsx`) with interactive logic.
 5. Add atomic Zustand store in `src/store/` if global state is needed (rare).
 
-## 16. Known Fixed Bugs (Historical)
+## 18.1. New Tool Implementation Checklist
+
+Before merging a new tool:
+1. Does it use a browser‑only API? → Add `dynamic(() => import(...), { ssr: false })` in the page route.
+2. Does it load a worker or WASM? → Use the standard worker loading pattern with local copy and CDN fallback.
+3. Does it need a worker file? → Add it to `scripts/sync-workers.js`.
+4. Does every async initialization have a `try/catch` that sets a user‑visible error state?
+5. Does it pass `npm run typecheck` and `npm run build`?
+6. Is it tested on a real mobile device (or emulated) at 320px width?
+7. Is it keyboard accessible and screen reader friendly?
+8. Does it work offline after first visit?
+9. Are all Blob URLs managed via `blobManager` (KL‑01 compliant)?
+10. Does it use atomic Zustand selectors only?
+11. Are there any dead UI elements? → Must be functional or removed.
+12. Are all SEO requirements met (metadata, JSON-LD, canonical)?
+
+## 19. Known Fixed Bugs (Historical)
 
 *These are documented to prevent regression. The architectural guardrails (KL‑series) already encode the enforcement.*
 
@@ -231,7 +392,7 @@ A tool is considered **production‑ready** only if:
 - **BUG‑006:** Blob URL lifecycle hardened.
 - **BUG‑007:** PDF Merge sequential processing.
 
-## 17. Current Priorities
+## 20. Current Priorities
 
 1. SEO indexing fix (sitemap, structured data).
 2. Sidebar performance optimization.
@@ -239,7 +400,7 @@ A tool is considered **production‑ready** only if:
 4. Hybrid UI polish & micro‑interactions rollout.
 5. Offline PWA audit completion.
 
-## 18. Severity Classification
+## 21. Severity Classification
 
 - **BLOCKER** → Production crash, memory leak, security issue
 - **CRITICAL** → Architecture violation, severe rendering instability
@@ -247,15 +408,14 @@ A tool is considered **production‑ready** only if:
 - **MINOR** → Non-critical standards deviation
 - **NIT** → Cosmetic or maintainability issue
 
-## 19. Bundle Governance
+## 22. Bundle Governance
 
 - New dependencies require bundle impact justification.
 - Heavy libraries must be dynamically imported.
 - Duplicate utility libraries are forbidden.
 - Bundle regressions >20KB gzipped require approval.
 
-## 20. Testing Standards
-
+## 23. Testing Standards
 Required validation before production:
 - `npm run typecheck`
 - `npm run lint`
@@ -265,54 +425,32 @@ Required validation before production:
 - Offline mode validation
 - Worker cancellation testing
 
-## 21. SEO Standards
-
-- Every tool page must define metadata.
-- Canonical URLs required.
-- Structured data required where applicable.
-- Sitemap entries generated automatically.
-- No duplicate metadata generation across layouts.
-
-## 22. Worker Lifecycle Standards
-
+## 24. Worker Lifecycle Standards
 - Workers must terminate idle tasks when possible.
 - Transferable objects must be released after processing.
 - Large buffers must be nulled after completion.
 - Worker queues must support cancellation and cleanup.
 
-## 23. Accessibility Validation
-
-All tools must be validated against:
-- Keyboard-only navigation
-- Screen reader announcements
-- Focus visibility
-- Reduced motion mode
-- 320px viewport usability
-
-## 24. Error Isolation Standards
-
+## 25. Error Isolation Standards
 - Every tool route must have an `ErrorBoundary`.
 - Worker failures must surface user-safe messages.
 - No raw stack traces shown to users.
 - Failed batch items must not terminate the entire queue.
 
-## 25. Service Worker Standards
-
+## 26. Service Worker Standards
 - All tool bundles must be precached.
 - Worker files must use cache-first strategy.
 - Version mismatches must trigger automatic stale cache invalidation.
 - Dynamic cache growth must be bounded.
 - Failed cache hydration must degrade gracefully.
 
-## 26. IndexedDB Constraints
-
+## 27. IndexedDB Constraints
 - IndexedDB writes must be debounced when triggered by rapid UI updates.
 - Large binary payloads must never be duplicated in persistence layers.
 - Expired cached entries must support cleanup/version migration.
 - Persisted Zustand stores must define explicit schema versions.
 
-## 27. React Server Component Rules
-
+## 28. React Server Component Rules
 - Server Components must never import browser APIs.
 - Client Components must be marked with `"use client"` only when interactivity is required.
 - Avoid unnecessary client boundaries.

@@ -98,7 +98,7 @@ class WorkerManager {
     lang: "css" | "js" | "html",
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
-  ): Promise<string> {
+  ): Promise<{ code: string; error: { type: string; message: string } | null }> {
     return workerOrchestrator.run("minifyCode", [code, lang], undefined, onProgress, abortSignal, true, 2);
   }
 

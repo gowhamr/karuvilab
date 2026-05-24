@@ -6,6 +6,7 @@ import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 import { DropZone } from "@/components/ui/DropZone";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { useRecoveryStore } from "@/src/store/useRecoveryStore";
 import { Layers, Code, FileCode, Zap } from "lucide-react";
 
 const toolId = "code-minifier";
@@ -15,6 +16,7 @@ type Lang = "css" | "js" | "html";
 export default function CodeMinifierClient() {
   const [lang, setLang] = useState<Lang>("css");
   const [isProcessing, setIsProcessing] = useState(false);
+  const showBanner = useRecoveryStore(state => state.showBanner);
 
   const addItems = useBatchStore(state => state.addItems);
   const startProcessing = useBatchStore(state => state.startProcessing);
@@ -32,7 +34,11 @@ export default function CodeMinifierClient() {
       item.abortController?.signal
     );
 
-    const blob = new Blob([result], { type: "text/plain" });
+    if (result.error) {
+      showBanner('partial_failure', result.error.message);
+    }
+
+    const blob = new Blob([result.code], { type: "text/plain" });
     const name = item.file.name.replace(/\.[^.]+$/, "") + ".min" + (item.file.name.match(/\.[^.]+$/)?.[0] || "");
 
     return {

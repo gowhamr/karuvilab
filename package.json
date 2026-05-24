@@ -12,7 +12,9 @@
     "legacy:watch": "node build.js --watch",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "postinstall": "node scripts/sync-workers.js",
+    "prebuild": "node scripts/sync-workers.js"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
@@ -56,6 +58,7 @@
     "marked": "^18.0.3",
     "next": "^16.2.4",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.0.379",
     "react": "^19.0.6",
     "react-dom": "^19.0.6",
     "resend": "^6.12.3",

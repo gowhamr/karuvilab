@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Editor from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
 import LZString from "lz-string";
 import { 
   Play, Download, Share2, Plus, X, Laptop, Tablet, Smartphone, 
@@ -13,6 +13,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { EngineLoader } from "@/components/system/EngineLoader";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -245,6 +246,10 @@ export default function HtmlViewerClient() {
     reader.readAsText(file);
   };
 
+  const checkMonaco = useCallback(() => {
+    return !!(window as any).monaco;
+  }, []);
+
   return (
     <div 
       className={cn(
@@ -319,27 +324,33 @@ export default function HtmlViewerClient() {
 
         {/* Monaco Editor */}
         <div className="flex-1 overflow-hidden relative">
-          <Editor
-            theme="vs-dark"
-            language={activeTab === "js" ? "javascript" : activeTab}
-            value={activeTab === "html" ? html : activeTab === "css" ? css : js}
-            onChange={(v) => {
-              if (activeTab === "html") setHtml(v || "");
-              else if (activeTab === "css") setCss(v || "");
-              else setJs(v || "");
-            }}
-            options={{
-              minimap: { enabled: false },
-              fontSize: 14,
-              fontFamily: "JetBrains Mono, monospace",
-              padding: { top: 20 },
-              lineNumbers: "on",
-              roundedSelection: true,
-              scrollBeyondLastLine: false,
-              automaticLayout: true,
-              tabSize: 2,
-            }}
-          />
+          <EngineLoader
+            checkInit={checkMonaco}
+            loadingMessage="Initializing Monaco Editor..."
+            errorMessage="Failed to load editor engine. Check your connection or retry."
+          >
+            <Editor
+              theme="vs-dark"
+              language={activeTab === "js" ? "javascript" : activeTab}
+              value={activeTab === "html" ? html : activeTab === "css" ? css : js}
+              onChange={(v) => {
+                if (activeTab === "html") setHtml(v || "");
+                else if (activeTab === "css") setCss(v || "");
+                else setJs(v || "");
+              }}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 14,
+                fontFamily: "JetBrains Mono, monospace",
+                padding: { top: 20 },
+                lineNumbers: "on",
+                roundedSelection: true,
+                scrollBeyondLastLine: false,
+                automaticLayout: true,
+                tabSize: 2,
+              }}
+            />
+          </EngineLoader>
           
           {/* CDN Overlay */}
           <AnimatePresence>

@@ -473,13 +473,23 @@ const api: WorkerAPI = {
       try {
         const { minify } = await import("terser");
         const result = await minify(code, { compress: true, mangle: true, module: true });
-        return result.code || code;
-      } catch (err) { /* fallback */ }
+        return { code: result.code || code, error: null };
+      } catch (err: any) {
+        return { 
+          code, 
+          error: { 
+            type: 'premium_engine_unavailable', 
+            message: 'Premium JS minification engine (Terser) is currently unavailable.' 
+          } 
+        };
+      }
     }
-    // Basic fallback minifiers
-    if (lang === "css") return code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s*([{}:;,>~+])\s*/g, "$1").replace(/;\s*}/g, "}").replace(/\s+/g, " ").trim();
-    if (lang === "html") return code.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").replace(/>\s+</g, "><").trim();
-    return code;
+    // Basic fallback minifiers for CSS/HTML (no heavy dependencies)
+    let minified = code;
+    if (lang === "css") minified = code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s*([{}:;,>~+])\s*/g, "$1").replace(/;\s*}/g, "}").replace(/\s+/g, " ").trim();
+    if (lang === "html") minified = code.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").replace(/>\s+</g, "><").trim();
+    
+    return { code: minified, error: null };
   },
 
   async computeDiff(textA, textB, onProgress) {

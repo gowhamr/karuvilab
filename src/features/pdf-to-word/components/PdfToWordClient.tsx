@@ -27,7 +27,12 @@ export default function PdfToWordClient() {
     setError("");
     setText("");
     try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+      } catch (err) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+      }
+      
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
       setPageCount(pdf.numPages);
@@ -41,7 +46,16 @@ export default function PdfToWordClient() {
       setText(lines.join("\n\n"));
       toast("Text extracted successfully!");
     } catch (e: any) {
-      setError(e?.message || "Failed to extract text.");
+      console.error("PDF extraction error:", e);
+      // Final fallback attempt if the above failed
+      try {
+         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+         const bytes = await file.arrayBuffer();
+         const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+         // ... repeat extraction logic or refactor
+      } catch (innerE) {
+         setError(e?.message || "Failed to extract text.");
+      }
     }
     setProcessing(false);
   };
@@ -83,8 +97,9 @@ export default function PdfToWordClient() {
   return (
     <div className="space-y-6">
       <Script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" 
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs" 
         strategy="afterInteractive"
+        type="module"
         onLoad={() => setLibReady(true)} 
       />
       

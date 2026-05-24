@@ -1,10 +1,11 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Script from "next/script";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-
+import { EngineLoader } from "@/components/system/EngineLoader";
 import { DropZone } from "@/components/ui/DropZone";
+import { Loader2, AlertCircle, FileText, Download } from "lucide-react";
 
 declare const pdfjsLib: any;
 
@@ -15,19 +16,29 @@ interface ExtractedImage { url: string; width: number; height: number; page: num
 export default function ExtractImagesClient() {
   const [file, setFile] = useState<File | null>(null);
   const [libReady, setLibReady] = useState(false);
+  const [libError, setLibError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [images, setImages] = useState<ExtractedImage[]>([]);
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
 
+  const checkLib = useCallback(() => {
+    return typeof pdfjsLib !== 'undefined';
+  }, []);
+
   const extract = async () => {
-    if (!libReady) { setError("PDF library not loaded yet."); return; }
+    if (!checkLib()) { setError("PDF library not loaded yet."); return; }
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
     setImages([]);
     try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+      } catch (err) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+      }
+      
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
       const extracted: ExtractedImage[] = [];
@@ -97,11 +108,19 @@ export default function ExtractImagesClient() {
   };
 
   return (
-    <>
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs" type="module" onLoad={() => setLibReady(true)} />
+    <div className="space-y-8">
+      <Script 
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs" 
+        type="module" 
+        onLoad={() => setLibReady(true)}
+        onError={() => setLibError("Failed to load PDF engine. Please check your connection.")}
+      />
       
-        {!libReady && <div className="bg-surface border border-border p-4 rounded-2xl text-sm text-text-3 flex items-center gap-2"><span className="animate-spin">⏳</span> Loading PDF.js library…</div>}
-
+      <EngineLoader
+        checkInit={checkLib}
+        loadingMessage="Preparing PDF extraction engine..."
+        errorMessage={libError || "Failed to load PDF extraction engine."}
+      >
         <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl text-sm text-yellow-700 dark:text-yellow-400">
           <strong>Note:</strong> Extracts raster images (JPEG, PNG) embedded in the PDF. Vector graphics and text-based content cannot be extracted as images.
         </div>
@@ -117,33 +136,42 @@ export default function ExtractImagesClient() {
           icon={<div className="text-4xl">{file ? "📄" : "🖼️"}</div>}
         />
 
-        {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
-        {progress && <div className="p-4 bg-surface border border-border rounded-xl text-sm text-text-3 flex items-center gap-2"><span className="animate-spin">⏳</span>{progress}</div>}
+        {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm font-bold">{error}</div>}
+        {progress && <div className="p-4 bg-surface border border-border rounded-xl text-sm text-text-3 flex items-center gap-2 font-bold uppercase tracking-widest"><Loader2 className="w-4 h-4 animate-spin text-blue" />{progress}</div>}
 
         <button
           onClick={extract}
           disabled={!file || processing || !libReady}
-          className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+          className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
         >
           {processing ? "Extracting…" : "Extract Images"}
         </button>
 
         {images.length > 0 && (
-          <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
+          <div className="bg-surface border border-border p-5 rounded-[32px] shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
-              <button onClick={downloadAll} className="px-4 py-2 bg-blue text-white text-sm font-bold rounded-xl hover:opacity-90">
-                Download All
+              <h2 className="font-black text-text-2 text-[10px] uppercase tracking-[0.2em]">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
+              <button 
+                onClick={downloadAll} 
+                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10"
+              >
+                <Download className="w-3.5 h-3.5" /> Download All
               </button>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {images.map((img, i) => (
-                <div key={i} className="bg-bg border border-border rounded-xl overflow-hidden">
-                  <img src={img.url} alt={`Extracted image ${i + 1}`} className="w-full h-24 object-contain bg-white" />
-                  <div className="p-2 space-y-1">
-                    <p className="text-xs text-text-4">Page {img.page} · {img.width}×{img.height}px</p>
-                    <a href={img.url} download={`extracted-p${img.page}-${i + 1}.png`} className="text-xs text-blue hover:underline font-medium">
-                      Download
+                <div key={i} className="bg-bg border border-border rounded-2xl overflow-hidden group">
+                  <div className="aspect-square bg-white flex items-center justify-center p-2">
+                    <img src={img.url} alt={`Extracted image ${i + 1}`} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+                  </div>
+                  <div className="p-3 bg-surface border-t border-border space-y-2">
+                    <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Page {img.page} · {img.width}×{img.height}px</p>
+                    <a 
+                      href={img.url} 
+                      download={`extracted-p${img.page}-${i + 1}.png`} 
+                      className="inline-flex items-center gap-1.5 text-[9px] font-black text-blue uppercase tracking-widest hover:underline"
+                    >
+                      <Download size={10} /> Download
                     </a>
                   </div>
                 </div>
@@ -151,7 +179,7 @@ export default function ExtractImagesClient() {
             </div>
           </div>
         )}
-      
-    </>
+      </EngineLoader>
+    </div>
   );
 }

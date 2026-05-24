@@ -1,13 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
 import { generateToolMetadata } from "@/src/lib/seo";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-
-const HtmlViewerClient = dynamic(() => import("@/src/features/html-viewer"), {
-  loading: () => <ToolSkeleton />,
-});
+import HtmlViewerClientWrapper from "./HtmlViewerClientWrapper";
 
 const toolId = "html-viewer";
 const cat = CATEGORIES.find(c => c.id === "developer")!;
@@ -22,7 +17,7 @@ export default function HtmlViewerPage() {
       category={cat}
       toolId={toolId}
     >
-      <HtmlViewerClient />
+      <HtmlViewerClientWrapper />
     </ToolShell>
   );
 }
