@@ -46,9 +46,18 @@ export default function PomodoroTimerClient() {
   const [isActive, setIsActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(focusDuration * 60);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const totalDuration = (mode === 'focus' ? focusDuration : breakDuration) * 60;
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationStatus(Notification.permission);
+    } else {
+      setNotificationStatus('unsupported');
+    }
+  }, []);
 
   useEffect(() => {
     const savedState = loadState<{ focus: number; break: number; longBreak: number }>('pomodoro-timer');
@@ -72,7 +81,7 @@ export default function PomodoroTimerClient() {
     playSound();
     addSession({ startTime: Date.now(), duration: totalDuration / 60, type: mode, completed: true });
     
-    if (Notification.permission === 'granted') {
+    if (notificationStatus === 'granted') {
       new Notification(`Pomodoro: ${mode === 'focus' ? 'Focus' : 'Break'} session complete!`);
     }
 
@@ -80,7 +89,7 @@ export default function PomodoroTimerClient() {
     setMode(nextMode);
     setTimeLeft((nextMode === 'focus' ? focusDuration : breakDuration) * 60);
     setIsActive(false);
-  }, [mode, focusDuration, breakDuration, addSession, totalDuration]);
+  }, [mode, focusDuration, breakDuration, addSession, totalDuration, notificationStatus]);
 
   useEffect(() => {
     if (isActive) {
@@ -113,9 +122,10 @@ export default function PomodoroTimerClient() {
     setMode(newMode);
   };
   
-  const requestNotificationPermission = () => {
+  const requestNotificationPermission = async () => {
     if ('Notification' in window && Notification.permission !== 'granted') {
-      Notification.requestPermission();
+      const permission = await Notification.requestPermission();
+      setNotificationStatus(permission);
     }
   };
 
@@ -124,6 +134,8 @@ export default function PomodoroTimerClient() {
     setDurations({ focus: 25, break: 5, longBreak: 15 });
     setShowRestoredBanner(false);
   };
+
+  const progress = timeLeft / totalDuration;
 
   return (
     <div className="relative flex flex-col items-center justify-center gap-8 p-4">
@@ -150,36 +162,75 @@ export default function PomodoroTimerClient() {
       </div>
 
       {/* Timer Card */}
-      <div className="relative w-full max-w-sm aspect-square rounded-full bg-black/10 dark:bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl flex items-center justify-center">
-        <motion.div
-          className="absolute inset-0 rounded-full border-[10px] border-blue"
-          initial={{ scale: 0.9, rotate: -90 }}
-          animate={{ pathLength: timeLeft / totalDuration }}
-          style={{ pathLength: timeLeft / totalDuration }}
-          transition={{ duration: 0.5 }}
-        />
+      <div className="relative w-full max-w-sm aspect-square rounded-full flex items-center justify-center">
+        <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="currentColor"
+            strokeWidth="4"
+            fill="transparent"
+            className="text-white/5"
+          />
+          <motion.circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="#4F46E5"
+            strokeWidth="4"
+            strokeDasharray="282.7"
+            initial={{ strokeDashoffset: 0 }}
+            animate={{ strokeDashoffset: 282.7 * (1 - progress) }}
+            transition={{ duration: 1, ease: "linear" }}
+            fill="transparent"
+            strokeLinecap="round"
+          />
+        </svg>
         <div className="text-center z-10">
           <p className="text-7xl font-bold font-mono tabular-nums">{formatTime(timeLeft)}</p>
-          <p className="text-sm font-bold uppercase tracking-widest opacity-50">{mode}</p>
+          <p className="text-sm font-black uppercase tracking-widest text-text-4">{mode}</p>
         </div>
       </div>
 
       {/* Controls */}
       <div className="flex items-center gap-6">
-        <button onClick={resetTimer} className="p-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors"><RotateCcw /></button>
-        <button onClick={toggleTimer} className="w-24 h-24 rounded-full bg-blue text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-blue/30">
-          {isActive ? <Pause className="w-10 h-10" /> : <Play className="w-10 h-10" />}
+        <button 
+          onClick={resetTimer} 
+          title="Reset Timer"
+          className="p-4 rounded-full bg-surface border border-border hover:border-blue hover:text-blue transition-all active:scale-90"
+        >
+          <RotateCcw className="w-6 h-6" />
         </button>
-        <button onClick={() => setIsSettingsOpen(true)} className="p-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors"><Settings /></button>
+        <button 
+          onClick={toggleTimer} 
+          className="w-24 h-24 rounded-full bg-blue text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-blue/30 hover:scale-105 active:scale-95 transition-all"
+        >
+          {isActive ? <Pause className="w-10 h-10" /> : <Play className="w-10 h-10 ml-1" />}
+        </button>
+        <button 
+          onClick={() => setIsSettingsOpen(true)} 
+          title="Settings"
+          className="p-4 rounded-full bg-surface border border-border hover:border-blue hover:text-blue transition-all active:scale-90"
+        >
+          <Settings className="w-6 h-6" />
+        </button>
       </div>
       
       {/* Notification Button */}
-      <button 
-        onClick={requestNotificationPermission}
-        className="flex items-center gap-2 text-sm text-text-4 hover:text-text"
-      >
-        <Bell className="w-4 h-4" /> Enable Notifications
-      </button>
+      {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && (
+        <button 
+          onClick={requestNotificationPermission}
+          className="flex items-center gap-2 px-4 py-2 bg-blue/5 border border-blue/10 rounded-xl text-xs font-black uppercase tracking-widest text-blue hover:bg-blue/10 transition-all"
+        >
+          <Bell className="w-4 h-4" /> Enable Notifications
+        </button>
+      )}
+      {notificationStatus === 'granted' && (
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500 opacity-60">
+           <Bell className="w-3 h-3" /> Notifications Active
+        </div>
+      )}
 
       <PomodoroSettings 
         isOpen={isSettingsOpen} 
