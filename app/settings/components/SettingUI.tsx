@@ -103,7 +103,7 @@ interface SettingSelectProps {
 
 export const SettingSelect = memo(function SettingSelect({ options, value, onChange }: SettingSelectProps) {
   return (
-    <div className="flex p-1.5 bg-bg border border-border rounded-2xl shadow-inner" role="radiogroup">
+    <div className="flex flex-wrap p-1.5 bg-bg border border-border rounded-2xl shadow-inner gap-1" role="radiogroup">
       {options.map((opt) => (
         <button
           key={opt.value}
@@ -111,7 +111,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
           aria-checked={value === opt.value}
           onClick={() => onChange(opt.value)}
           className={`
-            px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative
+            px-3 sm:px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative flex-1 min-w-[60px]
             ${value === opt.value 
               ? 'text-text' 
               : 'text-text-4 hover:text-text'}
