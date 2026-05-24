@@ -47,14 +47,14 @@ export function generateToolMetadata(toolId: string): Metadata {
 }
 
 interface StructuredDataProps {
-  tool?: ToolEntry;
-  category?: CategoryEntry;
+  tool?: ToolEntry | undefined;
+  category?: CategoryEntry | undefined;
   content?: {
-    detailedDescription?: string;
-    faq?: { question: string; answer: string }[];
-    howTo?: string[];
-    useCases?: string[];
-  };
+    detailedDescription?: string | undefined;
+    faq?: { question: string; answer: string }[] | undefined;
+    howTo?: string[] | undefined;
+    useCases?: string[] | undefined;
+  } | undefined;
 }
 
 interface BreadcrumbListItem {

@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
-import { Accordion } from "@/components/ui/Accordion";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
 import { ToolCard } from "@/components/ToolCard";
 import { TOOL_CONTENT } from "@/src/tool-content";
 import { ALL_TOOLS } from "@/src/registry";
@@ -167,10 +167,10 @@ Generated via KaruviLab`;
           <h3 className="text-lg font-bold text-text-2">Frequently Asked Questions</h3>
           <Accordion type="single" collapsible className="w-full">
             {content.faq.map((f, i) => (
-              <div key={i} className="border-b border-border">
+              <AccordionItem key={i} value={`item-${i}`} className="border-b border-border">
                 <AccordionTrigger className="text-sm">{f.question}</AccordionTrigger>
                 <AccordionContent className="text-sm">{f.answer}</AccordionContent>
-              </div>
+              </AccordionItem>
             ))}
           </Accordion>
         </div>
