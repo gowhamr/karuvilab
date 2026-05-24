@@ -63,7 +63,7 @@ export interface ToolContent {
   howTo?: string[];
   faq?: { question: string; answer: string }[];
   useCases?: string[];
-  examples?: { label: string; input: string; output: string }[];
+  examples?: { label?: string; input: string; output: string; description?: string }[];
   commonErrors?: { error: string; fix: string }[];
   alternatives?: string[];
 }

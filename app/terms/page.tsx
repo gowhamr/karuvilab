@@ -1,71 +1,47 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import { StructuredData } from "@/src/lib/seo";
-
-export const metadata: Metadata = {
-  title: "Terms & Conditions – KV",
-  description: "Terms & Conditions for KaruviLab. Read our usage rules and disclaimer of warranties.",
-  alternates: {
-    canonical: "/terms",
-  },
-};
-
-export default function TermsPage() {
-  const sections = [
-    {
-      title: "1. Acceptance of Terms",
-      body: "By accessing and using KaruviLab (\"the Tool\"), you accept and agree to be bound by these Terms & Conditions. If you do not agree with any part of these terms, please do not use the Tool.",
-    },
-    {
-      title: "2. Description of the Tool",
-      body: "KaruviLab is a free, browser-based utility that allows users to compress, convert, create, and validate image and PDF files, and provides a range of developer and SEO tools. The Tool is provided by R Gowtham under the Wanderseven brand.",
-    },
-    {
-      title: "3. Use of the Tool",
-      body: "You agree to use the Tool only for lawful purposes. You must not attempt to reverse-engineer the Tool's source code beyond what is permitted by applicable open-source licences, or use automated scripts to abuse the Tool.",
-    },
-    {
-      title: "4. Disclaimer of Warranties",
-      body: "The Tool is provided on an \"as is\" and \"as available\" basis without warranties of any kind. We do not guarantee that the output will meet the specific requirements of any government portal or authority.",
-    },
-    {
-      title: "5. Limitation of Liability",
-      body: "Wanderseven and R Gowtham shall not be liable for any direct or indirect damages arising from your use of or inability to use the Tool, including any file loss or processing errors.",
-    },
-    {
-      title: "6. Contact",
-      body: null,
-      contact: true,
-    },
-  ];
-
+export default function TermsOfServicePage() {
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-6">
-      <StructuredData />
-      <div className="space-y-2">
-        <nav className="flex items-center gap-2 text-sm text-text-4">
-          <Link href="/" className="hover:text-blue transition-colors">Home</Link>
-          <span>/</span>
-          <span className="text-text-3">Terms & Conditions</span>
-        </nav>
-        <h1 className="text-3xl font-black">Terms &amp; Conditions</h1>
-        <p className="text-text-3">Last updated: April 30, 2026</p>
-      </div>
+    <div className="max-w-4xl mx-auto px-6 py-16 space-y-8">
+      <h1 className="text-4xl font-black tracking-tight text-text">Terms of Service</h1>
+      
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Acceptance of Terms</h2>
+        <p>By accessing or using KaruviLab (https://karuvilab.com), you agree to be bound by these Terms of Service. If you do not agree, please do not use the website.</p>
+      </section>
 
-      <div className="space-y-4">
-        {sections.map(s => (
-          <div key={s.title} className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-3">
-            <h2 className="text-xl font-bold">{s.title}</h2>
-            {s.body && <p className="text-text-2 leading-relaxed">{s.body}</p>}
-            {s.contact && (
-              <p className="text-text-2 leading-relaxed">
-                For any queries regarding these Terms &amp; Conditions, please contact:{" "}
-                <a href="mailto:wanderseven@proton.me" className="text-blue hover:underline">wanderseven@proton.me</a>
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Use of Services</h2>
+        <p>KaruviLab provides browser‑native productivity tools for lawful purposes only. You agree not to use the tools for any illegal activities, to attempt to reverse‑engineer the platform, or to interfere with its operation.</p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">No Data Upload</h2>
+        <p>All tool processing (file conversion, image editing, PDF manipulation, calculations) occurs entirely within your browser. KaruviLab does not upload, store, or transmit your files or data to any server.</p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">No Liability</h2>
+        <p>KaruviLab tools are provided 'as is' without warranty of any kind. We do not guarantee the accuracy of calculations, conversions, or outputs. You assume full responsibility for any results produced using our tools.</p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Third‑Party Services</h2>
+        <p>KaruviLab may display advertisements from third‑party networks (such as Google AdSense). These networks may use cookies as described in our Privacy Policy.</p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Intellectual Property</h2>
+        <p>The KaruviLab name, KV logo, and all original content are the property of Wanderseven (R Gowtham). Third‑party libraries and icons are used under their respective open‑source licenses.</p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Governing Law</h2>
+        <p>These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Tamil Nadu, India.</p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Changes to Terms</h2>
+        <p>We may update these terms from time to time. Continued use of the website constitutes acceptance of the revised terms.</p>
+      </section>
     </div>
   );
 }
