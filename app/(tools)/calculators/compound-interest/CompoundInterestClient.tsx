@@ -164,8 +164,15 @@ Generated via KaruviLab`;
 
       {content?.faq && (
         <div className="space-y-4">
-            <h3 className="text-lg font-bold text-text-2">Frequently Asked Questions</h3>
-            <Accordion items={content.faq.map(f => ({ title: f.question, content: f.answer }))} />
+          <h3 className="text-lg font-bold text-text-2">Frequently Asked Questions</h3>
+          <Accordion type="single" collapsible className="w-full">
+            {content.faq.map((f, i) => (
+              <div key={i} className="border-b border-border">
+                <AccordionTrigger className="text-sm">{f.question}</AccordionTrigger>
+                <AccordionContent className="text-sm">{f.answer}</AccordionContent>
+              </div>
+            ))}
+          </Accordion>
         </div>
       )}
 
