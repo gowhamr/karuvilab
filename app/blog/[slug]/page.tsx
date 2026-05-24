@@ -1,8 +1,10 @@
 import { articles } from "@/src/content/blog/articles";
 import { notFound } from "next/navigation";
 
+type Params = Promise<{ slug: string }>;
+
 interface BlogArticleProps {
-  params: Promise<{ slug: string }>;
+  params: Params;
 }
 
 export default async function BlogArticlePage({ params }: BlogArticleProps) {
