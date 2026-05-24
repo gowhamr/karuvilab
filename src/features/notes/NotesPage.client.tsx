@@ -64,19 +64,9 @@ export default function NotesPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8 min-h-screen pb-32">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-1">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-text flex items-center gap-3">
-            <StickyNote className="text-blue w-10 h-10 md:w-12 md:h-12" />
-            KV Notes
-          </h1>
-          <p className="text-text-4 font-bold uppercase tracking-widest text-xs ml-1">
-            Secure, Browser-Native Thinking
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 bg-surface border border-border rounded-[24px] p-1.5 shadow-sm">
+      {/* Tabs Section */}
+      <div className="flex justify-start">
+        <div className="flex items-center gap-1 bg-surface border border-border rounded-2xl p-1 shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -84,29 +74,27 @@ export default function NotesPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "relative flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all",
-                  activeTab === tab.id ? "text-white" : "text-text-4 hover:text-text hover:bg-bg"
+                  "relative flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all outline-none",
+                  activeTab === tab.id ? "text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text hover:bg-bg"
                 )}
               >
                 {activeTab === tab.id && (
                   <m.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-blue rounded-full shadow-lg shadow-blue/20"
+                    className="absolute inset-0 bg-blue rounded-xl -z-10"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <span className="relative z-10 flex items-center gap-2">
-                  <Icon size={14} />
-                  {tab.label}
-                  {counts[tab.id] > 0 && (
-                    <span className={cn(
-                      "px-1.5 py-0.5 rounded-md text-[9px]",
-                      activeTab === tab.id ? "bg-white/20 text-white" : "bg-blue/10 text-blue"
-                    )}>
-                      {counts[tab.id]}
-                    </span>
-                  )}
-                </span>
+                <Icon size={14} className={activeTab === tab.id ? "text-white/80" : "text-text-4"} />
+                <span>{tab.label}</span>
+                {counts[tab.id] > 0 && (
+                  <span className={cn(
+                    "px-1.5 py-0.5 rounded-md text-[9px] ml-1",
+                    activeTab === tab.id ? "bg-white/20 text-white" : "bg-blue/10 text-blue"
+                  )}>
+                    {counts[tab.id]}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -144,7 +132,7 @@ export default function NotesPage() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleCreateNote}
-        className="fixed bottom-10 right-10 w-16 h-16 bg-blue text-white rounded-full flex items-center justify-center shadow-2xl shadow-blue/40 z-50 group hover:bg-blue/90 transition-colors"
+        className="fixed bottom-24 md:bottom-10 right-6 md:right-10 w-16 h-16 bg-blue text-white rounded-full flex items-center justify-center shadow-2xl shadow-blue/40 z-50 group hover:bg-blue/90 transition-colors outline-none focus-visible:ring-4 focus-visible:ring-blue/20"
         title="Create New Note"
       >
         <Plus size={32} className="group-hover:rotate-90 transition-transform duration-300" />

@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import * as Popover from "@radix-ui/react-popover";
 import { m, AnimatePresence } from "framer-motion";
 import { 
   X, Pin, Archive, Trash2, Hash, CheckSquare, 
   Type, Eye, Edit3, Plus, Trash, GripVertical,
-  ChevronLeft, Save, Sparkles
+  ChevronLeft, Save, Sparkles, MoreVertical
 } from "lucide-react";
 import { Note, ChecklistItem } from "../types";
 import { useNotesStore } from "../store";
@@ -104,75 +105,95 @@ export function NoteEditor() {
           "inset-0 md:inset-10 lg:inset-20 md:rounded-[32px] md:max-w-4xl md:mx-auto"
         )}>
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border/50 bg-bg/30">
+          <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-border/50 bg-bg/30">
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setSelectedNoteId(null)}
-                className="p-2 hover:bg-bg rounded-xl text-text-4 transition-all md:hidden"
+                className="p-2 hover:bg-surface rounded-xl text-text-3 hover:text-text transition-all md:hidden"
               >
                 <ChevronLeft size={20} />
               </button>
+              
               <div className="flex items-center gap-1 bg-surface border border-border rounded-xl p-1">
                 <button
                   onClick={() => handleChange({ isChecklist: false })}
-                  className={cn("p-2 rounded-lg transition-all", !localNote.isChecklist ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:bg-bg")}
+                  className={cn("p-2 rounded-lg transition-all", !localNote.isChecklist ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-3 hover:bg-bg hover:text-text")}
                   title="Note Mode"
                 >
                   <Type size={16} />
                 </button>
                 <button
                   onClick={() => handleChange({ isChecklist: true })}
-                  className={cn("p-2 rounded-lg transition-all", localNote.isChecklist ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:bg-bg")}
+                  className={cn("p-2 rounded-lg transition-all", localNote.isChecklist ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-3 hover:bg-bg hover:text-text")}
                   title="Checklist Mode"
                 >
                   <CheckSquare size={16} />
                 </button>
               </div>
-              <div className="h-6 w-px bg-border/50 mx-2 hidden md:block" />
+              
               {!localNote.isChecklist && (
-                <div className="flex items-center gap-1 bg-surface border border-border rounded-xl p-1">
-                  <button
-                    onClick={() => setIsPreview(false)}
-                    className={cn("p-2 rounded-lg transition-all", !isPreview ? "bg-blue/10 text-blue" : "text-text-4 hover:bg-bg")}
-                    title="Edit Markdown"
-                  >
-                    <Edit3 size={16} />
-                  </button>
-                  <button
-                    onClick={() => setIsPreview(true)}
-                    className={cn("p-2 rounded-lg transition-all", isPreview ? "bg-blue/10 text-blue" : "text-text-4 hover:bg-bg")}
-                    title="Preview Rendered"
-                  >
-                    <Eye size={16} />
-                  </button>
-                </div>
+                <>
+                  <div className="h-6 w-px bg-border/50 mx-1 md:mx-2" />
+                  <div className="flex items-center gap-1 bg-surface border border-border rounded-xl p-1">
+                    <button
+                      onClick={() => setIsPreview(false)}
+                      className={cn("p-2 rounded-lg transition-all", !isPreview ? "bg-blue/10 text-blue" : "text-text-3 hover:bg-bg hover:text-text")}
+                      title="Edit Markdown"
+                    >
+                      <Edit3 size={16} />
+                    </button>
+                    <button
+                      onClick={() => setIsPreview(true)}
+                      className={cn("p-2 rounded-lg transition-all", isPreview ? "bg-blue/10 text-blue" : "text-text-3 hover:bg-bg hover:text-text")}
+                      title="Preview Rendered"
+                    >
+                      <Eye size={16} />
+                    </button>
+                  </div>
+                </>
               )}
             </div>
 
             <div className="flex items-center gap-1">
-              <button
-                onClick={() => togglePin(localNote.id)}
-                className={cn("p-2 rounded-xl transition-all", localNote.pinned ? "text-blue bg-blue/10" : "text-text-4 hover:bg-bg")}
-                title={localNote.pinned ? "Unpin" : "Pin"}
-              >
-                <Pin size={18} fill={localNote.pinned ? "currentColor" : "none"} />
-              </button>
-              <button
-                onClick={() => toggleArchive(localNote.id)}
-                className={cn("p-2 rounded-xl transition-all", localNote.isArchived ? "text-blue bg-blue/10" : "text-text-4 hover:bg-bg")}
-                title={localNote.isArchived ? "Unarchive" : "Archive"}
-              >
-                <Archive size={18} />
-              </button>
-              <button
-                onClick={() => toggleDelete(localNote.id)}
-                className="p-2 text-text-4 hover:bg-error/10 hover:text-error rounded-xl transition-all"
-                title="Move to Trash"
-              >
-                <Trash2 size={18} />
-              </button>
-              <div className="h-6 w-px bg-border/50 mx-2 hidden md:block" />
-              <Dialog.Close className="p-2 hover:bg-bg rounded-xl text-text-4 transition-all active:scale-90">
+              <Popover.Root>
+                <Popover.Trigger asChild>
+                  <button className="p-2 text-text-3 hover:bg-surface hover:text-text rounded-xl transition-all outline-none">
+                    <MoreVertical size={20} />
+                  </button>
+                </Popover.Trigger>
+                <Popover.Portal>
+                  <Popover.Content align="end" sideOffset={8} className="z-[500] w-48 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 p-1">
+                    <button
+                      onClick={() => togglePin(localNote.id)}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-text-3 hover:text-text hover:bg-bg rounded-xl transition-all"
+                    >
+                      <Pin size={16} fill={localNote.pinned ? "currentColor" : "none"} className={localNote.pinned ? "text-blue" : ""} />
+                      {localNote.pinned ? "Unpin Note" : "Pin Note"}
+                    </button>
+                    <button
+                      onClick={() => toggleArchive(localNote.id)}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-text-3 hover:text-text hover:bg-bg rounded-xl transition-all"
+                    >
+                      <Archive size={16} className={localNote.isArchived ? "text-blue" : ""} />
+                      {localNote.isArchived ? "Unarchive Note" : "Archive Note"}
+                    </button>
+                    <div className="h-px bg-border/50 my-1" />
+                    <button
+                      onClick={() => {
+                        toggleDelete(localNote.id);
+                        setSelectedNoteId(null);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-error hover:bg-error/10 rounded-xl transition-all"
+                    >
+                      <Trash2 size={16} />
+                      Move to Trash
+                    </button>
+                  </Popover.Content>
+                </Popover.Portal>
+              </Popover.Root>
+              
+              <div className="h-6 w-px bg-border/50 mx-1 md:mx-2 hidden md:block" />
+              <Dialog.Close className="hidden md:flex p-2 hover:bg-surface hover:text-text rounded-xl text-text-3 transition-all active:scale-90">
                 <X size={20} />
               </Dialog.Close>
             </div>
@@ -276,13 +297,10 @@ export function NoteEditor() {
                 <Sparkles size={12} className="text-blue" />
                 Updated {formatFullDate(localNote.updatedAt)}
               </span>
-              <button 
-                onClick={() => setSelectedNoteId(null)}
-                className="px-6 py-2 bg-blue text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
-              >
-                <Save size={12} />
-                Saved
-              </button>
+              <div className="flex items-center gap-1.5 text-text-4">
+                <CheckSquare size={14} className="text-success" />
+                <span className="text-[10px] font-bold uppercase tracking-widest">Saved</span>
+              </div>
             </div>
           </div>
         </Dialog.Content>
