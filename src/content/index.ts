@@ -75,6 +75,7 @@ import { textCaseConverter } from './tools/text-case-converter';
 import { invoiceGenerator } from './tools/invoice-generator';
 import { colorConverter } from './tools/color-converter';
 import { scientificCalculator } from './tools/scientific-calculator';
+import { pomodoroTimer } from './tools/pomodoro-timer';
 import { notesContent } from './tools/notes';
 
 export const TOOL_CONTENT: Record<string, ToolContent> = {
@@ -149,5 +150,6 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "safe-to-spend": safeToSpend,
   "work-hours": workHours,
   "notes": notesContent,
-  "scientific-calculator": scientificCalculator
+  "scientific-calculator": scientificCalculator,
+  "pomodoro-timer": pomodoroTimer
 };

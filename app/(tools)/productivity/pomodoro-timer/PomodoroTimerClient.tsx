@@ -4,10 +4,13 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePomodoroStore } from '@/src/store/usePomodoroStore';
 import { useSessionStore } from '@/src/store/useSessionStore';
 import { SessionRestoredBanner } from '@/components/ui/SessionRestoredBanner';
-import { motion } from 'framer-motion';
-import { Play, Pause, RotateCcw, Settings, Bell } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Play, Pause, RotateCcw, Settings, Bell, Sparkles, Trophy, Coffee } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { PomodoroSettings } from './PomodoroSettings';
+
+// STYLE-001: Standardized animation tokens
+const TRANSITION = { type: "spring", bounce: 0.2, duration: 0.6 } as const;
 
 // Simple audio beep
 const playSound = () => {
@@ -36,6 +39,7 @@ export default function PomodoroTimerClient() {
   const longBreakDuration = usePomodoroStore(state => state.longBreakDuration);
   const setDurations = usePomodoroStore(state => state.setDurations);
   const addSession = usePomodoroStore(state => state.addSession);
+  const sessions = usePomodoroStore(state => state.sessions);
 
   const saveState = useSessionStore(state => state.saveState);
   const loadState = useSessionStore(state => state.loadState);
@@ -50,6 +54,13 @@ export default function PomodoroTimerClient() {
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const totalDuration = (mode === 'focus' ? focusDuration : breakDuration) * 60;
+
+  // STATS-001: Track current cycle
+  const dailyCompleted = sessions.filter(s => 
+    s.completed && 
+    new Date(s.startTime).toDateString() === new Date().toDateString() &&
+    s.type === 'focus'
+  ).length;
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -138,99 +149,170 @@ export default function PomodoroTimerClient() {
   const progress = timeLeft / totalDuration;
 
   return (
-    <div className="relative flex flex-col items-center justify-center gap-8 p-4">
+    <div className="relative flex flex-col items-center justify-center gap-12 py-8 max-w-2xl mx-auto">
       <SessionRestoredBanner 
         isVisible={showRestoredBanner}
         onClear={handleClearSession}
         onDismiss={() => setShowRestoredBanner(false)}
       />
 
+      {/* Header Stats */}
+      <div className="w-full flex items-center justify-between px-6 py-4 bg-surface/40 backdrop-blur-md border border-border rounded-3xl shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+            <Trophy size={20} />
+          </div>
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Today's Focus</p>
+            <p className="text-sm font-black text-text">{dailyCompleted} Sessions</p>
+          </div>
+        </div>
+
+        <div className="h-8 w-px bg-border/50 mx-2" />
+
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+            <Sparkles size={20} />
+          </div>
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Current Streak</p>
+            <p className="text-sm font-black text-text">{dailyCompleted % 4} / 4 Pomos</p>
+          </div>
+        </div>
+      </div>
+
       {/* Mode Switcher */}
-      <div className="flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
+      <div className="flex p-1.5 bg-surface border border-border rounded-[24px] shadow-premium relative z-10">
         {(['focus', 'break'] as const).map((m) => (
           <button
             key={m}
             onClick={() => switchMode(m)}
             className={cn(
-              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-              mode === m ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-4 hover:text-text"
+              "relative px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition-all outline-none",
+              mode === m ? "text-white" : "text-text-4 hover:text-text"
             )}
           >
-            {m}
+            {mode === m && (
+              <motion.div
+                layoutId="pomo-mode"
+                className="absolute inset-0 bg-blue rounded-2xl -z-10 shadow-lg shadow-blue/20"
+                transition={TRANSITION}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              {m === 'focus' ? <Sparkles size={14} /> : <Coffee size={14} />}
+              {m}
+            </span>
           </button>
         ))}
       </div>
 
       {/* Timer Card */}
-      <div className="relative w-full max-w-sm aspect-square rounded-full flex items-center justify-center">
-        <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-          <circle
-            cx="50"
-            cy="50"
-            r="45"
-            stroke="currentColor"
-            strokeWidth="4"
-            fill="transparent"
-            className="text-white/5"
-          />
-          <motion.circle
-            cx="50"
-            cy="50"
-            r="45"
-            stroke="#4F46E5"
-            strokeWidth="4"
-            strokeDasharray="282.7"
-            initial={{ strokeDashoffset: 0 }}
-            animate={{ strokeDashoffset: 282.7 * (1 - progress) }}
-            transition={{ duration: 1, ease: "linear" }}
-            fill="transparent"
-            strokeLinecap="round"
-          />
-        </svg>
-        <div className="text-center z-10">
-          <p className="text-7xl font-bold font-mono tabular-nums">{formatTime(timeLeft)}</p>
-          <p className="text-sm font-black uppercase tracking-widest text-text-4">{mode}</p>
+      <div className="relative group">
+        {/* Glow Effect */}
+        <AnimatePresence>
+          {isActive && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1.1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute inset-0 bg-blue/20 blur-[64px] rounded-full -z-10"
+              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
+            />
+          )}
+        </AnimatePresence>
+
+        <div className="relative w-72 md:w-80 aspect-square rounded-full flex items-center justify-center bg-surface border border-border/50 shadow-surface-4 transition-all group-hover:border-blue/30">
+          <svg className="absolute inset-0 w-full h-full transform -rotate-90 p-4" viewBox="0 0 100 100">
+            <circle
+              cx="50"
+              cy="50"
+              r="48"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              fill="transparent"
+              className="text-white/5"
+            />
+            <motion.circle
+              cx="50"
+              cy="50"
+              r="48"
+              stroke="#4F46E5"
+              strokeWidth="2.5"
+              strokeDasharray="301.6"
+              initial={{ strokeDashoffset: 0 }}
+              animate={{ strokeDashoffset: 301.6 * (1 - progress) }}
+              transition={{ duration: 1, ease: "linear" }}
+              fill="transparent"
+              strokeLinecap="round"
+            />
+          </svg>
+          <div className="text-center z-10">
+            <motion.p 
+              key={timeLeft}
+              initial={{ scale: 0.95, opacity: 0.8 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-7xl font-black font-mono tabular-nums tracking-tighter text-text"
+            >
+              {formatTime(timeLeft)}
+            </motion.p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-4 mt-2">
+              {isActive ? 'Keep Going' : 'Ready?'}
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center gap-6">
-        <button 
+      <div className="flex items-center gap-8">
+        <motion.button 
+          whileHover={{ scale: 1.1, rotate: -30 }}
+          whileTap={{ scale: 0.9 }}
           onClick={resetTimer} 
           title="Reset Timer"
-          className="p-4 rounded-full bg-surface border border-border hover:border-blue hover:text-blue transition-all active:scale-90"
+          className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
         >
           <RotateCcw className="w-6 h-6" />
-        </button>
-        <button 
+        </motion.button>
+        
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={toggleTimer} 
-          className="w-24 h-24 rounded-full bg-blue text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-blue/30 hover:scale-105 active:scale-95 transition-all"
+          className="w-28 h-28 rounded-[40px] bg-blue text-white flex items-center justify-center shadow-2xl shadow-blue/40 hover:bg-blue/90 transition-all border-4 border-white/10"
         >
-          {isActive ? <Pause className="w-10 h-10" /> : <Play className="w-10 h-10 ml-1" />}
-        </button>
-        <button 
+          {isActive ? <Pause className="w-12 h-12" /> : <Play className="w-12 h-12 ml-1" />}
+        </motion.button>
+
+        <motion.button 
+          whileHover={{ scale: 1.1, rotate: 30 }}
+          whileTap={{ scale: 0.9 }}
           onClick={() => setIsSettingsOpen(true)} 
           title="Settings"
-          className="p-4 rounded-full bg-surface border border-border hover:border-blue hover:text-blue transition-all active:scale-90"
+          className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
         >
           <Settings className="w-6 h-6" />
-        </button>
+        </motion.button>
       </div>
       
-      {/* Notification Button */}
-      {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && (
-        <button 
-          onClick={requestNotificationPermission}
-          className="flex items-center gap-2 px-4 py-2 bg-blue/5 border border-blue/10 rounded-xl text-xs font-black uppercase tracking-widest text-blue hover:bg-blue/10 transition-all"
-        >
-          <Bell className="w-4 h-4" /> Enable Notifications
-        </button>
-      )}
-      {notificationStatus === 'granted' && (
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500 opacity-60">
-           <Bell className="w-3 h-3" /> Notifications Active
+      {/* Footer Info */}
+      <div className="flex flex-col items-center gap-4">
+        {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && (
+          <button 
+            onClick={requestNotificationPermission}
+            className="flex items-center gap-2 px-6 py-3 bg-blue/5 border border-blue/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-blue hover:bg-blue/10 transition-all"
+          >
+            <Bell className="w-4 h-4" /> Enable Alerts
+          </button>
+        )}
+        
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface/30 border border-border/50">
+          <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-emerald-500 animate-pulse" : "bg-text-4")} />
+          <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
+            {isActive ? 'Session in progress' : 'Timer Paused'}
+          </span>
         </div>
-      )}
+      </div>
 
       <PomodoroSettings 
         isOpen={isSettingsOpen} 
