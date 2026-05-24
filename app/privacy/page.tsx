@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
 
       <section className="space-y-4 text-text-2 leading-relaxed">
         <h2 className="text-2xl font-black text-text">4. Contact Us</h2>
-        <p>If you have any questions, please contact us at gowthamrajaone@gmail.com.</p>
+        <p>If you have any questions, please contact us at KaruviLab@proton.me.</p>
       </section>
     </div>
   );
