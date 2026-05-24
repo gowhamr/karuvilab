@@ -1,52 +1,59 @@
 import { ToolContent } from '../../registry/types';
 
 export const markdown: ToolContent = {
-  detailedDescription:
-    "A live Markdown editor with a split-pane preview that renders your Markdown to HTML in real time. Supports CommonMark spec including tables, code blocks with syntax highlighting, task lists, and footnotes. All rendering is done in the browser using a lightweight Markdown parser.",
+  detailedDescription: `
+    <p>The KaruviLab Markdown Editor is a professional, browser-native writing environment designed for developers, technical writers, and content creators. Markdown has become the industry-standard syntax for documentation, README files, and blog posts because it is lightweight, human-readable, and easily convertible to HTML. Our tool provides a live, side-by-side preview experience, allowing you to see your rendered output the instant you type.</p>
+    
+    <p>By operating locally within your web browser, our Markdown editor offers a distraction-free space to document your projects without the latency of cloud-based editors. Whether you are drafting a new technical article, creating project documentation for GitHub, or simply learning Markdown syntax, this editor supports CommonMark and GitHub Flavored Markdown (GFM) extensions, including tables, task lists, and syntax-highlighted code blocks.</p>
+
+    <p>We prioritize both convenience and portability. You can copy the rendered HTML directly for use in your website's CMS, or download your work as a `.md` file for version control. This tool is built to integrate seamlessly into your existing development workflow, offering a fast, reliable, and entirely private platform for all your documentation needs.</p>
+  `,
   howTo: [
-    "Type or paste your Markdown in the left editor pane.",
-    "The rendered HTML preview updates instantly on the right.",
-    "Use the toolbar buttons for common Markdown shortcuts (bold, italic, link, etc.).",
-    "Copy the rendered HTML or download the `.md` file.",
+    "<strong>Start Typing:</strong> Enter your text in the left editor pane using standard Markdown syntax (e.g., `# Heading`, `**Bold**`).",
+    "<strong>Preview:</strong> The right pane renders your content into clean HTML in real-time.",
+    "<strong>Use Shortcuts:</strong> Utilize the built-in toolbar buttons to quickly insert bold, italic, list, or code formatting tags.",
+    "<strong>Export:</strong> Once your document is ready, click 'Copy HTML' to use the code, or download your work as a `.md` file.",
   ],
   faq: [
     {
-      question: "Which Markdown spec does this follow?",
-      answer:
-        "The tool follows CommonMark with GitHub Flavored Markdown (GFM) extensions, supporting tables, strikethrough, and task lists.",
+      question: "What Markdown standard is used?",
+      answer: "We support CommonMark, which is the most widely adopted standard. We also include GitHub Flavored Markdown (GFM) features like tables, task lists, and code blocks.",
     },
     {
-      question: "Can I export to HTML or PDF?",
-      answer:
-        "You can copy the rendered HTML. For PDF export, use the browser's 'Print → Save as PDF' feature.",
+      question: "Can I save my work?",
+      answer: "This is an editor, not a document manager. Please be sure to save your work by downloading the `.md` file or copying the HTML before closing your browser tab.",
     },
     {
-      question: "Are HTML tags inside Markdown rendered?",
-      answer:
-        "Raw HTML within Markdown is allowed by CommonMark and is rendered. Be cautious with `<script>` tags.",
+      question: "Does it support syntax highlighting?",
+      answer: "Yes. Fenced code blocks (` ```language `) are automatically rendered with syntax highlighting for popular programming languages.",
+    },
+    {
+      question: "Are there any privacy concerns?",
+      answer: "None. All rendering and processing occur locally. Your writing never leaves your computer.",
     },
   ],
   useCases: [
-    "Writing and previewing a README before pushing to GitHub",
-    "Drafting a blog post in Markdown",
-    "Creating formatted documentation for a project",
-    "Learning Markdown syntax interactively",
+    "Writing and previewing README files for GitHub projects.",
+    "Drafting technical blog posts or newsletters.",
+    "Creating well-formatted project documentation offline.",
+    "Learning and practicing Markdown syntax in a live, interactive environment.",
   ],
   examples: [
     {
       label: "Heading and bold",
-      input: "## Hello\n**Bold** and _italic_.",
-      output: "<h2>Hello</h2><p><strong>Bold</strong> and <em>italic</em>.</p>",
-    },
+      input: "## Project Overview\n**This tool** is *excellent*.",
+      output: "<h2>Project Overview</h2><p><strong>This tool</strong> is <em>excellent</em>.</p>",
+      description: "A simple demonstration of heading and inline formatting."
+    }
   ],
   commonErrors: [
     {
-      error: "Table does not render",
-      fix: "Ensure each row has the same number of columns and the header separator row uses at least three dashes (`---`) per cell.",
+      error: "Tables look disorganized",
+      fix: "Markdown tables require a specific syntax. Ensure you include the pipe `|` characters for columns and a delimiter row (e.g., `|---|`) between your header and the table body.",
     },
     {
-      error: "Code block shows rendered HTML instead of raw code",
-      fix: "Wrap the HTML inside a fenced code block with three backticks and specify the language: ```html ... ```.",
+      error: "Code blocks look strange",
+      fix: "Use triple backticks (```) followed by the language name on a new line to start the block, and another triple backtick on a new line to close it.",
     },
   ],
   alternatives: ["StackEdit.io", "Dillinger.io", "Typora"],
