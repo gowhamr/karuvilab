@@ -2,17 +2,19 @@ import { ToolEntry } from '../types';
 
 export const compound_interest: ToolEntry = {
   "id": "compound-interest",
-  "name": "Compound Interest",
-  "desc": "Compounded growth over time",
+  "name": "Compound Interest Calculator",
+  "desc": "Calculate compounded growth on your investment.",
   "href": "calculators/compound-interest/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [
-    "compound",
-    "interest",
-    "savings",
-    "growth"
+    "compound interest",
+    "interest calculator",
+    "investment growth",
+    "savings calculator"
   ],
   "searchIntent": "transactional",
-  "schemaType": "WebApplication"
+  "schemaType": "WebApplication",
+  "status": "stable",
+  "lastUpdated": "2026-05-24"
 };

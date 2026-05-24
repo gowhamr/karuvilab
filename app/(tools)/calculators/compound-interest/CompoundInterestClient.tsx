@@ -1,9 +1,14 @@
 "use client";
+
 import { useState, useMemo, useEffect, useId } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
+import { Accordion } from "@/components/ui/Accordion";
+import { ToolCard } from "@/components/ToolCard";
+import { TOOL_CONTENT } from "@/src/tool-content";
+import { ALL_TOOLS } from "@/src/registry";
 
 const FREQ_OPTIONS = [
   { label: "Annually", value: 1 },
@@ -18,6 +23,10 @@ const DEFAULT_STATE = {
   years: 10,
   freq: 1,
 };
+
+const toolId = "compound-interest";
+const content = TOOL_CONTENT[toolId as keyof typeof TOOL_CONTENT];
+const toolInfo = ALL_TOOLS.find(t => t.id === toolId);
 
 export default function CompoundInterestClient() {
   const freqLabelId = useId();
@@ -44,7 +53,6 @@ export default function CompoundInterestClient() {
   }, [principal, rate, years, freq, isLoaded]);
 
   const result = useMemo(() => {
-    // A = P(1 + r/n)^(nt)
     const P = d(principal);
     const r = d(rate).div(100);
     const n = d(freq);
@@ -74,8 +82,10 @@ Total Return: ${formatPercent(result.returnPct)}
 
 Generated via KaruviLab`;
 
+  const relatedTools = ALL_TOOLS.filter(t => toolInfo?.related?.includes(t.id));
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
         <SliderField
           label="Principal Amount"
@@ -145,22 +155,30 @@ Generated via KaruviLab`;
         />
       </div>
 
-      <div className="space-y-4">
-        <div className="bg-surface border border-border p-4 rounded-xl">
-          <span className="text-sm text-text-3 font-medium">
-            {formatINR(principal)} grows to{" "}
-            <strong className="text-blue">{formatINR(result.finalAmount)}</strong> in{" "}
-            {years} years at {rate}%
-          </span>
-        </div>
+      <CalculatorActionBar
+        summary={summary}
+        toolId={toolId}
+        historyLabel={`${formatINR(principal)} for ${years}y @ ${rate}%`}
+        historyData={{ principal, rate, years, freq, result }}
+      />
 
-        <CalculatorActionBar
-          summary={summary}
-          toolId="compound-interest"
-          historyLabel={`${formatINR(principal)} for ${years}y @ ${rate}%`}
-          historyData={{ principal, rate, years, freq, result }}
-        />
-      </div>
+      {content?.faq && (
+        <div className="space-y-4">
+            <h3 className="text-lg font-bold text-text-2">Frequently Asked Questions</h3>
+            <Accordion items={content.faq.map(f => ({ title: f.question, content: f.answer }))} />
+        </div>
+      )}
+
+      {relatedTools.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-bold text-text-2">Related Tools</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {relatedTools.map(t => (
+              <ToolCard key={t.id} tool={t} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
