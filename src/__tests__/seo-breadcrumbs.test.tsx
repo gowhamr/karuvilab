@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import { StructuredData } from '../lib/seo';
-import { ToolEntry, CategoryEntry } from '../../registry/types';
+import { ToolEntry, CategoryEntry } from '../registry/types';
 
 // Mock Next.js Script component
 vi.mock('next/script', () => ({
@@ -42,10 +42,11 @@ describe('StructuredData Breadcrumb Validation', () => {
   const extractBreadcrumb = (result: React.JSX.Element) => {
     // React elements are objects. Breadcrumb is always the first script (scripts[0])
     const scripts = React.Children.toArray(result.props.children);
-    const breadcrumbScript = scripts[0] as React.ReactElement;
+    const breadcrumbScript = scripts[0] as any;
     if (!breadcrumbScript) throw new Error('No breadcrumb script found');
     return JSON.parse(breadcrumbScript.props.dangerouslySetInnerHTML.__html);
   };
+
 
   it('validates Category-only page has 2 items: Home → Category', () => {
     const result = StructuredData({ category: mockCategory });

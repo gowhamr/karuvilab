@@ -164,7 +164,7 @@ export default function EMICalculatorClient() {
 
       {/* Print-Only Header */}
       <div className="hidden print-only py-10 border-b-2 border-border mb-10">
-         <h1 className="text-4xl font-black">KV EMI Report</h1>
+         <h2 className="text-4xl font-black">KV EMI Report</h2>
          <p className="text-text-3 mt-2 font-bold uppercase tracking-widest">
            {new Date().toLocaleDateString()} · Advanced Loan Analysis
          </p>
