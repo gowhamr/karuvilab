@@ -80,7 +80,7 @@ export default function DisclaimerPage() {
                 {s.contact && (
                   <p className="text-text-3 font-medium text-[15px]">
                     If you have any questions or concerns regarding this Disclaimer, please reach out to us at:{" "}
-                    <a href="mailto:wanderseven@proton.me" className="text-blue hover:underline font-bold">wanderseven@proton.me</a>
+                    <a href="mailto:KaruviLab@proton.me" className="text-blue hover:underline font-bold">KaruviLab@proton.me</a>
                   </p>
                 )}
                </div>

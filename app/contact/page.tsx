@@ -4,7 +4,7 @@ import { StructuredData } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
   title: "Contact – KV",
-  description: "Contact KaruviLab. Email us at wanderseven@proton.me for bug reports, feature requests or general enquiries.",
+  description: "Contact KaruviLab. Email us at KaruviLab@proton.me for bug reports, feature requests or general enquiries.",
   alternates: {
     canonical: "/contact",
   },
@@ -38,7 +38,7 @@ export default function ContactPage() {
               icon: "✉️",
               title: "Email Support",
               body: "For general enquiries, feature requests, and bug reports:",
-              link: { href: "mailto:wanderseven@proton.me", label: "wanderseven@proton.me" },
+              link: { href: "mailto:KaruviLab@proton.me", label: "KaruviLab@proton.me" },
               note: "We aim to respond within 1–2 business days.",
             },
             {

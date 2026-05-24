@@ -78,8 +78,8 @@ export default function AboutPage() {
                 <a href="https://wanderseven.com" target="_blank" rel="noopener noreferrer" className="text-sm text-blue hover:underline">
                   wanderseven.com
                 </a>
-                <a href="mailto:wanderseven@proton.me" className="text-sm text-blue hover:underline">
-                  wanderseven@proton.me
+                <a href="mailto:KaruviLab@proton.me" className="text-sm text-blue hover:underline">
+                  KaruviLab@proton.me
                 </a>
               </div>
             </div>
