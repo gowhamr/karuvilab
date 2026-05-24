@@ -97,7 +97,7 @@ export default function SettingsClient() {
             </div>
           </div>
           
-          <nav className="space-y-8 max-h-[calc(100vh-250px)] overflow-y-auto no-scrollbar px-1">
+          <nav className="space-y-8 max-h-[calc(100vh-250px)] overflow-y-auto no-scrollbar px-1" role="tablist">
             {Object.entries(groupedItems).map(([group, items]) => (
               <div key={group} className="space-y-2">
                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-4">{group}</h2>
@@ -105,6 +105,8 @@ export default function SettingsClient() {
                   {items.map((item) => (
                     <button
                       key={item.id}
+                      role="tab"
+                      aria-selected={activeSection === item.id}
                       onClick={() => setActiveSection(item.id)}
                       className={`
                         w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative

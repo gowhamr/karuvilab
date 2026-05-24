@@ -75,6 +75,8 @@ interface SettingSwitchProps {
 export const SettingSwitch = memo(function SettingSwitch({ checked, onChange, disabled }: SettingSwitchProps) {
   return (
     <button
+      role="switch"
+      aria-checked={checked}
       onClick={() => onChange(!checked)}
       disabled={disabled}
       className={`
@@ -101,10 +103,12 @@ interface SettingSelectProps {
 
 export const SettingSelect = memo(function SettingSelect({ options, value, onChange }: SettingSelectProps) {
   return (
-    <div className="flex p-1.5 bg-bg border border-border rounded-2xl shadow-inner">
+    <div className="flex p-1.5 bg-bg border border-border rounded-2xl shadow-inner" role="radiogroup">
       {options.map((opt) => (
         <button
           key={opt.value}
+          role="radio"
+          aria-checked={value === opt.value}
           onClick={() => onChange(opt.value)}
           className={`
             px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative
