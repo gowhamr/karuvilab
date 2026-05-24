@@ -16,8 +16,6 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 
 import { DropZone } from "@/components/ui/DropZone";
 
-const cat = CATEGORIES.find(c => c.id === "developer")!;
-
 // ── Types & Constants ────────────────────────────────────────────────────────
 
 type Tab = "html" | "css" | "js";
