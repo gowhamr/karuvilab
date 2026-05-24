@@ -2,11 +2,12 @@ import { articles } from "@/src/content/blog/articles";
 import { notFound } from "next/navigation";
 
 interface BlogArticleProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-export default function BlogArticlePage({ params }: BlogArticleProps) {
-  const article = (articles as any)[params.slug];
+export default async function BlogArticlePage({ params }: BlogArticleProps) {
+  const { slug } = await params;
+  const article = (articles as any)[slug];
 
   if (!article) {
     notFound();
