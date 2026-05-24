@@ -6,7 +6,7 @@ export const markdown: ToolContent = {
     
     <p>By operating locally within your web browser, our Markdown editor offers a distraction-free space to document your projects without the latency of cloud-based editors. Whether you are drafting a new technical article, creating project documentation for GitHub, or simply learning Markdown syntax, this editor supports CommonMark and GitHub Flavored Markdown (GFM) extensions, including tables, task lists, and syntax-highlighted code blocks.</p>
 
-    <p>We prioritize both convenience and portability. You can copy the rendered HTML directly for use in your website's CMS, or download your work as a `.md` file for version control. This tool is built to integrate seamlessly into your existing development workflow, offering a fast, reliable, and entirely private platform for all your documentation needs.</p>
+    <p>We prioritize both convenience and portability. You can copy the rendered HTML directly for use in your website's CMS, or download your work as a <code>.md</code> file for version control. This tool is built to integrate seamlessly into your existing development workflow, offering a fast, reliable, and entirely private platform for all your documentation needs.</p>
   `,
   howTo: [
     "<strong>Start Typing:</strong> Enter your text in the left editor pane using standard Markdown syntax (e.g., `# Heading`, `**Bold**`).",
