@@ -6,7 +6,10 @@ import { useNotesStore } from "../store";
 import { m } from "framer-motion";
 
 export function SearchBar() {
-  const { filter, setSearch, viewMode, setViewMode } = useNotesStore();
+  const filterSearch = useNotesStore(state => state.filter.search);
+  const setSearch = useNotesStore(state => state.setSearch);
+  const viewMode = useNotesStore(state => state.viewMode);
+  const setViewMode = useNotesStore(state => state.setViewMode);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 items-center w-full mb-6">
@@ -16,12 +19,12 @@ export function SearchBar() {
         </div>
         <input
           type="text"
-          value={filter.search}
+          value={filterSearch}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search notes, tags, or content..."
           className="w-full bg-surface border border-border rounded-2xl py-3 pl-12 pr-12 text-sm focus:outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all"
         />
-        {filter.search && (
+        {filterSearch && (
           <button
             onClick={() => setSearch("")}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-text-4 hover:text-text transition-colors"

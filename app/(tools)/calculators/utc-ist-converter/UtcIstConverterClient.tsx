@@ -89,7 +89,7 @@ export default function UtcIstConverterClient() {
 
   if (!mounted) {
     return (
-      <div className="bg-surface border border-border p-6 rounded-2xl h-64 animate-pulse" />
+      <div className="bg-surface border border-border p-6 rounded-2xl min-h-[320px] animate-pulse" />
     );
   }
 

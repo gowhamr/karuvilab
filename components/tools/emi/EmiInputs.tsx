@@ -6,6 +6,7 @@ import { SliderField } from "@/components/ui/SliderField";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
 import { useEmiStore } from "@/src/store/useEmiStore";
+import { useShallow } from "zustand/react/shallow";
 
 export function EmiInputs() {
   const { 
@@ -14,7 +15,13 @@ export function EmiInputs() {
     showMoratorium, 
     showFloatingRate, 
     toggleSection 
-  } = useEmiStore();
+  } = useEmiStore(useShallow(state => ({
+    inputs: state.inputs,
+    setInputs: state.setInputs,
+    showMoratorium: state.showMoratorium,
+    showFloatingRate: state.showFloatingRate,
+    toggleSection: state.toggleSection
+  })));
 
   return (
     <div className="space-y-6">

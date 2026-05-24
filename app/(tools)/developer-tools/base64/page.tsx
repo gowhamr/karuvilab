@@ -7,13 +7,12 @@ const Base64Client = dynamic(() => import("./Base64Client"), {
   loading: () => <ToolSkeleton />,
 });
 
-const cat = CATEGORIES.find(c => c.id === "security")!;
+import { generateToolMetadata } from "@/src/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Base64 Encoder / Decoder | KV",
-  description: "Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants.",
-  keywords: ["base64", "encode", "decode", "url-safe", "security"],
-};
+const toolId = "base64";
+const cat = CATEGORIES.find(c => c.id === "developer")!;
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Base64Tool() {
   return (

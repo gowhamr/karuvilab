@@ -6,16 +6,22 @@ import { SearchBar } from "./components/SearchBar";
 import { TagFilter } from "./components/TagFilter";
 import { NoteList } from "./components/NoteList";
 import { NoteEditor } from "./components/NoteEditor";
+import { NoteCard } from "./components/NoteCard";
 import { m, AnimatePresence } from "framer-motion";
-import { Plus, Archive, Trash2, StickyNote, Inbox } from "lucide-react";
+import { Plus, Archive, Trash2, StickyNote, Inbox, LucideIcon } from "lucide-react";
 import { generateId } from "./utils";
 import { Note } from "./types";
 import { cn } from "@/src/lib/utils";
+import { useShallow } from "zustand/react/shallow";
 
 type StatusTab = "active" | "archived" | "trash";
 
 export default function NotesPage() {
-  const { fetchNotes, addNote, setSelectedNoteId, emptyTrash, notes } = useNotesStore();
+  const fetchNotes = useNotesStore(state => state.fetchNotes);
+  const addNote = useNotesStore(state => state.addNote);
+  const setSelectedNoteId = useNotesStore(state => state.setSelectedNoteId);
+  const emptyTrash = useNotesStore(state => state.emptyTrash);
+  const notes = useNotesStore(state => state.notes);
   const [activeTab, setActiveTab] = useState<StatusTab>("active");
 
   useEffect(() => {
@@ -39,7 +45,7 @@ export default function NotesPage() {
     setSelectedNoteId(id);
   };
 
-  const tabs: { id: StatusTab; label: string; icon: any }[] = [
+  const tabs: { id: StatusTab; label: string; icon: LucideIcon }[] = [
     { id: "active", label: "Notes", icon: Inbox },
     { id: "archived", label: "Archive", icon: Archive },
     { id: "trash", label: "Trash", icon: Trash2 },
@@ -149,7 +155,10 @@ export default function NotesPage() {
 
 // Internal wrapper to filter notes based on active status tab
 function NoteListWrapper({ status }: { status: StatusTab }) {
-  const { notes, filter, viewMode, setSelectedNoteId } = useNotesStore();
+  const notes = useNotesStore(state => state.notes);
+  const filter = useNotesStore(useShallow(state => state.filter));
+  const viewMode = useNotesStore(state => state.viewMode);
+  const setSelectedNoteId = useNotesStore(state => state.setSelectedNoteId);
 
   const filtered = notes.filter(n => {
     if (status === "active") return !n.isArchived && !n.isDeleted;
@@ -204,8 +213,6 @@ function NoteListWrapper({ status }: { status: StatusTab }) {
   );
 }
 
-// Wrapper to avoid re-rendering NoteCard with different store logic if needed
-import { NoteCard } from "./components/NoteCard";
 function NoteCardWrapper({ note, onClick }: { note: Note, onClick: () => void }) {
   return <NoteCard note={note} onClick={onClick} />;
 }

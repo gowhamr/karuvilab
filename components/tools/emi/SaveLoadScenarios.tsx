@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Save, FolderOpen, Trash2, CircleCheckBig as CheckCircle2 } from "lucide-react";
 import { useEmiStore } from "@/src/store/useEmiStore";
 import { formatCurrency } from "@/src/lib/utils";
+import { useShallow } from "zustand/react/shallow";
 
 export function SaveLoadScenarios() {
   const { 
@@ -12,7 +13,13 @@ export function SaveLoadScenarios() {
     saveScenario, 
     loadScenario, 
     deleteScenario 
-  } = useEmiStore();
+  } = useEmiStore(useShallow(state => ({
+    savedScenarios: state.savedScenarios,
+    fetchSavedScenarios: state.fetchSavedScenarios,
+    saveScenario: state.saveScenario,
+    loadScenario: state.loadScenario,
+    deleteScenario: state.deleteScenario
+  })));
   
   const [newName, setNewName] = useState("");
   const [showSaved, setShowSaved] = useState(false);

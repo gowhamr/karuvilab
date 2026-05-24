@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import MicCameraTesterClient from "./MicCameraTesterClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "mic-camera-tester";
 const category = CATEGORIES.find(c => c.id === "utilities")!;
 
-export const metadata: Metadata = {
-  title: "Mic & Camera Tester — KaruviLab",
-  description: "Securely test your microphone and webcam privately in your browser. No data leaves your device.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function MicCameraTesterPage() {
   return (

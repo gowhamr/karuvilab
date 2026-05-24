@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, Send, CircleAlert as AlertCircle, Sparkles, CircleCheckBig as CheckCircle2, Monitor, Info, ChevronDown } from "lucide-react";
 import { useSupportStore, FeedbackType } from "@/src/store/useSupportStore";
 import { getSystemInfo, SystemInfo } from "@/src/lib/support-utils";
@@ -17,6 +17,7 @@ const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: any }[] = [
 ];
 
 export function FeedbackModal() {
+  const shouldReduceMotion = useReducedMotion();
   const isOpen = useSupportStore(state => state.isOpen);
   const closeFeedback = useSupportStore(state => state.closeFeedback);
   const type = useSupportStore(state => state.type);
@@ -109,6 +110,7 @@ export function FeedbackModal() {
                 <m.div 
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.4 }}
                   className="py-12 flex flex-col items-center text-center space-y-4"
                 >
                   <div className="w-20 h-20 rounded-full bg-blue/10 flex items-center justify-center text-blue">
@@ -123,6 +125,7 @@ export function FeedbackModal() {
                 <m.form 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
                   onSubmit={handleSubmit} 
                   className="space-y-6"
                 >

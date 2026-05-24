@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import ScientificCalculatorClient from "./ScientificCalculatorClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "scientific-calculator";
 const category = CATEGORIES.find(c => c.id === "calculators")!;
 
-export const metadata: Metadata = {
-  title: "Scientific Calculator — KaruviLab",
-  description: "Advanced scientific calculator with trigonometry, logarithms, and more. Fast, private, and precise.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function ScientificCalculatorPage() {
   return (

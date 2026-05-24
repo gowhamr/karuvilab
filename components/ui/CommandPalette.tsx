@@ -8,11 +8,11 @@ import { useSearchStore } from "@/src/store/useSearchStore";
 import { Search, Command, X, ArrowDown, ArrowUp, CornerDownLeft } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { usePerformanceSettings } from "@/src/lib/hooks";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export function CommandPalette() {
-  const isPaletteOpen = useSearchStore(state => state.isPaletteOpen);
-  const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
+  const shouldReduceMotion = useReducedMotion();
+  const isPaletteOpen = useSearchStore(state => state.isPaletteOpen);  const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
   const { shouldBlur } = usePerformanceSettings();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -34,6 +34,14 @@ export function CommandPalette() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isPaletteOpen, setIsPaletteOpen]);
+
+  // Reset query on close
+  useEffect(() => {
+    if (!isPaletteOpen) {
+      setQuery("");
+      setSelectedIndex(0);
+    }
+  }, [isPaletteOpen]);
 
   // Search Logic
   const filteredTools = useMemo(() => {
@@ -90,7 +98,12 @@ export function CommandPalette() {
                   initial={{ opacity: 0, scale: 0.95, y: -20, x: "-50%" }}
                   animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
                   exit={{ opacity: 0, scale: 0.95, y: -20, x: "-50%" }}
-                  transition={{ type: "spring", damping: 25, stiffness: 400 }}
+                  transition={{ 
+                    type: shouldReduceMotion ? "tween" : "spring", 
+                    duration: shouldReduceMotion ? 0 : 0.4,
+                    damping: 25, 
+                    stiffness: 400 
+                  }}
                   className="fixed left-1/2 top-[15%] z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden outline-none"
                 >
           <div className="flex items-center px-6 border-b border-border bg-bg/50">

@@ -117,7 +117,7 @@ function ToggleGroupItem({ value, icon: Icon, label }: { value: string, icon: an
     <ToggleGroup.Item
       value={value}
       className={cn(
-        "flex items-center gap-3 px-6 py-3 rounded-[18px] text-[11px] font-black uppercase tracking-[0.15em] transition-all relative group",
+        "flex items-center gap-3 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] transition-all relative group",
         "data-[state=on]:bg-indigo-600 data-[state=on]:text-white data-[state=on]:shadow-lg data-[state=on]:shadow-indigo-500/20",
         "data-[state=off]:text-text-4 data-[state=off]:hover:bg-surface/50 data-[state=off]:hover:text-text-2"
       )}

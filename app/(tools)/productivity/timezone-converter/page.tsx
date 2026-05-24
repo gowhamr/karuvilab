@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import TimeZoneConverterClient from "./TimeZoneConverterClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "timezone-converter";
 const category = CATEGORIES.find(c => c.id === "productivity")!;
 
-export const metadata: Metadata = {
-  title: "Time Zone Converter — KaruviLab",
-  description: "Convert dates and times between multiple time zones instantly and privately in your browser.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function TimeZoneConverterPage() {
   return (

@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import TextSorterDeduperClient from "./TextSorterDeduperClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "text-sorter-deduper";
 const category = CATEGORIES.find(c => c.id === "productivity")!;
 
-export const metadata: Metadata = {
-  title: "Text Sorter & Deduplicator — KaruviLab",
-  description: "Sort lists, remove duplicates, and organize your text instantly. Private and browser-native.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function TextSorterDeduperPage() {
   return (

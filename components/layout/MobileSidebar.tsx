@@ -18,6 +18,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   const dragControls = useDragControls();
   const sidebarRef = useRef<HTMLElement>(null);
   
+  // High-performance motion values (stable across renders)
   const x = useMotionValue(-SIDEBAR_WIDTH);
   const backdropOpacity = useTransform(x, [-SIDEBAR_WIDTH, 0], [0, 1]);
 
@@ -25,17 +26,16 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   useEffect(() => {
     if (isOpen) {
       animate(x, 0, { type: "spring", damping: 30, stiffness: 300, mass: 0.8 });
-      document.body.classList.add("sidebar-open");
+      document.body.style.overflow = "hidden";
       
-      // Focus first element on open
       const timer = setTimeout(() => {
-        const focusable = sidebarRef.current?.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const focusable = sidebarRef.current?.querySelector('button, [href], input');
         if (focusable) (focusable as HTMLElement).focus();
       }, 100);
       return () => clearTimeout(timer);
     } else {
-      animate(x, -SIDEBAR_WIDTH, { type: "spring", damping: 30, stiffness: 300, mass: 0.8 });
-      document.body.classList.remove("sidebar-open");
+      animate(x, -SIDEBAR_WIDTH, { type: "spring", damping: 35, stiffness: 350, mass: 0.8 });
+      document.body.style.overflow = "";
     }
   }, [isOpen, x]);
 
@@ -46,58 +46,30 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
       setIsOpen(false);
       return;
     }
-    if (e.key !== "Tab") return;
-
-    const focusable = sidebarRef.current?.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    if (!focusable || focusable.length === 0) return;
-
-    const first = focusable[0] as HTMLElement;
-    const last = focusable[focusable.length - 1] as HTMLElement;
-
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        last.focus();
-        e.preventDefault();
-      }
-    } else {
-      if (document.activeElement === last) {
-        first.focus();
-        e.preventDefault();
-      }
-    }
   };
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const { offset, velocity } = info;
-    
-    // Snapping logic: easier to trigger
     if (offset.x > 50 || velocity.x > 300) {
       setIsOpen(true);
     } else if (offset.x < -50 || velocity.x < -300) {
       setIsOpen(false);
     } else {
-      // Return to current state
       animate(x, isOpen ? 0 : -SIDEBAR_WIDTH, { type: "spring", damping: 30, stiffness: 300 });
     }
   };
 
   return (
     <div className="md:hidden">
-      {/* Edge Trigger Zone (Larger hit area, higher z-index) */}
       {!isOpen && (
         <div 
           className="fixed top-0 left-0 bottom-0 w-8 z-[100] touch-none"
-          onPointerDown={(e) => {
-            dragControls.start(e);
-          }}
+          onPointerDown={(e) => dragControls.start(e)}
         />
       )}
 
-      {/* Backdrop */}
-      <AnimatePresence>
-        {(isOpen || x.get() > -SIDEBAR_WIDTH) && (
+      <AnimatePresence initial={false}>
+        {isOpen && (
           <Backdrop onClick={() => setIsOpen(false)} opacity={backdropOpacity} />
         )}
       </AnimatePresence>
@@ -108,23 +80,20 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         drag="x"
         dragControls={dragControls}
         dragConstraints={{ left: -SIDEBAR_WIDTH, right: 0 }}
-        dragElastic={0.1}
+        dragElastic={0.05}
         dragMomentum={false}
         onDragEnd={handleDragEnd}
-        style={{ x }}
+        style={{ x, contain: 'layout style' }}
         role="dialog"
         aria-modal={isOpen}
         tabIndex={-1}
         aria-label="Navigation Sidebar"
         className={cn(
-          "fixed top-0 left-0 bottom-0 w-[280px] bg-surface/80 backdrop-blur-xl border-r border-border z-[70] rounded-r-2xl shadow-2xl flex flex-col touch-none overflow-hidden outline-none",
-          "dark:bg-surface/90"
+          "fixed top-0 left-0 bottom-0 w-[280px] bg-surface/90 backdrop-blur-xl border-r border-border z-[70] rounded-r-[32px] shadow-2xl flex flex-col touch-none overflow-hidden outline-none"
         )}
       >
-        {/* Inner shadow for physical feel */}
         <div className="absolute inset-y-0 right-0 w-px bg-white/5 dark:bg-white/10" />
-        
-        <div className="flex-1 flex flex-col h-full">
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
            {children}
         </div>
       </m.aside>

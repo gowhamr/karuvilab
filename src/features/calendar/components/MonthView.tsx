@@ -10,7 +10,8 @@ import { useState } from "react";
 import { DayDetailsSheet } from "./DayDetailsSheet";
 
 export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) {
-  const { currentDate, events } = useCalendarStore();
+  const currentDate = useCalendarStore(state => state.currentDate);
+  const events = useCalendarStore(state => state.events);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const days = getMonthDays(currentDate);
   const monthStart = startOfMonth(currentDate);

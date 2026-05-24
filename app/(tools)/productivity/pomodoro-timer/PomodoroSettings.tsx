@@ -5,13 +5,20 @@ import { X, Clock } from "lucide-react";
 import { usePomodoroStore } from "@/src/store/usePomodoroStore";
 import { SliderField } from "@/components/ui/SliderField";
 
+import { useShallow } from "zustand/react/shallow";
+
 interface PomodoroSettingsProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
-  const { focusDuration, breakDuration, longBreakDuration, setDurations } = usePomodoroStore();
+  const { focusDuration, breakDuration, longBreakDuration, setDurations } = usePomodoroStore(useShallow(state => ({
+    focusDuration: state.focusDuration,
+    breakDuration: state.breakDuration,
+    longBreakDuration: state.longBreakDuration,
+    setDurations: state.setDurations
+  })));
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>

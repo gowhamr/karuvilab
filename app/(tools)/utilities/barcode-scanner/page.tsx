@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import BarcodeScannerClient from "./BarcodeScannerClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "barcode-scanner";
 const category = CATEGORIES.find(c => c.id === "utilities")!;
 
-export const metadata: Metadata = {
-  title: "Barcode & QR Scanner — KaruviLab",
-  description: "Scan barcodes and QR codes directly from your browser. Secure, private, and fast.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function BarcodeScannerPage() {
   return (

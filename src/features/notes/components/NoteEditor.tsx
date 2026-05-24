@@ -16,7 +16,13 @@ import { cn } from "@/src/lib/utils";
 import { TAG_COLORS } from "../constants";
 
 export function NoteEditor() {
-  const { notes, selectedNoteId, setSelectedNoteId, updateNote, togglePin, toggleArchive, toggleDelete } = useNotesStore();
+  const notes = useNotesStore(state => state.notes);
+  const selectedNoteId = useNotesStore(state => state.selectedNoteId);
+  const setSelectedNoteId = useNotesStore(state => state.setSelectedNoteId);
+  const updateNote = useNotesStore(state => state.updateNote);
+  const togglePin = useNotesStore(state => state.togglePin);
+  const toggleArchive = useNotesStore(state => state.toggleArchive);
+  const toggleDelete = useNotesStore(state => state.toggleDelete);
   
   const initialNote = useMemo(() => {
     return notes.find(n => n.id === selectedNoteId) || null;

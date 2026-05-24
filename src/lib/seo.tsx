@@ -53,7 +53,15 @@ interface StructuredDataProps {
     detailedDescription?: string;
     faq?: { question: string; answer: string }[];
     howTo?: string[];
+    useCases?: string[];
   };
+}
+
+interface BreadcrumbListItem {
+  "@type": "ListItem";
+  position: number;
+  name: string;
+  item: string;
 }
 
 /**
@@ -62,13 +70,21 @@ interface StructuredDataProps {
 export function StructuredData({ tool, category, content: propsContent }: StructuredDataProps): React.JSX.Element {
   const scripts: Record<string, unknown>[] = [];
 
-  // 1. Breadcrumb Schema
-  const itemListElement: Record<string, unknown>[] = [
+  // Helper to ensure absolute URLs are perfectly canonical (trailing slash enforced)
+  const normalizeUrl = (path: string) => {
+    // Remove all leading and trailing slashes, then wrap in single slashes
+    const cleanPath = path.replace(/^\/+|\/+$/g, '');
+    const url = `${BASE_URL}/${cleanPath}/`;
+    return url.replace(/\/+$/, '/'); // Ensure single trailing slash
+  };
+
+  // 1. Breadcrumb List Construction
+  const itemListElement: BreadcrumbListItem[] = [
     {
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": BASE_URL
+      "item": `${BASE_URL}/`
     }
   ];
 
@@ -76,8 +92,8 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     itemListElement.push({
       "@type": "ListItem",
       "position": itemListElement.length + 1,
-      "name": category.label,
-      "item": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, '')}/`
+      "name": category.label || "Category",
+      "item": normalizeUrl(category.href)
     });
   }
 
@@ -85,8 +101,8 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     itemListElement.push({
       "@type": "ListItem",
       "position": itemListElement.length + 1,
-      "name": tool.name,
-      "item": `${BASE_URL}/${tool.href.replace(/^\/|\/$/g, '')}/`
+      "name": tool.name || "Tool",
+      "item": normalizeUrl(tool.href)
     });
   }
 
@@ -97,6 +113,21 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
   };
 
   scripts.push(breadcrumbList);
+
+  // 1b. CollectionPage Schema (for Categories)
+  if (category && !tool) {
+    scripts.push({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `${category.label} Tools | KaruviLab`,
+      "description": `Browse our collection of free, private, and offline-first ${category.label.toLowerCase()} tools.`,
+      "url": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, '')}/`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "KaruviLab"
+      }
+    });
+  }
 
   // 2. WebSite & Organization Schema (for Home)
   if (!tool && !category) {
@@ -146,6 +177,8 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       }
     };
 
+    const useCases = propsContent?.useCases || registryContent.useCases;
+
     const toolSchema: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": tool.schemaType || "WebApplication",
@@ -155,7 +188,7 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       "applicationCategory": getApplicationCategory(category?.id),
       "operatingSystem": "Any",
       "softwareVersion": "1.0.0",
-      "datePublished": new Date("2026-05-01").toISOString(),
+      "datePublished": "2026-05-01T00:00:00Z",
       "dateModified": tool.lastUpdated ? new Date(tool.lastUpdated).toISOString() : new Date().toISOString(),
       "offers": {
         "@type": "Offer",
@@ -166,7 +199,8 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
         "@type": "Organization",
         "name": "KaruviLab"
       },
-      "image": `${BASE_URL}/icons/icon-512.png`
+      "image": `${BASE_URL}/icons/icon-512.png`,
+      ...(useCases && useCases.length > 0 && { "featureList": useCases })
     };
 
     scripts.push(toolSchema);

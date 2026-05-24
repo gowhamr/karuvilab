@@ -30,7 +30,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
       <Link 
         href={`/${tool.href}`}
         className={cn(
-          "relative flex flex-col h-full bg-surface border border-border rounded-[24px] p-4 md:p-6 shadow-sm overflow-hidden transition-all duration-300",
+          "relative flex flex-col h-full bg-surface border border-border rounded-[32px] p-4 md:p-6 shadow-sm overflow-hidden transition-all duration-300",
           "hover:border-blue/30 hover:bg-blue/[0.01] hover:shadow-xl dark:hover:shadow-blue/10"
         )}
       >

@@ -13,7 +13,10 @@ interface NoteCardProps {
 }
 
 export function NoteCard({ note, onClick }: NoteCardProps) {
-  const { togglePin, toggleArchive, toggleDelete, viewMode } = useNotesStore();
+  const togglePin = useNotesStore(state => state.togglePin);
+  const toggleArchive = useNotesStore(state => state.toggleArchive);
+  const toggleDelete = useNotesStore(state => state.toggleDelete);
+  const viewMode = useNotesStore(state => state.viewMode);
 
   const handleAction = (e: React.MouseEvent, action: () => void) => {
     e.stopPropagation();

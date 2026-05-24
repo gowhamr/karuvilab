@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import FakeDataGeneratorClient from "./FakeDataGeneratorClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "fake-data-generator";
 const category = CATEGORIES.find(c => c.id === "developer")!;
 
-export const metadata: Metadata = {
-  title: "Fake Data Generator — KaruviLab",
-  description: "Generate realistic mock data for your applications. Secure, private, and 100% client-side.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function FakeDataGeneratorPage() {
   return (

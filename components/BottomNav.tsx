@@ -1,8 +1,9 @@
 "use client";
 
+import React, { memo, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, LayoutGrid, Settings, Laptop } from "lucide-react";
+import { Home, Search, LayoutGrid, Settings } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { m } from "framer-motion";
 
@@ -13,13 +14,19 @@ const NAV_ITEMS = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-export function BottomNav() {
+export const BottomNav = memo(function BottomNav() {
   const pathname = usePathname();
   const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
 
+  const handleSearch = useCallback(() => setIsPaletteOpen(true), [setIsPaletteOpen]);
+  const handleMenu = useCallback(() => setIsSidebarOpen(true), [setIsSidebarOpen]);
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface border-t border-border rounded-t-[24px] h-16 sm:h-[72px] px-6 shadow-sm pb-[env(safe-area-inset-bottom)]">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface border-t border-border rounded-t-[24px] h-16 sm:h-[72px] px-6 shadow-sm pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
+      style={{ contain: 'layout style paint' }}
+    >
       <div className="flex items-center justify-between h-full max-w-md mx-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
@@ -29,12 +36,12 @@ export function BottomNav() {
             return (
               <m.button
                 key={item.label}
-                whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 25 } }}
-                onClick={() => setIsPaletteOpen(true)}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleSearch}
                 className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Search"
               >
-                <div className="p-2.5 rounded-xl bg-bg border border-border group-active:bg-blue/5">
+                <div className="p-2.5 rounded-xl bg-bg border border-border">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
               </m.button>
@@ -45,20 +52,20 @@ export function BottomNav() {
             return (
               <m.button
                 key={item.label}
-                whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 25 } }}
-                onClick={() => setIsSidebarOpen(true)}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleMenu}
                 className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Menu"
               >
-                <div className="p-2.5 rounded-xl bg-bg border border-border group-active:bg-blue/5">
-                  <Icon className="w-5 h-5" />
+                <div className="p-2.5 rounded-xl bg-bg border border-border">
+                  <Icon className="w-5 h-5 text-text-3" />
                 </div>
               </m.button>
             );
           }
 
           return (
-            <m.div key={item.label} whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 25 } }}>
+            <m.div key={item.label} whileTap={{ scale: 0.95 }}>
               <Link
                 href={item.href!}
                 aria-label={item.label}
@@ -76,4 +83,4 @@ export function BottomNav() {
       </div>
     </nav>
   );
-}
+});

@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useReminders } from "./hooks/useReminders";
 import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from "date-fns";
 
+import { useShallow } from "zustand/react/shallow";
+
 export default function CalendarPage() {
   const { 
     currentView, 
@@ -22,7 +24,16 @@ export default function CalendarPage() {
     isLoading,
     isModalOpen,
     setIsModalOpen
-  } = useCalendarStore();
+  } = useCalendarStore(useShallow(state => ({
+    currentView: state.currentView,
+    setCurrentView: state.setCurrentView,
+    currentDate: state.currentDate,
+    setCurrentDate: state.setCurrentDate,
+    fetchEvents: state.fetchEvents,
+    isLoading: state.isLoading,
+    isModalOpen: state.isModalOpen,
+    setIsModalOpen: state.setIsModalOpen
+  })));
   const [initialDate, setInitialDate] = useState<Date>(new Date());
 
   useReminders();

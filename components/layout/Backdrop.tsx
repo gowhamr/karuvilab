@@ -11,10 +11,9 @@ export function Backdrop({ onClick, opacity }: BackdropProps) {
   return (
     <m.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{ opacity }}
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] md:hidden"
+      className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[60] md:hidden cursor-pointer touch-none"
       onClick={onClick}
     />
   );

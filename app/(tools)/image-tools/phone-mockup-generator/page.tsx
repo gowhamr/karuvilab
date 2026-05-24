@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import PhoneMockupGeneratorClient from "./PhoneMockupGeneratorClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "phone-mockup-generator";
 const category = CATEGORIES.find(c => c.id === "image")!;
 
-export const metadata: Metadata = {
-  title: "Phone Mockup Generator — KaruviLab",
-  description: "Create professional device mockups for your screenshots. Private, fast, and 100% browser-native.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function PhoneMockupGeneratorPage() {
   return (

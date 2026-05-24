@@ -107,7 +107,11 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
         </div>
 
         {/* Metrics Badge */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-green-500 text-white text-[10px] font-black uppercase rounded-2xl shadow-xl animate-in zoom-in duration-500">
+        <div 
+          aria-live="polite" 
+          aria-atomic="true"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-green-500 text-white text-[10px] font-black uppercase rounded-2xl shadow-xl animate-in zoom-in duration-500"
+        >
           {getReduction(item.originalSize, item.compressedSize || 0)} Reduction
         </div>
       </div>

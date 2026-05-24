@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { StructuredData } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
   title: "SEO Tools — Meta Tags, Sitemaps, and Robots.txt Builders",
@@ -17,6 +18,7 @@ export default function SeoToolsPage() {
   const tools = ALL_TOOLS.filter(t => t.category === "seo");
   return (
     <div className="max-w-6xl mx-auto space-y-8">
+      <StructuredData category={cat} />
       <div className="space-y-2">
         <Breadcrumbs category={cat} />
         <h1 className="text-4xl font-black">{cat.label}</h1>

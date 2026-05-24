@@ -63,7 +63,11 @@ export const ImageQueue: React.FC = () => {
                     <>
                       <span className="text-text-2">→</span>
                       <span className="text-blue">{formatSize(item.compressedSize)}</span>
-                      <span className="bg-green-500/10 text-green-600 px-1.5 py-0.5 rounded-md">
+                      <span 
+                        aria-live="polite" 
+                        aria-atomic="true"
+                        className="bg-green-500/10 text-green-600 px-1.5 py-0.5 rounded-md"
+                      >
                         -{getReduction(item.originalSize, item.compressedSize)}
                       </span>
                     </>

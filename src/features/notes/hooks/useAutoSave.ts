@@ -10,7 +10,7 @@ export function useAutoSave<T>(data: T, onSave: (data: T) => void, delay: number
   }, [onSave]);
 
   const debouncedSave = useCallback(
-    debounce((d: any) => {
+    debounce((d: unknown) => {
       onSaveRef.current(d as T);
     }, delay),
     [delay]

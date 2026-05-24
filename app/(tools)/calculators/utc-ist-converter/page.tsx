@@ -7,13 +7,12 @@ const UtcIstConverterClient = dynamic(() => import("./UtcIstConverterClient"), {
   loading: () => <ToolSkeleton />,
 });
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
+const toolId = "utc-ist-converter";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-export const metadata: Metadata = {
-  title: "UTC ↔ IST Converter | KV",
-  description: "Convert between Coordinated Universal Time (UTC) and Indian Standard Time (IST). Features live clocks and business hour references.",
-  keywords: ["utc to ist", "ist to utc", "time converter", "india time", "universal time", "offset converter"],
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function UtcIstConverter() {
   return (

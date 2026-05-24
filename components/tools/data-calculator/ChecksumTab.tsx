@@ -8,6 +8,8 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { Fingerprint, LoaderCircle as Loader2, FileText, Type, ShieldCheck, CircleAlert as AlertCircle } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 
+import { useShallow } from "zustand/react/shallow";
+
 const ALGOS = ["MD5", "SHA-1", "SHA-256", "SHA-512"];
 
 export function ChecksumTab() {
@@ -16,7 +18,16 @@ export function ChecksumTab() {
     checksumResult, setChecksumResult,
     checksumProgress, setChecksumProgress,
     isHashing, setIsHashing
-  } = useDataCalcStore();
+  } = useDataCalcStore(useShallow(state => ({
+    checksumAlgo: state.checksumAlgo,
+    setChecksumAlgo: state.setChecksumAlgo,
+    checksumResult: state.checksumResult,
+    setChecksumResult: state.setChecksumResult,
+    checksumProgress: state.checksumProgress,
+    setChecksumProgress: state.setChecksumProgress,
+    isHashing: state.isHashing,
+    setIsHashing: state.setIsHashing
+  })));
 
   const [textInput, setTextInput] = useState("");
   const [mode, setMode] = useState<'text' | 'file'>('text');

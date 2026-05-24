@@ -113,7 +113,7 @@ export const TRUST_INDICATORS = [
 
 import { memo } from "react";
 
-export const ToolIcon = memo(function ToolIcon({ category, toolId, className = "w-5 h-5" }: { category?: string; toolId?: string; className?: string }) {
+export const ToolIcon = memo(function ToolIcon({ category, toolId, className = "w-5 h-5" }: { category?: string | undefined; toolId?: string | undefined; className?: string }) {
   const Icon = (toolId && TOOL_ICONS[toolId]) || (category && CATEGORIES_FALLBACK[category]) || Wrench;
   return <Icon className={className} aria-hidden="true" />;
 });

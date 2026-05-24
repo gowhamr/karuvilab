@@ -43,8 +43,8 @@ export function ToolInput({
     "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-[48px] text-text",
     mono ? "font-mono text-sm" : "text-base",
     error 
-      ? "border-red-500 focus:ring-4 focus:ring-red-500/10 focus:border-red-500" 
-      : "border-border focus:ring-4 focus:ring-blue/10 focus:border-blue",
+      ? "border-red-500 focus:ring-4 focus:ring-inset focus:ring-red-500/10 focus:border-red-500" 
+      : "border-border focus:ring-4 focus:ring-inset focus:ring-blue/10 focus:border-blue",
     "placeholder:text-text-3/60",
     (readOnly || loading) && "bg-surface cursor-default",
     loading && "opacity-50 pointer-events-none",

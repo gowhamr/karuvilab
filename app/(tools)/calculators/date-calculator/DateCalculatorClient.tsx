@@ -81,7 +81,7 @@ export default function DateCalculatorClient() {
 
   if (!mounted) {
     return (
-      <div className="bg-surface border border-border p-6 rounded-[32px] h-64 animate-pulse" />
+      <div className="bg-surface border border-border p-6 rounded-[32px] min-h-[320px] animate-pulse" />
     );
   }
 

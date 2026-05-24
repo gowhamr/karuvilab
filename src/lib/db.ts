@@ -143,7 +143,19 @@ export const getDB = () => {
   return dbPromise;
 };
 
-export async function saveNote(note: any) {
+export async function saveNote(note: {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  pinned: boolean;
+  isArchived: boolean;
+  isDeleted: boolean;
+  isChecklist: boolean;
+  checklistItems: { id: string; text: string; checked: boolean }[];
+  createdAt: number;
+  updatedAt: number;
+}) {
   const db = await getDB();
   if (!db) return;
   await db.put('notes', note);
@@ -161,7 +173,20 @@ export async function deleteNote(id: string) {
   await db.delete('notes', id);
 }
 
-export async function saveCalendarEvent(event: any) {
+export async function saveCalendarEvent(event: {
+  id: string;
+  title: string;
+  description?: string;
+  startDate: string;
+  endDate: string;
+  allDay: boolean;
+  location?: string;
+  color: string;
+  recurrence?: any;
+  reminderMinutes?: number;
+  createdAt: number;
+  updatedAt: number;
+}) {
   const db = await getDB();
   if (!db) return;
   await db.put('calendar-events', event);

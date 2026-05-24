@@ -6,8 +6,13 @@ import { NoteCard } from "./NoteCard";
 import { AnimatePresence, m } from "framer-motion";
 import { StickyNote } from "lucide-react";
 
+import { useShallow } from "zustand/react/shallow";
+
 export function NoteList() {
-  const { notes, filter, viewMode, setSelectedNoteId } = useNotesStore();
+  const notes = useNotesStore(state => state.notes);
+  const filter = useNotesStore(useShallow(state => state.filter));
+  const viewMode = useNotesStore(state => state.viewMode);
+  const setSelectedNoteId = useNotesStore(state => state.setSelectedNoteId);
 
   const filteredNotes = useMemo(() => {
     return notes

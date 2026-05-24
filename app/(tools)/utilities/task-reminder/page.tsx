@@ -7,13 +7,12 @@ const TaskReminderClient = dynamic(() => import("./TaskReminderClient"), {
   loading: () => <ToolSkeleton />,
 });
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
+const toolId = "task-reminder";
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
-export const metadata: Metadata = {
-  title: "Task Reminder | KV",
-  description: "A private, lightweight task list that stores your data locally in your browser. No registration required.",
-  keywords: ["todo list", "task manager", "local storage", "private todo", "productivity"],
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function TaskReminder() {
   return (

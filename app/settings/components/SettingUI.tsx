@@ -17,7 +17,7 @@ export const SettingRow = memo(function SettingRow({ label, description, childre
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 py-8 border-b border-border/40 last:border-0 group/row">
       <div className="flex gap-5">
         {Icon && (
-          <div className="w-12 h-12 rounded-[18px] bg-blue/5 flex items-center justify-center text-blue flex-shrink-0 group-hover/row:bg-blue/10 transition-colors shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0 group-hover/row:bg-blue/10 transition-colors shadow-sm">
             <Icon className="w-5 h-5" />
           </div>
         )}

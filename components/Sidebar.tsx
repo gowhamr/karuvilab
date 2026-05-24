@@ -1,17 +1,19 @@
 "use client";
 
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES, getRecentTools, ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
-import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Heart } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
+import { useShallow } from "zustand/react/shallow";
 import { m } from "framer-motion";
 import { useI18n } from "@/src/lib/i18n/store";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { MobileSidebar } from "./layout/MobileSidebar";
+import { getDeviceCapabilities } from "@/src/utils";
+import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Heart, LucideIcon } from "lucide-react";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About", icon: Info, key: 'common.about' },
@@ -21,28 +23,172 @@ const SUPPORT_LINKS = [
   { href: "/disclaimer/", label: "Disclaimer", icon: Shield, key: 'common.disclaimer' },
 ];
 
+const SidebarItem = memo(function SidebarItem({ 
+  href, 
+  isActive, 
+  onClick, 
+  icon: Icon, 
+  label, 
+  color,
+  category,
+  toolId,
+  isSmall = false,
+  isHoverable = true
+}: { 
+  href: string; 
+  isActive: boolean; 
+  onClick: () => void; 
+  icon?: LucideIcon; 
+  label: string; 
+  color?: string;
+  category?: string;
+  toolId?: string;
+  isSmall?: boolean;
+  isHoverable?: boolean;
+}) {
+
+  const content = (
+    <Link
+      href={href}
+      onClick={onClick}
+      aria-current={isActive ? "page" : undefined}
+      className={`group flex items-center transition-all font-bold ${
+        isSmall 
+          ? `h-[52px] px-4 text-[11px] rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hov:text-blue hov:bg-blue/5"}`
+          : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hov:text-text hov:bg-black/5 dark:hov:bg-white/5"}`
+      }`}
+      style={{
+        color: !isSmall && isActive ? color : undefined,
+        backgroundColor: !isSmall && isActive ? `${color}15` : undefined,
+      }}
+    >
+      <div 
+        className={isSmall 
+          ? "w-8 h-8 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center mr-3 group-hov:bg-blue/20 transition-all"
+          : `w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isActive ? "" : "bg-transparent group-hov:scale-105"}`
+        }
+        style={{
+          color: !isSmall && isActive ? color : undefined,
+        }}
+      >
+        {Icon ? <Icon className={isSmall ? "w-3.5 h-3.5" : "w-5 h-5"} /> : <ToolIcon category={category} toolId={toolId} className={isSmall ? "w-3.5 h-3.5" : "w-5 h-5"} />}
+      </div>
+      <span className="flex-1 truncate">{label}</span>
+    </Link>
+  );
+
+  if (!isHoverable) return content;
+
+  return (
+    <m.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+      {content}
+    </m.div>
+  );
+});
+
+const CoreLinks = memo(function CoreLinks({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
+  const t = useI18n(state => state.t);
+  const locale = useI18n(state => state.locale);
+
+  return (
+    <div className="space-y-2">
+      <SidebarItem
+        href="/"
+        isActive={pathname === "/"}
+        onClick={setIsOpen}
+        label={t('common.home')}
+        icon={Home}
+        isHoverable={isHoverable}
+      />
+    </div>
+  );
+});
+
+const CategoriesList = memo(function CategoriesList({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
+  return (
+    <div className="space-y-4">
+      <div className="px-5 flex items-center gap-2 text-[11px] font-black text-text-4 uppercase tracking-[0.15em]">
+        <LayoutGrid className="w-4 h-4" />
+        Universal Tools
+      </div>
+      <div className="space-y-1">
+        {CATEGORIES.map((cat) => (
+          <SidebarItem
+            key={cat.id}
+            href={`/${cat.href}`}
+            isActive={pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`)}
+            onClick={setIsOpen}
+            label={cat.label}
+            color={cat.color}
+            category={cat.id}
+            isHoverable={isHoverable}
+          />
+        ))}
+        <SidebarItem
+          href="/all-tools"
+          isActive={pathname === "/all-tools"}
+          onClick={setIsOpen}
+          label="All Tools"
+          icon={LayoutGrid}
+          isHoverable={isHoverable}
+        />
+      </div>
+    </div>
+  );
+});
+
+const SupportLinks = memo(function SupportLinks({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
+  const t = useI18n(state => state.t);
+  const locale = useI18n(state => state.locale);
+
+  return (
+    <div className="pt-6 border-t border-border space-y-1">
+      {SUPPORT_LINKS.map(link => (
+        <SidebarItem
+          key={link.href}
+          href={link.href}
+          isActive={pathname === link.href}
+          onClick={setIsOpen}
+          label={t(link.key as any) || link.label}
+          icon={link.icon}
+          isSmall
+          isHoverable={isHoverable}
+        />
+      ))}
+    </div>
+  );
+});
+
 const SidebarContent = memo(function SidebarContent({ 
   pathname, 
   recent, 
   favorites, 
-  setIsOpen 
+  setIsOpen,
+  isHoverable
 }: { 
   pathname: string, 
   recent: ToolEntry[], 
   favorites: ToolEntry[], 
-  setIsOpen: (o: boolean) => void 
+  setIsOpen: () => void,
+  isHoverable: boolean
 }) {
-  const { t } = useI18n();
+  const t = useI18n(state => state.t);
+  const locale = useI18n(state => state.locale);
+  
+  const handleSearchClick = useCallback(() => {
+    setIsOpen();
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
+  }, [setIsOpen]);
 
   return (
-    <nav className="flex-1 overflow-y-auto p-4 space-y-8 no-scrollbar pb-24 md:pb-8">
+    <nav 
+      className="flex-1 overflow-y-auto p-4 space-y-8 no-scrollbar pb-24 md:pb-8"
+      style={{ contain: 'layout style paint' }}
+    >
       {/* Mobile Search (Sticky Layout) */}
       <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
         <button 
-          onClick={() => {
-            setIsOpen(false);
-            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
-          }}
+          onClick={handleSearchClick}
           className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hov:border-blue/30 transition-all group"
         >
           <div className="flex items-center gap-3">
@@ -58,90 +204,8 @@ const SidebarContent = memo(function SidebarContent({
         </button>
       </div>
 
-      {/* Core Links */}
-      <div className="space-y-2">
-        <m.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-          <Link
-            href="/"
-            onClick={() => setIsOpen(false)}
-            aria-current={pathname === "/" ? "page" : undefined}
-            className={`group flex items-center gap-3 h-[56px] px-4 rounded-2xl transition-all font-bold text-sm ${
-              pathname === "/" 
-                ? "bg-blue/10 text-blue" 
-                : "text-text-2 hov:bg-blue/5 hov:text-blue"
-            }`}
-          >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              pathname === "/" ? "bg-blue/20" : "bg-transparent group-hov:bg-blue/10"
-            }`}>
-              <Home className="w-5 h-5" />
-            </div>
-            {t('common.home')}
-          </Link>
-        </m.div>
-      </div>
-
-      {/* Categories */}
-      <div className="space-y-4">
-        <div className="px-5 flex items-center gap-2 text-[11px] font-black text-text-4 uppercase tracking-[0.15em]">
-          <LayoutGrid className="w-4 h-4" />
-          Universal Tools
-        </div>
-        <div className="space-y-1">
-          {CATEGORIES.map((cat) => {
-            const isActive = pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`);
-            const color = cat.color;
-            return (
-              <m.div key={cat.id} whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href={`/${cat.href}`}
-                  onClick={() => setIsOpen(false)}
-                  aria-current={isActive ? "page" : undefined}
-                  className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
-                    isActive
-                      ? "bg-blue/5 text-blue"
-                      : "text-text-3 hov:text-text hov:bg-black/5 dark:hov:bg-white/5"
-                  }`}
-                  style={{
-                    color: isActive ? color : undefined,
-                    backgroundColor: isActive ? `${color}15` : undefined,
-                  }}
-                >
-                  <div 
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                      isActive ? "" : "bg-transparent group-hov:scale-105"
-                    }`}
-                    style={{
-                      color: isActive ? color : undefined,
-                    }}
-                  >
-                    <ToolIcon category={cat.id} className="w-5 h-5" />
-                  </div>
-                  <span className="flex-1">{cat.label}</span>
-                </Link>
-              </m.div>
-            );
-          })}
-          <m.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-            <Link
-              href="/all-tools"
-              onClick={() => setIsOpen(false)}
-              className={`group flex items-center gap-3 h-[52px] px-3 rounded-2xl transition-all font-bold text-sm ${
-                pathname === "/all-tools"
-                  ? "bg-blue/10 text-blue"
-                  : "text-text-3 hov:text-text hov:bg-black/5 dark:hov:bg-white/5"
-              }`}
-            >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                pathname === "/all-tools" ? "text-blue" : "bg-transparent group-hov:scale-105"
-              }`}>
-                <LayoutGrid className="w-5 h-5" />
-              </div>
-              <span className="flex-1">All Tools</span>
-            </Link>
-          </m.div>
-        </div>
-      </div>
+      <CoreLinks pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
+      <CategoriesList pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
 
       {/* Personal Favorites */}
       {favorites.length > 0 && (
@@ -152,22 +216,17 @@ const SidebarContent = memo(function SidebarContent({
           </div>
           <div className="space-y-1">
             {favorites.map(tool => (
-              <m.div key={tool.id} whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href={`/${tool.href}`}
-                  onClick={() => setIsOpen(false)}
-                  className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                    pathname.includes(tool.href) 
-                      ? "bg-blue/10 text-blue" 
-                      : "text-text-3 hov:text-blue hov:bg-blue/5"
-                  }`}
-                >
-                  <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mr-3 group-hov:bg-red-500/20 transition-all">
-                    <ToolIcon toolId={tool.id} category={tool.category} className="w-3.5 h-3.5 text-red-500" />
-                  </div>
-                  {tool.name}
-                </Link>
-              </m.div>
+              <SidebarItem
+                key={tool.id}
+                href={`/${tool.href}`}
+                isActive={pathname.includes(tool.href)}
+                onClick={setIsOpen}
+                label={tool.name}
+                toolId={tool.id}
+                category={tool.category}
+                isSmall
+                isHoverable={isHoverable}
+              />
             ))}
           </div>
         </div>
@@ -182,95 +241,96 @@ const SidebarContent = memo(function SidebarContent({
           </div>
           <div className="space-y-1">
             {recent.map(tool => (
-              <m.div key={tool.id} whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href={`/${tool.href}`}
-                  onClick={() => setIsOpen(false)}
-                  className={`group flex items-center h-[52px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                    pathname.includes(tool.href) 
-                      ? "bg-blue/10 text-blue" 
-                      : "text-text-3 hov:text-blue hov:bg-blue/5"
-                  }`}
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue/20 group-hov:bg-blue mr-3 transition-all" />
-                  {tool.name}
-                </Link>
-              </m.div>
+              <SidebarItem
+                key={tool.id}
+                href={`/${tool.href}`}
+                isActive={pathname.includes(tool.href)}
+                onClick={setIsOpen}
+                label={tool.name}
+                toolId={tool.id}
+                category={tool.category}
+                isSmall
+                isHoverable={isHoverable}
+              />
             ))}
           </div>
         </div>
       )}
 
-      {/* Support */}
-      <div className="pt-6 border-t border-border space-y-1">
-        {SUPPORT_LINKS.map(link => {
-          const Icon = link.icon;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className={`group flex items-center gap-3 h-[48px] px-4 text-[11px] rounded-xl transition-all font-bold ${
-                pathname === link.href ? "text-blue bg-blue/5" : "text-text-4 hov:text-blue hov:bg-blue/5"
-              }`}
-            >
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-bg border border-border group-hov:border-blue/20 transition-all">
-                <Icon className="w-4 h-4" />
-              </div>
-              {t(link.key as any) || link.label}
-            </Link>
-          );
-        })}
-      </div>
+      <SupportLinks pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
     </nav>
   );
 });
 
 export function Sidebar() {
   const pathname = usePathname() ?? "";
-  const setIsOpen = useSearchStore(state => state.setIsSidebarOpen);
-  const favoriteIds = useFavoriteStore(state => state.favorites);
+  const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
+  const favoriteIds = useFavoriteStore(useShallow(state => state.favorites));
   const [recent, setRecent] = useState<ToolEntry[]>([]);
-  const [favorites, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [isHoverable, setIsHoverable] = useState(true);
+
+  const closeSidebar = useCallback(() => setIsSidebarOpen(false), [setIsSidebarOpen]);
 
   useEffect(() => {
     setHydrated(true);
-  }, []);
+    const caps = getDeviceCapabilities();
+    setIsHoverable(!caps.isMobile);
+  }, [setIsSidebarOpen]);
 
   useEffect(() => {
     if (hydrated) {
       setRecent(getRecentTools().slice(0, 5));
-      setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
     }
-  }, [pathname, favoriteIds, hydrated]);
+  }, [pathname, hydrated]);
+
+  const favorites = useMemo(() => {
+    if (!hydrated || favoriteIds.length === 0) return [];
+    const favSet = new Set(favoriteIds);
+    return ALL_TOOLS.filter(t => favSet.has(t.id)).slice(0, 10);
+  }, [favoriteIds, hydrated]);
 
   return (
     <>
       <MobileSidebar>
         <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
-          <Link href="/" onClick={() => setIsOpen(false)}>
+          <Link href="/" onClick={closeSidebar}>
             <KVLogo withText size="sm" />
           </Link>
           <button
             className="w-8 h-8 flex items-center justify-center hov:bg-black/5 rounded-xl transition-colors text-text-4"
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             aria-label="Close sidebar"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
-        <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
+        <SidebarContent 
+          pathname={pathname} 
+          recent={recent} 
+          favorites={favorites} 
+          setIsOpen={closeSidebar} 
+          isHoverable={isHoverable}
+        />
       </MobileSidebar>
 
       {/* Desktop Permanent Sidebar */}
-      <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden">
+      <aside 
+        className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden"
+        style={{ contain: 'layout style' }}
+      >
         <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
           <Link href="/">
             <KVLogo withText size="md" />
           </Link>
         </div>
-        <SidebarContent pathname={pathname} recent={recent} favorites={favorites} setIsOpen={setIsOpen} />
+        <SidebarContent 
+          pathname={pathname} 
+          recent={recent} 
+          favorites={favorites} 
+          setIsOpen={closeSidebar} 
+          isHoverable={isHoverable}
+        />
         <div className="p-4 border-t border-border bg-bg">
            <div className="p-4 rounded-2xl border border-border bg-surface space-y-2 relative overflow-hidden group">
               <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">

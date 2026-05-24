@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { StructuredData } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
   title: "Disclaimer – KV",
@@ -40,6 +41,7 @@ export default function DisclaimerPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-10 py-10 px-4 md:px-0">
+      <StructuredData />
       <div className="space-y-4">
         <nav className="flex items-center gap-2 text-xs font-bold text-text-4 uppercase tracking-widest">
           <Link href="/" className="hover:text-blue transition-colors">Home</Link>

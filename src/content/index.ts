@@ -74,6 +74,8 @@ import { wordCounter } from './tools/word-counter';
 import { textCaseConverter } from './tools/text-case-converter';
 import { invoiceGenerator } from './tools/invoice-generator';
 import { colorConverter } from './tools/color-converter';
+import { scientificCalculator } from './tools/scientific-calculator';
+import { notesContent } from './tools/notes';
 
 export const TOOL_CONTENT: Record<string, ToolContent> = {
   "hash-generator": hashGenerator,
@@ -145,5 +147,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "numeral-converter": numeralConverter,
   "smart-converter": smartConverter,
   "safe-to-spend": safeToSpend,
-  "work-hours": workHours
+  "work-hours": workHours,
+  "notes": notesContent,
+  "scientific-calculator": scientificCalculator
 };

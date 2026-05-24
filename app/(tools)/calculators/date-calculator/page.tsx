@@ -7,13 +7,12 @@ const DateCalculatorClient = dynamic(() => import("./DateCalculatorClient"), {
   loading: () => <ToolSkeleton />,
 });
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
+const toolId = "date-calculator";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-export const metadata: Metadata = {
-  title: "Date Calculator | KV",
-  description: "Calculate date differences or add/subtract time from any date. Supports years, months, weeks, and days.",
-  keywords: ["date calculator", "date difference", "add days to date", "subtract days from date", "business days"],
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function DateCalculator() {
   return (

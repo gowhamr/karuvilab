@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import WifiQrCodeClient from "./WifiQrCodeClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "wifi-qr-code";
 const category = CATEGORIES.find(c => c.id === "productivity")!;
 
-export const metadata: Metadata = {
-  title: "WiFi QR Code Generator — KaruviLab",
-  description: "Share your WiFi network securely with a QR code. Fast, private, and works on all devices.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function WifiQrCodePage() {
   return (

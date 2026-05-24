@@ -3,13 +3,12 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import ChartGeneratorClient from "./ChartGeneratorClient";
 
+import { generateToolMetadata } from "@/src/lib/seo";
+
 const toolId = "chart-generator";
 const category = CATEGORIES.find(c => c.id === "productivity")!;
 
-export const metadata: Metadata = {
-  title: "Chart & Graph Generator — KaruviLab",
-  description: "Create professional bar charts, pie charts, and more instantly. Secure, private, and 100% client-side.",
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function ChartGeneratorPage() {
   return (
