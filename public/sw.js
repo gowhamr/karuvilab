@@ -10,9 +10,9 @@ if (workbox) {
 
   // Cache names
   const CACHE_NAMES = {
-    static: 'karuvilab-static-v2',
-    images: 'karuvilab-images-v2',
-    pages: 'karuvilab-pages-v2',
+    static: 'karuvilab-static-v3',
+    images: 'karuvilab-images-v3',
+    pages: 'karuvilab-pages-v3',
     googleFonts: 'google-fonts',
   };
 
