@@ -132,7 +132,7 @@ export const toolRelationships: Record<string, ToolRelationship> = {
     related: ["image-crop","image-resizer","image-compress","phone-mockup-generator","color-palette-extractor"],
     workflow_examples: []
   },
-  'image-to-base64': {
+  'image-base64': {
     related: ["image-converter","color-converter","html-viewer","base64"],
     workflow_examples: []
   },
@@ -213,7 +213,7 @@ export const toolRelationships: Record<string, ToolRelationship> = {
     workflow_examples: []
   },
   'base64': {
-    related: ["url-encoder","html-entities","jwt-decoder","image-to-base64"],
+    related: ["url-encoder","html-entities","jwt-decoder","image-base64"],
     workflow_examples: []
   },
   'url-encoder': {

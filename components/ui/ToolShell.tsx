@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ALL_TOOLS, CategoryEntry, getToolColor } from "@/src/tool-registry";
+import { ALL_TOOLS, CategoryEntry, getToolColor, TOOL_RELATIONSHIPS } from "@/src/tool-registry";
 import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
 import { Check, X, ArrowUpRight, ChevronRight } from "lucide-react";
 import { ToolIcon } from "@/components/ui/Icons";
@@ -68,7 +68,10 @@ export function ToolShell({ title, description, category, children, toolId, cont
     alternatives:        content?.alternatives        ?? reg.alternatives,
   };
 
-  const relatedIds = content?.relatedTools ?? currentTool?.related ?? [];
+  const relatedIds = content?.relatedTools ?? 
+                     currentTool?.related ?? 
+                     (finalToolId ? (TOOL_RELATIONSHIPS as any)[finalToolId]?.related : []) ?? 
+                     [];
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (

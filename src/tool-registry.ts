@@ -5,6 +5,7 @@
  */
 
 import { ALL_TOOLS as ALL_TOOLS_IMPORT } from './registry';
+import { toolRelationships } from './registry/tool-relationships';
 
 export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'seo' | 'productivity';
 
@@ -93,6 +94,7 @@ export function getToolColor(tool: ToolEntry): string {
 }
 
 export const ALL_TOOLS = ALL_TOOLS_IMPORT;
+export const TOOL_RELATIONSHIPS = toolRelationships;
 
 export const RECENT_PATH_KEY = 'karuvi.recent.paths';
 
