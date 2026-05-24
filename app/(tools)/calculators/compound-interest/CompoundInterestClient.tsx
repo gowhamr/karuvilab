@@ -5,8 +5,6 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
-import { ToolCard } from "@/components/ToolCard";
 import { TOOL_CONTENT } from "@/src/tool-content";
 import { ALL_TOOLS } from "@/src/registry";
 
@@ -161,31 +159,6 @@ Generated via KaruviLab`;
         historyLabel={`${formatINR(principal)} for ${years}y @ ${rate}%`}
         historyData={{ principal, rate, years, freq, result }}
       />
-
-      {content?.faq && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-bold text-text-2">Frequently Asked Questions</h3>
-          <Accordion type="single" collapsible className="w-full">
-            {content.faq.map((f, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="border-b border-border">
-                <AccordionTrigger className="text-sm">{f.question}</AccordionTrigger>
-                <AccordionContent className="text-sm">{f.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      )}
-
-      {relatedTools.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-bold text-text-2">Related Tools</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {relatedTools.map(t => (
-              <ToolCard key={t.id} tool={t} />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

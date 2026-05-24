@@ -2,17 +2,27 @@ import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
 import { generateToolMetadata } from "@/src/lib/seo";
 import dynamic from "next/dynamic";
+import { CATEGORIES } from "@/src/tool-registry";
+import { ToolShell } from "@/components/ui/ToolShell";
+
 const HtmlViewerClient = dynamic(() => import("@/src/features/html-viewer"), {
   loading: () => <ToolSkeleton />,
 });
-import { Suspense } from "react";
 
-export const metadata: Metadata = generateToolMetadata("html-viewer");
+const toolId = "html-viewer";
+const cat = CATEGORIES.find(c => c.id === "developer")!;
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function HtmlViewerPage() {
   return (
-    <Suspense fallback={<div className="h-screen flex items-center justify-center font-black text-blue animate-pulse">LOADING EDITOR...</div>}>
+    <ToolShell
+      title="HTML Online Viewer"
+      description="Professional developer playground with multi-pane editor and secure real-time preview."
+      category={cat}
+      toolId={toolId}
+    >
       <HtmlViewerClient />
-    </Suspense>
+    </ToolShell>
   );
 }
