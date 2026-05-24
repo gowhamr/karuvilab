@@ -202,7 +202,10 @@ export default function ScientificCalculatorClient() {
             <span className="truncate max-w-[250px]">{expression}</span>
             <span className="bg-blue/10 text-blue px-2 py-0.5 rounded text-[10px]">{mode.toUpperCase()}</span>
           </div>
-          <div className="text-5xl font-black tracking-tighter text-text truncate leading-tight">
+          <div 
+            aria-live="polite"
+            className="text-5xl font-black tracking-tighter text-text truncate leading-tight"
+          >
             {display}
           </div>
         </div>
