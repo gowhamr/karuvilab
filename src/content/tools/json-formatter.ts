@@ -1,63 +1,60 @@
 import { ToolContent } from '../../registry/types';
 
 export const jsonFormatter: ToolContent = {
-  detailedDescription:
-    "Beautify, minify, and validate JSON in real time with syntax highlighting and an interactive tree view. Instantly spot malformed JSON with descriptive error messages pointing to the exact line. All processing is local — your data never leaves the browser.",
+  detailedDescription: `
+    <p>The JSON Formatter and Validator is a professional-grade development utility built to simplify the way you work with JSON data. Whether you are dealing with complex API responses, minified configuration files, or debugging data payloads, this tool provides an interactive environment to beautify, minify, and validate your code in real-time. Because it is a browser-first utility, you can handle sensitive data locally without ever worrying about external server uploads.</p>
+    
+    <p>JSON (JavaScript Object Notation) is the backbone of modern web communication. However, raw JSON often lacks human-readable indentation and is difficult to parse visually. Our Formatter transforms dense, minified JSON into a cleanly structured, human-readable format. Additionally, our intelligent validation engine identifies syntax errors—such as missing quotes, trailing commas, or incorrect braces—and pinpoints their exact location, making it an indispensable debugger for developers and system administrators alike.</p>
+
+    <p>We've integrated an interactive tree view, allowing you to expand and collapse nested objects and arrays. This structural visualization makes exploring deeply nested data structures effortless. By keeping all processing local and providing robust error reporting, KaruviLab's JSON Formatter ensures your development workflow is as secure and efficient as possible.</p>
+  `,
   howTo: [
-    "Paste your raw or minified JSON into the input panel.",
-    "Click 'Format' to beautify, or 'Minify' to compact the JSON.",
-    "Errors are highlighted inline with the line number and a description.",
-    "Switch to 'Tree View' to expand and collapse nested objects.",
-    "Copy the formatted output using the copy button.",
+    "<strong>Input:</strong> Paste your raw JSON payload into the main editor area.",
+    "<strong>Beautify:</strong> Click the 'Format' button to apply standard indentation and structure.",
+    "<strong>Minify:</strong> Click 'Minify' to remove all whitespace for compact transmission.",
+    "<strong>Validate:</strong> If there is a syntax error, the tool will automatically highlight the line and explain what's wrong.",
+    "<strong>Navigate:</strong> Switch to 'Tree View' to explore complex, nested data objects interactively.",
   ],
   faq: [
     {
-      question: "What counts as valid JSON?",
-      answer:
-        "Valid JSON must use double-quoted keys, no trailing commas, and no JavaScript-style comments. Single-quoted strings and `undefined` values are not valid JSON.",
+      question: "What makes JSON invalid?",
+      answer: "JSON is strictly enforced. Common syntax errors include: unquoted keys, single quotes instead of double quotes, trailing commas after the last item in an array or object, and embedded comments (which are not supported in standard JSON).",
     },
     {
-      question: "Can I format very large JSON files?",
-      answer:
-        "Yes, but files over a few megabytes may cause the browser to slow down. For huge files, consider a local tool like `jq`.",
+      question: "Is this tool suitable for huge JSON files?",
+      answer: "For standard API responses and config files, this tool is excellent. Extremely large JSON files (tens of megabytes) may cause browser-based editors to lag. In such cases, a CLI tool like `jq` is recommended.",
     },
     {
-      question: "Why does minified JSON not save space sometimes?",
-      answer:
-        "Whitespace-only savings are modest if the JSON contains mostly data. Minification primarily helps when JSON has lots of indentation and newlines.",
+      question: "Can I edit the JSON in Tree View?",
+      answer: "No, the Tree View is designed for structural exploration and inspection. Please perform all edits in the raw text panel, which will trigger an automatic update in the Tree View.",
     },
     {
-      question: "Does the tree view support editing?",
-      answer:
-        "The tree view is for inspection only. Edit in the text panel and the tree updates automatically.",
+      question: "Does KaruviLab store my JSON data?",
+      answer: "No. All formatting, minification, and validation logic runs entirely within your browser's local sandbox. Your data remains strictly on your device.",
     },
   ],
   useCases: [
-    "Debugging a malformed API response",
-    "Reading a minified configuration file from a build artifact",
-    "Validating JSON before committing to a repository",
-    "Exploring a deeply nested JSON structure interactively",
+    "Debugging error-prone API responses from backend services.",
+    "Formatting minified JSON output for easier structural inspection.",
+    "Verifying JSON integrity before committing to a version control system (Git).",
+    "Understanding the hierarchical structure of large, unfamiliar data schemas.",
   ],
   examples: [
     {
-      label: "Beautify minified JSON",
-      input: '{"name":"Alice","age":30,"city":"Chennai"}',
-      output: '{\n  "name": "Alice",\n  "age": 30,\n  "city": "Chennai"\n}',
-    },
+      input: '{"id":1,"status":"active","tags":["dev","test"]}',
+      output: '{\n  "id": 1,\n  "status": "active",\n  "tags": [\n    "dev",\n    "test"\n  ]\n}',
+      description: "Demonstrating how the beautifier adds human-readable structure to a compact JSON object."
+    }
   ],
   commonErrors: [
     {
-      error: "Unexpected token at line N",
-      fix: "Look for a trailing comma after the last item in an array or object — JSON does not allow trailing commas.",
+      error: "Unexpected token at line X",
+      fix: "This often indicates a trailing comma in an object or array. JSON standards do not permit a comma after the final key-value pair or array element.",
     },
     {
-      error: "Keys are not quoted or use single quotes",
-      fix: "JSON requires all keys and string values to use double quotes. Replace `'key'` with `\"key\"`.",
-    },
-    {
-      error: "Formatter outputs nothing for a seemingly valid input",
-      fix: "Check for a byte-order mark (BOM) at the start of the pasted text. Copy the JSON again from the source.",
+      error: "Syntax error: expected double-quoted key",
+      fix: "JSON keys must always be enclosed in double quotes. Change any single-quoted keys (e.g., 'name') to double quotes (e.g., \"name\").",
     },
   ],
-  alternatives: ["jsonlint.com", "JSONBeautifier.org", "VS Code built-in formatter"],
+  alternatives: ["jsonlint.com", "JSONBeautifier.org", "VS Code Editor Formatter"],
 };
