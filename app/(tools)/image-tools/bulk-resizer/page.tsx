@@ -1,13 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-
-const BulkImageResizerClient = dynamic(() => import("./BulkImageResizerClient"), {
-  loading: () => <ToolSkeleton />,
-});
+import BulkImageResizerClientWrapper from "./BulkImageResizerClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("bulk-resizer");
 
@@ -19,7 +14,7 @@ export default function page() {
       description="Resize multiple images at once with shared dimension settings."
       category={cat}
     >
-      <BulkImageResizerClient />
+      <BulkImageResizerClientWrapper />
     </ToolShell>
   );
 }

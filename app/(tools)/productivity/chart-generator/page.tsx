@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import ChartGeneratorClient from "./ChartGeneratorClient";
-
 import { generateToolMetadata } from "@/src/lib/seo";
+import ChartGeneratorClientWrapper from "./ChartGeneratorClientWrapper";
 
 const toolId = "chart-generator";
 const category = CATEGORIES.find(c => c.id === "productivity")!;
@@ -18,7 +17,7 @@ export default function ChartGeneratorPage() {
       category={category}
       toolId={toolId}
     >
-      <ChartGeneratorClient />
+      <ChartGeneratorClientWrapper />
     </ToolShell>
   );
 }

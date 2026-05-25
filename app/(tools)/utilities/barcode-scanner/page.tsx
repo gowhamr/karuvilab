@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import BarcodeScannerClient from "./BarcodeScannerClient";
-
 import { generateToolMetadata } from "@/src/lib/seo";
+import BarcodeScannerClientWrapper from "./BarcodeScannerClientWrapper";
 
 const toolId = "barcode-scanner";
 const category = CATEGORIES.find(c => c.id === "utilities")!;
@@ -18,7 +17,7 @@ export default function BarcodeScannerPage() {
       category={category}
       toolId={toolId}
     >
-      <BarcodeScannerClient />
+      <BarcodeScannerClientWrapper />
     </ToolShell>
   );
 }

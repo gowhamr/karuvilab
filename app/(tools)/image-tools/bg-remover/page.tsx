@@ -1,13 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-
-const BgRemoverClient = dynamic(() => import("./BgRemoverClient"), {
-  loading: () => <ToolSkeleton />,
-});
+import BgRemoverClientWrapper from "./BgRemoverClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("bg-remover");
 
@@ -19,7 +14,7 @@ export default function page() {
       description="Remove solid or near-solid backgrounds from images using color threshold matching."
       category={cat}
     >
-      <BgRemoverClient />
+      <BgRemoverClientWrapper />
     </ToolShell>
   );
 }
