@@ -7,6 +7,8 @@ import { useToast } from "@/components/ui/Toast";
 import { FileText, Download, Loader2, AlertCircle } from "lucide-react";
 import { EngineLoader } from "@/components/system/EngineLoader";
 
+import { Document, Packer, Paragraph, TextRun } from "docx";
+
 declare const pdfjsLib: any;
 
 export default function PdfToWordClient() {
@@ -74,41 +76,41 @@ export default function PdfToWordClient() {
       try {
         pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
       } catch (err) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.worker.min.mjs";
       }
       
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
       setPageCount(pdf.numPages);
-      const lines: string[] = [];
+      const allText: string[] = [];
+      
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-        const pageText = content.items.map((item: any) => item.str).join(" ");
-        lines.push(pageText);
+        
+        // Group items by their vertical position (Y coordinate) to detect lines/paragraphs
+        let lastY = -1;
+        let pageLines: string[] = [];
+        let currentLine: string[] = [];
+
+        for (const item of (content.items as any[])) {
+          if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) {
+            pageLines.push(currentLine.join(" "));
+            currentLine = [];
+          }
+          currentLine.push(item.str);
+          lastY = item.transform[5];
+        }
+        if (currentLine.length > 0) pageLines.push(currentLine.join(" "));
+        
+        allText.push(pageLines.join("\n"));
       }
-      setText(lines.join("\n\n"));
+      
+      setText(allText.join("\n\n--- Page Break ---\n\n"));
       toast("Text extracted successfully!");
     } catch (e: any) {
       console.error("PDF extraction error:", e);
-      // Final fallback attempt if the above failed
-      try {
-         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
-         const bytes = await file.arrayBuffer();
-         const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-         setPageCount(pdf.numPages);
-         const lines: string[] = [];
-         for (let i = 1; i <= pdf.numPages; i++) {
-           const page = await pdf.getPage(i);
-           const content = await page.getTextContent();
-           const pageText = content.items.map((item: any) => item.str).join(" ");
-           lines.push(pageText);
-         }
-         setText(lines.join("\n\n"));
-         toast("Text extracted successfully!");
-      } catch (innerE) {
-         setError(e?.message || "Failed to extract text.");
-      }
+      setError(e?.message || "Failed to extract text.");
     }
     setProcessing(false);
   };
@@ -117,22 +119,19 @@ export default function PdfToWordClient() {
     if (!text) return;
     setProcessing(true);
     try {
-      // @ts-ignore - dynamic import from URL
-      const docx = await import(/* webpackIgnore: true */ "https://esm.sh/docx");
-      const { Document, Packer, Paragraph, TextRun } = docx;
+      const sections = text.split("\n\n--- Page Break ---\n\n").map(pageContent => ({
+        properties: {},
+        children: pageContent.split("\n").map(line => 
+          new Paragraph({
+            children: [new TextRun({ text: line, size: 24 })],
+            spacing: { after: 200 }
+          })
+        ),
+      }));
 
-      const doc = new Document({
-        sections: [{
-          properties: {},
-          children: text.split("\n\n").map(paragraph => 
-            new Paragraph({
-              children: [new TextRun(paragraph)],
-            })
-          ),
-        }],
-      });
-
+      const doc = new Document({ sections });
       const blob = await Packer.toBlob(doc);
+      
       const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -141,7 +140,7 @@ export default function PdfToWordClient() {
       revokeUrl(url);
       toast("Word document downloaded!");
     } catch (err) {
-      console.error(err);
+      console.error("DOCX Generation error:", err);
       toast("Failed to generate .docx", "error");
     }
     setProcessing(false);
