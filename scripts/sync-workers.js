@@ -10,6 +10,10 @@ const WORKERS = [
   {
     src: 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs',
     dest: 'public/pdf.worker.min.mjs'
+  },
+  {
+    src: 'node_modules/pdfjs-dist/build/pdf.min.mjs',
+    dest: 'public/pdf.min.mjs'
   }
 ];
 

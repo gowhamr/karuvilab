@@ -1,6 +1,5 @@
 "use client";
-import { useState, useRef, useCallback } from "react";
-import Script from "next/script";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { EngineLoader } from "@/components/system/EngineLoader";
@@ -22,8 +21,45 @@ export default function ExtractImagesClient() {
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
 
+  // Robust ESM Loader for PDF.js
+  useEffect(() => {
+    async function initLib() {
+      if (typeof window === 'undefined') return;
+      if (typeof (window as any).pdfjsLib !== 'undefined') {
+        setLibReady(true);
+        return;
+      }
+
+      try {
+        let pdfjs;
+        try {
+          // @ts-ignore
+          pdfjs = await import(/* webpackIgnore: true */ "/pdf.min.mjs");
+        } catch (e) {
+          // @ts-ignore
+          pdfjs = await import(/* webpackIgnore: true */ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs");
+        }
+        
+        (window as any).pdfjsLib = pdfjs;
+
+        // Configure Worker Source
+        try {
+          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+        } catch (err) {
+          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs";
+        }
+
+        setLibReady(true);
+      } catch (err) {
+        console.error("Failed to load PDF.js engine:", err);
+        setLibError("Failed to load PDF engine. Please check your connection.");
+      }
+    }
+    initLib();
+  }, []);
+
   const checkLib = useCallback(() => {
-    return typeof pdfjsLib !== 'undefined';
+    return typeof (window as any).pdfjsLib !== 'undefined';
   }, []);
 
   const extract = async () => {
@@ -109,13 +145,6 @@ export default function ExtractImagesClient() {
 
   return (
     <div className="space-y-8">
-      <Script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs" 
-        type="module" 
-        onLoad={() => setLibReady(true)}
-        onError={() => setLibError("Failed to load PDF engine. Please check your connection.")}
-      />
-      
       <EngineLoader
         checkInit={checkLib}
         loadingMessage="Preparing PDF extraction engine..."
