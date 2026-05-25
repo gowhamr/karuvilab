@@ -1,14 +1,8 @@
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-
-const TimeZoneConverterClient = dynamic(
-  () => import("./TimeZoneConverterClient"),
-  { ssr: false }
-);
-
 import { generateToolMetadata } from "@/src/lib/seo";
+import TimeZoneConverterClientWrapper from "./TimeZoneConverterClientWrapper";
 
 const toolId = "timezone-converter";
 const category = CATEGORIES.find(c => c.id === "productivity")!;
@@ -23,7 +17,7 @@ export default function TimeZoneConverterPage() {
       category={category}
       toolId={toolId}
     >
-      <TimeZoneConverterClient />
+      <TimeZoneConverterClientWrapper />
     </ToolShell>
   );
 }
