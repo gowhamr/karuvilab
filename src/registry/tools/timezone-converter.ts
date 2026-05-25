@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const timezone_converter: ToolEntry = {
   "id": "timezone-converter",
   "name": "Time Zone Converter",
-  "desc": "Convert time between multiple time zones",
+  "desc": "Compare and convert time between multiple global time zones. Real-time offsets and DST support.",
   "href": "productivity/timezone-converter/",
   "category": "productivity",
   "keywords": [
@@ -11,11 +11,21 @@ export const timezone_converter: ToolEntry = {
     "converter",
     "world clock",
     "time",
-    "iana"
+    "iana",
+    "dst",
+    "meeting planner",
+    "utc converter",
+    "local time"
   ],
   "difficulty": "beginner",
-  "searchIntent": "informational",
-  "priority": 0.7,
+  "searchIntent": "transactional",
+  "priority": 0.8,
   "status": "new",
-  "schemaType": "WebApplication"
+  "schemaType": "WebApplication",
+  "related": [
+    "world-clock",
+    "utc-ist-converter",
+    "date-calculator",
+    "time-calculator"
+  ]
 };

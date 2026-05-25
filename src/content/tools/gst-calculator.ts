@@ -2,45 +2,64 @@ import { ToolContent } from '../../registry/types';
 
 export const gstCalculator: ToolContent = {
   detailedDescription:
-    "Add GST to a base price or extract (remove) GST from an inclusive price for any Indian GST slab (5%, 12%, 18%, 28%). Shows CGST, SGST, and IGST breakdowns. Useful for invoicing and tax reconciliation. All calculations are local.",
+    "An easy-to-use Indian GST Calculator to add or remove GST from any amount. Instantly calculate CGST, SGST, and IGST for standard tax slabs (5%, 12%, 18%, 28%). Whether you are a business owner creating an invoice or a consumer verifying a bill, our tool provides precise tax breakdowns entirely in your browser.",
   howTo: [
-    "Enter the amount (base price or GST-inclusive price).",
-    "Select the GST rate from the dropdown (5%, 12%, 18%, 28%).",
-    "Choose 'Add GST' or 'Remove GST'.",
-    "View the breakdown: base amount, CGST, SGST (or IGST), and total.",
+    "Step 1: Enter the initial amount in the 'Amount' field.",
+    "Step 2: Select the applicable GST rate (5%, 12%, 18%, or 28%).",
+    "Step 3: Choose 'Add GST' to calculate the tax on top of the amount, or 'Remove GST' to extract tax from an inclusive price.",
+    "Step 4: Instantly see the breakdown of Net Amount, GST Amount (split into CGST/SGST), and Total Amount.",
+  ],
+  examples: [
+    {
+      label: "Adding GST (Intrastate)",
+      description: "If you have a service worth ₹1,000 and want to add 18% GST for a local client:",
+      input: "₹1,000 + 18% GST",
+      output: "Base: ₹1,000 | CGST: ₹90 | SGST: ₹90 | Total: ₹1,180"
+    },
+    {
+      label: "Removing GST (Inclusive Price)",
+      description: "If you bought a product for ₹590 (inclusive of 18% GST) and want to find the base price:",
+      input: "₹590 (Remove 18%)",
+      output: "Base: ₹500 | GST: ₹90 | Total: ₹590"
+    }
   ],
   faq: [
     {
-      question: "What is the difference between CGST/SGST and IGST?",
+      question: "How is GST calculated in India?",
       answer:
-        "For intrastate transactions (within the same state), GST is split into CGST (central) and SGST (state) at half the rate each. For interstate transactions, the full GST is charged as IGST.",
+        "GST is calculated by multiplying the base price by the tax rate. Formula for Adding GST: GST Amount = (Base Price × Rate) / 100. Formula for Removing GST: Base Price = Total Price / (1 + (Rate / 100)).",
     },
     {
-      question: "How do I reverse-calculate GST from an inclusive price?",
+      question: "When should I use IGST vs CGST/SGST?",
       answer:
-        "Select 'Remove GST'. For example, a ₹118 inclusive amount at 18% GST has a base price of ₹100 (₹118 / 1.18).",
+        "Use CGST (Central) and SGST (State) for transactions within the same state (Intrastate). Use IGST (Integrated) for transactions between two different states (Interstate). The total tax amount remains the same.",
     },
     {
-      question: "Is cess included in the calculation?",
+      question: "What are the common GST slabs?",
       answer:
-        "No. Cess (e.g., compensation cess on luxury goods) is not included. Add it manually on top of the calculated GST.",
+        "Current standard GST slabs in India are 5% (essentials), 12% (standard items), 18% (most services and products), and 28% (luxury/sin goods). Some items like gold carry a 3% rate.",
+    },
+    {
+      question: "Is this GST calculator free to use?",
+      answer:
+        "Yes, KaruviLab's GST calculator is 100% free, private, and works offline. No data is ever uploaded to a server.",
     },
   ],
   useCases: [
-    "Calculating the GST amount to add on a client invoice",
-    "Finding the pre-GST price from a GST-inclusive bill",
-    "Verifying the GST breakdown on a purchase receipt",
-    "Computing CGST and SGST split for state-level filings",
+    "Businesses creating tax-compliant invoices",
+    "Accountants reconciling monthly tax filings",
+    "Consumers checking the accuracy of restaurant or shopping bills",
+    "Freelancers calculating the right amount to charge local vs international clients",
   ],
   commonErrors: [
     {
-      error: "GST amount seems too high",
-      fix: "Ensure you selected the correct GST slab. Common slabs are 5% for essentials, 12%/18% for goods and services, and 28% for luxury items.",
+      error: "Selecting the wrong slab",
+      fix: "Verify the HSN/SAC code of your product or service to find the exact applicable GST rate (e.g., most IT services are 18%).",
     },
     {
-      error: "Result differs slightly from the invoice",
-      fix: "Invoices may round amounts differently. The tool uses standard rounding — minor differences of ₹0.01 are normal.",
+      error: "Confusing inclusive and exclusive prices",
+      fix: "If the price already includes tax, use the 'Remove GST' mode to find the true base price.",
     },
   ],
-  alternatives: ["GST.gov.in calculator", "ClearTax GST Calculator", "Zoho GST Calculator"],
+  alternatives: ["Official GST.gov.in Tool", "ClearTax", "Tally Solutions"],
 };

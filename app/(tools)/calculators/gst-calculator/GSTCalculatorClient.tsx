@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { d, formatINR, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { Info, HelpCircle, ArrowRightLeft, Percent, Calculator } from "lucide-react";
 
 const GST_RATES = [3, 5, 12, 18, 28];
 
@@ -12,6 +13,7 @@ const DEFAULT_STATE = {
   amount: 1000,
   gstRate: 18,
   mode: "add" as "add" | "remove",
+  isInterstate: false,
 };
 
 export default function GSTCalculatorClient() {
@@ -21,6 +23,7 @@ export default function GSTCalculatorClient() {
   const [amount, setAmount] = useState<number>(DEFAULT_STATE.amount);
   const [gstRate, setGstRate] = useState(DEFAULT_STATE.gstRate);
   const [mode, setMode] = useState<"add" | "remove">(DEFAULT_STATE.mode);
+  const [isInterstate, setIsInterstate] = useState(DEFAULT_STATE.isInterstate);
 
   // Initialize from URL
   useEffect(() => {
@@ -28,14 +31,15 @@ export default function GSTCalculatorClient() {
     setAmount(Number(state.amount));
     setGstRate(Number(state.gstRate));
     setMode(state.mode as "add" | "remove");
+    setIsInterstate((state as any).isInterstate === "true");
     setIsLoaded(true);
   }, []);
 
   // Sync to URL
   useEffect(() => {
     if (!isLoaded) return;
-    syncStateToUrl({ amount, gstRate, mode });
-  }, [amount, gstRate, mode, isLoaded]);
+    syncStateToUrl({ amount, gstRate, mode, isInterstate });
+  }, [amount, gstRate, mode, isInterstate, isLoaded]);
 
   const result = useMemo(() => {
     const val = d(amount || 0);
@@ -43,153 +47,208 @@ export default function GSTCalculatorClient() {
     if (mode === "add") {
       const gstAmt = val.mul(rate.div(100));
       return { 
-        original: val.toNumber(), 
+        net: val.toNumber(), 
         gst: gstAmt.toNumber(), 
-        final: val.add(gstAmt).toNumber() 
+        total: val.add(gstAmt).toNumber() 
       };
     } else {
-      const original = val.div(d(1).add(rate.div(100)));
-      const gstAmt = val.sub(original);
+      const net = val.div(d(1).add(rate.div(100)));
+      const gstAmt = val.sub(net);
       return { 
-        original: original.toNumber(), 
+        net: net.toNumber(), 
         gst: gstAmt.toNumber(), 
-        final: val.toNumber() 
+        total: val.toNumber() 
       };
     }
   }, [amount, gstRate, mode]);
 
-  const slabTable = useMemo(() => {
-    const val = d(amount || 0);
-    return GST_RATES.map((r) => {
-      const rate = d(r);
-      const gstAmt = val.mul(rate.div(100));
-      return {
-        rate: r,
-        gst: gstAmt.toNumber(),
-        total: val.add(gstAmt).toNumber(),
-      };
-    });
-  }, [amount]);
+  const taxBreakdown = useMemo(() => {
+    if (isInterstate) {
+      return { igst: result.gst, cgst: 0, sgst: 0 };
+    }
+    return { igst: 0, cgst: result.gst / 2, sgst: result.gst / 2 };
+  }, [result.gst, isInterstate]);
 
-  const summary = `GST Calculation
+  const summary = `GST Calculation (${gstRate}% ${mode === "add" ? "added" : "extracted"})
 ----------------
-Amount: ${formatINR(amount)}
-GST Rate: ${gstRate}%
-Mode: ${mode === "add" ? "Add GST" : "Remove GST"}
-
-Original: ${formatINR(result.original, 2)}
-GST Amount: ${formatINR(result.gst, 2)}
-Final Amount: ${formatINR(result.final, 2)}
+Net Amount: ${formatINR(result.net, 2)}
+GST (${gstRate}%): ${formatINR(result.gst, 2)}
+${isInterstate ? `IGST: ${formatINR(taxBreakdown.igst, 2)}` : `CGST: ${formatINR(taxBreakdown.cgst, 2)}\nSGST: ${formatINR(taxBreakdown.sgst, 2)}`}
+Total Amount: ${formatINR(result.total, 2)}
 
 Generated via KaruviLab`;
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
-        <ToolInput
-          label="Amount (₹)"
-          type="number"
-          placeholder="Enter amount"
-          value={amount === 0 ? "" : amount.toString()}
-          onChange={(val) => setAmount(Number(val))}
-        />
+    <div className="space-y-8">
+      {/* Input Section */}
+      <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <ToolInput
+              label="Amount (Base or Inclusive)"
+              type="number"
+              placeholder="e.g. 1000"
+              value={amount === 0 ? "" : amount.toString()}
+              onChange={(val) => setAmount(Number(val))}
+            />
 
-        <div className="space-y-2" role="group" aria-labelledby={rateLabelId}>
-          <label id={rateLabelId} className="text-sm font-bold text-text-2">GST Rate</label>
-          <div className="flex flex-wrap gap-2">
-            {GST_RATES.map((r) => (
-              <button
-                key={r}
-                onClick={() => setGstRate(r)}
-                aria-pressed={gstRate === r}
-                className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
-                  gstRate === r
-                    ? "bg-blue text-white border-blue"
-                    : "bg-bg border-border hover:border-blue hover:text-blue"
-                }`}
-              >
-                {r}%
-              </button>
-            ))}
+            <div className="space-y-3" role="group" aria-labelledby={rateLabelId}>
+              <div className="flex items-center justify-between">
+                <label id={rateLabelId} className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">GST Rate Slab</label>
+                <span className="text-[10px] font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-full">{gstRate}% Selected</span>
+              </div>
+              <div className="grid grid-cols-5 gap-2">
+                {GST_RATES.map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => setGstRate(r)}
+                    aria-pressed={gstRate === r}
+                    className={`py-3 rounded-2xl text-xs font-black transition-all ${
+                      gstRate === r
+                        ? "bg-blue text-white shadow-lg shadow-blue/20"
+                        : "bg-bg border border-border text-text-3 hover:border-blue/50 hover:text-blue"
+                    }`}
+                  >
+                    {r}%
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-2" role="group" aria-labelledby={modeLabelId}>
-          <label id={modeLabelId} className="text-sm font-bold text-text-2">Mode</label>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => setMode("add")}
-              aria-pressed={mode === "add"}
-              className={`py-3 rounded-xl text-sm font-bold border transition-all ${
-                mode === "add"
-                  ? "bg-blue text-white border-blue"
-                  : "bg-bg border-border hover:border-blue hover:text-blue"
-              }`}
-            >
-              Add GST
-            </button>
-            <button
-              onClick={() => setMode("remove")}
-              aria-pressed={mode === "remove"}
-              className={`py-3 rounded-xl text-sm font-bold border transition-all ${
-                mode === "remove"
-                  ? "bg-blue text-white border-blue"
-                  : "bg-bg border-border hover:border-blue hover:text-blue"
-              }`}
-            >
-              Remove GST
-            </button>
+          <div className="space-y-6">
+            <div className="space-y-3" role="group" aria-labelledby={modeLabelId}>
+              <label id={modeLabelId} className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Calculation Mode</label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setMode("add")}
+                  className={`flex flex-col items-center gap-1 p-4 rounded-[24px] border-2 transition-all ${
+                    mode === "add"
+                      ? "bg-blue/5 border-blue text-blue"
+                      : "bg-bg border-border text-text-3 hover:border-blue/30"
+                  }`}
+                >
+                  <span className="text-xs font-black uppercase tracking-widest">Add GST</span>
+                  <span className="text-[9px] font-bold opacity-60">Net + Tax</span>
+                </button>
+                <button
+                  onClick={() => setMode("remove")}
+                  className={`flex flex-col items-center gap-1 p-4 rounded-[24px] border-2 transition-all ${
+                    mode === "remove"
+                      ? "bg-blue/5 border-blue text-blue"
+                      : "bg-bg border-border text-text-3 hover:border-blue/30"
+                  }`}
+                >
+                  <span className="text-xs font-black uppercase tracking-widest">Remove GST</span>
+                  <span className="text-[9px] font-bold opacity-60">Inclusive - Tax</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 bg-bg border border-border rounded-2xl flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-surface flex items-center justify-center">
+                  <ArrowRightLeft size={14} className="text-blue" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest">Interstate Sale</p>
+                  <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Use IGST instead of CGST/SGST</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsInterstate(!isInterstate)}
+                className={`w-12 h-6 rounded-full transition-all relative ${isInterstate ? 'bg-blue' : 'bg-border'}`}
+              >
+                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isInterstate ? 'right-1' : 'left-1'}`} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <MetricCard label="Original Amount" value={formatINR(result.original, 2)} />
-        <MetricCard label={`GST (${gstRate}%)`} value={formatINR(result.gst, 2)} />
-        <MetricCard label="Final Amount" value={formatINR(result.final, 2)} accent />
+      {/* Results Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MetricCard 
+          label="Net Amount (Excl. Tax)" 
+          value={formatINR(result.net, 2)} 
+          sub="The amount before tax"
+        />
+        <MetricCard 
+          label={`Total GST (${gstRate}%)`} 
+          value={formatINR(result.gst, 2)} 
+          sub="Total tax amount"
+          accent
+        />
+        <MetricCard 
+          label="Gross Amount (Incl. Tax)" 
+          value={formatINR(result.total, 2)} 
+          sub="The final billing amount"
+        />
+      </div>
+
+      {/* Breakdown Card */}
+      <div className="bg-surface border border-border rounded-[32px] overflow-hidden">
+        <div className="p-6 border-b border-border bg-bg/50 flex items-center justify-between">
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Tax Breakdown</h3>
+          <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Local Currency (INR)</span>
+        </div>
+        <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            {!isInterstate ? (
+              <>
+                <div className="flex justify-between items-center pb-4 border-b border-border/50">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-widest text-text-2">CGST</p>
+                    <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Central Tax ({gstRate/2}%)</p>
+                  </div>
+                  <p className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.cgst, 2)}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-widest text-text-2">SGST</p>
+                    <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">State Tax ({gstRate/2}%)</p>
+                  </div>
+                  <p className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.sgst, 2)}</p>
+                </div>
+              </>
+            ) : (
+              <div className="flex justify-between items-center h-full">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-widest text-text-2">IGST</p>
+                  <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Integrated Tax ({gstRate}%)</p>
+                </div>
+                <p className="font-mono text-2xl font-black text-blue">{formatINR(taxBreakdown.igst, 2)}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="bg-bg/50 rounded-2xl p-6 space-y-4">
+            <div className="flex items-center gap-2 text-blue">
+              <Info size={14} />
+              <span className="text-[10px] font-black uppercase tracking-[0.1em]">Calculation Details</span>
+            </div>
+            <div className="space-y-2">
+              <p className="text-[11px] font-medium leading-relaxed text-text-3 italic">
+                {mode === "add" 
+                  ? `GST is added: ${formatINR(result.net)} × (${gstRate}/100) = ${formatINR(result.gst)}` 
+                  : `GST is extracted: ${formatINR(result.total)} - (${formatINR(result.total)} / (1 + ${gstRate}/100)) = ${formatINR(result.gst)}`
+                }
+              </p>
+              <div className="h-px bg-border/50" />
+              <p className="text-[11px] font-medium leading-relaxed text-text-3">
+                The total amount is split based on {isInterstate ? "Integrated GST (Interstate)" : "Central and State GST (Intrastate)"} rules.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <CalculatorActionBar
         summary={summary}
         toolId="gst-calculator"
         historyLabel={`${formatINR(amount)} @ ${gstRate}% (${mode})`}
-        historyData={{ amount, gstRate, mode, result }}
+        historyData={{ amount, gstRate, mode, isInterstate, result }}
       />
-
-      <div className="space-y-4">
-        <h3 className="text-lg font-black">GST Slab Comparison</h3>
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-surface border-b border-border">
-                <th className="px-4 py-3 text-left font-bold text-text-3">GST Rate</th>
-                <th className="px-4 py-3 text-right font-bold text-text-3">GST Amount</th>
-                <th className="px-4 py-3 text-right font-bold text-text-3">Total (incl. GST)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {slabTable.map((row) => (
-                <tr
-                  key={row.rate}
-                  className={`border-b border-border/50 transition-colors ${
-                    row.rate === gstRate ? "bg-blue/5 font-bold" : "hover:bg-surface"
-                  }`}
-                >
-                  <td className="px-4 py-3 text-text-2 font-medium">{row.rate}%</td>
-                  <td className="px-4 py-3 text-right text-text">{formatINR(row.gst, 2)}</td>
-                  <td
-                    className={`px-4 py-3 text-right font-bold ${
-                      row.rate === gstRate ? "text-blue" : "text-text"
-                    }`}
-                  >
-                    {formatINR(row.total, 2)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 }
