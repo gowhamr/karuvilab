@@ -75,9 +75,24 @@ if (workbox) {
     '/offline',
     '/manifest.json',
     '/favicon.ico',
+    '/pdf.min.mjs',
+    '/pdf.worker.min.mjs',
+    '/icons/icon-16.png',
+    '/icons/icon-32.png',
+    '/icons/icon-48.png',
+    '/icons/icon-180.png',
     '/icons/icon-192.png',
+    '/icons/icon-256.png',
     '/icons/icon-512.png',
   ];
+
+  // 6. Cache ESM modules (workers, etc.)
+  registerRoute(
+    ({ url }) => url.pathname.endsWith('.mjs') || url.pathname.endsWith('.js'),
+    new StaleWhileRevalidate({
+      cacheName: CACHE_NAMES.static,
+    })
+  );
 
   self.addEventListener('install', (event) => {
     event.waitUntil(

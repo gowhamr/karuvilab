@@ -80,8 +80,13 @@ export default function TimeZoneConverterClient() {
     
     const [dPart, tPart] = sourceDate.split('T');
     if (!dPart || !tPart) return [];
-    const [year, month, day] = dPart.split('-').map(Number);
-    const [hour, minute] = tPart.split(':').map(Number);
+    const dateParts = dPart.split('-').map(Number);
+    const timeParts = tPart.split(':').map(Number);
+    const year = dateParts[0] || 0;
+    const month = dateParts[1] || 1;
+    const day = dateParts[2] || 1;
+    const hour = timeParts[0] || 0;
+    const minute = timeParts[1] || 0;
 
     // 1. Calculate the actual UTC timestamp for the given "Wall Time" in "Source TZ"
     const getActualUTC = () => {
