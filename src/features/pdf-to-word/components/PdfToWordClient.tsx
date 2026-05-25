@@ -39,7 +39,7 @@ export default function PdfToWordClient() {
         } catch (e) {
           // Fallback to CDN
           // @ts-ignore
-          pdfjs = await import(/* webpackIgnore: true */ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs");
+          pdfjs = await import(/* webpackIgnore: true */ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs");
         }
         
         (window as any).pdfjsLib = pdfjs;
@@ -48,7 +48,7 @@ export default function PdfToWordClient() {
         try {
           (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
         } catch (err) {
-          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs";
+          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs";
         }
 
         setLibReady(true);
