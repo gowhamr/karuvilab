@@ -19,7 +19,6 @@ import {
 import { m, AnimatePresence } from "framer-motion";
 import { getAllTimezones, COMMON_CITIES } from "@/src/lib/timezone-data";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { useToast } from "@/components/ui/Toast";
 
 interface TimezoneInfo {
   city: string;
@@ -77,12 +76,45 @@ export default function TimeZoneConverterClient() {
   };
 
   const conversions = useMemo(() => {
-    const baseDateObj = new Date(sourceDate);
-    if (isNaN(baseDateObj.getTime())) return [];
+    if (!sourceDate) return [];
+    
+    const [dPart, tPart] = sourceDate.split('T');
+    if (!dPart || !tPart) return [];
+    const [year, month, day] = dPart.split('-').map(Number);
+    const [hour, minute] = tPart.split(':').map(Number);
 
-    // To correctly interpret the sourceDate in the sourceTZ:
-    // We need to use Intl.DateTimeFormat to find the offset of sourceTZ at that moment
-    // and adjust. But simpler: use the format with timeZone option.
+    // 1. Calculate the actual UTC timestamp for the given "Wall Time" in "Source TZ"
+    const getActualUTC = () => {
+      try {
+        // Create a UTC date with the wall time components
+        const wallTimeAsUTC = new Date(Date.UTC(year, month - 1, day, hour, minute));
+        // Find what time it would be in the sourceTZ if the UTC time was our wall time
+        const tzString = wallTimeAsUTC.toLocaleString('en-US', { timeZone: sourceTZ });
+        const tzDate = new Date(tzString);
+        // The difference is the offset
+        const offset = tzDate.getTime() - wallTimeAsUTC.getTime();
+        // Adjust the wall time to get the real UTC timestamp
+        return new Date(wallTimeAsUTC.getTime() - offset);
+      } catch (e) {
+        return new Date(NaN);
+      }
+    };
+
+    const baseUTC = getActualUTC();
+    if (isNaN(baseUTC.getTime())) return [];
+
+    // Helper for offsets
+    const getOffsetMinutes = (date: Date, timeZone: string) => {
+      try {
+        const tzString = date.toLocaleString('en-US', { timeZone });
+        const tzDate = new Date(tzString);
+        const utcString = date.toLocaleString('en-US', { timeZone: 'UTC' });
+        const utcDate = new Date(utcString);
+        return (tzDate.getTime() - utcDate.getTime()) / 60000;
+      } catch { return 0; }
+    };
+
+    const baseOffset = getOffsetMinutes(baseUTC, sourceTZ);
     
     return targetTZs.map(tz => {
       try {
@@ -92,31 +124,7 @@ export default function TimeZoneConverterClient() {
           timeStyle: 'short',
         });
         
-        const sourceInTarget = new Intl.DateTimeFormat('en-US', {
-            timeZone: tz,
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: false
-        }).format(baseDateObj);
-
-        const sourceInSource = new Intl.DateTimeFormat('en-US', {
-            timeZone: sourceTZ,
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: false
-        }).format(baseDateObj);
-
-        // This is a bit tricky with just Intl. Let's use a simpler approach for offsets.
-        // We'll calculate the difference in minutes between the two zones for the given date.
-        
-        const getOffset = (date: Date, timeZone: string) => {
-          const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
-          const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
-          return (tzDate.getTime() - utcDate.getTime()) / 60000;
-        };
-
-        const baseOffset = getOffset(baseDateObj, sourceTZ);
-        const targetOffset = getOffset(baseDateObj, tz);
+        const targetOffset = getOffsetMinutes(baseUTC, tz);
         const diffMinutes = targetOffset - baseOffset;
         const diffHours = diffMinutes / 60;
         
@@ -124,14 +132,22 @@ export default function TimeZoneConverterClient() {
                             diffHours > 0 ? `+${diffHours}h` : `${diffHours}h`;
 
         // Relative Day
-        const baseDay = new Date(baseDateObj.toLocaleString('en-US', { timeZone: sourceTZ })).getDate();
-        const targetDay = new Date(baseDateObj.toLocaleString('en-US', { timeZone: tz })).getDate();
+        const baseDayStr = baseUTC.toLocaleString('en-US', { timeZone: sourceTZ, day: 'numeric' });
+        const targetDayStr = baseUTC.toLocaleString('en-US', { timeZone: tz, day: 'numeric' });
+        const baseDay = parseInt(baseDayStr);
+        const targetDay = parseInt(targetDayStr);
         
         let relativeDay = "";
-        if (targetDay > baseDay) relativeDay = "Next Day";
-        else if (targetDay < baseDay) relativeDay = "Previous Day";
+        // Simple comparison of day number might fail at month boundaries.
+        // Better: Compare full dates
+        const baseDateOnly = new Date(baseUTC.toLocaleString('en-US', { timeZone: sourceTZ, year: 'numeric', month: 'numeric', day: 'numeric' }));
+        const targetDateOnly = new Date(baseUTC.toLocaleString('en-US', { timeZone: tz, year: 'numeric', month: 'numeric', day: 'numeric' }));
+        
+        const dayDiff = (targetDateOnly.getTime() - baseDateOnly.getTime()) / (1000 * 60 * 60 * 24);
+        if (dayDiff >= 0.5) relativeDay = "Next Day";
+        else if (dayDiff <= -0.5) relativeDay = "Previous Day";
 
-        const formatted = targetFormatter.format(baseDateObj);
+        const formatted = targetFormatter.format(baseUTC);
         const [datePart, timePart] = formatted.split(', ');
 
         return { 

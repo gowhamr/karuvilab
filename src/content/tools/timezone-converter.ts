@@ -31,5 +31,25 @@ export const timezoneConverterContent: ToolContent = {
       question: "Does it show if the target time is on a different day?",
       answer: "Absolutely. Each timezone card includes a 'Next Day' or 'Previous Day' badge if the converted time falls on a different calendar day than your base time, helping you avoid meeting errors."
     }
+  ],
+  examples: [
+    {
+      label: "Scheduling a Remote Meeting",
+      input: "Base: 10:00 AM (Asia/Kolkata), Targets: London, New York",
+      output: "London: 4:30 AM, New York: 11:30 PM (Previous Day)",
+      description: "Quickly see that a morning meeting in India is too early for colleagues in the UK and late night for New York."
+    },
+    {
+      label: "Checking Stock Market Openings",
+      input: "Base: 9:30 AM (America/New_York), Targets: Tokyo, London",
+      output: "Tokyo: 10:30 PM, London: 2:30 PM",
+      description: "Determine what time global markets are open relative to Wall Street's opening bell."
+    },
+    {
+      label: "International Flight Planning",
+      input: "Base: 2:00 PM (Europe/Paris), Target: Singapore",
+      output: "Singapore: 9:00 PM (+7 hours)",
+      description: "Calculate arrival times or check-in windows for long-haul international flights."
+    }
   ]
 };

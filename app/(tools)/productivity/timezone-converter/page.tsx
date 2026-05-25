@@ -1,7 +1,12 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import TimeZoneConverterClient from "./TimeZoneConverterClient";
+
+const TimeZoneConverterClient = dynamic(
+  () => import("./TimeZoneConverterClient"),
+  { ssr: false }
+);
 
 import { generateToolMetadata } from "@/src/lib/seo";
 

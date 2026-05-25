@@ -9,7 +9,7 @@ interface ToolInputProps {
   onChange?: (val: string) => void;
   placeholder?: string;
   rows?: number;
-  type?: "text" | "number" | "password" | "date";
+  type?: "text" | "number" | "password" | "date" | "datetime-local";
   description?: string | undefined;
   error?: string | undefined;
   mono?: boolean;
