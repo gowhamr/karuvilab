@@ -4,7 +4,28 @@ export const currencyConverter: ToolContent = {
   detailedDescription: `
     <p>The Currency Converter is a vital tool for international travelers, global business professionals, and savvy online shoppers. Whether you are planning a trip abroad, managing international investments, or comparing prices across global e-commerce platforms, this tool provides instant and accurate conversion results using real-time market data.</p>
     
-    <p>Our converter supports over 150+ world currencies, ranging from major global currencies like USD, EUR, and GBP to localized currencies like INR, AED, and JPY. Because KaruviLab is a browser-first platform, our converter is incredibly fast—providing near-instant results the moment you input your values. It acts as a reliable companion for cross-border financial planning, ensuring you always know the current value of your money regardless of where you are in the world.</p>
+    <p>Our converter supports over 150+ world currencies, ranging from major global currencies like USD, EUR, and GBP to localized currencies like INR, AED, and JPY. Because KaruviLab is a browser-first platform, our converter is incredibly fast—providing near-instant results the moment you input your values.</p>
+
+    <div className="my-6 space-y-4">
+      <p className="font-bold text-text">How it works (Implementation Example):</p>
+      <pre className="bg-bg border border-border p-4 rounded-xl overflow-x-auto text-[13px]">
+<code className="text-blue">
+// Basic currency conversion logic in JavaScript
+function convertCurrency(amount, fromRate, toRate) {
+  // 1. Convert source amount to base (usually USD)
+  const amountInBase = amount / fromRate;
+  
+  // 2. Convert base amount to target currency
+  const result = amountInBase * toRate;
+  
+  return result.toFixed(2);
+}
+
+// Example: 100 USD to INR (assuming 1 USD = 83.00 INR)
+console.log(convertCurrency(100, 1.0, 83.00)); // "8300.00"
+</code>
+      </pre>
+    </div>
 
     <p>We prioritize privacy and efficiency. Unlike many banking apps that track your financial activities, this tool is purely functional. It fetches the latest mid-market exchange rates and performs all conversion math locally within your browser. You can use it as a quick reference guide whenever you need to understand the relative value of one currency against another, ensuring you stay empowered in the global marketplace.</p>
   `,

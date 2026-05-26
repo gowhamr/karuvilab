@@ -127,9 +127,10 @@ export function ToolShell({ title, description, category, children, toolId, cont
               className="space-y-4"
             >
               <h2 className="text-2xl font-bold">Deep Dive</h2>
-              <div className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-normal">
-                <p>{merged.detailedDescription}</p>
-              </div>
+              <div 
+                className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-normal"
+                dangerouslySetInnerHTML={{ __html: merged.detailedDescription }}
+              />
             </m.section>
           )}
 
