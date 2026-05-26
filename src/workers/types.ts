@@ -139,6 +139,22 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  // Media Tasks
+  encodeMp3(
+    left: Int16Array,
+    right: Int16Array,
+    sampleRate: number,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  createGif(
+    frames: ArrayBuffer[],
+    width: number,
+    height: number,
+    delay: number,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   // Math Tasks
   evaluateMath(expr: string): Promise<number>;
 

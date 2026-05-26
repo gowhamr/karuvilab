@@ -2,6 +2,7 @@
 
 import { cn } from "@/src/lib/utils";
 import { m } from "framer-motion";
+import Image from "next/image";
 
 interface KVLogoProps {
   className?: string;
@@ -45,13 +46,14 @@ export function KVLogo({
             : "bg-transparent"
         )}
       >
-        <img 
+        <Image 
           src="/logo.png" 
           alt="KaruviLab" 
           width={100}
           height={100}
           className="w-full h-full object-contain scale-90"
-          loading={loading}
+          priority={loading === "eager"}
+          loading={loading === "lazy" ? "lazy" : undefined}
         />
       </m.div>
       {withText && (

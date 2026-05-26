@@ -604,6 +604,55 @@ const api: WorkerAPI = {
   async calculateEmiSchedule(inputs) {
     const { generateSchedule } = await import("../lib/emi-calculations");
     return generateSchedule(inputs);
+  },
+
+  // Media Tasks
+  async encodeMp3(left, right, sampleRate, onProgress) {
+    // @ts-ignore
+    const lamejs = await import("lamejs");
+    const mp3encoder = new lamejs.Mp3Encoder(right ? 2 : 1, sampleRate, 128);
+    const mp3Data: any[] = [];
+    const sampleBlockSize = 1152;
+    
+    for (let i = 0; i < left.length; i += sampleBlockSize) {
+      const leftChunk = left.subarray(i, i + sampleBlockSize);
+      const rightChunk = right ? right.subarray(i, i + sampleBlockSize) : leftChunk;
+      const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
+      if (mp3buf.length > 0) mp3Data.push(mp3buf);
+      if (onProgress) onProgress({ percent: (i / left.length) * 100 });
+    }
+    
+    const end = mp3encoder.flush();
+    if (end.length > 0) mp3Data.push(end);
+    
+    // Concatenate chunks
+    const totalLen = mp3Data.reduce((acc, buf) => acc + buf.length, 0);
+    const result = new Uint8Array(totalLen);
+    let offset = 0;
+    for (const buf of mp3Data) {
+      result.set(new Uint8Array(buf), offset);
+      offset += buf.length;
+    }
+    return result;
+  },
+
+  async createGif(frames, width, height, delay, onProgress) {
+    // @ts-ignore
+    const { GIFEncoder, quantize, applyPalette } = await import('gifenc');
+    const gif = new GIFEncoder();
+    
+    for (let i = 0; i < frames.length; i++) {
+      const frameBuffer = frames[i];
+      if (!frameBuffer) continue;
+      const data = new Uint8Array(frameBuffer);
+      const palette = quantize(data, 256);
+      const index = applyPalette(data, palette);
+      gif.writeFrame(index, width, height, { palette, delay });
+      if (onProgress) onProgress({ percent: (i / frames.length) * 100 });
+    }
+    
+    gif.finish();
+    return gif.bytes();
   }
 };
 

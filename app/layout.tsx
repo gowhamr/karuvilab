@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { metadata } from "./metadata";
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PWARegistration } from "@/components/PWARegistration";
 import { ClientProviders } from "@/components/ClientProviders";
 import { Sidebar } from "@/components/Sidebar";
@@ -14,6 +14,7 @@ import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 import { CookieConsentBanner } from "@/components/system/CookieConsentBanner";
 import { AdSenseScript } from "@/components/system/AdSenseScript";
 import { StructuredData } from "@/src/lib/seo";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,7 +50,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable}`}>
       <head>
-        <script
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){
               var t = localStorage.getItem('karuvi-theme') || 'system';
@@ -70,11 +73,11 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
+        <StructuredData />
+        <AdSenseScript />
         <ClientProviders>
           <RecoveryBanner />
           <CookieConsentBanner />
-          <AdSenseScript />
-          <StructuredData />
           <div className="flex min-h-screen">
             <Sidebar />
             

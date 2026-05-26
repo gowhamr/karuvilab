@@ -128,6 +128,28 @@ class WorkerManager {
     return workerOrchestrator.run("createZip", [files], undefined, onProgress, abortSignal, true, 2);
   }
 
+  async encodeMp3(
+    left: Int16Array,
+    right: Int16Array | null,
+    sampleRate: number,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    const transfer = right ? [left.buffer, right.buffer] : [left.buffer];
+    return workerOrchestrator.run("encodeMp3", [left, right, sampleRate], transfer, onProgress, abortSignal, true, 3);
+  }
+
+  async createGif(
+    frames: ArrayBuffer[],
+    width: number,
+    height: number,
+    delay: number,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("createGif", [frames, width, height, delay], frames, onProgress, abortSignal, true, 3);
+  }
+
   terminateAll() {
     workerOrchestrator.terminateAll();
   }

@@ -5,7 +5,8 @@ import { MediaDropZone } from "@/components/ui/MediaDropZone";
 import { MediaStatusBadge } from "@/components/system/MediaStatusBadge";
 import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
 import { useObjectUrlManager } from "@/src/lib/hooks";
-import { Images, Play, Download, Trash2, Settings, Plus, Loader2, ArrowRightLeft } from "lucide-react";
+import { workerManager } from "@/src/workers/manager";
+import { Images, Play, Download, Trash2, Settings, Plus, Loader2 } from "lucide-react";
 import { m, AnimatePresence, Reorder } from "framer-motion";
 
 interface Frame {
@@ -57,9 +58,6 @@ export default function GifCreatorClient() {
     setProgress(5);
 
     try {
-      // @ts-ignore
-      const { GIFEncoder, quantize, applyPalette } = await import('gifenc');
-      
       const firstFrame = frames[0];
       if (!firstFrame) throw new Error("No frames found.");
 
@@ -74,7 +72,7 @@ export default function GifCreatorClient() {
       canvas.height = height;
       const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
 
-      const gif = new GIFEncoder();
+      const frameBuffers: ArrayBuffer[] = [];
 
       for (let i = 0; i < frames.length; i++) {
         const frame = frames[i];
@@ -87,16 +85,19 @@ export default function GifCreatorClient() {
         ctx.drawImage(img, 0, 0, width, height);
 
         const { data } = ctx.getImageData(0, 0, width, height);
-        const palette = quantize(data, 256);
-        const index = applyPalette(data, palette);
-
-        gif.writeFrame(index, width, height, { palette, delay });
-        setProgress(10 + (i / frames.length) * 80);
+        frameBuffers.push(data.buffer);
+        setProgress(10 + (i / frames.length) * 40);
       }
 
-      gif.finish();
-      const buffer = gif.bytes();
-      const blob = new Blob([buffer], { type: "image/gif" });
+      const gifBytes = await workerManager.createGif(
+        frameBuffers,
+        width,
+        height,
+        delay,
+        (p) => setProgress(50 + p.percent * 0.5)
+      );
+
+      const blob = new Blob([gifBytes.buffer as ArrayBuffer], { type: "image/gif" });
       const url = createUrl(blob);
 
       setResult({

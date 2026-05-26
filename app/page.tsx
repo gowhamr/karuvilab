@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <StructuredData />
       <HomeClient />
     </>
   );

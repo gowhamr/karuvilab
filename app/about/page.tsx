@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-6">
-      <StructuredData />
       <div className="space-y-2">
         <nav className="flex items-center gap-2 text-sm text-text-4">
           <Link href="/" className="hover:text-blue transition-colors">Home</Link>

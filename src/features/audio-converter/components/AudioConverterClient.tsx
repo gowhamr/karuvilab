@@ -7,6 +7,7 @@ import { MediaStatusBadge } from "@/components/system/MediaStatusBadge";
 import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { workerManager } from "@/src/workers/manager";
 import { Music, Download, Settings, Loader2 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 
@@ -106,18 +107,8 @@ export default function AudioConverterClient() {
       if (targetFormat === "wav") {
         resultBlob = convertToWav(decodedAudio);
       } else if (targetFormat === "mp3") {
-        // @ts-ignore
-        const lamejs = await import("lamejs");
-        const channels = decodedAudio.numberOfChannels;
-        const mp3encoder = new lamejs.Mp3Encoder(
-          channels, 
-          decodedAudio.sampleRate, 
-          128
-        );
-        const mp3Data = [];
-        
         const left = decodedAudio.getChannelData(0);
-        const right = channels > 1 ? decodedAudio.getChannelData(1) : left;
+        const right = decodedAudio.numberOfChannels > 1 ? decodedAudio.getChannelData(1) : null;
         
         const convertBuffer = (buffer: Float32Array) => {
           const int16 = new Int16Array(buffer.length);
@@ -129,20 +120,15 @@ export default function AudioConverterClient() {
         };
 
         const leftInt = convertBuffer(left);
-        const rightInt = convertBuffer(right);
-        
-        const sampleBlockSize = 1152;
-        for (let i = 0; i < leftInt.length; i += sampleBlockSize) {
-          const leftChunk = leftInt.subarray(i, i + sampleBlockSize);
-          const rightChunk = rightInt.subarray(i, i + sampleBlockSize);
-          const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
-          if (mp3buf.length > 0) mp3Data.push(mp3buf);
-          setProgress(40 + (i / leftInt.length) * 50);
-        }
-        
-        const end = mp3encoder.flush();
-        if (end.length > 0) mp3Data.push(end);
-        resultBlob = new Blob(mp3Data, { type: "audio/mp3" });
+        const rightInt = right ? convertBuffer(right) : null;
+
+        const mp3Bytes = await workerManager.encodeMp3(
+          leftInt,
+          rightInt,
+          decodedAudio.sampleRate,
+          (p) => setProgress(40 + p.percent * 0.6)
+        );
+        resultBlob = new Blob([mp3Bytes.buffer as ArrayBuffer], { type: "audio/mp3" });
       } else {
         throw new Error("Format not supported.");
       }
