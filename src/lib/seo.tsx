@@ -55,6 +55,7 @@ interface StructuredDataProps {
     howTo?: string[] | undefined;
     useCases?: string[] | undefined;
   } | undefined;
+  isHead?: boolean;
 }
 
 interface BreadcrumbListItem {
@@ -67,15 +68,14 @@ interface BreadcrumbListItem {
 /**
  * Renders JSON-LD structured data for Tools, Breadcrumbs, FAQ, and HowTo.
  */
-export function StructuredData({ tool, category, content: propsContent }: StructuredDataProps): React.JSX.Element {
+export function StructuredData({ tool, category, content: propsContent, isHead }: StructuredDataProps): React.JSX.Element {
   const scripts: Record<string, unknown>[] = [];
 
   // Helper to ensure absolute URLs are perfectly canonical (trailing slash enforced)
   const normalizeUrl = (path: string) => {
-    // Remove all leading and trailing slashes, then wrap in single slashes
     const cleanPath = path.replace(/^\/+|\/+$/g, '');
     const url = `${BASE_URL}/${cleanPath}/`;
-    return url.replace(/\/+$/, '/'); // Ensure single trailing slash
+    return url.replace(/\/+$/, '/');
   };
 
   // 1. Breadcrumb List Construction
@@ -114,7 +114,6 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
 
   scripts.push(breadcrumbList);
 
-  // 1b. CollectionPage Schema (for Categories)
   if (category && !tool) {
     scripts.push({
       "@context": "https://schema.org",
@@ -129,7 +128,6 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     });
   }
 
-  // 2. WebSite & Organization Schema (for Home)
   if (!tool && !category) {
     scripts.push({
       "@context": "https://schema.org",
@@ -159,7 +157,6 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
     });
   }
 
-  // 3. Tool / SoftwareApplication Schema
   if (tool) {
     const registryContent = (TOOL_CONTENT[tool.id as keyof typeof TOOL_CONTENT] || {}) as ToolContent;
     const detailedDesc = propsContent?.detailedDescription || registryContent.detailedDescription || tool.desc;
@@ -205,7 +202,6 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
 
     scripts.push(toolSchema);
 
-    // 4. FAQ Schema
     const faqs = propsContent?.faq || registryContent.faq;
     if (faqs && faqs.length > 0) {
       const faqSchema = {
@@ -223,7 +219,6 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
       scripts.push(faqSchema);
     }
 
-    // 5. HowTo Schema
     const howTo = propsContent?.howTo || registryContent.howTo;
     if (howTo && howTo.length > 0) {
       const howToSchema = {
@@ -244,14 +239,26 @@ export function StructuredData({ tool, category, content: propsContent }: Struct
 
   return (
     <>
-      {scripts.map((s, i) => (
-        <Script
-          key={i}
-          id={`json-ld-${tool?.id || 'site'}-${i}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
-        />
-      ))}
+      {scripts.map((s, i) => {
+        const content = JSON.stringify(s);
+        if (isHead) {
+          return (
+            <script
+              key={i}
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          );
+        }
+        return (
+          <Script
+            key={i}
+            id={`json-ld-${tool?.id || 'site'}-${i}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        );
+      })}
     </>
   );
 }

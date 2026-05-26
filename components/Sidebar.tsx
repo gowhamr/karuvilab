@@ -295,7 +295,7 @@ export function Sidebar() {
       <MobileSidebar>
         <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
           <Link href="/" onClick={closeSidebar}>
-            <KVLogo withText size="sm" />
+            <KVLogo withText size="sm" loading="lazy" />
           </Link>
           <button
             className="w-8 h-8 flex items-center justify-center hov:bg-black/5 rounded-xl transition-colors text-text-4"
@@ -321,7 +321,7 @@ export function Sidebar() {
       >
         <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
           <Link href="/">
-            <KVLogo withText size="md" />
+            <KVLogo withText size="md" loading="lazy" />
           </Link>
         </div>
         <SidebarContent 

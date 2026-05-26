@@ -49,8 +49,8 @@ export function Header() {
           </button>
 
           <Link href="/">
-            <KVLogo withText size="md" className="hidden md:flex" />
-            <KVLogo size="md" className="md:hidden" />
+            <KVLogo withText size="md" className="hidden md:flex" loading="eager" />
+            <KVLogo size="md" className="md:hidden" loading="eager" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">

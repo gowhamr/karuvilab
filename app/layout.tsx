@@ -50,30 +50,32 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable}`}>
       <head>
+        <StructuredData isHead />
         <Script
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){
-              var t = localStorage.getItem('karuvi-theme') || 'system';
-              var r = t;
-              if (t === 'system') {
-                r = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-              }
-              document.documentElement.setAttribute('data-theme', r);
-              
-              var f = localStorage.getItem('karuvi-font-size') || '1.0';
-              document.documentElement.setAttribute('data-font-size', f);
+              try {
+                var t = localStorage.getItem('karuvi-theme') || 'system';
+                var r = t;
+                if (t === 'system') {
+                  r = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                document.documentElement.setAttribute('data-theme', r);
+                
+                var f = localStorage.getItem('karuvi-font-size') || '1.0';
+                document.documentElement.setAttribute('data-font-size', f);
 
-              if (localStorage.getItem('karuvi-high-contrast') === 'true') {
-                document.documentElement.classList.add('high-contrast');
-              }
+                if (localStorage.getItem('karuvi-high-contrast') === 'true') {
+                  document.documentElement.classList.add('high-contrast');
+                }
+              } catch (e) {}
             })();`,
           }}
         />
       </head>
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
-        <StructuredData />
         <AdSenseScript />
         <ClientProviders>
           <RecoveryBanner />
