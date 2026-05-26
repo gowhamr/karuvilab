@@ -96,6 +96,10 @@ import { typing_speed_test } from './tools/typing-speed-test';
 import { barcode_scanner } from './tools/barcode-scanner';
 import { notes } from './tools/notes';
 import { word_to_pdf } from './tools/word-to-pdf';
+import { video_trim } from './tools/video-trim';
+import { audio_converter } from './tools/audio-converter';
+import { gif_creator } from './tools/gif-creator';
+import { video_metadata_viewer } from './tools/video-metadata-viewer';
 
 export const ALL_TOOLS: ToolEntry[] = [
   emi_calculator,
@@ -195,4 +199,8 @@ export const ALL_TOOLS: ToolEntry[] = [
   invoice_generator,
   color_converter,
   word_to_pdf,
+  video_trim,
+  audio_converter,
+  gif_creator,
+  video_metadata_viewer,
 ];

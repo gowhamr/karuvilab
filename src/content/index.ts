@@ -97,6 +97,10 @@ import { phoneMockupGeneratorContent } from './tools/phone-mockup-generator';
 import { chartGeneratorContent } from './tools/chart-generator';
 import { typingSpeedTestContent } from './tools/typing-speed-test';
 import { barcodeScannerContent } from './tools/barcode-scanner';
+import { videoTrimContent } from './tools/video-trim';
+import { audioConverterContent } from './tools/audio-converter';
+import { gifCreatorContent } from './tools/gif-creator';
+import { videoMetadataContent } from './tools/video-metadata-viewer';
 
 export const TOOL_CONTENT: Record<string, ToolContent> = {
   "hash-generator": hashGenerator,
@@ -193,5 +197,9 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "phone-mockup-generator": phoneMockupGeneratorContent,
   "chart-generator": chartGeneratorContent,
   "typing-speed-test": typingSpeedTestContent,
-  "barcode-scanner": barcodeScannerContent
+  "barcode-scanner": barcodeScannerContent,
+  "video-trim": videoTrimContent,
+  "audio-converter": audioConverterContent,
+  "gif-creator": gifCreatorContent,
+  "video-metadata-viewer": videoMetadataContent
 };

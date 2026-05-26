@@ -7,7 +7,7 @@
 import { ALL_TOOLS as ALL_TOOLS_IMPORT } from './registry';
 import { toolRelationships } from './registry/tool-relationships';
 
-export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'seo' | 'productivity';
+export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'seo' | 'productivity' | 'media';
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
@@ -78,6 +78,7 @@ export const CATEGORIES: CategoryEntry[] = [
   { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.', color: '#64748B' },
   { id: 'seo',         label: 'SEO Tools',       href: 'seo-tools/',       emoji: '', description: 'Analyze and generate meta tags, sitemaps, and robots.txt files.', color: '#06B6D4' },
   { id: 'productivity', label: 'Productivity',    href: 'productivity/',    emoji: '🚀', description: 'Professional tools to manage your time and workflow privately.', color: '#4F46E5' },
+  { id: 'media',        label: 'Media Tools',     href: 'media-tools/',     emoji: '🎬', description: 'Professional browser-native tools for video, audio, and GIF editing.', color: '#6366F1' },
 ];
 
 export const SUBCATEGORY_COLORS: Record<string, string> = {
