@@ -14,7 +14,7 @@ export function generateToolMetadata(toolId: string): Metadata {
 
   const title = `${tool.name} | KaruviLab`;
   const description = tool.desc;
-  const url = `${BASE_URL}/${tool.href}`;
+  const url = `${BASE_URL}/${tool.href.replace(/\/$/, '')}/`;
 
   return {
     title,
