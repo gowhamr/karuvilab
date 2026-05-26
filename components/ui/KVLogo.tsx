@@ -9,6 +9,7 @@ interface KVLogoProps {
   textClassName?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   variant?: "full" | "monochrome";
+  loading?: "eager" | "lazy";
 }
 
 const sizes = {
@@ -24,7 +25,8 @@ export function KVLogo({
   withText, 
   textClassName, 
   size = "md",
-  variant = "full"
+  variant = "full",
+  loading = "eager"
 }: KVLogoProps) {
   return (
     <div className={cn("flex items-center gap-3 group", className)} aria-label="KaruviLab" role="img">
@@ -46,8 +48,10 @@ export function KVLogo({
         <img 
           src="/logo.png" 
           alt="KaruviLab" 
+          width={100}
+          height={100}
           className="w-full h-full object-contain scale-90"
-          loading="eager"
+          loading={loading}
         />
       </m.div>
       {withText && (

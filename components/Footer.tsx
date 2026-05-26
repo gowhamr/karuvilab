@@ -8,7 +8,7 @@ export function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12">
         <div className="space-y-4 text-center md:text-left">
           <Link href="/" className="flex items-center gap-3 group justify-center md:justify-start">
-            <KVLogo size="md" />
+            <KVLogo size="md" loading="lazy" />
             <div className="flex flex-col text-left">
               <span className="text-[9px] font-black uppercase tracking-widest text-text-4 leading-none mb-1">Powered by</span>
               <span className="brand-wordmark text-xl tracking-tight leading-none text-text">

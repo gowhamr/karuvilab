@@ -13,6 +13,7 @@ import { Footer } from "@/components/Footer";
 import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 import { CookieConsentBanner } from "@/components/system/CookieConsentBanner";
 import { AdSenseScript } from "@/components/system/AdSenseScript";
+import { StructuredData } from "@/src/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -73,6 +74,7 @@ export default function RootLayout({
           <RecoveryBanner />
           <CookieConsentBanner />
           <AdSenseScript />
+          <StructuredData />
           <div className="flex min-h-screen">
             <Sidebar />
             
