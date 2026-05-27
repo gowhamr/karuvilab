@@ -13,6 +13,8 @@ import { ToolMoreMenu } from "./ToolMoreMenu";
 import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
 import { useSupportStore } from "@/src/store/useSupportStore";
 import { m } from "framer-motion";
+import { useMemo } from "react";
+import { parseAndSanitizeMarkdownSync } from "@/src/lib/security";
 
 interface ToolShellProps {
   title: string;
@@ -58,6 +60,12 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
   const reg: ToolContent = currentTool ? (TOOL_CONTENT[currentTool.id as keyof typeof TOOL_CONTENT] ?? {}) : {};
 
+  // Helper to trim leading indentation from multi-line strings
+  const trimIndent = (str?: string) => {
+    if (!str) return "";
+    return str.split('\n').map(line => line.trim()).join('\n').trim();
+  };
+
   const merged = {
     detailedDescription: content?.detailedDescription ?? reg.detailedDescription,
     howTo:               content?.howTo               ?? reg.howTo,
@@ -67,6 +75,15 @@ export function ToolShell({ title, description, category, children, toolId, cont
     commonErrors:        content?.commonErrors        ?? reg.commonErrors,
     alternatives:        content?.alternatives        ?? reg.alternatives,
   };
+
+  const parsedContent = useMemo(() => ({
+    detailedDescription: merged.detailedDescription ? parseAndSanitizeMarkdownSync(trimIndent(merged.detailedDescription)) : "",
+    howTo: (merged.howTo || []).map(step => parseAndSanitizeMarkdownSync(trimIndent(step))),
+    faq: (merged.faq || []).map(item => ({
+      question: item.question,
+      answer: parseAndSanitizeMarkdownSync(trimIndent(item.answer))
+    }))
+  }), [merged.detailedDescription, merged.howTo, merged.faq]);
 
   const relatedIds = content?.relatedTools ?? 
                      currentTool?.related ?? 
@@ -119,7 +136,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8 border-t border-border">
         <div className="lg:col-span-2 space-y-12">
-          {merged.detailedDescription && (
+          {parsedContent.detailedDescription && (
             <m.section 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -129,7 +146,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <h2 className="text-2xl font-bold">Deep Dive</h2>
               <div 
                 className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-normal"
-                dangerouslySetInnerHTML={{ __html: merged.detailedDescription }}
+                dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
               />
             </m.section>
           )}
@@ -201,10 +218,13 @@ export function ToolShell({ title, description, category, children, toolId, cont
             <section className="space-y-6">
               <h2 className="text-2xl font-bold">Expert FAQ</h2>
               <div className="grid gap-4">
-                {merged.faq.map((item, i) => (
+                {parsedContent.faq.map((item, i) => (
                   <div key={i} className="bg-surface border border-border rounded-2xl p-6 space-y-3">
                     <h3 className="font-bold text-text">{item.question}</h3>
-                    <p className="text-text-3 text-sm leading-relaxed">{item.answer}</p>
+                    <p 
+                      className="text-text-3 text-sm leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: item.answer }}
+                    />
                   </div>
                 ))}
               </div>
@@ -220,7 +240,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Step-by-step</p>
               </div>
               <ol className="space-y-6">
-                {merged.howTo.map((step, i) => (
+                {parsedContent.howTo.map((step, i) => (
                   <m.li 
                   key={i} 
                   whileHover={{ x: 5 }}

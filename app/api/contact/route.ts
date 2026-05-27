@@ -1,7 +1,16 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization to avoid build-time errors
+let resendInstance: Resend | null = null;
+const getResend = () => {
+  if (!resendInstance) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) return null;
+    resendInstance = new Resend(apiKey);
+  }
+  return resendInstance;
+};
 
 export async function POST(req: Request) {
   try {
@@ -9,6 +18,11 @@ export async function POST(req: Request) {
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const resend = getResend();
+    if (!resend) {
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 503 });
     }
 
     const { data, error } = await resend.emails.send({

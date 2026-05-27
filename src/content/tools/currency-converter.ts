@@ -6,10 +6,10 @@ export const currencyConverter: ToolContent = {
     
     <p>Our converter supports over 150+ world currencies, ranging from major global currencies like USD, EUR, and GBP to localized currencies like INR, AED, and JPY. Because KaruviLab is a browser-first platform, our converter is incredibly fast—providing near-instant results the moment you input your values.</p>
 
-    <div className="my-6 space-y-4">
-      <p className="font-bold text-text">How it works (Implementation Example):</p>
-      <pre className="bg-bg border border-border p-4 rounded-xl overflow-x-auto text-[13px]">
-<code className="text-blue">
+    <div class="my-6 space-y-4">
+      <p class="font-bold text-text">How it works (Implementation Example):</p>
+      <pre class="bg-bg border border-border p-4 rounded-xl overflow-x-auto text-[13px]">
+<code class="text-blue">
 // Basic currency conversion logic in JavaScript
 function convertCurrency(amount, fromRate, toRate) {
   // 1. Convert source amount to base (usually USD)

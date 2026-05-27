@@ -1,13 +1,18 @@
 import type { NextConfig } from "next";
 
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+
 const nextConfig: NextConfig = {
+  output: isGithubPages ? 'export' : undefined,
+  basePath: isGithubPages ? '/karuvilab' : '',
+  images: {
+    unoptimized: isGithubPages,
+    formats: ['image/avif', 'image/webp'],
+  },
   reactStrictMode: true,
   trailingSlash: true,
   typescript: {
     ignoreBuildErrors: false,
-  },
-  images: {
-    formats: ['image/avif', 'image/webp'],
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
