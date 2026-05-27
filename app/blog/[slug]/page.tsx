@@ -7,6 +7,12 @@ interface BlogArticleProps {
   params: Params;
 }
 
+export async function generateStaticParams() {
+  return Object.keys(articles).map((slug) => ({
+    slug,
+  }));
+}
+
 export default async function BlogArticlePage({ params }: BlogArticleProps) {
   const { slug } = await params;
   const article = (articles as any)[slug];
