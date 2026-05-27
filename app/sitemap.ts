@@ -3,6 +3,8 @@ import { ALL_TOOLS, CATEGORIES } from '@/src/tool-registry';
 
 const BASE_URL = 'https://karuvilab.com';
 
+export const dynamic = 'force-static';
+
 /**
  * Generates a single, comprehensive sitemap for all KaruviLab pages.
  * Consolidating into one file for simplicity and reliability.
