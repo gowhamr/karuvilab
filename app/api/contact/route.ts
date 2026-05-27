@@ -1,13 +1,18 @@
-import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
 // Lazy initialization to avoid build-time errors
-let resendInstance: Resend | null = null;
-const getResend = () => {
+let resendInstance: any = null;
+const getResend = async () => {
   if (!resendInstance) {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) return null;
-    resendInstance = new Resend(apiKey);
+    try {
+      const { Resend } = await import('resend');
+      resendInstance = new Resend(apiKey);
+    } catch (e) {
+      console.error('Failed to load Resend:', e);
+      return null;
+    }
   }
   return resendInstance;
 };
@@ -20,7 +25,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const resend = getResend();
+    const resend = await getResend();
     if (!resend) {
       return NextResponse.json({ error: 'Email service not configured' }, { status: 503 });
     }

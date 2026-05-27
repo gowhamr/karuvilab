@@ -1,16 +1,20 @@
-import { Resend } from 'resend';
-
 // Initialize lazily to avoid build-time errors if API key is missing
-let resend: Resend | null = null;
+let resend: any = null;
 
-const getResend = () => {
+const getResend = async () => {
   if (!resend) {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       console.warn('RESEND_API_KEY is not defined. Email functionality will not work.');
       return null;
     }
-    resend = new Resend(apiKey);
+    try {
+      const { Resend } = await import('resend');
+      resend = new Resend(apiKey);
+    } catch (e) {
+      console.error('Failed to load Resend:', e);
+      return null;
+    }
   }
   return resend;
 };
@@ -28,7 +32,7 @@ export async function sendFeedbackEmail({
   category,
   diagnosticInfo,
 }: FeedbackEmailProps) {
-  const client = getResend();
+  const client = await getResend();
   
   if (!client) {
     throw new Error('Email service is not configured (missing API key)');
