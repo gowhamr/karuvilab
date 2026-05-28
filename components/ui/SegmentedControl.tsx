@@ -56,12 +56,16 @@ export function SegmentedControl<T extends string | number>({
             {isActive && (
               <m.div
                 layoutId="segmented-active"
-                className="absolute inset-0 bg-blue rounded-xl shadow-lg shadow-blue/20 -z-10"
+                className="absolute inset-0 bg-blue rounded-xl shadow-lg shadow-blue/20 z-0"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
-            {option.icon && <span className={cn("transition-transform", isActive && "scale-110")}>{option.icon}</span>}
-            {option.label}
+            {option.icon && (
+              <span className={cn("relative z-10 transition-transform", isActive && "scale-110")}>
+                {option.icon}
+              </span>
+            )}
+            <span className="relative z-10">{option.label}</span>
           </button>
         );
       })}
