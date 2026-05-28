@@ -21,19 +21,23 @@ const sizes = {
   xl: "w-14 h-14",
 };
 
-export function KVLogo({ 
-  className, 
-  withText, 
-  textClassName, 
+// Use base path if deployed to GitHub Pages
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+const logoPath = `${basePath}/logo.png`;
+
+export function KVLogo({
+  className,
+  withText,
+  textClassName,
   size = "md",
   variant = "full",
   loading = "eager"
 }: KVLogoProps) {
   return (
     <div className={cn("flex items-center gap-3 group", className)} aria-label="KaruviLab" role="img">
-      <m.div 
-        whileHover={{ 
-          scale: 1.05, 
+      <m.div
+        whileHover={{
+          scale: 1.05,
           rotate: [0, -5, 5, 0],
           transition: { duration: 0.5, ease: "easeInOut" }
         }}
@@ -41,13 +45,13 @@ export function KVLogo({
         className={cn(
           "rounded-xl flex items-center justify-center transition-all duration-500 ease-expo overflow-hidden",
           sizes[size],
-          variant === "full" 
-            ? "bg-white/5 backdrop-blur-sm shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] border border-white/10 group-hover:border-blue/30 group-hover:shadow-blue/10" 
+          variant === "full"
+            ? "bg-white/5 backdrop-blur-sm shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] border border-white/10 group-hover:border-blue/30 group-hover:shadow-blue/10"
             : "bg-transparent"
         )}
       >
-        <Image 
-          src="/logo.png" 
+        <Image
+          src={logoPath}
           alt="KaruviLab" 
           width={100}
           height={100}

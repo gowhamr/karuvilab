@@ -4,6 +4,9 @@ const isGithubPages = process.env.GITHUB_PAGES === 'true';
 
 const nextConfig: NextConfig = {
   basePath: isGithubPages ? '/karuvilab' : '',
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubPages ? '/karuvilab' : '',
+  },
   images: {
     unoptimized: isGithubPages,
     formats: ['image/avif', 'image/webp'],
