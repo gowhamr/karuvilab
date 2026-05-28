@@ -26,6 +26,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 export function MarkdownEditor() {
   const { toast } = useToast();
   const [mode, setMode] = useState<"editor" | "upload">("editor");
+  const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
   const [md, setMd] = useState(SAMPLE_MARKDOWN);
   const [uploadMd, setUploadMd] = useState("");
   const [fileName, setFileName] = useState("");
@@ -40,8 +41,6 @@ export function MarkdownEditor() {
   const activeMd = mode === "editor" ? md : uploadMd;
   const html = useMemo(() => MarkdownService.parse(activeMd), [activeMd]);
   const stats = useMemo(() => MarkdownService.getStats(activeMd), [activeMd]);
-
-  const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
   // Insert logic
   const insertAtCursor = useCallback((before: string, after = "", insert = "") => {
@@ -214,21 +213,31 @@ export function MarkdownEditor() {
   };
 
   return (
-    <ToolShell
-      title="Markdown Editor"
-      description="Write, preview and export Markdown with support for Mermaid diagrams and syntax highlighting."
-      category={cat}
-    >
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-          <SegmentedControl
-            options={[
-              { id: "editor", label: "Live Editor", icon: <FileEdit className="w-4 h-4" /> },
-              { id: "upload", label: "File Upload", icon: <Upload className="w-4 h-4" /> },
-            ]}
-            activeId={mode}
-            onChange={(id) => setMode(id as any)}
-          />
+        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+            <SegmentedControl
+              options={[
+                { id: "editor", label: "Live Editor", icon: <FileEdit className="w-4 h-4" /> },
+                { id: "upload", label: "File Upload", icon: <Upload className="w-4 h-4" /> },
+              ]}
+              activeId={mode}
+              onChange={(id) => setMode(id as any)}
+            />
+
+            {mode === "editor" && (
+              <div className="md:hidden w-full sm:w-auto">
+                <SegmentedControl
+                  options={[
+                    { id: "edit", label: "Edit" },
+                    { id: "preview", label: "Preview" },
+                  ]}
+                  activeId={activeTab}
+                  onChange={(id) => setActiveTab(id as any)}
+                />
+              </div>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             <button
@@ -265,7 +274,7 @@ export function MarkdownEditor() {
         </div>
 
         {mode === "editor" ? (
-          <div className="flex flex-col h-[700px] bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
+          <div className="flex flex-col h-[70vh] min-h-[500px] max-h-[800px] bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
             <Toolbar 
               onInsert={insertAtCursor} 
               onClear={() => setMd("")}
@@ -286,18 +295,18 @@ export function MarkdownEditor() {
               />
             )}
 
-            <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-              <div className="flex-1 flex flex-col min-w-0 border-r border-border">
+            <div className="flex-1 flex flex-col md:flex-row min-h-0">
+              <div className={`flex-1 flex-col min-w-0 border-r border-border h-full ${activeTab === "edit" ? "flex" : "hidden"} md:flex`}>
                 <textarea
                   ref={textareaRef}
                   value={md}
                   onChange={(e) => setMd(e.target.value)}
                   placeholder="# Start typing your markdown here..."
-                  className="flex-1 p-6 bg-transparent outline-none resize-none font-mono text-sm text-text-2 leading-relaxed"
+                  className="flex-1 p-6 bg-transparent outline-none resize-none font-mono text-sm text-text-2 leading-relaxed h-full overflow-y-auto"
                   spellCheck={false}
                 />
               </div>
-              <div className="flex-1 min-w-0 bg-bg/30">
+              <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
                 <MarkdownPreview 
                   html={html} 
                   onCopyRaw={() => {
@@ -319,15 +328,15 @@ export function MarkdownEditor() {
             />
 
             {fileName && (
-              <div className="flex flex-col h-[600px] bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
-                <div className="px-6 py-4 border-b border-border bg-bg/50 flex items-center justify-between">
+              <div className="flex flex-col h-[60vh] min-h-[400px] max-h-[700px] bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
+                <div className="px-6 py-4 border-b border-border bg-bg/50 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue/10 rounded-2xl flex items-center justify-center">
+                    <div className="w-10 h-10 bg-blue/10 rounded-2xl flex items-center justify-center shrink-0">
                       <FileCode className="w-5 h-5 text-blue" />
                     </div>
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest">{fileName}</h4>
-                      <p className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-black uppercase tracking-widest truncate">{fileName}</h4>
+                      <p className="text-[10px] font-bold text-text-4 uppercase tracking-tighter truncate">
                         {stats.words} words • {stats.chars} characters
                       </p>
                     </div>
@@ -337,13 +346,13 @@ export function MarkdownEditor() {
                       setFileName("");
                       setUploadMd("");
                     }}
-                    className="p-2 hover:bg-surface rounded-xl text-text-4 transition-all"
+                    className="p-2 hover:bg-surface rounded-xl text-text-4 transition-all shrink-0 ml-2"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
                 
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-hidden bg-bg/30">
                   <MarkdownPreview 
                     html={html} 
                     onCopyRaw={() => {
@@ -357,6 +366,6 @@ export function MarkdownEditor() {
           </div>
         )}
       </div>
-    </ToolShell>
   );
 }
+
