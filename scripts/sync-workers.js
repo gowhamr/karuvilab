@@ -14,6 +14,10 @@ const WORKERS = [
   {
     src: 'node_modules/pdfjs-dist/build/pdf.min.mjs',
     dest: 'public/pdf.min.mjs'
+  },
+  {
+    src: 'node_modules/mermaid/dist/mermaid.min.js',
+    dest: 'public/lib/markdown/mermaid.min.js'
   }
 ];
 
