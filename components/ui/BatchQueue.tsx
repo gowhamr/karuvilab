@@ -125,13 +125,13 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-1">
             <h3 className="font-black text-xl flex items-center gap-2">
-              Queue <span className="text-sm font-medium text-text-4 bg-bg px-2 py-0.5 rounded-full">{stats.total} files</span>
+              Queue <span className="text-sm font-medium text-text-3 bg-surface border border-border/50 px-2 py-0.5 rounded-full">{stats.total} files</span>
             </h3>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-text-3" aria-label="Queue statistics">
-              <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-green-500" aria-hidden="true" /> {stats.completed} Done</span>
+              <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-green-600 dark:text-green-400" aria-hidden="true" /> {stats.completed} Done</span>
               <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-blue" aria-hidden="true" /> {stats.pending + stats.processing} Pending</span>
-              {stats.failed > 0 && <span className="flex items-center gap-1"><AlertCircle className="w-3.5 h-3.5 text-red-500" aria-hidden="true" /> {stats.failed} Failed</span>}
-              {stats.saved > 0 && <span className="text-green-500 font-bold">Saved {formatBytes(stats.saved)}</span>}
+              {stats.failed > 0 && <span className="flex items-center gap-1"><AlertCircle className="w-3.5 h-3.5 text-red-600 dark:text-red-400" aria-hidden="true" /> {stats.failed} Failed</span>}
+              {stats.saved > 0 && <span className="text-green-600 dark:text-green-400 font-bold">Saved {formatBytes(stats.saved)}</span>}
             </div>
           </div>
 
@@ -206,8 +206,8 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
             >
               <div className={cn(
                 "w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0 overflow-hidden",
-                item.status === 'completed' ? "bg-green-500/10 text-green-500" : 
-                item.status === 'failed' ? "bg-red-500/10 text-red-500" : "bg-bg text-text-4"
+                item.status === 'completed' ? "bg-green-500/10 text-green-700 dark:text-green-400" : 
+                item.status === 'failed' ? "bg-red-500/10 text-red-700 dark:text-red-400" : "bg-bg text-text-4"
               )} aria-hidden="true">
                 {renderThumbnail ? renderThumbnail(item) : (
                   item.status === 'completed' ? <CheckCircle2 className="w-6 h-6" /> :
@@ -254,11 +254,11 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                 <div className="flex items-center justify-between">
                   <p className={cn(
                     "text-[10px] font-medium truncate",
-                    item.status === 'failed' ? "text-red-500" : "text-text-4"
+                    item.status === 'failed' ? "text-red-600 dark:text-red-400" : "text-text-4"
                   )}>
                     {item.message || (item.status === 'pending' ? 'Waiting...' : '')}
                     {item.status === 'completed' && item.result && (
-                      <span className="text-green-500 font-bold ml-2">
+                      <span className="text-green-600 dark:text-green-400 font-bold ml-2">
                         → {formatBytes(item.result.compressedSize)} ({Math.round((1 - item.result.compressedSize / item.file.size) * 100)}% smaller)
                       </span>
                     )}

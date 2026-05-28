@@ -144,7 +144,7 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
   --text-rgb:     15, 23, 42;
   --text-2:       #334155;
   --text-3:       #475569;
-  --text-4:       #64748B;
+  --text-4:       #526175;
   --border:       #E2E8F0;
   --border-rgb:   226, 232, 240;
   --border-2:     #CBD5E1;
@@ -160,10 +160,10 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --blue:        #6366F1;
-  --blue-dark:   #4F46E5;
-  --blue-light:  rgba(99, 102, 241, 0.1);
-  --blue-glow:   rgba(99, 102, 241, 0.12);
+  --blue:        #4F46E5;
+  --blue-dark:   #4338CA;
+  --blue-light:  rgba(79, 70, 229, 0.1);
+  --blue-glow:   rgba(79, 70, 229, 0.12);
   
   --text:        #F8FAFC;
   --text-rgb:    248, 250, 252;

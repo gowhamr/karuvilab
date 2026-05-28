@@ -1,8 +1,12 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-sw.js');
+try {
+  importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.4.1/workbox-sw.js');
+} catch (e) {
+  console.error('Workbox SW failed to load:', e);
+}
 
-if (workbox) {
+if (typeof workbox !== 'undefined') {
   console.log('Workbox is loaded');
-
+  
   const { registerRoute, setCatchHandler } = workbox.routing;
   const { StaleWhileRevalidate, CacheFirst, NetworkFirst } = workbox.strategies;
   const { ExpirationPlugin } = workbox.expiration;
@@ -72,7 +76,7 @@ if (workbox) {
   // Critical App Shell Assets for proactive caching
   const APP_SHELL = [
     '/',
-    '/offline',
+    '/offline/',
     '/manifest.json',
     '/favicon.ico',
     '/pdf.min.mjs',
@@ -86,9 +90,9 @@ if (workbox) {
     '/icons/icon-512.png',
   ];
 
-  // 6. Cache ESM modules (workers, etc.)
+  // 6. Cache ESM modules (workers, etc.) - Excluding sw.js
   registerRoute(
-    ({ url }) => url.pathname.endsWith('.mjs') || url.pathname.endsWith('.js'),
+    ({ url }) => (url.pathname.endsWith('.mjs') || url.pathname.endsWith('.js')) && !url.pathname.endsWith('sw.js'),
     new StaleWhileRevalidate({
       cacheName: CACHE_NAMES.static,
     })
@@ -98,7 +102,11 @@ if (workbox) {
     event.waitUntil(
       caches.open(CACHE_NAMES.static).then((cache) => {
         console.log('Precaching App Shell');
-        return cache.addAll(APP_SHELL);
+        return cache.addAll(APP_SHELL).catch(err => {
+          console.error('App Shell precaching failed:', err);
+          // Don't fail the whole install if one minor asset is missing
+          return Promise.resolve();
+        });
       }).then(() => self.skipWaiting())
     );
   });
@@ -110,10 +118,17 @@ if (workbox) {
       const cachedResponse = await caches.match(event.request);
       if (cachedResponse) return cachedResponse;
 
-      // 2. Fallback to /offline page for non-cached pages
-      return caches.match('/offline') || Response.error();
+      // 2. Fallback to /offline/ page for non-cached pages
+      const offlineResponse = await caches.match('/offline/');
+      if (offlineResponse) return offlineResponse;
+
+      return new Response('Offline - Page not cached', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'text/plain' }
+      });
     }
-    return Response.error();
+    return new Response(null, { status: 404 });
   });
 
   self.addEventListener('activate', (event) => {
@@ -129,4 +144,6 @@ if (workbox) {
       ).then(() => self.clients.claim())
     );
   });
+} else {
+  console.error('Workbox failed to initialize: workbox object is undefined');
 }

@@ -330,21 +330,23 @@ export default function HomeClient() {
                 </section>
 
                 {/* Compact FAQ */}
-                <section className="max-w-3xl mx-auto w-full">
-                  <SectionHeader 
-                    title="Frequently Asked" 
-                    subtitle="Support & Privacy"
-                    icon={ShieldCheck}
-                  />
-                  <Accordion type="single" collapsible className="w-full space-y-2">
-                    {FAQ.map((item, i) => (
-                      <AccordionItem key={i} value={`item-${i}`} className="bg-surface/50 border border-border/50 rounded-xl px-4 overflow-hidden hover:border-blue/30 transition-all">
-                        <AccordionTrigger className="text-[11px] md:text-xs font-black uppercase tracking-widest py-4 hover:no-underline text-text-2">{item.q}</AccordionTrigger>
-                        <AccordionContent className="text-xs text-text-3 font-medium pb-4 leading-relaxed">{item.a}</AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </section>
+                {hydrated && (
+                  <section className="max-w-3xl mx-auto w-full">
+                    <SectionHeader 
+                      title="Frequently Asked" 
+                      subtitle="Support & Privacy"
+                      icon={ShieldCheck}
+                    />
+                    <Accordion type="single" collapsible className="w-full space-y-2">
+                      {FAQ.map((item, i) => (
+                        <AccordionItem key={i} value={`item-${i}`} className="bg-surface/50 border border-border/50 rounded-xl px-4 overflow-hidden hover:border-blue/30 transition-all">
+                          <AccordionTrigger className="text-[11px] md:text-xs font-black uppercase tracking-widest py-4 hover:no-underline text-text-2">{item.q}</AccordionTrigger>
+                          <AccordionContent className="text-xs text-text-3 font-medium pb-4 leading-relaxed">{item.a}</AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </section>
+                )}
               </m.div>
             )}
           </AnimatePresence>

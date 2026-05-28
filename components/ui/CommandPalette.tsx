@@ -171,7 +171,7 @@ export function CommandPalette() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-bold truncate text-sm">{tool.name}</div>
-                    <div className={`text-[10px] truncate font-medium ${i === selectedIndex ? "text-white/70" : "text-text-4"}`}>
+                    <div className={`text-[10px] truncate font-medium ${i === selectedIndex ? "text-indigo-100" : "text-text-4"}`}>
                       {tool.desc}
                     </div>
                   </div>

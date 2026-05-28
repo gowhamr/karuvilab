@@ -28,7 +28,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             relative flex-shrink-0 h-[38px] px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/20
             ${!activeCategory 
               ? "text-white" 
-              : "text-text-4 hover:text-text hover:bg-surface/80"}
+              : "text-text-4 hov:text-text hov:bg-surface/80"}
           `}
         >
           {!activeCategory && (
@@ -52,7 +52,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
               relative flex-shrink-0 h-[38px] flex items-center gap-2 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/20
               ${activeCategory === cat.id 
                 ? "text-white" 
-                : "text-text-4 hover:text-text hover:bg-surface/80"}
+                : "text-text-4 hov:text-text hov:bg-surface/80"}
             `}
           >
             {activeCategory === cat.id && (

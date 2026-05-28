@@ -121,7 +121,7 @@ export default function SettingsClient() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-[11px] font-black uppercase tracking-widest leading-none mb-1">{item.label}</div>
-                        <div className={`text-[10px] truncate font-medium ${activeSection === item.id ? 'text-white/60' : 'text-text-4'}`}>
+                        <div className={`text-[10px] truncate font-medium ${activeSection === item.id ? 'text-indigo-100' : 'text-text-4'}`}>
                           {item.desc}
                         </div>
                       </div>

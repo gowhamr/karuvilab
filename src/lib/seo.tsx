@@ -186,7 +186,7 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
       "operatingSystem": "Any",
       "softwareVersion": "1.0.0",
       "datePublished": "2026-05-01T00:00:00Z",
-      "dateModified": tool.lastUpdated ? new Date(tool.lastUpdated).toISOString() : new Date().toISOString(),
+      "dateModified": tool.lastUpdated ? new Date(tool.lastUpdated).toISOString() : "2026-05-28T00:00:00Z",
       "offers": {
         "@type": "Offer",
         "price": "0",

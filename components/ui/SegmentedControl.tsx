@@ -49,7 +49,7 @@ export function SegmentedControl<T extends string | number>({
             onClick={() => !disabled && onChange(option.id)}
             className={cn(
               "relative flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20",
-              isActive ? "text-white" : "text-text-3 hover:text-text hover:bg-surface/50",
+              isActive ? "text-white" : "text-text-3 hov:text-text hov:bg-surface/50",
               disabled && "cursor-not-allowed"
             )}
           >

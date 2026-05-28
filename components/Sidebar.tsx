@@ -59,7 +59,7 @@ const SidebarItem = memo(function SidebarItem({
       }`}
       style={{
         color: !isSmall && isActive ? color : undefined,
-        backgroundColor: !isSmall && isActive ? `${color}15` : undefined,
+        backgroundColor: !isSmall && isActive ? `${color}33` : undefined,
       }}
     >
       <div 

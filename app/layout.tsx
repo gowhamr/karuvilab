@@ -50,7 +50,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable}`}>
       <head>
-        <StructuredData isHead />
         <Script
           id="theme-init"
           strategy="beforeInteractive"
@@ -95,6 +94,7 @@ export default function RootLayout({
             </div>
           </div>
           <PWARegistration />
+          <StructuredData />
         </ClientProviders>
         <Analytics />
         <SpeedInsights />
