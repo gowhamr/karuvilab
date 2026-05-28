@@ -1,127 +1,129 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Heart, Code, Globe, Mail, Shield, Zap, Cpu } from "lucide-react";
+import { ShieldCheck, WifiOff, Cpu, Lock } from "lucide-react";
 import { KVLogo } from "@/components/ui/KVLogo";
-import { PrivacyBadge } from "@/components/system/PrivacyBadge";
-import { CATEGORIES } from "@/src/tool-registry";
+import { getRecentTools, ToolEntry } from "@/src/tool-registry";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
+  const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
+  const [isOnline, setIsOnline] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setRecentTools(getRecentTools());
+    setIsOnline(navigator.onLine);
+    setMounted(true);
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const quickLinks = [
+    { label: "All Tools", href: "/all-tools" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+    { label: "Help", href: "/help" },
+    { label: "About", href: "/about" },
+    { label: "Settings", href: "/settings" },
+  ];
 
   return (
-    <footer className="w-full bg-surface border-t border-border mt-auto overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24">
-        {/* Top Section: Multi-column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          
-          {/* Column 1: Brand & Identity */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <Link href="/" className="flex items-center gap-3 group">
-                <KVLogo size="md" loading="lazy" />
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-blue leading-none mb-1">Elite Tools</span>
-                  <span className="brand-wordmark text-2xl tracking-tight leading-none text-text">
-                    KaruviLab
-                  </span>
-                </div>
-              </Link>
-              <p className="text-text-3 text-xs font-medium leading-relaxed max-w-[240px]">
-                Professional, browser-native tools built for the privacy-conscious developer. 100% local processing.
-              </p>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <a href="https://github.com/karuvilab" target="_blank" rel="noopener noreferrer" className="p-2 bg-bg border border-border rounded-xl text-text-4 hover:text-blue hover:border-blue/30 transition-all shadow-sm" title="GitHub">
-                <Code className="w-4 h-4" />
-              </a>
-              <a href="https://twitter.com/karuvilab" target="_blank" rel="noopener noreferrer" className="p-2 bg-bg border border-border rounded-xl text-text-4 hover:text-blue hover:border-blue/30 transition-all shadow-sm" title="Twitter">
-                <Globe className="w-4 h-4" />
-              </a>
-              <a href="mailto:support@karuvilab.com" className="p-2 bg-bg border border-border rounded-xl text-text-4 hover:text-blue hover:border-blue/30 transition-all shadow-sm" title="Email Support">
-                <Mail className="w-4 h-4" />
-              </a>
-            </div>
-
-            <div className="inline-block">
-              <PrivacyBadge />
-            </div>
+    <footer className="w-full bg-bg/80 backdrop-blur-xl border-t border-border/60 mt-auto pb-24 md:pb-0 z-10 relative">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
+        {/* Top section: Recent Tools & Links */}
+        <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-6">
+          {/* Continue Using */}
+          <div className="flex-1 space-y-3 min-h-[60px]">
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              Continue Using
+            </h4>
+            {!mounted ? (
+              <div className="flex gap-2">
+                <div className="w-24 h-7 bg-surface border border-border rounded-xl animate-pulse" />
+                <div className="w-28 h-7 bg-surface border border-border rounded-xl animate-pulse" />
+              </div>
+            ) : recentTools.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {recentTools.slice(0, 4).map((tool) => (
+                  <Link
+                    key={tool.id}
+                    href={`/${tool.href}`}
+                    className="px-3 py-1.5 bg-surface border border-border rounded-xl text-[10px] font-bold text-text-2 hover:text-blue hover:border-blue/30 transition-all shadow-sm active:scale-95"
+                  >
+                    {tool.name}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs font-medium text-text-4">No recent tools yet.</p>
+            )}
           </div>
 
-          {/* Column 2: Tools (Categories) */}
-          <div className="space-y-6">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Universal Tools</h4>
-            <nav className="grid grid-cols-1 gap-3">
-              {CATEGORIES.slice(0, 6).map((cat) => (
-                <Link 
-                  key={cat.id} 
-                  href={`/${cat.href}`}
-                  className="text-xs font-bold text-text-3 hover:text-blue transition-colors flex items-center gap-2"
+          {/* Quick Links */}
+          <div className="flex-1 md:text-right space-y-3">
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4 hidden md:block">
+              Navigation
+            </h4>
+            <nav className="flex flex-wrap md:justify-end gap-x-6 gap-y-3">
+              {quickLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-xs font-bold text-text-3 hover:text-blue transition-colors py-1"
                 >
-                  <span className="w-1 h-1 rounded-full bg-border group-hover:bg-blue transition-colors" />
-                  {cat.label}
+                  {link.label}
                 </Link>
               ))}
-              <Link href="/all-tools" className="text-xs font-black text-blue hover:underline uppercase tracking-widest pt-2">
-                Browse All →
-              </Link>
             </nav>
-          </div>
-
-          {/* Column 3: Resources */}
-          <div className="space-y-6">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Resources</h4>
-            <nav className="flex flex-col gap-3">
-              <Link href="/blog" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Engineering Blog</Link>
-              <Link href="/help" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Help Center</Link>
-              <Link href="/sitemap" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Sitemap</Link>
-              <Link href="/settings" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">User Preferences</Link>
-              <Link href="/offline" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Offline Status</Link>
-            </nav>
-          </div>
-
-          {/* Column 4: Company */}
-          <div className="space-y-6">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Legal & Support</h4>
-            <nav className="flex flex-col gap-3">
-              <Link href="/about" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">About KaruviLab</Link>
-              <Link href="/privacy" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Terms of Service</Link>
-              <Link href="/disclaimer" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Disclaimer</Link>
-              <Link href="/contact" className="text-xs font-bold text-text-3 hover:text-blue transition-colors">Contact Support</Link>
-            </nav>
-          </div>
-
-        </div>
-
-        {/* Middle Section: Capability Badges */}
-        <div className="mt-16 pt-8 border-t border-border flex flex-wrap items-center justify-center gap-6 md:gap-12 opacity-50 grayscale hover:grayscale-0 transition-all">
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4">
-            <Zap className="w-3.5 h-3.5 text-yellow-500" /> PWA Ready
-          </div>
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4">
-            <Globe className="w-3.5 h-3.5 text-blue" /> Offline Capable
-          </div>
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4">
-            <Cpu className="w-3.5 h-3.5 text-success" /> Browser Native
-          </div>
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4">
-            <Shield className="w-3.5 h-3.5 text-blue" /> Zero Server Upload
           </div>
         </div>
 
-        {/* Bottom Section: Copyright & Attribution */}
-        <div className="mt-12 pt-8 border-t border-border/5 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-text-4">
-              © {currentYear} KaruviLab. All rights reserved.
-            </p>
-            <p className="text-[9px] font-bold text-text-4/60 uppercase tracking-tighter">
-              v2.1.0-stable • Hardware Accelerated Web Tools
-            </p>
+        <div className="h-px w-full bg-border/40" />
+
+        {/* Bottom section: Brand, Trust, Status */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          {/* Branding */}
+          <div className="flex items-center gap-2 shrink-0">
+            <KVLogo size="xs" variant="monochrome" className="opacity-70 grayscale hover:grayscale-0 transition-all" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              Powered by KaruviLab
+            </span>
           </div>
-          
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4 bg-bg px-4 py-2 rounded-full border border-border shadow-sm">
-            Made with <Heart className="w-3 h-3 text-red-500 fill-current animate-pulse" /> by KaruviLab Developers
+
+          {/* Trust Strip */}
+          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-[10px] font-black uppercase tracking-widest text-text-4/80">
+            <span className="flex items-center gap-1.5">
+              <WifiOff className="w-3 h-3" /> Works Offline
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Lock className="w-3 h-3" /> No Uploads
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3 h-3" /> 100% Private
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Cpu className="w-3 h-3" /> Local Processing
+            </span>
+          </div>
+
+          {/* Status */}
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4 shrink-0 mt-2 lg:mt-0">
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                !mounted ? "bg-border" : isOnline ? "bg-success" : "bg-warn animate-pulse"
+              }`}
+            />
+            {!mounted ? "Checking..." : isOnline ? "Offline Ready" : "Running Locally"}
           </div>
         </div>
       </div>
