@@ -37,6 +37,7 @@ export function MarkdownEditor() {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const uploadPreviewRef = useRef<HTMLDivElement>(null);
 
   const activeMd = mode === "editor" ? md : uploadMd;
   const html = useMemo(() => MarkdownService.parse(activeMd), [activeMd]);
@@ -182,7 +183,70 @@ export function MarkdownEditor() {
       blobManager.revoke(url);
       toast("HTML exported!");
     } else if (format === "pdf") {
-      window.print();
+      const element = mode === "editor" ? previewRef.current : uploadPreviewRef.current;
+      if (!element) {
+        toast("Preview not ready", "error");
+        return;
+      }
+
+      const toastId = toast("Generating PDF...", "info");
+
+      try {
+        const html2pdf = (await import('html2pdf.js')).default;
+        
+        const opt = {
+          margin: [15, 15] as [number, number],
+          filename: `${name}.pdf`,
+          image: { type: 'jpeg' as const, quality: 0.98 },
+          html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            letterRendering: true,
+            logging: false
+          },
+          jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        // Create a clone to modify for export
+        const clone = element.cloneNode(true) as HTMLElement;
+        
+        // Remove UI elements that shouldn't be in PDF
+        clone.querySelectorAll('.copy-code-btn, .mmd-copy, button, .flex.items-center.justify-between').forEach(el => el.remove());
+        
+        // Add PDF-specific styles for professional output
+        const style = document.createElement('style');
+        style.innerHTML = `
+          .markdown-body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; 
+            font-size: 14px; 
+            line-height: 1.6; 
+            color: #24292e; 
+            background: white !important;
+            padding: 0 !important;
+          }
+          .markdown-body h1 { font-size: 2em; margin-bottom: 16px; font-weight: 600; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
+          .markdown-body h2 { font-size: 1.5em; margin-top: 24px; margin-bottom: 16px; font-weight: 600; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
+          .markdown-body h3 { font-size: 1.25em; margin-top: 24px; margin-bottom: 16px; font-weight: 600; }
+          .markdown-body p { margin-top: 0; margin-bottom: 16px; }
+          .markdown-body pre { background-color: #f6f8fa; border-radius: 6px; padding: 16px; overflow: auto; margin-bottom: 16px; }
+          .markdown-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; background-color: rgba(27,31,35,0.05); border-radius: 3px; padding: 0.2em 0.4em; font-size: 85%; }
+          .markdown-body pre code { background-color: transparent; padding: 0; margin: 0; font-size: 100%; }
+          .markdown-body blockquote { border-left: 0.25em solid #dfe2e5; color: #6a737d; padding: 0 1em; margin: 0 0 16px 0; }
+          .markdown-body table { border-collapse: collapse; width: 100%; margin-top: 0; margin-bottom: 16px; display: table !important; }
+          .markdown-body th, .markdown-body td { border: 1px solid #dfe2e5; padding: 6px 13px; }
+          .markdown-body th { background-color: #f6f8fa; font-weight: 600; }
+          .markdown-body img { max-width: 100%; box-sizing: content-box; background-color: #fff; }
+          .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-top: 0; margin-bottom: 16px; }
+        `;
+        clone.prepend(style);
+
+        await html2pdf().set(opt).from(clone).save();
+        toast("PDF exported successfully!");
+      } catch (err) {
+        console.error("PDF export failed:", err);
+        toast("PDF export failed", "error");
+      }
     } else if (format === "word") {
       try {
         const sections = [
@@ -315,6 +379,7 @@ export function MarkdownEditor() {
             <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
               <MarkdownPreview 
                 html={html} 
+                ref={previewRef}
                 hideHeader={true}
                 onCopyRaw={() => {
                   navigator.clipboard.writeText(md);
@@ -365,6 +430,7 @@ export function MarkdownEditor() {
                 <div className="flex-1 min-h-0 overflow-hidden bg-bg/30">
                   <MarkdownPreview 
                     html={html} 
+                    ref={uploadPreviewRef}
                     onCopyRaw={() => {
                       navigator.clipboard.writeText(uploadMd);
                       toast("Markdown copied!");

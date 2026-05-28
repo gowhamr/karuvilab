@@ -10,10 +10,11 @@ interface MarkdownPreviewProps {
   hideHeader?: boolean;
 }
 
-export function MarkdownPreview({ html, onCopyRaw, hideHeader = false }: MarkdownPreviewProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>(
+  ({ html, onCopyRaw, hideHeader = false }, ref) => {
+    const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+    useEffect(() => {
     if (!containerRef.current) return;
 
     const win = window as any;
@@ -114,7 +115,7 @@ export function MarkdownPreview({ html, onCopyRaw, hideHeader = false }: Markdow
           </button>
         </div>
       )}
-      <div className="flex-1 overflow-y-auto p-6 scroll-smooth markdown-body">
+      <div className="flex-1 overflow-y-auto p-6 scroll-smooth markdown-body" ref={ref}>
         <div 
           ref={containerRef}
           dangerouslySetInnerHTML={{ __html: html }}
@@ -134,5 +135,6 @@ export function MarkdownPreview({ html, onCopyRaw, hideHeader = false }: Markdow
         )}
       </div>
     </div>
-  );
-}
+    );
+    }
+    );
