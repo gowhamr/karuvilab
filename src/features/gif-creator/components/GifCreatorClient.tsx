@@ -2,13 +2,13 @@
 
 import React, { useState, useCallback } from "react";
 import { ToolShell } from "@/components/ui/ToolShell";
-import { MediaDropZone } from "@/components/ui/MediaDropZone";
+import { DropZone } from "@/components/ui/DropZone";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
-import { Images, Play, Download, Trash2, Settings, Plus, Loader2 } from "lucide-react";
+import { Images, Play, Download, Trash2, Settings, Plus, Loader2, Image as ImageIcon } from "lucide-react";
 import { m, AnimatePresence, Reorder } from "framer-motion";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { RecoveryBanner } from "@/components/system/RecoveryBanner";
+import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
 
 interface Frame {
   id: string;
@@ -97,7 +97,7 @@ export default function GifCreatorClient() {
         (p) => setProgress(40 + p.percent * 0.6)
       );
 
-      const blob = new Blob([gifBytes], { type: "image/gif" });
+      const blob = new Blob([gifBytes.buffer as ArrayBuffer], { type: "image/gif" });
       const url = createUrl(blob);
 
       setResult({
@@ -121,11 +121,13 @@ export default function GifCreatorClient() {
     >
       <div className="space-y-8">
         {frames.length === 0 ? (
-          <MediaDropZone
-            type="image"
+          <DropZone
             accept="image/*"
-            onFileSelect={handleFiles}
+            multiple={true}
+            onFilesSelected={handleFiles}
+            title="Drop images here"
             description="Select multiple images (PNG, JPG, WebP) to create an animated GIF"
+            icon={<ImageIcon className="w-10 h-10" />}
           />
         ) : (
           <m.div 
@@ -213,7 +215,7 @@ export default function GifCreatorClient() {
 
             {/* Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-               <MetricCard label="Frames" value={frames.length} icon={Images} />
+               <MetricCard label="Frames" value={frames.length.toString()} icon={Images} />
                <MetricCard label="Frame Delay" value={`${delay}ms`} icon={Settings} />
                <MetricCard label="Duration" value={`${((frames.length * delay) / 1000).toFixed(1)}s`} icon={Play} />
             </div>
@@ -239,9 +241,10 @@ export default function GifCreatorClient() {
 
             <AnimatePresence>
               {error && (
-                <RecoveryBanner
-                  message={error}
-                  onRetry={handleCreate}
+                <MediaErrorBanner
+                  title="GIF Creation Error"
+                  description={error}
+                  retryAction={handleCreate}
                 />
               )}
 
