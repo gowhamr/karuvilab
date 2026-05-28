@@ -1,154 +1,273 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { Binary, Hash, TextCursorInput, ListIcon, BinaryIcon, TypeIcon } from "lucide-react";
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+type Mode = "single" | "text";
 
 const BASES = [
-  { base: 2, label: "Binary", prefix: "0b" },
-  { base: 8, label: "Octal", prefix: "0o" },
-  { base: 10, label: "Decimal", prefix: "" },
-  { base: 16, label: "Hexadecimal", prefix: "0x" },
+  { id: "bin", base: 2, label: "Binary", prefix: "0b", placeholder: "e.g. 101010", icon: Binary },
+  { id: "oct", base: 8, label: "Octal", prefix: "0o", placeholder: "e.g. 52", icon: ListIcon },
+  { id: "dec", base: 10, label: "Decimal", prefix: "", placeholder: "e.g. 42", icon: Hash },
+  { id: "hex", base: 16, label: "Hex", prefix: "0x", placeholder: "e.g. 2A", icon: BinaryIcon },
 ];
 
-function isValidInBase(s: string | undefined, base: number): boolean {
-  if (!s || s === "-") return false;
-  const chars: Record<number, RegExp> = {
-    2: /^-?[01]+$/,
-    8: /^-?[0-7]+$/,
-    10: /^-?[0-9]+$/,
-    16: /^-?[0-9a-fA-F]+$/,
-  };
-  return chars[base]?.test(s) ?? false;
-}
-
 export default function NumeralConverterClient() {
-  const [inputs, setInputs] = useState<Record<number, string>>({
-    2: "", 8: "", 10: "42", 16: "",
+  const [mode, setMode] = useState<Mode>("single");
+  const [inputs, setInputs] = useState<Record<string, string>>({
+    bin: "", oct: "", dec: "42", hex: "", text: "B",
   });
-  const [activeBase, setActiveBase] = useState(10);
 
-  const decimal = useMemo(() => {
-    const s = inputs[activeBase];
-    if (!isValidInBase(s, activeBase)) return null;
-    return parseInt(s!, activeBase);
-  }, [inputs, activeBase]);
+  // --- Single Value Logic ---
+  const handleSingleChange = useCallback((id: string, value: string) => {
+    const baseObj = BASES.find(b => b.id === id);
+    if (!baseObj && id !== "text") return;
 
-  const conversions = useMemo(() => {
-    if (decimal === null || isNaN(decimal)) return null;
-    return {
-      2: (decimal >>> 0).toString(2).toUpperCase(),
-      8: (decimal >>> 0).toString(8).toUpperCase(),
-      10: decimal.toString(10),
-      16: (decimal >>> 0).toString(16).toUpperCase(),
-    };
-  }, [decimal]);
-
-  const handleChange = (base: number, value: string) => {
-    setActiveBase(base);
-    setInputs((prev) => ({ ...prev, [base]: value }));
-    // Update other fields
-    if (isValidInBase(value, base)) {
-      const dec = parseInt(value, base);
-      const updated: Record<number, string> = { ...inputs, [base]: value };
-      BASES.forEach(({ base: b }) => {
-        if (b !== base) {
-          updated[b] = (dec >>> 0).toString(b).toUpperCase();
+    setInputs(prev => {
+      const next = { ...prev, [id]: value };
+      
+      try {
+        let bigValue: bigint;
+        if (id === "text") {
+          if (value.length === 0) {
+            return { bin: "", oct: "", dec: "", hex: "", text: "" };
+          }
+          bigValue = BigInt(value.charCodeAt(0));
+        } else {
+          const cleanValue = value.replace(/^0[box]/i, "");
+          if (cleanValue === "" || cleanValue === "-") {
+            return { bin: "", oct: "", dec: "", hex: "", text: "", [id]: value };
+          }
+          bigValue = BigInt(`0${baseObj!.prefix}${cleanValue}`);
         }
-      });
-      setInputs(updated);
-    }
+
+        // Update all other fields
+        BASES.forEach(b => {
+          if (b.id !== id) {
+            next[b.id] = bigValue.toString(b.base).toUpperCase();
+          }
+        });
+        if (id !== "text") {
+          next.text = bigValue < 1114112n ? String.fromCodePoint(Number(bigValue)) : "";
+        }
+      } catch (e) {
+        // Invalid input for this base, just update the field itself
+      }
+      return next;
+    });
+  }, []);
+
+  // --- Text/Stream Logic ---
+  const handleTextChange = useCallback((id: string, value: string) => {
+    setInputs(prev => {
+      const next = { ...prev, [id]: value };
+      
+      try {
+        let bytes: Uint8Array;
+
+        if (id === "text") {
+          bytes = new TextEncoder().encode(value);
+        } else if (id === "bin") {
+          const parts = value.trim().split(/\s+/).filter(p => p.length > 0);
+          bytes = new Uint8Array(parts.map(p => parseInt(p, 2)));
+        } else if (id === "hex") {
+          // Support both space-separated and continuous hex
+          let cleanHex = value.replace(/\s+/g, "");
+          if (cleanHex.length % 2 !== 0) cleanHex = "0" + cleanHex;
+          const parts = value.includes(" ") 
+            ? value.trim().split(/\s+/).filter(p => p.length > 0)
+            : cleanHex.match(/.{1,2}/g) || [];
+          bytes = new Uint8Array(parts.map(p => parseInt(p, 16)));
+        } else if (id === "dec") {
+          const parts = value.trim().split(/\s+/).filter(p => p.length > 0);
+          bytes = new Uint8Array(parts.map(p => parseInt(p, 10)));
+        } else if (id === "oct") {
+          const parts = value.trim().split(/\s+/).filter(p => p.length > 0);
+          bytes = new Uint8Array(parts.map(p => parseInt(p, 8)));
+        } else {
+          return next;
+        }
+
+        if (id !== "text") next.text = new TextDecoder().decode(bytes);
+        if (id !== "bin") next.bin = Array.from(bytes).map(b => b.toString(2).padStart(8, "0")).join(" ");
+        if (id !== "hex") next.hex = Array.from(bytes).map(b => b.toString(16).padStart(2, "0").toUpperCase()).join(" ");
+        if (id !== "dec") next.dec = Array.from(bytes).map(b => b.toString(10)).join(" ");
+        if (id !== "oct") next.oct = Array.from(bytes).map(b => b.toString(8).padStart(3, "0")).join(" ");
+
+      } catch (e) {
+        // Parsing error
+      }
+      return next;
+    });
+  }, []);
+
+  const clearAll = () => {
+    setInputs({ bin: "", oct: "", dec: "", hex: "", text: "" });
   };
-
-  const bits = useMemo(() => {
-    if (decimal === null || decimal < 0 || decimal > 255) return null;
-    return (decimal >>> 0).toString(2).padStart(8, "0");
-  }, [decimal]);
-
-  const summary = conversions
-    ? `Numeral Converter\n------------------\nDecimal: ${conversions[10]}\nBinary: ${conversions[2]}\nOctal: ${conversions[8]}\nHexadecimal: ${conversions[16]}\n\nGenerated via KaruviLab`
-    : "";
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        {BASES.map(({ base, label, prefix }) => (
-          <div key={base} className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-text-2">
-                {label} (Base {base})
-              </label>
-              {conversions && (
-                <CopyButton text={conversions[base as keyof typeof conversions]} label="Copy" />
+    <ToolShell
+      title="Numeral Converter"
+      description="Advanced base converter for Binary, Hex, Decimal, Octal, and ASCII Text."
+    >
+      <div className="space-y-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <SegmentedControl
+            options={[
+              { label: "Single Number", id: "single" },
+              { label: "Text / Bytes", id: "text" },
+            ]}
+            activeId={mode}
+            onChange={(v) => {
+              setMode(v as Mode);
+              clearAll();
+            }}
+          />
+          <button
+            onClick={clearAll}
+            className="text-xs font-bold text-text-4 hover:text-red-400 transition-colors uppercase tracking-widest px-4 py-2 bg-surface border border-border rounded-lg"
+          >
+            Clear All
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          {/* Main Inputs */}
+          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
+            {/* ASCII Text Field */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-bold text-text-2 flex items-center gap-2">
+                  <TypeIcon size={16} className="text-blue" />
+                  ASCII / Text
+                </label>
+                {inputs.text && <CopyButton text={inputs.text || ""} label="Copy" />}
+              </div>
+              {mode === "single" ? (
+                <ToolInput
+                  value={inputs.text || ""}
+                  onChange={(v) => handleSingleChange("text", v.slice(-1))}
+                  placeholder="e.g. A"
+                  className="font-mono text-xl"
+                />
+              ) : (
+                <textarea
+                  value={inputs.text || ""}
+                  onChange={(e) => handleTextChange("text", e.target.value)}
+                  placeholder="Enter text to convert..."
+                  className="w-full min-h-[100px] px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-base resize-y"
+                />
               )}
             </div>
-            <div className="flex gap-2 items-center">
-              {prefix && (
-                <span className="text-sm font-mono text-text-4 bg-bg border border-border px-3 py-3 rounded-xl">
-                  {prefix}
-                </span>
-              )}
-              <input
-                type="text"
-                value={inputs[base] || ""}
-                onChange={(e) => handleChange(base, e.target.value.toUpperCase())}
-                onFocus={() => setActiveBase(base)}
-                placeholder={`Enter ${label.toLowerCase()} number`}
-                className={`flex-1 px-4 py-3 bg-bg border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-lg ${
-                  inputs[base] && !isValidInBase(inputs[base], base)
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-border"
-                }`}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border/50">
+              {BASES.map((b) => (
+                <div key={b.id} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-bold text-text-2 flex items-center gap-2">
+                      <b.icon size={16} className="text-text-4" />
+                      {b.label}
+                    </label>
+                    {inputs[b.id] && <CopyButton text={inputs[b.id] || ""} label="Copy" />}
+                  </div>
+                  {mode === "single" ? (
+                    <div className="flex gap-2 items-center">
+                      {b.prefix && (
+                        <span className="text-sm font-mono text-text-4 bg-bg border border-border px-3 py-3 rounded-xl min-w-[3.5rem] text-center">
+                          {b.prefix}
+                        </span>
+                      )}
+                      <ToolInput
+                        value={inputs[b.id] || ""}
+                        onChange={(v) => handleSingleChange(b.id, v.toUpperCase())}
+                        placeholder={b.placeholder}
+                        className="font-mono text-lg flex-1"
+                      />
+                    </div>
+                  ) : (
+                    <textarea
+                      value={inputs[b.id] || ""}
+                      onChange={(e) => handleTextChange(b.id, e.target.value.toUpperCase())}
+                      placeholder={`Enter ${b.label.toLowerCase()} bytes (space separated)...`}
+                      className="w-full min-h-[80px] px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-sm resize-y"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Metrics / Info */}
+          {mode === "single" && inputs.dec && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <MetricCard
+                label="Total Bits"
+                value={BigInt(inputs.dec || "0").toString(2).length.toString()}
+                icon={Binary}
+              />
+              <MetricCard
+                label="Total Bytes"
+                value={Math.ceil(BigInt(inputs.dec || "0").toString(2).length / 8).toString()}
+                icon={ListIcon}
+              />
+              <MetricCard
+                label="Sign"
+                value={BigInt(inputs.dec || "0") >= 0n ? "Positive" : "Negative"}
+                icon={Hash}
               />
             </div>
-            {inputs[base] && !isValidInBase(inputs[base], base) && (
-              <p className="text-xs text-red-400">Invalid {label.toLowerCase()} number</p>
-            )}
+          )}
+
+          {mode === "text" && inputs.text && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <MetricCard
+                label="Character Count"
+                value={(inputs.text?.length || 0).toString()}
+                icon={TextCursorInput}
+              />
+              <MetricCard
+                label="Byte Size"
+                value={new TextEncoder().encode(inputs.text || "").length.toString()}
+                icon={ListIcon}
+              />
+              <MetricCard
+                label="Words"
+                value={inputs.text?.trim() ? inputs.text.trim().split(/\s+/).length.toString() : "0"}
+                icon={Hash}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Binary Table / Bit View for Single Mode (Small Numbers) */}
+        {mode === "single" && inputs.dec && BigInt(inputs.dec || "0") >= 0n && BigInt(inputs.dec || "0") < 256n && (
+          <div className="bg-surface border border-border p-6 rounded-[32px] space-y-4">
+            <h3 className="text-sm font-bold text-text-2 uppercase tracking-widest">8-Bit Visualizer</h3>
+            <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
+              {BigInt(inputs.dec || "0").toString(2).padStart(8, "0").split("").map((bit, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center font-mono text-xl font-black border-2 transition-all ${
+                      bit === "1"
+                        ? "bg-blue text-white border-blue shadow-lg shadow-blue/20 scale-105"
+                        : "bg-bg border-border text-text-4"
+                    }`}
+                  >
+                    {bit}
+                  </div>
+                  <span className="text-[10px] font-bold text-text-4">2^{7-i}</span>
+                  <span className="text-[10px] font-medium text-text-4/60">({Math.pow(2, 7-i)})</span>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        )}
       </div>
-
-      {/* Bit representation */}
-      {bits && (
-        <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="font-bold text-text-2">8-bit Representation</h2>
-            <span className="text-xs text-text-4">Value: {decimal}</span>
-          </div>
-          <div className="flex gap-1 flex-wrap">
-            {bits.split("").map((bit, i) => (
-              <div
-                key={i}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center font-mono text-lg font-black border ${
-                  bit === "1"
-                    ? "bg-blue text-white border-blue"
-                    : "bg-bg border-border text-text-4"
-                }`}
-              >
-                {bit}
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-1 flex-wrap">
-            {[7, 6, 5, 4, 3, 2, 1, 0].map((pos) => (
-              <div key={pos} className="w-10 text-center text-[10px] text-text-4 font-bold">
-                2^{pos}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {conversions && (
-        <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between">
-          <span className="text-sm text-text-3 font-mono">
-            dec:{conversions[10]} = bin:{conversions[2]} = oct:{conversions[8]} = hex:{conversions[16]}
-          </span>
-          <CopyButton text={summary} label="Copy All" />
-        </div>
-      )}
-    </div>
+    </ToolShell>
   );
 }
