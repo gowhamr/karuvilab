@@ -7,9 +7,10 @@ import { Copy, Maximize2, Check, Loader2 } from "lucide-react";
 interface MarkdownPreviewProps {
   html: string;
   onCopyRaw: () => void;
+  hideHeader?: boolean;
 }
 
-export function MarkdownPreview({ html, onCopyRaw }: MarkdownPreviewProps) {
+export function MarkdownPreview({ html, onCopyRaw, hideHeader = false }: MarkdownPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -98,19 +99,21 @@ export function MarkdownPreview({ html, onCopyRaw }: MarkdownPreviewProps) {
 
   return (
     <div className="flex flex-col h-full bg-bg border border-border rounded-xl overflow-hidden shadow-sm">
-      <div className="flex items-center justify-between px-4 py-2 bg-surface border-b border-border">
-        <span className="text-xs font-black text-text-4 uppercase tracking-[0.2em] flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-blue" />
-          Live Preview
-        </span>
-        <button 
-          onClick={onCopyRaw}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
-        >
-          <Copy className="w-3 h-3" />
-          Copy MD
-        </button>
-      </div>
+      {!hideHeader && (
+        <div className="flex items-center justify-between px-4 py-2 bg-surface border-b border-border">
+          <span className="text-xs font-black text-text-4 uppercase tracking-[0.2em] flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-blue" />
+            Live Preview
+          </span>
+          <button 
+            onClick={onCopyRaw}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
+          >
+            <Copy className="w-3 h-3" />
+            Copy MD
+          </button>
+        </div>
+      )}
       <div className="flex-1 overflow-y-auto p-6 scroll-smooth markdown-body">
         <div 
           ref={containerRef}

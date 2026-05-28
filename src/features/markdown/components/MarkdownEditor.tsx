@@ -213,68 +213,73 @@ export function MarkdownEditor() {
   };
 
   return (
-      <div className="space-y-6">
-        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-            <SegmentedControl
-              options={[
-                { id: "editor", label: "Live Editor", icon: <FileEdit className="w-4 h-4" /> },
-                { id: "upload", label: "File Upload", icon: <Upload className="w-4 h-4" /> },
-              ]}
-              activeId={mode}
-              onChange={(id) => setMode(id as any)}
-            />
+    <div className="space-y-4 md:space-y-6">
+      {/* Unified Header Controls */}
+      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+          {/* Main Mode Toggle */}
+          <SegmentedControl
+            options={[
+              { id: "editor", label: "Editor", icon: <FileEdit className="w-4 h-4" /> },
+              { id: "upload", label: "Upload", icon: <Upload className="w-4 h-4" /> },
+            ]}
+            activeId={mode}
+            onChange={(id) => setMode(id as any)}
+          />
 
-            {mode === "editor" && (
-              <div className="md:hidden w-full sm:w-auto">
-                <SegmentedControl
-                  options={[
-                    { id: "edit", label: "Edit" },
-                    { id: "preview", label: "Preview" },
-                  ]}
-                  activeId={activeTab}
-                  onChange={(id) => setActiveTab(id as any)}
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowFind(!showFind)}
-              className={`p-2 rounded-xl border transition-all ${showFind ? 'bg-blue text-white border-blue' : 'bg-surface border-border text-text-3 hover:border-blue hover:text-blue'}`}
-              title="Find & Replace"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            
-            <div className="w-px h-6 bg-border mx-1 hidden md:block" />
-
-            <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
-              <button
-                onClick={() => handleExport("html")}
-                className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
-              >
-                <Code2 className="w-3.5 h-3.5" /> HTML
-              </button>
-              <button
-                onClick={() => handleExport("pdf")}
-                className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
-              >
-                <FileText className="w-3.5 h-3.5" /> PDF
-              </button>
-              <button
-                onClick={() => handleExport("word")}
-                className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all"
-              >
-                <FileCode className="w-3.5 h-3.5" /> Word
-              </button>
+          {/* Mobile-only View Toggle (only in Editor mode) */}
+          {mode === "editor" && (
+            <div className="md:hidden w-full sm:w-auto">
+              <SegmentedControl
+                options={[
+                  { id: "edit", label: "Write" },
+                  { id: "preview", label: "Preview" },
+                ]}
+                activeId={activeTab}
+                onChange={(id) => setActiveTab(id as any)}
+              />
             </div>
-          </div>
+          )}
         </div>
 
-        {mode === "editor" ? (
-          <div className="flex flex-col h-[70vh] min-h-[500px] max-h-[800px] bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
+        <div className="flex items-center justify-between w-full sm:w-auto gap-2">
+          <button
+            onClick={() => setShowFind(!showFind)}
+            className={`p-2 rounded-xl border transition-all ${showFind ? 'bg-blue text-white border-blue' : 'bg-surface border-border text-text-3 hover:border-blue hover:text-blue'}`}
+            title="Find & Replace"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+          
+          <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
+
+          <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
+            <button
+              onClick={() => handleExport("html")}
+              className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
+            >
+              <Code2 className="w-3.5 h-3.5" /> HTML
+            </button>
+            <button
+              onClick={() => handleExport("pdf")}
+              className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
+            >
+              <FileText className="w-3.5 h-3.5" /> PDF
+            </button>
+            <button
+              onClick={() => handleExport("word")}
+              className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all"
+            >
+              <FileCode className="w-3.5 h-3.5" /> Word
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {mode === "editor" ? (
+        <div className="flex flex-col h-[75vh] md:h-[70vh] min-h-[500px] max-h-[850px] bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
+          {/* Hide Toolbar in Preview mode on mobile */}
+          <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
             <Toolbar 
               onInsert={insertAtCursor} 
               onClear={() => setMd("")}
@@ -282,44 +287,49 @@ export function MarkdownEditor() {
               scrollSync={scrollSync}
               onToggleScrollSync={() => setScrollSync(!scrollSync)}
             />
-            
-            {showFind && (
-              <FindBar
-                onFind={handleFind}
-                onReplace={handleReplace}
-                onClose={() => setShowFind(false)}
-                matchCount={findState.matches.length}
-                currentIndex={findState.index}
-                onNext={() => setFindState(s => ({ ...s, index: (s.index + 1) % (s.matches.length || 1) }))}
-                onPrev={() => setFindState(s => ({ ...s, index: (s.index - 1 + s.matches.length) % (s.matches.length || 1) }))}
+          </div>
+          
+          {showFind && (
+            <FindBar
+              onFind={handleFind}
+              onReplace={handleReplace}
+              onClose={() => setShowFind(false)}
+              matchCount={findState.matches.length}
+              currentIndex={findState.index}
+              onNext={() => setFindState(s => ({ ...s, index: (s.index + 1) % (s.matches.length || 1) }))}
+              onPrev={() => setFindState(s => ({ ...s, index: (s.index - 1 + s.matches.length) % (s.matches.length || 1) }))}
+            />
+          )}
+
+          <div className="flex-1 flex flex-col md:flex-row min-h-0">
+            <div className={`flex-1 flex-col min-w-0 md:border-r border-border h-full ${activeTab === "edit" ? "flex" : "hidden"} md:flex`}>
+              <textarea
+                ref={textareaRef}
+                value={md}
+                onChange={(e) => setMd(e.target.value)}
+                placeholder="# Start typing your markdown here..."
+                className="flex-1 p-4 md:p-6 bg-transparent outline-none resize-none font-mono text-sm text-text-2 leading-relaxed h-full overflow-y-auto"
+                spellCheck={false}
               />
-            )}
-
-            <div className="flex-1 flex flex-col md:flex-row min-h-0">
-              <div className={`flex-1 flex-col min-w-0 border-r border-border h-full ${activeTab === "edit" ? "flex" : "hidden"} md:flex`}>
-                <textarea
-                  ref={textareaRef}
-                  value={md}
-                  onChange={(e) => setMd(e.target.value)}
-                  placeholder="# Start typing your markdown here..."
-                  className="flex-1 p-6 bg-transparent outline-none resize-none font-mono text-sm text-text-2 leading-relaxed h-full overflow-y-auto"
-                  spellCheck={false}
-                />
-              </div>
-              <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
-                <MarkdownPreview 
-                  html={html} 
-                  onCopyRaw={() => {
-                    navigator.clipboard.writeText(md);
-                    toast("Markdown copied!");
-                  }} 
-                />
-              </div>
             </div>
+            <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
+              <MarkdownPreview 
+                html={html} 
+                hideHeader={true}
+                onCopyRaw={() => {
+                  navigator.clipboard.writeText(md);
+                  toast("Markdown copied!");
+                }} 
+              />
+            </div>
+          </div>
 
+          {/* Hide StatBar in Preview mode on mobile */}
+          <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
             <StatBar stats={stats} />
           </div>
-        ) : (
+        </div>
+      ) : (
           <div className="space-y-6">
             <DropZone
               onFilesSelected={handleFileUpload}
