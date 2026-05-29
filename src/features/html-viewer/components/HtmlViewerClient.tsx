@@ -65,6 +65,33 @@ export default function HtmlViewerClient() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const logIdRef = useRef(0);
 
+  // Initialize Monaco Engine
+  useEffect(() => {
+    const isGithubPages = window.location.hostname.includes('github.io') || window.location.pathname.startsWith('/karuvilab');
+    const basePath = isGithubPages ? '/karuvilab' : '';
+    const localMonacoPath = `${basePath}/lib/monaco/vs`;
+
+    // Try loading from local assets first
+    loader.config({ paths: { vs: localMonacoPath } });
+
+    loader.init().then(monacoInstance => {
+      (window as any).monaco = monacoInstance;
+    }).catch(err => {
+      console.warn("Local Monaco failed, falling back to CDN", err);
+      // Fallback to CDN if local fails
+      loader.config({ 
+        paths: { 
+          vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' 
+        } 
+      });
+      loader.init().then(monacoInstance => {
+        (window as any).monaco = monacoInstance;
+      }).catch(err2 => {
+        console.error("Monaco CDN also failed", err2);
+      });
+    });
+  }, []);
+
   // Load from URL or LocalStorage
   useEffect(() => {
     const codeParam = searchParams.get("code");

@@ -3,6 +3,9 @@ import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { StructuredData } from "@/src/lib/seo";
+import { EmptyState } from "@/components/system/EmptyState";
+import { LayoutGrid } from "lucide-react";
+import ProductivityPageClient from "./ProductivityPageClient";
 
 export const metadata: Metadata = {
   title: "Productivity Tools — Manage Your Workflow Privately",
@@ -46,9 +49,7 @@ export default function ProductivityPage() {
           </section>
         ))}
         {tools.length === 0 && (
-          <div className="text-center py-20 bg-surface rounded-[32px] border border-border/40">
-            <p className="text-text-4 font-black uppercase tracking-widest">More productivity tools coming soon.</p>
-          </div>
+          <ProductivityPageClient />
         )}
       </div>
     </div>

@@ -10,6 +10,11 @@ out/
 # UI References
 .temp_ui_refs/
 
+# Synced Library Assets
+public/lib/
+public/pdf.worker.min.mjs
+public/pdf.min.mjs
+
 # Local env files
 .env.local
 .env*.local

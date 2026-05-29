@@ -69,7 +69,7 @@ You can **combine** *different* ***styles*** in a ~~single~~ sentence with \`inl
 
 - [x] ✅ Set up project repository
 - [x] ✅ Configure Markdown parser
-- [ ] 🔲 Collaborative editing (coming soon)
+- [ ] 🔲 Integrated preview mode
 
 ---
 

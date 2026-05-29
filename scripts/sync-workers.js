@@ -18,6 +18,11 @@ const WORKERS = [
   {
     src: 'node_modules/mermaid/dist/mermaid.min.js',
     dest: 'public/lib/markdown/mermaid.min.js'
+  },
+  {
+    src: 'node_modules/monaco-editor/min/vs',
+    dest: 'public/lib/monaco/vs',
+    isDir: true
   }
 ];
 
@@ -35,8 +40,18 @@ function sync() {
 
     if (fs.existsSync(srcPath)) {
       try {
-        fs.copyFileSync(srcPath, destPath);
-        console.log(`✅ Synced: ${worker.src} -> ${worker.dest}`);
+        if (worker.isDir) {
+          if (fs.existsSync(destPath)) {
+            fs.rmSync(destPath, { recursive: true, force: true });
+          }
+          fs.mkdirSync(path.dirname(destPath), { recursive: true });
+          fs.cpSync(srcPath, destPath, { recursive: true });
+          console.log(`✅ Synced Directory: ${worker.src} -> ${worker.dest}`);
+        } else {
+          fs.mkdirSync(path.dirname(destPath), { recursive: true });
+          fs.copyFileSync(srcPath, destPath);
+          console.log(`✅ Synced: ${worker.src} -> ${worker.dest}`);
+        }
       } catch (err) {
         console.error(`❌ Failed to sync ${worker.src}:`, err);
       }

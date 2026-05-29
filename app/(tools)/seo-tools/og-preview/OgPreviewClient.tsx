@@ -94,7 +94,7 @@ export default function OgPreviewClient() {
                   <p className="text-xs text-green-700 dark:text-green-400">{displayUrl}</p>
                 </div>
               </div>
-              <p className="text-blue text-lg font-medium hover:underline cursor-pointer truncate">{displayTitle}</p>
+              <p className="text-blue text-lg font-medium truncate">{displayTitle}</p>
               <p className="text-sm text-text-3 mt-1 line-clamp-2 leading-relaxed">{displayDesc}</p>
             </div>
           </div>
