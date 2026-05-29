@@ -9,7 +9,9 @@ export function PWARegistration() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      const wb = new Workbox('/sw.js');
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const swPath = `${basePath}/sw.js`;
+      const wb = new Workbox(swPath);
 
       const onUpdate = () => {
         toast('New version available! Click to update.', 'info');

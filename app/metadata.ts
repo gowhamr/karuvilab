@@ -89,3 +89,17 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
 };
+
+// Apply basePath if on GitHub Pages
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+const basePath = isGithubPages ? '/karuvilab' : '';
+
+if (isGithubPages) {
+  if (typeof metadata.icons === 'object' && metadata.icons !== null) {
+    if ('icon' in metadata.icons && typeof metadata.icons.icon === 'string') metadata.icons.icon = `${basePath}${metadata.icons.icon}`;
+    if ('shortcut' in metadata.icons && typeof metadata.icons.shortcut === 'string') metadata.icons.shortcut = `${basePath}${metadata.icons.shortcut}`;
+    if ('apple' in metadata.icons && typeof metadata.icons.apple === 'string') metadata.icons.apple = `${basePath}${metadata.icons.apple}`;
+  }
+  metadata.manifest = `${basePath}${metadata.manifest}`;
+}
+

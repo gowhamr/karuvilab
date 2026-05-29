@@ -7,6 +7,9 @@ try {
 if (typeof workbox !== 'undefined') {
   console.log('Workbox is loaded');
   
+  const basePath = self.location.pathname.replace('sw.js', '');
+  console.log('Service Worker Base Path:', basePath);
+
   const { registerRoute, setCatchHandler } = workbox.routing;
   const { StaleWhileRevalidate, CacheFirst, NetworkFirst } = workbox.strategies;
   const { ExpirationPlugin } = workbox.expiration;
@@ -45,7 +48,7 @@ if (typeof workbox !== 'undefined') {
 
   // 3. Cache Next.js Static Assets (_next/static)
   registerRoute(
-    ({ url }) => url.pathname.startsWith('/_next/static/'),
+    ({ url }) => url.pathname.includes('/_next/static/'),
     new StaleWhileRevalidate({
       cacheName: CACHE_NAMES.static,
     })
@@ -67,27 +70,28 @@ if (typeof workbox !== 'undefined') {
 
   // 5. General Assets (manifest, favicon, etc.)
   registerRoute(
-    ({ url }) => ['/manifest.json', '/favicon.ico'].includes(url.pathname),
+    ({ url }) => url.pathname.endsWith('/manifest.json') || url.pathname.endsWith('/favicon.ico'),
     new StaleWhileRevalidate({
       cacheName: CACHE_NAMES.static,
     })
   );
 
   // Critical App Shell Assets for proactive caching
+  // Using relative paths to the service worker location
   const APP_SHELL = [
-    '/',
-    '/offline/',
-    '/manifest.json',
-    '/favicon.ico',
-    '/pdf.min.mjs',
-    '/pdf.worker.min.mjs',
-    '/icons/icon-16.png',
-    '/icons/icon-32.png',
-    '/icons/icon-48.png',
-    '/icons/icon-180.png',
-    '/icons/icon-192.png',
-    '/icons/icon-256.png',
-    '/icons/icon-512.png',
+    './',
+    './offline/',
+    './manifest.json',
+    './favicon.ico',
+    './pdf.min.mjs',
+    './pdf.worker.min.mjs',
+    './icons/icon-16.png',
+    './icons/icon-32.png',
+    './icons/icon-48.png',
+    './icons/icon-180.png',
+    './icons/icon-192.png',
+    './icons/icon-256.png',
+    './icons/icon-512.png',
   ];
 
   // 6. Cache ESM modules (workers, etc.) - Excluding sw.js
@@ -119,7 +123,7 @@ if (typeof workbox !== 'undefined') {
       if (cachedResponse) return cachedResponse;
 
       // 2. Fallback to /offline/ page for non-cached pages
-      const offlineResponse = await caches.match('/offline/');
+      const offlineResponse = await caches.match(`${basePath}offline/`);
       if (offlineResponse) return offlineResponse;
 
       return new Response('Offline - Page not cached', {
