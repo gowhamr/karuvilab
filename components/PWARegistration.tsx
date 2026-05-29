@@ -14,15 +14,23 @@ export function PWARegistration() {
       const wb = new Workbox(swPath);
 
       const onUpdate = () => {
-        toast('New version available! Click to update.', 'info');
-        // Add a click listener to the body or a specific mechanism to trigger the update
-        // For simplicity with the existing Toast, we'll just log or use a window confirm
         if (window.confirm('A new version of KaruviLab is available. Update now?')) {
-          window.location.reload();
+          wb.addEventListener('controlling', () => {
+            window.location.reload();
+          });
+
+          // Send message to waiting service worker to skip waiting
+          wb.messageSkipWaiting();
         }
       };
 
       wb.addEventListener('waiting', onUpdate);
+
+      // Also handle external controller changes (e.g. from other tabs)
+      wb.addEventListener('controlling', (event) => {
+        if (!event.isUpdate) return;
+        window.location.reload();
+      });
 
       wb.register().catch((err) => {
         console.error('Service Worker registration failed:', err);

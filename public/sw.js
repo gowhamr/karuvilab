@@ -108,11 +108,17 @@ if (typeof workbox !== 'undefined') {
         console.log('Precaching App Shell');
         return cache.addAll(APP_SHELL).catch(err => {
           console.error('App Shell precaching failed:', err);
-          // Don't fail the whole install if one minor asset is missing
           return Promise.resolve();
         });
-      }).then(() => self.skipWaiting())
+      })
     );
+  });
+
+  // Handle skipWaiting message from client
+  self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+      self.skipWaiting();
+    }
   });
 
   // Offline Fallback for Navigation
