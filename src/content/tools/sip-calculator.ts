@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const sipCalculator: ToolContent = {
   detailedDescription: `
-    <p>The SIP (Systematic Investment Plan) Calculator is a powerful wealth-planning tool designed to help you estimate the future value of your mutual fund investments. SIPs are one of the most effective ways to build a large corpus over time by investing small, regular amounts. This calculator provides the clarity you need to set realistic financial goals and understand the impact of long-term compounding.</p>
-    
-    <p>By inputting your monthly investment amount, expected annual return rate, and the duration of your investment, you can instantly see how much your wealth could grow. The tool also visualizes the total amount invested versus the estimated capital gains, giving you a clear picture of how much 'extra' money you are earning through disciplined investing and market growth.</p>
+<p>The SIP (Systematic Investment Plan) Calculator is a powerful wealth-planning tool designed to help you estimate the future value of your mutual fund investments. SIPs are one of the most effective ways to build a large corpus over time by investing small, regular amounts. This calculator provides the clarity you need to set realistic financial goals and understand the impact of long-term compounding.</p>
 
-    <p>One of the core benefits of using KaruviLab's SIP Calculator is privacy. Planning your financial future is a private matter. Because our tool runs entirely in your browser, your investment amounts, goals, and return expectations are never uploaded or shared. It is a secure environment for sensitive financial simulations, available whenever you need it, even without an internet connection.</p>
-  `,
+<p>By inputting your monthly investment amount, expected annual return rate, and the duration of your investment, you can instantly see how much your wealth could grow. The tool also visualizes the total amount invested versus the estimated capital gains, giving you a clear picture of how much 'extra' money you are earning through disciplined investing and market growth.</p>
+
+<p>One of the core benefits of using KaruviLab's SIP Calculator is privacy. Planning your financial future is a private matter. Because our tool runs entirely in your browser, your investment amounts, goals, and return expectations are never uploaded or shared. It is a secure environment for sensitive financial simulations, available whenever you need it, even without an internet connection.</p>
+`,
   howTo: [
     "<strong>Monthly Investment:</strong> Enter the amount you plan to invest every month.",
     "<strong>Return Rate:</strong> Input the expected annual rate of return (e.g., 12 for 12%).",

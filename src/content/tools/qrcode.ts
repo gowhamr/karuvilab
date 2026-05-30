@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const qrcode: ToolContent = {
   detailedDescription: `
-    <p>The KaruviLab QR Code Generator is a versatile, browser-native tool that lets you create high-quality QR codes for a wide variety of use cases. Whether you need to encode a complex URL for marketing materials, generate a vCard for seamless contact sharing, or create a quick-connect QR code for your guest Wi-Fi, our tool provides total control and reliability.</p>
-    
-    <p>Because this generator operates entirely within your browser, your data remains completely private. When you generate a QR code for sensitive information—such as Wi-Fi credentials or private text—none of that data is ever sent to or processed by a remote server. You can generate unlimited codes with the peace of mind that your input remains exclusively on your device.</p>
+<p>The KaruviLab QR Code Generator is a versatile, browser-native tool that lets you create high-quality QR codes for a wide variety of use cases. Whether you need to encode a complex URL for marketing materials, generate a vCard for seamless contact sharing, or create a quick-connect QR code for your guest Wi-Fi, our tool provides total control and reliability.</p>
 
-    <p>We provide advanced customization options to ensure your QR codes are both functional and visually appealing. Adjust the size, select the appropriate error correction level to ensure readability even when printed or damaged, and choose custom colors to align with your personal brand or business identity. Once you are satisfied with your design, you can download your code in high-resolution PNG or vector-based SVG formats for professional print projects.</p>
-  `,
+<p>Because this generator operates entirely within your browser, your data remains completely private. When you generate a QR code for sensitive information—such as Wi-Fi credentials or private text—none of that data is ever sent to or processed by a remote server. You can generate unlimited codes with the peace of mind that your input remains exclusively on your device.</p>
+
+<p>We provide advanced customization options to ensure your QR codes are both functional and visually appealing. Adjust the size, select the appropriate error correction level to ensure readability even when printed or damaged, and choose custom colors to align with your personal brand or business identity. Once you are satisfied with your design, you can download your code in high-resolution PNG or vector-based SVG formats for professional print projects.</p>
+`,
   howTo: [
     "<strong>Enter Data:</strong> Choose the content type (URL, Text, or Wi-Fi) and enter the information you want to encode.",
     "<strong>Customize:</strong> Use the settings panel to change the color, size, and error correction level.",

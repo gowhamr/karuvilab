@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const chartGeneratorContent: ToolContent = {
   detailedDescription: `
-    <p>The KaruviLab Chart & Graph Generator is a professional-grade visualization utility designed to transform raw data into beautiful, production-ready charts instantly. Whether you need a quick bar chart for a presentation, a pie chart for data analysis, or a line graph to track trends, this tool offers a fast and secure solution directly in your browser.</p>
-    
-    <p>We prioritize both aesthetics and privacy. Unlike cloud-based visualization platforms that track your data, KaruviLab's generator operates on a 100% local-first architecture. Your data points, labels, and resulting graphics are processed entirely within your browser's sandbox. This makes it an ideal tool for visualizing sensitive business metrics, personal finances, or research data without any risk of server-side leaks.</p>
+<p>The KaruviLab Chart & Graph Generator is a professional-grade visualization utility designed to transform raw data into beautiful, production-ready charts instantly. Whether you need a quick bar chart for a presentation, a pie chart for data analysis, or a line graph to track trends, this tool offers a fast and secure solution directly in your browser.</p>
 
-    <p>Our generator features a live-preview engine, high-resolution export options (PNG and SVG), and a modern design system that ensures your charts look clean and readable across all devices. With support for multiple chart types and customizable color palettes, you can create professional visualizations in seconds.</p>
-  `,
+<p>We prioritize both aesthetics and privacy. Unlike cloud-based visualization platforms that track your data, KaruviLab's generator operates on a 100% local-first architecture. Your data points, labels, and resulting graphics are processed entirely within your browser's sandbox. This makes it an ideal tool for visualizing sensitive business metrics, personal finances, or research data without any risk of server-side leaks.</p>
+
+<p>Our generator features a live-preview engine, high-resolution export options (PNG and SVG), and a modern design system that ensures your charts look clean and readable across all devices. With support for multiple chart types and customizable color palettes, you can create professional visualizations in seconds.</p>
+`,
   howTo: [
     "<strong>Input Your Data:</strong> Use the sidebar to add data points with labels and numerical values.",
     "<strong>Choose Your Chart Type:</strong> Toggle between Bar, Pie, Doughnut, and Line charts using the selector at the top.",

@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const compressPdf: ToolContent = {
   detailedDescription: `
-    <p>The KaruviLab PDF Compressor is a secure, browser-native tool designed to reduce the file size of your PDF documents instantly. Whether you need to meet file size limits for email attachments, online job applications, or web uploads, this tool helps you optimize your PDFs without compromising document quality.</p>
-    
-    <p>Traditional PDF compression tools often require you to upload your documents to a cloud server, raising significant privacy concerns. KaruviLab operates on a zero-upload, local-first principle. Your PDF files are processed entirely within your web browser, ensuring your sensitive business documents, contracts, and personal records stay strictly on your device.</p>
+<p>The KaruviLab PDF Compressor is a secure, browser-native tool designed to reduce the file size of your PDF documents instantly. Whether you need to meet file size limits for email attachments, online job applications, or web uploads, this tool helps you optimize your PDFs without compromising document quality.</p>
 
-    <p>Our compressor uses advanced algorithms to identify redundant data and efficiently pack your document, delivering a significantly smaller file while retaining text readability and image clarity. It is the perfect solution for anyone managing large document libraries and wanting to balance performance with data privacy.</p>
-  `,
+<p>Traditional PDF compression tools often require you to upload your documents to a cloud server, raising significant privacy concerns. KaruviLab operates on a zero-upload, local-first principle. Your PDF files are processed entirely within your web browser, ensuring your sensitive business documents, contracts, and personal records stay strictly on your device.</p>
+
+<p>Our compressor uses advanced algorithms to identify redundant data and efficiently pack your document, delivering a significantly smaller file while retaining text readability and image clarity. It is the perfect solution for anyone managing large document libraries and wanting to balance performance with data privacy.</p>
+`,
   howTo: [
     "<strong>Upload:</strong> Click the 'Upload PDF' button to select your document.",
     "<strong>Configure:</strong> Choose your preferred compression level (Low, Medium, or High) based on your needs.",

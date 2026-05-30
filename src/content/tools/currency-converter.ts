@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const currencyConverter: ToolContent = {
   detailedDescription: `
-    <p>The Currency Converter is a real-time financial utility that allows you to calculate exchange values between global currencies instantly. Whether you are a traveler planning a budget, an e-commerce business owner seting international prices, or a freelancer receiving payments from overseas, this tool provides the accurate data you need for informed decision-making.</p>
-    
-    <p>Our converter supports a vast array of global currencies, including major ones like USD, EUR, GBP, and JPY, as well as dozens of others. We prioritize data freshness while maintaining KaruviLab's local-first philosophy. Once the latest rates are fetched, all calculations happen instantly on your device. This means you can keep the tool open and perform multiple conversions without constantly refreshing or using extra bandwidth.</p>
+<p>The Currency Converter is a real-time financial utility that allows you to calculate exchange values between global currencies instantly. Whether you are a traveler planning a budget, an e-commerce business owner seting international prices, or a freelancer receiving payments from overseas, this tool provides the accurate data you need for informed decision-making.</p>
 
-    <p>Privacy is also handled with care. While the tool requires a brief connection to fetch current exchange rates, your specific conversion amounts and currency pairings remain private on your machine. You can even use the tool offline if you have previously cached the rates, making it an essential companion for international travel.</p>
-  `,
+<p>Our converter supports a vast array of global currencies, including major ones like USD, EUR, GBP, and JPY, as well as dozens of others. We prioritize data freshness while maintaining KaruviLab's local-first philosophy. Once the latest rates are fetched, all calculations happen instantly on your device. This means you can keep the tool open and perform multiple conversions without constantly refreshing or using extra bandwidth.</p>
+
+<p>Privacy is also handled with care. While the tool requires a brief connection to fetch current exchange rates, your specific conversion amounts and currency pairings remain private on your machine. You can even use the tool offline if you have previously cached the rates, making it an essential companion for international travel.</p>
+`,
   howTo: [
     "<strong>Select Base:</strong> Choose the currency you currently have from the first dropdown menu.",
     "<strong>Select Target:</strong> Choose the currency you want to convert into from the second dropdown.",

@@ -2,28 +2,26 @@ import { ToolContent } from '../../registry/types';
 
 export const hashGenerator: ToolContent = {
   detailedDescription: `
-    <p>A <strong>Hash Generator</strong> creates a unique digital fingerprint (hash value) from any text or file. Hashes are commonly used for data verification, security, software distribution, digital signatures, and cryptographic applications. This free online utility lets you create MD5, SHA-1, SHA-256, and SHA-512 hashes instantly in your browser.</p>
+A **Hash Generator** creates a unique digital fingerprint (hash value) from any text or file. Hashes are commonly used for data verification, security, software distribution, digital signatures, and cryptographic applications. This free online utility lets you create MD5, SHA-1, SHA-256, and SHA-512 hashes instantly in your browser.
 
-    <p>In line with KaruviLab's core philosophy, all processing happens locally on your device using the <strong>Web Crypto API</strong>, ensuring your data remains private and secure. There are no uploads, no accounts, and zero server-side processing required. Whether you are a developer verifying a checksum or a student learning about cryptography, our tool provides a safe and fast environment for all your hashing needs.</p>
+In line with KaruviLab's core philosophy, all processing happens locally on your device using the **Web Crypto API**, ensuring your data remains private and secure. There are no uploads, no accounts, and zero server-side processing required. Whether you are a developer verifying a checksum or a student learning about cryptography, our tool provides a safe and fast environment for all your hashing needs.
 
-    <h3>What Is a Hash Function?</h3>
-    <p>A hash function is a mathematical algorithm that converts data of any size into a fixed-length string of characters called a hash value or digest. Even a small change in the input creates a completely different hash output. This property makes hash functions useful for <strong>data integrity verification</strong> and detecting unauthorized modifications.</p>
+### What Is a Hash Function?
+A hash function is a mathematical algorithm that converts data of any size into a fixed-length string of characters called a hash value or digest. Even a small change in the input creates a completely different hash output. This property makes hash functions useful for **data integrity verification** and detecting unauthorized modifications.
 
-    <h3>Supported Hash Algorithms</h3>
-    <ul>
-      <li><strong>MD5:</strong> Produces a 128-bit hash value. While useful for file checksums in legacy systems, it is no longer considered secure for cryptographic purposes due to collision vulnerabilities.</li>
-      <li><strong>SHA-1:</strong> Generates a 160-bit hash value. Like MD5, it is considered cryptographically weak and should not be used for new security implementations.</li>
-      <li><strong>SHA-256:</strong> Part of the SHA-2 family, it produces a 256-bit hash. It is the recommended standard for most modern use cases, including file integrity, digital certificates, and blockchain technology.</li>
-      <li><strong>SHA-512:</strong> Generates a 512-bit hash value and offers a higher security margin, often used in high-security enterprise applications.</li>
-    </ul>
+### Supported Hash Algorithms
+- **MD5:** Produces a 128-bit hash value. While useful for file checksums in legacy systems, it is no longer considered secure for cryptographic purposes due to collision vulnerabilities.
+- **SHA-1:** Generates a 160-bit hash value. Like MD5, it is considered cryptographically weak and should not be used for new security implementations.
+- **SHA-256:** Part of the SHA-2 family, it produces a 256-bit hash. It is the recommended standard for most modern use cases, including file integrity, digital certificates, and blockchain technology.
+- **SHA-512:** Generates a 512-bit hash value and offers a higher security margin, often used in high-security enterprise applications.
 
-    <p>By keeping all cryptographic operations strictly within your browser, KaruviLab ensures that your text, files, and secret keys <strong>never leave your device</strong>. This makes it an ideal tool for privacy-conscious professionals and developers.</p>
-  `,
+By keeping all cryptographic operations strictly within your browser, KaruviLab ensures that your text, files, and secret keys **never leave your device**. This makes it an ideal tool for privacy-conscious professionals and developers.
+`,
   howTo: [
-    "<strong>Step 1:</strong> Type or paste the text you want to hash into the main input field.",
-    "<strong>Step 2:</strong> Select your desired hash algorithm (MD5, SHA-1, SHA-256, or SHA-512).",
-    "<strong>Step 3:</strong> If using HMAC mode, enter your secret key to sign the message.",
-    "<strong>Step 4:</strong> The hash is generated instantly. Use the 'Copy' button to save the result to your clipboard.",
+    "**Step 1:** Type or paste the text you want to hash into the main input field.",
+    "**Step 2:** Select your desired hash algorithm (MD5, SHA-1, SHA-256, or SHA-512).",
+    "**Step 3:** If using HMAC mode, enter your secret key to sign the message.",
+    "**Step 4:** The hash is generated instantly. Use the 'Copy' button to save the result to your clipboard.",
   ],
   faq: [
     {
@@ -32,7 +30,7 @@ export const hashGenerator: ToolContent = {
     },
     {
       question: "Which hash algorithm should I use?",
-      answer: "For most purposes, <strong>SHA-256</strong> is recommended because it provides strong security, is not currently susceptible to collisions, and has broad compatibility.",
+      answer: "For most purposes, **SHA-256** is recommended because it provides strong security, is not currently susceptible to collisions, and has broad compatibility.",
     },
     {
       question: "Why does the same text always generate the same hash?",

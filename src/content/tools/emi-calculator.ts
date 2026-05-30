@@ -2,38 +2,36 @@ import { ToolContent } from '../../registry/types';
 
 export const emiCalculator: ToolContent = {
   detailedDescription: `
-    <p>An <strong>EMI (Equated Monthly Installment)</strong> is the fixed amount you pay every month to repay a loan. It includes both the principal amount borrowed and the interest charged by the lender. Before taking any loan, it is important to understand how much you will need to pay each month. Whether you are applying for a home loan, personal loan, car loan, education loan, or business loan, knowing your EMI in advance helps you plan your finances, avoid repayment stress, and borrow responsibly.</p>
+An **EMI (Equated Monthly Installment)** is the fixed amount you pay every month to repay a loan. It includes both the principal amount borrowed and the interest charged by the lender. Before taking any loan, it is important to understand how much you will need to pay each month. Whether you are applying for a home loan, personal loan, car loan, education loan, or business loan, knowing your EMI in advance helps you plan your finances, avoid repayment stress, and borrow responsibly.
 
-    <p>Our online <strong>EMI calculator India</strong> is a simple financial tool that helps you estimate your monthly loan payments instantly. By entering the loan amount, interest rate, and repayment tenure, you can calculate your EMI within seconds without performing complex calculations. This guide explains how EMI works, the factors that affect your monthly payments, how EMI is calculated, and how you can use an EMI calculator to make informed borrowing decisions.</p>
+Our online **EMI calculator India** is a simple financial tool that helps you estimate your monthly loan payments instantly. By entering the loan amount, interest rate, and repayment tenure, you can calculate your EMI within seconds without performing complex calculations. This guide explains how EMI works, the factors that affect your monthly payments, how EMI is calculated, and how you can use an EMI calculator to make informed borrowing decisions.
 
-    <h3>Why Understanding EMI Is Important</h3>
-    <p>Many borrowers focus only on the loan amount and overlook the long-term repayment commitment. However, your EMI directly impacts your monthly budget and savings. Understanding your EMI helps you plan your monthly expenses effectively, avoid borrowing more than you can afford, compare loan offers from different lenders, choose the right loan tenure, and understand the total interest cost of a loan. A well-planned loan can help you achieve your goals, while poor repayment planning can lead to financial difficulties.</p>
+### Why Understanding EMI Is Important
+Many borrowers focus only on the loan amount and overlook the long-term repayment commitment. However, your EMI directly impacts your monthly budget and savings. Understanding your EMI helps you plan your monthly expenses effectively, avoid borrowing more than you can afford, compare loan offers from different lenders, choose the right loan tenure, and understand the total interest cost of a loan. A well-planned loan can help you achieve your goals, while poor repayment planning can lead to financial difficulties.
 
-    <h3>What Factors Affect Your EMI Amount?</h3>
-    <p>Three main factors determine the EMI you pay every month:</p>
-    <ul>
-      <li><strong>Loan Amount:</strong> The total money borrowed. Higher loan amount equals a higher EMI. Borrow only what you genuinely need.</li>
-      <li><strong>Interest Rate:</strong> The cost of borrowing money. Even a small difference in <strong>loan interest calculator</strong> rates can significantly affect your total repayment amount.</li>
-      <li><strong>Loan Tenure:</strong> The repayment period. A longer tenure means lower monthly EMI but higher total interest cost, while a shorter tenure leads to higher monthly EMI but lower total interest cost.</li>
-    </ul>
+### What Factors Affect Your EMI Amount?
+Three main factors determine the EMI you pay every month:
+- **Loan Amount:** The total money borrowed. Higher loan amount equals a higher EMI. Borrow only what you genuinely need.
+- **Interest Rate:** The cost of borrowing money. Even a small difference in **loan interest calculator** rates can significantly affect your total repayment amount.
+- **Loan Tenure:** The repayment period. A longer tenure means lower monthly EMI but higher total interest cost, while a shorter tenure leads to higher monthly EMI but lower total interest cost.
 
-    <h3>How an EMI Calculator Helps You</h3>
-    <p>An <strong>online EMI calculator</strong> offers several benefits including accurate EMI estimation, better financial planning, and significant time savings. It helps you compare various loan options by adjusting different loan amounts and tenures to find the most suitable option for your financial situation. Automated calculations also reduce human errors, providing consistent and reliable estimates for your <strong>financial planning</strong>.</p>
+### How an EMI Calculator Helps You
+An **online EMI calculator** offers several benefits including accurate EMI estimation, better financial planning, and significant time savings. It helps you compare various loan options by adjusting different loan amounts and tenures to find the most suitable option for your financial situation. Automated calculations also reduce human errors, providing consistent and reliable estimates for your **financial planning**.
 
-    <h3>The EMI Formula</h3>
-    <p>The standard formula used by banks and financial institutions for <strong>EMI calculation online</strong> is:</p>
-    <div class="p-4 bg-surface border border-border rounded-xl font-mono text-center my-4">
-      EMI = [P × R × (1 + R)^N] ÷ [(1 + R)^N – 1]
-    </div>
-    <p>Where P is the Principal Loan Amount, R is the Monthly Interest Rate (Annual Rate/12/100), and N is the Loan Tenure in Months. This formula calculates a fixed monthly payment throughout the loan period.</p>
+### The EMI Formula
+The standard formula used by banks and financial institutions for **EMI calculation online** is:
 
-    <p>In line with KaruviLab's core philosophy, this <strong>loan repayment calculator</strong> operates entirely within your browser. This means your sensitive financial figures and personal loan details never leave your device. It's a fast, secure, and <strong>offline-capable</strong> solution for anyone looking to calculate EMI online and maintain 100% data privacy.</p>
-  `,
+**EMI = [P × R × (1 + R)^N] ÷ [(1 + R)^N – 1]**
+
+Where P is the Principal Loan Amount, R is the Monthly Interest Rate (Annual Rate/12/100), and N is the Loan Tenure in Months. This formula calculates a fixed monthly payment throughout the loan period.
+
+In line with KaruviLab's core philosophy, this **loan repayment calculator** operates entirely within your browser. This means your sensitive financial figures and personal loan details never leave your device. It's a fast, secure, and **offline-capable** solution for anyone looking to calculate EMI online and maintain 100% data privacy.
+`,
   howTo: [
-    "<strong>Step 1:</strong> Enter the loan amount you wish to borrow in the principal field.",
-    "<strong>Step 2:</strong> Input the annual interest rate offered by the lender.",
-    "<strong>Step 3:</strong> Select the loan tenure in years or months.",
-    "<strong>Step 4:</strong> View the monthly EMI result, total interest payable, and total repayment amount instantly.",
+    "**Step 1:** Enter the loan amount you wish to borrow in the principal field.",
+    "**Step 2:** Input the annual interest rate offered by the lender.",
+    "**Step 3:** Select the loan tenure in years or months.",
+    "**Step 4:** View the monthly EMI result, total interest payable, and total repayment amount instantly.",
   ],
   faq: [
     {
@@ -93,3 +91,4 @@ export const emiCalculator: ToolContent = {
   ],
   alternatives: ["HDFC Bank EMI Calculator", "SBI Loan Calculator", "ICICI Bank personal loan calculator"],
 };
+

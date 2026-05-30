@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const markdown: ToolContent = {
   detailedDescription: `
-    <p>The KaruviLab Markdown Editor is a professional, browser-native writing environment designed for developers, technical writers, and content creators. Markdown has become the industry-standard syntax for documentation, README files, and blog posts because it is lightweight, human-readable, and easily convertible to HTML. Our tool provides a live, side-by-side preview experience, allowing you to see your rendered output the instant you type.</p>
-    
-    <p>By operating locally within your web browser, our Markdown editor offers a distraction-free space to document your projects without the latency of cloud-based editors. Whether you are drafting a new technical article, creating project documentation for GitHub, or simply learning Markdown syntax, this editor supports CommonMark and GitHub Flavored Markdown (GFM) extensions, including tables, task lists, and syntax-highlighted code blocks.</p>
+<p>The KaruviLab Markdown Editor is a professional, browser-native writing environment designed for developers, technical writers, and content creators. Markdown has become the industry-standard syntax for documentation, README files, and blog posts because it is lightweight, human-readable, and easily convertible to HTML. Our tool provides a live, side-by-side preview experience, allowing you to see your rendered output the instant you type.</p>
 
-    <p>We prioritize both convenience and portability. You can copy the rendered HTML directly for use in your website's CMS, or download your work as a <code>.md</code> file for version control. This tool is built to integrate seamlessly into your existing development workflow, offering a fast, reliable, and entirely private platform for all your documentation needs.</p>
-  `,
+<p>By operating locally within your web browser, our Markdown editor offers a distraction-free space to document your projects without the latency of cloud-based editors. Whether you are drafting a new technical article, creating project documentation for GitHub, or simply learning Markdown syntax, this editor supports CommonMark and GitHub Flavored Markdown (GFM) extensions, including tables, task lists, and syntax-highlighted code blocks.</p>
+
+<p>We prioritize both convenience and portability. You can copy the rendered HTML directly for use in your website's CMS, or download your work as a <code>.md</code> file for version control. This tool is built to integrate seamlessly into your existing development workflow, offering a fast, reliable, and entirely private platform for all your documentation needs.</p>
+`,
   howTo: [
     "<strong>Start Typing:</strong> Enter your text in the left editor pane using standard Markdown syntax (e.g., `# Heading`, `**Bold**`).",
     "<strong>Preview:</strong> The right pane renders your content into clean HTML in real-time.",

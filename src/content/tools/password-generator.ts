@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const passwordGenerator: ToolContent = {
   detailedDescription: `
-    <p>The Password Generator is a critical security utility designed to help you create cryptographically strong, unique passwords for every online account. In an era where credential stuffing and data breaches are common, using a random, high-entropy password is your first line of defense against cyberattacks.</p>
-    
-    <p>Our generator provides total control over the complexity of your passwords. You can toggle uppercase letters, lowercase letters, numbers, and special symbols, and adjust the length to meet any site's requirements. Because security is paramount, KaruviLab ensures that the generation process is entirely local. We use the Web Crypto API, which leverages your computer's own randomness sources, meaning your new secrets never exist on any server—even for a millisecond.</p>
+<p>The Password Generator is a critical security utility designed to help you create cryptographically strong, unique passwords for every online account. In an era where credential stuffing and data breaches are common, using a random, high-entropy password is your first line of defense against cyberattacks.</p>
 
-    <p>Whether you need a simple 8-character pin or a massive 128-character complex string, this tool delivers instant, reliable results. It is also completely functional offline, ensuring you can generate secure keys even when you are disconnected from the network. It is the perfect companion for anyone using a password manager who needs to rotate their credentials regularly.</p>
-  `,
+<p>Our generator provides total control over the complexity of your passwords. You can toggle uppercase letters, lowercase letters, numbers, and special symbols, and adjust the length to meet any site's requirements. Because security is paramount, KaruviLab ensures that the generation process is entirely local. We use the Web Crypto API, which leverages your computer's own randomness sources, meaning your new secrets never exist on any server—even for a millisecond.</p>
+
+<p>Whether you need a simple 8-character pin or a massive 128-character complex string, this tool delivers instant, reliable results. It is also completely functional offline, ensuring you can generate secure keys even when you are disconnected from the network. It is the perfect companion for anyone using a password manager who needs to rotate their credentials regularly.</p>
+`,
   howTo: [
     "<strong>Set Length:</strong> Use the slider or input field to choose how long you want your password to be.",
     "<strong>Toggle Options:</strong> Choose which character sets (Numbers, Symbols, etc.) to include based on your security needs.",

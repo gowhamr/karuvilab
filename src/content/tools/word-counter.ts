@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const wordCounter: ToolContent = {
   detailedDescription: `
-    <p>The Word Counter is an essential text analysis utility for writers, students, SEO professionals, and editors. More than just a simple count, this tool provides a detailed breakdown of your content, including character counts (with and without spaces), sentence counts, and paragraph counts. It helps you stay within specific limits for essays, blog posts, or social media updates.</p>
-    
-    <p>In addition to basic counting, our tool calculates advanced metrics like estimated reading time and speaking time. This is invaluable for public speakers prepping a speech or content creators trying to optimize their articles for user engagement. The real-time update engine ensures that as you type or edit your text, the stats reflect your changes instantly, providing a seamless editing experience.</p>
+<p>The Word Counter is an essential text analysis utility for writers, students, SEO professionals, and editors. More than just a simple count, this tool provides a detailed breakdown of your content, including character counts (with and without spaces), sentence counts, and paragraph counts. It helps you stay within specific limits for essays, blog posts, or social media updates.</p>
 
-    <p>At KaruviLab, your creative and professional writing stays private. We do not upload your text to any server for analysis. Every calculation happens right in your browser's memory, meaning your drafts, notes, and sensitive documents are never logged or stored. It is a completely secure, distraction-free environment for professional content auditing.</p>
-  `,
+<p>In addition to basic counting, our tool calculates advanced metrics like estimated reading time and speaking time. This is invaluable for public speakers prepping a speech or content creators trying to optimize their articles for user engagement. The real-time update engine ensures that as you type or edit your text, the stats reflect your changes instantly, providing a seamless editing experience.</p>
+
+<p>At KaruviLab, your creative and professional writing stays private. We do not upload your text to any server for analysis. Every calculation happens right in your browser's memory, meaning your drafts, notes, and sensitive documents are never logged or stored. It is a completely secure, distraction-free environment for professional content auditing.</p>
+`,
   howTo: [
     "<strong>Input Text:</strong> Type or paste your content into the large text area.",
     "<strong>Monitor Stats:</strong> Watch the real-time counters at the top or side of the tool update instantly.",

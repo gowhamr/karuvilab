@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const jsonFormatter: ToolContent = {
   detailedDescription: `
-    <p>The JSON Formatter and Validator is a professional-grade development utility built to simplify the way you work with JSON data. Whether you are dealing with complex API responses, minified configuration files, or debugging data payloads, this tool provides an interactive environment to beautify, minify, and validate your code in real-time. Because it is a browser-first utility, you can handle sensitive data locally without ever worrying about external server uploads.</p>
-    
-    <p>JSON (JavaScript Object Notation) is the backbone of modern web communication. However, raw JSON often lacks human-readable indentation and is difficult to parse visually. Our Formatter transforms dense, minified JSON into a cleanly structured, human-readable format. Additionally, our intelligent validation engine identifies syntax errors—such as missing quotes, trailing commas, or incorrect braces—and pinpoints their exact location, making it an indispensable debugger for developers and system administrators alike.</p>
+<p>The JSON Formatter and Validator is a professional-grade development utility built to simplify the way you work with JSON data. Whether you are dealing with complex API responses, minified configuration files, or debugging data payloads, this tool provides an interactive environment to beautify, minify, and validate your code in real-time. Because it is a browser-first utility, you can handle sensitive data locally without ever worrying about external server uploads.</p>
 
-    <p>We've integrated an interactive tree view, allowing you to expand and collapse nested objects and arrays. This structural visualization makes exploring deeply nested data structures effortless. By keeping all processing local and providing robust error reporting, KaruviLab's JSON Formatter ensures your development workflow is as secure and efficient as possible.</p>
-  `,
+<p>JSON (JavaScript Object Notation) is the backbone of modern web communication. However, raw JSON often lacks human-readable indentation and is difficult to parse visually. Our Formatter transforms dense, minified JSON into a cleanly structured, human-readable format. Additionally, our intelligent validation engine identifies syntax errors—such as missing quotes, trailing commas, or incorrect braces—and pinpoints their exact location, making it an indispensable debugger for developers and system administrators alike.</p>
+
+<p>We've integrated an interactive tree view, allowing you to expand and collapse nested objects and arrays. This structural visualization makes exploring deeply nested data structures effortless. By keeping all processing local and providing robust error reporting, KaruviLab's JSON Formatter ensures your development workflow is as secure and efficient as possible.</p>
+`,
   howTo: [
     "<strong>Input:</strong> Paste your raw JSON payload into the main editor area.",
     "<strong>Beautify:</strong> Click the 'Format' button to apply standard indentation and structure.",

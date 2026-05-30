@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const ageCalculator: ToolContent = {
   detailedDescription: `
-    <p>The KaruviLab Age Calculator provides an accurate way to calculate the precise time between any two dates. Whether you need to know your exact age in years, months, and days for official government documentation, or you are simply curious about how many days have passed since a significant life milestone, this tool delivers instant, precise results.</p>
-    
-    <p>Age calculations can be trickier than they appear, particularly when accounting for leap years, variations in month lengths, and the specific number of days in different calendar months. Our calculator uses precise date-math to ensure that your results are always accurate, regardless of the complexity of the calendar intervals involved.</p>
+<p>The KaruviLab Age Calculator provides an accurate way to calculate the precise time between any two dates. Whether you need to know your exact age in years, months, and days for official government documentation, or you are simply curious about how many days have passed since a significant life milestone, this tool delivers instant, precise results.</p>
 
-    <p>Like all KaruviLab utilities, your data stays on your device. We do not store, track, or share your birth date or any other information you input. This tool is a reliable, privacy-first alternative to the many tracking-heavy sites found across the web, making it the perfect choice for users who value data security alongside utility.</p>
-  `,
+<p>Age calculations can be trickier than they appear, particularly when accounting for leap years, variations in month lengths, and the specific number of days in different calendar months. Our calculator uses precise date-math to ensure that your results are always accurate, regardless of the complexity of the calendar intervals involved.</p>
+
+<p>Like all KaruviLab utilities, your data stays on your device. We do not store, track, or share your birth date or any other information you input. This tool is a reliable, privacy-first alternative to the many tracking-heavy sites found across the web, making it the perfect choice for users who value data security alongside utility.</p>
+`,
   howTo: [
     "<strong>Set Date of Birth:</strong> Click the birth date field to open the calendar and select your date of birth.",
     "<strong>Choose Target Date:</strong> The tool defaults to the current date. You can change this to calculate your age as of a specific past or future date.",

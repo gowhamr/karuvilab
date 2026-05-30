@@ -2,12 +2,12 @@ import { ToolContent } from '../../registry/types';
 
 export const bgRemover: ToolContent = {
   detailedDescription: `
-    <p>The Background Remover is a specialized image editing utility that allows you to isolate subjects by removing their backgrounds with a single click. Ideal for creating product photos for e-commerce, prepping profile pictures, or designing social media graphics, this tool provides a fast and efficient way to handle common design tasks without needing complex software like Photoshop.</p>
-    
-    <p>Unlike many online background removal services that upload your photos to a server for AI processing—often compromising your privacy and owning your data—KaruviLab's Background Remover operates entirely within your browser. By utilizing advanced color-matching and edge-detection algorithms locally, you can process sensitive personal or professional images with complete confidentiality. The tool is designed to work best with solid or high-contrast backgrounds.</p>
+<p>The Background Remover is a specialized image editing utility that allows you to isolate subjects by removing their backgrounds with a single click. Ideal for creating product photos for e-commerce, prepping profile pictures, or designing social media graphics, this tool provides a fast and efficient way to handle common design tasks without needing complex software like Photoshop.</p>
 
-    <p>Once the background is removed, you can export your subject as a transparent PNG. This ensures that you can easily overlay your images onto any other design or background. The local-first architecture also means you don't have to wait for large file uploads or downloads, making it one of the fastest ways to clean up your image assets.</p>
-  `,
+<p>Unlike many online background removal services that upload your photos to a server for AI processing—often compromising your privacy and owning your data—KaruviLab's Background Remover operates entirely within your browser. By utilizing advanced color-matching and edge-detection algorithms locally, you can process sensitive personal or professional images with complete confidentiality. The tool is designed to work best with solid or high-contrast backgrounds.</p>
+
+<p>Once the background is removed, you can export your subject as a transparent PNG. This ensures that you can easily overlay your images onto any other design or background. The local-first architecture also means you don't have to wait for large file uploads or downloads, making it one of the fastest ways to clean up your image assets.</p>
+`,
   howTo: [
     "<strong>Upload Image:</strong> Select or drag a photo into the tool area.",
     "<strong>Click Subject:</strong> Click on the background color you want to remove.",
