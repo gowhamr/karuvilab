@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { ALL_TOOLS, CategoryEntry, getToolColor, TOOL_RELATIONSHIPS } from "@/src/tool-registry";
-import { TOOL_CONTENT, ToolContent } from "@/src/tool-content";
-import { Check, X, ArrowUpRight, ChevronRight } from "lucide-react";
-import { ToolIcon } from "@/components/ui/Icons";
-import { ErrorBoundary } from "./ErrorBoundary";
-import { StructuredData } from "@/src/lib/seo";
-import { FavoriteButton } from "./FavoriteButton";
-import { Breadcrumbs } from "./Breadcrumbs";
-import { ToolMoreMenu } from "./ToolMoreMenu";
-import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
-import { useSupportStore } from "@/src/store/useSupportStore";
-import { m } from "framer-motion";
-import { useMemo } from "react";
-import { parseAndSanitizeMarkdownSync } from "@/src/lib/security";
+import Link from 'next/link';
+import { ALL_TOOLS, CategoryEntry, getToolColor, TOOL_RELATIONSHIPS } from '@/src/tool-registry';
+import { TOOL_CONTENT, ToolContent } from '@/src/tool-content';
+import { Check, X, ArrowUpRight, ChevronRight, ShieldCheck } from 'lucide-react';
+import { ToolIcon } from '@/components/ui/Icons';
+import { ErrorBoundary } from './ErrorBoundary';
+import { StructuredData } from '@/src/lib/seo';
+import { FavoriteButton } from './FavoriteButton';
+import { Breadcrumbs } from './Breadcrumbs';
+import { ToolMoreMenu } from './ToolMoreMenu';
+import { TrustBadges } from '../system/TrustBadges';
+import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
+import { m } from 'framer-motion';
+import { useMemo } from 'react';
+import { parseAndSanitizeMarkdownSync } from '@/src/lib/security';
 
 interface ToolShellProps {
   title: string;
@@ -34,37 +34,12 @@ interface ToolShellProps {
   };
 }
 
-/**
- * Foundational layout wrapper for all KaruviLab tools.
- * Handles SEO metadata, breadcrumbs, favorite status, workflow integration, 
- * and provides a consistent structure for tool content and documentation.
- *
- * @param title - The primary heading and tool name.
- * @param description - Short summary of tool capability.
- * @param category - The parent category for routing and styling.
- * @param children - The interactive tool client component.
- * @param toolId - Optional explicit tool ID for registry lookups.
- * @param content - Optional detailed documentation and FAQ data.
- */
-export function ToolShell({ title, description, category, children, toolId, content }: ToolShellProps): React.JSX.Element {
-  const currentTool = ALL_TOOLS.find(t =>
-    t.id === toolId ||
-    t.name === title ||
-    t.id === title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-  );
-
-  const finalToolId = toolId || currentTool?.id || "";
+export function ToolShell({ title, description, category, children, toolId, content }: ToolShellProps) {
+  const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
+  const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
-
   const color = currentTool ? getToolColor(currentTool) : (category?.color || '#4F46E5');
-
   const reg: ToolContent = currentTool ? (TOOL_CONTENT[currentTool.id as keyof typeof TOOL_CONTENT] ?? {}) : {};
-
-  // Helper to trim leading indentation from multi-line strings
-  const trimIndent = (str?: string) => {
-    if (!str) return "";
-    return str.split('\n').map(line => line.trim()).join('\n').trim();
-  };
 
   const merged = {
     detailedDescription: content?.detailedDescription ?? reg.detailedDescription,
@@ -77,38 +52,25 @@ export function ToolShell({ title, description, category, children, toolId, cont
   };
 
   const parsedContent = useMemo(() => ({
-    detailedDescription: merged.detailedDescription ? parseAndSanitizeMarkdownSync(trimIndent(merged.detailedDescription)) : "",
-    howTo: (merged.howTo || []).map(step => parseAndSanitizeMarkdownSync(trimIndent(step))),
+    detailedDescription: merged.detailedDescription ? parseAndSanitizeMarkdownSync(merged.detailedDescription) : '',
+    howTo: (merged.howTo || []).map(step => parseAndSanitizeMarkdownSync(step)),
     faq: (merged.faq || []).map(item => ({
       question: item.question,
-      answer: parseAndSanitizeMarkdownSync(trimIndent(item.answer))
+      answer: parseAndSanitizeMarkdownSync(item.answer)
     }))
   }), [merged.detailedDescription, merged.howTo, merged.faq]);
 
-  const relatedIds = content?.relatedTools ?? 
-                     currentTool?.related ?? 
-                     (finalToolId ? (TOOL_RELATIONSHIPS as any)[finalToolId]?.related : []) ?? 
-                     [];
+  const relatedIds = content?.relatedTools ?? currentTool?.related ?? [];
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (
     <m.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 sm:px-6 lg:px-8" 
-      style={{ '--tool-color': color } as any}
+      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4"
     >
-      <StructuredData 
-        {...(currentTool ? { tool: currentTool } : {})}
-        {...(category ? { category } : {})}
-        content={{
-          ...(merged.detailedDescription && { detailedDescription: merged.detailedDescription }),
-          ...(merged.faq && { faq: merged.faq }),
-          ...(merged.howTo && { howTo: merged.howTo }),
-        }}
-      />
-
+      <StructuredData tool={currentTool} category={category} content={merged} />
+      
       <header className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <Breadcrumbs category={category} title={title} />
@@ -117,75 +79,62 @@ export function ToolShell({ title, description, category, children, toolId, cont
             <ToolMoreMenu toolId={finalToolId} toolName={title} />
           </div>
         </div>
-        
         <div className="space-y-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">{title}</h1>
-          {description && (
-            <p className="text-base sm:text-lg md:text-xl text-text-3 leading-relaxed max-w-3xl font-medium">
-              {description}
-            </p>
-          )}
+          <h1 className="text-3xl font-black">{title}</h1>
+          <TrustBadges className="pt-2" />
+          {description && <p className="text-text-3 text-lg leading-relaxed max-w-3xl">{description}</p>}
         </div>
       </header>
 
-      <section className="relative z-10">
+      <section>
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8 border-t border-border">
-        <div className="lg:col-span-2 space-y-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="lg:col-span-2 space-y-16">
           {parsedContent.detailedDescription && (
-            <m.section 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="space-y-4"
-            >
+            <section className="space-y-4">
               <h2 className="text-2xl font-bold">Deep Dive</h2>
               <div 
-                className="prose prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed text-sm md:text-base font-normal"
+                className="prose prose-slate dark:prose-invert max-w-none text-text-3"
                 dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
               />
-            </m.section>
+            </section>
           )}
 
           {merged.useCases && merged.useCases.length > 0 && (
-            <section className="space-y-5">
-              <h2 className="text-2xl font-bold">Who uses this?</h2>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold">Use Cases</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {merged.useCases.map((uc, i) => (
-                  <m.li 
-                    key={i} 
-                    whileHover={{ scale: 1.02, x: 5 }}
-                    className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4 transition-colors hover:border-blue/30"
-                  >
-                    <Check className="w-4 h-4 mt-0.5 flex-shrink-0 text-success" />
-                    <span className="text-text-2 text-sm leading-relaxed">{uc}</span>
-                  </m.li>
+                  <div key={i} className="flex items-start gap-3 p-4 bg-surface border border-border rounded-2xl">
+                    <Check className="w-5 h-5 text-success shrink-0" />
+                    <span className="text-text-2 text-sm">{uc}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </section>
           )}
 
           {merged.examples && merged.examples.length > 0 && (
-            <section className="space-y-5">
+            <section className="space-y-6">
               <h2 className="text-2xl font-bold">Examples</h2>
               <div className="space-y-4">
                 {merged.examples.map((ex, i) => (
-                  <div key={i} className="bg-surface border border-border rounded-xl overflow-hidden">
-                    <div className="px-4 py-2 border-b border-border bg-bg">
-                      <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">{ex.label}</span>
+                  <div key={i} className="bg-surface border border-border rounded-2xl overflow-hidden">
+                    <div className="px-4 py-2 border-b border-border bg-bg/50">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-text-4">{ex.label}</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-border">
-                      <div className="p-4 space-y-1">
-                        <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Input</p>
-                        <code className="text-sm font-mono text-text-2 break-all">{ex.input}</code>
+                      <div className="p-4 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Input</p>
+                        <code className="text-sm font-mono text-text-2 block break-all">{ex.input}</code>
                       </div>
-                      <div className="p-4 space-y-1">
-                        <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Output</p>
-                        <code className="text-sm font-mono break-all text-blue">{ex.output}</code>
+                      <div className="p-4 space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Output</p>
+                        <code className="text-sm font-mono text-blue block break-all">{ex.output}</code>
                       </div>
                     </div>
                   </div>
@@ -194,35 +143,15 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </section>
           )}
 
-          {merged.commonErrors && merged.commonErrors.length > 0 && (
-            <section className="space-y-5">
-              <h2 className="text-2xl font-bold">Common Errors & Fixes</h2>
-              <div className="space-y-3">
-                {merged.commonErrors.map((item, i) => (
-                  <div key={i} className="bg-surface border border-border rounded-xl overflow-hidden">
-                    <div className="flex items-start gap-3 p-4 border-b border-border">
-                      <X className="text-error w-4 h-4 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-text-2 font-medium">{item.error}</p>
-                    </div>
-                    <div className="flex items-start gap-3 p-4">
-                      <Check className="text-success w-4 h-4 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-text-3">{item.fix}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {merged.faq && merged.faq.length > 0 && (
+          {parsedContent.faq && parsedContent.faq.length > 0 && (
             <section className="space-y-6">
-              <h2 className="text-2xl font-bold">Expert FAQ</h2>
-              <div className="grid gap-4">
+              <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+              <div className="space-y-4">
                 {parsedContent.faq.map((item, i) => (
-                  <div key={i} className="bg-surface border border-border rounded-2xl p-6 space-y-3">
+                  <div key={i} className="p-6 bg-surface border border-border rounded-2xl space-y-3">
                     <h3 className="font-bold text-text">{item.question}</h3>
-                    <p 
-                      className="text-text-3 text-sm leading-relaxed"
+                    <div 
+                      className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
                       dangerouslySetInnerHTML={{ __html: item.answer }}
                     />
                   </div>
@@ -232,31 +161,51 @@ export function ToolShell({ title, description, category, children, toolId, cont
           )}
         </div>
 
-        <aside className="space-y-12">
-          {merged.howTo && merged.howTo.length > 0 && (
-            <section className="border border-border rounded-3xl p-8 space-y-8 h-fit sticky top-24 bg-surface shadow-sm">
-              <div className="space-y-2">
+        <aside className="space-y-8">
+          {parsedContent.howTo && parsedContent.howTo.length > 0 && (
+            <section className="bg-surface border border-border rounded-[32px] p-8 space-y-6 sticky top-24">
+              <div className="space-y-1">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Step-by-step</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">How it works</p>
               </div>
-              <ol className="space-y-6">
+              <ol className="space-y-4">
                 {parsedContent.howTo.map((step, i) => (
-                  <m.li 
-                  key={i} 
-                  whileHover={{ x: 5 }}
-                  className="flex gap-4 group cursor-default"
-                  >
-                  <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue text-white flex items-center justify-center text-[10px] font-bold group-hover:scale-110 transition-transform">
-                    {i + 1}
-                  </span>
-                  <p 
-                    className="text-text-2 text-sm font-medium leading-snug group-hover:text-text transition-colors"
-                    dangerouslySetInnerHTML={{ __html: step }}
-                  />
-                  </m.li>                ))}
+                  <li key={i} className="flex gap-4 group">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
+                      {i + 1}
+                    </span>
+                    <div 
+                      className="text-text-2 text-sm leading-snug pt-0.5"
+                      dangerouslySetInnerHTML={{ __html: step }}
+                    />
+                  </li>
+                ))}
               </ol>
             </section>
           )}
+
+          <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
+            <div className="flex items-center gap-3 text-success">
+              <ShieldCheck className="w-5 h-5" />
+              <h3 className="font-bold text-sm">Privacy First</h3>
+            </div>
+            <p className="text-xs text-text-3 leading-relaxed">
+              All processing happens locally in your browser. Your files and data are never uploaded to our servers.
+            </p>
+          </div>
+
+          <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
+            <h3 className="font-bold text-sm text-text">Need Help?</h3>
+            <p className="text-xs text-text-3 leading-relaxed">
+              Check our documentation or contact support for assistance with this tool.
+            </p>
+            <Link 
+              href="/help"
+              className="inline-flex items-center gap-2 text-xs font-bold text-blue hover:underline"
+            >
+              Visit Help Center <ArrowUpRight className="w-3 h-3" />
+            </Link>
+          </div>
         </aside>
       </div>
 
@@ -264,33 +213,29 @@ export function ToolShell({ title, description, category, children, toolId, cont
         <section className="pt-12 border-t border-border space-y-8">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold">Related Tools</h2>
-            <Link href="/" className="text-xs font-bold uppercase tracking-widest text-blue hover:underline">View all →</Link>
+            <Link href="/all-tools" className="text-xs font-bold uppercase tracking-widest text-blue hover:underline">
+              Browse all <ChevronRight className="inline w-3 h-3" />
+            </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {related.map(tool => (
-              <m.div
+              <Link
                 key={tool.id}
-                whileHover={{ y: -4, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                href={`/${tool.href}`}
+                className="flex items-center gap-4 p-4 bg-surface border border-border rounded-2xl hover:border-blue/50 transition-colors group"
               >
-                <Link
-                  href={`/${tool.href}`}
-                  className="group flex items-center gap-3 p-4 min-h-[64px] bg-surface border border-border rounded-2xl transition-all hover:border-blue/30 hover:shadow-lg dark:hover:shadow-blue/5"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-bg flex items-center justify-center text-lg flex-shrink-0 group-hover:bg-blue/5 transition-colors">
-                    <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-bold text-text transition-colors text-sm truncate group-hover:text-blue">{tool.name}</div>
-                    <div className="text-xs text-text-4 font-medium line-clamp-1">{tool.desc}</div>
-                  </div>
-                </Link>
-              </m.div>
+                <div className="w-10 h-10 rounded-xl bg-bg flex items-center justify-center shrink-0">
+                  <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-sm truncate group-hover:text-blue transition-colors">{tool.name}</h3>
+                  <p className="text-xs text-text-4 truncate">{tool.desc}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>
       )}
-
     </m.div>
   );
 }
