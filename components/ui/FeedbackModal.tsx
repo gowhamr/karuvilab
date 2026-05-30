@@ -147,9 +147,10 @@ export function FeedbackModal() {
 
                   {/* Issue Type */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Type of Feedback</label>
+                    <label htmlFor="issue-type" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Type of Feedback</label>
                     <div className="relative">
                       <select 
+                        id="issue-type"
                         value={type}
                         onChange={(e) => setType(e.target.value as FeedbackType)}
                         className="w-full h-[56px] px-5 pr-12 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm appearance-none"
@@ -164,8 +165,9 @@ export function FeedbackModal() {
 
                   {/* Email Address */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Email Address</label>
+                    <label htmlFor="feedback-email" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Email Address</label>
                     <input 
+                      id="feedback-email"
                       type="email"
                       required
                       value={fromEmail}
@@ -177,8 +179,9 @@ export function FeedbackModal() {
 
                   {/* Description */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
+                    <label htmlFor="feedback-description" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
                     <textarea 
+                      id="feedback-description"
                       required
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}

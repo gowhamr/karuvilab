@@ -24,9 +24,9 @@
   --color-blue-light: var(--blue-light);
   --color-blue-glow: var(--blue-glow);
   
-  --color-success: #10B981;
-  --color-error: #EF4444;
-  --color-warn: #F59E0B;
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warn: var(--warn);
   
   --color-bg: var(--bg);
   --color-bg-input: var(--bg-input);
@@ -159,9 +159,12 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
 }
 
 [data-theme="dark"] {
+  --success:      #34D399;
+  --error:        #F87171;
+  --warn:         #FBBF24;
   color-scheme: dark;
-  --blue:        #4F46E5;
-  --blue-dark:   #4338CA;
+  --blue:        #818CF8;
+  --blue-dark:   #6366F1;
   --blue-light:  rgba(79, 70, 229, 0.1);
   --blue-glow:   rgba(79, 70, 229, 0.12);
   

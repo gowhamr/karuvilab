@@ -57,7 +57,7 @@ export default function PercentageCalculatorClient() {
     <div className="space-y-6">
       {/* Mode 1 */}
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="font-bold text-text-2">Mode 1 — What is X% of Y?</h2>
+        <h2 className="text-lg font-black uppercase tracking-widest text-text">Mode 1 — What is X% of Y?</h2>
         <div className="flex items-center gap-3 flex-wrap">
           <span className="text-text-3 text-sm font-medium">What is</span>
           <input
@@ -66,6 +66,7 @@ export default function PercentageCalculatorClient() {
             onChange={(e) => setM1x(e.target.value)}
             className="w-24 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="X"
+            aria-label="Percentage X"
           />
           <span className="text-text-3 text-sm font-medium">% of</span>
           <input
@@ -74,6 +75,7 @@ export default function PercentageCalculatorClient() {
             onChange={(e) => setM1y(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="Y"
+            aria-label="Value Y"
           />
           <span className="text-text-3 text-sm font-medium">?</span>
         </div>
@@ -85,7 +87,7 @@ export default function PercentageCalculatorClient() {
 
       {/* Mode 2 */}
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="font-bold text-text-2">Mode 2 — X is what % of Y?</h2>
+        <h2 className="text-lg font-black uppercase tracking-widest text-text">Mode 2 — X is what % of Y?</h2>
         <div className="flex items-center gap-3 flex-wrap">
           <input
             type="number"
@@ -93,6 +95,7 @@ export default function PercentageCalculatorClient() {
             onChange={(e) => setM2x(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="X"
+            aria-label="Value X"
           />
           <span className="text-text-3 text-sm font-medium">is what % of</span>
           <input
@@ -101,6 +104,7 @@ export default function PercentageCalculatorClient() {
             onChange={(e) => setM2y(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="Y"
+            aria-label="Value Y"
           />
           <span className="text-text-3 text-sm font-medium">?</span>
         </div>
@@ -117,7 +121,7 @@ export default function PercentageCalculatorClient() {
 
       {/* Mode 3 */}
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="font-bold text-text-2">Mode 3 — Percentage Change</h2>
+        <h2 className="text-lg font-black uppercase tracking-widest text-text">Mode 3 — Percentage Change</h2>
         <div className="flex items-center gap-3 flex-wrap">
           <span className="text-text-3 text-sm font-medium">From</span>
           <input
@@ -126,6 +130,7 @@ export default function PercentageCalculatorClient() {
             onChange={(e) => setM3x(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="From"
+            aria-label="Original value"
           />
           <span className="text-text-3 text-sm font-medium">to</span>
           <input
@@ -134,6 +139,7 @@ export default function PercentageCalculatorClient() {
             onChange={(e) => setM3y(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="To"
+            aria-label="New value"
           />
         </div>
         {r3 !== null && (

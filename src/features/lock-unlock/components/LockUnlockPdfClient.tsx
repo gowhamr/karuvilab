@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
@@ -10,6 +10,9 @@ import { DropZone } from "@/components/ui/DropZone";
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 export default function LockUnlockPdfClient() {
+  const userId = useId();
+  const ownerId = useId();
+  const unlockId = useId();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [mode, setMode] = useState<"lock" | "unlock">("lock");
@@ -100,19 +103,19 @@ export default function LockUnlockPdfClient() {
         {mode === "lock" ? (
           <>
             <div className="space-y-1">
-              <label className="text-sm font-medium">User Password (required to open the PDF)</label>
-              <input type="password" className={inputClass} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" />
+              <label htmlFor={userId} className="text-sm font-medium">User Password (required to open the PDF)</label>
+              <input id={userId} type="password" className={inputClass} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium">Owner Password (optional — for permissions)</label>
-              <input type="password" className={inputClass} value={ownerPassword} onChange={e => setOwnerPassword(e.target.value)} placeholder="Leave blank to use user password" />
+              <label htmlFor={ownerId} className="text-sm font-medium">Owner Password (optional — for permissions)</label>
+              <input id={ownerId} type="password" className={inputClass} value={ownerPassword} onChange={e => setOwnerPassword(e.target.value)} placeholder="Leave blank to use user password" />
             </div>
             <p className="text-xs text-text-4">The owner password controls editing/printing permissions. If left blank, the user password is used for both.</p>
           </>
         ) : (
           <div className="space-y-1">
-            <label className="text-sm font-medium">PDF Password</label>
-            <input type="password" className={inputClass} value={unlockPassword} onChange={e => setUnlockPassword(e.target.value)} placeholder="Enter the PDF password" />
+            <label htmlFor={unlockId} className="text-sm font-medium">PDF Password</label>
+            <input id={unlockId} type="password" className={inputClass} value={unlockPassword} onChange={e => setUnlockPassword(e.target.value)} placeholder="Enter the PDF password" />
             <p className="text-xs text-text-4">Enter the password to decrypt and save the PDF without protection.</p>
           </div>
         )}

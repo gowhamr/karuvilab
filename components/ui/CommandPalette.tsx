@@ -108,6 +108,7 @@ export function CommandPalette() {
                   }}
                   className="fixed left-1/2 top-[15%] z-[201] w-full max-w-xl bg-surface border border-border shadow-2xl rounded-2xl overflow-hidden outline-none"
                 >
+          <Dialog.Title className="sr-only">Command Palette</Dialog.Title>
           <div className="flex items-center px-6 border-b border-border bg-bg/50">
             <Search className="w-5 h-5 text-text-4" aria-hidden="true" />
             <input
@@ -116,7 +117,9 @@ export function CommandPalette() {
               type="text"
               placeholder="Jump to a tool..."
               role="combobox"
+              aria-label="Search tools"
               aria-autocomplete="list"
+...
               aria-expanded={isPaletteOpen}
               aria-haspopup="listbox"
               aria-controls={listboxId}

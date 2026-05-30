@@ -1,75 +1,85 @@
 "use client";
 
-import { cn } from "@/src/lib/utils";
 import { m } from "framer-motion";
-import Image from "next/image";
+import { cn } from "@/src/lib/utils";
 
 interface KVLogoProps {
-  className?: string;
+  size?: "sm" | "md" | "lg" | "xl";
   withText?: boolean;
-  textClassName?: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
-  variant?: "full" | "monochrome";
+  className?: string;
+  variant?: "full" | "minimal";
   loading?: "eager" | "lazy";
 }
 
-const sizes = {
-  xs: "w-6 h-6",
-  sm: "w-8 h-8",
-  md: "w-9 h-9",
-  lg: "w-11 h-11",
-  xl: "w-14 h-14",
-};
-
-// Use base path if deployed to GitHub Pages
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-const logoPath = `${basePath}/logo.png`;
-
-export function KVLogo({
+export function KVLogo({ 
+  size = "md", 
+  withText = true, 
   className,
-  withText,
-  textClassName,
-  size = "md",
   variant = "full",
   loading = "eager"
 }: KVLogoProps) {
   return (
-    <div className={cn("flex items-center gap-3 group", className)} >
+    <div 
+      className={cn("flex items-center gap-3 group", className)} 
+      aria-label={!withText ? "KaruviLab Home" : undefined}
+      role={!withText ? "img" : undefined}
+    >
       <m.div
         whileHover={{
           scale: 1.05,
-          rotate: [0, -5, 5, 0],
-          transition: { duration: 0.5, ease: "easeInOut" }
+          rotate: 5,
         }}
-        whileTap={{ scale: 0.95 }}
         className={cn(
-          "rounded-xl flex items-center justify-center transition-all duration-500 ease-expo overflow-hidden",
-          sizes[size],
-          variant === "full"
-            ? "bg-white/5 backdrop-blur-sm shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] border border-white/10 group-hover:border-blue/30 group-hover:shadow-blue/10"
-            : "bg-transparent"
+          "relative flex items-center justify-center rounded-xl transition-all duration-500",
+          size === "sm" ? "w-8 h-8" : 
+          size === "md" ? "w-10 h-10" : 
+          size === "lg" ? "w-14 h-14" : "w-20 h-20",
+          "bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 shadow-lg shadow-indigo-500/20"
         )}
       >
-        <Image
-          src={logoPath}
-          alt="" 
-          width={100}
-          height={100}
-          className="w-full h-full object-contain scale-90"
-          priority={loading === "eager"}
-          loading={loading === "lazy" ? "lazy" : undefined}
+        <div className="absolute inset-0 bg-white/10 rounded-xl" />
+        <span className={cn(
+          "font-black text-white font-dm-serif",
+          size === "sm" ? "text-lg" : 
+          size === "md" ? "text-xl" : 
+          size === "lg" ? "text-3xl" : "text-5xl"
+        )}>
+          K
+        </span>
+        
+        {/* Animated Glow Effect */}
+        <m.div 
+          animate={{
+            opacity: [0.1, 0.3, 0.1],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 3,
+            ease: "easeInOut"
+          }}
+          className="absolute inset-0 bg-indigo-400 blur-xl rounded-full -z-10"
         />
       </m.div>
+
       {withText && (
-        <div className="flex flex-col">
-          <m.span 
-            whileHover={{ x: 2 }}
-            className={cn("brand-wordmark tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-br from-text via-text to-text/70 font-black transition-colors group-hover:from-blue group-hover:to-blue/70", 
-            size === "sm" ? "text-lg" : "text-xl",
-            textClassName
+        <div className="flex flex-col -space-y-1">
+          <span className={cn(
+            "font-dm-serif font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-text via-text to-text-3",
+            size === "sm" ? "text-lg" : 
+            size === "md" ? "text-2xl" : 
+            size === "lg" ? "text-4xl" : "text-6xl"
           )}>
             KaruviLab
-          </m.span>
+          </span>
+          <span className={cn(
+            "font-black uppercase tracking-[0.4em] text-blue leading-none",
+            size === "sm" ? "text-[6px]" : 
+            size === "md" ? "text-[8px]" : 
+            size === "lg" ? "text-[11px]" : "text-[14px]"
+          )}>
+            Elite Tools
+          </span>
         </div>
       )}
     </div>

@@ -91,7 +91,7 @@ export default function RootLayout({
             <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">
               <Header />
               
-              <main className="flex-1 pb-20 md:pb-0">
+              <main id="main-content" className="flex-1 pb-20 md:pb-0 outline-none" tabIndex={-1}>
                 {children}
               </main>
 

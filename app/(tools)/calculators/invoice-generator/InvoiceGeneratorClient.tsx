@@ -345,13 +345,14 @@ export default function InvoiceGeneratorClient() {
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Visual Style</label>
-                    <div className="flex flex-wrap gap-2">
+                    <span id="label-visual-style" className="text-[10px] font-black uppercase tracking-widest text-text-4">Visual Style</span>
+                    <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="label-visual-style">
                       {(["classic", "modern", "professional", "minimal"] as TemplateType[]).map(t => (
                         <button
                           key={t}
                           onClick={() => setTemplate(t)}
-                          aria-pressed={template === t}
+                          role="radio"
+                          aria-checked={template === t}
                           className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
                         >
                           {t}
@@ -360,8 +361,9 @@ export default function InvoiceGeneratorClient() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Currency Symbol</label>
+                    <label htmlFor="currency-symbol" className="text-[10px] font-black uppercase tracking-widest text-text-4">Currency Symbol</label>
                     <input 
+                      id="currency-symbol"
                       value={currency} 
                       onChange={(e) => setCurrency(e.target.value)} 
                       className="w-full px-4 py-2 bg-bg border border-border rounded-xl text-sm font-bold focus:border-blue outline-none"
@@ -452,11 +454,12 @@ export default function InvoiceGeneratorClient() {
             </div>
             
             <div className="space-y-4">
-              {items.map((item) => (
+              {items.map((item, i) => (
                 <div key={item.id} className="grid grid-cols-12 gap-3 items-start p-4 bg-bg border border-border rounded-2xl group transition-all hover:border-blue/30">
                   <div className="col-span-6 space-y-1">
-                    <label className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Description</label>
+                    <label htmlFor={`desc-${item.id}`} className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Description</label>
                     <input 
+                      id={`desc-${item.id}`}
                       placeholder="e.g. Design Consulting" 
                       value={item.desc} 
                       onChange={(e) => updateItem(item.id, 'desc', e.target.value)} 
@@ -464,8 +467,9 @@ export default function InvoiceGeneratorClient() {
                     />
                   </div>
                   <div className="col-span-2 space-y-1">
-                    <label className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Qty</label>
+                    <label htmlFor={`qty-${item.id}`} className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Qty</label>
                     <input 
+                      id={`qty-${item.id}`}
                       type="number" 
                       value={item.qty} 
                       onChange={(e) => updateItem(item.id, 'qty', parseFloat(e.target.value) || 0)} 
@@ -473,22 +477,24 @@ export default function InvoiceGeneratorClient() {
                     />
                   </div>
                   <div className="col-span-3 space-y-1">
-                    <label className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Price</label>
+                    <label htmlFor={`price-${item.id}`} className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Price</label>
                     <div className="flex items-center gap-1">
-                      <span className="text-xs font-bold opacity-40">{currency}</span>
+                      <span className="text-xs font-bold opacity-40" aria-hidden="true">{currency}</span>
                       <input 
+                        id={`price-${item.id}`}
                         type="number" 
                         value={item.price} 
                         onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)} 
                         className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm font-black tabular-nums"
+                        aria-label={`Price in ${currency}`}
                       />
                     </div>
                   </div>
                   <div className="col-span-1 pt-4 text-right">
                     <button 
                       onClick={() => removeItem(item.id)} 
-                      aria-label="Delete Item"
-                      className="text-text-4 hover:text-error transition-colors opacity-0 group-hover:opacity-100"
+                      aria-label={`Delete Item ${item.desc || i + 1}`}
+                      className="text-text-4 hover:text-error transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 outline-none"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -506,23 +512,24 @@ export default function InvoiceGeneratorClient() {
              
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Invoice #</label>
-                  <input value={meta.number} onChange={(e) => setMeta({...meta, number: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
+                  <label htmlFor="inv-number" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Invoice #</label>
+                  <input id="inv-number" value={meta.number} onChange={(e) => setMeta({...meta, number: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Issue Date</label>
-                  <input type="date" value={meta.date} onChange={(e) => setMeta({...meta, date: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
+                  <label htmlFor="issue-date" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Issue Date</label>
+                  <input id="issue-date" type="date" value={meta.date} onChange={(e) => setMeta({...meta, date: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
                 </div>
              </div>
 
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Due Date</label>
-                  <input type="date" value={meta.dueDate} onChange={(e) => setMeta({...meta, dueDate: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
+                  <label htmlFor="due-date" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Due Date</label>
+                  <input id="due-date" type="date" value={meta.dueDate} onChange={(e) => setMeta({...meta, dueDate: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Payment Status</label>
+                  <label htmlFor="payment-status" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Payment Status</label>
                   <select 
+                    id="payment-status"
                     value={meta.status} 
                     onChange={(e) => setMeta({...meta, status: e.target.value as PaymentStatus})} 
                     className={`w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold outline-none focus:border-blue appearance-none ${meta.status === 'paid' ? 'text-success' : 'text-error'}`}
@@ -544,16 +551,16 @@ export default function InvoiceGeneratorClient() {
                    
                    <div className="flex justify-between items-center text-xs font-bold">
                      <span className="text-text-3 uppercase tracking-tighter flex items-center gap-2">
-                       Discount % 
-                       <input type="number" value={discount} onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)} className="w-12 bg-surface border border-border rounded-lg px-2 py-0.5" />
+                       <label htmlFor="discount-input">Discount %</label>
+                       <input id="discount-input" type="number" value={discount} onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)} className="w-12 bg-surface border border-border rounded-lg px-2 py-0.5" />
                      </span>
                      <span className="text-error">-{currency}{totals.discountAmt.toLocaleString()}</span>
                    </div>
 
                    <div className="flex justify-between items-center text-xs font-bold">
                      <span className="text-text-3 uppercase tracking-tighter flex items-center gap-2">
-                       GST % 
-                       <input type="number" value={taxRate} onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)} className="w-12 bg-surface border border-border rounded-lg px-2 py-0.5" />
+                       <label htmlFor="tax-rate-input">GST %</label>
+                       <input id="tax-rate-input" type="number" value={taxRate} onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)} className="w-12 bg-surface border border-border rounded-lg px-2 py-0.5" />
                      </span>
                      <span className="font-black">+{currency}{totals.tax.toLocaleString()}</span>
                    </div>
@@ -569,12 +576,12 @@ export default function InvoiceGeneratorClient() {
 
              <div className="space-y-4">
                 <div className="space-y-1">
-                   <label className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Notes</label>
-                   <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-medium focus:border-blue outline-none resize-none" rows={3} />
+                   <label htmlFor="notes-input" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Notes</label>
+                   <textarea id="notes-input" value={notes} onChange={(e) => setNotes(e.target.value)} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-medium focus:border-blue outline-none resize-none" rows={3} />
                 </div>
                 <div className="space-y-1">
-                   <label className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Terms & Conditions</label>
-                   <textarea value={terms} onChange={(e) => setTerms(e.target.value)} placeholder="e.g. Bank Account details..." className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-medium focus:border-blue outline-none resize-none" rows={2} />
+                   <label htmlFor="terms-input" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Terms & Conditions</label>
+                   <textarea id="terms-input" value={terms} onChange={(e) => setTerms(e.target.value)} placeholder="e.g. Bank Account details..." className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-medium focus:border-blue outline-none resize-none" rows={2} />
                 </div>
              </div>
 
