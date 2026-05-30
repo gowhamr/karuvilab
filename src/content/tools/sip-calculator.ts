@@ -2,59 +2,29 @@ import { ToolContent } from '../../registry/types';
 
 export const sipCalculator: ToolContent = {
   detailedDescription: `
-    <p>A Systematic Investment Plan (SIP) is one of the most effective ways to build long-term wealth through the power of compounding. The KaruviLab SIP Calculator is a financial planning tool designed to help you project the future value of your monthly investments. By understanding how small, consistent contributions can grow over decades, you can better plan for your financial goals, whether it is for retirement, a child's education, or purchasing a home.</p>
+    <p>The SIP (Systematic Investment Plan) Calculator is a powerful wealth-planning tool designed to help you estimate the future value of your mutual fund investments. SIPs are one of the most effective ways to build a large corpus over time by investing small, regular amounts. This calculator provides the clarity you need to set realistic financial goals and understand the impact of long-term compounding.</p>
     
-    <p>Compounding is often called the 'eighth wonder of the world,' and this calculator helps you visualize that process. Our tool allows you to simulate not just simple monthly investments, but also 'Step-Up' SIPs, where you increase your monthly contributions annually as your income grows. This feature provides a more realistic financial forecast, as most investors find they can save more as their career progresses.</p>
+    <p>By inputting your monthly investment amount, expected annual return rate, and the duration of your investment, you can instantly see how much your wealth could grow. The tool also visualizes the total amount invested versus the estimated capital gains, giving you a clear picture of how much 'extra' money you are earning through disciplined investing and market growth.</p>
 
-    <p>Privacy is paramount. Like all our financial tools, the SIP Calculator runs entirely on your local machine. Your investment goals, return expectations, and resulting corpus estimates are never transmitted. This allows you to explore different 'what-if' scenarios with complete financial confidentiality, ensuring your investment strategy remains your private affair.</p>
+    <p>One of the core benefits of using KaruviLab's SIP Calculator is privacy. Planning your financial future is a private matter. Because our tool runs entirely in your browser, your investment amounts, goals, and return expectations are never uploaded or shared. It is a secure environment for sensitive financial simulations, available whenever you need it, even without an internet connection.</p>
   `,
   howTo: [
     "<strong>Monthly Investment:</strong> Enter the amount you plan to invest every month.",
-    "<strong>Expected Return:</strong> Input the estimated annual return rate. While market returns fluctuate, many long-term equity investors use a 10–12% average for planning.",
-    "<strong>Duration:</strong> Set the total number of years you plan to continue your investment.",
-    "<strong>Step-Up SIP (Optional):</strong> If you plan to increase your investment amount each year, toggle the 'Step-up' option and input the percentage increase.",
-    "<strong>Review:</strong> Click 'Calculate' to view your total investment, the estimated wealth gain, and the final projected corpus.",
+    "<strong>Return Rate:</strong> Input the expected annual rate of return (e.g., 12 for 12%).",
+    "<strong>Investment Period:</strong> Set the number of years you intend to stay invested.",
+    "<strong>Calculate:</strong> Click 'Calculate' to see the projected maturity value and total gains.",
+    "<strong>Adjust Goals:</strong> Modify the values to see how increasing your SIP or tenure impacts the final corpus.",
   ],
   faq: [
-    {
-      question: "Are these returns guaranteed?",
-      answer: "No. All return projections are estimates based on your input. Mutual funds are subject to market risks, and actual performance may vary significantly over the years.",
-    },
-    {
-      question: "What is a 'Step-up' SIP?",
-      answer: "A Step-up SIP allows you to increase your monthly contribution by a percentage each year. This is a highly recommended strategy to beat inflation and accelerate wealth accumulation as your salary grows.",
-    },
-    {
-      question: "Should I account for inflation?",
-      answer: "While this tool shows the nominal future value, remember that inflation reduces purchasing power. You may want to lower the 'expected return' rate to simulate real-world value adjusted for inflation.",
-    },
-    {
-      question: "Is this tool secure?",
-      answer: "Yes. All computations are performed locally in your browser. No financial data is ever shared or stored on a server.",
-    },
-  ],
-  useCases: [
-    "Planning for long-term retirement goals with modest monthly savings.",
-    "Simulating how a 10% annual salary increase impacts long-term investment growth (Step-up SIP).",
-    "Comparing the impact of different return expectations on your final wealth corpus.",
-    "Teaching the fundamentals of compounding to family and friends.",
+    { question: "What is an SIP?", answer: "SIP is a method of investing a fixed amount regularly in mutual funds, benefiting from Rupee Cost Averaging." },
+    { question: "Are these returns guaranteed?", answer: "No, mutual fund investments are subject to market risks. This calculator provides estimates based on your input rate." },
+    { question: "Does it account for inflation?", answer: "This is a basic growth calculator. To account for inflation, you may want to use a higher return rate or adjust your final expectations." },
+    { question: "Can I use it for one-time investments?", answer: "For one-time investments, we recommend using our Lumpsum Calculator instead." },
+    { question: "Is my financial data private?", answer: "Absolutely. All calculations happen locally on your device; KaruviLab never sees your data." }
   ],
   examples: [
-    {
-      input: "5,000 INR/month | 12% Return | 20 Years",
-      output: "Total Invested: 1,200,000 | Estimated Gain: 3,795,000 | Final Corpus: 4,995,000",
-      description: "Shows how small, consistent investments turn into a substantial corpus over two decades."
-    }
-  ],
-  commonErrors: [
-    {
-      error: "Results seem too high",
-      fix: "Double-check the interest rate. Rates above 15% are rarely sustainable over long periods. 10–12% is a more standard, conservative projection.",
-    },
-    {
-      error: "Step-up SIP impact is unclear",
-      fix: "The Step-up effect compounds significantly over time. Try a small step-up percentage, like 5% or 10%, to see how much it accelerates your final goal.",
-    },
-  ],
-  alternatives: ["Groww SIP Calculator", "ET Money SIP Calculator", "Zerodha Varsity"],
+    { label: "Wealth Builder", input: "Monthly: 5000, Rate: 12%, Tenure: 20 yrs", output: "Invested: 12L, Gains: 37.9L, Total: 49.9L", description: "Demonstrating the massive power of compounding over two decades." },
+    { label: "Short Term Goal", input: "Monthly: 10000, Rate: 10%, Tenure: 5 yrs", output: "Invested: 6L, Gains: 1.7L, Total: 7.7L", description: "Planning for a down payment or major purchase in 5 years." },
+    { label: "Retirement Plan", input: "Monthly: 20000, Rate: 15%, Tenure: 25 yrs", output: "Invested: 60L, Gains: 5.9Cr, Total: 6.5Cr", description: "High-growth scenario showing significant wealth creation over a long career." }
+  ]
 };

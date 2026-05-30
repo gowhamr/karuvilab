@@ -2,84 +2,29 @@ import { ToolContent } from '../../registry/types';
 
 export const currencyConverter: ToolContent = {
   detailedDescription: `
-    <p>The Currency Converter is a vital tool for international travelers, global business professionals, and savvy online shoppers. Whether you are planning a trip abroad, managing international investments, or comparing prices across global e-commerce platforms, this tool provides instant and accurate conversion results using real-time market data.</p>
+    <p>The Currency Converter is a real-time financial utility that allows you to calculate exchange values between global currencies instantly. Whether you are a traveler planning a budget, an e-commerce business owner seting international prices, or a freelancer receiving payments from overseas, this tool provides the accurate data you need for informed decision-making.</p>
     
-    <p>Our converter supports over 150+ world currencies, ranging from major global currencies like USD, EUR, and GBP to localized currencies like INR, AED, and JPY. Because KaruviLab is a browser-first platform, our converter is incredibly fast—providing near-instant results the moment you input your values.</p>
+    <p>Our converter supports a vast array of global currencies, including major ones like USD, EUR, GBP, and JPY, as well as dozens of others. We prioritize data freshness while maintaining KaruviLab's local-first philosophy. Once the latest rates are fetched, all calculations happen instantly on your device. This means you can keep the tool open and perform multiple conversions without constantly refreshing or using extra bandwidth.</p>
 
-    <div class="my-6 space-y-4">
-      <p class="font-bold text-text">How it works (Implementation Example):</p>
-      <pre class="bg-bg border border-border p-4 rounded-xl overflow-x-auto text-[13px]">
-<code class="text-blue">
-// Basic currency conversion logic in JavaScript
-function convertCurrency(amount, fromRate, toRate) {
-  // 1. Convert source amount to base (usually USD)
-  const amountInBase = amount / fromRate;
-  
-  // 2. Convert base amount to target currency
-  const result = amountInBase * toRate;
-  
-  return result.toFixed(2);
-}
-
-// Example: 100 USD to INR (assuming 1 USD = 83.00 INR)
-console.log(convertCurrency(100, 1.0, 83.00)); // "8300.00"
-</code>
-      </pre>
-    </div>
-
-    <p>We prioritize privacy and efficiency. Unlike many banking apps that track your financial activities, this tool is purely functional. It fetches the latest mid-market exchange rates and performs all conversion math locally within your browser. You can use it as a quick reference guide whenever you need to understand the relative value of one currency against another, ensuring you stay empowered in the global marketplace.</p>
+    <p>Privacy is also handled with care. While the tool requires a brief connection to fetch current exchange rates, your specific conversion amounts and currency pairings remain private on your machine. You can even use the tool offline if you have previously cached the rates, making it an essential companion for international travel.</p>
   `,
   howTo: [
-    "<strong>Choose Currencies:</strong> Select your 'From' (source) and 'To' (target) currencies using the intuitive dropdown menus.",
-    "<strong>Input Amount:</strong> Enter the numerical amount you wish to convert.",
-    "<strong>Instantly Convert:</strong> The platform will display the converted value based on the latest mid-market exchange rate immediately.",
-    "<strong>Swap Quickly:</strong> Use the convenient swap icon to toggle between your chosen source and target currencies with a single click.",
+    "<strong>Select Base:</strong> Choose the currency you currently have from the first dropdown menu.",
+    "<strong>Select Target:</strong> Choose the currency you want to convert into from the second dropdown.",
+    "<strong>Enter Amount:</strong> Type the value you wish to convert into the input field.",
+    "<strong>View Result:</strong> See the converted value instantly based on the latest exchange rates.",
+    "<strong>Swap:</strong> Use the 'Swap' button to quickly reverse the conversion direction.",
   ],
   faq: [
-    {
-      question: "How current are the exchange rates?",
-      answer: "Rates are fetched from a trusted, live financial API and are updated periodically throughout the day. However, market rates are highly volatile.",
-    },
-    {
-      question: "Can I use this for real banking transactions?",
-      answer: "No. This tool is for informational and planning purposes only. Financial institutions often include hidden margins and fees in their rates that are not reflected in mid-market figures.",
-    },
-    {
-      question: "Does it work if I am offline?",
-      answer: "If you have an internet connection, the tool will fetch the latest rates. If you are offline, it will use the last cached rates available in your browser memory for your convenience.",
-    },
-    {
-      question: "Why do bank rates differ from these results?",
-      answer: "Banks and money transfer services typically charge a spread (a markup) on the mid-market rate. Always check your bank's specific exchange rate page for the exact cost of a transaction.",
-    },
-  ],
-  useCases: [
-    "Planning travel budgets by converting local currency to your home currency.",
-    "Comparing the cost of international goods on global e-commerce websites.",
-    "Quickly checking currency values for international freelance invoice preparation.",
-    "Calculating real-time value of international investments or savings.",
+    { question: "How often are rates updated?", answer: "Our rates are typically refreshed once every 24 hours to ensure a balance between accuracy and performance." },
+    { question: "Does it work for crypto?", answer: "Currently, we focus on fiat (government-backed) currencies, but crypto support may be added in the future." },
+    { question: "Can I use it offline?", answer: "Yes, if you have recently visited the tool, it will use the last known cached rates when you are offline." },
+    { question: "Is there a limit on amounts?", answer: "No, you can convert any numerical amount, from cents to billions." },
+    { question: "Is it free?", answer: "Yes, the currency converter is 100% free with no hidden fees or markups." }
   ],
   examples: [
-    {
-      input: "1,000 USD to INR",
-      output: "Approximately 83,000 INR (varies by market)",
-      description: "A common conversion for travelers or those tracking international remittances."
-    },
-    {
-      input: "500 EUR to GBP",
-      output: "Approximately 425 GBP",
-      description: "Quick calculation for intra-European or UK-based travel planning."
-    }
-  ],
-  commonErrors: [
-    {
-      error: "The rate is slightly different from what I see on Google",
-      fix: "Exchange rates are constantly fluctuating. Even a one-minute difference in data fetch times can cause minor variations between different providers.",
-    },
-    {
-      error: "Specific exotic currency not found",
-      fix: "While we support over 150 currencies, very rare or local-only currencies might not be included in our primary feed. Check the search box in the dropdown for the specific currency code.",
-    },
-  ],
-  alternatives: ["XE.com", "Google Currency Converter", "OANDA Converter"],
+    { label: "Travel Budget", input: "100 USD to EUR", output: "~92.50 EUR", description: "Quickly estimating local currency for an upcoming trip." },
+    { label: "Freelance Pay", input: "50000 JPY to USD", output: "~335 USD", description: "Converting international project payments into your local currency." },
+    { label: "Shopping", input: "10 GBP to INR", output: "~1050 INR", description: "Verifying the cost of an international online purchase." }
+  ]
 };

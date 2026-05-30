@@ -1,21 +1,70 @@
 import { ToolContent } from '../../registry/types';
 
 export const rotatePdfContent: ToolContent = {
-  detailedDescription: "The Rotate PDF tool is a secure, browser-native utility designed to help you with your daily tasks. Built with privacy as a core principle, all operations happen locally on your device, ensuring your data never leaves your browser.",
+  detailedDescription: "<p>The <strong>Rotate PDF</strong> tool is a highly efficient utility designed to instantly correct the orientation of your PDF pages directly within your browser. Strictly adhering to KaruviLab's <strong>Zero-Server-Upload</strong> and <strong>Privacy-First</strong> standards, this tool guarantees that your personal documents, scanned receipts, and professional files are never transmitted to external servers. The entire rotation process happens securely on your local device.</p><p>Powered by our advanced <strong>Local-First Execution</strong> architecture, the tool allows you to manipulate document orientations instantly. Whether you need to rotate a single upside-down page or fix an entire landscape document that was scanned improperly, the local processing engine handles it in milliseconds. This eliminates the sluggish upload times and security risks associated with cloud-based PDF editors.</p><p>Furthermore, the Rotate PDF tool is built with complete <strong>Offline Resilience</strong>. Once the application is fully loaded in your browser, you can safely sever your internet connection and continue adjusting your documents. This offline capability provides peace of mind for professionals handling sensitive data while traveling or working in environments with unreliable network access.</p>",
   howTo: [
-    "Upload or enter the required data for Rotate PDF.",
-    "Configure any available settings or options.",
-    "Click the action button to process your request.",
-    "Download or copy the results directly to your device."
+    "Upload the PDF document that contains pages needing rotation.",
+    "Select whether you want to rotate all pages in the document or select specific individual pages.",
+    "Choose the rotation direction: 90 degrees clockwise, 90 degrees counter-clockwise, or 180 degrees.",
+    "Click the action button to apply the rotation locally using your device's processing power.",
+    "Download the newly oriented PDF file directly to your local file system."
+  ],
+  examples: [
+    {
+      label: "Fix a Scanned Upside-Down Document",
+      description: "Corrects an entire document that was accidentally scanned backwards.",
+      input: "A 5-page PDF where all text is completely upside down.",
+      output: "The same PDF rotated 180 degrees so all pages are readable."
+    },
+    {
+      label: "Rotate a Landscape Chart",
+      description: "Adjusts a specific page containing a wide chart to landscape mode.",
+      input: "A portrait PDF where page 3 contains a sideways chart.",
+      output: "The PDF with only page 3 rotated 90 degrees for optimal viewing."
+    },
+    {
+      label: "Correct Mobile Camera Scans",
+      description: "Fixes receipts or documents snapped with a phone camera that saved sideways.",
+      input: "A PDF of a receipt displaying in a sideways landscape orientation.",
+      output: "The receipt rotated 90 degrees to standard portrait orientation."
+    }
   ],
   faq: [
     {
-      question: "Is my data safe with Rotate PDF?",
-      answer: "Yes, 100% safe. KaruviLab uses a zero-upload architecture. All processing is done in your browser's local sandbox."
+      question: "Are my documents uploaded to a server to be rotated?",
+      answer: "No. We utilize a strict Zero-Server-Upload design. Your files are processed entirely on your device, ensuring maximum privacy."
     },
     {
-      question: "Can I use Rotate PDF offline?",
-      answer: "Absolutely. Once the page is loaded, the tool is fully functional without an internet connection."
+      question: "Can I use the Rotate PDF tool offline?",
+      answer: "Yes, the tool features complete Offline Resilience. You can use it without an internet connection once the page is fully loaded."
+    },
+    {
+      question: "Can I rotate just one specific page in a large document?",
+      answer: "Yes, the tool allows you to select specific pages to rotate, leaving the rest of the document's orientation unchanged."
+    },
+    {
+      question: "Will rotating the PDF reduce its quality?",
+      answer: "No, our Local-First Execution engine only changes the metadata orientation of the pages. The original text, images, and resolution remain perfectly intact."
+    },
+    {
+      question: "Is there a limit to how many pages I can rotate at once?",
+      answer: "Because processing happens locally, the limit is based on your device's memory. It can easily handle rotating hundreds of pages instantly."
+    }
+  ],
+  useCases: [
+    "Administrative staff fixing large batches of incorrectly oriented documents generated by legacy scanning hardware.",
+    "Accounting professionals rotating sideways photos of expense receipts before submitting them for reimbursement.",
+    "Students adjusting specific landscape diagram pages in their digital textbooks for easier reading on a tablet.",
+    "Legal assistants ensuring all pages of a digital evidence binder are uniformly oriented in portrait mode before court submission."
+  ],
+  commonErrors: [
+    {
+      error: "Encrypted PDF Error",
+      fix: "The tool cannot modify password-protected or encrypted PDFs. Please use the Unlock PDF tool first to remove the restrictions before applying rotation."
+    },
+    {
+      error: "Visual Cache Not Updating",
+      fix: "Occasionally, your browser's built-in PDF viewer might cache the old orientation. Download the file and open it in a dedicated viewer to confirm the rotation was successful."
     }
   ]
 };

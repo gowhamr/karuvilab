@@ -1,65 +1,30 @@
 import { ToolContent } from '../../registry/types';
 
 export const gstCalculator: ToolContent = {
-  detailedDescription:
-    "An easy-to-use Indian GST Calculator to add or remove GST from any amount. Instantly calculate CGST, SGST, and IGST for standard tax slabs (5%, 12%, 18%, 28%). Whether you are a business owner creating an invoice or a consumer verifying a bill, our tool provides precise tax breakdowns entirely in your browser.",
+  detailedDescription: `
+    <p>The GST (Goods and Services Tax) Calculator is an essential financial tool for business owners, accountants, and consumers in India. It simplifies the complex process of calculating tax breakdowns for various tax slabs, including 5%, 12%, 18%, and 28%. Whether you need to find the base price of an item or calculate the final invoice amount with tax included, this tool provides instant and accurate results.</p>
+    
+    <p>Understanding the difference between 'Inclusive' and 'Exclusive' GST is crucial for accurate bookkeeping. When you have a base price, our tool adds the tax (Exclusive). If you have the total price and need to find the original amount, our tool extracts the tax (Inclusive). This dual functionality ensures that you can verify bills or create accurate price lists without manual mathematical errors.</p>
+
+    <p>Privacy is a key feature of KaruviLab. Financial data is sensitive, and by using our local-first calculator, you ensure that your pricing strategies and transaction amounts never leave your device. The tool also provides a clear split of CGST, SGST, and IGST, making it perfect for preparing GST-compliant invoices for both intra-state and inter-state transactions.</p>
+  `,
   howTo: [
-    "Step 1: Enter the initial amount in the 'Amount' field.",
-    "Step 2: Select the applicable GST rate (5%, 12%, 18%, or 28%).",
-    "Step 3: Choose 'Add GST' to calculate the tax on top of the amount, or 'Remove GST' to extract tax from an inclusive price.",
-    "Step 4: Instantly see the breakdown of Net Amount, GST Amount (split into CGST/SGST), and Total Amount.",
-  ],
-  examples: [
-    {
-      label: "Adding GST (Intrastate)",
-      description: "If you have a service worth ₹1,000 and want to add 18% GST for a local client:",
-      input: "₹1,000 + 18% GST",
-      output: "Base: ₹1,000 | CGST: ₹90 | SGST: ₹90 | Total: ₹1,180"
-    },
-    {
-      label: "Removing GST (Inclusive Price)",
-      description: "If you bought a product for ₹590 (inclusive of 18% GST) and want to find the base price:",
-      input: "₹590 (Remove 18%)",
-      output: "Base: ₹500 | GST: ₹90 | Total: ₹590"
-    }
+    "<strong>Enter Amount:</strong> Type the numerical value you want to calculate in the 'Amount' field.",
+    "<strong>Select Slab:</strong> Choose the applicable GST rate (5%, 12%, 18%, or 28%) from the dropdown.",
+    "<strong>Choose Type:</strong> Select 'Add GST' for exclusive amounts or 'Remove GST' for inclusive amounts.",
+    "<strong>Review Split:</strong> Observe the breakdown of Net Amount, CGST, SGST, and the Total Amount.",
+    "<strong>Copy Results:</strong> Use the results to populate your invoices or verify your purchase bills.",
   ],
   faq: [
-    {
-      question: "How is GST calculated in India?",
-      answer:
-        "GST is calculated by multiplying the base price by the tax rate. Formula for Adding GST: GST Amount = (Base Price × Rate) / 100. Formula for Removing GST: Base Price = Total Price / (1 + (Rate / 100)).",
-    },
-    {
-      question: "When should I use IGST vs CGST/SGST?",
-      answer:
-        "Use CGST (Central) and SGST (State) for transactions within the same state (Intrastate). Use IGST (Integrated) for transactions between two different states (Interstate). The total tax amount remains the same.",
-    },
-    {
-      question: "What are the common GST slabs?",
-      answer:
-        "Current standard GST slabs in India are 5% (essentials), 12% (standard items), 18% (most services and products), and 28% (luxury/sin goods). Some items like gold carry a 3% rate.",
-    },
-    {
-      question: "Is this GST calculator free to use?",
-      answer:
-        "Yes, KaruviLab's GST calculator is 100% free, private, and works offline. No data is ever uploaded to a server.",
-    },
+    { question: "What is CGST and SGST?", answer: "For intra-state transactions, GST is split equally into Central GST (CGST) and State GST (SGST)." },
+    { question: "When should I use IGST?", answer: "Integrated GST (IGST) is applied to inter-state transactions and is equal to the total GST rate." },
+    { question: "Is this calculator updated for 2026?", answer: "Yes, it uses the standard tax slabs and formulas applicable for the current fiscal year." },
+    { question: "Does it work for service taxes?", answer: "Yes, it works for any good or service covered under the GST regime." },
+    { question: "Is my data stored?", answer: "No. Like all KaruviLab tools, all calculations are performed locally and no data is saved on our servers." }
   ],
-  useCases: [
-    "Businesses creating tax-compliant invoices",
-    "Accountants reconciling monthly tax filings",
-    "Consumers checking the accuracy of restaurant or shopping bills",
-    "Freelancers calculating the right amount to charge local vs international clients",
-  ],
-  commonErrors: [
-    {
-      error: "Selecting the wrong slab",
-      fix: "Verify the HSN/SAC code of your product or service to find the exact applicable GST rate (e.g., most IT services are 18%).",
-    },
-    {
-      error: "Confusing inclusive and exclusive prices",
-      fix: "If the price already includes tax, use the 'Remove GST' mode to find the true base price.",
-    },
-  ],
-  alternatives: ["Official GST.gov.in Tool", "ClearTax", "Tally Solutions"],
+  examples: [
+    { label: "Tax Addition", input: "Amount: 1000, Slab: 18%, Mode: Add", output: "Net: 1000, GST: 180, Total: 1180", description: "Calculating the final price for a service with 18% GST added." },
+    { label: "Tax Removal", input: "Amount: 1180, Slab: 18%, Mode: Remove", output: "Net: 1000, GST: 180, Total: 1180", description: "Extracting the original price from a GST-inclusive MRP." },
+    { label: "Food Bill", input: "Amount: 500, Slab: 5%, Mode: Add", output: "Net: 500, GST: 25, Total: 525", description: "Verifying a restaurant bill with the standard 5% tax rate." }
+  ]
 };
