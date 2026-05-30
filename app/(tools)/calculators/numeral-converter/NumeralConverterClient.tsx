@@ -142,7 +142,7 @@ export default function NumeralConverterClient() {
             {/* ASCII Text Field */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-text-2 flex items-center gap-2">
+                <label htmlFor="text-input" className="text-sm font-bold text-text-2 flex items-center gap-2">
                   <TypeIcon size={16} className="text-blue" />
                   ASCII / Text
                 </label>
@@ -150,6 +150,7 @@ export default function NumeralConverterClient() {
               </div>
               {mode === "single" ? (
                 <ToolInput
+                  id="text-input"
                   value={inputs.text || ""}
                   onChange={(v) => handleSingleChange("text", v.slice(-1))}
                   placeholder="e.g. A"
@@ -157,6 +158,7 @@ export default function NumeralConverterClient() {
                 />
               ) : (
                 <textarea
+                  id="text-input"
                   value={inputs.text || ""}
                   onChange={(e) => handleTextChange("text", e.target.value)}
                   placeholder="Enter text to convert..."
@@ -169,7 +171,7 @@ export default function NumeralConverterClient() {
               {BASES.map((b) => (
                 <div key={b.id} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-sm font-bold text-text-2 flex items-center gap-2">
+                    <label htmlFor={`${b.id}-input`} className="text-sm font-bold text-text-2 flex items-center gap-2">
                       <b.icon size={16} className="text-text-4" />
                       {b.label}
                     </label>
@@ -183,6 +185,7 @@ export default function NumeralConverterClient() {
                         </span>
                       )}
                       <ToolInput
+                        id={`${b.id}-input`}
                         value={inputs[b.id] || ""}
                         onChange={(v) => handleSingleChange(b.id, v.toUpperCase())}
                         placeholder={b.placeholder}
@@ -191,6 +194,7 @@ export default function NumeralConverterClient() {
                     </div>
                   ) : (
                     <textarea
+                      id={`${b.id}-input`}
                       value={inputs[b.id] || ""}
                       onChange={(e) => handleTextChange(b.id, e.target.value.toUpperCase())}
                       placeholder={`Enter ${b.label.toLowerCase()} bytes (space separated)...`}
@@ -247,7 +251,7 @@ export default function NumeralConverterClient() {
         {/* Binary Table / Bit View for Single Mode (Small Numbers) */}
         {mode === "single" && inputs.dec && BigInt(inputs.dec || "0") >= 0n && BigInt(inputs.dec || "0") < 256n && (
           <div className="bg-surface border border-border p-6 rounded-[32px] space-y-4">
-            <h3 className="text-sm font-bold text-text-2 uppercase tracking-widest">8-Bit Visualizer</h3>
+            <h2 className="text-sm font-bold text-text-2 uppercase tracking-widest">8-Bit Visualizer</h2>
             <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
               {BigInt(inputs.dec || "0").toString(2).padStart(8, "0").split("").map((bit, i) => (
                 <div key={i} className="flex flex-col items-center gap-2">

@@ -274,7 +274,7 @@ Generated via KaruviLab`;
       {showTable && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black">Yearly Projection</h3>
+            <h2 className="text-lg font-black">Yearly Projection</h2>
           </div>
           <div className="overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-sm">

@@ -106,7 +106,7 @@ export default function JWTDecoderClient() {
           {/* Header */}
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-text-2">Header</h3>
+              <h2 className="text-sm font-bold text-text-2">Header</h2>
               <CopyButton text={JSON.stringify(decoded.header, null, 2)} />
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -122,7 +122,7 @@ export default function JWTDecoderClient() {
           {/* Payload */}
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-text-2">Payload</h3>
+              <h2 className="text-sm font-bold text-text-2">Payload</h2>
               <CopyButton text={JSON.stringify(decoded.payload, null, 2)} />
             </div>
             <div className="space-y-2">
@@ -150,7 +150,7 @@ export default function JWTDecoderClient() {
 
           {/* Signature */}
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-            <h3 className="text-sm font-bold text-text-2">Signature</h3>
+            <h2 className="text-sm font-bold text-text-2">Signature</h2>
             <p className="text-xs text-text-4">The signature cannot be verified client-side without the secret key. Use a trusted server-side tool to verify signatures.</p>
             <div className="font-mono text-xs text-text-3 break-all bg-bg border border-border rounded-xl p-3">
               {decoded.sig}

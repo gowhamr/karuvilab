@@ -339,10 +339,10 @@ export default function InvoiceGeneratorClient() {
           <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-4 flex-1">
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    Template & Branding
-                </h3>
+                </h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Visual Style</label>
@@ -397,10 +397,10 @@ export default function InvoiceGeneratorClient() {
           {/* Section 2: Parties */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    From (Your Details)
-                </h3>
+                </h2>
                 <div className="space-y-4">
                   <ToolInput placeholder="Business Name" value={from.name} onChange={(v) => setFrom({ ...from, name: v })} />
                   <div className="grid grid-cols-2 gap-4">

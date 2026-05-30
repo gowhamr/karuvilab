@@ -189,38 +189,38 @@ Generated via KaruviLab`;
       {/* Breakdown Card */}
       <div className="bg-surface border border-border rounded-[32px] overflow-hidden">
         <div className="p-6 border-b border-border bg-bg/50 flex items-center justify-between">
-          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Tax Breakdown</h3>
+          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Tax Breakdown</h2>
           <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Local Currency (INR)</span>
         </div>
         <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div className="space-y-4">
+          <dl className="space-y-4">
             {!isInterstate ? (
               <>
                 <div className="flex justify-between items-center pb-4 border-b border-border/50">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-text-2">CGST</p>
-                    <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Central Tax ({gstRate/2}%)</p>
+                    <dt className="text-xs font-black uppercase tracking-widest text-text-2">CGST</dt>
+                    <dd className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Central Tax ({gstRate/2}%)</dd>
                   </div>
-                  <p className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.cgst, 2)}</p>
+                  <dd className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.cgst, 2)}</dd>
                 </div>
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-text-2">SGST</p>
-                    <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">State Tax ({gstRate/2}%)</p>
+                    <dt className="text-xs font-black uppercase tracking-widest text-text-2">SGST</dt>
+                    <dd className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">State Tax ({gstRate/2}%)</dd>
                   </div>
-                  <p className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.sgst, 2)}</p>
+                  <dd className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.sgst, 2)}</dd>
                 </div>
               </>
             ) : (
               <div className="flex justify-between items-center h-full">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-text-2">IGST</p>
-                  <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Integrated Tax ({gstRate}%)</p>
+                  <dt className="text-xs font-black uppercase tracking-widest text-text-2">IGST</dt>
+                  <dd className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Integrated Tax ({gstRate}%)</dd>
                 </div>
-                <p className="font-mono text-2xl font-black text-blue">{formatINR(taxBreakdown.igst, 2)}</p>
+                <dd className="font-mono text-2xl font-black text-blue">{formatINR(taxBreakdown.igst, 2)}</dd>
               </div>
             )}
-          </div>
+          </dl>
 
           <div className="bg-bg/50 rounded-2xl p-6 space-y-4">
             <div className="flex items-center gap-2 text-blue">

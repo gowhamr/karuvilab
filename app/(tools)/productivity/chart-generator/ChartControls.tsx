@@ -215,22 +215,25 @@ export default function ChartControls({
                       <button 
                         onClick={() => movePoint(i, 'up')}
                         disabled={i === 0}
+                        aria-label="Move point up"
                         className="p-1 rounded-lg text-text-4 hover:bg-blue/10 hover:text-blue disabled:opacity-30"
                       >
-                        <ArrowUp className="w-3.5 h-3.5" />
+                        <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                       <button 
                         onClick={() => movePoint(i, 'down')}
                         disabled={i === data.length - 1}
+                        aria-label="Move point down"
                         className="p-1 rounded-lg text-text-4 hover:bg-blue/10 hover:text-blue disabled:opacity-30"
                       >
-                        <ArrowDown className="w-3.5 h-3.5" />
+                        <ArrowDown className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                       <button 
                         onClick={() => removePoint(p.id)}
+                        aria-label="Remove point"
                         className="p-1.5 rounded-lg text-text-4 hover:bg-error/10 hover:text-error transition-all active:scale-90"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     </div>
                     
@@ -239,12 +242,14 @@ export default function ChartControls({
                         type="color"
                         value={p.color}
                         onChange={(e) => updatePoint(p.id, "color", e.target.value)}
+                        aria-label="Point color"
                         className="w-6 h-6 rounded-lg bg-transparent border-none cursor-pointer"
                       />
                       <div className="flex-1 space-y-1">
                         <input 
                           value={p.label}
                           onChange={(e) => updatePoint(p.id, "label", e.target.value)}
+                          aria-label="Point label"
                           className="w-full bg-transparent border-none outline-none font-bold text-sm text-text"
                           placeholder="Label..."
                         />
@@ -254,6 +259,7 @@ export default function ChartControls({
                             type="number"
                             value={p.value}
                             onChange={(e) => updatePoint(p.id, "value", Number(e.target.value))}
+                            aria-label="Point value"
                             className="bg-transparent border-none outline-none font-mono text-xs text-blue w-20"
                           />
                         </div>

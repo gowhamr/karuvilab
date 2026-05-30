@@ -80,10 +80,10 @@ export default function MicCameraTesterClient() {
           <div className="p-8 bg-surface border border-border rounded-[32px] space-y-8">
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-bold flex items-center gap-2">
-                  <Mic className="w-5 h-5 text-blue" />
+                <h2 className="text-lg font-bold flex items-center gap-2">
+                  <Mic className="w-5 h-5 text-blue" aria-hidden="true" />
                   Microphone Level
-                </h3>
+                </h2>
                 <span className="text-xs font-bold text-text-4">{Math.round(audioLevel)}%</span>
               </div>
               <div className="h-4 bg-bg rounded-full overflow-hidden border border-border">
@@ -100,14 +100,14 @@ export default function MicCameraTesterClient() {
                 onClick={stream ? stopTest : startTest}
                 className={`flex items-center justify-center gap-3 py-4 rounded-2xl font-bold transition-all ${stream ? 'bg-error/10 text-error border border-error/30 hover:bg-error/20' : 'bg-blue text-white hover:bg-blue/90 shadow-lg shadow-blue/20'}`}
               >
-                {stream ? <><VideoOff className="w-5 h-5" /> Stop Test</> : <><Video className="w-5 h-5" /> Start Test</>}
+                {stream ? <><VideoOff className="w-5 h-5" aria-hidden="true" /> Stop Test</> : <><Video className="w-5 h-5" aria-hidden="true" /> Start Test</>}
               </button>
               
               <button
                 disabled={!stream}
                 className="flex items-center justify-center gap-3 py-4 bg-surface border border-border rounded-2xl font-bold text-text-2 hover:border-blue transition-all disabled:opacity-50"
               >
-                <CameraIcon className="w-5 h-5" /> Snapshot
+                <CameraIcon className="w-5 h-5" aria-hidden="true" /> Snapshot
               </button>
             </div>
 

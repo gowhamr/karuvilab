@@ -142,11 +142,11 @@ const RetirementCalculatorClient = memo(function RetirementCalculatorClient() {
       <div className="flex justify-end">
         <CopyButton text={summary} label="Copy Summary" />
       </div>
-
-      <div className="bg-blue/5 border border-blue/10 p-6 rounded-2xl">
-        <h3 className="text-sm font-black uppercase tracking-widest text-blue mb-2">Planning Insight</h3>
-        <p className="text-sm text-text-2 leading-relaxed">
-          Due to inflation, your current expenses will significantly increase by the time you retire. 
+<div className="bg-blue/5 border border-blue/10 p-6 rounded-2xl">
+  <h2 className="text-sm font-black uppercase tracking-widest text-blue mb-2">Planning Insight</h2>
+  <p className="text-sm text-text-2 leading-relaxed">
+    Due to inflation, your current expenses will significantly increase by the time you retire. 
+...
           To maintain the same lifestyle, you need a corpus that can generate monthly income while also growing enough to offset inflation. 
           The calculated corpus assumes you will consume the principal entirely by the end of your life expectancy.
         </p>

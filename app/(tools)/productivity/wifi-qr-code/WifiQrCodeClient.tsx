@@ -58,10 +58,10 @@ export default function WifiQrCodeClient() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-6 p-8 bg-surface border border-border rounded-[32px]">
-          <h3 className="text-lg font-bold flex items-center gap-2">
-            <Wifi className="w-5 h-5 text-blue" />
+          <h2 className="text-lg font-bold flex items-center gap-2">
+            <Wifi className="w-5 h-5 text-blue" aria-hidden="true" />
             Network Details
-          </h3>
+          </h2>
 
           <ToolInput
             label="SSID (Network Name)"
@@ -80,9 +80,10 @@ export default function WifiQrCodeClient() {
             />
             <button
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
               className="absolute right-3 top-10 p-2 text-text-4 hover:text-text-2 transition-colors"
             >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {showPassword ? <EyeOff className="w-4 h-4" aria-hidden="true" /> : <Eye className="w-4 h-4" aria-hidden="true" />}
             </button>
           </div>
 

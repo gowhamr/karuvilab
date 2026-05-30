@@ -187,8 +187,8 @@ export default function FileValidatorClient() {
       {fileInfo && !loading && (
         <div className="space-y-4">
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-            <h3 className="text-sm font-bold text-text-2">File Information</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <h2 className="text-sm font-bold text-text-2">File Information</h2>
+            <dl className="grid grid-cols-2 gap-3 text-sm">
               {[
                 { label: "Name", value: fileInfo.name },
                 { label: "Size", value: formatBytes(fileInfo.size) },
@@ -196,31 +196,31 @@ export default function FileValidatorClient() {
                 { label: "Last Modified", value: new Date(fileInfo.lastModified).toLocaleString() },
               ].map(({ label, value }) => (
                 <div key={label} className="bg-bg border border-border rounded-xl p-3">
-                  <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</div>
-                  <div className="font-mono text-text break-all text-xs">{value}</div>
+                  <dt className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</dt>
+                  <dd className="font-mono text-text break-all text-xs">{value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
           </div>
 
           {fileInfo.imageInfo && (
             <div className="bg-surface border border-border p-5 rounded-2xl">
-              <h3 className="text-sm font-bold text-text-2 mb-3">Image Preview</h3>
-              <div className="grid grid-cols-2 gap-3">
+              <h2 className="text-sm font-bold text-text-2 mb-3">Image Preview</h2>
+              <dl className="grid grid-cols-2 gap-3">
                 <div className="bg-bg border border-border rounded-xl p-3 text-center">
-                  <div className="text-xs font-bold text-text-4 mb-1">Width</div>
-                  <div className="text-xl font-black text-text">{fileInfo.imageInfo.width}px</div>
+                  <dt className="text-xs font-bold text-text-4 mb-1">Width</dt>
+                  <dd className="text-xl font-black text-text">{fileInfo.imageInfo.width}px</dd>
                 </div>
                 <div className="bg-bg border border-border rounded-xl p-3 text-center">
-                  <div className="text-xs font-bold text-text-4 mb-1">Height</div>
-                  <div className="text-xl font-black text-text">{fileInfo.imageInfo.height}px</div>
+                  <dt className="text-xs font-bold text-text-4 mb-1">Height</dt>
+                  <dd className="text-xl font-black text-text">{fileInfo.imageInfo.height}px</dd>
                 </div>
-              </div>
+              </dl>
             </div>
           )}
 
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-            <h3 className="text-sm font-bold text-text-2">Validation Checks</h3>
+            <h2 className="text-sm font-bold text-text-2">Validation Checks</h2>
             <div className="space-y-2">
               {fileInfo.checks.map((check, i) => (
                 <div key={i} className={`flex items-center gap-3 border rounded-xl p-3 text-sm ${STATUS_STYLES[check.status]}`}>

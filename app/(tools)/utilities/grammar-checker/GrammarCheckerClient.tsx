@@ -148,7 +148,7 @@ export default function GrammarCheckerClient() {
 
       {text && (
         <div className="space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-center text-sm">
+          <dl className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-center text-sm">
             {[
               { key: "misspelling", label: "Misspellings", color: "text-red-500" },
               { key: "capitalization", label: "Capitalization", color: "text-blue" },
@@ -157,16 +157,16 @@ export default function GrammarCheckerClient() {
               { key: "passive", label: "Passive Voice", color: "text-purple-500" },
             ].map(({ key, label, color }) => (
               <div key={key} className="bg-surface border border-border p-3 rounded-xl">
-                <div className={`text-xl font-black ${color}`}>{counts[key]}</div>
-                <div className="text-xs text-text-4 mt-0.5">{label}</div>
+                <dd className={`text-xl font-black ${color}`}>{counts[key]}</dd>
+                <dt className="text-xs text-text-4 mt-0.5">{label}</dt>
               </div>
             ))}
-          </div>
+          </dl>
 
           {issues.length > 0 ? (
             <>
               <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-                <h3 className="text-sm font-bold text-text-2">Highlighted Text</h3>
+                <h2 className="text-sm font-bold text-text-2">Highlighted Text</h2>
                 <div className="font-mono text-sm text-text bg-bg border border-border rounded-xl p-4 leading-loose whitespace-pre-wrap">
                   {highlighted.map((part, i) =>
                     part.issue ? (
@@ -187,7 +187,7 @@ export default function GrammarCheckerClient() {
               </div>
 
               <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-                <h3 className="text-sm font-bold text-text-2">Issues ({issues.length})</h3>
+                <h2 className="text-sm font-bold text-text-2">Issues ({issues.length})</h2>
                 <div className="space-y-2 max-h-72 overflow-y-auto">
                   {issues.map((issue, i) => (
                     <div key={i} className="flex items-start gap-3 bg-bg border border-border rounded-xl p-3 text-sm">

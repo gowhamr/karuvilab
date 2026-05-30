@@ -120,10 +120,10 @@ export default function PhoneMockupGeneratorClient() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6 p-8 bg-surface border border-border rounded-[32px]">
-            <h3 className="text-lg font-bold flex items-center gap-2">
-              <Smartphone className="w-5 h-5 text-blue" />
+            <h2 className="text-lg font-bold flex items-center gap-2">
+              <Smartphone className="w-5 h-5 text-blue" aria-hidden="true" />
               Customization
-            </h3>
+            </h2>
 
             <div className="space-y-3">
               <label className="text-sm font-bold text-text-2">Select Device</label>
@@ -147,6 +147,7 @@ export default function PhoneMockupGeneratorClient() {
                   <button
                     key={c}
                     onClick={() => setBgColor(c)}
+                    aria-label={`Select background color ${c}`}
                     className={`w-10 h-10 rounded-full border-2 ${bgColor === c ? 'border-blue scale-110' : 'border-transparent'}`}
                     style={{ backgroundColor: c }}
                   />
@@ -155,6 +156,7 @@ export default function PhoneMockupGeneratorClient() {
                   type="color" 
                   value={bgColor} 
                   onChange={(e) => setBgColor(e.target.value)}
+                  aria-label="Custom background color"
                   className="w-10 h-10 rounded-full border-none cursor-pointer overflow-hidden"
                 />
               </div>
@@ -171,7 +173,7 @@ export default function PhoneMockupGeneratorClient() {
                 onClick={download}
                 className="flex-[2] py-4 bg-blue text-white rounded-2xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2"
               >
-                <Download className="w-5 h-5" /> Download
+                <Download className="w-5 h-5" aria-hidden="true" /> Download
               </button>
             </div>
           </div>

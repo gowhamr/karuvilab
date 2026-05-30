@@ -81,10 +81,10 @@ export default function FakeDataGeneratorClient() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6 p-6 bg-surface border border-border rounded-[32px]">
-          <h3 className="text-lg font-bold flex items-center gap-2">
-            <RefreshCw className="w-5 h-5 text-blue" />
+          <h2 className="text-lg font-bold flex items-center gap-2">
+            <RefreshCw className="w-5 h-5 text-blue" aria-hidden="true" />
             Configuration
-          </h3>
+          </h2>
           
           <ToolInput
             label="Number of Rows"

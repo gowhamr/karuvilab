@@ -63,7 +63,7 @@ const CAGRCalculatorClient = memo(function CAGRCalculatorClient() {
       </div>
 
       <div className="bg-blue/5 border border-blue/10 p-6 rounded-2xl">
-        <h3 className="text-sm font-black uppercase tracking-widest text-blue mb-2">How it works</h3>
+        <h2 className="text-sm font-black uppercase tracking-widest text-blue mb-2">How it works</h2>
         <p className="text-sm text-text-2 leading-relaxed">
           Compound Annual Growth Rate (CAGR) is the best way to measure the performance of an investment over time. 
           Unlike simple absolute returns, CAGR accounts for the effect of compounding, giving you a normalized annual rate.

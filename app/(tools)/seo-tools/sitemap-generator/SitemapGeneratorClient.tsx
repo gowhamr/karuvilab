@@ -134,7 +134,7 @@ export default function SitemapGeneratorClient() {
           <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Website Base URL</label>
           <div className="relative group">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-blue">
-              <Globe size={18} />
+              <Globe size={18} aria-hidden="true" />
             </div>
             <input 
               type="text"
@@ -150,14 +150,15 @@ export default function SitemapGeneratorClient() {
             onClick={addEntry}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-blue/20"
           >
-            <Plus size={16} /> Add URL
+            <Plus size={16} aria-hidden="true" /> Add URL
           </button>
           <button 
             onClick={clearAll}
             className="p-4 bg-error/10 text-error border border-error/20 rounded-2xl hover:bg-error hover:text-white transition-all active:scale-90"
             title="Clear All"
+            aria-label="Clear All URLs"
           >
-            <Trash2 size={20} />
+            <Trash2 size={20} aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -211,7 +212,7 @@ export default function SitemapGeneratorClient() {
                           <tr>
                             <td colSpan={4} className="py-20 text-center space-y-4">
                               <div className="w-12 h-12 bg-bg rounded-full flex items-center justify-center mx-auto text-text-4">
-                                <LinkIcon size={20} />
+                                <LinkIcon size={20} aria-hidden="true" />
                               </div>
                               <p className="text-text-4 font-black uppercase tracking-widest text-[10px]">No URLs added yet</p>
                             </td>
@@ -224,6 +225,7 @@ export default function SitemapGeneratorClient() {
                                 type="text"
                                 value={entry.url}
                                 onChange={(e) => updateEntry(entry.id, 'url', e.target.value)}
+                                aria-label="URL Path"
                                 className="w-full bg-transparent border-none p-0 focus:ring-0 font-mono text-xs text-text-2 group-hover:text-blue transition-colors"
                               />
                             </td>
@@ -231,6 +233,7 @@ export default function SitemapGeneratorClient() {
                               <select 
                                 value={entry.changefreq}
                                 onChange={(e) => updateEntry(entry.id, 'changefreq', e.target.value)}
+                                aria-label="Change Frequency"
                                 className="bg-transparent border-none p-0 focus:ring-0 text-[10px] font-bold uppercase tracking-wider text-text-3 cursor-pointer"
                               >
                                 {CHANGEFREQS.map(f => <option key={f} value={f}>{f}</option>)}
@@ -240,6 +243,7 @@ export default function SitemapGeneratorClient() {
                               <select 
                                 value={entry.priority}
                                 onChange={(e) => updateEntry(entry.id, 'priority', e.target.value)}
+                                aria-label="Priority"
                                 className="bg-transparent border-none p-0 focus:ring-0 text-[10px] font-bold text-text-3 cursor-pointer"
                               >
                                 {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
@@ -248,9 +252,10 @@ export default function SitemapGeneratorClient() {
                             <td className="px-6 py-3 text-right">
                               <button 
                                 onClick={() => removeEntry(entry.id)}
+                                aria-label="Remove URL"
                                 className="p-2 text-text-4 hover:text-error transition-colors rounded-lg hover:bg-error/5"
                               >
-                                <X size={14} />
+                                <X size={14} aria-hidden="true" />
                               </button>
                             </td>
                           </tr>
@@ -267,7 +272,7 @@ export default function SitemapGeneratorClient() {
                     className="p-6 space-y-4"
                   >
                     <div className="bg-blue/5 border border-blue/10 p-4 rounded-2xl flex gap-3">
-                      <AlertTriangle className="text-blue shrink-0" size={18} />
+                      <AlertTriangle className="text-blue shrink-0" size={18} aria-hidden="true" />
                       <p className="text-[11px] font-medium text-blue/80 leading-relaxed">
                         Paste a list of relative paths (e.g. <code>/about</code>) or full URLs (one per line). 
                         Existing entries will be preserved.
@@ -277,6 +282,7 @@ export default function SitemapGeneratorClient() {
                       value={bulkInput}
                       onChange={(e) => setBulkInput(e.target.value)}
                       placeholder="/&#10;/about&#10;/contact&#10;/products/item-1"
+                      aria-label="Bulk URL Import"
                       className="w-full h-64 p-6 bg-bg border border-border rounded-2xl font-mono text-xs focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all resize-none custom-scrollbar"
                     />
                     <button 
@@ -316,21 +322,21 @@ export default function SitemapGeneratorClient() {
                   onClick={() => downloadFile('xml')}
                   className="flex flex-col items-center justify-center gap-2 p-3 bg-bg border border-border rounded-2xl hover:border-blue hover:text-blue transition-all group"
                 >
-                  <FileCode size={18} className="group-hover:scale-110 transition-transform" />
+                  <FileCode size={18} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
                   <span className="text-[9px] font-black uppercase">XML</span>
                 </button>
                 <button 
                   onClick={() => downloadFile('csv')}
                   className="flex flex-col items-center justify-center gap-2 p-3 bg-bg border border-border rounded-2xl hover:border-blue hover:text-blue transition-all group"
                 >
-                  <FileText size={18} className="group-hover:scale-110 transition-transform" />
+                  <FileText size={18} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
                   <span className="text-[9px] font-black uppercase">CSV</span>
                 </button>
                 <button 
                   onClick={() => downloadFile('json')}
                   className="flex flex-col items-center justify-center gap-2 p-3 bg-bg border border-border rounded-2xl hover:border-blue hover:text-blue transition-all group"
                 >
-                  <FileCode size={18} className="group-hover:scale-110 transition-transform" />
+                  <FileCode size={18} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
                   <span className="text-[9px] font-black uppercase">JSON</span>
                 </button>
               </div>
@@ -338,9 +344,9 @@ export default function SitemapGeneratorClient() {
           </div>
 
           <div className="bg-blue/5 border border-blue/10 p-6 rounded-[32px] space-y-4">
-            <h4 className="flex items-center gap-2 text-[10px] font-black text-blue uppercase tracking-widest">
-               <Check size={14} /> SEO Ready
-            </h4>
+            <h2 className="flex items-center gap-2 text-[10px] font-black text-blue uppercase tracking-widest">
+               <Check size={14} aria-hidden="true" /> SEO Ready
+            </h2>
             <p className="text-xs text-blue/70 leading-relaxed font-medium">
               This sitemap follows the <b>Sitemaps.org 0.9</b> protocol. All URLs are automatically validated to ensure they start with your base domain.
             </p>

@@ -16,9 +16,9 @@ export const ImageQueue: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-2">
-        <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+        <h2 className="text-[10px] font-black uppercase tracking-widest text-text-4">
           Queue • {items.length} Images
-        </h3>
+        </h2>
       </div>
 
       <div className="grid gap-3">
@@ -43,21 +43,22 @@ export const ImageQueue: React.FC = () => {
               {/* Thumbnail */}
               <div className="w-14 h-14 rounded-xl overflow-hidden bg-bg border border-border shrink-0 relative z-10 flex items-center justify-center text-text-4">
                 {item.previewUrl ? (
-                  <img src={item.previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <img src={item.previewUrl} alt={`Preview of ${item.file.name}`} className="w-full h-full object-cover" />
                 ) : (
-                  <ImageIcon size={24} />
+                  <ImageIcon size={24} aria-hidden="true" />
                 )}
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0 relative z-10">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-[10px] font-black uppercase truncate pr-4">{item.file.name}</h4>
+                  <span className="text-[10px] font-black uppercase truncate pr-4">{item.file.name}</span>
                   <button 
                     onClick={() => removeFile(item.id)}
+                    aria-label="Remove file"
                     className="text-text-4 hover:text-red-500 transition-colors"
                   >
-                    <X size={14} />
+                    <X size={14} aria-hidden="true" />
                   </button>
                 </div>
 
@@ -90,13 +91,13 @@ export const ImageQueue: React.FC = () => {
                   )}
                   {item.status === 'completed' && (
                     <div className="flex items-center gap-1 text-green-600 text-[8px] font-black uppercase">
-                      <CheckCircle2 size={10} />
+                      <CheckCircle2 size={10} aria-hidden="true" />
                       Ready
                     </div>
                   )}
                   {item.status === 'error' && (
                     <div className="flex items-center gap-1 text-red-500 text-[8px] font-black uppercase">
-                      <AlertCircle size={10} />
+                      <AlertCircle size={10} aria-hidden="true" />
                       Failed
                     </div>
                   )}
@@ -109,17 +110,19 @@ export const ImageQueue: React.FC = () => {
                   <a 
                     href={item.compressedUrl!} 
                     download={`compressed-${item.file.name}`}
+                    aria-label="Download compressed image"
                     className="w-10 h-10 rounded-xl bg-blue/10 text-blue flex items-center justify-center hover:bg-blue hover:text-white transition-all shadow-sm"
                   >
-                    <Download size={16} />
+                    <Download size={16} aria-hidden="true" />
                   </a>
                 ) : (
                   <button
                     onClick={() => compressItem(item.id)}
                     disabled={item.status === 'processing'}
+                    aria-label="Compress image"
                     className="w-10 h-10 rounded-xl bg-surface border border-border text-text-3 flex items-center justify-center hover:border-blue hover:text-blue transition-all"
                   >
-                    <RefreshCw size={16} className={item.status === 'processing' ? 'animate-spin' : ''} />
+                    <RefreshCw size={16} className={item.status === 'processing' ? 'animate-spin' : ''} aria-hidden="true" />
                   </button>
                 )}
               </div>

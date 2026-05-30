@@ -247,8 +247,8 @@ export default function HashGeneratorClient() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-8">
             <div className="flex items-center gap-2 mb-2">
-              <Settings2 size={18} className="text-blue" />
-              <h3 className="text-sm font-black uppercase tracking-widest text-text">Options</h3>
+              <Settings2 size={18} className="text-blue" aria-hidden="true" />
+              <h2 className="text-sm font-black uppercase tracking-widest text-text">Options</h2>
             </div>
 
             {/* Algorithm Selection */}
@@ -295,10 +295,12 @@ export default function HashGeneratorClient() {
             <div className="space-y-4 pt-4 border-t border-border">
               <div className="flex items-center justify-between">
                 <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
-                  <Key size={12} className={useHmac ? "text-blue" : "text-text-4"} /> HMAC Support
+                  <Key size={12} className={useHmac ? "text-blue" : "text-text-4"} aria-hidden="true" /> HMAC Support
                 </label>
                 <button
                   onClick={() => setHmac(!useHmac)}
+                  aria-label="Toggle HMAC Support"
+                  aria-pressed={useHmac}
                   className={cn(
                     "w-10 h-5 rounded-full relative transition-all",
                     useHmac ? "bg-blue" : "bg-border"
@@ -325,7 +327,7 @@ export default function HashGeneratorClient() {
                       value={hmacKey}
                       onChange={e => setHmacKey(e.target.value)}
                     />
-                    <Key size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-4" />
+                    <Key size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-4" aria-hidden="true" />
                   </div>
                   <p className="text-[9px] text-text-4 leading-relaxed italic">
                     HMAC (Hash-based Message Authentication Code) uses a secret key for verifiable authentication.
@@ -337,7 +339,7 @@ export default function HashGeneratorClient() {
             {/* Info Box */}
             <div className="p-4 bg-bg border border-border rounded-2xl space-y-2">
               <div className="flex items-center gap-2 text-blue">
-                <Terminal size={14} />
+                <Terminal size={14} aria-hidden="true" />
                 <span className="text-[10px] font-black uppercase tracking-widest">Runtime Note</span>
               </div>
               <p className="text-[9px] text-text-4 font-medium leading-relaxed">
@@ -357,9 +359,9 @@ export default function HashGeneratorClient() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between px-2">
-              <h3 className="text-xs font-black uppercase tracking-widest text-text flex items-center gap-2">
-                Generated Hashes {isProcessing && <Loader2 size={12} className="animate-spin text-blue" />}
-              </h3>
+              <h2 className="text-xs font-black uppercase tracking-widest text-text flex items-center gap-2">
+                Generated Hashes {isProcessing && <Loader2 size={12} className="animate-spin text-blue" aria-hidden="true" />}
+              </h2>
               {progress && (
                 <div className="text-[10px] font-bold text-blue uppercase tracking-widest flex items-center gap-2">
                   <span className="animate-pulse">{progress.message}</span>
@@ -398,12 +400,12 @@ export default function HashGeneratorClient() {
                     <div className="relative group min-h-[60px] flex items-center">
                       {res?.loading ? (
                         <div className="flex items-center gap-3 text-text-4">
-                          <Clock size={16} className="animate-pulse" />
+                          <Clock size={16} className="animate-pulse" aria-hidden="true" />
                           <span className="text-xs font-mono italic">Calculating...</span>
                         </div>
                       ) : res?.error ? (
                         <div className="flex items-start gap-2 text-red-500 bg-red-500/5 p-3 rounded-xl w-full border border-red-500/10">
-                          <AlertCircle size={14} className="mt-0.5" />
+                          <AlertCircle size={14} className="mt-0.5" aria-hidden="true" />
                           <span className="text-[10px] font-bold leading-relaxed">{res.error}</span>
                         </div>
                       ) : res?.value ? (
@@ -433,8 +435,8 @@ export default function HashGeneratorClient() {
             const Icon = item.icon as any;
             return (
               <div key={i} className="flex flex-col items-center text-center space-y-2 p-6 border border-border rounded-[32px]">
-                <Icon className="text-blue" size={24} />
-                <h4 className="text-[10px] font-black uppercase tracking-widest">{item.title}</h4>
+                <Icon className="text-blue" size={24} aria-hidden="true" />
+                <h3 className="text-[10px] font-black uppercase tracking-widest">{item.title}</h3>
                 <p className="text-[9px] font-medium text-text-4 uppercase">{item.desc}</p>
               </div>
             );

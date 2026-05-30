@@ -86,22 +86,25 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
           onClick={(e) => handleAction(e, () => togglePin(note.id))}
           className={`p-2 rounded-xl transition-all ${note.pinned ? 'text-blue bg-blue/10' : 'text-text-4 hover:bg-bg hover:text-blue'}`}
           title={note.pinned ? "Unpin" : "Pin"}
+          aria-label={note.pinned ? "Unpin note" : "Pin note"}
         >
-          <Pin size={16} fill={note.pinned ? "currentColor" : "none"} />
+          <Pin size={16} fill={note.pinned ? "currentColor" : "none"} aria-hidden="true" />
         </button>
         <button
           onClick={(e) => handleAction(e, () => toggleArchive(note.id))}
           className="p-2 text-text-4 hover:bg-bg hover:text-blue rounded-xl transition-all"
           title="Archive"
+          aria-label="Archive note"
         >
-          <Archive size={16} />
+          <Archive size={16} aria-hidden="true" />
         </button>
         <button
           onClick={(e) => handleAction(e, () => toggleDelete(note.id))}
           className="p-2 text-text-4 hover:bg-error/10 hover:text-error rounded-xl transition-all"
           title="Move to Trash"
+          aria-label="Move note to trash"
         >
-          <Trash2 size={16} />
+          <Trash2 size={16} aria-hidden="true" />
         </button>
       </div>
     </m.div>

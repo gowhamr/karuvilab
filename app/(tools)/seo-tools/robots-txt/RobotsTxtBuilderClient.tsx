@@ -103,7 +103,7 @@ export default function RobotsTxtBuilderClient() {
           </button>
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">
-            <h3 className="font-bold text-sm">Sitemap URL</h3>
+            <h2 className="font-bold text-sm">Sitemap URL</h2>
             <input type="url" className={inputClass} value={sitemapUrl} onChange={e => setSitemapUrl(e.target.value)} placeholder="https://example.com/sitemap.xml" />
           </div>
         </div>

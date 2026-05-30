@@ -92,7 +92,7 @@ export default function TextUtilityClient() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+      <dl className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
         {[
           { label: "Words", value: stats.words },
           { label: "Characters", value: stats.chars },
@@ -100,11 +100,11 @@ export default function TextUtilityClient() {
           { label: "Reading Time", value: `~${stats.readingTime}m` },
         ].map(({ label, value }) => (
           <div key={label} className="bg-surface border border-border p-4 rounded-xl">
-            <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</div>
-            <div className="text-xl font-black text-text">{value}</div>
+            <dt className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</dt>
+            <dd className="text-xl font-black text-text">{value}</dd>
           </div>
         ))}
-      </div>
+      </dl>
 
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
         <label className="text-sm font-bold text-text-2">Input Text</label>
@@ -119,7 +119,7 @@ export default function TextUtilityClient() {
 
       {OPERATIONS.map(({ group, items }) => (
         <div key={group} className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-          <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider">{group}</h3>
+          <h2 className="text-xs font-bold text-text-4 uppercase tracking-wider">{group}</h2>
           <div className="flex flex-wrap gap-2">
             {items.map(({ label, fn }) => (
               <button
@@ -162,8 +162,8 @@ export default function TextUtilityClient() {
       )}
 
       <div className="bg-surface border border-border p-5 rounded-2xl">
-        <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-3">Detailed Stats</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <h2 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-3">Detailed Stats</h2>
+        <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
           {[
             { label: "Words", value: stats.words },
             { label: "Characters", value: stats.chars },
@@ -174,11 +174,11 @@ export default function TextUtilityClient() {
             { label: "Reading Time", value: `~${stats.readingTime} min` },
           ].map(({ label, value }) => (
             <div key={label} className="bg-bg border border-border rounded-xl p-3">
-              <div className="text-xs text-text-4 mb-0.5">{label}</div>
-              <div className="font-bold text-text">{value}</div>
+              <dt className="text-xs text-text-4 mb-0.5">{label}</dt>
+              <dd className="font-bold text-text">{value}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
     </div>
   );

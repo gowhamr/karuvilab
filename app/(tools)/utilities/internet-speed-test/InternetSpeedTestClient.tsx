@@ -747,89 +747,89 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             {/* Right Column: Secondary Metrics & Info */}
             <div className="w-full xl:w-96 space-y-6">
               {/* Essential Metrics Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <dl className="grid grid-cols-2 gap-4">
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <ArrowDown className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Download</span>
+                    <ArrowDown className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
+                    <dt className="text-[9px] font-black uppercase tracking-widest">Download</dt>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">
+                  <dd className="text-2xl font-black text-text tabular-nums">
                     {download !== null ? download.toFixed(1) : '--'}
                     {download !== null && <span className="text-[10px] ml-1 opacity-40">Mbps</span>}
-                  </div>
+                  </dd>
                 </div>
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <ArrowUp className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Upload</span>
+                    <ArrowUp className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
+                    <dt className="text-[9px] font-black uppercase tracking-widest">Upload</dt>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">
+                  <dd className="text-2xl font-black text-text tabular-nums">
                     {upload !== null ? upload.toFixed(1) : '--'}
                     {upload !== null && <span className="text-[10px] ml-1 opacity-40">Mbps</span>}
-                  </div>
+                  </dd>
                 </div>
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <Activity className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Latency (Idle)</span>
+                    <Activity className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
+                    <dt className="text-[9px] font-black uppercase tracking-widest">Latency (Idle)</dt>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">{ping !== null ? `${ping}ms` : '--'}</div>
+                  <dd className="text-2xl font-black text-text tabular-nums">{ping !== null ? `${ping}ms` : '--'}</dd>
                 </div>
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <RefreshCw className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Jitter</span>
+                    <RefreshCw className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
+                    <dt className="text-[9px] font-black uppercase tracking-widest">Jitter</dt>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">{jitter !== null ? `${jitter}ms` : '--'}</div>
+                  <dd className="text-2xl font-black text-text tabular-nums">{jitter !== null ? `${jitter}ms` : '--'}</dd>
                 </div>
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <ShieldCheck className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Stability</span>
+                    <ShieldCheck className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
+                    <dt className="text-[9px] font-black uppercase tracking-widest">Stability</dt>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">{status === 'completed' ? `${stability.toFixed(0)}%` : status === 'idle' ? '--' : 'Calc...'}</div>
+                  <dd className="text-2xl font-black text-text tabular-nums">{status === 'completed' ? `${stability.toFixed(0)}%` : status === 'idle' ? '--' : 'Calc...'}</dd>
                 </div>
                 <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
-                    <Timer className="w-3.5 h-3.5 group-hover:text-blue transition-colors" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Loaded Latency</span>
+                    <Timer className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
+                    <dt className="text-[9px] font-black uppercase tracking-widest">Loaded Latency</dt>
                   </div>
-                  <div className="text-2xl font-black text-text tabular-nums">
+                  <dd className="text-2xl font-black text-text tabular-nums">
                     {loadedLatency !== null ? `${loadedLatency}ms` : status === 'download' ? "..." : '--'}
-                  </div>
+                  </dd>
                 </div>
-              </div>
+              </dl>
 
               {/* Provider Information */}
-              <div className="bg-bg/40 border border-border/50 p-6 rounded-[32px] space-y-5">
+              <dl className="bg-bg/40 border border-border/50 p-6 rounded-[32px] space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-2">
-                    <Server className="w-5 h-5" />
+                    <Server className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">ISP / AS Name</div>
-                    <div className="text-sm font-bold text-text truncate">{clientInfo?.org || 'Detecting...'}</div>
+                    <dt className="text-[9px] font-black text-text-4 uppercase tracking-widest">ISP / AS Name</dt>
+                    <dd className="text-sm font-bold text-text truncate">{clientInfo?.org || 'Detecting...'}</dd>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-2">
-                    <Globe className="w-5 h-5" />
+                    <Globe className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">Public IP</div>
-                    <div className="text-sm font-bold text-text tabular-nums">{clientInfo?.ip || '0.0.0.0'}</div>
+                    <dt className="text-[9px] font-black text-text-4 uppercase tracking-widest">Public IP</dt>
+                    <dd className="text-sm font-bold text-text tabular-nums">{clientInfo?.ip || '0.0.0.0'}</dd>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-2">
-                    <MapPin className="w-5 h-5" />
+                    <MapPin className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[9px] font-black text-text-4 uppercase tracking-widest">Node Location</div>
-                    <div className="text-sm font-bold text-text truncate">{clientInfo ? `${clientInfo.city}, ${clientInfo.country_name}` : 'Detecting...'}</div>
+                    <dt className="text-[9px] font-black text-text-4 uppercase tracking-widest">Node Location</dt>
+                    <dd className="text-sm font-bold text-text truncate">{clientInfo ? `${clientInfo.city}, ${clientInfo.country_name}` : 'Detecting...'}</dd>
                   </div>
                 </div>
-              </div>
+              </dl>
 
               {/* Persistence: Recent History */}
               <AnimatePresence>

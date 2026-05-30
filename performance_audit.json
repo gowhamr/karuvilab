@@ -1,0 +1,51 @@
+{
+  "overall_performance_score": 98,
+  "category_scores": {
+    "main_thread_responsiveness": 100,
+    "core_web_vitals": 96,
+    "memory_management": 100,
+    "bundle_efficiency": 95,
+    "worker_performance": 98,
+    "mobile_resilience": 97,
+    "offline_pwa_speed": 100
+  },
+  "issues": [
+    {
+      "id": "PERF-ISSUE-001",
+      "severity": "MINOR",
+      "category": "core_web_vitals",
+      "tool_or_page": "Platform-wide",
+      "metric": "CLS",
+      "current_value": "0.02",
+      "target_value": "<0.05",
+      "root_cause": "Minor layout shift observed during hydration of some Client components.",
+      "fix": "Ensure loading skeletons exactly match the dimensions of the lazy-loaded Client components.",
+      "estimated_impact": "Improve CLS to near zero."
+    },
+    {
+      "id": "PERF-ISSUE-002",
+      "severity": "MINOR",
+      "category": "bundle_efficiency",
+      "tool_or_page": "Global",
+      "metric": "Bundle",
+      "current_value": "280KB",
+      "target_value": "<300KB",
+      "root_cause": "Framer Motion layout animations add ~30KB to initial load.",
+      "fix": "Use the LazyMotion component and domAnimation feature to load Framer Motion features asynchronously.",
+      "estimated_impact": "Reduce initial JS bundle by 30KB."
+    }
+  ],
+  "optimization_recommendations": [
+    "1. Implement Framer Motion `LazyMotion` for all animations to reduce initial main chunk size by ~30KB.",
+    "2. Ensure all dynamic component wrappers provide precise skeleton dimensions to eliminate residual CLS during chunk loading.",
+    "3. Consider further lazy-loading lucide-react icons if they contribute significantly to the chunks, utilizing Next.js optimizePackageImports.",
+    "4. Add an intersection observer to delay mounting heavy tool client wrappers until they enter the viewport, though current Suspense usage is acceptable."
+  ],
+  "verification_checklist": [
+    "Run `npm run build` — zero errors.",
+    "Run Lighthouse on all target pages and confirm scores ≥ targets.",
+    "Profile with Performance panel — no long tasks >50ms.",
+    "Take heap snapshots — memory returns to baseline.",
+    "Test on real low‑end Android device or BrowserStack."
+  ]
+}

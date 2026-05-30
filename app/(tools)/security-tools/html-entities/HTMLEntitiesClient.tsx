@@ -101,7 +101,7 @@ export default function HTMLEntitiesClient() {
       </div>
 
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h3 className="text-sm font-bold text-text-2">Common HTML Entities Reference</h3>
+        <h2 className="text-sm font-bold text-text-2">Common HTML Entities Reference</h2>
         <div className="overflow-auto rounded-xl border border-border">
           <table className="w-full text-sm">
             <thead>

@@ -82,18 +82,18 @@ export default function URLCleanerClient() {
 
       {cleaned && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <div className="text-2xl font-black text-blue">{removed.length}</div>
-              <div className="text-xs text-text-4 mt-1">Parameters Removed</div>
+              <dd className="text-2xl font-black text-blue">{removed.length}</dd>
+              <dt className="text-xs text-text-4 mt-1">Parameters Removed</dt>
             </div>
             <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <div className="text-2xl font-black text-text">
+              <dd className="text-2xl font-black text-text">
                 {Math.round(((input.length - cleaned.length) / input.length) * 100)}%
-              </div>
-              <div className="text-xs text-text-4 mt-1">URL Shorter</div>
+              </dd>
+              <dt className="text-xs text-text-4 mt-1">URL Shorter</dt>
             </div>
-          </div>
+          </dl>
 
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-4">
             <div className="space-y-2">
@@ -119,7 +119,7 @@ export default function URLCleanerClient() {
 
           {removed.length > 0 && (
             <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-text-2">Removed Parameters</h3>
+              <h2 className="text-sm font-bold text-text-2">Removed Parameters</h2>
               <div className="flex flex-wrap gap-2">
                 {removed.map(param => (
                   <span key={param} className="px-3 py-1.5 text-xs font-mono font-bold bg-red-500/10 text-red-500 border border-red-500/20 rounded-full">
@@ -133,8 +133,8 @@ export default function URLCleanerClient() {
       )}
 
       <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-        <h3 className="text-sm font-bold text-text-2">Tracked Parameter Categories</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-3">
+        <h2 className="text-sm font-bold text-text-2">Tracked Parameter Categories</h2>
+        <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-3">
           {[
             ["UTM Tags", "utm_source, utm_medium, utm_campaign…"],
             ["Google", "gclid, dclid, gclsrc"],
@@ -144,11 +144,11 @@ export default function URLCleanerClient() {
             ["Others", "ref, ttclid, twclid, yclid…"],
           ].map(([cat, params]) => (
             <div key={cat} className="bg-bg border border-border rounded-xl p-3">
-              <div className="font-bold text-text mb-0.5">{cat}</div>
-              <div className="text-text-4">{params}</div>
+              <dt className="font-bold text-text mb-0.5">{cat}</dt>
+              <dd className="text-text-4">{params}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
     </div>
   );

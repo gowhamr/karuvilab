@@ -121,22 +121,22 @@ export default function RegexTesterClient() {
 
       {result && !result.error && (
         <div className="space-y-4">
-          <div className="bg-surface border border-border p-4 rounded-xl flex items-center gap-4">
+          <dl className="bg-surface border border-border p-4 rounded-xl flex items-center gap-4">
             <div className="text-center">
-              <div className="text-2xl font-black text-blue">{result.matches.length}</div>
-              <div className="text-xs text-text-4 uppercase tracking-wider">Matches</div>
+              <dd className="text-2xl font-black text-blue">{result.matches.length}</dd>
+              <dt className="text-xs text-text-4 uppercase tracking-wider">Matches</dt>
             </div>
             {result.matches[0] && result.matches[0].groups.length > 0 && (
               <div className="text-center">
-                <div className="text-2xl font-black text-text">{result.matches[0].groups.length}</div>
-                <div className="text-xs text-text-4 uppercase tracking-wider">Groups</div>
+                <dd className="text-2xl font-black text-text">{result.matches[0].groups.length}</dd>
+                <dt className="text-xs text-text-4 uppercase tracking-wider">Groups</dt>
               </div>
             )}
-          </div>
+          </dl>
 
           {highlighted && (
             <div className="bg-surface border border-border p-5 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-text-2">Highlighted Matches</h3>
+              <h2 className="text-sm font-bold text-text-2">Highlighted Matches</h2>
               <div className="font-mono text-sm text-text break-all leading-relaxed whitespace-pre-wrap bg-bg border border-border rounded-xl p-4">
                 {highlighted.map((part, i) =>
                   part.match
@@ -149,7 +149,7 @@ export default function RegexTesterClient() {
 
           {result.matches.length > 0 && (
             <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-text-2">Match Details</h3>
+              <h2 className="text-sm font-bold text-text-2">Match Details</h2>
               <div className="space-y-2">
                 {result.matches.slice(0, 50).map((m, i) => (
                   <div key={i} className="bg-bg border border-border rounded-xl p-3 text-sm">
@@ -179,7 +179,7 @@ export default function RegexTesterClient() {
       )}
 
       <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-        <h3 className="text-sm font-bold text-text-2">Example Patterns</h3>
+        <h2 className="text-sm font-bold text-text-2">Example Patterns</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {EXAMPLE_PATTERNS.map(ex => (
             <button
