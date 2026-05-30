@@ -1,12 +1,11 @@
 "use client";
 import { useState, useMemo, useCallback } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { Binary, Hash, TextCursorInput, ListIcon, BinaryIcon, TypeIcon } from "lucide-react";
+import { Binary, Hash, TextCursorInput, ListIcon, BinaryIcon, TypeIcon, FileCode2 } from "lucide-react";
 
 type Mode = "single" | "text";
 
@@ -17,10 +16,37 @@ const BASES = [
   { id: "hex", base: 16, label: "Hex", prefix: "0x", placeholder: "e.g. 2A", icon: BinaryIcon },
 ];
 
+const toRoman = (num: number) => {
+  if (num < 1 || num > 3999) return "N/A";
+  const roman: Record<string, number> = {
+    M: 1000, CM: 900, D: 500, CD: 400,
+    C: 100, XC: 90, L: 50, XL: 40,
+    X: 10, IX: 9, V: 5, IV: 4, I: 1
+  };
+  let str = "";
+  let n = num;
+  for (const i of Object.keys(roman) as Array<keyof typeof roman>) {
+    const val = roman[i] as number;
+    const q = Math.floor(n / val);
+    n -= q * val;
+    str += i.repeat(q);
+  }
+  return str;
+};
+
+const toBase64 = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes));
+const fromBase64 = (b64: string) => {
+  try {
+    return Uint8Array.from(atob(b64.replace(/\s+/g, '')), c => c.charCodeAt(0));
+  } catch {
+    return new Uint8Array(0);
+  }
+};
+
 export default function NumeralConverterClient() {
   const [mode, setMode] = useState<Mode>("single");
   const [inputs, setInputs] = useState<Record<string, string>>({
-    bin: "", oct: "", dec: "42", hex: "", text: "B",
+    bin: "", oct: "", dec: "42", hex: "", text: "B", base64: ""
   });
 
   // --- Single Value Logic ---
@@ -35,15 +61,17 @@ export default function NumeralConverterClient() {
         let bigValue: bigint;
         if (id === "text") {
           if (value.length === 0) {
-            return { bin: "", oct: "", dec: "", hex: "", text: "" };
+            return { bin: "", oct: "", dec: "", hex: "", text: "", base64: "" };
           }
           bigValue = BigInt(value.charCodeAt(0));
-        } else {
+        } else if (baseObj) {
           const cleanValue = value.replace(/^0[box]/i, "");
           if (cleanValue === "" || cleanValue === "-") {
-            return { bin: "", oct: "", dec: "", hex: "", text: "", [id]: value };
+            return { bin: "", oct: "", dec: "", hex: "", text: "", base64: "", [id]: value };
           }
-          bigValue = BigInt(`0${baseObj!.prefix}${cleanValue}`);
+          bigValue = BigInt(`0${baseObj.prefix}${cleanValue}`);
+        } else {
+          return next;
         }
 
         // Update all other fields
@@ -66,17 +94,21 @@ export default function NumeralConverterClient() {
   const handleTextChange = useCallback((id: string, value: string) => {
     setInputs(prev => {
       const next = { ...prev, [id]: value };
+      if (!value.trim()) {
+         return { bin: "", oct: "", dec: "", hex: "", text: "", base64: "" };
+      }
       
       try {
-        let bytes: Uint8Array;
+        let bytes: Uint8Array = new Uint8Array(0);
 
         if (id === "text") {
           bytes = new TextEncoder().encode(value);
+        } else if (id === "base64") {
+          bytes = fromBase64(value);
         } else if (id === "bin") {
           const parts = value.trim().split(/\s+/).filter(p => p.length > 0);
           bytes = new Uint8Array(parts.map(p => parseInt(p, 2)));
         } else if (id === "hex") {
-          // Support both space-separated and continuous hex
           let cleanHex = value.replace(/\s+/g, "");
           if (cleanHex.length % 2 !== 0) cleanHex = "0" + cleanHex;
           const parts = value.includes(" ") 
@@ -89,16 +121,16 @@ export default function NumeralConverterClient() {
         } else if (id === "oct") {
           const parts = value.trim().split(/\s+/).filter(p => p.length > 0);
           bytes = new Uint8Array(parts.map(p => parseInt(p, 8)));
-        } else {
-          return next;
         }
 
-        if (id !== "text") next.text = new TextDecoder().decode(bytes);
-        if (id !== "bin") next.bin = Array.from(bytes).map(b => b.toString(2).padStart(8, "0")).join(" ");
-        if (id !== "hex") next.hex = Array.from(bytes).map(b => b.toString(16).padStart(2, "0").toUpperCase()).join(" ");
-        if (id !== "dec") next.dec = Array.from(bytes).map(b => b.toString(10)).join(" ");
-        if (id !== "oct") next.oct = Array.from(bytes).map(b => b.toString(8).padStart(3, "0")).join(" ");
-
+        if (bytes.length > 0) {
+          if (id !== "text") next.text = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+          if (id !== "base64") next.base64 = toBase64(bytes);
+          if (id !== "bin") next.bin = Array.from(bytes).map(b => b.toString(2).padStart(8, "0")).join(" ");
+          if (id !== "hex") next.hex = Array.from(bytes).map(b => b.toString(16).padStart(2, "0").toUpperCase()).join(" ");
+          if (id !== "dec") next.dec = Array.from(bytes).map(b => b.toString(10)).join(" ");
+          if (id !== "oct") next.oct = Array.from(bytes).map(b => b.toString(8).padStart(3, "0")).join(" ");
+        }
       } catch (e) {
         // Parsing error
       }
@@ -107,13 +139,31 @@ export default function NumeralConverterClient() {
   }, []);
 
   const clearAll = () => {
-    setInputs({ bin: "", oct: "", dec: "", hex: "", text: "" });
+    setInputs({ bin: "", oct: "", dec: "", hex: "", text: "", base64: "" });
   };
+
+  const parsedDec = useMemo(() => {
+    if (mode !== "single" || !inputs.dec) return null;
+    try {
+      return BigInt(inputs.dec);
+    } catch {
+      return null;
+    }
+  }, [mode, inputs.dec]);
+
+  const bitSize = useMemo(() => {
+    if (parsedDec === null || parsedDec < 0n) return 0;
+    if (parsedDec < 256n) return 8;
+    if (parsedDec < 65536n) return 16;
+    if (parsedDec < 4294967296n) return 32;
+    if (parsedDec < 18446744073709551616n) return 64;
+    return 0; // Too large to visualize usefully
+  }, [parsedDec]);
 
   return (
     <ToolShell
       title="Numeral Converter"
-      description="Advanced base converter for Binary, Hex, Decimal, Octal, and ASCII Text."
+      description="Advanced base converter for Binary, Hex, Decimal, Octal, ASCII Text, and Base64."
     >
       <div className="space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -130,6 +180,7 @@ export default function NumeralConverterClient() {
           />
           <button
             onClick={clearAll}
+            aria-label="Clear all inputs"
             className="text-xs font-bold text-text-4 hover:text-red-400 transition-colors uppercase tracking-widest px-4 py-2 bg-surface border border-border rounded-lg"
           >
             Clear All
@@ -140,30 +191,52 @@ export default function NumeralConverterClient() {
           {/* Main Inputs */}
           <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
             {/* ASCII Text Field */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label htmlFor="text-input" className="text-sm font-bold text-text-2 flex items-center gap-2">
-                  <TypeIcon size={16} className="text-blue" />
-                  ASCII / Text
-                </label>
-                {inputs.text && <CopyButton text={inputs.text || ""} label="Copy" />}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="text-input" className="text-sm font-bold text-text-2 flex items-center gap-2">
+                    <TypeIcon size={16} className="text-blue" aria-hidden="true" />
+                    ASCII / Text
+                  </label>
+                  {inputs.text && <CopyButton text={inputs.text || ""} label="Copy" />}
+                </div>
+                {mode === "single" ? (
+                  <ToolInput
+                    id="text-input"
+                    value={inputs.text || ""}
+                    onChange={(v) => handleSingleChange("text", v.slice(-1))}
+                    placeholder="e.g. A"
+                    className="font-mono text-xl"
+                  />
+                ) : (
+                  <textarea
+                    id="text-input"
+                    value={inputs.text || ""}
+                    onChange={(e) => handleTextChange("text", e.target.value)}
+                    placeholder="Enter text to convert..."
+                    className="w-full min-h-[100px] px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-sm resize-y"
+                  />
+                )}
               </div>
-              {mode === "single" ? (
-                <ToolInput
-                  id="text-input"
-                  value={inputs.text || ""}
-                  onChange={(v) => handleSingleChange("text", v.slice(-1))}
-                  placeholder="e.g. A"
-                  className="font-mono text-xl"
-                />
-              ) : (
-                <textarea
-                  id="text-input"
-                  value={inputs.text || ""}
-                  onChange={(e) => handleTextChange("text", e.target.value)}
-                  placeholder="Enter text to convert..."
-                  className="w-full min-h-[100px] px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-base resize-y"
-                />
+
+              {/* Base64 Field (Only in Text Mode) */}
+              {mode === "text" && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="base64-input" className="text-sm font-bold text-text-2 flex items-center gap-2">
+                      <FileCode2 size={16} className="text-blue" aria-hidden="true" />
+                      Base64
+                    </label>
+                    {inputs.base64 && <CopyButton text={inputs.base64 || ""} label="Copy" />}
+                  </div>
+                  <textarea
+                    id="base64-input"
+                    value={inputs.base64 || ""}
+                    onChange={(e) => handleTextChange("base64", e.target.value)}
+                    placeholder="Base64 encoded string..."
+                    className="w-full min-h-[100px] px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-sm resize-y"
+                  />
+                </div>
               )}
             </div>
 
@@ -172,7 +245,7 @@ export default function NumeralConverterClient() {
                 <div key={b.id} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <label htmlFor={`${b.id}-input`} className="text-sm font-bold text-text-2 flex items-center gap-2">
-                      <b.icon size={16} className="text-text-4" />
+                      <b.icon size={16} className="text-text-4" aria-hidden="true" />
                       {b.label}
                     </label>
                     {inputs[b.id] && <CopyButton text={inputs[b.id] || ""} label="Copy" />}
@@ -180,7 +253,7 @@ export default function NumeralConverterClient() {
                   {mode === "single" ? (
                     <div className="flex gap-2 items-center">
                       {b.prefix && (
-                        <span className="text-sm font-mono text-text-4 bg-bg border border-border px-3 py-3 rounded-xl min-w-[3.5rem] text-center">
+                        <span className="text-sm font-mono text-text-4 bg-bg border border-border px-3 py-3 rounded-xl min-w-[3.5rem] text-center" aria-hidden="true">
                           {b.prefix}
                         </span>
                       )}
@@ -208,7 +281,7 @@ export default function NumeralConverterClient() {
 
           {/* Metrics / Info */}
           {mode === "single" && inputs.dec && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <MetricCard
                 label="Total Bits"
                 value={BigInt(inputs.dec || "0").toString(2).length.toString()}
@@ -223,6 +296,11 @@ export default function NumeralConverterClient() {
                 label="Sign"
                 value={BigInt(inputs.dec || "0") >= 0n ? "Positive" : "Negative"}
                 icon={Hash}
+              />
+              <MetricCard
+                label="Roman Numeral"
+                value={parsedDec !== null && parsedDec > 0n && parsedDec < 4000n ? toRoman(Number(parsedDec)) : "N/A"}
+                icon={TypeIcon}
               />
             </div>
           )}
@@ -248,15 +326,15 @@ export default function NumeralConverterClient() {
           )}
         </div>
 
-        {/* Binary Table / Bit View for Single Mode (Small Numbers) */}
-        {mode === "single" && inputs.dec && BigInt(inputs.dec || "0") >= 0n && BigInt(inputs.dec || "0") < 256n && (
-          <div className="bg-surface border border-border p-6 rounded-[32px] space-y-4">
-            <h2 className="text-sm font-bold text-text-2 uppercase tracking-widest">8-Bit Visualizer</h2>
+        {/* Dynamic Bit Visualizer for Single Mode */}
+        {mode === "single" && bitSize > 0 && parsedDec !== null && (
+          <div className="bg-surface border border-border p-6 rounded-[32px] space-y-6">
+            <h2 className="text-sm font-bold text-text-2 uppercase tracking-widest">{bitSize}-Bit Visualizer</h2>
             <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
-              {BigInt(inputs.dec || "0").toString(2).padStart(8, "0").split("").map((bit, i) => (
-                <div key={i} className="flex flex-col items-center gap-2">
+              {parsedDec.toString(2).padStart(bitSize, "0").split("").map((bit, i) => (
+                <div key={`${bitSize}-${i}`} className="flex flex-col items-center gap-1.5 w-10 sm:w-12">
                   <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center font-mono text-xl font-black border-2 transition-all ${
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-mono text-lg sm:text-xl font-black border-2 transition-all ${
                       bit === "1"
                         ? "bg-blue text-white border-blue shadow-lg shadow-blue/20 scale-105"
                         : "bg-bg border-border text-text-4"
@@ -264,8 +342,7 @@ export default function NumeralConverterClient() {
                   >
                     {bit}
                   </div>
-                  <span className="text-[10px] font-bold text-text-4">2^{7-i}</span>
-                  <span className="text-[10px] font-medium text-text-4/60">({Math.pow(2, 7-i)})</span>
+                  <span className="text-[9px] font-bold text-text-4" aria-hidden="true">2^{bitSize - 1 - i}</span>
                 </div>
               ))}
             </div>
