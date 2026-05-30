@@ -40,9 +40,6 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: siteConfig.name + " — Fast, Private Browser Tools",
     description: siteConfig.description,

@@ -14,7 +14,7 @@ export function generateToolMetadata(toolId: string): Metadata {
 
   const title = `${tool.name} | KaruviLab`;
   const description = tool.desc;
-  const url = `${BASE_URL}/${tool.href.replace(/\/$/, '')}/`;
+  const url = `${BASE_URL}/${tool.href.replace(/\/$/, "")}/`;
 
   return {
     title,
@@ -73,9 +73,9 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
 
   // Helper to ensure absolute URLs are perfectly canonical (trailing slash enforced)
   const normalizeUrl = (path: string) => {
-    const cleanPath = path.replace(/^\/+|\/+$/g, '');
+    const cleanPath = path.replace(/^\/+|\/+$/g, "");
     const url = `${BASE_URL}/${cleanPath}/`;
-    return url.replace(/\/+$/, '/');
+    return url.replace(/\/+$/, "/");
   };
 
   // 1. Breadcrumb List Construction
@@ -120,7 +120,7 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
       "@type": "CollectionPage",
       "name": `${category.label} Tools | KaruviLab`,
       "description": `Browse our collection of free, private, and offline-first ${category.label.toLowerCase()} tools.`,
-      "url": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, '')}/`,
+      "url": `${BASE_URL}/${category.href.replace(/^\/|\/$/g, "")}/`,
       "publisher": {
         "@type": "Organization",
         "name": "KaruviLab"
@@ -157,20 +157,34 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
     });
   }
 
+  if (propsContent?.detailedDescription && !tool) {
+    scripts.push({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Blog Article",
+      "description": propsContent.detailedDescription.substring(0, 160).replace(/<[^>]*>/g, ""),
+      "articleBody": propsContent.detailedDescription.replace(/<[^>]*>/g, ""),
+      "author": {
+        "@type": "Organization",
+        "name": "KaruviLab"
+      }
+    });
+  }
+
   if (tool) {
     const registryContent = (TOOL_CONTENT[tool.id as keyof typeof TOOL_CONTENT] || {}) as ToolContent;
     const detailedDesc = propsContent?.detailedDescription || registryContent.detailedDescription || tool.desc;
     
     const getApplicationCategory = (catId?: string) => {
       switch (catId) {
-        case 'calculators': return 'FinanceApplication';
-        case 'developer':   return 'DeveloperApplication';
-        case 'seo':         return 'BusinessApplication';
-        case 'security':    
-        case 'pdf':
-        case 'image':
-        case 'utilities':   return 'UtilitiesApplication';
-        default:            return 'UtilitiesApplication';
+        case "calculators": return "FinanceApplication";
+        case "developer":   return "DeveloperApplication";
+        case "seo":         return "BusinessApplication";
+        case "security":    
+        case "pdf":
+        case "image":
+        case "utilities":   return "UtilitiesApplication";
+        default:            return "UtilitiesApplication";
       }
     };
 
@@ -253,7 +267,7 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
         return (
           <Script
             key={i}
-            id={`json-ld-${tool?.id || 'site'}-${i}`}
+            id={`json-ld-${tool?.id || "site"}-${i}`}
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: content }}
           />
