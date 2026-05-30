@@ -1,5 +1,4 @@
 import { ToolContent } from '../registry/types';
-
 import { hashGenerator } from './tools/hash-generator';
 import { passwordGenerator } from './tools/password-generator';
 import { base64 } from './tools/base64';
@@ -74,33 +73,13 @@ import { wordCounter } from './tools/word-counter';
 import { textCaseConverter } from './tools/text-case-converter';
 import { invoiceGenerator } from './tools/invoice-generator';
 import { colorConverter } from './tools/color-converter';
-import { scientificCalculator } from './tools/scientific-calculator';
-import { pomodoroTimer } from './tools/pomodoro-timer';
 import { notesContent } from './tools/notes';
-
-// Missing imports
-import { pdfToWordContent } from './tools/pdf-to-word';
-import { lockUnlockPdfContent } from './tools/lock-unlock-pdf';
-import { watermarkPdfContent } from './tools/watermark-pdf';
-import { pageNumberingContent } from './tools/page-numbering';
-import { rotatePdfContent } from './tools/rotate-pdf';
-import { extractImagesContent } from './tools/extract-images';
-import { calendarContent } from './tools/calendar';
-import { yamlValidatorContent } from './tools/yaml-validator';
-import { colorPaletteExtractorContent } from './tools/color-palette-extractor';
-import { timezoneConverterContent } from './tools/timezone-converter';
-import { fakeDataGeneratorContent } from './tools/fake-data-generator';
-import { textSorterDeduperContent } from './tools/text-sorter-deduper';
-import { micCameraTesterContent } from './tools/mic-camera-tester';
-import { wifiQrCodeContent } from './tools/wifi-qr-code';
-import { phoneMockupGeneratorContent } from './tools/phone-mockup-generator';
-import { chartGeneratorContent } from './tools/chart-generator';
-import { typingSpeedTestContent } from './tools/typing-speed-test';
-import { barcodeScannerContent } from './tools/barcode-scanner';
 import { videoTrimContent } from './tools/video-trim';
 import { audioConverterContent } from './tools/audio-converter';
 import { gifCreatorContent } from './tools/gif-creator';
 import { videoMetadataContent } from './tools/video-metadata-viewer';
+import { commandCheatSheetContent } from './tools/command-cheat-sheet';
+import { hashMapVisualizerContent } from './tools/hash-map-visualizer';
 
 export const TOOL_CONTENT: Record<string, ToolContent> = {
   "hash-generator": hashGenerator,
@@ -178,28 +157,10 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "invoice-generator": invoiceGenerator,
   "color-converter": colorConverter,
   "notes": notesContent,
-  "scientific-calculator": scientificCalculator,
-  "pomodoro-timer": pomodoroTimer,
-  "pdf-to-word": pdfToWordContent,
-  "lock-unlock-pdf": lockUnlockPdfContent,
-  "watermark-pdf": watermarkPdfContent,
-  "page-numbering": pageNumberingContent,
-  "rotate-pdf": rotatePdfContent,
-  "extract-images": extractImagesContent,
-  "calendar": calendarContent,
-  "yaml-validator": yamlValidatorContent,
-  "color-palette-extractor": colorPaletteExtractorContent,
-  "timezone-converter": timezoneConverterContent,
-  "fake-data-generator": fakeDataGeneratorContent,
-  "text-sorter-deduper": textSorterDeduperContent,
-  "mic-camera-tester": micCameraTesterContent,
-  "wifi-qr-code": wifiQrCodeContent,
-  "phone-mockup-generator": phoneMockupGeneratorContent,
-  "chart-generator": chartGeneratorContent,
-  "typing-speed-test": typingSpeedTestContent,
-  "barcode-scanner": barcodeScannerContent,
   "video-trim": videoTrimContent,
   "audio-converter": audioConverterContent,
   "gif-creator": gifCreatorContent,
-  "video-metadata-viewer": videoMetadataContent
+  "video-metadata-viewer": videoMetadataContent,
+  "command-cheat-sheet": commandCheatSheetContent,
+  "hash-map-visualizer": hashMapVisualizerContent
 };
