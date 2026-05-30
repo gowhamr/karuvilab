@@ -3,15 +3,18 @@
 import { memo } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSwitch } from "../components/SettingUI";
-import { Shield, HardDrive, LineChart, History, Trash2, Download, Upload, Check, RefreshCcw } from "lucide-react";
+import { Shield, HardDrive, LineChart, History, Trash2, Download, Upload, Check, RefreshCcw, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { performFactoryReset, clearToolData } from "@/src/lib/factory-reset";
 
 export const PrivacySection = memo(function PrivacySection() {
   const privacy = useSettingsStore(state => state.privacy);
   const updatePrivacy = useSettingsStore(state => state.updatePrivacy);
   const resetAll = useSettingsStore(state => state.resetAll);
   const [isExporting, setIsExporting] = useState(false);
+  const [isReseting, setIsReseting] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
   const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const exportSettings = () => {
@@ -51,21 +54,19 @@ export const PrivacySection = memo(function PrivacySection() {
     reader.readAsText(file);
   };
 
-  const clearCache = () => {
+  const handleClearCache = async () => {
     if (!confirm("Are you sure? This will remove your recently used tools, saved inputs, and all tool-specific data. Your theme and favorites will be preserved.")) return;
     
-    const keysToRemove = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k) {
-        // Preserve critical settings
-        if (!k.startsWith("karuvi-theme") && !k.startsWith("karuvi-font-size") && !k.startsWith("karuvi-settings") && !k.startsWith("karuvi-favorites")) {
-          keysToRemove.push(k);
-        }
-      }
+    setIsClearing(true);
+    try {
+      await clearToolData();
+      alert("Cache cleared successfully.");
+    } catch (err) {
+      console.error("Clear Cache failed:", err);
+      alert("Failed to clear some data. Please try a Factory Reset if issues persist.");
+    } finally {
+      setIsClearing(false);
     }
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-    alert("Cache cleared successfully.");
   };
 
   return (
@@ -105,9 +106,11 @@ export const PrivacySection = memo(function PrivacySection() {
         helpText="This will empty your local tool cache. Your theme preferences and favorites are kept safe."
       >
         <button 
-          onClick={clearCache}
-          className="px-4 py-2 bg-surface border border-border rounded-xl text-[10px] font-black uppercase hover:border-blue hover:text-blue transition-all"
+          onClick={handleClearCache}
+          disabled={isClearing}
+          className="px-4 py-2 bg-surface border border-border rounded-xl text-[10px] font-black uppercase hover:border-blue hover:text-blue transition-all disabled:opacity-50 flex items-center gap-2"
         >
+          {isClearing ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
           Clear Cache
         </button>
       </SettingRow>
@@ -115,17 +118,25 @@ export const PrivacySection = memo(function PrivacySection() {
       <div className="pt-12 border-t border-border/40 mt-8">
         <h4 className="text-xs font-black uppercase tracking-widest text-red-500/60 mb-4">Danger Zone</h4>
         <button
-          onClick={() => {
+          onClick={async () => {
             if (confirm('DANGER: This will delete ALL your settings, favorites, and history. This cannot be undone.')) {
-              localStorage.clear();
-              resetAll();
-              window.location.reload();
+              setIsReseting(true);
+              try {
+                await performFactoryReset();
+              } catch (err) {
+                console.error("Factory Reset failed:", err);
+                // Fallback attempt
+                localStorage.clear();
+                resetAll();
+                window.location.reload();
+              }
             }
           }}
-          className="w-full sm:w-auto px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
+          disabled={isReseting}
+          className="w-full sm:w-auto px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <Trash2 className="w-4 h-4" />
-          Factory Reset App
+          {isReseting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+          {isReseting ? 'Resetting...' : 'Factory Reset App'}
         </button>
       </div>
     </div>
