@@ -64,12 +64,12 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
           </div>
 
           <div className="space-y-4">
-            <div className="flex justify-between items-end">
-              <span className="text-xs font-black uppercase tracking-widest text-text-4">Risk Indicator</span>
-              <span className={cn("text-sm font-black uppercase tracking-widest", riskTextColors[result.riskLevel])}>
+            <dl className="flex justify-between items-end">
+              <dt className="text-xs font-black uppercase tracking-widest text-text-4">Risk Indicator</dt>
+              <dd className={cn("text-sm font-black uppercase tracking-widest", riskTextColors[result.riskLevel])}>
                 {result.riskLevel} Risk
-              </span>
-            </div>
+              </dd>
+            </dl>
             
             <div className="relative h-3 w-full bg-bg border border-border rounded-full overflow-hidden">
               <div 

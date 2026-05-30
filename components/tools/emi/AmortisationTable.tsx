@@ -69,13 +69,16 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
         </div>
       </div>
 
-      <div className="bg-surface border border-border rounded-2xl overflow-hidden">
-        <div className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-[10px] font-black uppercase tracking-widest text-text-4">
-          <span>Month</span>
-          <span>Principal</span>
-          <span>Interest</span>
-          <span>Extra</span>
-          <span>Balance</span>
+      <div className="bg-surface border border-border rounded-2xl overflow-hidden" role="table" aria-label="Amortisation Schedule">
+        <div 
+          className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-[10px] font-black uppercase tracking-widest text-text-4"
+          role="row"
+        >
+          <span role="columnheader">Month</span>
+          <span role="columnheader">Principal</span>
+          <span role="columnheader">Interest</span>
+          <span role="columnheader">Extra</span>
+          <span role="columnheader">Balance</span>
         </div>
 
         <div 
@@ -84,20 +87,21 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
           className="relative overflow-auto"
           style={{ height: viewportHeight }}
         >
-          <div style={{ height: totalHeight, position: 'relative' }}>
+          <div style={{ height: totalHeight, position: 'relative' }} role="rowgroup">
             <div style={{ transform: `translateY(${offset}px)` }}>
               {visibleRows.map((entry) => (
                 <div 
                   key={entry.month} 
                   className="grid grid-cols-5 px-4 h-[48px] items-center text-xs font-bold border-b border-border/30 last:border-0 hover:bg-blue/5 transition-colors"
+                  role="row"
                 >
-                  <span className="text-text-3">M{entry.month}</span>
-                  <span className="text-text">{formatCurrency(entry.principal)}</span>
-                  <span className="text-text-4">{formatCurrency(entry.interest)}</span>
-                  <span className="text-green-600">
+                  <span className="text-text-3" role="rowheader">M{entry.month}</span>
+                  <span className="text-text" role="cell">{formatCurrency(entry.principal)}</span>
+                  <span className="text-text-4" role="cell">{formatCurrency(entry.interest)}</span>
+                  <span className="text-green-600" role="cell">
                     {entry.prepayment > 0 ? formatCurrency(entry.prepayment) : '-'}
                   </span>
-                  <span className="font-black text-blue">{formatCurrency(entry.balance)}</span>
+                  <span className="font-black text-blue" role="cell">{formatCurrency(entry.balance)}</span>
                 </div>
               ))}
             </div>

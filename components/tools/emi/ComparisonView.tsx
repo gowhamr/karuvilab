@@ -81,16 +81,16 @@ export function ComparisonView() {
                 />
               </div>
 
-              <div className="pt-4 border-t border-border/50 grid grid-cols-2 gap-2 text-[9px] font-bold text-text-4 uppercase tracking-tighter">
+              <dl className="pt-4 border-t border-border/50 grid grid-cols-2 gap-2 text-[9px] font-bold text-text-4 uppercase tracking-tighter">
                 <div>
-                  <p>Principal</p>
-                  <p className="text-text">{formatCurrency(d.config.loanAmount)}</p>
+                  <dt>Principal</dt>
+                  <dd className="text-text">{formatCurrency(d.config.loanAmount)}</dd>
                 </div>
                 <div>
-                  <p>Rate</p>
-                  <p className="text-text">{d.config.interestRate}%</p>
+                  <dt>Rate</dt>
+                  <dd className="text-text">{d.config.interestRate}%</dd>
                 </div>
-              </div>
+              </dl>
             </div>
           </div>
         ))}
@@ -113,16 +113,16 @@ export function ComparisonView() {
 
 function MetricItem({ label, value, isBest, diff }: { label: string, value: string, isBest?: boolean, diff?: number }) {
   return (
-    <div className="space-y-1">
-      <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">{label}</p>
-      <p className={cn("text-lg font-black tabular-nums", isBest ? "text-green-600" : "text-text")}>
+    <dl className="space-y-1">
+      <dt className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">{label}</dt>
+      <dd className={cn("text-lg font-black tabular-nums", isBest ? "text-green-600" : "text-text")}>
         {value}
-      </p>
+      </dd>
       {diff !== undefined && diff > 0 && (
-        <p className="text-[9px] font-bold text-red-500 uppercase tracking-tighter">
+        <dd className="text-[9px] font-bold text-red-500 uppercase tracking-tighter">
           +{formatCurrency(diff)} extra
-        </p>
+        </dd>
       )}
-    </div>
+    </dl>
   );
 }

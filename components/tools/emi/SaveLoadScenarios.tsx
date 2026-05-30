@@ -83,12 +83,12 @@ export function SaveLoadScenarios() {
             ) : (
               savedScenarios.map((s) => (
                 <div key={s.id} className="p-4 flex items-center justify-between group hover:bg-bg/40 transition-colors">
-                  <div className="space-y-1">
-                    <p className="text-sm font-black text-text">{s.name}</p>
-                    <p className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">
+                  <dl className="space-y-1">
+                    <dt className="text-sm font-black text-text">{s.name}</dt>
+                    <dd className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">
                       {formatCurrency(s.config.loanAmount)} @ {s.config.interestRate}% for {s.config.tenureMonths}mo
-                    </p>
-                  </div>
+                    </dd>
+                  </dl>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => loadScenario(s.id)}
