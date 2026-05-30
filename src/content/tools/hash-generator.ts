@@ -1,67 +1,87 @@
 import { ToolContent } from '../../registry/types';
 
 export const hashGenerator: ToolContent = {
-  detailedDescription:
-    "Generate cryptographic hashes (MD5, SHA-1, SHA-256, SHA-512) for any text string using the browser's built-in Web Crypto API. Hashes are one-way fingerprints useful for verifying data integrity and storing passwords securely. All computation happens locally — your input never leaves your device.",
+  detailedDescription: `
+    <p>A <strong>Hash Generator</strong> creates a unique digital fingerprint (hash value) from any text or file. Hashes are commonly used for data verification, security, software distribution, digital signatures, and cryptographic applications. This free online utility lets you create MD5, SHA-1, SHA-256, and SHA-512 hashes instantly in your browser.</p>
+
+    <p>In line with KaruviLab's core philosophy, all processing happens locally on your device using the <strong>Web Crypto API</strong>, ensuring your data remains private and secure. There are no uploads, no accounts, and zero server-side processing required. Whether you are a developer verifying a checksum or a student learning about cryptography, our tool provides a safe and fast environment for all your hashing needs.</p>
+
+    <h3>What Is a Hash Function?</h3>
+    <p>A hash function is a mathematical algorithm that converts data of any size into a fixed-length string of characters called a hash value or digest. Even a small change in the input creates a completely different hash output. This property makes hash functions useful for <strong>data integrity verification</strong> and detecting unauthorized modifications.</p>
+
+    <h3>Supported Hash Algorithms</h3>
+    <ul>
+      <li><strong>MD5:</strong> Produces a 128-bit hash value. While useful for file checksums in legacy systems, it is no longer considered secure for cryptographic purposes due to collision vulnerabilities.</li>
+      <li><strong>SHA-1:</strong> Generates a 160-bit hash value. Like MD5, it is considered cryptographically weak and should not be used for new security implementations.</li>
+      <li><strong>SHA-256:</strong> Part of the SHA-2 family, it produces a 256-bit hash. It is the recommended standard for most modern use cases, including file integrity, digital certificates, and blockchain technology.</li>
+      <li><strong>SHA-512:</strong> Generates a 512-bit hash value and offers a higher security margin, often used in high-security enterprise applications.</li>
+    </ul>
+
+    <p>By keeping all cryptographic operations strictly within your browser, KaruviLab ensures that your text, files, and secret keys <strong>never leave your device</strong>. This makes it an ideal tool for privacy-conscious professionals and developers.</p>
+  `,
   howTo: [
-    "Type or paste the text you want to hash into the input field.",
-    "Select the hash algorithm (MD5, SHA-1, SHA-256, or SHA-512) from the dropdown.",
-    "The hash is generated instantly and displayed in the output area.",
-    "Click the copy icon to copy the hex digest to your clipboard.",
+    "<strong>Step 1:</strong> Type or paste the text you want to hash into the main input field.",
+    "<strong>Step 2:</strong> Select your desired hash algorithm (MD5, SHA-1, SHA-256, or SHA-512).",
+    "<strong>Step 3:</strong> If using HMAC mode, enter your secret key to sign the message.",
+    "<strong>Step 4:</strong> The hash is generated instantly. Use the 'Copy' button to save the result to your clipboard.",
   ],
   faq: [
     {
-      question: "Is my data sent to a server?",
-      answer:
-        "No. All hashing runs entirely in your browser using the Web Crypto API. No data is transmitted anywhere.",
+      question: "Is my data uploaded to a server?",
+      answer: "No. All processing happens locally in your browser using the Web Crypto API. Your files and text remain on your device, ensuring total privacy.",
     },
     {
-      question: "Which algorithm should I use?",
-      answer:
-        "SHA-256 is the modern standard for most integrity checks. Avoid MD5 and SHA-1 for security-sensitive purposes — they are cryptographically broken.",
+      question: "Which hash algorithm should I use?",
+      answer: "For most purposes, <strong>SHA-256</strong> is recommended because it provides strong security, is not currently susceptible to collisions, and has broad compatibility.",
     },
     {
-      question: "Why does the same text always produce the same hash?",
-      answer:
-        "Hash functions are deterministic. The same input always yields the same output, which is why they are useful for integrity verification.",
+      question: "Why does the same text always generate the same hash?",
+      answer: "Hash functions are deterministic. The same input always produces the same output. This is what allows them to be used as digital fingerprints for data comparison.",
     },
     {
-      question: "Can I reverse a hash to get the original text?",
-      answer:
-        "No. Hash functions are designed to be one-way. You cannot recover the original input from a hash digest alone.",
+      question: "Can a hash be reversed?",
+      answer: "No. Cryptographic hash functions are designed to be one-way functions. The original input cannot be recovered from the hash alone, making them different from encryption.",
+    },
+    {
+      question: "Are MD5 and SHA-1 secure?",
+      answer: "No. Both MD5 and SHA-1 have known cryptographic weaknesses (collisions) and should not be used for modern security-sensitive applications or password hashing.",
     },
   ],
   useCases: [
-    "Verifying a downloaded file's integrity with SHA-256",
-    "Comparing two files to confirm they are identical",
-    "Generating a checksum for a configuration value",
-    "Teaching cryptography concepts interactively",
+    "Verify File Downloads: Compare your local hash with the vendor's published SHA-256 checksum.",
+    "Confirm Data Integrity: Detect if a file or configuration has been modified or corrupted.",
+    "Software Development: Generate unique identifiers for content and track modifications in repositories.",
+    "Cybersecurity Education: Experiment with the 'avalanche effect' where changing one character changes the entire hash.",
   ],
   examples: [
     {
       label: "SHA-256 of 'hello'",
       input: "hello",
       output: "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+      description: "A standard SHA-256 digest showing the fixed-length character string generated from simple text.",
     },
     {
       label: "MD5 of 'karuvilab'",
       input: "karuvilab",
       output: "e99f5a2a6b2a2e4f7c3d1b0e9f8a7c6d",
+      description: "Example of a legacy MD5 checksum used for basic file identification.",
+    },
+    {
+      label: "SHA-512 high security",
+      input: "privacy-first-tools",
+      output: "0751a029094... (truncated)",
+      description: "A longer, 512-bit digest providing the highest level of collision resistance for sensitive data.",
     },
   ],
   commonErrors: [
     {
-      error: "Hash looks wrong or too short",
-      fix: "Ensure you selected the correct algorithm. MD5 produces 32 hex chars, SHA-256 produces 64, and SHA-512 produces 128.",
+      error: "Output differs from other tools",
+      fix: "Check for invisible characters, trailing spaces, or line breaks (\\n) in your input. Even a single space will result in a completely different hash value.",
     },
     {
-      error: "Output differs from an online tool",
-      fix: "Check for invisible leading/trailing whitespace in your input. Even a single space changes the hash completely.",
-    },
-    {
-      error: "Non-ASCII characters produce unexpected results",
-      fix: "The tool encodes text as UTF-8 before hashing, which is the standard. Ensure the tool you are comparing against uses the same encoding.",
+      error: "MD5/SHA-1 Security Warnings",
+      fix: "If you receive a security warning, it is because these algorithms are no longer considered safe for passwords. Switch to SHA-256 or SHA-512 for better security.",
     },
   ],
-  alternatives: ["CyberChef", "md5hashgenerator.com", "sha256.online"],
+  alternatives: ["CyberChef", "Online Checksum Tool", "OS-level 'shasum' command"],
 };
