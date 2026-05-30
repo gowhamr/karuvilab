@@ -193,8 +193,24 @@ These rules **cannot** be reverted. They were established to prevent critical pr
 
 ## 10. SEO Standards
 
+### Redirects & Routing (Zero-Chain Policy)
+- **Native Redirects Only**: Always define redirects in `next.config.ts` using the native `redirects()` function rather than in `vercel.json`. This prevents multi-hop redirect chains caused by Next.js's internal routing (e.g., trailing slash enforcement) conflicting with external routing layers.
+- **Single-Hop Rule**: No redirect should ever require more than one hop to reach its final destination.
+
+### Canonical URLs
+- **Strictly Per-Page**: Every page must dynamically generate a unique, self-referencing canonical URL.
+- **NEVER globally override**: Do not place a hardcoded `alternates: { canonical: "/" }` in the root `app/metadata.ts`. This forces all subpages to declare the homepage as their canonical URL, triggering massive "Redirect Error" and indexing failures in Google Search Console.
+- **Trailing Slashes**: The application uses `trailingSlash: true`. All canonical URLs, structured data URLs, and sitemap entries MUST end with a trailing slash (e.g., `https://karuvilab.com/tools/category/tool-id/`).
+- **URL Normalization**: When writing regex to normalize URLs, ensure exactness to avoid malformed double-slashes. Use `.replace(/^\/+|\/+$/g, '')` without accidental spaces.
+
+### Content Quality (E-E-A-T Enhancement)
+- Avoid AI-style repetition and generic filler like "In today's digital world..." or "This powerful tool...".
+- Maintain a readability level of Grade 8–10.
+
 ### Metadata & Structured Data
 Every tool page must have:
+- A standard content section including Introduction (150-250 words), How-To-Use (min 4 steps), Practical Examples (min 3), FAQ (min 5), and a Privacy Section.
+- Trust badges displayed prominently: "✓ No Uploads", "✓ Browser Processing", "✓ Offline Capable", "✓ No Account Required".
 - A unique `<title>` tag following the pattern `[Tool Name] – KV`.
 - A unique `<meta name='description'>` of 120‑160 characters.
 - Valid Open Graph and Twitter Card tags.
