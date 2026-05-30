@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ALL_TOOLS, ToolEntry } from "@/src/tool-registry";
+import { ALL_TOOLS, ToolEntry, CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { Search, Command, X, ArrowDown, ArrowUp, CornerDownLeft } from "lucide-react";
@@ -47,11 +47,13 @@ export function CommandPalette() {
   const filteredTools = useMemo(() => {
     if (!query.trim()) return ALL_TOOLS.filter((t: ToolEntry) => t.popular).slice(0, 6);
     const q = query.toLowerCase();
-    return ALL_TOOLS.filter((t: ToolEntry) => 
-      t.name.toLowerCase().includes(q) ||
-      t.desc.toLowerCase().includes(q) ||
-      t.keywords.some((k: string) => k.toLowerCase().includes(q))
-    ).slice(0, 8);
+    return ALL_TOOLS.filter((t: ToolEntry) => {
+      const category = CATEGORIES.find(c => c.id === t.category);
+      return t.name.toLowerCase().includes(q) ||
+        t.desc.toLowerCase().includes(q) ||
+        t.keywords.some((k: string) => k.toLowerCase().includes(q)) ||
+        (category && category.label.toLowerCase().includes(q))
+    }).slice(0, 8);
   }, [query]);
 
   const handleSelect = (tool: ToolEntry) => {

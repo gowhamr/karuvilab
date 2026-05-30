@@ -14,6 +14,7 @@ import { cn } from "@/src/lib/utils";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
+import DOMPurify from "isomorphic-dompurify";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -150,7 +151,11 @@ export default function HtmlViewerClient() {
   // Compilation Logic
   const getCompiledDoc = useCallback(() => {
     const cssLinks = cdns.filter(url => url.endsWith(".css")).map(url => `<link rel="stylesheet" href="${url}">`).join("\n");
+    // Scripts are disabled in sandbox, but we keep links for reference if ever enabled
     const jsLinks = cdns.filter(url => !url.endsWith(".css")).map(url => `<script src="${url}"></script>`).join("\n");
+
+    const sanitizedHtml = DOMPurify.sanitize(html);
+    const sanitizedCss = DOMPurify.sanitize(css); // Though CSS is usually safe, we sanitize for completeness
 
     return `
       <!DOCTYPE html>
@@ -159,41 +164,15 @@ export default function HtmlViewerClient() {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           ${cssLinks}
-          <style>${css}</style>
-          <script>
-            // Console Override
-            const originalLog = console.log;
-            const originalError = console.error;
-            const originalWarn = console.warn;
-            const originalInfo = console.info;
-
-            const sendToParent = (type, args) => {
-              window.parent.postMessage({
-                source: 'karuvi-sandbox',
-                type,
-                payload: Array.from(args)
-              }, '*');
-            };
-
-            console.log = (...args) => { sendToParent('log', args); originalLog(...args); };
-            console.error = (...args) => { sendToParent('error', args); originalError(...args); };
-            console.warn = (...args) => { sendToParent('warn', args); originalWarn(...args); };
-            console.info = (...args) => { sendToParent('info', args); originalInfo(...args); };
-
-            window.onerror = (msg, url, line, col, error) => {
-              sendToParent('error', [msg + ' (line ' + line + ')']);
-              return false;
-            };
-          </script>
+          <style>${sanitizedCss}</style>
         </head>
         <body>
-          ${html}
-          ${jsLinks}
-          <script>${js}</script>
+          ${sanitizedHtml}
+          <!-- Scripts blocked by sandbox for security -->
         </body>
       </html>
     `;
-  }, [html, css, js, cdns]);
+  }, [html, css, cdns]);
 
   const updatePreview = useCallback(() => {
     if (iframeRef.current) {
@@ -485,7 +464,7 @@ export default function HtmlViewerClient() {
                 ref={iframeRef}
                 title="Sandbox Preview"
                 className="w-full h-full border-none"
-                sandbox="allow-scripts allow-modals"
+                sandbox=""
               />
             </div>
             

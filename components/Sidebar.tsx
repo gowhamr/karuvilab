@@ -52,10 +52,10 @@ const SidebarItem = memo(function SidebarItem({
       href={href}
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
-      className={`group flex items-center transition-all font-bold ${
+      className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-blue/50 focus-visible:ring-inset ${
         isSmall 
-          ? `h-[52px] px-4 text-[11px] rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hov:text-blue hov:bg-blue/5"}`
-          : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hov:text-text hov:bg-black/5 dark:hov:bg-white/5"}`
+          ? `h-[52px] px-4 text-[11px] rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
+          : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"}`
       }`}
       style={{
         color: !isSmall && isActive ? color : undefined,
@@ -64,8 +64,8 @@ const SidebarItem = memo(function SidebarItem({
     >
       <div 
         className={isSmall 
-          ? "w-8 h-8 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center mr-3 group-hov:bg-blue/20 transition-all"
-          : `w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isActive ? "" : "bg-transparent group-hov:scale-105"}`
+          ? "w-8 h-8 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center mr-3 group-hover:bg-blue/20 transition-all"
+          : `w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isActive ? "" : "bg-transparent group-hover:scale-105"}`
         }
         style={{
           color: !isSmall && isActive ? color : undefined,

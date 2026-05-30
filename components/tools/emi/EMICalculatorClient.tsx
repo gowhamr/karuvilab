@@ -27,16 +27,31 @@ export default function EMICalculatorClient() {
   const [result, setResult] = useState<EmiResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showRestoredBanner, setShowRestoredBanner] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
+  // Handle Hydration
   useEffect(() => {
-    const savedState = loadState<EmiInputsType>('emi-calculator');
+    const unsub = useSessionStore.persist.onFinishHydration(() => {
+      setIsHydrated(true);
+    });
+    if (useSessionStore.persist.hasHydrated()) {
+      setIsHydrated(true);
+    }
+    return unsub;
+  }, []);
+
+  // Load state only after hydration
+  useEffect(() => {
+    if (!isHydrated) return;
+    const savedState = loadState<EmiInputsType>( 'emi-calculator');
     if (savedState) {
       setInputs(savedState);
       setShowRestoredBanner(true);
     }
-  }, [loadState, setInputs]);
+  }, [isHydrated, loadState, setInputs]);
 
   useEffect(() => {
+    if (!isHydrated) return;
     saveState('emi-calculator', inputs);
     
     let active = true;

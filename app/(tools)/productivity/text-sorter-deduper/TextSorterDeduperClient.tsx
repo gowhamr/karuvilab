@@ -21,7 +21,9 @@ export default function TextSorterDeduperClient() {
 
   const process = (fn: (arr: string[]) => string[]) => {
     const processed = fn([...lines]);
-    setOutput(processed.join("\n"));
+    const result = processed.join("\n");
+    setInput(result);
+    setOutput(result);
   };
 
   const sortAZ = () => process(arr => arr.sort((a, b) => a.localeCompare(b)));
