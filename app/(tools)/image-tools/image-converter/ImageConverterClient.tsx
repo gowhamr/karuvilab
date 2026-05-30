@@ -179,7 +179,7 @@ export default function ImageConverterClient() {
 
         <div className="lg:col-span-2 hidden lg:block sticky top-8">
           <div className="bg-blue/5 border border-blue/10 rounded-[32px] p-8 space-y-6">
-            <h3 className="font-black text-sm uppercase tracking-widest text-blue">Platform Hardening</h3>
+            <h2 className="font-black text-sm uppercase tracking-widest text-blue">Platform Hardening</h2>
             <ul className="space-y-4">
               {[
                 { title: "Zero Upload", desc: "Files never leave your device" },
@@ -253,7 +253,7 @@ export default function ImageConverterClient() {
             <div className="bg-surface border border-border rounded-[32px] p-10 shadow-2xl max-w-sm w-full text-center space-y-6">
               <Loader2 className="w-12 h-12 text-blue animate-spin mx-auto" />
               <div className="space-y-2">
-                <h3 className="font-black text-xl">Creating Archive</h3>
+                <h2 className="font-black text-xl">Creating Archive</h2>
                 <p className="text-sm text-text-4 font-medium">Compressing your converted images into a single ZIP file...</p>
               </div>
             </div>

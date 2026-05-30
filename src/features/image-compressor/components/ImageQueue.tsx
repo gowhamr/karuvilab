@@ -55,7 +55,7 @@ export const ImageQueue: React.FC = () => {
                   <span className="text-[10px] font-black uppercase truncate pr-4">{item.file.name}</span>
                   <button 
                     onClick={() => removeFile(item.id)}
-                    aria-label="Remove file"
+                    aria-label="Remove from queue"
                     className="text-text-4 hover:text-red-500 transition-colors"
                   >
                     <X size={14} aria-hidden="true" />
@@ -110,7 +110,7 @@ export const ImageQueue: React.FC = () => {
                   <a 
                     href={item.compressedUrl!} 
                     download={`compressed-${item.file.name}`}
-                    aria-label="Download compressed image"
+                    aria-label="Download individual image"
                     className="w-10 h-10 rounded-xl bg-blue/10 text-blue flex items-center justify-center hover:bg-blue hover:text-white transition-all shadow-sm"
                   >
                     <Download size={16} aria-hidden="true" />

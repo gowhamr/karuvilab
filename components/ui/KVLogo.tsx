@@ -34,7 +34,7 @@ export function KVLogo({
   loading = "eager"
 }: KVLogoProps) {
   return (
-    <div className={cn("flex items-center gap-3 group", className)} aria-label="KaruviLab" role="img">
+    <div className={cn("flex items-center gap-3 group", className)} >
       <m.div
         whileHover={{
           scale: 1.05,
@@ -52,7 +52,7 @@ export function KVLogo({
       >
         <Image
           src={logoPath}
-          alt="KaruviLab" 
+          alt="" 
           width={100}
           height={100}
           className="w-full h-full object-contain scale-90"

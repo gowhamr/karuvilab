@@ -127,7 +127,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
             <h3 className="font-black text-xl flex items-center gap-2">
               Queue <span className="text-sm font-medium text-text-3 bg-surface border border-border/50 px-2 py-0.5 rounded-full">{stats.total} files</span>
             </h3>
-            <div className="flex flex-wrap gap-4 text-xs font-medium text-text-3" aria-label="Queue statistics">
+            <div className="flex flex-wrap gap-4 text-xs font-medium text-text-3" role="status" aria-label="Queue statistics">
               <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-green-600 dark:text-green-400" aria-hidden="true" /> {stats.completed} Done</span>
               <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-blue" aria-hidden="true" /> {stats.pending + stats.processing} Pending</span>
               {stats.failed > 0 && <span className="flex items-center gap-1"><AlertCircle className="w-3.5 h-3.5 text-red-600 dark:text-red-400" aria-hidden="true" /> {stats.failed} Failed</span>}

@@ -640,7 +640,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
               </div>
 
               {/* Central Speed Gauge */}
-              <div className="relative py-8 flex flex-col items-center xl:items-start">
+              <div className="relative py-8 flex flex-col items-center xl:items-start" aria-hidden="true">
                 <div className="relative flex items-center justify-center">
                    <PulseRing active={status !== 'idle' && status !== 'completed' && status !== 'error'} />
                    
@@ -676,7 +676,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 </div>
 
                 {/* Smooth Bézier Chart */}
-                <div className="w-full h-32 mt-12 bg-bg/40 rounded-[32px] overflow-hidden relative border border-border/50 group">
+                <div className="w-full h-32 mt-12 bg-bg/40 rounded-[32px] overflow-hidden relative border border-border/50 group" aria-hidden="true">
                   <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
                     <defs>
                       <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -840,7 +840,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                     className="space-y-4"
                   >
                     <div className="flex items-center justify-between px-1">
-                       <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4">Recent Tests</h3>
+                       <h2 className="text-[10px] font-black uppercase tracking-widest text-text-4">Recent Tests</h2>
                        <button onClick={() => { setPastResults([]); localStorage.removeItem('karuvi_speed_history'); }} className="text-[9px] font-bold text-red-500/60 uppercase">Clear</button>
                     </div>
                     <div className="space-y-2">

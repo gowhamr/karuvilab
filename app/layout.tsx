@@ -75,6 +75,12 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-blue focus:text-white focus:rounded-xl focus:font-black focus:uppercase focus:tracking-widest focus:shadow-2xl focus:shadow-blue/50 outline-none"
+        >
+          Skip to Content
+        </a>
         <AdSenseScript />
         <ClientProviders>
           <RecoveryBanner />

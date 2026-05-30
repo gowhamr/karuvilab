@@ -38,7 +38,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     ctx.clearRect(0, 0, width, height);
 
     // Draw axes
-    ctx.strokeStyle = "#e2e8f0"; // border color
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--border").trim() || "#e2e8f0"; // border color
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding.left, padding.top);
@@ -69,12 +69,12 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     
     ctx.fillStyle = "#4F46E5";
     ctx.fillRect(padding.left, legendY - 8, 10, 8);
-    ctx.fillStyle = "#1e293b";
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--text-2").trim() || "#1e293b";
     ctx.fillText("Principal", padding.left + 15, legendY);
 
     ctx.fillStyle = "#94a3b8";
     ctx.fillRect(padding.left + 80, legendY - 8, 10, 8);
-    ctx.fillStyle = "#1e293b";
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--text-2").trim() || "#1e293b";
     ctx.fillText("Interest", padding.left + 95, legendY);
 
   }, [schedule]);

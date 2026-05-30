@@ -351,6 +351,7 @@ export default function InvoiceGeneratorClient() {
                         <button
                           key={t}
                           onClick={() => setTemplate(t)}
+                          aria-pressed={template === t}
                           className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
                         >
                           {t}
@@ -416,10 +417,10 @@ export default function InvoiceGeneratorClient() {
              </div>
 
              <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    Bill To (Client)
-                </h3>
+                </h2>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <ToolInput placeholder="Client Name" value={to.name} onChange={(v) => setTo({ ...to, name: v })} />
@@ -438,10 +439,10 @@ export default function InvoiceGeneratorClient() {
           {/* Section 3: Line Items */}
           <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                  <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                  Line Items
-              </h3>
+              </h2>
               <button 
                 onClick={addItem}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue/5 text-blue text-[10px] font-black uppercase tracking-widest hover:bg-blue/10 transition-all active:scale-95"
@@ -484,7 +485,11 @@ export default function InvoiceGeneratorClient() {
                     </div>
                   </div>
                   <div className="col-span-1 pt-4 text-right">
-                    <button onClick={() => removeItem(item.id)} className="text-text-4 hover:text-error transition-colors opacity-0 group-hover:opacity-100">
+                    <button 
+                      onClick={() => removeItem(item.id)} 
+                      aria-label="Delete Item"
+                      className="text-text-4 hover:text-error transition-colors opacity-0 group-hover:opacity-100"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -497,7 +502,7 @@ export default function InvoiceGeneratorClient() {
         {/* Right Column: Settings & Summary */}
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8 sticky top-24 print:hidden">
-             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Final Summary</h3>
+             <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Final Summary</h2>
              
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">

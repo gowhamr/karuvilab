@@ -69,7 +69,7 @@ export default function ChartControls({
       {/* Main Config */}
       <div className="p-6 bg-surface border border-border rounded-[32px] shadow-sm space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-text-4">Chart Configuration</h3>
+          <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-text-4">Chart Configuration</h2>
           <div className="flex bg-bg p-1 rounded-xl border border-border">
             {(["bar", "line", "area", "pie", "doughnut"] as const).map((t) => (
               <button
@@ -175,7 +175,7 @@ export default function ChartControls({
       {/* Data Points */}
       <div className="p-6 bg-surface border border-border rounded-[32px] shadow-sm space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-text-4">Data Points</h3>
+          <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-text-4">Data Points</h2>
           <button 
             onClick={() => setShowImport(!showImport)}
             className="text-[10px] font-black text-blue hover:underline"

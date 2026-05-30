@@ -45,7 +45,7 @@ export function ToolInput({
     error 
       ? "border-red-500 focus:ring-4 focus:ring-inset focus:ring-red-500/10 focus:border-red-500" 
       : "border-border focus:ring-4 focus:ring-inset focus:ring-blue/10 focus:border-blue",
-    "placeholder:text-text-3/60",
+    "placeholder:text-text-3/80",
     (readOnly || loading) && "bg-surface cursor-default",
     loading && "opacity-50 pointer-events-none",
     className

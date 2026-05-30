@@ -83,8 +83,8 @@ export default function URLEncoderClient() {
 
       {parsed && (
         <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-text-2">URL Parse</h3>
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <h2 className="text-sm font-bold text-text-2">URL Parse</h2>
+          <dl className="grid grid-cols-2 gap-3 text-sm">
             {[
               { label: "Protocol", value: parsed.protocol },
               { label: "Hostname", value: parsed.hostname },
@@ -93,15 +93,15 @@ export default function URLEncoderClient() {
               { label: "Hash", value: parsed.hash || "(none)" },
             ].map(({ label, value }) => (
               <div key={label} className="bg-bg border border-border rounded-xl p-3">
-                <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</div>
-                <div className="font-mono text-text break-all">{value}</div>
+                <dt className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</dt>
+                <dd className="font-mono text-text break-all">{value}</dd>
               </div>
             ))}
-          </div>
+          </dl>
 
           {parsed.params.length > 0 && (
             <div>
-              <h4 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-2">Query Parameters</h4>
+              <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-2">Query Parameters</h3>
               <div className="overflow-auto rounded-xl border border-border">
                 <table className="w-full text-sm">
                   <thead>

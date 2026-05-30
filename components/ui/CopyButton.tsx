@@ -39,7 +39,7 @@ export function CopyButton({
       {...motionProps}
       onClick={handleCopy}
       disabled={disabled}
-      aria-label={copied ? "Copied!" : `Copy ${label}`}
+      aria-label={copied ? "Copied!" : label.toLowerCase().startsWith("copy") ? label : `Copy ${label}`}
       className={`
         min-h-[44px] px-3 py-2 text-sm font-bold rounded-lg transition-all border outline-none focus-visible:ring-2 focus-visible:ring-blue/20
         ${copied ? "bg-green-500/10 border-green-500/30 text-green-600" : "bg-surface border-border hov:border-blue hov:text-blue"}

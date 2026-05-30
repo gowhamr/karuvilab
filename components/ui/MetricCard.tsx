@@ -39,7 +39,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
     >
       <div className="flex items-center justify-between">
         <dt className="flex items-center gap-2 text-text-3 text-[11px] font-black uppercase tracking-widest truncate">
-          {Icon && <Icon className="w-4 h-4" aria-hidden="true" />}
+          {Icon && <Icon className="w-4 h-4" aria-hidden="true" focusable="false" />}
           {label}
         </dt>
         {trend && !loading && (
@@ -48,6 +48,8 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
               "flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider flex-shrink-0",
               trend.isPositive ? "bg-success/10 text-success" : "bg-error/10 text-error"
             )}
+            role="status"
+            aria-label={`${trend.label || "Trend"}: ${trend.value}`}
           >
             {trend.value}
           </dd>
@@ -59,6 +61,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
           accent ? "text-blue" : "text-text",
           loading && "opacity-20"
         )}
+        aria-live="polite"
       >
         {loading ? "---" : value}
       </dd>

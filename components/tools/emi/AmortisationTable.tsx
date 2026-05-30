@@ -88,7 +88,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
           style={{ height: viewportHeight }}
         >
           <div style={{ height: totalHeight, position: 'relative' }} role="rowgroup">
-            <div style={{ transform: `translateY(${offset}px)` }}>
+            <div style={{ transform: `translateY(${offset}px)` }} role="presentation">
               {visibleRows.map((entry) => (
                 <div 
                   key={entry.month} 

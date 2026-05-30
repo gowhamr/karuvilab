@@ -224,7 +224,7 @@ export default function ChartGeneratorClient() {
                 <Palette className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-sm">Visual Palettes</h4>
+                <h3 className="font-bold text-sm">Visual Palettes</h3>
                 <p className="text-xs text-text-4">Apply curated color schemes for consistent brand aesthetics.</p>
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function ChartGeneratorClient() {
                 <LayoutGrid className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-sm">Vector Precision</h4>
+                <h3 className="font-bold text-sm">Vector Precision</h3>
                 <p className="text-xs text-text-4">Charts are rendered as high-fidelity SVGs for maximum crispness.</p>
               </div>
             </div>

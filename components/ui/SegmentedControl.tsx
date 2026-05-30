@@ -38,13 +38,16 @@ export function SegmentedControl<T extends string | number>({
         className
       )}
     >
-      {options.map((option) => {
+      {options.map((option, index) => {
         const isActive = activeId === option.id;
         return (
           <button
             key={option.id}
             role="tab"
+            id={`tab-${option.id}`}
             aria-selected={isActive}
+            aria-controls={`panel-${option.id}`}
+            tabIndex={isActive ? 0 : -1}
             disabled={disabled}
             onClick={() => !disabled && onChange(option.id)}
             className={cn(

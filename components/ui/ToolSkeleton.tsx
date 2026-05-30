@@ -9,7 +9,11 @@ const SkeletonBlock = ({ className }: { className?: string }) => (
 
 export function ToolSkeleton() {
   return (
-    <div className="w-full space-y-8 sm:space-y-12 animate-in fade-in duration-500">
+    <div 
+      role="status" 
+      aria-label="Loading tool content..."
+      className="w-full space-y-8 sm:space-y-12 animate-in fade-in duration-500"
+    >
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
         <div className="space-y-6 sm:space-y-8">

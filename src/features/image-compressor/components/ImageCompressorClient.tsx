@@ -89,7 +89,7 @@ export default function ImageCompressorClient() {
               {f.icon}
             </div>
             <div>
-              <h4 className="text-sm font-black uppercase tracking-widest mb-1">{f.title}</h4>
+              <h3 className="text-sm font-black uppercase tracking-widest mb-1">{f.title}</h3>
               <p className="text-xs font-bold text-text-3 uppercase leading-relaxed">{f.desc}</p>
             </div>
           </div>

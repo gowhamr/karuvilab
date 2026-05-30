@@ -60,7 +60,7 @@ export function EmiInputs() {
               id="enable-floating"
               label="Floating Rate Stress Test"
               checked={showFloatingRate}
-              onChange={() => toggleSection('floatingRate')}
+              onChange={() => toggleSection("floatingRate")}
             />
           </div>
           {showFloatingRate && (
@@ -73,7 +73,7 @@ export function EmiInputs() {
                 step={0.25}
                 value={inputs.floatingRateDelta || 0}
                 onChange={(val) => setInputs({ floatingRateDelta: val })}
-                format={(v) => `${v > 0 ? '+' : ''}${v}%`}
+                format={(v) => `${v > 0 ? "+" : ""}${v}%`}
               />
               <p className="mt-2 text-[10px] text-text-4">
                 Test how your EMI changes if the interest rate increases or decreases.
@@ -89,7 +89,7 @@ export function EmiInputs() {
               id="enable-moratorium"
               label="Moratorium Period"
               checked={showMoratorium}
-              onChange={() => toggleSection('moratorium')}
+              onChange={() => toggleSection("moratorium")}
             />
           </div>
           {showMoratorium && (
@@ -101,34 +101,34 @@ export function EmiInputs() {
                 onChange={(val) => setInputs({ 
                   moratorium: { 
                     months: Number(val), 
-                    type: inputs.moratorium?.type || 'full' 
+                    type: inputs.moratorium?.type || "full" 
                   } 
                 })}
               />
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <label className="flex items-center gap-2 text-xs font-bold text-text-2">
-                  <input
+                <label htmlFor="moratorium-interest-only" className="flex items-center gap-2 text-xs font-bold text-text-2">
+                  <input id="moratorium-interest-only"
                     type="radio"
                     name="moratorium-type"
-                    checked={inputs.moratorium?.type === 'interest-only'}
+                    checked={inputs.moratorium?.type === "interest-only"}
                     onChange={() => setInputs({ 
                       moratorium: { 
                         months: inputs.moratorium?.months || 0, 
-                        type: 'interest-only' 
+                        type: "interest-only" 
                       } 
                     })}
                   />
                   Interest Only
                 </label>
-                <label className="flex items-center gap-2 text-xs font-bold text-text-2">
-                  <input
+                <label htmlFor="moratorium-full" className="flex items-center gap-2 text-xs font-bold text-text-2">
+                  <input id="moratorium-full"
                     type="radio"
                     name="moratorium-type"
-                    checked={inputs.moratorium?.type === 'full'}
+                    checked={inputs.moratorium?.type === "full"}
                     onChange={() => setInputs({ 
                       moratorium: { 
                         months: inputs.moratorium?.months || 0, 
-                        type: 'full' 
+                        type: "full" 
                       } 
                     })}
                   />

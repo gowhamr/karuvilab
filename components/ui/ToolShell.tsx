@@ -64,10 +64,12 @@ export function ToolShell({ title, description, category, children, toolId, cont
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   return (
-    <m.div 
+    <m.main 
+      id="main-content"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4"
+      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 outline-none"
+      tabIndex={-1}
     >
       <StructuredData tool={currentTool} category={category} content={merged} />
       
@@ -236,6 +238,6 @@ export function ToolShell({ title, description, category, children, toolId, cont
           </div>
         </section>
       )}
-    </m.div>
+    </m.main>
   );
 }

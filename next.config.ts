@@ -3,9 +3,9 @@ import type { NextConfig } from "next";
 const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
 const nextConfig: NextConfig = {
-  basePath: isGithubPages ? '/karuvilab' : '',
+  basePath: (isGithubPages && !process.env.CUSTOM_DOMAIN) ? '/karuvilab' : '',
   env: {
-    NEXT_PUBLIC_BASE_PATH: isGithubPages ? '/karuvilab' : '',
+    NEXT_PUBLIC_BASE_PATH: (isGithubPages && !process.env.CUSTOM_DOMAIN) ? '/karuvilab' : '',
   },
   images: {
     unoptimized: isGithubPages,

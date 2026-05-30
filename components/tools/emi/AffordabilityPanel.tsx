@@ -24,9 +24,9 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
   };
 
   const riskTextColors = {
-    low: "text-green-600",
-    medium: "text-orange-600",
-    high: "text-red-600"
+    low: "text-emerald-700 dark:text-emerald-400",
+    medium: "text-orange-700 dark:text-orange-400",
+    high: "text-red-700 dark:text-red-400"
   };
 
   return (

@@ -69,6 +69,7 @@ export const BottomNav = memo(function BottomNav() {
               <Link
                 href={item.href!}
                 aria-label={item.label}
+                aria-current={isActive ? "page" : undefined}
                 className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] ${
                   isActive ? "text-blue" : "text-text-4 hover:text-text"
                 }`}

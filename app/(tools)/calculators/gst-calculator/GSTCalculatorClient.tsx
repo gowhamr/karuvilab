@@ -157,6 +157,8 @@ Generated via KaruviLab`;
               </div>
               <button 
                 onClick={() => setIsInterstate(!isInterstate)}
+                aria-label="Toggle Interstate Sale"
+                aria-pressed={isInterstate}
                 className={`w-12 h-6 rounded-full transition-all relative ${isInterstate ? 'bg-blue' : 'bg-border'}`}
               >
                 <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isInterstate ? 'right-1' : 'left-1'}`} />
