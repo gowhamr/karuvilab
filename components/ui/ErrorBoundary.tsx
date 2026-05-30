@@ -27,6 +27,23 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
+
+    // Detect if this is a chunk loading error
+    const isChunkError = 
+      error.message.includes("ChunkLoadError") || 
+      error.message.toLowerCase().includes("loading chunk") ||
+      error.message.toLowerCase().includes("loading failed");
+
+    if (isChunkError) {
+      const reloadKey = "karuvi.last_component_reload";
+      const lastReload = parseInt(sessionStorage.getItem(reloadKey) || "0");
+      const now = Date.now();
+      
+      if (now - lastReload > 5000) {
+        sessionStorage.setItem(reloadKey, now.toString());
+        setTimeout(() => window.location.reload(), 500);
+      }
+    }
   }
 
   public override render() {

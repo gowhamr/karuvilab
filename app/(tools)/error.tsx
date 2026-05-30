@@ -13,6 +13,23 @@ export default function ToolError({
 }) {
   useEffect(() => {
     console.error("Tool Error Boundary:", error);
+
+    // Detect if this is a chunk loading error
+    const isChunkError = 
+      error.message.includes("ChunkLoadError") || 
+      error.message.toLowerCase().includes("loading chunk") ||
+      error.message.toLowerCase().includes("loading failed");
+
+    if (isChunkError) {
+      const reloadKey = "karuvi.last_tool_reload";
+      const lastReload = parseInt(sessionStorage.getItem(reloadKey) || "0");
+      const now = Date.now();
+      
+      if (now - lastReload > 5000) {
+        sessionStorage.setItem(reloadKey, now.toString());
+        setTimeout(() => window.location.reload(), 500);
+      }
+    }
   }, [error]);
 
   return (
