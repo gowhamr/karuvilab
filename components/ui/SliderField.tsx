@@ -31,15 +31,15 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
         max={max}
         min={min}
         step={step}
-        id={id}
-        aria-valuetext={display}
       >
         <Slider.Track className="bg-border relative grow rounded-full h-1.5">
           <Slider.Range className="absolute bg-blue rounded-full h-full" />
         </Slider.Track>
         <Slider.Thumb
+          id={id}
           className="block w-5 h-5 bg-white border border-border rounded-full shadow-md cursor-pointer hover:border-blue/50 focus:outline-none focus:ring-2 focus:ring-blue transition-colors"
           aria-label={label}
+          aria-valuetext={display}
         />
       </Slider.Root>
 

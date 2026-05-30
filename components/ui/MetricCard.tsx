@@ -21,7 +21,7 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, accent = false, sub, icon: Icon, className, trend, loading }: MetricCardProps) {
   return (
-    <m.dl 
+    <m.div 
       layout
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -36,43 +36,47 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         loading && "shimmer-wrapper",
         className
       )}
+      role="group"
+      aria-labelledby={label.replace(/\s+/g, "-").toLowerCase() + "-label"}
     >
       <div className="flex items-center justify-between">
-        <dt className="flex items-center gap-2 text-text-3 text-[11px] font-black uppercase tracking-widest truncate">
+        <h3 
+          id={label.replace(/\s+/g, "-").toLowerCase() + "-label"}
+          className="flex items-center gap-2 text-text-2 text-[11px] font-black uppercase tracking-widest truncate"
+        >
           {Icon && <Icon className="w-4 h-4" aria-hidden="true" focusable="false" />}
           {label}
-        </dt>
+        </h3>
         {trend && !loading && (
-          <dd 
+          <div 
             className={cn(
               "flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider flex-shrink-0",
-              trend.isPositive ? "bg-success/10 text-success" : "bg-error/10 text-error"
+              trend.isPositive ? "bg-success/10 text-emerald-700 dark:text-emerald-400" : "bg-error/10 text-red-700 dark:text-red-400"
             )}
             role="status"
             aria-label={`${trend.label || "Trend"}: ${trend.value}`}
           >
             {trend.value}
-          </dd>
+          </div>
         )}
       </div>
-      <dd 
+      <div 
         className={cn(
           "text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight transition-all", 
           accent ? "text-blue" : "text-text",
           loading && "opacity-20"
         )}
-        aria-live="polite"
       >
         {loading ? "---" : value}
-      </dd>
+      </div>
       {(sub || trend?.label) && (
-        <dd className={cn(
+        <p className={cn(
           "text-[11px] text-text-3 font-bold leading-relaxed line-clamp-2 transition-all",
           loading && "opacity-20"
         )}>
           {loading ? "Calculating..." : (trend?.label ? `${trend.label}: ${sub || ""}` : sub)}
-        </dd>
+        </p>
       )}
-    </m.dl>
+    </m.div>
   );
 }

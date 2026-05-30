@@ -187,18 +187,18 @@ export function ToolShell({ title, description, category, children, toolId, cont
           )}
 
           <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
-            <div className="flex items-center gap-3 text-success">
+            <div className="flex items-center gap-3 text-emerald-700 dark:text-emerald-400">
               <ShieldCheck className="w-5 h-5" />
               <h3 className="font-bold text-sm">Privacy First</h3>
             </div>
-            <p className="text-xs text-text-3 leading-relaxed">
+            <p className="text-xs text-text-2 leading-relaxed">
               All processing happens locally in your browser. Your files and data are never uploaded to our servers.
             </p>
           </div>
 
           <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
             <h3 className="font-bold text-sm text-text">Need Help?</h3>
-            <p className="text-xs text-text-3 leading-relaxed">
+            <p className="text-xs text-text-2 leading-relaxed">
               Check our documentation or contact support for assistance with this tool.
             </p>
             <Link 
