@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ToolShell } from '@/components/ui/ToolShell';
 import { SearchBar } from '@/components/ui/SearchBar';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Search, BookOpen } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 interface Command {
   cmd: string;
@@ -49,81 +48,75 @@ export default function CommandCheatSheet() {
   }, [search, activeCategory]);
 
   return (
-    <ToolShell
-      title="Command Cheat Sheet"
-      description="A quick reference for common CLI commands. Search and copy with one click."
-      icon={<Terminal className="w-6 h-6 text-indigo-500" />}
-    >
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="flex-1 w-full">
-            <SearchBar 
-              value={search} 
-              onChange={setSearch} 
-              placeholder="Search commands or descriptions..."
-            />
-          </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                  activeCategory === cat 
-                    ? 'bg-indigo-600 text-white shadow-lg' 
-                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="flex-1 w-full">
+          <SearchBar 
+            value={search} 
+            onChange={setSearch} 
+            placeholder="Search commands or descriptions..."
+          />
         </div>
-
-        <div className="grid gap-4">
-          <AnimatePresence mode="popLayout">
-            {filteredCommands.length > 0 ? (
-              filteredCommands.map((command, i) => (
-                <motion.div
-                  key={command.cmd}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ delay: i * 0.02 }}
-                  className="group bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-indigo-500/50 transition-all flex items-center justify-between"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
-                        {command.category}
-                      </span>
-                    </div>
-                    <code className="text-lg font-mono text-slate-100 block group-hover:text-white transition-colors">
-                      {command.cmd}
-                    </code>
-                    <p className="text-sm text-slate-400">
-                      {command.desc}
-                    </p>
-                  </div>
-                  <CopyButton value={command.cmd} className="flex-shrink-0" />
-                </motion.div>
-              ))
-            ) : (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-12 bg-slate-900/30 rounded-3xl border border-dashed border-slate-800"
-              >
-                <div className="bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-slate-500" />
-                </div>
-                <h3 className="text-slate-300 font-medium">No commands found</h3>
-                <p className="text-slate-500 text-sm">Try adjusting your search or category filter.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                activeCategory === cat 
+                  ? 'bg-indigo-600 text-white shadow-lg' 
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
-    </ToolShell>
+
+      <div className="grid gap-4">
+        <AnimatePresence mode="popLayout">
+          {filteredCommands.length > 0 ? (
+            filteredCommands.map((command, i) => (
+              <motion.div
+                key={command.cmd}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ delay: i * 0.02 }}
+                className="group bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-indigo-500/50 transition-all flex items-center justify-between"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                      {command.category}
+                    </span>
+                  </div>
+                  <code className="text-lg font-mono text-slate-100 block group-hover:text-white transition-colors">
+                    {command.cmd}
+                  </code>
+                  <p className="text-sm text-slate-400">
+                    {command.desc}
+                  </p>
+                </div>
+                <CopyButton text={command.cmd} className="flex-shrink-0" />
+              </motion.div>
+            ))
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12 bg-slate-900/30 rounded-3xl border border-dashed border-slate-800"
+            >
+              <div className="bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-slate-500" />
+              </div>
+              <h3 className="text-slate-300 font-medium">No commands found</h3>
+              <p className="text-slate-500 text-sm">Try adjusting your search or category filter.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }

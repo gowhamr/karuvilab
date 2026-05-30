@@ -36,11 +36,14 @@ export default function HashMapVisualizer() {
     
     setBuckets(prev => {
       const newBuckets = [...prev];
-      const existingIdx = newBuckets[bucketIdx].findIndex(e => e.key === keyInput);
+      const bucket = newBuckets[bucketIdx];
+      if (!bucket) return prev;
+      
+      const existingIdx = bucket.findIndex(e => e.key === keyInput);
       if (existingIdx >= 0) {
-        newBuckets[bucketIdx][existingIdx] = { key: keyInput, value: valInput, hash };
+        bucket[existingIdx] = { key: keyInput, value: valInput, hash };
       } else {
-        newBuckets[bucketIdx] = [...newBuckets[bucketIdx], { key: keyInput, value: valInput, hash }];
+        newBuckets[bucketIdx] = [...bucket, { key: keyInput, value: valInput, hash }];
       }
       return newBuckets;
     });
@@ -56,7 +59,10 @@ export default function HashMapVisualizer() {
     
     setBuckets(prev => {
       const newBuckets = [...prev];
-      newBuckets[bucketIdx] = newBuckets[bucketIdx].filter(e => e.key !== key);
+      const bucket = newBuckets[bucketIdx];
+      if (bucket) {
+        newBuckets[bucketIdx] = bucket.filter(e => e.key !== key);
+      }
       return newBuckets;
     });
     setLastAction({ type: 'delete', key, bucket: bucketIdx, hash });
@@ -66,7 +72,6 @@ export default function HashMapVisualizer() {
     <ToolShell
       title="Hash Map Visualizer"
       description="Visualize how a Hash Map works: Hashing, Buckets, and Collision handling."
-      icon={<Hash className="w-6 h-6 text-blue-500" />}
     >
       <div className="space-y-8">
         <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6">
@@ -125,11 +130,11 @@ export default function HashMapVisualizer() {
             >
               <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-800/50 rounded-t-[14px]">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-tight">Bucket {i}</span>
-                <span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded-full">{bucket.length}</span>
+                <span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded-full">{bucket?.length || 0}</span>
               </div>
               <div className="p-2 space-y-2 flex-grow">
                 <AnimatePresence>
-                  {bucket.length > 0 ? (
+                  {bucket && bucket.length > 0 ? (
                     bucket.map((entry) => (
                       <motion.div
                         key={entry.key}
