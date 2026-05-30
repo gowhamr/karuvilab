@@ -2,15 +2,13 @@
 
 import { useEffect } from 'react';
 import { Workbox } from 'workbox-window';
-import { useToast } from './ui/Toast';
 
 export function PWARegistration() {
-  const { toast } = useToast();
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-      const swPath = `${basePath}/sw.js`;
+      const swPath = (process.env.NEXT_PUBLIC_BASE_PATH || "") + "/sw.js";
       const wb = new Workbox(swPath);
 
       const onUpdate = () => {
@@ -36,7 +34,7 @@ export function PWARegistration() {
         console.error('Service Worker registration failed:', err);
       });
     }
-  }, [toast]);
+  }, []);
 
   return null;
 }
