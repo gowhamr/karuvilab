@@ -91,7 +91,7 @@ export const metadata: Metadata = {
 };
 
 // Apply basePath if on GitHub Pages
-const isGithubPages = process.env.GITHUB_PAGES === 'true';
+const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true';
 const basePath = isGithubPages ? '/karuvilab' : '';
 
 if (isGithubPages) {
