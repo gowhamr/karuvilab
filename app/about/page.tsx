@@ -1,97 +1,85 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { StructuredData } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "About – KV",
-  description: "Learn about KaruviLab — a privacy-first browser toolset built for compressing, converting, and validating files locally.",
-  alternates: {
-    canonical: "/about",
-  },
+  title: "About Us | KaruviLab",
+  description: "Learn about the mission behind KaruviLab. Discover our commitment to privacy-first, local-first browser-native tools built for speed and security.",
 };
 
-export default function AboutPage() {
+export default function AboutUs() {
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-6">
-      <div className="space-y-2">
-        <nav className="flex items-center gap-2 text-sm text-text-4">
-          <Link href="/" className="hover:text-blue transition-colors">Home</Link>
-          <span>/</span>
-          <span className="text-text-3">About Us</span>
-        </nav>
-        <h1 className="text-3xl font-black">About KaruviLab</h1>
-        <p className="text-text-3">Privacy-first browser tools for everyday document work.</p>
-      </div>
+    <div className="max-w-4xl mx-auto px-6 py-16 space-y-8">
+      <h1 className="text-4xl font-black tracking-tight text-text">About KaruviLab</h1>
+      
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <p className="text-xl font-bold text-text-3">
+          KaruviLab is the world's fastest, most private browser-native productivity platform.
+        </p>
+      </section>
 
-      <div className="space-y-6">
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-          <h2 className="text-xl font-bold">What is KaruviLab?</h2>
-          <p className="text-text-2 leading-relaxed">
-            KaruviLab is a free, browser-based utility designed to help individuals prepare images and PDF documents that meet the strict requirements of government portals, online application systems, and official document submissions.
-          </p>
-          <p className="text-text-2 leading-relaxed">
-            From passport photos and signatures to ID proofs and thumb impressions — every government document upload has its own format, size, and dimension requirements. Our tool takes the guesswork out of the process by letting you compress, convert, create, and validate files directly in your browser, without uploading anything to a server.
-          </p>
-        </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Our Mission</h2>
+        <p>
+          In an era where every small utility website demands account creation, uploads your sensitive documents to unknown servers, 
+          and tracks your every move, KaruviLab was built to offer a better way. Our mission is to provide professional-grade, 
+          everyday utility tools that respect your time and your data. 
+        </p>
+        <p>
+          We believe that compressing an image, formatting a JSON file, or calculating a loan shouldn't require compromising your privacy.
+        </p>
+      </section>
 
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-          <h2 className="text-xl font-bold">Why We Built This</h2>
-          <p className="text-text-2 leading-relaxed">
-            Millions of people struggle every year when uploading documents to government portals. Common errors include file size limits, wrong dimensions, or unsupported formats. We built this tool to be the one-stop solution for all these problems — fast, free, and private.
-          </p>
-        </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">The Privacy-First Philosophy</h2>
+        <p>At KaruviLab, we adhere to a strict set of core principles:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Local-First Processing:</strong> By leveraging WebAssembly and Web Workers, our tools process your files directly inside your browser's memory.</li>
+          <li><strong>Zero-Server-Upload:</strong> We do not have cloud storage. We do not upload your PDFs, images, or code. Your data physically never leaves your device.</li>
+          <li><strong>Offline Friendly:</strong> As a Progressive Web App (PWA), once KaruviLab loads, the vast majority of our tools will continue to work perfectly even if you lose internet connection.</li>
+          <li><strong>No Forced Accounts:</strong> You shouldn't have to surrender your email address just to split a PDF. KaruviLab works instantly, right out of the box.</li>
+        </ul>
+      </section>
 
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-          <h2 className="text-xl font-bold">Key Features</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { icon: "🗜️", title: "Compressor", desc: "Reduce image size to under 100 KB or PDFs to under 1 MB." },
-              { icon: "🔄", title: "Converter", desc: "Convert between JPG, PNG, GIF, WebP, AVIF, TIFF, BMP, HEIC, and PDF." },
-              { icon: "🖼️", title: "Image Creator", desc: "Create passport photos, signatures, and custom-sized images." },
-              { icon: "📄", title: "PDF Tools", desc: "Merge PDFs, convert images to PDF, and compress PDF files." },
-              { icon: "✅", title: "Validator", desc: "Validate files against government portal rules and auto-fix issues." },
-              { icon: "💻", title: "Developer Tools", desc: "Base64, Regex, JSON/XML formatter, and Markdown editor." },
-              { icon: "✂️", title: "Split & Copy", desc: "Break large text into parts for easy mobile clipboard sharing." },
-              { icon: "🔒", title: "100% Private", desc: "All processing happens locally. No file is ever uploaded to any server." },
-            ].map(f => (
-              <div key={f.title} className="bg-bg border border-border rounded-xl p-4 space-y-2">
-                <span className="text-2xl">{f.icon}</span>
-                <p className="font-bold text-sm">{f.title}</p>
-                <p className="text-xs text-text-3 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">User Benefits</h2>
+        <p>
+          Whether you are a developer debugging API payloads, a student managing assignments, a designer optimizing assets, 
+          or an office worker securely manipulating sensitive financial PDFs, KaruviLab offers unparalleled speed. Because data 
+          isn't traveling back and forth over a network, operations that usually take seconds happen almost instantly.
+        </p>
+      </section>
 
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-          <h2 className="text-xl font-bold">About the Owner</h2>
-          <div className="flex gap-5 items-start">
-            <div className="w-16 h-16 rounded-full bg-blue flex items-center justify-center text-white font-black text-xl flex-shrink-0">RG</div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold">R Gowtham</h3>
-              <p className="text-sm text-text-3">Owner &amp; Administrator</p>
-              <p className="text-text-2 text-sm leading-relaxed">
-                R Gowtham is the creator and maintainer of KaruviLab under the <strong>Wanderseven</strong> brand. Passionate about building practical, privacy-first tools for everyday users.
-              </p>
-              <div className="flex flex-wrap gap-3 pt-1">
-                <a href="https://wanderseven.com" target="_blank" rel="noopener noreferrer" className="text-sm text-blue hover:underline">
-                  wanderseven.com
-                </a>
-                <a href="mailto:KaruviLab@proton.me" className="text-sm text-blue hover:underline">
-                  KaruviLab@proton.me
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">The Founder & Team</h2>
+        <p>
+          KaruviLab was founded by a team of engineers passionate about web performance and digital privacy. 
+          Frustrated by the intrusive nature of modern web utilities, we set out to prove that complex computing—like 
+          video manipulation, PDF rendering, and code compilation—can be executed securely and efficiently on the client-side.
+        </p>
+      </section>
 
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-3">
-          <h2 className="text-xl font-bold">Technology</h2>
-          <p className="text-text-2 leading-relaxed">
-            This tool is built with Next.js and TypeScript, using Tailwind CSS for styling. It leverages open-source libraries like pdf-lib, PDF.js, and Canvas APIs for advanced format support. No server-side processing. No tracking. No cookies.
-          </p>
-        </div>
-      </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Our Technology Stack</h2>
+        <p>
+          KaruviLab pushes the boundaries of modern web browsers. We utilize:
+        </p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Next.js & React:</strong> For a highly responsive, app-like user interface.</li>
+          <li><strong>WebAssembly (WASM):</strong> To bring near-native speed to complex tasks like image compression and cryptography.</li>
+          <li><strong>IndexedDB:</strong> To securely save your tool configurations and history locally on your device.</li>
+          <li><strong>Service Workers:</strong> To cache assets and guarantee offline resilience.</li>
+        </ul>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">Commitment to Transparency</h2>
+        <p>
+          We are committed to operating transparently. We monetize the platform through non-intrusive advertisements (Google AdSense) 
+          to keep the tools 100% free for everyone, without resorting to data harvesting.
+        </p>
+        <p>
+          Welcome to the future of web utilities. Fast, free, and fiercely private.
+        </p>
+      </section>
     </div>
   );
 }

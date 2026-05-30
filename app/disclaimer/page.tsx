@@ -1,96 +1,87 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { StructuredData } from "@/src/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Disclaimer – KV",
-  description: "Official Disclaimer for KaruviLab. Information regarding tool accuracy, government non-affiliation, and limitation of liability.",
-  alternates: {
-    canonical: "/disclaimer",
-  },
+  title: "Legal Disclaimer | KaruviLab",
+  description: "Important disclaimers regarding the use of KaruviLab's calculators, technical tools, and informational content.",
 };
 
-export default function DisclaimerPage() {
-  const sections = [
-    {
-      title: "1. Information Accuracy",
-      body: "The information and calculation results provided by KaruviLab are for general informational purposes only. While we strive for 100% accuracy and keep our algorithms updated based on the latest standards, we make no warranties or guarantees regarding the absolute completeness, reliability, or precision of any result produced by the tools.",
-    },
-    {
-      title: "2. No Government Affiliation",
-      body: "KaruviLab is an independent, privately-owned platform. It is NOT affiliated with, authorized by, endorsed by, or in any way officially connected to any government body, agency, or authority, including but not limited to UIDAI, Income Tax Department, Passport Seva, or any municipal corporation. All tools provided are independent implementations for user convenience.",
-    },
-    {
-      title: "3. Financial & Legal Advice",
-      body: "Calculators (including EMI, SIP, Tax, and Investment tools) are intended to provide estimates only. They do not constitute financial, investment, or legal advice. Users should consult with qualified professionals before making any significant financial decisions based on the outputs of these tools.",
-    },
-    {
-      title: "4. Network & Utility Tools",
-      body: "Tools such as the Internet Speed Tester and File Validators provide real-time snapshots of performance or data. These results can be affected by various external factors including hardware, browser environment, and network congestion. They should not be used as a basis for professional certification or legal disputes.",
-    },
-    {
-      title: "5. Limitation of Liability",
-      body: "In no event shall KaruviLab, its developers, or its parent entity be liable for any direct, indirect, consequential, or incidental damages or losses arising from the use of, or inability to use, the tools provided on this website. Users assume full responsibility for any actions taken based on the information provided.",
-    },
-    {
-      title: "6. Contact Information",
-      body: null,
-      contact: true,
-    },
-  ];
-
+export default function LegalDisclaimer() {
   return (
-    <div className="max-w-4xl mx-auto space-y-10 py-10 px-4 md:px-0">
-      <div className="space-y-4">
-        <nav className="flex items-center gap-2 text-xs font-bold text-text-4 uppercase tracking-widest">
-          <Link href="/" className="hover:text-blue transition-colors">Home</Link>
-          <span className="opacity-30">/</span>
-          <span className="text-text-2">Disclaimer</span>
-        </nav>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-text">Legal Disclaimer</h1>
-        <div className="flex items-center gap-3">
-          <div className="h-1 w-12 bg-blue rounded-full" />
-          <p className="text-text-4 text-sm font-bold">Last updated: May 11, 2026</p>
-        </div>
+    <div className="max-w-4xl mx-auto px-6 py-16 space-y-8">
+      <h1 className="text-4xl font-black tracking-tight text-text">Legal Disclaimer</h1>
+      <p className="text-text-4 font-bold">Effective Date: May 30, 2026</p>
+
+      <div className="p-6 bg-blue/10 border border-blue/20 rounded-2xl">
+        <p className="text-lg font-black text-blue leading-relaxed">
+          "KaruviLab provides tools and information for educational and informational purposes only. Results should not be considered financial, legal, tax, investment, medical, or professional advice."
+        </p>
       </div>
 
-      <div className="bg-red-500/5 border border-red-500/10 p-6 rounded-[32px] flex items-start gap-5">
-        <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 flex-shrink-0">
-          <span className="text-2xl">⚠️</span>
-        </div>
-        <div>
-          <p className="font-black text-red-500 uppercase tracking-widest text-xs mb-1">Critical Notice</p>
-          <p className="text-sm text-text-2 leading-relaxed font-medium">
-            KaruviLab is an <strong className="text-text">Independent Utility</strong>. We are not associated with any government portal or official authority. Use of these tools does not guarantee acceptance of documents or data by third-party systems.
-          </p>
-        </div>
-      </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">1. General Information Disclaimer</h2>
+        <p>
+          The information and utility tools provided on KaruviLab (https://karuvilab.com) are for general informational purposes only. 
+          While we strive to keep the tools updated and correct, we make no representations or warranties of any kind, express or implied, 
+          about the completeness, accuracy, reliability, suitability, or availability with respect to the website or the information, 
+          products, services, or related graphics contained on the website for any purpose.
+        </p>
+      </section>
 
-      <div className="grid grid-cols-1 gap-6">
-        {sections.map((s, i) => (
-          <div key={s.title} className="bg-surface border border-border p-8 rounded-[32px] shadow-sm hover:shadow-md transition-all group">
-            <div className="flex items-start gap-4">
-               <div className="w-8 h-8 rounded-lg bg-bg border border-border flex items-center justify-center text-[10px] font-black text-text-4 group-hover:border-blue/30 group-hover:text-blue transition-all">
-                  0{i + 1}
-               </div>
-               <div className="space-y-3 flex-1">
-                <h2 className="text-xl font-black text-text">{s.title}</h2>
-                {s.body && <p className="text-text-3 leading-relaxed font-medium text-[15px]">{s.body}</p>}
-                {s.contact && (
-                  <p className="text-text-3 font-medium text-[15px]">
-                    If you have any questions or concerns regarding this Disclaimer, please reach out to us at:{" "}
-                    <a href="mailto:KaruviLab@proton.me" className="text-blue hover:underline font-bold">KaruviLab@proton.me</a>
-                  </p>
-                )}
-               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">2. No Professional Advice</h2>
+        <p>
+          The usage of KaruviLab does not create a professional-client relationship. You must not rely on the information provided 
+          by our tools as an alternative to advice from a certified professional.
+        </p>
+        
+        <h3 className="text-xl font-bold text-text mt-4">Financial & Investment Calculators</h3>
+        <p>
+          Tools such as the EMI Calculator, SIP Calculator, CAGR Calculator, and others are designed to provide illustrative estimates based on user input. 
+          They do not account for hidden fees, changing market conditions, inflation, or specific institutional terms. 
+          Always consult a licensed financial advisor before making investment or loan decisions.
+        </p>
 
-      <div className="pt-10 border-t border-border text-center">
-        <p className="text-xs text-text-4 font-bold uppercase tracking-[0.3em]">Precision • Privacy • Performance</p>
-      </div>
+        <h3 className="text-xl font-bold text-text mt-4">Tax Calculators</h3>
+        <p>
+          Tax tools, including the GST Calculator, are based on standard mathematical formulas and general tax brackets. 
+          Tax laws change frequently and vary by jurisdiction. You must consult a certified accountant or tax professional 
+          before filing taxes or making pricing decisions based on our tool outputs.
+        </p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">3. Technical Tool Disclaimer</h2>
+        <p>
+          Our developer utilities (e.g., Code Minifiers, HTML Viewers, Formatters) and file tools (e.g., PDF Splitter, Image Compressor) 
+          are provided "as is." While they process data securely within your browser, KaruviLab is not responsible for any data corruption, 
+          formatting loss, or unintended code execution resulting from the use of these utilities. Always maintain backups of your original files.
+        </p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">4. Accuracy and Availability</h2>
+        <p>
+          Any reliance you place on the outputs generated by KaruviLab is strictly at your own risk. Every effort is made to keep the 
+          website up and running smoothly. However, KaruviLab takes no responsibility for, and will not be liable for, the website 
+          being temporarily unavailable due to technical issues beyond our control.
+        </p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">5. Third-Party Content & External Links</h2>
+        <p>
+          Through this website, you are able to link to other websites which are not under the control of KaruviLab. 
+          We have no control over the nature, content, and availability of those sites. The inclusion of any links does not 
+          necessarily imply a recommendation or endorse the views expressed within them. Furthermore, user-generated content 
+          previewed in our sandbox tools is not endorsed or vetted by KaruviLab.
+        </p>
+      </section>
+
+      <section className="space-y-4 text-text-2 leading-relaxed">
+        <h2 className="text-2xl font-black text-text">6. Contact</h2>
+        <p>If you require clarification on any of our disclaimers, please contact us at:</p>
+        <p><strong>Email:</strong> <a href="mailto:support@karuvilab.com" className="text-blue hover:underline">support@karuvilab.com</a></p>
+      </section>
     </div>
   );
 }

@@ -32,6 +32,8 @@ export function Footer() {
     { label: "All Tools", href: "/all-tools" },
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
+    { label: "Cookies", href: "/cookies" },
+    { label: "Affiliate Disclosure", href: "/affiliate-disclosure" },
     { label: "Help", href: "/help" },
     { label: "About", href: "/about" },
     { label: "Settings", href: "/settings" },
