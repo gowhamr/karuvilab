@@ -21,7 +21,7 @@ import { DropZone } from "@/components/ui/DropZone";
 // ── Types & Constants ────────────────────────────────────────────────────────
 
 type Tab = "html" | "css" | "js";
-type Device = "desktop" | "tablet" | "mobile";
+type Device = "desktop" | "tablet" | "mobile" | "mobile-xs";
 
 interface LogEntry {
   type: "log" | "error" | "warn" | "info";
@@ -38,7 +38,8 @@ const DEFAULT_CODE = {
 const DEVICE_SIZES = {
   desktop: "100%",
   tablet: "768px",
-  mobile: "375px"
+  mobile: "375px",
+  "mobile-xs": "320px"
 };
 
 // ── Main Component ───────────────────────────────────────────────────────────
@@ -151,11 +152,10 @@ export default function HtmlViewerClient() {
   // Compilation Logic
   const getCompiledDoc = useCallback(() => {
     const cssLinks = cdns.filter(url => url.endsWith(".css")).map(url => `<link rel="stylesheet" href="${url}">`).join("\n");
-    // Scripts are disabled in sandbox, but we keep links for reference if ever enabled
     const jsLinks = cdns.filter(url => !url.endsWith(".css")).map(url => `<script src="${url}"></script>`).join("\n");
 
     const sanitizedHtml = DOMPurify.sanitize(html);
-    const sanitizedCss = DOMPurify.sanitize(css); // Though CSS is usually safe, we sanitize for completeness
+    const sanitizedCss = DOMPurify.sanitize(css); 
 
     return `
       <!DOCTYPE html>
@@ -165,14 +165,40 @@ export default function HtmlViewerClient() {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           ${cssLinks}
           <style>${sanitizedCss}</style>
+          <script>
+            // Console Override
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            const originalInfo = console.info;
+
+            const sendToParent = (type, args) => {
+              window.parent.postMessage({
+                source: 'karuvi-sandbox',
+                type,
+                payload: Array.from(args)
+              }, '*');
+            };
+
+            console.log = (...args) => { sendToParent('log', args); originalLog(...args); };
+            console.error = (...args) => { sendToParent('error', args); originalError(...args); };
+            console.warn = (...args) => { sendToParent('warn', args); originalWarn(...args); };
+            console.info = (...args) => { sendToParent('info', args); originalInfo(...args); };
+
+            window.onerror = (msg, url, line, col, error) => {
+              sendToParent('error', [msg + ' (line ' + line + ')']);
+              return false;
+            };
+          </script>
         </head>
         <body>
           ${sanitizedHtml}
-          <!-- Scripts blocked by sandbox for security -->
+          ${jsLinks}
+          <script>${js}</script>
         </body>
       </html>
     `;
-  }, [html, css, cdns]);
+  }, [html, css, js, cdns]);
 
   const updatePreview = useCallback(() => {
     if (iframeRef.current) {
@@ -426,7 +452,7 @@ export default function HtmlViewerClient() {
       {/* ── Preview Side ─────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 bg-bg dark:bg-white/[0.02]">
         {/* Preview Header */}
-        <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5">
+        <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5 overflow-x-auto no-scrollbar">
             <SegmentedControl
               activeId={device}
               onChange={(id) => setDevice(id as Device)}
@@ -434,6 +460,7 @@ export default function HtmlViewerClient() {
                 { id: "desktop", label: "Desktop", icon: <Laptop size={14} /> },
                 { id: "tablet", label: "Tablet", icon: <Tablet size={14} /> },
                 { id: "mobile", label: "Mobile", icon: <Smartphone size={14} /> },
+                { id: "mobile-xs", label: "Mobile XS", icon: <Smartphone size={14} /> },
               ]}
             />
 
@@ -464,7 +491,7 @@ export default function HtmlViewerClient() {
                 ref={iframeRef}
                 title="Sandbox Preview"
                 className="w-full h-full border-none"
-                sandbox=""
+                sandbox="allow-scripts allow-modals"
               />
             </div>
             

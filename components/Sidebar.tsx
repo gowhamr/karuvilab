@@ -189,10 +189,10 @@ const SidebarContent = memo(function SidebarContent({
       <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
         <button 
           onClick={handleSearchClick}
-          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hov:border-blue/30 transition-all group"
+          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hover:border-blue/30 transition-all group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hov:bg-blue/5 transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hover:bg-blue/5 transition-colors">
               <Search className="w-4 h-4" />
             </div>
             <span>{t('common.search').split('...')[0]}</span>
@@ -292,55 +292,57 @@ export function Sidebar() {
 
   return (
     <>
-      <MobileSidebar>
-        <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
-          <Link href="/" onClick={closeSidebar}>
-            <KVLogo withText size="sm" loading="lazy" />
-          </Link>
-          <button
-            className="w-8 h-8 flex items-center justify-center hov:bg-black/5 rounded-xl transition-colors text-text-4"
-            onClick={closeSidebar}
-            aria-label="Close sidebar"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-        <SidebarContent 
-          pathname={pathname} 
-          recent={recent} 
-          favorites={favorites} 
-          setIsOpen={closeSidebar} 
-          isHoverable={isHoverable}
-        />
-      </MobileSidebar>
-
-      {/* Desktop Permanent Sidebar */}
-      <aside 
-        className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden"
-        style={{ contain: 'layout style' }}
-      >
-        <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
-          <Link href="/">
-            <KVLogo withText size="md" loading="lazy" />
-          </Link>
-        </div>
-        <SidebarContent 
-          pathname={pathname} 
-          recent={recent} 
-          favorites={favorites} 
-          setIsOpen={closeSidebar} 
-          isHoverable={isHoverable}
-        />
-        <div className="p-4 border-t border-border bg-bg">
-           <div className="p-4 rounded-2xl border border-border bg-surface space-y-2 relative overflow-hidden group">
-              <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
-                <Shield className="w-3 h-3" />
-                Local-First
-              </p>
-              <p className="text-[9px] text-text-4 font-bold leading-tight">Private & secure data processing.</p>
-           </div>
-        </div>
-      </aside>
+      {!hydrated || isHoverable === false ? (
+        <MobileSidebar>
+          <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
+            <Link href="/" onClick={closeSidebar}>
+              <KVLogo withText size="sm" loading="lazy" />
+            </Link>
+            <button
+              className="w-8 h-8 flex items-center justify-center hover:bg-black/5 rounded-xl transition-colors text-text-4"
+              onClick={closeSidebar}
+              aria-label="Close sidebar"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <SidebarContent 
+            pathname={pathname} 
+            recent={recent} 
+            favorites={favorites} 
+            setIsOpen={closeSidebar} 
+            isHoverable={isHoverable}
+          />
+        </MobileSidebar>
+      ) : (
+        /* Desktop Permanent Sidebar */
+        <aside 
+          className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden"
+          style={{ contain: 'layout style' }}
+        >
+          <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
+            <Link href="/">
+              <KVLogo withText size="md" loading="lazy" />
+            </Link>
+          </div>
+          <SidebarContent 
+            pathname={pathname} 
+            recent={recent} 
+            favorites={favorites} 
+            setIsOpen={closeSidebar} 
+            isHoverable={isHoverable}
+          />
+          <div className="p-4 border-t border-border bg-bg">
+             <div className="p-4 rounded-2xl border border-border bg-surface space-y-2 relative overflow-hidden group">
+                <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
+                  <Shield className="w-3 h-3" />
+                  Local-First
+                </p>
+                <p className="text-[9px] text-text-4 font-bold leading-tight">Private & secure data processing.</p>
+             </div>
+          </div>
+        </aside>
+      )}
     </>
   );
 }
