@@ -82,8 +82,9 @@ const FDCalculatorClient = memo(function FDCalculatorClient() {
           </div>
           
           <div className="space-y-2 pt-2 border-t border-border">
-            <label className="text-sm font-bold text-text-2 block mb-2">Compounding Frequency</label>
+            <label htmlFor="compounding-select" className="text-sm font-bold text-text-2 block mb-2">Compounding Frequency</label>
             <select 
+              id="compounding-select"
               value={compounding}
               onChange={(e) => setCompounding(Number(e.target.value))}
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-text"

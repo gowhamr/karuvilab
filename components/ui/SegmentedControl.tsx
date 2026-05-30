@@ -16,33 +16,40 @@ interface SegmentedControlProps<T> {
   onChange: (id: T) => void;
   className?: string;
   disabled?: boolean;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
 }
 
 /**
  * A unified, accessible segmented control (tabs) for tool modes and settings.
- * Adheres to KL-Series design governance for elevated surfaces and interaction.
  */
-export function SegmentedControl<T extends string | number>({
-  options,
-  activeId,
-  onChange,
-  className,
-  disabled
-}: SegmentedControlProps<T>) {
+export function SegmentedControl<T extends string | number>(props: SegmentedControlProps<T>) {
+  const { 
+    options, 
+    activeId, 
+    onChange, 
+    className, 
+    disabled, 
+    "aria-label": ariaLabel, 
+    "aria-labelledby": ariaLabelledby 
+  } = props;
+
   return (
     <div
       role="tablist"
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
       className={cn(
         "flex p-1 bg-bg border border-border rounded-2xl w-fit",
         disabled && "opacity-50 pointer-events-none",
         className
       )}
     >
-      {options.map((option, index) => {
+      {options.map((option) => {
         const isActive = activeId === option.id;
         return (
           <button
-            key={option.id}
+            key={String(option.id)}
             role="tab"
             id={`tab-${option.id}`}
             aria-selected={isActive}

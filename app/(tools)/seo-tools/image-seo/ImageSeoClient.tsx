@@ -183,8 +183,8 @@ export default function ImageSeoClient() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium">File Extension</label>
-              <select className={inputClass} value={ext} onChange={e => setExt(e.target.value)}>
+              <label htmlFor="extension-select" className="text-sm font-medium">File Extension</label>
+              <select id="extension-select" className={inputClass} value={ext} onChange={e => setExt(e.target.value)}>
                 {[".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg"].map(e => <option key={e}>{e}</option>)}
               </select>
             </div>

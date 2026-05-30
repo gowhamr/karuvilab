@@ -155,8 +155,9 @@ export function ViewEditTab() {
              
              <div className="flex flex-wrap items-center gap-6">
                <div className="space-y-1">
-                 <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Language</label>
+                 <label htmlFor="viewer-language-select" className="text-[10px] font-black uppercase tracking-widest text-text-4">Language</label>
                  <select
+                   id="viewer-language-select"
                    value={fileA.language}
                    onChange={(e) => setFileALanguage(e.target.value)}
                    className="block w-32 px-3 py-1.5 bg-bg border border-border rounded-xl text-[10px] font-bold outline-none focus:ring-2 focus:ring-blue"

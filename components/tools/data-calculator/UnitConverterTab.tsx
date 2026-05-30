@@ -57,9 +57,10 @@ export function UnitConverterTab() {
       <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-widest text-text-4 px-1">From</label>
+            <label htmlFor="data-from-unit" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">From</label>
             <div className="flex gap-3">
               <select
+                id="data-from-unit"
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
                 className="flex-1 px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"
@@ -81,9 +82,10 @@ export function UnitConverterTab() {
           </div>
 
           <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-widest text-text-4 px-1">To</label>
+            <label htmlFor="data-to-unit" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">To</label>
             <div className="flex gap-3">
               <select
+                id="data-to-unit"
                 value={toUnit}
                 onChange={(e) => setToUnit(e.target.value)}
                 className="flex-1 px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"

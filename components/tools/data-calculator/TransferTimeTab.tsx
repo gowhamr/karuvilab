@@ -44,8 +44,9 @@ export function TransferTimeTab() {
                 onChange={setFileSize}
               />
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Unit</label>
+                <label htmlFor="file-unit-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Unit</label>
                 <select
+                  id="file-unit-select"
                   value={fileUnit}
                   onChange={(e) => setFileUnit(e.target.value)}
                   className="w-full px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"
@@ -72,8 +73,9 @@ export function TransferTimeTab() {
                 onChange={setBandwidth}
               />
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Speed Unit</label>
+                <label htmlFor="bandwidth-unit-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Speed Unit</label>
                 <select
+                  id="bandwidth-unit-select"
                   value={bandwidthUnit}
                   onChange={(e) => setBandwidthUnit(e.target.value)}
                   className="w-full px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"

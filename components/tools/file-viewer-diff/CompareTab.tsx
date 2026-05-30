@@ -111,6 +111,7 @@ export function CompareTab() {
                   <select
                     value={fileA.language}
                     onChange={(e) => setFileALanguage(e.target.value)}
+                    aria-label={`Language for ${fileA.name}`}
                     className="text-[10px] text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
                   >
                     {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
@@ -141,6 +142,7 @@ export function CompareTab() {
                   <select
                     value={fileB.language}
                     onChange={(e) => setFileBLanguage(e.target.value)}
+                    aria-label={`Language for ${fileB.name}`}
                     className="text-[10px] text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
                   >
                     {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}

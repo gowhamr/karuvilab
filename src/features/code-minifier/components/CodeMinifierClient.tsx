@@ -89,7 +89,7 @@ export default function CodeMinifierClient() {
             Minification Engine
           </h2>
           
-          <SegmentedControl
+          <SegmentedControl aria-labelledby="engine-label"
             options={[
               { id: "css", label: "CSS", icon: <Code className="w-3 h-3" /> },
               { id: "js", label: "JS", icon: <FileCode className="w-3 h-3" /> },

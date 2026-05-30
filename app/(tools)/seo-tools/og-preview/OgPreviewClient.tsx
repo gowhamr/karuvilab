@@ -69,8 +69,9 @@ export default function OgPreviewClient() {
               placeholder="My Website"
             />
             <div className="space-y-2">
-              <label className="text-sm font-bold text-text-2">Twitter Card</label>
+              <label htmlFor="twitter-card-select" className="text-sm font-bold text-text-2">Twitter Card</label>
               <select 
+                id="twitter-card-select"
                 className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-[48px]" 
                 value={twitterCard} 
                 onChange={e => setTwitterCard(e.target.value)}
@@ -104,7 +105,7 @@ export default function OgPreviewClient() {
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Facebook / Open Graph</h2>
             <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-[480px] shadow-sm">
               {image ? (
-                <img src={image} alt="OG preview" className="w-full h-[252px] object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                <img src={image} alt="Facebook Open Graph preview" className="w-full h-[252px] object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
               ) : (
                 <div className="w-full h-[252px] bg-bg flex items-center justify-center text-text-4 text-sm font-bold uppercase tracking-widest">
                   No image — add an OG Image URL
@@ -125,7 +126,7 @@ export default function OgPreviewClient() {
               {twitterCard === "summary_large_image" ? (
                 <>
                   {image ? (
-                    <img src={image} alt="Twitter card preview" className="w-full h-[200px] object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                    <img src={image} alt="Twitter card preview large" className="w-full h-[200px] object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
                   ) : (
                     <div className="w-full h-[200px] bg-bg flex items-center justify-center text-text-4 text-sm font-bold uppercase tracking-widest">No image</div>
                   )}
@@ -138,7 +139,7 @@ export default function OgPreviewClient() {
               ) : (
                 <div className="flex gap-4 p-4 bg-bg/30">
                   {image ? (
-                    <img src={image} alt="" className="w-24 h-24 object-cover rounded-xl flex-shrink-0 border border-border" />
+                    <img src={image} alt="Twitter card preview small" className="w-24 h-24 object-cover rounded-xl flex-shrink-0 border border-border" />
                   ) : (
                     <div className="w-24 h-24 bg-bg rounded-xl flex-shrink-0 flex items-center justify-center text-text-4 text-xs font-black uppercase border border-border">No img</div>
                   )}

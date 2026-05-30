@@ -169,8 +169,9 @@ export function EventModal({
               </div>
 
               <div className="flex items-center gap-3 border-l border-border/40 pl-6">
-                <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Repeat</span>
+                <label htmlFor="event-recurrence" className="text-[10px] font-black uppercase tracking-widest text-text-4">Repeat</label>
                 <select
+                  id="event-recurrence"
                   value={recurrence}
                   onChange={(e) => setRecurrence(e.target.value as RecurrenceType)}
                   className="bg-transparent text-xs font-bold text-indigo-600 outline-none cursor-pointer"

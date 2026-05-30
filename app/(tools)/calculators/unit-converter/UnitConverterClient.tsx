@@ -155,9 +155,10 @@ export default function UnitConverterClient() {
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         {/* From unit */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">From</label>
+          <label htmlFor="from-unit-select" className="text-sm font-bold text-text-2">From</label>
           <div className="flex gap-3">
             <select
+              id="from-unit-select"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -190,9 +191,10 @@ export default function UnitConverterClient() {
 
         {/* To unit */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">To</label>
+          <label htmlFor="to-unit-select" className="text-sm font-bold text-text-2">To</label>
           <div className="flex gap-3">
             <select
+              id="to-unit-select"
               value={to}
               onChange={(e) => setTo(e.target.value)}
               className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useId } from "react";
 import Editor, { loader } from "@monaco-editor/react";
 import LZString from "lz-string";
 import { 
@@ -45,6 +45,7 @@ const DEVICE_SIZES = {
 // ── Main Component ───────────────────────────────────────────────────────────
 
 export default function HtmlViewerClient() {
+  const cdnInputId = useId();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -394,7 +395,7 @@ export default function HtmlViewerClient() {
                 className="absolute inset-0 z-20 bg-surface dark:bg-black/90 p-6 flex flex-col space-y-6"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black uppercase tracking-widest text-text">External Libraries</h3>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-text"><label htmlFor={cdnInputId}>External Libraries</label></h3>
                   <button onClick={() => setIsCdnOpen(false)} className="text-text-4 hover:text-blue"><X className="w-5 h-5" /></button>
                 </div>
                 

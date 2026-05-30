@@ -20,6 +20,7 @@ export default function GifCreatorClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [frames, setFrames] = useState<Frame[]>([]);
   const [delay, setDelay] = useState(200); // ms
+  const delayId = React.useId();
   const [status, setStatus] = useState<"idle" | "processing" | "complete" | "error">("idle");
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{ url: string; size: number } | null>(null);
@@ -150,7 +151,7 @@ export default function GifCreatorClient() {
                <div className="flex items-center gap-3 w-full sm:w-auto justify-between">
                   <div className="flex items-center gap-2 px-4 py-2 bg-bg border border-border rounded-xl">
                     <Settings size={14} className="text-text-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-3">Delay:</span>
+                    <label htmlFor={delayId} className="text-[10px] font-black uppercase tracking-widest text-text-3">Delay:</label>
                     <input 
                       type="number" 
                       min="10"

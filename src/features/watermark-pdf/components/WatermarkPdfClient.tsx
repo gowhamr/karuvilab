@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
@@ -9,6 +9,8 @@ import { SliderField } from "@/components/ui/SliderField";
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 export default function WatermarkPdfClient() {
+  const textId = useId();
+  const colorId = useId();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [watermarkText, setWatermarkText] = useState("CONFIDENTIAL");
@@ -95,15 +97,15 @@ export default function WatermarkPdfClient() {
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Watermark Settings</h2>
 
             <div className="space-y-1">
-              <label className="text-sm font-medium">Watermark Text</label>
-              <input type="text" className={inputClass} value={watermarkText} onChange={e => setWatermarkText(e.target.value)} placeholder="CONFIDENTIAL" />
+              <label htmlFor={textId} className="text-sm font-medium">Watermark Text</label>
+              <input id={textId} type="text" className={inputClass} value={watermarkText} onChange={e => setWatermarkText(e.target.value)} placeholder="CONFIDENTIAL" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-sm font-medium">Color</label>
+                <label htmlFor={colorId} className="text-sm font-medium">Color</label>
                 <div className="flex items-center gap-2">
-                  <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
+                  <input id={colorId} type="color" value={color} onChange={e => setColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
                   <input type="text" className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none" value={color} onChange={e => setColor(e.target.value)} />
                 </div>
               </div>

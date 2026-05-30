@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
 import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
@@ -11,6 +11,10 @@ const cat = CATEGORIES.find(c => c.id === "pdf")!;
 type Position = "bottom-center" | "bottom-right" | "bottom-left" | "top-center" | "top-right" | "top-left";
 
 export default function PageNumberingClient() {
+  const prefixId = useId();
+  const startId = useId();
+  const suffixId = useId();
+  const colorId = useId();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [startNum, setStartNum] = useState(1);
@@ -100,16 +104,16 @@ export default function PageNumberingClient() {
 
             <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1">
-                <label className="text-sm font-medium">Prefix</label>
-                <input type="text" className={inputClass} value={prefix} onChange={e => setPrefix(e.target.value)} placeholder="Page " />
+                <label htmlFor={prefixId} className="text-sm font-medium">Prefix</label>
+                <input id={prefixId} type="text" className={inputClass} value={prefix} onChange={e => setPrefix(e.target.value)} placeholder="Page " />
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium">Start #</label>
-                <input type="number" className={inputClass} value={startNum} min={0} onChange={e => setStartNum(Number(e.target.value))} />
+                <label htmlFor={startId} className="text-sm font-medium">Start #</label>
+                <input id={startId} type="number" className={inputClass} value={startNum} min={0} onChange={e => setStartNum(Number(e.target.value))} />
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium">Suffix</label>
-                <input type="text" className={inputClass} value={suffix} onChange={e => setSuffix(e.target.value)} placeholder=" of N" />
+                <label htmlFor={suffixId} className="text-sm font-medium">Suffix</label>
+                <input id={suffixId} type="text" className={inputClass} value={suffix} onChange={e => setSuffix(e.target.value)} placeholder=" of N" />
               </div>
             </div>
 
@@ -135,9 +139,9 @@ export default function PageNumberingClient() {
                 format={v => `${v}px`}
               />
               <div className="space-y-1">
-                <label className="text-sm font-medium">Color</label>
+                <label htmlFor={colorId} className="text-sm font-medium">Color</label>
                 <div className="flex items-center gap-2">
-                  <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
+                  <input id={colorId} type="color" value={color} onChange={e => setColor(e.target.value)} className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
                   <input type="text" className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl font-mono text-xs focus:ring-2 focus:ring-blue outline-none" value={color} onChange={e => setColor(e.target.value)} />
                 </div>
               </div>

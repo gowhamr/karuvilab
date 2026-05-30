@@ -50,8 +50,9 @@ export function StorageCostTab() {
                 onChange={setDataSize}
               />
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Unit</label>
+                <label htmlFor="data-unit-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Unit</label>
                 <select
+                  id="data-unit-select"
                   value={dataUnit}
                   onChange={(e) => setDataUnit(e.target.value)}
                   className="w-full px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"
@@ -72,8 +73,9 @@ export function StorageCostTab() {
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Provider Preset</label>
+                <label htmlFor="provider-preset-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Provider Preset</label>
                 <select
+                  id="provider-preset-select"
                   value={provider}
                   onChange={(e) => handleProviderChange(e.target.value)}
                   className="w-full px-4 py-3 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all text-sm font-bold"

@@ -96,7 +96,7 @@ export function Footer() {
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           {/* Branding */}
           <div className="flex items-center gap-2 shrink-0">
-            <KVLogo size="xs" variant="monochrome" className="opacity-70 grayscale hover:grayscale-0 transition-all" />
+            <KVLogo size="sm" withText={false} className="opacity-70 grayscale hover:grayscale-0 transition-all" />
             <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
               Powered by KaruviLab
             </span>
