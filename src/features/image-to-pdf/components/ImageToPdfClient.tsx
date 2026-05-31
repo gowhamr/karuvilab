@@ -103,10 +103,10 @@ export default function ImageToPdfClient() {
                 <img src={img.url} alt={img.name} className="w-full h-24 object-cover" />
                 <div className="p-2 flex items-center justify-between">
                   <div className="flex gap-1">
-                    <button onClick={() => moveUp(i)} className="text-xs text-text-4 hover:text-blue">▲</button>
-                    <button onClick={() => moveDown(i)} className="text-xs text-text-4 hover:text-blue">▼</button>
+                    <button aria-label="Move item up" onClick={() => moveUp(i)} className="text-xs text-text-4 hover:text-blue">▲</button>
+                    <button aria-label="Move item down" onClick={() => moveDown(i)} className="text-xs text-text-4 hover:text-blue">▼</button>
                   </div>
-                  <button onClick={() => remove(i)} className="text-red-400 hover:text-red-600 text-xs font-bold">✕</button>
+                  <button aria-label="Remove item" onClick={() => remove(i)} className="text-red-400 hover:text-red-600 text-xs font-bold">✕</button>
                 </div>
                 <div className="absolute top-1 left-1 bg-blue text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{i + 1}</div>
               </div>

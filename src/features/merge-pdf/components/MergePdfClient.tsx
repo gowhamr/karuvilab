@@ -113,12 +113,12 @@ export default function MergePdfClient() {
             <div key={i} className="flex items-center gap-3 bg-bg border border-border rounded-xl px-4 py-3">
               <span className="text-xs font-bold text-text-4 w-5 text-center">{i + 1}</span>
               <div className="flex flex-col gap-0.5 flex-shrink-0">
-                <button onClick={() => moveUp(i)} disabled={i === 0} className="text-xs text-text-4 hover:text-blue disabled:opacity-30">▲</button>
-                <button onClick={() => moveDown(i)} disabled={i === files.length - 1} className="text-xs text-text-4 hover:text-blue disabled:opacity-30">▼</button>
+                <button aria-label="Move file up" onClick={() => moveUp(i)} disabled={i === 0} className="text-xs text-text-4 hover:text-blue disabled:opacity-30">▲</button>
+                <button aria-label="Move file down" onClick={() => moveDown(i)} disabled={i === files.length - 1} className="text-xs text-text-4 hover:text-blue disabled:opacity-30">▼</button>
               </div>
               <p className="flex-1 font-medium text-sm truncate">{f.name}</p>
               <p className="text-xs text-text-4">{(f.file.size / 1024).toFixed(0)} KB</p>
-              <button onClick={() => removeFile(i)} className="text-red-400 hover:text-red-600 text-sm font-bold flex-shrink-0">✕</button>
+              <button aria-label="Remove file" onClick={() => removeFile(i)} className="text-red-400 hover:text-red-600 text-sm font-bold flex-shrink-0">✕</button>
             </div>
           ))}
         </div>

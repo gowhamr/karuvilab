@@ -101,7 +101,7 @@ export default function CalendarPage() {
     <div className="max-w-[1600px] mx-auto px-2 md:px-8 space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">
       <CalendarHeader onAddEvent={() => handleAddEvent()} />
 
-      <main className="flex-1 flex flex-col min-h-0 relative">
+      <div className="flex-1 flex flex-col min-h-0 relative">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentView}
@@ -123,7 +123,7 @@ export default function CalendarPage() {
             <div className="w-14 h-14 border-[5px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin shadow-lg shadow-indigo-500/20" />
           </div>
         )}
-      </main>
+      </div>
 
       <EventModal 
         isOpen={isModalOpen} 

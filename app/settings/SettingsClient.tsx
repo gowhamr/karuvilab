@@ -154,7 +154,7 @@ export default function SettingsClient() {
       </aside>
 
       {/* ── Active Section Content ────────────────────────────────────────── */}
-      <main className="flex-1 min-w-0 pb-32 lg:pb-0">
+      <div className="flex-1 min-w-0 pb-32 lg:pb-0">
         <AnimatePresence mode="wait">
           <m.div
             key={activeSection}
@@ -196,7 +196,7 @@ export default function SettingsClient() {
             </div>
           </m.div>
         </AnimatePresence>
-      </main>
+      </div>
 
     </div>
   );
