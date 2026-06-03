@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const PercentageCalculatorClient = dynamic(() => import("./PercentageCalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const PercentageCalculatorClient = dynamic(() => import("./PercentageCalculatorClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("percentage-calculator");
 

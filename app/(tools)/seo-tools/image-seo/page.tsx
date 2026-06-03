@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const ImageSeoClient = dynamic(() => import("./ImageSeoClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const ImageSeoClient = dynamic(() => import("./ImageSeoClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("image-seo");
 

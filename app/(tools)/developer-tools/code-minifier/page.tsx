@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const CodeMinifierClient = dynamic(() => import("@/src/features/code-minifier"), { ssr: false, loading: () => <ToolSkeleton /> });
+const CodeMinifierClient = dynamic(() => import("@/src/features/code-minifier"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("code-minifier");
 

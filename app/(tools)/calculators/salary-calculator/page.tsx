@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SalaryCalculatorClient = dynamic(() => import("./SalaryCalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const SalaryCalculatorClient = dynamic(() => import("./SalaryCalculatorClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("salary-calculator");
 

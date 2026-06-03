@@ -1,14 +1,11 @@
-import dynamic from 'next/dynamic';
-import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
+import BarcodeScannerClientWrapper from "./BarcodeScannerClientWrapper";
 
 const toolId = "barcode-scanner";
 const category = CATEGORIES.find(c => c.id === "utilities")!;
-
-const BarcodeScannerClient = dynamic(() => import("./BarcodeScannerClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
@@ -20,7 +17,7 @@ export default function BarcodeScannerPage() {
       category={category}
       toolId={toolId}
     >
-      <BarcodeScannerClient />
+      <BarcodeScannerClientWrapper />
     </ToolShell>
   );
 }

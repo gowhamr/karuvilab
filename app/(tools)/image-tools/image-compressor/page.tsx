@@ -1,14 +1,9 @@
 import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
 import { generateToolMetadata } from '@/src/lib/seo';
 
-const ImageCompressorClient = dynamic(
-  () => import('@/src/features/image-compressor/components/ImageCompressorClient'),
-  { ssr: false, loading: () => <ToolSkeleton /> }
-);
+import ImageCompressorClientWrapper from './ImageCompressorClientWrapper';
 
 const toolId = 'image-compress';
 const cat = CATEGORIES.find(c => c.id === 'image')!;
@@ -59,7 +54,7 @@ export default function ImageCompressorPage() {
         relatedTools: ["image-converter", "image-resizer", "bg-remover"]
       }}
     >
-      <ImageCompressorClient />
+      <ImageCompressorClientWrapper />
     </ToolShell>
   );
 }

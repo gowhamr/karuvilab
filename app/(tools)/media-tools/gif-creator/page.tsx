@@ -1,13 +1,10 @@
-import dynamic from 'next/dynamic';
-import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
+import GifCreatorClientWrapper from "./GifCreatorClientWrapper";
 
 const toolId = "gif-creator";
-
-const GifCreatorClient = dynamic(() => import("@/src/features/gif-creator/components/GifCreatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
@@ -20,7 +17,7 @@ export default function GifCreatorPage() {
       category={cat}
       toolId={toolId}
     >
-      <GifCreatorClient />
+      <GifCreatorClientWrapper />
     </ToolShell>
   );
 }

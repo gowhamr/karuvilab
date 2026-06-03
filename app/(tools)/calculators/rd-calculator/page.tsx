@@ -3,7 +3,9 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import dynamic from "next/dynamic";
-const RDCalculatorClient = dynamic(() => import("./RDCalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const RDCalculatorClient = dynamic(() => import("./RDCalculatorClient"), {
+  loading: () => <ToolSkeleton />,
+});
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;

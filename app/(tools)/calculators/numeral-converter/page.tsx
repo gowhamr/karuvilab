@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const NumeralConverterClient = dynamic(() => import("./NumeralConverterClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const NumeralConverterClient = dynamic(() => import("./NumeralConverterClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("numeral-converter");
 

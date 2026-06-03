@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const HashGeneratorClient = dynamic(() => import("./HashGeneratorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const HashGeneratorClient = dynamic(() => import("./HashGeneratorClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("hash-generator");
 

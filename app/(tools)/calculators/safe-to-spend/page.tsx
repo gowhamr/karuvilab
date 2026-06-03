@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SafeToSpendClient = dynamic(() => import("./SafeToSpendClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const SafeToSpendClient = dynamic(() => import("./SafeToSpendClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("safe-to-spend");
 

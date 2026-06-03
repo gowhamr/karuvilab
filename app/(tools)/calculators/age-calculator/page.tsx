@@ -1,9 +1,7 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const AgeCalculatorClient = dynamic(() => import("./AgeCalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+import AgeCalculatorClientWrapper from "./AgeCalculatorClientWrapper";
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
@@ -42,7 +40,7 @@ export default function AgeCalculator() {
         relatedTools: ["date-calculator", "time-calculator", "world-clock"]
       }}
     >
-      <AgeCalculatorClient />
+      <AgeCalculatorClientWrapper />
     </ToolShell>
   );
 }

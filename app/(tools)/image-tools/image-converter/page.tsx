@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const ImageConverterClient = dynamic(() => import("./ImageConverterClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const ImageConverterClient = dynamic(() => import("./ImageConverterClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("image-converter");
 

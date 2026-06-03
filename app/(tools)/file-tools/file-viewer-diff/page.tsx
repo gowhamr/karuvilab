@@ -2,13 +2,7 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import dynamic from "next/dynamic";
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
-
-const FileViewerDiffClient = dynamic(() => import("@/components/tools/file-viewer-diff/FileViewerDiffClient"), {
-  ssr: false,
-  loading: () => <ToolSkeleton />,
-});
+import FileViewerDiffClientWrapper from "./FileViewerDiffClientWrapper";
 
 const toolId = "file-viewer-diff";
 const cat = CATEGORIES.find((c) => c.id === "developer")!;
@@ -55,7 +49,7 @@ export default function FileViewerDiffPage() {
         relatedTools: ["diff-checker", "code-minifier", "json-formatter"]
       }}
     >
-      <FileViewerDiffClient />
+      <FileViewerDiffClientWrapper />
     </ToolShell>
   );
 }

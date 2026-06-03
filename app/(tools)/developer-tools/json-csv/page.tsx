@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const JSONCSVConverterClient = dynamic(() => import("@/src/features/json-csv"), { ssr: false, loading: () => <ToolSkeleton /> });
+const JSONCSVConverterClient = dynamic(() => import("@/src/features/json-csv"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("json-csv");
 

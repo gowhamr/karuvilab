@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SlugGeneratorClient = dynamic(() => import("./SlugGeneratorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const SlugGeneratorClient = dynamic(() => import("./SlugGeneratorClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("slug-generator");
 

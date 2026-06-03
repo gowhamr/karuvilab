@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const URLEncoderClient = dynamic(() => import("./URLEncoderClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const URLEncoderClient = dynamic(() => import("./URLEncoderClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("url-encoder");
 

@@ -1,11 +1,8 @@
-import dynamic from 'next/dynamic';
-import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-
-const FileValidatorClient = dynamic(() => import("./FileValidatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+import FileValidatorClientWrapper from "./FileValidatorClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("validate");
 
@@ -17,7 +14,7 @@ export default function page() {
       description="Inspect file metadata, verify magic bytes against extension, and check image dimensions."
       category={cat}
     >
-      <FileValidatorClient />
+      <FileValidatorClientWrapper />
     </ToolShell>
   );
 }

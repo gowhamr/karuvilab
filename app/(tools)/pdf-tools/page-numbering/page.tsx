@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const PageNumberingClient = dynamic(() => import("@/src/features/page-numbering"), { ssr: false, loading: () => <ToolSkeleton /> });
+const PageNumberingClient = dynamic(() => import("@/src/features/page-numbering"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("page-numbering");
 

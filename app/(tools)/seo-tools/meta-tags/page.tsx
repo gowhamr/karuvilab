@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const MetaTagsGeneratorClient = dynamic(() => import("./MetaTagsGeneratorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const MetaTagsGeneratorClient = dynamic(() => import("./MetaTagsGeneratorClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("meta-tags");
 

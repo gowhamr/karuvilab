@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const RobotsTxtBuilderClient = dynamic(() => import("./RobotsTxtBuilderClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const RobotsTxtBuilderClient = dynamic(() => import("./RobotsTxtBuilderClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("robots-txt");
 

@@ -1,5 +1,3 @@
-import dynamic from 'next/dynamic';
-import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
 import type { Metadata } from "next";
 import { ALL_TOOLS, CATEGORIES } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
@@ -7,8 +5,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { StructuredData } from "@/src/lib/seo";
 import { EmptyState } from "@/components/system/EmptyState";
 import { LayoutGrid } from "lucide-react";
-
-const ProductivityPageClient = dynamic(() => import("./ProductivityPageClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+import ProductivityPageClient from "./ProductivityPageClient";
 
 export const metadata: Metadata = {
   title: "Productivity Tools — Manage Your Workflow Privately",

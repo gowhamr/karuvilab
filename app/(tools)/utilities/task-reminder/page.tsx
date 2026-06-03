@@ -3,7 +3,9 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import dynamic from "next/dynamic";
-const TaskReminderClient = dynamic(() => import("./TaskReminderClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const TaskReminderClient = dynamic(() => import("./TaskReminderClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 import { generateToolMetadata } from "@/src/lib/seo";
 

@@ -5,7 +5,9 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const URLCleanerClient = dynamic(() => import("./URLCleanerClient"), { ssr: false, loading: () => <ToolSkeleton /> });
+const URLCleanerClient = dynamic(() => import("./URLCleanerClient"), {
+  loading: () => <ToolSkeleton />,
+});
 
 export const metadata: Metadata = generateToolMetadata("url-cleaner");
 
