@@ -2,6 +2,7 @@
 
 import { FormatInfo } from './types';
 import * as Utils from './utils';
+import { blobManager } from './lib/blob-manager';
 
 declare global {
   interface Window {}
@@ -45,9 +46,9 @@ export async function loadHeic(file: File): Promise<HTMLImageElement> {
   const result = await (window as any).heic2any({ blob: file, toType: 'image/png', quality: 0.95 });
   const pngBlob = Array.isArray(result) ? result[0] : result;
   if (!pngBlob) throw new Error('HEIC conversion failed.');
-  const url = Utils.createObjectURL(pngBlob);
+  const url = blobManager.create(pngBlob);
   const img = await Utils.loadImage(url);
-  Utils.revokeObjectURL(url);
+  blobManager.revoke(url);
   return img;
 }
 

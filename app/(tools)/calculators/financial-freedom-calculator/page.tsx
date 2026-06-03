@@ -1,9 +1,15 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { generateToolMetadata } from "@/src/lib/seo";
-import FinancialFreedomCalculatorClient from "@/src/features/financial-freedom-calculator/FinancialFreedomCalculatorClient";
 import { financialFreedomCalculator } from "@/src/content/tools/financial-freedom-calculator";
+
+const FinancialFreedomCalculatorClient = dynamic(
+  () => import("@/src/features/financial-freedom-calculator/FinancialFreedomCalculatorClient"),
+  { ssr: false, loading: () => <ToolSkeleton /> }
+);
 
 const toolId = "financial-freedom-calculator";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;

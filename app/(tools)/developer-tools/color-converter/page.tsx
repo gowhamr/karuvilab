@@ -6,9 +6,7 @@ import { Metadata } from "next";
 import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const toolId = "color-converter";
-const ColorConverterClient = dynamic(() => import("./ColorConverterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const ColorConverterClient = dynamic(() => import("./ColorConverterClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 

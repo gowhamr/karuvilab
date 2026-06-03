@@ -2,7 +2,13 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import MarkdownEditorWrapper from "@/src/features/markdown/MarkdownEditorWrapper";
+import dynamic from "next/dynamic";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+
+const MarkdownEditor = dynamic(() => import("@/src/features/markdown/components/MarkdownEditor").then(mod => mod.MarkdownEditor), {
+  ssr: false,
+  loading: () => <ToolSkeleton />,
+});
 
 const cat = CATEGORIES.find((c) => c.id === "utilities")!;
 
@@ -50,7 +56,7 @@ export default function page() {
         relatedTools: ["html-viewer", "code-minifier", "text-utility", "word-counter"]
       }}
     >
-      <MarkdownEditorWrapper />
+      <MarkdownEditor />
     </ToolShell>
   );
 }

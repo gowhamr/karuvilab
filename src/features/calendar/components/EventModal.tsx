@@ -109,7 +109,7 @@ export function EventModal({
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-surface border border-border rounded-[32px] p-8 shadow-2xl z-50 animate-in zoom-in-95 duration-200 overflow-hidden">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-600">
+              <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
                 <CalendarIcon className="w-5 h-5" />
               </div>
               <Dialog.Title className="text-xl font-black tracking-tight text-text">
@@ -135,24 +135,24 @@ export function EventModal({
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 ml-4">Start Time</label>
                 <div className="relative group">
-                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
                   <input
                     type="datetime-local"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all"
+                    className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-blue outline-none transition-all"
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 ml-4">End Time</label>
                 <div className="relative group">
-                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
                   <input
                     type="datetime-local"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all"
+                    className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-blue outline-none transition-all"
                   />
                 </div>
               </div>
@@ -174,7 +174,7 @@ export function EventModal({
                   id="event-recurrence"
                   value={recurrence}
                   onChange={(e) => setRecurrence(e.target.value as RecurrenceType)}
-                  className="bg-transparent text-xs font-bold text-indigo-600 outline-none cursor-pointer"
+                  className="bg-transparent text-xs font-bold text-blue outline-none cursor-pointer"
                 >
                   {(Object.keys(RECURRENCE_LABELS) as RecurrenceType[]).map(type => (
                     <option key={type} value={type}>{RECURRENCE_LABELS[type]}</option>
@@ -185,23 +185,23 @@ export function EventModal({
 
             <div className="space-y-4">
               <div className="relative group">
-                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
                 <input
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="Add location"
-                  className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all placeholder:text-text-4"
+                  className="w-full h-12 pl-12 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-blue outline-none transition-all placeholder:text-text-4"
                 />
               </div>
 
               <div className="relative group">
-                <AlignLeft className="absolute left-4 top-4 w-4 h-4 text-text-4 group-focus-within:text-indigo-500 transition-colors" />
+                <AlignLeft className="absolute left-4 top-4 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Add description or notes"
                   rows={3}
-                  className="w-full pl-12 pr-4 py-3 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-indigo-500 outline-none transition-all placeholder:text-text-4 resize-none"
+                  className="w-full pl-12 pr-4 py-3 bg-bg border border-border rounded-2xl text-xs font-bold focus:border-blue outline-none transition-all placeholder:text-text-4 resize-none"
                 />
               </div>
             </div>
@@ -231,14 +231,14 @@ export function EventModal({
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="px-6 h-14 bg-red-500/10 text-red-500 rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all active:scale-95"
+                  className="px-6 h-14 bg-error/10 text-error rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-error hover:text-white transition-all active:scale-95"
                 >
                   Delete
                 </button>
               )}
               <button
                 type="submit"
-                className="flex-1 h-14 bg-indigo-600 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20 active:scale-95"
+                className="flex-1 h-14 bg-blue text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-dark transition-all shadow-xl shadow-blue/20 active:scale-95"
               >
                 {editingEvent ? "Save Changes" : "Create Event"}
               </button>

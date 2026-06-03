@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
@@ -6,6 +8,8 @@ import EmiCalculatorClientWrapper from "./EmiCalculatorClientWrapper";
 
 const toolId = "emi-calculator";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+
+const EmiCalculatorClient = dynamic(() => import("@/components/tools/emi/EMICalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
@@ -53,7 +57,7 @@ export default function EmiCalculator() {
         relatedTools: ["sip-calculator", "compound-interest", "fd-calculator"]
       }}
     >
-      <EmiCalculatorClientWrapper />
+      <EmiCalculatorClient />
     </ToolShell>
   );
 }

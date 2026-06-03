@@ -69,7 +69,7 @@ export default function HashMapVisualizer() {
 
   return (
     <div className="space-y-8">
-      <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6">
+      <div className="bg-surface/50 border border-border rounded-3xl p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <ToolInput
             label="Key"
@@ -86,7 +86,7 @@ export default function HashMapVisualizer() {
           <button
             onClick={handleInsert}
             disabled={!keyInput}
-            className="h-12 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95"
+            className="h-12 bg-blue hover:bg-blue-light disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-blue/20"
           >
             <Plus className="w-5 h-5" />
             Insert
@@ -101,14 +101,14 @@ export default function HashMapVisualizer() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="flex items-center gap-3 text-sm bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 p-4 rounded-2xl"
+            className="flex items-center gap-3 text-sm bg-blue/10 border border-blue/20 text-blue-light p-4 rounded-2xl"
           >
             <Info className="w-4 h-4 flex-shrink-0" />
             <span>
               {lastAction.type === 'insert' ? 'Inserted' : 'Deleted'} 
               <strong> "{lastAction.key}"</strong>. 
-              Hash: <code className="bg-indigo-500/20 px-1 rounded">{lastAction.hash}</code> → 
-              Bucket: <code className="bg-indigo-500/20 px-1 rounded">{lastAction.bucket}</code> 
+              Hash: <code className="bg-blue/20 px-1 rounded">{lastAction.hash}</code> → 
+              Bucket: <code className="bg-blue/20 px-1 rounded">{lastAction.bucket}</code> 
               (Hash % {BUCKET_COUNT})
             </span>
           </motion.div>
@@ -120,12 +120,12 @@ export default function HashMapVisualizer() {
           <div 
             key={i} 
             className={`flex flex-col border-2 rounded-2xl min-h-[160px] transition-colors ${
-              lastAction?.bucket === i ? 'border-indigo-500 bg-indigo-500/5' : 'border-slate-800 bg-slate-900/30'
+              lastAction?.bucket === i ? 'border-blue bg-blue/5' : 'border-border bg-surface/30'
             }`}
           >
-            <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-800/50 rounded-t-[14px]">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-tight">Bucket {i}</span>
-              <span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded-full">{bucket?.length || 0}</span>
+            <div className="p-3 border-b border-border flex justify-between items-center bg-surface/50 rounded-t-[14px]">
+              <span className="text-xs font-bold text-text-4 uppercase tracking-tight">Bucket {i}</span>
+              <span className="text-[10px] bg-bg-input text-text-3 px-1.5 py-0.5 rounded-full">{bucket?.length || 0}</span>
             </div>
             <div className="p-2 space-y-2 flex-grow">
               <AnimatePresence>
@@ -136,16 +136,16 @@ export default function HashMapVisualizer() {
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0.8, opacity: 0 }}
-                      className="bg-slate-800 border border-slate-700 p-2 rounded-xl group relative overflow-hidden"
+                      className="bg-surface border border-border p-2 rounded-xl group relative overflow-hidden"
                     >
                       <div className="flex justify-between items-start gap-2">
                         <div className="min-w-0">
-                          <p className="text-xs font-mono text-indigo-400 truncate">{entry.key}</p>
-                          <p className="text-sm text-slate-200 truncate">{entry.value}</p>
+                          <p className="text-xs font-mono text-blue-light truncate">{entry.key}</p>
+                          <p className="text-sm text-text-2 truncate">{entry.value}</p>
                         </div>
                         <button 
                           onClick={() => handleDelete(entry.key)}
-                          className="text-slate-500 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="text-text-4 hover:text-error p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <Trash2 className="w-3 h-3" />
                         </button>
@@ -153,7 +153,7 @@ export default function HashMapVisualizer() {
                     </motion.div>
                   ))
                 ) : (
-                  <div className="h-full flex items-center justify-center py-8 opacity-20 italic text-xs text-slate-500">
+                  <div className="h-full flex items-center justify-center py-8 opacity-20 italic text-xs text-text-4">
                     Empty
                   </div>
                 )}
@@ -163,22 +163,22 @@ export default function HashMapVisualizer() {
         ))}
       </div>
 
-      <div className="p-6 bg-slate-900/30 border border-slate-800 rounded-3xl">
-        <h4 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-indigo-400" />
+      <div className="p-6 bg-surface/30 border border-border rounded-3xl">
+        <h4 className="text-sm font-semibold text-text-3 mb-3 flex items-center gap-2">
+          <BookOpen className="w-4 h-4 text-blue" />
           How it works
         </h4>
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-400">
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-text-4">
           <li className="flex gap-2">
-            <ChevronRight className="w-3 h-3 text-indigo-500 flex-shrink-0 mt-0.5" />
+            <ChevronRight className="w-3 h-3 text-blue flex-shrink-0 mt-0.5" />
             <span><strong>Hashing:</strong> The key is passed through a hash function to generate a large integer.</span>
           </li>
           <li className="flex gap-2">
-            <ChevronRight className="w-3 h-3 text-indigo-500 flex-shrink-0 mt-0.5" />
+            <ChevronRight className="w-3 h-3 text-blue flex-shrink-0 mt-0.5" />
             <span><strong>Bucketing:</strong> We take <code>hash % bucket_count</code> to find where to store the entry.</span>
           </li>
           <li className="flex gap-2">
-            <ChevronRight className="w-3 h-3 text-indigo-500 flex-shrink-0 mt-0.5" />
+            <ChevronRight className="w-3 h-3 text-blue flex-shrink-0 mt-0.5" />
             <span><strong>Collision:</strong> When two keys end up in the same bucket, we use "Separate Chaining" (adding to a list).</span>
           </li>
         </ul>

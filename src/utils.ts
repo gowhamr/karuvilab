@@ -1,6 +1,7 @@
 /* ===== utils.ts – shared helpers ===== */
 
 import { FileValidationResult } from './types';
+import { blobManager } from './lib/blob-manager';
 
 export function formatBytes(bytes: number): string {
   if (bytes < 1024) return bytes + ' B';
@@ -61,13 +62,13 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 export function downloadBlob(blob: Blob, filename: string): void {
-  const url = createObjectURL(blob);
+  const url = blobManager.create(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
-  setTimeout(() => { document.body.removeChild(a); revokeObjectURL(url); }, 1000);
+  setTimeout(() => { document.body.removeChild(a); blobManager.revoke(url); }, 1000);
 }
 
 export function drawResized(img: HTMLImageElement, maxW: number | null, maxH: number | null): HTMLCanvasElement {
@@ -179,24 +180,21 @@ export function isLargeBatch(files: File[], thresholdMB: number = 50): boolean {
   return totalSize > thresholdMB * 1024 * 1024;
 }
 
-// ── Blob URL registry – tracks all object URLs so they can be revoked ──
-const _blobUrls: string[] = [];
+// ── Blob URL management – redirected to central blobManager (KL-01) ──
 
+/** @deprecated Use blobManager.create directly */
 export function createObjectURL(blob: Blob): string {
-  const url = URL.createObjectURL(blob);
-  _blobUrls.push(url);
-  return url;
+  return blobManager.create(blob);
 }
 
+/** @deprecated Use blobManager.revoke directly */
 export function revokeObjectURL(url: string): void {
-  const idx = _blobUrls.indexOf(url);
-  if (idx !== -1) _blobUrls.splice(idx, 1);
-  URL.revokeObjectURL(url);
+  blobManager.revoke(url);
 }
 
+/** @deprecated Use blobManager.revokeAll directly */
 export function revokeAllObjectURLs(): void {
-  _blobUrls.forEach(u => URL.revokeObjectURL(u));
-  _blobUrls.length = 0;
+  blobManager.revokeAll();
 }
 
 export function validateFile(file: File | null, allowedExtensions: string[] = [], maxMB: number = 20): FileValidationResult {

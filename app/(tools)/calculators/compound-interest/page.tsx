@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const CompoundInterestClient = dynamic(() => import("./CompoundInterestClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const CompoundInterestClient = dynamic(() => import("./CompoundInterestClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("compound-interest");
 

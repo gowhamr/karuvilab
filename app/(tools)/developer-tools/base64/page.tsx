@@ -3,9 +3,7 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import dynamic from "next/dynamic";
-const Base64Client = dynamic(() => import("./Base64Client"), {
-  loading: () => <ToolSkeleton />,
-});
+const Base64Client = dynamic(() => import("./Base64Client"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 import { generateToolMetadata } from "@/src/lib/seo";
 

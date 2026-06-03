@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const OgPreviewClient = dynamic(() => import("./OgPreviewClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const OgPreviewClient = dynamic(() => import("./OgPreviewClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("og-preview");
 

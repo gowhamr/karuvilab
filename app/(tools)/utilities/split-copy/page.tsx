@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SplitCopyClient = dynamic(() => import("./SplitCopyClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const SplitCopyClient = dynamic(() => import("./SplitCopyClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("split-copy");
 

@@ -3,10 +3,12 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { CATEGORIES } from "@/src/tool-registry";
 import dynamic from "next/dynamic";
 import { Metadata } from "next";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const toolId = "yaml-validator";
 const YamlClient = dynamic(() => import("./YamlValidatorClient"), {
-  loading: () => <div className="w-full h-[60vh] bg-surface rounded-3xl animate-pulse" />,
+  loading: () => <ToolSkeleton />,
+  ssr: false,
 });
 
 export const metadata: Metadata = generateToolMetadata(toolId);

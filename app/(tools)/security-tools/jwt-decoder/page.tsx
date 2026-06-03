@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const JWTDecoderClient = dynamic(() => import("./JWTDecoderClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const JWTDecoderClient = dynamic(() => import("./JWTDecoderClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("jwt-decoder");
 

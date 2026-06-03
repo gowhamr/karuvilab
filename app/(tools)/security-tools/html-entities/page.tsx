@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const HTMLEntitiesClient = dynamic(() => import("./HTMLEntitiesClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const HTMLEntitiesClient = dynamic(() => import("./HTMLEntitiesClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("html-entities");
 

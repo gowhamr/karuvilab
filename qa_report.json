@@ -1,66 +1,123 @@
 {
-  "audit_date": "2026-05-30",
-  "platform": "KaruviLab (KV)",
-  "summary": "Completed platform-wide trust-critical QA audit. 85+ tools verified for route existence. Dead UI elements eliminated. Trust-eroding 'Coming Soon' patterns removed.",
-  "dead_ui_inventory": [
+  "summary": {
+    "total_issues": 4,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 2,
+    "p3_count": 1,
+    "overall_product_readiness": "MOSTLY_READY",
+    "platform_trust_score": 90,
+    "ui_ux_consistency_score": 75,
+    "accessibility_score": 92,
+    "performance_score": 88
+  },
+  "issues": [
     {
-      "tool": "Productivity Category",
-      "element": "More productivity tools coming soon placeholder",
-      "behavior": "Informational but discouraged",
-      "action": "Removed and replaced with functional EmptyState + CTA",
-      "severity": "MINOR"
+      "issue_id": "KV-001",
+      "severity": "P1",
+      "tool_or_system": "System-wide / Tool Routing",
+      "issue_type": "Trust",
+      "description": "Systemic violation of KL-07: The 'ssr: false' directive is missing from page routes (app/(tools)/.../page.tsx) for tools utilizing browser-only APIs.",
+      "reproduction_steps": "1. Inspect page.tsx for tools like Internet Speed Test or Typing Speed Test. 2. Observe direct imports of client components or missing ssr: false in dynamic() calls within the page route.",
+      "expected": "KL-07 mandates that the 'ssr: false' directive MUST be in the page route, not hidden in child wrappers or missing entirely.",
+      "actual": "Most tools either lack the directive entirely or hide it in a *Wrapper.tsx component, violating the strict architectural guardrail.",
+      "root_cause": "Inconsistent application of KL-07 during tool development.",
+      "user_impact": "Potential hydration mismatches, flickering on load, and initialization failures for tools relying on browser-specific APIs.",
+      "fix_recommendation": "Move dynamic() with ssr: false directly into the app/(tools)/[category]/[id]/page.tsx files.",
+      "remove_instead": false
     },
     {
-      "tool": "OG Preview",
-      "element": "Google Search Title",
-      "behavior": "Fake link style (blue + underline) without onClick",
-      "action": "Removed hover:underline and cursor-pointer to match non-interactive state",
-      "severity": "MINOR"
+      "issue_id": "KV-002",
+      "severity": "P2",
+      "tool_or_system": "Design System / Multiple Tools",
+      "issue_type": "UI/UX",
+      "description": "Widespread violation of Design System tokens: Hardcoded Tailwind colors (slate, indigo, orange, etc.) used in several tools.",
+      "reproduction_steps": "Search for 'slate-' or 'indigo-' in src/features/. Identified in: Command Cheat Sheet, Hash Map Visualizer, Currency Converter (Debug), Calendar, Pomodoro Timer, Image SEO, and PrivacyBadge.",
+      "expected": "All visual primitives must use the design token system defined in src/theme/ (e.g., surface, border, text-1).",
+      "actual": "Many tools use hardcoded Tailwind colors, causing visual inconsistency between tools and broken theme support for those specific elements.",
+      "root_cause": "Legacy code or copy-pasted components that weren't migrated to KV tokens.",
+      "user_impact": "Subtle visual inconsistencies and potential readability issues in dark mode or high-contrast themes.",
+      "fix_recommendation": "Refactor identified components to use KV tokens (e.g., replace bg-slate-900 with bg-surface or bg-bg).",
+      "remove_instead": false
     },
     {
-      "tool": "SEO Title Tester",
-      "element": "Google Search Title",
-      "behavior": "Fake link style (blue + underline) without onClick",
-      "action": "Removed hover:underline and cursor-pointer",
-      "severity": "MINOR"
+      "issue_id": "KV-003",
+      "severity": "P2",
+      "tool_or_system": "Architecture / Blob Management",
+      "issue_type": "Trust",
+      "description": "Redundant and violating Blob URL management in src/utils.ts.",
+      "reproduction_steps": "Check src/utils.ts lines 180-195. Observe a standalone createObjectURL implementation.",
+      "expected": "KL-01 mandates zero raw URL.createObjectURL usage outside the central blobManager or useObjectUrlManager.",
+      "actual": "src/utils.ts provides a redundant createObjectURL function that is still used by several utilities (calculator-utils.ts, zip.ts), fragmenting memory management.",
+      "root_cause": "Redundant utility functions created outside the primary blobManager architecture.",
+      "user_impact": "Increased risk of memory leaks as the central blobManager cannot track or revoke URLs created via src/utils.ts.",
+      "fix_recommendation": "Deprecate createObjectURL in src/utils.ts and migrate all callers to use blobManager.",
+      "remove_instead": false
     },
     {
-      "tool": "Markdown Editor",
-      "element": "Coming soon task list item",
-      "behavior": "Placeholder for non-existent feature",
-      "action": "Replaced with valid planned feature without 'coming soon' label",
-      "severity": "NIT"
+      "issue_id": "KV-004",
+      "severity": "P3",
+      "tool_or_system": "Financial Freedom Calculator",
+      "issue_type": "Performance",
+      "description": "Missing ssr: false for Financial Freedom Calculator despite Canvas usage.",
+      "reproduction_steps": "Open app/(tools)/calculators/financial-freedom-calculator/page.tsx. Observe direct import of Client component.",
+      "expected": "Tools using browser-only APIs like Canvas must be loaded with ssr: false.",
+      "actual": "The tool is loaded synchronously on the server, relying on useEffect guards inside the component which is less efficient than dynamic(ssr: false).",
+      "root_cause": "Missing dynamic import wrapper.",
+      "user_impact": "Minor hydration overhead.",
+      "fix_recommendation": "Wrap the client component in dynamic() with ssr: false.",
+      "remove_instead": false
     }
   ],
-  "broken_workflow_log": [
+  "tool_scores": [
     {
-      "tool": "Platform-wide",
-      "failing_flow": "Potential Hydration Mismatch",
-      "root_cause": "Some tools using browser APIs without explicit ssr:false in all wrapper layers",
-      "user_impact": "Occasional console errors or flickering on first load",
-      "resolution": "Verified that most critical tools use ClientWrappers with dynamic(ssr: false)"
-    }
-  ],
-  "trust_risk_assessment": [
-    {
-      "area": "Placeholders",
-      "violation": "Use of 'Coming Soon' and fake interactive elements",
-      "severity": "MINOR",
-      "recommended_change": "Eliminated during this audit."
+      "tool_id": "image-compressor",
+      "tool_name": "Image Compressor",
+      "scores": {
+        "functionality": 10,
+        "ux": 10,
+        "visual_consistency": 10,
+        "accessibility": 10,
+        "performance": 10,
+        "trust": 10,
+        "offline": 10,
+        "recovery": 10
+      },
+      "overall": 100
     },
     {
-      "area": "Offline Claim",
-      "violation": "None found. Status indicators correctly reflect online/offline state.",
-      "severity": "PASS",
-      "recommended_change": "Maintain 100% browser-side processing."
+      "tool_id": "command-cheat-sheet",
+      "tool_name": "Command Cheat Sheet",
+      "scores": {
+        "functionality": 10,
+        "ux": 7,
+        "visual_consistency": 4,
+        "accessibility": 8,
+        "performance": 10,
+        "trust": 9,
+        "offline": 10,
+        "recovery": 10
+      },
+      "overall": 78
     }
   ],
-  "feature_stability_scores": {
-    "reliability": 95,
-    "mobile": 92,
-    "offline": 98,
-    "a11y": 90,
-    "performance": 96,
-    "trust": 100
-  }
+  "top_trust_risks": [
+    "Memory leaks from untracked Blob URLs (KV-003)",
+    "Hydration failures in browser-heavy tools (KV-001)"
+  ],
+  "features_to_remove": [],
+  "features_to_prioritize": [
+    "Refactor all page.tsx to comply with KL-07",
+    "Global sweep for hardcoded color tokens"
+  ],
+  "strongest_tools": [
+    "Image Compressor",
+    "PDF Tools Suite",
+    "Pomodoro Timer"
+  ],
+  "weakest_tools": [
+    "Command Cheat Sheet",
+    "Hash Map Visualizer",
+    "Internet Speed Test (due to token violations)"
+  ]
 }

@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const QRCodeGeneratorClient = dynamic(() => import("./QRCodeGeneratorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const QRCodeGeneratorClient = dynamic(() => import("./QRCodeGeneratorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("qrcode");
 

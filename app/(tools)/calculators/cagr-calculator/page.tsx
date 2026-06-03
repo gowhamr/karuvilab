@@ -3,9 +3,7 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import dynamic from "next/dynamic";
-const CAGRCalculatorClient = dynamic(() => import("./CAGRCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const CAGRCalculatorClient = dynamic(() => import("./CAGRCalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;

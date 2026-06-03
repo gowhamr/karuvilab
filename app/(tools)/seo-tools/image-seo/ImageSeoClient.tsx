@@ -123,7 +123,7 @@ export default function ImageSeoClient() {
               Generate Alt Text
             </button>
 
-            <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl text-xs text-yellow-700 dark:text-yellow-400">
+            <div className="p-3 bg-warn/10 border border-warn/30 rounded-xl text-xs text-warn font-medium">
               Alt text generation uses your provided description — AI-powered generation is not available in offline mode.
             </div>
           </div>

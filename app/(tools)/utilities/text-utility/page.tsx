@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const TextUtilityClient = dynamic(() => import("./TextUtilityClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const TextUtilityClient = dynamic(() => import("./TextUtilityClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("text-utility");
 

@@ -1,10 +1,16 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import ImageBase64ClientWrapper from "./ImageBase64ClientWrapper";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 export const metadata: Metadata = generateToolMetadata("image-base64");
+
+const ImageBase64Client = dynamic(() => import("./ImageBase64Client"), {
+  loading: () => <ToolSkeleton />,
+  ssr: false,
+});
 
 export default function page() {
   const cat = CATEGORIES.find(c => c.id === "image")!;
@@ -14,7 +20,7 @@ export default function page() {
       description="Encode images as Base64 data URIs or decode data URIs back to images."
       category={cat}
     >
-      <ImageBase64ClientWrapper />
+      <ImageBase64Client />
     </ToolShell>
   );
 }

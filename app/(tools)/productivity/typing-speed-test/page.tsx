@@ -1,7 +1,13 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import TypingSpeedTestClient from "./TypingSpeedTestClient";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+
+const TypingSpeedTestClient = dynamic(
+  () => import("./TypingSpeedTestClient"),
+  { ssr: false, loading: () => <ToolSkeleton /> }
+);
 
 import { generateToolMetadata } from "@/src/lib/seo";
 

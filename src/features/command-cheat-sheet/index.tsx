@@ -64,8 +64,8 @@ export default function CommandCheatSheet() {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeCategory === cat 
-                  ? 'bg-indigo-600 text-white shadow-lg' 
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-blue text-white shadow-lg shadow-blue/20' 
+                  : 'bg-surface text-text-3 hover:bg-hover'
               }`}
             >
               {cat}
@@ -84,18 +84,18 @@ export default function CommandCheatSheet() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: i * 0.02 }}
-                className="group bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-indigo-500/50 transition-all flex items-center justify-between"
+                className="group bg-surface/50 border border-border rounded-xl p-4 hover:border-blue/50 transition-all flex items-center justify-between"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue">
                       {command.category}
                     </span>
                   </div>
-                  <code className="text-lg font-mono text-slate-100 block group-hover:text-white transition-colors">
+                  <code className="text-lg font-mono text-text block group-hover:text-white transition-colors">
                     {command.cmd}
                   </code>
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-text-4">
                     {command.desc}
                   </p>
                 </div>
@@ -106,13 +106,13 @@ export default function CommandCheatSheet() {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-12 bg-slate-900/30 rounded-3xl border border-dashed border-slate-800"
+              className="text-center py-12 bg-surface/30 rounded-3xl border border-dashed border-border"
             >
-              <div className="bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="w-8 h-8 text-slate-500" />
+              <div className="bg-surface w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-text-4" />
               </div>
-              <h3 className="text-slate-300 font-medium">No commands found</h3>
-              <p className="text-slate-500 text-sm">Try adjusting your search or category filter.</p>
+              <h3 className="text-text-3 font-medium">No commands found</h3>
+              <p className="text-text-4 text-sm">Try adjusting your search or category filter.</p>
             </motion.div>
           )}
         </AnimatePresence>

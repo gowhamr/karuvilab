@@ -1,13 +1,19 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import ScientificCalculatorClientWrapper from "./ScientificCalculatorClientWrapper";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const toolId = "scientific-calculator";
 const cat = CATEGORIES.find(c => c.id === "calculators")!;
 
 export const metadata: Metadata = generateToolMetadata(toolId);
+
+const ScientificCalculatorClient = dynamic(() => import("./ScientificCalculatorClient"), {
+  loading: () => <ToolSkeleton />,
+  ssr: false,
+});
 
 export default function ScientificCalculatorPage() {
   return (
@@ -17,7 +23,7 @@ export default function ScientificCalculatorPage() {
       category={cat}
       toolId={toolId}
     >
-      <ScientificCalculatorClientWrapper />
+      <ScientificCalculatorClient />
     </ToolShell>
   );
 }

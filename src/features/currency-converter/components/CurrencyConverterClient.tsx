@@ -182,53 +182,53 @@ export default function CurrencyConverterClient() {
 
       {/* Debug Console */}
       {showDebug && ratesData?.debugInfo && (
-        <div className="bg-[#0F172A] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
-          <div className="px-5 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
-            <div className="flex items-center gap-2 text-slate-400">
+        <div className="bg-[#0F172A] border border-border rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="px-5 py-3 border-b border-border flex items-center justify-between bg-surface/50">
+            <div className="flex items-center gap-2 text-text-4">
               <Terminal size={14} />
               <span className="text-[10px] font-black uppercase tracking-widest">Network Diagnostics</span>
             </div>
             <button 
               onClick={() => setShowDebug(false)}
-              className="text-slate-500 hover:text-white transition-colors"
+              className="text-text-4 hover:text-white transition-colors"
             >
               <ChevronUp size={16} />
             </button>
           </div>
           <div className="p-5 space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/50">
-                <span className="block text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Total Latency</span>
-                <span className="text-blue-400 font-mono text-sm font-bold">{ratesData.debugInfo.latency || 'N/A'}ms</span>
+              <div className="bg-surface/80 p-3 rounded-xl border border-border/50">
+                <span className="block text-[9px] text-text-4 font-black uppercase tracking-widest mb-1">Total Latency</span>
+                <span className="text-blue font-mono text-sm font-bold">{ratesData.debugInfo.latency || 'N/A'}ms</span>
               </div>
-              <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/50">
-                <span className="block text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Active Source</span>
-                <span className="text-emerald-400 font-mono text-sm font-bold uppercase">{ratesData.source}</span>
+              <div className="bg-surface/80 p-3 rounded-xl border border-border/50">
+                <span className="block text-[9px] text-text-4 font-black uppercase tracking-widest mb-1">Active Source</span>
+                <span className="text-success font-mono text-sm font-bold uppercase">{ratesData.source}</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest px-1">Fetch Attempts</span>
+              <span className="text-[9px] text-text-4 font-black uppercase tracking-widest px-1">Fetch Attempts</span>
               {ratesData.debugInfo.attempts.map((attempt, i) => (
-                <div key={i} className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/50 flex flex-col gap-2">
+                <div key={i} className="bg-surface/80 p-3 rounded-xl border border-border/50 flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className={cn(
                         "w-1.5 h-1.5 rounded-full",
-                        attempt.success ? "bg-emerald-500" : "bg-red-500"
+                        attempt.success ? "bg-success" : "bg-error"
                       )} />
-                      <span className="text-[10px] font-bold text-slate-300 uppercase">{attempt.source}</span>
+                      <span className="text-[10px] font-bold text-text-3 uppercase">{attempt.source}</span>
                     </div>
-                    {attempt.latency && <span className="text-[10px] font-mono text-slate-500">{attempt.latency}ms</span>}
+                    {attempt.latency && <span className="text-[10px] font-mono text-text-4">{attempt.latency}ms</span>}
                   </div>
                   {attempt.url && (
                     <div className="flex items-center gap-1.5 opacity-50 overflow-hidden">
                       <ExternalLink size={10} className="shrink-0" />
-                      <span className="text-[9px] font-mono truncate text-slate-400">{attempt.url}</span>
+                      <span className="text-[9px] font-mono truncate text-text-4">{attempt.url}</span>
                     </div>
                   )}
                   {attempt.error && (
-                    <div className="text-[9px] font-mono text-red-400/80 leading-relaxed bg-red-500/5 p-2 rounded-lg border border-red-500/10">
+                    <div className="text-[9px] font-mono text-error/80 leading-relaxed bg-error/5 p-2 rounded-lg border border-error/10">
                       ERR: {attempt.error} {attempt.status && `(HTTP ${attempt.status})`}
                     </div>
                   )}

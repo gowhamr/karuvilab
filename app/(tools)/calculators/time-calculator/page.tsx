@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const TimeCalculatorClient = dynamic(() => import("./TimeCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const TimeCalculatorClient = dynamic(() => import("./TimeCalculatorClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("time-calculator");
 

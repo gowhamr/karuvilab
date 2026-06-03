@@ -5,9 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const WorkHoursClient = dynamic(() => import("./WorkHoursClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const WorkHoursClient = dynamic(() => import("./WorkHoursClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata("work-hours");
 

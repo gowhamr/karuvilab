@@ -6,9 +6,7 @@ import { Metadata } from "next";
 import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const toolId = "word-counter";
-const WordCounterClient = dynamic(() => import("./WordCounterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const WordCounterClient = dynamic(() => import("./WordCounterClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 

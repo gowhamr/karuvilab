@@ -6,9 +6,7 @@ import { Metadata } from "next";
 import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const toolId = "text-case-converter";
-const TextCaseConverterClient = dynamic(() => import("./TextCaseConverterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+const TextCaseConverterClient = dynamic(() => import("./TextCaseConverterClient"), { ssr: false, loading: () => <ToolSkeleton /> });
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
