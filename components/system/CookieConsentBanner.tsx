@@ -6,8 +6,6 @@ import { Cookie } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 
 export function CookieConsentBanner() {
-  // Temporarily disabled: Google Ads are not currently displayed
-  return null;
   const [consent, setConsent] = useState<string | null>(null);
 
   useEffect(() => {

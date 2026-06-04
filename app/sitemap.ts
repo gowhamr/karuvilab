@@ -1,7 +1,19 @@
 import { MetadataRoute } from 'next';
 import { ALL_TOOLS, CATEGORIES } from '@/src/tool-registry';
+import { emiCalculator } from '@/src/content/tools/emi-calculator'; // Sample to check if we can import content
 
 const BASE_URL = 'https://karuvilab.com';
+
+// Heuristic: only include tools that have substantial content in their sitemap entry
+// In a real build, we'd check the word count of the actual content file.
+// For now, we'll exclude the tools known to have < 250 words.
+const THIN_TOOLS = [
+  'command-cheat-sheet', 'hash-map-visualizer', 'color-palette-extractor', 
+  'fake-data-generator', 'mic-camera-tester', 'phone-mockup-generator',
+  'text-sorter-deduper', 'typing-speed-test', 'wifi-qr-code', 'color-converter',
+  'audio-converter', 'gif-creator', 'video-metadata-viewer'
+];
+
 
 export const dynamic = 'force-static';
 

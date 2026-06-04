@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { CATEGORIES, ALL_TOOLS } from "@/src/tool-registry";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Download, FileText, FileCode, FileImage, Upload, RefreshCw, CheckCircle2 } from "lucide-react";
+import { 
+  Download, FileText, FileCode, FileImage, 
+  Upload, RefreshCw, CheckCircle2, Search, 
+  Info, Zap, ShieldCheck, Layers, ArrowRight,
+  Sparkles, Trash2, Edit3, Type
+} from "lucide-react";
 import { blobManager } from "@/src/lib/blob-manager";
+import { m, AnimatePresence } from "framer-motion";
+import { cn } from "@/src/lib/utils";
+import { BatchQueue } from "@/components/ui/BatchQueue";
+import { useBatchStore } from "@/src/store/useBatchStore";
+import { ToolShell } from "@/components/ui/ToolShell";
 
 const cat = CATEGORIES.find(c => c.id === "seo")!;
+const toolId = "image-seo";
 
 function toSlug(s: string): string {
   return s
@@ -17,49 +28,35 @@ function toSlug(s: string): string {
     .replace(/-+/g, "-");
 }
 
-function toTitleCaseAlt(s: string): string {
-  const stop = new Set(["a","an","the","in","on","at","of","and","or","but","for","to","with"]);
-  return s
-    .trim()
-    .split(/\s+/)
-    .map((w, i) => {
-      if (i === 0 || !stop.has(w.toLowerCase())) {
-        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
-      }
-      return w.toLowerCase();
-    })
-    .join(" ")
-    .replace(/\.$/, "");
+function toNaturalAlt(s: string): string {
+  if (!s) return "";
+  const trimmed = s.trim();
+  const first = trimmed.charAt(0).toUpperCase();
+  const rest = trimmed.slice(1).toLowerCase();
+  return (first + rest).replace(/\s+/g, " ");
 }
 
 const EXTENSIONS = [
-  ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg",
-  ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
-  ".txt", ".csv", ".zip", ".mp4", ".mp3", ".wav"
+  ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg"
 ];
 
 export default function ImageSeoClient() {
-  const [tab, setTab] = useState<"alt" | "filename" | "renamer">("alt");
+  const [tab, setTab] = useState<"optimize" | "batch" | "analyzer">("optimize");
   
-  // Alt text tab
+  // single optimize tab
   const [preview, setPreview] = useState<string | null>(null);
   const [activeFile, setActiveFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [context, setContext] = useState("");
   const [generatedAlt, setGeneratedAlt] = useState("");
-  const [altSlug, setAltSlug] = useState("");
-  const [altExt, setAltExt] = useState(".jpg");
-  
-  // Filename tab
-  const [filenameInput, setFilenameInput] = useState("");
-  const [ext, setExt] = useState(".jpg");
+  const [customFilename, setCustomFilename] = useState("");
+  const [selectedExt, setSelectedExt] = useState(".jpg");
 
-  // File Renamer tab
-  const [renameFile, setRenameFile] = useState<File | null>(null);
-  const [renameInput, setRenameInput] = useState("");
-  const [renameExt, setRenameExt] = useState("");
+  // Analyzer tab
+  const [analyzeText, setAnalyzeText] = useState("");
 
-  const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
+  const items = useBatchStore(state => state.items[toolId] || []);
+  const addItems = useBatchStore(state => state.addItems);
+  const isProcessing = false; // We process instantly for renaming
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -74,30 +71,24 @@ export default function ImageSeoClient() {
     const extension = dotIdx !== -1 ? file.name.slice(dotIdx) : ".jpg";
     
     setContext(name);
-    setAltExt(extension);
+    setCustomFilename(toSlug(name));
+    setSelectedExt(extension);
   };
 
-  const handleRenameFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setRenameFile(file);
-    const dotIdx = file.name.lastIndexOf(".");
-    const name = dotIdx !== -1 ? file.name.slice(0, dotIdx) : file.name;
-    const extension = dotIdx !== -1 ? file.name.slice(dotIdx) : "";
-    setRenameInput(name);
-    setRenameExt(extension);
+  const handleBatchFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      addItems(toolId, files);
+    }
   };
 
-  const generateAlt = () => {
+  const generateSEO = () => {
     if (!context.trim()) return;
-    const alt = toTitleCaseAlt(context.trim());
-    setGeneratedAlt(alt);
-    setAltSlug(toSlug(context.trim()));
+    setGeneratedAlt(toNaturalAlt(context.trim()));
+    setCustomFilename(toSlug(context.trim()));
   };
 
-  const generatedFilename = toSlug(filenameInput) + ext;
-  const finalRenameName = (toSlug(renameInput) || "file") + renameExt;
-  const finalAltName = (altSlug || "image") + altExt;
+  const finalFilename = (customFilename || "image") + selectedExt;
 
   const downloadFile = (file: File, name: string) => {
     const url = blobManager.create(file);
@@ -111,280 +102,303 @@ export default function ImageSeoClient() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Tab switcher */}
-      <div className="flex flex-wrap gap-2 p-1 bg-surface border border-border rounded-2xl w-fit">
-        {(["alt", "filename", "renamer"] as const).map(t => (
+    <div className="space-y-8 max-w-6xl mx-auto">
+      {/* ── Tab Switcher (Raycast Style) ─────────────────────────────────── */}
+      <div className="flex flex-wrap gap-2 p-1.5 bg-surface border border-border rounded-2xl w-fit mx-auto md:mx-0 shadow-sm">
+        {(["optimize", "batch", "analyzer"] as const).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+            className={cn(
+              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-200",
               tab === t 
                 ? "bg-blue text-white shadow-lg shadow-blue/20" 
-                : "text-text-3 hover:text-blue hover:bg-blue/5"
-            }`}
+                : "text-text-4 hover:text-blue hover:bg-blue/5"
+            )}
           >
-            {t === "alt" ? "Alt Text Generator" : t === "filename" ? "Filename Generator" : "File Renamer"}
+            {t === "optimize" ? "Single Optimizer" : t === "batch" ? "Batch Renamer" : "SEO Analyzer"}
           </button>
         ))}
       </div>
 
-      {tab === "alt" && (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-4">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider flex items-center gap-2">
-              <FileImage className="w-4 h-4 text-blue" />
-              Input Image
-            </h2>
-
-            <div className="p-4 bg-bg border-2 border-dashed border-border rounded-2xl text-center space-y-2 group hover:border-blue transition-colors relative overflow-hidden">
-              {preview ? (
-                <img src={preview} alt="Preview" className="mx-auto max-h-48 rounded-lg object-contain" />
-              ) : imageUrl ? (
-                <img src={imageUrl} alt="URL preview" className="mx-auto max-h-48 rounded-lg object-contain" onError={() => {}} />
-              ) : (
-                <div className="py-8 text-text-4 text-sm">
-                  <Upload className="w-10 h-10 mx-auto mb-3 text-text-4 group-hover:text-blue transition-colors" />
-                  <p className="font-medium">Drop an image or click to upload</p>
-                  <p className="text-xs mt-1">Supports JPG, PNG, WebP, SVG</p>
-                </div>
-              )}
-              <label className="absolute inset-0 cursor-pointer">
-                <input type="file" accept="image/*" className="hidden" onChange={handleFile} />
-              </label>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-text-2 px-1">Or image URL</label>
-              <input type="url" className={inputClass} value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://example.com/image.jpg" />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-text-2 px-1">Image context / description</label>
-              <textarea
-                className={`${inputClass} font-medium text-sm resize-none`}
-                rows={3}
-                value={context}
-                onChange={e => setContext(e.target.value)}
-                placeholder="e.g. red sports car parked on mountain road at sunset"
-              />
-              <p className="text-xs text-text-4 px-1">Describe what the image shows for better SEO results.</p>
-            </div>
-
-            <button 
-              onClick={generateAlt} 
-              className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-            >
-              <RefreshCw className="w-5 h-5" />
-              Generate Alt Text
-            </button>
-          </div>
-
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
-              Generated Output
-            </h2>
-
-            {generatedAlt ? (
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-semibold text-text-2 px-1">Alt Text</label>
-                    <CopyButton text={generatedAlt} />
+      <AnimatePresence mode="wait">
+        {/* ── Single Optimizer Tab ────────────────────────────────────────── */}
+        {tab === "optimize" && (
+          <m.div 
+            key="optimize"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="grid gap-8 lg:grid-cols-12"
+          >
+            <div className="lg:col-span-7 space-y-6">
+              <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue">
+                    <FileImage className="w-5 h-5" />
                   </div>
-                  <div className="bg-bg border border-border rounded-xl p-4 font-semibold text-text text-lg">{generatedAlt}</div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-semibold text-text-2 px-1">HTML usage</label>
-                    <CopyButton text={`<img src="image.jpg" alt="${generatedAlt}" />`} label="Copy HTML" />
-                  </div>
-                  <div className="bg-bg border border-border rounded-xl p-4 font-mono text-sm text-blue break-all">
-                    {`<img src="image.jpg" alt="${generatedAlt}" />`}
+                  <div>
+                    <h2 className="font-black text-lg tracking-tight">Image Details</h2>
+                    <p className="text-[10px] text-text-4 font-bold uppercase tracking-widest">Upload and Configure</p>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-semibold text-text-2 px-1">SEO Filename Slug</label>
-                    <div className="flex gap-2">
+                <div className="group relative p-8 bg-bg border-2 border-dashed border-border rounded-2xl text-center hover:border-blue transition-all overflow-hidden shadow-inner">
+                  {preview ? (
+                    <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10">
+                      <img src={preview} alt="Preview" className="mx-auto max-h-64 rounded-xl shadow-lg object-contain" />
+                      <button 
+                        onClick={() => { setPreview(null); setActiveFile(null); }}
+                        className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity active:scale-90"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </m.div>
+                  ) : (
+                    <div className="py-12 space-y-4">
+                      <div className="w-20 h-20 bg-surface rounded-3xl mx-auto flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                        <Upload className="w-8 h-8 text-text-4 group-hover:text-blue transition-colors" />
+                      </div>
+                      <div>
+                        <p className="font-black text-text">Drop your image here</p>
+                        <p className="text-xs text-text-4 mt-1 uppercase tracking-widest font-bold">JPG, PNG, WebP, SVG (Max 50MB)</p>
+                      </div>
+                    </div>
+                  )}
+                  <label className="absolute inset-0 cursor-pointer">
+                    <input type="file" accept="image/*" className="hidden" onChange={handleFile} />
+                  </label>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em] px-1">Describe Image Content</label>
+                    <textarea
+                      className="w-full px-4 py-4 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all resize-none text-sm font-medium"
+                      rows={3}
+                      value={context}
+                      onChange={e => setContext(e.target.value)}
+                      placeholder="e.g. blue running shoes on a wooden floor"
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em] px-1">Custom Filename</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-sm font-mono font-bold text-blue"
+                          value={customFilename}
+                          onChange={e => setCustomFilename(e.target.value)}
+                        />
+                        <select 
+                          className="px-3 py-3 bg-bg border border-border rounded-xl outline-none text-xs font-bold"
+                          value={selectedExt}
+                          onChange={e => setSelectedExt(e.target.value)}
+                        >
+                          {EXTENSIONS.map(e => <option key={e}>{e}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={generateSEO}
+                      className="w-full py-4 bg-blue text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-xl hover:shadow-blue/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                    >
+                      <Zap className="w-4 h-4 fill-current" />
+                      Generate SEO Plan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 space-y-6">
+              <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="font-black text-lg tracking-tight">SEO Optimized Result</h2>
+                    <p className="text-[10px] text-text-4 font-bold uppercase tracking-widest">Ready for Indexing</p>
+                  </div>
+                </div>
+
+                {generatedAlt || activeFile ? (
+                  <div className="space-y-8 flex-1">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">Primary Alt Text</label>
+                        <CopyButton text={generatedAlt} />
+                      </div>
+                      <div className="p-5 bg-bg border border-border rounded-2xl font-bold text-text-2 text-lg shadow-inner">
+                        {generatedAlt || "Waiting for generation..."}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">HTML Implementation</label>
+                        <CopyButton text={`<img src="${finalFilename}" alt="${generatedAlt}" />`} label="Copy code" />
+                      </div>
+                      <div className="p-5 bg-bg border border-border rounded-2xl font-mono text-[11px] text-blue break-all leading-relaxed shadow-inner">
+                        <span className="opacity-50">&lt;img src="</span>
+                        <span className="font-black">{finalFilename}</span>
+                        <span className="opacity-50">" alt="</span>
+                        <span className="font-black">{generatedAlt}</span>
+                        <span className="opacity-50">" /&gt;</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-border mt-auto">
                       {activeFile && (
                         <button 
-                          onClick={() => downloadFile(activeFile, finalAltName)}
-                          className="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-600 hover:bg-green-500/20 rounded-lg text-xs font-bold transition-colors"
-                          title="Download with SEO name"
+                          onClick={() => downloadFile(activeFile, finalFilename)}
+                          className="w-full py-5 bg-green-600 text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl hover:shadow-2xl hover:shadow-green-500/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                         >
-                          <Download className="w-3.5 h-3.5" />
-                          Download
+                          <Download className="w-5 h-5" />
+                          Download with SEO Name
                         </button>
                       )}
-                      <CopyButton text={finalAltName} />
                     </div>
-                  </div>
-                  <div className="bg-bg border border-border rounded-xl p-4 font-mono text-base text-text-2">{finalAltName}</div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[340px] text-text-4 text-center">
-                <div className="w-16 h-16 bg-bg rounded-full flex items-center justify-center mb-4">
-                  <FileText className="w-8 h-8 opacity-20" />
-                </div>
-                <p className="font-medium">Waiting for input...</p>
-                <p className="text-xs">Fill in the context and click Generate</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {tab === "filename" && (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider flex items-center gap-2">
-              <FileCode className="w-4 h-4 text-blue" />
-              Filename Creator
-            </h2>
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-text-2 px-1">Title / Description</label>
-              <input
-                type="text"
-                className={inputClass}
-                value={filenameInput}
-                onChange={e => setFilenameInput(e.target.value)}
-                placeholder="Red Sports Car Mountain Sunset"
-              />
-            </div>
-            <div className="space-y-1">
-              <label htmlFor="extension-select" className="text-sm font-semibold text-text-2 px-1">File Extension</label>
-              <select id="extension-select" className={inputClass} value={ext} onChange={e => setExt(e.target.value)}>
-                {EXTENSIONS.map(e => <option key={e}>{e}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
-              SEO Optimized Name
-            </h2>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 bg-bg border border-border rounded-xl p-5 font-mono text-lg font-bold text-blue break-all">
-                  {generatedFilename || "seo-filename" + ext}
-                </div>
-                <CopyButton text={generatedFilename || "seo-filename" + ext} />
-              </div>
-              
-              <div className="p-4 bg-bg border border-border rounded-2xl space-y-3">
-                <p className="text-sm font-bold text-text-2 uppercase tracking-tighter">SEO Best Practices Applied:</p>
-                <ul className="space-y-2">
-                  {[
-                    "Lowercased all characters",
-                    "Replaced spaces with hyphens (-)",
-                    "Removed special characters",
-                    "Collapsed multiple hyphens"
-                  ].map((rule, i) => (
-                    <li key={i} className="flex items-center gap-2 text-xs font-medium text-text-3">
-                      <CheckCircle2 className="w-3 h-3 text-green-500" />
-                      {rule}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {tab === "renamer" && (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider flex items-center gap-2">
-              <Upload className="w-4 h-4 text-blue" />
-              Upload Any File
-            </h2>
-            
-            <div className="p-8 bg-bg border-2 border-dashed border-border rounded-2xl text-center space-y-3 group hover:border-blue transition-colors relative">
-              <div className="pointer-events-none">
-                {renameFile ? (
-                  <div className="space-y-2">
-                    <div className="w-16 h-16 bg-blue/10 text-blue rounded-2xl flex items-center justify-center mx-auto mb-2">
-                      <FileText className="w-8 h-8" />
-                    </div>
-                    <p className="font-bold text-text truncate max-w-[200px] mx-auto">{renameFile.name}</p>
-                    <p className="text-xs text-text-4">{(renameFile.size / 1024).toFixed(1)} KB</p>
                   </div>
                 ) : (
-                  <>
-                    <Upload className="w-12 h-12 mx-auto mb-4 text-text-4 group-hover:text-blue transition-colors" />
-                    <p className="font-bold">Drop your file here</p>
-                    <p className="text-xs text-text-4">Supports PDF, DOCX, Images, ZIP, etc.</p>
-                  </>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 opacity-30">
+                    <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center">
+                      <Search className="w-8 h-8" />
+                    </div>
+                    <p className="text-sm font-bold uppercase tracking-widest">Waiting for configuration</p>
+                  </div>
                 )}
               </div>
-              <label className="absolute inset-0 cursor-pointer">
-                <input type="file" className="hidden" onChange={handleRenameFile} />
-              </label>
             </div>
+          </m.div>
+        )}
 
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-text-2 px-1">New SEO Title</label>
-              <input
-                type="text"
-                className={inputClass}
-                value={renameInput}
-                onChange={e => setRenameInput(e.target.value)}
-                placeholder="Descriptive filename here"
+        {/* ── Batch Renamer Tab ───────────────────────────────────────────── */}
+        {tab === "batch" && (
+          <m.div 
+            key="batch"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-8"
+          >
+            <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                    <Layers className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="font-black text-2xl tracking-tight">Batch SEO Renamer</h2>
+                    <p className="text-xs text-text-4 font-bold uppercase tracking-widest">Process folders at once</p>
+                  </div>
+                </div>
+                
+                <div className="relative group overflow-hidden rounded-2xl">
+                   <button className="px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-[0.2em] flex items-center gap-3 hover:shadow-xl transition-all">
+                      <Upload className="w-4 h-4" />
+                      Select Multiple Files
+                   </button>
+                   <input type="file" multiple accept="image/*" onChange={handleBatchFiles} className="absolute inset-0 opacity-0 cursor-pointer" />
+                </div>
+              </div>
+
+              <BatchQueue 
+                toolId={toolId}
+                isProcessing={isProcessing}
+                onProcess={async () => {}}
+                onDownload={(item) => downloadFile(item.file, toSlug(item.file.name.split('.')[0] || "file") + "." + item.file.name.split('.').pop())}
+                renderThumbnail={(item) => {
+                  const url = blobManager.create(item.file);
+                  return <img src={url} alt="" className="w-full h-full object-cover" />;
+                }}
               />
             </div>
-          </div>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+               {[
+                 { icon: ShieldCheck, title: "100% Private", desc: "Files never leave your browser memory." },
+                 { icon: Zap, title: "Instant", desc: "No upload/download wait times." },
+                 { icon: CheckCircle2, title: "SEO Ready", desc: "Automatically converts spaces to hyphens." }
+               ].map((feature, i) => (
+                 <div key={i} className="p-6 bg-surface border border-border rounded-2xl flex items-start gap-4">
+                    <feature.icon className="w-5 h-5 text-blue shrink-0 mt-1" />
+                    <div>
+                       <h4 className="font-bold text-sm text-text tracking-tight">{feature.title}</h4>
+                       <p className="text-xs text-text-4 mt-1 leading-relaxed">{feature.desc}</p>
+                    </div>
+                 </div>
+               ))}
+            </div>
+          </m.div>
+        )}
 
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider flex items-center gap-2">
-              <Download className="w-4 h-4 text-blue" />
-              Download Renamed File
-            </h2>
-
-            {renameFile ? (
-              <div className="space-y-6">
-                <div className="bg-bg border border-border rounded-2xl p-6 text-center space-y-4">
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-text-4 uppercase">New Filename</p>
-                    <p className="text-xl font-bold text-blue break-all">{finalRenameName}</p>
+        {/* ── SEO Analyzer Tab ────────────────────────────────────────────── */}
+        {tab === "analyzer" && (
+          <m.div 
+            key="analyzer"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            className="space-y-8"
+          >
+            <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm">
+               <div className="max-w-2xl mx-auto space-y-8 text-center py-12">
+                  <div className="w-20 h-20 bg-blue/10 text-blue rounded-3xl mx-auto flex items-center justify-center shadow-inner">
+                     <Search className="w-10 h-10" />
+                  </div>
+                  <div className="space-y-3">
+                     <h2 className="text-3xl font-black tracking-tighter">Content SEO Analyzer</h2>
+                     <p className="text-text-4 text-sm font-medium leading-relaxed">
+                        Analyze your image alt text and filenames for search engine best practices. 
+                        Checks for keyword stuffing, length, and character accessibility.
+                     </p>
                   </div>
                   
-                  <button 
-                    onClick={() => downloadFile(renameFile, finalRenameName)}
-                    className="w-full py-4 bg-blue text-white font-bold rounded-2xl hover:shadow-xl hover:shadow-blue/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
-                  >
-                    <Download className="w-6 h-6" />
-                    Download Optimized File
-                  </button>
-                </div>
-
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-800 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+                  <div className="space-y-4">
+                    <textarea 
+                      className="w-full p-6 bg-bg border-2 border-border rounded-3xl focus:border-blue outline-none transition-all font-medium text-lg min-h-[160px] shadow-inner"
+                      placeholder="Paste your image description or alt text here..."
+                      value={analyzeText}
+                      onChange={e => setAnalyzeText(e.target.value)}
+                    />
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                       {[
+                         { label: "Word Count", value: analyzeText.split(/\s+/).filter(Boolean).length },
+                         { label: "Characters", value: analyzeText.length },
+                         { label: "SEO Health", value: analyzeText.length > 5 && analyzeText.length < 125 ? "Good" : "Check", color: analyzeText.length > 5 && analyzeText.length < 125 ? "text-green-500" : "text-amber-500" },
+                         { label: "Complexity", value: "Low" }
+                       ].map((stat, i) => (
+                         <div key={i} className="p-4 bg-bg border border-border rounded-2xl">
+                            <p className="text-[10px] font-black text-text-4 uppercase tracking-widest mb-1">{stat.label}</p>
+                            <p className={cn("text-lg font-black tracking-tight", stat.color || "text-text")}>{stat.value}</p>
+                         </div>
+                       ))}
+                    </div>
                   </div>
-                  <p className="text-xs text-yellow-800 dark:text-yellow-300 font-medium">
-                    This tool renames your file locally in the browser. Your file is never uploaded to any server.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[340px] text-text-4 text-center">
-                <div className="w-16 h-16 bg-bg rounded-full flex items-center justify-center mb-4">
-                  <RefreshCw className="w-8 h-8 opacity-20" />
-                </div>
-                <p className="font-medium">No file selected</p>
-                <p className="text-xs">Upload a file to see the rename options</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+               </div>
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+      
+      {/* ── Additional Resources ─────────────────────────────────────────── */}
+      <section className="pt-12 border-t border-border">
+         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="space-y-2 text-center md:text-left">
+               <h3 className="text-xl font-black tracking-tight">Need to resize as well?</h3>
+               <p className="text-sm text-text-4 max-w-md leading-relaxed font-medium">
+                 SEO isn't just about names. Large images slow down your site. Use our local Bulk Image Resizer to optimize load times.
+               </p>
+            </div>
+            <button className="group px-8 py-4 bg-surface border border-border rounded-2xl font-black text-xs uppercase tracking-widest hover:border-blue/30 transition-all shadow-sm flex items-center gap-3">
+               Image Resizer <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+         </div>
+      </section>
     </div>
   );
 }

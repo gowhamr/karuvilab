@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { ALL_TOOLS, CATEGORIES, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { StructuredData } from "@/src/lib/seo";
 import { ToolIcon } from "@/components/ui/Icons";
+
+const THIN_TOOLS = [
+  'command-cheat-sheet', 'hash-map-visualizer', 'color-palette-extractor', 
+  'fake-data-generator', 'mic-camera-tester', 'phone-mockup-generator',
+  'text-sorter-deduper', 'typing-speed-test', 'wifi-qr-code', 'color-converter',
+  'audio-converter', 'gif-creator', 'video-metadata-viewer'
+];
 
 export const metadata: Metadata = {
   title: "All Tools — Professional Browser-Side Toolkit",
@@ -27,7 +33,7 @@ export default function AllToolsPage() {
 
       <div className="space-y-16">
         {CATEGORIES.map((cat) => {
-          const tools = (ALL_TOOLS as ToolEntry[]).filter(t => t.category === cat.id);
+          const tools = (ALL_TOOLS as ToolEntry[]).filter(t => t.category === cat.id && !THIN_TOOLS.includes(t.id));
           if (tools.length === 0) return null;
 
           return (
