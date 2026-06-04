@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import PercentageCalculatorClientWrapper from "./PercentageCalculatorClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const PercentageCalculatorClient = dynamic(() => import("./PercentageCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("percentage-calculator");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Three modes: find a percentage, find what percent X is of Y, and calculate percentage change."
       category={cat}
     >
-      <PercentageCalculatorClient />
+      <PercentageCalculatorClientWrapper />
     </ToolShell>
   );
 }

@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import UnitConverterClientWrapper from "./UnitConverterClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const UnitConverterClient = dynamic(() => import("./UnitConverterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("unit-converter");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Convert between Length, Weight, Volume, Temperature, Area, and Speed units."
       category={cat}
     >
-      <UnitConverterClient />
+      <UnitConverterClientWrapper />
     </ToolShell>
   );
 }

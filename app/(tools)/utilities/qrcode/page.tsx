@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import QRCodeGeneratorClientWrapper from "./QRCodeGeneratorClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const QRCodeGeneratorClient = dynamic(() => import("./QRCodeGeneratorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("qrcode");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Generate QR codes from any URL or text. Uses a public API — requires internet access."
       category={cat}
     >
-      <QRCodeGeneratorClient />
+      <QRCodeGeneratorClientWrapper />
     </ToolShell>
   );
 }

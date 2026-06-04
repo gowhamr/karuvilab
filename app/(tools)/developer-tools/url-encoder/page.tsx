@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import URLEncoderClientWrapper from "./URLEncoderClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const URLEncoderClient = dynamic(() => import("./URLEncoderClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("url-encoder");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Encode or decode URL components using encodeURIComponent / decodeURIComponent."
       category={cat}
     >
-      <URLEncoderClient />
+      <URLEncoderClientWrapper />
     </ToolShell>
   );
 }

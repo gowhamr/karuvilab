@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import RobotsTxtBuilderClientWrapper from "./RobotsTxtBuilderClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const RobotsTxtBuilderClient = dynamic(() => import("./RobotsTxtBuilderClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("robots-txt");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Create a robots.txt file to control how search engines crawl your site."
       category={cat}
     >
-      <RobotsTxtBuilderClient />
+      <RobotsTxtBuilderClientWrapper />
     </ToolShell>
   );
 }

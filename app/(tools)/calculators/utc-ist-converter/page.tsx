@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import UtcIstConverterClientWrapper from "./UtcIstConverterClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const UtcIstConverterClient = dynamic(() => import("./UtcIstConverterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 import { generateToolMetadata } from "@/src/lib/seo";
 
@@ -46,7 +43,7 @@ export default function UtcIstConverter() {
         relatedTools: ["world-clock", "date-calculator", "time-calculator"]
       }}
     >
-      <UtcIstConverterClient />
+      <UtcIstConverterClientWrapper />
     </ToolShell>
   );
 }

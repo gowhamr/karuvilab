@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import ImageConverterClientWrapper from "./ImageConverterClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const ImageConverterClient = dynamic(() => import("./ImageConverterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("image-converter");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Convert images between JPG, PNG, WebP, and BMP formats in your browser."
       category={cat}
     >
-      <ImageConverterClient />
+      <ImageConverterClientWrapper />
     </ToolShell>
   );
 }

@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import WorldClockClientWrapper from "./WorldClockClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const WorldClockClient = dynamic(() => import("./WorldClockClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 import { generateToolMetadata } from "@/src/lib/seo";
 
@@ -47,7 +44,7 @@ export default function WorldClock() {
         relatedTools: ["utc-ist-converter", "date-calculator", "time-calculator"]
       }}
     >
-      <WorldClockClient />
+      <WorldClockClientWrapper />
     </ToolShell>
   );
 }

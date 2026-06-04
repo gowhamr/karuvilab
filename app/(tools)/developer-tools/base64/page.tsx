@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import Base64ClientWrapper from "./Base64ClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const Base64Client = dynamic(() => import("./Base64Client"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 import { generateToolMetadata } from "@/src/lib/seo";
 
@@ -42,7 +39,7 @@ export default function Base64Tool() {
         relatedTools: ["hash-generator", "password-generator", "url-encoder"]
       }}
     >
-      <Base64Client />
+      <Base64ClientWrapper />
     </ToolShell>
   );
 }

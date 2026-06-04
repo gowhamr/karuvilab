@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import CodeMinifierClientWrapper from "./CodeMinifierClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const CodeMinifierClient = dynamic(() => import("@/src/features/code-minifier"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("code-minifier");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Remove comments and whitespace from CSS, JavaScript, and HTML. Basic minification — not full AST-level."
       category={cat}
     >
-      <CodeMinifierClient />
+      <CodeMinifierClientWrapper />
     </ToolShell>
   );
 }

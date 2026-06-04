@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import StockAverageCalculatorClientWrapper from "./StockAverageCalculatorClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const StockAverageCalculatorClient = dynamic(() => import("./StockAverageCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
@@ -19,7 +16,7 @@ export default function StockAverageCalculator() {
       description="Calculate the weighted average buy price of your stock holdings."
       category={cat}
     >
-      <StockAverageCalculatorClient />
+      <StockAverageCalculatorClientWrapper />
     </ToolShell>
   );
 }

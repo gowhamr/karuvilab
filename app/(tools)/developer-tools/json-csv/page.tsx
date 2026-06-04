@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import JSONCSVConverterClientWrapper from "./JSONCSVConverterClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const JSONCSVConverterClient = dynamic(() => import("@/src/features/json-csv"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("json-csv");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Convert between JSON arrays and CSV format instantly with precision."
       category={cat}
     >
-      <JSONCSVConverterClient />
+      <JSONCSVConverterClientWrapper />
     </ToolShell>
   );
 }

@@ -1,14 +1,11 @@
+import WordCounterClientWrapper from "./WordCounterClientWrapper";
 import { generateToolMetadata } from "@/src/lib/seo";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CATEGORIES } from "@/src/tool-registry";
-import dynamic from "next/dynamic";
 import { Metadata } from "next";
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const toolId = "word-counter";
-const WordCounterClient = dynamic(() => import("./WordCounterClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
@@ -22,7 +19,7 @@ export default function WordCounterPage() {
       description="Count words, characters, sentences, and paragraphs in real-time. Estimate reading time and analyze your text."
       category={cat}
     >
-      <WordCounterClient />
+      <WordCounterClientWrapper />
     </ToolShell>
   );
 }

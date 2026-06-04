@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import SafeToSpendClientWrapper from "./SafeToSpendClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SafeToSpendClient = dynamic(() => import("./SafeToSpendClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("safe-to-spend");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Plan your monthly budget and find your daily/weekly spending limit."
       category={cat}
     >
-      <SafeToSpendClient />
+      <SafeToSpendClientWrapper />
     </ToolShell>
   );
 }

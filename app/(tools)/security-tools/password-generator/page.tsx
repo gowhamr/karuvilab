@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import PasswordGeneratorClientWrapper from "./PasswordGeneratorClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const PasswordGeneratorClient = dynamic(() => import("./PasswordGeneratorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("password-generator");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Generate strong, random passwords with customizable options."
       category={cat}
     >
-      <PasswordGeneratorClient />
+      <PasswordGeneratorClientWrapper />
     </ToolShell>
   );
 }

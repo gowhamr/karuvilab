@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import PPFCalculatorClientWrapper from "./PPFCalculatorClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const PPFCalculatorClient = dynamic(() => import("./PPFCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
@@ -33,7 +30,7 @@ export default function PPFCalculatorPage() {
         relatedTools: ["sip-calculator", "fd-calculator", "rd-calculator"]
       }}
     >
-      <PPFCalculatorClient />
+      <PPFCalculatorClientWrapper />
     </ToolShell>
   );
 }

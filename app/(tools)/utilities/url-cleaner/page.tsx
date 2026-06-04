@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import URLCleanerClientWrapper from "./URLCleanerClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const URLCleanerClient = dynamic(() => import("./URLCleanerClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("url-cleaner");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Remove UTM tags, fbclid, gclid and other tracking parameters from URLs."
       category={cat}
     >
-      <URLCleanerClient />
+      <URLCleanerClientWrapper />
     </ToolShell>
   );
 }

@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import TaskReminderClientWrapper from "./TaskReminderClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const TaskReminderClient = dynamic(() => import("./TaskReminderClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 import { generateToolMetadata } from "@/src/lib/seo";
 
@@ -46,7 +43,7 @@ export default function TaskReminder() {
         relatedTools: ["split-copy", "text-utility", "grammar-checker"]
       }}
     >
-      <TaskReminderClient />
+      <TaskReminderClientWrapper />
     </ToolShell>
   );
 }

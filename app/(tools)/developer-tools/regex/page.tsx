@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import RegexTesterClientWrapper from "./RegexTesterClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const RegexTesterClient = dynamic(() => import("@/src/features/regex"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("regex-tester");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Test regular expressions with live match highlighting, match positions, and capture groups."
       category={cat}
     >
-      <RegexTesterClient />
+      <RegexTesterClientWrapper />
     </ToolShell>
   );
 }

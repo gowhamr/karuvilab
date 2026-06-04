@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import HashGeneratorClientWrapper from "./HashGeneratorClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const HashGeneratorClient = dynamic(() => import("./HashGeneratorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("hash-generator");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text or file input."
       category={cat}
     >
-      <HashGeneratorClient />
+      <HashGeneratorClientWrapper />
     </ToolShell>
   );
 }

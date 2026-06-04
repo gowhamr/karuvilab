@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import SalaryCalculatorClientWrapper from "./SalaryCalculatorClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SalaryCalculatorClient = dynamic(() => import("./SalaryCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("salary-calculator");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Break down your CTC into take-home pay under the new tax regime (FY 2024-25)."
       category={cat}
     >
-      <SalaryCalculatorClient />
+      <SalaryCalculatorClientWrapper />
     </ToolShell>
   );
 }

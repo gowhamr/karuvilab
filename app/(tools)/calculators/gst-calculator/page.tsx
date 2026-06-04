@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import GSTCalculatorClientWrapper from "./GSTCalculatorClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const GSTCalculatorClient = dynamic(() => import("./GSTCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
@@ -19,7 +16,7 @@ export default function GstCalculator() {
       description="Add or remove GST from any amount. View all GST slab breakdowns."
       category={cat}
     >
-      <GSTCalculatorClient />
+      <GSTCalculatorClientWrapper />
     </ToolShell>
   );
 }

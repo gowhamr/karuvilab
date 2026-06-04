@@ -90,24 +90,32 @@ The following patterns are **NEVER** allowed unless explicitly approved through 
 
 ### Server-Side Rendering (SSR) Policy
 
-- **KL-07 (Mandatory `ssr: false`):** Any tool utilizing browser-only APIs (Canvas, Web Workers, BarcodeDetector), heavy external libraries (Monaco, PDF.js), or direct DOM manipulation MUST be loaded via `next/dynamic` with `ssr: false` in a client wrapper. This prevents hydration mismatches and silent initialization failures.
-- The `ssr: false` directive must be in the page route (`app/(tools)/.../page.tsx`), not hidden inside a child component.
+- **KL-07 (Mandatory `ssr: false`):** Any tool utilizing browser-only APIs (Canvas, Web Workers, BarcodeDetector), heavy external libraries (Monaco, PDF.js), or direct DOM manipulation MUST be loaded via `next/dynamic` with `ssr: false`.
+- **Implementation:** To keep `page.tsx` as a Server Component (required for `metadata`), the `ssr: false` directive must be implemented in a dedicated Client Wrapper (e.g., `ToolClientWrapper.tsx`) marked with `"use client"`. The `page.tsx` then imports this wrapper.
 
-#### Window/API Guards
-- Code that accesses `window`, `navigator`, `document`, or any browser‑specific API must either be wrapped in a `useEffect` (or `useLayoutEffect`), or be guarded by `typeof window !== 'undefined'` if unavoidable in the render body.
-
-#### No Node.js APIs in Client Components
-- Client components must never import or use Node.js‑specific modules (`fs`, `path`, `process.env.NEXT_RUNTIME`, etc.).
-
-**Pattern:**
+**Pattern (Client Wrapper - `ToolClientWrapper.tsx`):**
 ```typescript
+"use client";
 import dynamic from 'next/dynamic';
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
 const ToolClient = dynamic(
-  () => import('@/features/[tool]/components/ToolClient'),
-  { ssr: false }
+  () => import('./ToolClient'),
+  { ssr: false, loading: () => <ToolSkeleton /> }
 );
+
+export default function ToolClientWrapper() {
+  return <ToolClient />;
+}
 ```
+
+**Pattern (Page - `page.tsx`):**
+```typescript
+import ToolClientWrapper from "./ToolClientWrapper";
+// ... metadata and ToolShell ...
+<ToolClientWrapper />
+```
+
 
 ### Worker & Engine Loading Standard
 

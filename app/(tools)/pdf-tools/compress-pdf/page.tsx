@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import CompressPdfClientWrapper from "./CompressPdfClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const CompressPdfClient = dynamic(() => import("@/src/features/compress-pdf"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("compress-pdf");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Reduce PDF file size by re-encoding with pdf-lib's object stream compression."
       category={cat}
     >
-      <CompressPdfClient />
+      <CompressPdfClientWrapper />
     </ToolShell>
   );
 }

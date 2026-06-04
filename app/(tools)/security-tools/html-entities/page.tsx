@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import HTMLEntitiesClientWrapper from "./HTMLEntitiesClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const HTMLEntitiesClient = dynamic(() => import("./HTMLEntitiesClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("html-entities");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Encode special characters to HTML entities or decode HTML entities back to text."
       category={cat}
     >
-      <HTMLEntitiesClient />
+      <HTMLEntitiesClientWrapper />
     </ToolShell>
   );
 }

@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import DiffCheckerClientWrapper from "./DiffCheckerClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const DiffCheckerClient = dynamic(() => import("@/src/features/diff-checker"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("diff-checker");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Compare two text blocks line by line. Added lines in green, removed in red."
       category={cat}
     >
-      <DiffCheckerClient />
+      <DiffCheckerClientWrapper />
     </ToolShell>
   );
 }

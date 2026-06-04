@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import SplitPdfClientWrapper from "./SplitPdfClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const SplitPdfClient = dynamic(() => import("@/src/features/split-pdf"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("split-pdf");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Extract specific page ranges from a PDF file."
       category={cat}
     >
-      <SplitPdfClient />
+      <SplitPdfClientWrapper />
     </ToolShell>
   );
 }

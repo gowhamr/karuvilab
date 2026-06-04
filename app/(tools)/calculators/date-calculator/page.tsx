@@ -1,13 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const DateCalculatorClient = dynamic(() => import("./DateCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
-
 import { generateToolMetadata } from "@/src/lib/seo";
+import DateCalculatorClientWrapper from "./DateCalculatorClientWrapper";
 
 const toolId = "date-calculator";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
@@ -46,7 +41,7 @@ export default function DateCalculator() {
         relatedTools: ["age-calculator", "time-calculator", "world-clock"]
       }}
     >
-      <DateCalculatorClient />
+      <DateCalculatorClientWrapper />
     </ToolShell>
   );
 }

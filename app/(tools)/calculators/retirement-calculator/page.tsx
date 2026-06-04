@@ -1,11 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import RetirementCalculatorClientWrapper from "./RetirementCalculatorClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import dynamic from "next/dynamic";
-const RetirementCalculatorClient = dynamic(() => import("./RetirementCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
@@ -19,7 +16,7 @@ export default function RetirementCalculator() {
       description="Estimate the corpus required to maintain your lifestyle after retirement."
       category={cat}
     >
-      <RetirementCalculatorClient />
+      <RetirementCalculatorClientWrapper />
     </ToolShell>
   );
 }

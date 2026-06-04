@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import MergePdfClientWrapper from "./MergePdfClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const MergePdfClient = dynamic(() => import("@/src/features/merge-pdf"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("merge-pdf");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Combine multiple PDF files into one — all processing happens in your browser."
       category={cat}
     >
-      <MergePdfClient />
+      <MergePdfClientWrapper />
     </ToolShell>
   );
 }

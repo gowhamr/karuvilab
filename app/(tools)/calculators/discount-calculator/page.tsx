@@ -1,13 +1,8 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-
-const DiscountCalculatorClient = dynamic(() => import("./DiscountCalculatorClient"), {
-  loading: () => <ToolSkeleton />,
-});
+import DiscountCalculatorClientWrapper from "./DiscountCalculatorClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("discount-calculator");
 
@@ -19,7 +14,7 @@ export default function page() {
       description="Find discounted prices, savings, and what % off to reach your target price."
       category={cat}
     >
-      <DiscountCalculatorClient />
+      <DiscountCalculatorClientWrapper />
     </ToolShell>
   );
 }

@@ -1,13 +1,10 @@
-import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import ImageSeoClientWrapper from "./ImageSeoClientWrapper";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
-const ImageSeoClient = dynamic(() => import("./ImageSeoClient"), {
-  loading: () => <ToolSkeleton />,
-});
+
 
 export const metadata: Metadata = generateToolMetadata("image-seo");
 
@@ -19,7 +16,7 @@ export default function page() {
       description="Generate SEO-friendly alt text and filenames for your images."
       category={cat}
     >
-      <ImageSeoClient />
+      <ImageSeoClientWrapper />
     </ToolShell>
   );
 }
