@@ -12,6 +12,7 @@ export default function page() {
   
   return (
     <ToolShell
+      toolId="image-seo"
       title="Image SEO & File Renamer Tool"
       description="Generate SEO-friendly alt text, optimized filenames, and rename any file (PDF, DOCX, Images) for better search engine visibility."
       category={cat}

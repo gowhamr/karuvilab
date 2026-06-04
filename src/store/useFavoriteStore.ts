@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { idbStorage } from './idb-storage';
 
 interface FavoriteState {
   favorites: string[]; // Tool IDs
   toggleFavorite: (toolId: string) => void;
-  isFavorite: (toolId: string) => boolean;
 }
 
 export const useFavoriteStore = create<FavoriteState>()(
@@ -12,18 +12,18 @@ export const useFavoriteStore = create<FavoriteState>()(
     (set, get) => ({
       favorites: [],
       toggleFavorite: (toolId) => {
-        const { favorites } = get();
-        if (favorites.includes(toolId)) {
-          set({ favorites: favorites.filter((id) => id !== toolId) });
-        } else {
-          set({ favorites: [...favorites, toolId] });
-        }
+        const favorites = get().favorites;
+        const isFav = favorites.includes(toolId);
+        set({ 
+          favorites: isFav 
+            ? favorites.filter((id) => id !== toolId) 
+            : [...favorites, toolId] 
+        });
       },
-      isFavorite: (toolId) => get().favorites.includes(toolId),
     }),
     {
       name: 'karuvi-favorites',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => idbStorage),
     }
   )
 );

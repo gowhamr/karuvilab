@@ -4,9 +4,10 @@ import { Heart } from "lucide-react";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useState, useEffect } from "react";
 import { m } from "framer-motion";
+import { useShallow } from "zustand/react/shallow";
 
 export function FavoriteButton({ toolId }: { toolId: string }) {
-  const isFavorite = useFavoriteStore(state => state.isFavorite);
+  const favorites = useFavoriteStore(useShallow(state => state.favorites));
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
   const [hydrated, setHydrated] = useState(false);
 
@@ -16,11 +17,11 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
 
   if (!hydrated) {
     return (
-      <div className="w-32 h-10 bg-surface border border-border rounded-xl shimmer-wrapper" />
+      <div className="w-32 h-10 bg-surface border border-border rounded-xl shimmer-wrapper opacity-50" />
     );
   }
 
-  const active = isFavorite(toolId);
+  const active = favorites.includes(toolId);
 
   return (
     <m.button
