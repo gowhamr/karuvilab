@@ -1,100 +1,176 @@
-# KaruviLab (KV) — Elite Engineering Manifesto (GEMINI.md)
+# KaruviLab (KV) — Elite Engineering Manifesto
+**Version:** 3.0.0 | **Last Updated:** 2026-06-04 | **Status:** ACTIVE
 
-Welcome to **KaruviLab (KV)**. This document is the single source of truth for the platform's identity, architecture, and engineering standards. All human contributors and AI agents (Gemini CLI, Cursor, Claude Code, etc.) must adhere strictly to the philosophy, constraints, and technical policies defined herein.
+> This document is the **single source of truth** for KaruviLab's identity, architecture, and engineering standards.
+> All human contributors and AI agents (Gemini CLI, Cursor, Claude Code, etc.) **must** adhere strictly to every rule defined herein.
+> No rule may be bypassed without a formal exception logged in `EXCEPTIONS.md`.
 
-## 0. Hard Prohibitions
+---
 
-The following patterns are **NEVER** allowed unless explicitly approved through a formal exception:
+## 0. Hard Prohibitions ⛔
 
-- Raw `URL.createObjectURL` usage – always use `blobManager` or `useObjectUrlManager`.
-- Full Zustand store subscriptions (`const { ... } = useXxxStore()`) – always use atomic selectors.
-- `useEffect` dependency suppression (`eslint-disable exhaustive-deps`).
-- Main-thread CPU processing >5ms – offload heavy work to Web Workers.
-- Non-abortable async operations – every promise chain must accept an `AbortSignal`.
-- Raw HTML injection without `DOMPurify.sanitize()`.
-- Inline styles bypassing Tailwind tokens.
-- New dependencies without bundle-size justification.
-- Server-side processing for local tools – everything happens in the browser.
-- Client components importing Node‑only APIs (e.g., `fs`, `path`).
-- Silent fallback to degraded mode without user notification (e.g., falling back to unminified code without warning).
-- Dead UI elements (visible interactive elements that do nothing).
+The following patterns are **NEVER** allowed under any circumstances:
+
+| # | Prohibited Pattern | Required Alternative |
+|---|-------------------|----------------------|
+| P-01 | Raw `URL.createObjectURL` | Use `blobManager` or `useObjectUrlManager` |
+| P-02 | Full store destructure `const { ... } = useXxxStore()` | Atomic selectors only: `useStore(s => s.field)` |
+| P-03 | `// eslint-disable-next-line react-hooks/exhaustive-deps` | Fix the dependency array |
+| P-04 | Main-thread CPU work >5ms | Offload to Web Worker via `WorkerOrchestrator` |
+| P-05 | Non-abortable async operations | Every promise chain must accept `AbortSignal` |
+| P-06 | Raw HTML injection | Always wrap with `DOMPurify.sanitize()` |
+| P-07 | Inline styles bypassing Tailwind tokens | Use design token system in `src/theme/` |
+| P-08 | New dependencies without bundle justification | Add entry to `BUNDLE_DECISIONS.md` |
+| P-09 | Server-side processing for local tools | Browser-only execution always |
+| P-10 | Client components importing Node-only APIs (`fs`, `path`) | Use browser-safe equivalents |
+| P-11 | Silent fallback to degraded mode | Notify user of any degradation |
+| P-12 | Dead UI elements | Every interactive element must perform an action |
+| P-13 | `any` TypeScript type without justification | Narrow the type; document the exception |
+| P-14 | `console.log` in production code | Use structured logger from `src/lib/logger.ts` |
+| P-15 | Hardcoded colors, spacing, radii | Use design tokens exclusively |
+| P-16 | `eval()` or `new Function()` outside trusted worker contexts | Use safe alternatives |
+| P-17 | Non-semantic HTML (e.g., `<div>` for buttons) | Use correct semantic HTML elements |
+| P-18 | Unversioned IndexedDB stores | All stores must define an explicit `version` |
+
+---
 
 ## 1. Project Identity & Philosophy
 
 - **Name:** KaruviLab (KV)
 - **Vision:** The world's fastest, most private browser-native productivity platform.
-- **Non‑Negotiable Philosophy:**
-  - **Zero‑Server‑Upload:** All data stays on the user's device.
-  - **Privacy‑First:** No telemetry, no tracking, no cloud storage.
-  - **Local‑First Execution:** Web Workers, WebAssembly, Web Crypto.
-  - **Offline Resilience:** Fully functional without the internet via Service Workers and IndexedDB.
-  - **Enterprise UX:** Raycast/Linear‑tier, keyboard‑first, motion‑rich but subtle.
+- **Non-Negotiable Pillars:**
 
-## 2. Tech Stack (A‑Z)
+| Pillar | Meaning |
+|--------|---------|
+| **Zero-Server-Upload** | All data stays on the user's device. No file ever leaves the browser. |
+| **Privacy-First** | No telemetry, no tracking, no cloud storage, no analytics beacons. |
+| **Local-First Execution** | Web Workers, WebAssembly, Web Crypto — compute locally. |
+| **Offline Resilience** | Fully functional without internet via Service Workers + IndexedDB. |
+| **Enterprise UX** | Raycast/Linear-tier — keyboard-first, motion-rich but subtle, zero friction. |
 
-- **Next.js 16.2+** (App Router, strict Server/Client separation)
-- **React 19.0.6** (Concurrent Mode)
-- **Tailwind CSS v4.2.4** (JIT, container queries)
-- **TypeScript** (strict mode, no `any` without justification)
-- **WorkerOrchestrator** (singleton Web Worker pool)
-- **Comlink 4.4** (RPC‑style worker communication)
-- **Zustand 5.0+** (atomic selectors, IndexedDB persistence via `idb`)
-- **Framer Motion 12.38+** (hardware‑accelerated animations)
-- **DOMPurify 3.1+** (XSS protection)
-- **pdf‑lib 1.17+**, **Terser 5.47+**, **fflate**, **date‑fns**
+---
+
+## 2. Tech Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Next.js | 16.2+ | App Router, SSR/SSG, strict Server/Client separation |
+| React | 19.0.6 | Concurrent Mode, Server Components |
+| TypeScript | strict | No `any` without documented justification |
+| Tailwind CSS | v4.2.4 | JIT, container queries, design tokens |
+| Zustand | 5.0+ | Atomic state, IndexedDB persistence via `idb` |
+| Comlink | 4.4 | RPC-style worker communication |
+| Framer Motion | 12.38+ | Hardware-accelerated animations |
+| DOMPurify | 3.1+ | XSS protection on all HTML rendering |
+| pdf-lib | 1.17+ | Client-side PDF manipulation |
+| Terser | 5.47+ | In-worker JS minification |
+| fflate | latest | In-worker compression |
+| date-fns | latest | Tree-shakable date utilities |
+
+> **Dependency Rule:** Never add a library without a corresponding entry in `BUNDLE_DECISIONS.md` with gzipped size impact, alternatives considered, and justification.
+
+---
 
 ## 3. Design System & Tokens
 
-### Branding
-- **Logo:** Circular brand mark with Indigo‑to‑Blue gradient.
-- **Wordmark:** DM Serif Display, weight 800.
+### 3.1 Branding
+- **Logo:** Circular brand mark, Indigo-to-Blue gradient
+- **Wordmark:** DM Serif Display, weight 800
 
-### Core Tokens
-- `rounded-[32px]` – Large containers/cards
-- `rounded-2xl` (24px) – Secondary containers
-- `rounded-xl` (20px) – Modals/Dialogs
-- `rounded-lg` – Input elements/Buttons
-- Colors: Indigo `#4F46E5` (primary), Surface `#0F172A` (dark), Border `#1E293B`
-- Motion: `ease-expo` (0.16, 1, 0.3, 1), max 400ms
+### 3.2 Border Radius Tokens
+| Token | Value | Usage |
+|-------|-------|-------|
+| `rounded-[32px]` | 32px | Large cards, containers |
+| `rounded-2xl` | 24px | Secondary containers |
+| `rounded-xl` | 20px | Modals, Dialogs |
+| `rounded-lg` | 8px | Inputs, Buttons |
 
-## 4. Architecture & Key Paths
+> ⚠️ Arbitrary values like `rounded-[18px]` are **forbidden**. Use only the tokens above.
 
-- `/app/` – Routing, layouts, metadata, error boundaries
-- `/app/(tools)/` – Category‑based tool pages
-- `/components/ui/` – Shared atomic UI components (`ToolShell`, `MetricCard`, `ToolInput`, `SliderField`, `KVLogo`)
-- `/src/engine/workers/` – `karuvi.worker.ts`, `WorkerOrchestrator`, `TaskScheduler`
-- `/src/features/` – Tool‑specific logic, separated from UI
-- `/src/store/` – Global Zustand stores (settings, favorites, session)
-- `/src/lib/` – Stateless utilities
-- `/src/registry/` – Tool metadata and discovery
-- `/scripts/` – Build‑time scripts (favicons, data sync)
+### 3.3 Color Tokens
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--kv-primary` | `#4F46E5` | Primary actions, accents |
+| `--kv-surface` | `#0F172A` | Dark background |
+| `--kv-border` | `#1E293B` | Borders, dividers |
+| `--kv-surface-2` | `#1E293B` | Elevated surface |
+| `--kv-text` | `#F8FAFC` | Primary text (dark mode) |
+| `--kv-text-muted` | `#94A3B8` | Secondary text |
 
-## 5. React Reactivity Standards
+### 3.4 Motion Tokens
+- **Easing:** `ease-expo` → cubic-bezier(0.16, 1, 0.3, 1)
+- **Max duration:** 400ms
+- **Transition properties allowed:** `transform`, `opacity` only
+- **Forbidden properties:** `width`, `height`, `box-shadow`, `filter` (except `backdrop-blur`)
+- **Spring config:** `{ stiffness: 300, damping: 30 }`
+- `prefers-reduced-motion` **must** disable all animations globally via `MotionConfig reducedMotion="user"`
 
-### Zustand
-- **Atomic selectors only:** `useStore(s => s.field)`. Never destructure the entire store.
-- Use `useShallow` when selecting objects/arrays to prevent reference‑change re‑renders.
-- Stable `EMPTY_ARRAY` / `EMPTY_OBJECT` constants must be used as fallback references.
+---
 
-### React
-- `setState` must never be called during render (outside of event handlers or effects).
-- All child‑bound handlers must be wrapped in `useCallback`.
-- Expensive computations must be wrapped in `useMemo`.
-- Effects must return a cleanup function when they subscribe to timers, listeners, or workers.
-- No suppression of `exhaustive-deps` warnings.
+## 4. Architecture & Directory Structure
 
-### Rendering
-- Use `React.memo` for repeated list items that receive stable props.
-- Avoid passing inline objects/arrays as props.
-- Framer Motion layout animations should only be used where necessary; prefer opacity/transform transitions.
+```
+/
+├── app/                         # Next.js App Router
+│   ├── (tools)/                 # Category-based tool routes
+│   │   └── [category]/[tool-id]/
+│   │       ├── page.tsx         # Server Component — metadata + ToolShell
+│   │       ├── ToolClientWrapper.tsx  # "use client" + ssr:false boundary
+│   │       └── ToolClient.tsx   # Interactive logic
+│   ├── layout.tsx
+│   ├── sitemap.ts
+│   └── robots.ts
+├── components/
+│   ├── ui/                      # Shared atomic UI (ToolShell, MetricCard, ToolInput, SliderField, KVLogo)
+│   └── system/                  # System-level (EngineLoader, ErrorBoundary, EmptyState, StatusBadge)
+├── src/
+│   ├── engine/
+│   │   └── workers/             # karuvi.worker.ts, WorkerOrchestrator, TaskScheduler
+│   ├── features/                # Tool-specific logic — isolated from UI
+│   ├── store/                   # Global Zustand stores (settings, favorites, session)
+│   ├── lib/                     # Stateless utilities — pure functions only
+│   ├── registry/                # Tool metadata and discovery
+│   └── theme/                   # Design token definitions
+├── public/                      # Static assets, worker files (synced via scripts/)
+├── scripts/                     # Build-time: sync-workers.js, favicons, etc.
+├── BUNDLE_DECISIONS.md          # Required log for every new dependency
+└── EXCEPTIONS.md                # Required log for every rule exception
+```
 
-### Server-Side Rendering (SSR) Policy
+---
 
-- **KL-07 (Mandatory `ssr: false`):** Any tool utilizing browser-only APIs (Canvas, Web Workers, BarcodeDetector), heavy external libraries (Monaco, PDF.js), or direct DOM manipulation MUST be loaded via `next/dynamic` with `ssr: false`.
-- **Implementation:** To keep `page.tsx` as a Server Component (required for `metadata`), the `ssr: false` directive must be implemented in a dedicated Client Wrapper (e.g., `ToolClientWrapper.tsx`) marked with `"use client"`. The `page.tsx` then imports this wrapper.
+## 5. React & Reactivity Standards
 
-**Pattern (Client Wrapper - `ToolClientWrapper.tsx`):**
+### 5.1 Zustand Rules
+- **Atomic selectors only:** `const field = useStore(s => s.field)`
+- **Never:** `const { field1, field2 } = useStore()` — this re-renders on any store change
+- Use `useShallow` when selecting objects/arrays: `useStore(useShallow(s => s.obj))`
+- Use module-level `EMPTY_ARRAY = []` and `EMPTY_OBJECT = {}` as stable fallbacks
+- Tool-specific stores must remain **isolated** — never share raw state between tools
+
+### 5.2 React Rules
+- `setState` must never be called during render
+- All handlers passed to children must be wrapped in `useCallback`
+- Expensive computations must be wrapped in `useMemo`
+- Every `useEffect` that subscribes to timers, listeners, or workers **must** return a cleanup function
+- `exhaustive-deps` warnings are never suppressed — fix the root cause
+- Use `React.memo` for repeated list items with stable props
+- Never pass inline objects/arrays as props: `style={{ color: 'red' }}` → extract to a constant or token
+
+### 5.3 Rendering Performance
+- Framer Motion `layout` animations only when structurally necessary; prefer `opacity`/`transform`
+- No cascade re-renders from global state changes — profile with React DevTools before merging
+- Tool switch re-render budget: **<100ms**
+- Sidebar interactions: **60fps** sustained
+
+### 5.4 SSR Policy (KL-07)
+
+Any tool using browser-only APIs (Canvas, Web Workers, BarcodeDetector, IndexedDB), heavy libraries (Monaco, PDF.js), or direct DOM manipulation **MUST** use `ssr: false`.
+
+**Required pattern — 3-file structure:**
+
 ```typescript
+// ToolClientWrapper.tsx — "use client" boundary
 "use client";
 import dynamic from 'next/dynamic';
 import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
@@ -109,376 +185,475 @@ export default function ToolClientWrapper() {
 }
 ```
 
-**Pattern (Page - `page.tsx`):**
 ```typescript
-import ToolClientWrapper from "./ToolClientWrapper";
-// ... metadata and ToolShell ...
-<ToolClientWrapper />
-```
+// page.tsx — Server Component, owns metadata
+import type { Metadata } from 'next';
+import { ToolShell } from '@/components/ui/ToolShell';
+import ToolClientWrapper from './ToolClientWrapper';
 
+export const metadata: Metadata = { /* ... */ };
 
-### Worker & Engine Loading Standard
-
-#### EngineLoader Component
-All tools that load an external worker, WASM module, or CDN dependency must use the shared `<EngineLoader>` component (`components/system/EngineLoader.tsx`).
-- **Props:** `loadingMessage`, `errorMessage`, `onReady`, `timeout` (default 10s), `onRetry`.
-- **Behavior:** Shows a spinner; if `onReady` isn't called within `timeout`, displays `errorMessage` with a Retry button. Never hangs indefinitely.
-
-#### Worker File Loading Pattern
-Every external worker file must be:
-1. Copied to `public/` via `scripts/sync-workers.js`.
-2. Referenced with an absolute path (`/pdf.worker.min.mjs`).
-3. Backed by a CDN fallback if the local file fails.
-
-```typescript
-try {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-} catch {
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
+export default function Page() {
+  return (
+    <ToolShell>
+      <ToolClientWrapper />
+    </ToolShell>
+  );
 }
 ```
 
-#### Initialization Error Handling
-Every async engine initialization must have a `try/catch` block that sets a user‑visible error state and a Retry action. Silent fallbacks are **forbidden**.
-- **Forbidden:** Catching an error and returning a `defaultResult` without notifying the user.
-- **Required:** Catching an error, setting an error state, and notifying the user.
+```typescript
+// ToolClient.tsx — All interactive logic lives here
+"use client";
+// ... full tool implementation
+```
 
-## 6. Immutable Architectural Guardrails (KL‑Series)
+---
 
-These rules **cannot** be reverted. They were established to prevent critical production failures.
+## 6. Immutable Architectural Guardrails (KL-Series)
 
-| Rule | Description |
-|------|-------------|
-| **KL‑01** | Zero raw `URL.createObjectURL` anywhere outside the central `blobManager`. |
-| **KL‑02** | Worker concurrency enforced: max **3** on desktop, **2** on mobile. All scheduling must go through `WorkerOrchestrator`. |
-| **KL‑03** | Every dynamic import must have a `<Suspense>` boundary with a `<ToolSkeleton>` fallback. No `loading: null`. |
-| **KL‑04** | `HtmlViewerClient` and any `postMessage` listener must validate `event.origin === window.location.origin`. |
-| **KL‑05** | All async pipelines (workers, fetch, ZIP) must accept and propagate an `AbortSignal`. Cancelling a task must immediately release resources. |
-| **KL‑06** | Blob URLs that are persisted in Zustand stores must be owned by the store's lifecycle (`removeFile`/`clearFiles`). Components must never revoke store‑owned URLs. |
+> These rules **cannot be reverted**. Each was established after a real production failure. Violations are classified as **BLOCKER** severity.
 
-### Performance Manifesto (PERF‑Series)
-| Rule | Description |
-|------|-------------|
-| **PERF‑01** | No synchronous heavy computation on the main thread (e.g., `zipSync`). All heavy work is async/worker‑based. |
-| **PERF‑02** | ArrayBuffers are **transferred** (not copied) when passed to/from workers. |
-| **PERF‑03** | Main‑thread responsiveness is prioritized. Interactions must remain smooth (60fps) regardless of background tasks. |
+| Rule | Constraint | Why It Exists |
+|------|-----------|---------------|
+| **KL-01** | Zero raw `URL.createObjectURL` outside `blobManager` | Memory leaks from unreferenced Blob URLs |
+| **KL-02** | Worker concurrency: max **3** desktop / **2** mobile via `WorkerOrchestrator` | OOM crashes on low-memory devices |
+| **KL-03** | Every `dynamic()` import must have `<Suspense>` + `<ToolSkeleton>`. No `loading: null` | Blank screen flash on slow connections |
+| **KL-04** | All `postMessage` listeners must validate `event.origin === window.location.origin` | XSS via malicious iframes |
+| **KL-05** | All async pipelines (workers, fetch, ZIP) must accept and propagate `AbortSignal` | Resource leaks on navigation/cancel |
+| **KL-06** | Store-owned Blob URLs revoked only by store lifecycle (`removeFile`/`clearFiles`) | Double-revoke crashes |
+| **KL-07** | Browser-only tools loaded with `ssr: false` via `ToolClientWrapper` pattern | SSR hydration mismatches |
+| **KL-08** | Every `ErrorBoundary` must expose a Retry action — never a dead end | Users get stuck with no recovery path |
+| **KL-09** | All user-provided HTML/Markdown rendered through `DOMPurify.sanitize()` | Stored XSS via file content |
+| **KL-10** | `WorkerOrchestrator` is the **only** entry point for spawning workers | Duplicate workers exhaust thread limits |
+
+### 6.1 Performance Manifesto (PERF-Series)
+
+| Rule | Constraint |
+|------|-----------|
+| **PERF-01** | No synchronous heavy computation on the main thread (`zipSync`, crypto, parsing >5ms) |
+| **PERF-02** | `ArrayBuffer` must be **transferred** (not copied) when passed to/from workers |
+| **PERF-03** | Main-thread responsiveness is non-negotiable — 60fps regardless of background tasks |
+| **PERF-04** | Initial JS bundle growth per new feature: **<20KB gzipped** |
+| **PERF-05** | Mobile peak memory target: **<150MB** |
+| **PERF-06** | Long tasks (>50ms) on the main thread are **forbidden** — break with `scheduler.yield()` |
+
+---
 
 ## 7. Performance Budgets
 
-### Main Thread
-- Maximum blocking time per task: **5ms**.
-- Long tasks (>50ms) are forbidden.
+| Metric | Budget |
+|--------|--------|
+| Main thread max blocking per task | 5ms |
+| Long task threshold (forbidden) | 50ms |
+| Tool switch re-render time | <100ms |
+| Sidebar interaction frame rate | 60fps |
+| Mobile peak memory | <150MB |
+| Initial JS bundle growth per feature | <20KB gzipped |
+| Bundle regression requiring approval | >20KB gzipped |
+| Worker concurrency (desktop) | 3 max |
+| Worker concurrency (mobile) | 2 max |
+| EngineLoader default timeout | 10s |
 
-### Memory
-- Mobile peak memory target: **<150MB**.
-- All Blob URLs must be centrally managed and revoked.
+---
 
-### Rendering
-- Sidebar interactions: 60fps.
-- Tool switch re‑render budget: **<100ms**.
-- Avoid cascade re‑renders from global state changes.
+## 8. Worker & Engine Loading Standards
 
-### Bundle
-- Initial JS bundle growth per new feature: **<20KB gzipped**.
-- All heavy libraries must be dynamically imported (`next/dynamic`).
+### 8.1 EngineLoader Component
+All tools loading an external worker, WASM module, or CDN dependency must use `<EngineLoader>` (`components/system/EngineLoader.tsx`).
 
-## 8. Concurrency Enforcement
+**Props:** `loadingMessage`, `errorMessage`, `onReady`, `timeout` (default 10s), `onRetry`
+**Behavior:** Shows shimmer skeleton → if `onReady` not called within timeout → shows `errorMessage` + Retry button. **Never hangs indefinitely.**
 
-- Batch image processing is throttled via `src/lib/concurrency.ts`.
-- Max concurrent worker jobs: **3** desktop, **2** mobile.
-- PDF Merge processes files **one‑by‑one** (load‑copy‑release).
+### 8.2 Worker File Loading Pattern
 
-## 9. Accessibility Standards (WCAG 2.2 AA)
+Every external worker file must be:
+1. Copied to `public/` via `scripts/sync-workers.js`
+2. Referenced with an absolute path
+3. Backed by a CDN fallback if local file fails
+4. Protected by a 10s timeout via `<EngineLoader>`
 
-- Full keyboard operability (Tab/Enter/Escape/Arrow keys) for every interactive element.
-- Visible focus indicators on all focusable elements.
-- Focus trapping in modals, drawers, and the Command Palette.
-- `role="alert"` for critical error messages and status announcements.
-- ARIA labels for icon‑only buttons.
-- Color contrast ≥4.5:1 in all themes (dark, light, high‑contrast).
-- `prefers-reduced-motion` must completely disable animations.
+```typescript
+// Standard worker loading with local + CDN fallback
+function initWorkerSrc(): string {
+  try {
+    // Verify local file exists by checking precache manifest
+    return '/pdf.worker.min.mjs';
+  } catch {
+    return 'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
+  }
+}
 
-## 10. SEO Standards
+pdfjsLib.GlobalWorkerOptions.workerSrc = initWorkerSrc();
+```
 
-### Redirects & Routing (Zero-Chain Policy)
-- **Native Redirects Only**: Always define redirects in `next.config.ts` using the native `redirects()` function rather than in `vercel.json`. This prevents multi-hop redirect chains caused by Next.js's internal routing (e.g., trailing slash enforcement) conflicting with external routing layers.
-- **Single-Hop Rule**: No redirect should ever require more than one hop to reach its final destination.
+### 8.3 Initialization Error Handling
 
-### Canonical URLs
-- **Strictly Per-Page**: Every page must dynamically generate a unique, self-referencing canonical URL.
-- **NEVER globally override**: Do not place a hardcoded `alternates: { canonical: "/" }` in the root `app/metadata.ts`. This forces all subpages to declare the homepage as their canonical URL, triggering massive "Redirect Error" and indexing failures in Google Search Console.
-- **Trailing Slashes**: The application uses `trailingSlash: true`. All canonical URLs, structured data URLs, and sitemap entries MUST end with a trailing slash (e.g., `https://karuvilab.com/tools/category/tool-id/`).
-- **URL Normalization**: When writing regex to normalize URLs, ensure exactness to avoid malformed double-slashes. Use `.replace(/^\/+|\/+$/g, '')` without accidental spaces.
+**Forbidden:**
+```typescript
+// ❌ Silent fallback — user has no idea something failed
+try {
+  await initEngine();
+} catch {
+  return defaultResult;
+}
+```
 
-### Content Quality (E-E-A-T Enhancement)
-- Avoid AI-style repetition and generic filler like "In today's digital world..." or "This powerful tool...".
-- Maintain a readability level of Grade 8–10.
+**Required:**
+```typescript
+// ✅ User-visible error with retry
+try {
+  await initEngine();
+  setEngineReady(true);
+} catch (err) {
+  setEngineError('Failed to load processing engine. Please retry.');
+  logger.error('Engine init failed', err);
+}
+```
 
-### Metadata & Structured Data
+### 8.4 Worker Lifecycle Standards
+- Workers must terminate idle tasks where possible
+- Transferable objects must be released after processing
+- Large buffers must be nulled after completion
+- All worker queues must support cancellation and cleanup via `AbortSignal`
+
+---
+
+## 9. Concurrency Enforcement
+
+- Batch image/PDF processing throttled via `src/lib/concurrency.ts`
+- Max concurrent worker jobs: **3** desktop, **2** mobile
+- PDF Merge processes files **one-by-one** (load → copy → release)
+- `WorkerOrchestrator` is the **only** entry point for spawning workers (KL-10)
+
+---
+
+## 10. Accessibility Standards (WCAG 2.2 AA — Non-Negotiable)
+
+| Requirement | Detail |
+|-------------|--------|
+| Keyboard operability | Tab, Enter, Escape, Arrow keys on every interactive element |
+| Focus indicators | Visible on all focusable elements — never `outline: none` without replacement |
+| Focus trapping | Required in modals, drawers, Command Palette |
+| Error announcements | `role="alert"` for critical errors and status messages |
+| Icon-only buttons | Must have `aria-label` |
+| Color contrast | ≥4.5:1 in all themes (dark, light, high-contrast) |
+| Touch targets | ≥44×44px on all interactive elements |
+| Motion | `prefers-reduced-motion` must completely disable animations |
+| Screen readers | All tool states must be announced via `aria-live` regions |
+| Semantic HTML | Use correct elements — `<button>`, `<nav>`, `<main>`, `<section>` |
+
+---
+
+## 11. SEO Standards
+
+### 11.1 Redirects (Zero-Chain Policy)
+- **Native redirects only** — define in `next.config.ts` via `redirects()`, never `vercel.json`
+- **Single-hop rule** — no redirect may require more than one hop
+- Test all redirects with `curl -L -v` before merging
+
+### 11.2 Canonical URLs
+- Every page must dynamically generate a unique, self-referencing canonical URL
+- **Never** hardcode `alternates: { canonical: "/" }` in root `app/metadata.ts`
+- All canonical URLs, sitemap entries, and structured data URLs must end with trailing slash:
+  `https://karuvilab.com/tools/[category]/[tool-id]/`
+- URL normalization regex: `.replace(/^\/+|\/+$/g, '')` — no accidental spaces
+
+### 11.3 Required Metadata Per Tool Page
+Every tool page must include:
+- Unique `<title>` following: `[Tool Name] – KV`
+- Unique `<meta name="description">` of 120–160 characters
+- Valid Open Graph + Twitter Card tags
+- `WebApplication` or `SoftwareApplication` JSON-LD with: `datePublished`, `dateModified`, `applicationCategory`, `operatingSystem`, `offers`
+- `FAQPage` JSON-LD (if FAQ section present)
+- `BreadcrumbList` JSON-LD with canonical URL normalization
+- Self-referencing `<link rel="canonical">` with trailing slash
+
+### 11.4 Content Standards (E-E-A-T)
 Every tool page must have:
-- A standard content section including Introduction (150-250 words), How-To-Use (min 4 steps), Practical Examples (min 3), FAQ (min 5), and a Privacy Section.
-- Trust badges displayed prominently: "✓ No Uploads", "✓ Browser Processing", "✓ Offline Capable", "✓ No Account Required".
-- A unique `<title>` tag following the pattern `[Tool Name] – KV`.
-- A unique `<meta name='description'>` of 120‑160 characters.
-- Valid Open Graph and Twitter Card tags.
-- `WebApplication` or `SoftwareApplication` JSON‑LD structured data with `datePublished`, `dateModified`, `applicationCategory`, `operatingSystem`, `offers`.
-- `FAQPage` JSON‑LD structured data if the tool page includes an FAQ section.
-- `BreadcrumbList` JSON‑LD structured data with canonical URL normalization.
+- ≥400 words of original, server-rendered descriptive content
+- **Introduction** (150–250 words)
+- **How-To-Use** (minimum 4 steps)
+- **Practical Examples** (minimum 3)
+- **FAQ** (minimum 5 questions)
+- **Privacy Section** — explain what data is/isn't collected
+- Trust badges displayed prominently: `✓ No Uploads`, `✓ Browser Processing`, `✓ Offline Capable`, `✓ No Account Required`
 
-### Canonical URLs
-- Every page must have a self‑referencing `<link rel='canonical'>` with a trailing slash (`https://karuvilab.com/tools/[category]/[tool-id]/`).
-- No duplicate pages with differing URL patterns.
+> ❌ **Forbidden content patterns:** "In today's digital world...", "This powerful tool...", AI-style repetition, generic filler.
 
-### Internal Linking
-- Every tool must link to at least 3‑5 related tools via the `relatedTools` registry field.
-- The ToolShell component must render a 'Related Tools' section when related data is present.
-- Cross‑category linking is encouraged where logical (e.g., Image Compressor → Image SEO).
+### 11.5 Sitemap & Crawling
+- Dynamic sitemap (`app/sitemap.ts`) must include all tool pages
+- Priority values: `1.0` homepage, `0.9` category hubs, `0.8` tool pages
+- `robots.txt` must allow all crawlers and reference sitemap index
+- No `noindex` on public tool pages
 
-### Sitemap & Crawling
-- The dynamic sitemap (`app/sitemap.ts`) must include all tool pages with appropriate `priority` values (1.0 homepage, 0.9 category hubs, 0.8 tool pages).
-- `robots.txt` must allow all crawlers and reference the sitemap index.
-- No `noindex` tags on public tool pages.
+### 11.6 Internal Linking
+- Every tool must link to ≥3–5 related tools via `relatedTools` registry field
+- `ToolShell` must render a "Related Tools" section when data is present
+- Cross-category linking encouraged where logical
 
-### Content Quality (E‑E‑A‑T)
-- Every tool page must have ≥400 words of original, server‑rendered descriptive content.
-- Sections required: Introduction (2‑3 paragraphs), How‑To‑Use (numbered steps), Examples (2‑3 use cases), FAQ (4‑6 questions).
-- All content must be original and written in natural language; no AI‑generated placeholder text.
+---
 
-## 11. UI/UX Quality Standards
+## 12. UI/UX Quality Standards
 
-### Zero Dead Elements
-- Every visible button, icon, link, toggle, slider, and menu item must perform a functional action (navigation, state change, computation, or feedback).
-- Elements that appear interactive but do nothing are **forbidden**.
-- All tool pages must pass the Dead Element Strike audit before merging.
+### 12.1 Zero Dead Elements (Mandatory Audit)
+- Every button, icon, link, toggle, slider, and menu item must perform a functional action
+- Elements that appear interactive but do nothing are a **BLOCKER**
+- All tool pages must pass the **Dead Element Strike audit** before merging
 
-### Consistent Micro‑interactions
-- **Hover (desktop):** Subtle lift (1‑2px), shadow elevation change, or border accent on cards and buttons. Duration <200ms.
-- **Active/press:** Scale down to 0.98 with spring feedback.
-- **Touch feedback:** Ripple or scale effect on primary actions and FABs.
-- **Loading:** Shimmer skeletons matching content dimensions; no blank screens or spinners without context.
-- **Transitions:** View changes, modals, and accordions animated with Framer Motion springs (stiffness: 300, damping: 30).
-- All animations respect `prefers‑reduced‑motion`.
+### 12.2 Micro-interactions
+| Interaction | Spec |
+|-------------|------|
+| Hover (desktop) | Subtle lift 1–2px, shadow elevation, or border accent. Duration <200ms |
+| Active/press | Scale to `0.98` with spring feedback |
+| Touch feedback | Ripple or scale on primary actions and FABs |
+| Loading | Shimmer skeletons matching content dimensions — no blank screens |
+| View transitions | Framer Motion springs: `{ stiffness: 300, damping: 30 }` |
 
-### Smart Empty States
-- Every tool must show a friendly empty state with a clear call‑to‑action when in its initial state.
-- No blank canvases; use the shared `<EmptyState>` component.
+### 12.3 Empty States
+- Every tool must show a friendly empty state with a clear CTA in its initial state
+- Use shared `<EmptyState>` component — no blank canvases
 
-### Error & Recovery UX
-- All errors must show human‑friendly messages with a Retry action (use `<RecoveryBanner>`).
-- No raw stack traces or 'Unhandled Error' messages.
-- Silent failures are **forbidden**.
+### 12.4 Error & Recovery UX
+- All errors must show human-friendly messages with a Retry action (`<RecoveryBanner>`)
+- No raw stack traces, no "Unhandled Error" messages shown to users
+- Silent failures are **forbidden**
 
-### Status Communication
-- Use the shared `<StatusBadge>` component for all processing states (Queued, Processing, Complete, Error).
-- All status changes must be announced via `aria‑live` regions.
+### 12.5 Status Communication
+- Use `<StatusBadge>` for all processing states: `Queued | Processing | Complete | Error`
+- All status changes announced via `aria-live` regions
 
-### Design Token Compliance
-- All visual primitives must use the design token system (`src/theme/`).
-- No hardcoded colors, border radii, shadows, or spacing values.
-- `rounded-[18px]` or similar arbitrary values are **forbidden**.
+### 12.6 Mobile-First Ergonomics
+- Touch targets ≥44×44px
+- Bottom nav must respect safe-area insets: `pb-[env(safe-area-inset-bottom)]`
+- FAB placed `bottom-24` on mobile to avoid overlap
+- No horizontal overflow at 320px — test on every new tool
 
-## 12. User‑Friendly Design Principles
+### 12.7 Privacy Transparency
+- File-processing tools must display `<PrivacyBadge>`: "Processed entirely in your browser"
+- Currency Converter must show data freshness: live / cached / stale with timestamp
+- No tool may access camera/microphone without explicit permission + clear messaging
 
-### Clarity & Predictability
-- Tool purpose must be immediately clear from the title, description, and empty state.
-- All inputs must have visible labels and helper text.
-- Primary actions must be visually dominant; secondary actions de‑emphasized.
-- Navigation must be consistent across all tools (breadcrumb, sidebar, command palette).
-
-### Privacy Transparency
-- File‑processing tools must display a `<PrivacyBadge>` indicating 'Processed entirely in your browser'.
-- The Currency Converter must show data freshness (live, cached, stale) with timestamps.
-- No tool should silently access hardware (camera, mic) without explicit user permission and clear messaging.
-
-### Keyboard‑First Productivity
-- All interactive elements must be keyboard accessible (Tab, Enter, Escape, Arrow keys).
-- Global shortcuts: Ctrl+K (Command Palette), Esc (close modal/drawer), Ctrl+Enter (run/execute), Ctrl+S (save/export).
-- Shortcuts must be consistent across all tools.
-
-### Mobile‑First Ergonomics
-- Touch targets must be ≥44x44px.
-- Bottom navigation must respect safe‑area insets (`pb-[env(safe-area-inset-bottom)]`).
-- FAB (floating action button) placed `bottom-24` on mobile to avoid overlap.
-- No horizontal overflow at 320px width.
-
-### Trust Messaging
-- Subtle trust indicators: 'No Upload', 'Offline Capable', 'Private by Design' where appropriate.
-- No deceptive patterns, dark patterns, or misleading CTAs.
+---
 
 ## 13. Security Standards
 
-- **DOMPurify** must be applied to all user‑provided HTML/Markdown before rendering.
-- `postMessage` listeners must check `event.origin`.
-- No `eval()` or `new Function()` outside trusted worker contexts.
-- No dynamic script injection.
-- Web Crypto API is the preferred cryptographic library.
-- No sensitive personal data persisted in IndexedDB without encryption.
+| Rule | Requirement |
+|------|-------------|
+| HTML rendering | `DOMPurify.sanitize()` on ALL user-provided HTML/Markdown |
+| `postMessage` | Validate `event.origin === window.location.origin` (KL-04) |
+| Dynamic code | No `eval()`, `new Function()` outside trusted worker contexts |
+| Script injection | No dynamic `<script>` tag injection |
+| Crypto | Web Crypto API is the only cryptographic library |
+| IndexedDB | No sensitive personal data without encryption |
+| CSP | Content-Security-Policy headers must be configured in `next.config.ts` |
+| Subresource integrity | CDN fallback URLs must include `integrity` attribute where possible |
 
-## 14. Motion Standards
+---
 
-**Allowed animated properties:**
-- `transform` (translate, scale, rotate)
-- `opacity`
+## 14. State Management Architecture
 
-**Forbidden properties:**
-- `width`, `height` (use `scale` or layout animations)
-- `box-shadow` (use static tonal elevation tokens)
-- `filter` (except subtle `backdrop‑blur` on capable devices)
-
-Always respect `prefers-reduced-motion`. Framer Motion's `MotionConfig` is already set globally to `reducedMotion="user"`.
-
-## 15. AI Coding Workflow
-
-**Before modifying code:**
-1. Check for existing architectural utilities (`blobManager`, `WorkerOrchestrator`, `ToolShell`).
-2. Reuse shared UI primitives (`ToolInput`, `SliderField`, `MetricCard`).
-3. Verify worker compatibility – offload any CPU‑heavy work.
-4. Verify offline compatibility – no server‑side fetching unless clearly documented and opt‑in.
-5. Verify mobile responsiveness at 320px.
-6. Mentally run strict TypeScript checks.
-
-**After modifying code:**
-1. Validate no full‑store Zustand subscriptions.
-2. Validate all cleanup logic (effects, timers, workers).
-3. Validate Blob lifecycle – URLs created centrally, revoked only by the store.
-4. Validate `AbortSignal` propagation.
-5. Validate accessibility semantics (ARIA labels, keyboard nav).
-
-## 16. State Management Architecture
-
-### Global Stores (used across tools)
-Only for:
+### 14.1 Global Stores (cross-tool use only)
 - Settings (theme, font scale, preferences)
 - Favorites
 - Workflow state
 - Session persistence
 
-### Tool‑Specific Stores
-Must remain isolated per tool. Never share raw state across tools.
+### 14.2 Tool-Specific Stores
+- Must remain **isolated** per tool
+- Never expose raw tool state to other tools
+- Located in `src/features/[tool-id]/store.ts`, not `src/store/`
 
-### Persistence
-- **IndexedDB** via `idb` is the only persistence layer.
-- Never persist: `Blob` objects, `File` objects, raw `ArrayBuffer`, transient worker state.
-- Zustand `persist` middleware is used for serialisable state.
+### 14.3 Persistence Rules
+- **IndexedDB via `idb`** is the only persistence layer
+- All persisted Zustand stores must define explicit `version` + migration functions
+- **Never persist:** `Blob`, `File`, raw `ArrayBuffer`, transient worker state
+- IndexedDB writes must be **debounced** when triggered by rapid UI events (e.g., slider input)
+- Large binary payloads must never be duplicated across persistence layers
+- Expired cache entries must support cleanup via version migration
 
-## 17. Tool Production Quality Gates
+---
 
-A tool is considered **production‑ready** only if:
-- Zero TypeScript errors and zero unhandled promise rejections.
-- Works offline after first visit and responsive/usable at 320px width.
-- Keyboard accessible (WCAG 2.2 AA) and screen reader friendly.
-- No memory leaks (verified via DevTools heap snapshots).
-- CPU‑intensive work is offloaded to a Worker.
-- Uses `ToolShell` as the standard layout wrapper and atomic Zustand selectors exclusively.
-- Gracefully recovers from errors (ErrorBoundary with retry).
-- **Zero dead UI elements:** Every visible interactive element must perform a functional action (verified via Dead Element Strike).
-- **SEO Ready:** All SEO requirements met (metadata, structured data, canonical, FAQ section).
-- **SSR Safety:** If the tool uses browser‑only APIs, it must have `ssr: false` in the page route.
-- **Worker Loading:** If the tool loads a worker or WASM file, it must use the standard worker loading pattern (local copy + CDN fallback + error state).
-- **Engine Loading:** If the tool loads an external CDN dependency, it must use `<EngineLoader>` or an equivalent timeout/error mechanism.
-- **No Silent Fallbacks:** The user must be notified of any critical loading failure. Silent fallbacks are forbidden.
-- **Build Quality:** The tool must pass `npm run typecheck` and `npm run build`.
+## 15. Service Worker Standards
 
-## 18. Development Workflow & Registry
+- All tool bundles must be precached
+- Worker files use **cache-first** strategy
+- Version mismatches must trigger automatic stale cache invalidation
+- Dynamic cache growth must be bounded (set explicit max entries)
+- Failed cache hydration must degrade gracefully — never crash the tool
+- Offline mode must be fully validated as part of every tool's production gate
 
-1. Add tool metadata to `src/registry/tools/[tool-id].ts`.
-2. Create route in `/app/(tools)/[category]/[tool-id]/`.
-3. Implement `page.tsx` (server‑side metadata, ToolShell wrapper).
-4. Implement client component (`.client.tsx`) with interactive logic.
-5. Add atomic Zustand store in `src/store/` if global state is needed (rare).
+---
 
-## 18.1. New Tool Implementation Checklist
+## 16. Error Isolation Standards
 
-Before merging a new tool:
-1. Does it use a browser‑only API? → Add `dynamic(() => import(...), { ssr: false })` in the page route.
-2. Does it load a worker or WASM? → Use the standard worker loading pattern with local copy and CDN fallback.
-3. Does it need a worker file? → Add it to `scripts/sync-workers.js`.
-4. Does every async initialization have a `try/catch` that sets a user‑visible error state?
-5. Does it pass `npm run typecheck` and `npm run build`?
-6. Is it tested on a real mobile device (or emulated) at 320px width?
-7. Is it keyboard accessible and screen reader friendly?
-8. Does it work offline after first visit?
-9. Are all Blob URLs managed via `blobManager` (KL‑01 compliant)?
-10. Does it use atomic Zustand selectors only?
-11. Are there any dead UI elements? → Must be functional or removed.
-12. Are all SEO requirements met (metadata, JSON-LD, canonical)?
+- Every tool route must have an `<ErrorBoundary>` with a Retry action (KL-08)
+- Worker failures must surface user-safe messages — never raw error objects
+- No raw stack traces shown to users in production
+- Failed batch items must not terminate the entire queue
+- All errors must be logged to `src/lib/logger.ts` with context (tool ID, action, timestamp)
 
-## 19. Known Fixed Bugs (Historical)
+---
 
-*These are documented to prevent regression. The architectural guardrails (KL‑series) already encode the enforcement.*
+## 17. React Server Component Rules
 
-- **BUG‑001:** Minification now uses Terser in a worker.
-- **BUG‑002:** Calculator division‑by‑zero guards in place.
-- **BUG‑003:** Batch concurrency limited.
-- **BUG‑004:** Accessible checkboxes via Radix.
-- **BUG‑005:** JSON tree depth and size limits.
-- **BUG‑006:** Blob URL lifecycle hardened.
-- **BUG‑007:** PDF Merge sequential processing.
+- Server Components must **never** import browser APIs
+- `"use client"` only when interactivity is genuinely required — avoid unnecessary client boundaries
+- Heavy UI islands must be dynamically imported
+- Server Components own data loading whenever network access is required
+- `page.tsx` must always remain a Server Component (required for `metadata` export)
 
-## 20. Current Priorities
+---
 
-1. SEO indexing fix (sitemap, structured data).
-2. Sidebar performance optimization.
-3. Phase‑1 everyday tools (Word Counter, Text Case Converter, PDF to Word, etc.).
-4. Hybrid UI polish & micro‑interactions rollout.
-5. Offline PWA audit completion.
+## 18. Motion Standards
 
-## 21. Severity Classification
+**Allowed animated CSS properties:**
+- `transform` (translate, scale, rotate)
+- `opacity`
 
-- **BLOCKER** → Production crash, memory leak, security issue
-- **CRITICAL** → Architecture violation, severe rendering instability
-- **MAJOR** → Significant UX/performance degradation
-- **MINOR** → Non-critical standards deviation
-- **NIT** → Cosmetic or maintainability issue
+**Forbidden animated properties:**
+- `width`, `height` → use `scale` or layout animations
+- `box-shadow` → use static tonal elevation tokens
+- `filter` → except subtle `backdrop-blur` on capable devices
 
-## 22. Bundle Governance
+**Rules:**
+- Always respect `prefers-reduced-motion` — `MotionConfig reducedMotion="user"` set globally
+- `layout` animations only where structurally required
+- Max animation duration: **400ms**
+- Spring config: `{ stiffness: 300, damping: 30 }`
 
-- New dependencies require bundle impact justification.
-- Heavy libraries must be dynamically imported.
-- Duplicate utility libraries are forbidden.
-- Bundle regressions >20KB gzipped require approval.
+---
 
-## 23. Testing Standards
-Required validation before production:
-- `npm run typecheck`
-- `npm run lint`
-- `npm run test`
-- Production build verification
-- Mobile viewport validation
-- Offline mode validation
-- Worker cancellation testing
+## 19. Bundle Governance
 
-## 24. Worker Lifecycle Standards
-- Workers must terminate idle tasks when possible.
-- Transferable objects must be released after processing.
-- Large buffers must be nulled after completion.
-- Worker queues must support cancellation and cleanup.
+- Every new dependency requires an entry in `BUNDLE_DECISIONS.md`:
+  - Gzipped size impact
+  - Alternatives considered and rejected
+  - Justification
+- Heavy libraries must be dynamically imported via `next/dynamic`
+- Duplicate utility libraries are **forbidden** (e.g., don't add `moment` if `date-fns` exists)
+- Bundle regression >20KB gzipped requires explicit approval before merge
 
-## 25. Error Isolation Standards
-- Every tool route must have an `ErrorBoundary`.
-- Worker failures must surface user-safe messages.
-- No raw stack traces shown to users.
-- Failed batch items must not terminate the entire queue.
+---
 
-## 26. Service Worker Standards
-- All tool bundles must be precached.
-- Worker files must use cache-first strategy.
-- Version mismatches must trigger automatic stale cache invalidation.
-- Dynamic cache growth must be bounded.
-- Failed cache hydration must degrade gracefully.
+## 20. Testing Standards
 
-## 27. IndexedDB Constraints
-- IndexedDB writes must be debounced when triggered by rapid UI updates.
-- Large binary payloads must never be duplicated in persistence layers.
-- Expired cached entries must support cleanup/version migration.
-- Persisted Zustand stores must define explicit schema versions.
+### 20.1 Required Before Every Production Merge
+```bash
+npm run typecheck    # Zero TypeScript errors
+npm run lint         # Zero ESLint warnings/errors
+npm run test         # All unit/integration tests pass
+npm run build        # Clean production build
+```
 
-## 28. React Server Component Rules
-- Server Components must never import browser APIs.
-- Client Components must be marked with `"use client"` only when interactivity is required.
-- Avoid unnecessary client boundaries.
-- Heavy UI islands must be dynamically imported.
-- Server Components should own data loading whenever network access is required.
+### 20.2 Manual Validation Required
+- [ ] Mobile viewport at 320px — no overflow, usable layout
+- [ ] Offline mode — works after first visit with no internet
+- [ ] Worker cancellation — cancel mid-task, verify no memory leak
+- [ ] Keyboard-only navigation — all interactions reachable
+- [ ] Screen reader announcement — all state changes announced
+- [ ] DevTools heap snapshot — no memory leak after 5 tool operations
+- [ ] Dead Element Strike audit — every interactive element does something
 
-*This manifesto evolves with the platform. Every architectural decision that prevents a production failure must be added here.*
+---
+
+## 21. Development Workflow & Tool Registry
+
+### 21.1 Adding a New Tool (5-Step Workflow)
+1. Add tool metadata to `src/registry/tools/[tool-id].ts`
+2. Create route at `/app/(tools)/[category]/[tool-id]/`
+3. Implement `page.tsx` (Server Component — metadata + `ToolShell`)
+4. Implement `ToolClientWrapper.tsx` (`"use client"` + `ssr: false`)
+5. Implement `ToolClient.tsx` (interactive logic — browser-only)
+
+### 21.2 New Tool Pre-Merge Checklist
+
+```
+BROWSER APIs
+[ ] Uses browser-only APIs? → ToolClientWrapper with ssr: false (KL-07)
+[ ] Loads a worker or WASM? → Standard worker loading pattern (local + CDN fallback)
+[ ] Worker file needed? → Added to scripts/sync-workers.js
+
+ARCHITECTURE
+[ ] Every async init has try/catch → user-visible error state + retry
+[ ] No full Zustand store subscriptions → atomic selectors only
+[ ] All Blob URLs via blobManager (KL-01)
+[ ] All async ops accept AbortSignal (KL-05)
+
+QUALITY GATES
+[ ] npm run typecheck → zero errors
+[ ] npm run build → clean build
+[ ] 320px mobile viewport → no overflow
+[ ] Keyboard accessible
+[ ] Screen reader friendly
+[ ] Works offline after first visit
+[ ] Zero dead UI elements
+[ ] Memory leak check via DevTools
+
+SEO
+[ ] metadata (title, description, OG tags) defined in page.tsx
+[ ] JSON-LD structured data (WebApplication + FAQPage + BreadcrumbList)
+[ ] Self-referencing canonical URL with trailing slash
+[ ] ≥400 words server-rendered content
+[ ] Trust badges displayed
+[ ] ≥3 related tools in relatedTools registry field
+```
+
+---
+
+## 22. Severity Classification
+
+| Level | Meaning | Example |
+|-------|---------|---------|
+| **BLOCKER** | Production crash, memory leak, security breach | KL-series violation, XSS, OOM |
+| **CRITICAL** | Architecture violation, severe rendering instability | Full store subscription, dead UI |
+| **MAJOR** | Significant UX or performance degradation | Missing error boundary, no empty state |
+| **MINOR** | Non-critical standards deviation | Missing `aria-label` on non-critical icon |
+| **NIT** | Cosmetic or maintainability issue | Inconsistent spacing, naming style |
+
+> A BLOCKER or CRITICAL must block the merge. MAJOR requires a fix or a logged exception in `EXCEPTIONS.md`.
+
+---
+
+## 23. Known Fixed Bugs (Regression Prevention)
+
+> These are documented to prevent re-introduction. The KL-series guardrails encode enforcement.
+
+| ID | Summary | Enforced By |
+|----|---------|-------------|
+| BUG-001 | Minification blocked the main thread | PERF-01, Terser runs in worker |
+| BUG-002 | Calculator division-by-zero crashed silently | Input validation required |
+| BUG-003 | Uncapped batch concurrency caused OOM | KL-02, WorkerOrchestrator |
+| BUG-004 | Checkbox not accessible to screen readers | Radix UI primitives |
+| BUG-005 | JSON tree renderer crashed on deep/large trees | Depth + size limits enforced |
+| BUG-006 | Blob URLs leaked on component unmount | KL-01, KL-06, blobManager |
+| BUG-007 | PDF Merge held all files in memory simultaneously | Sequential one-by-one processing |
+| BUG-008 | Silent SSR hydration mismatch on tool load | KL-07, ToolClientWrapper pattern |
+| BUG-009 | `postMessage` listener exploitable via iframe | KL-04, origin validation |
+
+---
+
+## 24. Current Priorities
+
+| Priority | Item | Status |
+|----------|------|--------|
+| P1 | SEO indexing fix (sitemap, structured data) | 🔴 Active |
+| P2 | Sidebar performance optimization | 🔴 Active |
+| P3 | Phase-1 everyday tools (Word Counter, Text Case Converter, PDF to Word) | 🟡 In Progress |
+| P4 | Hybrid UI polish & micro-interactions rollout | 🟡 In Progress |
+| P5 | Offline PWA audit completion | ⚪ Planned |
+
+---
+
+## 25. Exception Process
+
+Any rule in this document may only be bypassed by:
+1. Opening a PR with the exception clearly documented in `EXCEPTIONS.md`
+2. Stating: the rule violated, the reason it cannot be followed, the mitigation applied, and the expected resolution date
+3. Getting explicit review approval before merging
+
+**No undocumented exceptions. Ever.**
+
+---
+
+*This manifesto evolves with the platform. Every architectural decision that prevents a production failure must be added here with its KL/PERF rule number. Version this document — increment the version header on every material change.*

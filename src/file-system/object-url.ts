@@ -1,24 +1,26 @@
 /**
  * Centralized object URL manager to prevent memory leaks.
  */
+import { blobManager } from '@/src/lib/blob-manager';
+
 class ObjectUrlManager {
   private urls = new Set<string>();
 
   create(blob: Blob | MediaSource): string {
-    const url = URL.createObjectURL(blob);
+    const url = blobManager.create(blob);
     this.urls.add(url);
     return url;
   }
 
   revoke(url: string) {
     if (this.urls.has(url)) {
-      URL.revokeObjectURL(url);
+      blobManager.revoke(url);
       this.urls.delete(url);
     }
   }
 
   revokeAll() {
-    this.urls.forEach(url => URL.revokeObjectURL(url));
+    this.urls.forEach(url => blobManager.revoke(url));
     this.urls.clear();
   }
 }
