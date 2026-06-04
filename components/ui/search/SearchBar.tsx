@@ -38,16 +38,16 @@ export function SearchBar() {
         onClick={() => setIsPaletteOpen(true)}
         aria-label="Search tools"
         className={cn(
-          "group flex items-center justify-between gap-3 p-3 sm:px-4 sm:py-2 bg-surface shadow-sm border border-border/50 rounded-2xl text-sm font-medium text-text-4 hover:border-blue/30 hover:shadow-md transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/50",
+          "group flex items-center justify-between gap-3 p-3 sm:px-4 sm:py-2 bg-mat-raised shadow-mat-shine border border-mat-border rounded-2xl text-sm font-medium text-text-4 hover:border-brand-primary/30 hover:bg-mat-hover transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50",
           "w-full md:min-w-[240px] lg:min-w-[340px] h-[44px]"
         )}
       >
         <div className="flex items-center gap-2.5">
-          <Search className="w-4 h-4 text-text-3 group-hover:text-blue transition-colors" />
+          <Search className="w-4 h-4 text-text-3 group-hover:text-brand-primary transition-colors" />
           <span className="hidden sm:inline">Search 100+ tools...</span>
           <span className="sm:hidden">Search...</span>
         </div>
-        <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-bg border border-border rounded-lg text-[10px] font-mono font-bold text-text-3 group-hover:text-blue transition-colors">
+        <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-mat-base border border-mat-border rounded-lg text-[10px] font-mono font-bold text-text-3 group-hover:text-brand-primary transition-colors">
           <Command className="w-3 h-3" />
           <span>K</span>
         </div>
@@ -57,7 +57,7 @@ export function SearchBar() {
       {isMobile && (
         <button
           onClick={() => setIsPaletteOpen(true)}
-          className="fixed bottom-24 right-4 z-40 w-14 h-14 bg-blue text-white rounded-full flex items-center justify-center shadow-lg shadow-blue/30 hover:scale-105 active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue"
+          className="fixed bottom-24 right-4 z-40 w-14 h-14 bg-brand-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-brand-primary/30 hover:scale-105 active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary"
           aria-label="Open search"
         >
           <Search className="w-6 h-6" />

@@ -64,16 +64,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   removeToast(t.id);
                 }
               }}
-              initial={{ opacity: 0, x: 50, scale: 0.9, filter: "blur(4px)" }}
-              animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
+              initial={{ opacity: 0, x: 50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, x: 20, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className={`
-                pointer-events-auto px-4 py-3 rounded-2xl shadow-xl border flex items-center gap-3 min-w-[280px] max-w-[400px]
-                bg-surface/90 backdrop-blur-md touch-none
+                pointer-events-auto px-4 py-3 rounded-2xl shadow-mat-shine border flex items-center gap-3 min-w-[280px] max-w-[400px]
+                bg-mat-raised border-mat-border touch-none
                 ${t.type === "success" ? "border-green-500/20" : ""}
                 ${t.type === "error" ? "border-red-500/20" : ""}
-                ${t.type === "info" ? "border-blue/20" : ""}
+                ${t.type === "info" ? "border-brand-primary/20" : ""}
                 ${t.type === "warn" ? "border-orange-500/20" : ""}
               `}
               role="alert"

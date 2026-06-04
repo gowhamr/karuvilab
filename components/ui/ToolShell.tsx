@@ -109,7 +109,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <h2 className="text-2xl font-bold">Use Cases</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {merged.useCases.map((uc, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 bg-surface border border-border rounded-2xl">
+                  <div key={i} className="flex items-start gap-3 p-4 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl">
                     <Check className="w-5 h-5 text-success shrink-0" />
                     <span className="text-text-2 text-sm">{uc}</span>
                   </div>
@@ -123,11 +123,11 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <h2 className="text-2xl font-bold">Examples</h2>
               <div className="space-y-4">
                 {merged.examples.map((ex, i) => (
-                  <div key={i} className="bg-surface border border-border rounded-2xl overflow-hidden">
-                    <div className="px-4 py-2 border-b border-border bg-bg/50">
+                  <div key={i} className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl overflow-hidden">
+                    <div className="px-4 py-2 border-b border-mat-border bg-mat-base/50">
                       <span className="text-[10px] font-bold uppercase tracking-widest text-text-4">{ex.label}</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-border">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-mat-border">
                       <div className="p-4 space-y-2">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Input</p>
                         <code className="text-sm font-mono text-text-2 block break-all">{ex.input}</code>
@@ -148,7 +148,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
               <div className="space-y-4">
                 {parsedContent.faq.map((item, i) => (
-                  <div key={i} className="p-6 bg-surface border border-border rounded-2xl space-y-3">
+                  <div key={i} className="p-6 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl space-y-3">
                     <h3 className="font-bold text-text">{item.question}</h3>
                     <div 
                       className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
@@ -163,7 +163,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
         <aside className="space-y-8">
           {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-            <section className="bg-surface border border-border rounded-[32px] p-8 space-y-6 sticky top-24">
+            <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] p-8 space-y-6 sticky top-24">
               <div className="space-y-1">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-4">How it works</p>
@@ -184,7 +184,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </section>
           )}
 
-          <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
+          <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
             <div className="flex items-center gap-3 text-emerald-700 dark:text-emerald-400">
               <ShieldCheck className="w-5 h-5" />
               <h3 className="font-bold text-sm">Privacy First</h3>
@@ -194,7 +194,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
             </p>
           </div>
 
-          <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
+          <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
             <h3 className="font-bold text-sm text-text">Need Help?</h3>
             <p className="text-xs text-text-2 leading-relaxed">
               Check our documentation or contact support for assistance with this tool.
@@ -222,9 +222,9 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
-                className="flex items-center gap-4 p-4 bg-surface border border-border rounded-2xl hover:border-blue/50 transition-colors group"
+                className="flex items-center gap-4 p-4 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl hover:border-brand-primary/50 transition-colors group"
               >
-                <div className="w-10 h-10 rounded-xl bg-bg flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-mat-base flex items-center justify-center shrink-0">
                   <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">

@@ -1,0 +1,25 @@
+/* src/theme/tokens.css */
+/* Hybrid Material Design System 2.0 Tokens */
+
+:root {
+  /* Material Surface Tokens (90% of UI) */
+  --kv-mat-base:          #0A0F1E;
+  --kv-mat-surface:       #0F172A;
+  --kv-mat-raised:        #1E293B;
+  --kv-mat-overlay:       #263348;
+  --kv-mat-hover:         #2D3D55;
+  --kv-mat-border:        rgba(255, 255, 255, 0.06);
+  --kv-mat-border-focus:  rgba(79, 70, 229, 0.6);
+  --kv-mat-shine:         rgba(255, 255, 255, 0.07);
+
+  /* Branding Tokens (7% of UI) */
+  --kv-brand-gradient:    linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+  --kv-brand-primary:     #4F46E5;
+  --kv-brand-glow:        rgba(79, 70, 229, 0.15);
+
+  /* Light Glass Tokens (3% - Hero elements only) */
+  --kv-glass-bg:          rgba(15, 23, 42, 0.75);
+  --kv-glass-blur:        blur(12px);
+  --kv-glass-border:      rgba(255, 255, 255, 0.08);
+  --kv-glass-shine:       rgba(255, 255, 255, 0.04);
+}

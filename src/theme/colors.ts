@@ -28,4 +28,17 @@ export const colors = {
     3: "var(--color-text-3)",
     4: "var(--color-text-4)",
   },
+  mat: {
+    base: "var(--color-mat-base)",
+    surface: "var(--color-mat-surface)",
+    raised: "var(--color-mat-raised)",
+    overlay: "var(--color-mat-overlay)",
+    hover: "var(--color-mat-hover)",
+    border: "var(--color-mat-border)",
+    "border-focus": "var(--color-mat-border-focus)",
+  },
+  brand: {
+    primary: "var(--color-brand-primary)",
+    glow: "var(--color-brand-glow)",
+  },
 } as const;

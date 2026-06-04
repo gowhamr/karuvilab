@@ -8,6 +8,8 @@ import { ALL_TOOLS } from '@/src/registry';
 import { SearchResults } from './SearchResults';
 import { Search, X } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
+import { supportsBlur } from '@/src/lib/deviceCapability';
+import { cn } from "@/src/lib/utils";
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -17,6 +19,7 @@ interface SearchOverlayProps {
 export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [blurEnabled, setBlurEnabled] = useState(false);
   
   const [query, setQuery] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -52,6 +55,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   // Reset state on open/close
   useEffect(() => {
     if (isOpen) {
+      setBlurEnabled(supportsBlur());
       setQuery('');
       setFocusedIndex(-1);
       // Autofocus input
@@ -117,7 +121,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex flex-col bg-surface sm:bg-black/40 sm:backdrop-blur-sm sm:p-4 md:p-12 lg:p-24"
+          className="fixed inset-0 z-50 flex flex-col bg-mat-base/40 sm:bg-black/20 sm:p-4 md:p-12 lg:p-24"
           onClick={onClose}
         >
           <m.div
@@ -125,11 +129,14 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             animate={{ y: 0, scale: 1 }}
             exit={{ y: -8, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="flex-1 sm:flex-none flex flex-col bg-bg sm:rounded-2xl sm:shadow-2xl sm:max-w-2xl sm:mx-auto w-full sm:max-h-[600px] overflow-hidden sm:border sm:border-border"
+            className={cn(
+              "flex-1 sm:flex-none flex flex-col sm:rounded-2xl sm:max-w-2xl sm:mx-auto w-full sm:max-h-[600px] overflow-hidden",
+              blurEnabled ? "kv-glass" : "bg-mat-overlay border border-mat-border shadow-mat-shine"
+            )}
             onClick={e => e.stopPropagation()}
           >
             {/* Search Input Header */}
-            <div className="flex-shrink-0 flex items-center h-[52px] md:h-[60px] px-2 md:px-4 border-b border-border bg-surface">
+            <div className="flex-shrink-0 flex items-center h-[52px] md:h-[60px] px-2 md:px-4 border-b border-mat-border bg-mat-surface/30">
               <div className="flex items-center justify-center w-10 h-10 text-text-4">
                 <Search className="w-5 h-5" />
               </div>
@@ -183,10 +190,10 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             </div>
 
             {/* Footer Hints (Desktop only) */}
-            <div className="hidden sm:flex flex-shrink-0 items-center justify-center h-10 border-t border-border bg-surface gap-4 text-[10px] font-bold text-text-4 uppercase tracking-widest">
-               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-bg border border-border rounded">↑↓</kbd> Navigate</span>
-               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-bg border border-border rounded">↵</kbd> Open</span>
-               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-bg border border-border rounded">Esc</kbd> Close</span>
+            <div className="hidden sm:flex flex-shrink-0 items-center justify-center h-10 border-t border-mat-border bg-mat-surface/30 gap-4 text-[10px] font-bold text-text-4 uppercase tracking-widest">
+               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">↑↓</kbd> Navigate</span>
+               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">↵</kbd> Open</span>
+               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">Esc</kbd> Close</span>
             </div>
           </m.div>
         </m.div>

@@ -8,6 +8,7 @@ import { useSupportStore, FeedbackType } from "@/src/store/useSupportStore";
 import { getSystemInfo, SystemInfo } from "@/src/lib/support-utils";
 import { cn } from "@/src/lib/utils";
 import { FileUpload } from "./FileUpload";
+import { supportsBlur } from "@/src/lib/deviceCapability";
 
 const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: any }[] = [
   { value: "calculation", label: "Calculation Wrong", icon: AlertCircle },
@@ -32,9 +33,11 @@ export function FeedbackModal() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [sysInfo, setSysInfo] = useState<SystemInfo | null>(null);
+  const [blurEnabled, setBlurEnabled] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setBlurEnabled(supportsBlur());
       setSysInfo(getSystemInfo());
       setIsSuccess(false);
       setDescription("");
@@ -83,10 +86,11 @@ export function FeedbackModal() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && closeFeedback()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[300] bg-bg/60 backdrop-blur-sm animate-in fade-in duration-300" />
+        <Dialog.Overlay className="fixed inset-0 z-[300] bg-mat-base/60 backdrop-blur-sm animate-in fade-in duration-300" />
         
         <Dialog.Content className={cn(
-          "fixed z-[301] bg-surface border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300",
+          "fixed z-[301] overflow-hidden flex flex-col transition-all duration-300",
+          blurEnabled ? "kv-glass" : "bg-mat-overlay border border-mat-border shadow-mat-shine",
           // Mobile: Bottom Sheet
           "bottom-0 left-0 right-0 rounded-t-[32px] max-h-[90vh] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-0",
           // Desktop: Centered Modal
@@ -134,12 +138,12 @@ export function FeedbackModal() {
                 >
                   {/* Context Banner */}
                   {context?.toolName && (
-                    <div className="p-4 bg-blue/5 border border-blue/10 rounded-2xl flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue flex items-center justify-center text-white">
+                    <div className="p-4 bg-brand-primary/5 border border-brand-primary/10 rounded-2xl flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white">
                         <Monitor className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[9px] font-black text-blue uppercase tracking-widest">Reporting For</p>
+                        <p className="text-[9px] font-black text-brand-primary uppercase tracking-widest">Reporting For</p>
                         <p className="text-xs font-bold text-text truncate">{context.toolName}</p>
                       </div>
                     </div>
@@ -153,7 +157,7 @@ export function FeedbackModal() {
                         id="issue-type"
                         value={type}
                         onChange={(e) => setType(e.target.value as FeedbackType)}
-                        className="w-full h-[56px] px-5 pr-12 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm appearance-none"
+                        className="w-full h-[56px] px-5 pr-12 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm appearance-none"
                       >
                         {FEEDBACK_OPTIONS.map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -173,7 +177,7 @@ export function FeedbackModal() {
                       value={fromEmail}
                       onChange={(e) => setFromEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full h-[56px] px-5 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm"
+                      className="w-full h-[56px] px-5 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm"
                     />
                   </div>
 
@@ -186,7 +190,7 @@ export function FeedbackModal() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="What happened? Any steps to reproduce?"
-                      className="w-full min-h-[120px] p-5 bg-bg border border-border rounded-2xl outline-none focus:border-blue/50 focus:ring-4 focus:ring-blue/5 transition-all font-bold text-sm resize-none"
+                      className="w-full min-h-[120px] p-5 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm resize-none"
                     />
                   </div>
 
@@ -195,7 +199,7 @@ export function FeedbackModal() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
                     <FileUpload 
                       onFileSelect={setScreenshot}
-                      className="group relative w-full h-[80px] border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-bg/50 hover:bg-surface hover:border-blue/30 transition-all cursor-pointer"
+                      className="group relative w-full h-[80px] border-2 border-dashed border-mat-border rounded-2xl flex items-center justify-center bg-mat-base/50 hover:bg-mat-surface hover:border-brand-primary/30 transition-colors cursor-pointer"
                     />
                   </div>
 
@@ -238,7 +242,7 @@ export function FeedbackModal() {
                     <button 
                       disabled={isSubmitting}
                       type="submit"
-                      className="w-full h-[64px] bg-blue text-white rounded-[20px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-blue/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                      className="w-full h-[64px] bg-brand-primary text-white rounded-[20px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

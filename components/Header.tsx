@@ -18,22 +18,18 @@ export function Header() {
   const { shouldBlur } = usePerformanceSettings();
   
   const bg = useTransform(scrollY, [0, 50], [
-    "rgba(var(--bg-rgb), 0)",
-    "rgba(var(--bg-rgb), 0.95)"
+    "var(--kv-mat-base)",
+    "var(--kv-mat-base)"
   ]);
-  const blurValue = useTransform(scrollY, [0, 50], [0, 8]);
-  const blurFilter = useTransform(blurValue, (v) => (shouldBlur && v > 0) ? `blur(${v}px)` : "none");
   const border = useTransform(scrollY, [0, 50], [
-    "rgba(var(--border-rgb), 0)",
-    "rgba(var(--border-rgb), 1)"
+    "rgba(var(--color-mat-border), 0)",
+    "var(--kv-mat-border)"
   ]);
 
   return (
     <m.header 
       style={{ 
         backgroundColor: bg,
-        backdropFilter: blurFilter,
-        WebkitBackdropFilter: blurFilter,
         borderBottomColor: border
       }}
       className="sticky top-0 z-40 w-full border-b border-transparent h-[60px] md:h-[72px]"

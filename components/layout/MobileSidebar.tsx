@@ -89,7 +89,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         tabIndex={-1}
         aria-label="Navigation Sidebar"
         className={cn(
-          "fixed top-0 left-0 bottom-0 w-[280px] bg-surface/90 backdrop-blur-xl border-r border-border z-[70] rounded-r-[32px] shadow-2xl flex flex-col touch-none overflow-hidden outline-none"
+          "fixed top-0 left-0 bottom-0 w-[280px] bg-mat-surface border-r border-mat-border shadow-mat-shine z-[70] rounded-r-[32px] flex flex-col touch-none overflow-hidden outline-none"
         )}
       >
         <div className="absolute inset-y-0 right-0 w-px bg-white/5 dark:bg-white/10" />

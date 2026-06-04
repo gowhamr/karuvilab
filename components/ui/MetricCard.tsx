@@ -29,10 +29,10 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
       whileHover={{ 
         y: -4, 
         scale: 1.01,
-        transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } 
+        transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } 
       }}
       className={cn(
-        "bg-surface border border-border p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] space-y-3 min-w-0 overflow-hidden shadow-sm hover:shadow-xl dark:hover:shadow-blue/10 transition-all duration-300", 
+        "bg-mat-surface border border-mat-border p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] space-y-3 min-w-0 overflow-hidden shadow-mat-shine transition-[background-color,border-color] duration-150 ease-out hover:border-mat-border-focus hover:bg-mat-hover", 
         loading && "shimmer-wrapper",
         className
       )}
@@ -62,8 +62,8 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
       </div>
       <div 
         className={cn(
-          "text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight transition-all", 
-          accent ? "text-blue" : "text-text",
+          "text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight transition-colors", 
+          accent ? "text-brand-primary" : "text-text",
           loading && "opacity-20"
         )}
       >

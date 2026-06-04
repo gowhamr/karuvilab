@@ -317,7 +317,7 @@ export function Sidebar() {
       ) : (
         /* Desktop Permanent Sidebar */
         <aside 
-          className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-surface border-r border-border z-30 flex-col overflow-hidden"
+          className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-mat-surface border-r border-mat-border shadow-mat-shine z-30 flex-col overflow-hidden"
           style={{ contain: 'layout style' }}
         >
           <div className="h-20 flex items-center px-8 border-b border-border bg-bg">

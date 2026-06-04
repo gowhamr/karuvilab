@@ -115,9 +115,9 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="absolute right-0 top-full mt-2 w-56 bg-surface border border-border shadow-2xl rounded-2xl p-2 z-50 overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-56 bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-50 overflow-hidden"
           >
-            <div className="px-3 py-2 text-[8px] font-black text-text-4 uppercase tracking-[0.2em] border-b border-border/50 mb-1">
+            <div className="px-3 py-2 text-[8px] font-black text-text-4 uppercase tracking-[0.2em] border-b border-mat-border mb-1">
               Tool Options
             </div>
             {menuItems.map((item, i) => {
@@ -131,15 +131,15 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
                     setIsOpen(false);
                   }}
                   className={`
-                    w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group outline-none focus:bg-blue/5
-                    ${item.danger ? "hover:bg-red-500/5 text-red-500/80" : "hover:bg-blue/5 text-text-2 hover:text-blue"}
+                    w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-colors group outline-none focus:bg-brand-primary/5
+                    ${item.danger ? "hover:bg-red-500/5 text-red-500/80" : "hover:bg-brand-primary/5 text-text-2 hover:text-brand-primary"}
                   `}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="w-4 h-4 opacity-60 group-hover:opacity-100" />
                     <span className="text-xs font-bold">{item.label}</span>
                   </div>
-                  <ChevronRight className="w-3 h-3 opacity-20 group-hover:opacity-100 transition-all" />
+                  <ChevronRight className="w-3 h-3 opacity-20 group-hover:opacity-100 transition-transform" />
                 </button>
               );
             })}
