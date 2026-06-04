@@ -56,17 +56,21 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function(){
               try {
-                var t = localStorage.getItem('karuvi-theme') || 'system';
+                var s = JSON.parse(localStorage.getItem('karuvi-settings') || '{}');
+                var state = s.state || {};
+                var app = state.appearance || {};
+                
+                var t = app.theme || 'system';
                 var r = t;
                 if (t === 'system') {
                   r = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 document.documentElement.setAttribute('data-theme', r);
                 
-                var f = localStorage.getItem('karuvi-font-size') || '1.0';
+                var f = app.fontSize || '1.0';
                 document.documentElement.setAttribute('data-font-size', f);
 
-                if (localStorage.getItem('karuvi-high-contrast') === 'true') {
+                if (app.highContrast === true) {
                   document.documentElement.classList.add('high-contrast');
                 }
               } catch (e) {}

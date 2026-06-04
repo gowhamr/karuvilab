@@ -178,6 +178,21 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
   --text-2:      #CBD5E1;
   --text-3:      #A0AEC0;
   --text-4:      #8B99AE;
+
+  /* Restore Material Dark Tokens */
+  --kv-mat-base:          #0A0F1E;
+  --kv-mat-surface:       #0F172A;
+  --kv-mat-raised:        #1E293B;
+  --kv-mat-overlay:       #263348;
+  --kv-mat-hover:         #2D3D55;
+  --kv-mat-border:        rgba(255, 255, 255, 0.06);
+  --kv-mat-border-focus:  rgba(79, 70, 229, 0.6);
+  --kv-mat-shine:         rgba(255, 255, 255, 0.07);
+
+  --kv-glass-bg:          rgba(15, 23, 42, 0.75);
+  --kv-glass-border:      rgba(255, 255, 255, 0.08);
+  --kv-glass-shine:       rgba(255, 255, 255, 0.04);
+
   --border:      var(--kv-mat-border);
   --border-rgb:  30, 41, 59;
   --border-2:    #334155;

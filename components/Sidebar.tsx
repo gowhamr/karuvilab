@@ -294,16 +294,16 @@ export function Sidebar() {
     <>
       {!hydrated || isHoverable === false ? (
         <MobileSidebar>
-          <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-bg">
+          <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-mat-surface">
             <Link href="/" onClick={closeSidebar}>
               <KVLogo withText size="sm" loading="lazy" />
             </Link>
             <button
-              className="w-8 h-8 flex items-center justify-center hover:bg-black/5 rounded-xl transition-colors text-text-4"
+              className="w-11 h-11 flex items-center justify-center hover:bg-mat-hover rounded-xl transition-colors text-text-4"
               onClick={closeSidebar}
               aria-label="Close sidebar"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
           <SidebarContent 
@@ -320,7 +320,7 @@ export function Sidebar() {
           className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-mat-surface border-r border-mat-border shadow-mat-shine z-30 flex-col overflow-hidden"
           style={{ contain: 'layout style' }}
         >
-          <div className="h-20 flex items-center px-8 border-b border-border bg-bg">
+          <div className="h-20 flex items-center px-8 border-b border-border bg-mat-surface">
             <Link href="/">
               <KVLogo withText size="md" loading="lazy" />
             </Link>
@@ -332,8 +332,8 @@ export function Sidebar() {
             setIsOpen={closeSidebar} 
             isHoverable={isHoverable}
           />
-          <div className="p-4 border-t border-border bg-bg">
-             <div className="p-4 rounded-2xl border border-border bg-surface space-y-2 relative overflow-hidden group">
+          <div className="p-4 border-t border-border bg-mat-base">
+             <div className="p-4 rounded-2xl border border-border bg-mat-surface space-y-2 relative overflow-hidden group">
                 <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
                   <Shield className="w-3 h-3" />
                   Local-First
