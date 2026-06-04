@@ -207,6 +207,7 @@ export default function HomeClient() {
                 Clear
               </button>
             )}
+
           </div>
         </div>
 
