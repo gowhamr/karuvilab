@@ -1,11 +1,20 @@
 "use client";
 
 import { useRecoveryStore } from '@/src/store/useRecoveryStore';
+import { useShallow } from 'zustand/react/shallow';
 import { AlertCircle, X, RefreshCw, AlertTriangle } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 
 export function RecoveryBanner() {
-  const { isVisible, type, message, action, dismissBanner } = useRecoveryStore();
+  const { isVisible, type, message, action, dismissBanner } = useRecoveryStore(
+    useShallow((s) => ({
+      isVisible: s.isVisible,
+      type: s.type,
+      message: s.message,
+      action: s.action,
+      dismissBanner: s.dismissBanner,
+    }))
+  );
 
   if (!isVisible) return null;
 

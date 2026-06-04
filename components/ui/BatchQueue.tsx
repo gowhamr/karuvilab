@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { 
   File, 
   Trash2, 
@@ -11,21 +11,17 @@ import {
   CircleAlert as AlertCircle, 
   Download, 
   Archive, 
-  LoaderCircle as Loader2,
   X,
   RefreshCw,
-  Clock
+  Clock,
+  Inbox
 } from 'lucide-react';
-import { BatchItem, useBatchStore, EMPTY_BATCH_ITEMS } from '@/src/store/useBatchStore';
+import { BatchItem, useBatchStore } from '@/src/store/useBatchStore';
 import { useWorkflowStore, WorkflowItem } from '@/src/store/useWorkflowStore';
 import { findToolById, DataType } from '@/src/tool-registry';
 import { WorkflowSuggestions } from './WorkflowSuggestions';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { StatusBadge } from '@/components/system/StatusBadge';
+import { cn } from '@/src/lib/utils';
 
 interface BatchQueueProps {
   toolId: string;
@@ -86,7 +82,6 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       const completedItems = items.filter(i => i.status === 'completed' && i.result);
       const completedIds = completedItems.map(i => i.id);
       
-      // Check if we've already synced these exact items
       const alreadySynced = syncedRef.current.length === completedIds.length &&
                            syncedRef.current.every((id, idx) => id === completedIds[idx]);
 
@@ -105,216 +100,219 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     }
   }, [stats.completed, isProcessing, toolId, items.length, syncToolOutput]);
 
-  if (items.length === 0) return null;
+  if (items.length === 0) return (
+    <m.div 
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="flex flex-col items-center justify-center py-16 px-6 bg-surface border border-dashed border-border rounded-[32px] text-center"
+    >
+      <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center mb-6 shadow-inner">
+        <Inbox className="w-8 h-8 text-text-4 opacity-30" />
+      </div>
+      <h3 className="text-xl font-black text-text mb-2 tracking-tight">Queue is empty</h3>
+      <p className="text-sm text-text-4 max-w-[240px] leading-relaxed">
+        Upload files to begin batch processing.
+      </p>
+    </m.div>
+  );
+
+  const overallProgress = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
 
   return (
     <div className="space-y-6" role="region" aria-label="Processing Queue">
-      {/* Header / Stats */}
-      <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm overflow-hidden relative">
-        <div className={cn(
-          "absolute top-0 left-0 h-1 bg-blue transition-all duration-500",
-          isProcessing && "shimmer-wrapper"
-        )} 
-             style={{ width: `${stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}%` }}
-             role="progressbar"
-             aria-valuenow={stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}
-             aria-valuemin={0}
-             aria-valuemax={100}
-             aria-label="Overall batch progress" />
-        
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="space-y-1">
-            <h3 className="font-black text-xl flex items-center gap-2">
-              Queue <span className="text-sm font-medium text-text-3 bg-surface border border-border/50 px-2 py-0.5 rounded-full">{stats.total} files</span>
+      {/* Header / Master Stats */}
+      <div className="bg-surface border border-border rounded-[24px] p-6 shadow-sm relative overflow-hidden">
+        {/* Master Progress Track (E-002) */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-surface-2 overflow-hidden">
+          <m.div 
+            initial={{ width: 0 }}
+            animate={{ width: `${overallProgress}%` }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className={cn(
+              "h-full bg-gradient-to-r from-blue to-indigo-400 transition-all",
+              isProcessing && "animate-pulse"
+            )}
+            style={{ width: `${overallProgress}%` }}
+          />
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mt-1">
+          <div className="space-y-1.5">
+            <h3 className="font-black text-2xl flex items-center gap-3 tracking-tight">
+              Process Queue 
+              <span className="text-xs font-black text-blue bg-blue/10 border border-blue/20 px-2.5 py-1 rounded-full uppercase tracking-widest">
+                {stats.total} Files
+              </span>
             </h3>
-            <div className="flex flex-wrap gap-4 text-xs font-medium text-text-3" role="status" aria-label="Queue statistics">
-              <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-green-600 dark:text-green-400" aria-hidden="true" /> {stats.completed} Done</span>
-              <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-blue" aria-hidden="true" /> {stats.pending + stats.processing} Pending</span>
-              {stats.failed > 0 && <span className="flex items-center gap-1"><AlertCircle className="w-3.5 h-3.5 text-red-600 dark:text-red-400" aria-hidden="true" /> {stats.failed} Failed</span>}
-              {stats.saved > 0 && <span className="text-green-600 dark:text-green-400 font-bold">Saved {formatBytes(stats.saved)}</span>}
+            <div className="flex flex-wrap gap-4 text-[10px] font-black uppercase tracking-[0.15em] text-text-4" role="status">
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-green-500" /> {stats.completed} Complete</span>
+              <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-blue" /> {stats.pending + stats.processing} Active</span>
+              {stats.failed > 0 && <span className="flex items-center gap-1.5 text-red-500"><AlertCircle className="w-3 h-3" /> {stats.failed} Errors</span>}
+              {stats.saved > 0 && <span className="text-green-500 font-black">Saved {formatBytes(stats.saved)}</span>}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 w-full md:w-auto" role="toolbar" aria-label="Queue actions">
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
             {!isProcessing ? (
               <>
                 <button 
                   onClick={onProcess}
                   disabled={stats.pending + stats.failed === 0}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-blue text-white font-bold rounded-xl hover:opacity-90 active:scale-95 transition-all text-sm disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
-                  aria-label="Process all files in queue"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-blue text-white font-black rounded-xl hover:shadow-lg hover:shadow-blue/20 active:scale-95 transition-all text-xs uppercase tracking-widest disabled:opacity-30 outline-none focus-visible:ring-2 focus-visible:ring-blue"
                 >
-                  <Play className="w-4 h-4 fill-current" aria-hidden="true" /> Process All
+                  <Play className="w-3.5 h-3.5 fill-current" /> Execute All
                 </button>
                 {onDownloadAll && stats.completed > 0 && (
                   <button 
                     onClick={onDownloadAll}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-bg border border-border text-text font-bold rounded-xl hover:border-blue transition-all text-sm focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
-                    aria-label="Download all completed files as ZIP"
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-bg border border-border text-text font-black rounded-xl hover:border-blue transition-all text-xs uppercase tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-blue"
                   >
-                    <Download className="w-4 h-4" aria-hidden="true" /> Download ZIP
-                  </button>
-                )}
-                {stats.completed > 0 && (
-                  <button 
-                    onClick={() => clearCompletedItems(toolId)}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-bg border border-border text-text-4 font-bold rounded-xl hover:text-text hover:border-border/80 transition-all text-sm focus-visible:ring-2 focus-visible:ring-border/50 outline-none"
-                    aria-label="Clear completed files from queue"
-                  >
-                    Clear Done
+                    <Download className="w-3.5 h-3.5" /> Bundle .ZIP
                   </button>
                 )}
                 <button 
                   onClick={() => clearItems(toolId)}
-                  className="p-2.5 text-text-4 hover:text-red-500 transition-colors focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none rounded-lg"
-                  title="Clear Queue"
-                  aria-label="Clear entire queue"
+                  className="p-3 text-text-4 hover:text-red-500 transition-colors outline-none rounded-xl hover:bg-red-500/5"
+                  aria-label="Clear Queue"
                 >
-                  <Trash2 className="w-5 h-5" aria-hidden="true" />
+                  <Trash2 className="w-5 h-5" />
                 </button>
               </>
             ) : (
               <button 
                 onClick={() => cancelAll(toolId)}
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all text-sm border border-red-500/20 focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none"
-                aria-label="Cancel all processing"
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-red-500/10 text-red-500 font-black rounded-xl hover:bg-red-500/20 transition-all text-xs uppercase tracking-widest border border-red-500/20 outline-none focus-visible:ring-2 focus-visible:ring-red-500"
               >
-                <XCircle className="w-4 h-4" aria-hidden="true" /> Cancel All
+                <XCircle className="w-3.5 h-3.5" /> Halt Processing
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* List */}
-      <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar" role="list" aria-label="Queue items">
-        <AnimatePresence initial={false}>
-          {items.map((item) => (
-            <motion.div
+      {/* Staggered List */}
+      <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar-thin" role="list">
+        <AnimatePresence initial={false} mode="popLayout">
+          {items.map((item, index) => (
+            <m.div
               key={item.id}
               role="listitem"
               layout
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ delay: index * 0.04, duration: 0.2 }}
               className={cn(
-                "group bg-surface border rounded-2xl p-4 flex items-center gap-4 transition-all",
-                item.status === 'completed' ? "border-green-500/20 bg-green-500/[0.02]" : "border-border",
-                item.status === 'failed' ? "border-red-500/20 bg-red-500/[0.02]" : "",
-                item.status === 'processing' ? "border-blue/20 ring-1 ring-blue/10" : ""
+                "group bg-surface-2 border rounded-xl p-4 flex items-center gap-4 transition-all relative",
+                item.status === 'completed' ? "border-green-500/10" : "border-border hover:border-blue/30",
+                item.status === 'failed' ? "border-red-500/30 border-l-[4px] border-l-red-500" : ""
               )}
             >
-              <div className={cn(
-                "w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0 overflow-hidden",
-                item.status === 'completed' ? "bg-green-500/10 text-green-700 dark:text-green-400" : 
-                item.status === 'failed' ? "bg-red-500/10 text-red-700 dark:text-red-400" : "bg-bg text-text-4"
-              )} aria-hidden="true">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-bg border border-border shadow-inner overflow-hidden">
                 {renderThumbnail ? renderThumbnail(item) : (
-                  item.status === 'completed' ? <CheckCircle2 className="w-6 h-6" /> :
-                  item.status === 'failed' ? <AlertCircle className="w-6 h-6" /> :
-                  item.status === 'processing' ? <Loader2 className="w-6 h-6 animate-spin text-blue" /> :
-                  <File className="w-6 h-6" />
+                  <File className={cn("w-6 h-6", 
+                    item.status === 'completed' ? "text-green-500" : 
+                    item.status === 'failed' ? "text-red-500" : "text-text-4"
+                  )} />
                 )}
               </div>
 
-              <div className="flex-1 min-w-0 space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="font-bold truncate text-sm">{item.file.name}</p>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-text-4 whitespace-nowrap">
-                    {formatBytes(item.file.size)}
-                  </span>
+              <div className="flex-1 min-w-0 space-y-2">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="font-bold truncate text-sm text-text tracking-tight">{item.file.name}</p>
+                  <StatusBadge status={item.status as any} />
                 </div>
                 
-                {/* Progress / Info */}
+                {/* Progress Bar (E-002) */}
                 <div className="flex items-center gap-3">
-                  <div className="flex-1 h-1.5 bg-bg rounded-full overflow-hidden">
-                    <motion.div 
-                      role="progressbar"
-                      aria-valuenow={item.progress || (item.status === 'completed' ? 100 : 0)}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-label={`Processing progress for ${item.file.name}`}
+                  <div className="flex-1 h-1.5 bg-bg rounded-full overflow-hidden shadow-inner">
+                    <m.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
                       className={cn(
                         "h-full transition-all duration-300",
                         item.status === 'completed' ? "bg-green-500" :
                         item.status === 'failed' ? "bg-red-500" :
-                        item.status === 'cancelled' ? "bg-text-4" : "bg-blue"
+                        "bg-blue"
                       )}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
+                      style={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
                     />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-text-3 w-8 text-right" aria-hidden="true">
-                    {item.status === 'completed' ? '100%' : 
-                     item.status === 'processing' ? `${Math.round(item.progress)}%` : 
-                     item.status === 'pending' ? '0%' : '-'}
+                  <span className="text-[10px] font-black font-mono text-text-4 w-10 text-right">
+                    {item.status === 'completed' ? '100%' : `${Math.round(item.progress)}%`}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <p className={cn(
-                    "text-[10px] font-medium truncate",
-                    item.status === 'failed' ? "text-red-600 dark:text-red-400" : "text-text-4"
-                  )}>
-                    {item.message || (item.status === 'pending' ? 'Waiting...' : '')}
-                    {item.status === 'completed' && item.result && (
-                      <span className="text-green-600 dark:text-green-400 font-bold ml-2">
-                        → {formatBytes(item.result.compressedSize)} ({Math.round((1 - item.result.compressedSize / item.file.size) * 100)}% smaller)
-                      </span>
-                    )}
-                  </p>
+                <div className="flex items-center justify-between text-[10px] font-medium text-text-4 uppercase tracking-widest">
+                   <span>{formatBytes(item.file.size)}</span>
+                   {item.status === 'completed' && item.result && (
+                     <span className="text-green-500 font-black">
+                       → {formatBytes(item.result.compressedSize)} ({Math.round((1 - item.result.compressedSize / item.file.size) * 100)}% Small)
+                     </span>
+                   )}
+                   {item.status === 'failed' && (
+                     <button 
+                       onClick={() => useBatchStore.getState().updateItem(toolId, item.id, { status: 'pending', progress: 0, error: undefined })}
+                       className="text-blue font-black hover:underline underline-offset-4"
+                     >
+                       Retry
+                     </button>
+                   )}
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+              {/* Context Actions (Fades in on hover) */}
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
                 {item.status === 'completed' && (
                   <button 
                     onClick={() => onDownload(item)}
-                    className="p-2 text-blue hover:bg-blue/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
-                    title="Download"
+                    className="p-2 text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue"
                     aria-label={`Download ${item.file.name}`}
                   >
-                    <Download className="w-4 h-4" aria-hidden="true" />
-                  </button>
-                )}
-                {item.status === 'failed' && (
-                  <button 
-                    onClick={() => useBatchStore.getState().updateItem(toolId, item.id, { status: 'pending', progress: 0, error: undefined })}
-                    className="p-2 text-blue hover:bg-blue/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
-                    title="Retry"
-                    aria-label={`Retry ${item.file.name}`}
-                  >
-                    <RefreshCw className="w-4 h-4" aria-hidden="true" />
+                    <Download className="w-4 h-4" />
                   </button>
                 )}
                 {(item.status === 'processing' || item.status === 'pending') && (
                   <button 
                     onClick={() => cancelItem(toolId, item.id)}
-                    className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none"
-                    title="Cancel"
-                    aria-label={`Cancel processing for ${item.file.name}`}
+                    className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    aria-label={`Cancel ${item.file.name}`}
                   >
-                    <X className="w-4 h-4" aria-hidden="true" />
+                    <X className="w-4 h-4" />
                   </button>
                 )}
                 <button 
                   onClick={() => removeItem(toolId, item.id)}
                   disabled={item.status === 'processing'}
-                  className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-20 focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none"
-                  title="Remove"
-                  aria-label={`Remove ${item.file.name} from queue`}
+                  className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/5 rounded-lg disabled:opacity-10 transition-colors"
+                  aria-label="Remove item"
                 >
-                  <Trash2 className="w-4 h-4" aria-hidden="true" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>
 
       {stats.completed > 0 && !isProcessing && (
-        <WorkflowSuggestions />
+        <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <WorkflowSuggestions />
+        </m.div>
       )}
+
+      <style jsx global>{`
+        .custom-scrollbar-thin::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar-thin::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+          background: var(--kv-border);
+          border-radius: 4px;
+        }
+      `}</style>
     </div>
   );
 }
