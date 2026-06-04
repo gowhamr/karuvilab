@@ -2,6 +2,7 @@
 
 import { m } from "framer-motion";
 import { cn } from "@/src/lib/utils";
+import Image from "next/image";
 
 interface KVLogoProps {
   size?: "sm" | "md" | "lg" | "xl";
@@ -18,6 +19,15 @@ export function KVLogo({
   variant = "full",
   loading = "eager"
 }: KVLogoProps) {
+  const dimensions = {
+    sm: 32,
+    md: 40,
+    lg: 56,
+    xl: 80
+  };
+
+  const pixelSize = dimensions[size];
+
   return (
     <div 
       className={cn("flex items-center gap-3 group", className)} 
@@ -30,27 +40,25 @@ export function KVLogo({
           rotate: 5,
         }}
         className={cn(
-          "relative flex items-center justify-center rounded-xl transition-all duration-500",
+          "relative flex items-center justify-center transition-all duration-500",
           size === "sm" ? "w-8 h-8" : 
           size === "md" ? "w-10 h-10" : 
-          size === "lg" ? "w-14 h-14" : "w-20 h-20",
-          "bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 shadow-lg shadow-indigo-500/20"
+          size === "lg" ? "w-14 h-14" : "w-20 h-20"
         )}
       >
-        <div className="absolute inset-0 bg-white/10 rounded-xl" />
-        <span className={cn(
-          "font-black text-white font-dm-serif",
-          size === "sm" ? "text-lg" : 
-          size === "md" ? "text-xl" : 
-          size === "lg" ? "text-3xl" : "text-5xl"
-        )}>
-          K
-        </span>
+        <Image
+          src="/logo.png"
+          alt="KV Logo"
+          width={pixelSize}
+          height={pixelSize}
+          className="object-contain"
+          priority={loading === "eager"}
+        />
         
         {/* Animated Glow Effect */}
         <m.div 
           animate={{
-            opacity: [0.1, 0.3, 0.1],
+            opacity: [0.1, 0.2, 0.1],
             scale: [1, 1.1, 1]
           }}
           transition={{
@@ -58,7 +66,7 @@ export function KVLogo({
             duration: 3,
             ease: "easeInOut"
           }}
-          className="absolute inset-0 bg-indigo-400 blur-xl rounded-full -z-10"
+          className="absolute inset-0 bg-blue-400 blur-xl rounded-full -z-10"
         />
       </m.div>
 
