@@ -49,7 +49,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // 3. Individual Tools
-  const toolPages: MetadataRoute.Sitemap = ALL_TOOLS.map(tool => ({
+  const toolPages: MetadataRoute.Sitemap = ALL_TOOLS
+    .filter(tool => !THIN_TOOLS.includes(tool.id))
+    .map(tool => ({
     url: `${BASE_URL}/${tool.href.replace(/\/$/, '')}/`,
     lastModified: tool.lastUpdated ? new Date(tool.lastUpdated) : new Date(),
     changeFrequency: 'monthly',
