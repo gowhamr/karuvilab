@@ -6,13 +6,13 @@ import dynamic from "next/dynamic";
 import { m, AnimatePresence } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
-import { SearchBar } from "@/components/ui/SearchBar";
+import { SearchBar } from "@/components/ui/search/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { 
   ArrowRight, LayoutGrid, Zap, ShieldCheck, 
-  Search, Laptop, Sparkles, TrendingUp,
+  Laptop, Sparkles, TrendingUp,
   CloudOff, UserMinus, Lock, Heart, Command
 } from "lucide-react";
 
@@ -106,8 +106,6 @@ const itemVariants = {
 // ── Page Component ───────────────────────────────────────────────────────────
 
 export default function HomeClient() {
-  const searchQuery = useSearchStore(state => state.searchQuery);
-  const setSearchQuery = useSearchStore(state => state.setSearchQuery);
   const activeCategory = useSearchStore(state => state.activeCategory);
   const setActiveCategory = useSearchStore(state => state.setActiveCategory);
   
@@ -134,21 +132,14 @@ export default function HomeClient() {
   );
 
   const filteredTools = useMemo(() => {
-    if (!searchQuery && !activeCategory) return [];
+    if (!activeCategory) return [];
     return (ALL_TOOLS as ToolEntry[]).filter(tool => {
-      const q = searchQuery.toLowerCase();
-      const matchesSearch = q
-        ? tool.name.toLowerCase().includes(q) ||
-          tool.desc.toLowerCase().includes(q) ||
-          (tool.keywords ?? []).some((k: string) => k.toLowerCase().includes(q))
-        : true;
-      const matchesCat = activeCategory ? tool.category === activeCategory : true;
-      return matchesSearch && matchesCat;
+      return tool.category === activeCategory;
     });
-  }, [searchQuery, activeCategory]);
+  }, [activeCategory]);
 
   const { shouldBlur } = usePerformanceSettings();
-  const isSearching = !!(searchQuery || activeCategory);
+  const isFiltering = !!activeCategory;
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 pb-16 space-y-10 md:space-y-16">
@@ -178,7 +169,7 @@ export default function HomeClient() {
         </m.div>
 
         <div className="w-full max-w-xl mx-auto space-y-3">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <SearchBar variant="hero" />
           
           {/* Inline Trust Strip */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-2">
@@ -208,9 +199,9 @@ export default function HomeClient() {
             <div className="flex-1 overflow-hidden">
               <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
             </div>
-            {isSearching && (
+            {isFiltering && (
               <button
-                onClick={() => { setSearchQuery(""); setActiveCategory(null); }}
+                onClick={() => { setActiveCategory(null); }}
                 className="text-[9px] font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
               >
                 Clear
@@ -221,18 +212,18 @@ export default function HomeClient() {
 
         <div className="pt-8">
           <AnimatePresence mode="wait">
-            {isSearching ? (
+            {isFiltering ? (
               <m.section 
-                key="search-results"
+                key="category-results"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 className="space-y-6"
               >
                 <SectionHeader 
-                  title={searchQuery ? `Results for "${searchQuery}"` : (CATEGORIES.find(c => c.id === activeCategory)?.label || "Tools")}
-                  subtitle="Search results"
-                  icon={Search}
+                  title={CATEGORIES.find(c => c.id === activeCategory)?.label || "Tools"}
+                  subtitle="Category results"
+                  icon={LayoutGrid}
                 />
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">

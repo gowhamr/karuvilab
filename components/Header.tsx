@@ -45,8 +45,15 @@ export function Header() {
           </button>
 
           <Link href="/" className="min-h-[44px] flex items-center">
+            {/* Desktop: Full Logo with Image and Subtext */}
             <KVLogo withText size="md" className="hidden md:flex" loading="eager" />
-            <KVLogo size="md" className="md:hidden" loading="eager" />
+            
+            {/* Mobile: Just the 'KaruviLab' text for maximum space efficiency */}
+            <div className="md:hidden flex items-center">
+              <span className="font-dm-serif font-black text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-text via-text to-text-3">
+                KaruviLab
+              </span>
+            </div>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">

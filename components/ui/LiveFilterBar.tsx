@@ -10,7 +10,7 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export const SearchBar = memo(function SearchBar({ value, onChange, placeholder }: SearchBarProps) {
+export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, placeholder }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from "react";
 import { Search, Command } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { SearchOverlay } from "./SearchOverlay";
 import { cn } from "@/src/lib/utils";
 import { getDeviceCapabilities } from "@/src/utils";
 
@@ -14,33 +13,18 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ variant = "header", className }: SearchBarProps) {
-  const isPaletteOpen = useSearchStore(state => state.isPaletteOpen);
   const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsMobile(getDeviceCapabilities().isMobile);
-    
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      // Cmd+K or / to open search
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setIsPaletteOpen(true);
-      } else if (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
-        e.preventDefault();
-        setIsPaletteOpen(true);
-      }
-    };
-    
-    window.addEventListener("keydown", handleGlobalKeyDown);
-    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-  }, [setIsPaletteOpen]);
+  }, []);
 
   const isHero = variant === "hero";
 
   return (
     <>
-      {/* Desktop Persistent Button (Header) */}
+      {/* Search Trigger Button */}
       <button 
         onClick={() => setIsPaletteOpen(true)}
         aria-label="Search tools"
@@ -71,7 +55,7 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
         </div>
       </button>
 
-      {/* Floating Action Button (Mobile Fallback) - Only show if not hero or on specific conditions */}
+      {/* Floating Action Button (Mobile Fallback) - Only show if not hero */}
       {isMobile && !isHero && (
         <button
           onClick={() => setIsPaletteOpen(true)}
@@ -81,12 +65,6 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
           <Search className="w-6 h-6" />
         </button>
       )}
-
-      {/* Full-screen Overlay */}
-      <SearchOverlay 
-        isOpen={isPaletteOpen} 
-        onClose={() => setIsPaletteOpen(false)} 
-      />
     </>
   );
 }

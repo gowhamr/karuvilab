@@ -5,6 +5,7 @@ import { LazyMotion, domAnimation, MotionConfig } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useStorageMonitor } from "@/src/lib/hooks/use-storage-monitor";
 import { FeedbackModal } from "@/components/ui/FeedbackModal";
+import { SearchManager } from "@/components/ui/search/SearchManager";
 
 function StorageMonitor() {
   useStorageMonitor();
@@ -18,6 +19,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         <ToastProvider>
           <StorageMonitor />
           <FeedbackModal />
+          <SearchManager />
           {children}
         </ToastProvider>
       </MotionConfig>

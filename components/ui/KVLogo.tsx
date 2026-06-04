@@ -7,6 +7,7 @@ import Image from "next/image";
 interface KVLogoProps {
   size?: "sm" | "md" | "lg" | "xl";
   withText?: boolean;
+  showSubtext?: boolean;
   className?: string;
   variant?: "full" | "minimal";
   loading?: "eager" | "lazy";
@@ -15,6 +16,7 @@ interface KVLogoProps {
 export function KVLogo({ 
   size = "md", 
   withText = true, 
+  showSubtext = true,
   className,
   variant = "full",
   loading = "eager"
@@ -80,14 +82,16 @@ export function KVLogo({
           )}>
             KaruviLab
           </span>
-          <span className={cn(
-            "font-black uppercase tracking-[0.4em] text-blue leading-none",
-            size === "sm" ? "text-[6px]" : 
-            size === "md" ? "text-[8px]" : 
-            size === "lg" ? "text-[11px]" : "text-[14px]"
-          )}>
-            Elite Tools
-          </span>
+          {showSubtext && (
+            <span className={cn(
+              "font-black uppercase tracking-[0.4em] text-blue leading-none",
+              size === "sm" ? "text-[6px]" : 
+              size === "md" ? "text-[8px]" : 
+              size === "lg" ? "text-[11px]" : "text-[14px]"
+            )}>
+              Elite Tools
+            </span>
+          )}
         </div>
       )}
     </div>

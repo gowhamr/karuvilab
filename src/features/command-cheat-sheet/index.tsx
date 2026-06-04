@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { SearchBar } from '@/components/ui/SearchBar';
+import { LiveFilterBar } from '@/components/ui/LiveFilterBar';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
@@ -51,7 +51,7 @@ export default function CommandCheatSheet() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 items-center">
         <div className="flex-1 w-full">
-          <SearchBar 
+          <LiveFilterBar 
             value={search} 
             onChange={setSearch} 
             placeholder="Search commands or descriptions..."
