@@ -12,8 +12,8 @@ export function Checkbox({ label, className, id, ...props }: CheckboxProps) {
   const finalId = id || generatedId;
 
   return (
-    <div className={cn("flex items-center gap-3 cursor-pointer group", className)}>
-      <div className="relative flex items-center justify-center w-6 h-6">
+    <label className={cn("flex items-center gap-3 cursor-pointer group py-2.5 min-h-[44px]", className)}>
+      <div className="relative flex items-center justify-center w-6 h-6 flex-shrink-0">
         <input
           type="checkbox"
           id={finalId}
@@ -32,12 +32,11 @@ export function Checkbox({ label, className, id, ...props }: CheckboxProps) {
           <polyline points="20 6 9 17 4 12" />
         </svg>
       </div>
-      <label 
-        htmlFor={finalId} 
-        className="text-sm font-bold text-text-2 cursor-pointer select-none group-hover:text-text transition-colors"
+      <span 
+        className="text-sm font-bold text-text-2 select-none group-hover:text-text transition-colors pt-0.5"
       >
         {label}
-      </label>
-    </div>
+      </span>
+    </label>
   );
 }

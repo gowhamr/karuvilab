@@ -21,7 +21,7 @@ export function ThemeToggle() {
   };
 
   if (!isHydrated) {
-    return <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface border border-border shimmer-wrapper" />;
+    return <div className="w-11 h-11 md:w-10 md:h-10 rounded-xl bg-surface border border-border shimmer-wrapper opacity-50" />;
   }
 
   const resolvedTheme = theme === "system" 
@@ -33,7 +33,7 @@ export function ThemeToggle() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.9, rotate: 15 }}
       onClick={toggleTheme}
-      className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-colors group relative overflow-hidden"
+      className="w-11 h-11 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-colors group relative overflow-hidden"
       aria-label={`Switch to ${resolvedTheme === "light" ? "dark" : "light"} theme`}
     >
       <AnimatePresence mode="wait" initial={false}>

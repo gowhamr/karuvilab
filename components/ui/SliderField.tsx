@@ -25,25 +25,25 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
       </div>
 
       <Slider.Root
-        className="relative flex items-center select-none touch-none w-full h-5"
+        className="relative flex items-center select-none touch-none w-full h-11"
         value={[value]}
         onValueChange={(v) => onChange(v[0]!)}
         max={max}
         min={min}
         step={step}
       >
-        <Slider.Track className="bg-border relative grow rounded-full h-1.5">
+        <Slider.Track className="bg-border relative grow rounded-full h-2">
           <Slider.Range className="absolute bg-blue rounded-full h-full" />
         </Slider.Track>
         <Slider.Thumb
           id={id}
-          className="block w-5 h-5 bg-white border border-border rounded-full shadow-md cursor-pointer hover:border-blue/50 focus:outline-none focus:ring-2 focus:ring-blue transition-colors"
+          className="block w-6 h-6 bg-white border-2 border-blue rounded-full shadow-lg cursor-pointer hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue/20 transition-all active:scale-95"
           aria-label={label}
           aria-valuetext={display}
         />
       </Slider.Root>
 
-      <div className="flex justify-between text-[11px] text-text-3 font-bold uppercase tracking-wider" aria-hidden="true">
+      <div className="flex justify-between text-[12px] text-text-4 font-black uppercase tracking-[0.1em]" aria-hidden="true">
         <span>{format ? format(min) : min}</span>
         <span>{format ? format(max) : max}</span>
       </div>

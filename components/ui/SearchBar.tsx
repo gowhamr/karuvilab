@@ -40,7 +40,7 @@ export const SearchBar = memo(function SearchBar({ value, onChange, placeholder 
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder || "Search tools... (⌘K)"}
           aria-label="Search tools"
-          className="w-full h-full px-4 bg-transparent outline-none text-sm md:text-base text-text placeholder:text-text-4 font-bold tracking-tight"
+          className="w-full h-full px-4 bg-transparent outline-none text-[16px] md:text-base text-text placeholder:text-text-4 font-bold tracking-tight"
         />
 
         <div className="pr-4 hidden sm:flex items-center">

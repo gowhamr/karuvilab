@@ -182,12 +182,12 @@ export default function FakeDataGeneratorClient() {
               <div className="space-y-3">
                 <label className="text-sm font-bold text-text-2 px-1">Output Format</label>
                 <SegmentedControl
-                  value={format}
+                  activeId={format}
                   onChange={(v) => setFormat(v as any)}
                   options={[
-                    { label: "JSON", value: "json", icon: <FileJson className="w-4 h-4" /> },
-                    { label: "CSV", value: "csv", icon: <TableIcon className="w-4 h-4" /> },
-                    { label: "SQL", value: "sql", icon: <Database className="w-4 h-4" /> },
+                    { label: "JSON", id: "json", icon: <FileJson className="w-4 h-4" /> },
+                    { label: "CSV", id: "csv", icon: <TableIcon className="w-4 h-4" /> },
+                    { label: "SQL", id: "sql", icon: <Database className="w-4 h-4" /> },
                   ]}
                 />
               </div>
