@@ -16,7 +16,7 @@ interface SearchOverlayProps {
 
 export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   
   const [query, setQuery] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -56,10 +56,12 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       setFocusedIndex(-1);
       // Autofocus input
       setTimeout(() => {
-        if (inputRef.current) inputRef.current.focus();
+        const input = inputRef.current;
+        if (input) input.focus();
       }, 50);
     } else {
-      if (inputRef.current) inputRef.current.blur();
+      const input = inputRef.current;
+      if (input) input.blur();
     }
   }, [isOpen]);
 
@@ -89,10 +91,10 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       setFocusedIndex(prev => (prev > 0 ? prev - 1 : prev));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (focusedIndex >= 0 && focusedIndex < results.length) {
-        handleSelect(results[focusedIndex].tool.id);
-      } else if (results.length > 0) {
-        handleSelect(results[0].tool.id);
+      if (focusedIndex >= 0 && focusedIndex < results.length && results[focusedIndex]) {
+        handleSelect(results[focusedIndex]!.tool.id);
+      } else if (results.length > 0 && results[0]) {
+        handleSelect(results[0]!.tool.id);
       }
     }
   };
@@ -147,7 +149,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               />
               {query && (
                 <button
-                  onClick={() => { setQuery(''); inputRef.current?.focus(); }}
+                  onClick={() => { setQuery(''); const input = inputRef.current; if(input) input.focus(); }}
                   className="w-10 h-10 flex items-center justify-center text-text-4 hover:text-text rounded-full transition-colors"
                   aria-label="Clear search"
                 >
