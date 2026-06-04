@@ -14,6 +14,7 @@ export const merge_pdf: ToolEntry = {
     "combine",
     "join"
   ],
+  "sampleAssetKey": "pdfMerger",
   "popular": true,
   "priority": 0.8,
   "status": "stable",

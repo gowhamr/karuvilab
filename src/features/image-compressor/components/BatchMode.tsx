@@ -1,11 +1,11 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useImageCompressStore } from '../store';
-import { DropZone } from '@/components/ui/DropZone';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { ImageQueue } from './ImageQueue';
 import { AdvancedSettings } from './AdvancedSettings';
-import { Loader2, Download, Trash2, Zap, AlertTriangle } from 'lucide-react';
+import { Loader2, Download, Trash2, Zap, AlertTriangle, Image as ImageIcon } from 'lucide-react';
 import { getDeviceCapabilities, isLargeBatch } from '@/src/utils';
 
 export const BatchMode: React.FC = () => {
@@ -16,10 +16,11 @@ export const BatchMode: React.FC = () => {
   const downloadBatch = useImageCompressStore(state => state.downloadBatch);
   const isProcessing = useImageCompressStore(state => state.isProcessing);
   const zipProgress = useImageCompressStore(state => state.zipProgress);
+  const [dragState, setDragState] = useState<'idle' | 'hover' | 'over' | 'rejected'>('idle');
 
-  const handleFiles = React.useCallback((files: File[] | FileList) => {
-    const fileArray = files instanceof FileList ? Array.from(files) : files;
-    addFiles(fileArray);
+  const handleFiles = React.useCallback((files: File[]) => {
+    addFiles(files);
+    setDragState('idle');
   }, [addFiles]);
 
   const { isMobile } = getDeviceCapabilities();
@@ -30,13 +31,20 @@ export const BatchMode: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-8 space-y-6">
-        <DropZone
-          onFilesSelected={handleFiles}
-          accept="image/*"
-          multiple
-          title="Drop Images Here"
-          description="Process up to 100 images at once."
-          maxSize={25 * 1024 * 1024}
+        <EmptyState
+          toolId="imageCompressor"
+          icon={ImageIcon}
+          headline="Drop images here"
+          toolType="batch"
+          onDrop={handleFiles}
+          dragState={dragState}
+          onDragOver={() => setDragState('over')}
+          onDragLeave={() => setDragState('idle')}
+          formats={['PNG', 'JPG', 'WebP', 'AVIF']}
+          maxFiles="100 images"
+          maxSize="25MB per file"
+          outcomeText="Result: Download optimized images as ZIP"
+          sampleCTA={{ label: "Try Batch Sample" }}
         />
 
         {showLargeBatchWarning && (

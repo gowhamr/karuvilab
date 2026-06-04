@@ -14,6 +14,7 @@ export const json_formatter: ToolEntry = {
     "pretty",
     "validate"
   ],
+  "sampleAssetKey": "jsonFormatter",
   "popular": true,
   "difficulty": "beginner",
   "searchIntent": "informational",

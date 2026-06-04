@@ -15,6 +15,7 @@ export const image_compress: ToolEntry = {
     "png",
     "webp"
   ],
+  "sampleAssetKey": "imageCompressor",
   "popular": true,
   "priority": 0.8,
   "difficulty": "advanced"

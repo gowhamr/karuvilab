@@ -40,6 +40,7 @@ export interface ToolEntry {
   // Content Engine
   seoContent?: SEOContent;
   schemaType?: 'SoftwareApplication' | 'WebApplication';
+  sampleAssetKey?: string;
   
   // Custom grouping
   subCategory?: string;

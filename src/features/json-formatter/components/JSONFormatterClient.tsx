@@ -9,8 +9,9 @@ import { Code, Network, Info, FileJson, Layers, Sparkles, ChevronRight, ChevronD
 import { cn } from "@/src/lib/utils";
 import { workerManager } from "@/src/workers/manager";
 import { StatusBadge } from "@/components/system/StatusBadge";
-import { EmptyState } from "@/components/system/EmptyState";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { formatError } from "@/src/lib/formatError";
 
 type Indent = 2 | 4 | "tab";
@@ -134,6 +135,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
 }
 
 export default function JSONFormatterClient() {
+  const recordConversion = useAnalyticsStore(s => s.recordConversion);
   const [state, setState, isLoaded] = usePersistentState("json-formatter", {
     mode: "beautify" as "beautify" | "minify",
     input: "",
@@ -146,6 +148,7 @@ export default function JSONFormatterClient() {
   const [result, setResult] = useState<{ output: string; error: any; parsed: any }>({ 
     output: "", error: null, parsed: null 
   });
+  const [dragState, setDragState] = useState<'idle' | 'hover' | 'over' | 'rejected'>('idle');
 
   const setMode = (m: "beautify" | "minify") => setState(prev => ({ ...prev, mode: m, view: "raw" }));
   const setInput = (i: string) => setState(prev => ({ ...prev, input: i }));
@@ -172,10 +175,11 @@ export default function JSONFormatterClient() {
           } else {
             const spaces = indent === "tab" ? "\t" : indent;
             out = JSON.stringify(obj, null, spaces);
+            setResult({ output: out, error: null, parsed: obj });
+            recordConversion("jsonFormatter");
           }
-          setResult({ output: out, error: null, parsed: obj });
         } catch (e) {
-          const msg = (e as Error).message;
+            const msg = (e as Error).message;
           const lineMatch = msg.match(/position (\d+)/);
           let errorData: { message: string; line?: number } = { message: msg };
           if (lineMatch) {
@@ -199,6 +203,7 @@ export default function JSONFormatterClient() {
               }
             }
             setResult(res);
+            if (!res.error) recordConversion("jsonFormatter");
             setIsProcessing(false);
           }
         } catch (err: any) {
@@ -323,10 +328,27 @@ export default function JSONFormatterClient() {
         <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px] relative">
           {(!output && !isProcessing && !error) ? (
             <EmptyState 
-              title="No Data"
-              description="Enter JSON in the input field to see the formatted output here."
-              icon={<Code className="w-6 h-6" />}
-              workflow={["Paste JSON", "Choose Mode", "Explore View"]}
+              toolId="jsonFormatter"
+              icon={Code}
+              headline="Paste JSON here"
+              toolType="text"
+              onDrop={(files) => {
+                const reader = new FileReader();
+                reader.onload = (e) => setInput(e.target?.result as string);
+                if (files[0]) reader.readAsText(files[0]);
+              }}
+              dragState={dragState}
+              onDragOver={() => setDragState('over')}
+              onDragLeave={() => setDragState('idle')}
+              outcomeText="Result: Format and validate JSON instantly"
+              sampleCTA={{ label: "Try Sample JSON" }}
+              subAction={{
+                label: "Focus Input",
+                onClick: () => {
+                  const el = document.querySelector('textarea') as HTMLTextAreaElement;
+                  if (el) el.focus();
+                }
+              }}
             />
           ) : isProcessing ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">

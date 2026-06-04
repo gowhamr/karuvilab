@@ -1,27 +1,29 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useImageCompressStore } from '../store';
-import { DropZone } from '@/components/ui/DropZone';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { AdvancedSettings } from './AdvancedSettings';
 import { ComparisonView } from './ComparisonView';
-import { Loader2, AlertCircle, RefreshCw, Zap } from 'lucide-react';
+import { Loader2, AlertCircle, RefreshCw, Zap, Image as ImageIcon } from 'lucide-react';
 
 export const SingleMode: React.FC = () => {
   const items = useImageCompressStore(state => state.items);
   const addFiles = useImageCompressStore(state => state.addFiles);
   const compressItem = useImageCompressStore(state => state.compressItem);
+  const [dragState, setDragState] = useState<'idle' | 'hover' | 'over' | 'rejected'>('idle');
 
   const activeItem = React.useMemo(() => 
     items && items.length > 0 ? items[0] : undefined
   , [items]);
 
-  const handleFiles = React.useCallback((files: File[] | FileList) => {
+  const handleFiles = React.useCallback((files: File[]) => {
     try {
-      const fileArray = files instanceof FileList ? Array.from(files) : files;
-      if (addFiles) addFiles(fileArray);
+      if (addFiles) addFiles(files);
+      setDragState('idle');
     } catch (err) {
       console.error("Failed to add files:", err);
+      setDragState('rejected');
     }
   }, [addFiles]);
 
@@ -30,13 +32,19 @@ export const SingleMode: React.FC = () => {
       {/* Primary Display Area */}
       <div className="lg:col-span-8 space-y-6">
         {!activeItem ? (
-          <DropZone
-            onFilesSelected={handleFiles}
-            accept="image/*"
-            title="Choose Image"
-            description="Drag and drop or click to upload. JPEG, PNG, WebP, AVIF."
-            maxSize={50 * 1024 * 1024}
-            className="aspect-[4/3] sm:aspect-video"
+          <EmptyState
+            toolId="imageCompressor"
+            icon={ImageIcon}
+            headline="Drop images here"
+            toolType="file"
+            onDrop={handleFiles}
+            dragState={dragState}
+            onDragOver={() => setDragState('over')}
+            onDragLeave={() => setDragState('idle')}
+            formats={['PNG', 'JPG', 'WebP', 'AVIF']}
+            maxSize="50MB"
+            outcomeText="Result: Download optimized images"
+            sampleCTA={{ label: "Try Sample Image" }}
           />
         ) : (
           <div className="space-y-6">
