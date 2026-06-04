@@ -38,19 +38,19 @@ interface EmptyStateProps {
   dragState:    "idle" | "hover" | "over" | "rejected";
 
   // Constraints
-  formats?:     string[];
-  maxSize?:     string;
-  maxFiles?:    string;
-  outputFormats?: string[];
+  formats?:     string[] | undefined;
+  maxSize?:     string | undefined;
+  maxFiles?:    string | undefined;
+  outputFormats?: string[] | undefined;
 
   // Sub-action
   subAction?: {
     label:    string;
     onClick:  () => void;
-  };
+  } | undefined;
 
   // Trust (rotate A/B/C to prevent banner blindness)
-  trustVariant?: "A" | "B" | "C";
+  trustVariant?: "A" | "B" | "C" | undefined;
 
   // Outcome line (max 60 chars, verb-first)
   outcomeText?: string;

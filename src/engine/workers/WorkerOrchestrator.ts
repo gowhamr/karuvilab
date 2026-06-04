@@ -177,9 +177,9 @@ class WorkerOrchestrator {
   }
 
   /**
-   * Runs a worker task from the pool.
+   * Dispatches a worker task from the pool.
    */
-  run<T>(
+  dispatch<T>(
     method: keyof WorkerAPI,
     args: unknown[],
     transferables?: Transferable[],
@@ -202,6 +202,14 @@ class WorkerOrchestrator {
       });
       this.processQueue();
     });
+  }
+
+  /**
+   * @deprecated Use dispatch()
+   */
+  run<T>(...args: Parameters<this["dispatch"]>): Promise<T> {
+    // @ts-ignore
+    return this.dispatch(...args);
   }
 
   terminateAll(): void {
