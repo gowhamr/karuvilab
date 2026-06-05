@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Menu, WifiOff } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { m, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { m, useScroll, useTransform, AnimatePresence, useMotionTemplate } from "framer-motion";
 import { usePerformanceSettings, useOnlineStatus } from "@/src/lib/hooks";
 import { usePathname } from "next/navigation";
 import { KVLogo } from "@/components/ui/KVLogo";
@@ -17,22 +17,14 @@ export function Header() {
   const { scrollY } = useScroll();
   const { shouldBlur } = usePerformanceSettings();
   
-  const bg = useTransform(scrollY, [0, 50], [
-    "var(--kv-mat-base)",
-    "var(--kv-mat-base)"
-  ]);
-  const border = useTransform(scrollY, [0, 50], [
-    "rgba(var(--color-mat-border), 0)",
-    "var(--kv-mat-border)"
-  ]);
+  const borderOpacity = useTransform(scrollY, [0, 50], [0, 1]);
 
   return (
     <m.header 
       style={{ 
-        backgroundColor: bg,
-        borderBottomColor: border
+        borderBottomColor: `rgba(var(--border-rgb), ${borderOpacity.get()})` // This might not be reactive enough
       }}
-      className="sticky top-0 z-40 w-full border-b border-transparent h-[60px] md:h-[72px]"
+      className="sticky top-0 z-40 w-full border-b border-transparent h-[60px] md:h-[72px] bg-mat-base/80 backdrop-blur-xl transition-colors duration-500 ease-expo"
     >
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between gap-4 pt-safe">
         <div className="flex items-center gap-2 md:gap-8">
