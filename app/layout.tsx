@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable} preload`}>
       <head>
         <Script
           id="theme-init"
@@ -73,6 +73,13 @@ export default function RootLayout({
                 if (app.highContrast === true) {
                   document.documentElement.classList.add('high-contrast');
                 }
+
+                // Remove preload class after a frame to enable transitions
+                window.requestAnimationFrame(function() {
+                  setTimeout(function() {
+                    document.documentElement.classList.remove('preload');
+                  }, 10);
+                });
               } catch (e) {}
             })();`,
           }}

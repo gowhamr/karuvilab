@@ -22,25 +22,10 @@ export const createSettingsStore: StateCreator<SettingsStore> = (set) => ({
   ...initialSettings,
 
   updateAppearance: (settings: Partial<AppearanceSettings>) =>
-    set((state: SettingsStore) => {
-      const newState = { appearance: { ...state.appearance, ...settings } };
-      if (settings.theme) {
-        localStorage.setItem('karuvi-theme', settings.theme);
-      }
-      return newState;
-    }),
+    set((state: SettingsStore) => ({ appearance: { ...state.appearance, ...settings } })),
 
   updateAccessibility: (settings: Partial<AccessibilitySettings>) =>
-    set((state: SettingsStore) => {
-      const newState = { accessibility: { ...state.accessibility, ...settings } };
-      if (settings.fontScaling !== undefined) {
-        localStorage.setItem('karuvi-font-size', settings.fontScaling.toString());
-      }
-      if (settings.highContrast !== undefined) {
-        localStorage.setItem('karuvi-high-contrast', settings.highContrast.toString());
-      }
-      return newState;
-    }),
+    set((state: SettingsStore) => ({ accessibility: { ...state.accessibility, ...settings } })),
 
   updatePrivacy: (settings: Partial<PrivacySettings>) =>
     set((state: SettingsStore) => ({ privacy: { ...state.privacy, ...settings } })),

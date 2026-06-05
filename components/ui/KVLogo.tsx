@@ -68,7 +68,7 @@ export function KVLogo({
             duration: 3,
             ease: "easeInOut"
           }}
-          className="absolute inset-0 bg-blue-400 blur-xl rounded-full -z-10"
+          className="absolute inset-0 bg-brand-glow blur-xl rounded-full -z-10"
         />
       </m.div>
 

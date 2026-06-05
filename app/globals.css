@@ -154,6 +154,16 @@ html[data-font-size="1.2"] { font-size: 120%; }
 html[data-font-size="large"] { font-size: 110%; } /* Fallback for legacy values */
 html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values */
 
+html.preload *,
+html.preload *:before,
+html.preload *:after {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
 :root {
   color-scheme: light;
   --blue:         #4F46E5;
@@ -181,6 +191,20 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
   --bg-input:     #F8FAFC;
 
   --border-focus:   #4F46E5;
+
+  /* Material Light Overrides */
+  --kv-mat-base:          #F1F5F9;
+  --kv-mat-surface:       #FFFFFF;
+  --kv-mat-raised:        #F8FAFC;
+  --kv-mat-overlay:       #FFFFFF;
+  --kv-mat-hover:         #F1F5F9;
+  --kv-mat-border:        #E2E8F0;
+  --kv-mat-border-focus:  #4F46E5;
+  --kv-mat-shine:         rgba(255, 255, 255, 0.5);
+  
+  --kv-glass-bg:          rgba(255, 255, 255, 0.7);
+  --kv-glass-border:      rgba(0, 0, 0, 0.05);
+  --kv-glass-shine:       rgba(255, 255, 255, 0.8);
 }
 
 [data-theme="dark"] {
@@ -214,7 +238,7 @@ html[data-font-size="normal"] { font-size: 100%; } /* Fallback for legacy values
   --kv-glass-shine:       rgba(255, 255, 255, 0.04);
 
   --border:      var(--kv-mat-border);
-  --border-rgb:  30, 41, 59;
+  --border-rgb:  255, 255, 255;
   --border-2:    #334155;
   --bg:          var(--kv-mat-base);
   --bg-rgb:      2, 6, 23;
