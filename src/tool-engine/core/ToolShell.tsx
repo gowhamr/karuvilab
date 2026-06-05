@@ -10,15 +10,24 @@ import { ErrorView } from "./ErrorView";
 import { OutputPanel } from "./OutputPanel";
 import { ActionBar } from "./ActionBar";
 import { useToolEngine } from "../hooks/useToolEngine";
+import { toolConfigMap } from "../registry";
 import type { ToolConfig } from "../types/ToolConfig";
 import { Settings as SettingsIcon } from "lucide-react";
 import { ToolIcon } from "@/components/ui/Icons";
+import { notFound } from "next/navigation";
 
 interface ToolShellProps {
-  config: ToolConfig;
+  toolId: string;
 }
 
-export function ToolShell({ config }: ToolShellProps) {
+export function ToolShell({ toolId }: ToolShellProps) {
+  const config = toolConfigMap.get(toolId);
+
+  if (!config) {
+    notFound();
+    return null;
+  }
+
   const { 
     phase, 
     progress, 

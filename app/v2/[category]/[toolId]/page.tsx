@@ -1,7 +1,7 @@
 // app/v2/[category]/[toolId]/page.tsx
 import { notFound } from "next/navigation";
-import { toolConfigMap } from "@/src/tool-engine/registry";
-import { ToolShell } from "@/src/tool-engine/core/ToolShell";
+import { toolConfigMap, ALL_TOOL_CONFIGS } from "@/src/tool-engine/registry";
+import V2ToolClientWrapper from "./V2ToolClientWrapper";
 import { Metadata } from "next";
 
 interface PageProps {
@@ -9,6 +9,13 @@ interface PageProps {
     category: string;
     toolId: string;
   }>;
+}
+
+export async function generateStaticParams() {
+  return ALL_TOOL_CONFIGS.map((config) => ({
+    category: config.category,
+    toolId: config.id,
+  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -32,5 +39,5 @@ export default async function ToolEnginePage({ params }: PageProps) {
     notFound();
   }
 
-  return <ToolShell config={config} />;
+  return <V2ToolClientWrapper toolId={toolId} />;
 }
