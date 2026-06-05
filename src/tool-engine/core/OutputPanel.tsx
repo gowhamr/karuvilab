@@ -1,62 +1,80 @@
 // src/tool-engine/core/OutputPanel.tsx
+
 "use client";
 
-import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
+import React, { lazy, Suspense } from "react";
+import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
+import { ErrorView } from "./ErrorView";
+import { logger } from "@/src/lib/logger";
+import DownloadRenderer from "../renderers/DownloadRenderer";
+import TextRenderer from "../renderers/TextRenderer";
+import PreviewRenderer from "../renderers/PreviewRenderer";
+import JsonRenderer from "../renderers/JsonRenderer";
+import TableRenderer from "../renderers/TableRenderer";
+import ChartRenderer from "../renderers/ChartRenderer";
+import type { ToolConfig } from "../types/ToolConfig";
 import type { ToolResult } from "../types/ToolResult";
-import { Loader2 } from "lucide-react";
-
-// Lazy load all renderers
-const DownloadRenderer = dynamic(() => import("../renderers/DownloadRenderer"), { ssr: false });
-const TextRenderer = dynamic(() => import("../renderers/TextRenderer"), { ssr: false });
-const PreviewRenderer = dynamic(() => import("../renderers/PreviewRenderer"), { ssr: false });
-const JsonRenderer = dynamic(() => import("../renderers/JsonRenderer"), { ssr: false });
-const TableRenderer = dynamic(() => import("../renderers/TableRenderer"), { ssr: false });
-const ChartRenderer = dynamic(() => import("../renderers/ChartRenderer"), { ssr: false });
 
 interface OutputPanelProps {
-  result: ToolResult | null;
+  result: ToolResult;
+  config: ToolConfig;
+  onReset: () => void;
 }
 
-export function OutputPanel({ result }: OutputPanelProps) {
-  if (!result || result.status !== "success") return null;
+export function OutputPanel({ result, config, onReset }: OutputPanelProps) {
+  if (result.status !== "success") return null;
 
-  const renderContent = () => {
-    switch (result.outputType) {
-      case "download":
-        return <DownloadRenderer result={result} />;
-      case "text":
-        return <TextRenderer result={result} />;
-      case "preview": 
-        return <PreviewRenderer result={result} />;
-      case "json": 
-        return <JsonRenderer result={result} />;
-      case "table": 
-        return <TableRenderer result={result} />;
-      case "chart": 
-        return <ChartRenderer result={result} />;
-      // case "custom": 
-      //   We would need ToolConfig here to pass to CustomRenderer
-      default:
-        return (
-          <div className="p-8 text-center text-text-4">
-            Unsupported output type: {result.outputType}
-          </div>
+  switch (result.outputType) {
+    case "download":
+      return <DownloadRenderer result={result} />;
+
+    case "preview":
+      return <PreviewRenderer result={result} />;
+
+    case "text":
+      return <TextRenderer result={result} />;
+
+    case "json":
+      return <JsonRenderer result={result} />;
+
+    case "table":
+      return <TableRenderer result={result} />;
+
+    case "chart":
+      return <ChartRenderer result={result} />;
+
+    case "custom": {
+      if (!config.customRenderer) {
+        logger.error(
+          "outputType=custom but no customRenderer in ToolConfig",
+          { toolId: config.id, action: "OutputPanel.render" }
         );
-    }
-  };
-
-  return (
-    <Suspense 
-      fallback={
-        <div className="p-12 flex justify-center bg-mat-surface border border-mat-border rounded-[32px] shadow-mat-shine">
-          <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
-        </div>
+        return <ErrorView error="Renderer not configured for this tool." onReset={onReset} />;
       }
-    >
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {renderContent()}
-      </div>
-    </Suspense>
-  );
+
+      const CustomRenderer = lazy(
+        () => config.customRenderer!()
+                .then(m => ({ default: m.default }))
+      );
+
+      return (
+        <Suspense fallback={<ToolSkeleton />}>
+          <CustomRenderer result={result} />
+        </Suspense>
+      );
+    }
+
+    default: {
+      logger.error(
+        "OutputPanel received unknown outputType",
+        {
+          // @ts-ignore - explicitly logging unknown type
+          outputType: result.outputType,
+          toolId:     config.id,
+          action:     "OutputPanel.render"
+        }
+      );
+      return <ErrorView error="An unexpected error occurred." onReset={onReset} />;
+    }
+  }
 }

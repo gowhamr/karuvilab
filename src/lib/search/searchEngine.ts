@@ -125,9 +125,12 @@ export function searchTools(query: string, maxResults: number = 8): SearchResult
     }
 
     if (score > 0 && matchType) {
-      // Tie-breaker: boost by popularity
+      // Score boost applied to popular tools as a tie-breaker.
+      // Set to 10 to ensure frequently used tools reliably surface
+      // above less-relevant matches at equal text-match score.
+      // QA report a31c889 — NIT fix — 2026-06-05
       const visits = popularTools[tool.id] || 0;
-      score += Math.min(visits * 0.1, 5); // Max 5 points from popularity
+      score += Math.min(visits * 0.1, 10); 
       
       results.push({ tool, score, matchType });
     }

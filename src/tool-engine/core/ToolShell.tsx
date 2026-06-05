@@ -105,7 +105,7 @@ export function ToolShell({ toolId }: ToolShellProps) {
             {phase === "validating" && <ProcessingView progress={0} />}
             {phase === "processing" && <ProcessingView progress={progress} onCancel={cancel} />}
             {phase === "error" && <ErrorView error={error} onReset={reset} />}
-            {phase === "done" && <OutputPanel result={result} />}
+            {phase === "done" && result && <OutputPanel result={result} config={config} onReset={reset} />}
           </div>
 
           {/* Actions */}

@@ -1,5 +1,5 @@
 // src/features/image-compressor/processor.ts
-import type { ToolProcessor } from "@/src/tool-engine/types";
+import type { ToolProcessor, ToolResult } from "@/src/tool-engine/types";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { logger } from "@/src/lib/logger";
 
@@ -24,13 +24,14 @@ const processor: ToolProcessor<ImageCompressorOptions> = {
     return null;
   },
 
-  async execute(input: unknown, options: ImageCompressorOptions, signal: AbortSignal, onProgress: (progress: number) => void) {
+  async execute(input: unknown, options: ImageCompressorOptions, signal: AbortSignal, onProgress: (progress: number) => void): Promise<ToolResult> {
+    const start = performance.now();
     onProgress(0);
 
     const files = Array.isArray(input) ? input as File[] : [input as File];
     if (files.length === 0) throw new Error("No files to process.");
 
-    const file = files[0]; // For single mode example. Batch mode would handle multiple.
+    const file = files[0];
     if (!file) throw new Error("File is undefined");
 
     let arrayBuffer: ArrayBuffer;
@@ -38,10 +39,21 @@ const processor: ToolProcessor<ImageCompressorOptions> = {
     try {
       arrayBuffer = await file.arrayBuffer();
     } catch (e) {
-      throw new Error("Failed to read file.");
+      return {
+        status: "error",
+        outputType: "download",
+        error: "Failed to read file.",
+        processingMs: performance.now() - start,
+      };
     }
 
-    if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+    if (signal.aborted) {
+      return {
+        status: "cancelled",
+        outputType: "download",
+        processingMs: performance.now() - start,
+      };
+    }
 
     onProgress(20);
 
@@ -63,7 +75,13 @@ const processor: ToolProcessor<ImageCompressorOptions> = {
         signal
       ) as Uint8Array;
 
-      if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+      if (signal.aborted) {
+        return {
+          status: "cancelled",
+          outputType: "download",
+          processingMs: performance.now() - start,
+        };
+      }
 
       onProgress(100);
 
@@ -79,16 +97,28 @@ const processor: ToolProcessor<ImageCompressorOptions> = {
         mimeType: formatToUse,
         inputSizeBytes: file.size,
         outputSizeBytes: outputBlob.size,
+        processingMs: performance.now() - start,
       };
 
     } catch (e: any) {
-      if (e.name === "AbortError") throw e;
+      if (e.name === "AbortError") {
+        return {
+          status: "cancelled",
+          outputType: "download",
+          processingMs: performance.now() - start,
+        };
+      }
       
-      logger.error("[ImageCompressorProcessor] Compression failed", e);
+      logger.error("[ImageCompressorProcessor] Compression failed", {
+        toolId: "image-compressor",
+        action: "execute",
+        error: e.message
+      });
       return {
         status: "error",
         outputType: "download",
         error: "Image compression failed. The file might be corrupted or in an unsupported sub-format.",
+        processingMs: performance.now() - start,
       };
     }
   }

@@ -1,5 +1,5 @@
 // src/features/pdf-merger/processor.ts
-import type { ToolProcessor } from "@/src/tool-engine/types";
+import type { ToolProcessor, ToolResult } from "@/src/tool-engine/types";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { logger } from "@/src/lib/logger";
 
@@ -23,7 +23,8 @@ const processor: ToolProcessor<PdfMergerOptions> = {
     return null;
   },
 
-  async execute(input: unknown, options: PdfMergerOptions, signal: AbortSignal, onProgress: (progress: number) => void) {
+  async execute(input: unknown, options: PdfMergerOptions, signal: AbortSignal, onProgress: (progress: number) => void): Promise<ToolResult> {
+    const start = performance.now();
     onProgress(0);
 
     const files = Array.isArray(input) ? input as File[] : [input as File];
@@ -33,7 +34,13 @@ const processor: ToolProcessor<PdfMergerOptions> = {
     let totalSize = 0;
 
     for (let i = 0; i < files.length; i++) {
-      if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+      if (signal.aborted) {
+        return {
+          status: "cancelled",
+          outputType: "download",
+          processingMs: performance.now() - start,
+        };
+      }
       try {
         const file = files[i];
         if (!file) continue;
@@ -42,11 +49,22 @@ const processor: ToolProcessor<PdfMergerOptions> = {
         totalSize += buffer.byteLength;
         onProgress((i / files.length) * 20); // First 20% is reading
       } catch (e) {
-        throw new Error(`Failed to read file: ${files[i]?.name}`);
+        return {
+          status: "error",
+          outputType: "download",
+          error: `Failed to read file: ${files[i]?.name}`,
+          processingMs: performance.now() - start,
+        };
       }
     }
 
-    if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+    if (signal.aborted) {
+      return {
+        status: "cancelled",
+        outputType: "download",
+        processingMs: performance.now() - start,
+      };
+    }
 
     try {
       // Dispatch to worker
@@ -58,7 +76,13 @@ const processor: ToolProcessor<PdfMergerOptions> = {
         signal
       ) as Uint8Array;
 
-      if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+      if (signal.aborted) {
+        return {
+          status: "cancelled",
+          outputType: "download",
+          processingMs: performance.now() - start,
+        };
+      }
 
       onProgress(100);
 
@@ -73,16 +97,28 @@ const processor: ToolProcessor<PdfMergerOptions> = {
         mimeType: "application/pdf",
         inputSizeBytes: totalSize,
         outputSizeBytes: outputBlob.size,
+        processingMs: performance.now() - start,
       };
 
     } catch (e: any) {
-      if (e.name === "AbortError") throw e;
+      if (e.name === "AbortError") {
+        return {
+          status: "cancelled",
+          outputType: "download",
+          processingMs: performance.now() - start,
+        };
+      }
       
-      logger.error("[PdfMergerProcessor] Merge failed", e);
+      logger.error("[PdfMergerProcessor] Merge failed", {
+        toolId: "pdf-merger",
+        action: "execute",
+        error: e.message
+      });
       return {
         status: "error",
         outputType: "download",
         error: "PDF merge failed. Ensure all files are valid, unencrypted PDFs.",
+        processingMs: performance.now() - start,
       };
     }
   }
