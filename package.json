@@ -14,7 +14,7 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "postinstall": "node scripts/sync-workers.js",
-    "prebuild": "node scripts/sync-workers.js"
+    "prebuild": "node scripts/sync-workers.js && npx tsx src/tool-engine/validators/validateRegistry.ts"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",

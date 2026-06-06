@@ -15,6 +15,7 @@ export const initialSettings = {
     telemetryEnabled: false,
     historyEnabled: true,
   } as PrivacySettings,
+  adsConsent: false,
   version: 1,
 };
 

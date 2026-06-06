@@ -43,7 +43,7 @@ export function PrivacyFeatures() {
             </div>
             
             <div className="relative z-10 space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-white transition-all duration-500">
+              <div className="w-12 h-12 rounded-2xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-[--kv-text] transition-all duration-500">
                 <f.icon className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-black text-text tracking-tight">{f.title}</h3>
@@ -59,7 +59,7 @@ export function PrivacyFeatures() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-br from-blue to-indigo-600 rounded-[40px] p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue/20"
+        className="bg-gradient-to-br from-blue to-indigo-600 rounded-[40px] p-8 md:p-12 text-[--kv-text] flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue/20"
       >
         <div className="space-y-4 text-center md:text-left">
           <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
@@ -72,7 +72,7 @@ export function PrivacyFeatures() {
         </div>
         <Link 
           href="/privacy" 
-          className="px-8 py-4 bg-white text-blue rounded-2xl font-black hover:scale-105 transition-transform shadow-xl whitespace-nowrap"
+          className="px-8 py-4 bg-[--kv-mat-surface] text-[--kv-text] rounded-2xl font-black hover:scale-105 transition-transform shadow-xl whitespace-nowrap"
         >
           View Privacy Policy
         </Link>

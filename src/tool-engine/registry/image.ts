@@ -48,7 +48,9 @@ export const imageCompressorConfig: ToolConfig = {
     title:       "Image Compressor — KaruviLab",
     description: "Compress PNG, JPG and WebP images locally. No upload.",
     keywords:    ["image compressor", "compress png", "reduce image size"],
+    canonical:   "/image-tools/image-compressor",
+    ogImage:     "/icons/icon-512.png",
   },
 
-  relatedTools: ["image-resizer", "color-extractor", "svg-optimizer"],
+  relatedTools: ["image-resizer", "color-palette-extractor", "image-converter"],
 };

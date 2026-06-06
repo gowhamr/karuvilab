@@ -64,6 +64,8 @@ export interface ToolConfig<
     title:       string;
     description: string;
     keywords:    string[];
+    canonical:   string; // Required canonical path
+    ogImage:     string; // Required OpenGraph image path
   };
 
   // Related tools (for discovery — min 3 required)

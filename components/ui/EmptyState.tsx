@@ -27,6 +27,13 @@ const TRUST_COPY: Record<"A" | "B" | "C", { title: string, desc: string }> = {
 
 const TRUST_VARIANTS = ["A", "B", "C"] as const;
 
+const dragStateClasses = {
+  idle:     "border-dashed border-[--kv-mat-border]",
+  hover:    "border-dashed border-[--kv-brand-primary]/40 bg-[--kv-brand-primary]/4",
+  over:     "border-solid border-[--kv-brand-primary] bg-[--kv-brand-primary]/8",
+  rejected: "border-solid border-red-500 bg-red-500/6",
+} as const;
+
 /**
  * Resolves trust variant for a tool.
  * If explicitly set in config → use it.
@@ -145,6 +152,15 @@ export function EmptyState({
     }
   };
 
+  const onBrowse = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (subAction?.onClick) {
+      subAction.onClick();
+    } else {
+      handleZoneClick(e);
+    }
+  };
+
   useEffect(() => {
     if (dragState === "rejected") {
       setIsRejected(true);
@@ -182,10 +198,10 @@ export function EmptyState({
         onDrop={(e) => { e.preventDefault(); handleEngagement(); }}
         onClick={handleZoneClick}
         className={cn(
-          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border-2 border-dashed rounded-[32px] p-8 md:p-12 min-h-[240px] md:min-h-[320px]",
-          dragState === "idle" && "border-mat-border bg-transparent hover:border-brand-primary/40 hover:bg-brand-primary/5",
-          dragState === "over" && "border-brand-primary bg-brand-primary/10",
-          (dragState === "rejected" || isRejected) && "border-error bg-error/5 animate-shake"
+          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border-2 rounded-[32px] p-8 md:p-12 min-h-[240px] md:min-h-[320px]",
+          dragStateClasses[dragState || "idle"],
+          (dragState === "rejected" || isRejected) && dragStateClasses.rejected,
+          isRejected && "animate-shake"
         )}
       >
         <div className={cn("mb-6 p-6 rounded-3xl bg-mat-base border border-mat-border transition-all", dragState === "over" && "scale-110 text-brand-primary", isRejected && "text-error")}>
@@ -196,14 +212,25 @@ export function EmptyState({
           {dragState === "over" ? `Release to process` : isRejected ? "File type not supported" : headline}
         </h2>
 
-        <div className="mb-8">
-           <button className="md:hidden w-full h-11 px-6 bg-mat-raised border border-mat-border rounded-xl text-sm font-bold text-text-2">Browse files</button>
-           <p className="hidden md:block text-sm font-bold text-text-4">or <span className="text-brand-primary hover:underline">browse files</span> from your device</p>
+        <div className="mb-8 w-full max-w-xs px-4 flex justify-center">
+          {/* Desktop */}
+          <span className="hidden md:inline text-[14px] text-[--kv-brand-primary] cursor-pointer hover:underline"
+                onClick={onBrowse}>
+            or browse files
+          </span>
+
+          {/* Mobile */}
+          <button
+            onClick={onBrowse}
+            className="md:hidden w-full h-[44px] rounded-lg border border-[--kv-mat-border] bg-transparent hover:bg-[--kv-mat-hover] text-[14px] font-medium text-[--kv-text] transition-colors duration-150"
+          >
+            Browse files
+          </button>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-          {formats?.map(f => <span key={f} className="px-2 py-1 bg-mat-raised border border-mat-border rounded-md text-[10px] font-black uppercase text-text-3">{f}</span>)}
-          {maxSize && <span className="text-[10px] font-bold text-text-4 px-2">Max: {maxSize}</span>}
+          {formats?.map(f => <span key={f} className="px-2 py-1 bg-mat-raised border border-mat-border rounded-md text-[12px] font-black uppercase text-text-3">{f}</span>)}
+          {maxSize && <span className="text-[12px] font-bold text-text-4 px-2">Max: {maxSize}</span>}
         </div>
 
         <div className="mb-8 flex flex-col items-center gap-1">
@@ -211,13 +238,14 @@ export function EmptyState({
             <ShieldCheck className="w-4 h-4" />
             <span className="text-xs font-black uppercase tracking-widest">{trust.title}</span>
           </div>
-          <p className="text-[10px] font-bold text-text-4 opacity-60">{trust.desc}</p>
+          <p className="text-[12px] font-bold text-text-4 opacity-60">{trust.desc}</p>
         </div>
 
         {outcomeText && (
-          <div className="mb-8 w-full max-w-[280px] border-t border-mat-border pt-4">
-            <p className="text-[11px] font-bold text-text-4 truncate">Result: {outcomeText.replace(/^Result:\s*/i, '')}</p>
-          </div>
+          <p className="text-[12px] text-[--kv-text-muted] italic mb-8">
+            Result: {outcomeText.replace(/^Result:\s*/i, '').slice(0, 52)}
+            {/* 52 chars + "Result: " prefix = 60 total */}
+          </p>
         )}
 
         <button onClick={handleSampleClick} className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-xs font-black uppercase tracking-widest text-brand-primary flex items-center gap-2">

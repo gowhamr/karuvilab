@@ -13,6 +13,31 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   trailingSlash: true,
+  async headers() {
+    const cspHeader = `
+      default-src 'self';
+      script-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: blob: https://pagead2.googlesyndication.com;
+      worker-src 'self' blob:;
+      connect-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://open.er-api.com https://api.frankfurter.dev;
+      object-src 'none';
+      frame-ancestors 'none';
+      base-uri 'self';
+    `.replace(/\s{2,}/g, ' ').trim();
+
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: cspHeader,
+          },
+        ],
+      },
+    ];
+  },
   typescript: {
     ignoreBuildErrors: false,
   },

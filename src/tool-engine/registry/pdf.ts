@@ -46,7 +46,9 @@ export const pdfMergerConfig: ToolConfig = {
     title:       "PDF Merger — KaruviLab",
     description: "Merge PDF files locally. No upload. No account.",
     keywords:    ["pdf merger", "combine pdf", "merge pdf files"],
+    canonical:   "/pdf-tools/merge-pdf",
+    ogImage:     "/icons/icon-512.png",
   },
 
-  relatedTools: ["pdf-splitter", "pdf-to-word", "file-validator"],
+  relatedTools: ["split-pdf", "pdf-to-word", "validate"],
 };

@@ -12,7 +12,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 import { CookieConsentBanner } from "@/components/system/CookieConsentBanner";
-import { AdSenseScript } from "@/components/system/AdSenseScript";
+import { AdSenseConditional } from "@/components/system/AdSenseConditional";
 import { StructuredData } from "@/src/lib/seo";
 import Script from "next/script";
 
@@ -92,16 +92,17 @@ export default function RootLayout({
         >
           Skip to Content
         </a>
-        <AdSenseScript />
         <ClientProviders>
           <RecoveryBanner />
           <CookieConsentBanner />
+          <AdSenseConditional />
           <div className="flex min-h-screen">
             <Sidebar />
             
             <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">
               <Header />
               
+              {/* outline-none: receives programmatic focus only */}
               <main id="main-content" className="flex-1 pb-20 md:pb-0 outline-none" tabIndex={-1}>
                 {children}
               </main>

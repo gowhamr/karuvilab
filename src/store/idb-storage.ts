@@ -15,7 +15,18 @@ export const idbStorage = {
   getItem: async (key: string): Promise<string | null> => {
     if (!dbPromise) return null;
     const db = await dbPromise;
-    return (await db.get(STORE_NAME, key)) || null;
+    let val = (await db.get(STORE_NAME, key)) || null;
+
+    if (!val && typeof window !== 'undefined') {
+      const legacyVal = localStorage.getItem(key);
+      if (legacyVal) {
+        val = legacyVal;
+        await db.put(STORE_NAME, val, key);
+        localStorage.removeItem(key);
+        console.log(`[idbStorage] Transparently migrated legacy key "${key}" from localStorage to IndexedDB.`);
+      }
+    }
+    return val;
   },
   setItem: async (key: string, value: string): Promise<void> => {
     if (!dbPromise) return;

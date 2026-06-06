@@ -4,16 +4,21 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Cookie } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
+import { idbStorage } from "@/src/store/idb-storage";
+import { useSettingsStore } from "@/src/store/settings/store";
 
 export function CookieConsentBanner() {
   const [consent, setConsent] = useState<string | null>(null);
 
   useEffect(() => {
-    setConsent(localStorage.getItem("kv-ad-consent"));
+    idbStorage.getItem("kv-ad-consent").then((val) => {
+      setConsent(val);
+    });
   }, []);
 
-  const handleConsent = (value: "accepted" | "rejected") => {
-    localStorage.setItem("kv-ad-consent", value);
+  const handleConsent = async (value: "accepted" | "rejected") => {
+    await idbStorage.setItem("kv-ad-consent", value);
+    useSettingsStore.setState({ adsConsent: value === "accepted" });
     setConsent(value);
     if (value === "accepted") {
       window.location.reload();

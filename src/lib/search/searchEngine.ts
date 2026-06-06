@@ -10,6 +10,14 @@ export interface SearchResult {
 
 const STOP_WORDS = new Set(["a", "an", "the", "in", "on", "at", "to", "for", "of", "and", "or", "how", "do", "i", "can", "is", "what", "with"]);
 
+/**
+ * Score boost for popular tools as tie-breaker.
+ * Increased from 5 → 10 per QA report a31c889 (2026-06-05).
+ * Ensures frequently visited tools reliably surface above
+ * equal-scored less-visited alternatives.
+ */
+const POPULARITY_BOOST = 10;
+
 function tokenizeQuery(query: string): string[] {
   return query
     .toLowerCase()
@@ -130,7 +138,7 @@ export function searchTools(query: string, maxResults: number = 8): SearchResult
       // above less-relevant matches at equal text-match score.
       // QA report a31c889 — NIT fix — 2026-06-05
       const visits = popularTools[tool.id] || 0;
-      score += Math.min(visits * 0.1, 10); 
+      score += Math.min(visits * 0.1, POPULARITY_BOOST); 
       
       results.push({ tool, score, matchType });
     }

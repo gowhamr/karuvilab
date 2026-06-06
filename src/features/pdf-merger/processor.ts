@@ -73,7 +73,11 @@ const processor: ToolProcessor<PdfMergerOptions> = {
         [arrayBuffers],
         arrayBuffers, // Transferables
         (p: any) => onProgress(20 + p.percent * 0.8), // Scale progress 20-100%
-        signal
+        signal,
+        true,
+        2,
+        500,
+        60000
       ) as Uint8Array;
 
       if (signal.aborted) {

@@ -102,9 +102,10 @@ const api: WorkerAPI = {
     let current = 0;
     
     if (algos.includes("MD5")) {
-      results["MD5"] = md5(text); // MD5 is already hex string in this implementation
-      // TODO: if encoding is base64, convert MD5 hex to base64 if needed, 
-      // but usually MD5 is always hex.
+      const hexString = md5(text);
+      results["MD5"] = encoding === "base64"
+        ? Buffer.from(hexString, "hex").toString("base64")
+        : hexString;
       current++;
       if (onProgress) onProgress({ percent: (current / total) * 100, message: "Computed MD5" });
     }

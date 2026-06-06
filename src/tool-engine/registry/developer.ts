@@ -45,6 +45,8 @@ export const base64Config: ToolConfig = {
     title:       "Base64 Encoder & Decoder — KaruviLab",
     description: "Encode text to Base64 or decode Base64 strings locally. URL-safe support.",
     keywords:    ["base64 encoder", "base64 decoder", "url safe base64"],
+    canonical:   "/developer-tools/base64",
+    ogImage:     "/icons/icon-512.png",
   },
 
   relatedTools: ["json-formatter", "hash-generator", "url-cleaner"],

@@ -74,6 +74,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         )}
       </AnimatePresence>
 
+      {/* outline-none: receives programmatic focus only */}
       <m.aside
         ref={sidebarRef}
         onKeyDown={handleKeyDown}

@@ -52,10 +52,10 @@ const SidebarItem = memo(function SidebarItem({
       href={href}
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
-      className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-blue/50 focus-visible:ring-inset ${
+      className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-[--kv-brand-primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--kv-mat-base] ${
         isSmall 
           ? `h-[52px] px-4 text-[11px] rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
-          : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-black/5 dark:hover:bg-white/5"}`
+          : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
       }`}
       style={{
         color: !isSmall && isActive ? color : undefined,
@@ -107,7 +107,7 @@ const CoreLinks = memo(function CoreLinks({ pathname, setIsOpen, isHoverable }: 
 const CategoriesList = memo(function CategoriesList({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   return (
     <div className="space-y-4">
-      <div className="px-5 flex items-center gap-2 text-[11px] font-black text-text-4 uppercase tracking-[0.15em]">
+      <div className="px-5 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.15em]">
         <LayoutGrid className="w-4 h-4" />
         Universal Tools
       </div>
@@ -210,7 +210,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Personal Favorites */}
       {favorites.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
+          <div className="px-4 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.20em]">
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             {t('common.favorites')}
           </div>
@@ -235,7 +235,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Recently Used */}
       {recent.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">
+          <div className="px-4 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.20em]">
             <Clock className="w-3.5 h-3.5" />
             {t('common.recent')}
           </div>
@@ -334,11 +334,11 @@ export function Sidebar() {
           />
           <div className="p-4 border-t border-border bg-mat-base">
              <div className="p-4 rounded-2xl border border-border bg-mat-surface space-y-2 relative overflow-hidden group">
-                <p className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
+                <p className="text-[12px] font-black text-blue uppercase tracking-[0.15em] flex items-center gap-2">
                   <Shield className="w-3 h-3" />
                   Local-First
                 </p>
-                <p className="text-[9px] text-text-4 font-bold leading-tight">Private & secure data processing.</p>
+                <p className="text-[12px] text-text-4 font-bold leading-tight">Private & secure data processing.</p>
              </div>
           </div>
         </aside>

@@ -97,7 +97,31 @@ export function getToolColor(tool: ToolEntry): string {
 export const ALL_TOOLS = ALL_TOOLS_IMPORT;
 export const TOOL_RELATIONSHIPS = toolRelationships;
 
+import { idbStorage } from "./store/idb-storage";
+
 export const RECENT_PATH_KEY = 'karuvi.recent.paths';
+
+let recentPathsCache: string[] = [];
+if (typeof window !== 'undefined') {
+  const migrateRecent = async () => {
+    const legacyVal = localStorage.getItem(RECENT_PATH_KEY);
+    if (legacyVal) {
+      try {
+        recentPathsCache = JSON.parse(legacyVal);
+        await idbStorage.setItem(RECENT_PATH_KEY, legacyVal);
+      } catch {}
+      localStorage.removeItem(RECENT_PATH_KEY);
+    } else {
+      const idbVal = await idbStorage.getItem(RECENT_PATH_KEY);
+      if (idbVal) {
+        try {
+          recentPathsCache = JSON.parse(idbVal);
+        } catch {}
+      }
+    }
+  };
+  migrateRecent();
+}
 
 export function findToolById(id: string): ToolEntry | undefined {
   return ALL_TOOLS.find(t => t.id === id);
@@ -114,13 +138,9 @@ export function findToolByPath(pathname: string): ToolEntry | undefined {
 export function getRecentTools(): ToolEntry[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = localStorage.getItem(RECENT_PATH_KEY);
-    if (!raw) return [];
-    const paths = JSON.parse(raw);
-    if (!Array.isArray(paths)) return [];
     const seen = new Set<string>();
     const out: ToolEntry[] = [];
-    for (const p of paths) {
+    for (const p of recentPathsCache) {
       if (typeof p !== 'string') continue;
       const t = findToolByPath(p);
       if (t && !seen.has(t.id)) {

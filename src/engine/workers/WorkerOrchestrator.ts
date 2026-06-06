@@ -9,9 +9,29 @@ interface QueuedTask {
   reject: (reason?: unknown) => void;
   onProgress?: ProgressCallback | undefined;
   abortSignal?: AbortSignal | undefined;
-  idempotent?: boolean;
-  retriesLeft?: number;
-  activeWorker?: Worker;
+  idempotent?: boolean | undefined;
+  retriesLeft?: number | undefined;
+  activeWorker?: Worker | undefined;
+  timeout?: number | undefined;
+  maxSizeMB?: number | undefined;
+  retrying?: boolean | undefined;
+}
+
+function getPayloadSize(arg: unknown): number {
+  if (arg instanceof ArrayBuffer) return arg.byteLength;
+  if (arg instanceof Blob) return arg.size;
+  if (typeof arg === "string") return new TextEncoder().encode(arg).length;
+  if (Array.isArray(arg)) {
+    return arg.reduce((sum: number, item) => sum + getPayloadSize(item), 0);
+  }
+  if (arg && typeof arg === "object") {
+    try {
+      return new TextEncoder().encode(JSON.stringify(arg)).length;
+    } catch {
+      return 0;
+    }
+  }
+  return 0;
 }
 
 class WorkerOrchestrator {
@@ -82,30 +102,52 @@ class WorkerOrchestrator {
       this.activeTasks.delete(worker);
       if (task.idempotent && (task.retriesLeft || 0) > 0) {
         task.retriesLeft! -= 1;
+        task.retrying = true;
         this.queue.unshift(task); // Re-queue at the front
-        import('@/src/store/useRecoveryStore').then(({ useRecoveryStore }) => {
+        import('../../store/useRecoveryStore').then(({ useRecoveryStore }) => {
           useRecoveryStore.getState().showBanner('worker_crash', 'Worker recovered automatically. Retrying task...');
         });
         this.processQueue();
       } else {
         task.reject(new Error("Task failed due to a worker crash."));
-        import('@/src/store/useRecoveryStore').then(({ useRecoveryStore }) => {
+        import('../../store/useRecoveryStore').then(({ useRecoveryStore }) => {
           useRecoveryStore.getState().showBanner('worker_crash', 'Task failed due to a worker crash.');
         });
       }
     }
   }
 
+  private verifyMemoryCleanup(workerEntry: typeof this.pool[0]) {
+    try {
+      const perfMemory = typeof performance !== 'undefined' ? (performance as any).memory : null;
+      if (perfMemory) {
+        const usedHeap = perfMemory.usedJSHeapSize;
+        const heapLimit = perfMemory.jsHeapSizeLimit;
+        if (usedHeap > 150 * 1024 * 1024 || usedHeap > heapLimit * 0.8) {
+          console.warn("[WorkerOrchestrator] High memory usage detected. Respawning worker.");
+          workerEntry.worker.terminate();
+          const idx = this.pool.findIndex(p => p.worker === workerEntry.worker);
+          if (idx > -1) {
+            this.pool.splice(idx, 1);
+          }
+        }
+      }
+    } catch (e) {
+      console.error("[WorkerOrchestrator] Memory verification error:", e);
+    }
+  }
+
   private async processQueue() {
-    if (this.queue.length === 0) return;
+    const task = this.queue.shift();
+    if (!task) return;
 
     const workerEntry = await this.getWorker();
     if (!workerEntry) {
+      this.queue.unshift(task);
       setTimeout(() => this.processQueue(), 100);
       return;
     }
 
-    const task = this.queue.shift()!;
     workerEntry.busy = true;
     workerEntry.lastHeard = Date.now();
     this.activeTasks.set(workerEntry.worker, task);
@@ -119,6 +161,7 @@ class WorkerOrchestrator {
       if (timeoutId) clearTimeout(timeoutId);
       workerEntry.busy = false;
       this.activeTasks.delete(workerEntry.worker);
+      this.verifyMemoryCleanup(workerEntry);
       this.processQueue();
     };
 
@@ -126,6 +169,11 @@ class WorkerOrchestrator {
       if (isFinished) return;
       workerEntry.worker.terminate();
       this.handleWorkerCrash(workerEntry.worker);
+      if (reason === "Task timed out") {
+        task.reject(new Error("TIMEOUT"));
+      } else {
+        task.reject(new Error(reason));
+      }
       cleanup();
     };
 
@@ -138,9 +186,10 @@ class WorkerOrchestrator {
     const abortHandler = () => onAbort("Task cancelled");
     task.abortSignal?.addEventListener('abort', abortHandler);
 
+    const timeoutMs = task.timeout !== undefined ? task.timeout : 30000;
     timeoutId = setTimeout(() => {
       onAbort("Task timed out");
-    }, 60000);
+    }, timeoutMs);
 
     try {
       const progressProxy = task.onProgress ? Comlink.proxy((p: any) => {
@@ -153,8 +202,6 @@ class WorkerOrchestrator {
         args[0] = Comlink.transfer(args[0], task.transferables);
       }
 
-      // STYLE-002: Strongly typed worker API invocation.
-      // We cast to a callable function with unknown parameters to remove 'any'.
       const method = workerEntry.api[task.method] as unknown as (...args: unknown[]) => Promise<unknown>;
       const result = await method(...args, progressProxy);
       
@@ -166,8 +213,12 @@ class WorkerOrchestrator {
         task.resolve(result);
         cleanup();
       }
-    } catch (err) {
+    } catch (err: any) {
       if (!isFinished) {
+        if (task.retrying) {
+          cleanup();
+          return;
+        }
         if (!task.abortSignal?.aborted) task.reject(err);
         cleanup();
       }
@@ -186,8 +237,17 @@ class WorkerOrchestrator {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal,
     idempotent: boolean = true,
-    retriesLeft: number = 1
+    retriesLeft: number = 2,
+    maxSizeMB?: number,
+    timeout?: number
   ): Promise<T> {
+    if (maxSizeMB !== undefined) {
+      const payloadSize = args.reduce<number>((sum, arg) => sum + getPayloadSize(arg), 0);
+      const maxBytes = maxSizeMB * 1024 * 1024;
+      if (payloadSize > maxBytes) {
+        return Promise.reject(new Error(`Payload size (${(payloadSize / 1024 / 1024).toFixed(2)}MB) exceeds limit of ${maxSizeMB}MB.`));
+      }
+    }
     return new Promise((resolve, reject) => {
       this.queue.push({ 
         method, 
@@ -198,7 +258,9 @@ class WorkerOrchestrator {
         onProgress, 
         abortSignal,
         idempotent,
-        retriesLeft
+        retriesLeft,
+        maxSizeMB,
+        timeout
       });
       this.processQueue();
     });
@@ -216,6 +278,7 @@ class WorkerOrchestrator {
     this.pool.forEach(p => p.worker.terminate());
     this.pool = [];
     this.queue = [];
+    this.activeTasks.clear();
   }
 }
 

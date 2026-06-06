@@ -88,7 +88,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <span className="text-sm font-bold text-text flex-1">{t.message}</span>
               <button 
                 onClick={() => removeToast(t.id)}
-                className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-text-4 pointer-events-auto"
+                className="p-1 rounded-lg hover:bg-[--kv-mat-hover] transition-colors text-text-4 pointer-events-auto"
                 aria-label="Close"
               >
                 <X className="w-3.5 h-3.5" />

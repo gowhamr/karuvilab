@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { idbStorage } from './idb-storage';
 
 export interface ClockItem {
   id: string;
@@ -34,7 +35,7 @@ export const useWorldClockStore = create<WorldClockState>()(
     }),
     {
       name: 'karuvi-world-clocks',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => idbStorage),
     }
   )
 );
