@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useRef, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "./Icons";
 import { m } from "framer-motion";
@@ -11,9 +11,40 @@ interface CategoryChipsProps {
 }
 
 export const CategoryChips = memo(function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent, currentIndex: number) => {
+      const items = containerRef.current?.querySelectorAll('[role="tab"]');
+      if (!items) return;
+
+      let nextIndex = currentIndex;
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextIndex = (currentIndex + 1) % items.length;
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        nextIndex = (currentIndex - 1 + items.length) % items.length;
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        nextIndex = 0;
+      } else if (e.key === "End") {
+        e.preventDefault();
+        nextIndex = items.length - 1;
+      }
+
+      if (nextIndex !== currentIndex) {
+        (items[nextIndex] as HTMLElement).focus();
+      }
+    },
+    []
+  );
+
   return (
     <div className="relative px-4 sm:px-0">
       <div 
+        ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
         className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 snap-x"
@@ -22,6 +53,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           role="tab"
           aria-selected={!activeCategory}
           onClick={() => onCategoryChange(null)}
+          onKeyDown={(e) => handleKeyDown(e, 0)}
+          tabIndex={!activeCategory ? 0 : -1}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
           className={`
@@ -40,12 +73,14 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           )}
           All
         </m.button>
-        {CATEGORIES.map(cat => (
+        {CATEGORIES.map((cat, index) => (
           <m.button
             key={cat.id}
             role="tab"
             aria-selected={activeCategory === cat.id}
             onClick={() => onCategoryChange(cat.id)}
+            onKeyDown={(e) => handleKeyDown(e, index + 1)}
+            tabIndex={activeCategory === cat.id ? 0 : -1}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
             className={`

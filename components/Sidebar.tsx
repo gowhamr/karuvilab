@@ -211,6 +211,7 @@ const SidebarContent = memo(function SidebarContent({
       {favorites.length > 0 && (
         <div className="space-y-3">
           <div className="px-4 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.20em]">
+            {/* text-red-500: semantic favorites color — intentional */}
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             {t('common.favorites')}
           </div>

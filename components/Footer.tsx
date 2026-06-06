@@ -40,7 +40,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-bg/80 backdrop-blur-xl border-t border-border/60 mt-auto pb-24 md:pb-0 z-10 relative">
+    <footer className="w-full bg-[--kv-mat-base] border-t border-border/60 mt-auto pb-24 md:pb-0 z-10 relative">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
         {/* Top section: Recent Tools & Links */}
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-6">

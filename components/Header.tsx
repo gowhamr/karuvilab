@@ -9,22 +9,26 @@ import { usePerformanceSettings, useOnlineStatus } from "@/src/lib/hooks";
 import { usePathname } from "next/navigation";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { SearchBar } from "@/components/ui/search/SearchBar";
-import React from "react";
+import { cn } from "@/src/lib/utils";
+import React, { useState, useEffect } from "react";
 
 export function Header() {
   const isOnline = useOnlineStatus();
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
-  const { scrollY } = useScroll();
-  const { shouldBlur } = usePerformanceSettings();
-  
-  const borderOpacity = useTransform(scrollY, [0, 50], [0, 1]);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
   return (
-    <m.header 
-      style={{ 
-        borderBottomColor: `rgba(var(--border-rgb), ${borderOpacity.get()})` // This might not be reactive enough
-      }}
-      className="sticky top-0 z-40 w-full border-b border-transparent h-[60px] md:h-[72px] bg-mat-base/80 backdrop-blur-xl transition-colors duration-500 ease-expo"
+    <header 
+      className={cn(
+        "sticky top-0 z-40 w-full h-[60px] md:h-[72px] bg-mat-base transition-colors duration-300",
+        scrolled ? "border-b border-mat-border" : "border-b border-transparent"
+      )}
     >
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between gap-4 pt-safe">
         <div className="flex items-center gap-2 md:gap-8">
@@ -92,7 +96,7 @@ export function Header() {
           <ThemeToggle />
         </div>
       </div>
-    </m.header>
+    </header>
   );
 }
 

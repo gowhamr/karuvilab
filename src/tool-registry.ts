@@ -58,6 +58,14 @@ export interface ToolEntry {
   analyticsId?: string;
   status?: 'stable' | 'beta' | 'deprecated' | 'new';
   lastUpdated?: string; // ISO format: YYYY-MM-DD
+  lastAdded?: string;   // ISO format: YYYY-MM-DD
+}
+
+export function isNewTool(tool: ToolEntry): boolean {
+  if (tool.status === 'new') return true;
+  if (!tool.lastAdded) return false;
+  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  return new Date(tool.lastAdded).getTime() > thirtyDaysAgo;
 }
 
 export interface CategoryEntry {

@@ -20,7 +20,7 @@ export function TrustIndicators() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.1 }}
-          className="group p-4 md:p-5 bg-surface border border-border rounded-2xl flex flex-col gap-3 hover:border-blue/30 transition-all"
+          className="group p-4 md:p-5 bg-mat-surface border border-mat-border rounded-2xl flex flex-col gap-3 hover:border-blue/30 transition-all"
         >
           <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-white transition-all">
             <item.icon className="w-5 h-5" />

@@ -13,6 +13,8 @@ All entries reviewed and approved via PR.
 | E-003 | P-07 Inline Styles      | Dynamic backgroundColor swatches| backgroundColor only, color tools   | Permanent       | ACTIVE   |
 | E-004 | Design Token System     | New --kv-mat-* tokens added     | Formally in src/theme/tokens.css    | Permanent       | ACTIVE   |
 | E-005 | P-15 Hardcoded Colors   | SliderField thumb bg-white      | --kv-text used as token equivalent  | Light mode only | ACTIVE   |
+| E-006 | P-07 Inline Styles      | CategoryChips active color      | backgroundColor & boxShadow only    | Permanent       | ACTIVE   |
+| E-007 | P-15 Hardcoded colors   | Sidebar favorites Heart color   | Single red Heart icon               | Permanent       | ACTIVE   |
 
 ---
 
@@ -63,4 +65,25 @@ All entries reviewed and approved via PR.
   Visually identical to white. If light mode introduced,
   this must be revisited immediately.
 - **Resolution Date:** Permanent until light mode introduced.
+- **Status:** ACTIVE
+
+### E-006
+- **Rule:** P-07 (Inline Styles)
+- **Reason:** CategoryChips active state requires dynamic
+  backgroundColor from tool registry cat.color values.
+  These are data-driven hex values that cannot be expressed
+  as static Tailwind tokens at build time.
+- **Mitigation:** Constrained to backgroundColor and
+  boxShadow only. No layout, typography, or spacing.
+- **Resolution Date:** Permanent — category colors are
+  data-driven from tool registry.
+- **Status:** ACTIVE
+
+### E-007
+- **Rule:** P-15 (Hardcoded colors)
+- **Reason:** Sidebar favorites Heart icon uses text-red-500
+  as a semantic color for favorites (universal UX convention).
+  This is intentional and not a dark mode violation.
+- **Mitigation:** Single icon, semantic purpose documented.
+- **Resolution Date:** Permanent — semantic color.
 - **Status:** ACTIVE

@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import Link from "next/link";
-import { ToolEntry } from "@/src/tool-registry";
+import { ToolEntry, isNewTool } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { Zap } from "lucide-react";
 import { cn } from "@/src/lib/utils";
@@ -16,7 +16,7 @@ interface ToolCardProps {
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
   return (
     <m.div
-      className="relative w-full h-[130px] md:h-[180px] group"
+      className="relative w-full min-h-[130px] md:min-h-[180px] group"
       whileHover={{ 
         y: -4,
         scale: 1.02,
@@ -30,7 +30,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
       <Link 
         href={`/${tool.href}`}
         className={cn(
-          "relative flex flex-col h-full bg-mat-surface border border-mat-border rounded-[32px] p-4 md:p-6 shadow-mat-shine overflow-hidden transition-all duration-300 ease-out",
+          "relative flex flex-col min-h-[130px] md:min-h-[180px] bg-mat-surface border border-mat-border rounded-[32px] p-4 md:p-6 shadow-mat-shine overflow-hidden transition-all duration-300 ease-out",
           "hover:border-mat-border-focus hover:bg-mat-hover active:scale-[0.98]"
         )}
       >
@@ -43,20 +43,26 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             <ToolIcon toolId={tool.id} category={tool.category} className="w-4 h-4 md:w-5 md:h-5" />
           </div>
           
-          {tool.popular && (
-            <m.div 
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ 
-                opacity: 1, 
-                x: 0
-              }}
-              className="px-2 py-0.5 rounded-full bg-brand-primary/5 border border-brand-primary/10 flex items-center gap-1"
-              aria-label="Popular tool"
-            >
-              <Zap className="w-2.5 h-2.5 fill-current text-brand-primary" aria-hidden="true" />
-              <span className="text-[7px] font-bold uppercase tracking-widest hidden md:inline text-brand-primary">Hot</span>
-            </m.div>
-          )}
+          <div className="flex items-center gap-1.5">
+            {tool.popular && (
+              <div 
+                className="px-2 py-0.5 rounded-full bg-brand-primary/5 border border-brand-primary/10 flex items-center gap-1"
+                aria-label="Popular tool"
+              >
+                <Zap className="w-2.5 h-2.5 fill-current text-brand-primary" aria-hidden="true" />
+                <span className="text-[11px] font-bold uppercase tracking-widest hidden md:inline text-brand-primary">Hot</span>
+              </div>
+            )}
+
+            {isNewTool(tool) && (
+              <div 
+                className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1"
+                aria-label="New tool"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-500">New</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Middle Section: Content */}
@@ -64,7 +70,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           <h3 className="font-bold text-[13px] md:text-base text-text transition-colors leading-tight tracking-tight truncate group-hover:text-brand-primary">
             {tool.name}
           </h3>
-          <p className="text-text-4 text-[10px] md:text-[12px] font-medium line-clamp-2 md:line-clamp-3 leading-relaxed transition-colors group-hover:text-text-3">
+          <p className="text-text-4 text-[12px] font-medium line-clamp-2 md:line-clamp-3 leading-relaxed transition-colors group-hover:text-text-3">
             {tool.desc}
           </p>
         </div>
