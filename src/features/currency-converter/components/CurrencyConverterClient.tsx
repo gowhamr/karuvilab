@@ -241,9 +241,9 @@ export default function CurrencyConverterClient() {
 
       {(ratesData || isLoading) && (
         <>
-          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5 relative overflow-hidden">
+          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5 relative">
             {isLoading && (
-              <div className="absolute top-0 left-0 w-full h-1 bg-blue/20 overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue/20 overflow-hidden rounded-t-2xl">
                 <div className="h-full bg-blue animate-progress w-full" />
               </div>
             )}

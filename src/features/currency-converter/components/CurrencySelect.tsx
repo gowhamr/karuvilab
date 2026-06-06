@@ -210,13 +210,15 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
         {isOpen && (
           <>
             {/* Backdrop for depth and closing */}
-            <m.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-[150] bg-black/40 backdrop-blur-sm"
-            />
+            {isMobile && (
+              <m.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+                className="fixed inset-0 z-[150] bg-black/40 backdrop-blur-sm"
+              />
+            )}
             {dropdownContent}
           </>
         )}
