@@ -121,7 +121,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex flex-col bg-mat-base/40 sm:bg-black/20 sm:p-4 md:p-12 lg:p-24"
+          className="fixed inset-0 z-50 flex flex-col bg-[--kv-mat-base] sm:bg-black/40 sm:backdrop-blur-sm sm:p-4 md:p-12 lg:p-24"
           onClick={onClose}
         >
           <m.div
@@ -130,34 +130,38 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             exit={{ y: -8, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className={cn(
-              "flex-1 sm:flex-none flex flex-col sm:rounded-2xl sm:max-w-2xl sm:mx-auto w-full sm:max-h-[600px] overflow-hidden",
-              blurEnabled ? "kv-glass" : "bg-mat-overlay border border-mat-border shadow-mat-shine"
+              "flex-1 sm:flex-none flex flex-col",
+              "w-full overflow-hidden",
+              "bg-[--kv-mat-base]",
+              "sm:rounded-2xl sm:max-w-2xl sm:mx-auto",
+              "sm:max-h-[600px]",
+              blurEnabled
+                ? "sm:kv-glass"
+                : "sm:bg-[--kv-mat-overlay] sm:border sm:border-[--kv-mat-border]"
             )}
             onClick={e => e.stopPropagation()}
           >
             {/* Search Input Header */}
-            <div className="flex-shrink-0 flex items-center h-[52px] md:h-[60px] px-2 md:px-4 border-b border-mat-border bg-mat-surface/30">
-              <div className="flex items-center justify-center w-10 h-10 text-text-4">
-                <Search className="w-5 h-5" />
-              </div>
+            <div className="flex-shrink-0 flex items-center h-[56px] px-4 border-b border-[--kv-mat-border] bg-[--kv-mat-surface]">
+              <Search className="w-5 h-5 text-[--kv-text-muted] shrink-0" />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={e => {
                   setQuery(e.target.value);
-                  setFocusedIndex(-1); // reset selection
+                  setFocusedIndex(-1);
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Search 100+ tools..."
-                className="flex-1 h-full bg-transparent border-none outline-none text-base font-medium text-text placeholder-text-4 px-2"
+                className="flex-1 h-full bg-transparent border-none outline-none text-[16px] font-medium text-[--kv-text] placeholder:text-[--kv-text-muted] px-3"
                 autoComplete="off"
-                spellCheck="false"
+                spellCheck={false}
                 autoCorrect="off"
               />
               {query && (
                 <button
                   onClick={() => { setQuery(''); const input = inputRef.current; if(input) input.focus(); }}
-                  className="w-10 h-10 flex items-center justify-center text-text-4 hover:text-text rounded-full transition-colors"
+                  className="w-11 h-11 flex items-center justify-center text-[--kv-text-muted] hover:text-[--kv-text] rounded-full transition-colors"
                   aria-label="Clear search"
                 >
                   <X className="w-4 h-4" />
@@ -165,7 +169,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               )}
               <button
                 onClick={onClose}
-                className="sm:hidden px-3 h-10 flex items-center justify-center text-sm font-bold text-text-3 hover:text-text transition-colors"
+                className="sm:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-[14px] font-semibold text-[--kv-brand-primary] ml-1"
               >
                 Cancel
               </button>
@@ -175,7 +179,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             </div>
 
             {/* Results Area */}
-            <div className="flex-1 overflow-y-auto overscroll-contain">
+            <div className="flex-1 overflow-y-auto overscroll-contain bg-[--kv-mat-base] sm:bg-transparent">
               <SearchResults
                 results={results}
                 query={query}

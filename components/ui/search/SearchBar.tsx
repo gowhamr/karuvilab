@@ -54,17 +54,6 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
           <span>K</span>
         </div>
       </button>
-
-      {/* Floating Action Button (Mobile Fallback) - Only show if not hero */}
-      {isMobile && !isHero && (
-        <button
-          onClick={() => setIsPaletteOpen(true)}
-          className="fixed bottom-24 right-4 z-40 w-14 h-14 bg-brand-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-brand-primary/30 hover:scale-105 active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary"
-          aria-label="Open search"
-        >
-          <Search className="w-6 h-6" />
-        </button>
-      )}
     </>
   );
 }

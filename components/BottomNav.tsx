@@ -24,7 +24,7 @@ export const BottomNav = memo(function BottomNav() {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface border-t border-border rounded-t-[24px] h-16 sm:h-[72px] px-6 shadow-sm pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-[--kv-mat-surface] border-t border-[--kv-mat-border] rounded-t-[24px] px-6 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]"
       style={{ contain: 'layout style paint' }}
     >
       <div className="flex items-center justify-between h-full max-w-md mx-auto">
