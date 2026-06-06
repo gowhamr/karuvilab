@@ -144,7 +144,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
                     </div>
                     <div className={cn(
                       "text-[10px] truncate font-medium uppercase tracking-tighter",
-                      value === opt.code ? "text-indigo-100" : "text-text-4"
+                      value === opt.code ? "text-blue-light" : "text-text-4"
                     )}>
                       {opt.name}
                     </div>

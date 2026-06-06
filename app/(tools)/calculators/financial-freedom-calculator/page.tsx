@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import FinancialFreedomCalculatorClient from "@/src/features/financial-freedom-calculator/FinancialFreedomCalculatorClient";
+import FinancialFreedomCalculatorClientWrapper from "./FinancialFreedomCalculatorClientWrapper";
 import { financialFreedomCalculator } from "@/src/content/tools/financial-freedom-calculator";
 
 const toolId = "financial-freedom-calculator";
@@ -19,7 +19,7 @@ export default function FinancialFreedomCalculator() {
       toolId={toolId}
       content={financialFreedomCalculator}
     >
-      <FinancialFreedomCalculatorClient />
+      <FinancialFreedomCalculatorClientWrapper />
     </ToolShell>
   );
 }

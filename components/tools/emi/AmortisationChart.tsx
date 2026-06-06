@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { AmortizationEntry } from "@/src/lib/emi-calculations";
-import { formatCurrency } from "@/src/lib/utils";
+import { formatCurrency, getThemeColor } from "@/src/lib/utils";
 
 interface AmortisationChartProps {
   schedule: AmortizationEntry[];
@@ -38,7 +38,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     ctx.clearRect(0, 0, width, height);
 
     // Draw axes
-    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--border").trim() || "#e2e8f0"; // border color
+    ctx.strokeStyle = getThemeColor('--border', '#e2e8f0');
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding.left, padding.top);
@@ -54,12 +54,12 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
       
       // Principal part
       const pHeight = (entry.principal / maxVal) * chartHeight;
-      ctx.fillStyle = "#4F46E5"; // blue (principal)
+      ctx.fillStyle = getThemeColor('--blue', '#4F46E5'); // blue (principal)
       ctx.fillRect(x, height - padding.bottom - pHeight, barWidth, pHeight);
 
       // Interest part
       const iHeight = (entry.interest / maxVal) * chartHeight;
-      ctx.fillStyle = "#94a3b8"; // slate-400 (interest)
+      ctx.fillStyle = getThemeColor('--text-4', '#94a3b8'); // slate-400 (interest)
       ctx.fillRect(x, height - padding.bottom - pHeight - iHeight, barWidth, iHeight);
     });
 
@@ -67,14 +67,14 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     const legendY = height - 10;
     ctx.font = "10px Inter, sans-serif";
     
-    ctx.fillStyle = "#4F46E5";
+    ctx.fillStyle = getThemeColor('--blue', '#4F46E5');
     ctx.fillRect(padding.left, legendY - 8, 10, 8);
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--text-2").trim() || "#1e293b";
+    ctx.fillStyle = getThemeColor('--text-2', '#1e293b');
     ctx.fillText("Principal", padding.left + 15, legendY);
 
-    ctx.fillStyle = "#94a3b8";
+    ctx.fillStyle = getThemeColor('--text-4', '#94a3b8');
     ctx.fillRect(padding.left + 80, legendY - 8, 10, 8);
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--text-2").trim() || "#1e293b";
+    ctx.fillStyle = getThemeColor('--text-2', '#1e293b');
     ctx.fillText("Interest", padding.left + 95, legendY);
 
   }, [schedule]);

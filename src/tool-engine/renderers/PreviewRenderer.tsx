@@ -1,15 +1,23 @@
-// src/tool-engine/renderers/PreviewRenderer.tsx
-"use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { ToolResult } from "../types/ToolResult";
+import { blobManager } from "@/src/lib/blob-manager";
 
 export default function PreviewRenderer({ result }: { result: ToolResult }) {
-  if (!result.blob) return null;
-  const url = URL.createObjectURL(result.blob);
+  const [url, setUrl] = useState<string | null>(null);
 
-  // Note: in a real implementation we would use useObjectUrlManager
-  // to properly manage the lifecycle of this URL.
+  useEffect(() => {
+    if (!result.blob) {
+      setUrl(null);
+      return;
+    }
+    const newUrl = blobManager.create(result.blob);
+    setUrl(newUrl);
+    return () => {
+      blobManager.revoke(newUrl);
+    };
+  }, [result.blob]);
+
+  if (!url) return null;
 
   return (
     <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] overflow-hidden p-6 flex items-center justify-center">

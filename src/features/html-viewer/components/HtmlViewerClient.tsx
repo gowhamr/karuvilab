@@ -519,7 +519,7 @@ export default function HtmlViewerClient() {
                   className="absolute bottom-20 right-6 w-80 max-h-[300px] bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
                 >
                     <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5">
-                      <span className="text-[9px] font-black uppercase tracking-widest text-indigo-200">Output Logs</span>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-blue-light">Output Logs</span>
                       <button onClick={() => setLogs([])} className="text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-300">Clear</button>
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">

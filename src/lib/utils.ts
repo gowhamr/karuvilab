@@ -14,3 +14,12 @@ export function formatCurrency(value: number, decimals: number = 0): string {
     maximumFractionDigits: decimals,
   });
 }
+
+/**
+ * Safely resolves a CSS variable color on the client.
+ */
+export function getThemeColor(variableName: string, fallback: string): string {
+  if (typeof window === "undefined") return fallback;
+  const val = window.getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+  return val || fallback;
+}

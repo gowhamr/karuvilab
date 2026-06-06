@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import InternetSpeedTestClient from "./InternetSpeedTestClient";
+import InternetSpeedTestClientWrapper from "./InternetSpeedTestClientWrapper";
 
 const toolId = "internet-speed-test";
 const cat = CATEGORIES.find((c) => c.id === "utilities")!;
@@ -53,7 +53,7 @@ export default function InternetSpeedTestPage() {
         relatedTools: ["data-calculator", "world-clock", "time-calculator"]
       }}
     >
-      <InternetSpeedTestClient />
+      <InternetSpeedTestClientWrapper />
     </ToolShell>
   );
 }

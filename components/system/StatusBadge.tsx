@@ -11,13 +11,13 @@ interface StatusBadgeProps {
 
 const statusConfig: Record<StatusType, { icon: any; defaultLabel: string; colors: string; animation?: string }> = {
   idle: { icon: null, defaultLabel: "", colors: "" },
-  processing: { icon: Loader2, defaultLabel: "Processing...", colors: "bg-indigo-500/10 text-indigo-500 dark:bg-indigo-400/10 dark:text-indigo-400", animation: "animate-spin" },
-  queued: { icon: Clock, defaultLabel: "Queued", colors: "bg-slate-500/10 text-slate-500 dark:bg-slate-400/10 dark:text-slate-400" },
-  saved: { icon: CheckCircle2, defaultLabel: "Saved", colors: "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400" },
-  offline: { icon: WifiOff, defaultLabel: "Offline mode", colors: "bg-amber-500/10 text-amber-600 dark:bg-amber-400/10 dark:text-amber-400" },
-  cached: { icon: Database, defaultLabel: "Cached locally", colors: "bg-blue-500/10 text-blue-600 dark:bg-blue-400/10 dark:text-blue-400" },
-  error: { icon: AlertCircle, defaultLabel: "Error", colors: "bg-rose-500/10 text-rose-600 dark:bg-rose-400/10 dark:text-rose-400" },
-  complete: { icon: CheckCircle2, defaultLabel: "Complete", colors: "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400" },
+  processing: { icon: Loader2, defaultLabel: "Processing...", colors: "bg-blue/10 text-blue", animation: "animate-spin" },
+  queued: { icon: Clock, defaultLabel: "Queued", colors: "bg-hover/50 text-text-3" },
+  saved: { icon: CheckCircle2, defaultLabel: "Saved", colors: "bg-success/10 text-success" },
+  offline: { icon: WifiOff, defaultLabel: "Offline mode", colors: "bg-warn/10 text-warn" },
+  cached: { icon: Database, defaultLabel: "Cached locally", colors: "bg-ocean/10 text-ocean" },
+  error: { icon: AlertCircle, defaultLabel: "Error", colors: "bg-error/10 text-error" },
+  complete: { icon: CheckCircle2, defaultLabel: "Complete", colors: "bg-success/10 text-success" },
 };
 
 export const StatusBadge = memo(function StatusBadge({ status, label, className = "" }: StatusBadgeProps) {

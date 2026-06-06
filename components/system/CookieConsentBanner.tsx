@@ -39,11 +39,11 @@ export function CookieConsentBanner() {
       >
         <div className="backdrop-blur-md bg-surface/90 border border-border rounded-2xl shadow-surface-4 p-6 flex flex-col gap-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0 text-indigo-500">
+            <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center flex-shrink-0 text-blue">
               <Cookie className="w-5 h-5" />
             </div>
             <p className="text-xs text-text-3 leading-relaxed">
-              This site uses third‑party advertising cookies from Google to display personalized ads. You can accept or reject these cookies. Learn more in our <Link href="/privacy" className="text-indigo-500 hover:underline font-bold">Privacy Policy</Link>.
+              This site uses third‑party advertising cookies from Google to display personalized ads. You can accept or reject these cookies. Learn more in our <Link href="/privacy" className="text-blue hover:underline font-bold">Privacy Policy</Link>.
             </p>
           </div>
           
@@ -56,7 +56,7 @@ export function CookieConsentBanner() {
             </button>
             <button 
               onClick={() => handleConsent("accepted")}
-              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all"
+              className="px-4 py-2.5 bg-blue hover:bg-blue-dark text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all"
             >
               Accept All
             </button>

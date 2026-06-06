@@ -129,7 +129,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
             animate={{ width: `${overallProgress}%` }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className={cn(
-              "h-full bg-gradient-to-r from-blue to-indigo-400 transition-all",
+              "h-full bg-gradient-to-r from-blue to-blue-light transition-all",
               isProcessing && "animate-pulse"
             )}
             style={{ width: `${overallProgress}%` }}

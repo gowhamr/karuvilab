@@ -237,7 +237,8 @@ export default function PomodoroTimerClient() {
               cx="50"
               cy="50"
               r="48"
-              stroke="#4F46E5"
+              stroke="currentColor"
+              className="text-blue"
               strokeWidth="2.5"
               strokeDasharray="301.6"
               initial={{ strokeDashoffset: 0 }}
@@ -307,7 +308,7 @@ export default function PomodoroTimerClient() {
         )}
         
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface/30 border border-border/50">
-          <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-emerald-500 animate-pulse" : "bg-text-4")} />
+          <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-success animate-pulse" : "bg-text-4")} />
           <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
             {isActive ? 'Session in progress' : 'Timer Paused'}
           </span>

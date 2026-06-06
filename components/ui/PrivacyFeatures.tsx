@@ -59,13 +59,13 @@ export function PrivacyFeatures() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-br from-blue to-indigo-600 rounded-[40px] p-8 md:p-12 text-[--kv-text] flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue/20"
+        className="bg-gradient-to-br from-blue to-blue-dark rounded-[40px] p-8 md:p-12 text-[--kv-text] flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue/20"
       >
         <div className="space-y-4 text-center md:text-left">
           <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
             Security is not a feature,<br />it's our foundation.
           </h2>
-          <p className="text-blue-100 text-lg font-medium max-w-xl">
+          <p className="text-blue-light text-lg font-medium max-w-xl">
             KaruviLab was built to solve the privacy concerns of modern developer and office tools. 
             No sign-ups, no cookies, no compromise.
           </p>

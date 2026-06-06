@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-import TypingSpeedTestClient from "./TypingSpeedTestClient";
+import TypingSpeedTestClientWrapper from "./TypingSpeedTestClientWrapper";
 
 import { generateToolMetadata } from "@/src/lib/seo";
 
@@ -18,7 +18,7 @@ export default function TypingSpeedTestPage() {
       category={category}
       toolId={toolId}
     >
-      <TypingSpeedTestClient />
+      <TypingSpeedTestClientWrapper />
     </ToolShell>
   );
 }
