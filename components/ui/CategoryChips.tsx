@@ -55,20 +55,20 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           onClick={() => onCategoryChange(null)}
           onKeyDown={(e) => handleKeyDown(e, 0)}
           tabIndex={!activeCategory ? 0 : -1}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.05, y: -1 }}
           whileTap={{ scale: 0.95 }}
           className={`
-            relative flex-shrink-0 h-[44px] px-6 rounded-xl text-[12px] font-black uppercase tracking-widest transition-colors snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/20
+            relative flex-shrink-0 h-[40px] px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
             ${!activeCategory 
-              ? "text-white" 
-              : "text-text-4 hover:text-text hover:bg-surface/80"}
+              ? "text-white shadow-lg shadow-blue/30" 
+              : "text-text-3 hover:text-text hover:bg-mat-hover border border-mat-border"}
           `}
         >
           {!activeCategory && (
             <m.div 
               layoutId="active-cat"
-              className="absolute inset-0 bg-blue rounded-xl -z-10 shadow-lg shadow-blue/20"
-              transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+              className="absolute inset-0 bg-gradient-to-r from-blue to-blue-dark rounded-full -z-10"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
           All
@@ -81,28 +81,28 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             onClick={() => onCategoryChange(cat.id)}
             onKeyDown={(e) => handleKeyDown(e, index + 1)}
             tabIndex={activeCategory === cat.id ? 0 : -1}
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
             className={`
-              relative flex-shrink-0 h-[44px] flex items-center gap-2.5 px-6 rounded-xl text-[12px] font-black uppercase tracking-widest transition-colors snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/20
+              relative flex-shrink-0 h-[40px] flex items-center gap-2.5 px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
               ${activeCategory === cat.id 
                 ? "text-white" 
-                : "text-text-4 hover:text-text hover:bg-surface/80"}
+                : "text-text-3 hover:text-text hover:bg-mat-hover border border-mat-border"}
             `}
           >
             {activeCategory === cat.id && (
               <m.div 
                 layoutId="active-cat"
-                className="absolute inset-0 rounded-xl -z-10 shadow-lg"
+                className="absolute inset-0 rounded-full -z-10"
                 style={{ 
                   backgroundColor: cat.color,
-                  boxShadow: `0 8px 16px -4px ${cat.color}40`
+                  boxShadow: `0 8px 20px -4px ${cat.color}60`
                 }}
-                transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
-            <ToolIcon category={cat.id} className={`w-4 h-4 ${activeCategory === cat.id ? "text-white" : "opacity-60"}`} aria-hidden="true" />
-            {cat.label}
+            <ToolIcon category={cat.id} className={`w-3.5 h-3.5 ${activeCategory === cat.id ? "text-white" : "text-text-4 group-hover:text-text"}`} aria-hidden="true" />
+            <span className="whitespace-nowrap">{cat.label}</span>
           </m.button>
         ))}
       </div>
