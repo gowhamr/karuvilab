@@ -50,17 +50,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ toast }}>
       {children}
       {/* Toast Container */}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none items-end">
+      <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-[100] flex flex-col gap-3 pointer-events-none items-end">
         <AnimatePresence mode="popLayout">
           {toasts.map((t) => (
             <m.div
               key={t.id}
               layout
               drag="x"
-              dragConstraints={{ left: 0, right: 300 }}
-              dragElastic={{ left: 0.1, right: 0.8 }}
+              dragConstraints={{ left: 0, right: 200 }}
+              dragElastic={{ left: 0.1, right: 0.6 }}
               onDragEnd={(_, info) => {
-                if (info.offset.x > 150 || info.velocity.x > 500) {
+                if (info.offset.x > 80 || info.velocity.x > 400) {
                   removeToast(t.id);
                 }
               }}
@@ -70,7 +70,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className={`
                 pointer-events-auto px-4 py-3 rounded-2xl shadow-mat-shine border flex items-center gap-3 min-w-[280px] max-w-[400px]
-                bg-mat-raised border-mat-border touch-none
+                bg-mat-raised border-mat-border touch-none overflow-hidden
                 ${t.type === "success" ? "border-green-500/20" : ""}
                 ${t.type === "error" ? "border-red-500/20" : ""}
                 ${t.type === "info" ? "border-brand-primary/20" : ""}
@@ -88,8 +88,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <span className="text-sm font-bold text-text flex-1">{t.message}</span>
               <button 
                 onClick={() => removeToast(t.id)}
-                className="p-1 rounded-lg hover:bg-[--kv-mat-hover] transition-colors text-text-4 pointer-events-auto"
-                aria-label="Close"
+                className="p-1 rounded-lg hover:bg-mat-hover transition-colors text-text-4 pointer-events-auto"
+                aria-label={`Dismiss: ${t.message.slice(0, 40)}`}
               >
                 <X className="w-3.5 h-3.5" />
               </button>

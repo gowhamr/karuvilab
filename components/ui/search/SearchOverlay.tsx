@@ -121,7 +121,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex flex-col bg-mat-base sm:bg-black/70 sm:backdrop-blur-md sm:p-4 md:p-12 lg:p-24"
+          className="fixed inset-0 z-50 flex flex-col bg-mat-base sm:bg-black/85 sm:backdrop-blur-md sm:p-4 md:p-12 lg:p-24"
           onClick={onClose}
         >
           <m.div

@@ -29,9 +29,9 @@ const TRUST_VARIANTS = ["A", "B", "C"] as const;
 
 const dragStateClasses = {
   idle:     "border-dashed border-[--kv-mat-border]",
-  hover:    "border-dashed border-[--kv-brand-primary]/40 bg-[--kv-brand-primary]/4",
-  over:     "border-solid border-[--kv-brand-primary] bg-[--kv-brand-primary]/8",
-  rejected: "border-solid border-red-500 bg-red-500/6",
+  hover:    "border-dashed border-brand-primary/40 bg-brand-primary/10",
+  over:     "border-solid border-brand-primary bg-brand-primary/15",
+  rejected: "border-solid border-red-500 bg-red-500/10",
 } as const;
 
 /**
@@ -102,7 +102,9 @@ export function EmptyState({
   onDragLeave,
   className
 }: EmptyStateProps) {
-  const { recordView, recordEngagement, recordBounce } = useAnalyticsStore();
+  const recordView = useAnalyticsStore(s => s.recordView);
+  const recordEngagement = useAnalyticsStore(s => s.recordEngagement);
+  const recordBounce = useAnalyticsStore(s => s.recordBounce);
   const shouldReduceMotion = useReducedMotion();
   const hasEngaged = useRef(false);
   const [isRejected, setIsRejected] = useState(false);
@@ -185,7 +187,7 @@ export function EmptyState({
             <span className="text-sm text-text-3 font-bold truncate">↩ {lastSession.label} · Continue?</span>
             <div className="flex items-center gap-2">
               <button onClick={() => { handleEngagement(); lastSession.onRestore(); }} className="text-sm font-black text-brand-primary min-w-[44px] min-h-[44px]">Restore</button>
-              <button onClick={lastSession.onDismiss} className="min-w-[44px] min-h-[44px] text-text-4"><X className="w-4 h-4" /></button>
+              <button onClick={lastSession.onDismiss} className="min-w-[44px] min-h-[44px] text-text-4" aria-label="Dismiss session restore"><X className="w-4 h-4" /></button>
             </div>
           </m.div>
         )}
@@ -197,6 +199,15 @@ export function EmptyState({
         onDragLeave={onDragLeave}
         onDrop={(e) => { e.preventDefault(); handleEngagement(); }}
         onClick={handleZoneClick}
+        tabIndex={0}
+        role="button"
+        aria-label="Drop files here or click to browse"
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleZoneClick(e as any);
+          }
+        }}
         className={cn(
           "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border-2 rounded-[32px] p-8 md:p-12 min-h-[240px] md:min-h-[320px]",
           dragStateClasses[dragState || "idle"],
@@ -214,10 +225,13 @@ export function EmptyState({
 
         <div className="mb-8 w-full max-w-xs px-4 flex justify-center">
           {/* Desktop */}
-          <span className="hidden md:inline text-[14px] text-[--kv-brand-primary] cursor-pointer hover:underline"
-                onClick={onBrowse}>
+          <button
+            className="hidden md:inline text-[14px] text-brand-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded"
+            onClick={onBrowse}
+            type="button"
+          >
             or browse files
-          </span>
+          </button>
 
           {/* Mobile */}
           <button
@@ -233,12 +247,15 @@ export function EmptyState({
           {maxSize && <span className="text-[12px] font-bold text-text-4 px-2">Max: {maxSize}</span>}
         </div>
 
-        <div className="mb-8 flex flex-col items-center gap-1">
-          <div className="flex items-center gap-2 text-emerald-500">
-            <ShieldCheck className="w-4 h-4" />
-            <span className="text-xs font-black uppercase tracking-widest">{trust.title}</span>
+        {/* Dynamic Trust Badge */}
+        <div className="flex items-center gap-3 bg-mat-raised/50 border border-mat-border rounded-2xl px-5 py-4 mb-4 select-none max-w-sm">
+          <div className="p-2.5 rounded-xl bg-success/10 border border-success/20 text-success shrink-0">
+            <ShieldCheck className="w-5 h-5" />
           </div>
-          <p className="text-[12px] font-bold text-text-4 opacity-60">{trust.desc}</p>
+          <div className="text-left">
+            <h4 className="text-[13px] font-black tracking-tight text-text leading-snug">{trust.title}</h4>
+            <p className="text-[12px] font-bold text-text-4">{trust.desc}</p>
+          </div>
         </div>
 
         {outcomeText && (
@@ -252,12 +269,6 @@ export function EmptyState({
           <PlayCircle className="w-4 h-4" /> {sampleCTA?.label || "Try Sample File"}
         </button>
       </m.div>
-
-      <style jsx global>{`
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
-        .animate-shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; animation-iteration-count: 3; }
-        @media (prefers-reduced-motion: reduce) { .animate-shake { animation: none; } }
-      `}</style>
     </motion.div>
   );
 }

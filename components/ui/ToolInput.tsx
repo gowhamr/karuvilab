@@ -57,9 +57,9 @@ export function ToolInput({
 
   return (
     <div className="space-y-2">
-      {label && (
+      {(label || description) && (
         <div className="flex justify-between items-end px-1">
-          <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>
+          {label && <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>}
           {description && (
             <span 
               id={descriptionId}

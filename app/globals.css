@@ -321,6 +321,18 @@ body.sidebar-open {
     rgba(255, 255, 255, 0)
   );
 }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+  animation-iteration-count: 3;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-shake { animation: none; }
+}
 
 /* Custom Scrollbar for non-mobile */
 @media (min-width: 768px) {

@@ -86,7 +86,7 @@ export function FeedbackModal() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && closeFeedback()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[300] bg-mat-base/60 backdrop-blur-sm animate-in fade-in duration-300" />
+        <Dialog.Overlay className="fixed inset-0 z-[300] bg-black/50 backdrop-blur-sm animate-in fade-in duration-300" />
         
         <Dialog.Content className={cn(
           "fixed z-[301] overflow-hidden flex flex-col transition-all duration-300",
@@ -106,7 +106,7 @@ export function FeedbackModal() {
                 {isSuccess ? "We've received your report" : "Help us improve KV"}
               </Dialog.Description>
             </div>
-            <Dialog.Close className="p-2 hover:bg-bg rounded-xl text-text-4 transition-all active:scale-90">
+            <Dialog.Close className="p-2 hover:bg-bg rounded-xl text-text-4 transition-all active:scale-90" aria-label="Close feedback dialog">
               <X className="w-5 h-5" />
             </Dialog.Close>
           </div>

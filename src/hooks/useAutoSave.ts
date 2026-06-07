@@ -19,7 +19,7 @@ export function useAutoSave<T>(
 ) {
   const onRestoreRef = useRef(onRestore);
   const dataRef = useRef(data);
-  const { showBanner } = useRecoveryStore();
+  const showBanner = useRecoveryStore(s => s.showBanner);
   const initialized = useRef(false);
 
   useEffect(() => {

@@ -29,7 +29,7 @@ export default function ToolLoading() {
             </div>
           </div>
         </div>
-        <aside className="h-96 bg-surface border border-border rounded-3xl animate-pulse" />
+        <aside className="hidden lg:block h-96 bg-surface border border-border rounded-3xl animate-pulse" />
       </div>
     </div>
   );

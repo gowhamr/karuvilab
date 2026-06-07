@@ -77,7 +77,7 @@ export function ToolResultArea({
       {error ? (
         <div 
           role="alert"
-          className="w-full px-4 py-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-xl text-red-600 dark:text-red-400 text-sm font-medium"
+          className="w-full px-4 py-3 bg-error/5 border border-error/20 rounded-xl text-error text-sm font-medium"
         >
           {error}
         </div>

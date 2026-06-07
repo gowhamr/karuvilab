@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, memo } from "react";
 import { Search, Command } from "lucide-react";
-import { m } from "framer-motion";
 
 interface SearchBarProps {
   value: string;
@@ -17,17 +16,18 @@ export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, plac
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
+        e.stopImmediatePropagation();
         inputRef.current?.focus();
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true); // Use capture phase to handle before other global handlers
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, []);
 
   return (
     <div className="relative group w-full">
-      <m.div 
-        className="relative h-[56px] md:h-[64px] flex items-center bg-surface border border-border rounded-xl shadow-sm focus-within:border-blue/40 transition-all duration-300"
+      <div 
+        className="relative h-[56px] md:h-[64px] flex items-center bg-surface border border-border rounded-xl shadow-sm focus-within:border-blue focus-within:ring-2 focus-within:ring-blue/20 transition-all duration-300"
       >
         <div className="pl-5 text-text-4 group-focus-within:text-blue transition-colors">
           <Search className="w-5 h-5" />
@@ -40,7 +40,7 @@ export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, plac
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder || "Search tools... (⌘K)"}
           aria-label="Search tools"
-          className="w-full h-full px-4 bg-transparent outline-none text-[16px] md:text-base text-text placeholder:text-text-4 font-bold tracking-tight"
+          className="w-full h-full px-4 bg-transparent outline-none text-base text-text placeholder:text-text-4 font-bold tracking-tight"
         />
 
         <div className="pr-4 hidden sm:flex items-center">
@@ -49,7 +49,7 @@ export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, plac
             <span>K</span>
           </div>
         </div>
-      </m.div>
+      </div>
     </div>
   );
 });

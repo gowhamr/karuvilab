@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function AllToolsPage() {
   return (
-    <div className="max-w-6xl mx-auto space-y-16">
+    <div className="max-w-6xl mx-auto space-y-16 px-4 md:px-8 pt-6 pb-28 md:pb-8">
       <div className="space-y-4">
         <Breadcrumbs title="All Tools" />
         <h1 className="text-4xl md:text-5xl font-black tracking-tight">Universal Toolkit</h1>

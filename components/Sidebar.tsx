@@ -13,14 +13,14 @@ import { useI18n } from "@/src/lib/i18n/store";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { MobileSidebar } from "./layout/MobileSidebar";
 import { getDeviceCapabilities } from "@/src/utils";
-import { Home, Info, HelpCircle, Settings, Shield, X, Clock, Search, Command, LayoutGrid, Heart, LucideIcon } from "lucide-react";
+import { Home, Info, HelpCircle, Settings, Shield, FileWarning, X, Clock, Search, Command, LayoutGrid, Heart, LucideIcon } from "lucide-react";
 
 const SUPPORT_LINKS = [
   { href: "/about/", label: "About", icon: Info, key: 'common.about' },
   { href: "/help/", label: "Help", icon: HelpCircle, key: 'common.help' },
   { href: "/settings/", label: "Settings", icon: Settings, key: 'common.settings' },
   { href: "/privacy/", label: "Privacy", icon: Shield, key: 'common.privacy' },
-  { href: "/disclaimer/", label: "Disclaimer", icon: Shield, key: 'common.disclaimer' },
+  { href: "/disclaimer/", label: "Disclaimer", icon: FileWarning, key: 'common.disclaimer' },
 ];
 
 const SidebarItem = memo(function SidebarItem({ 
@@ -52,14 +52,14 @@ const SidebarItem = memo(function SidebarItem({
       href={href}
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
-      className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-[--kv-brand-primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--kv-mat-base] ${
+      className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base ${
         isSmall 
           ? `h-[52px] px-4 text-[11px] rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
           : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
       }`}
       style={{
         color: !isSmall && isActive ? color : undefined,
-        backgroundColor: !isSmall && isActive ? `${color}33` : undefined,
+        backgroundColor: !isSmall && isActive ? `color-mix(in srgb, ${color} 20%, transparent)` : undefined,
       }}
     >
       <div 
@@ -88,7 +88,6 @@ const SidebarItem = memo(function SidebarItem({
 
 const CoreLinks = memo(function CoreLinks({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   const t = useI18n(state => state.t);
-  const locale = useI18n(state => state.locale);
 
   return (
     <div className="space-y-2">
@@ -139,7 +138,6 @@ const CategoriesList = memo(function CategoriesList({ pathname, setIsOpen, isHov
 
 const SupportLinks = memo(function SupportLinks({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   const t = useI18n(state => state.t);
-  const locale = useI18n(state => state.locale);
 
   return (
     <div className="pt-6 border-t border-border space-y-1">
@@ -173,23 +171,22 @@ const SidebarContent = memo(function SidebarContent({
   isHoverable: boolean
 }) {
   const t = useI18n(state => state.t);
-  const locale = useI18n(state => state.locale);
   
   const handleSearchClick = useCallback(() => {
     setIsOpen();
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }));
+    useSearchStore.getState().setIsPaletteOpen(true);
   }, [setIsOpen]);
 
   return (
     <nav 
       className="flex-1 overflow-y-auto p-4 space-y-8 no-scrollbar pb-24 md:pb-8"
-      style={{ contain: 'layout style paint' }}
+      style={{ contain: 'layout style' }}
     >
       {/* Mobile Search (Sticky Layout) */}
       <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
         <button 
           onClick={handleSearchClick}
-          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hover:border-blue/30 transition-all group"
+          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
         >
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hover:bg-blue/5 transition-colors">
@@ -211,7 +208,6 @@ const SidebarContent = memo(function SidebarContent({
       {favorites.length > 0 && (
         <div className="space-y-3">
           <div className="px-4 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.20em]">
-            {/* text-red-500: semantic favorites color — intentional */}
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             {t('common.favorites')}
           </div>
@@ -220,7 +216,7 @@ const SidebarContent = memo(function SidebarContent({
               <SidebarItem
                 key={tool.id}
                 href={`/${tool.href}`}
-                isActive={pathname.includes(tool.href)}
+                isActive={pathname === `/${tool.href}` || pathname.startsWith(`/${tool.href}/`)}
                 onClick={setIsOpen}
                 label={tool.name}
                 toolId={tool.id}
@@ -245,7 +241,7 @@ const SidebarContent = memo(function SidebarContent({
               <SidebarItem
                 key={tool.id}
                 href={`/${tool.href}`}
-                isActive={pathname.includes(tool.href)}
+                isActive={pathname === `/${tool.href}` || pathname.startsWith(`/${tool.href}/`)}
                 onClick={setIsOpen}
                 label={tool.name}
                 toolId={tool.id}
@@ -269,7 +265,7 @@ export function Sidebar() {
   const favoriteIds = useFavoriteStore(useShallow(state => state.favorites));
   const [recent, setRecent] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const [isHoverable, setIsHoverable] = useState(true);
+  const [isHoverable, setIsHoverable] = useState<boolean | null>(null);
 
   const closeSidebar = useCallback(() => setIsSidebarOpen(false), [setIsSidebarOpen]);
 
@@ -293,14 +289,14 @@ export function Sidebar() {
 
   return (
     <>
-      {!hydrated || isHoverable === false ? (
+      {isHoverable === false ? (
         <MobileSidebar>
           <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-mat-surface">
             <Link href="/" onClick={closeSidebar}>
               <KVLogo withText size="sm" loading="lazy" />
             </Link>
             <button
-              className="w-11 h-11 flex items-center justify-center hover:bg-mat-hover rounded-xl transition-colors text-text-4"
+              className="w-11 h-11 flex items-center justify-center hover:bg-mat-hover rounded-xl transition-colors text-text-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
               onClick={closeSidebar}
               aria-label="Close sidebar"
             >
@@ -318,7 +314,7 @@ export function Sidebar() {
       ) : (
         /* Desktop Permanent Sidebar */
         <aside 
-          className="hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-mat-surface border-r border-mat-border shadow-mat-shine z-30 flex-col overflow-hidden"
+          className={`hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-mat-surface border-r border-mat-border shadow-mat-shine z-30 flex-col overflow-hidden ${!hydrated ? 'invisible' : ''}`}
           style={{ contain: 'layout style' }}
         >
           <div className="h-20 flex items-center px-8 border-b border-border bg-mat-surface">
@@ -331,7 +327,7 @@ export function Sidebar() {
             recent={recent} 
             favorites={favorites} 
             setIsOpen={closeSidebar} 
-            isHoverable={isHoverable}
+            isHoverable={isHoverable || false}
           />
           <div className="p-4 border-t border-border bg-mat-base">
              <div className="p-4 rounded-2xl border border-border bg-mat-surface space-y-2 relative overflow-hidden group">

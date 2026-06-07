@@ -10,6 +10,7 @@ import React, { useMemo } from "react";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { ALL_TOOLS } from "@/src/registry";
 import { cn } from "@/src/lib/utils";
+import { useShallow } from "zustand/react/shallow";
 import { 
   BarChart3, 
   TrendingUp, 
@@ -22,7 +23,15 @@ import {
 } from "lucide-react";
 
 export function EmptyStateMetrics() {
-  const { views, engagements, conversions, bounces, resetMetrics } = useAnalyticsStore();
+  const { views, engagements, conversions, bounces, resetMetrics } = useAnalyticsStore(
+    useShallow(state => ({
+      views: state.views,
+      engagements: state.engagements,
+      conversions: state.conversions,
+      bounces: state.bounces,
+      resetMetrics: state.resetMetrics
+    }))
+  );
 
   const toolStats = useMemo(() => {
     return ALL_TOOLS.map(tool => {

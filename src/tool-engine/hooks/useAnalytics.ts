@@ -3,7 +3,10 @@ import { useEffect, useRef } from "react";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 
 export function useAnalytics(toolId: string) {
-  const { recordView, recordEngagement, recordConversion, recordBounce } = useAnalyticsStore();
+  const recordView = useAnalyticsStore(s => s.recordView);
+  const recordEngagement = useAnalyticsStore(s => s.recordEngagement);
+  const recordConversion = useAnalyticsStore(s => s.recordConversion);
+  const recordBounce = useAnalyticsStore(s => s.recordBounce);
   const hasEngaged = useRef(false);
   const viewRecorded = useRef(false);
 

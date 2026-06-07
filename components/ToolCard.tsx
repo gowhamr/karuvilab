@@ -16,7 +16,7 @@ interface ToolCardProps {
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
   return (
     <m.div
-      className="relative w-full min-h-[130px] md:min-h-[180px] group"
+      className="relative w-full group"
       whileHover={{ 
         y: -4,
         scale: 1.02,
@@ -26,21 +26,26 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
         scale: 0.98,
         transition: { type: "spring", stiffness: 400, damping: 25 }
       }}
+      style={{ touchAction: 'manipulation' }}
     >
       <Link 
         href={`/${tool.href}`}
         className={cn(
-          "relative flex flex-col min-h-[130px] md:min-h-[180px] bg-mat-surface border border-mat-border rounded-[32px] p-4 md:p-6 shadow-mat-shine overflow-hidden transition-all duration-300 ease-out",
-          "hover:border-mat-border-focus hover:bg-mat-hover active:scale-[0.98]"
+          "relative flex flex-col bg-mat-surface border border-mat-border rounded-[32px] shadow-mat-shine overflow-hidden transition-all duration-300 ease-out",
+          "hover:border-mat-border-focus hover:bg-mat-hover",
+          compact ? "min-h-[100px] md:min-h-[120px] p-3 md:p-4" : "min-h-[130px] md:min-h-[180px] p-4 md:p-6"
         )}
       >
         {/* Top Section: Icon & Badge */}
-        <div className="flex items-center justify-between mb-2 md:mb-4">
+        <div className={cn("flex items-center justify-between", compact ? "mb-1.5" : "mb-2 md:mb-4")}>
           <div 
-            className="w-9 h-9 md:w-11 md:h-11 rounded-[16px] bg-mat-base border border-mat-border flex items-center justify-center transition-transform duration-200 group-hover:scale-110"
+            className={cn(
+              "rounded-[16px] bg-mat-base border border-mat-border flex items-center justify-center transition-transform duration-200 group-hover:scale-110",
+              compact ? "w-8 h-8" : "w-9 h-9 md:w-11 md:h-11"
+            )}
             aria-hidden="true"
           >
-            <ToolIcon toolId={tool.id} category={tool.category} className="w-4 h-4 md:w-5 md:h-5" />
+            <ToolIcon toolId={tool.id} category={tool.category} className={compact ? "w-3.5 h-3.5" : "w-4 h-4 md:w-5 md:h-5"} />
           </div>
           
           <div className="flex items-center gap-1.5">
@@ -50,7 +55,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
                 aria-label="Popular tool"
               >
                 <Zap className="w-2.5 h-2.5 fill-current text-brand-primary" aria-hidden="true" />
-                <span className="text-[11px] font-bold uppercase tracking-widest hidden md:inline text-brand-primary">Hot</span>
+                <span className={cn("text-[11px] font-bold uppercase tracking-widest text-brand-primary", compact ? "hidden" : "hidden md:inline")}>Hot</span>
               </div>
             )}
 
@@ -66,13 +71,21 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
         </div>
 
         {/* Middle Section: Content */}
-        <div className="space-y-1 md:space-y-1.5 flex-1">
-          <h3 className="font-bold text-[13px] md:text-base text-text transition-colors leading-tight tracking-tight truncate group-hover:text-brand-primary">
+        <div className={cn("flex-1", compact ? "space-y-0.5" : "space-y-1 md:space-y-1.5")}>
+          <h3 
+            className={cn(
+              "font-bold text-text transition-colors leading-tight tracking-tight truncate group-hover:text-brand-primary",
+              compact ? "text-[12px] md:text-[13px]" : "text-[13px] md:text-base"
+            )}
+            title={tool.name}
+          >
             {tool.name}
           </h3>
-          <p className="text-text-4 text-[12px] font-medium line-clamp-2 md:line-clamp-3 leading-relaxed transition-colors group-hover:text-text-3">
-            {tool.desc}
-          </p>
+          {!compact && (
+            <p className="text-text-4 text-[12px] font-medium line-clamp-2 md:line-clamp-3 leading-relaxed transition-colors group-hover:text-text-3">
+              {tool.desc}
+            </p>
+          )}
         </div>
       </Link>
     </m.div>

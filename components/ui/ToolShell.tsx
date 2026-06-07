@@ -67,7 +67,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
     <m.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4 outline-none"
+      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4"
     >
       <StructuredData tool={currentTool} category={category} content={merged} />
       
@@ -80,7 +80,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
           </div>
         </div>
         <div className="space-y-4">
-          <h1 className="text-3xl font-black">{title}</h1>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black">{title}</h1>
           <TrustBadges className="pt-2" />
           {description && <p className="text-text-3 text-lg leading-relaxed max-w-3xl">{description}</p>}
         </div>
@@ -92,8 +92,8 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </ErrorBoundary>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-16">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] lg:grid-cols-3 gap-8 lg:gap-12">
+        <div className="md:col-span-1 lg:col-span-2 space-y-16">
           {parsedContent.detailedDescription && (
             <section className="space-y-4">
               <h2 className="text-2xl font-bold">Deep Dive</h2>
@@ -163,7 +163,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
 
         <aside className="space-y-8">
           {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-            <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] p-8 space-y-6 sticky top-24">
+            <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] p-8 space-y-6 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="space-y-1">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-4">How it works</p>
@@ -185,7 +185,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
           )}
 
           <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
-            <div className="flex items-center gap-3 text-emerald-700 dark:text-emerald-400">
+            <div className="flex items-center gap-3 text-success">
               <ShieldCheck className="w-5 h-5" />
               <h3 className="font-bold text-sm">Privacy First</h3>
             </div>
@@ -222,13 +222,13 @@ export function ToolShell({ title, description, category, children, toolId, cont
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
-                className="flex items-center gap-4 p-4 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl hover:border-brand-primary/50 transition-colors group"
+                className="flex items-center gap-4 p-4 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl hover:border-brand-primary/50 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
               >
                 <div className="w-10 h-10 rounded-xl bg-mat-base flex items-center justify-center shrink-0">
                   <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-sm truncate group-hover:text-blue transition-colors">{tool.name}</h3>
+                  <h3 className="font-bold text-sm truncate group-hover:text-brand-primary transition-colors">{tool.name}</h3>
                   <p className="text-xs text-text-4 truncate">{tool.desc}</p>
                 </div>
               </Link>
