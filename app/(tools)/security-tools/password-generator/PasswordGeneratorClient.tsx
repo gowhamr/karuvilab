@@ -1,30 +1,69 @@
 "use client";
-import { useState, useCallback } from "react";
+
+import { useState, useCallback, useMemo } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { SliderField } from "@/components/ui/SliderField";
-import { Shield, Key, History, Zap, ShieldCheck, Lock } from "lucide-react";
+import { Shield, Key, History, Zap, ShieldCheck, Lock, AlertTriangle, Info, Clock, Fingerprint } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { m } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWER = "abcdefghijklmnopqrstuvwxyz";
 const NUMS  = "0123456789";
 const SYMS  = "!@#$%^&*()-_=+[]{}|;:,.<>?";
 
-function getStrength(password: string): { label: string; color: string; score: number } {
-  let score = 0;
-  if (password.length >= 12) score++;
-  if (password.length >= 16) score++;
-  if (/[A-Z]/.test(password)) score++;
-  if (/[a-z]/.test(password)) score++;
-  if (/[0-9]/.test(password)) score++;
-  if (/[^A-Za-z0-9]/.test(password)) score++;
+interface StrengthInfo {
+  label: string;
+  color: string;
+  score: number;
+  entropy: number;
+  crackTime: string;
+}
 
-  if (score <= 2) return { label: "Weak", color: "text-red-500", score };
-  if (score <= 3) return { label: "Fair", color: "text-amber-500", score };
-  if (score <= 4) return { label: "Good", color: "text-blue-500", score };
-  return { label: "Strong", color: "text-emerald-500", score };
+function calculateEntropy(password: string): number {
+  if (!password) return 0;
+  let pool = 0;
+  if (/[a-z]/.test(password)) pool += 26;
+  if (/[A-Z]/.test(password)) pool += 26;
+  if (/[0-9]/.test(password)) pool += 10;
+  if (/[^A-Za-z0-9]/.test(password)) pool += SYMS.length;
+  
+  return Math.log2(Math.pow(pool, password.length));
+}
+
+function formatCrackTime(entropy: number): string {
+  // Assuming 100 billion guesses per second (standard high-end GPU cluster)
+  const guessesPerSecond = 1e11;
+  const totalGuesses = Math.pow(2, entropy);
+  const seconds = totalGuesses / guessesPerSecond;
+
+  if (seconds < 1) return "Instantly";
+  if (seconds < 60) return "Few seconds";
+  if (seconds < 3600) return "Few minutes";
+  if (seconds < 86400) return "Few hours";
+  if (seconds < 2592000) return `${Math.floor(seconds / 86400)} days`;
+  if (seconds < 31536000) return `${Math.floor(seconds / 2592000)} months`;
+  if (seconds < 31536000000) return `${Math.floor(seconds / 31536000)} years`;
+  return "Centuries";
+}
+
+function getStrength(password: string): StrengthInfo {
+  const entropy = calculateEntropy(password);
+  const crackTime = formatCrackTime(entropy);
+  
+  let score = 0;
+  if (entropy > 40) score++;
+  if (entropy > 60) score++;
+  if (entropy > 80) score++;
+  if (entropy > 100) score++;
+  if (entropy > 120) score++;
+
+  if (score <= 1) return { label: "Very Weak", color: "text-red-500", score, entropy, crackTime };
+  if (score === 2) return { label: "Weak", color: "text-red-400", score, entropy, crackTime };
+  if (score === 3) return { label: "Fair", color: "text-amber-500", score, entropy, crackTime };
+  if (score === 4) return { label: "Strong", color: "text-blue-500", score, entropy, crackTime };
+  return { label: "Excellent", color: "text-emerald-500", score, entropy, crackTime };
 }
 
 function generatePassword(length: number, useUpper: boolean, useLower: boolean, useNums: boolean, useSyms: boolean): string {
@@ -48,6 +87,35 @@ export default function PasswordGeneratorClient() {
   const [useSyms, setUseSyms] = useState(true);
   const [passwords, setPasswords] = useState<string[]>([]);
   const [history, setHistory] = useState<string[]>([]);
+  const [breachInfo, setBreachInfo] = useState<{ count: number | null; loading: boolean }>({ count: null, loading: false });
+
+  const checkBreach = async (password: string) => {
+    if (!password) return;
+    setBreachInfo({ count: null, loading: true });
+    try {
+      const msgUint8 = new TextEncoder().encode(password);
+      const hashBuffer = await crypto.subtle.digest("SHA-1", msgUint8);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+      
+      const prefix = hashHex.substring(0, 5);
+      const suffix = hashHex.substring(5);
+      
+      const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+      const text = await res.text();
+      const lines = text.split("\n");
+      const match = lines.find(line => line.split(":")[0] === suffix);
+      
+      if (match) {
+        setBreachInfo({ count: parseInt(match.split(":")[1] || "0"), loading: false });
+      } else {
+        setBreachInfo({ count: 0, loading: false });
+      }
+    } catch (err) {
+      console.error("HIBP Check failed", err);
+      setBreachInfo({ count: null, loading: false });
+    }
+  };
 
   const generate = useCallback(() => {
     const newPasswords = Array.from({ length: 5 }, () =>
@@ -55,9 +123,10 @@ export default function PasswordGeneratorClient() {
     );
     setPasswords(newPasswords);
     setHistory(prev => [newPasswords[0]!, ...prev].slice(0, 10));
+    checkBreach(newPasswords[0]!);
   }, [length, useUpper, useLower, useNums, useSyms]);
 
-  const strength = passwords[0] ? getStrength(passwords[0]) : null;
+  const strength = useMemo(() => passwords[0] ? getStrength(passwords[0]) : null, [passwords]);
 
   return (
     <div className="space-y-12">
@@ -80,10 +149,10 @@ export default function PasswordGeneratorClient() {
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Checkbox checked={useUpper} onChange={() => setUseUpper(v => !v)} label="Uppercase Characters (A-Z)" />
-                <Checkbox checked={useLower} onChange={() => setUseLower(v => !v)} label="Lowercase Characters (a-z)" />
-                <Checkbox checked={useNums} onChange={() => setUseNums(v => !v)} label="Numeric Values (0-9)" />
-                <Checkbox checked={useSyms} onChange={() => setUseSyms(v => !v)} label="Special Symbols (!@#$%...)" />
+                <Checkbox checked={useUpper} onChange={() => setUseUpper(v => !v)} label="Uppercase (A-Z)" />
+                <Checkbox checked={useLower} onChange={() => setUseLower(v => !v)} label="Lowercase (a-z)" />
+                <Checkbox checked={useNums} onChange={() => setUseNums(v => !v)} label="Numbers (0-9)" />
+                <Checkbox checked={useSyms} onChange={() => setUseSyms(v => !v)} label="Special Characters" />
               </div>
 
               <button
@@ -96,56 +165,97 @@ export default function PasswordGeneratorClient() {
             </div>
           </div>
 
-          {passwords.length > 0 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-               <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3 px-2">
-                <ShieldCheck className="w-4 h-4" />
-                Security Results
-              </h2>
-
-              <div className="space-y-4">
-                {strength && (
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 bg-surface border border-border rounded-2xl shadow-sm">
-                    <div className="flex items-center gap-3">
-                      <Shield className={cn("w-5 h-5", strength.score >= 5 ? "text-emerald-500" : "text-blue")} />
-                      <span className="text-sm text-text-3 font-bold">Strength Analysis:</span>
-                      <span className={cn("text-sm font-black uppercase tracking-wider", strength.color)}>{strength.label}</span>
+          <AnimatePresence>
+            {passwords.length > 0 && (
+              <m.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-8"
+              >
+                {/* Strength Dashboard */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
+                    <div className="flex items-center gap-2 text-text-4">
+                      <Fingerprint className="w-3.5 h-3.5" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Entropy</span>
                     </div>
-                    <div className="flex gap-1.5">
-                      {Array.from({ length: 6 }).map((_, i) => (
-                        <m.div
-                          key={i}
-                          initial={{ scale: 0.8 }}
-                          animate={{ scale: 1 }}
-                          className={cn(
-                            "h-1.5 w-8 rounded-full transition-all duration-500",
-                            i < strength.score 
-                              ? (strength.score >= 5 ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]" : strength.score >= 4 ? "bg-blue shadow-[0_0_10px_rgba(79,70,229,0.2)]" : strength.score >= 3 ? "bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.2)]" : "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.2)]") 
-                              : "bg-border"
-                          )}
-                        />
-                      ))}
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-black text-text">{Math.floor(strength?.entropy || 0)}</span>
+                      <span className="text-[10px] text-text-4 font-bold uppercase">bits</span>
                     </div>
+                    <p className="text-[11px] text-text-3 font-medium">Measure of password randomness.</p>
                   </div>
-                )}
 
-                <div className="space-y-3">
-                  {passwords.map((pw, i) => (
-                    <div 
-                      key={i} 
-                      className={cn(
-                        "bg-surface border border-border p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 transition-all hover:border-blue/30 shadow-sm",
-                        i === 0 && "ring-2 ring-blue/10 border-blue/20"
-                      )}
-                    >
-                      <span className="font-mono text-sm sm:text-base text-text break-all flex-1 selection:bg-blue/20">{pw}</span>
-                      <CopyButton text={pw} />
+                  <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
+                    <div className="flex items-center gap-2 text-text-4">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Crack Time</span>
                     </div>
-                  ))}
+                    <span className={cn("text-xl font-black block", strength?.color)}>{strength?.crackTime}</span>
+                    <p className="text-[11px] text-text-3 font-medium">Estimate using GPU clusters.</p>
+                  </div>
+
+                  <div className={cn(
+                    "p-5 rounded-3xl space-y-3 border transition-colors",
+                    breachInfo.loading ? "bg-surface border-border" :
+                    breachInfo.count === 0 ? "bg-emerald-500/5 border-emerald-500/20" :
+                    breachInfo.count && breachInfo.count > 0 ? "bg-red-500/5 border-red-500/20" : "bg-surface border-border"
+                  )}>
+                    <div className="flex items-center gap-2 text-text-4">
+                      <AlertTriangle className={cn("w-3.5 h-3.5", breachInfo.count ? "text-red-500" : "text-emerald-500")} />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Breach Check</span>
+                    </div>
+                    {breachInfo.loading ? (
+                      <div className="h-6 w-24 bg-mat-base animate-pulse rounded-lg" />
+                    ) : (
+                      <span className={cn("text-xl font-black block", breachInfo.count ? "text-red-500" : "text-emerald-500")}>
+                        {breachInfo.count === 0 ? "Clear" : breachInfo.count ? `${breachInfo.count.toLocaleString()} times` : "Unknown"}
+                      </span>
+                    )}
+                    <p className="text-[11px] text-text-3 font-medium">Checked via HIBP API.</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between px-2">
+                    <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+                      <ShieldCheck className="w-4 h-4" />
+                      Results
+                    </h2>
+                  </div>
+
+                  <div className="space-y-3">
+                    {passwords.map((pw, i) => (
+                      <m.div 
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className={cn(
+                          "bg-surface border border-border p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 transition-all hover:border-blue/30 shadow-sm group",
+                          i === 0 && "ring-2 ring-blue/10 border-blue/20"
+                        )}
+                      >
+                        <span className="font-mono text-sm sm:text-base text-text break-all flex-1 selection:bg-blue/20">{pw}</span>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <button 
+                            onClick={() => {
+                              checkBreach(pw);
+                            }}
+                            className="p-2 text-text-4 hover:text-blue transition-colors"
+                            title="Analyze this password"
+                           >
+                             <Info className="w-4 h-4" />
+                           </button>
+                           <CopyButton text={pw} />
+                        </div>
+                      </m.div>
+                    ))}
+                  </div>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
@@ -154,25 +264,34 @@ export default function PasswordGeneratorClient() {
           <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-emerald-600">
-                <ShieldCheck className="w-3 h-3" />
-                <span className="text-[9px] font-black uppercase tracking-widest">Local Execution</span>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-black uppercase tracking-widest">Privacy Guard</span>
               </div>
               <p className="text-[11px] text-text-3 leading-relaxed font-medium">
-                Passwords are generated using <code className="text-emerald-700 bg-emerald-100 dark:bg-emerald-900/30 px-1 rounded">crypto.getRandomValues()</code> entirely in your browser. No data ever leaves your device.
+                Breach checks use the <strong className="text-emerald-700">k-Anonymity</strong> model. We only send the first 5 characters of your password's hash. Your actual password never leaves your browser.
               </p>
             </div>
 
             {history.length > 0 && (
               <div className="space-y-4">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
-                  <History className="w-3 h-3" />
+                  <History className="w-3.5 h-3.5" />
                   Recent History
                 </h3>
                 <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                   {history.map((pw, i) => (
-                    <div key={i} className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-bg transition-colors">
+                    <div key={i} className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-bg transition-colors group">
                       <span className="font-mono text-[10px] text-text-4 break-all flex-1 truncate">{pw}</span>
-                      <CopyButton text={pw} />
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                         <button 
+                          onClick={() => checkBreach(pw)}
+                          className="p-1 hover:text-blue transition-colors"
+                          title="Check for breaches"
+                         >
+                           <AlertTriangle className="w-3 h-3" />
+                         </button>
+                         <CopyButton text={pw} />
+                      </div>
                     </div>
                   ))}
                 </div>
