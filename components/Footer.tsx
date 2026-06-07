@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, WifiOff, Cpu, Lock } from "lucide-react";
+import { ShieldCheck, WifiOff, Cpu, Lock, Clock } from "lucide-react";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { getRecentTools, ToolEntry } from "@/src/tool-registry";
 
@@ -28,15 +28,18 @@ export function Footer() {
     };
   }, []);
 
-  const quickLinks = [
+  const navigationLinks = [
     { label: "All Tools", href: "/all-tools" },
-    { label: "Privacy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Cookies", href: "/cookies" },
-    { label: "Affiliate Disclosure", href: "/affiliate-disclosure" },
-    { label: "Help", href: "/help" },
-    { label: "About", href: "/about" },
     { label: "Settings", href: "/settings" },
+    { label: "Help & Support", href: "/help" },
+    { label: "About Us", href: "/about" },
+  ];
+
+  const legalLinks = [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Affiliate Disclosure", href: "/affiliate-disclosure" },
   ];
 
   return (
@@ -67,26 +70,56 @@ export function Footer() {
                 ))}
               </div>
             ) : (
-              <p className="text-xs font-medium text-text-4">No recent tools yet.</p>
+              <div className="flex items-center gap-2 text-text-4 text-xs font-semibold">
+                <div className="p-1.5 rounded-lg bg-bg border border-border">
+                  <Clock className="w-3.5 h-3.5 text-text-4" />
+                </div>
+                <span>
+                  No recent tools yet.{" "}
+                  <Link href="/all-tools" className="text-brand-primary hover:underline font-black">
+                    Browse tools
+                  </Link>
+                </span>
+              </div>
             )}
           </div>
 
-          {/* Quick Links */}
-          <div className="flex-1 md:text-right space-y-3">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4 hidden md:block">
-              Navigation
-            </h4>
-            <nav className="flex flex-wrap md:justify-end gap-x-6 gap-y-3">
-              {quickLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-xs font-bold text-text-3 hover:text-blue transition-colors py-1"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+          {/* Quick Links Column Group */}
+          <div className="flex-1 grid grid-cols-2 gap-6 md:justify-items-end">
+            <div className="space-y-3">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+                Resources
+              </h4>
+              <ul className="space-y-2">
+                {navigationLinks.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-xs font-semibold text-text-3 hover:text-brand-primary transition-colors py-0.5 block md:text-right"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-3">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+                Legal
+              </h4>
+              <ul className="space-y-2">
+                {legalLinks.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-xs font-semibold text-text-3 hover:text-brand-primary transition-colors py-0.5 block md:text-right"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -118,14 +151,22 @@ export function Footer() {
             </span>
           </div>
 
-          {/* Status */}
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-4 shrink-0 mt-2 lg:mt-0">
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${
-                !mounted ? "bg-border" : isOnline ? "bg-success" : "bg-warn animate-pulse"
-              }`}
-            />
-            {!mounted ? "Checking..." : isOnline ? "Offline Ready" : "Running Locally"}
+          {/* Status Badge */}
+          <div className="shrink-0 mt-2 lg:mt-0">
+            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300 ${
+              !mounted 
+                ? "bg-surface border-border text-text-4" 
+                : isOnline 
+                  ? "bg-success/5 border-success/15 text-success" 
+                  : "bg-warn/5 border-warn/15 text-warn animate-pulse"
+            }`}>
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  !mounted ? "bg-text-4" : isOnline ? "bg-success" : "bg-warn"
+                }`}
+              />
+              <span>{!mounted ? "Checking..." : isOnline ? "Offline Ready" : "Running Locally"}</span>
+            </div>
           </div>
         </div>
       </div>

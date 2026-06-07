@@ -38,10 +38,10 @@ export const BottomNav = memo(function BottomNav() {
                 key={item.label}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSearch}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Search"
               >
-                <div className="p-2.5 rounded-xl bg-bg border border-border">
+                <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
               </m.button>
@@ -54,10 +54,10 @@ export const BottomNav = memo(function BottomNav() {
                 key={item.label}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleMenu}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-blue transition-colors min-w-[48px] min-h-[48px]"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px]"
                 aria-label="Menu"
               >
-                <div className="p-2.5 rounded-xl bg-bg border border-border">
+                <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
               </m.button>
@@ -71,11 +71,15 @@ export const BottomNav = memo(function BottomNav() {
                 aria-label={item.label}
                 aria-current={isActive ? "page" : undefined}
                 className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] ${
-                  isActive ? "text-blue" : "text-text-4 hover:text-text"
+                  isActive ? "text-brand-primary" : "text-text-4 hover:text-text"
                 }`}
               >
-                <div className={`p-2.5 rounded-xl border transition-all ${isActive ? "bg-blue/5 border-blue/20 shadow-[0_0_15px_rgba(79,70,229,0.1)]" : "bg-bg border-border"}`}>
-                  <Icon className={`w-5 h-5 ${isActive ? "text-blue" : ""}`} />
+                <div className={`p-2.5 rounded-xl transition-all ${
+                  isActive 
+                    ? "bg-brand-primary/10 text-brand-primary" 
+                    : "bg-transparent text-text-4 hover:bg-mat-hover"
+                }`}>
+                  <Icon className="w-5 h-5" />
                 </div>
               </Link>
             </m.div>

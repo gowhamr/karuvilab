@@ -183,8 +183,8 @@ html.preload *:after {
   --border:       #E2E8F0;
   --border-rgb:   226, 232, 240;
   --border-2:     #CBD5E1;
-  --bg:           #F1F5F9;
-  --bg-rgb:       241, 245, 249;
+  --bg:           #F8FAFC;
+  --bg-rgb:       248, 250, 252;
   --surface:      #FFFFFF;
   --elevated:     #F8FAFC;
   --hover:        #E2E8F0;
@@ -193,16 +193,16 @@ html.preload *:after {
   --border-focus:   #4F46E5;
 
   /* Material Light Overrides */
-  --kv-mat-base:          #F1F5F9;
+  --kv-mat-base:          #F8FAFC;
   --kv-mat-surface:       #FFFFFF;
-  --kv-mat-raised:        #F8FAFC;
+  --kv-mat-raised:        #F1F5F9;
   --kv-mat-overlay:       #FFFFFF;
   --kv-mat-hover:         #F1F5F9;
   --kv-mat-border:        #E2E8F0;
   --kv-mat-border-focus:  #4F46E5;
   --kv-mat-shine:         rgba(255, 255, 255, 0.5);
   
-  --kv-glass-bg:          rgba(255, 255, 255, 0.7);
+  --kv-glass-bg:          rgba(255, 255, 255, 0.9);
   --kv-glass-border:      rgba(0, 0, 0, 0.05);
   --kv-glass-shine:       rgba(255, 255, 255, 0.8);
 }

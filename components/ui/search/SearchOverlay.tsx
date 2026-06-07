@@ -121,7 +121,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex flex-col bg-[--kv-mat-base] sm:bg-black/40 sm:backdrop-blur-sm sm:p-4 md:p-12 lg:p-24"
+          className="fixed inset-0 z-50 flex flex-col bg-mat-base sm:bg-black/70 sm:backdrop-blur-md sm:p-4 md:p-12 lg:p-24"
           onClick={onClose}
         >
           <m.div
@@ -132,17 +132,15 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             className={cn(
               "flex-1 sm:flex-none flex flex-col",
               "w-full overflow-hidden",
-              "bg-[--kv-mat-base] sm:bg-transparent",
+              "bg-mat-base sm:bg-mat-surface",
               "sm:rounded-2xl sm:max-w-2xl sm:mx-auto",
               "sm:max-h-[600px]",
-              blurEnabled
-                ? "sm:kv-glass"
-                : "sm:bg-[--kv-mat-overlay] sm:border sm:border-[--kv-mat-border]"
+              "sm:border sm:border-mat-border sm:shadow-2xl"
             )}
             onClick={e => e.stopPropagation()}
           >
             {/* Search Input Header */}
-            <div className="flex-shrink-0 flex items-center h-[56px] px-4 border-b border-[--kv-mat-border] bg-[--kv-mat-surface]">
+            <div className="flex-shrink-0 flex items-center h-[56px] px-4 border-b border-mat-border bg-mat-surface">
               <Search className="w-5 h-5 text-[--kv-text-muted] shrink-0" />
               <input
                 ref={inputRef}
@@ -169,7 +167,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               )}
               <button
                 onClick={onClose}
-                className="sm:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-[14px] font-semibold text-[--kv-brand-primary] ml-1"
+                className="sm:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-[14px] font-semibold text-brand-primary ml-1"
               >
                 Cancel
               </button>
@@ -179,7 +177,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             </div>
 
             {/* Results Area */}
-            <div className="flex-1 overflow-y-auto overscroll-contain bg-[--kv-mat-base] sm:bg-transparent">
+            <div className="flex-1 overflow-y-auto overscroll-contain bg-mat-base sm:bg-transparent">
               <SearchResults
                 results={results}
                 query={query}

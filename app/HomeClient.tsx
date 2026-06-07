@@ -12,7 +12,6 @@ import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { PrivacyFeatures } from "@/components/ui/PrivacyFeatures";
-import { TrustIndicators } from "@/components/ui/TrustIndicators";
 import { 
   ArrowRight, LayoutGrid, Zap, ShieldCheck, 
   Sparkles, TrendingUp, Clock, Heart, Command
@@ -174,7 +173,7 @@ export default function HomeClient() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-16 space-y-10 md:space-y-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-28 md:pb-16 space-y-6 md:space-y-16">
         
         {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
         <div className="w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-10">
@@ -187,7 +186,7 @@ export default function HomeClient() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/all-tools"
-              className="w-full sm:w-auto flex-1 h-[52px] sm:h-[48px] rounded-xl bg-[--kv-brand-primary] text-white text-[16px] font-semibold flex items-center justify-center gap-2 shadow-lg shadow-[--kv-brand-glow] hover:opacity-90 active:scale-[0.98] transition-all duration-150 focus-visible:ring-2 focus-visible:ring-[--kv-brand-primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--kv-mat-base]"
+              className="w-full sm:w-auto flex-1 h-[52px] sm:h-[48px] rounded-xl bg-brand-primary text-white text-[16px] font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow hover:opacity-90 active:scale-[0.98] transition-all duration-150 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base"
             >
               <LayoutGrid className="w-5 h-5" />
               Browse 100+ Tools
@@ -202,11 +201,6 @@ export default function HomeClient() {
               <kbd className="text-[12px] font-mono">⌘K</kbd>
             </button>
           </div>
-        </div>
-
-        {/* Trust Indicators */}
-        <div className="w-full max-w-5xl mx-auto pt-2 md:pt-4">
-          <TrustIndicators />
         </div>
 
         {/* ── 2. Content Area ─────────────────────────────────────────────────── */}
@@ -248,7 +242,7 @@ export default function HomeClient() {
                     icon={LayoutGrid}
                   />
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-[350px]">
                     {filteredTools.map(tool => (
                       <ToolCard key={tool.id} tool={tool} compact />
                     ))}
@@ -389,11 +383,11 @@ export default function HomeClient() {
                         subtitle="Support & Privacy"
                         icon={ShieldCheck}
                       />
-                      <Accordion type="single" collapsible className="w-full space-y-2">
+                      <Accordion type="single" collapsible className="w-full space-y-3">
                         {FAQ.map((item, i) => (
-                          <AccordionItem key={i} value={`item-${i}`} className="bg-surface/50 border border-border/50 rounded-xl px-4 overflow-hidden hover:border-blue/30 transition-all">
-                            <AccordionTrigger className="text-[11px] md:text-xs font-black uppercase tracking-widest py-4 hover:no-underline text-text-2">{item.q}</AccordionTrigger>
-                            <AccordionContent className="text-xs text-text-3 font-medium pb-4 leading-relaxed">{item.a}</AccordionContent>
+                          <AccordionItem key={i} value={`item-${i}`} className="bg-surface border border-border rounded-2xl px-5 overflow-hidden hover:border-brand-primary/20 hover:shadow-sm transition-all duration-200">
+                            <AccordionTrigger className="text-sm font-black text-text py-4 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
+                            <AccordionContent className="text-xs text-text-3 font-semibold pb-4 leading-relaxed">{item.a}</AccordionContent>
                           </AccordionItem>
                         ))}
                       </Accordion>

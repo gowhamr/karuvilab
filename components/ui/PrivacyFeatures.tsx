@@ -36,9 +36,9 @@ export function PrivacyFeatures() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="relative p-8 bg-mat-surface border border-mat-border rounded-[32px] overflow-hidden group"
+            className="relative p-8 bg-mat-surface border border-mat-border rounded-[32px] overflow-hidden group shadow-premium hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
           >
-            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-110 transition-all duration-700">
+            <div className="hidden sm:block absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-110 transition-all duration-700">
               <f.icon className="w-32 h-32" />
             </div>
             

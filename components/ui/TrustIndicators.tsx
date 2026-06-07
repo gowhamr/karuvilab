@@ -20,14 +20,14 @@ export function TrustIndicators() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.1 }}
-          className="group p-4 md:p-5 bg-mat-surface border border-mat-border rounded-2xl flex flex-col gap-3 hover:border-blue/30 transition-all"
+          className="group p-4 md:p-5 bg-mat-surface border border-mat-border rounded-2xl flex flex-col gap-3 shadow-premium hover:shadow-md hover:-translate-y-0.5 hover:border-brand-primary/30 transition-all duration-300"
         >
-          <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-white transition-all">
+          <div className="w-10 h-10 rounded-xl bg-brand-primary/5 border border-brand-primary/10 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all duration-300">
             <item.icon className="w-5 h-5" />
           </div>
           <div className="space-y-0.5">
             <h3 className="text-sm font-black text-text tracking-tight">{item.title}</h3>
-            <p className="text-[11px] text-text-4 font-semibold leading-tight">{item.desc}</p>
+            <p className="text-[11px] text-text-3 font-semibold leading-tight">{item.desc}</p>
           </div>
         </m.div>
       ))}

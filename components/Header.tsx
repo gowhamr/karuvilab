@@ -93,9 +93,6 @@ export function Header() {
           <div className="hidden sm:block flex-1 max-w-md">
              <SearchBar />
           </div>
-          <div className="sm:hidden flex-1 flex justify-end">
-             <SearchBar />
-          </div>
           
           <div className="h-4 w-px bg-border/50 hidden sm:block" />
 
