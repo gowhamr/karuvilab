@@ -80,12 +80,18 @@ The following patterns are **NEVER** allowed under any circumstances:
 ### 3.2 Border Radius Tokens
 | Token | Value | Usage |
 |-------|-------|-------|
-| `rounded-[32px]` | 32px | Large cards, containers |
-| `rounded-2xl` | 24px | Secondary containers |
-| `rounded-xl` | 20px | Modals, Dialogs |
-| `rounded-lg` | 8px | Inputs, Buttons |
+| `rounded-full` | 9999px | Chips, badges, buttons, pills, search bars, toggles, avatars |
+| `rounded-3xl` | 24px | Hero cards, large feature cards, bottom sheet top corners |
+| `rounded-2xl` | 20px | Modals, dialogs, alerts, large card containers |
+| `rounded-xl` | 16px | Primary buttons, input fields, standard tool cards, settings rows |
+| `rounded-lg` | 12px | Dropdowns, menus, compact cards, medium icon containers |
+| `rounded` | 6px | Tooltips, keyboard shortcuts, small utility elements |
+| `rounded-sm` | 4px | Context menus, sub-item highlights |
+| `rounded-none` | 0px | Dividers, separators, full-bleed elements |
 
 > ⚠️ Arbitrary values like `rounded-[18px]` are **forbidden**. Use only the tokens above.
+> Every component must follow the Parent-Child Radius Rule: $\text{Radius}_{\text{child}} = \text{Radius}_{\text{parent}} - \text{Padding}_{\text{parent}}$.
+
 
 ### 3.3 Color Tokens
 | Token | Value | Usage |

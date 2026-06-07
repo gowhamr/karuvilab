@@ -15,6 +15,7 @@ All entries reviewed and approved via PR.
 | E-005 | P-15 Hardcoded Colors   | SliderField thumb bg-white      | --kv-text used as token equivalent  | Light mode only | ACTIVE   |
 | E-006 | P-07 Inline Styles      | CategoryChips active color      | backgroundColor & boxShadow only    | Permanent       | ACTIVE   |
 | E-007 | P-15 Hardcoded colors   | Sidebar favorites Heart color   | Single red Heart icon               | Permanent       | ACTIVE   |
+| E-008 | Design Token System     | Legacy `rounded-[32px]` usages   | Backward compatible `container` key | 2026-08-30      | ACTIVE   |
 
 ---
 
@@ -87,3 +88,11 @@ All entries reviewed and approved via PR.
 - **Mitigation:** Single icon, semantic purpose documented.
 - **Resolution Date:** Permanent — semantic color.
 - **Status:** ACTIVE
+
+### E-008
+- **Rule:** Design Token System (GEMINI.md §3.2)
+- **Reason:** Legacy components (e.g., ToolShell, EmptyState, MetricCard) currently use the deprecated `rounded-[32px]` or arbitrary pixel styles. They are undergoing a phased transition to the new token system.
+- **Mitigation:** Retained `container: "32px"` as a deprecated reference in `radius.ts` for backward compatibility during the migration.
+- **Resolution Date:** 2026-08-30 — complete phased rollout to standard tokens.
+- **Status:** ACTIVE
+
