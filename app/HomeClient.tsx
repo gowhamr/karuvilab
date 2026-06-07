@@ -176,25 +176,17 @@ export default function HomeClient() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 pb-28 md:pb-16 space-y-6 md:space-y-16">
         
         {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
-        <div className="w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-10">
+        <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-10">
           {/* SearchBar: hidden on mobile (BottomNav + Header handle it) */}
           <div className="hidden sm:block">
             <SearchBar variant="hero" />
           </div>
           
           {/* Primary & Secondary CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/all-tools"
-              className="w-full sm:w-auto flex-1 h-[52px] sm:h-[48px] rounded-xl bg-brand-primary text-white text-[16px] font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow hover:opacity-90 active:scale-[0.98] transition-all duration-150 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base"
-            >
-              <LayoutGrid className="w-5 h-5" />
-              Browse 100+ Tools
-            </Link>
-
+          <div className="flex justify-center">
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="hidden sm:flex h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-[15px] font-bold text-text items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
+              className="h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-[15px] font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
             >
               <Command className="w-4 h-4" />
               <span>Quick Search</span>
