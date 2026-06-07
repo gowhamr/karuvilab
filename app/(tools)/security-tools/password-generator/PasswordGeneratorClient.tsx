@@ -63,7 +63,7 @@ export default function PasswordGeneratorClient() {
     <div className="space-y-12">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-surface border border-border p-6 sm:p-8 rounded-[32px] shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
             <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
               <Lock className="w-4 h-4" />
               Generator Parameters
@@ -151,7 +151,7 @@ export default function PasswordGeneratorClient() {
         <div className="space-y-6 lg:sticky lg:top-8">
           <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2">Security Audit</h2>
           
-          <div className="bg-surface border border-border rounded-[32px] p-6 space-y-6 shadow-sm">
+          <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-emerald-600">
                 <ShieldCheck className="w-3 h-3" />

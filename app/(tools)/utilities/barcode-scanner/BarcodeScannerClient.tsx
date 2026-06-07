@@ -129,7 +129,7 @@ export default function BarcodeScannerClient() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-6">
           {mode === "camera" ? (
-            <div className="relative aspect-square md:aspect-video bg-black rounded-[32px] overflow-hidden border border-border shadow-xl">
+            <div className="relative aspect-square md:aspect-video bg-black rounded-4xl overflow-hidden border border-border shadow-xl">
               {stream ? (
                 <>
                   <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />

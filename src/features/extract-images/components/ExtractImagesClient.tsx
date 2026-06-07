@@ -177,7 +177,7 @@ export default function ExtractImagesClient() {
         </button>
 
         {images.length > 0 && (
-          <div className="bg-surface border border-border p-5 rounded-[32px] shadow-sm space-y-4">
+          <div className="bg-surface border border-border p-5 rounded-4xl shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-black text-text-2 text-[10px] uppercase tracking-[0.2em]">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
               <button 

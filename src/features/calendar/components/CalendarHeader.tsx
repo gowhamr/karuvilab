@@ -63,7 +63,7 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
             </Popover.Portal>
           </Popover.Root>
 
-          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-xl md:rounded-[20px] p-1 md:p-1.5 shadow-sm">
+          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-xl md:rounded-xl p-1 md:p-1.5 shadow-sm">
             <button
               onClick={handlePrev}
               className="p-1.5 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
@@ -87,7 +87,7 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
 
         <button
           onClick={onAddEvent}
-          className="flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-indigo-600 text-white rounded-2xl md:rounded-[24px] font-black text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group"
+          className="flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-indigo-600 text-white rounded-2xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group"
         >
           <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform duration-300" />
           <span>New Event</span>
@@ -100,7 +100,7 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
           type="single"
           value={currentView}
           onValueChange={(value) => value && setCurrentView(value as any)}
-          className="flex bg-surface/30 backdrop-blur-xl border border-border/20 rounded-[24px] p-1.5 w-max md:w-auto"
+          className="flex bg-surface/30 backdrop-blur-xl border border-border/20 rounded-2xl p-1.5 w-max md:w-auto"
         >
           <ToggleGroupItem value="month" icon={LayoutGrid} label="Month" />
           <ToggleGroupItem value="week" icon={Rows} label="Week" />

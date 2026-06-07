@@ -67,7 +67,7 @@ export default function ChartControls({
   return (
     <div className="space-y-6 lg:sticky lg:top-24">
       {/* Main Config */}
-      <div className="p-6 bg-surface border border-border rounded-[32px] shadow-sm space-y-6">
+      <div className="p-6 bg-surface border border-border rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-text-4">Chart Configuration</h2>
           <div className="flex bg-bg p-1 rounded-xl border border-border">
@@ -173,7 +173,7 @@ export default function ChartControls({
       </div>
 
       {/* Data Points */}
-      <div className="p-6 bg-surface border border-border rounded-[32px] shadow-sm space-y-6">
+      <div className="p-6 bg-surface border border-border rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-text-4">Data Points</h2>
           <button 

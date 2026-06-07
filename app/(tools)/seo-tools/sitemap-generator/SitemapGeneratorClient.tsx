@@ -129,7 +129,7 @@ export default function SitemapGeneratorClient() {
   return (
     <div className="space-y-8">
       {/* Top Bar: Base Settings */}
-      <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm flex flex-col md:flex-row items-end gap-6">
+      <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm flex flex-col md:flex-row items-end gap-6">
         <div className="flex-1 w-full space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Website Base URL</label>
           <div className="relative group">
@@ -166,7 +166,7 @@ export default function SitemapGeneratorClient() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Editor Area */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-surface border border-border rounded-[32px] shadow-sm overflow-hidden flex flex-col">
+          <div className="bg-surface border border-border rounded-4xl shadow-sm overflow-hidden flex flex-col">
             <div className="flex border-b border-border bg-bg/50">
               <button 
                 onClick={() => setActiveTab('editor')}
@@ -301,7 +301,7 @@ export default function SitemapGeneratorClient() {
 
         {/* Preview & Download */}
         <div className="space-y-6">
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6 flex flex-col min-h-[500px]">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6 flex flex-col min-h-[500px]">
             <div className="flex items-center justify-between border-b border-border pb-4">
               <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Live Preview</h2>
               <div className="flex gap-2">
@@ -343,7 +343,7 @@ export default function SitemapGeneratorClient() {
             </div>
           </div>
 
-          <div className="bg-blue/5 border border-blue/10 p-6 rounded-[32px] space-y-4">
+          <div className="bg-blue/5 border border-blue/10 p-6 rounded-4xl space-y-4">
             <h2 className="flex items-center gap-2 text-[10px] font-black text-blue uppercase tracking-widest">
                <Check size={14} aria-hidden="true" /> SEO Ready
             </h2>

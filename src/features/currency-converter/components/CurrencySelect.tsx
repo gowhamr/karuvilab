@@ -82,7 +82,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
       className={cn(
         "z-[200] bg-surface border border-border shadow-2xl flex flex-col",
         isMobile 
-          ? "fixed inset-x-4 top-[10%] bottom-[10%] rounded-[32px] max-h-[80vh]" 
+          ? "fixed inset-x-4 top-[10%] bottom-[10%] rounded-4xl max-h-[80vh]" 
           : "absolute top-full left-0 right-0 mt-2 rounded-2xl max-h-[420px]"
       )}
     >

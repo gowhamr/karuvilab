@@ -60,7 +60,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
         ))}
       </div>
 
-      <div className="p-6 bg-bg border border-border rounded-[24px] space-y-6">
+      <div className="p-6 bg-bg border border-border rounded-2xl space-y-6">
         {/* Quality */}
         <SliderField
           label="Compression Quality"

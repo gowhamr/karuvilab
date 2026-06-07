@@ -11,7 +11,7 @@ export function InputPanel() {
   const setInputs = useFinancialFreedomStore(state => state.setInputs);
 
   return (
-    <div className="space-y-8 h-full bg-surface/50 rounded-[32px] p-6 sm:p-8 border border-border">
+    <div className="space-y-8 h-full bg-surface/50 rounded-4xl p-6 sm:p-8 border border-border">
       <div>
         <h2 className="text-xl font-bold text-text mb-6 font-display">Core Parameters</h2>
         <div className="space-y-6">

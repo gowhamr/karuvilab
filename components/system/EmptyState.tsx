@@ -26,7 +26,7 @@ export function EmptyState({
   className = "" 
 }: EmptyStateProps) {
   return (
-    <div className={`flex flex-col items-center justify-center p-12 text-center bg-surface border-2 border-dashed border-border rounded-[32px] ${className}`}>
+    <div className={`flex flex-col items-center justify-center p-12 text-center bg-surface border-2 border-dashed border-border rounded-4xl ${className}`}>
       {icon && (
         <div className="w-16 h-16 mb-6 text-blue bg-blue/5 rounded-2xl flex items-center justify-center">
           {icon}

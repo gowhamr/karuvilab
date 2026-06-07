@@ -94,7 +94,7 @@ export function FeedbackModal() {
           // Mobile: Bottom Sheet
           "bottom-0 left-0 right-0 rounded-t-[32px] max-h-[90vh] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-0",
           // Desktop: Centered Modal
-          "md:bottom-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[500px] md:rounded-[32px] md:max-h-[85vh]"
+          "md:bottom-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[500px] md:rounded-4xl md:max-h-[85vh]"
         )}>
           {/* Header */}
           <div className="flex items-center justify-between px-8 py-6 border-b border-border/50">
@@ -242,7 +242,7 @@ export function FeedbackModal() {
                     <button 
                       disabled={isSubmitting}
                       type="submit"
-                      className="w-full h-[64px] bg-brand-primary text-white rounded-[20px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                      className="w-full h-[64px] bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

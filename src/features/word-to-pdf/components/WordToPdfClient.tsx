@@ -154,7 +154,7 @@ export default function WordToPdfClient() {
       </button>
 
       {result && (
-        <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-success/10 rounded-2xl flex items-center justify-center">

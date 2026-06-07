@@ -132,7 +132,7 @@ export default function ImageSeoClient() {
             className="grid gap-8 lg:grid-cols-12"
           >
             <div className="lg:col-span-7 space-y-6">
-              <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
+              <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue">
                     <FileImage className="w-5 h-5" />
@@ -213,7 +213,7 @@ export default function ImageSeoClient() {
             </div>
 
             <div className="lg:col-span-5 space-y-6">
-              <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm h-full flex flex-col">
+              <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
                     <Sparkles className="w-5 h-5" />
@@ -284,7 +284,7 @@ export default function ImageSeoClient() {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-8"
           >
-            <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+            <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
@@ -344,7 +344,7 @@ export default function ImageSeoClient() {
             exit={{ opacity: 0, scale: 0.98 }}
             className="space-y-8"
           >
-            <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm">
+            <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm">
                <div className="max-w-2xl mx-auto space-y-8 text-center py-12">
                   <div className="w-20 h-20 bg-blue/10 text-blue rounded-3xl mx-auto flex items-center justify-center shadow-inner">
                      <Search className="w-10 h-10" />

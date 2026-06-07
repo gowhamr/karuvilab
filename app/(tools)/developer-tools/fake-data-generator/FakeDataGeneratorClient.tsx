@@ -161,7 +161,7 @@ export default function FakeDataGeneratorClient() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Sidebar Configuration */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface border border-border rounded-[32px] p-8 shadow-sm space-y-8">
+          <div className="bg-surface border border-border rounded-4xl p-8 shadow-sm space-y-8">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold flex items-center gap-3">
                 <RefreshCw className={cn("w-6 h-6 text-blue", isGenerating && "animate-spin")} />
@@ -195,7 +195,7 @@ export default function FakeDataGeneratorClient() {
               <button
                 onClick={generateData}
                 disabled={isGenerating || selectedFields.length === 0}
-                className="w-full py-5 bg-blue text-white rounded-[20px] font-black text-lg shadow-xl shadow-blue/20 hover:shadow-blue/30 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                className="w-full py-5 bg-blue text-white rounded-xl font-black text-lg shadow-xl shadow-blue/20 hover:shadow-blue/30 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
               >
                 {isGenerating ? <RefreshCw className="w-6 h-6 animate-spin" /> : <ShieldCheck className="w-6 h-6" />}
                 Generate Realistic Data
@@ -203,7 +203,7 @@ export default function FakeDataGeneratorClient() {
             </div>
           </div>
 
-          <div className="bg-blue/5 border border-blue/10 rounded-[32px] p-6 space-y-4">
+          <div className="bg-blue/5 border border-blue/10 rounded-4xl p-6 space-y-4">
             <h3 className="text-sm font-black text-blue uppercase tracking-widest flex items-center gap-2">
               <ShieldCheck className="w-4 h-4" />
               Privacy Assurance
@@ -216,7 +216,7 @@ export default function FakeDataGeneratorClient() {
 
         {/* Main Selection Area */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-surface border border-border rounded-[32px] p-8 shadow-sm">
+          <div className="bg-surface border border-border rounded-4xl p-8 shadow-sm">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-xl font-bold text-text">Select Data Fields</h2>

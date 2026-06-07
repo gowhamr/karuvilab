@@ -39,7 +39,7 @@ export class ToolErrorBoundary extends Component<Props, State> {
   public override render() {
     if (this.state.hasError) {
       return (
-        <div className="p-8 bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] flex flex-col items-center justify-center text-center space-y-6">
+        <div className="p-8 bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl flex flex-col items-center justify-center text-center space-y-6">
           <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-2">
             <AlertCircle className="w-8 h-8" />
           </div>

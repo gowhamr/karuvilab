@@ -51,7 +51,7 @@ export const SingleMode: React.FC = () => {
             <ComparisonView item={activeItem} />
             
             {activeItem.status === 'error' && (
-              <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-[32px] flex items-center gap-4">
+              <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-4xl flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 shrink-0">
                   <AlertCircle size={24} />
                 </div>
@@ -74,7 +74,7 @@ export const SingleMode: React.FC = () => {
       {/* Settings Panel */}
       <div className="lg:col-span-4 space-y-6">
         <div className="sticky top-6 space-y-6">
-          <div className="p-6 bg-surface border border-border rounded-[32px] space-y-6">
+          <div className="p-6 bg-surface border border-border rounded-4xl space-y-6">
             <div className="space-y-2">
               <h3 className="text-sm font-black uppercase tracking-widest">Settings</h3>
               <p className="text-[11px] font-bold text-text-3 uppercase tracking-widest">Adjust output quality and format</p>

@@ -82,7 +82,7 @@ export default function CodeMinifierClient() {
   return (
     <div className="space-y-12">
       {/* Settings & Mode */}
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-[32px] shadow-sm space-y-8">
+      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
             <Layers className="w-4 h-4" />

@@ -102,7 +102,7 @@ export function NoteEditor() {
         
         <Dialog.Content className={cn(
           "fixed z-[401] bg-surface border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 outline-none",
-          "inset-0 md:inset-10 lg:inset-20 md:rounded-[32px] md:max-w-4xl md:mx-auto"
+          "inset-0 md:inset-10 lg:inset-20 md:rounded-4xl md:max-w-4xl md:mx-auto"
         )}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-border/50 bg-bg/30">

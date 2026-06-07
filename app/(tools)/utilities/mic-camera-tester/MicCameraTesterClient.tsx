@@ -159,7 +159,7 @@ export default function MicCameraTesterClient() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Hardware View */}
-          <div className="relative aspect-video bg-surface rounded-[32px] overflow-hidden border border-border group shadow-sm flex items-center justify-center">
+          <div className="relative aspect-video bg-surface rounded-4xl overflow-hidden border border-border group shadow-sm flex items-center justify-center">
             <video 
               ref={videoRef} 
               autoPlay 
@@ -195,7 +195,7 @@ export default function MicCameraTesterClient() {
 
           {/* Controls & Metrics */}
           <div className="space-y-6 flex flex-col justify-center">
-            <div className="p-6 sm:p-8 bg-surface border border-border rounded-[32px] space-y-8">
+            <div className="p-6 sm:p-8 bg-surface border border-border rounded-4xl space-y-8">
               
               {/* Device Selectors */}
               <div className="space-y-4">

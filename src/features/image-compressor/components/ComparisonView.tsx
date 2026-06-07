@@ -52,7 +52,7 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
 
   if (!item.compressedUrl) {
     return (
-      <div className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-[32px] overflow-hidden flex items-center justify-center">
+      <div className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-4xl overflow-hidden flex items-center justify-center">
         <img src={item.previewUrl} alt="Original" className="max-h-full object-contain" />
         <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-white text-[10px] font-black uppercase rounded-full">
           Original • {formatSize(item.originalSize)}
@@ -73,7 +73,7 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
         aria-valuenow={Math.round(sliderPos)}
         aria-valuetext={`${Math.round(sliderPos)}% original visible`}
         onKeyDown={onKeyDown}
-        className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-[32px] overflow-hidden cursor-col-resize select-none outline-none focus:ring-4 focus:ring-blue/20 transition-all group"
+        className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-4xl overflow-hidden cursor-col-resize select-none outline-none focus:ring-4 focus:ring-blue/20 transition-all group"
         onMouseMove={onMouseMove}
         onTouchMove={onTouchMove}
       >

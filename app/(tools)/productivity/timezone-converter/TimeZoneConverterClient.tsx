@@ -172,7 +172,7 @@ export default function TimeZoneConverterClient() {
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       {/* Configuration Panel */}
-      <div className="bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
         <div className="p-8 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Source Time & Zone */}
@@ -343,7 +343,7 @@ export default function TimeZoneConverterClient() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="group bg-surface border border-border rounded-[24px] p-6 hover:shadow-xl hover:border-blue/30 transition-all relative overflow-hidden"
+              className="group bg-surface border border-border rounded-2xl p-6 hover:shadow-xl hover:border-blue/30 transition-all relative overflow-hidden"
             >
               {/* Decorative Background Icon */}
               <Globe className="absolute -right-4 -bottom-4 w-24 h-24 text-blue/5 group-hover:text-blue/10 transition-colors pointer-events-none" />
@@ -414,7 +414,7 @@ export default function TimeZoneConverterClient() {
              setIsSearchingTarget(true);
              window.scrollTo({ top: 0, behavior: 'smooth' });
            }}
-           className="border-2 border-dashed border-border rounded-[24px] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue hover:bg-blue/5 transition-all group"
+           className="border-2 border-dashed border-border rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-blue hover:bg-blue/5 transition-all group"
          >
            <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center group-hover:scale-110 group-hover:bg-blue group-hover:text-white transition-all">
              <Plus className="w-6 h-6" />

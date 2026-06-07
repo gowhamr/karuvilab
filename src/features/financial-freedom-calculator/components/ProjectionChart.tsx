@@ -135,7 +135,7 @@ export function ProjectionChart() {
   }, [projections, retirementAge]);
 
   return (
-    <div className="w-full bg-surface border border-border rounded-[24px] sm:rounded-[32px] p-6 shadow-sm">
+    <div className="w-full bg-surface border border-border rounded-2xl sm:rounded-4xl p-6 shadow-sm">
       <h3 className="text-sm font-bold text-text-2 mb-4 uppercase tracking-widest">Net Worth Projection</h3>
       <div className="relative w-full aspect-[16/9] sm:aspect-[21/9]">
         <canvas

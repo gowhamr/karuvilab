@@ -39,7 +39,7 @@ export function ImageConverterControls({
   };
 
   return (
-    <div className="bg-surface border border-border rounded-[32px] p-6 sm:p-8 shadow-sm space-y-8">
+    <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
       {/* Format Selection */}
       <div className="space-y-4">
         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">

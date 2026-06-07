@@ -36,7 +36,7 @@ export default function ToolError({
     <div className="max-w-xl mx-auto py-32 px-4 text-center space-y-8">
       <div className="relative inline-flex">
         <div className="absolute -inset-4 bg-red-500/10 blur-2xl rounded-full" />
-        <div className="w-20 h-20 bg-surface border border-red-500/20 rounded-[24px] flex items-center justify-center text-red-500 relative">
+        <div className="w-20 h-20 bg-surface border border-red-500/20 rounded-2xl flex items-center justify-center text-red-500 relative">
           <AlertTriangle className="w-10 h-10" />
         </div>
       </div>

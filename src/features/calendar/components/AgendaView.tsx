@@ -77,7 +77,7 @@ function AgendaDay({
       <div className="space-y-4">
         {/* Festivals and Observances */}
         {festivals.map((f, i) => (
-          <div key={`f-${i}`} className="bg-amber-500/5 backdrop-blur-md border border-amber-500/10 p-4 md:p-6 rounded-2xl md:rounded-[32px] flex items-center gap-4 md:gap-5 shadow-sm">
+          <div key={`f-${i}`} className="bg-amber-500/5 backdrop-blur-md border border-amber-500/10 p-4 md:p-6 rounded-2xl md:rounded-4xl flex items-center gap-4 md:gap-5 shadow-sm">
             <span className="text-2xl md:text-3xl drop-shadow-sm" aria-hidden="true">{f.emoji}</span>
             <div>
               <h3 className="text-sm md:text-base font-black text-amber-700 dark:text-amber-400">{f.name}</h3>
@@ -87,7 +87,7 @@ function AgendaDay({
         ))}
 
         {observances.map((o, i) => (
-          <div key={`o-${i}`} className="bg-blue-500/5 backdrop-blur-md border border-blue-500/10 p-4 md:p-6 rounded-2xl md:rounded-[32px] flex items-center gap-4 md:gap-5 shadow-sm">
+          <div key={`o-${i}`} className="bg-blue-500/5 backdrop-blur-md border border-blue-500/10 p-4 md:p-6 rounded-2xl md:rounded-4xl flex items-center gap-4 md:gap-5 shadow-sm">
             <span className="text-2xl md:text-3xl drop-shadow-sm" aria-hidden="true">{o.emoji}</span>
             <div>
               <h3 className="text-sm md:text-base font-black text-blue-700 dark:text-blue-400">{o.name}</h3>
@@ -105,7 +105,7 @@ function AgendaDay({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="group bg-surface/40 backdrop-blur-xl border border-border/30 p-4 md:p-6 rounded-2xl md:rounded-[32px] flex items-center gap-4 md:gap-6 hover:border-indigo-500/30 transition-all shadow-md hover:shadow-xl active:scale-[0.98]"
+              className="group bg-surface/40 backdrop-blur-xl border border-border/30 p-4 md:p-6 rounded-2xl md:rounded-4xl flex items-center gap-4 md:gap-6 hover:border-indigo-500/30 transition-all shadow-md hover:shadow-xl active:scale-[0.98]"
             >
               <div className="w-14 md:w-20 flex-shrink-0 text-center border-r border-border/20 pr-4 md:pr-6">
                 <div className="text-xs md:text-sm font-black text-text tabular-nums">

@@ -28,7 +28,7 @@ export default function OgPreviewClient() {
     
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Inputs */}
-        <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
+        <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6">
           <h2 className="font-black text-text text-sm uppercase tracking-widest border-b border-border pb-3">Page Details</h2>
           
           <ToolInput
@@ -85,7 +85,7 @@ export default function OgPreviewClient() {
         {/* Previews */}
         <div className="space-y-6">
           {/* Google Search */}
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-3">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Google Search</h2>
             <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-border max-w-[560px] shadow-sm">
               <div className="flex items-center gap-2 mb-1">
@@ -101,7 +101,7 @@ export default function OgPreviewClient() {
           </div>
 
           {/* Facebook / OG */}
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-3">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Facebook / Open Graph</h2>
             <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-[480px] shadow-sm">
               {image ? (
@@ -120,7 +120,7 @@ export default function OgPreviewClient() {
           </div>
 
           {/* Twitter */}
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-3">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Twitter / X Card</h2>
             <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-[480px] shadow-sm">
               {twitterCard === "summary_large_image" ? (

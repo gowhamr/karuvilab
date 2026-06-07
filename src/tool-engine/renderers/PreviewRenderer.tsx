@@ -20,7 +20,7 @@ export default function PreviewRenderer({ result }: { result: ToolResult }) {
   if (!url) return null;
 
   return (
-    <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] overflow-hidden p-6 flex items-center justify-center">
+    <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl overflow-hidden p-6 flex items-center justify-center">
       {result.mimeType?.startsWith("image/") ? (
         <img src={url} alt="Preview" className="max-w-full h-auto rounded-2xl" />
       ) : (

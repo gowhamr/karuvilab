@@ -154,7 +154,7 @@ export default function PdfToWordClient() {
         errorMessage={libError || "Failed to load PDF extraction engine."}
       >
         <div
-          className="bg-surface border-2 border-dashed border-border rounded-[32px] p-12 text-center cursor-pointer hover:border-blue transition-all group"
+          className="bg-surface border-2 border-dashed border-border rounded-4xl p-12 text-center cursor-pointer hover:border-blue transition-all group"
           onClick={() => fileRef.current?.click()}
           onDragOver={e => e.preventDefault()}
           onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) { setFile(f); setText(""); } }}
@@ -192,7 +192,7 @@ export default function PdfToWordClient() {
         </button>
 
         {text && (
-          <div className="bg-surface border border-border p-6 rounded-[24px] shadow-sm space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="space-y-1">
                 <h2 className="font-black text-text text-sm uppercase tracking-widest">Extracted Content</h2>

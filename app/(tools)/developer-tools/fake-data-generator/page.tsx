@@ -47,7 +47,7 @@ export default function FakeDataGeneratorPage() {
             </div>
           </div>
 
-          <div className="bg-surface border border-border rounded-[40px] p-10 shadow-sm space-y-8">
+          <div className="bg-surface border border-border rounded-5xl p-10 shadow-sm space-y-8">
             <h3 className="text-xl font-bold text-text">How to Use the Generator</h3>
             <ol className="space-y-6">
               <li className="flex gap-5">
@@ -119,7 +119,7 @@ export default function FakeDataGeneratorPage() {
           </div>
         </div>
 
-        <div className="mt-20 p-12 bg-surface border border-border rounded-[48px] relative overflow-hidden group">
+        <div className="mt-20 p-12 bg-surface border border-border rounded-6xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
             <ShieldCheck className="w-32 h-32 text-blue" />
           </div>

@@ -188,7 +188,7 @@ export default function ScientificCalculatorClient() {
       {/* Calculator Main */}
       <div className="flex-1 w-full space-y-6">
         {/* Display */}
-        <div className="bg-surface border border-border rounded-[32px] p-8 text-right space-y-2 shadow-sm relative overflow-hidden group">
+        <div className="bg-surface border border-border rounded-4xl p-8 text-right space-y-2 shadow-sm relative overflow-hidden group">
            <div className="absolute top-4 left-6 opacity-0 group-hover:opacity-100 transition-opacity">
              <button 
                onClick={() => setShowHistory(!showHistory)}
@@ -250,7 +250,7 @@ export default function ScientificCalculatorClient() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className={`w-full lg:w-80 bg-surface border border-border rounded-[32px] overflow-hidden flex flex-col h-[500px] lg:h-[600px] shadow-xl lg:shadow-none ${!showHistory ? 'hidden lg:flex' : 'fixed inset-4 z-50 lg:relative lg:inset-0'}`}
+            className={`w-full lg:w-80 bg-surface border border-border rounded-4xl overflow-hidden flex flex-col h-[500px] lg:h-[600px] shadow-xl lg:shadow-none ${!showHistory ? 'hidden lg:flex' : 'fixed inset-4 z-50 lg:relative lg:inset-0'}`}
           >
             <div className="p-6 border-b border-border flex justify-between items-center bg-bg/30">
               <div className="flex items-center gap-2 font-bold text-text">

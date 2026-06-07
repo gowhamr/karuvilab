@@ -56,7 +56,7 @@ export function EmptyStateMetrics() {
 
   if (toolStats.length === 0) {
     return (
-      <div className="p-12 text-center bg-mat-surface border border-mat-border rounded-[32px] shadow-mat-shine">
+      <div className="p-12 text-center bg-mat-surface border border-mat-border rounded-4xl shadow-mat-shine">
         <BarChart3 className="w-12 h-12 text-text-4 mx-auto mb-4 opacity-20" />
         <p className="text-text-3 font-bold">No analytics data recorded yet.</p>
         <p className="text-xs text-text-4 mt-1">Start using tools to see metrics appear here.</p>
@@ -65,7 +65,7 @@ export function EmptyStateMetrics() {
   }
 
   return (
-    <div className="space-y-8 bg-mat-base p-6 rounded-[32px] border border-mat-border">
+    <div className="space-y-8 bg-mat-base p-6 rounded-4xl border border-mat-border">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-black tracking-tight">Empty State Performance</h2>

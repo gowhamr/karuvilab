@@ -182,7 +182,7 @@ export default function PomodoroTimerClient() {
       </div>
 
       {/* Mode Switcher */}
-      <div className="flex p-1.5 bg-surface border border-border rounded-[24px] shadow-premium relative z-10">
+      <div className="flex p-1.5 bg-surface border border-border rounded-2xl shadow-premium relative z-10">
         {(['focus', 'break'] as const).map((m) => (
           <button
             key={m}
@@ -280,7 +280,7 @@ export default function PomodoroTimerClient() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={toggleTimer} 
-          className="w-28 h-28 rounded-[40px] bg-blue text-white flex items-center justify-center shadow-2xl shadow-blue/40 hover:bg-blue/90 transition-all border-4 border-white/10"
+          className="w-28 h-28 rounded-5xl bg-blue text-white flex items-center justify-center shadow-2xl shadow-blue/40 hover:bg-blue/90 transition-all border-4 border-white/10"
         >
           {isActive ? <Pause className="w-12 h-12" /> : <Play className="w-12 h-12 ml-1" />}
         </motion.button>

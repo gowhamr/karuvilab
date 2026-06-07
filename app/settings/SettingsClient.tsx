@@ -60,7 +60,7 @@ export default function SettingsClient() {
           </div>
         </div>
         <div className="flex-1 space-y-8">
-           <div className="h-[500px] w-full bg-surface rounded-[40px]" />
+           <div className="h-[500px] w-full bg-surface rounded-5xl" />
         </div>
       </div>
     );
@@ -162,14 +162,14 @@ export default function SettingsClient() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-surface border border-border/40 rounded-[32px] lg:rounded-[48px] p-6 md:p-10 lg:p-16 shadow-premium relative overflow-hidden"
+            className="bg-surface border border-border/40 rounded-4xl lg:rounded-6xl p-6 md:p-10 lg:p-16 shadow-premium relative overflow-hidden"
           >
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
             
             <header className="mb-10 lg:mb-16 space-y-4 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-[20px] lg:rounded-[24px] bg-blue/5 flex items-center justify-center text-blue shadow-inner shadow-blue/10">
+                <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-blue/5 flex items-center justify-center text-blue shadow-inner shadow-blue/10">
                    {(() => {
                      const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Sun;
                      return <Icon className="w-6 h-6 lg:w-8 lg:h-8" />;

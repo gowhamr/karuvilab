@@ -101,7 +101,7 @@ export default function VideoMetadataViewerClient() {
           className="space-y-8"
         >
           {/* Header Action */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border p-6 rounded-[32px] shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border p-6 rounded-4xl shadow-sm">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue/10 rounded-2xl flex items-center justify-center text-blue">
                 <FileSearch />
@@ -137,7 +137,7 @@ export default function VideoMetadataViewerClient() {
           )}
 
           {/* Technical Details */}
-          <div className="bg-surface border border-border rounded-[32px] overflow-hidden">
+          <div className="bg-surface border border-border rounded-4xl overflow-hidden">
             <div className="p-6 border-b border-border bg-bg/50 flex items-center gap-3">
               <Info size={16} className="text-blue" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-3">Technical Stream Info</h3>

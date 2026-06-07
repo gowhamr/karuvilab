@@ -31,7 +31,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ y: -4 }}
       onClick={onClick}
-      className={`group relative bg-surface/50 backdrop-blur-xl border border-border rounded-[24px] p-5 cursor-pointer hover:border-blue/30 hover:shadow-xl hover:shadow-blue/5 transition-all flex flex-col ${
+      className={`group relative bg-surface/50 backdrop-blur-xl border border-border rounded-2xl p-5 cursor-pointer hover:border-blue/30 hover:shadow-xl hover:shadow-blue/5 transition-all flex flex-col ${
         viewMode === "list" ? "flex-row items-center gap-6" : "h-full"
       }`}
     >

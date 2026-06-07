@@ -61,7 +61,7 @@ export default function SlugGeneratorClient() {
     
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
             <div className="flex items-center justify-between border-b border-border pb-4">
               <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Input</h2>
               <div className="flex bg-bg p-1 rounded-xl border border-border">
@@ -99,7 +99,7 @@ export default function SlugGeneratorClient() {
             )}
           </div>
 
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
             <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Options</h2>
 
             <div className="grid grid-cols-2 gap-4">
@@ -138,7 +138,7 @@ export default function SlugGeneratorClient() {
 
         <div className="space-y-6">
           {!bulkMode ? (
-            <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6 h-full">
+            <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6 h-full">
               <h2 className="font-black text-text-2 text-sm uppercase tracking-widest border-b border-border pb-4">Slug Variants</h2>
 
               <div className="space-y-4">
@@ -161,7 +161,7 @@ export default function SlugGeneratorClient() {
               </div>
             </div>
           ) : (
-            <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6 h-full">
+            <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6 h-full">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Bulk Slugs ({bulkSlugs.length})</h2>
                 {bulkSlugs.length > 0 && (

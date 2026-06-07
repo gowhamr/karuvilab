@@ -81,7 +81,7 @@ export default function DateCalculatorClient() {
 
   if (!mounted) {
     return (
-      <div className="bg-surface border border-border p-6 rounded-[32px] min-h-[320px] animate-pulse" />
+      <div className="bg-surface border border-border p-6 rounded-4xl min-h-[320px] animate-pulse" />
     );
   }
 
@@ -105,7 +105,7 @@ export default function DateCalculatorClient() {
 
       {tab === "diff" && (
         <div className="space-y-8">
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <ToolInput
                 label="From Date"
@@ -147,7 +147,7 @@ export default function DateCalculatorClient() {
 
       {tab === "add" && (
         <div className="space-y-8">
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
             <ToolInput
               label="Base Date"
               type="date"
@@ -210,7 +210,7 @@ export default function DateCalculatorClient() {
           </div>
 
           {addResult && (
-            <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+            <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
               <div className="flex items-center gap-3 border-b border-border pb-4">
                 <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
                   <Calendar size={20} />
@@ -221,7 +221,7 @@ export default function DateCalculatorClient() {
                 </div>
               </div>
 
-              <div className="p-8 bg-bg rounded-[24px] border border-border flex flex-col items-center justify-center shadow-inner">
+              <div className="p-8 bg-bg rounded-2xl border border-border flex flex-col items-center justify-center shadow-inner">
                 <div className="text-4xl md:text-5xl font-black text-blue tracking-tighter tabular-nums mb-2">
                   {addResult}
                 </div>

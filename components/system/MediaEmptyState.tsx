@@ -27,7 +27,7 @@ export function MediaEmptyState({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className={cn(
-        "p-12 sm:p-20 bg-surface border border-border rounded-[32px] text-center space-y-8 flex flex-col items-center justify-center min-h-[400px] shadow-sm",
+        "p-12 sm:p-20 bg-surface border border-border rounded-4xl text-center space-y-8 flex flex-col items-center justify-center min-h-[400px] shadow-sm",
         className
       )}
     >

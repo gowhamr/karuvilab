@@ -128,7 +128,7 @@ export default function EMICalculatorClient() {
       {/* Top Section: Inputs & Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-surface border border-border rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 shadow-sm">
+          <div className="bg-surface border border-border rounded-2xl sm:rounded-4xl p-4 sm:p-8 shadow-sm">
             <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue mb-8 flex items-center gap-3">
               <Calculator className="w-4 h-4" />
               Loan Configuration
@@ -170,7 +170,7 @@ export default function EMICalculatorClient() {
             loading={isLoading || !result}
           />
 
-          <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-[24px] sm:rounded-[32px] space-y-3 relative overflow-hidden">
+          <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-2xl sm:rounded-4xl space-y-3 relative overflow-hidden">
             { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-10" /> }
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />

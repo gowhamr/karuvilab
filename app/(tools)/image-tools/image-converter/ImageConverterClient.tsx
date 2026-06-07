@@ -178,7 +178,7 @@ export default function ImageConverterClient() {
         </div>
 
         <div className="lg:col-span-2 hidden lg:block sticky top-8">
-          <div className="bg-blue/5 border border-blue/10 rounded-[32px] p-8 space-y-6">
+          <div className="bg-blue/5 border border-blue/10 rounded-4xl p-8 space-y-6">
             <h2 className="font-black text-sm uppercase tracking-widest text-blue">Platform Hardening</h2>
             <ul className="space-y-4">
               {[
@@ -228,7 +228,7 @@ export default function ImageConverterClient() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
-            className="py-32 flex flex-col items-center justify-center text-center space-y-6 border-2 border-dashed border-border rounded-[32px]"
+            className="py-32 flex flex-col items-center justify-center text-center space-y-6 border-2 border-dashed border-border rounded-4xl"
           >
             <div className="w-20 h-20 bg-bg rounded-full flex items-center justify-center text-4xl">
               📥
@@ -250,7 +250,7 @@ export default function ImageConverterClient() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-surface/80 backdrop-blur-sm flex items-center justify-center p-6"
           >
-            <div className="bg-surface border border-border rounded-[32px] p-10 shadow-2xl max-w-sm w-full text-center space-y-6">
+            <div className="bg-surface border border-border rounded-4xl p-10 shadow-2xl max-w-sm w-full text-center space-y-6">
               <Loader2 className="w-12 h-12 text-blue animate-spin mx-auto" />
               <div className="space-y-2">
                 <h2 className="font-black text-xl">Creating Archive</h2>

@@ -51,9 +51,9 @@ export default function AgeCalculatorClient() {
   }, [dob, asOf]);
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <ToolInput
             label="Date of Birth"
             type="date"

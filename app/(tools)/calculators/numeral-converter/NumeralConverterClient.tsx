@@ -189,7 +189,7 @@ export default function NumeralConverterClient() {
 
         <div className="grid grid-cols-1 gap-6">
           {/* Main Inputs */}
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-6">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6">
             {/* ASCII Text Field */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -328,7 +328,7 @@ export default function NumeralConverterClient() {
 
         {/* Dynamic Bit Visualizer for Single Mode */}
         {mode === "single" && bitSize > 0 && parsedDec !== null && (
-          <div className="bg-surface border border-border p-6 rounded-[32px] space-y-6">
+          <div className="bg-surface border border-border p-6 rounded-4xl space-y-6">
             <h2 className="text-sm font-bold text-text-2 uppercase tracking-widest">{bitSize}-Bit Visualizer</h2>
             <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
               {parsedDec.toString(2).padStart(bitSize, "0").split("").map((bit, i) => (

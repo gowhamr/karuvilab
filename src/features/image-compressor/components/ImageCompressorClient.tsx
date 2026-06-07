@@ -84,7 +84,7 @@ export default function ImageCompressorClient() {
           { title: "Fast Engine", desc: "Worker-powered compression for peak performance.", icon: <Zap className="text-blue" /> },
           { title: "Universal", desc: "Supports JPEG, PNG, WebP, and next-gen AVIF.", icon: <ImageIcon className="text-blue" /> },
         ].map((f, i) => (
-          <div key={i} className="p-8 bg-surface border border-border rounded-[32px] space-y-4 hover:border-blue/30 transition-colors group">
+          <div key={i} className="p-8 bg-surface border border-border rounded-4xl space-y-4 hover:border-blue/30 transition-colors group">
             <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center group-hover:scale-110 transition-transform">
               {f.icon}
             </div>

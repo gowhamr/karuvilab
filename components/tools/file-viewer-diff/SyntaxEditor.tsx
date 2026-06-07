@@ -79,7 +79,7 @@ export function SyntaxEditor({
       <m.div 
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center h-full min-h-[400px] bg-surface border border-dashed border-border rounded-[32px] text-center p-12"
+        className="flex flex-col items-center justify-center h-full min-h-[400px] bg-surface border border-dashed border-border rounded-4xl text-center p-12"
       >
         <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center mb-6 shadow-sm">
           <Copy className="w-8 h-8 text-text-4" />

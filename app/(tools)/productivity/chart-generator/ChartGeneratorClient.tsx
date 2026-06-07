@@ -157,7 +157,7 @@ export default function ChartGeneratorClient() {
 
         {/* Chart Preview */}
         <div className="xl:col-span-8 space-y-6">
-          <div className="p-8 md:p-12 bg-surface border border-border rounded-[48px] shadow-sm flex flex-col items-center justify-center min-h-[600px] relative overflow-hidden group/canvas">
+          <div className="p-8 md:p-12 bg-surface border border-border rounded-6xl shadow-sm flex flex-col items-center justify-center min-h-[600px] relative overflow-hidden group/canvas">
             
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
@@ -219,7 +219,7 @@ export default function ChartGeneratorClient() {
 
           {/* Empty State / Tips */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 bg-surface border border-border rounded-[32px] flex items-center gap-4">
+            <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
                 <Palette className="w-6 h-6" />
               </div>
@@ -228,7 +228,7 @@ export default function ChartGeneratorClient() {
                 <p className="text-xs text-text-4">Apply curated color schemes for consistent brand aesthetics.</p>
               </div>
             </div>
-            <div className="p-6 bg-surface border border-border rounded-[32px] flex items-center gap-4">
+            <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
                 <LayoutGrid className="w-6 h-6" />
               </div>

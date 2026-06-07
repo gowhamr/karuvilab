@@ -109,7 +109,7 @@ export default function FinancialFreedomCalculatorClient() {
         </div>
 
         {isComparisonMode ? (
-          <div className="bg-surface border border-border p-6 rounded-[32px] space-y-4">
+          <div className="bg-surface border border-border p-6 rounded-4xl space-y-4">
             <h2 className="text-sm font-bold text-text-2 uppercase tracking-widest">Scenario Comparison</h2>
             <ComparisonView />
           </div>

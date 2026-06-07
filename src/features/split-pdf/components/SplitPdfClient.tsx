@@ -95,7 +95,7 @@ export default function SplitPdfClient() {
   return (
     <div className="space-y-6">
       <div
-        className="bg-surface border-2 border-dashed border-border rounded-[32px] p-10 text-center cursor-pointer hover:border-blue transition-colors group"
+        className="bg-surface border-2 border-dashed border-border rounded-4xl p-10 text-center cursor-pointer hover:border-blue transition-colors group"
         onClick={() => fileRef.current?.click()}
         onDragOver={e => e.preventDefault()}
         onDrop={e => { 
@@ -124,7 +124,7 @@ export default function SplitPdfClient() {
         <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { if (e.target.files) loadFile(e.target.files); }} />
       </div>
 
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
         <Checkbox
           label="Split into individual pages (one file per page)"
           checked={splitAll}

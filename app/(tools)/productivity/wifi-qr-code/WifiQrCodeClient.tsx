@@ -57,7 +57,7 @@ export default function WifiQrCodeClient() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-6 p-8 bg-surface border border-border rounded-[32px]">
+        <div className="space-y-6 p-8 bg-surface border border-border rounded-4xl">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <Wifi className="w-5 h-5 text-blue" aria-hidden="true" />
             Network Details
@@ -112,7 +112,7 @@ export default function WifiQrCodeClient() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-8 bg-surface border border-border rounded-[32px] space-y-6 min-h-[400px] relative">
+        <div className="flex flex-col items-center justify-center p-8 bg-surface border border-border rounded-4xl space-y-6 min-h-[400px] relative">
           <QRCodeLoader onLoad={() => setIsLibLoaded(true)} />
           
           {ssid ? (

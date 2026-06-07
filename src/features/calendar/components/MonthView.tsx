@@ -25,7 +25,7 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-surface/60 backdrop-blur-xl border border-border/30 rounded-[24px] md:rounded-[32px] overflow-hidden shadow-premium">
+    <div className="flex-1 flex flex-col min-h-0 bg-surface/60 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-4xl overflow-hidden shadow-premium">
       <div className="flex-1 flex flex-col overflow-x-auto no-scrollbar">
         <div className="min-w-[320px] md:min-w-full flex-1 flex flex-col">
           {/* Weekday Headers */}

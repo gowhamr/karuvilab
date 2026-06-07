@@ -81,7 +81,7 @@ Generated via KaruviLab`;
   return (
     <div className="space-y-8">
       {/* Input Section */}
-      <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+      <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
             <ToolInput
@@ -122,7 +122,7 @@ Generated via KaruviLab`;
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setMode("add")}
-                  className={`flex flex-col items-center gap-1 p-4 rounded-[24px] border-2 transition-all ${
+                  className={`flex flex-col items-center gap-1 p-4 rounded-2xl border-2 transition-all ${
                     mode === "add"
                       ? "bg-blue/5 border-blue text-blue"
                       : "bg-bg border-border text-text-3 hover:border-blue/30"
@@ -133,7 +133,7 @@ Generated via KaruviLab`;
                 </button>
                 <button
                   onClick={() => setMode("remove")}
-                  className={`flex flex-col items-center gap-1 p-4 rounded-[24px] border-2 transition-all ${
+                  className={`flex flex-col items-center gap-1 p-4 rounded-2xl border-2 transition-all ${
                     mode === "remove"
                       ? "bg-blue/5 border-blue text-blue"
                       : "bg-bg border-border text-text-3 hover:border-blue/30"
@@ -189,7 +189,7 @@ Generated via KaruviLab`;
       </div>
 
       {/* Breakdown Card */}
-      <div className="bg-surface border border-border rounded-[32px] overflow-hidden">
+      <div className="bg-surface border border-border rounded-4xl overflow-hidden">
         <div className="p-6 border-b border-border bg-bg/50 flex items-center justify-between">
           <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Tax Breakdown</h2>
           <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Local Currency (INR)</span>

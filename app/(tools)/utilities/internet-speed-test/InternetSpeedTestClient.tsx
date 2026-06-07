@@ -571,7 +571,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
   return (
     <div className="space-y-12">
       {/* Main Testing Console */}
-      <div className="bg-surface border border-border rounded-[48px] p-6 md:p-12 shadow-2xl relative overflow-hidden">
+      <div className="bg-surface border border-border rounded-6xl p-6 md:p-12 shadow-2xl relative overflow-hidden">
           {/* Subtle Grid Background */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
                style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '24px 24px' }} />
@@ -676,7 +676,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                 </div>
 
                 {/* Smooth Bézier Chart */}
-                <div className="w-full h-32 mt-12 bg-bg/40 rounded-[32px] overflow-hidden relative border border-border/50 group" aria-hidden="true">
+                <div className="w-full h-32 mt-12 bg-bg/40 rounded-4xl overflow-hidden relative border border-border/50 group" aria-hidden="true">
                   <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
                     <defs>
                       <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -748,7 +748,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             <div className="w-full xl:w-96 space-y-6">
               {/* Essential Metrics Grid */}
               <dl className="grid grid-cols-2 gap-4">
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-2xl space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
                     <ArrowDown className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
                     <dt className="text-[9px] font-black uppercase tracking-widest">Download</dt>
@@ -758,7 +758,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                     {download !== null && <span className="text-[10px] ml-1 opacity-40">Mbps</span>}
                   </dd>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-2xl space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
                     <ArrowUp className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
                     <dt className="text-[9px] font-black uppercase tracking-widest">Upload</dt>
@@ -768,28 +768,28 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                     {upload !== null && <span className="text-[10px] ml-1 opacity-40">Mbps</span>}
                   </dd>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-2xl space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
                     <Activity className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
                     <dt className="text-[9px] font-black uppercase tracking-widest">Latency (Idle)</dt>
                   </div>
                   <dd className="text-2xl font-black text-text tabular-nums">{ping !== null ? `${ping}ms` : '--'}</dd>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-2xl space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
                     <RefreshCw className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
                     <dt className="text-[9px] font-black uppercase tracking-widest">Jitter</dt>
                   </div>
                   <dd className="text-2xl font-black text-text tabular-nums">{jitter !== null ? `${jitter}ms` : '--'}</dd>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-2xl space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
                     <ShieldCheck className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
                     <dt className="text-[9px] font-black uppercase tracking-widest">Stability</dt>
                   </div>
                   <dd className="text-2xl font-black text-text tabular-nums">{status === 'completed' ? `${stability.toFixed(0)}%` : status === 'idle' ? '--' : 'Calc...'}</dd>
                 </div>
-                <div className="bg-bg/40 border border-border/50 p-5 rounded-[24px] space-y-1 group hover:border-blue/30 transition-colors">
+                <div className="bg-bg/40 border border-border/50 p-5 rounded-2xl space-y-1 group hover:border-blue/30 transition-colors">
                   <div className="flex items-center gap-2 text-text-4">
                     <Timer className="w-3.5 h-3.5 group-hover:text-blue transition-colors" aria-hidden="true" />
                     <dt className="text-[9px] font-black uppercase tracking-widest">Loaded Latency</dt>
@@ -801,7 +801,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
               </dl>
 
               {/* Provider Information */}
-              <dl className="bg-bg/40 border border-border/50 p-6 rounded-[32px] space-y-5">
+              <dl className="bg-bg/40 border border-border/50 p-6 rounded-4xl space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center text-text-2">
                     <Server className="w-5 h-5" aria-hidden="true" />
@@ -867,7 +867,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-12 p-6 bg-red-500/5 border border-red-500/10 rounded-[32px] flex flex-col gap-4"
+              className="mt-12 p-6 bg-red-500/5 border border-red-500/10 rounded-4xl flex flex-col gap-4"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 flex-shrink-0">
@@ -952,7 +952,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-surface border border-border p-10 rounded-[48px] space-y-10"
+            className="bg-surface border border-border p-10 rounded-6xl space-y-10"
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                <div className="space-y-2">
@@ -976,7 +976,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               <div className="p-6 bg-bg/40 border border-border/50 rounded-[32px] space-y-4">
+               <div className="p-6 bg-bg/40 border border-border/50 rounded-4xl space-y-4">
                   <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
                      <Zap className="w-5 h-5" />
                   </div>
@@ -987,7 +987,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                      </p>
                   </div>
                </div>
-               <div className="p-6 bg-bg/40 border border-border/50 rounded-[32px] space-y-4">
+               <div className="p-6 bg-bg/40 border border-border/50 rounded-4xl space-y-4">
                   <div className="w-10 h-10 rounded-xl bg-orange-500/5 flex items-center justify-center text-orange-500">
                      <Activity className="w-5 h-5" />
                   </div>
@@ -998,7 +998,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
                      </p>
                   </div>
                </div>
-               <div className="p-6 bg-bg/40 border border-border/50 rounded-[32px] space-y-4">
+               <div className="p-6 bg-bg/40 border border-border/50 rounded-4xl space-y-4">
                   <div className="w-10 h-10 rounded-xl bg-green-500/5 flex items-center justify-center text-green-500">
                      <MonitorPlay className="w-5 h-5" />
                   </div>
@@ -1022,7 +1022,7 @@ function IntelligenceCard({ icon: Icon, title, requirement, current, isLatency, 
 
   return (
     <div className={cn(
-      "bg-surface border p-6 rounded-[32px] space-y-4 transition-all duration-500 relative overflow-hidden group",
+      "bg-surface border p-6 rounded-4xl space-y-4 transition-all duration-500 relative overflow-hidden group",
       status === 'yes' ? "border-green-500/20 shadow-lg shadow-green-500/5" : "border-border"
     )}>
       {status === 'yes' && (

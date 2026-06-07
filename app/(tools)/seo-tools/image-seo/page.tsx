@@ -31,7 +31,7 @@ export default function page() {
             </p>
           </div>
 
-          <div className="bg-surface border border-border p-6 rounded-[32px]">
+          <div className="bg-surface border border-border p-6 rounded-4xl">
             <h3 className="text-xl font-bold text-text mb-4">How to Use the Tool</h3>
             <ol className="space-y-4 text-text-3">
               <li className="flex gap-3">
@@ -54,7 +54,7 @@ export default function page() {
           </div>
         </div>
 
-        <div className="mt-12 bg-surface border border-border rounded-[32px] p-8">
+        <div className="mt-12 bg-surface border border-border rounded-4xl p-8">
           <h2 className="text-2xl font-bold text-text mb-8 text-center">Frequently Asked Questions</h2>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
@@ -102,7 +102,7 @@ export default function page() {
           </div>
         </div>
 
-        <div className="mt-12 p-8 bg-surface border border-border rounded-[32px] flex flex-col items-center text-center">
+        <div className="mt-12 p-8 bg-surface border border-border rounded-4xl flex flex-col items-center text-center">
           <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4">
             <CheckCircle2 className="w-8 h-8 text-green-500" />
           </div>

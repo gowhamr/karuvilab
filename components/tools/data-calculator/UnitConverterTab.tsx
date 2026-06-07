@@ -54,7 +54,7 @@ export function UnitConverterTab() {
   
   return (
     <div className="space-y-8">
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div className="space-y-4">
             <label htmlFor="data-from-unit" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">From</label>
@@ -124,7 +124,7 @@ export function UnitConverterTab() {
       {/* Comparison Table */}
       <div className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-text px-2">Common Conversions</h3>
-        <div className="overflow-hidden rounded-[32px] border border-border bg-surface">
+        <div className="overflow-hidden rounded-4xl border border-border bg-surface">
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="bg-bg/50 border-b border-border">

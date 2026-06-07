@@ -139,7 +139,7 @@ Generated via KaruviLab`;
 
   return (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
         <SliderField
           label="Monthly SIP Amount"
           id="sip-monthly"

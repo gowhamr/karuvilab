@@ -59,7 +59,7 @@ export const BatchMode: React.FC = () => {
 
       <div className="lg:col-span-4 space-y-6">
         <div className="sticky top-6 space-y-6">
-          <div className="p-6 bg-surface border border-border rounded-[32px] space-y-6">
+          <div className="p-6 bg-surface border border-border rounded-4xl space-y-6">
             <div className="space-y-2">
               <h3 className="text-sm font-black uppercase tracking-widest">Global Settings</h3>
               <p className="text-[11px] font-bold text-text-3 uppercase tracking-widest">Apply to all queued images</p>

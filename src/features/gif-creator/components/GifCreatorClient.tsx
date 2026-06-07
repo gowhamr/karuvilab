@@ -137,7 +137,7 @@ export default function GifCreatorClient() {
             className="space-y-8"
           >
             {/* Header Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface border border-border p-6 rounded-[32px] shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface border border-border p-6 rounded-4xl shadow-sm">
                <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-blue/10 rounded-2xl flex items-center justify-center text-blue">
                     <Images />
@@ -182,7 +182,7 @@ export default function GifCreatorClient() {
             </div>
 
             {/* Frame Reordering */}
-            <div className="bg-bg/50 border border-border rounded-[32px] p-6">
+            <div className="bg-bg/50 border border-border rounded-4xl p-6">
               <Reorder.Group 
                 axis="x" 
                 values={frames} 
@@ -225,7 +225,7 @@ export default function GifCreatorClient() {
             <button
               onClick={handleCreate}
               disabled={status === "processing" || frames.length < 2}
-              className="w-full py-5 bg-blue text-white rounded-[24px] font-black uppercase tracking-[0.2em] shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full py-5 bg-blue text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {status === "processing" ? (
                 <>
@@ -253,7 +253,7 @@ export default function GifCreatorClient() {
                 <m.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-8 bg-success/5 border border-success/20 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-8"
+                  className="p-8 bg-success/5 border border-success/20 rounded-4xl flex flex-col md:flex-row items-center justify-between gap-8"
                 >
                   <div className="flex items-center gap-6">
                     <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg rotate-3">

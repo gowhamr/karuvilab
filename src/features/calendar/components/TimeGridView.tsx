@@ -20,7 +20,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
   const hours = Array.from({ length: 24 }, (_, i) => addHours(startOfDay(new Date()), i));
 
   return (
-    <div className="flex-1 flex flex-col bg-surface/60 backdrop-blur-xl border border-border/30 rounded-[24px] md:rounded-[32px] overflow-hidden shadow-premium relative">
+    <div className="flex-1 flex flex-col bg-surface/60 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-4xl overflow-hidden shadow-premium relative">
       {/* Scrollable Container for Mobile */}
       <div className="flex-1 flex flex-col overflow-x-auto no-scrollbar">
         <div className={cn(

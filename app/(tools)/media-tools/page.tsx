@@ -16,7 +16,7 @@ export default function MediaToolsCategory() {
     <div className="max-w-6xl mx-auto space-y-12 pb-20">
       <header className="space-y-6 text-center pt-10">
         <div className="flex justify-center">
-          <div className="w-24 h-24 bg-indigo-500/10 rounded-[32px] text-indigo-500 neon-glow flex items-center justify-center text-4xl">
+          <div className="w-24 h-24 bg-indigo-500/10 rounded-4xl text-indigo-500 neon-glow flex items-center justify-center text-4xl">
              {category.emoji}
           </div>
         </div>

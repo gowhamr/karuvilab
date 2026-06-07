@@ -36,7 +36,7 @@ export default function DiscountCalculatorClient() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-8">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
         <ToolInput
           label="Original Price (₹)"
           id="disc-price"
@@ -72,7 +72,7 @@ export default function DiscountCalculatorClient() {
       </div>
 
       {/* Reverse Calculator */}
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center gap-3 border-b border-border pb-4">
           <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
             <span className="text-xl font-bold">↺</span>

@@ -159,7 +159,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     <m.div 
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col items-center justify-center py-16 px-6 bg-surface border border-dashed border-border rounded-[32px] text-center"
+      className="flex flex-col items-center justify-center py-16 px-6 bg-surface border border-dashed border-border rounded-4xl text-center"
     >
       <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center mb-6 shadow-inner">
         <Inbox className="w-8 h-8 text-text-4 opacity-30" />
@@ -174,7 +174,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
   return (
     <div className="space-y-6" role="region" aria-label="Processing Queue">
       {/* Header / Master Stats */}
-      <div className="bg-surface border border-border rounded-[24px] p-6 shadow-sm relative overflow-hidden">
+      <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm relative overflow-hidden">
         {/* Master Progress Track (E-002) */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-surface-2 overflow-hidden">
           <m.div 

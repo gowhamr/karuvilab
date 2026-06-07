@@ -119,7 +119,7 @@ export default function CalendarPage() {
         </AnimatePresence>
 
         {isLoading && (
-          <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-[32px] border border-border/20">
+          <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-4xl border border-border/20">
             <div className="w-14 h-14 border-[5px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin shadow-lg shadow-indigo-500/20" />
           </div>
         )}

@@ -108,7 +108,7 @@ export default function TypingSpeedTestClient() {
         </div>
       </div>
 
-      <div className="p-8 bg-surface border border-border rounded-[32px] space-y-6 relative overflow-hidden">
+      <div className="p-8 bg-surface border border-border rounded-4xl space-y-6 relative overflow-hidden">
         <div 
           className="text-2xl leading-relaxed font-medium font-mono"
           onClick={() => inputRef.current?.focus()}

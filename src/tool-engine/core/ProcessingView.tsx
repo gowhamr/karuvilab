@@ -12,7 +12,7 @@ interface ProcessingViewProps {
 
 export function ProcessingView({ progress, onCancel }: ProcessingViewProps) {
   return (
-    <div className="p-8 md:p-12 bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] flex flex-col items-center justify-center text-center space-y-8 min-h-[320px]">
+    <div className="p-8 md:p-12 bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl flex flex-col items-center justify-center text-center space-y-8 min-h-[320px]">
       <div className="w-16 h-16 bg-brand-primary/10 text-brand-primary rounded-full flex items-center justify-center mb-4">
         <Loader2 className="w-8 h-8 animate-spin" />
       </div>

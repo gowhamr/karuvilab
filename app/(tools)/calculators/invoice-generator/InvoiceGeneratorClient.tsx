@@ -336,7 +336,7 @@ export default function InvoiceGeneratorClient() {
         {/* Left Column: Form Controls */}
         <div className="lg:col-span-8 space-y-8">
           {/* Section 1: Template & Branding */}
-          <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-4 flex-1">
                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
@@ -399,7 +399,7 @@ export default function InvoiceGeneratorClient() {
 
           {/* Section 2: Parties */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
+             <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    From (Your Details)
@@ -418,7 +418,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
              </div>
 
-             <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
+             <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    Bill To (Client)
@@ -439,7 +439,7 @@ export default function InvoiceGeneratorClient() {
           </div>
 
           {/* Section 3: Line Items */}
-          <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-6">
+          <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                  <div className="w-1.5 h-1.5 rounded-full bg-blue" />
@@ -507,7 +507,7 @@ export default function InvoiceGeneratorClient() {
 
         {/* Right Column: Settings & Summary */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8 sticky top-24 print:hidden">
+          <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8 sticky top-24 print:hidden">
              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Final Summary</h2>
              
              <div className="grid grid-cols-2 gap-4">
@@ -542,7 +542,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
              </div>
 
-             <div className="space-y-4 p-6 bg-blue/5 border border-blue/10 rounded-[24px]">
+             <div className="space-y-4 p-6 bg-blue/5 border border-blue/10 rounded-2xl">
                 <div className="space-y-3">
                    <div className="flex justify-between items-center text-xs font-bold">
                      <span className="text-text-3 uppercase tracking-tighter">Subtotal</span>

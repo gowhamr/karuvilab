@@ -46,7 +46,7 @@ export default function GlobalError({
           <div className="max-w-md w-full space-y-8 animate-in fade-in zoom-in-95 duration-500">
             <div className="relative inline-flex mx-auto">
               <div className="absolute -inset-4 bg-red-500/10 blur-2xl rounded-full" />
-              <div className="w-20 h-20 bg-[#0F172A] border border-red-500/20 rounded-[24px] flex items-center justify-center text-red-500 relative">
+              <div className="w-20 h-20 bg-[#0F172A] border border-red-500/20 rounded-2xl flex items-center justify-center text-red-500 relative">
                 <AlertTriangle className="w-10 h-10" />
               </div>
             </div>

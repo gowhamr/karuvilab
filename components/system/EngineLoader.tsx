@@ -94,7 +94,7 @@ export function EngineLoader({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="p-8 bg-error/5 border border-error/10 rounded-[32px] text-center space-y-4"
+          className="p-8 bg-error/5 border border-error/10 rounded-4xl text-center space-y-4"
         >
           <div className="w-12 h-12 bg-error/10 rounded-2xl flex items-center justify-center mx-auto">
             <AlertCircle className="w-6 h-6 text-error" />
@@ -121,7 +121,7 @@ export function EngineLoader({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="p-12 bg-surface border border-border rounded-[32px] text-center space-y-4"
+          className="p-12 bg-surface border border-border rounded-4xl text-center space-y-4"
         >
           <div className="w-12 h-12 bg-blue/10 rounded-2xl flex items-center justify-center mx-auto">
             <Loader2 className="w-6 h-6 text-blue animate-spin" />

@@ -80,14 +80,17 @@ The following patterns are **NEVER** allowed under any circumstances:
 ### 3.2 Border Radius Tokens
 | Token | Value | Usage |
 |-------|-------|-------|
-| `rounded-full` | 9999px | Chips, badges, buttons, pills, search bars, toggles, avatars |
-| `rounded-3xl` | 24px | Hero cards, large feature cards, bottom sheet top corners |
-| `rounded-2xl` | 20px | Modals, dialogs, alerts, large card containers |
-| `rounded-xl` | 16px | Primary buttons, input fields, standard tool cards, settings rows |
-| `rounded-lg` | 12px | Dropdowns, menus, compact cards, medium icon containers |
-| `rounded` | 6px | Tooltips, keyboard shortcuts, small utility elements |
-| `rounded-sm` | 4px | Context menus, sub-item highlights |
-| `rounded-none` | 0px | Dividers, separators, full-bleed elements |
+| `rounded-full` | 9999px | Chips, badges, toggle pills, avatars |
+| `rounded-6xl` | 48px | Ultra-large hero containers, main app entry wrappers |
+| `rounded-5xl` | 40px | Large section containers, landing section blocks |
+| `rounded-4xl` | 32px | Bottom sheet top corners, edge-to-edge containers |
+| `rounded-3xl` | 28px | Hero cards, large feature cards, modals |
+| `rounded-2xl` | 24px | Primary tool cards, large dialogs |
+| `rounded-xl` | 20px | Primary buttons, main input fields |
+| `rounded-lg` | 16px | Secondary buttons, standard dropdowns, menus |
+| `rounded-md` | 12px | Nested card items, secondary utility buttons |
+| `rounded-sm` | 8px | Checkboxes, tooltips, small indicators |
+| `rounded-xs` | 4px | Hairline dividers, micro-elements |
 
 > ⚠️ Arbitrary values like `rounded-[18px]` are **forbidden**. Use only the tokens above.
 > Every component must follow the Parent-Child Radius Rule: $\text{Radius}_{\text{child}} = \text{Radius}_{\text{parent}} - \text{Padding}_{\text{parent}}$.

@@ -29,7 +29,7 @@ export function TransferTimeTab() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+        <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
           <div className="space-y-6">
             <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
               <FileText className="w-4 h-4" />
@@ -117,7 +117,7 @@ export function TransferTimeTab() {
             accent
           />
           
-          <div className="p-8 bg-surface border border-border rounded-[32px] space-y-4">
+          <div className="p-8 bg-surface border border-border rounded-4xl space-y-4">
             <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">Detailed Breakdown</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center py-2 border-b border-border/50">

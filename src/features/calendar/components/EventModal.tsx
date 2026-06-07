@@ -106,7 +106,7 @@ export function EventModal({
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 animate-in fade-in" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-surface border border-border rounded-[32px] p-8 shadow-2xl z-50 animate-in zoom-in-95 duration-200 overflow-hidden">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-surface border border-border rounded-4xl p-8 shadow-2xl z-50 animate-in zoom-in-95 duration-200 overflow-hidden">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">

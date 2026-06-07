@@ -35,7 +35,7 @@ export function MediaErrorBanner({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "p-6 rounded-[32px] border-l-4 shadow-sm backdrop-blur-md flex flex-col md:flex-row gap-6 items-start md:items-center justify-between",
+        "p-6 rounded-4xl border-l-4 shadow-sm backdrop-blur-md flex flex-col md:flex-row gap-6 items-start md:items-center justify-between",
         errorCode === "ENGINE_LOAD_FAILED" 
           ? "bg-amber-500/5 border-amber-500/40 text-amber-900 dark:text-amber-200" 
           : "bg-red-500/5 border-red-500/40 text-red-900 dark:text-red-200",

@@ -122,7 +122,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         />
         {!html.trim() && (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-50">
-            <div className="w-16 h-16 bg-surface rounded-[32px] flex items-center justify-center">
+            <div className="w-16 h-16 bg-surface rounded-4xl flex items-center justify-center">
               <Loader2 className="w-8 h-8 text-text-4 animate-pulse" />
             </div>
             <div className="space-y-1">

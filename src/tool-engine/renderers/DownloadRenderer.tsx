@@ -15,7 +15,7 @@ export default function DownloadRenderer({ result }: { result: ToolResult }) {
   }, [result, download]);
 
   return (
-    <div className="p-8 md:p-12 bg-mat-surface border border-mat-border shadow-mat-shine rounded-[32px] flex flex-col items-center justify-center text-center space-y-6 min-h-[320px]">
+    <div className="p-8 md:p-12 bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl flex flex-col items-center justify-center text-center space-y-6 min-h-[320px]">
       <div className="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-2">
         <CheckCircle2 className="w-10 h-10" />
       </div>

@@ -127,7 +127,7 @@ export default function ImageResizerClient() {
           )}
 
           {/* Options */}
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <ToolInput
                 label="Width (px)"
@@ -158,7 +158,7 @@ export default function ImageResizerClient() {
         </div>
 
         {/* Output */}
-        <div className="bg-surface border border-border p-6 md:p-8 rounded-[32px] shadow-sm space-y-6">
+        <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
           <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Result</h2>
           {resizedUrl ? (
             <>

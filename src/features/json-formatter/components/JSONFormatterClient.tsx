@@ -221,13 +221,13 @@ export default function JSONFormatterClient() {
 
   const { output, error, parsed } = result;
 
-  if (!isLoaded) return <div className="animate-pulse h-[500px] bg-surface/50 rounded-[32px] border border-border" />;
+  if (!isLoaded) return <div className="animate-pulse h-[500px] bg-surface/50 rounded-4xl border border-border" />;
 
   return (
     <div className="space-y-12">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-surface border border-border rounded-[32px] p-6 sm:p-8 shadow-sm space-y-8 relative overflow-hidden">
+          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8 relative overflow-hidden">
             {isProcessing && (
               <div className="absolute top-0 left-0 w-full h-1 bg-blue/10 overflow-hidden">
                 <div className="h-full bg-blue animate-progress w-full" />
@@ -264,7 +264,7 @@ export default function JSONFormatterClient() {
 
         <aside className="space-y-6 lg:sticky lg:top-8">
           <h2 className="text-[10px] font-black uppercase tracking-widest text-text-4 px-2">Settings</h2>
-          <div className="bg-surface border border-border rounded-[32px] p-6 space-y-6 shadow-sm">
+          <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
             {mode === "beautify" && (
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-3">Indentation</p>
@@ -325,7 +325,7 @@ export default function JSONFormatterClient() {
           </div>
         </div>
 
-        <div className="bg-surface border border-border rounded-[32px] p-2 shadow-sm min-h-[400px] relative">
+        <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-[400px] relative">
           {(!output && !isProcessing && !error) ? (
             <EmptyState 
               toolId="jsonFormatter"

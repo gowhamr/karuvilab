@@ -139,7 +139,7 @@ export default function VideoTrimClient() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
-          <div className="bg-surface border border-border rounded-[32px] overflow-hidden shadow-sm">
+          <div className="bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
             <div className="aspect-video relative bg-black">
               <video
                 ref={videoRef}
@@ -248,7 +248,7 @@ export default function VideoTrimClient() {
               <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-8 bg-success/5 border border-success/20 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-6"
+                className="p-8 bg-success/5 border border-success/20 rounded-4xl flex flex-col md:flex-row items-center justify-between gap-6"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-success/10 rounded-2xl flex items-center justify-center text-success">

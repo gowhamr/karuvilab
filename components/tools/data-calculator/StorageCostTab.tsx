@@ -35,7 +35,7 @@ export function StorageCostTab() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        <div className="bg-surface border border-border p-8 rounded-[32px] shadow-sm space-y-8">
+        <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
           <div className="space-y-6">
             <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
               <HardDrive className="w-4 h-4" />
@@ -122,7 +122,7 @@ export function StorageCostTab() {
             sub={`$${(totalCost / durationMonths).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / month`}
           />
           
-          <div className="p-8 bg-surface border border-border rounded-[32px] space-y-6">
+          <div className="p-8 bg-surface border border-border rounded-4xl space-y-6">
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
               <h4 className="text-[10px] font-black uppercase tracking-widest">Cost Analysis</h4>

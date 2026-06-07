@@ -182,7 +182,7 @@ export default function HashGeneratorClient() {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-4"
               >
-                <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-4">
+                <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Enter Text Content</label>
                     <span className="text-[10px] font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
@@ -217,7 +217,7 @@ export default function HashGeneratorClient() {
                   multiple={false}
                   title="Drop a file to hash"
                   description="All file types supported. Local processing only."
-                  className="aspect-video lg:aspect-auto lg:h-[300px] rounded-[32px]"
+                  className="aspect-video lg:aspect-auto lg:h-[300px] rounded-4xl"
                 />
                 {file && (
                   <div className="bg-surface border border-border px-6 py-4 rounded-2xl flex items-center justify-between group">
@@ -245,7 +245,7 @@ export default function HashGeneratorClient() {
 
         {/* Settings Area */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border p-6 rounded-[32px] shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-8">
             <div className="flex items-center gap-2 mb-2">
               <Settings2 size={18} className="text-blue" aria-hidden="true" />
               <h2 className="text-sm font-black uppercase tracking-widest text-text">Options</h2>
@@ -377,7 +377,7 @@ export default function HashGeneratorClient() {
                   <div 
                     key={algo} 
                     className={cn(
-                      "bg-surface border p-4 md:p-6 rounded-[28px] shadow-sm transition-all",
+                      "bg-surface border p-4 md:p-6 rounded-3xl shadow-sm transition-all",
                       res?.loading ? "opacity-50 border-border" : "border-border"
                     )}
                   >
@@ -434,7 +434,7 @@ export default function HashGeneratorClient() {
           ].map((item, i) => {
             const Icon = item.icon as any;
             return (
-              <div key={i} className="flex flex-col items-center text-center space-y-2 p-6 border border-border rounded-[32px]">
+              <div key={i} className="flex flex-col items-center text-center space-y-2 p-6 border border-border rounded-4xl">
                 <Icon className="text-blue" size={24} aria-hidden="true" />
                 <h3 className="text-[10px] font-black uppercase tracking-widest">{item.title}</h3>
                 <p className="text-[9px] font-medium text-text-4 uppercase">{item.desc}</p>

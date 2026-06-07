@@ -56,11 +56,11 @@ export class ErrorBoundary extends Component<Props, State> {
           <div 
             role="alert" 
             aria-live="assertive"
-            className="flex flex-col items-center justify-center p-8 sm:p-12 bg-surface border border-border rounded-[40px] space-y-8 text-center animate-in fade-in zoom-in-95 duration-500 shadow-2xl shadow-red-500/5 overflow-hidden"
+            className="flex flex-col items-center justify-center p-8 sm:p-12 bg-surface border border-border rounded-5xl space-y-8 text-center animate-in fade-in zoom-in-95 duration-500 shadow-2xl shadow-red-500/5 overflow-hidden"
           >
-            <div className="w-20 h-20 rounded-[24px] bg-red-500/10 flex items-center justify-center text-red-500 relative">
+            <div className="w-20 h-20 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 relative">
               <AlertTriangle className="w-10 h-10" />
-              <div className="absolute inset-0 rounded-[24px] border border-red-500/20 animate-ping" />
+              <div className="absolute inset-0 rounded-2xl border border-red-500/20 animate-ping" />
             </div>
             
             <div className="space-y-3">

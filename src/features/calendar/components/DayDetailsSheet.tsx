@@ -69,13 +69,13 @@ export function DayDetailsSheet({
                   <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Today's Context</h3>
                   <div className="grid gap-3">
                     {festivals.map((f, i) => (
-                      <div key={`f-${i}`} className="bg-amber-500/5 border border-amber-500/10 p-5 rounded-[32px] flex items-center gap-5 shadow-sm">
+                      <div key={`f-${i}`} className="bg-amber-500/5 border border-amber-500/10 p-5 rounded-4xl flex items-center gap-5 shadow-sm">
                         <span className="text-3xl drop-shadow-sm">{f.emoji}</span>
                         <span className="text-base font-black text-amber-700 dark:text-amber-400">{f.name}</span>
                       </div>
                     ))}
                     {observances.map((o, i) => (
-                      <div key={`o-${i}`} className="bg-blue-500/5 border border-blue-500/10 p-5 rounded-[32px] flex items-center gap-5 shadow-sm">
+                      <div key={`o-${i}`} className="bg-blue-500/5 border border-blue-500/10 p-5 rounded-4xl flex items-center gap-5 shadow-sm">
                         <span className="text-3xl drop-shadow-sm">{o.emoji}</span>
                         <span className="text-base font-black text-blue-700 dark:text-blue-400">{o.name}</span>
                       </div>
@@ -88,7 +88,7 @@ export function DayDetailsSheet({
               <div className="space-y-4">
                 <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Schedule</h3>
                 {dayEvents.length === 0 ? (
-                  <div className="p-10 border-2 border-dashed border-border/20 rounded-[40px] text-center space-y-3">
+                  <div className="p-10 border-2 border-dashed border-border/20 rounded-5xl text-center space-y-3">
                     <div className="w-16 h-16 bg-indigo-500/5 rounded-3xl flex items-center justify-center mx-auto text-3xl">📭</div>
                     <p className="text-sm text-text-4 font-bold uppercase tracking-widest opacity-40">Zero Events</p>
                   </div>
@@ -103,7 +103,7 @@ export function DayDetailsSheet({
                           onAddEvent(date);
                           onClose();
                         }}
-                        className="bg-surface/40 backdrop-blur-lg border border-border/40 p-6 rounded-[32px] flex items-center gap-6 shadow-sm active:shadow-inner transition-all"
+                        className="bg-surface/40 backdrop-blur-lg border border-border/40 p-6 rounded-4xl flex items-center gap-6 shadow-sm active:shadow-inner transition-all"
                       >
                         <div className="w-2 h-14 rounded-full shadow-sm" style={{ backgroundColor: (COLOR_MAP as any)[event.color].hex }} />
                         <div className="flex-1 min-w-0">
@@ -128,7 +128,7 @@ export function DayDetailsSheet({
 
             <button 
               onClick={onClose}
-              className="mt-14 w-full py-5 rounded-[32px] bg-bg/50 border border-border/30 text-[11px] font-black uppercase tracking-[0.3em] text-text-4 hover:bg-surface transition-colors"
+              className="mt-14 w-full py-5 rounded-4xl bg-bg/50 border border-border/30 text-[11px] font-black uppercase tracking-[0.3em] text-text-4 hover:bg-surface transition-colors"
             >
               Dismiss
             </button>
