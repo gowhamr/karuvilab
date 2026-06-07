@@ -43,20 +43,20 @@ export function CookieConsentBanner() {
               <Cookie className="w-5 h-5" />
             </div>
             <p className="text-xs text-text-3 leading-relaxed">
-              This site uses third‑party advertising cookies from Google to display personalized ads. You can accept or reject these cookies. Learn more in our <Link href="/privacy" className="text-blue hover:underline font-bold">Privacy Policy</Link>.
+              To keep KaruviLab free and private, we use Google AdSense to serve personalized ads. This requires third‑party advertising cookies. <strong className="text-blue">Your tool data remains 100% local and is never shared.</strong> You can accept or reject these cookies below. Learn more in our <Link href="/privacy" className="text-blue hover:underline font-bold">Privacy Policy</Link>.
             </p>
           </div>
           
           <div className="grid grid-cols-2 gap-3">
             <button 
               onClick={() => handleConsent("rejected")}
-              className="px-4 py-2.5 border border-border hover:bg-bg text-text-3 font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all"
+              className="px-4 py-3 border border-mat-border hover:bg-mat-hover text-text-3 font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all active:scale-95"
             >
               Reject All
             </button>
             <button 
               onClick={() => handleConsent("accepted")}
-              className="px-4 py-2.5 bg-blue hover:bg-blue-dark text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all"
+              className="px-4 py-3 bg-blue hover:bg-blue-dark text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all shadow-lg shadow-blue/20 active:scale-95"
             >
               Accept All
             </button>
