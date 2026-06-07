@@ -10,12 +10,32 @@ import { usePathname } from "next/navigation";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { SearchBar } from "@/components/ui/search/SearchBar";
 import { cn } from "@/src/lib/utils";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export function Header() {
   const isOnline = useOnlineStatus();
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
   const [scrolled, setScrolled] = useState(false);
+  const themeToggleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = themeToggleRef.current;
+    if (!el) return;
+
+    const updateAriaLabel = () => {
+      const btn = el.querySelector("button");
+      if (btn) {
+        btn.setAttribute("aria-label", "Toggle theme");
+      }
+    };
+
+    updateAriaLabel();
+
+    const observer = new MutationObserver(updateAriaLabel);
+    observer.observe(el, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -93,7 +113,9 @@ export function Header() {
             )}
           </AnimatePresence>
 
-          <ThemeToggle />
+          <div ref={themeToggleRef} className="flex">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>

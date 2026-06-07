@@ -1,17 +1,7 @@
-import { MetadataRoute } from "next";
-
-export const dynamic = "force-static";
-
+import { MetadataRoute } from "next"
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/_next/", "/admin/"],
-      },
-    ],
+    rules: [{ userAgent: "*", allow: "/" }],
     sitemap: "https://karuvilab.com/sitemap.xml",
-    host: "https://karuvilab.com",
-  };
+  }
 }

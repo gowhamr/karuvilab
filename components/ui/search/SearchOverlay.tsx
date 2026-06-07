@@ -132,7 +132,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             className={cn(
               "flex-1 sm:flex-none flex flex-col",
               "w-full overflow-hidden",
-              "bg-[--kv-mat-base]",
+              "bg-[--kv-mat-base] sm:bg-transparent",
               "sm:rounded-2xl sm:max-w-2xl sm:mx-auto",
               "sm:max-h-[600px]",
               blurEnabled

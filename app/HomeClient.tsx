@@ -138,16 +138,23 @@ export default function HomeClient() {
   const popularToolsMap = useSearchStore(state => state.popularTools);
   const popularTools = useMemo(() => {
     const usageBased = Object.entries(popularToolsMap)
+      .filter(([_, count]) => count > 0)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
       .map(([id]) => ALL_TOOLS.find(t => t.id === id))
       .filter(Boolean) as ToolEntry[];
 
-    // Fall back to hardcoded if no usage data yet
+    const hardcoded = (ALL_TOOLS as ToolEntry[]).filter(t => t.popular);
+
     if (usageBased.length < 4) {
-      return (ALL_TOOLS as ToolEntry[]).filter(t => t.popular).slice(0, 10);
+      return hardcoded.slice(0, 10);
     }
-    return usageBased;
+
+    // Merge usage-based (priority) with hardcoded, keeping unique items
+    const merged = new Set<ToolEntry>();
+    usageBased.forEach(t => merged.add(t));
+    hardcoded.forEach(t => merged.add(t));
+    
+    return Array.from(merged).slice(0, 10);
   }, [popularToolsMap]);
 
   const filteredTools = useMemo(() => {
@@ -262,8 +269,8 @@ export default function HomeClient() {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
+                          transition={{ duration: 0.25 }}
+                          style={{ overflow: "hidden" }}
                         >
                           <SectionHeader 
                             title={t('common.recent')} 
@@ -288,8 +295,8 @@ export default function HomeClient() {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
+                          transition={{ duration: 0.25 }}
+                          style={{ overflow: "hidden" }}
                         >
                           <SectionHeader 
                             title={t('common.favorites')} 
@@ -323,17 +330,13 @@ export default function HomeClient() {
                       ))}
                     </div>
 
-                    {/* sm+: horizontal scroll carousel */}
-                    <div className="hidden sm:block relative">
-                      <div className="flex overflow-x-auto no-scrollbar gap-3 md:gap-4 pb-2 snap-x snap-mandatory">
-                        {popularTools.map(tool => (
-                          <div key={tool.id} className="min-w-[200px] snap-start shrink-0">
-                            <ToolCard tool={tool} />
-                          </div>
-                        ))}
-                      </div>
-                      {/* Fade gradient at right edge */}
-                      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-mat-base to-transparent pointer-events-none" />
+                    {/* Tablet+ carousel */}
+                    <div className="hidden sm:flex overflow-x-auto no-scrollbar gap-3 pb-2 snap-x snap-mandatory">
+                      {popularTools.map(tool => (
+                        <div key={tool.id} className="min-w-[220px] snap-start shrink-0">
+                          <ToolCard tool={tool} />
+                        </div>
+                      ))}
                     </div>
                   </section>
 
