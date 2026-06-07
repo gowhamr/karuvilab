@@ -10,7 +10,9 @@ import {
   Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate,
   Activity, Video, Laptop, Zap as ZapIcon, Globe2, Briefcase as WorkIcon,
   Hourglass, Languages, Music, Film, Info, Tags, Network, Music2, Scissors as ScissorsIcon,
-  Timer, ArrowLeftRight, Code2
+  Timer, ArrowLeftRight, Code2,
+  IndianRupee, Home, Award, TrendingUp as TrendingUpIcon,
+  Palette, Eye, Square, Layers as LayersIcon
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -81,6 +83,18 @@ export const TOOL_ICONS: Record<string, any> = {
   "lorem-ipsum": FileText,
   "csv-to-json": ArrowLeftRight,
   "xml-formatter": Code2,
+  
+  "income-tax": IndianRupee,
+  "hra-calculator": Home,
+  "gratuity-calculator": Award,
+  "tds-calculator": Percent,
+  "nps-calculator": TrendingUpIcon,
+
+  // Design Tools
+  "gradient-generator": Palette,
+  "contrast-checker": Eye,
+  "box-shadow-generator": Square,
+  "glassmorphism-generator": LayersIcon,
 
   // Security Tools
   "base64": Binary,
