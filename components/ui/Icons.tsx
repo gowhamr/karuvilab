@@ -12,7 +12,8 @@ import {
   Hourglass, Languages, Music, Film, Info, Tags, Network, Music2, Scissors as ScissorsIcon,
   Timer, ArrowLeftRight, Code2,
   IndianRupee, Home, Award, TrendingUp as TrendingUpIcon,
-  Palette, Eye, Square, Layers as LayersIcon
+  Palette, Eye, Square, Layers as LayersIcon,
+  KeyRound, Shield
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -97,6 +98,9 @@ export const TOOL_ICONS: Record<string, any> = {
   "glassmorphism-generator": LayersIcon,
 
   // Security Tools
+  "hmac-generator": KeyRound,
+  "cipher-tools": Lock,
+  "csp-builder": Shield,
   "base64": Binary,
   "password-generator": Key,
   "hash-generator": Fingerprint,
