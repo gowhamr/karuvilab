@@ -87,6 +87,18 @@ const COMMANDS: Command[] = [
   { category: 'Unix/SCO', cmd: 'sysadmsh', desc: 'SCO Admin visual shell (Legacy Admin Tool)' },
   { category: 'Unix/SCO', cmd: 'sar -u 1 10', desc: 'System activity reporter (Monitor CPU usage)' },
   { category: 'Unix/SCO', cmd: 'lp -d <printer> <file>', desc: 'Submit print request to a specific printer' },
+
+  // Editors
+  { category: 'Editors', cmd: 'vi <file>', desc: 'Open file in Vi/Vim editor' },
+  { category: 'Editors', cmd: 'i', desc: 'Vi: Enter Insert mode (Edit text)' },
+  { category: 'Editors', cmd: 'Esc', desc: 'Vi: Return to Command mode' },
+  { category: 'Editors', cmd: ':wq', desc: 'Vi: Save and Quit' },
+  { category: 'Editors', cmd: ':q!', desc: 'Vi: Quit without saving' },
+  { category: 'Editors', cmd: 'dd', desc: 'Vi: Delete current line' },
+  { category: 'Editors', cmd: 'nano <file>', desc: 'Open file in Nano editor' },
+  { category: 'Editors', cmd: 'Ctrl + O', desc: 'Nano: Save (Write Out) changes' },
+  { category: 'Editors', cmd: 'Ctrl + X', desc: 'Nano: Exit editor' },
+  { category: 'Editors', cmd: 'Ctrl + W', desc: 'Nano: Search for text' },
 ];
 
 const CATEGORIES = ['All', ...Array.from(new Set(COMMANDS.map(c => c.category)))];
