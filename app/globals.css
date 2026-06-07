@@ -179,16 +179,16 @@ html.preload *:after {
   --text:         #0F172A;
   --text-rgb:     15, 23, 42;
   --text-2:       #334155;
-  --text-3:       #475569;
-  --text-4:       #4A5568;
-  --border:       #E2E8F0;
-  --border-rgb:   226, 232, 240;
+  --text-3:       #3F4E64;
+  --text-4:       #5E6C84;
+  --border:       #DDE4EE;
+  --border-rgb:   221, 228, 238;
   --border-2:     #CBD5E1;
   --bg:           #F8FAFC;
   --bg-rgb:       248, 250, 252;
   --surface:      #FFFFFF;
   --elevated:     #F8FAFC;
-  --hover:        #E2E8F0;
+  --hover:        #F1F5F9;
   --bg-input:     #F8FAFC;
 
   --border-focus:   #4F46E5;
@@ -203,9 +203,9 @@ html.preload *:after {
   --kv-mat-border-focus:  #4F46E5;
   --kv-mat-shine:         rgba(255, 255, 255, 0.5);
   
-  --kv-glass-bg:          rgba(255, 255, 255, 0.9);
-  --kv-glass-border:      rgba(0, 0, 0, 0.05);
-  --kv-glass-shine:       rgba(255, 255, 255, 0.8);
+  --kv-glass-bg:          rgba(255, 255, 255, 0.85);
+  --kv-glass-border:      rgba(226, 232, 240, 0.8);
+  --kv-glass-shine:       rgba(255, 255, 255, 0.9);
 }
 
 [data-theme="dark"] {

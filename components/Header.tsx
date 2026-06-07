@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Menu, WifiOff } from "lucide-react";
+import { Menu, WifiOff, Search } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { m, useScroll, useTransform, AnimatePresence, useMotionTemplate } from "framer-motion";
 import { usePerformanceSettings, useOnlineStatus } from "@/src/lib/hooks";
@@ -51,7 +51,7 @@ export function Header() {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between gap-4 pt-safe">
-        <div className="flex items-center gap-2 md:gap-8">
+        <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
           <button
             onClick={() => setIsSidebarOpen(true)}
             className="md:hidden min-w-[44px] min-h-[44px] -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
@@ -72,7 +72,7 @@ export function Header() {
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {[
               { label: "Calculators", href: "/calculators" },
               { label: "PDF Tools", href: "/pdf-tools" },
@@ -89,13 +89,25 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4 flex-1 justify-end">
-          <div className="hidden sm:block flex-1 max-w-md">
-             <SearchBar />
-          </div>
-          
-          <div className="h-4 w-px bg-border/50 hidden sm:block" />
+        {/* Center Search - Desktop Only */}
+        <div className="hidden md:flex flex-1 justify-center max-w-xl mx-auto px-4">
+           <SearchBar className="md:min-w-[280px] lg:min-w-[400px]" />
+        </div>
 
+        <div className="flex items-center gap-2 md:gap-4 flex-shrink-0 justify-end">
+          {/* Search Trigger - Mobile Only */}
+          <div className="md:hidden flex items-center">
+             <button 
+                onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
+                className="w-11 h-11 flex items-center justify-center text-text-3 hover:text-blue hover:bg-blue/5 rounded-xl transition-all"
+                aria-label="Search tools"
+             >
+                <Search className="w-5 h-5" />
+             </button>
+          </div>
+
+          <div className="h-4 w-px bg-border/50 hidden sm:block" />
+          
           <AnimatePresence>
             {!isOnline && (
               <m.div
