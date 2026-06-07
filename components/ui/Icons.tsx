@@ -104,6 +104,7 @@ export const TOOL_ICONS: Record<string, any> = {
   "slug-generator": Link2,
   "seo-title": Type,
   "calendar": Calendar,
+  "crontab-editor": Clock,
 
   // Media Tools
   "video-trim": ScissorsIcon,
