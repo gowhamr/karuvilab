@@ -9,7 +9,8 @@ import {
   QrCode, Copy, Type, SpellCheck, CheckSquare, FileEdit, Link2, FileCheck, 
   Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate,
   Activity, Video, Laptop, Zap as ZapIcon, Globe2, Briefcase as WorkIcon,
-  Hourglass, Languages, Music, Film, Info, Tags, Network, Music2, Scissors as ScissorsIcon
+  Hourglass, Languages, Music, Film, Info, Tags, Network, Music2, Scissors as ScissorsIcon,
+  Timer, ArrowLeftRight, Code2
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -75,6 +76,11 @@ export const TOOL_ICONS: Record<string, any> = {
   "diff-checker": GitCompare,
   "format": Code,
   "html-viewer": LayoutTemplate,
+  "uuid-generator": Fingerprint,
+  "unix-timestamp": Timer,
+  "lorem-ipsum": FileText,
+  "csv-to-json": ArrowLeftRight,
+  "xml-formatter": Code2,
 
   // Security Tools
   "base64": Binary,
