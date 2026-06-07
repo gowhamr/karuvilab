@@ -8,7 +8,8 @@ import {
   RefreshCw, Crop, Users, Wand2, Braces, Table, Terminal, FileCode, GitCompare, 
   QrCode, Copy, Type, SpellCheck, CheckSquare, FileEdit, Link2, FileCheck, 
   Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate,
-  Activity
+  Activity, Video, Laptop, Zap as ZapIcon, Globe2, Briefcase as WorkIcon,
+  Hourglass, Languages
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -16,33 +17,34 @@ export const CATEGORY_ICONS: Record<string, any> = {
   pdf: FileText,
   image: ImageIcon,
   security: ShieldCheck,
-  developer: Code,
-  utilities: Wrench,
-  seo: Search,
-  productivity: LayoutTemplate,
+  developer: Terminal,
+  utilities: Laptop,
+  seo: Globe2,
+  productivity: ZapIcon,
+  media: Video,
 };
 
 export const TOOL_ICONS: Record<string, any> = {
   // Calculators
   "emi-calculator": Landmark,
   "sip-calculator": TrendingUp,
-  "age-calculator": Calendar,
+  "age-calculator": Hourglass,
   "compound-interest": Coins,
   "gst-calculator": Tag,
-  "currency-converter": RefreshCw,
-  "discount-calculator": Tag,
+  "currency-converter": Languages,
+  "discount-calculator": Percent,
   "world-clock": Globe,
   "date-calculator": Calendar,
   "time-calculator": Clock,
   "standard-calculator": Calculator,
-  "salary-calculator": Briefcase,
-  "percentage-calculator": Percent,
+  "salary-calculator": WorkIcon,
+  "percentage-calculator": HashIcon,
   "unit-converter": Layers,
-  "numeral-converter": HashIcon,
+  "numeral-converter": Binary,
   "smart-converter": Wand2,
   "safe-to-spend": Gauge,
   "work-hours": Clock,
-  "utc-ist-converter": Globe,
+  "utc-ist-converter": Globe2,
 
   // PDF Tools
   "compress-pdf": FileArchive,
@@ -79,7 +81,7 @@ export const TOOL_ICONS: Record<string, any> = {
   "password-generator": Key,
   "hash-generator": Fingerprint,
   "url-encoder": Link2,
-  "html-entities": Code,
+  "html-entities": Braces,
   "jwt-decoder": ShieldCheck,
 
   // Utilities
@@ -98,7 +100,7 @@ export const TOOL_ICONS: Record<string, any> = {
   "og-preview": ImageIcon,
   "sitemap-generator": Layout,
   "robots-txt": FileSearch,
-  "image-seo": Search,
+  "image-seo": FileSearch,
   "slug-generator": Link2,
   "seo-title": Type,
   "calendar": Calendar,
@@ -123,8 +125,9 @@ const CATEGORIES_FALLBACK: Record<string, any> = {
   pdf: FileText,
   image: ImageIcon,
   security: ShieldCheck,
-  developer: Code,
-  utilities: Wrench,
-  seo: Search,
-  productivity: LayoutTemplate,
+  developer: Terminal,
+  utilities: Laptop,
+  seo: Globe2,
+  productivity: ZapIcon,
+  media: Video,
 };

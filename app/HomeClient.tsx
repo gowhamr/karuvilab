@@ -173,10 +173,10 @@ export default function HomeClient() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-28 md:pb-16 space-y-6 md:space-y-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-28 md:pb-16 space-y-6 md:space-y-12">
         
         {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
-        <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-10">
+        <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-8">
           {/* SearchBar: hidden on mobile (BottomNav + Header handle it) */}
           <div className="hidden sm:block">
             <SearchBar variant="hero" />
@@ -218,7 +218,7 @@ export default function HomeClient() {
             </div>
           </div>
 
-          <div className="pt-8">
+          <div className="pt-6">
             <AnimatePresence mode="wait">
               {isFiltering ? (
                 <m.section 
@@ -245,7 +245,7 @@ export default function HomeClient() {
                   key="default-content"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="space-y-12 md:space-y-20"
+                  className="space-y-10 md:space-y-12"
                 >
                   {/* 1. Recently Used (if any) — CLS-safe */}
                   <div className="min-h-0 transition-all duration-300">
