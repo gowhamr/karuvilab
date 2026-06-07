@@ -15,6 +15,7 @@ import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
 import { useMemo } from 'react';
 import { parseAndSanitizeMarkdownSync } from '@/src/lib/security';
+import { ToolFeedback } from './ToolFeedback';
 
 interface ToolShellProps {
   title: string;
@@ -193,6 +194,8 @@ export function ToolShell({ title, description, category, children, toolId, cont
               All processing happens locally in your browser. Your files and data are never uploaded to our servers.
             </p>
           </div>
+
+          <ToolFeedback toolId={finalToolId} toolName={title} />
 
           <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
             <h3 className="font-bold text-sm text-text">Need Help?</h3>

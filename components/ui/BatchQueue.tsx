@@ -22,6 +22,7 @@ import { findToolById, DataType } from '@/src/tool-registry';
 import { WorkflowSuggestions } from './WorkflowSuggestions';
 import { StatusBadge } from '@/components/system/StatusBadge';
 import { cn } from '@/src/lib/utils';
+import { useContextualActionBar } from '@/src/store/useContextualActionBar';
 
 interface BatchQueueProps {
   toolId: string;
@@ -100,6 +101,60 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     }
   }, [stats.completed, isProcessing, toolId, items.length, syncToolOutput]);
 
+  const setBarConfig = useContextualActionBar(s => s.setBarConfig);
+  const hideBar = useContextualActionBar(s => s.hide);
+
+  const overallProgress = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
+  const allCompleted = stats.total > 0 && stats.completed === stats.total;
+
+  useEffect(() => {
+    if (items.length === 0) {
+      hideBar();
+      return;
+    }
+
+    if (isProcessing) {
+      setBarConfig({
+        type: "processing",
+        progress: overallProgress,
+        label: `Processing ${stats.processing + stats.pending} files...`,
+        onCancel: () => cancelAll(toolId),
+      });
+    } else if (allCompleted) {
+      setBarConfig({
+        type: "done",
+        primaryLabel: onDownloadAll ? "Bundle .ZIP" : "Clear Queue",
+        onPrimaryClick: onDownloadAll || (() => clearItems(toolId)),
+        secondaryLabel: onDownloadAll ? "Clear" : undefined,
+        onSecondaryClick: onDownloadAll ? (() => clearItems(toolId)) : undefined,
+      });
+    } else {
+      setBarConfig({
+        type: "idle",
+        label: "Execute All",
+        onClick: onProcess,
+      });
+    }
+
+    return () => {
+      hideBar();
+    };
+  }, [
+    items.length,
+    isProcessing,
+    overallProgress,
+    stats.processing,
+    stats.pending,
+    allCompleted,
+    onDownloadAll,
+    onProcess,
+    toolId,
+    cancelAll,
+    clearItems,
+    setBarConfig,
+    hideBar
+  ]);
+
   if (items.length === 0) return (
     <m.div 
       initial={{ opacity: 0, scale: 0.98 }}
@@ -115,8 +170,6 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       </p>
     </m.div>
   );
-
-  const overallProgress = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
 
   return (
     <div className="space-y-6" role="region" aria-label="Processing Queue">

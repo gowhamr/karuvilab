@@ -8,8 +8,12 @@ import { LazyMotion, domAnimation } from "framer-motion";
 import { Footer } from "@/components/Footer";
 import dynamic from "next/dynamic";
 import { FeedbackModal } from "@/components/ui/FeedbackModal";
+import { ContextualActionBar } from "@/components/ui/ContextualActionBar";
+import { useContextualActionBar } from "@/src/store/useContextualActionBar";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
+  const isBarVisible = useContextualActionBar((s) => s.visible);
+
   return (
     <LazyMotion features={domAnimation}>
       <ToastProvider>
@@ -18,10 +22,11 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           <Sidebar />
           <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">
             <Header />
-            <div className="flex-1 pb-[72px] md:pb-0">
+            <div className={`flex-1 md:pb-0 ${isBarVisible ? 'pb-[136px]' : 'pb-[72px]'}`}>
               {children}
             </div>
             <Footer />
+            <ContextualActionBar />
             <BottomNav />
           </div>
         </div>
