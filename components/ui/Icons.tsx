@@ -9,7 +9,7 @@ import {
   QrCode, Copy, Type, SpellCheck, CheckSquare, FileEdit, Link2, FileCheck, 
   Globe, Layout, FileSearch, Trash2, Binary, Fingerprint, LayoutTemplate,
   Activity, Video, Laptop, Zap as ZapIcon, Globe2, Briefcase as WorkIcon,
-  Hourglass, Languages
+  Hourglass, Languages, Music, Film, Info, Tags, Network, Music2, Scissors as ScissorsIcon
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -96,14 +96,20 @@ export const TOOL_ICONS: Record<string, any> = {
   "internet-speed-test": Activity,
 
   // SEO Tools
-  "meta-tags": Layout,
+  "meta-tags": Tags,
   "og-preview": ImageIcon,
-  "sitemap-generator": Layout,
+  "sitemap-generator": Network,
   "robots-txt": FileSearch,
-  "image-seo": FileSearch,
+  "image-seo": Search,
   "slug-generator": Link2,
   "seo-title": Type,
   "calendar": Calendar,
+
+  // Media Tools
+  "video-trim": ScissorsIcon,
+  "audio-converter": Music2,
+  "gif-creator": Film,
+  "video-metadata-viewer": Info,
 };
 
 export const TRUST_INDICATORS = [

@@ -234,10 +234,12 @@ export default function HomeClient() {
                     icon={LayoutGrid}
                   />
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-[350px]">
-                    {filteredTools.map(tool => (
-                      <ToolCard key={tool.id} tool={tool} compact />
-                    ))}
+                  <div className="min-h-[350px]">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                      {filteredTools.map(tool => (
+                        <ToolCard key={tool.id} tool={tool} compact />
+                      ))}
+                    </div>
                   </div>
                 </m.section>
               ) : (
