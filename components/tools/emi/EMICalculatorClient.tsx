@@ -16,7 +16,9 @@ import { ExportButtons } from "./ExportButtons";
 import { SaveLoadScenarios } from "./SaveLoadScenarios";
 import { formatCurrency } from "@/src/lib/utils";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 import { Calculator, TrendingDown, Receipt, Calendar, Info } from "lucide-react";
+import { useMemo } from "react";
 
 export default function EMICalculatorClient() {
   const inputs = useEmiStore(state => state.inputs);
@@ -71,6 +73,38 @@ export default function EMICalculatorClient() {
     return () => { active = false; };
   }, [inputs, saveState]);
 
+  const summary = useMemo(() => {
+    if (!result) return "";
+    let s = `EMI Calculator Summary\n`;
+    s += `----------------------\n`;
+    s += `Loan Amount: ${formatCurrency(inputs.loanAmount)}\n`;
+    s += `Interest Rate: ${inputs.interestRate}%\n`;
+    s += `Tenure: ${inputs.tenureMonths} Months\n`;
+    
+    if (inputs.floatingRateDelta) {
+      s += `Floating Rate Delta: ${inputs.floatingRateDelta > 0 ? '+' : ''}${inputs.floatingRateDelta}%\n`;
+    }
+    
+    if (inputs.moratorium) {
+      s += `Moratorium: ${inputs.moratorium.months} Months (${inputs.moratorium.type})\n`;
+    }
+
+    s += `\nResults:\n`;
+    s += `Monthly EMI: ${formatCurrency(result.monthlyEmi)}\n`;
+    s += `Total Interest: ${formatCurrency(result.totalInterest)}\n`;
+    s += `Total Payment: ${formatCurrency(result.totalPayment)}\n`;
+    s += `Effective Tenure: ${result.effectiveTenure} Months\n`;
+    
+    if (result.savings) {
+      s += `\nSavings via Prepayment:\n`;
+      s += `Interest Saved: ${formatCurrency(result.savings.interest)}\n`;
+      s += `Tenure Saved: ${result.savings.months} Months\n`;
+    }
+    
+    s += `\nGenerated via KaruviLab`;
+    return s;
+  }, [inputs, result]);
+
   const handleClearSession = () => {
     clearState('emi-calculator');
     const defaultInputs: Partial<EmiInputsType> = { 
@@ -113,6 +147,7 @@ export default function EMICalculatorClient() {
             label="Monthly EMI"
             value={formatCurrency(result?.monthlyEmi || 0)}
             icon={Receipt}
+            loading={isLoading || !result}
             trend={(inputs.floatingRateDelta !== undefined && inputs.floatingRateDelta !== 0) ? {
               value: `${inputs.floatingRateDelta > 0 ? '+' : ''}${inputs.floatingRateDelta}%`,
               isPositive: inputs.floatingRateDelta < 0,
@@ -124,6 +159,7 @@ export default function EMICalculatorClient() {
             label="Total Interest"
             value={formatCurrency(result?.totalInterest || 0)}
             icon={TrendingDown}
+            loading={isLoading || !result}
             className="bg-bg/50"
           />
 
@@ -131,9 +167,11 @@ export default function EMICalculatorClient() {
             label="Total Payment"
             value={formatCurrency(result?.totalPayment || 0)}
             icon={Calendar}
+            loading={isLoading || !result}
           />
 
-          <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-[24px] sm:rounded-[32px] space-y-3">
+          <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-[24px] sm:rounded-[32px] space-y-3 relative overflow-hidden">
+            { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-10" /> }
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
               <span className="text-[10px] font-black uppercase tracking-widest">Effective Tenure</span>
@@ -148,7 +186,14 @@ export default function EMICalculatorClient() {
             </p>
           </div>
 
-          <div className="no-print">
+          <CalculatorActionBar 
+            summary={summary}
+            toolId="emi-calculator"
+            historyLabel={`${formatCurrency(inputs.loanAmount)} @ ${inputs.interestRate}%`}
+            historyData={{ inputs, result }}
+          />
+
+          <div className="no-print pt-4">
              <SaveLoadScenarios />
           </div>
         </div>

@@ -41,7 +41,7 @@ export interface EmiResult {
  * Standard EMI formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
  */
 export function calculateEmi(p: number, r: number, n: number): number {
-  if (n <= 0) return 0;
+  if (isNaN(p) || isNaN(r) || isNaN(n) || n <= 0) return 0;
   if (r === 0) return p / n;
   const monthlyRate = r / 12 / 100;
   return (p * monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
@@ -52,26 +52,26 @@ export function calculateEmi(p: number, r: number, n: number): number {
  */
 export function generateSchedule(inputs: EmiInputs): EmiResult {
   const { 
-    loanAmount, 
-    interestRate, 
-    tenureMonths, 
+    loanAmount = 0, 
+    interestRate = 0, 
+    tenureMonths = 0, 
     prepayments = [], 
     recurringPrepayment,
     moratorium,
     floatingRateDelta = 0
   } = inputs;
 
-  const actualRate = interestRate + floatingRateDelta;
+  const actualRate = (interestRate || 0) + (floatingRateDelta || 0);
   const monthlyRate = actualRate / 12 / 100;
   const baseEmi = calculateEmi(loanAmount, actualRate, tenureMonths);
   
-  let balance = loanAmount;
+  let balance = loanAmount || 0;
   let totalInterest = 0;
   let totalPrincipal = 0;
   const schedule: AmortizationEntry[] = [];
   
   let currentMonth = 1;
-  const maxMonths = tenureMonths * 2; // Safety cap
+  const maxMonths = (tenureMonths || 0) * 2 || 360; // Safety cap
 
   while (balance > 0.01 && currentMonth <= maxMonths) {
     let interestPaid = balance * monthlyRate;
