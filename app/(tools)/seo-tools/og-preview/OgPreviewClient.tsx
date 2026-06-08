@@ -87,7 +87,7 @@ export default function OgPreviewClient() {
           {/* Google Search */}
           <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Google Search</h2>
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-border max-w-[560px] shadow-sm">
+            <div className="bg-surface rounded-2xl p-5 border border-border max-w-[560px] shadow-sm">
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-4 h-4 bg-blue rounded-full flex-shrink-0" />
                 <div>

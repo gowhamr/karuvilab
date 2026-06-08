@@ -66,11 +66,11 @@ describe('Calendar World Events & Holidays', () => {
     const upcoming = getUpcomingEvents(fromDate, 3);
     
     expect(upcoming.length).toBe(3);
-    expect(upcoming[0].event.id).toBe('christmas'); // Dec 25
-    expect(upcoming[0].daysUntil).toBe(1);
+    expect(upcoming[0]!.event.id).toBe('christmas'); // Dec 25
+    expect(upcoming[0]!.daysUntil).toBe(1);
     
-    expect(upcoming[1].event.id).toBe('new-years-eve'); // Dec 31
-    expect(upcoming[1].daysUntil).toBe(7);
+    expect(upcoming[1]!.event.id).toBe('new-years-eve'); // Dec 31
+    expect(upcoming[1]!.daysUntil).toBe(7);
   });
 
   it('should filter events by category', () => {

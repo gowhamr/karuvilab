@@ -5,6 +5,7 @@ import { Code2, Play, Check, AlertTriangle, Copy, Download, Braces } from 'lucid
 import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { blobManager } from '@/src/lib/blob-manager';
 
 type XMLFormatMode = 'format' | 'minify' | 'validate';
 type XMLIndent = '2' | '4' | 'tab';
@@ -137,12 +138,12 @@ export default function XmlFormatterClient() {
   const handleDownload = () => {
     if (!result.valid || options.mode === 'validate') return;
     const blob = new Blob([result.output], { type: 'application/xml' });
-    const url = URL.createObjectURL(blob);
+    const url = blobManager.create(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = options.mode === 'minify' ? 'minified.xml' : 'formatted.xml';
     a.click();
-    URL.revokeObjectURL(url);
+    blobManager.revoke(url);
   };
 
   return (

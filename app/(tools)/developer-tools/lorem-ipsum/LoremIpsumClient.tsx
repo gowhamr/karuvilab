@@ -5,6 +5,7 @@ import { FileText, Copy, RefreshCw, Download, Layers, Text as TextIcon, AlignLef
 import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { blobManager } from '@/src/lib/blob-manager';
 
 type LoremUnit = 'words' | 'sentences' | 'paragraphs';
 type LoremVariant = 'classic' | 'cicero' | 'random' | 'hipster' | 'tech';

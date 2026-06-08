@@ -86,7 +86,7 @@ export default function BoxShadowGeneratorClient() {
         style={{ backgroundColor: bgColor }}
       >
         {/* Colors controls floating */}
-        <div className="absolute top-4 left-4 flex gap-4 bg-white/80 dark:bg-black/50 backdrop-blur-md p-2 rounded-2xl border border-border/50 shadow-sm z-10">
+        <div className="absolute top-4 left-4 flex gap-4 bg-surface/80 backdrop-blur-md p-2 rounded-2xl border border-border/50 shadow-sm z-10">
            <div className="flex items-center gap-2">
              <input type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-6 h-6 rounded cursor-pointer border-none p-0" />
              <span className="text-[10px] font-black uppercase tracking-widest text-text-4">BG</span>

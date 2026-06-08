@@ -111,7 +111,7 @@ export default function QRCodeGeneratorClient() {
 
       {input && (
         <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm flex flex-col items-center gap-6">
-          <div className="bg-white p-4 rounded-2xl shadow-sm min-w-[200px] min-h-[200px] flex items-center justify-center">
+          <div className="bg-surface p-4 rounded-2xl shadow-sm min-w-[200px] min-h-[200px] flex items-center justify-center">
             {!isLibLoaded || !qrBlobUrl ? (
                <div className="flex flex-col items-center gap-2">
                  <Loader2 className="w-8 h-8 animate-spin text-blue/30" />

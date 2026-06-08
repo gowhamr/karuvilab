@@ -5,6 +5,7 @@ import { ArrowLeftRight, Copy, Download, Code2, Table as TableIcon, AlertTriangl
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { blobManager } from '@/src/lib/blob-manager';
 
 type ConversionMode = 'csv-to-json' | 'json-to-csv';
 type Delimiter = ',' | ';' | '\\t' | '|' | 'auto';
