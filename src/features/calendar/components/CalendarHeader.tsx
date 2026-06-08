@@ -10,7 +10,8 @@ import {
   Plus,
   LayoutGrid,
   Rows,
-  List
+  List,
+  Settings
 } from "lucide-react";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import * as Popover from "@radix-ui/react-popover";
@@ -18,7 +19,13 @@ import { MiniCalendar } from "./MiniCalendar";
 import { cn } from "@/src/lib/utils";
 import { useState } from "react";
 
-export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
+export function CalendarHeader({ 
+  onAddEvent, 
+  onToggleSidebar 
+}: { 
+  onAddEvent: () => void; 
+  onToggleSidebar: () => void;
+}) {
   const currentDate = useCalendarStore(state => state.currentDate);
   const setCurrentDate = useCalendarStore(state => state.setCurrentDate);
   const currentView = useCalendarStore(state => state.currentView);
@@ -48,7 +55,7 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
             <Popover.Trigger asChild>
               <button 
                 aria-label="Open date picker"
-                className="text-left group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-2xl p-2 -m-2 transition-all"
+                className="text-left group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-2xl p-2 -m-2 transition-all min-h-[44px]"
               >
                 <h2 className="text-2xl md:text-5xl font-black tracking-tighter font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-2 md:gap-3">
                   {format(currentDate, 'MMMM')} <span className="text-text-4 font-sans font-normal opacity-50">{format(currentDate, 'yyyy')}</span>
@@ -63,35 +70,48 @@ export function CalendarHeader({ onAddEvent }: { onAddEvent: () => void }) {
             </Popover.Portal>
           </Popover.Root>
 
-          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-xl md:rounded-xl p-1 md:p-1.5 shadow-sm">
+          <div className="flex items-center bg-surface/40 backdrop-blur-md border border-border/30 rounded-xl p-1 md:p-1.5 shadow-sm">
             <button
               onClick={handlePrev}
-              className="p-1.5 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
+              aria-label="Previous period"
+              className="p-3 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90 min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
             </button>
             <button
               onClick={handleToday}
-              className="px-2 md:px-4 py-1 text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 hover:text-indigo-600 transition-colors"
+              className="px-2 md:px-4 py-2 text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 hover:text-indigo-600 transition-colors min-h-[44px]"
             >
               Today
             </button>
             <button
               onClick={handleNext}
-              className="p-1.5 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90"
+              aria-label="Next period"
+              className="p-3 md:p-2 hover:bg-surface rounded-lg md:rounded-xl text-text-3 hover:text-text transition-all active:scale-90 min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
             </button>
           </div>
         </div>
 
-        <button
-          onClick={onAddEvent}
-          className="flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-indigo-600 text-white rounded-2xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group"
-        >
-          <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform duration-300" />
-          <span>New Event</span>
-        </button>
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <button
+            onClick={onToggleSidebar}
+            className="lg:hidden flex items-center justify-center gap-2 px-5 py-3.5 bg-surface border border-border/30 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-[0.15em] hover:bg-hover active:scale-95 transition-all text-text-2 flex-1 min-h-[44px]"
+            aria-label="Toggle calendar settings"
+          >
+            <Settings className="w-4 h-4 text-indigo-500" />
+            <span>Filters</span>
+          </button>
+
+          <button
+            onClick={onAddEvent}
+            className="flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 bg-indigo-600 text-white rounded-xl font-black text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group flex-1 md:flex-none min-h-[44px]"
+          >
+            <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform duration-300" />
+            <span>New Event</span>
+          </button>
+        </div>
       </div>
 
       {/* Bottom Row: View Switching */}
@@ -117,7 +137,7 @@ function ToggleGroupItem({ value, icon: Icon, label }: { value: string, icon: an
     <ToggleGroup.Item
       value={value}
       className={cn(
-        "flex items-center gap-3 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] transition-all relative group",
+        "flex items-center gap-3 px-6 py-3.5 md:py-3 rounded-xl text-[10px] md:text-[11px] font-black uppercase tracking-[0.15em] transition-all relative group min-h-[44px]",
         "data-[state=on]:bg-indigo-600 data-[state=on]:text-white data-[state=on]:shadow-lg data-[state=on]:shadow-indigo-500/20",
         "data-[state=off]:text-text-4 data-[state=off]:hover:bg-surface/50 data-[state=off]:hover:text-text-2"
       )}

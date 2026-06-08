@@ -15,6 +15,7 @@ import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from "date
 import { useShallow } from "zustand/react/shallow";
 import { WorldEventPanel } from "./components/WorldEventPanel";
 import { CalendarSidebar } from "./components/CalendarSidebar";
+import { X } from "lucide-react";
 
 export default function CalendarPage() {
   const { 
@@ -41,6 +42,7 @@ export default function CalendarPage() {
   const setSelectedWorldEvent = useCalendarStore(state => state.setSelectedWorldEvent);
 
   const [initialDate, setInitialDate] = useState<Date>(new Date());
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useReminders();
 
@@ -105,7 +107,7 @@ export default function CalendarPage() {
 
   return (
     <div className="max-w-[1600px] mx-auto px-2 md:px-8 space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">
-      <CalendarHeader onAddEvent={() => handleAddEvent()} />
+      <CalendarHeader onAddEvent={() => handleAddEvent()} onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
 
       <div className="flex-1 flex flex-col lg:flex-row gap-6 md:gap-8 min-h-0 relative">
         <div className="flex-1 flex flex-col min-h-0 relative">
@@ -132,7 +134,10 @@ export default function CalendarPage() {
           )}
         </div>
 
-        <CalendarSidebar />
+        {/* Desktop Sidebar (inline) */}
+        <div className="hidden lg:block">
+          <CalendarSidebar />
+        </div>
       </div>
 
       <EventModal 
@@ -148,6 +153,41 @@ export default function CalendarPage() {
             date={selectedWorldEvent.date}
             onClose={() => setSelectedWorldEvent(null)}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Settings Sidebar Drawer */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSidebarOpen(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 lg:hidden"
+            />
+            {/* Slide-in Drawer */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 280 }}
+              className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-[320px] bg-surface/95 backdrop-blur-2xl border-r border-border/40 z-50 p-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar lg:hidden"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-sm font-black uppercase tracking-wider text-text-3">Preferences</span>
+                <button
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="w-8 h-8 rounded-lg bg-surface-2 border border-border/30 flex items-center justify-center text-text-3 hover:text-text active:scale-95 transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <CalendarSidebar />
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
