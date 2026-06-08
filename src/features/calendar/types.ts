@@ -22,3 +22,15 @@ export interface CalendarEvent {
   createdAt: number;
   updatedAt: number;
 }
+
+import { EventCategory, EventImportance } from './world-events-db';
+
+export interface CalendarWorldEventsSettings {
+  showWorldEvents: boolean;           // master toggle
+  showCategories: EventCategory[];    // which categories to show
+  showImportance: EventImportance[];  // major | moderate | minor
+  highlightIndianEvents: boolean;     // extra prominence for Indian events
+  showUpcomingWidget: boolean;        // sidebar widget
+  compactBadges: boolean;             // show only emoji vs emoji+name
+}
+

@@ -13,6 +13,8 @@ import { useReminders } from "./hooks/useReminders";
 import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from "date-fns";
 
 import { useShallow } from "zustand/react/shallow";
+import { WorldEventPanel } from "./components/WorldEventPanel";
+import { CalendarSidebar } from "./components/CalendarSidebar";
 
 export default function CalendarPage() {
   const { 
@@ -34,6 +36,10 @@ export default function CalendarPage() {
     isModalOpen: state.isModalOpen,
     setIsModalOpen: state.setIsModalOpen
   })));
+  
+  const selectedWorldEvent = useCalendarStore(state => state.selectedWorldEvent);
+  const setSelectedWorldEvent = useCalendarStore(state => state.setSelectedWorldEvent);
+
   const [initialDate, setInitialDate] = useState<Date>(new Date());
 
   useReminders();
@@ -101,28 +107,32 @@ export default function CalendarPage() {
     <div className="max-w-[1600px] mx-auto px-2 md:px-8 space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">
       <CalendarHeader onAddEvent={() => handleAddEvent()} />
 
-      <div className="flex-1 flex flex-col min-h-0 relative">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentView}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 flex flex-col min-h-0"
-          >
-            {currentView === 'month' && <MonthView onAddEvent={handleAddEvent} />}
-            {currentView === 'week' && <WeekView />}
-            {currentView === 'day' && <DayView />}
-            {currentView === 'agenda' && <AgendaView />}
-          </motion.div>
-        </AnimatePresence>
+      <div className="flex-1 flex flex-col lg:flex-row gap-6 md:gap-8 min-h-0 relative">
+        <div className="flex-1 flex flex-col min-h-0 relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentView}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-1 flex flex-col min-h-0"
+            >
+              {currentView === 'month' && <MonthView onAddEvent={handleAddEvent} />}
+              {currentView === 'week' && <WeekView />}
+              {currentView === 'day' && <DayView />}
+              {currentView === 'agenda' && <AgendaView />}
+            </motion.div>
+          </AnimatePresence>
 
-        {isLoading && (
-          <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-4xl border border-border/20">
-            <div className="w-14 h-14 border-[5px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin shadow-lg shadow-indigo-500/20" />
-          </div>
-        )}
+          {isLoading && (
+            <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-4xl border border-border/20">
+              <div className="w-14 h-14 border-[5px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin shadow-lg shadow-indigo-500/20" />
+            </div>
+          )}
+        </div>
+
+        <CalendarSidebar />
       </div>
 
       <EventModal 
@@ -130,6 +140,17 @@ export default function CalendarPage() {
         onClose={() => setIsModalOpen(false)} 
         initialDate={initialDate}
       />
+
+      <AnimatePresence>
+        {selectedWorldEvent && (
+          <WorldEventPanel
+            event={selectedWorldEvent.event}
+            date={selectedWorldEvent.date}
+            onClose={() => setSelectedWorldEvent(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
+

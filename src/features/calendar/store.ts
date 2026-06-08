@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { CalendarView, CalendarEvent } from './types';
+import { CalendarView, CalendarEvent, CalendarWorldEventsSettings } from './types';
 import { saveCalendarEvent, getCalendarEvents, deleteCalendarEvent } from '@/src/lib/db';
+import { WorldEvent } from './world-events-db';
 
 interface CalendarState {
   currentDate: Date;
@@ -9,12 +10,16 @@ interface CalendarState {
   selectedEventId: string | null;
   isLoading: boolean;
   isModalOpen: boolean;
+  worldEventsSettings: CalendarWorldEventsSettings;
+  selectedWorldEvent: { event: WorldEvent; date: Date } | null;
   
   // Actions
   setCurrentDate: (date: Date) => void;
   setCurrentView: (view: CalendarView) => void;
   setSelectedEvent: (id: string | null) => void;
   setIsModalOpen: (open: boolean) => void;
+  updateWorldEventsSettings: (settings: Partial<CalendarWorldEventsSettings>) => void;
+  setSelectedWorldEvent: (item: { event: WorldEvent; date: Date } | null) => void;
   
   fetchEvents: () => Promise<void>;
   addEvent: (event: Omit<CalendarEvent, 'createdAt' | 'updatedAt'>) => Promise<void>;
@@ -29,6 +34,19 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
   selectedEventId: null,
   isLoading: false,
   isModalOpen: false,
+  worldEventsSettings: {
+    showWorldEvents: true,
+    showCategories: [
+      'global-holiday', 'un-observance', 'environmental', 'health',
+      'cultural', 'historical', 'awareness', 'science-tech',
+      'indian-national', 'indian-festival', 'sporting', 'professional'
+    ],
+    showImportance: ['major', 'moderate', 'minor'],
+    highlightIndianEvents: true,
+    showUpcomingWidget: true,
+    compactBadges: false,
+  },
+  selectedWorldEvent: null,
 
   setCurrentDate: (currentDate) => set({ currentDate }),
   setCurrentView: (currentView) => set({ currentView }),
@@ -37,6 +55,10 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     if (!isModalOpen) set({ selectedEventId: null });
     set({ isModalOpen });
   },
+  updateWorldEventsSettings: (settings) => set(state => ({
+    worldEventsSettings: { ...state.worldEventsSettings, ...settings }
+  })),
+  setSelectedWorldEvent: (selectedWorldEvent) => set({ selectedWorldEvent }),
 
   fetchEvents: async () => {
     set({ isLoading: true });

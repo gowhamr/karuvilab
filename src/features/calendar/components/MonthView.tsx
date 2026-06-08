@@ -9,6 +9,8 @@ import { cn } from "@/src/lib/utils";
 import { useState } from "react";
 import { DayDetailsSheet } from "./DayDetailsSheet";
 
+import { WorldEvent } from "../world-events-db";
+
 export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) {
   const currentDate = useCalendarStore(state => state.currentDate);
   const events = useCalendarStore(state => state.events);
@@ -68,12 +70,35 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
 function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCurrentMonth: boolean, onClick: () => void, onAddEvent: (date: Date) => void }) {
   const events = useCalendarStore(state => state.events);
   const setSelectedEvent = useCalendarStore(state => state.setSelectedEvent);
+  const setSelectedWorldEvent = useCalendarStore(state => state.setSelectedWorldEvent);
+  
+  const showWorldEvents = useCalendarStore(state => state.worldEventsSettings.showWorldEvents);
+  const showCategories = useCalendarStore(state => state.worldEventsSettings.showCategories);
+  const showImportance = useCalendarStore(state => state.worldEventsSettings.showImportance);
+  const highlightIndianEvents = useCalendarStore(state => state.worldEventsSettings.highlightIndianEvents);
+  const compactBadges = useCalendarStore(state => state.worldEventsSettings.compactBadges);
+
   const isToday = isSameDay(day, new Date());
   const dayEvents = getEventsForDay(day, events);
   const festivals = getFestivalsForDay(day);
   const observances = getObservancesForDay(day);
 
-  const hasSpecialDay = festivals.length > 0 || observances.length > 0;
+  // Filter and sort world events
+  const combinedEvents = showWorldEvents ? [...festivals, ...observances].filter(e => 
+    showCategories.includes(e.category) && 
+    showImportance.includes(e.importance)
+  ) : [];
+
+  const sortedWorldEvents = [...combinedEvents].sort((a, b) => {
+    if (highlightIndianEvents) {
+      const aIsIndian = a.globalReach === 'india-specific' || a.category.startsWith('indian');
+      const bIsIndian = b.globalReach === 'india-specific' || b.category.startsWith('indian');
+      if (aIsIndian && !bIsIndian) return -1;
+      if (!aIsIndian && bIsIndian) return 1;
+    }
+    const importanceOrder = { major: 0, moderate: 1, minor: 2 };
+    return importanceOrder[a.importance] - importanceOrder[b.importance];
+  });
 
   return (
     <div
@@ -97,26 +122,42 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
 
         <div className="flex flex-col items-end gap-1">
           <div className="flex gap-0.5">
-            {festivals.map((f, i) => (
-              <span key={i} title={f.name} className="text-[10px] md:text-xs">{f.emoji}</span>
-            ))}
-            {observances.map((o, i) => (
-              <span key={i} title={o.name} className="text-[10px] md:text-xs">{o.emoji}</span>
+            {sortedWorldEvents.slice(0, 3).map((evt) => (
+              <span key={evt.id} title={evt.name} className="text-[10px] md:text-xs">{evt.emoji}</span>
             ))}
           </div>
         </div>
       </div>
 
       <div className="space-y-1 overflow-hidden">
-        {/* Festivals and Observances as mini-badges if no emoji - hidden on mobile grid to save space */}
+        {/* World Events Badges */}
         <div className="hidden md:block space-y-1">
-          {festivals.map((f, i) => (
-            <div key={`f-${i}`} className="px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-[8px] font-bold truncate">
-              {f.name}
+          {sortedWorldEvents.slice(0, 2).map((evt) => (
+            <div
+              key={evt.id}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedWorldEvent({ event: evt, date: day });
+              }}
+              className={cn(
+                "flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold truncate transition-all hover:opacity-80 border shadow-sm",
+                evt.colors.bg,
+                evt.colors.border,
+                evt.colors.text
+              )}
+            >
+              <span>{evt.emoji}</span>
+              {!compactBadges && <span className="truncate">{evt.shortName}</span>}
             </div>
           ))}
+          {sortedWorldEvents.length > 2 && (
+            <div className="text-[8px] font-black text-text-4 uppercase tracking-widest pl-1">
+              + {sortedWorldEvents.length - 2} more
+            </div>
+          )}
         </div>
 
+        {/* Personal Events */}
         <div className="flex flex-wrap gap-1 md:block md:space-y-1">
           {dayEvents.slice(0, 3).map(event => (
             <div
@@ -128,7 +169,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
               }}
               className={cn(
                 "md:px-2 md:py-1 rounded-full md:rounded-lg text-[9px] font-bold truncate border shadow-sm",
-                "w-1.5 h-1.5 md:w-auto md:h-auto", // Circle dot on mobile, auto on desktop
+                "w-1.5 h-1.5 md:w-auto md:h-auto",
                 COLOR_MAP[event.color].bg,
                 COLOR_MAP[event.color].border,
                 COLOR_MAP[event.color].text

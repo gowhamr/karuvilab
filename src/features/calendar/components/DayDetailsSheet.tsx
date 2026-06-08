@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { COLOR_MAP } from "../constants";
 import { getFestivalsForDay, getObservancesForDay } from "../utils";
 import { cn } from "@/src/lib/utils";
+import { WorldEvent } from "../world-events-db";
 
 export function DayDetailsSheet({ 
   date, 
@@ -21,9 +22,32 @@ export function DayDetailsSheet({
 }) {
   const events = useCalendarStore(state => state.events);
   const setSelectedEvent = useCalendarStore(state => state.setSelectedEvent);
+  const setSelectedWorldEvent = useCalendarStore(state => state.setSelectedWorldEvent);
+  
+  const showWorldEvents = useCalendarStore(state => state.worldEventsSettings.showWorldEvents);
+  const showCategories = useCalendarStore(state => state.worldEventsSettings.showCategories);
+  const showImportance = useCalendarStore(state => state.worldEventsSettings.showImportance);
+  const highlightIndianEvents = useCalendarStore(state => state.worldEventsSettings.highlightIndianEvents);
+
   const dayEvents = events.filter(e => isSameDay(parseISO(e.startDate), date));
   const festivals = getFestivalsForDay(date);
   const observances = getObservancesForDay(date);
+
+  const combinedEvents = showWorldEvents ? [...festivals, ...observances].filter(e => 
+    showCategories.includes(e.category) && 
+    showImportance.includes(e.importance)
+  ) : [];
+
+  const sortedWorldEvents = [...combinedEvents].sort((a, b) => {
+    if (highlightIndianEvents) {
+      const aIsIndian = a.globalReach === 'india-specific' || a.category.startsWith('indian');
+      const bIsIndian = b.globalReach === 'india-specific' || b.category.startsWith('indian');
+      if (aIsIndian && !bIsIndian) return -1;
+      if (!aIsIndian && bIsIndian) return 1;
+    }
+    const importanceOrder = { major: 0, moderate: 1, minor: 2 };
+    return importanceOrder[a.importance] - importanceOrder[b.importance];
+  });
 
   return (
     <AnimatePresence>
@@ -64,20 +88,26 @@ export function DayDetailsSheet({
 
             <div className="space-y-10">
               {/* Festivals & Observances */}
-              {(festivals.length > 0 || observances.length > 0) && (
+              {sortedWorldEvents.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Today's Context</h3>
                   <div className="grid gap-3">
-                    {festivals.map((f, i) => (
-                      <div key={`f-${i}`} className="bg-amber-500/5 border border-amber-500/10 p-5 rounded-4xl flex items-center gap-5 shadow-sm">
+                    {sortedWorldEvents.map((f) => (
+                      <div 
+                        key={f.id} 
+                        onClick={() => {
+                          setSelectedWorldEvent({ event: f, date });
+                          onClose();
+                        }}
+                        className={cn(
+                          "border p-5 rounded-4xl flex items-center gap-5 shadow-sm active:scale-98 cursor-pointer transition-all",
+                          f.colors.bg,
+                          f.colors.border,
+                          f.colors.text
+                        )}
+                      >
                         <span className="text-3xl drop-shadow-sm">{f.emoji}</span>
-                        <span className="text-base font-black text-amber-700 dark:text-amber-400">{f.name}</span>
-                      </div>
-                    ))}
-                    {observances.map((o, i) => (
-                      <div key={`o-${i}`} className="bg-blue-500/5 border border-blue-500/10 p-5 rounded-4xl flex items-center gap-5 shadow-sm">
-                        <span className="text-3xl drop-shadow-sm">{o.emoji}</span>
-                        <span className="text-base font-black text-blue-700 dark:text-blue-400">{o.name}</span>
+                        <span className="text-base font-black">{f.name}</span>
                       </div>
                     ))}
                   </div>

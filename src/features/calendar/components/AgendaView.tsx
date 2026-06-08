@@ -8,7 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getFestivalsForDay, getObservancesForDay } from "../utils";
 import { addDays, startOfDay, eachDayOfInterval } from "date-fns";
 import { CalendarEvent } from "../types";
-import { GlobalFestival, GlobalObservance } from "../data/static-data";
+import { WorldEvent } from "../world-events-db";
+
 
 export function AgendaView() {
   const events = useCalendarStore(state => state.events);
@@ -59,8 +60,8 @@ function AgendaDay({
 }: { 
   date: Date;
   dayEvents: CalendarEvent[];
-  festivals: GlobalFestival[];
-  observances: GlobalObservance[];
+  festivals: WorldEvent[];
+  observances: WorldEvent[];
 }) {
   let label = format(date, 'EEEE, MMMM d');
   if (isToday(date)) label = 'Today';
