@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Number Base Converter | KV",
-  description: "Convert numbers between binary, octal, decimal, and hexadecimal bases instantly.",
-  keywords: ["number base converter", "binary to decimal", "hex to decimal", "numeral converter", "base conversion"],
+  title: "Numeral & Encoding Converter | KV",
+  description: "Universal encoding converter. Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text. Auto-detect format and convert to all others instantly.",
+  keywords: ["numeral converter", "encoding converter", "hex to text", "binary to text", "base64 decode", "percent encoding"],
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
