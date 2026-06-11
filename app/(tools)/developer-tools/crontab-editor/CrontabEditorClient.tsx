@@ -5,6 +5,10 @@ import { Clock, Check, Copy, ChevronDown, ChevronUp, AlertCircle, Calendar, Zap,
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { FocusModeWrapper } from '@/components/ui/FocusModeWrapper';
+import { useUrlState } from '@/src/hooks/useUrlState';
+import { ShareButton } from '@/components/ui/ShareButton';
+import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
+import { QRModal } from '@/components/ui/QRModal';
 
 // --- SECTION A: Cron Parser Engine (Pure Functions) ---
 
@@ -301,14 +305,23 @@ const PRESETS = [
 // --- SECTION B & E: UI and State ---
 
 export default function CrontabEditorClient() {
-  const [expression, setExpression] = useState<string>('* * * * *');
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { expr: '* * * * *' },
+    debounceMs: 400,
+    encode: false,
+  });
+
+  const expression = state.expr as string;
+  const setExpressionUrl = useCallback((v: string) => setState({ expr: v }), [setState]);
+
   const [parsed, setParsed] = useState<ParsedCron>(parseCronExpression('* * * * *'));
   const [fontSize, setFontSize] = useState<number>(14);
   const [copied, setCopied] = useState<boolean>(false);
   const [cheatsheetOpen, setCheatsheetOpen] = useState<boolean>(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
 
   const handleExpressionChange = (val: string) => {
-    setExpression(val);
+    setExpressionUrl(val);
     setParsed(parseCronExpression(val));
   };
 
@@ -346,6 +359,8 @@ export default function CrontabEditorClient() {
       onFontSizeChange={setFontSize}
     >
       <div className="max-w-4xl mx-auto space-y-8 pb-12 w-full">
+      <SharedResultBanner hasParams={hasParams} toolName="Crontab Editor" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       
       {/* 1. Expression Input */}
       <div className="space-y-3">
@@ -401,6 +416,16 @@ export default function CrontabEditorClient() {
           )}
         </div>
       </div>
+
+      {parsed.valid && (
+        <div className="flex justify-end">
+          <ShareButton
+            url={shareUrl}
+            title={`Cron: "${expression}" — ${parsed.humanReadable} — KaruviLab`}
+            onQrClick={() => setIsQrOpen(true)}
+          />
+        </div>
+      )}
 
       {/* 2. Presets */}
       <div className="space-y-3">

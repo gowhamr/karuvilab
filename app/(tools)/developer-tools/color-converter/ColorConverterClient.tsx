@@ -6,6 +6,10 @@ import { cn } from "@/src/lib/utils";
 import { m, AnimatePresence } from "framer-motion";
 import { useColorStore } from "@/src/store/useColorStore";
 import { Check, Copy, Hash, RefreshCw, AlertCircle, Sparkles } from "lucide-react";
+import { useUrlState } from "@/src/hooks/useUrlState";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
+import { QRModal } from "@/components/ui/QRModal";
 
 // Color Conversion & Analysis Utils
 function hexToRgb(hex: string) {
@@ -57,9 +61,16 @@ function getContrastRatio(lum1: number, lum2: number) {
 const FORMATS = ["HEX", "RGB", "HSL"] as const;
 
 export default function ColorConverterClient() {
-  const [hex, setHex] = useState("#4F46E5");
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { hex: '#4F46E5' },
+    debounceMs: 400,
+    encode: false,
+  });
+
+  const [hex, setHexLocal] = useState(state.hex as string);
   const [invalid, setInvalid] = useState(false);
   const [activeFormat, setActiveFormat] = useState<typeof FORMATS[number]>("HEX");
+  const [isQrOpen, setIsQrOpen] = useState(false);
   
   const history = useColorStore(s => s.history);
   const addColor = useColorStore(s => s.addColor);
@@ -72,16 +83,17 @@ export default function ColorConverterClient() {
 
   const updateColor = useCallback((newHex: string, save = true) => {
     if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(newHex)) {
-      setHex(newHex.toUpperCase());
+      setHexLocal(newHex.toUpperCase());
+      setState({ hex: newHex.toUpperCase() });
       setInvalid(false);
       if (save) addColor(newHex.toUpperCase());
     } else {
       setInvalid(true);
     }
-  }, [addColor]);
+  }, [addColor, setState]);
 
   const handleInputChange = (val: string) => {
-    setHex(val);
+    setHexLocal(val);
     if (val.startsWith("#") && (val.length === 4 || val.length === 7)) {
       updateColor(val, true);
     } else {
@@ -111,6 +123,8 @@ export default function ColorConverterClient() {
 
   return (
     <div className="space-y-12">
+      <SharedResultBanner hasParams={hasParams} toolName="Color Converter" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Left: Swatch & History */}
         <div className="space-y-8">
@@ -225,6 +239,14 @@ export default function ColorConverterClient() {
               </div>
            </div>
         </div>
+      </div>
+
+      <div className="flex justify-end">
+        <ShareButton
+          url={shareUrl}
+          title={`Color ${hex} converted — KaruviLab Color Converter`}
+          onQrClick={() => setIsQrOpen(true)}
+        />
       </div>
     </div>
   );

@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Home, Info, CheckCircle2 } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn, formatCurrency } from '@/src/lib/utils';
 import { MetricCard } from '@/components/ui/MetricCard';
+import { useUrlState } from '@/src/hooks/useUrlState';
+import { ShareButton } from '@/components/ui/ShareButton';
+import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
+import { QRModal } from '@/components/ui/QRModal';
 
 interface HRAInput {
   basicSalary: number;
@@ -56,12 +60,24 @@ function calculateHRA(input: HRAInput): HRAResult {
 }
 
 export default function HraCalculatorClient() {
-  const [basicSalary, setBasicSalary] = useState<number>(50000);
-  const [daPercent, setDaPercent] = useState<number>(0);
-  const [hraReceived, setHraReceived] = useState<number>(20000);
-  const [rentPaid, setRentPaid] = useState<number>(18000);
-  const [city, setCity] = useState<'metro' | 'non-metro'>('metro');
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { basic: 50000, da: 0, hra: 20000, rent: 18000, city: 'metro' },
+    debounceMs: 400,
+  });
+
+  const basicSalary = state.basic as number;
+  const daPercent = state.da as number;
+  const hraReceived = state.hra as number;
+  const rentPaid = state.rent as number;
+  const city = state.city as 'metro' | 'non-metro';
   const [isAnnual, setIsAnnual] = useState<boolean>(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
+
+  const setBasicSalary = useCallback((v: number) => setState({ basic: v }), [setState]);
+  const setDaPercent = useCallback((v: number) => setState({ da: v }), [setState]);
+  const setHraReceived = useCallback((v: number) => setState({ hra: v }), [setState]);
+  const setRentPaid = useCallback((v: number) => setState({ rent: v }), [setState]);
+  const setCity = useCallback((v: 'metro' | 'non-metro') => setState({ city: v }), [setState]);
 
   const result = useMemo(() => calculateHRA({
     basicSalary,
@@ -75,6 +91,8 @@ export default function HraCalculatorClient() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <SharedResultBanner hasParams={hasParams} toolName="HRA Calculator" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         
         {/* LEFT COLUMN: Inputs */}
@@ -192,6 +210,14 @@ export default function HraCalculatorClient() {
               label="Taxable HRA" 
               value={formatCurrency(result.taxable * mult)} 
               className="bg-red-500/5 border-red-500/20 text-red-500" 
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <ShareButton
+              url={shareUrl}
+              title={`HRA Exempt: ${formatCurrency(result.exemption * 12)} annually — KaruviLab`}
+              onQrClick={() => setIsQrOpen(true)}
             />
           </div>
 

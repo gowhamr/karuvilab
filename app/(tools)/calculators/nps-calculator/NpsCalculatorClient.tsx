@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { TrendingUp, Info, PiggyBank, Calendar, Briefcase } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn, formatCurrency } from '@/src/lib/utils';
 import { MetricCard } from '@/components/ui/MetricCard';
+import { useUrlState } from '@/src/hooks/useUrlState';
+import { ShareButton } from '@/components/ui/ShareButton';
+import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
+import { QRModal } from '@/components/ui/QRModal';
 
 interface NPSResult {
   yearsToRetirement: number;
@@ -48,18 +52,33 @@ function calculateNPS(
 }
 
 export default function NpsCalculatorClient() {
-  const [age, setAge] = useState<number>(30);
-  const [retireAge, setRetireAge] = useState<number>(60);
-  const [monthlyInv, setMonthlyInv] = useState<number>(10000);
-  const [returnRate, setReturnRate] = useState<number>(10);
-  const [annuityPercent, setAnnuityPercent] = useState<number>(40);
-  const [annuityRate, setAnnuityRate] = useState<number>(6);
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { age: 30, retire: 60, monthly: 10000, returnRate: 10, annuityPct: 40, annuityRate: 6 },
+    debounceMs: 400,
+  });
+
+  const age = state.age as number;
+  const retireAge = state.retire as number;
+  const monthlyInv = state.monthly as number;
+  const returnRate = state.returnRate as number;
+  const annuityPercent = state.annuityPct as number;
+  const annuityRate = state.annuityRate as number;
+  const [isQrOpen, setIsQrOpen] = useState(false);
+
+  const setAge = useCallback((v: number) => setState({ age: v }), [setState]);
+  const setRetireAge = useCallback((v: number) => setState({ retire: v }), [setState]);
+  const setMonthlyInv = useCallback((v: number) => setState({ monthly: v }), [setState]);
+  const setReturnRate = useCallback((v: number) => setState({ returnRate: v }), [setState]);
+  const setAnnuityPercent = useCallback((v: number) => setState({ annuityPct: v }), [setState]);
+  const setAnnuityRate = useCallback((v: number) => setState({ annuityRate: v }), [setState]);
 
   const result = useMemo(() => calculateNPS(age, retireAge, monthlyInv, returnRate, annuityRate, annuityPercent), 
     [age, retireAge, monthlyInv, returnRate, annuityRate, annuityPercent]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <SharedResultBanner hasParams={hasParams} toolName="NPS Calculator" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* LEFT COLUMN: Inputs */}
@@ -187,6 +206,14 @@ export default function NpsCalculatorClient() {
               value={formatCurrency(result.monthlyPension)} 
               className="bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400" 
               sub="Taxable as per slab rate"
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <ShareButton
+              url={shareUrl}
+              title={`NPS Corpus: ${formatCurrency(result.estimatedCorpus)} at retirement — KaruviLab`}
+              onQrClick={() => setIsQrOpen(true)}
             />
           </div>
 

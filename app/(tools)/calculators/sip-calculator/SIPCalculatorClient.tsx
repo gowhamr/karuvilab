@@ -11,6 +11,9 @@ import { d, Decimal, formatINR, formatPercent, syncStateToUrl, getInitialStateFr
 import { useToast } from "@/components/ui/Toast";
 import { addToHistory } from "@/src/lib/db";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
+import { QRModal } from "@/components/ui/QRModal";
 
 const DEFAULT_STATE = {
   monthly: 5000,
@@ -36,6 +39,11 @@ export default function SIPCalculatorClient() {
   const [feeRate, setFeeRate] = useState(DEFAULT_STATE.feeRate);
   
   const [showTable, setShowTable] = useState(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
+
+  // Derive share URL from current window location (url state maintained via syncStateToUrl)
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const hasParams = typeof window !== 'undefined' ? window.location.search.length > 0 : false;
 
   // Initialize from URL
   useEffect(() => {
@@ -139,6 +147,8 @@ Generated via KaruviLab`;
 
   return (
     <div className="space-y-6">
+      <SharedResultBanner hasParams={hasParams} toolName="SIP Calculator" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
         <SliderField
           label="Monthly SIP Amount"
@@ -252,6 +262,14 @@ Generated via KaruviLab`;
             Gross Value: {formatINR(result.totalValue)}
           </div>
         </div>
+      </div>
+
+      <div className="flex justify-end">
+        <ShareButton
+          url={shareUrl}
+          title={`SIP Result: ${formatINR(result.netValue)} net value in ${years}y — KaruviLab`}
+          onQrClick={() => setIsQrOpen(true)}
+        />
       </div>
 
       <CalculatorActionBar

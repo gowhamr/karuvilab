@@ -1,9 +1,10 @@
 "use client";
 
-import { memo, useRef, useCallback } from "react";
+import { memo, useRef, useCallback, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "./Icons";
 import { m } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CategoryChipsProps {
   activeCategory: string | null;
@@ -12,6 +13,53 @@ interface CategoryChipsProps {
 
 export const CategoryChips = memo(function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const fadeLeftRef = useRef<HTMLDivElement>(null);
+  const fadeRightRef = useRef<HTMLDivElement>(null);
+  const btnLeftRef = useRef<HTMLButtonElement>(null);
+  const btnRightRef = useRef<HTMLButtonElement>(null);
+
+  const updateScrollState = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const scrollLeft = el.scrollLeft;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+
+    const hasLeft = scrollLeft > 5;
+    const hasRight = scrollLeft < maxScroll - 5;
+
+    // Toggle left elements
+    if (fadeLeftRef.current) fadeLeftRef.current.style.opacity = hasLeft ? "1" : "0";
+    if (btnLeftRef.current) {
+      if (hasLeft) {
+        btnLeftRef.current.classList.add("md:group-hover/wrapper:opacity-100", "md:group-hover/wrapper:pointer-events-auto");
+      } else {
+        btnLeftRef.current.classList.remove("md:group-hover/wrapper:opacity-100", "md:group-hover/wrapper:pointer-events-auto");
+      }
+    }
+
+    // Toggle right elements
+    if (fadeRightRef.current) fadeRightRef.current.style.opacity = hasRight ? "1" : "0";
+    if (btnRightRef.current) {
+      if (hasRight) {
+        btnRightRef.current.classList.add("md:group-hover/wrapper:opacity-100", "md:group-hover/wrapper:pointer-events-auto");
+      } else {
+        btnRightRef.current.classList.remove("md:group-hover/wrapper:opacity-100", "md:group-hover/wrapper:pointer-events-auto");
+      }
+    }
+  }, []);
+
+  const scrollLeft = useCallback(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollBy({ left: -220, behavior: "smooth" });
+    }
+  }, []);
+
+  const scrollRight = useCallback(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollBy({ left: 220, behavior: "smooth" });
+    }
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, currentIndex: number) => {
@@ -41,13 +89,70 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     []
   );
 
+  // Monitor scroll for fades & arrows
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    updateScrollState();
+
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    // Initial check with small delay to handle client layout calculations
+    const timer = setTimeout(updateScrollState, 100);
+
+    return () => {
+      el.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+      clearTimeout(timer);
+    };
+  }, [updateScrollState]);
+
+  // Center active category chip on load or state change
+  useEffect(() => {
+    const targetId = activeCategory ? `tab-${activeCategory}` : "tab-all";
+    const activeEl = containerRef.current?.querySelector(`[id="${targetId}"]`);
+    if (activeEl) {
+      activeEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [activeCategory]);
+
   return (
-    <div className="relative px-4 sm:px-0">
+    <div className="relative group/wrapper px-4 sm:px-0">
+      {/* Left/Right Dynamic Fades */}
+      <div 
+        ref={fadeLeftRef}
+        className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-surface via-surface/90 to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
+      />
+      <div 
+        ref={fadeRightRef}
+        className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-surface via-surface/90 to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
+      />
+
+      {/* Desktop Navigation Chevrons */}
+      <button
+        ref={btnLeftRef}
+        onClick={scrollLeft}
+        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface border border-border hidden md:flex items-center justify-center text-text-3 hover:text-text hover:bg-hover shadow-md z-20 hover:scale-105 transition-all duration-200 opacity-0 pointer-events-none focus-visible:opacity-100 focus-visible:pointer-events-auto outline-none focus-visible:ring-2 focus-visible:ring-blue/40"
+        aria-label="Scroll categories left"
+      >
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+      <button
+        ref={btnRightRef}
+        onClick={scrollRight}
+        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface border border-border hidden md:flex items-center justify-center text-text-3 hover:text-text hover:bg-hover shadow-md z-20 hover:scale-105 transition-all duration-200 opacity-0 pointer-events-none focus-visible:opacity-100 focus-visible:pointer-events-auto outline-none focus-visible:ring-2 focus-visible:ring-blue/40"
+        aria-label="Scroll categories right"
+      >
+        <ChevronRight className="w-4 h-4" />
+      </button>
+
       <div 
         ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 snap-x"
+        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 snap-x scroll-smooth"
       >
         <m.button
           role="tab"
@@ -110,9 +215,6 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           </m.button>
         ))}
       </div>
-      
-      {/* Right fade gradient to indicate horizontal scrolling */}
-      <div className="absolute right-0 sm:right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-surface via-surface/90 to-transparent pointer-events-none md:hidden" />
     </div>
   );
 });

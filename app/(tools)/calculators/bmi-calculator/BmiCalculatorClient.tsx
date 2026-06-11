@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { Activity, Info, RefreshCw, User, Scale } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { MetricCard } from '@/components/ui/MetricCard';
+import { useUrlState } from '@/src/hooks/useUrlState';
+import { ShareButton } from '@/components/ui/ShareButton';
+import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
+import { QRModal } from '@/components/ui/QRModal';
 
 // --- SECTION A: BMI Engine (Pure Functions) ---
 
@@ -241,18 +245,27 @@ function BmiGauge({ bmi, threshold }: { bmi: number; threshold: BMIThreshold }) 
 // --- MAIN COMPONENT ---
 
 export default function BmiCalculatorClient() {
-  // --- SECTION E: State ---
-  const [unit, setUnit] = useState<UnitSystem>('metric');
-  
-  // Metric inputs
-  const [heightCm, setHeightCm] = useState<number>(170);
-  
-  // Imperial inputs  
-  const [heightFt, setHeightFt] = useState<number>(5);
-  const [heightIn, setHeightIn] = useState<number>(7);
+  // --- SECTION E: State (URL-synced) ---
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { h: 170, w: 70, unit: 'metric', hft: 5, hin: 7 },
+    debounceMs: 400,
+  });
 
-  // Shared weight state (internally stored in kg or lbs based on active unit)
-  const [weight, setWeight] = useState<number>(70);
+  // Derive individual values from URL state
+  const unit = state.unit as UnitSystem;
+  const heightCm = state.h as number;
+  const heightFt = state.hft as number;
+  const heightIn = state.hin as number;
+  const weight = state.w as number;
+
+  // Setters that go through URL state
+  const setUnit = useCallback((u: UnitSystem) => setState({ unit: u }), [setState]);
+  const setHeightCm = useCallback((h: number) => setState({ h }), [setState]);
+  const setHeightFt = useCallback((hft: number) => setState({ hft }), [setState]);
+  const setHeightIn = useCallback((hin: number) => setState({ hin }), [setState]);
+  const setWeight = useCallback((w: number) => setState({ w }), [setState]);
+
+  const [isQrOpen, setIsQrOpen] = useState(false);
 
   const result = useMemo<BMIResult | null>(() => {
     const hCm = unit === 'metric' ? heightCm : feetInchesToCm(heightFt, heightIn);
@@ -265,20 +278,27 @@ export default function BmiCalculatorClient() {
     if (newUnit === unit) return;
     if (newUnit === 'imperial') {
       const totalInches = cmToInches(heightCm);
-      setHeightFt(Math.floor(totalInches / 12));
-      setHeightIn(Math.round(totalInches % 12));
-      setWeight(Math.round(kgToLbs(weight)));
+      setState({
+        unit: newUnit,
+        hft: Math.floor(totalInches / 12),
+        hin: Math.round(totalInches % 12),
+        w: Math.round(kgToLbs(weight)),
+      });
     } else {
       const hCm = feetInchesToCm(heightFt, heightIn);
-      setHeightCm(Math.round(hCm));
-      setWeight(Math.round(lbsToKg(weight)));
+      setState({
+        unit: newUnit,
+        h: Math.round(hCm),
+        w: Math.round(lbsToKg(weight)),
+      });
     }
-    setUnit(newUnit);
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-10 pb-12">
-      
+      <SharedResultBanner hasParams={hasParams} toolName="BMI Calculator" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
+
       {/* 1. Unit Toggle */}
       <div className="flex justify-center">
         <div className="flex rounded-2xl border border-border p-1 bg-surface shadow-sm overflow-hidden">
@@ -411,6 +431,14 @@ export default function BmiCalculatorClient() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
+          {/* Share */}
+          <div className="flex justify-end">
+            <ShareButton
+              url={shareUrl}
+              title={`My BMI is ${result.bmi} (${result.category}) — calculated on KaruviLab`}
+              onQrClick={() => setIsQrOpen(true)}
+            />
+          </div>
           {/* Gauge */}
           <div className="bg-surface border border-border rounded-6xl p-8 flex flex-col items-center justify-center shadow-sm relative overflow-hidden">
              {/* Background glow matching category */}

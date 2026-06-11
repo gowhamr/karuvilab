@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { IndianRupee, Info, ArrowLeftRight, PiggyBank, Briefcase, FileText } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn, formatCurrency } from '@/src/lib/utils';
 import { MetricCard } from '@/components/ui/MetricCard';
+import { useUrlState } from '@/src/hooks/useUrlState';
+import { ShareButton } from '@/components/ui/ShareButton';
+import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
+import { QRModal } from '@/components/ui/QRModal';
 
 type TaxRegime = 'old' | 'new';
 type AgeGroup = 'below60' | '60to80' | 'above80';
@@ -136,16 +140,28 @@ function calculateTaxForRegime(
 }
 
 export default function IncomeTaxClient() {
-  const [grossSalary, setGrossSalary] = useState<number>(1200000);
-  const [age, setAge] = useState<AgeGroup>('below60');
-  const [activeRegime, setActiveRegime] = useState<TaxRegime>('new');
-  
-  // Old Regime Deductions
-  const [sec80C, setSec80C] = useState<number>(0);
-  const [sec80D, setSec80D] = useState<number>(0);
-  const [hra, setHra] = useState<number>(0);
-  const [homeLoan, setHomeLoan] = useState<number>(0);
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { salary: 1200000, regime: 'new', age: 'below60', c80: 0, c80d: 0, hra: 0, hli: 0 },
+    debounceMs: 400,
+  });
+
+  const grossSalary = state.salary as number;
+  const activeRegime = state.regime as TaxRegime;
+  const age = state.age as AgeGroup;
+  const sec80C = state.c80 as number;
+  const sec80D = state.c80d as number;
+  const hra = state.hra as number;
+  const homeLoan = state.hli as number;
   const [otherDed, setOtherDed] = useState<number>(0);
+  const [isQrOpen, setIsQrOpen] = useState(false);
+
+  const setGrossSalary = useCallback((v: number) => setState({ salary: v }), [setState]);
+  const setActiveRegime = useCallback((v: TaxRegime) => setState({ regime: v }), [setState]);
+  const setAge = useCallback((v: AgeGroup) => setState({ age: v }), [setState]);
+  const setSec80C = useCallback((v: number) => setState({ c80: v }), [setState]);
+  const setSec80D = useCallback((v: number) => setState({ c80d: v }), [setState]);
+  const setHra = useCallback((v: number) => setState({ hra: v }), [setState]);
+  const setHomeLoan = useCallback((v: number) => setState({ hli: v }), [setState]);
 
   const results = useMemo(() => {
     const stdDeductionOld = 50000;
@@ -169,6 +185,8 @@ export default function IncomeTaxClient() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <SharedResultBanner hasParams={hasParams} toolName="Income Tax Calculator" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       
       {/* Top Banner - Recommendation */}
       <div className={cn(
@@ -207,6 +225,14 @@ export default function IncomeTaxClient() {
             Old Regime
           </button>
         </div>
+      </div>
+
+      <div className="flex justify-end">
+        <ShareButton
+          url={shareUrl}
+          title={`Income Tax: ${formatCurrency(activeResult.totalTax)} total tax (${activeRegime} regime) — KaruviLab`}
+          onQrClick={() => setIsQrOpen(true)}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

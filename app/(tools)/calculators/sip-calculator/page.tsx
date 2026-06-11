@@ -2,12 +2,50 @@ import SIPCalculatorClientWrapper from "./SIPCalculatorClientWrapper";
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
-
 import { generateToolMetadata } from "@/src/lib/seo";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+const staticMeta = generateToolMetadata("sip-calculator");
 
-export const metadata: Metadata = generateToolMetadata("sip-calculator");
+interface Props {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const monthly = params['monthly'];
+  const rate = params['rate'];
+  const years = params['years'];
+
+  const hasSharedResult = monthly !== undefined || rate !== undefined;
+
+  if (hasSharedResult) {
+    const m = Array.isArray(monthly) ? monthly[0] : monthly;
+    const r = Array.isArray(rate) ? rate[0] : rate;
+    const y = Array.isArray(years) ? years[0] : years;
+
+    const dynamicTitle = `SIP ₹${Number(m).toLocaleString('en-IN')}/mo @ ${r}% for ${y}yr — KV`;
+    const dynamicDesc = `Shared SIP projection: ₹${Number(m).toLocaleString('en-IN')}/month at ${r}% p.a. for ${y} years. See the full result on KaruviLab.`;
+
+    return {
+      ...staticMeta,
+      title: dynamicTitle,
+      description: dynamicDesc,
+      openGraph: {
+        ...(typeof staticMeta.openGraph === 'object' && !Array.isArray(staticMeta.openGraph) ? staticMeta.openGraph : {}),
+        title: dynamicTitle,
+        description: dynamicDesc,
+      },
+      twitter: {
+        ...(typeof staticMeta.twitter === 'object' ? staticMeta.twitter : {}),
+        title: dynamicTitle,
+        description: dynamicDesc,
+      },
+    };
+  }
+
+  return staticMeta;
+}
 
 export default function SipCalculator() {
   return (

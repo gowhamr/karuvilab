@@ -7,7 +7,47 @@ import EmiCalculatorClientWrapper from "./EmiCalculatorClientWrapper";
 const toolId = "emi-calculator";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-export const metadata: Metadata = generateToolMetadata(toolId);
+const staticMeta = generateToolMetadata(toolId);
+
+interface Props {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const p = params['p'];
+  const r = params['r'];
+  const n = params['n'];
+
+  const hasSharedResult = p !== undefined || r !== undefined;
+
+  if (hasSharedResult) {
+    const principal = Array.isArray(p) ? p[0] : p;
+    const rate = Array.isArray(r) ? r[0] : r;
+    const months = Array.isArray(n) ? n[0] : n;
+
+    const dynamicTitle = `EMI for ₹${Number(principal).toLocaleString('en-IN')} @ ${rate}% — KV`;
+    const dynamicDesc = `Shared EMI calculation: Loan ₹${Number(principal).toLocaleString('en-IN')} at ${rate}% p.a. for ${months} months. View the full amortization on KaruviLab.`;
+
+    return {
+      ...staticMeta,
+      title: dynamicTitle,
+      description: dynamicDesc,
+      openGraph: {
+        ...(typeof staticMeta.openGraph === 'object' && !Array.isArray(staticMeta.openGraph) ? staticMeta.openGraph : {}),
+        title: dynamicTitle,
+        description: dynamicDesc,
+      },
+      twitter: {
+        ...(typeof staticMeta.twitter === 'object' ? staticMeta.twitter : {}),
+        title: dynamicTitle,
+        description: dynamicDesc,
+      },
+    };
+  }
+
+  return staticMeta;
+}
 
 export default function EmiCalculator() {
   return (
@@ -57,4 +97,3 @@ export default function EmiCalculator() {
     </ToolShell>
   );
 }
-

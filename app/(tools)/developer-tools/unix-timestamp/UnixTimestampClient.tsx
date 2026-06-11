@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Timer, ArrowLeftRight, Clock, Calendar, Hash, Globe2 } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { useUrlState } from '@/src/hooks/useUrlState';
+import { ShareButton } from '@/components/ui/ShareButton';
+import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
+import { QRModal } from '@/components/ui/QRModal';
 
 // Utility functions
 function toRelative(date: Date): string {
@@ -20,9 +24,37 @@ function toRelative(date: Date): string {
 }
 
 export default function UnixTimestampClient() {
-  const [mode, setMode] = useState<'toHuman' | 'toUnix'>('toHuman');
-  const [inputTs, setInputTs] = useState<string>(Math.floor(Date.now() / 1000).toString());
-  const [inputDate, setInputDate] = useState<string>(new Date().toISOString().slice(0, 16));
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { ts: '0', mode: 'toHuman', date: '' },
+    debounceMs: 400,
+  });
+
+  const mode = state.mode as 'toHuman' | 'toUnix';
+  const rawTs = state.ts as string;
+  const rawDate = state.date as string;
+  const [isQrOpen, setIsQrOpen] = useState(false);
+
+  // Initialize ts and date from live clock on first mount if defaults
+  const [initDone, setInitDone] = useState(false);
+  useEffect(() => {
+    if (!initDone) {
+      setInitDone(true);
+      if (rawTs === '0' && rawDate === '') {
+        setState({
+          ts: Math.floor(Date.now() / 1000).toString(),
+          date: new Date().toISOString().slice(0, 16),
+        });
+      }
+    }
+  }, [initDone, rawTs, rawDate, setState]);
+
+  const inputTs = rawTs === '0' && !initDone ? Math.floor(Date.now() / 1000).toString() : rawTs;
+  const inputDate = rawDate === '' && !initDone ? new Date().toISOString().slice(0, 16) : rawDate;
+
+  const setMode = useCallback((m: 'toHuman' | 'toUnix') => setState({ mode: m }), [setState]);
+  const setInputTs = useCallback((v: string) => setState({ ts: v }), [setState]);
+  const setInputDate = useCallback((v: string) => setState({ date: v }), [setState]);
+
   const [liveTime, setLiveTime] = useState<number>(Math.floor(Date.now() / 1000));
   const [timezone, setTimezone] = useState<string>(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
@@ -50,6 +82,8 @@ export default function UnixTimestampClient() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
+      <SharedResultBanner hasParams={hasParams} toolName="Unix Timestamp Converter" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       
       {/* 1. Live Clock Header */}
       <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
@@ -159,6 +193,16 @@ export default function UnixTimestampClient() {
           </div>
         )}
       </div>
+
+      {parsedDate && (
+        <div className="flex justify-end">
+          <ShareButton
+            url={shareUrl}
+            title={`Unix Timestamp ${Math.floor(parsedDate.getTime() / 1000)} = ${parsedDate.toUTCString()} — KaruviLab`}
+            onQrClick={() => setIsQrOpen(true)}
+          />
+        </div>
+      )}
 
     </div>
   );

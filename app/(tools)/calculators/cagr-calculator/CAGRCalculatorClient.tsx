@@ -1,17 +1,31 @@
 "use client";
 
-import { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo, useCallback } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useUrlState } from "@/src/hooks/useUrlState";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
+import { QRModal } from "@/components/ui/QRModal";
 
 const inr = (n: number) =>
   "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
 
 const CAGRCalculatorClient = memo(function CAGRCalculatorClient() {
-  const [initial, setInitial] = useState("10000");
-  const [final, setFinal] = useState("25000");
-  const [years, setYears] = useState("5");
+  const { state, setState, shareUrl, hasParams } = useUrlState({
+    defaults: { initial: '10000', final: '25000', years: '5' },
+    debounceMs: 400,
+  });
+
+  const initial = state.initial as string;
+  const final = state.final as string;
+  const years = state.years as string;
+  const [isQrOpen, setIsQrOpen] = useState(false);
+
+  const setInitial = useCallback((v: string) => setState({ initial: v }), [setState]);
+  const setFinal = useCallback((v: string) => setState({ final: v }), [setState]);
+  const setYears = useCallback((v: string) => setState({ years: v }), [setState]);
 
   const result = useMemo(() => {
     const i = parseFloat(initial) || 0;
@@ -29,6 +43,8 @@ const CAGRCalculatorClient = memo(function CAGRCalculatorClient() {
 
   return (
     <div className="space-y-6">
+      <SharedResultBanner hasParams={hasParams} toolName="CAGR Calculator" />
+      <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6">
         <ToolInput
           label="Initial Investment (BV)"
@@ -58,8 +74,13 @@ const CAGRCalculatorClient = memo(function CAGRCalculatorClient() {
         <MetricCard label="Absolute Return" value={result.absolute.toFixed(2) + "%"} sub="Total percentage gain" />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
         <CopyButton text={summary} label="Copy Summary" />
+        <ShareButton
+          url={shareUrl}
+          title={`CAGR: ${result.cagr.toFixed(2)}% annualized return — KaruviLab`}
+          onQrClick={() => setIsQrOpen(true)}
+        />
       </div>
 
       <div className="bg-blue/5 border border-blue/10 p-6 rounded-2xl">
