@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { ToolShell } from '@/components/ui/ToolShell';
 import BmiCalculatorWrapper from './BmiCalculatorWrapper';
 
+export const dynamic = 'force-static';
+
 interface Props {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }

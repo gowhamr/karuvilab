@@ -1,21 +1,18 @@
 "use client";
-import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
-
-const cat = CATEGORIES.find(c => c.id === "developer")!;
-
-const EXAMPLE_PATTERNS = [
-  { label: "Email", pattern: "[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}", flags: "g" },
-  { label: "URL", pattern: "https?://[^\\s/$.?#].[^\\s]*", flags: "gi" },
-  { label: "IPv4", pattern: "\\b(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\b", flags: "g" },
-  { label: "Phone (US)", pattern: "\\(?\\d{3}\\)?[\\s.\\-]?\\d{3}[\\s.\\-]?\\d{4}", flags: "g" },
-  { label: "Date (YYYY-MM-DD)", pattern: "\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])", flags: "g" },
-  { label: "Hex color", pattern: "#(?:[0-9a-fA-F]{3}){1,2}\\b", flags: "g" },
-  { label: "HTML tag", pattern: "<[^>]+>", flags: "g" },
-  { label: "Whitespace (multi)", pattern: "\\s{2,}", flags: "g" },
-];
+import { REGEX_CATEGORIES, REGEX_LIBRARY, type RegexPattern } from "../library";
+import { 
+  BookOpen, 
+  Search, 
+  Copy, 
+  Check, 
+  ChevronLeft, 
+  ChevronRight, 
+  ArrowUpRight, 
+  Info 
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Match {
   value: string;
@@ -29,6 +26,74 @@ export default function RegexTesterClient() {
   const [testString, setTestString] = useState("");
   const [fontSize, setFontSize] = useState(14);
   const [wordWrap, setWordWrap] = useState(true);
+
+  // Regex Library state
+  const [librarySearch, setLibrarySearch] = useState("");
+  const [activeLibCategory, setActiveLibCategory] = useState("all");
+  const [copiedPatternId, setCopiedPatternId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftScrollBtn, setShowLeftScrollBtn] = useState(false);
+  const [showRightScrollBtn, setShowRightScrollBtn] = useState(false);
+
+  const allCategories = useMemo(() => [
+    { id: "all", label: "All Patterns" },
+    ...REGEX_CATEGORIES
+  ], []);
+
+  const filteredPatterns = useMemo(() => {
+    return REGEX_LIBRARY.filter(pat => {
+      const matchesCategory = activeLibCategory === "all" || pat.category === activeLibCategory;
+      const query = librarySearch.toLowerCase().trim();
+      const matchesSearch = !query || 
+        pat.label.toLowerCase().includes(query) ||
+        pat.description.toLowerCase().includes(query) ||
+        pat.pattern.toLowerCase().includes(query) ||
+        pat.example.toLowerCase().includes(query);
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeLibCategory, librarySearch]);
+
+  const updateScrollButtons = () => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const scrollLeft = el.scrollLeft;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    setShowLeftScrollBtn(scrollLeft > 5);
+    setShowRightScrollBtn(scrollLeft < maxScroll - 5);
+  };
+
+  useEffect(() => {
+    updateScrollButtons();
+    window.addEventListener("resize", updateScrollButtons);
+    return () => window.removeEventListener("resize", updateScrollButtons);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(updateScrollButtons, 100);
+    return () => clearTimeout(timer);
+  }, [activeLibCategory]);
+
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [activeLibCategory, librarySearch]);
+
+  const handleCopyPattern = (id: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedPatternId(id);
+    setTimeout(() => setCopiedPatternId(null), 2000);
+  };
+
+  const handleInsertPattern = (patternObj: RegexPattern) => {
+    setPattern(patternObj.pattern);
+    const newFlags = { g: false, i: false, m: false, s: false, u: false };
+    for (const f of patternObj.flags) {
+      if (f in newFlags) (newFlags as Record<string, boolean>)[f] = true;
+    }
+    setFlags(newFlags);
+    setTestString(patternObj.example);
+  };
 
   const flagString = Object.entries(flags).filter(([, v]) => v).map(([k]) => k).join("");
 
@@ -191,26 +256,195 @@ export default function RegexTesterClient() {
         </div>
       )}
 
-      <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-        <h2 className="text-sm font-bold text-text-2">Example Patterns</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-          {EXAMPLE_PATTERNS.map(ex => (
-            <button
-              key={ex.label}
-              onClick={() => {
-                setPattern(ex.pattern);
-                const newFlags = { g: false, i: false, m: false, s: false, u: false };
-                for (const f of ex.flags) {
-                  if (f in newFlags) (newFlags as Record<string, boolean>)[f] = true;
-                }
-                setFlags(newFlags);
-              }}
-              className="px-3 py-2 text-xs font-medium bg-bg border border-border rounded-xl hover:border-blue hover:text-blue transition-all text-left"
-            >
-              {ex.label}
-            </button>
-          ))}
+      {/* Regex Library Browser */}
+      <div className="bg-surface border border-border p-6 rounded-2xl space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold text-text flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-blue" />
+              Regex Library
+            </h2>
+            <p className="text-xs text-text-4">
+              Browse and search 100+ production-ready regular expressions with interactive testing.
+            </p>
+          </div>
+          
+          {/* Search Input */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search by label, pattern, description..."
+              className="w-full pl-9 pr-8 py-2 bg-bg border border-border rounded-xl text-xs text-text focus:ring-2 focus:ring-blue focus:border-blue outline-none transition-all placeholder:text-text-4"
+              value={librarySearch}
+              onChange={e => setLibrarySearch(e.target.value)}
+            />
+            {librarySearch && (
+              <button
+                onClick={() => setLibrarySearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-4 hover:text-text cursor-pointer font-bold"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* Horizontal Category Scroll */}
+        <div className="relative w-full border-b border-border/50 pb-2">
+          {/* Gradient Fades */}
+          <div 
+            className="absolute left-0 top-0 bottom-2 w-10 bg-gradient-to-r from-surface to-transparent pointer-events-none transition-opacity duration-200 z-10"
+            style={{ opacity: showLeftScrollBtn ? 1 : 0 }}
+          />
+          <div 
+            className="absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-surface to-transparent pointer-events-none transition-opacity duration-200 z-10"
+            style={{ opacity: showRightScrollBtn ? 1 : 0 }}
+          />
+
+          {/* Navigation Buttons for desktop */}
+          {showLeftScrollBtn && (
+            <button 
+              onClick={() => scrollContainerRef.current?.scrollBy({ left: -200, behavior: "smooth" })}
+              className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface border border-border shadow-sm flex items-center justify-center text-text-2 hover:bg-bg hover:text-blue transition-all z-20 cursor-pointer hidden md:flex"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+          )}
+          {showRightScrollBtn && (
+            <button 
+              onClick={() => scrollContainerRef.current?.scrollBy({ left: 200, behavior: "smooth" })}
+              className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface border border-border shadow-sm flex items-center justify-center text-text-2 hover:bg-bg hover:text-blue transition-all z-20 cursor-pointer hidden md:flex"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* Scroll Container */}
+          <div 
+            ref={scrollContainerRef}
+            onScroll={updateScrollButtons}
+            className="flex gap-2 overflow-x-auto scrollbar-none scroll-smooth snap-x snap-proximity px-1 py-1"
+          >
+            {allCategories.map(catItem => {
+              const isActive = activeLibCategory === catItem.id;
+              return (
+                <button
+                  key={catItem.id}
+                  onClick={(e) => {
+                    setActiveLibCategory(catItem.id);
+                    e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+                  }}
+                  className={`snap-start px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border select-none cursor-pointer ${
+                    isActive 
+                      ? "bg-blue text-white border-blue shadow-sm shadow-blue/20" 
+                      : "bg-bg text-text-2 border-border hover:border-blue/50 hover:text-blue"
+                  }`}
+                >
+                  {catItem.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Patterns Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <AnimatePresence mode="popLayout">
+            {filteredPatterns.slice(0, visibleCount).map((pat) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                key={pat.id}
+                className="bg-bg border border-border hover:border-blue/50 hover:shadow-sm rounded-xl p-4 flex flex-col justify-between transition-all group"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-bold text-xs text-text group-hover:text-blue transition-colors truncate" title={pat.label}>
+                      {pat.label}
+                    </h3>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded font-medium bg-surface text-text-3 border border-border uppercase shrink-0">
+                      {pat.category === "dev" ? "Dev" : pat.category === "indian" ? "Indian" : pat.category}
+                    </span>
+                  </div>
+
+                  {/* Regex code block with copy button */}
+                  <div className="relative bg-surface font-mono text-[10px] px-2.5 py-1.5 rounded-lg border border-border text-blue overflow-x-auto scrollbar-none flex justify-between items-center gap-2">
+                    <span className="font-semibold select-all truncate">
+                      /{pat.pattern}/
+                    </span>
+                    <button
+                      onClick={() => handleCopyPattern(pat.id, pat.pattern)}
+                      className="text-text-4 hover:text-blue p-0.5 rounded hover:bg-bg transition-colors shrink-0"
+                      title="Copy regular expression"
+                    >
+                      {copiedPatternId === pat.id ? (
+                        <Check className="w-3.5 h-3.5 text-green-500" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Description (community-style) */}
+                  <p className="text-[11px] text-text-3 font-normal leading-relaxed line-clamp-3 min-h-[48px]">
+                    {pat.description}
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-border/40 space-y-2.5">
+                  {/* Example */}
+                  <div className="flex items-center gap-1.5 text-[10px] text-text-4 bg-surface/30 px-2 py-1 rounded border border-border/30">
+                    <span className="font-semibold text-text-3 shrink-0">Example:</span>
+                    <code className="font-mono text-text truncate max-w-full" title={pat.example}>
+                      {pat.example}
+                    </code>
+                  </div>
+
+                  {/* Action buttons */}
+                  <button
+                    onClick={() => handleInsertPattern(pat)}
+                    className="w-full py-1.5 bg-surface hover:bg-blue hover:text-white border border-border hover:border-blue text-[11px] font-semibold text-text rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    Insert Into Tester
+                    <ArrowUpRight className="w-3 h-3" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Empty State */}
+        {filteredPatterns.length === 0 && (
+          <div className="text-center py-10 space-y-2 border border-dashed border-border rounded-xl">
+            <Info className="w-8 h-8 text-text-4 mx-auto" />
+            <h3 className="font-bold text-xs text-text">No patterns found</h3>
+            <p className="text-[11px] text-text-4 max-w-md mx-auto">
+              We couldn't find any patterns matching "{librarySearch}" in the "{allCategories.find(c => c.id === activeLibCategory)?.label}" category.
+            </p>
+          </div>
+        )}
+
+        {/* Load More Button */}
+        {filteredPatterns.length > visibleCount && (
+          <div className="text-center pt-2">
+            <button
+              onClick={() => setVisibleCount(prev => prev + 12)}
+              className="px-5 py-2 bg-bg hover:bg-surface border border-border hover:border-blue/50 text-[11px] font-semibold text-text hover:text-blue rounded-xl transition-all cursor-pointer inline-flex items-center gap-1.5"
+            >
+              Show More Patterns
+              <span className="text-[9px] px-1.5 py-0.5 bg-surface rounded text-text-3 border border-border">
+                {filteredPatterns.length - visibleCount} remaining
+              </span>
+            </button>
+          </div>
+        )}
       </div>
       </div>
     </FocusModeWrapper>

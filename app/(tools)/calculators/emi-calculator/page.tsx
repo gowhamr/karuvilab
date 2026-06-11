@@ -4,6 +4,8 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 import EmiCalculatorClientWrapper from "./EmiCalculatorClientWrapper";
 
+export const dynamic = 'force-static';
+
 const toolId = "emi-calculator";
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 

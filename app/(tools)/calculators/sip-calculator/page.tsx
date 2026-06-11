@@ -4,6 +4,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
 
+export const dynamic = 'force-static';
+
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 const staticMeta = generateToolMetadata("sip-calculator");
 
