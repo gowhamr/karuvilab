@@ -174,7 +174,7 @@ export default function HomeClient() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-28 md:pb-16 space-y-6 md:space-y-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-12 md:pb-16 space-y-6 md:space-y-12">
         
         {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
         <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-8">

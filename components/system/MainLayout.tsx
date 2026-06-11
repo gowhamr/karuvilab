@@ -21,10 +21,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <Header />
         <main
           id="main-content"
-          className={`
-            flex-1 outline-none
-            ${isFullscreen ? 'pb-0' : 'pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-0'}
-          `}
+          className="flex-1 outline-none"
           tabIndex={-1}
         >
           {children}

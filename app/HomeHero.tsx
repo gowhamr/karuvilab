@@ -22,7 +22,7 @@ export function HomeHero() {
       {/* H1 — reduce size on mobile */}
       <h1 className="text-[24px] sm:text-[36px] md:text-[48px] font-black tracking-tighter leading-[1.1] text-text max-w-2xl">
         Build faster with KV.<br />
-        <span className="block text-text-3">Privacy you can trust.</span>
+        <span className="block text-brand-primary">Privacy you can trust.</span>
       </h1>
 
       {/* Description — tighter, 1 line on mobile */}
@@ -40,6 +40,9 @@ export function HomeHero() {
           </div>
         ))}
       </div>
+      
+      {/* Visual separation boundary */}
+      <div className="w-full max-w-5xl mx-auto mt-8 md:mt-12 h-px bg-gradient-to-r from-transparent via-mat-border-focus to-transparent opacity-50" />
     </section>
   );
 }

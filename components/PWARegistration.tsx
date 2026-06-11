@@ -142,7 +142,7 @@ export function PWARegistration() {
           fixed left-4 right-4 z-50
           bottom-24 md:bottom-6 md:right-auto md:left-6 md:w-96
           p-5 rounded-3xl
-          bg-[--kv-mat-overlay] border border-[--kv-mat-border] shadow-2xl shadow-mat-shine
+          bg-mat-surface border border-mat-border shadow-2xl shadow-mat-shine
           flex flex-col gap-4 outline-none focus:ring-2 focus:ring-blue/30
         "
       >

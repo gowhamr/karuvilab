@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   trailingSlash: true,
+  staticPageGenerationTimeout: 300,
   async headers() {
     const cspHeader = `
       default-src 'self';

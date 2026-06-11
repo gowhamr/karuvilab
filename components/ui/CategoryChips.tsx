@@ -110,6 +110,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           </m.button>
         ))}
       </div>
+      
+      {/* Right fade gradient to indicate horizontal scrolling */}
+      <div className="absolute right-0 sm:right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-surface via-surface/90 to-transparent pointer-events-none md:hidden" />
     </div>
   );
 });
