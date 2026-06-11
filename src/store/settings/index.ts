@@ -16,6 +16,12 @@ export const initialSettings = {
     historyEnabled: true,
   } as PrivacySettings,
   adsConsent: false,
+  focusMode: {
+    autoHideToolbar: false,
+    defaultFontSize: 14,
+    defaultWordWrap: true,
+    lastUsedToolId: null,
+  },
   version: 1,
 };
 
@@ -30,6 +36,9 @@ export const createSettingsStore: StateCreator<SettingsStore> = (set) => ({
 
   updatePrivacy: (settings: Partial<PrivacySettings>) =>
     set((state: SettingsStore) => ({ privacy: { ...state.privacy, ...settings } })),
+
+  updateFocusMode: (settings: Partial<SettingsStore['focusMode']>) =>
+    set((state: SettingsStore) => ({ focusMode: { ...state.focusMode, ...settings } })),
 
   resetAll: () => set(initialSettings),
 });

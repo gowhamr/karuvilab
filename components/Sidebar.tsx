@@ -259,13 +259,18 @@ const SidebarContent = memo(function SidebarContent({
   );
 });
 
+import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
+
 export function Sidebar() {
+  const { isFullscreen } = useFullscreenContext();
   const pathname = usePathname() ?? "";
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
   const favoriteIds = useFavoriteStore(useShallow(state => state.favorites));
   const [recent, setRecent] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [isHoverable, setIsHoverable] = useState<boolean | null>(null);
+
+  if (isFullscreen) return null;
 
   const closeSidebar = useCallback(() => setIsSidebarOpen(false), [setIsSidebarOpen]);
 

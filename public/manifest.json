@@ -1,11 +1,17 @@
 {
+  "id": "/",
   "name": "KaruviLab",
   "short_name": "KV",
   "description": "Fast, Private Browser-Side Toolkit",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#020617",
   "theme_color": "#4F46E5",
+  "categories": ["utilities", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icons/android-icon-192x192.png",
@@ -20,16 +26,55 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/android-icon-192x192.png",
+      "src": "/icons/icon-maskable-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/icons/icon-maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "KaruviLab — 100+ Private Browser Tools"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "KaruviLab Mobile — Tools in Your Pocket"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Image Compressor",
+      "short_name": "Compressor",
+      "description": "Compress images directly in your browser",
+      "url": "/image-tools/image-compressor/",
+      "icons": [{ "src": "/icons/shortcut-image-compressor.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "PDF Merger",
+      "short_name": "Merge PDF",
+      "description": "Combine multiple PDF files locally",
+      "url": "/pdf-tools/merge-pdf/",
+      "icons": [{ "src": "/icons/shortcut-pdf-merger.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Markdown Editor",
+      "short_name": "Markdown",
+      "description": "Write and preview Markdown offline",
+      "url": "/utilities/markdown/",
+      "icons": [{ "src": "/icons/shortcut-markdown.png", "sizes": "96x96", "type": "image/png" }]
     }
   ]
 }

@@ -195,6 +195,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             <div className="hidden sm:flex flex-shrink-0 items-center justify-center h-10 border-t border-mat-border bg-mat-surface/30 gap-4 text-[10px] font-bold text-text-4 uppercase tracking-widest">
                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">↑↓</kbd> Navigate</span>
                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">↵</kbd> Open</span>
+               <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">F11</kbd> Focus Mode</span>
                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">Esc</kbd> Close</span>
             </div>
           </m.div>

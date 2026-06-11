@@ -13,6 +13,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { formatError } from "@/src/lib/formatError";
+import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
 
 type Indent = 2 | 4 | "tab";
 
@@ -143,6 +144,9 @@ export default function JSONFormatterClient() {
     view: "raw" as "raw" | "tree"
   });
 
+  const [fontSize, setFontSize] = useState(13);
+  const [wordWrap, setWordWrap] = useState(false);
+
   const { mode, input, indent, view } = state;
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<{ output: string; error: any; parsed: any }>({ 
@@ -224,7 +228,16 @@ export default function JSONFormatterClient() {
   if (!isLoaded) return <div className="animate-pulse h-[500px] bg-surface/50 rounded-4xl border border-border" />;
 
   return (
-    <div className="space-y-12">
+    <FocusModeWrapper
+      toolId="json-formatter"
+      toolName="JSON Formatter"
+      charCount={output.length}
+      lineCount={output ? output.split('\n').length : 0}
+      language="json"
+      onFontSizeChange={setFontSize}
+      onWrapToggle={() => setWordWrap(v => !v)}
+    >
+      <div className="space-y-12 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8 relative overflow-hidden">
@@ -255,6 +268,7 @@ export default function JSONFormatterClient() {
               placeholder='Paste JSON here, e.g. {"name":"KaruviLab"}'
               rows={12}
               mono
+              style={{ fontSize: `${fontSize}px` }}
               error={error?.message}
               description={error?.line ? `Error on line ${error.line}` : undefined}
               loading={isProcessing}
@@ -367,13 +381,15 @@ export default function JSONFormatterClient() {
             <textarea
               readOnly
               aria-label="Formatted JSON output"
-              className="w-full min-h-[400px] p-6 sm:p-8 bg-transparent font-mono text-sm text-text-2 resize-none outline-none custom-scrollbar"
+              className={`w-full min-h-[400px] p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+              style={{ fontSize: `${fontSize}px` }}
               value={output}
               placeholder="Results will appear here..."
             />
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </FocusModeWrapper>
   );
 }

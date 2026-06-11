@@ -7,6 +7,8 @@ import {
   FileCode, FileEdit, Type
 } from "lucide-react";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
+import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { DropZone } from "@/components/ui/DropZone";
 import { useToast } from "@/components/ui/Toast";
@@ -30,6 +32,11 @@ export function MarkdownEditor() {
   const [md, setMd] = useState(SAMPLE_MARKDOWN);
   const [uploadMd, setUploadMd] = useState("");
   const [fileName, setFileName] = useState("");
+  const [fontSize, setFontSize] = useState(14);
+  const [wordWrap, setWordWrap] = useState(true);
+  
+  const { isFullscreen, activeToolId } = useFullscreenContext();
+  const isThisToolFullscreen = isFullscreen && activeToolId === "markdown-editor";
   
   const [showFind, setShowFind] = useState(false);
   const [findState, setFindState] = useState({ matches: [] as number[], index: 0 });
@@ -353,59 +360,71 @@ export function MarkdownEditor() {
       </div>
 
       {mode === "editor" ? (
-        <div className="flex flex-col h-[75vh] md:h-[70vh] min-h-[500px] max-h-[850px] bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
-          {/* Hide Toolbar in Preview mode on mobile */}
-          <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
-            <Toolbar 
-              onInsert={insertAtCursor} 
-              onClear={() => setMd("")}
-              onLoadSample={() => setMd(SAMPLE_MARKDOWN)}
-              scrollSync={scrollSync}
-              onToggleScrollSync={() => setScrollSync(!scrollSync)}
-            />
-          </div>
-          
-          {showFind && (
-            <FindBar
-              onFind={handleFind}
-              onReplace={handleReplace}
-              onClose={() => setShowFind(false)}
-              matchCount={findState.matches.length}
-              currentIndex={findState.index}
-              onNext={() => setFindState(s => ({ ...s, index: (s.index + 1) % (s.matches.length || 1) }))}
-              onPrev={() => setFindState(s => ({ ...s, index: (s.index - 1 + s.matches.length) % (s.matches.length || 1) }))}
-            />
-          )}
-
-          <div className="flex-1 flex flex-col md:flex-row min-h-0">
-            <div className={`flex-1 flex-col min-w-0 md:border-r border-border h-full ${activeTab === "edit" ? "flex" : "hidden"} md:flex`}>
-              <textarea
-                ref={textareaRef}
-                value={md}
-                onChange={(e) => setMd(e.target.value)}
-                placeholder="# Start typing your markdown here..."
-                className="flex-1 p-4 md:p-6 bg-transparent outline-none resize-none font-mono text-sm text-text-2 leading-relaxed h-full overflow-y-auto"
-                spellCheck={false}
+        <FocusModeWrapper
+          toolId="markdown"
+          toolName="Markdown Editor"
+          wordCount={stats.words}
+          charCount={stats.chars}
+          lineCount={md.split('\n').length}
+          language="markdown"
+          onFontSizeChange={setFontSize}
+          onWrapToggle={() => setWordWrap(v => !v)}
+        >
+          <div className={`flex flex-col bg-surface border border-border rounded-4xl overflow-hidden shadow-sm w-full ${isThisToolFullscreen ? 'h-full max-h-none' : 'h-[75vh] md:h-[70vh] min-h-[500px] max-h-[850px]'}`}>
+            {/* Hide Toolbar in Preview mode on mobile */}
+            <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
+              <Toolbar 
+                onInsert={insertAtCursor} 
+                onClear={() => setMd("")}
+                onLoadSample={() => setMd(SAMPLE_MARKDOWN)}
+                scrollSync={scrollSync}
+                onToggleScrollSync={() => setScrollSync(!scrollSync)}
               />
             </div>
-            <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
-              <MarkdownPreview 
-                html={html} 
-                ref={previewRef}
-                hideHeader={true}
-                onCopyRaw={() => {
-                  navigator.clipboard.writeText(md);
-                  toast("Markdown copied!");
-                }} 
+            
+            {showFind && (
+              <FindBar
+                onFind={handleFind}
+                onReplace={handleReplace}
+                onClose={() => setShowFind(false)}
+                matchCount={findState.matches.length}
+                currentIndex={findState.index}
+                onNext={() => setFindState(s => ({ ...s, index: (s.index + 1) % (s.matches.length || 1) }))}
+                onPrev={() => setFindState(s => ({ ...s, index: (s.index - 1 + s.matches.length) % (s.matches.length || 1) }))}
               />
+            )}
+
+            <div className="flex-1 flex flex-col md:flex-row min-h-0">
+              <div className={`flex-1 flex-col min-w-0 md:border-r border-border h-full ${activeTab === "edit" ? "flex" : "hidden"} md:flex`}>
+                <textarea
+                  ref={textareaRef}
+                  value={md}
+                  onChange={(e) => setMd(e.target.value)}
+                  placeholder="# Start typing your markdown here..."
+                  className={`flex-1 p-4 md:p-6 bg-transparent outline-none resize-none font-mono text-text-2 leading-relaxed h-full overflow-y-auto ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+                  style={{ fontSize: `${fontSize}px` }}
+                  spellCheck={false}
+                />
+              </div>
+              <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
+                <MarkdownPreview 
+                  html={html} 
+                  ref={previewRef}
+                  hideHeader={true}
+                  onCopyRaw={() => {
+                    navigator.clipboard.writeText(md);
+                    toast("Markdown copied!");
+                  }} 
+                />
+              </div>
+            </div>
+
+            {/* Hide StatBar in Preview mode on mobile */}
+            <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
+              <StatBar stats={stats} />
             </div>
           </div>
-
-          {/* Hide StatBar in Preview mode on mobile */}
-          <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
-            <StatBar stats={stats} />
-          </div>
-        </div>
+        </FocusModeWrapper>
       ) : (
           <div className="space-y-6">
             <DropZone

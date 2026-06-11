@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
-
+import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
 import { beautify, Language } from "@/src/lib/formatter-utils";
 
 const cat = CATEGORIES.find(c => c.id === "developer")!;
@@ -15,6 +15,8 @@ const LANGS: Lang[] = ["json", "html", "xml", "css", "sql", "markdown"];
 export default function CodeFormatterClient() {
   const [lang, setLang] = useState<Lang>("json");
   const [input, setInput] = useState("");
+  const [fontSize, setFontSize] = useState(13);
+  const [wordWrap, setWordWrap] = useState(false);
 
   const { output, error } = useMemo(() => {
     if (!input.trim()) return { output: "", error: "" };
@@ -29,8 +31,20 @@ export default function CodeFormatterClient() {
   const originalSize = useMemo(() => new TextEncoder().encode(input).length, [input]);
   const formattedSize = useMemo(() => new TextEncoder().encode(output).length, [output]);
 
+  const toolId = lang === "sql" ? "sql-formatter" : (lang === "css" || lang === "html" ? "css-formatter" : "code-formatter");
+  const toolName = lang === "sql" ? "SQL Formatter" : (lang === "css" || lang === "html" ? "CSS/HTML Formatter" : "Code Formatter");
+
   return (
-    <div className="space-y-6">
+    <FocusModeWrapper
+      toolId={toolId}
+      toolName={toolName}
+      charCount={output.length}
+      lineCount={output ? output.split('\n').length : 0}
+      language={lang}
+      onFontSizeChange={setFontSize}
+      onWrapToggle={() => setWordWrap(v => !v)}
+    >
+      <div className="space-y-6 w-full">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="flex flex-wrap gap-2">
           {LANGS.map(l => (
@@ -47,7 +61,8 @@ export default function CodeFormatterClient() {
         <div className="space-y-2">
           <label className="text-sm font-bold text-text-2">Input</label>
           <textarea
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
+            className={`w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono focus:ring-2 focus:ring-blue outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+            style={{ fontSize: `${fontSize}px` }}
             rows={12}
             placeholder={`Paste your ${lang.toUpperCase()} here…`}
             value={input}
@@ -82,7 +97,8 @@ export default function CodeFormatterClient() {
             </div>
             <textarea
               readOnly
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text resize-none outline-none"
+              className={`w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-text resize-none outline-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+              style={{ fontSize: `${fontSize}px` }}
               rows={14}
               value={output}
             />
@@ -90,5 +106,6 @@ export default function CodeFormatterClient() {
         </div>
       )}
     </div>
-  );
+  </FocusModeWrapper>
+);
 }

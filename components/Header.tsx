@@ -2,21 +2,26 @@
 
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Menu, WifiOff, Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { m, useScroll, useTransform, AnimatePresence, useMotionTemplate } from "framer-motion";
-import { usePerformanceSettings, useOnlineStatus } from "@/src/lib/hooks";
+import { m } from "framer-motion";
+import { usePerformanceSettings } from "@/src/lib/hooks";
 import { usePathname } from "next/navigation";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { SearchBar } from "@/components/ui/search/SearchBar";
 import { cn } from "@/src/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
 
+import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
+import { OfflineSyncIndicator } from "./system/OfflineSyncIndicator";
+
 export function Header() {
-  const isOnline = useOnlineStatus();
+  const { isFullscreen } = useFullscreenContext();
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
   const [scrolled, setScrolled] = useState(false);
   const themeToggleRef = useRef<HTMLDivElement>(null);
+
+  if (isFullscreen) return null;
 
   useEffect(() => {
     const el = themeToggleRef.current;
@@ -108,19 +113,7 @@ export function Header() {
 
           <div className="h-4 w-px bg-border/50 hidden sm:block" />
           
-          <AnimatePresence>
-            {!isOnline && (
-              <m.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="flex items-center gap-1.5 px-2 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-[10px] font-bold uppercase tracking-wider"
-              >
-                <WifiOff className="w-3 h-3" />
-                <span className="hidden xs:inline">Offline</span>
-              </m.div>
-            )}
-          </AnimatePresence>
+          <OfflineSyncIndicator />
 
           <div ref={themeToggleRef} className="flex">
             <ThemeToggle />

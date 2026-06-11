@@ -17,9 +17,9 @@ if (typeof workbox !== 'undefined') {
 
   // Cache names
   const CACHE_NAMES = {
-    static: 'karuvilab-static-v5',
-    images: 'karuvilab-images-v5',
-    pages: 'karuvilab-pages-v5',
+    static: 'karuvilab-static-1781150461082',
+    images: 'karuvilab-images-1781150461082',
+    pages: 'karuvilab-pages-1781150461082',
     googleFonts: 'google-fonts',
   };
 
@@ -81,6 +81,7 @@ if (typeof workbox !== 'undefined') {
   const APP_SHELL = [
     './',
     './offline/',
+    './offline',
     './manifest.json',
     './favicon.ico',
     './pdf.min.mjs',
@@ -129,7 +130,7 @@ if (typeof workbox !== 'undefined') {
       if (cachedResponse) return cachedResponse;
 
       // 2. Fallback to /offline/ page for non-cached pages
-      const offlineResponse = await caches.match(`${basePath}offline/`);
+      const offlineResponse = await caches.match(`${basePath}offline/`) || await caches.match(`${basePath}offline`);
       if (offlineResponse) return offlineResponse;
 
       return new Response('Offline - Page not cached', {

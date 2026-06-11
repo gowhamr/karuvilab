@@ -14,13 +14,18 @@ const NAV_ITEMS = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
+import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
+
 export const BottomNav = memo(function BottomNav() {
+  const { isFullscreen } = useFullscreenContext();
   const pathname = usePathname();
   const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
 
   const handleSearch = useCallback(() => setIsPaletteOpen(true), [setIsPaletteOpen]);
   const handleMenu = useCallback(() => setIsSidebarOpen(true), [setIsSidebarOpen]);
+
+  if (isFullscreen) return null;
 
   return (
     <nav 

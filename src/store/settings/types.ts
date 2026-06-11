@@ -22,6 +22,12 @@ export interface SettingsState {
   accessibility: AccessibilitySettings;
   privacy: PrivacySettings;
   adsConsent: boolean;
+  focusMode: {
+    autoHideToolbar: boolean;
+    defaultFontSize: number;
+    defaultWordWrap: boolean;
+    lastUsedToolId: string | null;
+  };
   version: number;
 }
 
@@ -29,6 +35,7 @@ export interface SettingsActions {
   updateAppearance: (settings: Partial<AppearanceSettings>) => void;
   updateAccessibility: (settings: Partial<AccessibilitySettings>) => void;
   updatePrivacy: (settings: Partial<PrivacySettings>) => void;
+  updateFocusMode: (settings: Partial<SettingsState['focusMode']>) => void;
   resetAll: () => void;
 }
 

@@ -51,7 +51,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
       >
         <m.button
           role="tab"
+          id="tab-all"
           aria-selected={!activeCategory}
+          aria-controls="tool-grid-panel"
           onClick={() => onCategoryChange(null)}
           onKeyDown={(e) => handleKeyDown(e, 0)}
           tabIndex={!activeCategory ? 0 : -1}
@@ -77,7 +79,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           <m.button
             key={cat.id}
             role="tab"
+            id={`tab-${cat.id}`}
             aria-selected={activeCategory === cat.id}
+            aria-controls="tool-grid-panel"
             onClick={() => onCategoryChange(cat.id)}
             onKeyDown={(e) => handleKeyDown(e, index + 1)}
             tabIndex={activeCategory === cat.id ? 0 : -1}

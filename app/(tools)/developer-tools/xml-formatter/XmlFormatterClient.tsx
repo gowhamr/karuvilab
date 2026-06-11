@@ -6,6 +6,8 @@ import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { blobManager } from '@/src/lib/blob-manager';
+import { FocusModeWrapper } from '@/components/ui/FocusModeWrapper';
+import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 
 type XMLFormatMode = 'format' | 'minify' | 'validate';
 type XMLIndent = '2' | '4' | 'tab';
@@ -133,6 +135,12 @@ export default function XmlFormatterClient() {
     mode: 'format'
   });
 
+  const [fontSize, setFontSize] = useState(14);
+  const [wordWrap, setWordWrap] = useState(true);
+
+  const { isFullscreen, activeToolId } = useFullscreenContext();
+  const isThisToolFullscreen = isFullscreen && activeToolId === "xml-formatter";
+
   const result = useMemo(() => processXML(input, options), [input, options]);
 
   const handleDownload = () => {
@@ -147,7 +155,16 @@ export default function XmlFormatterClient() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
+    <FocusModeWrapper
+      toolId="xml-formatter"
+      toolName="XML Formatter"
+      charCount={result.output.length}
+      lineCount={result.output ? result.output.split('\n').length : 0}
+      language="xml"
+      onFontSizeChange={setFontSize}
+      onWrapToggle={() => setWordWrap(v => !v)}
+    >
+      <div className="max-w-6xl mx-auto space-y-8 pb-12 w-full">
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
         
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -203,7 +220,8 @@ export default function XmlFormatterClient() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="<root>\n  <item>Data</item>\n</root>"
-              className="w-full h-[500px] bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
+              className={`w-full h-[500px] bg-bg border border-border rounded-2xl p-4 font-mono text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+              style={{ fontSize: `${fontSize}px` }}
               spellCheck="false"
             />
           </div>
@@ -244,7 +262,8 @@ export default function XmlFormatterClient() {
                   <textarea
                     readOnly
                     value={result.output}
-                    className="w-full h-full bg-transparent p-4 font-mono text-sm text-text-2 outline-none resize-none"
+                    className={`w-full h-full bg-transparent p-4 font-mono text-text-2 outline-none resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+                    style={{ fontSize: `${fontSize}px` }}
                   />
                 )
               ) : input && result.error ? (
@@ -301,7 +320,8 @@ export default function XmlFormatterClient() {
         )}
 
       </div>
-    </div>
+      </div>
+    </FocusModeWrapper>
   );
 }
 

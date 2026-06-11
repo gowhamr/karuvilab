@@ -6,10 +6,15 @@ import { ShieldCheck, WifiOff, Cpu, Lock, Clock } from "lucide-react";
 import { KVLogo } from "@/components/ui/KVLogo";
 import { getRecentTools, ToolEntry } from "@/src/tool-registry";
 
+import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
+
 export function Footer() {
+  const { isFullscreen } = useFullscreenContext();
   const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
   const [isOnline, setIsOnline] = useState(true);
   const [mounted, setMounted] = useState(false);
+
+  if (isFullscreen) return null;
 
   useEffect(() => {
     setRecentTools(getRecentTools());

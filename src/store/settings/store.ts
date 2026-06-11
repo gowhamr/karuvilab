@@ -66,6 +66,12 @@ const settingsIdbStorage = {
           historyEnabled: true,
         },
         adsConsent: adsConsent || false,
+        focusMode: localObj?.state?.focusMode || {
+          autoHideToolbar: false,
+          defaultFontSize: 14,
+          defaultWordWrap: true,
+          lastUsedToolId: null,
+        },
       },
       version: localObj?.version || 1,
     });
@@ -78,6 +84,7 @@ const settingsIdbStorage = {
       state: {
         appearance: obj.state.appearance,
         accessibility: obj.state.accessibility,
+        focusMode: obj.state.focusMode,
       },
       version: obj.version,
     });

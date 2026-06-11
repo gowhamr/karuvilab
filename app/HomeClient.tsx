@@ -60,6 +60,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
       {href && (
         <Link 
           href={href}
+          aria-label={`Explore all ${title}`}
           className="group flex items-center gap-1 text-[10px] font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
         >
           Explore all <ArrowRight className="w-3 h-3" />
@@ -218,7 +219,12 @@ export default function HomeClient() {
             </div>
           </div>
 
-          <div className="pt-6">
+          <div
+            id="tool-grid-panel"
+            role="tabpanel"
+            aria-labelledby={activeCategory ? `tab-${activeCategory}` : 'tab-all'}
+            className="pt-6"
+          >
             <AnimatePresence mode="wait">
               {isFiltering ? (
                 <m.section 

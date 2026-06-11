@@ -1,15 +1,18 @@
-import { ShieldCheck, CloudOff, WifiOff, UserMinus } from "lucide-react";
+import { ShieldCheck, CloudOff, WifiOff, Wifi, UserMinus } from "lucide-react";
 import { m } from "framer-motion";
 
 interface TrustBadgeProps {
   className?: string;
+  requiresNetwork?: boolean | undefined;
 }
 
-export function TrustBadges({ className = "" }: TrustBadgeProps) {
+export function TrustBadges({ className = "", requiresNetwork = false }: TrustBadgeProps) {
   const badges = [
     { icon: CloudOff, label: "No Uploads", color: "text-blue" },
     { icon: ShieldCheck, label: "Browser Processing", color: "text-success" },
-    { icon: WifiOff, label: "Offline Capable", color: "text-warn" },
+    requiresNetwork
+      ? { icon: Wifi, label: "Requires Network", color: "text-blue" }
+      : { icon: WifiOff, label: "Offline Capable", color: "text-warn" },
     { icon: UserMinus, label: "No Account Required", color: "text-text-4" },
   ];
 

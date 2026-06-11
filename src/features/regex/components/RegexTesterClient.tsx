@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
 
 const cat = CATEGORIES.find(c => c.id === "developer")!;
 
@@ -26,6 +27,8 @@ export default function RegexTesterClient() {
   const [pattern, setPattern] = useState("");
   const [flags, setFlags] = useState({ g: true, i: false, m: false, s: false, u: false });
   const [testString, setTestString] = useState("");
+  const [fontSize, setFontSize] = useState(14);
+  const [wordWrap, setWordWrap] = useState(true);
 
   const flagString = Object.entries(flags).filter(([, v]) => v).map(([k]) => k).join("");
 
@@ -69,7 +72,16 @@ export default function RegexTesterClient() {
   }, [pattern, flagString, testString, result]);
 
   return (
-    <div className="space-y-6">
+    <FocusModeWrapper
+      toolId="regex-tester"
+      toolName="Regex Tester"
+      charCount={testString.length}
+      lineCount={testString ? testString.split('\n').length : 0}
+      language="regex"
+      onFontSizeChange={setFontSize}
+      onWrapToggle={() => setWordWrap(v => !v)}
+    >
+      <div className="space-y-6 w-full">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="space-y-2">
           <label className="text-sm font-bold text-text-2">Pattern</label>
@@ -104,7 +116,8 @@ export default function RegexTesterClient() {
         <div className="space-y-2">
           <label className="text-sm font-bold text-text-2">Test String</label>
           <textarea
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
+            className={`w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono focus:ring-2 focus:ring-blue outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+            style={{ fontSize: `${fontSize}px` }}
             rows={6}
             placeholder="Enter your test string here…"
             value={testString}
@@ -199,6 +212,7 @@ export default function RegexTesterClient() {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+    </FocusModeWrapper>
   );
 }

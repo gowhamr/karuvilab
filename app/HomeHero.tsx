@@ -34,8 +34,8 @@ export function HomeHero() {
       {/* Trust strip — compact on mobile */}
       <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5">
         {TRUST_ITEMS.map((item, i) => (
-          <div key={i} className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
-            <item.icon className="w-3 h-3 text-brand-primary" />
+          <div key={i} className="flex items-center gap-1.5 transition-opacity">
+            <item.icon className="w-3 h-3 text-brand-primary" aria-hidden="true" />
             <span className="text-[11px] font-bold uppercase tracking-widest text-text-3">{item.text}</span>
           </div>
         ))}

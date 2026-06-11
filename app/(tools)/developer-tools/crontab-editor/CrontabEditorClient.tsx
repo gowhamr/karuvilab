@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { Clock, Check, Copy, ChevronDown, ChevronUp, AlertCircle, Calendar, Zap, List } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
+import { FocusModeWrapper } from '@/components/ui/FocusModeWrapper';
 
 // --- SECTION A: Cron Parser Engine (Pure Functions) ---
 
@@ -302,6 +303,7 @@ const PRESETS = [
 export default function CrontabEditorClient() {
   const [expression, setExpression] = useState<string>('* * * * *');
   const [parsed, setParsed] = useState<ParsedCron>(parseCronExpression('* * * * *'));
+  const [fontSize, setFontSize] = useState<number>(14);
   const [copied, setCopied] = useState<boolean>(false);
   const [cheatsheetOpen, setCheatsheetOpen] = useState<boolean>(false);
 
@@ -337,7 +339,13 @@ export default function CrontabEditorClient() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-12">
+    <FocusModeWrapper
+      toolId="crontab-editor"
+      toolName="Crontab Editor"
+      language="cron"
+      onFontSizeChange={setFontSize}
+    >
+      <div className="max-w-4xl mx-auto space-y-8 pb-12 w-full">
       
       {/* 1. Expression Input */}
       <div className="space-y-3">
@@ -355,6 +363,7 @@ export default function CrontabEditorClient() {
                 ? "border-2 border-green-500/30 focus:border-green-500/60 focus:ring-4 focus:ring-green-500/10" 
                 : "border-2 border-red-500/30 focus:border-red-500/60 focus:ring-4 focus:ring-red-500/10"
             )}
+            style={{ fontSize: `${fontSize}px` }}
             placeholder="* * * * *"
           />
           <button
@@ -445,6 +454,7 @@ export default function CrontabEditorClient() {
                 value={field.value}
                 onChange={(e) => handleFieldChange(i, e.target.value)}
                 className="w-full bg-transparent font-mono text-xl font-black text-text focus:outline-none"
+                style={{ fontSize: `${fontSize + 6}px` }}
               />
               <div className="pt-1">
                 <p className="text-[10px] text-text-4 font-bold">
@@ -566,6 +576,7 @@ export default function CrontabEditorClient() {
           )}
         </AnimatePresence>
       </div>
-    </div>
+      </div>
+    </FocusModeWrapper>
   );
 }

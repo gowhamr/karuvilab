@@ -16,5 +16,6 @@ export const currency_converter: ToolEntry = {
     "inr"
   ],
   "searchIntent": "transactional",
-  "schemaType": "WebApplication"
+  "schemaType": "WebApplication",
+  "requiresNetwork": true
 };

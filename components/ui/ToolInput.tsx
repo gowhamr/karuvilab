@@ -19,6 +19,7 @@ interface ToolInputProps {
   readOnly?: boolean;
   className?: string;
   loading?: boolean;
+  style?: React.CSSProperties;
 }
 
 export function ToolInput({ 
@@ -36,7 +37,8 @@ export function ToolInput({
   id: providedId,
   readOnly,
   className,
-  loading
+  loading,
+  style
 }: ToolInputProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
@@ -74,6 +76,7 @@ export function ToolInput({
         <textarea
           id={id}
           className={cn(baseClasses, "min-h-[120px] py-4")}
+          style={style}
           rows={rows}
           placeholder={placeholder}
           value={value}
@@ -93,6 +96,7 @@ export function ToolInput({
           inputMode={inputMode}
           autoComplete={autoComplete}
           className={baseClasses}
+          style={style}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}

@@ -8,6 +8,7 @@ import { DropZone } from "@/components/ui/DropZone";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useRecoveryStore } from "@/src/store/useRecoveryStore";
 import { Layers, Code, FileCode, Zap } from "lucide-react";
+import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
 
 const toolId = "code-minifier";
 
@@ -16,6 +17,7 @@ type Lang = "css" | "js" | "html";
 export default function CodeMinifierClient() {
   const [lang, setLang] = useState<Lang>("css");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [fontSize, setFontSize] = useState(14);
   const showBanner = useRecoveryStore(state => state.showBanner);
 
   const addItems = useBatchStore(state => state.addItems);
@@ -80,7 +82,13 @@ export default function CodeMinifierClient() {
   };
 
   return (
-    <div className="space-y-12">
+    <FocusModeWrapper
+      toolId="code-minifier"
+      toolName="JS/TS Minifier"
+      language={lang === "js" ? "javascript" : lang}
+      onFontSizeChange={setFontSize}
+    >
+      <div className="space-y-12 w-full">
       {/* Settings & Mode */}
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -131,6 +139,7 @@ export default function CodeMinifierClient() {
           <p className="font-black text-text-4 uppercase tracking-[0.2em] text-xs">Add files to start minifying</p>
         </div>
       )}
-    </div>
+      </div>
+    </FocusModeWrapper>
   );
 }

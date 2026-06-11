@@ -26,6 +26,21 @@ const WORKERS = [
   }
 ];
 
+function updateCacheNames() {
+  const swPath = path.join(process.cwd(), 'public', 'sw.js');
+  if (fs.existsSync(swPath)) {
+    try {
+      let content = fs.readFileSync(swPath, 'utf8');
+      const buildHash = Date.now().toString();
+      const updated = content.replace(/karuvilab-(static|images|pages)-(v\d+|[a-f0-9]+|\d+)/g, 'karuvilab-$1-' + buildHash);
+      fs.writeFileSync(swPath, updated, 'utf8');
+      console.log(`✅ Automatically updated sw.js cache names with build hash: ${buildHash}`);
+    } catch (err) {
+      console.error('❌ Failed to update sw.js cache names:', err);
+    }
+  }
+}
+
 function sync() {
   console.log('🚀 Syncing KaruviLab worker assets...');
   
@@ -59,6 +74,8 @@ function sync() {
       console.warn(`⚠️ Warning: Source worker not found: ${srcPath}`);
     }
   }
+
+  updateCacheNames();
 }
 
 sync();

@@ -257,6 +257,7 @@ html.preload *:after {
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;
+  overscroll-behavior: none;
 }
 
 body {
@@ -270,6 +271,7 @@ body {
   min-height: 100dvh;
   min-height: 100svh;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 header, aside, footer, nav, .mat-surface-1, .mat-surface-2, .mat-surface-3, .kv-glass, .bg-surface, .bg-bg, .bg-bg-input, .border-border {

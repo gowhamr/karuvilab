@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Popover from "@radix-ui/react-popover";
 import { m, AnimatePresence } from "framer-motion";
+import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
 import { 
   X, Pin, Archive, Trash2, Hash, CheckSquare, 
   Type, Eye, Edit3, Plus, Trash, GripVertical,
@@ -33,6 +34,16 @@ export function NoteEditor() {
   const [isPreview, setIsPreview] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
   const [newTag, setNewTag] = useState("");
+  const [fontSize, setFontSize] = useState(14);
+  const [wordWrap, setWordWrap] = useState(true);
+
+  const wordCount = useMemo(() => {
+    if (!localNote?.content) return 0;
+    return localNote.content.trim() ? localNote.content.trim().split(/\s+/).length : 0;
+  }, [localNote?.content]);
+
+  const charCount = useMemo(() => localNote?.content?.length || 0, [localNote?.content]);
+  const lineCount = useMemo(() => localNote?.content?.split('\n').length || 0, [localNote?.content]);
 
   useEffect(() => {
     if (initialNote) {
@@ -256,12 +267,23 @@ export function NoteEditor() {
                   dangerouslySetInnerHTML={{ __html: previewHtml || "Nothing to preview..." }}
                 />
               ) : (
-                <textarea
-                  value={localNote.content}
-                  onChange={(e) => handleChange({ content: e.target.value })}
-                  placeholder="Start writing your thoughts... (Markdown supported)"
-                  className="w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-[400px]"
-                />
+                <FocusModeWrapper
+                  toolId="notes"
+                  toolName="Notepad"
+                  wordCount={wordCount}
+                  charCount={charCount}
+                  lineCount={lineCount}
+                  onFontSizeChange={setFontSize}
+                  onWrapToggle={() => setWordWrap(v => !v)}
+                >
+                  <textarea
+                    value={localNote.content}
+                    onChange={(e) => handleChange({ content: e.target.value })}
+                    placeholder="Start writing your thoughts... (Markdown supported)"
+                    className={`w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-[400px] ${wordWrap ? '' : 'whitespace-pre overflow-x-auto'}`}
+                    style={{ fontSize: `${fontSize}px` }}
+                  />
+                </FocusModeWrapper>
               )}
             </div>
           </div>

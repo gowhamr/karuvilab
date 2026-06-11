@@ -10,7 +10,10 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: isGithubPages,
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
   },
+  compress: true,
+  poweredByHeader: false,
   reactStrictMode: true,
   trailingSlash: true,
   async headers() {
@@ -42,7 +45,16 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion"],
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-popover",
+      "@radix-ui/react-select",
+      "@radix-ui/react-slider",
+      "@radix-ui/react-toggle-group",
+    ],
   },
   ...(isGithubPages ? {} : {
     async redirects() {

@@ -59,6 +59,7 @@ export interface ToolEntry {
   status?: 'stable' | 'beta' | 'deprecated' | 'new';
   lastUpdated?: string; // ISO format: YYYY-MM-DD
   lastAdded?: string;   // ISO format: YYYY-MM-DD
+  requiresNetwork?: boolean;
 }
 
 export function isNewTool(tool: ToolEntry): boolean {

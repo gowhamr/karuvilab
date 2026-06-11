@@ -14,5 +14,6 @@ export const internet_speed_test: ToolEntry = {
     "ping",
     "latency"
   ],
-  "status": "new"
+  "status": "new",
+  "requiresNetwork": true
 };

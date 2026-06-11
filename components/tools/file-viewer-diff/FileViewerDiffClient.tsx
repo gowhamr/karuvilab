@@ -6,6 +6,7 @@ import { useFileViewerStore } from '@/src/store/useFileViewerStore';
 import { FileText, Files, ShieldCheck, Database } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
+import { FocusModeWrapper } from '@/components/ui/FocusModeWrapper';
 
 const ViewEditTab = dynamic(() => import('./ViewEditTab').then(mod => mod.ViewEditTab), {
   loading: () => <ToolSkeleton />,
@@ -25,11 +26,33 @@ const TABS = [
 export default function FileViewerDiffClient() {
   const activeTab = useFileViewerStore(state => state.activeTab);
   const setActiveTab = useFileViewerStore(state => state.setActiveTab);
+  const fileA = useFileViewerStore(state => state.fileA);
+  const fileB = useFileViewerStore(state => state.fileB);
+  
+  const settings = useFileViewerStore(state => state.settings);
+  const updateSettings = useFileViewerStore(state => state.updateSettings);
+
+  const fontSize = settings.fontSize;
+  const setFontSize = (size: number) => updateSettings({ fontSize: size });
+  const onWrapToggle = () => updateSettings({ wordWrap: !settings.wordWrap });
+
+  const lineCount = Math.max(
+    fileA?.content?.split('\n').length || 0,
+    fileB?.content?.split('\n').length || 0
+  );
 
   const ActiveComponent = TABS.find(t => t.id === activeTab)?.component || ViewEditTab;
 
   return (
-    <div className="space-y-10">
+    <FocusModeWrapper
+      toolId="file-viewer-diff"
+      toolName="File Viewer & Diff"
+      lineCount={lineCount}
+      language={activeTab === 'compare' ? 'diff' : fileA?.language || 'text'}
+      onFontSizeChange={setFontSize}
+      onWrapToggle={onWrapToggle}
+    >
+      <div className="space-y-10 w-full">
       {/* Navigation Tabs */}
       <div className="flex flex-wrap gap-2 p-1.5 bg-surface border border-border rounded-3xl w-fit mx-auto shadow-sm">
         {TABS.map((tab) => {
@@ -69,6 +92,7 @@ export default function FileViewerDiffClient() {
            <p className="text-xs font-bold text-text-3 uppercase tracking-widest">No Cloud Storage</p>
         </div>
       </div>
-    </div>
+      </div>
+    </FocusModeWrapper>
   );
 }

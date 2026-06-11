@@ -82,7 +82,7 @@ export function ToolShell({ title, description, category, children, toolId, cont
         </div>
         <div className="space-y-4">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-black">{title}</h1>
-          <TrustBadges className="pt-2" />
+          <TrustBadges className="pt-2" requiresNetwork={currentTool?.requiresNetwork} />
           {description && <p className="text-text-3 text-lg leading-relaxed max-w-3xl">{description}</p>}
         </div>
       </header>
