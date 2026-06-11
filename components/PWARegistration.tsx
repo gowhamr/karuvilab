@@ -6,8 +6,10 @@ import { X, Download, Share } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePWAStore } from '@/src/store/usePWAStore';
 import { useSearchStore } from '@/src/store/useSearchStore';
+import { useToast } from '@/components/ui/Toast';
 
 export function PWARegistration() {
+  const { toast } = useToast();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -28,19 +30,10 @@ export function PWARegistration() {
         const wb = new Workbox(swPath);
 
         const onUpdate = () => {
-          if (window.confirm('A new version of KaruviLab is available. Update now?')) {
-            wb.addEventListener('controlling', () => {
-              window.location.reload();
-            });
-            wb.messageSkipWaiting();
-          }
+          wb.messageSkipWaiting();
         };
 
         wb.addEventListener('waiting', onUpdate);
-        wb.addEventListener('controlling', (event) => {
-          if (!event.isUpdate) return;
-          window.location.reload();
-        });
 
         wb.register().catch((err) => {
           // Non-critical: SW registration can fail in private mode or blocked environments
