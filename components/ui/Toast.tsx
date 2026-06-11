@@ -6,14 +6,20 @@ import { X, CheckCircle2, AlertCircle, Info, AlertTriangle } from "lucide-react"
 
 type ToastType = "success" | "error" | "info" | "warn";
 
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
 interface Toast {
   id: string;
   message: string;
   type: ToastType;
+  action?: ToastAction;
 }
 
 interface ToastContextType {
-  toast: (message: string, type?: ToastType) => void;
+  toast: (message: string, type?: ToastType, action?: ToastAction) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -27,12 +33,12 @@ export function useToast() {
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const toast = useCallback((message: string, type: ToastType = "success") => {
+  const toast = useCallback((message: string, type: ToastType = "success", action?: ToastAction) => {
     const id = Math.random().toString(36).slice(2, 9);
-    setToasts((prev) => [...prev, { id, message, type }]);
+    setToasts((prev) => [...prev, { id, message, type, ...(action ? { action } : {}) }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4000); // Slightly longer duration for better readability
+    }, action ? 8000 : 4000); // Give users more time if there's an action
   }, []);
 
   const removeToast = (id: string) => {
@@ -86,6 +92,23 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               }`} />
               <div className="flex-shrink-0 ml-1">{icons[t.type]}</div>
               <span className="text-sm font-bold text-text flex-1">{t.message}</span>
+              
+              {t.action && (
+                <button
+                  onClick={() => {
+                    t.action!.onClick();
+                    removeToast(t.id);
+                  }}
+                  className={`ml-2 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all
+                    ${t.type === 'success' ? 'bg-green-500 hover:bg-green-600 text-white' : 
+                      t.type === 'error' ? 'bg-red-500 hover:bg-red-600 text-white' : 
+                      t.type === 'warn' ? 'bg-orange-500 hover:bg-orange-600 text-white' : 
+                      'bg-blue hover:bg-blue-dark text-white'}`}
+                >
+                  {t.action.label}
+                </button>
+              )}
+              
               <button 
                 onClick={() => removeToast(t.id)}
                 className="p-1 rounded-lg hover:bg-mat-hover transition-colors text-text-4 pointer-events-auto"

@@ -8,6 +8,8 @@ import { useState } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { performFactoryReset, clearToolData } from "@/src/lib/factory-reset";
 
+import { useToast } from "@/components/ui/Toast";
+
 export const PrivacySection = memo(function PrivacySection() {
   const privacy = useSettingsStore(state => state.privacy);
   const updatePrivacy = useSettingsStore(state => state.updatePrivacy);
@@ -16,6 +18,7 @@ export const PrivacySection = memo(function PrivacySection() {
   const [isReseting, setIsReseting] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const { toast } = useToast();
 
   const exportSettings = () => {
     setIsExporting(true);
@@ -45,28 +48,31 @@ export const PrivacySection = memo(function PrivacySection() {
       try {
         const data = JSON.parse(event.target?.result as string);
         Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v as string));
-        alert("Settings imported successfully! Reloading...");
-        window.location.reload();
+        toast("Settings imported successfully! Reloading...", "success");
+        setTimeout(() => window.location.reload(), 1500);
       } catch (err) {
-        alert("Failed to import settings. Invalid file format.");
+        toast("Failed to import settings. Invalid file format.", "error");
       }
     };
     reader.readAsText(file);
   };
 
   const handleClearCache = async () => {
-    if (!confirm("Are you sure? This will remove your recently used tools, saved inputs, and all tool-specific data. Your theme and favorites will be preserved.")) return;
-    
-    setIsClearing(true);
-    try {
-      await clearToolData();
-      alert("Cache cleared successfully.");
-    } catch (err) {
-      console.error("Clear Cache failed:", err);
-      alert("Failed to clear some data. Please try a Factory Reset if issues persist.");
-    } finally {
-      setIsClearing(false);
-    }
+    toast("Are you sure? This will remove all tool-specific data.", "warn", {
+      label: "Clear",
+      onClick: async () => {
+        setIsClearing(true);
+        try {
+          await clearToolData();
+          toast("Cache cleared successfully.", "success");
+        } catch (err) {
+          console.error("Clear Cache failed:", err);
+          toast("Failed to clear some data.", "error");
+        } finally {
+          setIsClearing(false);
+        }
+      }
+    });
   };
 
   return (
@@ -118,19 +124,22 @@ export const PrivacySection = memo(function PrivacySection() {
       <div className="pt-12 border-t border-border/40 mt-8">
         <h4 className="text-xs font-black uppercase tracking-widest text-red-500/60 mb-4">Danger Zone</h4>
         <button
-          onClick={async () => {
-            if (confirm('DANGER: This will delete ALL your settings, favorites, and history. This cannot be undone.')) {
-              setIsReseting(true);
-              try {
-                await performFactoryReset();
-              } catch (err) {
-                console.error("Factory Reset failed:", err);
-                // Fallback attempt
-                localStorage.clear();
-                resetAll();
-                window.location.reload();
+          onClick={() => {
+            toast('DANGER: This will delete ALL your settings, favorites, and history. This cannot be undone.', 'error', {
+              label: 'Reset',
+              onClick: async () => {
+                setIsReseting(true);
+                try {
+                  await performFactoryReset();
+                } catch (err) {
+                  console.error("Factory Reset failed:", err);
+                  // Fallback attempt
+                  localStorage.clear();
+                  resetAll();
+                  window.location.reload();
+                }
               }
-            }
+            });
           }}
           disabled={isReseting}
           className="w-full sm:w-auto px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"

@@ -6,6 +6,7 @@ import { History, Trash2, ExternalLink, Calendar, ChevronRight } from "lucide-re
 import { formatINR } from "@/src/lib/calculator-utils";
 import Link from "next/link";
 import { ALL_TOOLS } from "@/src/tool-registry";
+import { useToast } from "@/components/ui/Toast";
 
 export const HistorySection = memo(function HistorySection() {
   const [history, setHistory] = useState<any[]>([]);
@@ -21,15 +22,22 @@ export const HistorySection = memo(function HistorySection() {
     load();
   }, []);
 
+  const { toast } = useToast();
+
   const clearHistory = async () => {
-    if (!confirm("Are you sure you want to clear all calculation history?")) return;
-    try {
-      await clearAllHistory();
-      setHistory([]);
-    } catch (error) {
-      console.error("Failed to clear history:", error);
-      alert("Failed to clear history. Please try again.");
-    }
+    toast("Are you sure you want to clear all calculation history?", "warn", {
+      label: "Clear",
+      onClick: async () => {
+        try {
+          await clearAllHistory();
+          setHistory([]);
+          toast("History cleared successfully.", "success");
+        } catch (error) {
+          console.error("Failed to clear history:", error);
+          toast("Failed to clear history. Please try again.", "error");
+        }
+      }
+    });
   };
 
   if (isLoading) return <div className="animate-pulse space-y-4">

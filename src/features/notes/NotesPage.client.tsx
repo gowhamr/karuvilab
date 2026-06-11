@@ -13,6 +13,7 @@ import { generateId } from "./utils";
 import { Note } from "./types";
 import { cn } from "@/src/lib/utils";
 import { useShallow } from "zustand/react/shallow";
+import { useToast } from "@/components/ui/Toast";
 
 type StatusTab = "active" | "archived" | "trash";
 
@@ -23,6 +24,7 @@ export default function NotesPage() {
   const emptyTrash = useNotesStore(state => state.emptyTrash);
   const notes = useNotesStore(state => state.notes);
   const [activeTab, setActiveTab] = useState<StatusTab>("active");
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchNotes();
@@ -110,9 +112,10 @@ export default function NotesPage() {
         <div className="flex justify-center">
           <button
             onClick={() => {
-              if (confirm("Are you sure you want to permanently delete all notes in the trash?")) {
-                emptyTrash();
-              }
+              toast("Are you sure you want to permanently delete all notes in the trash?", "warn", {
+                label: "Empty",
+                onClick: () => emptyTrash()
+              });
             }}
             className="flex items-center gap-2 px-6 py-2 border border-error/20 text-error bg-error/5 hover:bg-error/10 rounded-full text-xs font-black uppercase tracking-widest transition-all"
           >

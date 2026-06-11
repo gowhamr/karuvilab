@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { useToast } from "@/components/ui/Toast";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { cn } from "@/src/lib/utils";
 import { m, AnimatePresence } from "framer-motion";
@@ -43,6 +44,7 @@ export default function SitemapGeneratorClient() {
   const [activeTab, setActiveTab] = useState<'editor' | 'import'>('editor');
 
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const { toast } = useToast();
 
   // --- Handlers ---
 
@@ -79,7 +81,10 @@ export default function SitemapGeneratorClient() {
   };
 
   const clearAll = () => {
-    if (confirm("Clear all URLs?")) setEntries([]);
+    toast("Clear all URLs?", "warn", {
+      label: "Clear",
+      onClick: () => setEntries([])
+    });
   };
 
   // --- Exports ---

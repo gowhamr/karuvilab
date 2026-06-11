@@ -14,6 +14,7 @@ import {
   detectFormat, decodeToBytes, encodeFromBytes, floatToIEEE754, 
   ieee754ToFloat, decodeJWT, caesarShift, atbash, MORSE_MAP 
 } from "./helpers";
+import { useToast } from "@/components/ui/Toast";
 
 type TabMode = "smart" | "number" | "encode" | "text" | "jwt";
 
@@ -78,6 +79,7 @@ const SAMPLES = {
 
 export default function NumeralConverterClient() {
   const [activeTab, setActiveTab] = useState<TabMode>("smart");
+  const { toast } = useToast();
   
   // Input states
   const [inputValue, setInputValue] = useState<string>(SAMPLES.text || "");
@@ -181,7 +183,7 @@ export default function NumeralConverterClient() {
     if (!file) return;
 
     if (file.size > 1 * 1024 * 1024) {
-      alert("File is too large. Max supported size is 1MB.");
+      toast("File is too large. Max supported size is 1MB.", "error");
       return;
     }
 

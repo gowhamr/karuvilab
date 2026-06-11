@@ -5,9 +5,11 @@ import { ToolInput } from "@/components/ui/ToolInput";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { DropZone } from "@/components/ui/DropZone";
 import { FileText, Clock, Type, AlignLeft, Hash, Quote } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 export default function WordCounterClient() {
   const [text, setText] = useState("");
+  const { toast } = useToast();
 
   const stats = useMemo(() => {
     const trimmedText = text.trim();
@@ -38,6 +40,11 @@ export default function WordCounterClient() {
     const file = files[0];
     if (!file) return;
 
+    if (file.size > 2 * 1024 * 1024) {
+      toast("File too large. Max 2MB allowed.", "error");
+      return;
+    }
+
     if (file.name.endsWith(".txt")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -53,10 +60,10 @@ export default function WordCounterClient() {
         setText(result.value);
       } catch (err) {
         console.error(err);
-        alert("Failed to parse .docx file.");
+        toast("Failed to parse .docx file.", "error");
       }
     } else {
-      alert("Only .txt and .docx files are supported.");
+      toast("Only .txt and .docx files are supported.", "error");
     }
   };
 

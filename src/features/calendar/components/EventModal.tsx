@@ -13,6 +13,7 @@ import { cn } from "@/src/lib/utils";
 
 import { Checkbox } from "@/components/ui/Checkbox";
 import { RECURRENCE_LABELS } from "../constants";
+import { useToast } from "@/components/ui/Toast";
 
 export function EventModal({ 
   isOpen, 
@@ -29,6 +30,7 @@ export function EventModal({
   const setSelectedEvent = useCalendarStore(state => state.setSelectedEvent);
   const updateEvent = useCalendarStore(state => state.updateEvent);
   const removeEvent = useCalendarStore(state => state.removeEvent);
+  const { toast } = useToast();
 
   const editingEvent = selectedEventId ? events.find(e => e.id === selectedEventId) : null;
 
@@ -95,10 +97,13 @@ export function EventModal({
 
   const handleDelete = async () => {
     if (editingEvent) {
-      if (confirm("Are you sure you want to delete this event?")) {
-        await removeEvent(editingEvent.id);
-        onClose();
-      }
+      toast("Are you sure you want to delete this event?", "warn", {
+        label: "Delete",
+        onClick: async () => {
+          await removeEvent(editingEvent.id);
+          onClose();
+        }
+      });
     }
   };
 

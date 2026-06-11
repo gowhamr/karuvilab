@@ -14,6 +14,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 import { useSupportStore } from "@/src/store/useSupportStore";
+import { useToast } from "@/components/ui/Toast";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 // ... (omitting lines for brevity in thought, but I must provide full new_string in real replace)
@@ -179,6 +180,7 @@ const SpeedGauge = ({ value, max = 100, color = "#4F46E5" }: { value: number, ma
 };
 
 export default function InternetSpeedTestClient() {
+  const { toast } = useToast();
   const [status, setStatus] = useState<TestStatus>('idle');
   const [ping, setPing] = useState<number | null>(null);
   const [download, setDownload] = useState<number | null>(null);
@@ -486,7 +488,7 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
       navigator.share({ title: 'Internet Speed Test Result', text });
     } else {
       navigator.clipboard.writeText(text);
-      alert("Results copied to clipboard!");
+      toast("Results copied to clipboard!", "success");
     }
   };
 
