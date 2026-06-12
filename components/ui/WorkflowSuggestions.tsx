@@ -28,7 +28,7 @@ export function WorkflowSuggestions() {
           >
             <Link 
               href={`/${tool.href}`}
-              className="group block bg-surface border border-border p-5 rounded-2xl hover:border-blue transition-all hover:shadow-lg hover:shadow-blue/5 relative overflow-hidden h-full"
+              className="group block bg-surface border border-border p-5 rounded-2xl hover:border-blue transition-all hover:shadow-md hover:shadow-blue/5 relative overflow-hidden h-full"
             >
               <div 
                 className="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 opacity-5 group-hover:opacity-10 transition-opacity"

@@ -211,7 +211,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                 <button 
                   onClick={onProcess}
                   disabled={stats.pending + stats.failed === 0}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-blue text-white font-black rounded-xl hover:shadow-lg hover:shadow-blue/20 active:scale-95 transition-all text-xs uppercase tracking-widest disabled:opacity-30 outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-blue text-white font-black rounded-xl hover:shadow-md hover:shadow-blue/10 active:scale-95 transition-all text-xs uppercase tracking-widest disabled:opacity-30 outline-none focus-visible:ring-2 focus-visible:ring-blue"
                 >
                   <Play className="w-3.5 h-3.5 fill-current" /> Execute All
                 </button>

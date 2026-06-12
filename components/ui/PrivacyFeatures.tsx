@@ -59,7 +59,7 @@ export function PrivacyFeatures() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-br from-blue to-blue-dark rounded-3xl p-6 md:p-12 text-text flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 shadow-xl shadow-blue/20"
+        className="bg-gradient-to-br from-blue to-blue-dark rounded-3xl p-6 md:p-12 text-text flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 shadow-lg shadow-blue/10"
       >
         <div className="space-y-2 text-center md:text-left">
           <h2 className="text-[22px] md:text-4xl font-black tracking-tight leading-tight text-white">
@@ -71,7 +71,7 @@ export function PrivacyFeatures() {
         </div>
         <Link 
           href="/privacy" 
-          className="w-full md:w-auto h-[52px] px-8 bg-white text-[#1E293B] rounded-xl font-bold text-[15px] hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-lg"
+          className="w-full md:w-auto h-[52px] px-8 bg-white text-[#1E293B] rounded-xl font-bold text-[15px] hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-md"
         >
           View Privacy Policy
         </Link>

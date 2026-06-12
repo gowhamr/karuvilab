@@ -43,7 +43,7 @@ function generateCSS(config: GradientConfig): string {
 }
 
 function generateTailwind(config: GradientConfig): string {
-  return `shadow-[${generateCSS(config).replace(/ /g, '_')}]`;
+  return `bg-[${generateCSS(config).replace(/ /g, '_')}]`;
 }
 
 export default function GradientGeneratorClient() {

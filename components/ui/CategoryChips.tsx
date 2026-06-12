@@ -65,7 +65,14 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
     updateScrollState();
 
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) {
+        el.scrollLeft += e.deltaY;
+      }
+    };
+
     el.addEventListener("scroll", updateScrollState, { passive: true });
+    el.addEventListener("wheel", handleWheel, { passive: true });
     window.addEventListener("resize", updateScrollState);
 
     // Initial check with small delay to handle client layout calculations
@@ -73,6 +80,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
     return () => {
       el.removeEventListener("scroll", updateScrollState);
+      el.removeEventListener("wheel", handleWheel);
       window.removeEventListener("resize", updateScrollState);
       clearTimeout(timer);
     };
@@ -83,27 +91,31 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     const targetId = activeCategory ? `tab-${activeCategory}` : "tab-all";
     const activeEl = containerRef.current?.querySelector(`[id="${targetId}"]`);
     if (activeEl) {
-      activeEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      // Use scrollTo for more reliable centering than scrollIntoView which can sometimes trigger vertical scroll
+      const container = containerRef.current!;
+      const target = activeEl as HTMLElement;
+      const scrollLeft = target.offsetLeft - (container.clientWidth / 2) + (target.clientWidth / 2);
+      container.scrollTo({ left: scrollLeft, behavior: "smooth" });
     }
   }, [activeCategory]);
 
   return (
-    <div className="relative group/wrapper w-[calc(100%+2rem)] -ml-4 md:w-[calc(100%+4rem)] md:-ml-8">
+    <div className="relative group/wrapper w-[calc(100%+2rem)] -ml-4 md:w-[calc(100%+4rem)] md:-ml-8 overflow-hidden">
       {/* Left/Right Dynamic Fades — Purely visual indicators */}
       <div 
         ref={fadeLeftRef}
-        className="absolute left-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-r from-bg via-bg/80 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300"
+        className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-bg via-bg/90 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300"
       />
       <div 
         ref={fadeRightRef}
-        className="absolute right-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300"
+        className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-bg via-bg/90 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300"
       />
 
       <div 
         ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-10"
+        className="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-10"
       >
         <m.button
           role="tab"
@@ -116,10 +128,10 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           whileHover={{ scale: 1.05, y: -1 }}
           whileTap={{ scale: 0.95 }}
           className={`
-            relative flex-shrink-0 h-[40px] px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+            relative flex-shrink-0 h-[42px] px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
             ${!activeCategory 
               ? "text-white shadow-md shadow-blue/15" 
-              : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface border border-border/50 shadow-sm"}
+              : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface shadow-sm"}
           `}
         >
           {!activeCategory && (
@@ -144,7 +156,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
             className={`
-              relative flex-shrink-0 h-[40px] flex items-center gap-2.5 px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+              relative flex-shrink-0 h-[42px] flex items-center gap-2.5 px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
               ${activeCategory === cat.id 
                 ? "text-white" 
                 : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface shadow-sm"}
@@ -165,8 +177,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             <span className="whitespace-nowrap">{cat.label}</span>
           </m.button>
         ))}
-        {/* Spacer for right padding on mobile scroll to ensure last item clears the fade */}
-        <div className="w-4 shrink-0 sm:hidden" />
+        {/* Large spacer for right gutter to ensure last item clears the fade and feels spacious */}
+        <div className="w-12 md:w-32 shrink-0 pointer-events-none" aria-hidden="true" />
       </div>
     </div>
   );

@@ -187,7 +187,7 @@ export default function HomeClient() {
           )}
         >
           <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
             </div>
             {isFiltering && (
