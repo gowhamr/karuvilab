@@ -54,7 +54,7 @@ export function SaveLoadScenarios() {
         <button
           onClick={handleSave}
           disabled={!newName.trim() || saveStatus !== 'idle'}
-          className="px-8 py-3.5 bg-blue text-white rounded-xl text-sm font-black uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+          className="px-8 py-3.5 bg-blue text-white rounded-xl text-sm font-black uppercase tracking-widest flex items-center gap-2 shadow-md shadow-blue/10 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
         >
           {saveStatus === 'done' ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
           {saveStatus === 'saving' ? "Saving..." : saveStatus === 'done' ? "Saved" : "Save Scenario"}

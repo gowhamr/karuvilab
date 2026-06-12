@@ -153,7 +153,7 @@ export default function SitemapGeneratorClient() {
         <div className="flex gap-2 w-full md:w-auto">
           <button 
             onClick={addEntry}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-blue/20"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-md shadow-blue/10"
           >
             <Plus size={16} aria-hidden="true" /> Add URL
           </button>
@@ -293,7 +293,7 @@ export default function SitemapGeneratorClient() {
                     <button 
                       onClick={importFromText}
                       disabled={!bulkInput.trim()}
-                      className="w-full py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-blue/20 disabled:opacity-50 disabled:grayscale disabled:scale-100"
+                      className="w-full py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
                     >
                       Import URLs
                     </button>

@@ -37,7 +37,7 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
         </Slider.Track>
         <Slider.Thumb
           id={id}
-          className="block w-6 h-6 bg-[--kv-text] border-2 border-[--kv-brand-primary] rounded-full shadow-lg cursor-pointer hover:scale-110 focus-visible:ring-2 focus-visible:ring-[--kv-brand-primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--kv-mat-base] focus:outline-none transition-all active:scale-95"
+          className="block w-6 h-6 bg-[--kv-text] border border-[--kv-brand-primary] rounded-full shadow-lg cursor-pointer hover:scale-110 focus-visible:ring-2 focus-visible:ring-[--kv-brand-primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--kv-mat-base] focus:outline-none transition-all active:scale-95"
           aria-label={label}
           aria-valuetext={display}
         />

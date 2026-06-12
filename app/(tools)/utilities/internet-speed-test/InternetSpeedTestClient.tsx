@@ -72,7 +72,7 @@ const PulseRing = ({ active, color = "rgba(79, 70, 229, 0.4)" }: { active: boole
             repeat: Infinity,
             ease: "easeOut" 
           }}
-          className="absolute w-full h-full rounded-full border-2"
+          className="absolute w-full h-full rounded-full border"
           style={{ borderColor: color }}
         />
         <motion.div
@@ -594,7 +594,6 @@ Test your speed at: ${window.location.origin}/utilities/internet-speed-test/`;
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <div className="flex items-center gap-3 mb-2">
-                     <PrivacyBadge message="Browser-based diagnostic" />
                      <StatusBadge 
                         status={status === 'completed' ? 'complete' : status === 'error' ? 'error' : status === 'idle' ? 'idle' : 'processing'} 
                         label={

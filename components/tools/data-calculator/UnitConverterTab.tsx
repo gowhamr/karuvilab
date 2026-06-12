@@ -114,7 +114,7 @@ export function UnitConverterTab() {
           
           <button
             onClick={handleConvert}
-            className="px-8 py-3 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:bg-blue-600 transition-all active:scale-95"
+            className="px-8 py-3 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:bg-blue-600 transition-all active:scale-95"
           >
             Save to History
           </button>

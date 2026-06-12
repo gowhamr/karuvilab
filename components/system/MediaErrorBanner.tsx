@@ -64,7 +64,7 @@ export function MediaErrorBanner({
         {retryAction && (
           <button
             onClick={retryAction}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-blue/20"
+            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:opacity-90 active:scale-95 transition-all shadow-md shadow-blue/10"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Retry

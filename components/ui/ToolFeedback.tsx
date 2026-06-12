@@ -206,7 +206,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                 aria-label="Thumbs up - tool was helpful"
               >
                 {isSubmitting && vote === 'up' ? (
-                  <div className="w-4 h-4 border-2 border-success border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border border-success border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
                     <ThumbsUp className="w-4 h-4" />
@@ -282,7 +282,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                     className="w-full h-9 bg-brand-primary text-white rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
                   >
                     {isSubmitting ? (
-                      <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-3.5 h-3.5 border border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
                         <Send className="w-3 h-3" />

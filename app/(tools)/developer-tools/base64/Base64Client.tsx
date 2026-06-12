@@ -52,7 +52,7 @@ export default function Base64Client() {
           <button
             key={t}
             onClick={() => { setTab(t); setInput(""); }}
-            className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${tab === t ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-3 hover:text-text"}`}
+            className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${tab === t ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-3 hover:text-text"}`}
           >
             {t === "encode" ? "Encode" : "Decode"}
           </button>
@@ -74,7 +74,7 @@ export default function Base64Client() {
         <label className="flex items-center gap-3 cursor-pointer select-none group w-fit">
           <div
             onClick={() => setUrlSafe(v => !v)}
-            className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all group-hover:scale-110 ${urlSafe ? "bg-blue border-blue shadow-lg shadow-blue/20" : "border-border bg-bg"}`}
+            className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-all group-hover:scale-110 ${urlSafe ? "bg-blue border-blue shadow-md shadow-blue/10" : "border-border bg-bg"}`}
           >
             {urlSafe && (
               <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -245,7 +245,7 @@ export function FeedbackModal() {
                       className="w-full h-[64px] bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/25 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                       {isSubmitting ? (
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin" />
                       ) : (
                         <>
                           <Send className="w-4 h-4" />

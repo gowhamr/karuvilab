@@ -151,7 +151,7 @@ export const PrivacySection = memo(function PrivacySection() {
           </h3>
           <Accordion type="single" collapsible className="w-full space-y-3">
             {FAQ.map((item, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-black/5 dark:border-white/5 shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
+              <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-mat-border shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
                 <AccordionTrigger className="text-[13px] font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
                 <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
               </AccordionItem>

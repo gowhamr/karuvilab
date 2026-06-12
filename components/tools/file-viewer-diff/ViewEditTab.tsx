@@ -125,7 +125,7 @@ export function ViewEditTab() {
               </button>
               <button
                 onClick={handleDownload}
-                className="p-2.5 bg-blue text-white rounded-xl hover:scale-105 transition-all shadow-lg shadow-blue/20"
+                className="p-2.5 bg-blue text-white rounded-xl hover:scale-105 transition-all shadow-md shadow-blue/10"
                 title="Download File"
               >
                 <Download className="w-4 h-4" />

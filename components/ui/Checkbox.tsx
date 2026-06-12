@@ -17,7 +17,7 @@ export function Checkbox({ label, className, id, ...props }: CheckboxProps) {
         <input
           type="checkbox"
           id={finalId}
-          className="peer appearance-none w-6 h-6 rounded-lg border-2 border-border bg-bg checked:bg-blue checked:border-blue transition-all cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-blue/10"
+          className="peer appearance-none w-6 h-6 rounded-lg border border-border bg-bg checked:bg-blue checked:border-blue transition-all cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-blue/10"
           {...props}
         />
         <svg

@@ -95,7 +95,7 @@ export default function DateCalculatorClient() {
             onClick={() => setTab(t)}
             className={cn(
               "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
-              tab === t ? "bg-blue text-white shadow-lg shadow-blue/20 scale-[1.02]" : "text-text-4 hover:text-text"
+              tab === t ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02]" : "text-text-4 hover:text-text"
             )}
           >
             {t === "diff" ? "Difference" : "Add/Sub"}

@@ -67,13 +67,13 @@ export default function SlugGeneratorClient() {
               <div className="flex bg-bg p-1 rounded-xl border border-border">
                 <button 
                   onClick={() => setBulkMode(false)} 
-                  className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${!bulkMode ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-4 hover:text-text-2"}`}
+                  className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${!bulkMode ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-4 hover:text-text-2"}`}
                 >
                   Single
                 </button>
                 <button 
                   onClick={() => setBulkMode(true)} 
-                  className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${bulkMode ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-4 hover:text-text-2"}`}
+                  className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${bulkMode ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-4 hover:text-text-2"}`}
                 >
                   Bulk
                 </button>

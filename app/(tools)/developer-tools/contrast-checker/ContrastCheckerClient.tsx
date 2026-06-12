@@ -166,7 +166,7 @@ export default function ContrastCheckerClient() {
 
               <div>
                 <h4 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 mb-2">UI Component</h4>
-                <div className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold border-2 transition-colors duration-300" style={{ borderColor: fg }}>
+                <div className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold border transition-colors duration-300" style={{ borderColor: fg }}>
                   Interactive Button
                 </div>
               </div>

@@ -82,7 +82,7 @@ export function EmptyState({
       {cta && (
         <button
           onClick={cta.onClick}
-          className="h-14 px-8 bg-blue text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-blue/20"
+          className="h-14 px-8 bg-blue text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-blue/10"
         >
           {cta.label}
         </button>

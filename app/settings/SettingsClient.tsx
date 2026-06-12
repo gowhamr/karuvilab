@@ -109,7 +109,7 @@ export default function SettingsClient() {
                       className={`
                         w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative
                         ${activeSection === item.id 
-                          ? 'bg-blue text-white shadow-lg shadow-blue/20' 
+                          ? 'bg-blue text-white shadow-md shadow-blue/10' 
                           : 'hover:bg-blue/5 text-text-2'}
                       `}
                     >

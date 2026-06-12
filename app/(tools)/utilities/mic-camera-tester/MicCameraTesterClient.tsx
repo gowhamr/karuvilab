@@ -258,7 +258,7 @@ export default function MicCameraTesterClient() {
                   className={`flex items-center justify-center gap-2 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
                     stream 
                       ? 'bg-error/10 text-error border border-error/30 hover:bg-error/20' 
-                      : 'bg-blue text-white hover:bg-blue/90 shadow-lg shadow-blue/20'
+                      : 'bg-blue text-white hover:bg-blue/90 shadow-md shadow-blue/10'
                   } disabled:opacity-50`}
                 >
                   {stream ? <><VideoOff className="w-4 h-4" aria-hidden="true" /> Stop Test</> : <><Video className="w-4 h-4" aria-hidden="true" /> Start Test</>}

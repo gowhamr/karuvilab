@@ -145,7 +145,7 @@ export default function UuidGeneratorClient() {
               onClick={() => { setVersion(v); handleGenerate(); }}
               className={cn(
                 "px-5 py-2.5 rounded-full text-xs font-bold transition-all",
-                version === v ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-bg text-text-3 hover:text-text border border-border"
+                version === v ? "bg-blue text-white shadow-md shadow-blue/10" : "bg-bg text-text-3 hover:text-text border border-border"
               )}
             >
               Version {v.replace('v', '')}
@@ -182,7 +182,7 @@ export default function UuidGeneratorClient() {
         )}
 
         <div className="relative group">
-          <div className="font-mono text-xl sm:text-2xl md:text-3xl bg-bg border-2 border-border rounded-2xl p-6 md:p-8 text-text text-center w-full transition-all flex items-center justify-center break-all">
+          <div className="font-mono text-xl sm:text-2xl md:text-3xl bg-bg border border-border rounded-2xl p-6 md:p-8 text-text text-center w-full transition-all flex items-center justify-center break-all">
             {formattedCurrent}
           </div>
           <div className="absolute -top-3 right-4 flex gap-2">
@@ -236,7 +236,7 @@ export default function UuidGeneratorClient() {
           </div>
           <button 
             onClick={handleBulkGenerate}
-            className="w-full sm:w-auto px-8 py-3.5 bg-surface border-2 border-border hover:border-blue text-text-2 hover:text-blue font-black uppercase tracking-widest rounded-xl transition-all active:scale-95"
+            className="w-full sm:w-auto px-8 py-3.5 bg-surface border border-border hover:border-blue text-text-2 hover:text-blue font-black uppercase tracking-widest rounded-xl transition-all active:scale-95"
           >
             Generate List
           </button>

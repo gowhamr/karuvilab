@@ -103,7 +103,7 @@ export function ShareButton({ url, title = 'Check out this result on KaruviLab',
         aria-haspopup="true"
         className={cn(
           'flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest',
-          'bg-blue text-white shadow-lg shadow-blue/25 hover:bg-blue/90 active:scale-95',
+          'bg-blue text-white shadow-md shadow-blue/10 hover:bg-blue/90 active:scale-95',
           'transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue'
         )}
       >

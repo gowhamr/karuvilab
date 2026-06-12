@@ -59,7 +59,7 @@ export default function ToolError({
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
         <button
           onClick={reset}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-blue text-white font-black rounded-xl hover:scale-105 transition-all shadow-lg shadow-blue/20"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-blue text-white font-black rounded-xl hover:scale-105 transition-all shadow-md shadow-blue/10"
         >
           <RefreshCcw className="w-4 h-4" />
           Try Again

@@ -122,7 +122,7 @@ export default function StandardCalculatorClient() {
 
   const BtnClass = (type: "num" | "op" | "eq" | "fn") => {
     const base = "flex items-center justify-center rounded-xl text-xl font-bold h-14 transition-all active:scale-95 select-none cursor-pointer";
-    if (type === "eq") return base + " bg-blue text-white shadow-lg shadow-blue/20 hover:opacity-90 col-span-2";
+    if (type === "eq") return base + " bg-blue text-white shadow-md shadow-blue/10 hover:opacity-90 col-span-2";
     if (type === "op") return base + " bg-blue/10 text-blue hover:bg-blue/20 border border-blue/20";
     if (type === "fn") return base + " bg-surface border border-border text-text-3 hover:border-blue hover:text-blue";
     return base + " bg-surface border border-border hover:bg-bg";

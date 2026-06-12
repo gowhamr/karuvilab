@@ -195,7 +195,7 @@ export default function PomodoroTimerClient() {
             {mode === m && (
               <motion.div
                 layoutId="pomo-mode"
-                className="absolute inset-0 bg-blue rounded-2xl -z-10 shadow-lg shadow-blue/20"
+                className="absolute inset-0 bg-blue rounded-2xl -z-10 shadow-md shadow-blue/10"
                 transition={TRANSITION}
               />
             )}

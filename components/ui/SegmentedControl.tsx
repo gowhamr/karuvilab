@@ -66,7 +66,7 @@ export function SegmentedControl<T extends string | number>(props: SegmentedCont
             {isActive && (
               <m.div
                 layoutId="segmented-active"
-                className="absolute inset-0 bg-blue rounded-xl shadow-lg shadow-blue/20 z-0"
+                className="absolute inset-0 bg-blue rounded-xl shadow-md shadow-blue/10 z-0"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}

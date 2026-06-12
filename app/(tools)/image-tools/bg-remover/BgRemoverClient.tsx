@@ -89,7 +89,7 @@ export default function BgRemoverClient() {
             ) : undefined}
           />
           <div className="flex justify-center">
-            <PrivacyBadge message="Processed locally in your browser" />
+
           </div>
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">

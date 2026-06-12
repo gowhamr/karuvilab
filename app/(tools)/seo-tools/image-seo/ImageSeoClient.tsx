@@ -112,7 +112,7 @@ export default function ImageSeoClient() {
             className={cn(
               "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-200",
               tab === t 
-                ? "bg-blue text-white shadow-lg shadow-blue/20" 
+                ? "bg-blue text-white shadow-md shadow-blue/10" 
                 : "text-text-4 hover:text-blue hover:bg-blue/5"
             )}
           >
@@ -359,7 +359,7 @@ export default function ImageSeoClient() {
                   
                   <div className="space-y-4">
                     <textarea 
-                      className="w-full p-6 bg-bg border-2 border-border rounded-3xl focus:border-blue outline-none transition-all font-medium text-lg min-h-[160px] shadow-inner"
+                      className="w-full p-6 bg-bg border border-border rounded-3xl focus:border-blue outline-none transition-all font-medium text-lg min-h-[160px] shadow-inner"
                       placeholder="Paste your image description or alt text here..."
                       value={analyzeText}
                       onChange={e => setAnalyzeText(e.target.value)}

@@ -148,7 +148,7 @@ export default function PhoneMockupGeneratorClient() {
                     key={c}
                     onClick={() => setBgColor(c)}
                     aria-label={`Select background color ${c}`}
-                    className={`w-10 h-10 rounded-full border-2 ${bgColor === c ? 'border-blue scale-110' : 'border-transparent'}`}
+                    className={`w-10 h-10 rounded-full border ${bgColor === c ? 'border-blue scale-110' : 'border-transparent'}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}

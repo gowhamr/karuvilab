@@ -104,7 +104,7 @@ export default function WorldClockClient() {
             <div
               key={id}
               className={cn(
-                "bg-surface border-2 rounded-3xl p-6 space-y-4 group transition-all duration-300",
+                "bg-surface border rounded-3xl p-6 space-y-4 group transition-all duration-300",
                 isLocal ? "border-blue shadow-2xl shadow-blue/10" : "border-border hover:border-blue/30"
               )}
             >
@@ -147,7 +147,7 @@ export default function WorldClockClient() {
           onClick={() => setIsModalOpen(true)}
           className="border-2 border-dashed border-border rounded-3xl p-6 flex flex-col items-center justify-center gap-4 text-text-4 hover:border-blue hover:text-blue transition-all group min-h-[180px]"
         >
-          <div className="w-16 h-16 rounded-full bg-surface border-2 border-border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ease-expo">
+          <div className="w-16 h-16 rounded-full bg-surface border border-border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ease-expo">
             <Plus className="w-8 h-8" />
           </div>
           <span className="text-sm font-black uppercase tracking-[0.2em]">Add Clock</span>

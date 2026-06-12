@@ -375,8 +375,8 @@ export default function CrontabEditorClient() {
             className={cn(
               "font-mono text-xl md:text-2xl bg-bg rounded-2xl p-6 pr-16 text-text w-full transition-all outline-none",
               parsed.valid 
-                ? "border-2 border-green-500/30 focus:border-green-500/60 focus:ring-4 focus:ring-green-500/10" 
-                : "border-2 border-red-500/30 focus:border-red-500/60 focus:ring-4 focus:ring-red-500/10"
+                ? "border border-green-500/30 focus:border-green-500/60 focus:ring-4 focus:ring-green-500/10" 
+                : "border border-red-500/30 focus:border-red-500/60 focus:ring-4 focus:ring-red-500/10"
             )}
             style={{ fontSize: `${fontSize}px` }}
             placeholder="* * * * *"

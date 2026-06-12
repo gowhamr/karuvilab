@@ -167,7 +167,7 @@ export default function BulkImageResizerClient() {
                       type="checkbox" 
                       checked={lockRatio} 
                       onChange={e => setLockRatio(e.target.checked)} 
-                      className="w-5 h-5 rounded-lg border-2 border-border checked:bg-blue checked:border-blue transition-all cursor-pointer appearance-none" 
+                      className="w-5 h-5 rounded-lg border border-border checked:bg-blue checked:border-blue transition-all cursor-pointer appearance-none" 
                     />
                     {lockRatio && <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-white text-[10px] font-black">✓</div>}
                   </div>

@@ -20,7 +20,7 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ hours, minutes, second
   return (
     <div className="relative w-10 h-10">
       {/* Clock Face */}
-      <div className="w-full h-full rounded-full bg-bg border-2 border-surface" />
+      <div className="w-full h-full rounded-full bg-bg border border-surface" />
 
       {/* Center Dot */}
       <div className="absolute top-1/2 left-1/2 w-1 h-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue" />

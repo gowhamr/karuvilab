@@ -198,7 +198,7 @@ export default function ColorConverterClient() {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       onClick={() => updateColor(c, false)}
-                      className="w-8 h-8 rounded-lg border-2 border-surface shadow-sm hover:scale-110 transition-transform active:scale-95"
+                      className="w-8 h-8 rounded-lg border border-surface shadow-sm hover:scale-110 transition-transform active:scale-95"
                       style={{ backgroundColor: c }}
                       title={c}
                     />

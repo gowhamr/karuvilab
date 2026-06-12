@@ -31,7 +31,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
     <div className="flex items-center justify-between mb-4 md:mb-6">
       <div className="flex items-center gap-2.5">
         {Icon && (
-          <div className="w-8 h-8 rounded-lg bg-blue/5 border border-blue/10 flex items-center justify-center text-blue shadow-sm">
+          <div className="w-8 h-8 rounded-lg bg-blue/5 flex items-center justify-center text-blue shadow-sm">
             <Icon className="w-4 h-4" />
           </div>
         )}
@@ -191,7 +191,7 @@ export default function HomeClient() {
             className="sticky top-[60px] md:top-[72px] z-30 w-full max-w-[100vw] py-2 bg-bg border-b border-border transition-all !opacity-100"
           >
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-              <div className="flex-1 overflow-hidden">
+              <div className="flex-1">
                 <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
               </div>
               {isFiltering && (

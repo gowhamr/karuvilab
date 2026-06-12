@@ -109,7 +109,7 @@ export default function ChartControls({
             <button
               onClick={() => setOptions({ ...options, showValues: !options.showValues })}
               className={cn(
-                "flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all gap-1",
+                "flex flex-col items-center justify-center p-3 rounded-2xl border transition-all gap-1",
                 options.showValues ? "bg-blue/5 border-blue text-blue" : "bg-bg border-border text-text-4"
               )}
             >
@@ -121,7 +121,7 @@ export default function ChartControls({
             <button
               onClick={() => setOptions({ ...options, showGrid: !options.showGrid })}
               className={cn(
-                "flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all gap-1",
+                "flex flex-col items-center justify-center p-3 rounded-2xl border transition-all gap-1",
                 options.showGrid ? "bg-blue/5 border-blue text-blue" : "bg-bg border-border text-text-4"
               )}
             >
@@ -158,7 +158,7 @@ export default function ChartControls({
                   key={p.name}
                   onClick={() => applyPalette(i)}
                   className={cn(
-                    "flex p-1 rounded-xl border-2 transition-all",
+                    "flex p-1 rounded-xl border transition-all",
                     options.activePalette === i ? "border-blue scale-105 shadow-sm" : "border-transparent opacity-60 hover:opacity-100"
                   )}
                 >

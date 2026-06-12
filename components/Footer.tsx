@@ -69,7 +69,7 @@ export function Footer() {
                     <Link
                       key={tool.id}
                       href={`/${tool.href}`}
-                      className="px-3 py-1.5 bg-surface border border-border rounded-xl text-[10px] font-bold text-text-2 hover:text-blue hover:border-blue/30 transition-all shadow-sm active:scale-95"
+                      className="px-3 py-1.5 bg-surface rounded-xl text-[10px] font-bold text-text-2 hover:text-blue transition-all shadow-sm active:scale-95"
                     >
                       {tool.name}
                     </Link>

@@ -75,7 +75,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={() => {
                   this.setState({ hasError: false, error: undefined, showDetails: false });
                 }}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <RefreshCw className="w-4 h-4" />
                 Retry Component

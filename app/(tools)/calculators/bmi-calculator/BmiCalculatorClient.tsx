@@ -306,7 +306,7 @@ export default function BmiCalculatorClient() {
             onClick={() => handleUnitSwitch('metric')}
             className={cn(
               "px-8 py-2.5 rounded-xl text-sm font-black transition-all",
-              unit === 'metric' ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-3 hover:text-text"
+              unit === 'metric' ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-3 hover:text-text"
             )}
           >
             Metric (kg/cm)
@@ -315,7 +315,7 @@ export default function BmiCalculatorClient() {
             onClick={() => handleUnitSwitch('imperial')}
             className={cn(
               "px-8 py-2.5 rounded-xl text-sm font-black transition-all",
-              unit === 'imperial' ? "bg-blue text-white shadow-lg shadow-blue/20" : "text-text-3 hover:text-text"
+              unit === 'imperial' ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-3 hover:text-text"
             )}
           >
             Imperial (lbs/ft)

@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { ALL_TOOLS, CategoryEntry, getToolColor, TOOL_RELATIONSHIPS } from '@/src/tool-registry';
-import { Check, ArrowUpRight, ChevronRight, ShieldCheck } from 'lucide-react';
+import { ALL_TOOLS, CategoryEntry, getToolColor } from '@/src/tool-registry';
+import { Check, ArrowUpRight, ChevronRight } from 'lucide-react';
 import { ToolIcon } from '@/components/ui/Icons';
 import { ErrorBoundary } from './ErrorBoundary';
 import { FavoriteButton } from './FavoriteButton';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
-import { TrustBadges } from '../system/TrustBadges';
+import { TrustSection } from '../system/TrustSection';
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
 import { useMemo } from 'react';
@@ -37,7 +37,6 @@ export function ClientToolShell({ title, description, category, children, toolId
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
-  const color = currentTool ? getToolColor(currentTool) : (category?.color || '#4F46E5');
 
   const parsedContent = useMemo(() => ({
     detailedDescription: content.detailedDescription ? parseAndSanitizeMarkdownSync(content.detailedDescription) : '',
@@ -67,7 +66,6 @@ export function ClientToolShell({ title, description, category, children, toolId
         </div>
         <div className="space-y-4">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-black">{title}</h1>
-          <TrustBadges className="pt-2" requiresNetwork={currentTool?.requiresNetwork} />
           {description && <p className="text-text-3 text-lg leading-relaxed max-w-3xl">{description}</p>}
         </div>
       </header>
@@ -170,16 +168,6 @@ export function ClientToolShell({ title, description, category, children, toolId
             </section>
           )}
 
-          <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
-            <div className="flex items-center gap-3 text-success">
-              <ShieldCheck className="w-5 h-5" />
-              <h3 className="font-bold text-sm">Privacy First</h3>
-            </div>
-            <p className="text-xs text-text-2 leading-relaxed">
-              All processing happens locally in your browser. Your files and data are never uploaded to our servers.
-            </p>
-          </div>
-
           <ToolFeedback toolId={finalToolId} toolName={title} />
 
           <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
@@ -196,6 +184,8 @@ export function ClientToolShell({ title, description, category, children, toolId
           </div>
         </aside>
       </div>
+
+      <TrustSection requiresNetwork={currentTool?.requiresNetwork ?? false} />
 
       {related.length > 0 && (
         <section className="pt-12 border-t border-border space-y-8">

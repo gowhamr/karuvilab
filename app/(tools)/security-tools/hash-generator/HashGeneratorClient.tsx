@@ -154,7 +154,7 @@ export default function HashGeneratorClient() {
           onClick={() => setMode("text")}
           className={cn(
             "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
-            mode === "text" ? "bg-blue text-white shadow-lg shadow-blue/20 scale-[1.02]" : "text-text-4 hover:text-text"
+            mode === "text" ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02]" : "text-text-4 hover:text-text"
           )}
         >
           <Hash size={16} /> Text
@@ -163,7 +163,7 @@ export default function HashGeneratorClient() {
           onClick={() => setMode("file")}
           className={cn(
             "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
-            mode === "file" ? "bg-blue text-white shadow-lg shadow-blue/20 scale-[1.02]" : "text-text-4 hover:text-text"
+            mode === "file" ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02]" : "text-text-4 hover:text-text"
           )}
         >
           <FileCode size={16} /> File

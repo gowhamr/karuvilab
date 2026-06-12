@@ -82,7 +82,7 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
           <p className="text-sm font-medium opacity-80 leading-relaxed">
             This is a preview of your frosted glass effect. Adjust the parameters below to fine-tune the blur, transparency, and borders.
           </p>
-          <div className="mt-2 py-3 px-6 rounded-xl font-bold text-center border-2 border-current opacity-80">
+          <div className="mt-2 py-3 px-6 rounded-xl font-bold text-center border border-current opacity-80">
             Action Button
           </div>
         </div>

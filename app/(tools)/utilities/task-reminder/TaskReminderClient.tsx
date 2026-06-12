@@ -117,7 +117,7 @@ export default function TaskReminderClient() {
           <button
             onClick={addTask}
             disabled={!newText.trim()}
-            className="h-[50px] px-8 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-blue/25 disabled:opacity-50 disabled:grayscale disabled:scale-100"
+            className="h-[50px] px-8 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
           >
             Add Task
           </button>
@@ -165,7 +165,7 @@ export default function TaskReminderClient() {
                 <li key={task.id} className={`flex items-start gap-4 p-5 transition-all hover:bg-bg/50 ${task.done ? "opacity-50" : ""}`}>
                   <button
                     onClick={() => toggleTask(task.id)}
-                    className={`mt-0.5 w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all ${task.done ? "bg-green-500 border-green-500 shadow-lg shadow-green-500/20" : "border-border bg-bg hover:border-blue"}`}
+                    className={`mt-0.5 w-6 h-6 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all ${task.done ? "bg-green-500 border-green-500 shadow-lg shadow-green-500/20" : "border-border bg-bg hover:border-blue"}`}
                   >
                     {task.done && (
                       <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

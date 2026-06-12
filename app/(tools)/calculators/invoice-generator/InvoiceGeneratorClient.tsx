@@ -328,7 +328,7 @@ export default function InvoiceGeneratorClient() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <PrivacyBadge message="Generated locally. No data leaves your device." />
+
         <StatusBadge status={isGenerating ? "processing" : "idle"} label="Generating PDF..." />
       </div>
 
@@ -353,7 +353,7 @@ export default function InvoiceGeneratorClient() {
                           onClick={() => setTemplate(t)}
                           role="radio"
                           aria-checked={template === t}
-                          className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
+                          className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
                         >
                           {t}
                         </button>
@@ -375,7 +375,7 @@ export default function InvoiceGeneratorClient() {
               <div className="w-full md:w-48">
                 <label className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-2">Company Logo</label>
                 {logo ? (
-                  <div className="relative group aspect-square rounded-2xl border-2 border-border overflow-hidden bg-bg">
+                  <div className="relative group aspect-square rounded-2xl border border-border overflow-hidden bg-bg">
                     <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
                     <button 
                       onClick={() => setLogo(null)}
@@ -595,7 +595,7 @@ export default function InvoiceGeneratorClient() {
                 <button 
                   onClick={generatePDF}
                   disabled={isGenerating}
-                  className="flex-[2] flex items-center justify-center gap-3 py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
+                  className="flex-[2] flex items-center justify-center gap-3 py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
                 >
                   <Download className="w-4 h-4" /> {isGenerating ? "Generating..." : "Download PDF"}
                 </button>

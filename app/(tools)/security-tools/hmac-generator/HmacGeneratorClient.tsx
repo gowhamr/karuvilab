@@ -189,7 +189,7 @@ export default function HmacGeneratorClient() {
                 value={output}
                 placeholder="Awaiting input..."
                 className={cn(
-                  "w-full h-32 bg-bg border-2 border-border rounded-2xl p-6 font-mono text-sm outline-none resize-none break-all transition-colors",
+                  "w-full h-32 bg-bg border border-border rounded-2xl p-6 font-mono text-sm outline-none resize-none break-all transition-colors",
                   output ? "text-text" : "text-text-4",
                   isValid ? "border-green-500/50 bg-green-500/5 text-green-500" : isInvalid ? "border-red-500/50 bg-red-500/5 text-red-500" : ""
                 )}

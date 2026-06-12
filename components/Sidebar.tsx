@@ -334,15 +334,6 @@ export function Sidebar() {
             setIsOpen={closeSidebar} 
             isHoverable={isHoverable || false}
           />
-          <div className="p-4 border-t border-border bg-mat-base">
-             <div className="p-4 rounded-2xl border border-border bg-mat-surface space-y-2 relative overflow-hidden group">
-                <p className="text-[12px] font-black text-blue uppercase tracking-[0.15em] flex items-center gap-2">
-                  <Shield className="w-3 h-3" />
-                  Local-First
-                </p>
-                <p className="text-[12px] text-text-4 font-bold leading-tight">Private & secure data processing.</p>
-             </div>
-          </div>
         </aside>
       )}
     </>

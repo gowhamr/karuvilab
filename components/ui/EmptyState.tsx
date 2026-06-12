@@ -209,7 +209,7 @@ export function EmptyState({
           }
         }}
         className={cn(
-          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border-2 rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-[320px]",
+          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-[320px]",
           dragStateClasses[dragState || "idle"],
           (dragState === "rejected" || isRejected) && dragStateClasses.rejected,
           isRejected && "animate-shake"

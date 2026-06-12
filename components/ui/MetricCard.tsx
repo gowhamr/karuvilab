@@ -32,7 +32,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } 
       }}
       className={cn(
-        "bg-mat-surface border border-mat-border p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3 min-w-0 overflow-hidden shadow-mat-shine transition-[background-color,border-color] duration-150 ease-out hover:border-mat-border-focus hover:bg-mat-hover", 
+        "bg-mat-surface p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3 min-w-0 overflow-hidden shadow-mat-shine transition-[background-color,border-color] duration-150 ease-out border border-transparent hover:border-mat-border-focus hover:bg-mat-hover", 
         loading && "shimmer-wrapper",
         className
       )}

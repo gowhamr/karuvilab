@@ -184,7 +184,7 @@ export function PWARegistration() {
               onClick={handleInstall}
               disabled={!deferredPrompt}
               aria-label="Install KaruviLab app"
-              className="flex-1 py-2.5 bg-blue hover:bg-blue/90 disabled:opacity-50 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue/20"
+              className="flex-1 py-2.5 bg-blue hover:bg-blue/90 disabled:opacity-50 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 shadow-md shadow-blue/10"
             >
               Install
             </button>

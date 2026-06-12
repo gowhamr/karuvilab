@@ -74,7 +74,7 @@ export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
 
             <button
               onClick={onClose}
-              className="w-full mt-10 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-blue/20 active:scale-[0.98] transition-all"
+              className="w-full mt-10 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-md shadow-blue/10 active:scale-[0.98] transition-all"
             >
               Apply Changes
             </button>

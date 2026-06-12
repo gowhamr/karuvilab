@@ -440,7 +440,7 @@ export default function CipherToolsClient() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden lg:block">
             <button 
               onClick={swap}
-              className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-lg shadow-blue/20 transition-all border border-border"
+              className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-md shadow-blue/10 transition-all border border-border"
               title="Swap Input/Output"
             >
               <ArrowLeftRight className="w-4 h-4" />

@@ -146,7 +146,7 @@ export default function ImageCropClient() {
                 <img src={originalUrl} alt="" style={{ width: origW * scale, height: origH * scale, display: "block" }} />
                 {cropW > 0 && cropH > 0 && (
                   <div
-                    className="absolute border-2 border-blue bg-blue/10"
+                    className="absolute border border-blue bg-blue/10"
                     style={{
                       left: cropX * scale,
                       top: cropY * scale,

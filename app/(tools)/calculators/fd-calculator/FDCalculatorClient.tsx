@@ -62,7 +62,7 @@ const FDCalculatorClient = memo(function FDCalculatorClient() {
                       <button 
                         key={u}
                         onClick={() => setTenureUnit(u)}
-                        className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${tenureUnit === u ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'bg-bg border border-border text-text-3 hover:border-blue/50'}`}
+                        className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${tenureUnit === u ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-3 hover:border-blue/50'}`}
                       >
                         {u.toUpperCase()}
                       </button>

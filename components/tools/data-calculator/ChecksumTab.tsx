@@ -97,7 +97,7 @@ export function ChecksumTab() {
                 className={cn(
                   "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all",
                   checksumAlgo === algo 
-                    ? "bg-blue border-blue text-white shadow-lg shadow-blue/20" 
+                    ? "bg-blue border-blue text-white shadow-md shadow-blue/10" 
                     : "bg-bg border-border text-text-3 hover:border-blue hover:text-blue"
                 )}
               >
@@ -118,7 +118,7 @@ export function ChecksumTab() {
             <button
               disabled={!textInput || isHashing}
               onClick={() => calculateHash(textInput)}
-              className="w-full py-4 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/20 hover:bg-blue-600 transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
+              className="w-full py-4 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:bg-blue-600 transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
             >
               {isHashing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
               Generate {checksumAlgo}

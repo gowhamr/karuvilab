@@ -105,7 +105,7 @@ Generated via KaruviLab`;
                     aria-pressed={gstRate === r}
                     className={`py-3 rounded-2xl text-xs font-black transition-all ${
                       gstRate === r
-                        ? "bg-blue text-white shadow-lg shadow-blue/20"
+                        ? "bg-blue text-white shadow-md shadow-blue/10"
                         : "bg-bg border border-border text-text-3 hover:border-blue/50 hover:text-blue"
                     }`}
                   >
@@ -122,7 +122,7 @@ Generated via KaruviLab`;
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setMode("add")}
-                  className={`flex flex-col items-center gap-1 p-4 rounded-2xl border-2 transition-all ${
+                  className={`flex flex-col items-center gap-1 p-4 rounded-2xl border transition-all ${
                     mode === "add"
                       ? "bg-blue/5 border-blue text-blue"
                       : "bg-bg border-border text-text-3 hover:border-blue/30"
@@ -133,7 +133,7 @@ Generated via KaruviLab`;
                 </button>
                 <button
                   onClick={() => setMode("remove")}
-                  className={`flex flex-col items-center gap-1 p-4 rounded-2xl border-2 transition-all ${
+                  className={`flex flex-col items-center gap-1 p-4 rounded-2xl border transition-all ${
                     mode === "remove"
                       ? "bg-blue/5 border-blue text-blue"
                       : "bg-bg border-border text-text-3 hover:border-blue/30"

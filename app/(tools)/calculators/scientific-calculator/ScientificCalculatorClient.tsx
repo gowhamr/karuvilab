@@ -180,7 +180,7 @@ export default function ScientificCalculatorClient() {
     { label: "+", action: () => append("+"), className: "text-blue bg-blue/5" },
     { label: "DEL", action: backspace, className: "text-text-3" },
     { label: "%", action: () => append("%"), className: "text-text-3" },
-    { label: "=", action: calculate, className: "col-span-2 bg-blue text-white hover:bg-blue/90 shadow-lg shadow-blue/20" },
+    { label: "=", action: calculate, className: "col-span-2 bg-blue text-white hover:bg-blue/90 shadow-md shadow-blue/10" },
   ];
 
   return (

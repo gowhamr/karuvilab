@@ -87,7 +87,7 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   autoFocus
-                  className="w-full h-14 pl-12 pr-6 bg-bg border-2 border-border rounded-2xl text-base font-bold focus:border-blue outline-none transition-all"
+                  className="w-full h-14 pl-12 pr-6 bg-bg border border-border rounded-2xl text-base font-bold focus:border-blue outline-none transition-all"
                 />
               </div>
             </div>

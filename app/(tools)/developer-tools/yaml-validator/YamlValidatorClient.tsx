@@ -95,14 +95,14 @@ export default function YamlValidatorClient() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Paste your YAML or JSON here..."
-            className="w-full h-96 p-4 bg-surface border-2 border-border rounded-xl font-mono text-sm focus:border-blue outline-none transition-colors"
+            className="w-full h-96 p-4 bg-surface border border-border rounded-xl font-mono text-sm focus:border-blue outline-none transition-colors"
           />
         </div>
 
         {/* Output Panel */}
         <div className="space-y-2">
           <label className="text-sm font-bold text-text-3">Output / Result</label>
-          <div className="relative w-full h-96 bg-surface border-2 border-border rounded-xl">
+          <div className="relative w-full h-96 bg-surface border border-border rounded-xl">
             <textarea
               value={output}
               readOnly

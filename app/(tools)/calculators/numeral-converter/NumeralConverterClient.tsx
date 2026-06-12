@@ -433,7 +433,7 @@ export default function NumeralConverterClient() {
               }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black whitespace-nowrap transition-all ${
                 activeTab === t.id 
-                  ? "bg-blue text-white shadow-lg shadow-blue/20" 
+                  ? "bg-blue text-white shadow-md shadow-blue/10" 
                   : "text-text-3 hover:text-text hover:bg-bg/50"
               }`}
             >

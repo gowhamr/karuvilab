@@ -168,7 +168,7 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
 
                 {!isLoaded && !hasError && (
                   <div className="w-[256px] h-[256px] bg-bg rounded-2xl flex items-center justify-center">
-                    <div className="w-8 h-8 border-2 border-blue border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border border-blue border-t-transparent rounded-full animate-spin" />
                   </div>
                 )}
 
@@ -185,7 +185,7 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
                 {isLoaded && (
                   <button
                     onClick={handleDownload}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-blue/25 hover:bg-blue/90 active:scale-95 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue text-white text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:bg-blue/90 active:scale-95 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
                   >
                     <Download className="w-3.5 h-3.5" />
                     Download PNG
