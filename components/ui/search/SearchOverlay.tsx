@@ -115,6 +115,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
   return (
     <AnimatePresence>
+      {/* NOTE: z-50 shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
       {isOpen && (
         <m.div
           initial={{ opacity: 0 }}

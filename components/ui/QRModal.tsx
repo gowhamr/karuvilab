@@ -116,6 +116,7 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
       {isOpen && (
         <>
           {/* Overlay */}
+          {/* NOTE: z-50 shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
           <m.div
             variants={OVERLAY_VARIANTS}
             initial="hidden"
@@ -128,6 +129,7 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
           />
 
           {/* Modal */}
+          {/* NOTE: z-50 shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
           <m.div
             role="dialog"
             aria-modal="true"

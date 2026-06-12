@@ -30,7 +30,7 @@ export function RecoveryBanner() {
         exit={{ opacity: 0, y: -20 }}
         className="fixed top-20 left-1/2 -translate-x-1/2 z-[500] w-[90%] max-w-lg"
       >
-        <div className={`p-4 rounded-2xl shadow-xl border flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between backdrop-blur-md ${isError ? 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400' : 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400'}`}>
+        <div className={`p-4 rounded-2xl shadow-xl border border-border border-l-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-surface ${isError ? 'border-l-red-500 text-red-600 dark:text-red-400' : 'border-l-amber-500 text-amber-700 dark:text-amber-400'}`}>
           <div className="flex items-start gap-3">
             <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <div className="space-y-1">

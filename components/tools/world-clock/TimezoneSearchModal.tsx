@@ -47,6 +47,7 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen
 
   return (
     <AnimatePresence>
+      {/* NOTE: z-50 shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}

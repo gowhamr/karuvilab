@@ -116,7 +116,7 @@ export function SyntaxEditor({
         {showLineNumbers && (
           <div 
             ref={lineNumbersRef}
-            className="bg-surface/50 border-r border-border text-text-4 text-right py-4 px-4 select-none flex-shrink-0 min-w-[4rem] hidden sm:block overflow-hidden sticky left-0 z-10"
+            className="bg-surface border-r border-border text-text-4 text-right py-4 px-4 select-none flex-shrink-0 min-w-[4rem] hidden sm:block overflow-hidden sticky left-0 z-10"
           >
             {lines.map((_, i) => (
               <div 
