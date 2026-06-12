@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, LayoutGrid, Settings } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
+import { m } from "framer-motion";
+import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
@@ -12,8 +14,6 @@ const NAV_ITEMS = [
   { label: "Tools", action: "menu", icon: LayoutGrid },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
-
-import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 
 export const BottomNav = memo(function BottomNav() {
   const { isFullscreen } = useFullscreenContext();
@@ -40,41 +40,43 @@ export const BottomNav = memo(function BottomNav() {
 
           if (item.action === "search") {
             return (
-              <button
+              <m.button
                 key={item.label}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleSearch}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary active:scale-95 transition-all min-w-[48px] min-h-[48px]"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px] outline-none"
                 aria-label="Search"
               >
                 <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
-              </button>
+              </m.button>
             );
           }
 
           if (item.action === "menu") {
             return (
-              <button
+              <m.button
                 key={item.label}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleMenu}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary active:scale-95 transition-all min-w-[48px] min-h-[48px]"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px] outline-none"
                 aria-label="Menu"
               >
                 <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
-              </button>
+              </m.button>
             );
           }
 
           return (
-            <div key={item.label} className="active:scale-95 transition-all">
+            <m.div key={item.label} whileTap={{ scale: 0.95 }}>
               <Link
                 href={item.href!}
                 aria-label={item.label}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] ${
+                className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] outline-none ${
                   isActive ? "text-brand-primary" : "text-text-4 hover:text-text"
                 }`}
               >
@@ -86,7 +88,7 @@ export const BottomNav = memo(function BottomNav() {
                   <Icon className="w-5 h-5" />
                 </div>
               </Link>
-            </div>
+            </m.div>
           );
         })}
       </div>

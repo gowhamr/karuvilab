@@ -2,7 +2,6 @@
 
 import { useMemo, useEffect, useState, memo, useCallback } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { m, AnimatePresence, MotionConfig } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
@@ -11,6 +10,8 @@ import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
+import { useI18n } from "@/src/lib/i18n/store";
+import { usePerformanceSettings } from "@/src/lib/hooks";
 import { 
   ArrowRight, LayoutGrid, Zap, ShieldCheck, 
   Sparkles, TrendingUp, Clock, Heart, Command
@@ -65,10 +66,6 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
   );
 });
 
-
-import { useI18n } from "@/src/lib/i18n/store";
-import { usePerformanceSettings } from "@/src/lib/hooks";
-
 // ── Animation Variants ───────────────────────────────────────────────────────
 
 const containerVariants = {
@@ -106,7 +103,7 @@ export default function HomeClient() {
   const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
   const [favoriteTools, setFavorites] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const { t } = useI18n();
+  const t = useI18n(s => s.t);
 
   // Analytics
   const recordView = useAnalyticsStore(state => state.recordView);
