@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, LayoutGrid, Settings } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { m } from "framer-motion";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
@@ -41,38 +40,36 @@ export const BottomNav = memo(function BottomNav() {
 
           if (item.action === "search") {
             return (
-              <m.button
+              <button
                 key={item.label}
-                whileTap={{ scale: 0.95 }}
                 onClick={handleSearch}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px]"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary active:scale-95 transition-all min-w-[48px] min-h-[48px]"
                 aria-label="Search"
               >
                 <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
-              </m.button>
+              </button>
             );
           }
 
           if (item.action === "menu") {
             return (
-              <m.button
+              <button
                 key={item.label}
-                whileTap={{ scale: 0.95 }}
                 onClick={handleMenu}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px]"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary active:scale-95 transition-all min-w-[48px] min-h-[48px]"
                 aria-label="Menu"
               >
                 <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
                   <Icon className="w-5 h-5 text-text-3" />
                 </div>
-              </m.button>
+              </button>
             );
           }
 
           return (
-            <m.div key={item.label} whileTap={{ scale: 0.95 }}>
+            <div key={item.label} className="active:scale-95 transition-all">
               <Link
                 href={item.href!}
                 aria-label={item.label}
@@ -89,7 +86,7 @@ export const BottomNav = memo(function BottomNav() {
                   <Icon className="w-5 h-5" />
                 </div>
               </Link>
-            </m.div>
+            </div>
           );
         })}
       </div>

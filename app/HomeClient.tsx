@@ -15,6 +15,7 @@ import {
   ArrowRight, LayoutGrid, Zap, ShieldCheck, 
   Sparkles, TrendingUp, Clock, Heart, Command
 } from "lucide-react";
+import { cn } from "@/src/lib/utils";
 
 // ── Components ──────────────────────────────────────────────────────────────
 
@@ -31,7 +32,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
     <div className="flex items-center justify-between mb-4 md:mb-6">
       <div className="flex items-center gap-2.5">
         {Icon && (
-          <div className="w-8 h-8 rounded-lg bg-blue/5 flex items-center justify-center text-blue shadow-sm">
+          <div className="w-8 h-8 rounded-lg bg-blue/5 border border-blue/10 flex items-center justify-center text-blue shadow-sm">
             <Icon className="w-4 h-4" />
           </div>
         )}
@@ -99,6 +100,7 @@ export default function HomeClient() {
   const activeCategory = useSearchStore(state => state.activeCategory);
   const setActiveCategory = useSearchStore(state => state.setActiveCategory);
   const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
+  const isSidebarOpen = useSearchStore(state => state.isSidebarOpen);
   
   const favoriteIds = useFavoriteStore(state => state.favorites);
   const [recentTools, setRecentTools] = useState<ToolEntry[]>([]);
@@ -157,55 +159,53 @@ export default function HomeClient() {
     if (id) recordEngagement("homepage");
   }, [setActiveCategory, recordEngagement]);
 
-  const { shouldBlur } = usePerformanceSettings();
   const isFiltering = !!activeCategory;
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-4 md:space-y-8">
+      <div className="w-full space-y-4 md:space-y-8 pb-12">
         
-        {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
-        <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-2 md:pt-4">
-          {/* SearchBar: hidden on mobile (BottomNav + Header handle it) */}
-          <div className="hidden sm:block">
+        {/* ── 1. Search & CTA Section ── */}
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-2 md:pt-4">
             <SearchBar variant="hero" />
-          </div>
-          
-          {/* Primary & Secondary CTAs */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setIsPaletteOpen(true)}
-              className="h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-[15px] font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
-            >
-              <Command className="w-4 h-4" />
-              <span>Quick Search</span>
-              <kbd className="text-[12px] font-mono">⌘K</kbd>
-            </button>
+            <div className="flex justify-center">
+              <button
+                onClick={() => setIsPaletteOpen(true)}
+                className="h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-[15px] font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
+              >
+                <Command className="w-4 h-4" />
+                <span>Quick Search</span>
+                <kbd className="text-[12px] font-mono">⌘K</kbd>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* ── 2. Content Area ─────────────────────────────────────────────────── */}
-        <div className="relative">
-          {/* Horizontal Category Chips */}
-          <div 
-            className="sticky top-[60px] md:top-[72px] z-30 w-full max-w-[100vw] py-2 bg-bg border-b border-border transition-all !opacity-100"
-          >
-            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-              <div className="flex-1">
-                <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-              </div>
-              {isFiltering && (
-                <button
-                  onClick={() => { handleCategoryChange(null); }}
-                  className="text-[9px] font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
-                >
-                  Clear
-                </button>
-              )}
-
+        {/* ── 2. Sticky Category Chips (Full Width Container) ── */}
+        <div 
+          className={cn(
+            "sticky top-[60px] md:top-[72px] z-30 w-full py-2 bg-bg border-b border-border transition-all !opacity-100 overflow-hidden",
+            isSidebarOpen && "invisible md:visible"
+          )}
+        >
+          <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
+            <div className="flex-1">
+              <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
             </div>
+            {isFiltering && (
+              <button
+                onClick={() => { handleCategoryChange(null); }}
+                className="text-[9px] font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
+              >
+                Clear
+              </button>
+            )}
           </div>
+        </div>
 
+        {/* ── 3. Main Content Area ── */}
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div
             id="tool-grid-panel"
             role="tabpanel"
@@ -242,7 +242,7 @@ export default function HomeClient() {
                   animate={{ opacity: 1 }}
                   className="space-y-8 md:space-y-10"
                 >
-                  {/* 1. Recently Used (if any) — CLS-safe */}
+                  {/* Recently Used */}
                   {recentTools.length > 0 && (
                     <div className="min-h-0 transition-all duration-300">
                       <AnimatePresence>
@@ -268,7 +268,7 @@ export default function HomeClient() {
                     </div>
                   )}
 
-                  {/* 2. Personal Favorites (if any) — CLS-safe */}
+                  {/* Favorites */}
                   {favoriteTools.length > 0 && (
                     <div className="min-h-0 transition-all duration-300">
                       <AnimatePresence>
@@ -294,7 +294,7 @@ export default function HomeClient() {
                     </div>
                   )}
 
-                  {/* 3. Popular Tools Area (Optimized mobile/desktop rendering) */}
+                  {/* Popular Tools */}
                   <section>
                     <SectionHeader 
                       title={t('common.popular')} 
@@ -304,7 +304,7 @@ export default function HomeClient() {
                       href="/all-tools"
                     />
                     
-                    {/* Mobile: 2-col grid (no scroll) */}
+                    {/* Mobile: 2-col grid */}
                     <div className="sm:hidden grid grid-cols-2 gap-3">
                       {popularTools.slice(0, 6).map(tool => (
                         <ToolCard key={tool.id} tool={tool} compact />
@@ -321,7 +321,7 @@ export default function HomeClient() {
                     </div>
                   </section>
 
-                  {/* 4. Main Grid */}
+                  {/* Main Grid */}
                   <section id="tools">
                     <SectionHeader 
                       title={t('common.all')} 
@@ -351,8 +351,6 @@ export default function HomeClient() {
                       </Link>
                     </div>
                   </section>
-
-
                 </m.div>
               )}
             </AnimatePresence>
