@@ -1,6 +1,5 @@
 // src/lib/search/buildIndex.ts
-import { ALL_TOOLS } from '@/src/registry';
-import { ToolEntry } from '@/src/registry/types';
+import { ALL_TOOLS, ToolEntry } from '@/src/tool-registry';
 import { expandSynonyms } from './synonyms';
 
 export interface IndexedTool extends ToolEntry {

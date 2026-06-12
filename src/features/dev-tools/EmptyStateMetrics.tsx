@@ -8,7 +8,7 @@
 
 import React, { useMemo } from "react";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
-import { ALL_TOOLS } from "@/src/registry";
+import { ALL_TOOLS } from "@/src/tool-registry";
 import { cn } from "@/src/lib/utils";
 import { useShallow } from "zustand/react/shallow";
 import { 
