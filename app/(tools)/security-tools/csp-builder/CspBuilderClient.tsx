@@ -94,6 +94,37 @@ export default function CspBuilderClient() {
 
   const cspString = useMemo(() => buildCSPString(config), [config]);
 
+  const [importValue, setImportValue] = useState('');
+  const [importError, setImportError] = useState('');
+
+  const handleImport = () => {
+    try {
+      const policy = importValue.replace(/^(Content-Security-Policy: )/i, '').trim();
+      if (!policy) return;
+
+      const newDirectives: Record<string, string[]> = {};
+      const parts = policy.split(';');
+      
+      parts.forEach(part => {
+        const trimmed = part.trim();
+        if (!trimmed) return;
+        const [directive, ...sources] = trimmed.split(/\s+/);
+        if (directive) {
+          newDirectives[directive] = sources.filter(Boolean);
+        }
+      });
+
+      if (Object.keys(newDirectives).length === 0) throw new Error('No valid directives found');
+      
+      setConfig({ directives: newDirectives, reportOnly: importValue.toLowerCase().includes('report-only') });
+      setImportValue('');
+      setImportError('');
+      setActiveTab('header');
+    } catch (err) {
+      setImportError('Invalid CSP format. Please check your string.');
+    }
+  };
+
   const toggleSource = (dir: string, src: string) => {
     const current = config.directives[dir] || [];
     let next;
