@@ -200,8 +200,7 @@ export default function HomeClient() {
         <div className="relative">
           {/* Horizontal Category Chips */}
           <div 
-            className="sticky top-[60px] md:top-[72px] z-30 w-full max-w-[100vw] py-2 bg-mat-base/95 border-b border-border transition-all"
-            style={{ backdropFilter: shouldBlur ? 'blur(12px)' : 'none' }}
+            className="sticky top-[60px] md:top-[72px] z-30 w-full max-w-[100vw] py-2 bg-bg border-b border-border transition-all !opacity-100"
           >
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
               <div className="flex-1 overflow-hidden">
