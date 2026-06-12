@@ -9,6 +9,20 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { performFactoryReset, clearToolData } from "@/src/lib/factory-reset";
 
 import { useToast } from "@/components/ui/Toast";
+import { PrivacyFeatures } from "@/components/ui/PrivacyFeatures";
+import dynamic from "next/dynamic";
+
+const Accordion = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.Accordion), { ssr: false });
+const AccordionItem = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionItem), { ssr: false });
+const AccordionTrigger = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionTrigger), { ssr: false });
+const AccordionContent = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionContent), { ssr: false });
+
+const FAQ = [
+  { q: "Is KV free for commercial use?", a: "Yes. KV (KaruviLab) is 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
+  { q: "How secure is my data on KV?", a: "Security is our core mission. All processing happens locally in your browser. Your files and text never leave your device." },
+  { q: "Can I use these tools offline?", a: "Most KV tools are designed to work offline once loaded. Since processing is 100% client-side, you can disconnect and keep working." },
+  { q: "Do you store any of my inputs or outputs?", a: "Absolutely not. KV does not have a backend that processes your data. Everything stays in your browser's volatile memory." },
+];
 
 export const PrivacySection = memo(function PrivacySection() {
   const privacy = useSettingsStore(state => state.privacy);
@@ -120,6 +134,31 @@ export const PrivacySection = memo(function PrivacySection() {
           Clear Cache
         </button>
       </SettingRow>
+
+      <div className="pt-12 border-t border-border/40 mt-8 space-y-12">
+        <div>
+          <h3 className="text-sm font-black text-text mb-6 uppercase tracking-widest flex items-center gap-2">
+            <Shield className="w-4 h-4 text-blue" />
+            Built for Privacy
+          </h3>
+          <PrivacyFeatures />
+        </div>
+
+        <div>
+          <h3 className="text-sm font-black text-text mb-4 uppercase tracking-widest flex items-center gap-2">
+            <Shield className="w-4 h-4 text-blue" />
+            Frequently Asked
+          </h3>
+          <Accordion type="single" collapsible className="w-full space-y-3">
+            {FAQ.map((item, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-black/5 dark:border-white/5 shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
+                <AccordionTrigger className="text-[13px] font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
+                <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </div>
 
       <div className="pt-12 border-t border-border/40 mt-8">
         <h4 className="text-xs font-black uppercase tracking-widest text-red-500/60 mb-4">Danger Zone</h4>

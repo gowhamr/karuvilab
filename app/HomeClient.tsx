@@ -11,16 +11,10 @@ import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
-import { PrivacyFeatures } from "@/components/ui/PrivacyFeatures";
 import { 
   ArrowRight, LayoutGrid, Zap, ShieldCheck, 
   Sparkles, TrendingUp, Clock, Heart, Command
 } from "lucide-react";
-
-const Accordion = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.Accordion), { ssr: false });
-const AccordionItem = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionItem), { ssr: false });
-const AccordionTrigger = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionTrigger), { ssr: false });
-const AccordionContent = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionContent), { ssr: false });
 
 // ── Components ──────────────────────────────────────────────────────────────
 
@@ -70,12 +64,6 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
   );
 });
 
-const FAQ = [
-  { q: "Is KV free for commercial use?", a: "Yes. KV (KaruviLab) is 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
-  { q: "How secure is my data on KV?", a: "Security is our core mission. All processing happens locally in your browser. Your files and text never leave your device." },
-  { q: "Can I use these tools offline?", a: "Most KV tools are designed to work offline once loaded. Since processing is 100% client-side, you can disconnect and keep working." },
-  { q: "Do you store any of my inputs or outputs?", a: "Absolutely not. KV does not have a backend that processes your data. Everything stays in your browser's volatile memory." },
-];
 
 import { useI18n } from "@/src/lib/i18n/store";
 import { usePerformanceSettings } from "@/src/lib/hooks";
@@ -364,34 +352,7 @@ export default function HomeClient() {
                     </div>
                   </section>
 
-                  {/* Privacy Features section — resurrected */}
-                  <section className="max-w-4xl mx-auto w-full mt-6 md:mt-10">
-                    <SectionHeader
-                      title="Built for Privacy"
-                      subtitle="Why local-first matters"
-                      icon={ShieldCheck}
-                    />
-                    <PrivacyFeatures />
-                  </section>
 
-                  {/* Compact FAQ */}
-                  {hydrated && (
-                    <section className="max-w-3xl mx-auto w-full">
-                      <SectionHeader 
-                        title="Frequently Asked" 
-                        subtitle="Support & Privacy"
-                        icon={ShieldCheck}
-                      />
-                      <Accordion type="single" collapsible className="w-full space-y-3">
-                        {FAQ.map((item, i) => (
-                          <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-black/5 dark:border-white/5 shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
-                            <AccordionTrigger className="text-[13px] font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
-                            <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
-                    </section>
-                  )}
                 </m.div>
               )}
             </AnimatePresence>

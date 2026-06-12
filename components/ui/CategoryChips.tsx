@@ -123,12 +123,16 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
       {/* Left/Right Dynamic Fades */}
       <div 
         ref={fadeLeftRef}
-        className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-bg to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
-      />
+        className="absolute left-0 top-0 bottom-0 w-12 md:w-16 bg-gradient-to-r from-bg via-bg/80 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300 flex items-center justify-start pl-1 sm:hidden"
+      >
+        <ChevronLeft className="w-4 h-4 text-text-4/70 animate-pulse" />
+      </div>
       <div 
         ref={fadeRightRef}
-        className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-bg to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
-      />
+        className="absolute right-0 top-0 bottom-0 w-12 md:w-16 bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300 flex items-center justify-end pr-1 sm:hidden"
+      >
+        <ChevronRight className="w-4 h-4 text-text-4/70 animate-pulse" />
+      </div>
 
       {/* Desktop Navigation Chevrons */}
       <button
@@ -152,7 +156,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
         ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 px-4 sm:px-0 snap-x snap-mandatory scroll-smooth w-full"
+        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 pl-4 pr-12 sm:px-0 snap-x snap-mandatory scroll-smooth w-full relative z-10"
       >
         <m.button
           role="tab"
@@ -214,8 +218,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             <span className="whitespace-nowrap">{cat.label}</span>
           </m.button>
         ))}
-        {/* Spacer for right padding on mobile scroll */}
-        <div className="w-2 shrink-0 sm:hidden" />
+        {/* Spacer for right padding on mobile scroll to ensure last item clears the fade */}
+        <div className="w-4 shrink-0 sm:hidden" />
       </div>
     </div>
   );

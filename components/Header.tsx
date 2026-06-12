@@ -55,11 +55,11 @@ export function Header() {
         scrolled ? "border-b border-mat-border" : "border-b border-transparent"
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between gap-4 pt-safe">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 h-full flex items-center justify-between gap-1.5 sm:gap-4 pt-safe">
         <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden min-w-[48px] min-h-[48px] -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
+            className="md:hidden min-w-[44px] min-h-[44px] -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
@@ -71,7 +71,7 @@ export function Header() {
             
             {/* Mobile: Just the 'KaruviLab' text for maximum space efficiency */}
             <div className="md:hidden flex items-center">
-              <span className="font-dm-serif font-black text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-text via-text to-text-3">
+              <span className="font-dm-serif font-black text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-text via-text to-text-3">
                 KaruviLab
               </span>
             </div>
@@ -99,16 +99,16 @@ export function Header() {
            <SearchBar className="md:min-w-[280px] lg:min-w-[400px]" />
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4 flex-shrink-0 justify-end">
+        <div className="flex items-center gap-1.5 md:gap-4 flex-shrink-0 justify-end">
           {/* Search Trigger - Mobile Only */}
           <div className="md:hidden flex items-center">
              <button 
                 onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
-                className="h-[44px] px-4 flex items-center gap-2 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
+                className="h-[40px] px-3 flex items-center gap-1.5 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
                 aria-label="Search tools"
              >
                 <Search className="w-4 h-4 text-text-3" />
-                <span className="text-[14px] font-medium pr-1 text-text-3">Search...</span>
+                <span className="text-[13px] font-medium text-text-3">Search</span>
              </button>
           </div>
 
