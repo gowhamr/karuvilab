@@ -257,6 +257,7 @@ export default function GradientGeneratorClient() {
                  <button
                    key={i}
                    onClick={() => setConfig({ type: 'linear', angle: 90, shape: 'circle', colorStops: [...p.stops] })}
+                   aria-label={`Apply ${p.name} preset`}
                    className="group relative aspect-square rounded-2xl border border-border overflow-hidden shadow-sm hover:ring-2 hover:ring-blue hover:border-transparent transition-all"
                    title={p.name}
                  >
@@ -272,3 +273,4 @@ export default function GradientGeneratorClient() {
   );
 }
 // Note: ArrowLeftRight is imported but currently not properly typed in Icons if it was a custom alias. It is available in lucide-react.
+t.

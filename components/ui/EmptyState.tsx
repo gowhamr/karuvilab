@@ -1,6 +1,6 @@
 /**
  * components/ui/EmptyState.tsx
- * Version 4.1 — Deterministic trust rotation.
+ * Version 4.2 — Deterministic trust rotation + Accessibility fixes.
  */
 
 "use client";
@@ -34,22 +34,15 @@ const dragStateClasses = {
   rejected: "border-solid border-red-500 bg-red-500/10",
 } as const;
 
-/**
- * Resolves trust variant for a tool.
- * If explicitly set in config → use it.
- * Otherwise → derive from toolId deterministically.
- */
 function resolveTrustVariant(
   configured: "A" | "B" | "C" | undefined,
   toolId:     string
 ): "A" | "B" | "C" {
   if (configured) return configured;
-
   const index = toolId
     .split("")
     .reduce((sum, char) => sum + char.charCodeAt(0), 0)
     % TRUST_VARIANTS.length;
-
   return TRUST_VARIANTS[index] as "A" | "B" | "C";
 }
 
@@ -60,19 +53,19 @@ interface EmptyStateProps {
   toolId:       SampleAssetKey;
   onDrop:       (files: File[]) => void;
   dragState:    "idle" | "hover" | "over" | "rejected";
-  formats?:     string[] | undefined;
-  maxSize?:     string | undefined;
-  maxFiles?:    string | undefined;
+  formats?:     string[];
+  maxSize?:     string;
+  maxFiles?:    string;
   subAction?: {
     label:    string;
     onClick:  () => void;
-  } | undefined;
-  trustVariant?: "A" | "B" | "C" | undefined;
-  outcomeText?: string | undefined;
+  };
+  trustVariant?: "A" | "B" | "C";
+  outcomeText?: string;
   sampleCTA?: {
     label:    string;
     onClick?: () => void;
-  } | undefined;
+  };
   lastSession?: {
     label:      string;
     onRestore:  () => void;
@@ -80,7 +73,7 @@ interface EmptyStateProps {
   };
   onDragOver?:  () => void;
   onDragLeave?: () => void;
-  className?: string | undefined;
+  className?: string;
 }
 
 export function EmptyState({
@@ -105,9 +98,9 @@ export function EmptyState({
   const recordView = useAnalyticsStore(s => s.recordView);
   const recordEngagement = useAnalyticsStore(s => s.recordEngagement);
   const recordBounce = useAnalyticsStore(s => s.recordBounce);
-  const shouldReduceMotion = useReducedMotion();
   const hasEngaged = useRef(false);
   const [isRejected, setIsRejected] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const trustVariant = resolveTrustVariant(configuredTrustVariant, toolId);
   const trust = TRUST_COPY[trustVariant];
@@ -126,6 +119,24 @@ export function EmptyState({
     return () => { handleExit(); window.removeEventListener("pagehide", handleExit); };
   }, [toolId, recordView, recordBounce]);
 
+  const onBrowse = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    handleEngagement();
+    if (subAction?.onClick) {
+      subAction.onClick();
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      onDrop(files);
+    }
+    e.target.value = ''; // Reset
+  };
+
   const handleSampleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     handleEngagement();
@@ -137,29 +148,6 @@ export function EmptyState({
         const files = Array.isArray(sample) ? sample : [sample instanceof File ? sample : new File([sample], "sample.txt")];
         onDrop(files);
       }
-    }
-  };
-
-  const handleZoneClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleEngagement();
-    if (dragState === "idle") {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.onchange = (ev) => {
-        const files = Array.from((ev.target as HTMLInputElement).files || []);
-        if (files.length > 0) onDrop(files);
-      };
-      input.click();
-    }
-  };
-
-  const onBrowse = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (subAction?.onClick) {
-      subAction.onClick();
-    } else {
-      handleZoneClick(e);
     }
   };
 
@@ -198,23 +186,33 @@ export function EmptyState({
         onDragOver={(e) => { e.preventDefault(); onDragOver?.(); }}
         onDragLeave={onDragLeave}
         onDrop={(e) => { e.preventDefault(); handleEngagement(); }}
-        onClick={handleZoneClick}
+        onClick={onBrowse}
         tabIndex={0}
         role="button"
-        aria-label="Drop files here or click to browse"
+        aria-label={`${headline}. Click or drop files here.`}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            handleZoneClick(e as any);
+            onBrowse(e);
           }
         }}
         className={cn(
-          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-[320px]",
+          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-[320px] group",
           dragStateClasses[dragState || "idle"],
           (dragState === "rejected" || isRejected) && dragStateClasses.rejected,
           isRejected && "animate-shake"
         )}
       >
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          onChange={handleInputChange}
+          multiple={toolType === 'batch' || toolType === 'file'}
+          accept={formats?.join(',')}
+          aria-hidden="true"
+        />
+
         <div className={cn("mb-6 p-6 rounded-3xl bg-mat-base border border-mat-border transition-all", dragState === "over" && "scale-110 text-brand-primary", isRejected && "text-error")}>
           {isRejected ? <XCircleIcon className="w-12 h-12" /> : <Icon className="w-12 h-12" />}
         </div>
@@ -224,22 +222,9 @@ export function EmptyState({
         </h2>
 
         <div className="mb-8 w-full max-w-xs px-4 flex justify-center">
-          {/* Desktop */}
-          <button
-            className="hidden md:inline text-[14px] text-brand-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded"
-            onClick={onBrowse}
-            type="button"
-          >
-            or browse files
-          </button>
-
-          {/* Mobile */}
-          <button
-            onClick={onBrowse}
-            className="md:hidden w-full h-[44px] rounded-lg border border-[--kv-mat-border] bg-transparent hover:bg-[--kv-mat-hover] text-[14px] font-medium text-[--kv-text] transition-colors duration-150"
-          >
-            Browse files
-          </button>
+          <span className="text-[14px] text-brand-primary font-medium group-hover:underline">
+            {subAction?.label || (toolType === "file" || toolType === "batch" ? "Click to browse files" : "Click to get started")}
+          </span>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
@@ -250,7 +235,7 @@ export function EmptyState({
         {/* Dynamic Trust Badge */}
         <div className="flex items-center gap-3 bg-mat-raised/50 border border-mat-border rounded-2xl px-5 py-4 mb-4 select-none max-w-sm">
           <div className="p-2.5 rounded-xl bg-success/10 border border-success/20 text-success shrink-0">
-            <ShieldCheck className="w-5 h-5" />
+            <ShieldCheck className="w-5 h-5" aria-hidden="true" />
           </div>
           <div className="text-left">
             <h4 className="text-[13px] font-black tracking-tight text-text leading-snug">{trust.title}</h4>
@@ -261,12 +246,14 @@ export function EmptyState({
         {outcomeText && (
           <p className="text-[12px] text-[--kv-text-muted] italic mb-8">
             Result: {outcomeText.replace(/^Result:\s*/i, '').slice(0, 52)}
-            {/* 52 chars + "Result: " prefix = 60 total */}
           </p>
         )}
 
-        <button onClick={handleSampleClick} className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-xs font-black uppercase tracking-widest text-brand-primary flex items-center gap-2">
-          <PlayCircle className="w-4 h-4" /> {sampleCTA?.label || "Try Sample File"}
+        <button 
+          onClick={handleSampleClick} 
+          className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-xs font-black uppercase tracking-widest text-brand-primary flex items-center gap-2 hover:bg-brand-primary/20 transition-colors"
+        >
+          <PlayCircle className="w-4 h-4" aria-hidden="true" /> {sampleCTA?.label || "Try Sample File"}
         </button>
       </m.div>
     </motion.div>

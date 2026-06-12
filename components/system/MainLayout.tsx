@@ -3,13 +3,9 @@
 import React, { ReactNode } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
+import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
-import dynamic from "next/dynamic";
-
-const BottomNav = dynamic(() => import("@/components/BottomNav").then(m => m.BottomNav), {
-  ssr: false,
-});
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const { isFullscreen } = useFullscreenContext();

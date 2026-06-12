@@ -104,10 +104,18 @@ const SpeedGauge = ({ value, max = 100, color = "#4F46E5" }: { value: number, ma
   const strokeDashoffset = arcLength - (progress * arcLength);
 
   return (
-    <div className="relative w-[240px] h-[240px] md:w-[320px] md:h-[320px]">
+    <div 
+      className="relative w-[240px] h-[240px] md:w-[320px] md:h-[320px]"
+      role="meter"
+      aria-valuenow={value}
+      aria-valuemin={0}
+      aria-valuemax={max}
+      aria-label="Current speed"
+    >
       <svg
         viewBox={`0 0 ${size} ${size}`}
         className="w-full h-full transform -rotate-225"
+        aria-hidden="true"
       >
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">

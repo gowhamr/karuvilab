@@ -40,8 +40,8 @@ export function FindBar({
           <span className="text-[10px] font-bold text-text-4 mr-1">
             {matchCount > 0 ? `${currentIndex + 1}/${matchCount}` : "0 found"}
           </span>
-          <button onClick={onPrev} className="p-0.5 hover:bg-surface rounded"><ChevronUp className="w-3.5 h-3.5" /></button>
-          <button onClick={onNext} className="p-0.5 hover:bg-surface rounded"><ChevronDown className="w-3.5 h-3.5" /></button>
+          <button onClick={onPrev} aria-label="Previous match" className="p-0.5 hover:bg-surface rounded"><ChevronUp className="w-3.5 h-3.5" /></button>
+          <button onClick={onNext} aria-label="Next match" className="p-0.5 hover:bg-surface rounded"><ChevronDown className="w-3.5 h-3.5" /></button>
         </div>
       </div>
 
@@ -57,12 +57,14 @@ export function FindBar({
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
           <button 
             onClick={() => onReplace(query, replacement, false)}
+            aria-label="Replace current match"
             className="px-1.5 py-0.5 hover:bg-blue hover:text-white rounded text-[9px] font-black uppercase tracking-tighter transition-all"
           >
             One
           </button>
           <button 
             onClick={() => onReplace(query, replacement, true)}
+            aria-label="Replace all matches"
             className="px-1.5 py-0.5 hover:bg-blue hover:text-white rounded text-[9px] font-black uppercase tracking-tighter transition-all"
           >
             All
@@ -70,7 +72,7 @@ export function FindBar({
         </div>
       </div>
 
-      <button onClick={onClose} className="p-1.5 hover:bg-surface rounded-lg text-text-4">
+      <button onClick={onClose} aria-label="Close find and replace" className="p-1.5 hover:bg-surface rounded-lg text-text-4">
         <X className="w-4 h-4" />
       </button>
     </div>
