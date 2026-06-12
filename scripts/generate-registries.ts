@@ -29,6 +29,7 @@ async function main() {
           featured: tool.featured || false,
           popular: tool.popular || false,
           status: tool.status || 'stable',
+          lastAdded: tool.lastAdded || null,
           keywords: tool.keywords || [],
           input: tool.input || null,
           output: tool.output || null,

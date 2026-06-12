@@ -13,5 +13,6 @@ export const audio_converter: ToolEntry = {
   searchIntent: 'action',
   priority: 0.8,
   status: 'new',
+  lastAdded: '2026-06-05',
   related: ['video-trim', 'video-metadata-viewer']
 };

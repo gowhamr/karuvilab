@@ -61,7 +61,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
         <Link 
           href={href}
           aria-label={`Explore all ${title}`}
-          className="group flex items-center gap-1 text-[10px] font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
+          className="flex items-center gap-1 min-h-[44px] px-2 text-[12px] font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
         >
           Explore all <ArrowRight className="w-3 h-3" />
         </Link>
@@ -349,7 +349,7 @@ export default function HomeClient() {
                       viewport={{ once: true }}
                       className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
                     >
-                      {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
+                      {(ALL_TOOLS as ToolEntry[]).slice(0, 16).map(tool => (
                         <m.div key={tool.id} variants={itemVariants}>
                           <ToolCard tool={tool} compact />
                         </m.div>
@@ -358,7 +358,7 @@ export default function HomeClient() {
                     <div className="mt-8 flex justify-center">
                       <Link 
                         href="/all-tools"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-[11px] font-black text-text hover:border-blue/30 hover:text-blue hover:shadow-lg transition-all shadow-sm uppercase tracking-widest"
+                        className="w-full flex items-center justify-center gap-2 h-[52px] md:w-auto md:inline-flex md:px-6 md:h-[48px] bg-[--kv-mat-surface] border border-[--kv-mat-border] rounded-xl text-[14px] font-black text-[--kv-text] hover:border-blue/30 hover:text-blue transition-all"
                       >
                         Browse 100+ Tools <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -366,7 +366,7 @@ export default function HomeClient() {
                   </section>
 
                   {/* Privacy Features section — resurrected */}
-                  <section className="max-w-4xl mx-auto w-full">
+                  <section className="max-w-4xl mx-auto w-full mt-8 md:mt-16">
                     <SectionHeader
                       title="Built for Privacy"
                       subtitle="Why local-first matters"
@@ -386,7 +386,7 @@ export default function HomeClient() {
                       <Accordion type="single" collapsible className="w-full space-y-3">
                         {FAQ.map((item, i) => (
                           <AccordionItem key={i} value={`item-${i}`} className="bg-surface border border-border rounded-2xl px-5 overflow-hidden hover:border-brand-primary/20 hover:shadow-sm transition-all duration-200">
-                            <AccordionTrigger className="text-sm font-black text-text py-4 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
+                            <AccordionTrigger className="text-[13px] md:text-[14px] font-bold tracking-wide py-4 text-[--kv-text] [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
                             <AccordionContent className="text-xs text-text-3 font-semibold pb-4 leading-relaxed">{item.a}</AccordionContent>
                           </AccordionItem>
                         ))}

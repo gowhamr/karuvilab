@@ -36,18 +36,18 @@ export function PrivacyFeatures() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="relative p-6 bg-mat-surface border border-mat-border rounded-2xl overflow-hidden group shadow-premium hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+            className="relative flex items-start gap-4 md:flex-col md:items-start p-4 md:p-8 bg-mat-surface border border-mat-border rounded-2xl md:rounded-[32px] overflow-hidden group shadow-premium hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
           >
             <div className="hidden sm:block absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-110 transition-all duration-700">
               <f.icon className="w-24 h-24" />
             </div>
             
-            <div className="relative z-10 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-text transition-all duration-500">
-                <f.icon className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-black text-text tracking-tight">{f.title}</h3>
-              <p className="text-[13px] text-text-4 font-semibold leading-snug">
+            <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue group-hover:bg-blue group-hover:text-text transition-all duration-500">
+              <f.icon className="w-5 h-5 md:w-6 md:h-6" />
+            </div>
+            <div>
+              <h3 className="text-base md:text-xl font-black text-[--kv-text] tracking-tight">{f.title}</h3>
+              <p className="text-[13px] md:text-sm text-[--kv-text-muted] font-medium mt-1 leading-relaxed">
                 {f.desc}
               </p>
             </div>
@@ -59,10 +59,10 @@ export function PrivacyFeatures() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-br from-blue to-blue-dark rounded-3xl p-6 md:p-8 text-text flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl shadow-blue/20"
+        className="bg-gradient-to-br from-blue to-blue-dark rounded-3xl p-6 md:p-12 text-text flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 shadow-xl shadow-blue/20"
       >
         <div className="space-y-2 text-center md:text-left">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-tight text-white">
+          <h2 className="text-[22px] md:text-4xl font-black tracking-tight leading-tight text-white">
             Security is not a feature, it's our foundation.
           </h2>
           <p className="text-blue-light/85 text-sm md:text-base font-medium max-w-xl">
@@ -71,7 +71,7 @@ export function PrivacyFeatures() {
         </div>
         <Link 
           href="/privacy" 
-          className="px-6 py-3 bg-mat-surface text-text border border-mat-border rounded-xl text-xs font-black hover:scale-105 transition-transform shadow-lg whitespace-nowrap"
+          className="w-full md:w-auto h-[52px] md:h-[48px] px-6 bg-white text-[#1E293B] rounded-xl text-xs font-black hover:scale-105 transition-all shadow-lg whitespace-nowrap flex items-center justify-center"
         >
           View Privacy Policy
         </Link>

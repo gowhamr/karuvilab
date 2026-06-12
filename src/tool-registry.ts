@@ -63,10 +63,10 @@ export interface ToolEntry {
 }
 
 export function isNewTool(tool: ToolEntry): boolean {
-  if (tool.status === 'new') return true;
   if (!tool.lastAdded) return false;
-  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-  return new Date(tool.lastAdded).getTime() > thirtyDaysAgo;
+  const cutoff = Date.now() - (14 * 24 * 60 * 60 * 1000);
+  // 14 days — stricter than 30 days
+  return new Date(tool.lastAdded).getTime() > cutoff;
 }
 
 export interface CategoryEntry {

@@ -53,41 +53,31 @@ export function Footer() {
         {/* Top section: Recent Tools & Links */}
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-6">
           {/* Continue Using */}
-          <div className="flex-1 space-y-3 min-h-[60px]">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
-              Continue Using
-            </h4>
-            {!mounted ? (
-              <div className="flex gap-2">
-                <div className="w-24 h-7 bg-surface border border-border rounded-xl animate-pulse" />
-                <div className="w-28 h-7 bg-surface border border-border rounded-xl animate-pulse" />
-              </div>
-            ) : recentTools.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {recentTools.slice(0, 4).map((tool) => (
-                  <Link
-                    key={tool.id}
-                    href={`/${tool.href}`}
-                    className="px-3 py-1.5 bg-surface border border-border rounded-xl text-[10px] font-bold text-text-2 hover:text-blue hover:border-blue/30 transition-all shadow-sm active:scale-95"
-                  >
-                    {tool.name}
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-text-4 text-xs font-semibold">
-                <div className="p-1.5 rounded-lg bg-bg border border-border">
-                  <Clock className="w-3.5 h-3.5 text-text-4" />
+          {(!mounted || recentTools.length > 0) && (
+            <div className="flex-1 space-y-3 min-h-[60px]">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+                Continue Using
+              </h4>
+              {!mounted ? (
+                <div className="flex gap-2">
+                  <div className="w-24 h-7 bg-surface border border-border rounded-xl animate-pulse" />
+                  <div className="w-28 h-7 bg-surface border border-border rounded-xl animate-pulse" />
                 </div>
-                <span>
-                  No recent tools yet.{" "}
-                  <Link href="/all-tools" className="text-brand-primary hover:underline font-black">
-                    Browse tools
-                  </Link>
-                </span>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {recentTools.slice(0, 4).map((tool) => (
+                    <Link
+                      key={tool.id}
+                      href={`/${tool.href}`}
+                      className="px-3 py-1.5 bg-surface border border-border rounded-xl text-[10px] font-bold text-text-2 hover:text-blue hover:border-blue/30 transition-all shadow-sm active:scale-95"
+                    >
+                      {tool.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Quick Links Column Group */}
           <div className="flex-1 grid grid-cols-2 gap-6 md:justify-items-end">
@@ -100,7 +90,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-xs font-semibold text-text-3 hover:text-brand-primary transition-colors py-0.5 block md:text-right"
+                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-2 block min-h-[44px] flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -117,7 +107,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-xs font-semibold text-text-3 hover:text-brand-primary transition-colors py-0.5 block md:text-right"
+                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-2 block min-h-[44px] flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -134,7 +124,7 @@ export function Footer() {
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           {/* Branding */}
           <div className="flex items-center gap-2 shrink-0">
-            <KVLogo size="sm" withText={false} className="opacity-70 grayscale hover:grayscale-0 transition-all" />
+            <KVLogo size="sm" withText={false} className="opacity-60 hover:opacity-100 transition-all" />
             <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
               Powered by KaruviLab
             </span>
@@ -154,10 +144,8 @@ export function Footer() {
             <span className="flex items-center gap-1.5">
               <Cpu className="w-3 h-3" /> Local Processing
             </span>
-          </div>
 
-          {/* Status Badge */}
-          <div className="shrink-0 mt-2 lg:mt-0">
+            {/* Status Badge */}
             <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300 ${
               !mounted 
                 ? "bg-surface border-border text-text-4" 

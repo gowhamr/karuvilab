@@ -13,6 +13,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "age",
       "birthday",
@@ -38,6 +39,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": "2026-06-05",
     "keywords": [
       "audio converter",
       "convert wav to mp3",
@@ -66,6 +68,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": "2026-06-05",
     "keywords": [
       "barcode",
       "qr scanner",
@@ -90,6 +93,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "base64",
       "encode",
@@ -116,6 +120,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "background",
@@ -139,6 +144,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "bmi calculator",
       "body mass index",
@@ -169,6 +175,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "box shadow generator",
       "css shadow",
@@ -197,6 +204,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "bulk",
@@ -220,6 +228,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "cagr",
       "growth",
@@ -243,6 +252,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "calendar",
       "productivity",
@@ -268,6 +278,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": "2026-06-05",
     "keywords": [
       "chart",
       "graph",
@@ -293,6 +304,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "cipher",
       "encryption",
@@ -324,6 +336,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "minify",
       "css",
@@ -347,6 +360,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "color picker",
       "hex to rgb",
@@ -370,6 +384,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "color",
       "palette",
@@ -399,6 +414,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "commands",
       "linux",
@@ -422,6 +438,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "compound interest",
       "interest calculator",
@@ -445,6 +462,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "compress",
@@ -468,6 +486,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "contrast checker",
       "wcag contrast",
@@ -496,6 +515,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "cron",
       "crontab",
@@ -525,6 +545,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "csp",
       "content security policy",
@@ -554,6 +575,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "csv to json",
       "json to csv",
@@ -583,6 +605,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "currency",
       "exchange",
@@ -608,6 +631,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": true,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "data",
       "units",
@@ -638,6 +662,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "date",
       "days",
@@ -661,6 +686,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "diff",
       "compare",
@@ -683,6 +709,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "discount",
       "sale",
@@ -706,6 +733,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": true,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "emi",
       "loan",
@@ -734,6 +762,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "extract",
@@ -756,6 +785,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "fake data",
       "mock data",
@@ -781,6 +811,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "fd",
       "fixed deposit",
@@ -804,6 +835,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": true,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "file viewer",
       "diff",
@@ -834,6 +866,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "fire",
       "financial freedom",
@@ -865,6 +898,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "format",
       "prettier",
@@ -887,6 +921,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "gif creator",
       "make gif",
@@ -916,6 +951,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "glassmorphism",
       "glass css",
@@ -944,6 +980,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "gradient generator",
       "css gradient",
@@ -973,6 +1010,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "grammar",
       "spelling",
@@ -995,6 +1033,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "gratuity calculator",
       "gratuity act 1972",
@@ -1023,6 +1062,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": true,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "gst calculator",
       "calculate gst india",
@@ -1050,6 +1090,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "hash",
       "md5",
@@ -1073,6 +1114,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "hash map",
       "data structures"
@@ -1094,6 +1136,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "hmac",
       "mac",
@@ -1123,6 +1166,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "hra calculator",
       "house rent allowance",
@@ -1150,6 +1194,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "html",
       "entities",
@@ -1172,6 +1217,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "html",
       "viewer",
@@ -1202,6 +1248,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "base64",
@@ -1224,6 +1271,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "compress",
@@ -1248,6 +1296,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "convert",
@@ -1274,6 +1323,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "crop",
@@ -1296,6 +1346,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "resize",
@@ -1318,6 +1369,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image seo",
       "alt text generator",
@@ -1345,6 +1397,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "image",
       "jpg",
@@ -1369,6 +1422,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "income tax",
       "tax calculator",
@@ -1399,6 +1453,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "inflation",
       "purchasing power",
@@ -1422,6 +1477,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "speed",
       "test",
@@ -1447,6 +1503,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": true,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "invoice generator",
       "pro invoice maker",
@@ -1474,6 +1531,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "json",
       "csv",
@@ -1499,6 +1557,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "json",
       "format",
@@ -1526,6 +1585,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "jwt",
       "token",
@@ -1549,6 +1609,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "password",
@@ -1573,6 +1634,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "lorem ipsum",
       "placeholder text",
@@ -1602,6 +1664,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "lumpsum",
       "investment",
@@ -1625,6 +1688,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "markdown",
       "md",
@@ -1657,6 +1721,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "merge",
@@ -1680,6 +1745,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "seo",
       "meta",
@@ -1703,6 +1769,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "mic test",
       "camera test",
@@ -1727,6 +1794,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "mutual fund",
       "returns",
@@ -1751,6 +1819,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": true,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "notes",
       "notebook",
@@ -1780,6 +1849,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "nps calculator",
       "national pension system",
@@ -1808,6 +1878,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "numeral converter",
       "encoding converter",
@@ -1858,6 +1929,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "og",
       "open graph",
@@ -1881,6 +1953,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "page",
@@ -1903,6 +1976,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "password",
       "random",
@@ -1929,6 +2003,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "word",
@@ -1952,6 +2027,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "percent",
       "percentage",
@@ -1974,6 +2050,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "mockup",
       "phone",
@@ -1999,6 +2076,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pomodoro",
       "timer",
@@ -2023,6 +2101,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "ppf",
       "savings",
@@ -2047,6 +2126,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "qr",
       "qrcode",
@@ -2069,6 +2149,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "rd",
       "recurring deposit",
@@ -2092,6 +2173,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "regex",
       "regexp",
@@ -2115,6 +2197,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "retirement",
       "planning",
@@ -2139,6 +2222,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "robots",
       "txt",
@@ -2162,6 +2246,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "rotate",
@@ -2185,6 +2270,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "budget",
       "spending",
@@ -2207,6 +2293,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "salary",
       "ctc",
@@ -2231,6 +2318,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "calculator",
       "scientific",
@@ -2255,6 +2343,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "seo",
       "title",
@@ -2278,6 +2367,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "sip",
       "investment",
@@ -2304,6 +2394,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "sitemap",
       "xml",
@@ -2326,6 +2417,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "slug",
       "url",
@@ -2349,6 +2441,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "convert",
       "smart",
@@ -2371,6 +2464,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "split",
       "copy",
@@ -2394,6 +2488,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "split",
@@ -2417,6 +2512,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "calculator",
       "math",
@@ -2439,6 +2535,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "stock",
       "average",
@@ -2463,6 +2560,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "swp",
       "withdrawal",
@@ -2487,6 +2585,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "task",
       "todo",
@@ -2510,6 +2609,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "tds calculator",
       "tax deducted at source",
@@ -2539,6 +2639,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "text converter",
       "uppercase",
@@ -2563,6 +2664,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "sort",
       "deduplicate",
@@ -2587,6 +2689,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "text",
       "case",
@@ -2610,6 +2713,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "time",
       "duration",
@@ -2633,6 +2737,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "timezone",
       "converter",
@@ -2666,6 +2771,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "typing test",
       "wpm",
@@ -2690,6 +2796,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "unit",
       "convert",
@@ -2715,6 +2822,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "unix timestamp",
       "epoch",
@@ -2743,6 +2851,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "url",
       "clean",
@@ -2766,6 +2875,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "url",
       "encode",
@@ -2789,6 +2899,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "utc",
       "ist",
@@ -2812,6 +2923,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "uuid",
       "guid",
@@ -2840,6 +2952,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "validate",
       "file",
@@ -2863,6 +2976,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "video metadata",
       "inspect video",
@@ -2891,6 +3005,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "video trim",
       "cut video",
@@ -2920,6 +3035,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "pdf",
       "watermark",
@@ -2942,6 +3058,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "wifi",
       "qr code",
@@ -2967,6 +3084,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "word count",
       "character count",
@@ -2990,6 +3108,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": true,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "word to pdf",
       "docx to pdf",
@@ -3013,6 +3132,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "work",
       "hours",
@@ -3036,6 +3156,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "time",
       "timezone",
@@ -3062,6 +3183,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
+    "lastAdded": null,
     "keywords": [
       "xml formatter",
       "xml beautifier",
@@ -3090,6 +3212,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "stable",
+    "lastAdded": null,
     "keywords": [
       "yaml",
       "json",

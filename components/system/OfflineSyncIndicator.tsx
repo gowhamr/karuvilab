@@ -73,11 +73,12 @@ export function OfflineSyncIndicator() {
             flex items-center justify-center gap-2 
             px-0 md:px-3 rounded-xl 
             bg-surface border border-border 
-            hover:bg-mat-hover text-text hover:text-blue transition-colors
+            hover:bg-mat-hover hover:text-blue transition-colors
             relative overflow-hidden group outline-none
-            ${status === 'online' ? 'hover:border-success/30' : status === 'cached' ? 'hover:border-warn/30' : 'hover:border-error/30'}
+            ${status === 'online' ? 'text-text hover:border-success/30' : 'text-amber-500 hover:border-warn/30'}
           `}
-          aria-label={`Network status: ${current.label}. Click for details.`}
+          title={status === 'online' ? "Online — all tools ready" : "Offline — tools still work locally"}
+          aria-label={status === 'online' ? "Connection status: online" : "Connection status: offline"}
         >
           <span className="relative flex h-2 w-2">
             {status !== 'online' && (

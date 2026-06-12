@@ -49,6 +49,7 @@ export interface ToolEntry {
   analyticsId?: string;
   status?: 'stable' | 'beta' | 'deprecated' | 'new';
   lastUpdated?: string; // ISO format: YYYY-MM-DD
+  lastAdded?: string;   // ISO format: YYYY-MM-DD
   requiresNetwork?: boolean;
 }
 export interface CategoryEntry {

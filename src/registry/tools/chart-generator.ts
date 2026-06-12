@@ -18,5 +18,6 @@ export const chart_generator: ToolEntry = {
   "searchIntent": "transactional",
   "priority": 0.8,
   "status": "new",
+  "lastAdded": "2026-06-05",
   "schemaType": "WebApplication"
 };
