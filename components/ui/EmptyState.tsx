@@ -53,27 +53,27 @@ interface EmptyStateProps {
   toolId:       SampleAssetKey;
   onDrop:       (files: File[]) => void;
   dragState:    "idle" | "hover" | "over" | "rejected";
-  formats?:     string[];
-  maxSize?:     string;
-  maxFiles?:    string;
+  formats?:     string[] | undefined;
+  maxSize?:     string | undefined;
+  maxFiles?:    string | undefined;
   subAction?: {
     label:    string;
     onClick:  () => void;
-  };
-  trustVariant?: "A" | "B" | "C";
-  outcomeText?: string;
+  } | undefined;
+  trustVariant?: "A" | "B" | "C" | undefined;
+  outcomeText?: string | undefined;
   sampleCTA?: {
     label:    string;
     onClick?: () => void;
-  };
+  } | undefined;
   lastSession?: {
     label:      string;
     onRestore:  () => void;
     onDismiss:  () => void;
-  };
-  onDragOver?:  () => void;
-  onDragLeave?: () => void;
-  className?: string;
+  } | undefined;
+  onDragOver?:  (() => void) | undefined;
+  onDragLeave?: (() => void) | undefined;
+  className?: string | undefined;
 }
 
 export function EmptyState({

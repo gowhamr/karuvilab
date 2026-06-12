@@ -32,7 +32,11 @@ export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
                 </div>
                 <Dialog.Title className="text-xl font-black tracking-tight">Timer Settings</Dialog.Title>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-bg rounded-xl transition-colors text-text-4">
+              <button 
+                onClick={onClose} 
+                className="min-w-[44px] min-h-[44px] hover:bg-bg rounded-xl transition-colors text-text-4 flex items-center justify-center"
+                aria-label="Close settings"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>

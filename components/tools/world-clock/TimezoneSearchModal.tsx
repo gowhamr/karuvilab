@@ -70,7 +70,11 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen
                 <Globe className="w-5 h-5 text-blue" />
                 <h2 className="text-lg font-black text-text">Add Timezone</h2>
               </div>
-              <button onClick={onClose} className="p-2 text-text-4 hover:text-text rounded-full transition-colors">
+              <button 
+                onClick={onClose} 
+                className="min-w-[44px] min-h-[44px] text-text-4 hover:text-text rounded-full transition-colors flex items-center justify-center"
+                aria-label="Close modal"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>

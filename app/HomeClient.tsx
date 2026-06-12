@@ -41,7 +41,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
           <h2 className="text-base md:text-lg font-black tracking-tight text-text flex items-center gap-2">
             {title}
             {badge && (
-              <span className="px-1.5 py-0.5 rounded-md bg-blue/5 border border-blue/10 text-[11px] font-black uppercase tracking-widest text-blue">
+              <span className="px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 text-[10px] font-black uppercase tracking-widest text-blue shadow-sm">
                 {badge}
               </span>
             )}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useId } from 'react';
 import { Square, Plus, Trash2, SlidersHorizontal, Copy, Layers } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
@@ -54,6 +54,7 @@ function generateTailwind(layers: ShadowLayer[]): string {
 }
 
 export default function BoxShadowGeneratorClient() {
+  const baseId = useId();
   const [layers, setLayers] = useState<ShadowLayer[]>(PRESETS[5]!.layers);
   const [bgColor, setBgColor] = useState<string>('#F8FAFC');
   const [boxColor, setBoxColor] = useState<string>('#FFFFFF');
@@ -207,8 +208,8 @@ export default function BoxShadowGeneratorClient() {
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-6">
              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Box Properties</h3>
              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Radius <span>{borderRadius}px</span></label>
-                <input type="range" min="0" max="100" value={borderRadius} onChange={e => setBorderRadius(Number(e.target.value))} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                <label htmlFor={`${baseId}-radius`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Radius <span>{borderRadius}px</span></label>
+                <input id={`${baseId}-radius`} type="range" min="0" max="100" value={borderRadius} onChange={e => setBorderRadius(Number(e.target.value))} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
              </div>
           </div>
 

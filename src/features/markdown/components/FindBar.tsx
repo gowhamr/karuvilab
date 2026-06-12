@@ -72,7 +72,7 @@ export function FindBar({
         </div>
       </div>
 
-      <button onClick={onClose} aria-label="Close find and replace" className="p-1.5 hover:bg-surface rounded-lg text-text-4">
+      <button onClick={onClose} aria-label="Close find and replace" className="min-w-[44px] min-h-[44px] hover:bg-surface rounded-lg text-text-4 flex items-center justify-center">
         <X className="w-4 h-4" />
       </button>
     </div>

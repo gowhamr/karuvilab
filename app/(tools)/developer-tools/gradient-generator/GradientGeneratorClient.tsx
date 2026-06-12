@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useId } from 'react';
 import { Palette, Copy, RefreshCw, Layers, SlidersHorizontal, Trash2, Plus, ArrowLeftRight } from 'lucide-react';
 import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
@@ -43,10 +43,11 @@ function generateCSS(config: GradientConfig): string {
 }
 
 function generateTailwind(config: GradientConfig): string {
-  return `bg-[${generateCSS(config).replace(/ /g, '_')}]`;
+  return `shadow-[${generateCSS(config).replace(/ /g, '_')}]`;
 }
 
 export default function GradientGeneratorClient() {
+  const baseId = useId();
   const [config, setConfig] = useState<GradientConfig>({
     type: 'linear',
     angle: 90,
@@ -196,24 +197,28 @@ export default function GradientGeneratorClient() {
                 <div key={stop.id} className="flex items-center gap-3 p-3 bg-bg border border-border rounded-2xl group transition-all hover:border-blue/30">
                   <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-sm shrink-0 border border-border/50">
                     <input
+                      id={`${baseId}-stop-color-${stop.id}`}
                       type="color"
                       value={stop.color}
                       onChange={(e) => updateStop(stop.id, 'color', e.target.value)}
                       className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer"
+                      aria-label={`Color for stop ${i + 1}`}
                     />
                   </div>
                   
                   <div className="flex-1 space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-xs font-mono font-bold text-text">{stop.color.toUpperCase()}</span>
+                      <label htmlFor={`${baseId}-stop-pos-${stop.id}`} className="text-xs font-mono font-bold text-text">{stop.color.toUpperCase()}</label>
                       <span className="text-[10px] font-bold text-text-4">{stop.position}%</span>
                     </div>
                     <input
+                      id={`${baseId}-stop-pos-${stop.id}`}
                       type="range"
                       min={0} max={100}
                       value={stop.position}
                       onChange={(e) => updateStop(stop.id, 'position', Number(e.target.value))}
                       className="w-full h-1 bg-border rounded-full appearance-none cursor-pointer accent-blue"
+                      aria-label={`Position for stop ${i + 1}`}
                     />
                   </div>
 
@@ -272,5 +277,3 @@ export default function GradientGeneratorClient() {
     </div>
   );
 }
-// Note: ArrowLeftRight is imported but currently not properly typed in Icons if it was a custom alias. It is available in lucide-react.
-t.

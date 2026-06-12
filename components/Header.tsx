@@ -104,7 +104,7 @@ export function Header() {
           <div className="md:hidden flex items-center">
              <button 
                 onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
-                className="h-[40px] px-3 flex items-center gap-1.5 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
+                className="h-[44px] px-4 flex items-center gap-2 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
                 aria-label="Search tools"
              >
                 <Search className="w-4 h-4 text-text-3" />

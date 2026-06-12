@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useId } from 'react';
 import { Layers, Copy } from 'lucide-react';
 import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
@@ -34,6 +34,7 @@ function hexToRgba(hex: string, opacity: number): string {
 }
 
 export default function GlassmorphismGeneratorClient() {
+  const baseId = useId();
   const [config, setConfig] = useState<GlassConfig>(PRESETS[0]!.config);
   const [outputTab, setOutputTab] = useState<'css' | 'tailwind'>('css');
 
@@ -100,34 +101,34 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Blur Radius (backdrop-filter) <span>{config.blur}px</span></label>
-              <input type="range" min="0" max="40" value={config.blur} onChange={e => setConfig({ ...config, blur: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+              <label htmlFor={`${baseId}-blur`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Blur Radius (backdrop-filter) <span>{config.blur}px</span></label>
+              <input id={`${baseId}-blur`} type="range" min="0" max="40" value={config.blur} onChange={e => setConfig({ ...config, blur: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Transparency <span>{config.transparency}%</span></label>
-              <input type="range" min="0" max="100" value={config.transparency} onChange={e => setConfig({ ...config, transparency: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+              <label htmlFor={`${baseId}-transparency`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Transparency <span>{config.transparency}%</span></label>
+              <input id={`${baseId}-transparency`} type="range" min="0" max="100" value={config.transparency} onChange={e => setConfig({ ...config, transparency: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Width <span>{config.borderWidth}px</span></label>
-                <input type="range" min="0" max="4" step="1" value={config.borderWidth} onChange={e => setConfig({ ...config, borderWidth: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                <label htmlFor={`${baseId}-border-width`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Width <span>{config.borderWidth}px</span></label>
+                <input id={`${baseId}-border-width`} type="range" min="0" max="4" step="1" value={config.borderWidth} onChange={e => setConfig({ ...config, borderWidth: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Opacity <span>{config.borderOpacity}%</span></label>
-                <input type="range" min="0" max="100" value={config.borderOpacity} onChange={e => setConfig({ ...config, borderOpacity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                <label htmlFor={`${baseId}-border-opacity`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Opacity <span>{config.borderOpacity}%</span></label>
+                <input id={`${baseId}-border-opacity`} type="range" min="0" max="100" value={config.borderOpacity} onChange={e => setConfig({ ...config, borderOpacity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Radius <span>{config.borderRadius}px</span></label>
-                <input type="range" min="0" max="64" value={config.borderRadius} onChange={e => setConfig({ ...config, borderRadius: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                <label htmlFor={`${baseId}-border-radius`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Radius <span>{config.borderRadius}px</span></label>
+                <input id={`${baseId}-border-radius`} type="range" min="0" max="64" value={config.borderRadius} onChange={e => setConfig({ ...config, borderRadius: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Shadow Intensity <span>{config.shadowIntensity}%</span></label>
-                <input type="range" min="0" max="100" value={config.shadowIntensity} onChange={e => setConfig({ ...config, shadowIntensity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                <label htmlFor={`${baseId}-shadow-intensity`} className="text-[10px] font-bold uppercase tracking-widest text-text-4 flex justify-between">Shadow Intensity <span>{config.shadowIntensity}%</span></label>
+                <input id={`${baseId}-shadow-intensity`} type="range" min="0" max="100" value={config.shadowIntensity} onChange={e => setConfig({ ...config, shadowIntensity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
             </div>
 

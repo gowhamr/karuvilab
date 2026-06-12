@@ -14,7 +14,7 @@ export function HomeHero() {
       <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-r from-blue/10 via-indigo-500/5 to-purple-500/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
       {/* Tag pill — reduce size */}
-      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[--kv-mat-surface] border border-[--kv-mat-border] text-[10px] font-bold uppercase tracking-widest text-[--kv-text-muted]">
+      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[--kv-mat-surface] border border-border/40 text-[10px] font-bold uppercase tracking-widest text-[--kv-text-muted] shadow-sm">
         <Sparkles className="w-3 h-3 text-[--kv-brand-primary]" />
         <span>Productivity Refined</span>
       </div>
