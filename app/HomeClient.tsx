@@ -174,7 +174,7 @@ export default function HomeClient() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-8 md:pb-12 space-y-4 md:space-y-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-4 md:space-y-8">
         
         {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
         <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-2 md:pt-4">
@@ -384,7 +384,7 @@ export default function HomeClient() {
                       />
                       <Accordion type="single" collapsible className="w-full space-y-3">
                         {FAQ.map((item, i) => (
-                          <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-[#CBD5E1] dark:border-[--kv-mat-border] rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/40 hover:shadow-sm transition-all duration-200">
+                          <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-black/5 dark:border-white/5 shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
                             <AccordionTrigger className="text-[13px] font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
                             <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
                           </AccordionItem>

@@ -123,11 +123,11 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
       {/* Left/Right Dynamic Fades */}
       <div 
         ref={fadeLeftRef}
-        className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[--kv-mat-base] to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
+        className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-bg to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
       />
       <div 
         ref={fadeRightRef}
-        className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[--kv-mat-base] to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
+        className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-bg to-transparent pointer-events-none z-10 opacity-0 transition-opacity duration-300"
       />
 
       {/* Desktop Navigation Chevrons */}
