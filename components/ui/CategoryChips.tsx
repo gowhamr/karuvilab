@@ -168,7 +168,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             relative flex-shrink-0 h-[40px] px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
             ${!activeCategory 
               ? "text-white shadow-lg shadow-blue/30" 
-              : "text-text-3 hover:text-text hover:bg-mat-hover border border-mat-border"}
+              : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-[--kv-mat-hover] bg-[--kv-mat-surface] border border-[--kv-chip-border]"}
           `}
         >
           {!activeCategory && (
@@ -196,7 +196,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
               relative flex-shrink-0 h-[40px] flex items-center gap-2.5 px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
               ${activeCategory === cat.id 
                 ? "text-white" 
-                : "text-text-3 hover:text-text hover:bg-mat-hover border border-mat-border"}
+                : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-[--kv-mat-hover] bg-[--kv-mat-surface] border border-[--kv-chip-border]"}
             `}
           >
             {activeCategory === cat.id && (

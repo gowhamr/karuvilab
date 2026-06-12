@@ -59,6 +59,12 @@
   --color-brand-primary: var(--kv-brand-primary);
   --color-brand-glow: var(--kv-brand-glow);
 
+  /* Contrast Mappings */
+  --color-kv-text: var(--kv-text);
+  --color-kv-text-muted: var(--kv-text-muted);
+  --color-kv-chip-border: var(--kv-chip-border);
+  --color-kv-trust-text: var(--kv-trust-text);
+
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -210,6 +216,12 @@ html.preload *:after {
   --kv-glass-bg:          rgba(255, 255, 255, 0.85);
   --kv-glass-border:      rgba(226, 232, 240, 0.8);
   --kv-glass-shine:       rgba(255, 255, 255, 0.9);
+
+  /* Contrast Overrides for Light Mode */
+  --kv-text:             #0F172A;
+  --kv-text-muted:       #475569;
+  --kv-chip-border:      #CBD5E1;
+  --kv-trust-text:       #475569;
 }
 
 [data-theme="dark"] {
@@ -252,6 +264,12 @@ html.preload *:after {
   --hover:       var(--kv-mat-hover);
   --bg-input:    var(--kv-mat-base);
   --border-focus: var(--kv-mat-border-focus);
+
+  /* Contrast Overrides for Dark Mode */
+  --kv-text:             #F8FAFC;
+  --kv-text-muted:       #94A3B8;
+  --kv-chip-border:      rgba(255, 255, 255, 0.10);
+  --kv-trust-text:       #94A3B8;
 }
 
 html {

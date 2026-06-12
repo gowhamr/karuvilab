@@ -85,12 +85,12 @@ export function Footer() {
               <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
                 Resources
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-0.5">
                 {navigationLinks.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-2 block min-h-[44px] flex items-center md:justify-end"
+                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block min-h-[36px] flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -102,12 +102,12 @@ export function Footer() {
               <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
                 Legal
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-0.5">
                 {legalLinks.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-2 block min-h-[44px] flex items-center md:justify-end"
+                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block min-h-[36px] flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -125,13 +125,13 @@ export function Footer() {
           {/* Branding */}
           <div className="flex items-center gap-2 shrink-0">
             <KVLogo size="sm" withText={false} className="opacity-60 hover:opacity-100 transition-all" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
+            <span className="text-[10px] font-black uppercase tracking-widest text-text-2">
               Powered by KaruviLab
             </span>
           </div>
 
           {/* Trust Strip */}
-          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-[10px] font-black uppercase tracking-widest text-text-4/80">
+          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-[10px] font-black uppercase tracking-widest text-text-2">
             <span className="flex items-center gap-1.5">
               <WifiOff className="w-3 h-3" /> Works Offline
             </span>

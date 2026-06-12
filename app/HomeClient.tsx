@@ -51,7 +51,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
             )}
           </h2>
           {subtitle && (
-            <p className="text-[12px] text-text-4 font-bold uppercase tracking-wider">
+            <p className="text-[11px] md:text-[12px] text-[--kv-text-muted] font-bold uppercase tracking-[0.15em]">
               {subtitle}
             </p>
           )}
@@ -200,7 +200,7 @@ export default function HomeClient() {
         <div className="relative">
           {/* Horizontal Category Chips */}
           <div 
-            className="sticky top-[60px] md:top-[72px] z-30 w-full max-w-[100vw] py-2 bg-surface/95 border-b border-border transition-all"
+            className="sticky top-[60px] md:top-[72px] z-30 w-full max-w-[100vw] py-2 bg-mat-base/95 border-b border-border transition-all"
             style={{ backdropFilter: shouldBlur ? 'blur(12px)' : 'none' }}
           >
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -223,7 +223,7 @@ export default function HomeClient() {
             id="tool-grid-panel"
             role="tabpanel"
             aria-labelledby={activeCategory ? `tab-${activeCategory}` : 'tab-all'}
-            className="pt-6"
+            className="pt-4 md:pt-6"
           >
             <AnimatePresence mode="wait">
               {isFiltering ? (
@@ -256,9 +256,9 @@ export default function HomeClient() {
                   className="space-y-10 md:space-y-12"
                 >
                   {/* 1. Recently Used (if any) — CLS-safe */}
-                  <div className="min-h-0 transition-all duration-300">
-                    <AnimatePresence>
-                      {recentTools.length > 0 && (
+                  {recentTools.length > 0 && (
+                    <div className="min-h-0 transition-all duration-300">
+                      <AnimatePresence>
                         <m.section
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
@@ -277,14 +277,14 @@ export default function HomeClient() {
                             ))}
                           </div>
                         </m.section>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                      </AnimatePresence>
+                    </div>
+                  )}
 
                   {/* 2. Personal Favorites (if any) — CLS-safe */}
-                  <div className="min-h-0 transition-all duration-300">
-                    <AnimatePresence>
-                      {favoriteTools.length > 0 && (
+                  {favoriteTools.length > 0 && (
+                    <div className="min-h-0 transition-all duration-300">
+                      <AnimatePresence>
                         <m.section
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
@@ -303,9 +303,9 @@ export default function HomeClient() {
                             ))}
                           </div>
                         </m.section>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                      </AnimatePresence>
+                    </div>
+                  )}
 
                   {/* 3. Popular Tools Area (Optimized mobile/desktop rendering) */}
                   <section>
@@ -358,7 +358,7 @@ export default function HomeClient() {
                     <div className="mt-8 flex justify-center">
                       <Link 
                         href="/all-tools"
-                        className="w-full flex items-center justify-center gap-2 h-[52px] md:w-auto md:inline-flex md:px-6 md:h-[48px] bg-[--kv-mat-surface] border border-[--kv-mat-border] rounded-xl text-[14px] font-black text-[--kv-text] hover:border-blue/30 hover:text-blue transition-all"
+                        className="w-full flex items-center justify-center gap-2 h-[52px] md:w-auto md:inline-flex md:px-6 md:h-[48px] bg-[--kv-mat-raised] border border-[--kv-mat-border] rounded-xl text-[15px] font-semibold text-[--kv-text] hover:bg-[--kv-mat-hover] hover:border-[--kv-brand-primary]/40 hover:text-[--kv-brand-primary] transition-all duration-150"
                       >
                         Browse 100+ Tools <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -385,7 +385,7 @@ export default function HomeClient() {
                       />
                       <Accordion type="single" collapsible className="w-full space-y-3">
                         {FAQ.map((item, i) => (
-                          <AccordionItem key={i} value={`item-${i}`} className="bg-surface border border-border rounded-2xl px-5 overflow-hidden hover:border-brand-primary/20 hover:shadow-sm transition-all duration-200">
+                          <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-[#CBD5E1] dark:border-[--kv-mat-border] rounded-2xl px-5 overflow-hidden hover:border-[--kv-brand-primary]/40 hover:shadow-sm transition-all duration-200">
                             <AccordionTrigger className="text-[13px] md:text-[14px] font-bold tracking-wide py-4 text-[--kv-text] [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
                             <AccordionContent className="text-xs text-text-3 font-semibold pb-4 leading-relaxed">{item.a}</AccordionContent>
                           </AccordionItem>

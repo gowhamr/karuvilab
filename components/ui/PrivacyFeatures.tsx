@@ -36,7 +36,7 @@ export function PrivacyFeatures() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="relative flex items-start gap-4 md:flex-col md:items-start p-4 md:p-8 bg-mat-surface border border-mat-border rounded-2xl md:rounded-[32px] overflow-hidden group shadow-premium hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+            className="relative flex items-start gap-4 md:flex-col md:items-start p-4 md:p-8 bg-[--kv-mat-surface] border border-[--kv-mat-border] rounded-2xl md:rounded-[32px] overflow-hidden group shadow-premium hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
           >
             <div className="hidden sm:block absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-110 transition-all duration-700">
               <f.icon className="w-24 h-24" />
@@ -65,13 +65,13 @@ export function PrivacyFeatures() {
           <h2 className="text-[22px] md:text-4xl font-black tracking-tight leading-tight text-white">
             Security is not a feature, it's our foundation.
           </h2>
-          <p className="text-blue-light/85 text-sm md:text-base font-medium max-w-xl">
+          <p className="text-white/85 text-[14px] md:text-[16px] font-medium leading-relaxed max-w-xl">
             KaruviLab solves privacy concerns with local-first processing. No sign-ups, no cookies, no compromise.
           </p>
         </div>
         <Link 
           href="/privacy" 
-          className="w-full md:w-auto h-[52px] md:h-[48px] px-6 bg-white text-[#1E293B] rounded-xl text-xs font-black hover:scale-105 transition-all shadow-lg whitespace-nowrap flex items-center justify-center"
+          className="w-full md:w-auto h-[52px] px-8 bg-white text-[#1E293B] rounded-xl font-bold text-[15px] hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-lg"
         >
           View Privacy Policy
         </Link>

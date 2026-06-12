@@ -31,8 +31,8 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
       <Link 
         href={`/${tool.href}`}
         className={cn(
-          "relative flex flex-col bg-mat-surface border border-mat-border shadow-mat-shine overflow-hidden transition-all duration-300 ease-out",
-          "hover:border-mat-border-focus hover:bg-mat-hover",
+          "relative flex flex-col bg-[--kv-mat-surface] border border-[--kv-mat-border] shadow-mat-shine overflow-hidden transition-all duration-150 ease-out",
+          "hover:border-[--kv-mat-border-focus] hover:bg-[--kv-mat-hover]",
           compact 
             ? "min-h-[76px] md:min-h-[92px] p-2.5 md:p-3 rounded-xl md:rounded-2xl" 
             : "min-h-[100px] md:min-h-[136px] p-4 md:p-6 rounded-2xl md:rounded-3xl"
@@ -53,12 +53,13 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           <div className="flex items-center gap-1">
             {tool.popular && (
               <div 
-                className="px-1.5 py-0.5 rounded-full bg-brand-primary/5 border border-brand-primary/10 flex items-center gap-0.5"
+                className="px-1.5 py-0.5 rounded-full bg-[--kv-brand-primary]/10 border border-[--kv-brand-primary]/20 flex items-center gap-0.5"
                 role="img"
                 aria-label="Popular tool"
+                title="Popular"
               >
-                <Zap className="w-2.5 h-2.5 fill-current text-brand-primary" aria-hidden="true" />
-                <span className={cn("text-[10px] font-bold uppercase tracking-widest text-brand-primary", compact ? "hidden" : "hidden md:inline")}>Hot</span>
+                <Zap className="w-2.5 h-2.5 fill-current text-[--kv-brand-primary]" aria-hidden="true" />
+                <span className={cn("text-[10px] font-bold uppercase tracking-widest text-[--kv-brand-primary]", compact ? "hidden" : "hidden md:inline")}>Hot</span>
               </div>
             )}
 
