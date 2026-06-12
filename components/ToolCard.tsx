@@ -59,7 +59,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
                 title="Popular"
               >
                 <Zap className="w-2.5 h-2.5 fill-current text-[--kv-brand-primary]" aria-hidden="true" />
-                <span className={cn("text-[10px] font-bold uppercase tracking-widest text-[--kv-brand-primary]", compact ? "hidden" : "hidden md:inline")}>Hot</span>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-[--kv-brand-primary]">Hot</span>
               </div>
             )}
 
@@ -69,7 +69,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
                 role="img"
                 aria-label="New tool"
               >
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-500">New</span>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">New</span>
               </div>
             )}
           </div>

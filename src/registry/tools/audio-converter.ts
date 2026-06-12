@@ -8,7 +8,7 @@ export const audio_converter: ToolEntry = {
   category: 'media',
   subCategory: 'Audio',
   keywords: ['audio converter', 'convert wav to mp3', 'mp3 converter', 'opus encoder', 'aac converter', 'private audio tool'],
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   searchIntent: 'action',
   priority: 0.8,

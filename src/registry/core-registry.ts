@@ -37,7 +37,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "new",
     "lastAdded": "2026-06-05",
     "keywords": [
@@ -118,7 +118,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -142,7 +142,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "new",
     "lastAdded": null,
     "keywords": [
@@ -412,7 +412,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "new",
     "lastAdded": null,
     "keywords": [

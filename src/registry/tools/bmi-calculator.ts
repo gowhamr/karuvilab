@@ -9,7 +9,7 @@ export const bmi_calculator: ToolEntry = {
   category: 'calculators',
   keywords: ['bmi calculator', 'body mass index', 'health', 'weight', 'fitness', 'healthy weight', 'bmi india'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.9,
   searchIntent: 'action',

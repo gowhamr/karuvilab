@@ -9,7 +9,7 @@ export const command_cheat_sheet: ToolEntry = {
   input: 'none',
   output: 'none',
   keywords: ['commands','linux','git','cheat sheet'],
-  popular: true,
+  popular: false,
   status: 'new',
   schemaType: 'SoftwareApplication',
   lastUpdated: '2026-05-30'
