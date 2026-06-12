@@ -174,10 +174,10 @@ export default function HomeClient() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-12 md:pb-16 space-y-6 md:space-y-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-8 md:pb-12 space-y-4 md:space-y-8">
         
         {/* ── 1. Search & CTA Section (Centered & Clear next action) ─────────── */}
-        <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-6 md:pt-8">
+        <div className="hidden sm:block w-full max-w-xl mx-auto space-y-3 pt-2 md:pt-4">
           {/* SearchBar: hidden on mobile (BottomNav + Header handle it) */}
           <div className="hidden sm:block">
             <SearchBar variant="hero" />
@@ -252,7 +252,7 @@ export default function HomeClient() {
                   key="default-content"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="space-y-10 md:space-y-12"
+                  className="space-y-8 md:space-y-10"
                 >
                   {/* 1. Recently Used (if any) — CLS-safe */}
                   {recentTools.length > 0 && (
@@ -365,7 +365,7 @@ export default function HomeClient() {
                   </section>
 
                   {/* Privacy Features section — resurrected */}
-                  <section className="max-w-4xl mx-auto w-full mt-8 md:mt-16">
+                  <section className="max-w-4xl mx-auto w-full mt-6 md:mt-10">
                     <SectionHeader
                       title="Built for Privacy"
                       subtitle="Why local-first matters"
@@ -384,9 +384,9 @@ export default function HomeClient() {
                       />
                       <Accordion type="single" collapsible className="w-full space-y-3">
                         {FAQ.map((item, i) => (
-                          <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-[#CBD5E1] dark:border-[--kv-mat-border] rounded-2xl px-5 overflow-hidden hover:border-[--kv-brand-primary]/40 hover:shadow-sm transition-all duration-200">
-                            <AccordionTrigger className="text-[13px] md:text-[14px] font-bold tracking-wide py-4 text-[--kv-text] [&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
-                            <AccordionContent className="text-xs text-text-3 font-semibold pb-4 leading-relaxed">{item.a}</AccordionContent>
+                          <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-[#CBD5E1] dark:border-[--kv-mat-border] rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/40 hover:shadow-sm transition-all duration-200">
+                            <AccordionTrigger className="text-[13px] font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
+                            <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
                           </AccordionItem>
                         ))}
                       </Accordion>

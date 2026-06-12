@@ -59,7 +59,7 @@ export function Header() {
         <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden min-w-[44px] min-h-[44px] -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
+            className="md:hidden min-w-[48px] min-h-[48px] -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
@@ -104,10 +104,11 @@ export function Header() {
           <div className="md:hidden flex items-center">
              <button 
                 onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
-                className="w-11 h-11 flex items-center justify-center text-text-3 hover:text-blue hover:bg-blue/5 rounded-xl transition-all"
+                className="h-[44px] px-4 flex items-center gap-2 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
                 aria-label="Search tools"
              >
-                <Search className="w-5 h-5" />
+                <Search className="w-4 h-4 text-text-3" />
+                <span className="text-[14px] font-medium pr-1 text-text-3">Search...</span>
              </button>
           </div>
 

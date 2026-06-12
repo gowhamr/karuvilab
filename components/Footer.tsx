@@ -80,7 +80,7 @@ export function Footer() {
           )}
 
           {/* Quick Links Column Group */}
-          <div className="flex-1 grid grid-cols-2 gap-6 md:justify-items-end">
+          <div className="flex-1 grid grid-cols-2 gap-4 md:gap-6 bg-surface border border-border rounded-2xl p-4 md:p-6 shadow-sm md:justify-items-end">
             <div className="space-y-3">
               <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
                 Resources
@@ -90,7 +90,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block min-h-[36px] flex items-center md:justify-end"
+                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -107,7 +107,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block min-h-[36px] flex items-center md:justify-end"
+                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -136,30 +136,11 @@ export function Footer() {
               <WifiOff className="w-3 h-3" /> Works Offline
             </span>
             <span className="flex items-center gap-1.5">
-              <Lock className="w-3 h-3" /> No Uploads
-            </span>
-            <span className="flex items-center gap-1.5">
               <ShieldCheck className="w-3 h-3" /> 100% Private
             </span>
             <span className="flex items-center gap-1.5">
               <Cpu className="w-3 h-3" /> Local Processing
             </span>
-
-            {/* Status Badge */}
-            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300 ${
-              !mounted 
-                ? "bg-surface border-border text-text-4" 
-                : isOnline 
-                  ? "bg-success/5 border-success/15 text-success" 
-                  : "bg-warn/5 border-warn/15 text-warn animate-pulse"
-            }`}>
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  !mounted ? "bg-text-4" : isOnline ? "bg-success" : "bg-warn"
-                }`}
-              />
-              <span>{!mounted ? "Checking..." : isOnline ? "Offline Ready" : "Running Locally"}</span>
-            </div>
           </div>
         </div>
       </div>

@@ -119,7 +119,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
   }, [activeCategory]);
 
   return (
-    <div className="relative group/wrapper px-4 sm:px-0">
+    <div className="relative group/wrapper w-full">
       {/* Left/Right Dynamic Fades */}
       <div 
         ref={fadeLeftRef}
@@ -152,7 +152,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
         ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 snap-x scroll-smooth"
+        className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 px-4 sm:px-0 snap-x snap-mandatory scroll-smooth w-full"
       >
         <m.button
           role="tab"
@@ -168,7 +168,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             relative flex-shrink-0 h-[40px] px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
             ${!activeCategory 
               ? "text-white shadow-lg shadow-blue/30" 
-              : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-[--kv-mat-hover] bg-[--kv-mat-surface] border border-[--kv-chip-border]"}
+              : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface border border-border/50 shadow-sm"}
           `}
         >
           {!activeCategory && (
@@ -196,7 +196,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
               relative flex-shrink-0 h-[40px] flex items-center gap-2.5 px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
               ${activeCategory === cat.id 
                 ? "text-white" 
-                : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-[--kv-mat-hover] bg-[--kv-mat-surface] border border-[--kv-chip-border]"}
+                : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface border border-border/50 shadow-sm"}
             `}
           >
             {activeCategory === cat.id && (
@@ -214,6 +214,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             <span className="whitespace-nowrap">{cat.label}</span>
           </m.button>
         ))}
+        {/* Spacer for right padding on mobile scroll */}
+        <div className="w-2 shrink-0 sm:hidden" />
       </div>
     </div>
   );

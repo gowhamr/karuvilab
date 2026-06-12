@@ -9,7 +9,7 @@ const TRUST_ITEMS = [
 
 export function HomeHero() {
   return (
-    <section className="relative pt-3 md:pt-10 flex flex-col items-center text-center space-y-3 md:space-y-5 px-4 overflow-hidden">
+    <section className="relative pt-1 md:pt-4 flex flex-col items-center text-center space-y-2 md:space-y-4 px-4 overflow-hidden">
       {/* Ambient background glow */}
       <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-r from-blue/10 via-indigo-500/5 to-purple-500/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
@@ -20,7 +20,7 @@ export function HomeHero() {
       </div>
 
       {/* H1 — reduce size on mobile */}
-      <h1 className="text-[26px] md:text-5xl font-black tracking-tighter leading-[1.1] text-[--kv-text] max-w-2xl">
+      <h1 className="text-[22px] md:text-5xl font-black tracking-tighter leading-[1.1] text-[--kv-text] max-w-2xl mt-1">
         Build faster with KV.<br />
         <span className="block text-[--kv-brand-primary]">Privacy you can trust.</span>
       </h1>
@@ -42,7 +42,7 @@ export function HomeHero() {
       </div>
       
       {/* Visual separation boundary */}
-      <div className="w-full max-w-5xl mx-auto mt-8 md:mt-12 h-px bg-gradient-to-r from-transparent via-mat-border-focus to-transparent opacity-50" />
+      <div className="w-full max-w-5xl mx-auto mt-4 md:mt-8 h-px bg-gradient-to-r from-transparent via-mat-border-focus to-transparent opacity-50" />
     </section>
   );
 }

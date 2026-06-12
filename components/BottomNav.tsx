@@ -29,12 +29,12 @@ export const BottomNav = memo(function BottomNav() {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-[60] md:hidden bg-surface border-t border-border rounded-t-[24px] px-6 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] dark:shadow-none !opacity-100"
+      className="fixed bottom-0 left-0 right-0 z-[60] md:hidden bg-surface border-t border-border px-4 pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] dark:shadow-none !opacity-100"
       style={{ 
         contain: 'layout style paint'
       }}
     >
-      <div className="flex items-center justify-between h-full max-w-md mx-auto">
+      <div className="flex items-center justify-between h-[64px] max-w-md mx-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = item.href === pathname;
