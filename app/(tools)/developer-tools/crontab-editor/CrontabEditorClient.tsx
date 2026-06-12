@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Clock, Check, Copy, ChevronDown, ChevronUp, AlertCircle, Calendar, Zap, List } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
@@ -145,25 +145,37 @@ function cronToHuman(expr: string): string {
   let desc = 'At ';
   
   if (min !== '*' && hour !== '*') {
-    desc += `${formatValue(hour, 'hour')}:${min.padStart(2, '0')} `;
+    // Specific time
+    if (!min.includes(',') && !min.includes('/') && !min.includes('-') && 
+        !hour.includes(',') && !hour.includes('/') && !hour.includes('-')) {
+      desc = `At ${formatValue(hour, 'hour')}:${min.padStart(2, '0')} `;
+    } else {
+      desc = `At ${fieldToHuman(min, 'minute')} of ${fieldToHuman(hour, 'hour')} `;
+    }
   } else if (min !== '*') {
-    desc += `minute ${min} of every hour `;
+    desc = `At ${fieldToHuman(min, 'minute')} of every hour `;
   } else if (hour !== '*') {
-    desc += `every minute of ${formatValue(hour, 'hour')} `;
+    desc = `Every minute of ${fieldToHuman(hour, 'hour')} `;
   } else {
-    desc += 'every minute ';
+    desc = 'Every minute ';
   }
 
   if (dom !== '*' || month !== '*' || dow !== '*') {
     desc += 'on ';
     if (dom !== '*') desc += `${fieldToHuman(dom, 'dom')} `;
-    if (month !== '*') desc += `in ${fieldToHuman(month, 'month')} `;
-    if (dow !== '*') desc += `on ${fieldToHuman(dow, 'dow')} `;
+    if (month !== '*') {
+       if (dom !== '*') desc += 'in ';
+       desc += `${fieldToHuman(month, 'month')} `;
+    }
+    if (dow !== '*') {
+       if (dom !== '*' || month !== '*') desc += 'on ';
+       desc += `${fieldToHuman(dow, 'dow')} `;
+    }
   } else {
     desc += 'every day';
   }
 
-  return desc.trim();
+  return desc.trim().replace(/\s+/g, ' ');
 }
 
 function getValues(field: string, min: number, max: number): number[] {
@@ -311,31 +323,44 @@ export default function CrontabEditorClient() {
     encode: false,
   });
 
-  const expression = state.expr as string;
-  const setExpressionUrl = useCallback((v: string) => setState({ expr: v }), [setState]);
-
-  const [parsed, setParsed] = useState<ParsedCron>(parseCronExpression('* * * * *'));
+  // Local state for immediate UI feedback
+  const [localExpression, setLocalExpression] = useState<string>(state.expr as string);
+  const [parsed, setParsed] = useState<ParsedCron>(parseCronExpression(state.expr as string));
   const [fontSize, setFontSize] = useState<number>(14);
   const [copied, setCopied] = useState<boolean>(false);
   const [cheatsheetOpen, setCheatsheetOpen] = useState<boolean>(false);
   const [isQrOpen, setIsQrOpen] = useState(false);
 
+  // Sync local state when URL state changes (e.g., initial load or browser back/forward)
+  useEffect(() => {
+    if (state.expr && state.expr !== localExpression) {
+      setLocalExpression(state.expr as string);
+      setParsed(parseCronExpression(state.expr as string));
+    }
+  }, [state.expr]);
+
   const handleExpressionChange = (val: string) => {
-    setExpressionUrl(val);
+    setLocalExpression(val);
     setParsed(parseCronExpression(val));
+    setState({ expr: val }); // Debounced update to URL
   };
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(expression);
+    navigator.clipboard.writeText(localExpression);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  }, [expression]);
+  }, [localExpression]);
 
   const handleFieldChange = (index: number, val: string) => {
-    const parts = expression.split(/\s+/);
+    const parts = localExpression.split(/\s+/);
     if (parts.length === 5) {
       parts[index] = val;
       handleExpressionChange(parts.join(' '));
+    } else if (SPECIAL_EXPRESSIONS[localExpression]) {
+       // If it's a special expression like @hourly, convert to standard first then edit
+       const standard = SPECIAL_EXPRESSIONS[localExpression]!.split(/\s+/);
+       standard[index] = val;
+       handleExpressionChange(standard.join(' '));
     }
   };
 
@@ -345,10 +370,10 @@ export default function CrontabEditorClient() {
     const hours = Math.floor(mins / 60);
     const days = Math.floor(hours / 24);
 
-    if (days > 0) return `(in ${days} day${days > 1 ? 's' : ''})`;
-    if (hours > 0) return `(in ${hours} hour${hours > 1 ? 's' : ''})`;
-    if (mins > 0) return `(in ${mins} minute${mins > 1 ? 's' : ''})`;
-    return '(in less than a minute)';
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''} from now`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} from now`;
+    if (mins > 0) return `${mins} minute${mins > 1 ? 's' : ''} from now`;
+    return 'just now';
   };
 
   return (
@@ -363,53 +388,53 @@ export default function CrontabEditorClient() {
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       
       {/* 1. Expression Input */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue">
           Cron Expression
         </label>
         <div className="relative group">
           <input
             type="text"
-            value={expression}
+            value={localExpression}
             onChange={(e) => handleExpressionChange(e.target.value)}
             className={cn(
-              "font-mono text-xl md:text-2xl bg-bg rounded-2xl p-6 pr-16 text-text w-full transition-all outline-none",
+              "font-mono text-xl md:text-2xl bg-bg rounded-3xl p-6 pr-16 text-text w-full transition-all outline-none",
               parsed.valid 
-                ? "border border-green-500/30 focus:border-green-500/60 focus:ring-4 focus:ring-green-500/10" 
-                : "border border-red-500/30 focus:border-red-500/60 focus:ring-4 focus:ring-red-500/10"
+                ? "border border-green-500/30 focus:border-green-500/60 focus:ring-8 focus:ring-green-500/5 shadow-sm" 
+                : "border border-red-500/30 focus:border-red-500/60 focus:ring-8 focus:ring-red-500/5 shadow-sm"
             )}
-            style={{ fontSize: `${fontSize}px` }}
+            style={{ fontSize: `${fontSize + 4}px` }}
             placeholder="* * * * *"
           />
           <button
             onClick={handleCopy}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-surface hover:bg-mat-hover border border-mat-border rounded-xl transition-all active:scale-95 group-hover:shadow-lg"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-surface hover:bg-mat-hover border border-mat-border rounded-2xl transition-all active:scale-95 group-hover:shadow-md"
             title="Copy Expression"
           >
             {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-text-3" />}
           </button>
         </div>
         
-        <div className="flex items-center gap-2 min-h-[24px]">
+        <div className="flex items-center gap-2 min-h-[28px] px-2">
           {parsed.valid ? (
             <m.div 
-              initial={{ opacity: 0, x: -5 }} 
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -5 }} 
+              animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-2 text-green-500"
             >
-              <Check className="w-4 h-4" />
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               <span className="text-green-600 dark:text-green-400 font-bold text-base leading-tight">
                 {parsed.humanReadable}
               </span>
             </m.div>
           ) : (
             <m.div 
-              initial={{ opacity: 0, x: -5 }} 
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -5 }} 
+              animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-2 text-red-500"
             >
               <AlertCircle className="w-4 h-4" />
-              <span className="text-red-600 dark:text-red-400 font-bold text-base">
+              <span className="text-red-600 dark:text-red-400 font-bold text-sm">
                 {parsed.error}
               </span>
             </m.div>
@@ -421,28 +446,28 @@ export default function CrontabEditorClient() {
         <div className="flex justify-end">
           <ShareButton
             url={shareUrl}
-            title={`Cron: "${expression}" — ${parsed.humanReadable} — KaruviLab`}
+            title={`Cron: "${localExpression}" — ${parsed.humanReadable} — KaruviLab`}
             onQrClick={() => setIsQrOpen(true)}
           />
         </div>
       )}
 
       {/* 2. Presets */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div className="flex items-center gap-2 text-blue">
           <Zap className="w-3.5 h-3.5" />
           <label className="text-[10px] font-black uppercase tracking-[0.2em]">Quick Presets</label>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-4 px-1 no-scrollbar snap-x">
+        <div className="flex gap-2 overflow-x-auto pb-2 px-1 no-scrollbar snap-x">
           {PRESETS.map((preset) => (
             <button
               key={preset.label}
               onClick={() => handleExpressionChange(preset.expr)}
               className={cn(
-                "px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap snap-start border",
-                expression === preset.expr
-                  ? "bg-blue/10 border-blue text-blue shadow-lg shadow-blue/10"
-                  : "bg-surface border-mat-border text-text-3 hover:border-blue hover:text-blue"
+                "px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap snap-start border",
+                localExpression === preset.expr
+                  ? "bg-blue/10 border-blue/40 text-blue shadow-lg shadow-blue/5"
+                  : "bg-surface border-mat-border text-text-4 hover:border-blue/30 hover:text-blue"
               )}
             >
               {preset.label}
@@ -455,46 +480,47 @@ export default function CrontabEditorClient() {
       <div className="space-y-4">
         <div className="flex items-center gap-2 text-blue">
           <List className="w-3.5 h-3.5" />
-          <label className="text-[10px] font-black uppercase tracking-[0.2em]">Field Breakdown</label>
+          <label className="text-[10px] font-black uppercase tracking-[0.2em]">Live Field Breakdown</label>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {parsed.fields.map((field, i) => (
             <m.div
               key={field.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.03 }}
               className={cn(
-                "group rounded-2xl p-5 space-y-2 border transition-all hover:shadow-lg",
+                "group rounded-3xl p-5 space-y-3 border transition-all hover:shadow-xl hover:-translate-y-1",
                 field.value === '*' 
                   ? "bg-mat-surface border-mat-border" 
-                  : "bg-blue/5 border-blue/30 shadow-sm"
+                  : "bg-blue/5 border-blue/20 shadow-sm"
               )}
             >
-              <span className="text-[9px] font-black uppercase tracking-widest text-text-4 group-hover:text-blue transition-colors">
-                {field.label}
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 group-hover:text-blue transition-colors">
+                  {field.label}
+                </span>
+                <span className="text-[9px] font-bold text-text-4 bg-mat-base px-2 py-0.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  {field.min}-{field.max}
+                </span>
+              </div>
               <input
                 type="text"
                 value={field.value}
                 onChange={(e) => handleFieldChange(i, e.target.value)}
-                className="w-full bg-transparent font-mono text-xl font-black text-text focus:outline-none"
-                style={{ fontSize: `${fontSize + 6}px` }}
+                className="w-full bg-transparent font-mono text-2xl font-black text-text focus:outline-none focus:text-blue transition-colors"
+                style={{ fontSize: `${fontSize + 8}px` }}
               />
-              <div className="pt-1">
-                <p className="text-[10px] text-text-4 font-bold">
-                  {field.min} – {field.max}
-                </p>
-                <p className="text-[11px] text-text-3 font-medium line-clamp-2 mt-1 leading-tight group-hover:text-text transition-colors">
-                  {field.description}
-                </p>
-              </div>
+              <p className="text-[11px] text-text-3 font-bold leading-tight group-hover:text-text transition-colors min-h-[32px] line-clamp-2">
+                {field.description}
+              </p>
             </m.div>
           ))}
-          {expression === '@reboot' && (
-            <div className="col-span-full bg-blue/5 border border-blue/20 p-6 rounded-3xl text-center">
-              <p className="text-blue font-black uppercase tracking-widest text-sm italic">Special Shortcut: @reboot</p>
-              <p className="text-text-3 text-sm font-medium mt-1">This task will run once when the system starts up.</p>
+          {localExpression === '@reboot' && (
+            <div className="col-span-full bg-blue/5 border border-blue/20 p-8 rounded-4xl text-center shadow-inner">
+              <Zap className="w-8 h-8 text-blue mx-auto mb-3 opacity-50" />
+              <p className="text-blue font-black uppercase tracking-[0.3em] text-sm">Special Shortcut: @reboot</p>
+              <p className="text-text-4 text-xs font-bold mt-2 uppercase tracking-widest">Triggers once during system bootstrap</p>
             </div>
           )}
         </div>
@@ -509,7 +535,7 @@ export default function CrontabEditorClient() {
         >
           <div className="flex items-center gap-2 text-blue">
             <Clock className="w-3.5 h-3.5" />
-            <label className="text-[10px] font-black uppercase tracking-[0.2em]">Next Run Times</label>
+            <label className="text-[10px] font-black uppercase tracking-[0.2em]">Execution Schedule</label>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {parsed.nextRuns.map((date, i) => (
@@ -518,24 +544,30 @@ export default function CrontabEditorClient() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center justify-between p-4 bg-mat-surface border border-mat-border rounded-xl font-mono text-[13px] group hover:border-blue/30 transition-all"
+                className="flex items-center justify-between p-5 bg-surface border border-mat-border rounded-2xl group hover:border-blue/30 transition-all shadow-sm hover:shadow-md"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-text-4 font-black">{i + 1}.</span>
-                  <span className="text-text group-hover:text-blue transition-colors">
-                    {date.toLocaleString('en-US', { 
-                      weekday: 'short', 
-                      day: '2-digit', 
-                      month: 'short', 
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: true
-                    })}
-                  </span>
+                <div className="flex items-center gap-4">
+                  <span className={cn(
+                    "w-8 h-8 flex items-center justify-center rounded-xl text-xs font-black",
+                    i === 0 ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-mat-base text-text-4"
+                  )}>{i + 1}</span>
+                  <div className="space-y-0.5">
+                    <span className="text-sm font-black text-text group-hover:text-blue transition-colors block">
+                      {date.toLocaleString('en-US', { 
+                        weekday: 'short', 
+                        day: '2-digit', 
+                        month: 'short', 
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                      })}
+                    </span>
+                    <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">
+                      {date.getFullYear()}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[10px] font-bold text-text-4 bg-mat-base px-2 py-1 rounded-lg">
+                <span className="text-[10px] font-black uppercase tracking-widest text-blue bg-blue/5 px-3 py-1.5 rounded-xl border border-blue/10">
                   {formatRelative(date)}
                 </span>
               </m.div>
@@ -546,60 +578,72 @@ export default function CrontabEditorClient() {
 
       {/* 5. Reference Cheatsheet */}
       <div className="pt-8 no-print">
-        <button
-          onClick={() => setCheatsheetOpen(!cheatsheetOpen)}
-          className="flex items-center justify-between w-full p-6 bg-mat-surface border border-mat-border rounded-2xl hover:border-blue/30 transition-all"
-        >
-          <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-blue" />
-            <span className="font-black uppercase tracking-widest text-xs">Cron Reference Cheatsheet</span>
-          </div>
-          {cheatsheetOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-        </button>
-
-        <AnimatePresence>
-          {cheatsheetOpen && (
-            <m.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden"
-            >
-              <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-8 bg-mat-base/50 border-x border-b border-mat-border rounded-b-2xl">
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-blue">Special Characters</h4>
-                  <ul className="space-y-2 text-[13px] font-medium text-text-3">
-                    <li className="flex justify-between"><code className="text-blue font-bold">*</code> <span>Any value</span></li>
-                    <li className="flex justify-between"><code className="text-blue font-bold">,</code> <span>Value list (1,3,5)</span></li>
-                    <li className="flex justify-between"><code className="text-blue font-bold">-</code> <span>Range (1-5)</span></li>
-                    <li className="flex justify-between"><code className="text-blue font-bold">/</code> <span>Step values (*/5)</span></li>
-                    <li className="flex justify-between"><code className="text-blue font-bold">@</code> <span>Shortcuts (@daily)</span></li>
-                  </ul>
-                </div>
-                
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-blue">Field Ranges</h4>
-                  <ul className="space-y-2 text-[13px] font-medium text-text-3">
-                    <li className="flex justify-between"><span>Minute</span> <code className="text-text font-bold">0 – 59</code></li>
-                    <li className="flex justify-between"><span>Hour</span> <code className="text-text font-bold">0 – 23</code></li>
-                    <li className="flex justify-between"><span>Day/Month</span> <code className="text-text font-bold">1 – 31</code></li>
-                    <li className="flex justify-between"><span>Month</span> <code className="text-text font-bold">1 – 12</code></li>
-                    <li className="flex justify-between"><span>Day/Week</span> <code className="text-text font-bold">0 – 7</code></li>
-                  </ul>
-                </div>
-
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-blue">Common Examples</h4>
-                  <ul className="space-y-2 text-[13px] font-medium text-text-3">
-                    <li className="flex flex-col"><code className="text-text font-bold text-xs">*/5 * * * *</code> <span className="text-[11px] opacity-70">Every 5 minutes</span></li>
-                    <li className="flex flex-col mt-1"><code className="text-text font-bold text-xs">0 * * * *</code> <span className="text-[11px] opacity-70">Every hour</span></li>
-                    <li className="flex flex-col mt-1"><code className="text-text font-bold text-xs">0 9 * * 1-5</code> <span className="text-[11px] opacity-70">9 AM weekdays</span></li>
-                  </ul>
-                </div>
+        <div className="bg-surface border border-mat-border rounded-3xl overflow-hidden shadow-sm">
+          <button
+            onClick={() => setCheatsheetOpen(!cheatsheetOpen)}
+            className="flex items-center justify-between w-full p-6 hover:bg-mat-hover transition-all"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
+                <Calendar className="w-5 h-5" />
               </div>
-            </m.div>
-          )}
-        </AnimatePresence>
+              <div className="text-left">
+                <span className="font-black uppercase tracking-[0.2em] text-xs block">Reference Cheatsheet</span>
+                <span className="text-[10px] font-bold text-text-4 uppercase">Master the cron syntax</span>
+              </div>
+            </div>
+            <div className="w-8 h-8 rounded-lg bg-mat-base flex items-center justify-center text-text-4">
+              {cheatsheetOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </div>
+          </button>
+
+          <AnimatePresence>
+            {cheatsheetOpen && (
+              <m.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-10 border-t border-mat-border bg-mat-base/20">
+                  <div className="space-y-4">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue border-b border-blue/10 pb-2">Special Characters</h4>
+                    <ul className="space-y-3 text-[12px] font-bold text-text-3">
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">*</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-[11px]">Any value</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">,</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-[11px]">Value list (1,3,5)</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">-</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-[11px]">Range (1-5)</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">/</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-[11px]">Step values (*/5)</span></li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue border-b border-blue/10 pb-2">Field Constraints</h4>
+                    <ul className="space-y-3 text-[12px] font-bold text-text-3">
+                      <li className="flex justify-between"><span>Min</span> <code className="text-text-2 font-mono">0</code></li>
+                      <li className="flex justify-between"><span>Max Hour</span> <code className="text-text-2 font-mono">23</code></li>
+                      <li className="flex justify-between"><span>Max Month</span> <code className="text-text-2 font-mono">12</code></li>
+                      <li className="flex justify-between"><span>Max Day</span> <code className="text-text-2 font-mono">31</code></li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue border-b border-blue/10 pb-2">Example Recipes</h4>
+                    <ul className="space-y-4">
+                      <li className="group cursor-pointer" onClick={() => handleExpressionChange('*/5 * * * *')}>
+                        <code className="text-text-2 font-mono text-xs block group-hover:text-blue transition-colors">*/5 * * * *</code>
+                        <span className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">Every 5 minutes</span>
+                      </li>
+                      <li className="group cursor-pointer" onClick={() => handleExpressionChange('0 0 * * 0')}>
+                        <code className="text-text-2 font-mono text-xs block group-hover:text-blue transition-colors">0 0 * * 0</code>
+                        <span className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">Weekly Sunday</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
       </div>
     </FocusModeWrapper>

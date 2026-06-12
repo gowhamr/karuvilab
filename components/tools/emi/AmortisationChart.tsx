@@ -46,22 +46,56 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     ctx.lineTo(width - padding.right, height - padding.bottom);
     ctx.stroke();
 
-    const barWidth = Math.max(1, (chartWidth / data.length) * 0.8);
-    const gap = (chartWidth / data.length) * 0.2;
+    // Area Chart Implementation
+    const step = chartWidth / (data.length - 1);
 
+    // Interest Area (Bottom layer)
+    ctx.beginPath();
+    ctx.moveTo(padding.left, height - padding.bottom);
     data.forEach((entry, i) => {
-      const x = padding.left + i * (chartWidth / data.length);
-      
-      // Principal part
-      const pHeight = (entry.principal / maxVal) * chartHeight;
-      ctx.fillStyle = getThemeColor('--blue', '#4F46E5'); // blue (principal)
-      ctx.fillRect(x, height - padding.bottom - pHeight, barWidth, pHeight);
-
-      // Interest part
-      const iHeight = (entry.interest / maxVal) * chartHeight;
-      ctx.fillStyle = getThemeColor('--text-4', '#94a3b8'); // slate-400 (interest)
-      ctx.fillRect(x, height - padding.bottom - pHeight - iHeight, barWidth, iHeight);
+      const x = padding.left + i * step;
+      const h = (entry.interest / maxVal) * chartHeight;
+      ctx.lineTo(x, height - padding.bottom - h);
     });
+    ctx.lineTo(width - padding.right, height - padding.bottom);
+    ctx.closePath();
+    ctx.fillStyle = getThemeColor('--text-4', '#94a3b8');
+    ctx.globalAlpha = 0.3;
+    ctx.fill();
+    ctx.globalAlpha = 1.0;
+
+    // Principal Area (Stacked on top of interest)
+    ctx.beginPath();
+    ctx.moveTo(padding.left, height - padding.bottom);
+    data.forEach((entry, i) => {
+      const x = padding.left + i * step;
+      const hInterest = (entry.interest / maxVal) * chartHeight;
+      const hPrincipal = (entry.principal / maxVal) * chartHeight;
+      ctx.lineTo(x, height - padding.bottom - hInterest - hPrincipal);
+    });
+    // Draw back along the interest line to create the stacked effect
+    for (let i = data.length - 1; i >= 0; i--) {
+      const entry = data[i];
+      if (!entry) continue;
+      const x = padding.left + i * step;
+      const hInterest = (entry.interest / maxVal) * chartHeight;
+      ctx.lineTo(x, height - padding.bottom - hInterest);
+    }
+    ctx.closePath();
+    ctx.fillStyle = getThemeColor('--blue', '#4F46E5');
+    ctx.fill();
+
+    // Stroke for Principal line (Top line)
+    ctx.beginPath();
+    data.forEach((entry, i) => {
+      const x = padding.left + i * step;
+      const hTotal = ((entry.principal + entry.interest) / maxVal) * chartHeight;
+      if (i === 0) ctx.moveTo(x, height - padding.bottom - hTotal);
+      else ctx.lineTo(x, height - padding.bottom - hTotal);
+    });
+    ctx.strokeStyle = getThemeColor('--blue', '#4F46E5');
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
     // Legends
     const legendY = height - 10;
@@ -73,7 +107,9 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     ctx.fillText("Principal", padding.left + 15, legendY);
 
     ctx.fillStyle = getThemeColor('--text-4', '#94a3b8');
+    ctx.globalAlpha = 0.3;
     ctx.fillRect(padding.left + 80, legendY - 8, 10, 8);
+    ctx.globalAlpha = 1.0;
     ctx.fillStyle = getThemeColor('--text-2', '#1e293b');
     ctx.fillText("Interest", padding.left + 95, legendY);
 

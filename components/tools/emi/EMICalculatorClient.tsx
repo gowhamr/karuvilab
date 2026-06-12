@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { m, AnimatePresence } from "framer-motion";
 import { useEmiStore } from "@/src/store/useEmiStore";
 import { useSessionStore } from "@/src/store/useSessionStore";
 import { SessionRestoredBanner } from "@/components/ui/SessionRestoredBanner";
@@ -18,7 +19,6 @@ import { formatCurrency } from "@/src/lib/utils";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 import { Calculator, TrendingDown, Receipt, Calendar, Info } from "lucide-react";
-import { useMemo } from "react";
 
 export default function EMICalculatorClient() {
   const inputs = useEmiStore(state => state.inputs);
@@ -117,6 +117,19 @@ export default function EMICalculatorClient() {
   };
 
 
+  const [isSticky, setIsSticky] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!resultRef.current) return;
+      const rect = resultRef.current.getBoundingClientRect();
+      setIsSticky(rect.bottom < 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="relative space-y-12">
       <SessionRestoredBanner 
@@ -124,6 +137,27 @@ export default function EMICalculatorClient() {
         onClear={handleClearSession}
         onDismiss={() => setShowRestoredBanner(false)}
       />
+
+      {/* Mobile Sticky Bar */}
+      <AnimatePresence>
+        {isSticky && result && (
+          <m.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-md border-t border-border p-4 shadow-2xl flex items-center justify-between"
+          >
+            <div className="space-y-0.5">
+               <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Monthly EMI</p>
+               <p className="text-lg font-black text-text">{formatCurrency(result.monthlyEmi)}</p>
+            </div>
+            <div className="text-right space-y-0.5">
+               <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Total Interest</p>
+               <p className="text-sm font-bold text-text-3">{formatCurrency(result.totalInterest)}</p>
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
       
       {/* Top Section: Inputs & Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -143,25 +177,27 @@ export default function EMICalculatorClient() {
         <div className="space-y-6 lg:sticky lg:top-8">
           <h2 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Loan Summary</h2>
           
-          <MetricCard
-            label="Monthly EMI"
-            value={formatCurrency(result?.monthlyEmi || 0)}
-            icon={Receipt}
-            loading={isLoading || !result}
-            trend={(inputs.floatingRateDelta !== undefined && inputs.floatingRateDelta !== 0) ? {
-              value: `${inputs.floatingRateDelta > 0 ? '+' : ''}${inputs.floatingRateDelta}%`,
-              isPositive: inputs.floatingRateDelta < 0,
-              label: "Stress Test"
-            } : undefined}
-          />
+          <div ref={resultRef} className="space-y-6">
+            <MetricCard
+              label="Monthly EMI"
+              value={formatCurrency(result?.monthlyEmi || 0)}
+              icon={Receipt}
+              loading={isLoading || !result}
+              trend={(inputs.floatingRateDelta !== undefined && inputs.floatingRateDelta !== 0) ? {
+                value: `${inputs.floatingRateDelta > 0 ? '+' : ''}${inputs.floatingRateDelta}%`,
+                isPositive: inputs.floatingRateDelta < 0,
+                label: "Stress Test"
+              } : undefined}
+            />
 
-          <MetricCard
-            label="Total Interest"
-            value={formatCurrency(result?.totalInterest || 0)}
-            icon={TrendingDown}
-            loading={isLoading || !result}
-            className="bg-bg/50"
-          />
+            <MetricCard
+              label="Total Interest"
+              value={formatCurrency(result?.totalInterest || 0)}
+              icon={TrendingDown}
+              loading={isLoading || !result}
+              className="bg-bg/50"
+            />
+          </div>
 
           <MetricCard
             label="Total Payment"

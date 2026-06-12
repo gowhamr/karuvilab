@@ -52,91 +52,94 @@ export function EmiInputs() {
         />
       </div>
 
-      <Accordion type="multiple">
-        {/* Floating Rate Stress Test */}
-        <AccordionItem value="floating-rate">
-          <div className="py-2">
-            <Checkbox
-              id="enable-floating"
-              label="Floating Rate Stress Test"
-              checked={showFloatingRate}
-              onChange={() => toggleSection("floatingRate")}
-            />
-          </div>
-          {showFloatingRate && (
-            <div className="pt-4 pb-6 pl-8">
-              <SliderField
-                id="floating-delta"
-                label="Interest Rate Delta (±%)"
-                min={-3}
-                max={3}
-                step={0.25}
-                value={inputs.floatingRateDelta || 0}
-                onChange={(val) => setInputs({ floatingRateDelta: val })}
-                format={(v) => `${v > 0 ? "+" : ""}${v}%`}
+      <Accordion type="single" collapsible className="bg-bg/50 border border-border rounded-2xl px-6">
+        <AccordionItem value="advanced-settings" className="border-none">
+          <AccordionTrigger className="hover:no-underline py-4">
+            <span className="text-xs font-black uppercase tracking-widest text-text-3">Advanced Settings</span>
+          </AccordionTrigger>
+          <AccordionContent className="pb-6 space-y-6">
+            {/* Floating Rate Stress Test */}
+            <div className="space-y-4">
+              <Checkbox
+                id="enable-floating"
+                label="Floating Rate Stress Test"
+                checked={showFloatingRate}
+                onChange={() => toggleSection("floatingRate")}
               />
-              <p className="mt-2 text-[10px] text-text-4">
-                Test how your EMI changes if the interest rate increases or decreases.
-              </p>
+              {showFloatingRate && (
+                <div className="pt-2 pl-8">
+                  <SliderField
+                    id="floating-delta"
+                    label="Interest Rate Delta (±%)"
+                    min={-3}
+                    max={3}
+                    step={0.25}
+                    value={inputs.floatingRateDelta || 0}
+                    onChange={(val) => setInputs({ floatingRateDelta: val })}
+                    format={(v) => `${v > 0 ? "+" : ""}${v}%`}
+                  />
+                  <p className="mt-2 text-[10px] text-text-4">
+                    Test how your EMI changes if the interest rate increases or decreases.
+                  </p>
+                </div>
+              )}
             </div>
-          )}
-        </AccordionItem>
 
-        {/* Moratorium Period */}
-        <AccordionItem value="moratorium">
-          <div className="py-2">
-            <Checkbox
-              id="enable-moratorium"
-              label="Moratorium Period"
-              checked={showMoratorium}
-              onChange={() => toggleSection("moratorium")}
-            />
-          </div>
-          {showMoratorium && (
-            <div className="pt-4 pb-6 pl-8 space-y-4">
-              <ToolInput
-                label="Moratorium (Months)"
-                type="number"
-                value={String(inputs.moratorium?.months || 0)}
-                onChange={(val) => setInputs({ 
-                  moratorium: { 
-                    months: Number(val), 
-                    type: inputs.moratorium?.type || "full" 
-                  } 
-                })}
+            {/* Moratorium Period */}
+            <div className="space-y-4 pt-4 border-t border-border/50">
+              <Checkbox
+                id="enable-moratorium"
+                label="Moratorium Period"
+                checked={showMoratorium}
+                onChange={() => toggleSection("moratorium")}
               />
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <label htmlFor="moratorium-interest-only" className="flex items-center gap-2 text-xs font-bold text-text-2">
-                  <input id="moratorium-interest-only"
-                    type="radio"
-                    name="moratorium-type"
-                    checked={inputs.moratorium?.type === "interest-only"}
-                    onChange={() => setInputs({ 
+              {showMoratorium && (
+                <div className="pt-2 pl-8 space-y-4">
+                  <ToolInput
+                    label="Moratorium (Months)"
+                    type="number"
+                    value={String(inputs.moratorium?.months || 0)}
+                    onChange={(val) => setInputs({ 
                       moratorium: { 
-                        months: inputs.moratorium?.months || 0, 
-                        type: "interest-only" 
+                        months: Number(val), 
+                        type: inputs.moratorium?.type || "full" 
                       } 
                     })}
                   />
-                  Interest Only
-                </label>
-                <label htmlFor="moratorium-full" className="flex items-center gap-2 text-xs font-bold text-text-2">
-                  <input id="moratorium-full"
-                    type="radio"
-                    name="moratorium-type"
-                    checked={inputs.moratorium?.type === "full"}
-                    onChange={() => setInputs({ 
-                      moratorium: { 
-                        months: inputs.moratorium?.months || 0, 
-                        type: "full" 
-                      } 
-                    })}
-                  />
-                  Full Moratorium
-                </label>
-              </div>
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <label htmlFor="moratorium-interest-only" className="flex items-center gap-2 text-xs font-bold text-text-2 cursor-pointer">
+                      <input id="moratorium-interest-only"
+                        type="radio"
+                        name="moratorium-type"
+                        checked={inputs.moratorium?.type === "interest-only"}
+                        onChange={() => setInputs({ 
+                          moratorium: { 
+                            months: inputs.moratorium?.months || 0, 
+                            type: "interest-only" 
+                          } 
+                        })}
+                      />
+                      Interest Only
+                    </label>
+                    <label htmlFor="moratorium-full" className="flex items-center gap-2 text-xs font-bold text-text-2 cursor-pointer">
+                      <input id="moratorium-full"
+                        type="radio"
+                        name="moratorium-type"
+                        checked={inputs.moratorium?.type === "full"}
+                        onChange={() => setInputs({ 
+                          moratorium: { 
+                            months: inputs.moratorium?.months || 0, 
+                            type: "full" 
+                          } 
+                        })}
+                      />
+                      Full Moratorium
+                    </label>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

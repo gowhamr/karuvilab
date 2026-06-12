@@ -542,7 +542,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "category": "security",
     "icon": null,
     "color": null,
-    "featured": false,
+    "featured": true,
     "popular": true,
     "status": "new",
     "lastAdded": null,

@@ -10,6 +10,7 @@ export const csp_builder: ToolEntry = {
   keywords: ['csp', 'content security policy', 'csp generator', 'xss protection', 'security headers', 'csp evaluator'],
   status: 'new',
   popular: true,
+  featured: true,
   difficulty: 'advanced',
   priority: 0.9,
   searchIntent: 'action',
