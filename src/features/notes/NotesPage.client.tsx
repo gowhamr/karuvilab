@@ -7,6 +7,7 @@ import { TagFilter } from "./components/TagFilter";
 import { NoteList } from "./components/NoteList";
 import { NoteEditor } from "./components/NoteEditor";
 import { NoteCard } from "./components/NoteCard";
+import { ImportNoteModal } from "./components/ImportNoteModal";
 import { m, AnimatePresence } from "framer-motion";
 import { Plus, Archive, Trash2, StickyNote, Inbox, LucideIcon } from "lucide-react";
 import { generateId } from "./utils";
@@ -24,6 +25,7 @@ export default function NotesPage() {
   const emptyTrash = useNotesStore(state => state.emptyTrash);
   const notes = useNotesStore(state => state.notes);
   const [activeTab, setActiveTab] = useState<StatusTab>("active");
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -103,7 +105,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      <SearchBar />
+      <SearchBar onImportClick={() => setIsImportModalOpen(true)} />
       
       {activeTab === "active" && <TagFilter />}
 
@@ -129,6 +131,8 @@ export default function NotesPage() {
       <NoteListWrapper status={activeTab} />
 
       <NoteEditor />
+
+      <ImportNoteModal open={isImportModalOpen} onOpenChange={setIsImportModalOpen} />
 
       {/* Floating Action Button */}
       <m.button

@@ -34,13 +34,89 @@ function getPayloadSize(arg: unknown): number {
   return 0;
 }
 
+type PoolType = 'compute' | 'media' | 'heavy';
+
+const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
+  // Compute Pool (fast, low-memory mathematical/text parsing tasks)
+  generateHashes: 'compute',
+  generateFileHash: 'compute',
+  generateHmac: 'compute',
+  generateFileHmac: 'compute',
+  processYaml: 'compute',
+  processJson: 'compute',
+  evaluateMath: 'compute',
+  calculateEmiSchedule: 'compute',
+
+  // Media Pool (heavy file manipulation, image/PDF processing)
+  mergePdfs: 'media',
+  compressImage: 'media',
+  resizeImage: 'media',
+  removeBackground: 'media',
+  compressImageBatch: 'media',
+  extractColorPalette: 'media',
+  createGif: 'media',
+  extractImagesFromPdf: 'media',
+  extractTextFromPdf: 'media',
+
+  // Heavy Pool (CPU-bound compression or heavy dynamic compiler modules)
+  minifyCode: 'heavy',
+  computeDiff: 'heavy',
+  createZip: 'heavy',
+  encodeMp3: 'heavy',
+  extractRawTextFromDocx: 'heavy',
+  convertDocxToPdf: 'heavy'
+};
+
+interface WorkerPool {
+  type: PoolType;
+  workers: Array<{ worker: Worker; api: Comlink.Remote<WorkerAPI>; busy: boolean; lastHeard?: number }>;
+  queue: QueuedTask[];
+  activeTasks: Map<Worker, QueuedTask>;
+}
+
 class WorkerOrchestrator {
-  private pool: Array<{ worker: Worker; api: Comlink.Remote<WorkerAPI>; busy: boolean; lastHeard?: number }> = [];
-  private queue: QueuedTask[] = [];
-  private activeTasks = new Map<Worker, QueuedTask>();
-  private maxWorkers = 4;
+  private pools: Record<PoolType, WorkerPool> = {
+    compute: { type: 'compute', workers: [], queue: [], activeTasks: new Map() },
+    media: { type: 'media', workers: [], queue: [], activeTasks: new Map() },
+    heavy: { type: 'heavy', workers: [], queue: [], activeTasks: new Map() }
+  };
+
+  private maxWorkers = 3; // Enforce MAX_WORKERS = 3 as per performance priority guidelines
   private isLowMemory = false;
   private initialized = false;
+
+  // Compatibility getters and setters for existing tests
+  private get pool() {
+    return [
+      ...this.pools.compute.workers,
+      ...this.pools.media.workers,
+      ...this.pools.heavy.workers
+    ];
+  }
+
+  private set pool(val: any[]) {
+    if (val.length === 0) {
+      this.pools.compute.workers = [];
+      this.pools.media.workers = [];
+      this.pools.heavy.workers = [];
+    }
+  }
+
+  private get queue() {
+    return [
+      ...this.pools.compute.queue,
+      ...this.pools.media.queue,
+      ...this.pools.heavy.queue
+    ];
+  }
+
+  private set queue(val: any[]) {
+    if (val.length === 0) {
+      this.pools.compute.queue = [];
+      this.pools.media.queue = [];
+      this.pools.heavy.queue = [];
+    }
+  }
 
   private init() {
     if (this.initialized || typeof window === 'undefined' || typeof navigator === 'undefined') return;
@@ -54,7 +130,7 @@ class WorkerOrchestrator {
       if (this.isLowMemory) {
         this.maxWorkers = isMobile ? 1 : 2;
       } else {
-        this.maxWorkers = isMobile ? 2 : Math.min(cores, 4);
+        this.maxWorkers = isMobile ? 2 : Math.min(cores, 3); // Lower limit to 3 instead of 4
       }
       this.initialized = true;
     } catch (e) {
@@ -62,13 +138,14 @@ class WorkerOrchestrator {
     }
   }
 
-  private async getWorker() {
+  private async getWorker(poolType: PoolType) {
     this.init();
     
-    const idle = this.pool.find(w => !w.busy);
+    const poolObj = this.pools[poolType];
+    const idle = poolObj.workers.find(w => !w.busy);
     if (idle) return idle;
 
-    if (this.pool.length < this.maxWorkers) {
+    if (poolObj.workers.length < this.maxWorkers) {
       try {
         const worker = new Worker(
           new URL('../../workers/karuvi.worker.ts', import.meta.url),
@@ -76,38 +153,39 @@ class WorkerOrchestrator {
         );
         
         worker.onerror = (e) => {
-          console.error("[WorkerOrchestrator] Worker terminal error:", e);
-          this.handleWorkerCrash(worker);
+          console.error(`[WorkerOrchestrator] ${poolType} Worker crash detected:`, e);
+          this.handleWorkerCrash(worker, poolType);
         };
 
         const api = Comlink.wrap<WorkerAPI>(worker);
         const entry = { worker, api, busy: false, lastHeard: Date.now() };
-        this.pool.push(entry);
+        poolObj.workers.push(entry);
         return entry;
       } catch (err) {
-        console.error("[WorkerOrchestrator] Failed to spawn worker:", err);
+        console.error(`[WorkerOrchestrator] Failed to spawn ${poolType} worker:`, err);
         return null;
       }
     }
     return null;
   }
 
-  private handleWorkerCrash(worker: Worker) {
-    const idx = this.pool.findIndex(p => p.worker === worker);
+  private handleWorkerCrash(worker: Worker, poolType: PoolType) {
+    const poolObj = this.pools[poolType];
+    const idx = poolObj.workers.findIndex(p => p.worker === worker);
     if (idx > -1) {
-      this.pool.splice(idx, 1);
+      poolObj.workers.splice(idx, 1);
     }
-    const task = this.activeTasks.get(worker);
+    const task = poolObj.activeTasks.get(worker);
     if (task) {
-      this.activeTasks.delete(worker);
+      poolObj.activeTasks.delete(worker);
       if (task.idempotent && (task.retriesLeft || 0) > 0) {
         task.retriesLeft! -= 1;
         task.retrying = true;
-        this.queue.unshift(task); // Re-queue at the front
+        poolObj.queue.unshift(task); // Re-queue at the front
         import('../../store/useRecoveryStore').then(({ useRecoveryStore }) => {
           useRecoveryStore.getState().showBanner('worker_crash', 'Worker recovered automatically. Retrying task...');
         });
-        this.processQueue();
+        this.processQueue(poolType);
       } else {
         task.reject(new Error("Task failed due to a worker crash."));
         import('../../store/useRecoveryStore').then(({ useRecoveryStore }) => {
@@ -117,18 +195,19 @@ class WorkerOrchestrator {
     }
   }
 
-  private verifyMemoryCleanup(workerEntry: typeof this.pool[0]) {
+  private verifyMemoryCleanup(workerEntry: typeof this.pools.compute.workers[0], poolType: PoolType) {
     try {
       const perfMemory = typeof performance !== 'undefined' ? (performance as any).memory : null;
       if (perfMemory) {
         const usedHeap = perfMemory.usedJSHeapSize;
         const heapLimit = perfMemory.jsHeapSizeLimit;
         if (usedHeap > 150 * 1024 * 1024 || usedHeap > heapLimit * 0.8) {
-          console.warn("[WorkerOrchestrator] High memory usage detected. Respawning worker.");
+          console.warn(`[WorkerOrchestrator] High memory usage detected in ${poolType} worker. Respawning.`);
           workerEntry.worker.terminate();
-          const idx = this.pool.findIndex(p => p.worker === workerEntry.worker);
+          const poolObj = this.pools[poolType];
+          const idx = poolObj.workers.findIndex(p => p.worker === workerEntry.worker);
           if (idx > -1) {
-            this.pool.splice(idx, 1);
+            poolObj.workers.splice(idx, 1);
           }
         }
       }
@@ -137,20 +216,21 @@ class WorkerOrchestrator {
     }
   }
 
-  private async processQueue() {
-    const task = this.queue.shift();
+  private async processQueue(poolType: PoolType) {
+    const poolObj = this.pools[poolType];
+    const task = poolObj.queue.shift();
     if (!task) return;
 
-    const workerEntry = await this.getWorker();
+    const workerEntry = await this.getWorker(poolType);
     if (!workerEntry) {
-      this.queue.unshift(task);
-      setTimeout(() => this.processQueue(), 100);
+      poolObj.queue.unshift(task);
+      setTimeout(() => this.processQueue(poolType), 100);
       return;
     }
 
     workerEntry.busy = true;
     workerEntry.lastHeard = Date.now();
-    this.activeTasks.set(workerEntry.worker, task);
+    poolObj.activeTasks.set(workerEntry.worker, task);
 
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let isFinished = false;
@@ -160,15 +240,15 @@ class WorkerOrchestrator {
       isFinished = true;
       if (timeoutId) clearTimeout(timeoutId);
       workerEntry.busy = false;
-      this.activeTasks.delete(workerEntry.worker);
-      this.verifyMemoryCleanup(workerEntry);
-      this.processQueue();
+      poolObj.activeTasks.delete(workerEntry.worker);
+      this.verifyMemoryCleanup(workerEntry, poolType);
+      this.processQueue(poolType);
     };
 
     const onAbort = (reason = "Task aborted") => {
       if (isFinished) return;
       workerEntry.worker.terminate();
-      this.handleWorkerCrash(workerEntry.worker);
+      this.handleWorkerCrash(workerEntry.worker, poolType);
       if (reason === "Task timed out") {
         task.reject(new Error("TIMEOUT"));
       } else {
@@ -228,7 +308,7 @@ class WorkerOrchestrator {
   }
 
   /**
-   * Dispatches a worker task from the pool.
+   * Dispatches a worker task from the appropriate pool.
    */
   dispatch<T>(
     method: keyof WorkerAPI,
@@ -248,8 +328,12 @@ class WorkerOrchestrator {
         return Promise.reject(new Error(`Payload size (${(payloadSize / 1024 / 1024).toFixed(2)}MB) exceeds limit of ${maxSizeMB}MB.`));
       }
     }
+
+    const poolType = METHOD_TO_POOL[method] || 'compute';
+    const poolObj = this.pools[poolType];
+
     return new Promise((resolve, reject) => {
-      this.queue.push({ 
+      poolObj.queue.push({ 
         method, 
         args, 
         transferables, 
@@ -262,7 +346,7 @@ class WorkerOrchestrator {
         maxSizeMB,
         timeout
       });
-      this.processQueue();
+      this.processQueue(poolType);
     });
   }
 
@@ -275,10 +359,12 @@ class WorkerOrchestrator {
   }
 
   terminateAll(): void {
-    this.pool.forEach(p => p.worker.terminate());
-    this.pool = [];
-    this.queue = [];
-    this.activeTasks.clear();
+    Object.values(this.pools).forEach(poolObj => {
+      poolObj.workers.forEach(p => p.worker.terminate());
+      poolObj.workers = [];
+      poolObj.queue = [];
+      poolObj.activeTasks.clear();
+    });
   }
 }
 

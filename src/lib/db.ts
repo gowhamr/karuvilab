@@ -85,6 +85,8 @@ interface KaruviDB extends DBSchema {
       checklistItems: { id: string; text: string; checked: boolean }[];
       createdAt: number;
       updatedAt: number;
+      isEncrypted?: boolean;
+      encryptedData?: string;
     };
     indexes: { 'by-updated': number };
   };

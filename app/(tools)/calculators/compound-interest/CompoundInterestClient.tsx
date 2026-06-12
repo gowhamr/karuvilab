@@ -5,8 +5,6 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
-import { TOOL_CONTENT } from "@/src/tool-content";
-import { ALL_TOOLS } from "@/src/registry";
 
 const FREQ_OPTIONS = [
   { label: "Annually", value: 1 },
@@ -23,8 +21,6 @@ const DEFAULT_STATE = {
 };
 
 const toolId = "compound-interest";
-const content = TOOL_CONTENT[toolId as keyof typeof TOOL_CONTENT];
-const toolInfo = ALL_TOOLS.find(t => t.id === toolId);
 
 export default function CompoundInterestClient() {
   const freqLabelId = useId();
@@ -79,8 +75,6 @@ Total Interest: ${formatINR(result.interest)}
 Total Return: ${formatPercent(result.returnPct)}
 
 Generated via KaruviLab`;
-
-  const relatedTools = ALL_TOOLS.filter(t => toolInfo?.related?.includes(t.id));
 
   return (
     <div className="space-y-8">

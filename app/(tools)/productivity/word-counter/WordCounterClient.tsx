@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { DropZone } from "@/components/ui/DropZone";
 import { FileText, Clock, Type, AlignLeft, Hash, Quote } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 
 export default function WordCounterClient() {
   const [text, setText] = useState("");
@@ -53,11 +54,13 @@ export default function WordCounterClient() {
       reader.readAsText(file);
     } else if (file.name.endsWith(".docx")) {
       try {
-        // @ts-ignore - dynamic import from URL
-        const mammoth = await import(/* webpackIgnore: true */ "https://esm.sh/mammoth");
         const arrayBuffer = await file.arrayBuffer();
-        const result = await mammoth.extractRawText({ arrayBuffer });
-        setText(result.value);
+        const extractedText = await workerOrchestrator.dispatch<string>(
+          "extractRawTextFromDocx",
+          [arrayBuffer],
+          [arrayBuffer]
+        );
+        setText(extractedText);
       } catch (err) {
         console.error(err);
         toast("Failed to parse .docx file.", "error");

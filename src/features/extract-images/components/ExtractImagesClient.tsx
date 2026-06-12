@@ -1,12 +1,12 @@
 "use client";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import { DropZone } from "@/components/ui/DropZone";
 import { Loader2, AlertCircle, FileText, Download } from "lucide-react";
-
-declare const pdfjsLib: any;
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -14,120 +14,58 @@ interface ExtractedImage { url: string; width: number; height: number; page: num
 
 export default function ExtractImagesClient() {
   const [file, setFile] = useState<File | null>(null);
-  const [libReady, setLibReady] = useState(false);
-  const [libError, setLibError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [images, setImages] = useState<ExtractedImage[]>([]);
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
-
-  // Robust ESM Loader for PDF.js
-  useEffect(() => {
-    async function initLib() {
-      if (typeof window === 'undefined') return;
-      if (typeof (window as any).pdfjsLib !== 'undefined') {
-        setLibReady(true);
-        return;
-      }
-
-      try {
-        let pdfjs;
-        try {
-          // @ts-ignore
-          pdfjs = await import(/* webpackIgnore: true */ "/pdf.min.mjs");
-        } catch (e) {
-          // @ts-ignore
-          pdfjs = await import(/* webpackIgnore: true */ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs");
-        }
-        
-        (window as any).pdfjsLib = pdfjs;
-
-        // Configure Worker Source
-        try {
-          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-        } catch (err) {
-          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs";
-        }
-
-        setLibReady(true);
-      } catch (err) {
-        console.error("Failed to load PDF.js engine:", err);
-        setLibError("Failed to load PDF engine. Please check your connection.");
-      }
-    }
-    initLib();
-  }, []);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const checkLib = useCallback(() => {
-    return typeof (window as any).pdfjsLib !== 'undefined';
+    return true; // Library is running in the worker, so it's always ready
   }, []);
 
   const extract = async () => {
-    if (!checkLib()) { setError("PDF library not loaded yet."); return; }
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
+    
+    // Revoke any previous image URLs to avoid memory leaks
+    images.forEach(img => revokeUrl(img.url));
     setImages([]);
+
     try {
-      try {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-      } catch (err) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
-      }
-      
       const bytes = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-      const extracted: ExtractedImage[] = [];
-      let imgIndex = 0;
+      
+      const results = await workerOrchestrator.dispatch<Array<{
+        arrayBuffer: ArrayBuffer;
+        width: number;
+        height: number;
+        page: number;
+        index: number;
+      }>>(
+        "extractImagesFromPdf",
+        [bytes],
+        [bytes],
+        (p: any) => setProgress(p.message || `Processing page...`)
+      );
 
-      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-        setProgress(`Processing page ${pageNum} of ${pdf.numPages}…`);
-        const page = await pdf.getPage(pageNum);
-        const ops = await page.getOperatorList();
-        const fns = ops.fnArray;
-        const args = ops.argsArray;
-
-        for (let i = 0; i < fns.length; i++) {
-          const OPS = pdfjsLib.OPS;
-          if (fns[i] === OPS.paintImageXObject || fns[i] === OPS.paintImageXObjectRepeat) {
-            const imgName = args[i][0];
-            try {
-              const imgData = await new Promise<any>((res, rej) => {
-                page.objs.get(imgName, (img: any) => img ? res(img) : rej(new Error("not found")));
-              });
-              const canvas = document.createElement("canvas");
-              canvas.width = imgData.width;
-              canvas.height = imgData.height;
-              const ctx = canvas.getContext("2d")!;
-              const imageData = ctx.createImageData(imgData.width, imgData.height);
-
-              if (imgData.data && imgData.data.length) {
-                const src = imgData.data;
-                const dst = imageData.data;
-                if (src.length === imgData.width * imgData.height * 3) {
-                  for (let p = 0; p < imgData.width * imgData.height; p++) {
-                    dst[p * 4] = src[p * 3];
-                    dst[p * 4 + 1] = src[p * 3 + 1];
-                    dst[p * 4 + 2] = src[p * 3 + 2];
-                    dst[p * 4 + 3] = 255;
-                  }
-                } else {
-                  dst.set(src.slice(0, dst.length));
-                }
-              }
-
-              ctx.putImageData(imageData, 0, 0);
-              const url = canvas.toDataURL("image/png");
-              extracted.push({ url, width: imgData.width, height: imgData.height, page: pageNum, index: imgIndex++ });
-            } catch {}
-          }
-        }
-      }
+      const extracted = results.map(item => {
+        const blob = new Blob([item.arrayBuffer], { type: "image/png" });
+        const url = createUrl(blob);
+        return {
+          url,
+          width: item.width,
+          height: item.height,
+          page: item.page,
+          index: item.index
+        };
+      });
 
       setImages(extracted);
       setProgress("");
       if (extracted.length === 0) setError("No extractable images found in this PDF.");
     } catch (e: any) {
+      console.error("Image extraction error:", e);
       setError(e?.message || "Failed to extract images.");
       setProgress("");
     }
@@ -148,7 +86,7 @@ export default function ExtractImagesClient() {
       <EngineLoader
         checkInit={checkLib}
         loadingMessage="Preparing PDF extraction engine..."
-        errorMessage={libError || "Failed to load PDF extraction engine."}
+        errorMessage="Failed to load PDF extraction engine."
       >
         <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl text-sm text-yellow-700 dark:text-yellow-400">
           <strong>Note:</strong> Extracts raster images (JPEG, PNG) embedded in the PDF. Vector graphics and text-based content cannot be extracted as images.
@@ -170,7 +108,7 @@ export default function ExtractImagesClient() {
 
         <button
           onClick={extract}
-          disabled={!file || processing || !libReady}
+          disabled={!file || processing}
           className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
         >
           {processing ? "Extracting…" : "Extract Images"}

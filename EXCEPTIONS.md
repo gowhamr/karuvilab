@@ -8,7 +8,7 @@ All entries reviewed and approved via PR.
 
 | ID    | Rule Violated           | Reason                          | Mitigation                          | Resolution Date | Status   |
 |-------|-------------------------|---------------------------------|-------------------------------------|-----------------|----------|
-| E-001 | KL-01 Storage Standards | Legacy localStorage in settings | try/catch + graceful fallback       | 2026-07-15      | ACTIVE   |
+| E-001 | KL-01 Storage Standards | Legacy localStorage in settings | try/catch + graceful fallback       | 2026-06-12      | RESOLVED |
 | E-002 | P-07 Inline Styles      | Dynamic width on progress bars  | width property only, no color/font  | Permanent       | ACTIVE   |
 | E-003 | P-07 Inline Styles      | Dynamic backgroundColor swatches| backgroundColor only, color tools   | Permanent       | ACTIVE   |
 | E-004 | Design Token System     | New --kv-mat-* tokens added     | Formally in src/theme/tokens.css    | Permanent       | ACTIVE   |
@@ -24,8 +24,8 @@ All entries reviewed and approved via PR.
   IndexedDB migration. Settings format requires refactor.
 - **Mitigation:** Wrapped in try/catch. Graceful fallback to
   defaults if localStorage unavailable.
-- **Resolution Date:** 2026-07-15 — migrate to IndexedDB via idb
-- **Status:** ACTIVE
+- **Resolution Date:** 2026-06-12 — migrated to IndexedDB via idb
+- **Status:** RESOLVED
 
 ### E-002
 - **Rule:** P-07 (Inline Styles)

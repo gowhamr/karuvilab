@@ -5,7 +5,7 @@ import { Note } from "../types";
 import { useNotesStore } from "../store";
 import { formatNoteDate, truncateText } from "../utils";
 import { m } from "framer-motion";
-import { Pin, Archive, Trash2, Hash, CheckSquare } from "lucide-react";
+import { Pin, Archive, Trash2, Hash, CheckSquare, Lock, Unlock } from "lucide-react";
 
 interface NoteCardProps {
   note: Note;
@@ -17,6 +17,9 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
   const toggleArchive = useNotesStore(state => state.toggleArchive);
   const toggleDelete = useNotesStore(state => state.toggleDelete);
   const viewMode = useNotesStore(state => state.viewMode);
+  const notePasswords = useNotesStore(state => state.notePasswords);
+
+  const isUnlocked = note.isEncrypted && !!notePasswords[note.id];
 
   const handleAction = (e: React.MouseEvent, action: () => void) => {
     e.stopPropagation();
@@ -45,8 +48,13 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
       <div className={`flex-1 min-w-0 ${viewMode === "list" ? "flex items-center gap-6" : ""}`}>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <h3 className="text-lg font-black text-text truncate leading-tight group-hover:text-blue transition-colors">
-              {note.title || "Untitled Note"}
+            <h3 className="text-lg font-black text-text truncate leading-tight group-hover:text-blue transition-colors flex items-center gap-1.5">
+              {note.isEncrypted && (
+                isUnlocked 
+                  ? <Unlock size={14} className="text-success shrink-0" />
+                  : <Lock size={14} className="text-error shrink-0" />
+              )}
+              <span className="truncate">{note.title || "Untitled Note"}</span>
             </h3>
             {note.isChecklist && (
               <CheckSquare size={16} className="text-blue shrink-0 mt-1" />

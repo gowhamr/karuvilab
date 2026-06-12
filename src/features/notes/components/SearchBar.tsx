@@ -1,11 +1,15 @@
 "use client";
 
 import React from "react";
-import { Search, X, List, Grid } from "lucide-react";
+import { Search, X, List, Grid, Unlock } from "lucide-react";
 import { useNotesStore } from "../store";
 import { m } from "framer-motion";
 
-export function SearchBar() {
+interface SearchBarProps {
+  onImportClick?: () => void;
+}
+
+export function SearchBar({ onImportClick }: SearchBarProps) {
   const filterSearch = useNotesStore(state => state.filter.search);
   const setSearch = useNotesStore(state => state.setSearch);
   const viewMode = useNotesStore(state => state.viewMode);
@@ -34,29 +38,42 @@ export function SearchBar() {
         )}
       </div>
 
-      <div className="flex items-center gap-2 bg-surface border border-border rounded-2xl p-1">
-        <button
-          onClick={() => setViewMode("grid")}
-          className={`p-2 rounded-xl transition-all ${
-            viewMode === "grid"
-              ? "bg-blue text-white shadow-lg shadow-blue/20"
-              : "text-text-4 hover:bg-bg hover:text-text"
-          }`}
-          title="Grid View"
-        >
-          <Grid size={18} />
-        </button>
-        <button
-          onClick={() => setViewMode("list")}
-          className={`p-2 rounded-xl transition-all ${
-            viewMode === "list"
-              ? "bg-blue text-white shadow-lg shadow-blue/20"
-              : "text-text-4 hover:bg-bg hover:text-text"
-          }`}
-          title="List View"
-        >
-          <List size={18} />
-        </button>
+      <div className="flex items-center gap-3 shrink-0 w-full md:w-auto justify-end">
+        {onImportClick && (
+          <button
+            onClick={onImportClick}
+            className="flex items-center gap-2 px-5 py-3 bg-surface border border-border hover:border-blue/30 text-text-3 hover:text-blue rounded-2xl text-xs font-black uppercase tracking-widest transition-all cursor-pointer shadow-sm"
+            title="Decrypt Shared Note"
+          >
+            <Unlock size={14} className="text-blue" />
+            <span>Decrypt Note</span>
+          </button>
+        )}
+
+        <div className="flex items-center gap-2 bg-surface border border-border rounded-2xl p-1">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-2 rounded-xl transition-all ${
+              viewMode === "grid"
+                ? "bg-blue text-white shadow-lg shadow-blue/20"
+                : "text-text-4 hover:bg-bg hover:text-text"
+            }`}
+            title="Grid View"
+          >
+            <Grid size={18} />
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-2 rounded-xl transition-all ${
+              viewMode === "list"
+                ? "bg-blue text-white shadow-lg shadow-blue/20"
+                : "text-text-4 hover:bg-bg hover:text-text"
+            }`}
+            title="List View"
+          >
+            <List size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );

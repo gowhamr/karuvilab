@@ -18,6 +18,8 @@ export interface Note {
   checklistItems: ChecklistItem[];
   createdAt: number;
   updatedAt: number;
+  isEncrypted?: boolean;
+  encryptedData?: string;
 }
 
 export type NoteSortOption = "updatedAt" | "createdAt" | "title";

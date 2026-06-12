@@ -2,8 +2,8 @@ import { ToolEntry } from '../types';
 
 export const notes: ToolEntry = {
   id: 'notes',
-  name: 'KV Notes',
-  desc: 'Private, offline-first note-taking tool with Markdown and checklists.',
+  name: 'KV Secure Notes',
+  desc: 'Zero-transmission, AES-256 encrypted private notes with Markdown and checklists.',
   href: 'productivity/notes/',
   category: 'productivity',
   input: 'text',

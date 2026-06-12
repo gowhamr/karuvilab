@@ -16,93 +16,110 @@ const settingsIdbStorage = {
   getItem: async (name: string): Promise<string | null> => {
     if (typeof window === 'undefined') return null;
 
-    const localData = localStorage.getItem('karuvi-settings');
-    const localObj = localData ? JSON.parse(localData) : null;
-
-    const idbData = await idbStorage.getItem('karuvi-settings-privacy');
-    const idbObj = idbData ? JSON.parse(idbData) : null;
-
-    let privacy = idbObj?.state?.privacy;
-    let adsConsent = idbObj?.state?.adsConsent;
-
-    if (adsConsent === undefined && typeof window !== 'undefined') {
-      const legacyConsent = localStorage.getItem('kv-ad-consent');
-      if (legacyConsent) {
-        adsConsent = legacyConsent === 'accepted';
-        await idbStorage.setItem('kv-ad-consent', legacyConsent);
-        localStorage.removeItem('kv-ad-consent');
-      } else {
-        const consentVal = await idbStorage.getItem('kv-ad-consent');
-        if (consentVal) {
-          adsConsent = consentVal === 'accepted';
-        }
-      }
+    // 1. Try to load the unified settings from IndexedDB (new source of truth)
+    const idbData = await idbStorage.getItem('karuvi-settings-db');
+    if (idbData) {
+      return idbData;
     }
 
-    if (localObj && localObj.state && localObj.state.privacy && !idbObj) {
-      privacy = localObj.state.privacy;
-      adsConsent = localObj.state.adsConsent;
-
-      await idbStorage.setItem('karuvi-settings-privacy', JSON.stringify({
-        state: { privacy, adsConsent },
-        version: localObj.version || 1
-      }));
-
-      const { privacy: _, adsConsent: __, ...cleanedState } = localObj.state;
-      localStorage.setItem('karuvi-settings', JSON.stringify({
-        state: cleanedState,
-        version: localObj.version || 1
-      }));
-      console.log("[useSettingsStore] Transparently migrated legacy privacy settings to IndexedDB.");
+    // 2. Fallback / Migration: check legacy split configuration
+    let legacyLocalObj: any = null;
+    try {
+      const localData = localStorage.getItem('karuvi-settings');
+      legacyLocalObj = localData ? JSON.parse(localData) : null;
+    } catch (e) {
+      console.warn("[settingsIdbStorage] Failed to read legacy localStorage settings:", e);
     }
 
-    return JSON.stringify({
-      state: {
-        ...(localObj?.state || {}),
-        privacy: privacy || {
+    const legacyIdbData = await idbStorage.getItem('karuvi-settings-privacy');
+    const legacyIdbObj = legacyIdbData ? JSON.parse(legacyIdbData) : null;
+
+    // If any legacy state exists, merge and migrate them
+    if (legacyLocalObj || legacyIdbObj) {
+      const mergedState = {
+        state: {
+          ...(legacyLocalObj?.state || {}),
+          ...(legacyIdbObj?.state || {}),
+        },
+        version: legacyLocalObj?.version || legacyIdbObj?.version || 1,
+      };
+
+      // Set fallback defaults for properties if missing
+      if (!mergedState.state.privacy) {
+        mergedState.state.privacy = {
           localOnly: true,
           clearStorageOnExit: false,
           telemetryEnabled: false,
           historyEnabled: true,
-        },
-        adsConsent: adsConsent || false,
-        focusMode: localObj?.state?.focusMode || {
+        };
+      }
+      if (mergedState.state.adsConsent === undefined) {
+        mergedState.state.adsConsent = false;
+      }
+      if (!mergedState.state.focusMode) {
+        mergedState.state.focusMode = {
           autoHideToolbar: false,
           defaultFontSize: 14,
           defaultWordWrap: true,
           lastUsedToolId: null,
-        },
-      },
-      version: localObj?.version || 1,
-    });
+        };
+      }
+
+      const mergedString = JSON.stringify(mergedState);
+      // Save to IndexedDB
+      await idbStorage.setItem('karuvi-settings-db', mergedString);
+      
+      // Remove legacy split IndexedDB key
+      await idbStorage.removeItem('karuvi-settings-privacy');
+
+      // Keep only appearance mirrored in localStorage for server-side theme-init
+      try {
+        if (mergedState.state.appearance) {
+          localStorage.setItem('karuvi-settings', JSON.stringify({
+            state: { appearance: mergedState.state.appearance },
+            version: mergedState.version,
+          }));
+        } else {
+          localStorage.removeItem('karuvi-settings');
+        }
+      } catch (e) {
+        console.warn("[settingsIdbStorage] Failed to mirror appearance during migration:", e);
+      }
+
+      console.log("[settingsIdbStorage] Successfully migrated legacy settings to unified IndexedDB storage.");
+      return mergedString;
+    }
+
+    return null;
   },
   setItem: async (name: string, value: string): Promise<void> => {
     if (typeof window === 'undefined') return;
-    const obj = JSON.parse(value);
 
-    const localValue = JSON.stringify({
-      state: {
-        appearance: obj.state.appearance,
-        accessibility: obj.state.accessibility,
-        focusMode: obj.state.focusMode,
-      },
-      version: obj.version,
-    });
-    localStorage.setItem('karuvi-settings', localValue);
+    // 1. Save unified settings to IndexedDB
+    await idbStorage.setItem('karuvi-settings-db', value);
 
-    const idbValue = JSON.stringify({
-      state: {
-        privacy: obj.state.privacy,
-        adsConsent: obj.state.adsConsent,
-      },
-      version: obj.version,
-    });
-    await idbStorage.setItem('karuvi-settings-privacy', idbValue);
+    // 2. Mirror appearance settings to localStorage for the head theme script (try/catch wrapped)
+    try {
+      const obj = JSON.parse(value);
+      const mirrorValue = JSON.stringify({
+        state: {
+          appearance: obj.state.appearance,
+        },
+        version: obj.version,
+      });
+      localStorage.setItem('karuvi-settings', mirrorValue);
+    } catch (e) {
+      console.warn("[settingsIdbStorage] Failed to mirror appearance to localStorage:", e);
+    }
   },
   removeItem: async (name: string): Promise<void> => {
     if (typeof window === 'undefined') return;
-    localStorage.removeItem('karuvi-settings');
-    await idbStorage.removeItem('karuvi-settings-privacy');
+    await idbStorage.removeItem('karuvi-settings-db');
+    try {
+      localStorage.removeItem('karuvi-settings');
+    } catch (e) {
+      console.warn("[settingsIdbStorage] Failed to remove localStorage settings:", e);
+    }
   }
 };
 

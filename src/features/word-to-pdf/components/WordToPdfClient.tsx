@@ -5,8 +5,7 @@ import { useToast } from "@/components/ui/Toast";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { FileText, Download, Loader2, AlertCircle, FileCode } from "lucide-react";
-import mammoth from "mammoth";
-import * as PDFLib from "pdf-lib";
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 
 export default function WordToPdfClient() {
   const { toast } = useToast();
@@ -33,70 +32,13 @@ export default function WordToPdfClient() {
     try {
       const arrayBuffer = await file.arrayBuffer();
       
-      // Extract text/html using mammoth
-      // Note: mammoth extracts HTML/Text from docx reliably in browser
-      const { value: text } = await mammoth.extractRawText({ arrayBuffer });
-      
-      if (!text.trim()) {
-        throw new Error("The document seems to be empty or unreadable.");
-      }
+      // Dispatch conversion to Worker Pool
+      const pdfBytes = await workerOrchestrator.dispatch<Uint8Array>(
+        "convertDocxToPdf",
+        [arrayBuffer],
+        [arrayBuffer] // transferables
+      );
 
-      // Create PDF using pdf-lib
-      const pdfDoc = await PDFLib.PDFDocument.create();
-      const timesRomanFont = await pdfDoc.embedFont(PDFLib.StandardFonts.TimesRoman);
-      
-      // Simple text wrapping and pagination logic
-      const pageSize = { width: 595.28, height: 841.89 }; // A4
-      let page = pdfDoc.addPage([pageSize.width, pageSize.height]);
-      const { width, height } = page.getSize();
-      const fontSize = 12;
-      const margin = 50;
-      const maxWidth = width - margin * 2;
-      
-      let y = height - margin;
-      
-      const lines = text.split("\n");
-      
-      for (const line of lines) {
-        if (!line.trim()) {
-          y -= fontSize;
-          continue;
-        }
-
-        // Very basic text wrapping
-        const words = line.split(" ");
-        let currentLine = "";
-        
-        for (const word of words) {
-          const testLine = currentLine ? `${currentLine} ${word}` : word;
-          const textWidth = timesRomanFont.widthOfTextAtSize(testLine, fontSize);
-          
-          if (textWidth > maxWidth) {
-            page.drawText(currentLine, { x: margin, y, size: fontSize, font: timesRomanFont });
-            y -= fontSize * 1.2;
-            currentLine = word;
-            
-            if (y < margin) {
-              page = pdfDoc.addPage([pageSize.width, pageSize.height]);
-              y = height - margin;
-            }
-          } else {
-            currentLine = testLine;
-          }
-        }
-        
-        if (currentLine) {
-          page.drawText(currentLine, { x: margin, y, size: fontSize, font: timesRomanFont });
-          y -= fontSize * 1.2;
-        }
-
-        if (y < margin) {
-          page = pdfDoc.addPage([pageSize.width, pageSize.height]);
-          y = height - margin;
-        }
-      }
-
-      const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
       const name = file.name.replace(/\.docx$/i, "") + ".pdf";
       

@@ -160,4 +160,31 @@ export interface WorkerAPI {
 
   // EMI Tasks
   calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult>;
+
+  // Document Tasks
+  extractRawTextFromDocx(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  convertDocxToPdf(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  extractImagesFromPdf(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<Array<{
+    arrayBuffer: ArrayBuffer;
+    width: number;
+    height: number;
+    page: number;
+    index: number;
+  }>>;
+
+  extractTextFromPdf(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<string>;
 }

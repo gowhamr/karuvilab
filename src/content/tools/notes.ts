@@ -1,32 +1,32 @@
 import { ToolContent } from '../../registry/types';
 
 export const notesContent: ToolContent = {
-  detailedDescription: "KV Notes is a premium, offline-first note-taking tool designed for speed, privacy, and simplicity. It allows you to capture thoughts, create checklists, and organize your ideas without ever leaving your browser. With full Markdown support, beautiful glassmorphism design, and local-only storage using IndexedDB, your data remains 100% private and accessible even without an internet connection. It features powerful searching, pinning for important notes, and status management for archiving or trashing old thoughts.",
+  detailedDescription: "KV Secure Notes is a premium, zero-transmission note-taking tool designed for top-tier security, privacy, and speed. It allows you to protect your sensitive notes using military-grade AES-256 encryption with a password of your choice, ensuring that your data remains completely unreadable to unauthorized eyes. All notes are stored locally in your browser's IndexedDB, adhering to a strict local-only policy (zero servers, zero transmission). It supports full Markdown formatting, task checklists, tagging, and secure encrypted sharing. You can share any encrypted note by copying its ciphertext package; the recipient can decrypt and import it using the same password without any intermediate server.",
   howTo: [
     "Click the floating '+' button to create a new note.",
-    "Toggle between 'Note' mode (Markdown) and 'Checklist' mode.",
-    "Add a title and start writing your content. It auto-saves every 1.5 seconds of inactivity.",
-    "Use the 'Preview' mode to see your Markdown rendered beautifully.",
+    "To encrypt a note, open it, click the three-dots menu, select 'Encrypt Note', and set a secure password.",
+    "To view or edit a locked note, click on it and enter the correct password. It remains unlocked for the session.",
+    "Toggle between 'Note' mode (Markdown) and 'Checklist' mode using the icons in the header.",
     "Add tags in the footer to categorize your notes. Just type and press Enter.",
-    "Pin important notes to keep them at the top of your list.",
-    "Search for notes using the global search bar in the header."
+    "To share a note securely, select 'Copy Ciphertext' from the three-dots menu. The recipient can click the 'Decrypt Note' button in the toolbar to import it.",
+    "Pin important notes to keep them at the top of your list."
   ],
   faq: [
     {
+      question: "How secure is the encryption?",
+      answer: "We use industry-standard PBKDF2 with 100,000 iterations of SHA-256 to derive a 256-bit key from your password, and encrypt the data using AES-GCM 256-bit. All cryptographic operations run natively in your browser via the Web Crypto API."
+    },
+    {
+      question: "Can anyone (including KaruviLab) recover my password?",
+      answer: "No. KaruviLab operates on a strict zero-server policy. All encryption and decryption happen purely client-side, and your password never leaves your browser. Because of this, it is impossible for us to recover forgotten passwords."
+    },
+    {
       question: "Is my data stored on a server?",
-      answer: "No. KaruviLab operates on a 'Zero-Server-Upload' policy. All your notes, tags, and settings are stored locally in your browser's IndexedDB. We never see, track, or store your data."
+      answer: "No. All notes (including encrypted ciphertext) are saved locally in your browser's IndexedDB database. Your data is 100% private and offline-first."
     },
     {
-      question: "Can I use this tool offline?",
-      answer: "Yes! KV Notes is designed to be fully functional offline. Once you've visited the site, you can continue taking and editing notes even without an internet connection."
-    },
-    {
-      question: "What is Markdown?",
-      answer: "Markdown is a lightweight markup language that allows you to format text using simple symbols (e.g., # for headers, * for italics, ** for bold). It's great for structured note-taking."
-    },
-    {
-      question: "How do checklists work?",
-      answer: "Checklist mode turns each line into a checkable item. You can track progress on tasks and easily toggle back to regular note mode if needed."
+      question: "How does sharing work without a server?",
+      answer: "When you share a note, you copy its ciphertext (an encrypted Base64 package containing the salt, initialization vector, and encrypted payload). You can send this text via any communication channel. The recipient enters the same password to decrypt and view it locally."
     }
   ],
   useCases: [

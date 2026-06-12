@@ -1,21 +1,18 @@
 "use client";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useToast } from "@/components/ui/Toast";
 import { FileText, Download, Loader2, AlertCircle } from "lucide-react";
 import { EngineLoader } from "@/components/system/EngineLoader";
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 
 import { Document, Packer, Paragraph, TextRun } from "docx";
-
-declare const pdfjsLib: any;
 
 export default function PdfToWordClient() {
   const { toast } = useToast();
   const [file, setFile] = useState<File | null>(null);
-  const [libReady, setLibReady] = useState(false);
-  const [libError, setLibError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [text, setText] = useState("");
   const [pageCount, setPageCount] = useState(0);
@@ -23,90 +20,28 @@ export default function PdfToWordClient() {
   const fileRef = useRef<HTMLInputElement>(null);
   const { createUrl, revokeUrl } = useObjectUrlManager();
 
-  // Robust ESM Loader for PDF.js
-  useEffect(() => {
-    async function initLib() {
-      if (typeof window === 'undefined') return;
-      if (typeof (window as any).pdfjsLib !== 'undefined') {
-        setLibReady(true);
-        return;
-      }
-
-      try {
-        // Try local sync first
-        let pdfjs;
-        try {
-          // @ts-ignore
-          pdfjs = await import(/* webpackIgnore: true */ "/pdf.min.mjs");
-        } catch (e) {
-          // Fallback to CDN
-          // @ts-ignore
-          pdfjs = await import(/* webpackIgnore: true */ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs");
-        }
-        
-        (window as any).pdfjsLib = pdfjs;
-
-        // Configure Worker Source
-        try {
-          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-        } catch (err) {
-          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs";
-        }
-
-        setLibReady(true);
-      } catch (err) {
-        console.error("Failed to load PDF.js engine:", err);
-        setLibError("Failed to load PDF engine. Please check your connection.");
-      }
-    }
-    initLib();
-  }, []);
-
   const checkLib = useCallback(() => {
-    return typeof (window as any).pdfjsLib !== 'undefined';
+    return true; // Library is running in the worker, so it's always ready
   }, []);
 
   const extract = async () => {
-    if (!checkLib()) { setError("PDF library not loaded yet."); return; }
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
     setText("");
     try {
-      try {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-      } catch (err) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.worker.min.mjs";
-      }
-      
       const bytes = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-      setPageCount(pdf.numPages);
-      const allText: string[] = [];
       
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        
-        // Group items by their vertical position (Y coordinate) to detect lines/paragraphs
-        let lastY = -1;
-        let pageLines: string[] = [];
-        let currentLine: string[] = [];
+      const extractedText = await workerOrchestrator.dispatch<string>(
+        "extractTextFromPdf",
+        [bytes],
+        [bytes],
+        (p: any) => console.log(p.message || "Extracting...")
+      );
 
-        for (const item of (content.items as any[])) {
-          if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) {
-            pageLines.push(currentLine.join(" "));
-            currentLine = [];
-          }
-          currentLine.push(item.str);
-          lastY = item.transform[5];
-        }
-        if (currentLine.length > 0) pageLines.push(currentLine.join(" "));
-        
-        allText.push(pageLines.join("\n"));
-      }
-      
-      setText(allText.join("\n\n--- Page Break ---\n\n"));
+      setText(extractedText);
+      const pages = extractedText.split("\n\n--- Page Break ---\n\n");
+      setPageCount(pages.length);
       toast("Text extracted successfully!");
     } catch (e: any) {
       console.error("PDF extraction error:", e);
@@ -151,7 +86,7 @@ export default function PdfToWordClient() {
       <EngineLoader
         checkInit={checkLib}
         loadingMessage="Preparing extraction engine..."
-        errorMessage={libError || "Failed to load PDF extraction engine."}
+        errorMessage="Failed to load PDF extraction engine."
       >
         <div
           className="bg-surface border-2 border-dashed border-border rounded-4xl p-12 text-center cursor-pointer hover:border-blue transition-all group"
@@ -185,7 +120,7 @@ export default function PdfToWordClient() {
 
         <button
           onClick={extract}
-          disabled={!file || processing || !libReady}
+          disabled={!file || processing}
           className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
         >
           {processing ? "Extracting content..." : "Extract PDF Content"}

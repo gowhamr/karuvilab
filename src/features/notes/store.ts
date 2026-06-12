@@ -8,6 +8,7 @@ interface NotesState {
   filter: NoteFilter;
   isLoading: boolean;
   selectedNoteId: string | null;
+  notePasswords: Record<string, string>; // In-memory passwords for unlocked notes
 
   // Actions
   setViewMode: (mode: NoteView) => void;
@@ -24,6 +25,12 @@ interface NotesState {
   toggleArchive: (id: string) => Promise<void>;
   toggleDelete: (id: string) => Promise<void>;
   emptyTrash: () => Promise<void>;
+
+  // Encryption Actions
+  encryptNote: (id: string, password: string) => Promise<void>;
+  decryptNote: (id: string, password: string) => Promise<void>;
+  unlockNote: (id: string, password: string) => Promise<boolean>;
+  lockNote: (id: string) => Promise<void>;
 }
 
 export const useNotesStore = create<NotesState>((set, get) => ({
@@ -37,6 +44,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
   isLoading: false,
   selectedNoteId: null,
+  notePasswords: {},
 
   setViewMode: (viewMode) => set({ viewMode }),
   setSearch: (search) => set(state => ({ filter: { ...state.filter, search } })),
@@ -72,7 +80,58 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       ...note,
       updatedAt: Date.now(),
     };
-    await saveNote(updatedNote);
+
+    if (updatedNote.isEncrypted) {
+      const password = get().notePasswords[note.id];
+      if (password) {
+        try {
+          const { encryptData } = await import('./crypto');
+          const payloadToEncrypt = JSON.stringify({
+            title: note.title,
+            content: note.content,
+            tags: note.tags,
+            isChecklist: note.isChecklist,
+            checklistItems: note.checklistItems
+          });
+          const encryptedString = await encryptData(payloadToEncrypt, password);
+          
+          const noteForDB: Note = {
+            ...updatedNote,
+            encryptedData: encryptedString,
+            title: "🔒 Encrypted Note",
+            content: "This note is encrypted.",
+            tags: [],
+            isChecklist: false,
+            checklistItems: []
+          };
+          await saveNote(noteForDB);
+        } catch (err) {
+          console.error("Failed to encrypt note for saving:", err);
+          return;
+        }
+      } else {
+        // If we don't have the password, save the placeholder record without modifying encryptedData
+        const dbNotes = await getNotes();
+        const existingNote = dbNotes.find(n => n.id === note.id);
+        if (existingNote) {
+          const noteForDB: Note = {
+            ...updatedNote,
+            title: existingNote.title,
+            content: existingNote.content,
+            tags: existingNote.tags,
+            isChecklist: existingNote.isChecklist,
+            checklistItems: existingNote.checklistItems
+          };
+          if (existingNote.encryptedData) {
+            noteForDB.encryptedData = existingNote.encryptedData;
+          }
+          await saveNote(noteForDB);
+        }
+      }
+    } else {
+      await saveNote(updatedNote);
+    }
+
     set(state => ({
       notes: state.notes.map(n => n.id === note.id ? updatedNote : n)
     }));
@@ -89,7 +148,20 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     const note = get().notes.find(n => n.id === id);
     if (!note) return;
     const updatedNote = { ...note, pinned: !note.pinned, updatedAt: Date.now() };
-    await saveNote(updatedNote);
+    if (updatedNote.isEncrypted) {
+      // Just toggle pin and update DB safely
+      const dbNotes = await getNotes();
+      const existing = dbNotes.find(n => n.id === id);
+      if (existing) {
+        await saveNote({
+          ...existing,
+          pinned: updatedNote.pinned,
+          updatedAt: updatedNote.updatedAt
+        });
+      }
+    } else {
+      await saveNote(updatedNote);
+    }
     set(state => ({
       notes: state.notes.map(n => n.id === id ? updatedNote : n)
     }));
@@ -99,7 +171,19 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     const note = get().notes.find(n => n.id === id);
     if (!note) return;
     const updatedNote = { ...note, isArchived: !note.isArchived, updatedAt: Date.now() };
-    await saveNote(updatedNote);
+    if (updatedNote.isEncrypted) {
+      const dbNotes = await getNotes();
+      const existing = dbNotes.find(n => n.id === id);
+      if (existing) {
+        await saveNote({
+          ...existing,
+          isArchived: updatedNote.isArchived,
+          updatedAt: updatedNote.updatedAt
+        });
+      }
+    } else {
+      await saveNote(updatedNote);
+    }
     set(state => ({
       notes: state.notes.map(n => n.id === id ? updatedNote : n)
     }));
@@ -109,7 +193,19 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     const note = get().notes.find(n => n.id === id);
     if (!note) return;
     const updatedNote = { ...note, isDeleted: !note.isDeleted, updatedAt: Date.now() };
-    await saveNote(updatedNote);
+    if (updatedNote.isEncrypted) {
+      const dbNotes = await getNotes();
+      const existing = dbNotes.find(n => n.id === id);
+      if (existing) {
+        await saveNote({
+          ...existing,
+          isDeleted: updatedNote.isDeleted,
+          updatedAt: updatedNote.updatedAt
+        });
+      }
+    } else {
+      await saveNote(updatedNote);
+    }
     set(state => ({
       notes: state.notes.map(n => n.id === id ? updatedNote : n)
     }));
@@ -123,5 +219,136 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     set(state => ({
       notes: state.notes.filter(n => !n.isDeleted)
     }));
+  },
+
+  encryptNote: async (id, password) => {
+    const note = get().notes.find(n => n.id === id);
+    if (!note) return;
+
+    try {
+      const { encryptData } = await import('./crypto');
+      const payloadToEncrypt = JSON.stringify({
+        title: note.title,
+        content: note.content,
+        tags: note.tags,
+        isChecklist: note.isChecklist,
+        checklistItems: note.checklistItems
+      });
+
+      const encryptedString = await encryptData(payloadToEncrypt, password);
+
+      const updatedNote: Note = {
+        ...note,
+        isEncrypted: true,
+        encryptedData: encryptedString,
+        updatedAt: Date.now()
+      };
+
+      const noteForDB: Note = {
+        ...updatedNote,
+        title: "🔒 Encrypted Note",
+        content: "This note is encrypted.",
+        tags: [],
+        isChecklist: false,
+        checklistItems: []
+      };
+      await saveNote(noteForDB);
+
+      set(state => ({
+        notePasswords: { ...state.notePasswords, [id]: password },
+        notes: state.notes.map(n => n.id === id ? updatedNote : n)
+      }));
+    } catch (err) {
+      console.error("Encryption failed:", err);
+      throw err;
+    }
+  },
+
+  decryptNote: async (id, password) => {
+    const note = get().notes.find(n => n.id === id);
+    if (!note) return;
+
+    let decryptedNote = { ...note };
+
+    if (note.isEncrypted && note.encryptedData) {
+      const { decryptData } = await import('./crypto');
+      try {
+        const decryptedPayload = await decryptData(note.encryptedData, password);
+        const data = JSON.parse(decryptedPayload);
+        decryptedNote = {
+          ...decryptedNote,
+          isEncrypted: false,
+          title: data.title,
+          content: data.content,
+          tags: data.tags,
+          isChecklist: data.isChecklist,
+          checklistItems: data.checklistItems,
+          updatedAt: Date.now()
+        };
+        delete decryptedNote.encryptedData;
+      } catch (err) {
+        throw new Error("Incorrect password");
+      }
+    }
+
+    await saveNote(decryptedNote);
+
+    const nextPasswords = { ...get().notePasswords };
+    delete nextPasswords[id];
+
+    set(state => ({
+      notePasswords: nextPasswords,
+      notes: state.notes.map(n => n.id === id ? decryptedNote : n)
+    }));
+  },
+
+  unlockNote: async (id, password) => {
+    const note = get().notes.find(n => n.id === id);
+    if (!note || !note.isEncrypted || !note.encryptedData) return false;
+
+    const { decryptData } = await import('./crypto');
+    try {
+      const decryptedPayload = await decryptData(note.encryptedData, password);
+      const data = JSON.parse(decryptedPayload);
+      
+      const decryptedNote: Note = {
+        ...note,
+        title: data.title,
+        content: data.content,
+        tags: data.tags,
+        isChecklist: data.isChecklist,
+        checklistItems: data.checklistItems
+      };
+
+      set(state => ({
+        notePasswords: { ...state.notePasswords, [id]: password },
+        notes: state.notes.map(n => n.id === id ? decryptedNote : n)
+      }));
+      return true;
+    } catch (err) {
+      console.error("Unlock failed:", err);
+      return false;
+    }
+  },
+
+  lockNote: async (id) => {
+    const note = get().notes.find(n => n.id === id);
+    if (!note || !note.isEncrypted) return;
+
+    // Save current decrypted state back to DB as encrypted first
+    await get().updateNote(note);
+
+    const dbNotes = await getNotes();
+    const dbNote = dbNotes.find(n => n.id === id);
+    
+    if (dbNote) {
+      const nextPasswords = { ...get().notePasswords };
+      delete nextPasswords[id];
+
+      set(state => ({
+        notePasswords: nextPasswords,
+        notes: state.notes.map(n => n.id === id ? (dbNote as Note) : n)
+      }));
+    }
   },
 }));

@@ -4,7 +4,7 @@
  * Defines metadata, SEO, UI hints, and relationships for every tool.
  */
 
-import { ALL_TOOLS as ALL_TOOLS_IMPORT } from './registry';
+import { CORE_TOOLS } from './registry/core-registry';
 import { toolRelationships } from './registry/tool-relationships';
 
 export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'seo' | 'productivity' | 'media';
@@ -103,7 +103,7 @@ export function getToolColor(tool: ToolEntry): string {
   return CATEGORIES.find(c => c.id === tool.category)?.color || '#4F46E5';
 }
 
-export const ALL_TOOLS = ALL_TOOLS_IMPORT;
+export const ALL_TOOLS = CORE_TOOLS;
 export const TOOL_RELATIONSHIPS = toolRelationships;
 
 import { idbStorage } from "./store/idb-storage";
