@@ -121,7 +121,7 @@ export function InputArea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text..."
-        className="w-full min-h-[140px] p-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue focus:border-transparent outline-none transition-all font-mono text-sm resize-y"
+        className="w-full min-h-36 p-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue focus:border-transparent outline-none transition-all font-mono text-sm resize-y"
       />
 
       <p className="text-tiny text-text-4 uppercase tracking-wider font-semibold">

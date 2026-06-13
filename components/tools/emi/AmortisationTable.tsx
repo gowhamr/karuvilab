@@ -92,7 +92,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
               {visibleRows.map((entry) => (
                 <div 
                   key={entry.month} 
-                  className="grid grid-cols-5 px-4 h-[48px] items-center text-xs font-bold border-b border-border/30 last:border-0 hover:bg-blue/5 transition-colors"
+                  className="grid grid-cols-5 px-4 h-12 items-center text-xs font-bold border-b border-border/30 last:border-0 hover:bg-blue/5 transition-colors"
                   role="row"
                 >
                   <span className="text-text-3" role="rowheader">M{entry.month}</span>

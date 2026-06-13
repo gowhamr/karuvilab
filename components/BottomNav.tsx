@@ -33,7 +33,7 @@ export const BottomNav = memo(function BottomNav() {
         contain: 'layout style paint'
       }}
     >
-      <div className="flex items-center justify-between h-[64px] max-w-md mx-auto">
+      <div className="flex items-center justify-between h-16 max-w-md mx-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = item.href === pathname;
@@ -44,7 +44,7 @@ export const BottomNav = memo(function BottomNav() {
                 key={item.label}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSearch}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px] outline-none"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-12 min-h-12 outline-none"
                 aria-label="Search"
               >
                 <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
@@ -60,7 +60,7 @@ export const BottomNav = memo(function BottomNav() {
                 key={item.label}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleMenu}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-[48px] min-h-[48px] outline-none"
+                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-12 min-h-12 outline-none"
                 aria-label="Menu"
               >
                 <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
@@ -76,7 +76,7 @@ export const BottomNav = memo(function BottomNav() {
                 href={item.href!}
                 aria-label={item.label}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex flex-col items-center justify-center gap-1 transition-all min-w-[48px] min-h-[48px] outline-none ${
+                className={`flex flex-col items-center justify-center gap-1 transition-all min-w-12 min-h-12 outline-none ${
                   isActive ? "text-brand-primary" : "text-text-4 hover:text-text"
                 }`}
               >

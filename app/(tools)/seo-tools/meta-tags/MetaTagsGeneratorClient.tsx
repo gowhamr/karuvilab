@@ -97,7 +97,7 @@ export default function MetaTagsGeneratorClient() {
               />
               <div className="space-y-2">
                 <label htmlFor="robots-select" className="text-sm font-bold text-text-2">Robots</label>
-                <select id="robots-select" className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-[48px]" value={robots} onChange={e => setRobots(e.target.value)}>
+                <select id="robots-select" className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-12" value={robots} onChange={e => setRobots(e.target.value)}>
                   {ROBOTS_OPTIONS.map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
@@ -143,13 +143,13 @@ export default function MetaTagsGeneratorClient() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label htmlFor="og-type-select" className="text-sm font-bold text-text-2">OG Type</label>
-                <select id="og-type-select" className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-[48px]" value={ogType} onChange={e => setOgType(e.target.value)}>
+                <select id="og-type-select" className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-12" value={ogType} onChange={e => setOgType(e.target.value)}>
                   {OG_TYPES.map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
               <div className="space-y-2">
                 <label htmlFor="twitter-card-select" className="text-sm font-bold text-text-2">Twitter Card</label>
-                <select id="twitter-card-select" className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-[48px]" value={twitterCard} onChange={e => setTwitterCard(e.target.value)}>
+                <select id="twitter-card-select" className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-12" value={twitterCard} onChange={e => setTwitterCard(e.target.value)}>
                   {TWITTER_CARDS.map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>

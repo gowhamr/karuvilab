@@ -49,7 +49,7 @@ export function ToolResultArea({
           {onClear && (
             <button
               onClick={onClear}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-4 hover:text-red-500 transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none"
+              className="min-w-11 min-h-11 flex items-center justify-center text-text-4 hover:text-red-500 transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-red-500/20 outline-none"
               title="Clear"
               aria-label={`Clear ${label}`}
             >
@@ -61,7 +61,7 @@ export function ToolResultArea({
           {onDownload && (
             <button
               onClick={handleDownload}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-4 hover:text-blue transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
+              className="min-w-11 min-h-11 flex items-center justify-center text-text-4 hover:text-blue transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
               title="Download"
               aria-label={`Download ${label}`}
             >
@@ -88,7 +88,7 @@ export function ToolResultArea({
             role="region"
             aria-label={`${label} result`}
             tabIndex={0}
-            className="w-full min-h-[120px] px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10 outline-none focus:border-blue"
+            className="w-full min-h-30 px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10 outline-none focus:border-blue"
           >
             {value || <span className="text-text-4 italic" aria-hidden="true">Result will appear here...</span>}
             {!value && <span className="sr-only">Result will appear here.</span>}

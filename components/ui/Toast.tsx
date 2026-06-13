@@ -75,7 +75,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               exit={{ opacity: 0, scale: 0.9, x: 20, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className={`
-                pointer-events-auto px-4 py-3 rounded-2xl shadow-mat-shine border flex items-center gap-3 min-w-[280px] max-w-[400px]
+                pointer-events-auto px-4 py-3 rounded-2xl shadow-mat-shine border flex items-center gap-3 min-w-[280px] max-w-96
                 bg-mat-raised border-mat-border touch-none overflow-hidden
                 ${t.type === "success" ? "border-green-500/20" : ""}
                 ${t.type === "error" ? "border-red-500/20" : ""}

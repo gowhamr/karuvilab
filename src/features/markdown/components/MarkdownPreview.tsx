@@ -127,7 +127,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
             </div>
             <div className="space-y-1">
               <h4 className="font-black text-xs uppercase tracking-widest">Nothing to preview</h4>
-              <p className="text-xs font-bold text-text-4 uppercase max-w-[200px]">
+              <p className="text-xs font-bold text-text-4 uppercase max-w-52">
                 Start typing markdown in the editor to see it rendered here.
               </p>
             </div>

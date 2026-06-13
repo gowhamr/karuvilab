@@ -104,7 +104,7 @@ export function FocusModeToolbar({
           className={`
             flex items-center justify-between
             px-4
-            ${isMobile ? 'h-[52px]' : 'h-12'}
+            ${isMobile ? 'h-13' : 'h-12'}
             bg-mat-raised/90 backdrop-blur-md
             border-b border-border
             select-none
@@ -121,7 +121,7 @@ export function FocusModeToolbar({
               title="Exit focus mode (Esc)"
               className={`
                 flex items-center gap-1.5
-                ${isMobile ? 'min-h-[44px] px-3' : 'px-2.5 py-1.5'}
+                ${isMobile ? 'min-h-11 px-3' : 'px-2.5 py-1.5'}
                 rounded-lg
                 text-text-3 hover:text-text
                 hover:bg-mat-hover

@@ -392,7 +392,7 @@ export default function RegexTesterClient() {
                   </div>
 
                   {/* Description (community-style) */}
-                  <p className="text-xs text-text-3 font-normal leading-relaxed line-clamp-3 min-h-[48px]">
+                  <p className="text-xs text-text-3 font-normal leading-relaxed line-clamp-3 min-h-12">
                     {pat.description}
                   </p>
                 </div>

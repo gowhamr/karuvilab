@@ -116,7 +116,7 @@ export default function RobotsTxtBuilderClient() {
               Download
             </button>
           </div>
-          <pre className="bg-bg border border-border rounded-xl p-4 font-mono text-sm text-text-3 overflow-x-auto whitespace-pre min-h-[300px]">
+          <pre className="bg-bg border border-border rounded-xl p-4 font-mono text-sm text-text-3 overflow-x-auto whitespace-pre min-h-72">
             {generated}
           </pre>
         </div>

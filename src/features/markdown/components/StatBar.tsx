@@ -31,7 +31,7 @@ export function StatBar({ stats, goal = 500 }: StatBarProps) {
         Reading Time: <span className="text-text">{stats.readMin} min</span>
       </div>
       
-      <div className="flex-1 min-w-[120px] flex items-center gap-2 max-w-xs ml-auto">
+      <div className="flex-1 min-w-30 flex items-center gap-2 max-w-xs ml-auto">
         <span className="text-tiny">Goal ({goal})</span>
         <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden">
           <m.div 

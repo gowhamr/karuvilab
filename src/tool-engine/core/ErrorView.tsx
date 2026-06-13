@@ -11,7 +11,7 @@ interface ErrorViewProps {
 
 export function ErrorView({ error, onReset }: ErrorViewProps) {
   return (
-    <div className="p-8 md:p-12 bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl flex flex-col items-center justify-center text-center space-y-6 min-h-[320px]">
+    <div className="p-8 md:p-12 bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl flex flex-col items-center justify-center text-center space-y-6 min-h-80">
       <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-2 animate-shake">
         <AlertCircle className="w-8 h-8" />
       </div>

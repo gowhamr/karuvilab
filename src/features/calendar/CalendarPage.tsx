@@ -174,7 +174,7 @@ export default function CalendarPage() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 280 }}
-              className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-[320px] bg-surface/95 backdrop-blur-2xl border-r border-border/40 z-50 p-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar lg:hidden"
+              className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-80 bg-surface/95 backdrop-blur-2xl border-r border-border/40 z-50 p-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar lg:hidden"
             >
               <div className="flex items-center justify-between mb-6">
                 <span className="text-sm font-black uppercase tracking-wider text-text-3">Preferences</span>

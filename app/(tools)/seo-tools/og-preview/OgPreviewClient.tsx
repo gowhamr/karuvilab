@@ -72,7 +72,7 @@ export default function OgPreviewClient() {
               <label htmlFor="twitter-card-select" className="text-sm font-bold text-text-2">Twitter Card</label>
               <select 
                 id="twitter-card-select"
-                className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-[48px]" 
+                className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all text-base min-h-12" 
                 value={twitterCard} 
                 onChange={e => setTwitterCard(e.target.value)}
               >
@@ -126,9 +126,9 @@ export default function OgPreviewClient() {
               {twitterCard === "summary_large_image" ? (
                 <>
                   {image ? (
-                    <img src={image} alt="Twitter card preview large" className="w-full h-[200px] object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                    <img src={image} alt="Twitter card preview large" className="w-full h-52 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
                   ) : (
-                    <div className="w-full h-[200px] bg-bg flex items-center justify-center text-text-4 text-sm font-bold uppercase tracking-widest">No image</div>
+                    <div className="w-full h-52 bg-bg flex items-center justify-center text-text-4 text-sm font-bold uppercase tracking-widest">No image</div>
                   )}
                   <div className="p-4 bg-bg/30">
                     <p className="font-bold text-text line-clamp-1">{displayTitle}</p>

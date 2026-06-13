@@ -201,7 +201,7 @@ export default function ChartControls({
           </div>
         ) : (
           <>
-            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 no-scrollbar">
+            <div className="space-y-3 max-h-96 overflow-y-auto pr-2 no-scrollbar">
               <AnimatePresence initial={false}>
                 {data.map((p, i) => (
                   <m.div 

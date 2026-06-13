@@ -359,7 +359,7 @@ export default function ImageSeoClient() {
                   
                   <div className="space-y-4">
                     <textarea 
-                      className="w-full p-6 bg-bg border border-border rounded-3xl focus:border-blue outline-none transition-all font-medium text-lg min-h-[160px] shadow-inner"
+                      className="w-full p-6 bg-bg border border-border rounded-3xl focus:border-blue outline-none transition-all font-medium text-lg min-h-40 shadow-inner"
                       placeholder="Paste your image description or alt text here..."
                       value={analyzeText}
                       onChange={e => setAnalyzeText(e.target.value)}

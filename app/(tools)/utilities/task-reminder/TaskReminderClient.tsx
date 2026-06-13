@@ -89,7 +89,7 @@ export default function TaskReminderClient() {
 
   if (!mounted) {
     return (
-      <div className="bg-surface border border-border p-6 rounded-3xl min-h-[320px] animate-pulse" />
+      <div className="bg-surface border border-border p-6 rounded-3xl min-h-80 animate-pulse" />
     );
   }
 

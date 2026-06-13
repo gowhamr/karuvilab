@@ -54,8 +54,8 @@ const SidebarItem = memo(function SidebarItem({
       aria-current={isActive ? "page" : undefined}
       className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base ${
         isSmall 
-          ? `h-[52px] px-4 text-xs rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
-          : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
+          ? `h-13 px-4 text-xs rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
+          : `h-13 px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
       }`}
       style={{
         color: !isSmall && isActive ? color : undefined,
@@ -186,7 +186,7 @@ const SidebarContent = memo(function SidebarContent({
       <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
         <button 
           onClick={handleSearchClick}
-          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          className="w-full h-12 flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
         >
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hover:bg-blue/5 transition-colors">

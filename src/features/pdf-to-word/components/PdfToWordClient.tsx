@@ -144,7 +144,7 @@ export default function PdfToWordClient() {
               </div>
             </div>
             <textarea
-              className="w-full px-4 py-3 bg-bg border border-border rounded-2xl font-mono text-xs focus:ring-2 focus:ring-blue outline-none transition-all resize-none min-h-[300px]"
+              className="w-full px-4 py-3 bg-bg border border-border rounded-2xl font-mono text-xs focus:ring-2 focus:ring-blue outline-none transition-all resize-none min-h-72"
               value={text}
               readOnly
             />

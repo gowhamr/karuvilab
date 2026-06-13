@@ -26,7 +26,7 @@ export function FindBar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 p-2 bg-surface border-b border-border shadow-inner">
-      <div className="relative flex-1 min-w-[200px]">
+      <div className="relative flex-1 min-w-52">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-4" />
         <input
           type="text"
@@ -45,7 +45,7 @@ export function FindBar({
         </div>
       </div>
 
-      <div className="relative flex-1 min-w-[200px]">
+      <div className="relative flex-1 min-w-52">
         <Replace className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-4" />
         <input
           type="text"
@@ -72,7 +72,7 @@ export function FindBar({
         </div>
       </div>
 
-      <button onClick={onClose} aria-label="Close find and replace" className="min-w-[44px] min-h-[44px] hover:bg-surface rounded-lg text-text-4 flex items-center justify-center">
+      <button onClick={onClose} aria-label="Close find and replace" className="min-w-11 min-h-11 hover:bg-surface rounded-lg text-text-4 flex items-center justify-center">
         <X className="w-4 h-4" />
       </button>
     </div>

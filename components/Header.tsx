@@ -51,7 +51,7 @@ export function Header() {
   return (
     <header 
       className={cn(
-        "sticky top-0 z-40 w-full h-[60px] md:h-[72px] bg-mat-base transition-colors duration-300",
+        "sticky top-0 z-40 w-full h-15 md:h-18 bg-mat-base transition-colors duration-300",
         scrolled ? "border-b border-mat-border" : "border-b border-transparent"
       )}
     >
@@ -59,13 +59,13 @@ export function Header() {
         <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden min-w-[44px] min-h-[44px] -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
+            className="md:hidden min-w-11 min-h-11 -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
           </button>
 
-          <Link href="/" className="min-h-[44px] flex items-center">
+          <Link href="/" className="min-h-11 flex items-center">
             {/* Desktop: Full Logo with Image and Subtext */}
             <KVLogo withText size="md" className="hidden md:flex" loading="eager" />
             
@@ -96,7 +96,7 @@ export function Header() {
 
         {/* Center Search - Desktop Only */}
         <div className="hidden md:flex flex-1 justify-center max-w-xl mx-auto px-4">
-           <SearchBar className="md:min-w-[280px] lg:min-w-[400px]" />
+           <SearchBar className="md:min-w-[280px] lg:min-w-96" />
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-4 flex-shrink-0 justify-end">
@@ -104,7 +104,7 @@ export function Header() {
           <div className="md:hidden flex items-center">
              <button 
                 onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
-                className="h-[44px] px-4 flex items-center gap-2 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
+                className="h-11 px-4 flex items-center gap-2 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
                 aria-label="Search tools"
              >
                 <Search className="w-4 h-4 text-text-3" />

@@ -421,7 +421,7 @@ export default function HtmlViewerClient() {
                     {cdns.length === 0 && <p className="text-xs text-text-4 text-center py-8">No libraries added.</p>}
                     {cdns.map(url => (
                       <div key={url} className="flex items-center justify-between p-3 bg-bg border border-border rounded-xl">
-                        <span className="text-xs font-mono truncate text-text-3 max-w-[200px]">{url}</span>
+                        <span className="text-xs font-mono truncate text-text-3 max-w-52">{url}</span>
                         <button onClick={() => removeCdn(url)} className="text-text-4 hover:text-red-500 transition-colors">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -521,7 +521,7 @@ export default function HtmlViewerClient() {
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   exit={{ y: "100%" }}
-                  className="absolute bottom-20 right-6 w-80 max-h-[300px] bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+                  className="absolute bottom-20 right-6 w-80 max-h-72 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
                 >
                     <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5">
                       <span className="text-tiny font-black uppercase tracking-widest text-blue-light">Output Logs</span>

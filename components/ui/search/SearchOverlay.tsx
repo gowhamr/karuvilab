@@ -141,7 +141,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             onClick={e => e.stopPropagation()}
           >
             {/* Search Input Header */}
-            <div className="flex-shrink-0 flex items-center h-[56px] px-4 border-b border-mat-border bg-mat-surface">
+            <div className="flex-shrink-0 flex items-center h-14 px-4 border-b border-mat-border bg-mat-surface">
               <Search className="w-5 h-5 text-[--kv-text-muted] shrink-0" />
               <input
                 ref={inputRef}
@@ -168,7 +168,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               )}
               <button
                 onClick={onClose}
-                className="sm:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-sm font-semibold text-brand-primary ml-1"
+                className="sm:hidden min-w-11 min-h-11 flex items-center justify-center text-sm font-semibold text-brand-primary ml-1"
               >
                 Cancel
               </button>

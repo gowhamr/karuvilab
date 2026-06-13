@@ -174,8 +174,8 @@ export function EmptyState({
           >
             <span className="text-sm text-text-3 font-bold truncate">↩ {lastSession.label} · Continue?</span>
             <div className="flex items-center gap-2">
-              <button onClick={() => { handleEngagement(); lastSession.onRestore(); }} className="text-sm font-black text-brand-primary min-w-[44px] min-h-[44px]">Restore</button>
-              <button onClick={lastSession.onDismiss} className="min-w-[44px] min-h-[44px] text-text-4" aria-label="Dismiss session restore"><X className="w-4 h-4" /></button>
+              <button onClick={() => { handleEngagement(); lastSession.onRestore(); }} className="text-sm font-black text-brand-primary min-w-11 min-h-11">Restore</button>
+              <button onClick={lastSession.onDismiss} className="min-w-11 min-h-11 text-text-4" aria-label="Dismiss session restore"><X className="w-4 h-4" /></button>
             </div>
           </m.div>
         )}
@@ -197,7 +197,7 @@ export function EmptyState({
           }
         }}
         className={cn(
-          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-[320px] group",
+          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-80 group",
           dragStateClasses[dragState || "idle"],
           (dragState === "rejected" || isRejected) && dragStateClasses.rejected,
           isRejected && "animate-shake"

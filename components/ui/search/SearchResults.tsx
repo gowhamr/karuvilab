@@ -37,7 +37,7 @@ export const SearchResults = memo(function SearchResults({
               {recentQueries.map((q) => (
                 <div key={q} className="flex items-center group">
                   <button 
-                    className="flex-1 flex items-center gap-3 px-4 py-3 min-h-[44px] hover:bg-surface rounded-xl text-sm font-medium text-text-3 hover:text-text transition-colors text-left"
+                    className="flex-1 flex items-center gap-3 px-4 py-3 min-h-11 hover:bg-surface rounded-xl text-sm font-medium text-text-3 hover:text-text transition-colors text-left"
                     onClick={() => onSelectRecent?.(q)}
                   >
                     <svg className="w-4 h-4 text-text-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

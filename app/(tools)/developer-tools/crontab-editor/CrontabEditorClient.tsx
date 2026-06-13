@@ -226,7 +226,7 @@ export default function CrontabEditorClient() {
                 className="w-full bg-transparent font-mono text-2xl font-black text-text focus:outline-none focus:text-blue transition-colors"
                 style={{ fontSize: `${fontSize + 8}px` }}
               />
-              <p className="text-xs text-text-3 font-bold leading-tight group-hover:text-text transition-colors min-h-[32px] line-clamp-2">
+              <p className="text-xs text-text-3 font-bold leading-tight group-hover:text-text transition-colors min-h-8 line-clamp-2">
                 {field.description}
               </p>
             </m.div>

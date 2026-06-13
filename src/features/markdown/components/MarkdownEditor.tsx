@@ -434,7 +434,7 @@ export function MarkdownEditor() {
             />
 
             {fileName && (
-              <div className="flex flex-col h-[60vh] min-h-[400px] max-h-[700px] bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
+              <div className="flex flex-col h-[60vh] min-h-96 max-h-[700px] bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
                 <div className="px-6 py-4 border-b border-border bg-bg/50 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue/10 rounded-2xl flex items-center justify-center shrink-0">

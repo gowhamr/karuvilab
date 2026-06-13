@@ -64,7 +64,7 @@ export const SearchResultItem = memo(function SearchResultItem({
       role="option"
       aria-selected={isFocused}
       className={cn(
-        "w-full flex items-center gap-4 p-3 md:p-4 text-left transition-all duration-75 min-h-[56px] md:min-h-[64px] border-l-4",
+        "w-full flex items-center gap-4 p-3 md:p-4 text-left transition-all duration-75 min-h-14 md:min-h-16 border-l-4",
         isFocused 
           ? "bg-surface border-brand-primary shadow-sm z-10" 
           : "bg-transparent border-transparent hover:bg-surface/50"

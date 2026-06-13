@@ -88,7 +88,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
     <div className="relative flex items-center gap-2" ref={menuRef}>
       <button 
         onClick={handleShare}
-        className="min-w-[44px] min-h-[44px] p-2.5 bg-surface border border-border rounded-xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center"
+        className="min-w-11 min-h-11 p-2.5 bg-surface border border-border rounded-xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center"
         aria-label="Share tool"
       >
         <Share2 className="w-4 h-4" />
@@ -96,7 +96,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
 
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`min-w-[44px] min-h-[44px] p-2.5 border rounded-xl transition-all active:scale-90 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center ${
+        className={`min-w-11 min-h-11 p-2.5 border rounded-xl transition-all active:scale-90 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center ${
           isOpen ? "bg-blue border-blue text-white" : "bg-surface border-border text-text-3 hover:text-blue hover:border-blue/30"
         }`}
         aria-label="More options"

@@ -98,7 +98,7 @@ export function ViewEditTab() {
                 <FileText className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-text truncate max-w-[200px]">{fileA.name}</h3>
+                <h3 className="text-sm font-bold text-text truncate max-w-52">{fileA.name}</h3>
                 <p className="text-xs font-black uppercase tracking-widest text-text-4">
                   {fileA.language} • {formatFileSize(fileA.size)}
                 </p>
@@ -141,7 +141,7 @@ export function ViewEditTab() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 bg-surface border border-border p-4 rounded-2xl">
-             <div className="flex-1 min-w-[200px]">
+             <div className="flex-1 min-w-52">
                 <SliderField
                   label="Font Size"
                   id="font-size"

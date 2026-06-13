@@ -199,7 +199,7 @@ export default function ScientificCalculatorClient() {
              </button>
            </div>
           <div className="text-sm font-bold text-text-4 uppercase tracking-widest h-5 flex justify-end items-center gap-2">
-            <span className="truncate max-w-[250px]">{expression}</span>
+            <span className="truncate max-w-64">{expression}</span>
             <span className="bg-blue/10 text-blue px-2 py-0.5 rounded text-xs">{mode.toUpperCase()}</span>
           </div>
           <div 

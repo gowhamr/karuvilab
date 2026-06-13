@@ -189,7 +189,7 @@ export default function SettingsClient() {
               </p>
             </header>
 
-            <div className="relative z-10 min-h-[400px]">
+            <div className="relative z-10 min-h-96">
               {activeSection === 'appearance' && <AppearanceSection />}
               {activeSection === 'privacy' && <PrivacySection />}
               {activeSection === 'history' && <HistorySection />}

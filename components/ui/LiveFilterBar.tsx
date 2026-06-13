@@ -27,7 +27,7 @@ export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, plac
   return (
     <div className="relative group w-full">
       <div 
-        className="relative h-[56px] md:h-[64px] flex items-center bg-surface border border-border rounded-xl shadow-sm focus-within:border-blue focus-within:ring-2 focus-within:ring-blue/20 transition-all duration-300"
+        className="relative h-14 md:h-16 flex items-center bg-surface border border-border rounded-xl shadow-sm focus-within:border-blue focus-within:ring-2 focus-within:ring-blue/20 transition-all duration-300"
       >
         <div className="pl-5 text-text-4 group-focus-within:text-blue transition-colors">
           <Search className="w-5 h-5" />

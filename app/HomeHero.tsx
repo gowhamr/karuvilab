@@ -11,7 +11,7 @@ export function HomeHero() {
   return (
     <section className="relative pt-1 md:pt-4 flex flex-col items-center text-center space-y-2 md:space-y-4 px-4 overflow-hidden">
       {/* Ambient background glow */}
-      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-r from-blue/10 via-indigo-500/5 to-purple-500/10 rounded-full blur-[90px] pointer-events-none -z-10" />
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-80 bg-gradient-to-r from-blue/10 via-indigo-500/5 to-purple-500/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
       {/* Tag pill — reduce size */}
       <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[--kv-mat-surface] border border-border/40 text-xs font-bold uppercase tracking-widest text-[--kv-text-muted] shadow-sm">

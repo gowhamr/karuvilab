@@ -54,7 +54,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-6">
           {/* Continue Using */}
           {(!mounted || recentTools.length > 0) && (
-            <div className="flex-1 space-y-3 min-h-[60px]">
+            <div className="flex-1 space-y-3 min-h-15">
               <h4 className="text-xs font-black uppercase tracking-widest text-text-4">
                 Continue Using
               </h4>

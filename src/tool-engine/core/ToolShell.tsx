@@ -65,7 +65,7 @@ export function ToolShell({ toolId }: ToolShellProps) {
           </div>
 
           {/* Phase Routing */}
-          <div className="flex-1 w-full min-h-[320px]">
+          <div className="flex-1 w-full min-h-80">
             {phase === "idle" && (
               <EmptyState 
                 icon={emptyStateIcon}

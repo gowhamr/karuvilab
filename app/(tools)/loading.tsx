@@ -16,7 +16,7 @@ export default function ToolLoading() {
       </div>
       <div className="relative">
         <div className="absolute -inset-4 bg-blue/5 blur-3xl -z-10 rounded-full" />
-        <div className="h-[400px] w-full bg-surface border border-border rounded-4xl animate-pulse" />
+        <div className="h-96 w-full bg-surface border border-border rounded-4xl animate-pulse" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8">
         <div className="lg:col-span-2 space-y-12">

@@ -153,7 +153,7 @@ export default function SlugGeneratorClient() {
                       <span className="text-xs font-black uppercase tracking-widest text-text-4">{label}</span>
                       {value && <CopyButton text={value} />}
                     </div>
-                    <div className="bg-bg border border-border rounded-xl px-4 py-3 font-mono text-sm text-text-2 break-all min-h-[48px] flex items-center shadow-inner group-hover:border-blue/30 transition-colors">
+                    <div className="bg-bg border border-border rounded-xl px-4 py-3 font-mono text-sm text-text-2 break-all min-h-12 flex items-center shadow-inner group-hover:border-blue/30 transition-colors">
                       {value || <span className="text-text-4 italic opacity-50">Enter text to generate</span>}
                     </div>
                   </div>

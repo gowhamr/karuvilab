@@ -112,12 +112,12 @@ export default function WifiQrCodeClient() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-8 bg-surface border border-border rounded-4xl space-y-6 min-h-[400px] relative">
+        <div className="flex flex-col items-center justify-center p-8 bg-surface border border-border rounded-4xl space-y-6 min-h-96 relative">
           <QRCodeLoader onLoad={() => setIsLibLoaded(true)} />
           
           {ssid ? (
             <>
-              <div className="p-6 bg-white rounded-3xl shadow-xl relative min-w-[200px] min-h-[200px] flex items-center justify-center">
+              <div className="p-6 bg-white rounded-3xl shadow-xl relative min-w-52 min-h-52 flex items-center justify-center">
                 {!isLibLoaded || !qrBlobUrl ? (
                   <div className="flex flex-col items-center gap-2">
                     <Loader2 className="w-8 h-8 animate-spin text-blue/30" />

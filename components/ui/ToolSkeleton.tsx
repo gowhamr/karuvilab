@@ -17,7 +17,7 @@ export function ToolSkeleton() {
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
         <div className="space-y-6 sm:space-y-8">
-          <SkeletonBlock className="h-[400px] w-full rounded-4xl" />
+          <SkeletonBlock className="h-96 w-full rounded-4xl" />
           <SkeletonBlock className="h-14 w-full bg-blue/10 border-blue/20 rounded-2xl" />
         </div>
         <SkeletonBlock className="h-[500px] w-full rounded-4xl" />

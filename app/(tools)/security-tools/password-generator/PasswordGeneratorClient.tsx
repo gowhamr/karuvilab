@@ -278,7 +278,7 @@ export default function PasswordGeneratorClient() {
                   <History className="w-3.5 h-3.5" />
                   Recent History
                 </h3>
-                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-2 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
                   {history.map((pw, i) => (
                     <div key={i} className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-bg transition-colors group">
                       <span className="font-mono text-xs text-text-4 break-all flex-1 truncate">{pw}</span>

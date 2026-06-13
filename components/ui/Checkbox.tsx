@@ -12,7 +12,7 @@ export function Checkbox({ label, className, id, ...props }: CheckboxProps) {
   const finalId = id || generatedId;
 
   return (
-    <label className={cn("flex items-center gap-3 cursor-pointer group py-2.5 min-h-[44px]", className)}>
+    <label className={cn("flex items-center gap-3 cursor-pointer group py-2.5 min-h-11", className)}>
       <div className="relative flex items-center justify-center w-6 h-6 flex-shrink-0">
         <input
           type="checkbox"

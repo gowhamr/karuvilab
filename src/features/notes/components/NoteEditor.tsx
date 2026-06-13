@@ -438,7 +438,7 @@ export function NoteEditor() {
                 />
 
                 {/* Content Area */}
-                <div className="min-h-[300px]">
+                <div className="min-h-72">
                   {localNote.isChecklist ? (
                     <div className="space-y-3">
                       {localNote.checklistItems.map((item) => (
@@ -497,7 +497,7 @@ export function NoteEditor() {
                         value={localNote.content}
                         onChange={(e) => handleChange({ content: e.target.value })}
                         placeholder="Start writing your thoughts... (Markdown supported)"
-                        className={`w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-[400px] ${wordWrap ? '' : 'whitespace-pre overflow-x-auto'}`}
+                        className={`w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-96 ${wordWrap ? '' : 'whitespace-pre overflow-x-auto'}`}
                         style={{ fontSize: `${fontSize}px` }}
                       />
                     </FocusModeWrapper>

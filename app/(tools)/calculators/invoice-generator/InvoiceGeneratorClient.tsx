@@ -380,7 +380,7 @@ export default function InvoiceGeneratorClient() {
                           onClick={() => setTemplate(t)}
                           role="radio"
                           aria-checked={template === t}
-                          className={`flex-1 min-w-[80px] py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
+                          className={`flex-1 min-w-20 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
                         >
                           {t}
                         </button>

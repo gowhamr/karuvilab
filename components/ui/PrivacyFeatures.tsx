@@ -71,7 +71,7 @@ export function PrivacyFeatures() {
         </div>
         <Link 
           href="/privacy" 
-          className="w-full md:w-auto h-[52px] px-8 bg-white text-[#1E293B] rounded-xl font-bold text-base hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-md"
+          className="w-full md:w-auto h-13 px-8 bg-white text-[#1E293B] rounded-xl font-bold text-base hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-md"
         >
           View Privacy Policy
         </Link>

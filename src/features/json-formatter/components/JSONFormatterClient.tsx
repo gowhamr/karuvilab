@@ -339,7 +339,7 @@ export default function JSONFormatterClient() {
           </div>
         </div>
 
-        <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-[400px] relative">
+        <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-96 relative">
           {(!output && !isProcessing && !error) ? (
             <EmptyState 
               toolId="jsonFormatter"
@@ -381,7 +381,7 @@ export default function JSONFormatterClient() {
             <textarea
               readOnly
               aria-label="Formatted JSON output"
-              className={`w-full min-h-[400px] p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+              className={`w-full min-h-96 p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
               style={{ fontSize: `${fontSize}px` }}
               value={output}
               placeholder="Results will appear here..."

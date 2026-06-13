@@ -188,7 +188,7 @@ export default function HashGeneratorClient() {
                     <span className="text-xs font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
                   </div>
                   <textarea
-                    className="w-full px-5 py-4 bg-bg border border-border rounded-2xl font-mono text-sm focus:ring-4 focus:ring-blue/5 focus:border-blue outline-none transition-all resize-none min-h-[200px]"
+                    className="w-full px-5 py-4 bg-bg border border-border rounded-2xl font-mono text-sm focus:ring-4 focus:ring-blue/5 focus:border-blue outline-none transition-all resize-none min-h-52"
                     placeholder="Type or paste content here..."
                     value={text}
                     onChange={e => setText(e.target.value)}
@@ -217,7 +217,7 @@ export default function HashGeneratorClient() {
                   multiple={false}
                   title="Drop a file to hash"
                   description="All file types supported. Local processing only."
-                  className="aspect-video lg:aspect-auto lg:h-[300px] rounded-4xl"
+                  className="aspect-video lg:aspect-auto lg:h-72 rounded-4xl"
                 />
                 {file && (
                   <div className="bg-surface border border-border px-6 py-4 rounded-2xl flex items-center justify-between group">
@@ -226,7 +226,7 @@ export default function HashGeneratorClient() {
                         <FileCode size={20} />
                       </div>
                       <div>
-                        <p className="text-sm font-bold truncate max-w-[200px]">{file.name}</p>
+                        <p className="text-sm font-bold truncate max-w-52">{file.name}</p>
                         <p className="text-xs font-black uppercase tracking-widest text-text-4">{(file.size / 1024).toFixed(1)} KB</p>
                       </div>
                     </div>
@@ -397,7 +397,7 @@ export default function HashGeneratorClient() {
                       {!res?.loading && res?.value && <CopyButton text={res.value} className="bg-bg border border-border" />}
                     </div>
 
-                    <div className="relative group min-h-[60px] flex items-center">
+                    <div className="relative group min-h-15 flex items-center">
                       {res?.loading ? (
                         <div className="flex items-center gap-3 text-text-4">
                           <Clock size={16} className="animate-pulse" aria-hidden="true" />

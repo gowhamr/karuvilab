@@ -46,7 +46,7 @@ export function ToolInput({
   const errorId = `${id}-error`;
 
   const baseClasses = cn(
-    "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-[48px] text-text",
+    "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-12 text-text",
     mono ? "font-mono text-sm md:text-sm" : "text-base", // Force 16px on mobile to prevent zoom
     error 
       ? "border-red-500 focus:ring-4 focus:ring-inset focus:ring-red-500/10 focus:border-red-500" 
@@ -75,7 +75,7 @@ export function ToolInput({
       {rows > 1 ? (
         <textarea
           id={id}
-          className={cn(baseClasses, "min-h-[120px] py-4")}
+          className={cn(baseClasses, "min-h-30 py-4")}
           style={style}
           rows={rows}
           placeholder={placeholder}

@@ -29,7 +29,7 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-surface/60 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-4xl overflow-hidden shadow-premium">
       <div className="flex-1 flex flex-col overflow-x-auto no-scrollbar">
-        <div className="min-w-[320px] md:min-w-full flex-1 flex flex-col">
+        <div className="min-w-80 md:min-w-full flex-1 flex flex-col">
           {/* Weekday Headers */}
           <div className="grid grid-cols-7 border-b border-border/30 bg-bg/50 sticky top-0 z-20 backdrop-blur-md">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
@@ -104,7 +104,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
     <div
       onClick={onClick}
       className={cn(
-        "min-h-[60px] md:min-h-[140px] p-1 md:p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all",
+        "min-h-15 md:min-h-36 p-1 md:p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all",
         !isCurrentMonth && "bg-bg/20 opacity-40",
         isCurrentMonth && "hover:bg-indigo-500/5",
         isToday && "bg-indigo-500/[0.05]"

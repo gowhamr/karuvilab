@@ -57,7 +57,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
         <Link 
           href={href}
           aria-label={`Explore all ${title}`}
-          className="flex items-center gap-1 min-h-[44px] px-2 text-xs font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
+          className="flex items-center gap-1 min-h-11 px-2 text-xs font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
         >
           Explore all <ArrowRight className="w-3 h-3" />
         </Link>
@@ -169,7 +169,7 @@ export default function HomeClient() {
             <div className="flex justify-center">
               <button
                 onClick={() => setIsPaletteOpen(true)}
-                className="h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-base font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
+                className="h-12 px-6 rounded-xl border border-mat-border bg-transparent text-base font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
               >
                 <Command className="w-4 h-4" />
                 <span>Quick Search</span>
@@ -224,7 +224,7 @@ export default function HomeClient() {
                     icon={LayoutGrid}
                   />
 
-                  <div className="min-h-[350px]">
+                  <div className="min-h-80">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                       {filteredTools.map(tool => (
                         <ToolCard key={tool.id} tool={tool} compact />
@@ -311,7 +311,7 @@ export default function HomeClient() {
                     {/* Tablet+ carousel */}
                     <div className="hidden sm:flex overflow-x-auto no-scrollbar gap-3 pb-2 snap-x snap-mandatory">
                       {popularTools.map(tool => (
-                        <div key={tool.id} className="min-w-[220px] snap-start shrink-0">
+                        <div key={tool.id} className="min-w-56 snap-start shrink-0">
                           <ToolCard tool={tool} />
                         </div>
                       ))}
@@ -342,7 +342,7 @@ export default function HomeClient() {
                     <div className="mt-8 flex justify-center">
                       <Link 
                         href="/all-tools"
-                        className="w-full flex items-center justify-center gap-2 h-[52px] md:w-auto md:inline-flex md:px-6 md:h-[48px] bg-[--kv-mat-raised] border border-[--kv-mat-border] rounded-xl text-base font-semibold text-[--kv-text] hover:bg-[--kv-mat-hover] hover:border-[--kv-brand-primary]/40 hover:text-[--kv-brand-primary] transition-all duration-150"
+                        className="w-full flex items-center justify-center gap-2 h-13 md:w-auto md:inline-flex md:px-6 md:h-12 bg-[--kv-mat-raised] border border-[--kv-mat-border] rounded-xl text-base font-semibold text-[--kv-text] hover:bg-[--kv-mat-hover] hover:border-[--kv-brand-primary]/40 hover:text-[--kv-brand-primary] transition-all duration-150"
                       >
                         Browse 100+ Tools <ArrowRight className="w-4 h-4" />
                       </Link>

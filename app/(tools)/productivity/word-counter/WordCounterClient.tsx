@@ -89,7 +89,7 @@ export default function WordCounterClient() {
             accept=".txt,.docx"
             title="Drop file (.txt, .docx)"
             description="or click to browse"
-            className="h-[300px]"
+            className="h-72"
           />
         </div>
       </div>

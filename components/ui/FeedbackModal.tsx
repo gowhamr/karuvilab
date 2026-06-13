@@ -157,7 +157,7 @@ export function FeedbackModal() {
                         id="issue-type"
                         value={type}
                         onChange={(e) => setType(e.target.value as FeedbackType)}
-                        className="w-full h-[56px] px-5 pr-12 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm appearance-none"
+                        className="w-full h-14 px-5 pr-12 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm appearance-none"
                       >
                         {FEEDBACK_OPTIONS.map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -177,7 +177,7 @@ export function FeedbackModal() {
                       value={fromEmail}
                       onChange={(e) => setFromEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full h-[56px] px-5 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm"
+                      className="w-full h-14 px-5 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm"
                     />
                   </div>
 
@@ -190,7 +190,7 @@ export function FeedbackModal() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="What happened? Any steps to reproduce?"
-                      className="w-full min-h-[120px] p-5 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm resize-none"
+                      className="w-full min-h-30 p-5 bg-mat-base border border-mat-border rounded-2xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm resize-none"
                     />
                   </div>
 
@@ -199,7 +199,7 @@ export function FeedbackModal() {
                     <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
                     <FileUpload 
                       onFileSelect={setScreenshot}
-                      className="group relative w-full h-[80px] border-2 border-dashed border-mat-border rounded-2xl flex items-center justify-center bg-mat-base/50 hover:bg-mat-surface hover:border-brand-primary/30 transition-colors cursor-pointer"
+                      className="group relative w-full h-20 border-2 border-dashed border-mat-border rounded-2xl flex items-center justify-center bg-mat-base/50 hover:bg-mat-surface hover:border-brand-primary/30 transition-colors cursor-pointer"
                     />
                   </div>
 
@@ -242,7 +242,7 @@ export function FeedbackModal() {
                     <button 
                       disabled={isSubmitting}
                       type="submit"
-                      className="w-full h-[64px] bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                      className="w-full h-16 bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin" />

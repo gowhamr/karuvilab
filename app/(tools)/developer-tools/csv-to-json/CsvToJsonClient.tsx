@@ -227,7 +227,7 @@ export default function CsvToJsonClient() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={mode === 'csv-to-json' ? "id,name,age\\n1,John,30\\n2,Jane,25" : "[\\n  { \"id\": 1, \"name\": \"John\", \"age\": 30 }\\n]"}
-              className="w-full h-[400px] bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
+              className="w-full h-96 bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
             />
           </div>
 
@@ -258,7 +258,7 @@ export default function CsvToJsonClient() {
               readOnly
               value={output}
               className={cn(
-                "w-full h-[400px] bg-mat-base border border-mat-border rounded-2xl p-4 font-mono text-sm outline-none resize-none",
+                "w-full h-96 bg-mat-base border border-mat-border rounded-2xl p-4 font-mono text-sm outline-none resize-none",
                 output.startsWith('Error:') ? "text-red-500" : "text-text-3"
               )}
             />

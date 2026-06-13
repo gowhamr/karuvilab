@@ -19,7 +19,7 @@ export function TextPanel({ charBreakdown, bytes }: TextPanelProps) {
 
         {charBreakdown ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4 max-h-[360px] overflow-y-auto pr-2 scrollbar-thin">
+            <div className="space-y-4 max-h-96 overflow-y-auto pr-2 scrollbar-thin">
               {charBreakdown.map((row, idx) => (
                 <div key={idx} className="flex items-center justify-between bg-bg border border-border rounded-2xl p-4 shadow-sm">
                   <div className="flex items-center gap-4">

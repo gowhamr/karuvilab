@@ -69,7 +69,7 @@ export function CalendarSidebar() {
   };
 
   return (
-    <aside className="w-full lg:w-[320px] shrink-0 space-y-6">
+    <aside className="w-full lg:w-80 shrink-0 space-y-6">
       {/* Upcoming Events Widget */}
       {worldEventsSettings.showUpcomingWidget && (
         <div className="bg-surface/40 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-3xl p-5 shadow-sm space-y-4">
@@ -212,7 +212,7 @@ export function CalendarSidebar() {
                 <Filter className="w-3.5 h-3.5 text-indigo-500/80" />
                 Categories
               </label>
-              <div className="grid grid-cols-1 gap-2 max-h-[200px] overflow-y-auto pr-1 no-scrollbar">
+              <div className="grid grid-cols-1 gap-2 max-h-52 overflow-y-auto pr-1 no-scrollbar">
                 {CATEGORY_INFOS.map((cat) => {
                   const isActive = showCategories.includes(cat.id);
                   return (
