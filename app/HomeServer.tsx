@@ -31,11 +31,11 @@ export function HomeHero() {
       </p>
 
       {/* Trust strip — compact on mobile */}
-      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 md:gap-x-4">
         {TRUST_ITEMS.map((item, i) => (
-          <div key={i} className="flex items-center gap-1.5">
+          <div key={i} className="flex items-center gap-1 md:gap-1.5 shrink-0">
             <item.icon className="w-3 h-3 text-[--kv-brand-primary]" />
-            <span className="text-xs font-bold uppercase tracking-widest text-[--kv-text-muted]">{item.text}</span>
+            <span className="text-micro md:text-xs font-bold uppercase tracking-wider text-[--kv-text-muted]">{item.text}</span>
           </div>
         ))}
       </div>
