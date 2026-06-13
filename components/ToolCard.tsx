@@ -2,9 +2,8 @@
 
 import { memo } from "react";
 import Link from "next/link";
-import { ToolEntry, isNewTool } from "@/src/tool-registry";
+import { ToolEntry } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
-import { Zap } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { m } from "framer-motion";
 
@@ -63,30 +62,6 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             >
               {tool.name}
             </h3>
-            
-            <div className="flex items-center gap-1 shrink-0">
-              {tool.popular && (
-                <div 
-                  className="px-1.5 py-0.5 rounded-full bg-[--kv-brand-primary]/10 border border-[--kv-brand-primary]/20 flex items-center gap-0.5"
-                  role="img"
-                  aria-label="Popular tool"
-                  title="Popular"
-                >
-                  <Zap className="w-2.5 h-2.5 fill-current text-[--kv-brand-primary]" aria-hidden="true" />
-                  <span className="text-tiny font-bold uppercase tracking-widest text-[--kv-brand-primary]">Hot</span>
-                </div>
-              )}
-
-              {isNewTool(tool) && (
-                <div 
-                  className="px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-0.5"
-                  role="img"
-                  aria-label="New tool"
-                >
-                  <span className="text-tiny font-bold uppercase tracking-widest text-emerald-500">New</span>
-                </div>
-              )}
-            </div>
           </div>
           <p className="text-[--kv-text-muted] text-xs md:text-sm font-medium line-clamp-2 leading-relaxed">
             {tool.desc}
