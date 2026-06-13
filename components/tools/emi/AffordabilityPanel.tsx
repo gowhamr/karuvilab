@@ -78,7 +78,7 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
               />
             </div>
             
-            <div className="flex justify-between text-[10px] font-bold text-text-4 uppercase tracking-tighter">
+            <div className="flex justify-between text-xs font-bold text-text-4 uppercase tracking-tighter">
               <span>0%</span>
               <span>25%</span>
               <span>50%</span>

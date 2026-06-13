@@ -78,7 +78,7 @@ export function EmiInputs() {
                     onChange={(val) => setInputs({ floatingRateDelta: val })}
                     format={(v) => `${v > 0 ? "+" : ""}${v}%`}
                   />
-                  <p className="mt-2 text-[10px] text-text-4">
+                  <p className="mt-2 text-xs text-text-4">
                     Test how your EMI changes if the interest rate increases or decreases.
                   </p>
                 </div>

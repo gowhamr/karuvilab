@@ -104,7 +104,7 @@ export default function WordToPdfClient() {
               </div>
               <div>
                 <h3 className="font-black text-text uppercase tracking-widest text-sm">Conversion Ready</h3>
-                <p className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">{result.name}</p>
+                <p className="text-xs font-bold text-text-4 uppercase tracking-tighter">{result.name}</p>
               </div>
             </div>
             <button

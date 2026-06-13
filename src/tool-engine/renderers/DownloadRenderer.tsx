@@ -32,7 +32,7 @@ export default function DownloadRenderer({ result }: { result: ToolResult }) {
         <Download className="w-4 h-4" />
         Download Again
       </button>
-      <p className="text-[10px] text-text-4 uppercase tracking-widest font-black">
+      <p className="text-xs text-text-4 uppercase tracking-widest font-black">
         {result.filename}
       </p>
     </div>

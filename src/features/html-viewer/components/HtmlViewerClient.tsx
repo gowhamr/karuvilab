@@ -12,6 +12,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useDebounce } from "@/src/hooks/useDebounce";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import DOMPurify from "isomorphic-dompurify";
@@ -64,6 +65,11 @@ export default function HtmlViewerClient() {
   const [copied, setCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const debouncedHtml = useDebounce(html, 500);
+  const debouncedCss = useDebounce(css, 500);
+  const debouncedJs = useDebounce(js, 500);
+  const debouncedCdns = useDebounce(cdns, 500);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const logIdRef = useRef(0);
@@ -211,9 +217,8 @@ export default function HtmlViewerClient() {
   }, [getCompiledDoc]);
 
   useEffect(() => {
-    const timeout = setTimeout(updatePreview, 500);
-    return () => clearTimeout(timeout);
-  }, [updatePreview]);
+    updatePreview();
+  }, [debouncedHtml, debouncedCss, debouncedJs, debouncedCdns, updatePreview]);
 
   // Actions
   const handleShare = () => {
@@ -300,7 +305,7 @@ export default function HtmlViewerClient() {
                 key={t}
                 onClick={() => setActiveTab(t)}
                 className={cn(
-                  "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
                   activeTab === t 
                     ? "bg-blue text-white neon-glow" 
                     : "text-text-4 hover:bg-blue/5 hover:text-blue"
@@ -416,7 +421,7 @@ export default function HtmlViewerClient() {
                     {cdns.length === 0 && <p className="text-xs text-text-4 text-center py-8">No libraries added.</p>}
                     {cdns.map(url => (
                       <div key={url} className="flex items-center justify-between p-3 bg-bg border border-border rounded-xl">
-                        <span className="text-[10px] font-mono truncate text-text-3 max-w-[200px]">{url}</span>
+                        <span className="text-xs font-mono truncate text-text-3 max-w-[200px]">{url}</span>
                         <button onClick={() => removeCdn(url)} className="text-text-4 hover:text-red-500 transition-colors">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -425,7 +430,7 @@ export default function HtmlViewerClient() {
                   </div>
 
                   <div className="pt-4 border-t border-border">
-                      <p className="text-[10px] font-bold text-text-4 uppercase mb-2">Common Presets</p>
+                      <p className="text-xs font-bold text-text-4 uppercase mb-2">Common Presets</p>
                       <div className="flex flex-wrap gap-2">
                         {[
                           { name: "Tailwind", url: "https://cdn.tailwindcss.com" },
@@ -436,7 +441,7 @@ export default function HtmlViewerClient() {
                           <button 
                             key={lib.name}
                             onClick={() => !cdns.includes(lib.url) && setCdns([...cdns, lib.url])}
-                            className="px-3 py-1.5 rounded-lg bg-blue/5 border border-blue/10 text-[10px] font-bold text-blue hover:bg-blue hover:text-white transition-all"
+                            className="px-3 py-1.5 rounded-lg bg-blue/5 border border-blue/10 text-xs font-bold text-blue hover:bg-blue hover:text-white transition-all"
                           >
                             + {lib.name}
                           </button>
@@ -468,7 +473,7 @@ export default function HtmlViewerClient() {
           <div className="flex items-center gap-2">
             <button 
               onClick={handleDownload}
-              className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border rounded-lg text-[10px] font-black uppercase tracking-widest text-text-4 hover:border-blue/30 hover:text-blue transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border rounded-lg text-xs font-black uppercase tracking-widest text-text-4 hover:border-blue/30 hover:text-blue transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Export</span>
@@ -505,7 +510,7 @@ export default function HtmlViewerClient() {
               )}
             >
               <Terminal className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Console {logs.length > 0 && `(${logs.length})`}</span>
+              <span className="text-xs font-black uppercase tracking-widest">Console {logs.length > 0 && `(${logs.length})`}</span>
               {isConsoleOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronUp className="w-3 h-3" />}
             </button>
 
@@ -519,14 +524,14 @@ export default function HtmlViewerClient() {
                   className="absolute bottom-20 right-6 w-80 max-h-[300px] bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
                 >
                     <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5">
-                      <span className="text-[9px] font-black uppercase tracking-widest text-blue-light">Output Logs</span>
-                      <button onClick={() => setLogs([])} className="text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-300">Clear</button>
+                      <span className="text-tiny font-black uppercase tracking-widest text-blue-light">Output Logs</span>
+                      <button onClick={() => setLogs([])} className="text-tiny font-black uppercase tracking-widest text-red-400 hover:text-red-300">Clear</button>
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
-                      {logs.length === 0 && <p className="text-[10px] text-white/20 italic">No output yet...</p>}
+                      {logs.length === 0 && <p className="text-xs text-white/20 italic">No output yet...</p>}
                       {logs.map(log => (
                         <div key={log.id} className={cn(
-                          "text-[11px] font-mono break-all",
+                          "text-xs font-mono break-all",
                           log.type === "error" ? "text-red-400" : log.type === "warn" ? "text-yellow-400" : "text-blue-200"
                         )}>
                             <span className="opacity-30 mr-2">[{log.type}]</span>

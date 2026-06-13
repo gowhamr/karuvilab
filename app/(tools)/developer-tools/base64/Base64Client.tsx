@@ -84,7 +84,7 @@ export default function Base64Client() {
           </div>
           <div className="space-y-0.5">
             <span className="text-sm font-bold text-text-2">URL-safe Base64</span>
-            <p className="text-[10px] text-text-4 font-medium uppercase tracking-tighter">+→-, /→_, no padding</p>
+            <p className="text-xs text-text-4 font-medium uppercase tracking-tighter">+→-, /→_, no padding</p>
           </div>
         </label>
       </div>

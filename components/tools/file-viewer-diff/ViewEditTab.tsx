@@ -99,7 +99,7 @@ export function ViewEditTab() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-text truncate max-w-[200px]">{fileA.name}</h3>
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">
+                <p className="text-xs font-black uppercase tracking-widest text-text-4">
                   {fileA.language} • {formatFileSize(fileA.size)}
                 </p>
               </div>
@@ -109,7 +109,7 @@ export function ViewEditTab() {
               {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
                 <button
                   onClick={handleBeautify}
-                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue hover:text-white transition-all flex items-center gap-2"
+                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue hover:text-white transition-all flex items-center gap-2"
                   title="Beautify / Format"
                 >
                   <Sparkles className="w-4 h-4" />
@@ -155,12 +155,12 @@ export function ViewEditTab() {
              
              <div className="flex flex-wrap items-center gap-6">
                <div className="space-y-1">
-                 <label htmlFor="viewer-language-select" className="text-[10px] font-black uppercase tracking-widest text-text-4">Language</label>
+                 <label htmlFor="viewer-language-select" className="text-xs font-black uppercase tracking-widest text-text-4">Language</label>
                  <select
                    id="viewer-language-select"
                    value={fileA.language}
                    onChange={(e) => setFileALanguage(e.target.value)}
-                   className="block w-32 px-3 py-1.5 bg-bg border border-border rounded-xl text-[10px] font-bold outline-none focus:ring-2 focus:ring-blue"
+                   className="block w-32 px-3 py-1.5 bg-bg border border-border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue"
                  >
                    {LANG_OPTIONS.map(l => <option key={l} value={l}>{l.toUpperCase()}</option>)}
                  </select>
@@ -172,7 +172,7 @@ export function ViewEditTab() {
                     onChange={(e) => updateSettings({ wordWrap: e.target.checked })}
                     className="accent-blue"
                   />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Word Wrap</span>
+                  <span className="text-xs font-black uppercase tracking-widest text-text-4">Word Wrap</span>
                </label>
 
                <label className="flex items-center gap-2 cursor-pointer pt-4">
@@ -181,7 +181,7 @@ export function ViewEditTab() {
                     onChange={(e) => updateSettings({ showLineNumbers: e.target.checked })}
                     className="accent-blue"
                   />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Lines</span>
+                  <span className="text-xs font-black uppercase tracking-widest text-text-4">Lines</span>
                </label>
              </div>
           </div>

@@ -87,24 +87,24 @@ export default function page() {
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           <div className="p-6 bg-blue/5 border border-blue/10 rounded-2xl">
             <h4 className="font-bold text-blue mb-2 italic">Example: Photography</h4>
-            <p className="text-xs text-text-3">Original: <code className="text-red-400">DSC_001.jpg</code></p>
-            <p className="text-xs text-text-3 mt-1 font-bold">SEO: <code className="text-green-500">golden-gate-bridge-sunset-fog.jpg</code></p>
+            <p className="text-xs text-text-3">Original: <code className="text-error">DSC_001.jpg</code></p>
+            <p className="text-xs text-text-3 mt-1 font-bold">SEO: <code className="text-success">golden-gate-bridge-sunset-fog.jpg</code></p>
           </div>
           <div className="p-6 bg-blue/5 border border-blue/10 rounded-2xl">
             <h4 className="font-bold text-blue mb-2 italic">Example: Real Estate</h4>
-            <p className="text-xs text-text-3">Original: <code className="text-red-400">scan_doc_2024.pdf</code></p>
-            <p className="text-xs text-text-3 mt-1 font-bold">SEO: <code className="text-green-500">modern-3-bedroom-apartment-floorplan.pdf</code></p>
+            <p className="text-xs text-text-3">Original: <code className="text-error">scan_doc_2024.pdf</code></p>
+            <p className="text-xs text-text-3 mt-1 font-bold">SEO: <code className="text-success">modern-3-bedroom-apartment-floorplan.pdf</code></p>
           </div>
           <div className="p-6 bg-blue/5 border border-blue/10 rounded-2xl">
             <h4 className="font-bold text-blue mb-2 italic">Example: E-commerce</h4>
-            <p className="text-xs text-text-3">Original: <code className="text-red-400">product-red.png</code></p>
-            <p className="text-xs text-text-3 mt-1 font-bold">SEO: <code className="text-green-500">ergonomic-wireless-gaming-mouse-red.png</code></p>
+            <p className="text-xs text-text-3">Original: <code className="text-error">product-red.png</code></p>
+            <p className="text-xs text-text-3 mt-1 font-bold">SEO: <code className="text-success">ergonomic-wireless-gaming-mouse-red.png</code></p>
           </div>
         </div>
 
         <div className="mt-12 p-8 bg-surface border border-border rounded-4xl flex flex-col items-center text-center">
-          <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4">
-            <CheckCircle2 className="w-8 h-8 text-green-500" />
+          <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle2 className="w-8 h-8 text-success" />
           </div>
           <h3 className="text-xl font-bold text-text">Privacy & Security First</h3>
           <p className="text-text-3 max-w-2xl mt-2 italic">

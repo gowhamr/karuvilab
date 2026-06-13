@@ -31,14 +31,14 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
   
   return (
     <div className={cn("bg-surface border border-border rounded-2xl overflow-hidden flex flex-col font-mono text-xs", className)}>
-      <div className="flex bg-bg border-b border-border px-4 py-2 justify-between items-center text-[10px] font-black uppercase tracking-widest text-text-4">
+      <div className="flex bg-bg border-b border-border px-4 py-2 justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
         <div className="flex-1">Original</div>
         <div className="w-px h-4 bg-border mx-4" />
         <div className="flex-1">Modified</div>
       </div>
 
       {diff.length > 5000 && (
-        <div className="px-4 py-2 bg-yellow-500/10 border-b border-border text-[10px] text-yellow-600 font-bold uppercase tracking-wider">
+        <div className="px-4 py-2 bg-yellow-500/10 border-b border-border text-xs text-yellow-600 font-bold uppercase tracking-wider">
           Large diff detected ({diff.length} lines). Virtualizing rendering for stability.
         </div>
       )}
@@ -82,12 +82,12 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
 
         {diff.length > visibleCount && (
           <div className="p-4 flex flex-col items-center gap-2 bg-bg/50 border-t border-border">
-            <p className="text-[10px] text-text-4 uppercase font-bold">
+            <p className="text-xs text-text-4 uppercase font-bold">
               Showing {visibleCount} of {diff.length} lines for performance
             </p>
             <button 
               onClick={() => setVisibleCount(prev => prev + 2000)}
-              className="px-6 py-2 bg-blue text-white text-[10px] font-black uppercase rounded-full hover:scale-105 active:scale-95 transition-all"
+              className="px-6 py-2 bg-blue text-white text-xs font-black uppercase rounded-full hover:scale-105 active:scale-95 transition-all"
             >
               Load 2,000 more lines
             </button>

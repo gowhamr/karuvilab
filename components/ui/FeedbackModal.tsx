@@ -102,7 +102,7 @@ export function FeedbackModal() {
               <Dialog.Title className="text-xl font-black tracking-tight">
                 {isSuccess ? "Thank You!" : "Feedback"}
               </Dialog.Title>
-              <Dialog.Description className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              <Dialog.Description className="text-xs font-black uppercase tracking-widest text-text-4">
                 {isSuccess ? "We've received your report" : "Help us improve KV"}
               </Dialog.Description>
             </div>
@@ -143,7 +143,7 @@ export function FeedbackModal() {
                         <Monitor className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[9px] font-black text-brand-primary uppercase tracking-widest">Reporting For</p>
+                        <p className="text-tiny font-black text-brand-primary uppercase tracking-widest">Reporting For</p>
                         <p className="text-xs font-bold text-text truncate">{context.toolName}</p>
                       </div>
                     </div>
@@ -151,7 +151,7 @@ export function FeedbackModal() {
 
                   {/* Issue Type */}
                   <div className="space-y-2">
-                    <label htmlFor="issue-type" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Type of Feedback</label>
+                    <label htmlFor="issue-type" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Type of Feedback</label>
                     <div className="relative">
                       <select 
                         id="issue-type"
@@ -169,7 +169,7 @@ export function FeedbackModal() {
 
                   {/* Email Address */}
                   <div className="space-y-2">
-                    <label htmlFor="feedback-email" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Email Address</label>
+                    <label htmlFor="feedback-email" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Email Address</label>
                     <input 
                       id="feedback-email"
                       type="email"
@@ -183,7 +183,7 @@ export function FeedbackModal() {
 
                   {/* Description */}
                   <div className="space-y-2">
-                    <label htmlFor="feedback-description" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
+                    <label htmlFor="feedback-description" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
                     <textarea 
                       id="feedback-description"
                       required
@@ -196,7 +196,7 @@ export function FeedbackModal() {
 
                   {/* Screenshot */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
                     <FileUpload 
                       onFileSelect={setScreenshot}
                       className="group relative w-full h-[80px] border-2 border-dashed border-mat-border rounded-2xl flex items-center justify-center bg-mat-base/50 hover:bg-mat-surface hover:border-brand-primary/30 transition-colors cursor-pointer"
@@ -206,10 +206,10 @@ export function FeedbackModal() {
                   {/* System Info */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between ml-1">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Diagnostic Info</label>
-                       <span className="text-[9px] font-bold text-text-4 opacity-60 italic">Captured automatically</span>
+                       <label className="text-xs font-black uppercase tracking-widest text-text-4">Diagnostic Info</label>
+                       <span className="text-tiny font-bold text-text-4 opacity-60 italic">Captured automatically</span>
                     </div>
-                    <div className="p-4 bg-elevated/50 border border-border rounded-2xl space-y-2 text-[10px] font-bold text-text-3 font-mono">
+                    <div className="p-4 bg-elevated/50 border border-border rounded-2xl space-y-2 text-xs font-bold text-text-3 font-mono">
                       <div className="flex justify-between border-b border-border/50 pb-2">
                         <span>Browser</span>
                         <span className="text-text">{sysInfo?.browser}</span>
@@ -253,7 +253,7 @@ export function FeedbackModal() {
                         </>
                       )}
                     </button>
-                    <p className="text-[10px] text-center font-bold text-text-4">
+                    <p className="text-xs text-center font-bold text-text-4">
                       Your message will be transmitted securely to our support team. No file contents are ever included.
                     </p>
                   </div>

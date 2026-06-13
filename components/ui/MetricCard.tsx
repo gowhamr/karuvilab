@@ -42,7 +42,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
       <div className="flex items-center justify-between">
         <h3 
           id={label.replace(/\s+/g, "-").toLowerCase() + "-label"}
-          className="flex items-center gap-2 text-text-2 text-[11px] font-black uppercase tracking-widest truncate"
+          className="flex items-center gap-2 text-text-2 text-xs font-black uppercase tracking-widest truncate"
         >
           {Icon && <Icon className="w-4 h-4" aria-hidden="true" focusable="false" />}
           {label}
@@ -50,7 +50,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         {trend && !loading && (
           <div 
             className={cn(
-              "flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider flex-shrink-0",
+              "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-black uppercase tracking-wider flex-shrink-0",
               trend.isPositive ? "bg-success/10 text-emerald-700 dark:text-emerald-400" : "bg-error/10 text-red-700 dark:text-red-400"
             )}
             role="status"
@@ -71,7 +71,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
       </div>
       {(sub || trend?.label) && (
         <p className={cn(
-          "text-[11px] text-text-3 font-bold leading-relaxed line-clamp-2 transition-all",
+          "text-xs text-text-3 font-bold leading-relaxed line-clamp-2 transition-all",
           loading && "opacity-20"
         )}>
           {loading ? "Calculating..." : (trend?.label ? `${trend.label}: ${sub || ""}` : sub)}

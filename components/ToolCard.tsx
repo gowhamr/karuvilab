@@ -57,7 +57,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             <h3 
               className={cn(
                 "font-bold text-text transition-colors leading-tight tracking-tight truncate group-hover:text-brand-primary",
-                compact ? "text-[13px] md:text-[14px]" : "text-[15px] md:text-[16px]"
+                compact ? "text-sm md:text-sm" : "text-base md:text-base"
               )}
               title={tool.name}
             >
@@ -73,7 +73,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
                   title="Popular"
                 >
                   <Zap className="w-2.5 h-2.5 fill-current text-[--kv-brand-primary]" aria-hidden="true" />
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-[--kv-brand-primary]">Hot</span>
+                  <span className="text-tiny font-bold uppercase tracking-widest text-[--kv-brand-primary]">Hot</span>
                 </div>
               )}
 
@@ -83,12 +83,12 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
                   role="img"
                   aria-label="New tool"
                 >
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">New</span>
+                  <span className="text-tiny font-bold uppercase tracking-widest text-emerald-500">New</span>
                 </div>
               )}
             </div>
           </div>
-          <p className="text-[--kv-text-muted] text-[12px] md:text-[13px] font-medium line-clamp-2 leading-relaxed">
+          <p className="text-[--kv-text-muted] text-xs md:text-sm font-medium line-clamp-2 leading-relaxed">
             {tool.desc}
           </p>
         </div>

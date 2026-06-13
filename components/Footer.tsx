@@ -55,7 +55,7 @@ export function Footer() {
           {/* Continue Using */}
           {(!mounted || recentTools.length > 0) && (
             <div className="flex-1 space-y-3 min-h-[60px]">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-4">
                 Continue Using
               </h4>
               {!mounted ? (
@@ -69,7 +69,7 @@ export function Footer() {
                     <Link
                       key={tool.id}
                       href={`/${tool.href}`}
-                      className="px-3 py-1.5 bg-surface rounded-xl text-[10px] font-bold text-text-2 hover:text-blue transition-all shadow-sm active:scale-95"
+                      className="px-3 py-1.5 bg-surface rounded-xl text-xs font-bold text-text-2 hover:text-blue transition-all shadow-sm active:scale-95"
                     >
                       {tool.name}
                     </Link>
@@ -82,7 +82,7 @@ export function Footer() {
           {/* Quick Links Column Group */}
           <div className="flex-1 grid grid-cols-2 gap-4 md:gap-6 bg-surface border border-border rounded-2xl p-4 md:p-6 shadow-sm md:justify-items-end">
             <div className="space-y-3">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-4">
                 Resources
               </h4>
               <ul className="space-y-0.5">
@@ -90,7 +90,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
+                      className="text-sm font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -99,7 +99,7 @@ export function Footer() {
               </ul>
             </div>
             <div className="space-y-3">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-4">
                 Legal
               </h4>
               <ul className="space-y-0.5">
@@ -107,7 +107,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[13px] font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
+                      className="text-sm font-bold text-[--kv-text-muted] hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -125,13 +125,13 @@ export function Footer() {
           {/* Branding */}
           <div className="flex items-center gap-2 shrink-0">
             <KVLogo size="sm" withText={false} className="opacity-60 hover:opacity-100 transition-all" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-text-2">
+            <span className="text-xs font-black uppercase tracking-widest text-text-2">
               Powered by KaruviLab
             </span>
           </div>
 
           {/* Trust Strip */}
-          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-[10px] font-black uppercase tracking-widest text-text-2">
+          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-xs font-black uppercase tracking-widest text-text-2">
             <span className="flex items-center gap-1.5">
               <WifiOff className="w-3 h-3" /> Works Offline
             </span>

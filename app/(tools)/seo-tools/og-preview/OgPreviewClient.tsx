@@ -112,7 +112,7 @@ export default function OgPreviewClient() {
                 </div>
               )}
               <div className="p-4 border-t border-border bg-bg/30">
-                <p className="text-[10px] uppercase text-text-4 tracking-widest font-black">{hostname}</p>
+                <p className="text-xs uppercase text-text-4 tracking-widest font-black">{hostname}</p>
                 <p className="font-bold text-text mt-1 line-clamp-1">{displayTitle}</p>
                 <p className="text-sm text-text-3 mt-1 line-clamp-2 leading-relaxed">{displayDesc}</p>
               </div>
@@ -133,7 +133,7 @@ export default function OgPreviewClient() {
                   <div className="p-4 bg-bg/30">
                     <p className="font-bold text-text line-clamp-1">{displayTitle}</p>
                     <p className="text-sm text-text-3 mt-1 line-clamp-2 leading-relaxed">{displayDesc}</p>
-                    <p className="text-[10px] text-text-4 mt-2 font-black uppercase tracking-widest">{hostname}</p>
+                    <p className="text-xs text-text-4 mt-2 font-black uppercase tracking-widest">{hostname}</p>
                   </div>
                 </>
               ) : (
@@ -146,7 +146,7 @@ export default function OgPreviewClient() {
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-text line-clamp-1">{displayTitle}</p>
                     <p className="text-sm text-text-3 mt-1 line-clamp-2 leading-relaxed">{displayDesc}</p>
-                    <p className="text-[10px] text-text-4 mt-2 font-black uppercase tracking-widest">{hostname}</p>
+                    <p className="text-xs text-text-4 mt-2 font-black uppercase tracking-widest">{hostname}</p>
                   </div>
                 </div>
               )}

@@ -190,7 +190,7 @@ export function ShareButton({ url, title = 'Check out this result on KaruviLab',
             <div className="border-t border-border/50 mx-4" />
             <div className="px-4 py-3 flex items-start gap-2">
               <Lock className="w-3 h-3 text-text-4 mt-0.5 shrink-0" />
-              <p className="text-[9px] text-text-4 font-medium leading-relaxed">
+              <p className="text-tiny text-text-4 font-medium leading-relaxed">
                 The shared link encodes only your calculator inputs — never personal data.
               </p>
             </div>

@@ -827,6 +827,24 @@ const api: WorkerAPI = {
     }
 
     return allText.join("\n\n--- Page Break ---\n\n");
+  },
+
+  // Numeral Tasks
+  async convertNumeral(input: string, inputFormat: string, targetFormat: string, extraOptions?: any) {
+    const { decodeToBytes, encodeFromBytes, detectFormat } = await import("../features/numeral-converter/utils/conversion-helpers");
+    try {
+      const detected = inputFormat === 'auto' ? detectFormat(input).format : inputFormat;
+      const bytes = decodeToBytes(input, detected);
+      const value = encodeFromBytes(bytes, targetFormat, extraOptions);
+      return { value, error: "" };
+    } catch (e: any) {
+      return { value: "", error: e.message || "Conversion failed" };
+    }
+  },
+
+  async detectNumeralFormat(input: string) {
+    const { detectFormat } = await import("../features/numeral-converter/utils/conversion-helpers");
+    return detectFormat(input);
   }
 };
 

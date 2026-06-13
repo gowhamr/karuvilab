@@ -64,7 +64,7 @@ export const HistorySection = memo(function HistorySection() {
         <h3 className="text-xs font-black uppercase tracking-widest text-text-4">{history.length} Saved Calculations</h3>
         <button 
           onClick={clearHistory}
-          className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:underline flex items-center gap-1"
+          className="text-xs font-black uppercase tracking-widest text-red-500 hover:underline flex items-center gap-1"
         >
           <Trash2 className="w-3 h-3" />
           Clear All
@@ -82,10 +82,10 @@ export const HistorySection = memo(function HistorySection() {
               <div className="flex items-start justify-between relative z-10">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-blue bg-blue/5 px-2 py-0.5 rounded">
+                    <span className="text-xs font-black uppercase tracking-widest text-blue bg-blue/5 px-2 py-0.5 rounded">
                       {tool?.name || item.toolId}
                     </span>
-                    <span className="text-[10px] font-bold text-text-4 flex items-center gap-1">
+                    <span className="text-xs font-bold text-text-4 flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       {new Date(item.timestamp).toLocaleDateString()}
                     </span>
@@ -93,7 +93,7 @@ export const HistorySection = memo(function HistorySection() {
                   <h4 className="font-bold text-text group-hover:text-blue transition-colors">
                     {item.label}
                   </h4>
-                  <div className="text-[11px] text-text-3 font-medium line-clamp-1">
+                  <div className="text-xs text-text-3 font-medium line-clamp-1">
                     {JSON.stringify(item.data.result || item.data).replace(/[{}"[\]]/g, '').replace(/,/g, ' | ')}
                   </div>
                 </div>

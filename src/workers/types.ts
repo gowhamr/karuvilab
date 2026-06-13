@@ -187,4 +187,14 @@ export interface WorkerAPI {
     file: ArrayBuffer,
     onProgress?: ProgressCallback
   ): Promise<string>;
+
+  // Numeral Tasks
+  convertNumeral(
+    input: string,
+    inputFormat: string,
+    targetFormat: string,
+    extraOptions?: any
+  ): Promise<{ value: string; error: string }>;
+
+  detectNumeralFormat(input: string): Promise<{ format: string; confidence: string }>;
 }

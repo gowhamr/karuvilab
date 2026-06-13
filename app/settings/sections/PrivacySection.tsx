@@ -99,7 +99,7 @@ export const PrivacySection = memo(function PrivacySection() {
       >
         <div className="flex items-center gap-2 px-3 py-1.5 bg-blue/5 border border-blue/10 rounded-lg text-blue">
           <Shield className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-black uppercase tracking-widest">Always Active</span>
+          <span className="text-xs font-black uppercase tracking-widest">Always Active</span>
         </div>
       </SettingRow>
 
@@ -107,12 +107,12 @@ export const PrivacySection = memo(function PrivacySection() {
         <button
           onClick={exportSettings}
           disabled={isExporting}
-          className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-[11px] font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all"
+          className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-xs font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all"
         >
           {isExporting ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
           Export Settings (Store)
         </button>
-        <label className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-[11px] font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all cursor-pointer">
+        <label className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-xs font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all cursor-pointer">
           <Upload className="w-4 h-4" />
           Import Settings
           <input type="file" accept=".json" className="hidden" onChange={importSettings} />
@@ -128,7 +128,7 @@ export const PrivacySection = memo(function PrivacySection() {
         <button 
           onClick={handleClearCache}
           disabled={isClearing}
-          className="px-4 py-2 bg-surface border border-border rounded-xl text-[10px] font-black uppercase hover:border-blue hover:text-blue transition-all disabled:opacity-50 flex items-center gap-2"
+          className="px-4 py-2 bg-surface border border-border rounded-xl text-xs font-black uppercase hover:border-blue hover:text-blue transition-all disabled:opacity-50 flex items-center gap-2"
         >
           {isClearing ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
           Clear Cache
@@ -152,7 +152,7 @@ export const PrivacySection = memo(function PrivacySection() {
           <Accordion type="single" collapsible className="w-full space-y-3">
             {FAQ.map((item, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-mat-border shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
-                <AccordionTrigger className="text-[13px] font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
+                <AccordionTrigger className="text-sm font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
                 <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
               </AccordionItem>
             ))}
@@ -181,7 +181,7 @@ export const PrivacySection = memo(function PrivacySection() {
             });
           }}
           disabled={isReseting}
-          className="w-full sm:w-auto px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full sm:w-auto px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
         >
           {isReseting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
           {isReseting ? 'Resetting...' : 'Factory Reset App'}

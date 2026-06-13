@@ -125,23 +125,23 @@ export function StorageCostTab() {
           <div className="p-8 bg-surface border border-border rounded-4xl space-y-6">
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
-              <h4 className="text-[10px] font-black uppercase tracking-widest">Cost Analysis</h4>
+              <h4 className="text-xs font-black uppercase tracking-widest">Cost Analysis</h4>
             </div>
             
             <div className="space-y-4">
               <div className="p-4 bg-bg rounded-2xl border border-border/50 space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Capacity</p>
+                <p className="text-xs font-black uppercase tracking-widest text-text-4">Capacity</p>
                 <p className="text-sm font-bold text-text">{dataSize} {dataUnit}</p>
               </div>
               
               <div className="p-4 bg-bg rounded-2xl border border-border/50 space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Monthly Rate</p>
+                <p className="text-xs font-black uppercase tracking-widest text-text-4">Monthly Rate</p>
                 <p className="text-sm font-bold text-text">
                   ${(totalCost / durationMonths).toLocaleString(undefined, { minimumFractionDigits: 4 })} / month
                 </p>
               </div>
               
-              <p className="text-[10px] text-text-3 leading-relaxed">
+              <p className="text-xs text-text-3 leading-relaxed">
                 Prices vary by region and storage class (e.g., Hot vs Cold storage). This calculator uses standard base rates and does not include egress (download) fees, API request costs, or data transfer taxes.
               </p>
             </div>

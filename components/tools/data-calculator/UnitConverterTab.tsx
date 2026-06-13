@@ -128,9 +128,9 @@ export function UnitConverterTab() {
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="bg-bg/50 border-b border-border">
-                <th className="px-6 py-4 text-left font-black text-text-3 uppercase tracking-widest text-[10px]">Unit</th>
-                <th className="px-6 py-4 text-right font-black text-text-3 uppercase tracking-widest text-[10px]">Value</th>
-                <th className="px-6 py-4 text-left font-black text-text-3 uppercase tracking-widest text-[10px]">Type</th>
+                <th className="px-6 py-4 text-left font-black text-text-3 uppercase tracking-widest text-xs">Unit</th>
+                <th className="px-6 py-4 text-right font-black text-text-3 uppercase tracking-widest text-xs">Value</th>
+                <th className="px-6 py-4 text-left font-black text-text-3 uppercase tracking-widest text-xs">Type</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
@@ -141,7 +141,7 @@ export function UnitConverterTab() {
                   <tr key={u.id} className={u.id === toUnit ? "bg-blue/5" : "hover:bg-bg/30"}>
                     <td className="px-6 py-4 font-bold text-text-2">{u.label}</td>
                     <td className="px-6 py-4 text-right font-black text-text tabular-nums">{fmtNum(conv)}</td>
-                    <td className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-4">
+                    <td className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">
                       {u.type.toUpperCase()}
                     </td>
                   </tr>
@@ -162,7 +162,7 @@ export function UnitConverterTab() {
             </div>
             <button
               onClick={clearHistory}
-              className="text-[10px] font-black uppercase tracking-widest text-error hover:underline flex items-center gap-1"
+              className="text-xs font-black uppercase tracking-widest text-error hover:underline flex items-center gap-1"
             >
               <Trash2 className="w-3 h-3" />
               Clear
@@ -171,7 +171,7 @@ export function UnitConverterTab() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {history.map((h) => (
               <div key={h.id} className="p-4 bg-surface border border-border rounded-2xl flex flex-col gap-1 shadow-sm">
-                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-text-4">
+                <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
                   <span>{new Date(h.timestamp).toLocaleTimeString()}</span>
                   <span className="text-blue">{h.fromUnit} → {h.toUnit}</span>
                 </div>

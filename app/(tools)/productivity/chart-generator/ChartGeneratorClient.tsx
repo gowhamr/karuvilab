@@ -210,7 +210,7 @@ export default function ChartGeneratorClient() {
               </button>
               <button 
                 onClick={downloadPNG}
-                className="flex items-center gap-2 px-6 py-3 bg-blue text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
               >
                 <Download className="w-4 h-4" /> Export PNG
               </button>

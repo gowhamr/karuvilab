@@ -14,19 +14,19 @@ export function HomeHero() {
       <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-r from-blue/10 via-indigo-500/5 to-purple-500/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
       {/* Tag pill — reduce size */}
-      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[--kv-mat-surface] border border-border/40 text-[10px] font-bold uppercase tracking-widest text-[--kv-text-muted] shadow-sm">
+      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[--kv-mat-surface] border border-border/40 text-xs font-bold uppercase tracking-widest text-[--kv-text-muted] shadow-sm">
         <Sparkles className="w-3 h-3 text-[--kv-brand-primary]" />
         <span>Productivity Refined</span>
       </div>
 
       {/* H1 — reduce size on mobile */}
-      <h1 className="text-[22px] md:text-5xl font-black tracking-tighter leading-[1.1] text-[--kv-text] max-w-2xl mt-1">
+      <h1 className="text-2xl md:text-5xl font-black tracking-tighter leading-[1.1] text-[--kv-text] max-w-2xl mt-1">
         Build faster with KV.<br />
         <span className="block text-[--kv-brand-primary]">Privacy you can trust.</span>
       </h1>
 
       {/* Description — tighter, 1 line on mobile */}
-      <p className="text-[13px] sm:text-[15px] md:text-[16px] text-[--kv-text-muted] font-medium max-w-sm sm:max-w-md mx-auto leading-snug sm:leading-relaxed">
+      <p className="text-sm sm:text-base md:text-base text-[--kv-text-muted] font-medium max-w-sm sm:max-w-md mx-auto leading-snug sm:leading-relaxed">
         Local-first tools by KaruviLab.
         <span className="block text-[--kv-text-muted] mt-1">Fast. Secure. Local-first.</span>
       </p>
@@ -36,7 +36,7 @@ export function HomeHero() {
         {TRUST_ITEMS.map((item, i) => (
           <div key={i} className="flex items-center gap-1 md:gap-1.5 shrink-0">
             <item.icon className="w-3 h-3 text-[--kv-brand-primary]" aria-hidden="true" />
-            <span className="text-[9px] md:text-[11px] font-bold uppercase tracking-widest text-[--kv-text-muted]">{item.text}</span>
+            <span className="text-tiny md:text-xs font-bold uppercase tracking-widest text-[--kv-text-muted]">{item.text}</span>
           </div>
         ))}
       </div>

@@ -118,7 +118,7 @@ export default function SplitPdfClient() {
           <>
             <div className="text-4xl mb-4 transition-transform group-hover:scale-110">✂️</div>
             <p className="font-bold text-text-2">Drop a PDF here or click to select</p>
-            <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest mt-2">Maximum file size: 50MB</p>
+            <p className="text-xs font-bold text-text-4 uppercase tracking-widest mt-2">Maximum file size: 50MB</p>
           </>
         )}
         <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { if (e.target.files) loadFile(e.target.files); }} />
@@ -140,7 +140,7 @@ export default function SplitPdfClient() {
               mono
               description={pageCount > 0 ? `${pageCount} total pages` : undefined}
             />
-            <p className="text-[10px] font-bold text-text-4 uppercase tracking-wider leading-relaxed">
+            <p className="text-xs font-bold text-text-4 uppercase tracking-wider leading-relaxed">
               Each range becomes a separate PDF. Examples: <code className="text-blue">1-5</code>, <code className="text-blue">2</code>, <code className="text-blue">1-3, 5, 7-10</code>
             </p>
           </div>

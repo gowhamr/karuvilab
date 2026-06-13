@@ -98,7 +98,7 @@ export function SyntaxEditor({
         <m.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] text-amber-600 font-black uppercase tracking-[0.15em]"
+          className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-600 font-black uppercase tracking-[0.15em]"
         >
           <Info className="w-4 h-4" />
           Performance Mode: Syntax highlighting disabled for large files (&gt;100KB)

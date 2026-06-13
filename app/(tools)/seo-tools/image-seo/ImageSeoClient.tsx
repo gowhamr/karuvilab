@@ -139,7 +139,7 @@ export default function ImageSeoClient() {
                   </div>
                   <div>
                     <h2 className="font-black text-lg tracking-tight">Image Details</h2>
-                    <p className="text-[10px] text-text-4 font-bold uppercase tracking-widest">Upload and Configure</p>
+                    <p className="text-xs text-text-4 font-bold uppercase tracking-widest">Upload and Configure</p>
                   </div>
                 </div>
 
@@ -172,7 +172,7 @@ export default function ImageSeoClient() {
 
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em] px-1">Describe Image Content</label>
+                    <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em] px-1">Describe Image Content</label>
                     <textarea
                       className="w-full px-4 py-4 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all resize-none text-sm font-medium"
                       rows={3}
@@ -183,7 +183,7 @@ export default function ImageSeoClient() {
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em] px-1">Custom Filename</label>
+                      <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em] px-1">Custom Filename</label>
                       <div className="flex gap-2">
                         <input
                           type="text"
@@ -220,7 +220,7 @@ export default function ImageSeoClient() {
                   </div>
                   <div>
                     <h2 className="font-black text-lg tracking-tight">SEO Optimized Result</h2>
-                    <p className="text-[10px] text-text-4 font-bold uppercase tracking-widest">Ready for Indexing</p>
+                    <p className="text-xs text-text-4 font-bold uppercase tracking-widest">Ready for Indexing</p>
                   </div>
                 </div>
 
@@ -228,7 +228,7 @@ export default function ImageSeoClient() {
                   <div className="space-y-8 flex-1">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">Primary Alt Text</label>
+                        <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em]">Primary Alt Text</label>
                         <CopyButton text={generatedAlt} />
                       </div>
                       <div className="p-5 bg-bg border border-border rounded-2xl font-bold text-text-2 text-lg shadow-inner">
@@ -238,10 +238,10 @@ export default function ImageSeoClient() {
 
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em]">HTML Implementation</label>
+                        <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em]">HTML Implementation</label>
                         <CopyButton text={`<img src="${finalFilename}" alt="${generatedAlt}" />`} label="Copy code" />
                       </div>
-                      <div className="p-5 bg-bg border border-border rounded-2xl font-mono text-[11px] text-blue break-all leading-relaxed shadow-inner">
+                      <div className="p-5 bg-bg border border-border rounded-2xl font-mono text-xs text-blue break-all leading-relaxed shadow-inner">
                         <span className="opacity-50">&lt;img src="</span>
                         <span className="font-black">{finalFilename}</span>
                         <span className="opacity-50">" alt="</span>
@@ -373,7 +373,7 @@ export default function ImageSeoClient() {
                          { label: "Complexity", value: "Low" }
                        ].map((stat, i) => (
                          <div key={i} className="p-4 bg-bg border border-border rounded-2xl">
-                            <p className="text-[10px] font-black text-text-4 uppercase tracking-widest mb-1">{stat.label}</p>
+                            <p className="text-xs font-black text-text-4 uppercase tracking-widest mb-1">{stat.label}</p>
                             <p className={cn("text-lg font-black tracking-tight", stat.color || "text-text")}>{stat.value}</p>
                          </div>
                        ))}

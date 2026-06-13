@@ -156,7 +156,7 @@ export default function UuidGeneratorClient() {
         {version === 'v5' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-bg/50 p-4 rounded-2xl border border-border/50">
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-2">Namespace</label>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4 block mb-2">Namespace</label>
               <select 
                 value={v5Namespace} 
                 onChange={(e) => setV5Namespace(e.target.value)}
@@ -169,7 +169,7 @@ export default function UuidGeneratorClient() {
               </select>
             </div>
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-2">Name String</label>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4 block mb-2">Name String</label>
               <input 
                 type="text" 
                 value={v5Name} 
@@ -203,7 +203,7 @@ export default function UuidGeneratorClient() {
                 key={f}
                 onClick={() => setFormat(f)}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors",
+                  "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors",
                   format === f ? "bg-blue/10 text-blue border border-blue/20" : "text-text-4 hover:bg-bg border border-transparent"
                 )}
               >

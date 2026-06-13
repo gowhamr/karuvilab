@@ -115,7 +115,7 @@ export default function QRCodeGeneratorClient() {
             {!isLibLoaded || !qrBlobUrl ? (
                <div className="flex flex-col items-center gap-2">
                  <Loader2 className="w-8 h-8 animate-spin text-blue/30" />
-                 <span className="text-[10px] font-bold text-text-4">GENERATING...</span>
+                 <span className="text-xs font-bold text-text-4">GENERATING...</span>
                </div>
             ) : (
               <img

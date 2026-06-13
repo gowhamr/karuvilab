@@ -69,13 +69,13 @@ export function EmptyStateMetrics() {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-black tracking-tight">Empty State Performance</h2>
-          <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Local Diagnostics Dashboard</p>
+          <p className="text-xs font-black uppercase tracking-widest text-text-4">Local Diagnostics Dashboard</p>
         </div>
         <div className="flex gap-4">
-           <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-500 rounded-lg text-[10px] font-black uppercase">
+           <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-500 rounded-lg text-xs font-black uppercase">
              <TrendingUp className="w-3 h-3" /> Target {" > "} 75% Eng.
            </div>
-           <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 text-red-500 rounded-lg text-[10px] font-black uppercase">
+           <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 text-red-500 rounded-lg text-xs font-black uppercase">
              <TrendingDown className="w-3 h-3" /> Target {" < "} 25% Bounce
            </div>
         </div>
@@ -84,7 +84,7 @@ export function EmptyStateMetrics() {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-separate border-spacing-y-2">
           <thead>
-            <tr className="text-[10px] font-black uppercase tracking-widest text-text-4">
+            <tr className="text-xs font-black uppercase tracking-widest text-text-4">
               <th className="px-4 py-2">Tool</th>
               <th className="px-4 py-2"><div className="flex items-center gap-1.5"><Eye className="w-3 h-3" /> Views</div></th>
               <th className="px-4 py-2"><div className="flex items-center gap-1.5"><MousePointer2 className="w-3 h-3" /> Eng.</div></th>
@@ -101,7 +101,7 @@ export function EmptyStateMetrics() {
                 <td className="px-4 py-4 rounded-l-2xl">
                   <div className="flex flex-col">
                     <span className="font-bold text-sm text-text">{tool.name}</span>
-                    <span className="text-[9px] text-text-4 uppercase font-black">{tool.category}</span>
+                    <span className="text-tiny text-text-4 uppercase font-black">{tool.category}</span>
                   </div>
                 </td>
                 <td className="px-4 py-4 font-mono text-xs">{tool.v}</td>

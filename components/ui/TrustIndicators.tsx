@@ -27,7 +27,7 @@ export function TrustIndicators() {
           </div>
           <div className="space-y-0.5">
             <h3 className="text-sm font-black text-text tracking-tight">{item.title}</h3>
-            <p className="text-[11px] text-text-3 font-semibold leading-tight">{item.desc}</p>
+            <p className="text-xs text-text-3 font-semibold leading-tight">{item.desc}</p>
           </div>
         </m.div>
       ))}

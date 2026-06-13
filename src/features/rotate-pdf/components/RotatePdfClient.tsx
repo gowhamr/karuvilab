@@ -79,7 +79,7 @@ export default function RotatePdfClient() {
           <>
             <div className="text-4xl mb-4 transition-transform group-hover:scale-110">🔄</div>
             <p className="font-bold text-text-2">Drop a PDF here or click to select</p>
-            <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest mt-2">Maximum file size: 50MB</p>
+            <p className="text-xs font-bold text-text-4 uppercase tracking-widest mt-2">Maximum file size: 50MB</p>
           </>
         )}
         <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) loadFile(f); }} />

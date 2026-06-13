@@ -98,12 +98,12 @@ export default function UtcIstConverterClient() {
       {/* Live clocks */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Current UTC</div>
+          <div className="text-xs font-bold text-text-4 uppercase tracking-wider">Current UTC</div>
           <div className="text-2xl font-black font-mono text-text">{liveUtc.split("T")[1]}</div>
           <div className="text-sm text-text-3">{liveUtc.split("T")[0]}</div>
         </div>
         <div className="bg-surface border border-blue/30 p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Current IST (UTC+5:30)</div>
+          <div className="text-xs font-bold text-text-4 uppercase tracking-wider">Current IST (UTC+5:30)</div>
           <div className="text-2xl font-black font-mono text-blue">{liveIst.split("T")[1]}</div>
           <div className="text-sm text-text-3">{liveIst.split("T")[0]}</div>
         </div>

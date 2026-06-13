@@ -58,7 +58,7 @@ export function SegmentedControl<T extends string | number>(props: SegmentedCont
             disabled={disabled}
             onClick={() => !disabled && onChange(option.id)}
             className={cn(
-              "relative flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-black uppercase tracking-widest transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20",
+              "relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20",
               isActive ? "text-white" : "text-text-4 hover:text-text hover:bg-surface/50",
               disabled && "cursor-not-allowed"
             )}

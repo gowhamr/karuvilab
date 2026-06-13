@@ -47,7 +47,7 @@ export function PrivacyFeatures() {
             </div>
             <div>
               <h3 className="text-base md:text-xl font-black text-[--kv-text] tracking-tight">{f.title}</h3>
-              <p className="text-[13px] md:text-sm text-[--kv-text-muted] font-medium mt-1 leading-relaxed">
+              <p className="text-sm md:text-sm text-[--kv-text-muted] font-medium mt-1 leading-relaxed">
                 {f.desc}
               </p>
             </div>
@@ -62,16 +62,16 @@ export function PrivacyFeatures() {
         className="bg-gradient-to-br from-blue to-blue-dark rounded-3xl p-6 md:p-12 text-text flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 shadow-lg shadow-blue/10"
       >
         <div className="space-y-2 text-center md:text-left">
-          <h2 className="text-[22px] md:text-4xl font-black tracking-tight leading-tight text-white">
+          <h2 className="text-2xl md:text-4xl font-black tracking-tight leading-tight text-white">
             Security is not a feature, it's our foundation.
           </h2>
-          <p className="text-white/85 text-[14px] md:text-[16px] font-medium leading-relaxed max-w-xl">
+          <p className="text-white/85 text-sm md:text-base font-medium leading-relaxed max-w-xl">
             KaruviLab solves privacy concerns with local-first processing. No sign-ups, no cookies, no compromise.
           </p>
         </div>
         <Link 
           href="/privacy" 
-          className="w-full md:w-auto h-[52px] px-8 bg-white text-[#1E293B] rounded-xl font-bold text-[15px] hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-md"
+          className="w-full md:w-auto h-[52px] px-8 bg-white text-[#1E293B] rounded-xl font-bold text-base hover:bg-white/90 transition-opacity flex items-center justify-center whitespace-nowrap shadow-md"
         >
           View Privacy Policy
         </Link>

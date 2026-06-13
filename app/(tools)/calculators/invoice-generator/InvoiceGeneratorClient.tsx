@@ -9,6 +9,7 @@ import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { StatusBadge } from "@/components/system/StatusBadge";
 import { DropZone } from "@/components/ui/DropZone";
 import { formatError } from "@/src/lib/formatError";
+import { useAutoSave } from "@/src/hooks/useAutoSave";
 
 interface LineItem {
   id: string;
@@ -61,6 +62,32 @@ export default function InvoiceGeneratorClient() {
   const [notes, setNotes] = useState("Payment is due within 15 days. Thank you for your business!");
   const [terms, setTerms] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Auto-save logic
+  const invoiceData = useMemo(() => ({
+    logo, currency, template, from, to, meta, items, taxRate, discount, notes, terms
+  }), [logo, currency, template, from, to, meta, items, taxRate, discount, notes, terms]);
+
+  useAutoSave(
+    'invoice-generator',
+    invoiceData,
+    (restored: typeof invoiceData) => {
+      setLogo(restored.logo);
+      setCurrency(restored.currency);
+      setTemplate(restored.template);
+      setFrom(restored.from);
+      setTo(restored.to);
+      setMeta(restored.meta);
+      setItems(restored.items);
+      setTaxRate(restored.taxRate);
+      setDiscount(restored.discount);
+      setNotes(restored.notes);
+      setTerms(restored.terms);
+      toast("Invoice draft restored!");
+    },
+    // Don't save large logos to tool-states to keep IndexedDB light
+    (data) => ({ ...data, logo: data.logo && data.logo.length > 500000 ? null : data.logo })
+  );
 
   const totals = useMemo(() => {
     const subtotal = items.reduce((acc, item) => acc + (item.qty * item.price), 0);
@@ -345,7 +372,7 @@ export default function InvoiceGeneratorClient() {
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <span id="label-visual-style" className="text-[10px] font-black uppercase tracking-widest text-text-4">Visual Style</span>
+                    <span id="label-visual-style" className="text-xs font-black uppercase tracking-widest text-text-4">Visual Style</span>
                     <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="label-visual-style">
                       {(["classic", "modern", "professional", "minimal"] as TemplateType[]).map(t => (
                         <button
@@ -353,7 +380,7 @@ export default function InvoiceGeneratorClient() {
                           onClick={() => setTemplate(t)}
                           role="radio"
                           aria-checked={template === t}
-                          className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
+                          className={`flex-1 min-w-[80px] py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
                         >
                           {t}
                         </button>
@@ -361,7 +388,7 @@ export default function InvoiceGeneratorClient() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="currency-symbol" className="text-[10px] font-black uppercase tracking-widest text-text-4">Currency Symbol</label>
+                    <label htmlFor="currency-symbol" className="text-xs font-black uppercase tracking-widest text-text-4">Currency Symbol</label>
                     <input 
                       id="currency-symbol"
                       value={currency} 
@@ -373,7 +400,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
               </div>
               <div className="w-full md:w-48">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-2">Company Logo</label>
+                <label className="text-xs font-black uppercase tracking-widest text-text-4 block mb-2">Company Logo</label>
                 {logo ? (
                   <div className="relative group aspect-square rounded-2xl border border-border overflow-hidden bg-bg">
                     <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
@@ -447,7 +474,7 @@ export default function InvoiceGeneratorClient() {
               </h2>
               <button 
                 onClick={addItem}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue/5 text-blue text-[10px] font-black uppercase tracking-widest hover:bg-blue/10 transition-all active:scale-95"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue/5 text-blue text-xs font-black uppercase tracking-widest hover:bg-blue/10 transition-all active:scale-95"
               >
                 <Plus className="w-3.5 h-3.5" /> Add Item
               </button>
@@ -457,7 +484,7 @@ export default function InvoiceGeneratorClient() {
               {items.map((item, i) => (
                 <div key={item.id} className="grid grid-cols-12 gap-3 items-start p-4 bg-bg border border-border rounded-2xl group transition-all hover:border-blue/30">
                   <div className="col-span-6 space-y-1">
-                    <label htmlFor={`desc-${item.id}`} className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Description</label>
+                    <label htmlFor={`desc-${item.id}`} className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Description</label>
                     <input 
                       id={`desc-${item.id}`}
                       placeholder="e.g. Design Consulting" 
@@ -467,7 +494,7 @@ export default function InvoiceGeneratorClient() {
                     />
                   </div>
                   <div className="col-span-2 space-y-1">
-                    <label htmlFor={`qty-${item.id}`} className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Qty</label>
+                    <label htmlFor={`qty-${item.id}`} className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Qty</label>
                     <input 
                       id={`qty-${item.id}`}
                       type="number" 
@@ -477,7 +504,7 @@ export default function InvoiceGeneratorClient() {
                     />
                   </div>
                   <div className="col-span-3 space-y-1">
-                    <label htmlFor={`price-${item.id}`} className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Price</label>
+                    <label htmlFor={`price-${item.id}`} className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Price</label>
                     <div className="flex items-center gap-1">
                       <span className="text-xs font-bold opacity-40" aria-hidden="true">{currency}</span>
                       <input 
@@ -512,22 +539,22 @@ export default function InvoiceGeneratorClient() {
              
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label htmlFor="inv-number" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Invoice #</label>
+                  <label htmlFor="inv-number" className="text-tiny font-black text-text-4 uppercase tracking-tighter">Invoice #</label>
                   <input id="inv-number" value={meta.number} onChange={(e) => setMeta({...meta, number: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="issue-date" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Issue Date</label>
+                  <label htmlFor="issue-date" className="text-tiny font-black text-text-4 uppercase tracking-tighter">Issue Date</label>
                   <input id="issue-date" type="date" value={meta.date} onChange={(e) => setMeta({...meta, date: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
                 </div>
              </div>
 
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label htmlFor="due-date" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Due Date</label>
+                  <label htmlFor="due-date" className="text-tiny font-black text-text-4 uppercase tracking-tighter">Due Date</label>
                   <input id="due-date" type="date" value={meta.dueDate} onChange={(e) => setMeta({...meta, dueDate: e.target.value})} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-bold focus:border-blue outline-none" />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="payment-status" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Payment Status</label>
+                  <label htmlFor="payment-status" className="text-tiny font-black text-text-4 uppercase tracking-tighter">Payment Status</label>
                   <select 
                     id="payment-status"
                     value={meta.status} 
@@ -567,7 +594,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
 
                 <div className="pt-4 border-t border-blue/10 flex justify-between items-end">
-                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue mb-1">Grand Total</span>
+                   <span className="text-xs font-black uppercase tracking-[0.2em] text-blue mb-1">Grand Total</span>
                    <span className="text-3xl font-black text-blue tabular-nums leading-none tracking-tighter">
                      {currency}{totals.total.toLocaleString()}
                    </span>
@@ -576,11 +603,11 @@ export default function InvoiceGeneratorClient() {
 
              <div className="space-y-4">
                 <div className="space-y-1">
-                   <label htmlFor="notes-input" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Notes</label>
+                   <label htmlFor="notes-input" className="text-tiny font-black text-text-4 uppercase tracking-tighter">Notes</label>
                    <textarea id="notes-input" value={notes} onChange={(e) => setNotes(e.target.value)} className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-medium focus:border-blue outline-none resize-none" rows={3} />
                 </div>
                 <div className="space-y-1">
-                   <label htmlFor="terms-input" className="text-[9px] font-black text-text-4 uppercase tracking-tighter">Terms & Conditions</label>
+                   <label htmlFor="terms-input" className="text-tiny font-black text-text-4 uppercase tracking-tighter">Terms & Conditions</label>
                    <textarea id="terms-input" value={terms} onChange={(e) => setTerms(e.target.value)} placeholder="e.g. Bank Account details..." className="w-full bg-bg border border-border rounded-xl px-3 py-2 text-xs font-medium focus:border-blue outline-none resize-none" rows={2} />
                 </div>
              </div>
@@ -588,7 +615,7 @@ export default function InvoiceGeneratorClient() {
              <div className="flex gap-2">
                 <button 
                   onClick={handlePrint}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-surface border border-border text-text-2 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:border-blue hover:text-blue transition-all active:scale-95"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-surface border border-border text-text-2 rounded-2xl font-black uppercase tracking-widest text-xs hover:border-blue hover:text-blue transition-all active:scale-95"
                 >
                   <Printer className="w-3.5 h-3.5" /> Print
                 </button>

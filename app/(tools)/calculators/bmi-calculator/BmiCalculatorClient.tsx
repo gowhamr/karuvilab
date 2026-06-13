@@ -53,7 +53,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/10',
     borderColor: 'border-blue-500/30',
-    gaugeColor: '#60A5FA',
+    gaugeColor: 'var(--blue)',
     advice: 'Consult a doctor. Significant health risks associated with very low body weight.'
   },
   {
@@ -62,7 +62,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-cyan-400',
     bgColor: 'bg-cyan-500/10',
     borderColor: 'border-cyan-500/30',
-    gaugeColor: '#22D3EE',
+    gaugeColor: 'var(--ocean-blue)',
     advice: 'Below healthy range. Consider increasing caloric intake with nutrient-dense foods.'
   },
   {
@@ -71,7 +71,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-green-400',
     bgColor: 'bg-green-500/10',
     borderColor: 'border-green-500/30',
-    gaugeColor: '#34D399',
+    gaugeColor: 'var(--success)',
     advice: 'Healthy weight range. Maintain with balanced diet and regular physical activity.'
   },
   {
@@ -80,7 +80,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-500/10',
     borderColor: 'border-yellow-500/30',
-    gaugeColor: '#FBBF24',
+    gaugeColor: 'var(--warn)',
     advice: 'Slightly above healthy range. Regular exercise and mindful eating can help.'
   },
   {
@@ -89,7 +89,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10',
     borderColor: 'border-orange-500/30',
-    gaugeColor: '#FB923C',
+    gaugeColor: 'var(--error)',
     advice: 'Increased health risk. Lifestyle changes and medical consultation recommended.'
   },
   {
@@ -98,7 +98,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-red-400',
     bgColor: 'bg-red-500/10',
     borderColor: 'border-red-500/30',
-    gaugeColor: '#F87171',
+    gaugeColor: 'var(--error)',
     advice: 'High health risk. Medical supervision strongly recommended.'
   },
   {
@@ -107,7 +107,7 @@ const STANDARD_THRESHOLDS: BMIThreshold[] = [
     color: 'text-red-600',
     bgColor: 'bg-red-600/10',
     borderColor: 'border-red-600/30',
-    gaugeColor: '#DC2626',
+    gaugeColor: 'var(--error)',
     advice: 'Very high health risk. Please consult a healthcare professional immediately.'
   },
 ];
@@ -198,12 +198,12 @@ function BmiGauge({ bmi, threshold }: { bmi: number; threshold: BMIThreshold }) 
         
         {/* Colored segments */}
         {/* Note: This is a simplified colored arc for clarity */}
-        <path d="M 30 150 A 120 120 0 0 1 70 65" fill="none" stroke="#60A5FA" strokeWidth="24" />
-        <path d="M 70 65 A 120 120 0 0 1 100 40" fill="none" stroke="#22D3EE" strokeWidth="24" />
-        <path d="M 100 40 A 120 120 0 0 1 165 30" fill="none" stroke="#34D399" strokeWidth="24" />
-        <path d="M 165 30 A 120 120 0 0 1 215 50" fill="none" stroke="#FBBF24" strokeWidth="24" />
-        <path d="M 215 50 A 120 120 0 0 1 250 85" fill="none" stroke="#FB923C" strokeWidth="24" />
-        <path d="M 250 85 A 120 120 0 0 1 270 150" fill="none" stroke="#F87171" strokeWidth="24" />
+        <path d="M 30 150 A 120 120 0 0 1 70 65" fill="none" stroke="var(--blue)" strokeWidth="24" />
+        <path d="M 70 65 A 120 120 0 0 1 100 40" fill="none" stroke="var(--ocean-blue)" strokeWidth="24" />
+        <path d="M 100 40 A 120 120 0 0 1 165 30" fill="none" stroke="var(--success)" strokeWidth="24" />
+        <path d="M 165 30 A 120 120 0 0 1 215 50" fill="none" stroke="var(--warn)" strokeWidth="24" />
+        <path d="M 215 50 A 120 120 0 0 1 250 85" fill="none" stroke="var(--error)" strokeWidth="24" opacity="0.8" />
+        <path d="M 250 85 A 120 120 0 0 1 270 150" fill="none" stroke="var(--error)" strokeWidth="24" />
 
         {/* Animated Needle */}
         <m.g
@@ -217,12 +217,12 @@ function BmiGauge({ bmi, threshold }: { bmi: number; threshold: BMIThreshold }) 
         </m.g>
 
         {/* Labels */}
-        <text x="35" y="170" textAnchor="middle" className="text-[10px] fill-text-4 font-bold">16</text>
-        <text x="80" y="55" textAnchor="middle" className="text-[10px] fill-text-4 font-bold">18.5</text>
-        <text x="165" y="20" textAnchor="middle" className="text-[10px] fill-text-4 font-bold">25</text>
-        <text x="235" y="60" textAnchor="middle" className="text-[10px] fill-text-4 font-bold">30</text>
-        <text x="265" y="100" textAnchor="middle" className="text-[10px] fill-text-4 font-bold">35</text>
-        <text x="275" y="170" textAnchor="middle" className="text-[10px] fill-text-4 font-bold">40</text>
+        <text x="35" y="170" textAnchor="middle" className="text-xs fill-text-4 font-bold">16</text>
+        <text x="80" y="55" textAnchor="middle" className="text-xs fill-text-4 font-bold">18.5</text>
+        <text x="165" y="20" textAnchor="middle" className="text-xs fill-text-4 font-bold">25</text>
+        <text x="235" y="60" textAnchor="middle" className="text-xs fill-text-4 font-bold">30</text>
+        <text x="265" y="100" textAnchor="middle" className="text-xs fill-text-4 font-bold">35</text>
+        <text x="275" y="170" textAnchor="middle" className="text-xs fill-text-4 font-bold">40</text>
       </svg>
 
       <div className="text-center mt-[-40px] space-y-1">
@@ -328,7 +328,7 @@ export default function BmiCalculatorClient() {
         {/* Height Input */}
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
               <User className="w-3.5 h-3.5" />
               Height
             </h3>
@@ -392,7 +392,7 @@ export default function BmiCalculatorClient() {
         {/* Weight Input */}
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
               <Scale className="w-3.5 h-3.5" />
               Weight
             </h3>
@@ -505,15 +505,15 @@ export default function BmiCalculatorClient() {
 
           {/* Reference Table */}
           <div className="space-y-4">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2">BMI Categories (WHO Standards)</h2>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2">BMI Categories (WHO Standards)</h2>
             <div className="bg-surface border border-border rounded-3xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-bg/50 border-b border-border">
-                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-4">Category</th>
-                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-4">BMI Range</th>
-                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-4">Asian BMI Range</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">Category</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">BMI Range</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">Asian BMI Range</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -538,7 +538,7 @@ export default function BmiCalculatorClient() {
                           <td className="px-6 py-4 text-xs font-mono font-bold text-text-2">
                             {t.min === 0 ? `< ${t.max}` : t.max === Infinity ? `> ${t.min}` : `${t.min} – ${t.max}`}
                           </td>
-                          <td className="px-6 py-4 text-[10px] font-bold text-text-4 uppercase italic">
+                          <td className="px-6 py-4 text-xs font-bold text-text-4 uppercase italic">
                             {asianEquivalent ? (
                               `${asianEquivalent.min === 0 ? `< ${asianEquivalent.max}` : asianEquivalent.max === Infinity ? `> ${asianEquivalent.min}` : `${asianEquivalent.min} – ${asianEquivalent.max}`}`
                             ) : '—'}
@@ -552,7 +552,7 @@ export default function BmiCalculatorClient() {
             </div>
           </div>
 
-          <p className="text-text-4 text-[10px] text-center uppercase tracking-[0.2em] mt-8">
+          <p className="text-text-4 text-xs text-center uppercase tracking-[0.2em] mt-8">
             🔒 Your height and weight are never stored or transmitted. All calculations happen locally in your browser.
           </p>
         </m.div>

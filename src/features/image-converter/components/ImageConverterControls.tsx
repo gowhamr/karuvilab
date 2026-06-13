@@ -42,7 +42,7 @@ export function ImageConverterControls({
     <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
       {/* Format Selection */}
       <div className="space-y-4">
-        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
+        <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4">
           Output Format
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -71,7 +71,7 @@ export function ImageConverterControls({
 
       {/* Presets */}
       <div className="space-y-4">
-        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">
+        <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4">
           Conversion Preset
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -96,7 +96,7 @@ export function ImageConverterControls({
                 }`}>
                   {PRESETS[p].label}
                 </p>
-                <p className="text-[10px] text-text-4 font-medium mt-0.5 leading-relaxed">
+                <p className="text-xs text-text-4 font-medium mt-0.5 leading-relaxed">
                   {PRESETS[p].description}
                 </p>
               </div>
@@ -111,7 +111,7 @@ export function ImageConverterControls({
           <AccordionTrigger className="hover:no-underline py-2">
             <div className="flex items-center gap-2 text-text-3">
               <Settings2 className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-wider">Advanced Settings</span>
+              <span className="text-xs font-black uppercase tracking-wider">Advanced Settings</span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-6 space-y-6">

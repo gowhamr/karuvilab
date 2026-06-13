@@ -29,7 +29,7 @@ export function MiniCalendar({ onSelect }: { onAddEvent?: () => void, onSelect?:
   return (
     <div className="w-64 p-4 bg-surface border border-border rounded-3xl shadow-xl">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="text-[10px] font-black uppercase tracking-widest text-text">
+        <h4 className="text-xs font-black uppercase tracking-widest text-text">
           {format(viewDate, 'MMMM yyyy')}
         </h4>
         <div className="flex gap-1">
@@ -52,7 +52,7 @@ export function MiniCalendar({ onSelect }: { onAddEvent?: () => void, onSelect?:
 
       <div className="grid grid-cols-7 gap-1">
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-          <div key={i} className="text-[8px] font-black text-text-4 text-center py-1">{d}</div>
+          <div key={i} className="text-micro font-black text-text-4 text-center py-1">{d}</div>
         ))}
         {days.map((day) => {
           const isCurrentMonth = isSameMonth(day, viewDate);
@@ -67,7 +67,7 @@ export function MiniCalendar({ onSelect }: { onAddEvent?: () => void, onSelect?:
                 if (onSelect) onSelect(day);
               }}
               className={cn(
-                "h-7 w-7 rounded-lg text-[10px] font-bold flex items-center justify-center transition-all",
+                "h-7 w-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all",
                 !isCurrentMonth && "opacity-20",
                 isSelected && "bg-indigo-600 text-white shadow-md",
                 isToday && !isSelected && "text-indigo-600 bg-indigo-500/10",

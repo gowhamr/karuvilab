@@ -62,7 +62,7 @@ export function FileUpload({ onFileSelect, className }: FileUploadProps) {
       ) : (
         <div className="flex flex-col items-center gap-1">
           <Upload className="w-4 h-4 text-text-4 group-hover:text-blue transition-colors" />
-          <span className="text-[9px] font-bold text-text-4 uppercase tracking-widest">
+          <span className="text-tiny font-bold text-text-4 uppercase tracking-widest">
             Click to upload or drag & drop
           </span>
         </div>

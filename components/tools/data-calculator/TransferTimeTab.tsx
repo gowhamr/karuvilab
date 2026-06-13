@@ -103,7 +103,7 @@ export function TransferTimeTab() {
               onChange={setOverhead}
               format={(v) => `${v}%`}
             />
-            <p className="text-[10px] text-text-4 font-medium leading-relaxed italic">
+            <p className="text-xs text-text-4 font-medium leading-relaxed italic">
               * Real-world transfers typically have ~5-10% TCP/IP and protocol overhead.
             </p>
           </div>
@@ -118,7 +118,7 @@ export function TransferTimeTab() {
           />
           
           <div className="p-8 bg-surface border border-border rounded-4xl space-y-4">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">Detailed Breakdown</h4>
+            <h4 className="text-xs font-black uppercase tracking-widest text-text-4">Detailed Breakdown</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center py-2 border-b border-border/50">
                 <span className="text-xs font-bold text-text-2">Total Bits (incl. overhead)</span>
@@ -132,7 +132,7 @@ export function TransferTimeTab() {
                   {bandwidth} {bandwidthUnit}
                 </span>
               </div>
-              <p className="text-[10px] text-text-3 leading-relaxed pt-2">
+              <p className="text-xs text-text-3 leading-relaxed pt-2">
                 This estimate assumes a stable connection at the specified speed. Actual times may vary due to server load, packet loss, and physical distance (latency).
               </p>
             </div>

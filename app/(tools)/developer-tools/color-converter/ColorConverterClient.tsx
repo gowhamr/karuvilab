@@ -10,6 +10,7 @@ import { useUrlState } from "@/src/hooks/useUrlState";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
+import { KV_BLUE } from "@/src/theme/constants";
 
 // Color Conversion & Analysis Utils
 function hexToRgb(hex: string) {
@@ -62,7 +63,7 @@ const FORMATS = ["HEX", "RGB", "HSL"] as const;
 
 export default function ColorConverterClient() {
   const { state, setState, shareUrl, hasParams } = useUrlState({
-    defaults: { hex: '#4F46E5' },
+    defaults: { hex: KV_BLUE },
     debounceMs: 400,
     encode: false,
   });
@@ -106,14 +107,14 @@ export default function ColorConverterClient() {
     const aaa = ratio >= 7;
     return (
       <div className="space-y-2">
-        <p className="text-[10px] font-black text-text-4 uppercase tracking-widest">{label}</p>
+        <p className="text-xs font-black text-text-4 uppercase tracking-widest">{label}</p>
         <div className="flex gap-2">
           <div className={cn(
-            "px-2 py-0.5 rounded text-[9px] font-black tracking-tighter border",
+            "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
             aa ? "bg-green-500/10 border-green-500/20 text-green-500" : "bg-red-500/10 border-red-500/20 text-red-500"
           )}>AA {aa ? "PASS" : "FAIL"}</div>
           <div className={cn(
-            "px-2 py-0.5 rounded text-[9px] font-black tracking-tighter border",
+            "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
             aaa ? "bg-green-500/10 border-green-500/20 text-green-500" : "bg-red-500/10 border-red-500/20 text-red-500"
           )}>AAA {aaa ? "PASS" : "FAIL"}</div>
         </div>
@@ -151,7 +152,7 @@ export default function ColorConverterClient() {
                        key={f}
                        onClick={() => setActiveFormat(f)}
                        className={cn(
-                         "px-4 py-1.5 rounded-lg text-[10px] font-black transition-all",
+                         "px-4 py-1.5 rounded-lg text-xs font-black transition-all",
                          activeFormat === f ? "bg-blue text-white shadow-sm" : "text-text-4 hover:text-text"
                        )}
                      >
@@ -186,7 +187,7 @@ export default function ColorConverterClient() {
           </div>
 
           <div className="space-y-4">
-             <h4 className="text-[10px] font-black text-text-4 uppercase tracking-[0.2em] flex items-center gap-2">
+             <h4 className="text-xs font-black text-text-4 uppercase tracking-[0.2em] flex items-center gap-2">
                 <Sparkles className="w-3 h-3" /> Recent Palettes
              </h4>
              <div className="flex flex-wrap gap-3">
@@ -218,7 +219,7 @@ export default function ColorConverterClient() {
            ].map((row) => (
              <div key={row.label} className="group flex items-center justify-between p-4 bg-surface border border-border rounded-xl hover:border-blue/30 transition-all shadow-sm">
                 <div className="space-y-0.5">
-                   <span className="text-[9px] font-black text-text-4 uppercase tracking-widest block">{row.label}</span>
+                   <span className="text-tiny font-black text-text-4 uppercase tracking-widest block">{row.label}</span>
                    <span className="font-mono text-sm font-bold text-text-2">{row.value}</span>
                 </div>
                 <CopyButton text={row.value} />

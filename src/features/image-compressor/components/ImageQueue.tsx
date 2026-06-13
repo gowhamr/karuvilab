@@ -16,7 +16,7 @@ export const ImageQueue: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-2">
-        <h2 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+        <h2 className="text-xs font-black uppercase tracking-widest text-text-4">
           Queue • {items.length} Images
         </h2>
       </div>
@@ -52,7 +52,7 @@ export const ImageQueue: React.FC = () => {
               {/* Info */}
               <div className="flex-1 min-w-0 relative z-10">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-black uppercase truncate pr-4">{item.file.name}</span>
+                  <span className="text-xs font-black uppercase truncate pr-4">{item.file.name}</span>
                   <button 
                     onClick={() => removeFile(item.id)}
                     aria-label="Remove from queue"
@@ -62,7 +62,7 @@ export const ImageQueue: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-2 text-[9px] font-bold text-text-4 uppercase">
+                <div className="flex items-center gap-2 text-tiny font-bold text-text-4 uppercase">
                   <span>{formatSize(item.originalSize)}</span>
                   {item.compressedSize && (
                     <>
@@ -86,17 +86,17 @@ export const ImageQueue: React.FC = () => {
                       <div className="flex-1 h-1 bg-bg rounded-full overflow-hidden">
                         <div className="h-full bg-blue transition-all duration-300" style={{ width: `${item.progress}%` }} />
                       </div>
-                      <span className="text-[8px] font-black text-blue">{item.progress}%</span>
+                      <span className="text-micro font-black text-blue">{item.progress}%</span>
                     </div>
                   )}
                   {item.status === 'completed' && (
-                    <div className="flex items-center gap-1 text-green-600 text-[8px] font-black uppercase">
+                    <div className="flex items-center gap-1 text-green-600 text-micro font-black uppercase">
                       <CheckCircle2 size={10} aria-hidden="true" />
                       Ready
                     </div>
                   )}
                   {item.status === 'error' && (
-                    <div className="flex items-center gap-1 text-red-500 text-[8px] font-black uppercase">
+                    <div className="flex items-center gap-1 text-red-500 text-micro font-black uppercase">
                       <AlertCircle size={10} aria-hidden="true" />
                       Failed
                     </div>

@@ -43,7 +43,7 @@ export function ToolResultArea({
       <div className="flex items-center justify-between">
         <div className="text-sm font-bold text-text-2 flex items-center gap-2">
           {label}
-          {language && <span className="px-2 py-1 bg-blue/10 text-blue text-[12px] uppercase font-black tracking-widest rounded-lg">{language}</span>}
+          {language && <span className="px-2 py-1 bg-blue/10 text-blue text-xs uppercase font-black tracking-widest rounded-lg">{language}</span>}
         </div>
         <div className="flex items-center gap-2">
           {onClear && (

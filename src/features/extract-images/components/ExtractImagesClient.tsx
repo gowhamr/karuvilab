@@ -117,10 +117,10 @@ export default function ExtractImagesClient() {
         {images.length > 0 && (
           <div className="bg-surface border border-border p-5 rounded-4xl shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-black text-text-2 text-[10px] uppercase tracking-[0.2em]">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
+              <h2 className="font-black text-text-2 text-xs uppercase tracking-[0.2em]">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
               <button 
                 onClick={downloadAll} 
-                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10"
+                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-xs font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10"
               >
                 <Download className="w-3.5 h-3.5" /> Download All
               </button>
@@ -132,11 +132,11 @@ export default function ExtractImagesClient() {
                     <img src={img.url} alt={`Extracted image ${i + 1}`} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div className="p-3 bg-surface border-t border-border space-y-2">
-                    <p className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">Page {img.page} · {img.width}×{img.height}px</p>
+                    <p className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Page {img.page} · {img.width}×{img.height}px</p>
                     <a 
                       href={img.url} 
                       download={`extracted-p${img.page}-${i + 1}.png`} 
-                      className="inline-flex items-center gap-1.5 text-[9px] font-black text-blue uppercase tracking-widest hover:underline"
+                      className="inline-flex items-center gap-1.5 text-tiny font-black text-blue uppercase tracking-widest hover:underline"
                     >
                       <Download size={10} /> Download
                     </a>

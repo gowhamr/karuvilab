@@ -59,7 +59,7 @@ export default function TdsCalculatorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
               <Percent className="w-3.5 h-3.5" /> Payment Details
             </h3>
           </div>
@@ -174,7 +174,7 @@ export default function TdsCalculatorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+            <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
               <Info className="w-3 h-3" /> Section Details: {activeSection.code.split('_')[0]}
             </h4>
             
@@ -193,7 +193,7 @@ export default function TdsCalculatorClient() {
               </div>
             </div>
             
-            <p className="text-[10px] font-medium text-text-4 leading-relaxed text-center italic mt-4">
+            <p className="text-xs font-medium text-text-4 leading-relaxed text-center italic mt-4">
               Note: Surcharge and Health & Education Cess (4%) are generally not applicable on payments made to residents (except Salary u/s 192). This calculator assumes a resident payee.
             </p>
           </div>

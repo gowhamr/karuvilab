@@ -32,7 +32,7 @@ export const SearchResults = memo(function SearchResults({
       <div className="p-2 space-y-6">
         {recentQueries.length > 0 && (
           <div className="space-y-1">
-            <h3 className="px-4 text-[11px] font-black uppercase tracking-widest text-text-4 mb-2">Recent Searches</h3>
+            <h3 className="px-4 text-xs font-black uppercase tracking-widest text-text-4 mb-2">Recent Searches</h3>
             <div className="space-y-0.5">
               {recentQueries.map((q) => (
                 <div key={q} className="flex items-center group">
@@ -70,7 +70,7 @@ export const SearchResults = memo(function SearchResults({
 
         {popularTools.length > 0 && (
           <div className="space-y-3">
-            <h3 className="px-4 text-[11px] font-black uppercase tracking-widest text-text-4">Popular Tools</h3>
+            <h3 className="px-4 text-xs font-black uppercase tracking-widest text-text-4">Popular Tools</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 px-2">
               {popularTools.map((tool) => (
                 <button
@@ -83,7 +83,7 @@ export const SearchResults = memo(function SearchResults({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   </div>
-                  <span className="text-[11px] font-bold text-text text-center leading-tight truncate w-full px-1">{tool.name}</span>
+                  <span className="text-xs font-bold text-text text-center leading-tight truncate w-full px-1">{tool.name}</span>
                 </button>
               ))}
             </div>
@@ -108,7 +108,7 @@ export const SearchResults = memo(function SearchResults({
         
         {popularTools.length > 0 && (
           <div className="pt-8 border-t border-border">
-            <h3 className="text-[11px] font-black uppercase tracking-widest text-text-4 mb-4 text-left">Suggested Tools</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-text-4 mb-4 text-left">Suggested Tools</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {popularTools.slice(0, 4).map((tool) => (
                 <button

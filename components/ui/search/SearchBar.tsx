@@ -48,7 +48,7 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
         </div>
         <div className={cn(
           "hidden sm:flex items-center gap-1.5 px-2 py-1 bg-mat-base rounded-xl text-text-3 group-hover:text-brand-primary transition-colors",
-          isHero ? "text-xs font-mono font-black" : "text-[10px] font-mono font-bold"
+          isHero ? "text-xs font-mono font-black" : "text-xs font-mono font-bold"
         )}>
           <Command className={cn(isHero ? "w-4 h-4" : "w-3 h-3")} />
           <span>K</span>

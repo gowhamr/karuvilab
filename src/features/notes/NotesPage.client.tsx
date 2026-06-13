@@ -78,7 +78,7 @@ export default function NotesPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "relative flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all outline-none",
+                  "relative flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-xs font-black uppercase tracking-widest transition-all outline-none",
                   activeTab === tab.id ? "text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text hover:bg-bg"
                 )}
               >
@@ -93,7 +93,7 @@ export default function NotesPage() {
                 <span>{tab.label}</span>
                 {counts[tab.id] > 0 && (
                   <span className={cn(
-                    "px-1.5 py-0.5 rounded-md text-[9px] ml-1",
+                    "px-1.5 py-0.5 rounded-md text-tiny ml-1",
                     activeTab === tab.id ? "bg-white/20 text-white" : "bg-blue/10 text-blue"
                   )}>
                     {counts[tab.id]}

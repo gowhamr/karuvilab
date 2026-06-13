@@ -291,3 +291,6 @@ interface KaruviRegistryInterface {
   findToolByPath(pathname: string): KaruviToolEntry | undefined;
   getRecentTools(): KaruviToolEntry[];
 }
+
+declare module 'lamejs';
+declare module 'gifenc';

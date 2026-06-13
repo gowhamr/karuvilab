@@ -191,14 +191,14 @@ export default function XmlFormatterClient() {
 
         {options.mode === 'format' && (
           <div className="flex items-center gap-4 bg-bg border border-border rounded-2xl p-4">
-            <span className="text-[10px] font-black uppercase tracking-widest text-text-4">Indentation</span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-4">Indentation</span>
             <div className="flex gap-2">
               {(['2', '4', 'tab'] as XMLIndent[]).map(ind => (
                 <button
                   key={ind}
                   onClick={() => setOptions({ ...options, indent: ind })}
                   className={cn(
-                    "px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-colors border",
+                    "px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors border",
                     options.indent === ind ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-4 hover:text-text"
                   )}
                 >
@@ -213,8 +213,8 @@ export default function XmlFormatterClient() {
           {/* Input Area */}
           <div className="space-y-3">
             <div className="flex justify-between items-center px-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Input XML</label>
-              <button onClick={() => setInput('')} className="text-[10px] font-bold text-red-500 hover:underline">Clear</button>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">Input XML</label>
+              <button onClick={() => setInput('')} className="text-xs font-bold text-red-500 hover:underline">Clear</button>
             </div>
             <textarea
               value={input}
@@ -229,7 +229,7 @@ export default function XmlFormatterClient() {
           {/* Output Area */}
           <div className="space-y-3">
             <div className="flex justify-between items-center px-2 min-h-[24px]">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">
                 {options.mode === 'validate' ? 'Validation Result' : 'Output'}
               </label>
               {options.mode !== 'validate' && result.valid && (
@@ -292,19 +292,19 @@ export default function XmlFormatterClient() {
         {input && result.valid && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/50">
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-1">Elements</span>
+              <span className="text-xs font-black uppercase tracking-widest text-text-4 block mb-1">Elements</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.elements}</span>
             </div>
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-1">Attributes</span>
+              <span className="text-xs font-black uppercase tracking-widest text-text-4 block mb-1">Attributes</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.attributes}</span>
             </div>
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-1">Max Depth</span>
+              <span className="text-xs font-black uppercase tracking-widest text-text-4 block mb-1">Max Depth</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.depth}</span>
             </div>
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-[10px] font-black uppercase tracking-widest text-text-4 block mb-1">Size {options.mode === 'minify' ? 'Reduction' : 'Change'}</span>
+              <span className="text-xs font-black uppercase tracking-widest text-text-4 block mb-1">Size {options.mode === 'minify' ? 'Reduction' : 'Change'}</span>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-mono font-black text-text">
                   {(result.stats.size.output / 1024).toFixed(1)} <span className="text-sm font-bold text-text-4">KB</span>

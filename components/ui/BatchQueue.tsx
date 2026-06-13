@@ -197,7 +197,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                 {stats.total} Files
               </span>
             </h3>
-            <div className="flex flex-wrap gap-4 text-[10px] font-black uppercase tracking-[0.15em] text-text-4" role="status">
+            <div className="flex flex-wrap gap-4 text-xs font-black uppercase tracking-[0.15em] text-text-4" role="status">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-green-500" /> {stats.completed} Complete</span>
               <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-blue" /> {stats.pending + stats.processing} Active</span>
               {stats.failed > 0 && <span className="flex items-center gap-1.5 text-red-500"><AlertCircle className="w-3 h-3" /> {stats.failed} Errors</span>}
@@ -291,12 +291,12 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                       style={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
                     />
                   </div>
-                  <span className="text-[10px] font-black font-mono text-text-4 w-10 text-right">
+                  <span className="text-xs font-black font-mono text-text-4 w-10 text-right">
                     {item.status === 'completed' ? '100%' : `${Math.round(item.progress)}%`}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] font-medium text-text-4 uppercase tracking-widest">
+                <div className="flex items-center justify-between text-xs font-medium text-text-4 uppercase tracking-widest">
                    <span>{formatBytes(item.file.size)}</span>
                    {item.status === 'completed' && item.result && (
                      <span className="text-green-500 font-black">

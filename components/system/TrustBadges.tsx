@@ -27,7 +27,7 @@ export function TrustBadges({ className = "", requiresNetwork = false }: TrustBa
           className="flex items-center gap-1.5 px-3 py-1.5 bg-surface/50 border border-border/40 rounded-xl"
         >
           <badge.icon className={`w-3.5 h-3.5 ${badge.color}`} />
-          <span className="text-[10px] font-black uppercase tracking-widest text-text-3">
+          <span className="text-xs font-black uppercase tracking-widest text-text-3">
             {badge.label}
           </span>
         </m.div>

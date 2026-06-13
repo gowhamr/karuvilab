@@ -116,7 +116,7 @@ export default function ChartPreview({ data, type, options, svgRef }: ChartPrevi
                   x={x + barW / 2}
                   y={y - 15}
                   textAnchor="middle"
-                  className="text-[14px] font-black fill-text"
+                  className="text-sm font-black fill-text"
                 >
                   {d.value}
                 </m.text>
@@ -125,7 +125,7 @@ export default function ChartPreview({ data, type, options, svgRef }: ChartPrevi
                 x={x + barW / 2}
                 y={chartHeight - margin + 30}
                 textAnchor="middle"
-                className="text-[12px] font-bold fill-text-4"
+                className="text-xs font-bold fill-text-4"
               >
                 {d.label}
               </text>
@@ -173,9 +173,9 @@ export default function ChartPreview({ data, type, options, svgRef }: ChartPrevi
                     strokeWidth="3"
                   />
                   {options.showValues && (
-                    <text x={x} y={y - 20} textAnchor="middle" className="text-[14px] font-black fill-text">{d.value}</text>
+                    <text x={x} y={y - 20} textAnchor="middle" className="text-sm font-black fill-text">{d.value}</text>
                   )}
-                  <text x={x} y={chartHeight - margin + 30} textAnchor="middle" className="text-[12px] font-bold fill-text-4">{d.label}</text>
+                  <text x={x} y={chartHeight - margin + 30} textAnchor="middle" className="text-xs font-bold fill-text-4">{d.label}</text>
                 </g>
               );
             })}
@@ -228,7 +228,7 @@ export default function ChartPreview({ data, type, options, svgRef }: ChartPrevi
                     <text
                       transform={`translate(${Math.cos((startAngle + angle/2 - 90) * Math.PI / 180) * (outerR + innerR)/2}, ${Math.sin((startAngle + angle/2 - 90) * Math.PI / 180) * (outerR + innerR)/2})`}
                       textAnchor="middle"
-                      className="text-[12px] font-black fill-white pointer-events-none"
+                      className="text-xs font-black fill-white pointer-events-none"
                     >
                       {Math.round((d.value/total)*100)}%
                     </text>

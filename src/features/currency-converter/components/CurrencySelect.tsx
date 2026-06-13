@@ -143,7 +143,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
                       )}
                     </div>
                     <div className={cn(
-                      "text-[10px] truncate font-medium uppercase tracking-tighter",
+                      "text-xs truncate font-medium uppercase tracking-tighter",
                       value === opt.code ? "text-blue-light" : "text-text-4"
                     )}>
                       {opt.name}
@@ -161,14 +161,14 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
       <div className="px-6 py-3 bg-bg/30 border-t border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Globe className="w-3 h-3 text-text-4" />
-          <span className="text-[9px] font-black text-text-4 uppercase tracking-widest">
+          <span className="text-tiny font-black text-text-4 uppercase tracking-widest">
             {options.length} Assets Available
           </span>
         </div>
         {isMobile && (
           <button 
             onClick={() => setIsOpen(false)}
-            className="text-[9px] font-black text-blue uppercase tracking-widest hover:underline"
+            className="text-tiny font-black text-blue uppercase tracking-widest hover:underline"
           >
             Close
           </button>
@@ -179,7 +179,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
 
   return (
     <div className="flex-1 flex flex-col gap-3 relative" ref={containerRef}>
-      <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">{label}</label>
+      <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">{label}</label>
       
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -198,7 +198,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
           </div>
           <div className="min-w-0">
             <div className="text-base font-black text-text truncate tracking-tight">{value}</div>
-            <div className="text-[10px] text-text-4 font-bold truncate uppercase tracking-widest">
+            <div className="text-xs text-text-4 font-bold truncate uppercase tracking-widest">
               {selectedOption?.name || "Select Currency"}
             </div>
           </div>

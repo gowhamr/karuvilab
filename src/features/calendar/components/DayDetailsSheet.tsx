@@ -90,7 +90,7 @@ export function DayDetailsSheet({
               {/* Festivals & Observances */}
               {sortedWorldEvents.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Today's Context</h3>
+                  <h3 className="text-xs font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Today's Context</h3>
                   <div className="grid gap-3">
                     {sortedWorldEvents.map((f) => (
                       <div 
@@ -116,7 +116,7 @@ export function DayDetailsSheet({
 
               {/* Personal Events */}
               <div className="space-y-4">
-                <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Schedule</h3>
+                <h3 className="text-xs font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Schedule</h3>
                 {dayEvents.length === 0 ? (
                   <div className="p-10 border-2 border-dashed border-border/20 rounded-5xl text-center space-y-3">
                     <div className="w-16 h-16 bg-indigo-500/5 rounded-3xl flex items-center justify-center mx-auto text-3xl">📭</div>
@@ -139,11 +139,11 @@ export function DayDetailsSheet({
                         <div className="flex-1 min-w-0">
                           <h4 className="text-lg font-black text-text truncate">{event.title}</h4>
                           <div className="flex flex-wrap items-center gap-4 mt-2">
-                            <span className="text-[11px] font-bold text-text-4 flex items-center gap-2 uppercase tracking-tight">
+                            <span className="text-xs font-bold text-text-4 flex items-center gap-2 uppercase tracking-tight">
                               <Clock className="w-3.5 h-3.5 text-indigo-500/60" /> {event.allDay ? 'All Day' : format(parseISO(event.startDate), 'h:mm a')}
                             </span>
                             {event.location && (
-                              <span className="text-[11px] font-bold text-text-4 flex items-center gap-2 uppercase tracking-tight truncate">
+                              <span className="text-xs font-bold text-text-4 flex items-center gap-2 uppercase tracking-tight truncate">
                                 <MapPin className="w-3.5 h-3.5 text-indigo-500/60" /> {event.location}
                               </span>
                             )}
@@ -158,7 +158,7 @@ export function DayDetailsSheet({
 
             <button 
               onClick={onClose}
-              className="mt-14 w-full py-5 rounded-4xl bg-bg/50 border border-border/30 text-[11px] font-black uppercase tracking-[0.3em] text-text-4 hover:bg-surface transition-colors"
+              className="mt-14 w-full py-5 rounded-4xl bg-bg/50 border border-border/30 text-xs font-black uppercase tracking-[0.3em] text-text-4 hover:bg-surface transition-colors"
             >
               Dismiss
             </button>

@@ -50,7 +50,7 @@ export const BatchMode: React.FC = () => {
         {showLargeBatchWarning && (
           <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center gap-3 text-amber-600">
             <AlertTriangle size={18} />
-            <p className="text-[11px] font-bold uppercase tracking-widest">Large batch detected. Mobile devices may throttle processing.</p>
+            <p className="text-xs font-bold uppercase tracking-widest">Large batch detected. Mobile devices may throttle processing.</p>
           </div>
         )}
 
@@ -62,7 +62,7 @@ export const BatchMode: React.FC = () => {
           <div className="p-6 bg-surface border border-border rounded-4xl space-y-6">
             <div className="space-y-2">
               <h3 className="text-sm font-black uppercase tracking-widest">Global Settings</h3>
-              <p className="text-[11px] font-bold text-text-3 uppercase tracking-widest">Apply to all queued images</p>
+              <p className="text-xs font-bold text-text-3 uppercase tracking-widest">Apply to all queued images</p>
             </div>
 
             <AdvancedSettings />
@@ -90,7 +90,7 @@ export const BatchMode: React.FC = () => {
                 <button
                   onClick={downloadBatch}
                   disabled={!items.some(i => i.status === 'completed') || isProcessing}
-                  className="py-3 bg-surface border border-border text-text-2 font-bold text-[10px] uppercase tracking-widest rounded-xl hover:border-blue hover:text-blue transition-all disabled:opacity-50 flex items-center justify-center gap-2 relative overflow-hidden"
+                  className="py-3 bg-surface border border-border text-text-2 font-bold text-xs uppercase tracking-widest rounded-xl hover:border-blue hover:text-blue transition-all disabled:opacity-50 flex items-center justify-center gap-2 relative overflow-hidden"
                 >
                   {zipProgress > 0 && (
                     <div 
@@ -105,7 +105,7 @@ export const BatchMode: React.FC = () => {
                 <button
                   onClick={clearFiles}
                   disabled={items.length === 0 || isProcessing}
-                  className="py-3 bg-surface border border-border text-red-500 font-bold text-[10px] uppercase tracking-widest rounded-xl hover:border-red-500 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="py-3 bg-surface border border-border text-red-500 font-bold text-xs uppercase tracking-widest rounded-xl hover:border-red-500 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <Trash2 size={14} />
                   Clear

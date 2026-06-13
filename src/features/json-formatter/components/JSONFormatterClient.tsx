@@ -44,7 +44,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
         <button 
           onClick={() => setCollapsed(c => !c)} 
           aria-label={collapsed ? "Expand array" : "Collapse array"}
-          className="text-text-4 hover:text-blue transition-colors text-[10px] mr-1 inline-flex items-center justify-center w-4 h-4 rounded hover:bg-blue/5"
+          className="text-text-4 hover:text-blue transition-colors text-xs mr-1 inline-flex items-center justify-center w-4 h-4 rounded hover:bg-blue/5"
         >
           {collapsed ? <ChevronRight size={10} /> : <ChevronDown size={10} />}
         </button>
@@ -68,7 +68,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
               {hasMore && (
                 <button 
                   onClick={() => setShowAll(true)}
-                  className="text-blue hover:underline text-[10px] font-black uppercase tracking-widest mt-2 block"
+                  className="text-blue hover:underline text-xs font-black uppercase tracking-widest mt-2 block"
                 >
                   + Show all {value.length} items
                 </button>
@@ -93,7 +93,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
         <button 
           onClick={() => setCollapsed(c => !c)} 
           aria-label={collapsed ? "Expand object" : "Collapse object"}
-          className="text-text-4 hover:text-blue transition-colors text-[10px] mr-1 inline-flex items-center justify-center w-4 h-4 rounded hover:bg-blue/5"
+          className="text-text-4 hover:text-blue transition-colors text-xs mr-1 inline-flex items-center justify-center w-4 h-4 rounded hover:bg-blue/5"
         >
           {collapsed ? <ChevronRight size={10} /> : <ChevronDown size={10} />}
         </button>
@@ -119,7 +119,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
               {hasMore && (
                 <button 
                   onClick={() => setShowAll(true)}
-                  className="text-blue hover:underline text-[10px] font-black uppercase tracking-widest mt-2 block"
+                  className="text-blue hover:underline text-xs font-black uppercase tracking-widest mt-2 block"
                 >
                   + Show all {entries.length} keys
                 </button>
@@ -277,11 +277,11 @@ export default function JSONFormatterClient() {
         </div>
 
         <aside className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-[10px] font-black uppercase tracking-widest text-text-4 px-2">Settings</h2>
+          <h2 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Settings</h2>
           <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
             {mode === "beautify" && (
               <div className="space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-3">Indentation</p>
+                <p className="text-xs font-black uppercase tracking-widest text-text-3">Indentation</p>
                 <div className="flex flex-wrap gap-2">
                   {([2, 4, "tab"] as Indent[]).map(v => (
                     <button
@@ -304,9 +304,9 @@ export default function JSONFormatterClient() {
             <div className="p-4 bg-blue/5 border border-blue/10 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-blue">
                 <Info className="w-3 h-3" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-blue-dark">Pro Tip</span>
+                <span className="text-tiny font-black uppercase tracking-widest text-blue-dark">Pro Tip</span>
               </div>
-              <p className="text-[11px] text-text-3 leading-relaxed font-medium">
+              <p className="text-xs text-text-3 leading-relaxed font-medium">
                 Switch to <span className="text-blue font-bold">Tree View</span> in the results area to explore complex nested objects.
               </p>
             </div>

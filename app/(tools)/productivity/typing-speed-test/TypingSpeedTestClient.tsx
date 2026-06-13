@@ -94,17 +94,17 @@ export default function TypingSpeedTestClient() {
         <div className="p-6 bg-surface border border-border rounded-3xl flex flex-col items-center justify-center space-y-2">
           <Trophy className="w-6 h-6 text-blue" />
           <div className="text-3xl font-black">{stats.wpm}</div>
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">WPM</div>
+          <div className="text-xs font-bold text-text-4 uppercase tracking-widest">WPM</div>
         </div>
         <div className="p-6 bg-surface border border-border rounded-3xl flex flex-col items-center justify-center space-y-2">
           <Target className="w-6 h-6 text-blue" />
           <div className="text-3xl font-black">{stats.accuracy}%</div>
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Accuracy</div>
+          <div className="text-xs font-bold text-text-4 uppercase tracking-widest">Accuracy</div>
         </div>
         <div className="p-6 bg-surface border border-border rounded-3xl flex flex-col items-center justify-center space-y-2">
           <Timer className="w-6 h-6 text-blue" />
           <div className="text-3xl font-black">{stats.time}s</div>
-          <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Time</div>
+          <div className="text-xs font-bold text-text-4 uppercase tracking-widest">Time</div>
         </div>
       </div>
 

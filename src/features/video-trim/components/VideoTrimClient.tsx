@@ -161,7 +161,7 @@ export default function VideoTrimClient() {
 
             <div className="p-8 space-y-8">
               <div className="space-y-4">
-                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-text-4">
+                <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
                   <span>{formatDuration(range[0] || 0)}</span>
                   <span className="text-blue bg-blue/5 px-2 py-0.5 rounded-full">
                     Selected: {formatDuration(selectedDuration)}
@@ -256,7 +256,7 @@ export default function VideoTrimClient() {
                   </div>
                   <div>
                     <h3 className="font-black text-sm uppercase tracking-widest text-text">Trim Complete</h3>
-                    <p className="text-[10px] font-bold text-text-4 uppercase">
+                    <p className="text-xs font-bold text-text-4 uppercase">
                       {result.name} • {(result.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>

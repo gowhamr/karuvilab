@@ -128,7 +128,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           whileHover={{ scale: 1.05, y: -1 }}
           whileTap={{ scale: 0.95 }}
           className={`
-            relative flex-shrink-0 h-[42px] px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+            relative flex-shrink-0 min-h-[44px] py-2 px-4 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
             ${!activeCategory 
               ? "text-white shadow-md shadow-blue/15" 
               : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface shadow-sm"}
@@ -156,7 +156,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
             className={`
-              relative flex-shrink-0 h-[42px] flex items-center gap-2.5 px-6 rounded-full text-[11px] font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+              relative flex-shrink-0 min-h-[44px] flex items-center gap-2.5 py-2 px-4 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
               ${activeCategory === cat.id 
                 ? "text-white" 
                 : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface shadow-sm"}

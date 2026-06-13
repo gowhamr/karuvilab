@@ -46,6 +46,8 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   processJson: 'compute',
   evaluateMath: 'compute',
   calculateEmiSchedule: 'compute',
+  convertNumeral: 'compute',
+  detectNumeralFormat: 'compute',
 
   // Media Pool (heavy file manipulation, image/PDF processing)
   mergePdfs: 'media',

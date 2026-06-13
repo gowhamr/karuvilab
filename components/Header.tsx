@@ -86,7 +86,7 @@ export function Header() {
               <Link 
                 key={link.label}
                 href={link.href}
-                className="flex items-center h-12 px-3 rounded-lg text-[11px] font-bold text-text-3 hover:text-blue hover:bg-blue/5 transition-all uppercase tracking-wider"
+                className="flex items-center h-12 px-3 rounded-lg text-xs font-bold text-text-3 hover:text-blue hover:bg-blue/5 transition-all uppercase tracking-wider"
               >
                 {link.label}
               </Link>
@@ -108,7 +108,7 @@ export function Header() {
                 aria-label="Search tools"
              >
                 <Search className="w-4 h-4 text-text-3" />
-                <span className="text-[13px] font-medium text-text-3">Search</span>
+                <span className="text-sm font-medium text-text-3">Search</span>
              </button>
           </div>
 

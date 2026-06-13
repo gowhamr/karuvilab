@@ -148,11 +148,11 @@ export default function EMICalculatorClient() {
             className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-md border-t border-border p-4 shadow-2xl flex items-center justify-between"
           >
             <div className="space-y-0.5">
-               <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Monthly EMI</p>
+               <p className="text-xs font-black uppercase tracking-widest text-text-4">Monthly EMI</p>
                <p className="text-lg font-black text-text">{formatCurrency(result.monthlyEmi)}</p>
             </div>
             <div className="text-right space-y-0.5">
-               <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Total Interest</p>
+               <p className="text-xs font-black uppercase tracking-widest text-text-4">Total Interest</p>
                <p className="text-sm font-bold text-text-3">{formatCurrency(result.totalInterest)}</p>
             </div>
           </m.div>
@@ -210,12 +210,12 @@ export default function EMICalculatorClient() {
             { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-10" /> }
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Effective Tenure</span>
+              <span className="text-xs font-black uppercase tracking-widest">Effective Tenure</span>
             </div>
             <p className="text-2xl sm:text-3xl font-black text-text tabular-nums">
               {result?.effectiveTenure || 0} <span className="text-sm text-text-4 font-bold">Months</span>
             </p>
-            <p className="text-[10px] text-text-3 font-medium leading-relaxed">
+            <p className="text-xs text-text-3 font-medium leading-relaxed">
               {(result?.effectiveTenure || 0) / 12 >= 1 
                 ? `${((result?.effectiveTenure || 0) / 12).toFixed(1)} years until debt-free.` 
                 : "Loan will be closed within a year."}

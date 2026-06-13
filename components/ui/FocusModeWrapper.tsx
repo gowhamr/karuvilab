@@ -150,7 +150,7 @@ export function FocusModeWrapper({
             <Maximize2 className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Focus</span>
             {!isMobile && (
-              <kbd className="hidden md:inline text-[9px] px-1 py-0.5
+              <kbd className="hidden md:inline text-tiny px-1 py-0.5
                 bg-mat-surface border border-border rounded font-mono">
                 F11
               </kbd>

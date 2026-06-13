@@ -131,13 +131,13 @@ export default function PdfToWordClient() {
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="space-y-1">
                 <h2 className="font-black text-text text-sm uppercase tracking-widest">Extracted Content</h2>
-                <p className="text-[10px] font-bold text-text-4 uppercase tracking-tighter">{pageCount} Pages found</p>
+                <p className="text-xs font-bold text-text-4 uppercase tracking-tighter">{pageCount} Pages found</p>
               </div>
               <div className="flex gap-2">
                 <CopyButton text={text} label="Copy Text" />
                 <button 
                   onClick={downloadDocx} 
-                  className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-xl font-black uppercase tracking-widest text-[10px] hover:opacity-90 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-xl font-black uppercase tracking-widest text-xs hover:opacity-90 transition-all"
                 >
                   <Download className="w-3.5 h-3.5" /> Download .docx
                 </button>

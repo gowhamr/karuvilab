@@ -48,7 +48,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
           <button
             key={p.label}
             onClick={() => update({ quality: p.quality, lossless: p.lossless })}
-            className={`flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[10px] font-black uppercase transition-all ${
+            className={`flex items-center justify-center gap-2 py-2.5 rounded-xl border text-xs font-black uppercase transition-all ${
               settings.quality === p.quality && settings.lossless === p.lossless
                 ? 'bg-blue border-blue text-white shadow-lg shadow-blue/20'
                 : 'bg-bg border-border text-text-4 hover:border-blue/30'
@@ -74,14 +74,14 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
 
         {/* Format Selector */}
         <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Output Format</label>
+          <label className="text-xs font-black uppercase tracking-widest text-text-4">Output Format</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {(['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as CompressionFormat[]).map((fmt) => (
               <button
                 key={fmt}
                 disabled={!supportedFormats.includes(fmt)}
                 onClick={() => update({ format: fmt })}
-                className={`py-2 px-1 rounded-xl border text-[10px] font-black uppercase transition-all disabled:opacity-30 ${
+                className={`py-2 px-1 rounded-xl border text-xs font-black uppercase transition-all disabled:opacity-30 ${
                   settings.format === fmt
                     ? 'bg-blue border-blue text-white shadow-lg shadow-blue/20'
                     : 'bg-bg border-border text-text-4 hover:border-blue/30'
@@ -96,7 +96,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
         {/* Resize Controls */}
         <div className="space-y-3 pt-2 border-t border-border/50">
           <div className="flex items-center justify-between">
-            <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Dimensions</label>
+            <label className="text-xs font-black uppercase tracking-widest text-text-4">Dimensions</label>
             <button 
               onClick={() => update({ maintainAspectRatio: !settings.maintainAspectRatio })}
               className={`p-1 rounded-md transition-colors ${settings.maintainAspectRatio ? 'text-blue' : 'text-text-4'}`}
@@ -114,7 +114,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
                 onChange={(e) => update({ resizeWidth: e.target.value ? Number(e.target.value) : null })}
                 className="w-full pl-3 pr-8 py-2 bg-surface border border-border rounded-xl text-xs focus:ring-1 focus:ring-blue outline-none"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-text-4">W</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-tiny font-bold text-text-4">W</span>
             </div>
             <div className="relative">
               <input
@@ -124,7 +124,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
                 onChange={(e) => update({ resizeHeight: e.target.value ? Number(e.target.value) : null })}
                 className="w-full pl-3 pr-8 py-2 bg-surface border border-border rounded-xl text-xs focus:ring-1 focus:ring-blue outline-none"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-text-4">H</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-tiny font-bold text-text-4">H</span>
             </div>
           </div>
         </div>

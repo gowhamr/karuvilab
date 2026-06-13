@@ -44,9 +44,9 @@ export function WorkflowSuggestions() {
                 </div>
                 <div>
                   <h4 className="font-black text-sm group-hover:text-blue transition-colors line-clamp-1">{tool.name}</h4>
-                  <p className="text-[10px] text-text-4 font-medium line-clamp-2 mt-1">{tool.desc}</p>
+                  <p className="text-xs text-text-4 font-medium line-clamp-2 mt-1">{tool.desc}</p>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] font-black text-blue uppercase tracking-widest pt-1">
+                <div className="flex items-center gap-1 text-xs font-black text-blue uppercase tracking-widest pt-1">
                   Try Now <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>

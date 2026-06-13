@@ -213,12 +213,12 @@ export default function CsvToJsonClient() {
           {/* Input Area */}
           <div className="space-y-4">
             <div className="flex justify-between items-center px-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">
                 Input {mode === 'csv-to-json' ? 'CSV' : 'JSON'}
               </label>
               <button 
                 onClick={() => setInput('')}
-                className="text-[10px] font-bold text-red-500 hover:underline"
+                className="text-xs font-bold text-red-500 hover:underline"
               >
                 Clear
               </button>
@@ -234,7 +234,7 @@ export default function CsvToJsonClient() {
           {/* Output Area */}
           <div className="space-y-4">
             <div className="flex justify-between items-center px-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+              <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                 Output {mode === 'csv-to-json' ? 'JSON' : 'CSV'}
                 {parsedResult && parsedResult.errors.length > 0 && (
                   <span className="flex items-center gap-1 text-amber-500 px-2 py-0.5 bg-amber-500/10 rounded-full">
@@ -267,7 +267,7 @@ export default function CsvToJsonClient() {
 
         {/* Options Panel */}
         <div className="bg-bg border border-border rounded-3xl p-6 space-y-6">
-          <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4">Parsing Options</h3>
+          <h3 className="text-xs font-black uppercase tracking-widest text-text-4">Parsing Options</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div className="space-y-3">
@@ -333,7 +333,7 @@ export default function CsvToJsonClient() {
         {mode === 'csv-to-json' && parsedResult && parsedResult.data.length > 0 && (
           <div className="space-y-4 pt-4 border-t border-border/50">
             <div className="flex items-center justify-between px-2">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+              <h3 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                 <TableIcon className="w-3.5 h-3.5" />
                 Data Preview (First 5 Rows)
               </h3>
@@ -345,7 +345,7 @@ export default function CsvToJsonClient() {
                 <thead>
                   <tr className="bg-bg/80 border-b border-border">
                     {parsedResult.headers.map((h, i) => (
-                      <th key={i} className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-text-4 border-r border-border last:border-r-0">
+                      <th key={i} className="px-4 py-3 text-xs font-black uppercase tracking-widest text-text-4 border-r border-border last:border-r-0">
                         {h}
                       </th>
                     ))}

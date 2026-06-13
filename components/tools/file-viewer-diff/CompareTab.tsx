@@ -101,7 +101,7 @@ export function CompareTab() {
       {!diff ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <div className="space-y-4">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4 px-2">Original File</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Original File</h3>
             {!fileA ? (
               <DropZone onFilesSelected={handleFileA} accept="*" title="Upload Original" className="h-48" />
             ) : (
@@ -112,7 +112,7 @@ export function CompareTab() {
                     value={fileA.language}
                     onChange={(e) => setFileALanguage(e.target.value)}
                     aria-label={`Language for ${fileA.name}`}
-                    className="text-[10px] text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
+                    className="text-xs text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
                   >
                     {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
                   </select>
@@ -132,7 +132,7 @@ export function CompareTab() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-text-4 px-2">Modified File</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Modified File</h3>
             {!fileB ? (
               <DropZone onFilesSelected={handleFileB} accept="*" title="Upload Modified" className="h-48" />
             ) : (
@@ -143,7 +143,7 @@ export function CompareTab() {
                     value={fileB.language}
                     onChange={(e) => setFileBLanguage(e.target.value)}
                     aria-label={`Language for ${fileB.name}`}
-                    className="text-[10px] text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
+                    className="text-xs text-text-4 uppercase bg-transparent border-none p-0 focus:ring-0 cursor-pointer hover:text-blue"
                   >
                     {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
                   </select>
@@ -198,7 +198,7 @@ export function CompareTab() {
             
             <button 
               onClick={() => setDiff(null)}
-              className="text-[10px] font-black uppercase tracking-widest text-blue hover:underline"
+              className="text-xs font-black uppercase tracking-widest text-blue hover:underline"
             >
               Start New Comparison
             </button>

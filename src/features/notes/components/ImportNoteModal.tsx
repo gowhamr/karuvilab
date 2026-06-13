@@ -218,7 +218,7 @@ export function ImportNoteModal({ open, onOpenChange }: ImportNoteModalProps) {
                   {decryptedNote.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 pt-2">
                       {decryptedNote.tags.map(tag => (
-                        <span key={tag} className="px-2 py-0.5 bg-blue/5 text-blue text-[10px] font-bold rounded uppercase tracking-wider">
+                        <span key={tag} className="px-2 py-0.5 bg-blue/5 text-blue text-xs font-bold rounded uppercase tracking-wider">
                           #{tag}
                         </span>
                       ))}

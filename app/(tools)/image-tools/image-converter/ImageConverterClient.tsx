@@ -190,7 +190,7 @@ export default function ImageConverterClient() {
                   <div className="w-1.5 h-1.5 rounded-full bg-blue mt-1.5 shrink-0" />
                   <div>
                     <p className="font-black text-xs uppercase tracking-wider text-text">{h.title}</p>
-                    <p className="text-[10px] text-text-4 font-medium">{h.desc}</p>
+                    <p className="text-xs text-text-4 font-medium">{h.desc}</p>
                   </div>
                 </li>
               ))}

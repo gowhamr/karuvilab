@@ -61,17 +61,17 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
             </h2>
             <div className="flex flex-wrap gap-1.5 pt-0.5">
               <span className={cn(
-                "px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border",
+                "px-2.5 py-0.5 rounded-full text-tiny font-black uppercase tracking-wider border",
                 event.colors.bg,
                 event.colors.border,
                 event.colors.text
               )}>
                 {event.category.replace('-', ' ')}
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-surface-2 text-text-3 border border-border/30">
+              <span className="px-2.5 py-0.5 rounded-full text-tiny font-black uppercase tracking-wider bg-surface-2 text-text-3 border border-border/30">
                 {event.importance}
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-surface-2 text-text-3 border border-border/30">
+              <span className="px-2.5 py-0.5 rounded-full text-tiny font-black uppercase tracking-wider bg-surface-2 text-text-3 border border-border/30">
                 {event.globalReach.replace('-', ' ')}
               </span>
             </div>
@@ -155,7 +155,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
             {event.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-surface-2 border border-border/20 text-text-3"
+                className="px-2.5 py-1 rounded-lg text-xs font-bold bg-surface-2 border border-border/20 text-text-3"
               >
                 #{tag}
               </span>
@@ -164,7 +164,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
 
           {event.links && event.links.length > 0 && (
             <div className="space-y-2 pt-2">
-              <p className="text-[10px] font-black uppercase tracking-wider text-text-4">Reference Links</p>
+              <p className="text-xs font-black uppercase tracking-wider text-text-4">Reference Links</p>
               <div className="flex flex-col gap-1.5">
                 {event.links.map((link, idx) => (
                   <a

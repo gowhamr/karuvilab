@@ -113,8 +113,8 @@ export function OfflineSyncIndicator() {
           <div className="flex items-start gap-3 p-3 bg-bg border border-border/50 rounded-2xl">
             <Shield className="w-4 h-4 text-success shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-2">100% Client-Side</h4>
-              <p className="text-[10px] text-text-3 leading-normal">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-2">100% Client-Side</h4>
+              <p className="text-xs text-text-3 leading-normal">
                 KaruviLab processes all sensitive data in-browser. Your inputs are never transmitted to any external servers.
               </p>
             </div>
@@ -122,7 +122,7 @@ export function OfflineSyncIndicator() {
 
           {/* Network-dependent Tools List */}
           <div className="space-y-2.5">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4">
+            <h4 className="text-xs font-black uppercase tracking-widest text-text-4">
               Network Requirements
             </h4>
             <div className="space-y-1.5">
@@ -136,7 +136,7 @@ export function OfflineSyncIndicator() {
                     <span className="font-bold text-text-2">{t.name}</span>
                     <span
                       className={`
-                        px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border
+                        px-2 py-0.5 rounded-full text-tiny font-black uppercase tracking-wider border
                         ${
                           isToolAvailable
                             ? 'bg-success/5 border-success/15 text-success'
@@ -150,7 +150,7 @@ export function OfflineSyncIndicator() {
                 );
               })}
             </div>
-            <p className="text-[9px] text-text-4 leading-normal italic">
+            <p className="text-tiny text-text-4 leading-normal italic">
               All other 100+ tools are offline-capable and serve directly from local cache storage.
             </p>
           </div>

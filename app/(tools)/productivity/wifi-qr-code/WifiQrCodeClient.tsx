@@ -121,7 +121,7 @@ export default function WifiQrCodeClient() {
                 {!isLibLoaded || !qrBlobUrl ? (
                   <div className="flex flex-col items-center gap-2">
                     <Loader2 className="w-8 h-8 animate-spin text-blue/30" />
-                    <span className="text-[10px] font-bold text-text-4">INITIALIZING...</span>
+                    <span className="text-xs font-bold text-text-4">INITIALIZING...</span>
                   </div>
                 ) : (
                   <img src={qrBlobUrl} alt="WiFi QR Code" className="w-64 h-64" />
@@ -134,7 +134,7 @@ export default function WifiQrCodeClient() {
               >
                 <Download className="w-5 h-5" /> Download QR Code
               </button>
-              <p className="text-[10px] text-text-4 uppercase font-black tracking-widest text-center">
+              <p className="text-xs text-text-4 uppercase font-black tracking-widest text-center">
                 Scan with your phone's camera to connect
               </p>
             </>

@@ -240,7 +240,7 @@ export default function IncomeTaxClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
               <Briefcase className="w-3.5 h-3.5" /> Income Details
             </h3>
             
@@ -265,7 +265,7 @@ export default function IncomeTaxClient() {
                     key={a}
                     onClick={() => setAge(a)}
                     className={cn(
-                      "py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all",
+                      "py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all",
                       age === a ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-2"
                     )}
                   >
@@ -285,10 +285,10 @@ export default function IncomeTaxClient() {
                 className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 overflow-hidden"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500 flex items-center gap-2">
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-purple-500 flex items-center gap-2">
                     <PiggyBank className="w-3.5 h-3.5" /> Deductions
                   </h3>
-                  <span className="text-[9px] font-bold uppercase bg-purple-500/10 text-purple-500 px-2 py-1 rounded-md">Old Regime Only</span>
+                  <span className="text-tiny font-bold uppercase bg-purple-500/10 text-purple-500 px-2 py-1 rounded-md">Old Regime Only</span>
                 </div>
 
                 <div className="space-y-4">
@@ -312,7 +312,7 @@ export default function IncomeTaxClient() {
                       </div>
                     </div>
                   ))}
-                  <p className="text-[10px] text-text-4 font-medium text-center pt-2 italic">Standard deduction of ₹50,000 is auto-applied.</p>
+                  <p className="text-xs text-text-4 font-medium text-center pt-2 italic">Standard deduction of ₹50,000 is auto-applied.</p>
                 </div>
               </m.div>
             )}
@@ -335,7 +335,7 @@ export default function IncomeTaxClient() {
 
         {/* RIGHT COLUMN: Results */}
         <div className="lg:col-span-7 space-y-6">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2">Tax Breakdown</h3>
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2">Tax Breakdown</h3>
           
           <div className="grid grid-cols-2 gap-4">
             <MetricCard label="Gross Income" value={formatCurrency(activeResult.grossIncome)} />
@@ -351,36 +351,36 @@ export default function IncomeTaxClient() {
             
             <div className="flex items-end justify-between border-b border-border/50 pb-6">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4 mb-2">Total Tax Payable</p>
+                <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-2">Total Tax Payable</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl sm:text-5xl font-black text-text tracking-tighter">{formatCurrency(activeResult.totalTax)}</span>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4 mb-1">Effective Rate</p>
+                <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-1">Effective Rate</p>
                 <span className="text-xl font-black text-text-3">{activeResult.effectiveRate.toFixed(1)}%</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6 pt-2">
                <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-text-4 mb-1">Monthly In-Hand</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-1">Monthly In-Hand</p>
                   <span className="text-2xl font-bold text-green-500">{formatCurrency(activeResult.inHandMonthly)}</span>
                </div>
                <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-text-4 mb-1">Monthly Tax</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-1">Monthly Tax</p>
                   <span className="text-xl font-bold text-red-400">{formatCurrency(activeResult.monthlyTax)}</span>
                </div>
             </div>
 
             {/* Slab Table */}
             <div className="pt-6 space-y-3">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                 <FileText className="w-3 h-3" /> Slab Breakdown
               </h4>
               <div className="bg-bg border border-border rounded-2xl overflow-hidden">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-mat-base border-b border-border text-[9px] uppercase tracking-widest text-text-4 font-black">
+                  <thead className="bg-mat-base border-b border-border text-tiny uppercase tracking-widest text-text-4 font-black">
                     <tr>
                       <th className="px-4 py-3">Income Range</th>
                       <th className="px-4 py-3">Rate</th>

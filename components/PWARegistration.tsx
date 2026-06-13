@@ -171,7 +171,7 @@ export function PWARegistration() {
         {/* Action Button */}
         {isIOS && isSafari ? (
           // iOS Safari Share Sheet Instructions
-          <div className="flex items-start gap-2.5 p-3 bg-bg/50 border border-border/30 rounded-2xl text-[11px] text-text-2">
+          <div className="flex items-start gap-2.5 p-3 bg-bg/50 border border-border/30 rounded-2xl text-xs text-text-2">
             <Share className="w-4 h-4 text-blue shrink-0 mt-0.5" />
             <p className="leading-normal">
               To install: tap the <strong className="text-text">Share</strong> button in Safari, then select <strong className="text-text">Add to Home Screen</strong>.

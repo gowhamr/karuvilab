@@ -157,7 +157,7 @@ export default function DateCalculatorClient() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+                <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                   <Plus size={12} /> Operation
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -189,7 +189,7 @@ export default function DateCalculatorClient() {
             </div>
 
             <div className="space-y-4 pt-4 border-t border-border">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+              <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                 <Hash size={12} /> Time Unit
               </label>
               <div className="flex p-1 bg-bg border border-border rounded-xl">
@@ -198,7 +198,7 @@ export default function DateCalculatorClient() {
                     key={u}
                     onClick={() => setAddUnit(u)}
                     className={cn(
-                      "flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                      "flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all",
                       addUnit === u ? "bg-surface text-blue shadow-sm" : "text-text-4 hover:text-text"
                     )}
                   >
@@ -217,7 +217,7 @@ export default function DateCalculatorClient() {
                 </div>
                 <div>
                   <h2 className="text-sm font-black uppercase tracking-widest text-text">Resulting Date</h2>
-                  <p className="text-[10px] font-bold text-text-4 uppercase">Calculated arrival</p>
+                  <p className="text-xs font-bold text-text-4 uppercase">Calculated arrival</p>
                 </div>
               </div>
 

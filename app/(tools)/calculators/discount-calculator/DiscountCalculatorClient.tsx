@@ -79,7 +79,7 @@ export default function DiscountCalculatorClient() {
           </div>
           <div>
             <h2 className="text-sm font-black uppercase tracking-widest text-text">Reverse Calculator</h2>
-            <p className="text-[10px] font-bold text-text-4 uppercase">Find % off to reach target</p>
+            <p className="text-xs font-bold text-text-4 uppercase">Find % off to reach target</p>
           </div>
         </div>
 

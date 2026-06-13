@@ -513,7 +513,7 @@ export function NoteEditor() {
                   {localNote.tags.map((tag) => (
                     <span 
                       key={tag} 
-                      className="flex items-center gap-1 px-2 py-1 bg-blue/5 text-blue text-[10px] font-black rounded-lg uppercase tracking-widest border border-blue/10 group animate-in zoom-in-75"
+                      className="flex items-center gap-1 px-2 py-1 bg-blue/5 text-blue text-xs font-black rounded-lg uppercase tracking-widest border border-blue/10 group animate-in zoom-in-75"
                     >
                       {tag}
                       <button onClick={() => handleRemoveTag(tag)} className="hover:text-error">
@@ -527,18 +527,18 @@ export function NoteEditor() {
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyDown={handleAddTag}
                     placeholder="Add tag..."
-                    className="bg-transparent text-[10px] font-black uppercase tracking-widest text-text outline-none w-20 placeholder:text-text-4"
+                    className="bg-transparent text-xs font-black uppercase tracking-widest text-text outline-none w-20 placeholder:text-text-4"
                   />
                 </div>
 
                 <div className="flex items-center justify-between md:justify-end gap-6">
-                  <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest flex items-center gap-2">
+                  <span className="text-xs font-bold text-text-4 uppercase tracking-widest flex items-center gap-2">
                     <Sparkles size={12} className="text-blue" />
                     Updated {formatFullDate(localNote.updatedAt)}
                   </span>
                   <div className="flex items-center gap-1.5 text-text-4">
                     <CheckSquare size={14} className="text-success" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Saved</span>
+                    <span className="text-xs font-bold uppercase tracking-widest">Saved</span>
                   </div>
                 </div>
               </div>

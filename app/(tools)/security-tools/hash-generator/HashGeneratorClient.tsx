@@ -184,8 +184,8 @@ export default function HashGeneratorClient() {
               >
                 <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Enter Text Content</label>
-                    <span className="text-[10px] font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
+                    <label className="text-xs font-black uppercase tracking-widest text-text-4">Enter Text Content</label>
+                    <span className="text-xs font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
                   </div>
                   <textarea
                     className="w-full px-5 py-4 bg-bg border border-border rounded-2xl font-mono text-sm focus:ring-4 focus:ring-blue/5 focus:border-blue outline-none transition-all resize-none min-h-[200px]"
@@ -196,7 +196,7 @@ export default function HashGeneratorClient() {
                   {text && (
                     <button 
                       onClick={() => setText("")}
-                      className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors flex items-center gap-1"
+                      className="text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors flex items-center gap-1"
                     >
                       <Trash2 size={12} /> Clear Text
                     </button>
@@ -227,7 +227,7 @@ export default function HashGeneratorClient() {
                       </div>
                       <div>
                         <p className="text-sm font-bold truncate max-w-[200px]">{file.name}</p>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-text-4">{(file.size / 1024).toFixed(1)} KB</p>
+                        <p className="text-xs font-black uppercase tracking-widest text-text-4">{(file.size / 1024).toFixed(1)} KB</p>
                       </div>
                     </div>
                     <button 
@@ -253,14 +253,14 @@ export default function HashGeneratorClient() {
 
             {/* Algorithm Selection */}
             <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Algorithms</label>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">Algorithms</label>
               <div className="grid grid-cols-2 gap-2">
                 {ALGOS.map(algo => (
                   <button
                     key={algo}
                     onClick={() => toggleAlgo(algo)}
                     className={cn(
-                      "px-4 py-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all text-center",
+                      "px-4 py-3 rounded-xl border text-xs font-black uppercase tracking-widest transition-all text-center",
                       selectedAlgos.includes(algo) 
                         ? "bg-blue border-blue text-white shadow-md shadow-blue/20" 
                         : "bg-bg border-border text-text-4 hover:border-blue/30"
@@ -274,14 +274,14 @@ export default function HashGeneratorClient() {
 
             {/* Output Encoding */}
             <div className="space-y-4 pt-4 border-t border-border">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Output Encoding</label>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">Output Encoding</label>
               <div className="flex p-1 bg-bg border border-border rounded-xl">
                 {(['hex', 'base64'] as const).map(enc => (
                   <button
                     key={enc}
                     onClick={() => setEncoding(enc)}
                     className={cn(
-                      "flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                      "flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all",
                       encoding === enc ? "bg-surface text-blue shadow-sm" : "text-text-4 hover:text-text"
                     )}
                   >
@@ -294,7 +294,7 @@ export default function HashGeneratorClient() {
             {/* HMAC Support */}
             <div className="space-y-4 pt-4 border-t border-border">
               <div className="flex items-center justify-between">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+                <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                   <Key size={12} className={useHmac ? "text-blue" : "text-text-4"} aria-hidden="true" /> HMAC Support
                 </label>
                 <button
@@ -329,7 +329,7 @@ export default function HashGeneratorClient() {
                     />
                     <Key size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-4" aria-hidden="true" />
                   </div>
-                  <p className="text-[9px] text-text-4 leading-relaxed italic">
+                  <p className="text-tiny text-text-4 leading-relaxed italic">
                     HMAC (Hash-based Message Authentication Code) uses a secret key for verifiable authentication.
                   </p>
                 </motion.div>
@@ -340,9 +340,9 @@ export default function HashGeneratorClient() {
             <div className="p-4 bg-bg border border-border rounded-2xl space-y-2">
               <div className="flex items-center gap-2 text-blue">
                 <Terminal size={14} aria-hidden="true" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Runtime Note</span>
+                <span className="text-xs font-black uppercase tracking-widest">Runtime Note</span>
               </div>
-              <p className="text-[9px] text-text-4 font-medium leading-relaxed">
+              <p className="text-tiny text-text-4 font-medium leading-relaxed">
                 All cryptographic operations are performed on-device via Web Crypto API. Your keys and data are never transmitted.
               </p>
             </div>
@@ -363,7 +363,7 @@ export default function HashGeneratorClient() {
                 Generated Hashes {isProcessing && <Loader2 size={12} className="animate-spin text-blue" aria-hidden="true" />}
               </h2>
               {progress && (
-                <div className="text-[10px] font-bold text-blue uppercase tracking-widest flex items-center gap-2">
+                <div className="text-xs font-bold text-blue uppercase tracking-widest flex items-center gap-2">
                   <span className="animate-pulse">{progress.message}</span>
                   <span>{Math.round(progress.percent)}%</span>
                 </div>
@@ -384,13 +384,13 @@ export default function HashGeneratorClient() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <div className={cn(
-                          "w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-black transition-colors",
+                          "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-colors",
                           res?.loading ? "bg-bg text-text-4" : 
                           res?.error ? "bg-red-500/10 text-red-500" : "bg-blue/10 text-blue"
                         )}>
                           {algo.split('-')[1] || algo}
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
+                        <span className="text-xs font-black uppercase tracking-widest text-text-4">
                           {useHmac ? `HMAC-${algo}` : algo}
                         </span>
                       </div>
@@ -406,7 +406,7 @@ export default function HashGeneratorClient() {
                       ) : res?.error ? (
                         <div className="flex items-start gap-2 text-red-500 bg-red-500/5 p-3 rounded-xl w-full border border-red-500/10">
                           <AlertCircle size={14} className="mt-0.5" aria-hidden="true" />
-                          <span className="text-[10px] font-bold leading-relaxed">{res.error}</span>
+                          <span className="text-xs font-bold leading-relaxed">{res.error}</span>
                         </div>
                       ) : res?.value ? (
                         <div className="w-full font-mono text-sm text-text break-all bg-bg/50 p-4 rounded-2xl border border-border/50 group-hover:border-blue/30 transition-all select-all">
@@ -436,8 +436,8 @@ export default function HashGeneratorClient() {
             return (
               <div key={i} className="flex flex-col items-center text-center space-y-2 p-6 border border-border rounded-4xl">
                 <Icon className="text-blue" size={24} aria-hidden="true" />
-                <h3 className="text-[10px] font-black uppercase tracking-widest">{item.title}</h3>
-                <p className="text-[9px] font-medium text-text-4 uppercase">{item.desc}</p>
+                <h3 className="text-xs font-black uppercase tracking-widest">{item.title}</h3>
+                <p className="text-tiny font-medium text-text-4 uppercase">{item.desc}</p>
               </div>
             );
           })}

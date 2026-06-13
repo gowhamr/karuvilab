@@ -222,14 +222,14 @@ export function EmptyState({
         </h2>
 
         <div className="mb-8 w-full max-w-xs px-4 flex justify-center">
-          <span className="text-[14px] text-brand-primary font-medium group-hover:underline">
+          <span className="text-sm text-brand-primary font-medium group-hover:underline">
             {subAction?.label || (toolType === "file" || toolType === "batch" ? "Click to browse files" : "Click to get started")}
           </span>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-          {formats?.map(f => <span key={f} className="px-2 py-1 bg-mat-raised border border-mat-border rounded-md text-[12px] font-black uppercase text-text-3">{f}</span>)}
-          {maxSize && <span className="text-[12px] font-bold text-text-4 px-2">Max: {maxSize}</span>}
+          {formats?.map(f => <span key={f} className="px-2 py-1 bg-mat-raised border border-mat-border rounded-md text-xs font-black uppercase text-text-3">{f}</span>)}
+          {maxSize && <span className="text-xs font-bold text-text-4 px-2">Max: {maxSize}</span>}
         </div>
 
         {/* Dynamic Trust Badge */}
@@ -238,13 +238,13 @@ export function EmptyState({
             <ShieldCheck className="w-5 h-5" aria-hidden="true" />
           </div>
           <div className="text-left">
-            <h4 className="text-[13px] font-black tracking-tight text-text leading-snug">{trust.title}</h4>
-            <p className="text-[12px] font-bold text-text-4">{trust.desc}</p>
+            <h4 className="text-sm font-black tracking-tight text-text leading-snug">{trust.title}</h4>
+            <p className="text-xs font-bold text-text-4">{trust.desc}</p>
           </div>
         </div>
 
         {outcomeText && (
-          <p className="text-[12px] text-[--kv-text-muted] italic mb-8">
+          <p className="text-xs text-[--kv-text-muted] italic mb-8">
             Result: {outcomeText.replace(/^Result:\s*/i, '').slice(0, 52)}
           </p>
         )}

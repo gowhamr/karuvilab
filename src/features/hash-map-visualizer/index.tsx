@@ -119,13 +119,13 @@ export default function HashMapVisualizer() {
         {buckets.map((bucket, i) => (
           <div 
             key={i} 
-            className={`flex flex-col border-2 rounded-2xl min-h-[160px] transition-colors ${
+            className={`flex flex-col border-2 rounded-2xl min-h-40 transition-colors ${
               lastAction?.bucket === i ? 'border-blue bg-blue/5' : 'border-border bg-surface/30'
             }`}
           >
-            <div className="p-3 border-b border-border flex justify-between items-center bg-surface/50 rounded-t-[14px]">
+            <div className="p-3 border-b border-border flex justify-between items-center bg-surface/50 rounded-t-lg">
               <span className="text-xs font-bold text-text-4 uppercase tracking-tight">Bucket {i}</span>
-              <span className="text-[10px] bg-bg-input text-text-3 px-1.5 py-0.5 rounded-full">{bucket?.length || 0}</span>
+              <span className="text-xs bg-bg-input text-text-3 px-1.5 py-0.5 rounded-full">{bucket?.length || 0}</span>
             </div>
             <div className="p-2 space-y-2 flex-grow">
               <AnimatePresence>

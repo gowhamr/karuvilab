@@ -140,7 +140,7 @@ export default function BulkImageResizerClient() {
 
             <div className="space-y-6">
               <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Target Width (px)</label>
+                <label className="text-xs font-black uppercase tracking-widest text-text-4">Target Width (px)</label>
                 <input 
                   type="number" 
                   className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold" 
@@ -150,7 +150,7 @@ export default function BulkImageResizerClient() {
                 />
               </div>
               <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Target Height (px)</label>
+                <label className="text-xs font-black uppercase tracking-widest text-text-4">Target Height (px)</label>
                 <input 
                   type="number" 
                   className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold" 
@@ -169,7 +169,7 @@ export default function BulkImageResizerClient() {
                       onChange={e => setLockRatio(e.target.checked)} 
                       className="w-5 h-5 rounded-lg border border-border checked:bg-blue checked:border-blue transition-all cursor-pointer appearance-none" 
                     />
-                    {lockRatio && <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-white text-[10px] font-black">✓</div>}
+                    {lockRatio && <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-white text-xs font-black">✓</div>}
                   </div>
                   <span className="text-sm font-bold text-text-2 group-hover:text-blue transition-colors">Lock Aspect Ratio</span>
                 </label>

@@ -116,7 +116,7 @@ export function Toolbar({
         <button
           title="Load Sample"
           onClick={onLoadSample}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue/5 text-blue text-[10px] font-black uppercase tracking-widest hover:bg-blue/10 transition-all border border-blue/10"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue/5 text-blue text-xs font-black uppercase tracking-widest hover:bg-blue/10 transition-all border border-blue/10"
         >
           <Sparkles className="w-3 h-3" />
           Sample

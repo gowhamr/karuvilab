@@ -159,11 +159,11 @@ export default function PomodoroTimerClient() {
       {/* Header Stats */}
       <div className="w-full flex items-center justify-between px-6 py-4 bg-surface/40 backdrop-blur-md border border-border rounded-3xl shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+          <div className="w-10 h-10 rounded-2xl bg-warning/10 flex items-center justify-center text-warning">
             <Trophy size={20} />
           </div>
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Today's Focus</p>
+            <p className="text-xs font-black uppercase tracking-widest text-text-4">Today's Focus</p>
             <p className="text-sm font-black text-text">{dailyCompleted} Sessions</p>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function PomodoroTimerClient() {
             <Sparkles size={20} />
           </div>
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-text-4">Current Streak</p>
+            <p className="text-xs font-black uppercase tracking-widest text-text-4">Current Streak</p>
             <p className="text-sm font-black text-text">{dailyCompleted % 4} / 4 Pomos</p>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function PomodoroTimerClient() {
             key={m}
             onClick={() => switchMode(m)}
             className={cn(
-              "relative px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition-all outline-none",
+              "relative px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all outline-none",
               mode === m ? "text-white" : "text-text-4 hover:text-text"
             )}
           >
@@ -216,7 +216,7 @@ export default function PomodoroTimerClient() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1.1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute inset-0 bg-blue/20 blur-[64px] rounded-full -z-10"
+              className="absolute inset-0 bg-blue/20 blur-3xl rounded-full -z-10"
               transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
             />
           )}
@@ -257,7 +257,7 @@ export default function PomodoroTimerClient() {
             >
               {formatTime(timeLeft)}
             </motion.p>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-4 mt-2">
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-text-4 mt-2">
               {isActive ? 'Keep Going' : 'Ready?'}
             </p>
           </div>
@@ -301,7 +301,7 @@ export default function PomodoroTimerClient() {
         {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && (
           <button 
             onClick={requestNotificationPermission}
-            className="flex items-center gap-2 px-6 py-3 bg-blue/5 border border-blue/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-blue hover:bg-blue/10 transition-all"
+            className="flex items-center gap-2 px-6 py-3 bg-blue/5 border border-blue/10 rounded-2xl text-xs font-black uppercase tracking-widest text-blue hover:bg-blue/10 transition-all"
           >
             <Bell className="w-4 h-4" /> Enable Alerts
           </button>
@@ -309,7 +309,7 @@ export default function PomodoroTimerClient() {
         
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface/30 border border-border/50">
           <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-success animate-pulse" : "bg-text-4")} />
-          <span className="text-[10px] font-black uppercase tracking-widest text-text-4">
+          <span className="text-xs font-black uppercase tracking-widest text-text-4">
             {isActive ? 'Session in progress' : 'Timer Paused'}
           </span>
         </div>

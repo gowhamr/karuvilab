@@ -54,7 +54,7 @@ const SidebarItem = memo(function SidebarItem({
       aria-current={isActive ? "page" : undefined}
       className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base ${
         isSmall 
-          ? `h-[52px] px-4 text-[11px] rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
+          ? `h-[52px] px-4 text-xs rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
           : `h-[52px] px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
       }`}
       style={{
@@ -106,7 +106,7 @@ const CoreLinks = memo(function CoreLinks({ pathname, setIsOpen, isHoverable }: 
 const CategoriesList = memo(function CategoriesList({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   return (
     <div className="space-y-4">
-      <div className="px-5 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.15em]">
+      <div className="px-5 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-[0.15em]">
         <LayoutGrid className="w-4 h-4" />
         Universal Tools
       </div>
@@ -186,7 +186,7 @@ const SidebarContent = memo(function SidebarContent({
       <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
         <button 
           onClick={handleSearchClick}
-          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          className="w-full h-[48px] flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
         >
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-surface border border-border flex items-center justify-center group-hover:bg-blue/5 transition-colors">
@@ -194,7 +194,7 @@ const SidebarContent = memo(function SidebarContent({
             </div>
             <span>{t('common.search').split('...')[0]}</span>
           </div>
-          <div className="flex items-center gap-0.5 px-1.5 py-1 bg-surface border border-border rounded-lg text-[8px] font-mono">
+          <div className="flex items-center gap-0.5 px-1.5 py-1 bg-surface border border-border rounded-lg text-micro font-mono">
             <Command className="w-2.5 h-2.5" />
             <span>K</span>
           </div>
@@ -207,7 +207,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Personal Favorites */}
       {favorites.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.20em]">
+          <div className="px-4 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-[0.20em]">
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             {t('common.favorites')}
           </div>
@@ -232,7 +232,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Recently Used */}
       {recent.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-[12px] font-black text-text-4 uppercase tracking-[0.20em]">
+          <div className="px-4 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-[0.20em]">
             <Clock className="w-3.5 h-3.5" />
             {t('common.recent')}
           </div>
@@ -319,7 +319,7 @@ export function Sidebar() {
       ) : (
         /* Desktop Permanent Sidebar */
         <aside 
-          className={`hidden md:flex fixed top-0 left-0 bottom-0 w-[280px] rounded-r-[32px] bg-mat-surface border-r border-mat-border shadow-mat-shine z-30 flex-col overflow-hidden ${!hydrated ? 'invisible' : ''}`}
+          className={`hidden md:flex fixed top-0 left-0 bottom-0 w-72 rounded-r-4xl bg-mat-surface border-r border-mat-border shadow-mat-shine z-sidebar flex-col overflow-hidden ${!hydrated ? 'invisible' : ''}`}
           style={{ contain: 'layout style' }}
         >
           <div className="h-20 flex items-center px-8 border-b border-border bg-mat-surface">

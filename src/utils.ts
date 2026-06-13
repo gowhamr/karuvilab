@@ -180,22 +180,7 @@ export function isLargeBatch(files: File[], thresholdMB: number = 50): boolean {
   return totalSize > thresholdMB * 1024 * 1024;
 }
 
-// ── Blob URL management – redirected to central blobManager (KL-01) ──
 
-/** @deprecated Use blobManager.create directly */
-export function createObjectURL(blob: Blob): string {
-  return blobManager.create(blob);
-}
-
-/** @deprecated Use blobManager.revoke directly */
-export function revokeObjectURL(url: string): void {
-  blobManager.revoke(url);
-}
-
-/** @deprecated Use blobManager.revokeAll directly */
-export function revokeAllObjectURLs(): void {
-  blobManager.revokeAll();
-}
 
 export function validateFile(file: File | null, allowedExtensions: string[] = [], maxMB: number = 20): FileValidationResult {
   if (!file) return { valid: false, error: 'No file selected.' };

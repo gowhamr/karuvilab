@@ -67,13 +67,13 @@ export default function SlugGeneratorClient() {
               <div className="flex bg-bg p-1 rounded-xl border border-border">
                 <button 
                   onClick={() => setBulkMode(false)} 
-                  className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${!bulkMode ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-4 hover:text-text-2"}`}
+                  className={`text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${!bulkMode ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-4 hover:text-text-2"}`}
                 >
                   Single
                 </button>
                 <button 
                   onClick={() => setBulkMode(true)} 
-                  className={`text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${bulkMode ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-4 hover:text-text-2"}`}
+                  className={`text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-lg transition-all ${bulkMode ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-4 hover:text-text-2"}`}
                 >
                   Bulk
                 </button>
@@ -150,7 +150,7 @@ export default function SlugGeneratorClient() {
                 ].map(({ label, value }) => (
                   <div key={label} className="space-y-2 group">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-text-4">{label}</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-text-4">{label}</span>
                       {value && <CopyButton text={value} />}
                     </div>
                     <div className="bg-bg border border-border rounded-xl px-4 py-3 font-mono text-sm text-text-2 break-all min-h-[48px] flex items-center shadow-inner group-hover:border-blue/30 transition-colors">
@@ -172,7 +172,7 @@ export default function SlugGeneratorClient() {
                 {bulkSlugs.map((item, i) => (
                   <div key={i} className="flex items-start gap-4 bg-bg border border-border rounded-2xl px-5 py-4 hover:border-blue/30 transition-all shadow-sm group">
                     <div className="flex-1 min-w-0">
-                      <p className="text-[10px] font-bold text-text-4 uppercase tracking-widest mb-1 group-hover:text-blue transition-colors truncate">{item.original}</p>
+                      <p className="text-xs font-bold text-text-4 uppercase tracking-widest mb-1 group-hover:text-blue transition-colors truncate">{item.original}</p>
                       <p className="font-mono text-sm text-text-2 break-all font-bold tracking-tight">{item.slug}</p>
                     </div>
                     <CopyButton text={item.slug} />
@@ -181,7 +181,7 @@ export default function SlugGeneratorClient() {
                 {bulkSlugs.length === 0 && (
                   <div className="flex flex-col items-center justify-center py-12 text-text-4 border-2 border-dashed border-border rounded-2xl">
                     <span className="text-4xl mb-3 opacity-20">📝</span>
-                    <span className="text-[10px] font-black uppercase tracking-widest">Enter titles to generate slugs</span>
+                    <span className="text-xs font-black uppercase tracking-widest">Enter titles to generate slugs</span>
                   </div>
                 )}
               </div>

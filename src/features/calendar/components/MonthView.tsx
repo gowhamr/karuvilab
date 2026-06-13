@@ -34,7 +34,7 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
           <div className="grid grid-cols-7 border-b border-border/30 bg-bg/50 sticky top-0 z-20 backdrop-blur-md">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
               <div key={day} className="py-3 md:py-5 text-center">
-                <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.25em] text-text-4">
+                <span className="text-xs md:text-xs font-black uppercase tracking-[0.1em] md:tracking-[0.25em] text-text-4">
                   <span className="md:hidden">{day[0]}</span>
                   <span className="hidden md:inline">{day}</span>
                 </span>
@@ -123,7 +123,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
         <div className="flex flex-col items-end gap-1">
           <div className="flex gap-0.5">
             {sortedWorldEvents.slice(0, 3).map((evt) => (
-              <span key={evt.id} title={evt.name} className="text-[10px] md:text-xs">{evt.emoji}</span>
+              <span key={evt.id} title={evt.name} className="text-xs md:text-xs">{evt.emoji}</span>
             ))}
           </div>
         </div>
@@ -140,7 +140,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
                 setSelectedWorldEvent({ event: evt, date: day });
               }}
               className={cn(
-                "flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold truncate transition-all hover:opacity-80 border shadow-sm",
+                "flex items-center gap-1 px-1.5 py-0.5 rounded-md text-tiny font-bold truncate transition-all hover:opacity-80 border shadow-sm",
                 evt.colors.bg,
                 evt.colors.border,
                 evt.colors.text
@@ -151,7 +151,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
             </div>
           ))}
           {sortedWorldEvents.length > 2 && (
-            <div className="text-[8px] font-black text-text-4 uppercase tracking-widest pl-1">
+            <div className="text-micro font-black text-text-4 uppercase tracking-widest pl-1">
               + {sortedWorldEvents.length - 2} more
             </div>
           )}
@@ -168,7 +168,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
                 onAddEvent(day);
               }}
               className={cn(
-                "md:px-2 md:py-1 rounded-full md:rounded-lg text-[9px] font-bold truncate border shadow-sm",
+                "md:px-2 md:py-1 rounded-full md:rounded-lg text-tiny font-bold truncate border shadow-sm",
                 "w-1.5 h-1.5 md:w-auto md:h-auto",
                 COLOR_MAP[event.color].bg,
                 COLOR_MAP[event.color].border,
@@ -179,7 +179,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
             </div>
           ))}
           {dayEvents.length > 3 && (
-            <div className="text-[7px] md:text-[8px] font-black text-text-4 uppercase tracking-widest">
+            <div className="text-[7px] md:text-micro font-black text-text-4 uppercase tracking-widest">
               <span className="md:hidden">+{dayEvents.length - 3}</span>
               <span className="hidden md:inline">+ {dayEvents.length - 3} more</span>
             </div>

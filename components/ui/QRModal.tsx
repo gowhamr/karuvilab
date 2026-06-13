@@ -178,7 +178,7 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
                   </div>
                 )}
 
-                <p className="text-[10px] text-text-4 font-medium text-center leading-relaxed max-w-xs">
+                <p className="text-xs text-text-4 font-medium text-center leading-relaxed max-w-xs">
                   Scan to open this shared result on any device
                 </p>
 

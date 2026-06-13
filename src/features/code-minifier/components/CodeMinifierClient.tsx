@@ -118,7 +118,7 @@ export default function CodeMinifierClient() {
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2 flex items-center gap-2">
+        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2 flex items-center gap-2">
           <Zap className="w-3 h-3" />
           Processing Queue
         </h2>

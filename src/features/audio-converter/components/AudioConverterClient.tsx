@@ -244,7 +244,7 @@ export default function AudioConverterClient() {
                   </div>
                   <div>
                     <h3 className="font-black text-sm uppercase tracking-widest text-text">Conversion Ready</h3>
-                    <p className="text-[10px] font-bold text-text-4 uppercase">
+                    <p className="text-xs font-bold text-text-4 uppercase">
                       {result.name} • {(result.size / 1024).toFixed(0)} KB
                     </p>
                   </div>

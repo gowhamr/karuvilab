@@ -265,7 +265,7 @@ export default function FakeDataGeneratorClient() {
             />
             {result && (
                <div className="absolute top-14 right-8 flex items-center gap-2">
-                 <div className="px-3 py-1 bg-green-500/10 text-green-600 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                 <div className="px-3 py-1 bg-green-500/10 text-green-600 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                    <CheckCircle2 className="w-3 h-3" />
                    Ready to Use
                  </div>

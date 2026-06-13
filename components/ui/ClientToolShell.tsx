@@ -109,15 +109,15 @@ export function ClientToolShell({ title, description, category, children, toolId
                 {content.examples.map((ex, i) => (
                   <div key={i} className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl overflow-hidden">
                     <div className="px-4 py-2 border-b border-mat-border bg-mat-base/50">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-text-4">{ex.label}</span>
+                      <span className="text-xs font-bold uppercase tracking-widest text-text-4">{ex.label}</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-mat-border">
                       <div className="p-4 space-y-2">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Input</p>
+                        <p className="text-xs font-bold uppercase tracking-widest text-text-4">Input</p>
                         <code className="text-sm font-mono text-text-2 block break-all">{ex.input}</code>
                       </div>
                       <div className="p-4 space-y-2">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-text-4">Output</p>
+                        <p className="text-xs font-bold uppercase tracking-widest text-text-4">Output</p>
                         <code className="text-sm font-mono text-blue block break-all">{ex.output}</code>
                       </div>
                     </div>
@@ -150,7 +150,7 @@ export function ClientToolShell({ title, description, category, children, toolId
             <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl p-8 space-y-6 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="space-y-1">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-4">How it works</p>
+                <p className="text-xs font-black uppercase tracking-widest text-text-4">How it works</p>
               </div>
               <ol className="space-y-4">
                 {parsedContent.howTo.map((step, i) => (

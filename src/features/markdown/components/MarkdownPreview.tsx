@@ -37,7 +37,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         wrapper.className = 'my-6 bg-surface border border-border rounded-xl overflow-hidden shadow-sm';
         wrapper.innerHTML = `
           <div class="flex items-center justify-between px-3 py-2 bg-bg border-b border-border">
-            <span class="text-[10px] font-black text-text-4 uppercase tracking-widest flex items-center gap-1.5">
+            <span class="text-xs font-black text-text-4 uppercase tracking-widest flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-blue animate-pulse"></span>
               Diagram
             </span>
@@ -108,7 +108,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
           </span>
           <button 
             onClick={onCopyRaw}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-black uppercase tracking-widest text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
           >
             <Copy className="w-3 h-3" />
             Copy MD
@@ -127,7 +127,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
             </div>
             <div className="space-y-1">
               <h4 className="font-black text-xs uppercase tracking-widest">Nothing to preview</h4>
-              <p className="text-[10px] font-bold text-text-4 uppercase max-w-[200px]">
+              <p className="text-xs font-bold text-text-4 uppercase max-w-[200px]">
                 Start typing markdown in the editor to see it rendered here.
               </p>
             </div>

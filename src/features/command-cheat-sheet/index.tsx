@@ -143,7 +143,7 @@ export default function CommandCheatSheet() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2.5 rounded-full text-[13px] font-bold transition-all whitespace-nowrap snap-start ${
+              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all whitespace-nowrap snap-start ${
                 activeCategory === cat 
                   ? 'bg-blue text-white shadow-xl shadow-blue/30 scale-105' 
                   : 'bg-surface/80 border border-border text-text-3 hover:text-text hover:bg-hover'

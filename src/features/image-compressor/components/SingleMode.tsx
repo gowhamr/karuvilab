@@ -57,7 +57,7 @@ export const SingleMode: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-black uppercase tracking-widest text-red-600 mb-1">Compression Failed</h4>
-                  <p className="text-[11px] font-bold text-red-500/80 uppercase leading-relaxed">{activeItem.error}</p>
+                  <p className="text-xs font-bold text-red-500/80 uppercase leading-relaxed">{activeItem.error}</p>
                 </div>
                 <button 
                   onClick={() => compressItem(activeItem.id)}
@@ -77,7 +77,7 @@ export const SingleMode: React.FC = () => {
           <div className="p-6 bg-surface border border-border rounded-4xl space-y-6">
             <div className="space-y-2">
               <h3 className="text-sm font-black uppercase tracking-widest">Settings</h3>
-              <p className="text-[11px] font-bold text-text-3 uppercase tracking-widest">Adjust output quality and format</p>
+              <p className="text-xs font-bold text-text-3 uppercase tracking-widest">Adjust output quality and format</p>
             </div>
             
             <AdvancedSettings itemId={activeItem ? activeItem.id : undefined} />

@@ -126,7 +126,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
           role="img"
         />
       </div>
-      <p className="text-[10px] text-text-4 font-bold uppercase text-center tracking-widest">
+      <p className="text-xs text-text-4 font-bold uppercase text-center tracking-widest">
         Loan Timeline (Months)
       </p>
     </div>

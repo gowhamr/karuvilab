@@ -41,13 +41,13 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
           <h2 className="text-base md:text-lg font-black tracking-tight text-text flex items-center gap-2">
             {title}
             {badge && (
-              <span className="px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 text-[10px] font-black uppercase tracking-widest text-blue shadow-sm">
+              <span className="px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 text-xs font-black uppercase tracking-widest text-blue shadow-sm">
                 {badge}
               </span>
             )}
           </h2>
           {subtitle && (
-            <p className="text-[11px] md:text-[12px] text-[--kv-text-muted] font-bold uppercase tracking-[0.15em]">
+            <p className="text-xs md:text-xs text-[--kv-text-muted] font-bold uppercase tracking-[0.15em]">
               {subtitle}
             </p>
           )}
@@ -57,7 +57,7 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
         <Link 
           href={href}
           aria-label={`Explore all ${title}`}
-          className="flex items-center gap-1 min-h-[44px] px-2 text-[12px] font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
+          className="flex items-center gap-1 min-h-[44px] px-2 text-xs font-black text-blue hover:translate-x-0.5 transition-all uppercase tracking-widest"
         >
           Explore all <ArrowRight className="w-3 h-3" />
         </Link>
@@ -169,11 +169,11 @@ export default function HomeClient() {
             <div className="flex justify-center">
               <button
                 onClick={() => setIsPaletteOpen(true)}
-                className="h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-[15px] font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
+                className="h-[48px] px-6 rounded-xl border border-mat-border bg-transparent text-base font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
               >
                 <Command className="w-4 h-4" />
                 <span>Quick Search</span>
-                <kbd className="text-[12px] font-mono">⌘K</kbd>
+                <kbd className="text-xs font-mono">⌘K</kbd>
               </button>
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function HomeClient() {
             {isFiltering && (
               <button
                 onClick={() => { handleCategoryChange(null); }}
-                className="text-[9px] font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
+                className="text-tiny font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
               >
                 Clear
               </button>
@@ -342,7 +342,7 @@ export default function HomeClient() {
                     <div className="mt-8 flex justify-center">
                       <Link 
                         href="/all-tools"
-                        className="w-full flex items-center justify-center gap-2 h-[52px] md:w-auto md:inline-flex md:px-6 md:h-[48px] bg-[--kv-mat-raised] border border-[--kv-mat-border] rounded-xl text-[15px] font-semibold text-[--kv-text] hover:bg-[--kv-mat-hover] hover:border-[--kv-brand-primary]/40 hover:text-[--kv-brand-primary] transition-all duration-150"
+                        className="w-full flex items-center justify-center gap-2 h-[52px] md:w-auto md:inline-flex md:px-6 md:h-[48px] bg-[--kv-mat-raised] border border-[--kv-mat-border] rounded-xl text-base font-semibold text-[--kv-text] hover:bg-[--kv-mat-hover] hover:border-[--kv-brand-primary]/40 hover:text-[--kv-brand-primary] transition-all duration-150"
                       >
                         Browse 100+ Tools <ArrowRight className="w-4 h-4" />
                       </Link>

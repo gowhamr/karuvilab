@@ -152,7 +152,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Search 100+ tools..."
-                className="flex-1 h-full bg-transparent border-none outline-none text-[16px] font-medium text-[--kv-text] placeholder:text-[--kv-text-muted] px-3"
+                className="flex-1 h-full bg-transparent border-none outline-none text-base font-medium text-[--kv-text] placeholder:text-[--kv-text-muted] px-3"
                 autoComplete="off"
                 spellCheck={false}
                 autoCorrect="off"
@@ -168,12 +168,12 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               )}
               <button
                 onClick={onClose}
-                className="sm:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-[14px] font-semibold text-brand-primary ml-1"
+                className="sm:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-sm font-semibold text-brand-primary ml-1"
               >
                 Cancel
               </button>
               <div className="hidden sm:flex items-center justify-center w-10 h-10">
-                <kbd className="px-2 py-1 bg-bg border border-border rounded text-[10px] font-mono font-bold text-text-4 uppercase">Esc</kbd>
+                <kbd className="px-2 py-1 bg-bg border border-border rounded text-xs font-mono font-bold text-text-4 uppercase">Esc</kbd>
               </div>
             </div>
 
@@ -193,7 +193,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             </div>
 
             {/* Footer Hints (Desktop only) */}
-            <div className="hidden sm:flex flex-shrink-0 items-center justify-center h-10 border-t border-mat-border bg-mat-surface/30 gap-4 text-[10px] font-bold text-text-4 uppercase tracking-widest">
+            <div className="hidden sm:flex flex-shrink-0 items-center justify-center h-10 border-t border-mat-border bg-mat-surface/30 gap-4 text-xs font-bold text-text-4 uppercase tracking-widest">
                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">↑↓</kbd> Navigate</span>
                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">↵</kbd> Open</span>
                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 bg-mat-base border border-mat-border rounded">F11</kbd> Focus Mode</span>

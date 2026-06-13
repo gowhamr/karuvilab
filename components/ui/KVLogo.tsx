@@ -86,8 +86,8 @@ export function KVLogo({
             <span className={cn(
               "font-black uppercase tracking-[0.4em] text-blue leading-none",
               size === "sm" ? "text-[6px]" : 
-              size === "md" ? "text-[8px]" : 
-              size === "lg" ? "text-[11px]" : "text-[14px]"
+              size === "md" ? "text-micro" : 
+              size === "lg" ? "text-xs" : "text-sm"
             )}>
               Elite Tools
             </span>

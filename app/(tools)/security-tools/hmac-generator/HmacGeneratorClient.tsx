@@ -85,7 +85,7 @@ export default function HmacGeneratorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
               <KeyRound className="w-3.5 h-3.5" /> Configuration
             </h3>
             <div className="flex bg-bg border border-border rounded-xl p-1">
@@ -116,7 +116,7 @@ export default function HmacGeneratorClient() {
             <div className="space-y-3">
               <label className="text-xs font-bold text-text-3 block flex justify-between">
                 Secret Key
-                <span className="text-[10px] text-text-4">{key.length} chars</span>
+                <span className="text-xs text-text-4">{key.length} chars</span>
               </label>
               <input
                 type="text"
@@ -130,7 +130,7 @@ export default function HmacGeneratorClient() {
             <div className="space-y-3">
               <label className="text-xs font-bold text-text-3 block flex justify-between">
                 Message Data
-                <span className="text-[10px] text-text-4">{message.length} chars</span>
+                <span className="text-xs text-text-4">{message.length} chars</span>
               </label>
               <textarea
                 value={message}
@@ -163,7 +163,7 @@ export default function HmacGeneratorClient() {
         <div className="space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
                 <FileCheck className="w-3 h-3" /> 
                 {mode === 'verify' ? 'Computed Signature' : 'Generated Signature'}
               </h3>
@@ -173,7 +173,7 @@ export default function HmacGeneratorClient() {
                     key={enc}
                     onClick={() => setEncoding(enc)}
                     className={cn(
-                      "px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all",
+                      "px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all",
                       encoding === enc ? "bg-surface text-text shadow-sm" : "text-text-4"
                     )}
                   >

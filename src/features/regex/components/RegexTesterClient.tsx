@@ -218,7 +218,7 @@ export default function RegexTesterClient() {
               <div className="font-mono text-sm text-text break-all leading-relaxed whitespace-pre-wrap bg-bg border border-border rounded-xl p-4">
                 {highlighted.map((part, i) =>
                   part.match
-                    ? <mark key={i} className="bg-blue/20 text-blue rounded px-0.5">{part.text}</mark>
+                    ? <mark key={i} className="bg-blue/20 text-blue dark:text-blue-light rounded px-0.5">{part.text}</mark>
                     : <span key={i}>{part.text}</span>
                 )}
               </div>
@@ -233,7 +233,7 @@ export default function RegexTesterClient() {
                   <div key={i} className="bg-bg border border-border rounded-xl p-3 text-sm">
                     <div className="flex items-center gap-3 flex-wrap">
                       <span className="text-xs font-bold text-text-4">#{i + 1}</span>
-                      <span className="font-mono text-blue">"{m.value}"</span>
+                      <span className="font-mono text-blue dark:text-blue-light">"{m.value}"</span>
                       <span className="text-xs text-text-4">at index {m.index}</span>
                     </div>
                     {m.groups.length > 0 && (
@@ -368,13 +368,13 @@ export default function RegexTesterClient() {
                     <h3 className="font-bold text-xs text-text group-hover:text-blue transition-colors truncate" title={pat.label}>
                       {pat.label}
                     </h3>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded font-medium bg-surface text-text-3 border border-border uppercase shrink-0">
+                    <span className="text-tiny px-1.5 py-0.5 rounded font-medium bg-surface text-text-3 border border-border uppercase shrink-0">
                       {pat.category === "dev" ? "Dev" : pat.category === "indian" ? "Indian" : pat.category}
                     </span>
                   </div>
 
                   {/* Regex code block with copy button */}
-                  <div className="relative bg-surface font-mono text-[10px] px-2.5 py-1.5 rounded-lg border border-border text-blue overflow-x-auto scrollbar-none flex justify-between items-center gap-2">
+                  <div className="relative bg-surface font-mono text-xs px-2.5 py-1.5 rounded-lg border border-border text-blue overflow-x-auto scrollbar-none flex justify-between items-center gap-2">
                     <span className="font-semibold select-all truncate">
                       /{pat.pattern}/
                     </span>
@@ -392,14 +392,14 @@ export default function RegexTesterClient() {
                   </div>
 
                   {/* Description (community-style) */}
-                  <p className="text-[11px] text-text-3 font-normal leading-relaxed line-clamp-3 min-h-[48px]">
+                  <p className="text-xs text-text-3 font-normal leading-relaxed line-clamp-3 min-h-[48px]">
                     {pat.description}
                   </p>
                 </div>
 
                 <div className="mt-3 pt-3 border-t border-border/40 space-y-2.5">
                   {/* Example */}
-                  <div className="flex items-center gap-1.5 text-[10px] text-text-4 bg-surface/30 px-2 py-1 rounded border border-border/30">
+                  <div className="flex items-center gap-1.5 text-xs text-text-4 bg-surface/30 px-2 py-1 rounded border border-border/30">
                     <span className="font-semibold text-text-3 shrink-0">Example:</span>
                     <code className="font-mono text-text truncate max-w-full" title={pat.example}>
                       {pat.example}
@@ -409,7 +409,7 @@ export default function RegexTesterClient() {
                   {/* Action buttons */}
                   <button
                     onClick={() => handleInsertPattern(pat)}
-                    className="w-full py-1.5 bg-surface hover:bg-blue hover:text-white border border-border hover:border-blue text-[11px] font-semibold text-text rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer"
+                    className="w-full py-1.5 bg-surface hover:bg-blue hover:text-white border border-border hover:border-blue text-xs font-semibold text-text rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer"
                   >
                     Insert Into Tester
                     <ArrowUpRight className="w-3 h-3" />
@@ -425,7 +425,7 @@ export default function RegexTesterClient() {
           <div className="text-center py-10 space-y-2 border border-dashed border-border rounded-xl">
             <Info className="w-8 h-8 text-text-4 mx-auto" />
             <h3 className="font-bold text-xs text-text">No patterns found</h3>
-            <p className="text-[11px] text-text-4 max-w-md mx-auto">
+            <p className="text-xs text-text-4 max-w-md mx-auto">
               We couldn't find any patterns matching "{librarySearch}" in the "{allCategories.find(c => c.id === activeLibCategory)?.label}" category.
             </p>
           </div>
@@ -436,10 +436,10 @@ export default function RegexTesterClient() {
           <div className="text-center pt-2">
             <button
               onClick={() => setVisibleCount(prev => prev + 12)}
-              className="px-5 py-2 bg-bg hover:bg-surface border border-border hover:border-blue/50 text-[11px] font-semibold text-text hover:text-blue rounded-xl transition-all cursor-pointer inline-flex items-center gap-1.5"
+              className="px-5 py-2 bg-bg hover:bg-surface border border-border hover:border-blue/50 text-xs font-semibold text-text hover:text-blue rounded-xl transition-all cursor-pointer inline-flex items-center gap-1.5"
             >
               Show More Patterns
-              <span className="text-[9px] px-1.5 py-0.5 bg-surface rounded text-text-3 border border-border">
+              <span className="text-tiny px-1.5 py-0.5 bg-surface rounded text-text-3 border border-border">
                 {filteredPatterns.length - visibleCount} remaining
               </span>
             </button>

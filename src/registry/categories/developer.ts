@@ -1,0 +1,685 @@
+// Auto-generated.
+import { ToolEntry } from '../types';
+export const DEVELOPER_TOOLS: ToolEntry[] = [
+  {
+    "id": "base64",
+    "name": "Base64 Encode/Decode",
+    "desc": "Encode or decode Base64 strings",
+    "href": "developer-tools/base64/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "base64",
+      "encode",
+      "decode"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "url-encoder",
+      "hash-generator",
+      "jwt-decoder"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "box-shadow-generator",
+    "name": "Box Shadow Generator",
+    "desc": "Visual box shadow generator. Layer multiple shadows to create deep, realistic UI depth with CSS and Tailwind export.",
+    "href": "developer-tools/box-shadow-generator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "box shadow generator",
+      "css shadow",
+      "tailwind shadow",
+      "drop shadow",
+      "layered shadow"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "gradient-generator",
+      "glassmorphism-generator",
+      "color-converter"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "code-minifier",
+    "name": "Code Minifier",
+    "desc": "Minify CSS, JS, and HTML",
+    "href": "developer-tools/code-minifier/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "minify",
+      "css",
+      "js",
+      "html"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "color-converter",
+    "name": "Color Converter",
+    "desc": "Convert colors between HEX, RGB, HSL, HSV, and CMYK formats.",
+    "href": "developer-tools/color-converter/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "color picker",
+      "hex to rgb",
+      "rgb to hsl",
+      "color space"
+    ],
+    "input": "none",
+    "output": "text",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "command-cheat-sheet",
+    "name": "Command Cheat Sheet",
+    "desc": "A searchable reference for Linux, Windows (CMD), and Git commands.",
+    "href": "developer-tools/command-cheat-sheet/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "commands",
+      "linux",
+      "git",
+      "cheat sheet"
+    ],
+    "input": "none",
+    "output": "none",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "contrast-checker",
+    "name": "Contrast Checker",
+    "desc": "WCAG contrast ratio checker. Ensure your text and background colors are accessible with live previews and color suggestions.",
+    "href": "developer-tools/contrast-checker/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "contrast checker",
+      "wcag contrast",
+      "accessibility checker",
+      "color contrast",
+      "a11y"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "color-converter",
+      "gradient-generator",
+      "html-viewer"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "crontab-editor",
+    "name": "Crontab Editor",
+    "desc": "Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly.",
+    "href": "developer-tools/crontab-editor/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "cron",
+      "crontab",
+      "scheduler",
+      "linux",
+      "devops",
+      "automation"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "json-formatter",
+      "base64",
+      "regex-tester"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "csv-to-json",
+    "name": "CSV to JSON Converter",
+    "desc": "Convert CSV to JSON and JSON to CSV natively in your browser. Supports custom delimiters, headers, and advanced parsing options.",
+    "href": "developer-tools/csv-to-json/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": true,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "csv to json",
+      "json to csv",
+      "converter",
+      "data parser",
+      "data format",
+      "delimiter"
+    ],
+    "input": "csv",
+    "output": "json",
+    "related": [
+      "json-formatter",
+      "xml-formatter",
+      "fake-data-generator"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "diff-checker",
+    "name": "Diff Checker",
+    "desc": "Compare two text snippets",
+    "href": "developer-tools/diff-checker/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "diff",
+      "compare",
+      "text"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "fake-data-generator",
+    "name": "Fake Data Generator",
+    "desc": "Generate realistic fake data for testing",
+    "href": "developer-tools/fake-data-generator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "fake data",
+      "mock data",
+      "generator",
+      "csv",
+      "json",
+      "sql"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "file-viewer-diff",
+    "name": "File Viewer & Diff",
+    "desc": "Local text editor and diff checker",
+    "href": "file-tools/file-viewer-diff/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": true,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "file viewer",
+      "diff",
+      "compare",
+      "editor",
+      "source code"
+    ],
+    "input": [
+      "any-file",
+      "text"
+    ],
+    "output": [
+      "any-file",
+      "text"
+    ],
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "format",
+    "name": "Code Formatter",
+    "desc": "Auto-format code in many languages",
+    "href": "developer-tools/format/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "format",
+      "prettier",
+      "code"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "glassmorphism-generator",
+    "name": "Glassmorphism Generator",
+    "desc": "Generate trendy glassmorphism CSS effects. Adjust blur, transparency, and tint to create beautiful frosted glass elements.",
+    "href": "developer-tools/glassmorphism-generator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "glassmorphism",
+      "glass css",
+      "frosted glass",
+      "backdrop filter",
+      "ui generator"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "gradient-generator",
+      "box-shadow-generator",
+      "color-converter"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "gradient-generator",
+    "name": "CSS Gradient Generator",
+    "desc": "Visual CSS gradient builder. Generate Linear, Radial, and Conic gradients with multiple color stops and instant CSS/Tailwind export.",
+    "href": "developer-tools/gradient-generator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": true,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "gradient generator",
+      "css gradient",
+      "tailwind gradient",
+      "linear gradient",
+      "radial gradient",
+      "conic gradient"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "color-converter",
+      "box-shadow-generator",
+      "glassmorphism-generator"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "hash-map-visualizer",
+    "name": "Hash Map Visualizer",
+    "desc": "Interactive visualization of hash map operations.",
+    "href": "developer-tools/hash-map-visualizer/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "hash map",
+      "data structures"
+    ],
+    "input": "none",
+    "output": "none",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "html-viewer",
+    "name": "HTML Online Viewer",
+    "desc": "Professional live HTML/CSS/JS editor and sandboxed preview",
+    "href": "developer-tools/html-viewer/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "html",
+      "viewer",
+      "editor",
+      "codepen",
+      "playground",
+      "javascript",
+      "css"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "code-minifier",
+      "format",
+      "json-formatter"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "json-csv",
+    "name": "JSON ↔ CSV",
+    "desc": "Convert between JSON and CSV",
+    "href": "developer-tools/json-csv/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "json",
+      "csv",
+      "convert"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "json-formatter",
+      "unit-converter"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "json-formatter",
+    "name": "JSON Formatter",
+    "desc": "Format and validate JSON",
+    "href": "developer-tools/json-formatter/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "json",
+      "format",
+      "pretty",
+      "validate"
+    ],
+    "input": "json",
+    "output": "json",
+    "related": [
+      "json-csv",
+      "base64",
+      "format"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "lorem-ipsum",
+    "name": "Lorem Ipsum Generator",
+    "desc": "Generate Lorem Ipsum placeholder text in words, sentences, or paragraphs with Classic, Hipster, or Tech variants.",
+    "href": "developer-tools/lorem-ipsum/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "lorem ipsum",
+      "placeholder text",
+      "dummy text",
+      "generator",
+      "hipster ipsum",
+      "tech ipsum"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "word-counter",
+      "text-case-converter",
+      "json-formatter"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "regex-tester",
+    "name": "Regex Tester",
+    "desc": "Test regular expressions live",
+    "href": "developer-tools/regex/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "regex",
+      "regexp",
+      "match",
+      "pattern"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "unix-timestamp",
+    "name": "Unix Timestamp Converter",
+    "desc": "Convert Unix timestamps to human-readable dates and back. Live clock, timezone support, relative time display.",
+    "href": "developer-tools/unix-timestamp/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": true,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "unix timestamp",
+      "epoch",
+      "date converter",
+      "time",
+      "iso 8601"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "crontab-editor",
+      "world-clock",
+      "timezone-converter"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "url-encoder",
+    "name": "URL Encoder",
+    "desc": "Percent-encode and decode URLs",
+    "href": "developer-tools/url-encoder/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "url",
+      "encode",
+      "decode",
+      "percent"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "uuid-generator",
+    "name": "UUID Generator",
+    "desc": "Generate RFC-compliant UUIDs (v1, v4, v5, v7). Bulk generation, format options, and UUID validator. 100% browser-native using Web Crypto API.",
+    "href": "developer-tools/uuid-generator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": true,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "uuid",
+      "guid",
+      "unique id",
+      "v4",
+      "random",
+      "identifier"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "hash-generator",
+      "crontab-editor"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "xml-formatter",
+    "name": "XML Formatter",
+    "desc": "Format, beautify, minify, and validate XML documents in your browser. Fast, secure, and offline-capable.",
+    "href": "developer-tools/xml-formatter/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "xml formatter",
+      "xml beautifier",
+      "xml validator",
+      "minify xml",
+      "pretty print xml"
+    ],
+    "input": "text",
+    "output": "text",
+    "related": [
+      "json-formatter",
+      "csv-to-json",
+      "html-viewer"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "yaml-validator",
+    "name": "YAML Validator & Converter",
+    "desc": "Validate YAML syntax and convert between YAML and JSON.",
+    "href": "developer-tools/yaml-validator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "yaml",
+      "json",
+      "converter",
+      "validator",
+      "parser",
+      "formatter"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "json-formatter",
+      "diff-checker",
+      "code-minifier"
+    ],
+    "subCategory": "Format & Convert",
+    "requiresNetwork": false
+  }
+] as any[];

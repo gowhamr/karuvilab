@@ -98,10 +98,10 @@ export default function HraCalculatorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
               <Home className="w-3.5 h-3.5" /> Salary & Rent Details
             </h3>
-            <span className="text-[10px] font-bold text-text-4 uppercase bg-bg px-2 py-1 rounded-md">Monthly Values</span>
+            <span className="text-xs font-bold text-text-4 uppercase bg-bg px-2 py-1 rounded-md">Monthly Values</span>
           </div>
           
           <div className="space-y-6">
@@ -131,7 +131,7 @@ export default function HraCalculatorClient() {
                 onChange={(e) => setDaPercent(Number(e.target.value))}
                 className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue"
               />
-              <p className="text-[10px] text-text-4 font-medium">DA is typically for Govt employees. Keep 0 if NA.</p>
+              <p className="text-xs text-text-4 font-medium">DA is typically for Govt employees. Keep 0 if NA.</p>
             </div>
 
             <div className="space-y-3">
@@ -171,7 +171,7 @@ export default function HraCalculatorClient() {
                   )}
                 >
                   Metro (50%)
-                  <span className="block text-[9px] font-medium text-text-4 mt-0.5">Delhi, Mumbai, Chennai, Kolkata</span>
+                  <span className="block text-tiny font-medium text-text-4 mt-0.5">Delhi, Mumbai, Chennai, Kolkata</span>
                 </button>
                 <button
                   onClick={() => setCity('non-metro')}
@@ -181,7 +181,7 @@ export default function HraCalculatorClient() {
                   )}
                 >
                   Non-Metro (40%)
-                  <span className="block text-[9px] font-medium text-text-4 mt-0.5">All other cities</span>
+                  <span className="block text-tiny font-medium text-text-4 mt-0.5">All other cities</span>
                 </button>
               </div>
             </div>
@@ -191,10 +191,10 @@ export default function HraCalculatorClient() {
         {/* RIGHT COLUMN: Results */}
         <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Calculation Results</h3>
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Calculation Results</h3>
             <button
               onClick={() => setIsAnnual(!isAnnual)}
-              className="text-[10px] font-bold uppercase tracking-widest text-blue hover:underline"
+              className="text-xs font-bold uppercase tracking-widest text-blue hover:underline"
             >
               Show {isAnnual ? 'Monthly' : 'Annually'}
             </button>
@@ -222,7 +222,7 @@ export default function HraCalculatorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+            <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
               <Info className="w-3 h-3" /> The 3 Conditions (Sec 10(13A))
             </h4>
             

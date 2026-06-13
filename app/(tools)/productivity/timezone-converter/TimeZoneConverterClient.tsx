@@ -308,7 +308,7 @@ export default function TimeZoneConverterClient() {
                             >
                               <div>
                                 <p className="font-bold text-text group-hover:text-blue">{zone.city}</p>
-                                <p className="text-[10px] text-text-4">{zone.country}</p>
+                                <p className="text-xs text-text-4">{zone.country}</p>
                               </div>
                               <Plus className="w-4 h-4 text-text-4 group-hover:text-blue" />
                             </button>
@@ -324,7 +324,7 @@ export default function TimeZoneConverterClient() {
         </div>
 
         {/* Info Bar */}
-        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-[10px] font-bold text-text-4 uppercase tracking-[0.2em]">
+        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-xs font-bold text-text-4 uppercase tracking-[0.2em]">
           <div className="flex items-center gap-2">
             <Info className="w-3 h-3" />
             Comparing {targetTZs.length} zones to {sourceTZ}
@@ -357,7 +357,7 @@ export default function TimeZoneConverterClient() {
                         {conv.tz.split('/').pop()?.replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <div className="text-[10px] text-text-4 font-bold truncate max-w-[150px]">
+                    <div className="text-xs text-text-4 font-bold truncate max-w-[150px]">
                       {conv.tz}
                     </div>
                   </div>
@@ -382,7 +382,7 @@ export default function TimeZoneConverterClient() {
                       {conv.time}
                     </h2>
                     {conv.relativeDay && (
-                      <span className="text-[10px] bg-blue/10 text-blue px-2 py-0.5 rounded-full font-black uppercase">
+                      <span className="text-xs bg-blue/10 text-blue px-2 py-0.5 rounded-full font-black uppercase">
                         {conv.relativeDay}
                       </span>
                     )}
@@ -395,7 +395,7 @@ export default function TimeZoneConverterClient() {
 
                 <div className="pt-4 border-t border-border flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-black text-text-4 uppercase tracking-wider">Offset:</span>
+                    <span className="text-xs font-black text-text-4 uppercase tracking-wider">Offset:</span>
                     <span className={`text-xs font-bold ${conv.offsetLabel.startsWith('+') ? 'text-success' : conv.offsetLabel.startsWith('-') ? 'text-error' : 'text-blue'}`}>
                       {conv.offsetLabel}
                     </span>

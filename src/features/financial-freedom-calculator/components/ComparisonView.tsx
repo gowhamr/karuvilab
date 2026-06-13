@@ -22,7 +22,7 @@ export function ComparisonView() {
       <table className="w-full text-left text-sm whitespace-nowrap">
         <thead>
           <tr className="border-b border-border">
-            <th className="py-4 px-4 font-bold text-text-2 uppercase tracking-widest text-[11px]">Metric</th>
+            <th className="py-4 px-4 font-bold text-text-2 uppercase tracking-widest text-xs">Metric</th>
             {scenarios.map(s => (
               <th key={s.id} className="py-4 px-4">
                 <div className="flex items-center justify-between gap-4">
@@ -30,7 +30,7 @@ export function ComparisonView() {
                   <div className="flex gap-2">
                     <button 
                       onClick={() => loadScenario(s.id)}
-                      className="text-[10px] uppercase font-bold tracking-widest bg-blue/10 text-blue px-2 py-1 rounded hover:bg-blue/20 transition-colors"
+                      className="text-xs uppercase font-bold tracking-widest bg-blue/10 text-blue px-2 py-1 rounded hover:bg-blue/20 transition-colors"
                       aria-label={`Load scenario ${s.name}`}
                     >
                       Load

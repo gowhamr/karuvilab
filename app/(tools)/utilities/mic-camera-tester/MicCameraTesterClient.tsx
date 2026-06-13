@@ -144,7 +144,7 @@ export default function MicCameraTesterClient() {
                 <div className="w-2 h-2 rounded-full bg-error animate-pulse" />
                 <div>
                   <p className="text-sm font-bold">Failed to load media devices</p>
-                  <p className="text-[10px] uppercase tracking-widest opacity-80 mt-1">{error}</p>
+                  <p className="text-xs uppercase tracking-widest opacity-80 mt-1">{error}</p>
                 </div>
               </div>
               <button 
@@ -185,7 +185,7 @@ export default function MicCameraTesterClient() {
               <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
                 <div className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10 flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                  <span className="text-[9px] font-black text-white uppercase tracking-widest">Live</span>
+                  <span className="text-tiny font-black text-white uppercase tracking-widest">Live</span>
                 </div>
               </div>
             )}
@@ -200,7 +200,7 @@ export default function MicCameraTesterClient() {
               {/* Device Selectors */}
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="video-select" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-2">Camera</label>
+                  <label htmlFor="video-select" className="text-xs font-black uppercase tracking-widest text-text-4 ml-2">Camera</label>
                   <select 
                     id="video-select"
                     className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue outline-none"
@@ -216,7 +216,7 @@ export default function MicCameraTesterClient() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="audio-select" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-2">Microphone</label>
+                  <label htmlFor="audio-select" className="text-xs font-black uppercase tracking-widest text-text-4 ml-2">Microphone</label>
                   <select 
                     id="audio-select"
                     className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue outline-none"
@@ -276,13 +276,13 @@ export default function MicCameraTesterClient() {
 
             <div className="grid grid-cols-2 gap-4">
               <dl className="p-4 bg-surface border border-border rounded-2xl space-y-1">
-                <dt className="text-[9px] font-black text-blue uppercase tracking-widest flex items-center gap-1.5">
+                <dt className="text-tiny font-black text-blue uppercase tracking-widest flex items-center gap-1.5">
                   <Settings className="w-3 h-3" aria-hidden="true" /> Privacy
                 </dt>
                 <dd className="text-xs font-bold text-text-2 leading-tight">Stream never leaves browser</dd>
               </dl>
               <dl className="p-4 bg-surface border border-border rounded-2xl space-y-1">
-                <dt className="text-[9px] font-black text-success uppercase tracking-widest flex items-center gap-1.5">
+                <dt className="text-tiny font-black text-success uppercase tracking-widest flex items-center gap-1.5">
                   <RefreshCw className="w-3 h-3" aria-hidden="true" /> Latency
                 </dt>
                 <dd className="text-xs font-bold text-text-2 leading-tight">Zero-delay local loopback</dd>

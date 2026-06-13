@@ -44,7 +44,7 @@ export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, plac
         />
 
         <div className="pr-4 hidden sm:flex items-center">
-          <div className="flex items-center gap-1 px-1.5 py-1 bg-bg border border-border rounded-lg text-[9px] font-mono font-bold text-text-4 group-focus-within:border-blue/20 group-focus-within:text-blue/60 transition-colors">
+          <div className="flex items-center gap-1 px-1.5 py-1 bg-bg border border-border rounded-lg text-tiny font-mono font-bold text-text-4 group-focus-within:border-blue/20 group-focus-within:text-blue/60 transition-colors">
             <Command className="w-2.5 h-2.5" />
             <span>K</span>
           </div>

@@ -34,7 +34,7 @@ export function ContextualActionBar() {
         {config.type === "processing" && (
           <div className="w-full flex items-center gap-4">
             <div className="flex-1 space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-text-3">
+              <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-text-3">
                 <span className="flex items-center gap-1.5">
                   <Loader2 className="w-3 h-3 animate-spin text-brand-primary" />
                   {config.label || "Processing..."}
@@ -51,7 +51,7 @@ export function ContextualActionBar() {
             {config.onCancel && (
               <button
                 onClick={config.onCancel}
-                className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/5 rounded-lg border border-red-500/10 transition-colors"
+                className="px-3 py-2 text-xs font-black uppercase tracking-widest text-red-500 hover:bg-red-500/5 rounded-lg border border-red-500/10 transition-colors"
               >
                 Cancel
               </button>

@@ -339,19 +339,19 @@ export function MarkdownEditor() {
           <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
             <button
               onClick={() => handleExport("html")}
-              className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
             >
               <Code2 className="w-3.5 h-3.5" /> HTML
             </button>
             <button
               onClick={() => handleExport("pdf")}
-              className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
             >
               <FileText className="w-3.5 h-3.5" /> PDF
             </button>
             <button
               onClick={() => handleExport("word")}
-              className="flex items-center gap-1.5 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all"
             >
               <FileCode className="w-3.5 h-3.5" /> Word
             </button>
@@ -442,7 +442,7 @@ export function MarkdownEditor() {
                     </div>
                     <div className="min-w-0">
                       <h4 className="text-xs font-black uppercase tracking-widest truncate">{fileName}</h4>
-                      <p className="text-[10px] font-bold text-text-4 uppercase tracking-tighter truncate">
+                      <p className="text-xs font-bold text-text-4 uppercase tracking-tighter truncate">
                         {stats.words} words • {stats.chars} characters
                       </p>
                     </div>

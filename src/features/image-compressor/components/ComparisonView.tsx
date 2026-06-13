@@ -54,7 +54,7 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
     return (
       <div className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-4xl overflow-hidden flex items-center justify-center">
         <img src={item.previewUrl} alt="Original" className="max-h-full object-contain" />
-        <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-white text-[10px] font-black uppercase rounded-full">
+        <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-white text-xs font-black uppercase rounded-full">
           Original • {formatSize(item.originalSize)}
         </div>
       </div>
@@ -99,10 +99,10 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
         </div>
 
         {/* Labels */}
-        <div className="absolute top-4 left-4 px-3 py-1 bg-white/90 text-black text-[10px] font-black uppercase rounded-full shadow-sm">
+        <div className="absolute top-4 left-4 px-3 py-1 bg-white/90 text-black text-xs font-black uppercase rounded-full shadow-sm">
           Original • {formatSize(item.originalSize)}
         </div>
-        <div className="absolute top-4 right-4 px-3 py-1 bg-blue/90 text-white text-[10px] font-black uppercase rounded-full shadow-sm">
+        <div className="absolute top-4 right-4 px-3 py-1 bg-blue/90 text-white text-xs font-black uppercase rounded-full shadow-sm">
           Compressed • {formatSize(item.compressedSize || 0)}
         </div>
 
@@ -110,7 +110,7 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
         <div 
           aria-live="polite" 
           aria-atomic="true"
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-green-500 text-white text-[10px] font-black uppercase rounded-2xl shadow-xl animate-in zoom-in duration-500"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-green-500 text-white text-xs font-black uppercase rounded-2xl shadow-xl animate-in zoom-in duration-500"
         >
           {getReduction(item.originalSize, item.compressedSize || 0)} Reduction
         </div>

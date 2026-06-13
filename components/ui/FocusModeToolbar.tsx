@@ -140,7 +140,7 @@ export function FocusModeToolbar({
               {toolName}
               {language && (
                 <span className="ml-1.5 px-1.5 py-0.5 rounded
-                  bg-blue/10 text-blue text-[10px] font-mono uppercase">
+                  bg-blue/10 text-blue text-xs font-mono uppercase">
                   {language}
                 </span>
               )}
@@ -148,7 +148,7 @@ export function FocusModeToolbar({
           </div>
 
           {/* CENTER — Stats */}
-          <div className="flex items-center gap-3 text-[11px] text-text-4 font-mono">
+          <div className="flex items-center gap-3 text-xs text-text-4 font-mono">
             {wordCount !== undefined && (
               <span title="Word count">{wordCount.toLocaleString()} words</span>
             )}
@@ -179,9 +179,9 @@ export function FocusModeToolbar({
                     hover:bg-mat-hover disabled:opacity-30
                     transition-all text-xs"
                 >
-                  A<span className="text-[9px]">-</span>
+                  A<span className="text-tiny">-</span>
                 </button>
-                <span className="px-1.5 text-[10px] text-text-4
+                <span className="px-1.5 text-xs text-text-4
                   font-mono border-x border-border">
                   {fontSize}
                 </span>
@@ -193,7 +193,7 @@ export function FocusModeToolbar({
                     hover:bg-mat-hover disabled:opacity-30
                     transition-all text-xs"
                 >
-                  A<span className="text-[9px]">+</span>
+                  A<span className="text-tiny">+</span>
                 </button>
               </div>
             )}
@@ -233,7 +233,7 @@ export function FocusModeToolbar({
             {/* Clock */}
             <div className="flex items-center gap-1
               px-2 py-1 rounded-lg
-              text-text-4 text-[11px] font-mono
+              text-text-4 text-xs font-mono
               hidden sm:flex">
               <Clock className="w-3 h-3" />
               {timeStr}
@@ -243,7 +243,7 @@ export function FocusModeToolbar({
             {!isMobile && (
               <div className="hidden md:flex items-center gap-1
                 px-2 py-1 rounded-lg
-                border border-border text-text-4 text-[10px] font-mono">
+                border border-border text-text-4 text-xs font-mono">
                 <Keyboard className="w-3 h-3" />
                 F11
               </div>

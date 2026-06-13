@@ -55,7 +55,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-text">Amortisation Schedule</h3>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Filter Year</span>
+          <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Filter Year</span>
           <select 
             value={filterYear} 
             onChange={(e) => setFilterYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
@@ -71,7 +71,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
 
       <div className="bg-surface border border-border rounded-2xl overflow-hidden" role="table" aria-label="Amortisation Schedule">
         <div 
-          className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-[10px] font-black uppercase tracking-widest text-text-4"
+          className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-xs font-black uppercase tracking-widest text-text-4"
           role="row"
         >
           <span role="columnheader">Month</span>

@@ -129,7 +129,7 @@ export default function CalendarPage() {
 
           {isLoading && (
             <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-4xl border border-border/20">
-              <div className="w-14 h-14 border-[5px] border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin shadow-lg shadow-indigo-500/20" />
+              <div className="w-14 h-14 border-4 border-blue/10 border-t-blue rounded-full animate-spin shadow-lg shadow-blue/20" />
             </div>
           )}
         </div>
@@ -180,7 +180,7 @@ export default function CalendarPage() {
                 <span className="text-sm font-black uppercase tracking-wider text-text-3">Preferences</span>
                 <button
                   onClick={() => setIsSidebarOpen(false)}
-                  className="w-8 h-8 rounded-lg bg-surface-2 border border-border/30 flex items-center justify-center text-text-3 hover:text-text active:scale-95 transition-all"
+                  className="w-11 h-11 rounded-lg bg-surface-2 border border-border/30 flex items-center justify-center text-text-3 hover:text-text active:scale-95 transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>

@@ -258,7 +258,7 @@ Generated via KaruviLab`;
             Inflation-adjusted ({inflationRate}%/yr):{" "}
             <strong className="text-blue">{formatINR(result.inflAdj)}</strong>
           </div>
-          <div className="text-[10px] text-text-4 font-black uppercase tracking-widest">
+          <div className="text-xs text-text-4 font-black uppercase tracking-widest">
             Gross Value: {formatINR(result.totalValue)}
           </div>
         </div>

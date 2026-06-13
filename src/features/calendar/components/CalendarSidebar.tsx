@@ -91,7 +91,7 @@ export function CalendarSidebar() {
                   <p className="text-xs font-black text-text truncate">
                     {event.name}
                   </p>
-                  <p className="text-[10px] font-bold text-text-4">
+                  <p className="text-xs font-bold text-text-4">
                     {format(date, 'MMM d')} ·{' '}
                     {daysUntil === 0 ? 'Today' :
                      daysUntil === 1 ? 'Tomorrow' :
@@ -100,7 +100,7 @@ export function CalendarSidebar() {
                 </div>
                 {daysUntil <= 7 && (
                   <span className={cn(
-                    "text-[8px] font-black px-2 py-0.5 rounded-full border",
+                    "text-micro font-black px-2 py-0.5 rounded-full border",
                     daysUntil === 0 
                       ? "bg-rose-500/10 text-rose-400 border-rose-500/20" 
                       : "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
@@ -153,7 +153,7 @@ export function CalendarSidebar() {
           <div className="space-y-5 animate-in fade-in duration-200">
             {/* Visual Options */}
             <div className="space-y-2.5">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Display Options</label>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">Display Options</label>
               <div className="space-y-2">
                 <button
                   onClick={() => updateWorldEventsSettings({ highlightIndianEvents: !highlightIndianEvents })}
@@ -184,7 +184,7 @@ export function CalendarSidebar() {
 
             {/* Importance filters */}
             <div className="space-y-2.5 border-t border-border/20 pt-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4">Importance</label>
+              <label className="text-xs font-black uppercase tracking-widest text-text-4">Importance</label>
               <div className="flex flex-wrap gap-1.5">
                 {IMPORTANCE_INFOS.map((imp) => {
                   const isActive = showImportance.includes(imp.id);
@@ -193,7 +193,7 @@ export function CalendarSidebar() {
                       key={imp.id}
                       onClick={() => handleImportanceToggle(imp.id)}
                       className={cn(
-                        "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border transition-all active:scale-95",
+                        "px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider border transition-all active:scale-95",
                         isActive
                           ? "bg-indigo-600/10 border-indigo-500/30 text-indigo-400"
                           : "bg-surface-2/10 border-border/20 text-text-4 hover:text-text-2"
@@ -208,7 +208,7 @@ export function CalendarSidebar() {
 
             {/* Categories checkbox list */}
             <div className="space-y-2.5 border-t border-border/20 pt-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5">
+              <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5">
                 <Filter className="w-3.5 h-3.5 text-indigo-500/80" />
                 Categories
               </label>

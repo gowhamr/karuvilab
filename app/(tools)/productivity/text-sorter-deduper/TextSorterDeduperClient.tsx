@@ -113,15 +113,15 @@ export default function TextSorterDeduperClient() {
 
           <div className="grid grid-cols-3 gap-4">
             <div className="p-4 bg-surface border border-border rounded-2xl">
-              <div className="text-[10px] font-black text-text-4 uppercase tracking-widest">Total</div>
+              <div className="text-xs font-black text-text-4 uppercase tracking-widest">Total</div>
               <div className="text-xl font-black">{stats.total}</div>
             </div>
             <div className="p-4 bg-surface border border-border rounded-2xl">
-              <div className="text-[10px] font-black text-text-4 uppercase tracking-widest">Unique</div>
+              <div className="text-xs font-black text-text-4 uppercase tracking-widest">Unique</div>
               <div className="text-xl font-black text-blue">{stats.unique}</div>
             </div>
             <div className="p-4 bg-surface border border-border rounded-2xl">
-              <div className="text-[10px] font-black text-text-4 uppercase tracking-widest">Duplicates</div>
+              <div className="text-xs font-black text-text-4 uppercase tracking-widest">Duplicates</div>
               <div className="text-xl font-black text-error">{stats.duplicates}</div>
             </div>
           </div>

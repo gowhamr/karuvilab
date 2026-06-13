@@ -67,7 +67,7 @@ export default function MetaTagsGeneratorClient() {
               placeholder="My Awesome Page"
               description={`${titleLen}/60`}
             />
-            {titleLen > 60 && <p className="text-[10px] font-bold text-red-500 uppercase tracking-tight">Title exceeds 60 characters — may be truncated in search results.</p>}
+            {titleLen > 60 && <p className="text-xs font-bold text-red-500 uppercase tracking-tight">Title exceeds 60 characters — may be truncated in search results.</p>}
 
             <ToolInput
               label="Meta Description"
@@ -78,7 +78,7 @@ export default function MetaTagsGeneratorClient() {
               mono
               description={`${descLen}/160`}
             />
-            {descLen > 160 && <p className="text-[10px] font-bold text-red-500 uppercase tracking-tight">Description exceeds 160 characters — may be truncated.</p>}
+            {descLen > 160 && <p className="text-xs font-bold text-red-500 uppercase tracking-tight">Description exceeds 160 characters — may be truncated.</p>}
 
             <ToolInput
               label="Keywords"

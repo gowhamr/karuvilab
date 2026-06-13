@@ -176,7 +176,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
             </div>
             <button
               onClick={resetFeedback}
-              className="text-[10px] font-bold text-brand-primary hover:underline uppercase tracking-wider pt-2"
+              className="text-xs font-bold text-brand-primary hover:underline uppercase tracking-wider pt-2"
             >
               Change feedback
             </button>
@@ -245,7 +245,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                   className="space-y-3 pt-2 border-t border-mat-border overflow-hidden"
                 >
                   <div className="space-y-2">
-                    <label htmlFor="widget-comment" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">
+                    <label htmlFor="widget-comment" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">
                       What can we improve?
                     </label>
                     <textarea
@@ -259,7 +259,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="widget-email" className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">
+                    <label htmlFor="widget-email" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">
                       Email Address (Optional)
                     </label>
                     <input
@@ -273,13 +273,13 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                   </div>
 
                   {errorMessage && (
-                    <p className="text-[10px] text-error font-bold ml-1">{errorMessage}</p>
+                    <p className="text-xs text-error font-bold ml-1">{errorMessage}</p>
                   )}
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-9 bg-brand-primary text-white rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+                    className="w-full h-9 bg-brand-primary text-white rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <div className="w-3.5 h-3.5 border border-white/30 border-t-white rounded-full animate-spin" />

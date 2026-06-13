@@ -71,18 +71,18 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
         <div className={`flex items-center justify-between ${viewMode === "list" ? "shrink-0 gap-8" : "mt-auto pt-4 border-t border-border/50"}`}>
           <div className="flex flex-wrap gap-1.5">
             {note.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="flex items-center gap-1 px-2 py-0.5 bg-blue/5 text-blue text-[10px] font-bold rounded-md uppercase tracking-wider">
+              <span key={tag} className="flex items-center gap-1 px-2 py-0.5 bg-blue/5 text-blue text-xs font-bold rounded-md uppercase tracking-wider">
                 <Hash size={10} />
                 {tag}
               </span>
             ))}
             {note.tags.length > 2 && (
-              <span className="text-[10px] text-text-4 font-bold mt-1">
+              <span className="text-xs text-text-4 font-bold mt-1">
                 +{note.tags.length - 2}
               </span>
             )}
           </div>
-          <span className="text-[11px] font-bold text-text-4 uppercase tracking-widest whitespace-nowrap">
+          <span className="text-xs font-bold text-text-4 uppercase tracking-widest whitespace-nowrap">
             {formatNoteDate(note.updatedAt)}
           </span>
         </div>

@@ -52,15 +52,15 @@ const StockAverageCalculatorClient = memo(function StockAverageCalculatorClient(
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
         <div className="hidden md:grid grid-cols-7 gap-4 mb-2">
-          <div className="col-span-3 text-[10px] font-black uppercase tracking-wider text-text-4 px-2">Quantity</div>
-          <div className="col-span-3 text-[10px] font-black uppercase tracking-wider text-text-4 px-2">Price per Share</div>
+          <div className="col-span-3 text-xs font-black uppercase tracking-wider text-text-4 px-2">Quantity</div>
+          <div className="col-span-3 text-xs font-black uppercase tracking-wider text-text-4 px-2">Price per Share</div>
           <div className="col-span-1"></div>
         </div>
 
         {orders.map((order, idx) => (
           <div key={order.id} className="grid grid-cols-1 md:grid-cols-7 gap-3 md:gap-4 items-end bg-bg/20 p-3 rounded-xl border border-border/50">
             <div className="col-span-3">
-              <label className="md:hidden text-[10px] font-black uppercase tracking-wider text-text-4 mb-1 block">Quantity</label>
+              <label className="md:hidden text-xs font-black uppercase tracking-wider text-text-4 mb-1 block">Quantity</label>
               <input
                 type="number"
                 value={order.quantity || ""}
@@ -70,7 +70,7 @@ const StockAverageCalculatorClient = memo(function StockAverageCalculatorClient(
               />
             </div>
             <div className="col-span-3">
-              <label className="md:hidden text-[10px] font-black uppercase tracking-wider text-text-4 mb-1 block">Buy Price</label>
+              <label className="md:hidden text-xs font-black uppercase tracking-wider text-text-4 mb-1 block">Buy Price</label>
               <input
                 type="number"
                 value={order.price || ""}

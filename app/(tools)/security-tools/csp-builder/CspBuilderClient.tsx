@@ -226,7 +226,7 @@ export default function CspBuilderClient() {
           <button 
             key={name}
             onClick={() => setConfig({ directives: JSON.parse(JSON.stringify(directives)), reportOnly: false })} 
-            className="px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-surface transition-all whitespace-nowrap"
+            className="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-surface transition-all whitespace-nowrap"
           >
             {name}
           </button>
@@ -235,7 +235,7 @@ export default function CspBuilderClient() {
 
       {/* Import Section */}
       <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
            Import & Analyze Existing Policy
         </h3>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -253,7 +253,7 @@ export default function CspBuilderClient() {
             Analyze
           </button>
         </div>
-        {importError && <p className="text-[10px] text-red-500 font-bold px-1">{importError}</p>}
+        {importError && <p className="text-xs text-red-500 font-bold px-1">{importError}</p>}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -262,13 +262,13 @@ export default function CspBuilderClient() {
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
                 <Shield className="w-3.5 h-3.5" /> Directives Configuration
               </h3>
               <div className="flex items-center gap-3">
                 <label className="flex items-center gap-2 cursor-pointer bg-bg border border-border px-3 py-1.5 rounded-lg shadow-sm hover:border-blue/30 transition-colors">
                   <input type="checkbox" checked={config.reportOnly} onChange={e => setConfig({...config, reportOnly: e.target.checked})} className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500/20" />
-                  <span className="text-[10px] font-black uppercase tracking-wider text-text-3">Report-Only</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-text-3">Report-Only</span>
                 </label>
               </div>
             </div>
@@ -296,12 +296,12 @@ export default function CspBuilderClient() {
                     {/* Selected Sources Badges */}
                     <div className="flex flex-wrap gap-1.5 min-h-[28px]">
                       {activeSources.map(src => (
-                        <span key={src} className="flex items-center gap-1 pl-2.5 pr-1 py-1 bg-blue/5 border border-blue/10 text-blue rounded-lg text-[10px] font-mono font-bold group">
+                        <span key={src} className="flex items-center gap-1 pl-2.5 pr-1 py-1 bg-blue/5 border border-blue/10 text-blue rounded-lg text-xs font-mono font-bold group">
                           {src}
                           <button onClick={() => removeSource(dir, src)} className="p-0.5 opacity-0 group-hover:opacity-100 hover:bg-blue/10 rounded transition-all"><Trash2 className="w-2.5 h-2.5" /></button>
                         </span>
                       ))}
-                      {activeSources.length === 0 && <span className="text-[10px] text-text-4 italic py-1">No sources (fallback applies)</span>}
+                      {activeSources.length === 0 && <span className="text-xs text-text-4 italic py-1">No sources (fallback applies)</span>}
                     </div>
 
                     {/* Common Source Toggles */}
@@ -311,7 +311,7 @@ export default function CspBuilderClient() {
                           key={src}
                           onClick={() => toggleSource(dir, src)}
                           className={cn(
-                            "px-2.5 py-1.5 rounded-lg text-[9px] font-mono font-bold transition-all border",
+                            "px-2.5 py-1.5 rounded-lg text-tiny font-mono font-bold transition-all border",
                             activeSources.includes(src) ? "bg-blue text-white border-blue shadow-md shadow-blue/20" : "bg-transparent text-text-4 border-transparent hover:bg-surface/50"
                           )}
                         >
@@ -328,9 +328,9 @@ export default function CspBuilderClient() {
                         onChange={e => setCustomInputs({...customInputs, [dir]: e.target.value})}
                         onKeyDown={e => e.key === 'Enter' && addCustomSource(dir)}
                         placeholder="e.g. *.google.com"
-                        className="flex-1 bg-surface border border-border rounded-xl px-3 py-2 text-[10px] font-mono text-text focus:border-blue outline-none transition-colors"
+                        className="flex-1 bg-surface border border-border rounded-xl px-3 py-2 text-xs font-mono text-text focus:border-blue outline-none transition-colors"
                       />
-                      <button onClick={() => addCustomSource(dir)} className="px-4 py-2 bg-blue text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shrink-0 shadow-sm active:scale-95 transition-all">Add</button>
+                      <button onClick={() => addCustomSource(dir)} className="px-4 py-2 bg-blue text-white rounded-xl text-xs font-bold uppercase tracking-widest shrink-0 shadow-sm active:scale-95 transition-all">Add</button>
                     </div>
                   </m.div>
                 );
@@ -360,10 +360,10 @@ export default function CspBuilderClient() {
           
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4">Export Policy</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Export Policy</h3>
               <div className="flex items-center gap-2">
                 <div className={cn(
-                  "px-2 py-0.5 rounded-full text-[9px] font-black uppercase",
+                  "px-2 py-0.5 rounded-full text-tiny font-black uppercase",
                   securityScore.score > 80 ? "bg-emerald-500/10 text-emerald-500" :
                   securityScore.score > 50 ? "bg-amber-500/10 text-amber-500" : "bg-red-500/10 text-red-500"
                 )}>
@@ -383,7 +383,7 @@ export default function CspBuilderClient() {
                 <button
                   key={t}
                   onClick={() => setActiveTab(t)}
-                  className={cn("flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all", activeTab === t ? "bg-surface text-text shadow-sm" : "text-text-4")}
+                  className={cn("flex-1 py-2 rounded-lg text-tiny font-black uppercase tracking-widest transition-all", activeTab === t ? "bg-surface text-text shadow-sm" : "text-text-4")}
                 >
                   {t}
                 </button>
@@ -399,13 +399,13 @@ export default function CspBuilderClient() {
                   activeTab === 'nginx' ? `add_header ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}";` :
                   `Header set ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}"`
                 }
-                className="w-full h-56 bg-bg border border-border rounded-2xl p-5 font-mono text-[11px] text-text-3 outline-none resize-none leading-relaxed break-all shadow-inner"
+                className="w-full h-56 bg-bg border border-border rounded-2xl p-5 font-mono text-xs text-text-3 outline-none resize-none leading-relaxed break-all shadow-inner"
               />
             </div>
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-4">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
                Security Analysis
             </h3>
             {securityScore.warnings.length === 0 ? (
@@ -415,7 +415,7 @@ export default function CspBuilderClient() {
                  </div>
                  <div>
                    <p className="text-sm font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Secure Policy</p>
-                   <p className="text-[11px] font-bold text-emerald-600/70 mt-0.5 leading-tight">Your CSP follows modern security best practices.</p>
+                   <p className="text-xs font-bold text-emerald-600/70 mt-0.5 leading-tight">Your CSP follows modern security best practices.</p>
                  </div>
               </div>
             ) : (
@@ -426,12 +426,12 @@ export default function CspBuilderClient() {
                    </div>
                    <div>
                      <p className="text-sm font-black text-amber-600 dark:text-amber-400 uppercase tracking-wide">Optimization Needed</p>
-                     <p className="text-[11px] font-bold text-amber-600/70 mt-0.5 leading-tight">{securityScore.warnings.length} issues identified for review.</p>
+                     <p className="text-xs font-bold text-amber-600/70 mt-0.5 leading-tight">{securityScore.warnings.length} issues identified for review.</p>
                    </div>
                 </div>
                 <div className="space-y-2">
                   {securityScore.warnings.map((w, i) => (
-                    <div key={i} className="flex gap-3 text-[11px] text-text-3 font-bold bg-bg p-3.5 rounded-2xl border border-border leading-relaxed">
+                    <div key={i} className="flex gap-3 text-xs text-text-3 font-bold bg-bg p-3.5 rounded-2xl border border-border leading-relaxed">
                       <span className={cn(
                         "font-black shrink-0",
                         w.level === 'error' ? 'text-red-500' : w.level === 'warn' ? 'text-amber-500' : 'text-blue'

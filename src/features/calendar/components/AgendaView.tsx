@@ -70,7 +70,7 @@ function AgendaDay({
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-end ml-4">
-        <h2 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-500/50">
+        <h2 className="text-xs font-black uppercase tracking-[0.3em] text-indigo-500/50">
           {label}
         </h2>
       </div>
@@ -82,7 +82,7 @@ function AgendaDay({
             <span className="text-2xl md:text-3xl drop-shadow-sm" aria-hidden="true">{f.emoji}</span>
             <div>
               <h3 className="text-sm md:text-base font-black text-amber-700 dark:text-amber-400">{f.name}</h3>
-              <p className="text-[9px] md:text-[10px] font-bold text-amber-600/60 uppercase tracking-widest mt-0.5">Festival</p>
+              <p className="text-tiny md:text-xs font-bold text-amber-600/60 uppercase tracking-widest mt-0.5">Festival</p>
             </div>
           </div>
         ))}
@@ -92,7 +92,7 @@ function AgendaDay({
             <span className="text-2xl md:text-3xl drop-shadow-sm" aria-hidden="true">{o.emoji}</span>
             <div>
               <h3 className="text-sm md:text-base font-black text-blue-700 dark:text-blue-400">{o.name}</h3>
-              <p className="text-[9px] md:text-[10px] font-bold text-blue-600/60 uppercase tracking-widest mt-0.5">Global Observance</p>
+              <p className="text-tiny md:text-xs font-bold text-blue-600/60 uppercase tracking-widest mt-0.5">Global Observance</p>
             </div>
           </div>
         ))}
@@ -113,7 +113,7 @@ function AgendaDay({
                   {event.allDay ? 'All Day' : format(parseISO(event.startDate), 'h:mm')}
                 </div>
                 {!event.allDay && (
-                  <div className="text-[8px] md:text-[10px] font-bold text-text-4 uppercase tracking-wider mt-0.5">
+                  <div className="text-micro md:text-xs font-bold text-text-4 uppercase tracking-wider mt-0.5">
                     {format(parseISO(event.startDate), 'a')}
                   </div>
                 )}
@@ -124,7 +124,7 @@ function AgendaDay({
                   {event.title}
                 </h3>
                 {(event.location || event.description) && (
-                  <p className="text-[10px] md:text-[12px] font-medium text-text-4 truncate mt-1 md:mt-1.5 flex items-center gap-2 md:gap-2.5">
+                  <p className="text-xs md:text-xs font-medium text-text-4 truncate mt-1 md:mt-1.5 flex items-center gap-2 md:gap-2.5">
                     {event.location && <><span className="text-indigo-500/80" aria-hidden="true">📍</span> {event.location}</>}
                     {event.description && <><span className="text-text-4/20" aria-hidden="true">|</span> {event.description}</>}
                   </p>

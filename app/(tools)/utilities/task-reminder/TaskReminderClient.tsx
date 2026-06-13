@@ -139,9 +139,9 @@ export default function TaskReminderClient() {
             ))}
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-[10px] font-black text-text-4 uppercase tracking-widest">{activeCount} Pending</span>
+            <span className="text-xs font-black text-text-4 uppercase tracking-widest">{activeCount} Pending</span>
             {tasks.some(t => t.done) && (
-              <button onClick={clearCompleted} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline">
+              <button onClick={clearCompleted} className="text-xs font-black text-red-500 uppercase tracking-widest hover:underline">
                 Clear Done
               </button>
             )}
@@ -177,7 +177,7 @@ export default function TaskReminderClient() {
                     <p className={`font-bold text-sm leading-snug ${task.done ? "line-through text-text-4" : "text-text"}`}>{task.text}</p>
                     {task.dueDate && (
                       <div className="flex items-center gap-2 mt-1.5">
-                        <div className={`text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter ${overdue ? "bg-red-500 text-white shadow-lg shadow-red-500/20" : "bg-bg border border-border text-text-4"}`}>
+                        <div className={`text-xs font-black px-2 py-0.5 rounded-md uppercase tracking-tighter ${overdue ? "bg-red-500 text-white shadow-lg shadow-red-500/20" : "bg-bg border border-border text-text-4"}`}>
                           {overdue ? "Overdue" : "Due"}
                         </div>
                         <span className={`text-xs font-medium ${overdue ? "text-red-500" : "text-text-4"}`}>
@@ -202,7 +202,7 @@ export default function TaskReminderClient() {
         )}
       </div>
 
-      <p className="text-[10px] text-text-4 text-center font-black uppercase tracking-[0.2em]">
+      <p className="text-xs text-text-4 text-center font-black uppercase tracking-[0.2em]">
         Data secured on your device via LocalStorage
       </p>
     </div>

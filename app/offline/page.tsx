@@ -43,11 +43,11 @@ export default function OfflinePage() {
 
       <div className="pt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-2xl w-full">
         <div className="p-6 bg-surface border border-border rounded-3xl space-y-2">
-          <h3 className="font-black uppercase tracking-widest text-[10px] text-blue">Local Tools</h3>
+          <h3 className="font-black uppercase tracking-widest text-xs text-blue">Local Tools</h3>
           <p className="text-xs text-text-3 font-medium">Most calculators and converters work 100% offline once loaded.</p>
         </div>
         <div className="p-6 bg-surface border border-border rounded-3xl space-y-2">
-          <h3 className="font-black uppercase tracking-widest text-[10px] text-blue">Data Privacy</h3>
+          <h3 className="font-black uppercase tracking-widest text-xs text-blue">Data Privacy</h3>
           <p className="text-xs text-text-3 font-medium">Your data never leaves your device, connection or no connection.</p>
         </div>
       </div>

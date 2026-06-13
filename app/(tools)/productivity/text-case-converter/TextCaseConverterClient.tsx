@@ -92,7 +92,7 @@ export default function TextCaseConverterClient() {
               key={opt.value}
               value={opt.value}
               className={cn(
-                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all",
+                "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border transition-all",
                 activeCase === opt.value
                   ? "bg-blue border-blue text-white shadow-md shadow-blue/10"
                   : "bg-surface border-border text-text-4 hover:border-blue/30 hover:text-blue"

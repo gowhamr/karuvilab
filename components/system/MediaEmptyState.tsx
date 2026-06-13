@@ -63,7 +63,7 @@ export function MediaEmptyState({
         
         <div className="flex items-center justify-center gap-2 py-2 px-4 bg-bg rounded-xl border border-border">
           <ShieldCheck className="w-3.5 h-3.5 text-success" />
-          <span className="text-[9px] font-black text-text-4 uppercase tracking-[0.1em]">
+          <span className="text-tiny font-black text-text-4 uppercase tracking-[0.1em]">
             No upload — Processed 100% locally
           </span>
         </div>
@@ -73,7 +73,7 @@ export function MediaEmptyState({
         {acceptedFormats.map((fmt) => (
           <span 
             key={fmt}
-            className="px-2.5 py-1 bg-bg border border-border rounded-lg text-[9px] font-mono font-black text-text-4 uppercase tracking-tighter"
+            className="px-2.5 py-1 bg-bg border border-border rounded-lg text-tiny font-mono font-black text-text-4 uppercase tracking-tighter"
           >
             {fmt}
           </span>

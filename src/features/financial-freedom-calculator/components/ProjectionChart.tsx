@@ -146,7 +146,7 @@ export function ProjectionChart() {
           aria-label="Line chart showing projected net worth over time"
         />
       </div>
-      <div className="flex gap-4 mt-4 justify-center text-[11px] font-bold uppercase tracking-wider text-text-3">
+      <div className="flex gap-4 mt-4 justify-center text-xs font-bold uppercase tracking-wider text-text-3">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-blue" />
           <span>Net Worth</span>

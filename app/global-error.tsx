@@ -78,7 +78,7 @@ export default function GlobalError({
             
             {error.digest && (
               <div className="pt-8">
-                <code className="text-[10px] font-mono text-[#64748B] uppercase tracking-widest opacity-50">
+                <code className="text-xs font-mono text-[#64748B] uppercase tracking-widest opacity-50">
                   ID: {error.digest}
                 </code>
               </div>

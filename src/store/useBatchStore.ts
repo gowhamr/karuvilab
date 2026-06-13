@@ -34,6 +34,7 @@ interface BatchState {
   startProcessing: (toolId: string, processor: (item: BatchItem) => Promise<BatchResult>) => Promise<void>;
   cancelItem: (toolId: string, itemId: string) => void;
   cancelAll: (toolId: string) => void;
+  isProcessing: (toolId: string) => boolean;
 }
 
 export const useBatchStore = create<BatchState>((set, get) => ({
@@ -83,14 +84,21 @@ export const useBatchStore = create<BatchState>((set, get) => ({
   },
 
   updateItem: (toolId, itemId, updates) => {
-    set(state => ({
-      items: {
-        ...state.items,
-        [toolId]: (state.items[toolId] || []).map(item =>
-          item.id === itemId ? { ...item, ...updates } : item
-        ),
-      },
-    }));
+    set(state => {
+      const items = state.items[toolId] || [];
+      const index = items.findIndex(i => i.id === itemId);
+      if (index === -1) return state;
+      
+      const newItems = [...items];
+      newItems[index] = { ...newItems[index]!, ...updates };
+      
+      return {
+        items: {
+          ...state.items,
+          [toolId]: newItems,
+        },
+      };
+    });
   },
 
   cancelItem: (toolId, itemId) => {
@@ -98,7 +106,7 @@ export const useBatchStore = create<BatchState>((set, get) => ({
     if (item?.abortController) {
       item.abortController.abort();
     }
-    get().updateItem(toolId, itemId, { status: 'cancelled', message: 'Cancelled' });
+    get().updateItem(toolId, itemId, { status: 'cancelled', message: 'Cancelled', progress: 0 });
   },
 
   cancelAll: (toolId) => {
@@ -107,6 +115,10 @@ export const useBatchStore = create<BatchState>((set, get) => ({
         get().cancelItem(toolId, item.id);
       }
     });
+  },
+
+  isProcessing: (toolId) => {
+    return (get().items[toolId] || []).some(i => i.status === 'processing');
   },
 
   startProcessing: async (toolId, processor) => {
@@ -120,6 +132,10 @@ export const useBatchStore = create<BatchState>((set, get) => ({
     const concurrency = isMobile ? 2 : 3;
 
     await limitConcurrency(pendingItems, concurrency, async (item) => {
+      // Re-check status inside concurrency lock to prevent double-processing
+      const currentItem = (get().items[toolId] || []).find(i => i.id === item.id);
+      if (!currentItem || currentItem.status === 'cancelled') return;
+
       const abortController = new AbortController();
       get().updateItem(toolId, item.id, { 
         status: 'processing', 
@@ -130,6 +146,7 @@ export const useBatchStore = create<BatchState>((set, get) => ({
 
       try {
         const result = await processor({ ...item, abortController });
+        // Force 100% on completion to fix visual 99% bug
         get().updateItem(toolId, item.id, { 
           status: 'completed', 
           progress: 100, 
@@ -138,12 +155,13 @@ export const useBatchStore = create<BatchState>((set, get) => ({
         });
       } catch (error: any) {
         if (error.name === 'AbortError' || error.message === 'Task cancelled' || error.message === 'Task aborted') {
-          get().updateItem(toolId, item.id, { status: 'cancelled', message: 'Cancelled' });
+          get().updateItem(toolId, item.id, { status: 'cancelled', message: 'Cancelled', progress: 0 });
         } else {
           get().updateItem(toolId, item.id, { 
             status: 'failed', 
             error: error.message || 'Unknown error',
-            message: 'Failed'
+            message: 'Failed',
+            progress: 0
           });
         }
       }

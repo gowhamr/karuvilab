@@ -23,7 +23,7 @@ export const SettingRow = memo(function SettingRow({ label, description, childre
         )}
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-text">{label}</h3>
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text">{label}</h3>
             {helpText && <SettingHelp text={helpText} />}
           </div>
           {description && <p className="text-sm text-text-3 font-medium leading-relaxed max-w-lg">{description}</p>}
@@ -55,7 +55,7 @@ export const SettingHelp = memo(function SettingHelp({ text }: { text: string })
             initial={{ opacity: 0, y: 5, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 5, scale: 0.95 }}
-            className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-4 bg-surface border border-border rounded-2xl shadow-premium text-[11px] font-medium text-text-3 leading-relaxed pointer-events-none"
+            className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-4 bg-surface border border-border rounded-2xl shadow-premium text-xs font-medium text-text-3 leading-relaxed pointer-events-none"
           >
             <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-surface" />
             {text}
@@ -111,7 +111,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
           aria-checked={value === opt.value}
           onClick={() => onChange(opt.value)}
           className={`
-            px-3 sm:px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative flex-1 min-w-[60px]
+            px-3 sm:px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 relative flex-1 min-w-[60px]
             ${value === opt.value 
               ? 'text-text' 
               : 'text-text-4 hover:text-text'}

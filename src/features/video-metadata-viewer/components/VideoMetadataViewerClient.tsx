@@ -108,19 +108,19 @@ export default function VideoMetadataViewerClient() {
               </div>
               <div>
                 <h3 className="font-black text-sm uppercase tracking-widest text-text">Metadata Report</h3>
-                <p className="text-[10px] font-bold text-text-4 uppercase">{file.name}</p>
+                <p className="text-xs font-bold text-text-4 uppercase">{file.name}</p>
               </div>
             </div>
             <div className="flex gap-2">
               <button 
                 onClick={copyAsJson}
-                className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-blue transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-blue transition-all"
               >
                 <Copy size={14} /> Copy JSON
               </button>
               <button 
                 onClick={() => setFile(null)}
-                className="flex items-center gap-2 px-6 py-3 bg-bg border border-border rounded-xl text-[10px] font-black uppercase tracking-widest hover:text-red-500 transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:text-error transition-all"
               >
                 Clear
               </button>
@@ -140,26 +140,26 @@ export default function VideoMetadataViewerClient() {
           <div className="bg-surface border border-border rounded-4xl overflow-hidden">
             <div className="p-6 border-b border-border bg-bg/50 flex items-center gap-3">
               <Info size={16} className="text-blue" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-3">Technical Stream Info</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Technical Stream Info</h3>
             </div>
             <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                <div className="space-y-4">
                   <div className="flex justify-between items-center pb-4 border-b border-border/50">
-                    <span className="text-[10px] font-black uppercase text-text-4">Video Codec</span>
+                    <span className="text-xs font-black uppercase text-text-4">Video Codec</span>
                     <span className="text-xs font-bold text-text">{meta?.codec}</span>
                   </div>
                   <div className="flex justify-between items-center pb-4 border-b border-border/50">
-                    <span className="text-[10px] font-black uppercase text-text-4">Aspect Ratio</span>
+                    <span className="text-xs font-black uppercase text-text-4">Aspect Ratio</span>
                     <span className="text-xs font-bold text-text">{((meta?.width || 0) / (meta?.height || 1)).toFixed(2)}:1</span>
                   </div>
                </div>
                <div className="space-y-4">
                   <div className="flex justify-between items-center pb-4 border-b border-border/50">
-                    <span className="text-[10px] font-black uppercase text-text-4">MIME Type</span>
+                    <span className="text-xs font-black uppercase text-text-4">MIME Type</span>
                     <span className="text-xs font-bold text-text">{meta?.type}</span>
                   </div>
                   <div className="flex justify-between items-center pb-4 border-b border-border/50">
-                    <span className="text-[10px] font-black uppercase text-text-4">Avg. Bitrate</span>
+                    <span className="text-xs font-black uppercase text-text-4">Avg. Bitrate</span>
                     <span className="text-xs font-bold text-text">
                       {meta && meta.duration > 0 ? ((meta.size * 8) / (meta.duration * 1000 * 1000)).toFixed(2) : 0} Mbps
                     </span>

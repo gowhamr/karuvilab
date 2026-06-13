@@ -144,14 +144,14 @@ export default function GifCreatorClient() {
                   </div>
                   <div>
                     <h3 className="font-black text-sm uppercase tracking-widest text-text">Frame List</h3>
-                    <p className="text-[10px] font-bold text-text-4 uppercase">{frames.length} Frames Selected</p>
+                    <p className="text-xs font-bold text-text-4 uppercase">{frames.length} Frames Selected</p>
                   </div>
                </div>
 
                <div className="flex items-center gap-3 w-full sm:w-auto justify-between">
                   <div className="flex items-center gap-2 px-4 py-2 bg-bg border border-border rounded-xl">
                     <Settings size={14} className="text-text-4" />
-                    <label htmlFor={delayId} className="text-[10px] font-black uppercase tracking-widest text-text-3">Delay:</label>
+                    <label htmlFor={delayId} className="text-xs font-black uppercase tracking-widest text-text-3">Delay:</label>
                     <input 
                       type="number" 
                       min="10"
@@ -160,7 +160,7 @@ export default function GifCreatorClient() {
                       onChange={(e) => setDelay(Math.max(10, parseInt(e.target.value) || 100))}
                       className="w-16 bg-transparent border-none p-0 focus:ring-0 text-xs font-black tabular-nums"
                     />
-                    <span className="text-[10px] font-bold text-text-4">ms</span>
+                    <span className="text-xs font-bold text-text-4">ms</span>
                   </div>
                   
                   <button 

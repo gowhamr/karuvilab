@@ -25,7 +25,7 @@ export function PrepaymentSection({ savings }: { savings?: { interest: number; m
         </div>
         {showPrepayment && savings && (savings.interest > 0 || savings.months > 0) && (
           <div className="px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full">
-            <span className="text-[10px] font-black text-green-600 uppercase tracking-widest">
+            <span className="text-xs font-black text-green-600 uppercase tracking-widest">
               Savings: {formatCurrency(savings.interest)} & {savings.months} Months
             </span>
           </div>

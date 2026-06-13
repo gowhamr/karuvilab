@@ -177,22 +177,22 @@ export default function PasswordGeneratorClient() {
                   <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
                     <div className="flex items-center gap-2 text-text-4">
                       <Fingerprint className="w-3.5 h-3.5" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Entropy</span>
+                      <span className="text-xs font-black uppercase tracking-widest">Entropy</span>
                     </div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-2xl font-black text-text">{Math.floor(strength?.entropy || 0)}</span>
-                      <span className="text-[10px] text-text-4 font-bold uppercase">bits</span>
+                      <span className="text-xs text-text-4 font-bold uppercase">bits</span>
                     </div>
-                    <p className="text-[11px] text-text-3 font-medium">Measure of password randomness.</p>
+                    <p className="text-xs text-text-3 font-medium">Measure of password randomness.</p>
                   </div>
 
                   <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
                     <div className="flex items-center gap-2 text-text-4">
                       <Clock className="w-3.5 h-3.5" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Crack Time</span>
+                      <span className="text-xs font-black uppercase tracking-widest">Crack Time</span>
                     </div>
                     <span className={cn("text-xl font-black block", strength?.color)}>{strength?.crackTime}</span>
-                    <p className="text-[11px] text-text-3 font-medium">Estimate using GPU clusters.</p>
+                    <p className="text-xs text-text-3 font-medium">Estimate using GPU clusters.</p>
                   </div>
 
                   <div className={cn(
@@ -203,7 +203,7 @@ export default function PasswordGeneratorClient() {
                   )}>
                     <div className="flex items-center gap-2 text-text-4">
                       <AlertTriangle className={cn("w-3.5 h-3.5", breachInfo.count ? "text-red-500" : "text-emerald-500")} />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Breach Check</span>
+                      <span className="text-xs font-black uppercase tracking-widest">Breach Check</span>
                     </div>
                     {breachInfo.loading ? (
                       <div className="h-6 w-24 bg-mat-base animate-pulse rounded-lg" />
@@ -212,7 +212,7 @@ export default function PasswordGeneratorClient() {
                         {breachInfo.count === 0 ? "Clear" : breachInfo.count ? `${breachInfo.count.toLocaleString()} times` : "Unknown"}
                       </span>
                     )}
-                    <p className="text-[11px] text-text-3 font-medium">Checked via HIBP API.</p>
+                    <p className="text-xs text-text-3 font-medium">Checked via HIBP API.</p>
                   </div>
                 </div>
 
@@ -259,29 +259,29 @@ export default function PasswordGeneratorClient() {
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-2">Security Audit</h2>
+          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2">Security Audit</h2>
           
           <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-emerald-600">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span className="text-[9px] font-black uppercase tracking-widest">Privacy Guard</span>
+                <span className="text-tiny font-black uppercase tracking-widest">Privacy Guard</span>
               </div>
-              <p className="text-[11px] text-text-3 leading-relaxed font-medium">
+              <p className="text-xs text-text-3 leading-relaxed font-medium">
                 Breach checks use the <strong className="text-emerald-700">k-Anonymity</strong> model. We only send the first 5 characters of your password's hash. Your actual password never leaves your browser.
               </p>
             </div>
 
             {history.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
                   <History className="w-3.5 h-3.5" />
                   Recent History
                 </h3>
                 <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                   {history.map((pw, i) => (
                     <div key={i} className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-bg transition-colors group">
-                      <span className="font-mono text-[10px] text-text-4 break-all flex-1 truncate">{pw}</span>
+                      <span className="font-mono text-xs text-text-4 break-all flex-1 truncate">{pw}</span>
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                          <button 
                           onClick={() => checkBreach(pw)}

@@ -136,7 +136,7 @@ export default function SitemapGeneratorClient() {
       {/* Top Bar: Base Settings */}
       <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm flex flex-col md:flex-row items-end gap-6">
         <div className="flex-1 w-full space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-text-4 ml-1">Website Base URL</label>
+          <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Website Base URL</label>
           <div className="relative group">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-blue">
               <Globe size={18} aria-hidden="true" />
@@ -176,7 +176,7 @@ export default function SitemapGeneratorClient() {
               <button 
                 onClick={() => setActiveTab('editor')}
                 className={cn(
-                  "px-8 py-4 text-[10px] font-black uppercase tracking-widest transition-all",
+                  "px-8 py-4 text-xs font-black uppercase tracking-widest transition-all",
                   activeTab === 'editor' ? "text-blue border-b-2 border-blue bg-surface" : "text-text-4 hover:text-text"
                 )}
               >
@@ -185,7 +185,7 @@ export default function SitemapGeneratorClient() {
               <button 
                 onClick={() => setActiveTab('import')}
                 className={cn(
-                  "px-8 py-4 text-[10px] font-black uppercase tracking-widest transition-all",
+                  "px-8 py-4 text-xs font-black uppercase tracking-widest transition-all",
                   activeTab === 'import' ? "text-blue border-b-2 border-blue bg-surface" : "text-text-4 hover:text-text"
                 )}
               >
@@ -205,7 +205,7 @@ export default function SitemapGeneratorClient() {
                   >
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="text-[10px] text-text-4 font-black uppercase tracking-widest border-b border-border">
+                        <tr className="text-xs text-text-4 font-black uppercase tracking-widest border-b border-border">
                           <th className="px-6 py-4 text-left">Path / URL</th>
                           <th className="px-4 py-4 text-left w-24">Freq</th>
                           <th className="px-4 py-4 text-left w-24">Priority</th>
@@ -219,7 +219,7 @@ export default function SitemapGeneratorClient() {
                               <div className="w-12 h-12 bg-bg rounded-full flex items-center justify-center mx-auto text-text-4">
                                 <LinkIcon size={20} aria-hidden="true" />
                               </div>
-                              <p className="text-text-4 font-black uppercase tracking-widest text-[10px]">No URLs added yet</p>
+                              <p className="text-text-4 font-black uppercase tracking-widest text-xs">No URLs added yet</p>
                             </td>
                           </tr>
                         )}
@@ -239,7 +239,7 @@ export default function SitemapGeneratorClient() {
                                 value={entry.changefreq}
                                 onChange={(e) => updateEntry(entry.id, 'changefreq', e.target.value)}
                                 aria-label="Change Frequency"
-                                className="bg-transparent border-none p-0 focus:ring-0 text-[10px] font-bold uppercase tracking-wider text-text-3 cursor-pointer"
+                                className="bg-transparent border-none p-0 focus:ring-0 text-xs font-bold uppercase tracking-wider text-text-3 cursor-pointer"
                               >
                                 {CHANGEFREQS.map(f => <option key={f} value={f}>{f}</option>)}
                               </select>
@@ -249,7 +249,7 @@ export default function SitemapGeneratorClient() {
                                 value={entry.priority}
                                 onChange={(e) => updateEntry(entry.id, 'priority', e.target.value)}
                                 aria-label="Priority"
-                                className="bg-transparent border-none p-0 focus:ring-0 text-[10px] font-bold text-text-3 cursor-pointer"
+                                className="bg-transparent border-none p-0 focus:ring-0 text-xs font-bold text-text-3 cursor-pointer"
                               >
                                 {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
                               </select>
@@ -278,7 +278,7 @@ export default function SitemapGeneratorClient() {
                   >
                     <div className="bg-blue/5 border border-blue/10 p-4 rounded-2xl flex gap-3">
                       <AlertTriangle className="text-blue shrink-0" size={18} aria-hidden="true" />
-                      <p className="text-[11px] font-medium text-blue/80 leading-relaxed">
+                      <p className="text-xs font-medium text-blue/80 leading-relaxed">
                         Paste a list of relative paths (e.g. <code>/about</code>) or full URLs (one per line). 
                         Existing entries will be preserved.
                       </p>
@@ -315,41 +315,41 @@ export default function SitemapGeneratorClient() {
             </div>
             
             <div className="flex-1 relative group">
-              <pre className="absolute inset-0 bg-bg border border-border rounded-2xl p-6 font-mono text-[10px] text-text-4 overflow-x-auto whitespace-pre overflow-y-auto custom-scrollbar shadow-inner group-hover:text-text-3 transition-colors">
+              <pre className="absolute inset-0 bg-bg border border-border rounded-2xl p-6 font-mono text-xs text-text-4 overflow-x-auto whitespace-pre overflow-y-auto custom-scrollbar shadow-inner group-hover:text-text-3 transition-colors">
                 {generatedXml}
               </pre>
             </div>
 
             <div className="space-y-3 pt-2">
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-text-4 text-center">Export Sitemap</p>
+              <p className="text-tiny font-black uppercase tracking-[0.2em] text-text-4 text-center">Export Sitemap</p>
               <div className="grid grid-cols-3 gap-2">
                 <button 
                   onClick={() => downloadFile('xml')}
                   className="flex flex-col items-center justify-center gap-2 p-3 bg-bg border border-border rounded-2xl hover:border-blue hover:text-blue transition-all group"
                 >
                   <FileCode size={18} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
-                  <span className="text-[9px] font-black uppercase">XML</span>
+                  <span className="text-tiny font-black uppercase">XML</span>
                 </button>
                 <button 
                   onClick={() => downloadFile('csv')}
                   className="flex flex-col items-center justify-center gap-2 p-3 bg-bg border border-border rounded-2xl hover:border-blue hover:text-blue transition-all group"
                 >
                   <FileText size={18} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
-                  <span className="text-[9px] font-black uppercase">CSV</span>
+                  <span className="text-tiny font-black uppercase">CSV</span>
                 </button>
                 <button 
                   onClick={() => downloadFile('json')}
                   className="flex flex-col items-center justify-center gap-2 p-3 bg-bg border border-border rounded-2xl hover:border-blue hover:text-blue transition-all group"
                 >
                   <FileCode size={18} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
-                  <span className="text-[9px] font-black uppercase">JSON</span>
+                  <span className="text-tiny font-black uppercase">JSON</span>
                 </button>
               </div>
             </div>
           </div>
 
           <div className="bg-blue/5 border border-blue/10 p-6 rounded-4xl space-y-4">
-            <h2 className="flex items-center gap-2 text-[10px] font-black text-blue uppercase tracking-widest">
+            <h2 className="flex items-center gap-2 text-xs font-black text-blue uppercase tracking-widest">
                <Check size={14} aria-hidden="true" /> SEO Ready
             </h2>
             <p className="text-xs text-blue/70 leading-relaxed font-medium">

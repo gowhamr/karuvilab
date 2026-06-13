@@ -95,7 +95,7 @@ export function ChecksumTab() {
                 key={algo}
                 onClick={() => setChecksumAlgo(algo)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all",
+                  "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest border transition-all",
                   checksumAlgo === algo 
                     ? "bg-blue border-blue text-white shadow-md shadow-blue/10" 
                     : "bg-bg border-border text-text-3 hover:border-blue hover:text-blue"
@@ -139,7 +139,7 @@ export function ChecksumTab() {
 
         {isHashing && (
           <div className="space-y-3 animate-in fade-in duration-500">
-            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-text-4">
+            <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
               <span className="flex items-center gap-2">
                 <Loader2 className="w-3 h-3 animate-spin text-blue" />
                 Computing Hash...
@@ -166,7 +166,7 @@ export function ChecksumTab() {
           <div className="space-y-4 animate-in slide-in-from-bottom-2 fade-in duration-500">
             <div className="space-y-2">
               <div className="flex items-center justify-between px-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+                <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
                   <Fingerprint className="w-3 h-3" />
                   {checksumAlgo} Hash
                 </label>
@@ -181,7 +181,7 @@ export function ChecksumTab() {
               </div>
             </div>
             
-            <div className="flex items-center gap-2 text-[10px] text-text-3 font-medium bg-bg/50 p-3 rounded-xl border border-border/50">
+            <div className="flex items-center gap-2 text-xs text-text-3 font-medium bg-bg/50 p-3 rounded-xl border border-border/50">
               <ShieldCheck className="w-3.5 h-3.5 text-success" />
               <span>Computation completed entirely in your browser. Your data was never uploaded.</span>
             </div>

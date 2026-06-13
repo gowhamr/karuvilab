@@ -200,7 +200,7 @@ export default function ScientificCalculatorClient() {
            </div>
           <div className="text-sm font-bold text-text-4 uppercase tracking-widest h-5 flex justify-end items-center gap-2">
             <span className="truncate max-w-[250px]">{expression}</span>
-            <span className="bg-blue/10 text-blue px-2 py-0.5 rounded text-[10px]">{mode.toUpperCase()}</span>
+            <span className="bg-blue/10 text-blue px-2 py-0.5 rounded text-xs">{mode.toUpperCase()}</span>
           </div>
           <div 
             aria-live="polite"
@@ -292,7 +292,7 @@ export default function ScientificCalculatorClient() {
                     }}
                     className="w-full text-right p-4 rounded-2xl border border-border hover:border-blue/30 hover:bg-bg/50 transition-all space-y-1 group"
                   >
-                    <div className="text-[10px] text-text-4 font-mono truncate opacity-60 group-hover:opacity-100 transition-opacity">
+                    <div className="text-xs text-text-4 font-mono truncate opacity-60 group-hover:opacity-100 transition-opacity">
                       {item.expression}
                     </div>
                     <div className="text-lg font-black text-text group-hover:text-blue transition-colors">

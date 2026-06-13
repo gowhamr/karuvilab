@@ -75,7 +75,7 @@ export default function SettingsClient() {
           <div className="px-4 space-y-6">
             <Link 
               href="/"
-              className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-4 hover:text-blue transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-text-4 hover:text-blue transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back to Dashboard
@@ -90,7 +90,7 @@ export default function SettingsClient() {
                 placeholder="Search settings..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 pl-11 pr-4 bg-bg border border-border rounded-2xl text-[11px] font-bold text-text placeholder:text-text-4 focus:border-blue/40 outline-none transition-all"
+                className="w-full h-12 pl-11 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text placeholder:text-text-4 focus:border-blue/40 outline-none transition-all"
               />
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function SettingsClient() {
           <nav className="space-y-8 max-h-[calc(100vh-250px)] overflow-y-auto no-scrollbar px-1" role="tablist">
             {Object.entries(groupedItems).map(([group, items]) => (
               <div key={group} className="space-y-2">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-4 px-4">{group}</h2>
+                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-4">{group}</h2>
                 <div className="space-y-1">
                   {items.map((item) => (
                     <button
@@ -120,8 +120,8 @@ export default function SettingsClient() {
                         <item.icon className="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-[11px] font-black uppercase tracking-widest leading-none mb-1">{item.label}</div>
-                        <div className={`text-[10px] truncate font-medium ${activeSection === item.id ? 'text-indigo-100' : 'text-text-4'}`}>
+                        <div className="text-xs font-black uppercase tracking-widest leading-none mb-1">{item.label}</div>
+                        <div className={`text-xs truncate font-medium ${activeSection === item.id ? 'text-indigo-100' : 'text-text-4'}`}>
                           {item.desc}
                         </div>
                       </div>
@@ -136,18 +136,18 @@ export default function SettingsClient() {
             {filteredItems.length === 0 && (
               <div className="px-4 py-8 text-center space-y-2">
                 <p className="text-xs font-black text-text-4 uppercase tracking-widest">No results found</p>
-                <p className="text-[10px] text-text-4 opacity-60">Try searching for theme, cache, or privacy.</p>
+                <p className="text-xs text-text-4 opacity-60">Try searching for theme, cache, or privacy.</p>
               </div>
             )}
           </nav>
         </div>
 
         <div className="hidden lg:block p-6 bg-gradient-to-br from-blue/5 to-transparent border border-blue/10 rounded-3xl space-y-4">
-           <p className="text-[10px] font-black text-blue uppercase tracking-widest flex items-center gap-2">
+           <p className="text-xs font-black text-blue uppercase tracking-widest flex items-center gap-2">
              <RefreshCw className="w-3 h-3" />
              Local-First App
            </p>
-           <p className="text-[10px] text-text-4 font-bold leading-relaxed">
+           <p className="text-xs text-text-4 font-bold leading-relaxed">
              Settings are updated instantly and stored strictly on your device.
            </p>
         </div>

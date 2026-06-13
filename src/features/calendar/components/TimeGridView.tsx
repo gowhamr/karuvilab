@@ -42,7 +42,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
             {/* Time Labels */}
             <div className="absolute top-0 left-0 bottom-0 w-12 md:w-16 border-r border-border/20 bg-bg/20 z-10">
               {hours.map(hour => (
-                <div key={hour.toISOString()} className="h-[80px] px-1 md:px-2 pt-1 text-[8px] md:text-[9px] font-black text-text-4 uppercase text-right">
+                <div key={hour.toISOString()} className="h-[80px] px-1 md:px-2 pt-1 text-micro md:text-tiny font-black text-text-4 uppercase text-right">
                   {format(hour, 'h a')}
                 </div>
               ))}
@@ -103,14 +103,14 @@ export function TimeGridView({ days }: { days: Date[] }) {
                           )}
                           style={{ top: `${top}px`, height: `${Math.max(height, 35)}px` }}
                         >
-                          <div className="text-[11px] font-black truncate">{event.title}</div>
+                          <div className="text-xs font-black truncate">{event.title}</div>
                           {duration >= 45 && (
-                            <div className="text-[9px] font-bold opacity-70 mt-0.5">
+                            <div className="text-tiny font-bold opacity-70 mt-0.5">
                               {format(start, 'h:mm a')}
                             </div>
                           )}
                           {duration >= 60 && event.location && (
-                            <div className="text-[9px] font-medium opacity-60 mt-1 truncate flex items-center gap-1.5">
+                            <div className="text-tiny font-medium opacity-60 mt-1 truncate flex items-center gap-1.5">
                               <span className="text-xs">📍</span> {event.location}
                             </div>
                           )}
@@ -133,7 +133,7 @@ function HeaderCell({ day }: { day: Date }) {
 
   return (
     <div className="py-3 md:py-5 text-center border-r border-border/20 last:border-r-0 relative group">
-      <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 block mb-1 md:mb-1.5">
+      <span className="text-tiny md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 block mb-1 md:mb-1.5">
         {format(day, 'EEE')}
       </span>
       <div className="flex flex-col items-center">

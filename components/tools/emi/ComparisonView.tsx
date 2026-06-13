@@ -40,7 +40,7 @@ export function ComparisonView() {
         </div>
         <button 
           onClick={clearComparison}
-          className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors"
+          className="text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors"
         >
           Clear All
         </button>
@@ -58,7 +58,7 @@ export function ComparisonView() {
 
             <div className="space-y-6">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-blue mb-1">Scenario</p>
+                <p className="text-xs font-black uppercase tracking-widest text-blue mb-1">Scenario</p>
                 <p className="text-sm font-black text-text truncate">{d.name}</p>
               </div>
 
@@ -81,7 +81,7 @@ export function ComparisonView() {
                 />
               </div>
 
-              <dl className="pt-4 border-t border-border/50 grid grid-cols-2 gap-2 text-[9px] font-bold text-text-4 uppercase tracking-tighter">
+              <dl className="pt-4 border-t border-border/50 grid grid-cols-2 gap-2 text-tiny font-bold text-text-4 uppercase tracking-tighter">
                 <div>
                   <dt>Principal</dt>
                   <dd className="text-text">{formatCurrency(d.config.loanAmount)}</dd>
@@ -103,7 +103,7 @@ export function ComparisonView() {
             <div className="w-10 h-10 rounded-full bg-bg flex items-center justify-center group-hover:bg-blue group-hover:text-white transition-all">
               <Plus className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Add Current</span>
+            <span className="text-xs font-black uppercase tracking-widest">Add Current</span>
           </button>
         )}
       </div>
@@ -114,12 +114,12 @@ export function ComparisonView() {
 function MetricItem({ label, value, isBest, diff }: { label: string, value: string, isBest?: boolean, diff?: number }) {
   return (
     <dl className="space-y-1">
-      <dt className="text-[9px] font-bold text-text-4 uppercase tracking-tighter">{label}</dt>
+      <dt className="text-tiny font-bold text-text-4 uppercase tracking-tighter">{label}</dt>
       <dd className={cn("text-lg font-black tabular-nums", isBest ? "text-green-600" : "text-text")}>
         {value}
       </dd>
       {diff !== undefined && diff > 0 && (
-        <dd className="text-[9px] font-bold text-red-500 uppercase tracking-tighter">
+        <dd className="text-tiny font-bold text-red-500 uppercase tracking-tighter">
           +{formatCurrency(diff)} extra
         </dd>
       )}

@@ -88,7 +88,7 @@ export default function UnixTimestampClient() {
       {/* 1. Live Clock Header */}
       <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
         <div>
-          <h2 className="text-[10px] font-black uppercase tracking-widest text-blue mb-1">Live Epoch Clock</h2>
+          <h2 className="text-xs font-black uppercase tracking-widest text-blue mb-1">Live Epoch Clock</h2>
           <p className="text-text-4 text-sm font-medium">Updates every second</p>
         </div>
         <div className="flex items-center gap-4 bg-bg border border-border px-6 py-4 rounded-2xl shadow-inner">
@@ -131,7 +131,7 @@ export default function UnixTimestampClient() {
         </div>
 
         <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-widest text-text-4 block">
+          <label className="text-xs font-black uppercase tracking-widest text-text-4 block">
             {mode === 'toHuman' ? 'Enter Timestamp (Seconds or Milliseconds)' : 'Enter Date and Time'}
           </label>
           
@@ -156,7 +156,7 @@ export default function UnixTimestampClient() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-border/50">
             
             <div className="bg-bg border border-border rounded-2xl p-5 space-y-1">
-              <span className="text-[9px] font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Globe2 className="w-3 h-3"/> UTC / GMT</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Globe2 className="w-3 h-3"/> UTC / GMT</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-medium text-text">{parsedDate.toUTCString()}</span>
                 <CopyButton text={parsedDate.toUTCString()} />
@@ -164,7 +164,7 @@ export default function UnixTimestampClient() {
             </div>
 
             <div className="bg-bg border border-border rounded-2xl p-5 space-y-1">
-              <span className="text-[9px] font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Calendar className="w-3 h-3"/> ISO 8601</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Calendar className="w-3 h-3"/> ISO 8601</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-medium text-text">{parsedDate.toISOString()}</span>
                 <CopyButton text={parsedDate.toISOString()} />
@@ -172,7 +172,7 @@ export default function UnixTimestampClient() {
             </div>
 
             <div className="bg-bg border border-border rounded-2xl p-5 space-y-1">
-              <span className="text-[9px] font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Hash className="w-3 h-3"/> Unix Timestamp (Seconds)</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Hash className="w-3 h-3"/> Unix Timestamp (Seconds)</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-medium text-text">{Math.floor(parsedDate.getTime() / 1000)}</span>
                 <CopyButton text={Math.floor(parsedDate.getTime() / 1000).toString()} />
@@ -180,7 +180,7 @@ export default function UnixTimestampClient() {
             </div>
 
             <div className="bg-blue/5 border border-blue/20 rounded-2xl p-5 space-y-1">
-              <span className="text-[9px] font-black uppercase tracking-widest text-blue flex items-center gap-1.5"><Clock className="w-3 h-3"/> Relative Time</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-blue flex items-center gap-1.5"><Clock className="w-3 h-3"/> Relative Time</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-bold text-blue">{toRelative(parsedDate)}</span>
               </div>
