@@ -21,6 +21,7 @@ import { StatusBadge } from '@/components/system/StatusBadge';
 import { cn } from '@/src/lib/utils';
 import { useContextualActionBar } from '@/src/store/useContextualActionBar';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { WorkflowSuggestions } from '@/components/ui/WorkflowSuggestions';
 
 interface BatchQueueProps {
   toolId: string;
