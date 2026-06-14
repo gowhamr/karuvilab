@@ -44,7 +44,7 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
       )}
       
       <div 
-        className="overflow-auto max-h-[600px] overscroll-contain"
+        className="overflow-auto max-h-full overscroll-contain"
         style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px', contain: 'layout paint' } as any}
       >
         <table className="w-full border-collapse table-fixed">

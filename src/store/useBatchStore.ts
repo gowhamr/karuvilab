@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { TaskProgress } from '../workers/types';
+import { useWorkflowStore, WorkflowItem } from './useWorkflowStore';
+import { findToolById, DataType } from '../tool-registry';
 
 export type BatchItemStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
 
@@ -166,5 +168,22 @@ export const useBatchStore = create<BatchState>((set, get) => ({
         }
       }
     });
+
+    // After all items have finished processing, sync to workflow store
+    const updatedItems = get().items[toolId] || [];
+    const completedItems = updatedItems.filter(i => i.status === 'completed' && i.result);
+    
+    if (completedItems.length > 0) {
+      const tool = findToolById(toolId);
+      const outputType = (Array.isArray(tool?.output) ? tool?.output[0] : tool?.output) || 'any-file';
+      
+      const workflowItems: WorkflowItem[] = completedItems.map(i => ({
+        blob: i.result!.blob,
+        name: i.result!.name,
+        type: outputType as DataType
+      }));
+      
+      useWorkflowStore.getState().syncToolOutput(toolId, workflowItems);
+    }
   },
 }));

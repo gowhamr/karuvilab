@@ -306,7 +306,7 @@ export default function SitemapGeneratorClient() {
 
         {/* Preview & Download */}
         <div className="space-y-6">
-          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6 flex flex-col min-h-[500px]">
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6 flex flex-col min-h-full">
             <div className="flex items-center justify-between border-b border-border pb-4">
               <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Live Preview</h2>
               <div className="flex gap-2">

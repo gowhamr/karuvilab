@@ -135,7 +135,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
   if (!mounted) {
     // Return placeholder of same dimensions to prevent CLS layout shift
     return (
-      <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-5 space-y-4 min-h-[110px]" />
+      <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-5 space-y-4 min-h-28" />
     );
   }
 
@@ -254,7 +254,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Tell us what went wrong..."
-                      className="w-full min-h-[70px] p-3 bg-mat-base border border-mat-border rounded-xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-medium text-xs resize-none"
+                      className="w-full min-h-18 p-3 bg-mat-base border border-mat-border rounded-xl outline-none focus:border-brand-primary/50 focus:ring-4 focus:ring-brand-primary/5 transition-all font-medium text-xs resize-none"
                     />
                   </div>
 
@@ -280,7 +280,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                     type="submit"
                     disabled={isSubmitting}
                     className="w-full h-9 bg-brand-primary text-white rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
-                  >
+                   aria-label="Send">
                     {isSubmitting ? (
                       <div className="w-3.5 h-3.5 border border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (

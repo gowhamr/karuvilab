@@ -147,7 +147,7 @@ export function ClientToolShell({ title, description, category, children, toolId
 
         <aside className="space-y-8">
           {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-            <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl p-8 space-y-6 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
+            <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl p-8 space-y-6 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
               <div className="space-y-1">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
                 <p className="text-xs font-black uppercase tracking-widest text-text-4">How it works</p>

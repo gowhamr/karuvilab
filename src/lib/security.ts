@@ -5,6 +5,18 @@ import { marked } from 'marked';
  * Sanitizes HTML to prevent XSS attacks.
  * Uses DOMPurify with strict defaults.
  */
+DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+  if (node.tagName && node.tagName.toLowerCase() === 'a') {
+    const href = node.getAttribute('href');
+    if (href && href.trim().toLowerCase().startsWith('javascript:')) {
+      node.removeAttribute('href');
+    } else {
+      node.setAttribute('target', '_blank');
+      node.setAttribute('rel', 'noopener noreferrer');
+    }
+  }
+});
+
 export function sanitizeHtml(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [
@@ -13,7 +25,6 @@ export function sanitizeHtml(html: string): string {
       'strike', 'code', 'pre', 'hr', 'br', 'div', 'span', 'img', 'del'
     ],
     ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
-    ADD_ATTR: ['target', 'rel'],
     FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'base'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
   });

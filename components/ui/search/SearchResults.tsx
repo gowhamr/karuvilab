@@ -13,6 +13,7 @@ interface SearchResultsProps {
   onRemoveRecent?: (query: string) => void;
   onClearRecent?: () => void;
   popularTools?: any[];
+  favoriteTools?: any[];
 }
 
 export const SearchResults = memo(function SearchResults({
@@ -24,12 +25,35 @@ export const SearchResults = memo(function SearchResults({
   onSelectRecent,
   onRemoveRecent,
   onClearRecent,
-  popularTools = []
+  popularTools = [],
+  favoriteTools = []
 }: SearchResultsProps) {
 
   if (!query.trim()) {
     return (
       <div className="p-2 space-y-6">
+        {favoriteTools.length > 0 && (
+          <div className="space-y-3">
+            <h3 className="px-4 text-xs font-black uppercase tracking-widest text-text-4">Favorites</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 px-2">
+              {favoriteTools.map((tool) => (
+                <button
+                  key={tool.id}
+                  onClick={() => onSelect(tool.id)}
+                  className="flex flex-col items-center justify-center gap-2 p-4 h-22 bg-blue/5 hover:bg-blue/10 border border-blue/20 rounded-2xl transition-colors active:scale-95 group"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-bg flex items-center justify-center text-blue group-hover:scale-110 transition-transform">
+                     <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold text-text text-center leading-tight truncate w-full px-1">{tool.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {recentQueries.length > 0 && (
           <div className="space-y-1">
             <h3 className="px-4 text-xs font-black uppercase tracking-widest text-text-4 mb-2">Recent Searches</h3>
@@ -76,7 +100,7 @@ export const SearchResults = memo(function SearchResults({
                 <button
                   key={tool.id}
                   onClick={() => onSelect(tool.id)}
-                  className="flex flex-col items-center justify-center gap-2 p-4 h-[88px] bg-surface hover:bg-surface-hover border border-border rounded-2xl transition-colors active:scale-95"
+                  className="flex flex-col items-center justify-center gap-2 p-4 h-22 bg-surface hover:bg-surface-hover border border-border rounded-2xl transition-colors active:scale-95"
                 >
                   <div className="w-8 h-8 rounded-lg bg-bg flex items-center justify-center text-text-3">
                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

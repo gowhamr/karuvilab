@@ -48,7 +48,7 @@ export default function DataCalculatorClient() {
       </div>
 
       {/* Tab Content */}
-      <div className="min-h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="min-h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
         <ActiveComponent />
       </div>
 

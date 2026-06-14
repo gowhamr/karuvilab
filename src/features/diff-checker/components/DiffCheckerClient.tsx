@@ -112,7 +112,7 @@ export default function DiffCheckerClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-2xl overflow-hidden">
-            <div className="overflow-auto max-h-[600px]">
+            <div className="overflow-auto max-h-full">
               <table className="w-full text-sm font-mono">
                 <tbody>
                   {diff.map((line, i) => (

@@ -1,4 +1,13 @@
 export const zIndex = {
+  behind: -10,
+  base: 0,
+  content: 10,
+  above: 20,
+  sidebar: 30,
+  header: 40,
+  overlay: 50,
+  nav: 60,
+  backdrop: 90,
   dropdown: 100,
   sticky: 200,
   fixed: 300,
@@ -7,4 +16,5 @@ export const zIndex = {
   popover: 600,
   tooltip: 700,
   toast: 800,
+  max: 1000,
 } as const;

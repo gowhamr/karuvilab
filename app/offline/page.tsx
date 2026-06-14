@@ -26,6 +26,7 @@ export default function OfflinePage() {
       <div className="flex flex-col sm:flex-row gap-4">
         <button 
           onClick={() => window.location.reload()}
+          aria-label="Reload application"
           className="flex items-center gap-2 px-8 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-md shadow-blue/10 hover:scale-[1.02] active:scale-95 transition-all"
         >
           <RefreshCw size={18} />

@@ -11,6 +11,8 @@ const dbPromise = typeof window !== 'undefined'
     })
   : null;
 
+const writeTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
 export const idbStorage = {
   getItem: async (key: string): Promise<string | null> => {
     if (!dbPromise) return null;
@@ -30,8 +32,19 @@ export const idbStorage = {
   },
   setItem: async (key: string, value: string): Promise<void> => {
     if (!dbPromise) return;
-    const db = await dbPromise;
-    await db.put(STORE_NAME, value, key);
+    
+    if (writeTimeouts.has(key)) {
+      clearTimeout(writeTimeouts.get(key)!);
+    }
+    
+    return new Promise((resolve) => {
+      writeTimeouts.set(key, setTimeout(async () => {
+        const db = await dbPromise;
+        await db.put(STORE_NAME, value, key);
+        writeTimeouts.delete(key);
+        resolve();
+      }, 500));
+    });
   },
   removeItem: async (key: string): Promise<void> => {
     if (!dbPromise) return;

@@ -145,7 +145,7 @@ export default function WorldClockClient() {
           
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="border-2 border-dashed border-border rounded-3xl p-6 flex flex-col items-center justify-center gap-4 text-text-4 hover:border-blue hover:text-blue transition-all group min-h-[180px]"
+          className="border-2 border-dashed border-border rounded-3xl p-6 flex flex-col items-center justify-center gap-4 text-text-4 hover:border-blue hover:text-blue transition-all group min-h-45"
         >
           <div className="w-16 h-16 rounded-full bg-surface border border-border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ease-expo">
             <Plus className="w-8 h-8" />

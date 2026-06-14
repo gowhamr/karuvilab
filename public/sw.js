@@ -17,9 +17,9 @@ if (typeof workbox !== 'undefined') {
 
   // Cache names
   const CACHE_NAMES = {
-    static: 'karuvilab-static-1781360161745',
-    images: 'karuvilab-images-1781360161745',
-    pages: 'karuvilab-pages-1781360161745',
+    static: 'karuvilab-static-1781369292010',
+    images: 'karuvilab-images-1781369292010',
+    pages: 'karuvilab-pages-1781369292010',
     googleFonts: 'google-fonts',
   };
 

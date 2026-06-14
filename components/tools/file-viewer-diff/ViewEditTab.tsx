@@ -193,7 +193,7 @@ export function ViewEditTab() {
             fontSize={settings.fontSize}
             wordWrap={settings.wordWrap}
             showLineNumbers={settings.showLineNumbers}
-            className="h-[600px]"
+            className="h-full"
           />
         </div>
       )}

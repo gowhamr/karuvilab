@@ -163,7 +163,7 @@ export default function MetaTagsGeneratorClient() {
           {(title || desc) && (
             <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-3">
               <h2 className="font-black text-text text-sm uppercase tracking-widest">Search Snippet Preview</h2>
-              <div className="bg-bg rounded-xl p-4 border border-border max-w-[600px]">
+              <div className="bg-bg rounded-xl p-4 border border-border max-w-full">
                 <p className="text-blue text-base font-medium truncate">{title || "Page Title"}</p>
                 <p className="text-green-600 text-xs mt-0.5 truncate">{canonical || "https://example.com/page"}</p>
                 <p className="text-text-3 text-sm mt-1 line-clamp-2">{desc || "Page description will appear here."}</p>

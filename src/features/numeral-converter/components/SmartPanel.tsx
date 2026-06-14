@@ -42,7 +42,7 @@ export function SmartPanel({
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         
         {/* Text Encodings */}
         <div className="bg-surface border border-border p-6 rounded-4xl space-y-4 shadow-sm">
@@ -170,7 +170,7 @@ export function SmartPanel({
         </div>
 
         {/* Action Toggle */}
-        <div className="md:col-span-2 flex justify-center">
+        <div className="md:col-span-2 xl:col-span-3 flex justify-center">
            <button 
              onClick={() => setShowAdvanced(!showAdvanced)}
              className="px-6 py-2 bg-bg border border-border rounded-full text-xs font-black uppercase tracking-widest text-text-3 hover:text-blue hover:border-blue/30 transition-all shadow-sm"

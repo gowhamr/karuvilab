@@ -57,7 +57,7 @@ export function SaveLoadScenarios() {
             onClick={handleSave}
             disabled={!newName.trim() || saveStatus !== 'idle'}
             className="px-6 py-2.5 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
-          >
+           aria-label="Check Circle2">
             {saveStatus === 'done' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
             {saveStatus === 'saving' ? "Saving..." : saveStatus === 'done' ? "Saved" : "Save"}
           </button>

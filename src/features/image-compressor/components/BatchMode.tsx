@@ -72,7 +72,7 @@ export const BatchMode: React.FC = () => {
                 onClick={compressAll}
                 disabled={items.length === 0 || isProcessing}
                 className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-blue/20 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
-              >
+               aria-label="Loader2">
                 {isProcessing && zipProgress === 0 ? (
                   <>
                     <Loader2 className="animate-spin" size={18} />

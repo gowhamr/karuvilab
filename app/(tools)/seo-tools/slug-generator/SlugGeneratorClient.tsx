@@ -168,7 +168,7 @@ export default function SlugGeneratorClient() {
                   <CopyButton text={bulkSlugs.map(x => x.slug).join("\n")} label="Copy All" className="bg-bg border border-border" />
                 )}
               </div>
-              <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+              <div className="space-y-3 max-h-full overflow-y-auto custom-scrollbar pr-2">
                 {bulkSlugs.map((item, i) => (
                   <div key={i} className="flex items-start gap-4 bg-bg border border-border rounded-2xl px-5 py-4 hover:border-blue/30 transition-all shadow-sm group">
                     <div className="flex-1 min-w-0">

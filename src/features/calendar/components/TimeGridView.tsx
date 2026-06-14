@@ -38,7 +38,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
           </div>
 
           {/* Grid Content */}
-          <div className="flex-1 overflow-y-auto no-scrollbar relative min-h-[600px]">
+          <div className="flex-1 overflow-y-auto no-scrollbar relative min-h-full">
             {/* Time Labels */}
             <div className="absolute top-0 left-0 bottom-0 w-12 md:w-16 border-r border-border/20 bg-bg/20 z-10">
               {hours.map(hour => (
@@ -65,7 +65,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                 const isToday = format(day, 'yyyy-MM-dd') === format(now, 'yyyy-MM-dd');
 
                 return (
-                  <div key={day.toISOString()} className="relative h-[1920px] border-r border-border/10 last:border-r-0">
+                  <div key={day.toISOString()} className="relative h-full border-r border-border/10 last:border-r-0">
                     {/* Current Time Indicator */}
                     {isToday && (
                       <div 

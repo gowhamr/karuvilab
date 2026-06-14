@@ -189,7 +189,7 @@ export default function CipherToolsClient() {
               )}
               {activeCipher === 'morse' && isEncode && (
                 <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-4 bg-bg border border-border px-5 py-2.5 rounded-2xl shadow-premium">
-                  <button onClick={playMorse} disabled={!output} className={cn("flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all", isPlaying ? "bg-error text-white" : "bg-blue text-white active:scale-95 disabled:opacity-50")}>
+                  <button onClick={playMorse} disabled={!output} className={cn("flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all", isPlaying ? "bg-error text-white" : "bg-blue text-white active:scale-95 disabled:opacity-50")} aria-label="Square">
                     {isPlaying ? <Square className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
                     <span>{isPlaying ? 'Stop' : 'Play'}</span>
                   </button>
@@ -212,10 +212,10 @@ export default function CipherToolsClient() {
             <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder="Enter text..." className="w-full h-64 bg-bg border border-border rounded-3xl p-6 font-mono text-sm text-text focus:ring-4 focus:ring-blue/10 outline-none transition-all resize-none" />
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden lg:block">
-            <button onClick={swap} className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-md shadow-blue/10 transition-all border border-border"><ArrowLeftRight className="w-4 h-4" /></button>
+            <button onClick={swap} className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-md shadow-blue/10 transition-all border border-border" aria-label="Arrow Left Right"><ArrowLeftRight className="w-4 h-4" /></button>
           </div>
           <div className="space-y-3">
-            <div className="flex items-center justify-between min-h-[20px]"><h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">{isEncode ? 'Ciphertext' : 'Plaintext'}</h3><CopyButton text={output} /></div>
+            <div className="flex items-center justify-between min-h-5"><h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">{isEncode ? 'Ciphertext' : 'Plaintext'}</h3><CopyButton text={output} /></div>
             <textarea readOnly value={output} placeholder="Output..." className="w-full h-64 bg-mat-base border border-mat-border rounded-3xl p-6 font-mono text-sm text-text-2 outline-none resize-none" />
           </div>
         </div>

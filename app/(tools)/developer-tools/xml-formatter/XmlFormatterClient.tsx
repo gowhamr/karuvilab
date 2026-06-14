@@ -220,7 +220,7 @@ export default function XmlFormatterClient() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="<root>\n  <item>Data</item>\n</root>"
-              className={`w-full h-[500px] bg-bg border border-border rounded-2xl p-4 font-mono text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+              className={`w-full h-full bg-bg border border-border rounded-2xl p-4 font-mono text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
               style={{ fontSize: `${fontSize}px` }}
               spellCheck="false"
             />
@@ -228,7 +228,7 @@ export default function XmlFormatterClient() {
 
           {/* Output Area */}
           <div className="space-y-3">
-            <div className="flex justify-between items-center px-2 min-h-[24px]">
+            <div className="flex justify-between items-center px-2 min-h-6">
               <label className="text-xs font-black uppercase tracking-widest text-text-4">
                 {options.mode === 'validate' ? 'Validation Result' : 'Output'}
               </label>
@@ -243,7 +243,7 @@ export default function XmlFormatterClient() {
             </div>
             
             <div className={cn(
-              "w-full h-[500px] rounded-2xl overflow-hidden border",
+              "w-full h-full rounded-2xl overflow-hidden border",
               !input ? "bg-mat-base border-mat-border" :
               result.valid ? "bg-mat-surface border-green-500/30 ring-1 ring-green-500/10" : "bg-red-500/5 border-red-500/30"
             )}>

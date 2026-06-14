@@ -294,7 +294,7 @@ export default function CspBuilderClient() {
                     </div>
                     
                     {/* Selected Sources Badges */}
-                    <div className="flex flex-wrap gap-1.5 min-h-[28px]">
+                    <div className="flex flex-wrap gap-1.5 min-h-7">
                       {activeSources.map(src => (
                         <span key={src} className="flex items-center gap-1 pl-2.5 pr-1 py-1 bg-blue/5 border border-blue/10 text-blue rounded-lg text-xs font-mono font-bold group">
                           {src}

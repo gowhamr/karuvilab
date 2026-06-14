@@ -112,7 +112,7 @@ export default function InternetSpeedTestClient() {
               <button
                 onClick={handleStart}
                 className="group relative px-10 py-5 bg-blue text-white rounded-2xl font-black text-xl shadow-2xl shadow-blue/30 hover:scale-105 transition-all active:scale-95 flex items-center gap-4 overflow-hidden"
-              >
+               aria-label="Refresh Cw">
                 <RefreshCw className={cn("w-6 h-6 relative z-10", (status !== 'idle' && status !== 'completed' && status !== 'error') && "animate-spin")} />
                 <span className="relative z-10">{status === 'idle' ? 'Start Test' : 'Run Again'}</span>
               </button>

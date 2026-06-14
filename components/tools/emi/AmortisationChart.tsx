@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import { AmortizationEntry } from "@/src/lib/emi-calculations";
 import { formatCurrency, getThemeColor } from "@/src/lib/utils";
+import { useChartColors } from "@/src/hooks/useChartColors";
 
 interface AmortisationChartProps {
   schedule: AmortizationEntry[];
@@ -10,6 +11,7 @@ interface AmortisationChartProps {
 
 export function AmortisationChart({ schedule }: AmortisationChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const themeColors = useChartColors();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -38,7 +40,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     ctx.clearRect(0, 0, width, height);
 
     // Draw axes
-    ctx.strokeStyle = getThemeColor('--border', '#e2e8f0');
+    ctx.strokeStyle = themeColors.border;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding.left, padding.top);
@@ -59,7 +61,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     });
     ctx.lineTo(width - padding.right, height - padding.bottom);
     ctx.closePath();
-    ctx.fillStyle = getThemeColor('--text-4', '#94a3b8');
+    ctx.fillStyle = themeColors.muted;
     ctx.globalAlpha = 0.3;
     ctx.fill();
     ctx.globalAlpha = 1.0;
@@ -82,7 +84,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
       ctx.lineTo(x, height - padding.bottom - hInterest);
     }
     ctx.closePath();
-    ctx.fillStyle = getThemeColor('--blue', '#4F46E5');
+    ctx.fillStyle = themeColors.blue;
     ctx.fill();
 
     // Stroke for Principal line (Top line)
@@ -93,7 +95,7 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
       if (i === 0) ctx.moveTo(x, height - padding.bottom - hTotal);
       else ctx.lineTo(x, height - padding.bottom - hTotal);
     });
-    ctx.strokeStyle = getThemeColor('--blue', '#4F46E5');
+    ctx.strokeStyle = themeColors.blue;
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -101,19 +103,19 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     const legendY = height - 10;
     ctx.font = "10px Inter, sans-serif";
     
-    ctx.fillStyle = getThemeColor('--blue', '#4F46E5');
+    ctx.fillStyle = themeColors.blue;
     ctx.fillRect(padding.left, legendY - 8, 10, 8);
-    ctx.fillStyle = getThemeColor('--text-2', '#1e293b');
+    ctx.fillStyle = themeColors.text;
     ctx.fillText("Principal", padding.left + 15, legendY);
 
-    ctx.fillStyle = getThemeColor('--text-4', '#94a3b8');
+    ctx.fillStyle = themeColors.muted;
     ctx.globalAlpha = 0.3;
     ctx.fillRect(padding.left + 80, legendY - 8, 10, 8);
     ctx.globalAlpha = 1.0;
-    ctx.fillStyle = getThemeColor('--text-2', '#1e293b');
+    ctx.fillStyle = themeColors.text;
     ctx.fillText("Interest", padding.left + 95, legendY);
 
-  }, [schedule]);
+  }, [schedule, themeColors]);
 
   return (
     <div className="space-y-4">

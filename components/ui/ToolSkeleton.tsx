@@ -20,7 +20,7 @@ export function ToolSkeleton() {
           <SkeletonBlock className="h-96 w-full rounded-4xl" />
           <SkeletonBlock className="h-14 w-full bg-blue/10 border-blue/20 rounded-2xl" />
         </div>
-        <SkeletonBlock className="h-[500px] w-full rounded-4xl" />
+        <SkeletonBlock className="h-full w-full rounded-4xl" />
       </div>
 
       {/* Bottom Features */}

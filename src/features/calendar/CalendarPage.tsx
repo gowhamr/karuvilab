@@ -106,7 +106,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto px-2 md:px-8 space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">
+    <div className="max-w-7xl mx-auto px-2 md:px-8 space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">
       <CalendarHeader onAddEvent={() => handleAddEvent()} onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
 
       <div className="flex-1 flex flex-col lg:flex-row gap-6 md:gap-8 min-h-0 relative">

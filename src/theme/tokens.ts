@@ -4,6 +4,7 @@ import { motion } from "./motion";
 import { radius } from "./radius";
 import { spacing } from "./spacing";
 import { zIndex } from "./zindex";
+import { typography } from "./typography";
 
 export const tokens = {
   colors,
@@ -12,4 +13,5 @@ export const tokens = {
   radius,
   spacing,
   zIndex,
+  typography,
 } as const;

@@ -40,7 +40,7 @@ export function StatBar({ stats, goal = 500 }: StatBarProps) {
             className={`h-full transition-colors ${progress >= 100 ? 'bg-success' : 'bg-blue'}`}
           />
         </div>
-        <span className="min-w-[24px] text-right">{progress}%</span>
+        <span className="min-w-6 text-right">{progress}%</span>
       </div>
     </div>
   );

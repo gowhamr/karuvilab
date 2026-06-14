@@ -3,6 +3,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw, Flag } from "lucide-react";
 import { useSupportStore } from "@/src/store/useSupportStore";
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 
 interface Props {
   children: ReactNode;
@@ -41,7 +42,12 @@ export class ErrorBoundary extends Component<Props, State> {
       
       if (now - lastReload > 5000) {
         sessionStorage.setItem(reloadKey, now.toString());
-        setTimeout(() => window.location.reload(), 500);
+        setTimeout(() => {
+          if (typeof window !== 'undefined') {
+            workerOrchestrator.terminateAll();
+            window.location.reload();
+          }
+        }, 500);
       }
     }
   }
@@ -83,7 +89,12 @@ export class ErrorBoundary extends Component<Props, State> {
               
               <div className="grid grid-cols-2 gap-3">
                 <button
-                  onClick={() => typeof window !== 'undefined' && window.location.reload()}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      workerOrchestrator.terminateAll();
+                      window.location.reload();
+                    }
+                  }}
                   className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-blue/30 transition-all"
                 >
                   <RefreshCw className="w-3 h-3" />

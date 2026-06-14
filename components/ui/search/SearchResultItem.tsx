@@ -69,7 +69,7 @@ export const SearchResultItem = memo(function SearchResultItem({
           ? "bg-surface border-brand-primary shadow-sm z-10" 
           : "bg-transparent border-transparent hover:bg-surface/50"
       )}
-    >
+     aria-label="Tool">
       <div className={cn(
         "flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-xl flex items-center justify-center transition-all duration-150",
         isFocused 

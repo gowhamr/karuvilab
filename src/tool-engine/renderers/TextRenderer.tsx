@@ -14,7 +14,7 @@ export default function TextRenderer({ result }: { result: ToolResult }) {
         <h3 className="text-xs font-black uppercase tracking-widest text-text-4">Output</h3>
         <CopyButton text={text} />
       </div>
-      <div className="p-6 overflow-auto max-h-[500px] custom-scrollbar bg-transparent">
+      <div className="p-6 overflow-auto max-h-full custom-scrollbar bg-transparent">
         <pre className="text-sm font-mono text-text whitespace-pre-wrap word-break">
           {text}
         </pre>

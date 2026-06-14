@@ -24,7 +24,7 @@ export default function PreviewRenderer({ result }: { result: ToolResult }) {
       {result.mimeType?.startsWith("image/") ? (
         <img src={url} alt="Preview" className="max-w-full h-auto rounded-2xl" />
       ) : (
-        <iframe src={url} className="w-full h-[600px] rounded-2xl border-none" />
+        <iframe src={url} title="Tool Output Preview" className="w-full h-full rounded-2xl border-none" />
       )}
     </div>
   );

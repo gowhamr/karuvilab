@@ -83,7 +83,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
         "z-[200] bg-surface border border-border shadow-2xl flex flex-col",
         isMobile 
           ? "fixed inset-x-4 top-[10%] bottom-[10%] rounded-4xl max-h-[80vh]" 
-          : "absolute top-full left-0 right-0 mt-2 rounded-2xl max-h-[420px]"
+          : "absolute top-full left-0 right-0 mt-2 rounded-2xl max-h-96"
       )}
     >
       {/* Search Header */}
@@ -137,7 +137,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
                     <div className="text-sm font-bold truncate flex items-center gap-2">
                       {opt.code}
                       {isPopular && (
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-blue/10 text-blue text-[7px] font-black uppercase tracking-tighter">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-blue/10 text-blue text-tiny font-black uppercase tracking-tighter">
                           Top
                         </span>
                       )}

@@ -15,7 +15,7 @@ export default function TableRenderer({ result }: { result: ToolResult }) {
 
   return (
     <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl overflow-hidden">
-      <div className="overflow-x-auto custom-scrollbar max-h-[600px]">
+      <div className="overflow-x-auto custom-scrollbar max-h-full">
         <table className="w-full text-left border-collapse">
           <thead className="bg-mat-base/50 sticky top-0 z-10">
             <tr>

@@ -33,8 +33,8 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           "relative flex flex-col bg-[--kv-mat-surface] border border-mat-border shadow-sm overflow-hidden transition-all duration-150 ease-out",
           "hover:border-[--kv-mat-border-focus] hover:bg-[--kv-mat-hover]",
           compact 
-            ? "min-h-[76px] md:min-h-[92px] p-2.5 md:p-3 rounded-2xl" 
-            : "min-h-24 md:min-h-[136px] p-4 md:p-6 rounded-4xl"
+            ? "min-h-20 md:min-h-24 p-2 md:p-3 rounded-2xl" 
+            : "min-h-24 md:min-h-32 p-4 md:p-6 rounded-4xl"
         )}
       >
         {/* Top Section: Icon */}

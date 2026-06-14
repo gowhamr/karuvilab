@@ -19,7 +19,9 @@ export function Header() {
   const { isFullscreen } = useFullscreenContext();
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const themeToggleRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname() || "";
 
   if (isFullscreen) return null;
 
@@ -67,7 +69,7 @@ export function Header() {
 
           <Link href="/" className="min-h-11 flex items-center">
             {/* Desktop: Full Logo with Image and Subtext */}
-            <KVLogo withText size="md" className="hidden md:flex" loading="eager" />
+            <KVLogo withText size="md" className="hidden md:flex" loading="lazy" />
             
             {/* Mobile: Just the 'KaruviLab' text for maximum space efficiency */}
             <div className="md:hidden flex items-center">
@@ -77,26 +79,45 @@ export function Header() {
             </div>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-1">
+          <nav 
+            className="hidden xl:flex items-center gap-1"
+            onMouseLeave={() => setHoveredLink(null)}
+          >
             {[
               { label: "Calculators", href: "/calculators" },
               { label: "PDF Tools", href: "/pdf-tools" },
               { label: "Image Tools", href: "/image-tools" },
-            ].map((link) => (
-              <Link 
-                key={link.label}
-                href={link.href}
-                className="flex items-center h-12 px-3 rounded-lg text-xs font-bold text-text-3 hover:text-blue hover:bg-blue/5 transition-all uppercase tracking-wider"
-              >
-                {link.label}
-              </Link>
-            ))}
+            ].map((link) => {
+              const isActive = pathname.startsWith(link.href);
+              const isHovered = hoveredLink === link.href;
+
+              return (
+                <Link 
+                  key={link.label}
+                  href={link.href}
+                  onMouseEnter={() => setHoveredLink(link.href)}
+                  className={cn(
+                    "relative flex items-center h-12 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors z-10",
+                    isActive || isHovered ? "text-blue" : "text-text-3 hover:text-blue"
+                  )}
+                >
+                  {((hoveredLink === link.href) || (!hoveredLink && isActive)) && (
+                    <m.div
+                      layoutId="header-nav-pill"
+                      className="absolute inset-0 bg-blue/5 rounded-lg -z-10"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
         {/* Center Search - Desktop Only */}
         <div className="hidden md:flex flex-1 justify-center max-w-xl mx-auto px-4">
-           <SearchBar className="md:min-w-[280px] lg:min-w-96" />
+           <SearchBar className="md:min-w-72 lg:min-w-96" />
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-4 flex-shrink-0 justify-end">

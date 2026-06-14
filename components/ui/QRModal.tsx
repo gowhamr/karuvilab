@@ -167,7 +167,7 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
                 </div>
 
                 {!isLoaded && !hasError && (
-                  <div className="w-[256px] h-[256px] bg-bg rounded-2xl flex items-center justify-center">
+                  <div className="w-64 h-64 bg-bg rounded-2xl flex items-center justify-center">
                     <div className="w-8 h-8 border border-blue border-t-transparent rounded-full animate-spin" />
                   </div>
                 )}

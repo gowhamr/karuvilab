@@ -14,7 +14,7 @@ export default function JsonRenderer({ result }: { result: ToolResult }) {
         <h3 className="text-xs font-black uppercase tracking-widest text-text-4">JSON Output</h3>
         <CopyButton text={jsonText} />
       </div>
-      <div className="p-6 overflow-auto max-h-[500px] custom-scrollbar bg-transparent">
+      <div className="p-6 overflow-auto max-h-full custom-scrollbar bg-transparent">
         <pre className="text-sm font-mono text-blue whitespace-pre-wrap word-break">
           {jsonText}
         </pre>

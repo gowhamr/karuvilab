@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { ToastProvider } from "@/components/ui/Toast";
 import { LazyMotion, domAnimation } from "framer-motion";
-import { Footer } from "@/components/Footer";
+const Footer = dynamic(() => import("@/components/Footer").then(mod => mod.Footer));
 import dynamic from "next/dynamic";
 import { FeedbackModal } from "@/components/ui/FeedbackModal";
 import { ContextualActionBar } from "@/components/ui/ContextualActionBar";

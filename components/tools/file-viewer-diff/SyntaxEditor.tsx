@@ -85,7 +85,7 @@ export function SyntaxEditor({
           <Copy className="w-8 h-8 text-text-4" />
         </div>
         <h3 className="text-xl font-black text-text mb-2 tracking-tight">Drop a file to begin</h3>
-        <p className="text-sm text-text-4 max-w-[240px] leading-relaxed">
+        <p className="text-sm text-text-4 max-w-60 leading-relaxed">
           Paste your code or drag a file here to view with syntax highlighting.
         </p>
       </m.div>

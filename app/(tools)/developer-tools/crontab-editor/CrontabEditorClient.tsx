@@ -132,7 +132,7 @@ export default function CrontabEditorClient() {
           </button>
         </div>
         
-        <div className="flex items-center gap-2 min-h-[28px] px-2">
+        <div className="flex items-center gap-2 min-h-7 px-2">
           {parsed.valid ? (
             <m.div 
               initial={{ opacity: 0, y: -5 }} 

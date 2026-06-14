@@ -4,20 +4,21 @@ import React, { useState, useEffect, useRef, useCallback, useId } from "react";
 import Editor, { loader } from "@monaco-editor/react";
 import LZString from "lz-string";
 import { 
-  Play, Download, Share2, Plus, X, Laptop, Tablet, Smartphone, 
-  Terminal, Settings, Trash2, Copy, Check, FileCode, ExternalLink,
-  ChevronDown, ChevronUp, Maximize2, Minimize2, ShieldCheck, Upload
+  Download, Share2, Plus, X, Laptop, Tablet, Smartphone, 
+  Terminal, Trash2, Copy, Check, Upload, ChevronDown, ChevronUp, 
+  Maximize2, Minimize2
 } from "lucide-react";
-import { m, AnimatePresence } from "framer-motion";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import DOMPurify from "isomorphic-dompurify";
-
 import { DropZone } from "@/components/ui/DropZone";
+
+import { CdnOverlay } from "./CdnOverlay";
+import { ConsoleDrawer } from "./ConsoleDrawer";
 
 // ── Types & Constants ────────────────────────────────────────────────────────
 
@@ -47,7 +48,6 @@ const DEVICE_SIZES = {
 
 export default function HtmlViewerClient() {
   const cdnInputId = useId();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   
@@ -65,6 +65,14 @@ export default function HtmlViewerClient() {
   const [copied, setCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const debouncedHtml = useDebounce(html, 500);
   const debouncedCss = useDebounce(css, 500);
@@ -80,23 +88,14 @@ export default function HtmlViewerClient() {
     const basePath = isGithubPages ? '/karuvilab' : '';
     const localMonacoPath = `${basePath}/lib/monaco/vs`;
 
-    // Try loading from local assets first
     loader.config({ paths: { vs: localMonacoPath } });
 
     loader.init().then(monacoInstance => {
       (window as any).monaco = monacoInstance;
-    }).catch(err => {
-      console.warn("Local Monaco failed, falling back to CDN", err);
-      // Fallback to CDN if local fails
-      loader.config({ 
-        paths: { 
-          vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' 
-        } 
-      });
+    }).catch(() => {
+      loader.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' } });
       loader.init().then(monacoInstance => {
         (window as any).monaco = monacoInstance;
-      }).catch(err2 => {
-        console.error("Monaco CDN also failed", err2);
       });
     });
   }, []);
@@ -139,10 +138,7 @@ export default function HtmlViewerClient() {
   // Handle Logs from Iframe
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      // Security: Validate origin to prevent spoofing
-      // Note: 'null' is allowed because sandboxed iframes without 'allow-same-origin' have a null origin.
       if (event.origin !== window.location.origin && event.origin !== "null") return;
-      
       if (event.data.source === "karuvi-sandbox") {
         const { type, payload } = event.data;
         setLogs(prev => [...prev, { 
@@ -156,11 +152,9 @@ export default function HtmlViewerClient() {
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  // Compilation Logic
   const getCompiledDoc = useCallback(() => {
     const cssLinks = cdns.filter(url => url.endsWith(".css")).map(url => `<link rel="stylesheet" href="${url}">`).join("\n");
     const jsLinks = cdns.filter(url => !url.endsWith(".css")).map(url => `<script src="${url}"></script>`).join("\n");
-
     const sanitizedHtml = DOMPurify.sanitize(html);
     const sanitizedCss = DOMPurify.sanitize(css); 
 
@@ -173,29 +167,18 @@ export default function HtmlViewerClient() {
           ${cssLinks}
           <style>${sanitizedCss}</style>
           <script>
-            // Console Override
             const originalLog = console.log;
             const originalError = console.error;
             const originalWarn = console.warn;
             const originalInfo = console.info;
-
             const sendToParent = (type, args) => {
-              window.parent.postMessage({
-                source: 'karuvi-sandbox',
-                type,
-                payload: Array.from(args)
-              }, '*');
+              window.parent.postMessage({ source: 'karuvi-sandbox', type, payload: Array.from(args) }, '*');
             };
-
             console.log = (...args) => { sendToParent('log', args); originalLog(...args); };
             console.error = (...args) => { sendToParent('error', args); originalError(...args); };
             console.warn = (...args) => { sendToParent('warn', args); originalWarn(...args); };
             console.info = (...args) => { sendToParent('info', args); originalInfo(...args); };
-
-            window.onerror = (msg, url, line, col, error) => {
-              sendToParent('error', [msg + ' (line ' + line + ')']);
-              return false;
-            };
+            window.onerror = (msg, url, line, col, error) => { sendToParent('error', [msg + ' (line ' + line + ')']); return false; };
           </script>
         </head>
         <body>
@@ -209,9 +192,7 @@ export default function HtmlViewerClient() {
 
   const updatePreview = useCallback(() => {
     if (iframeRef.current) {
-      // Clear logs on reload
       setLogs([]);
-      // Using srcDoc for simple, isolated preview
       iframeRef.current.srcdoc = getCompiledDoc();
     }
   }, [getCompiledDoc]);
@@ -220,7 +201,6 @@ export default function HtmlViewerClient() {
     updatePreview();
   }, [debouncedHtml, debouncedCss, debouncedJs, debouncedCdns, updatePreview]);
 
-  // Actions
   const handleShare = () => {
     const code = LZString.compressToEncodedURIComponent(JSON.stringify({ html, css, js, cdns }));
     const url = `${window.location.origin}${window.location.pathname}?code=${code}`;
@@ -266,282 +246,114 @@ export default function HtmlViewerClient() {
   const handleFiles = (files: FileList | File[]) => {
     const file = files instanceof FileList ? files[0] : files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;
-      if (file.name.endsWith(".html")) {
-        setHtml(content);
-        setActiveTab("html");
-      } else if (file.name.endsWith(".css")) {
-        setCss(content);
-        setActiveTab("css");
-      } else if (file.name.endsWith(".js")) {
-        setJs(content);
-        setActiveTab("js");
-      }
+      if (file.name.endsWith(".html")) { setHtml(content); setActiveTab("html"); }
+      else if (file.name.endsWith(".css")) { setCss(content); setActiveTab("css"); }
+      else if (file.name.endsWith(".js")) { setJs(content); setActiveTab("js"); }
     };
     reader.readAsText(file);
   };
 
-  const checkMonaco = useCallback(() => {
-    return !!(window as any).monaco;
-  }, []);
+  const checkMonaco = useCallback(() => !!(window as any).monaco, []);
 
   return (
-    <div 
-      className={cn(
-        "relative flex flex-col lg:flex-row h-[70vh] min-h-[600px] border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
-        isFullscreen && "fixed inset-0 z-[100] h-screen w-screen rounded-none m-0"
-      )}
-    >
-      {/* ── Editor Side ──────────────────────────────────────────────────── */}
+    <div className={cn(
+      "relative flex flex-col lg:flex-row h-[70vh] min-h-full border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
+      isFullscreen && "fixed inset-0 z-[100] h-screen w-screen rounded-none m-0"
+    )}>
       <div className="flex-1 flex flex-col min-w-0 border-r border-border dark:border-white/5">
-        {/* Editor Header */}
         <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5">
           <div className="flex gap-1">
             {(["html", "css", "js"] as Tab[]).map(t => (
               <button
                 key={t}
                 onClick={() => setActiveTab(t)}
+                aria-label={`Switch to ${t.toUpperCase()} editor`}
                 className={cn(
                   "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                  activeTab === t 
-                    ? "bg-blue text-white neon-glow" 
-                    : "text-text-4 hover:bg-blue/5 hover:text-blue"
+                  activeTab === t ? "bg-blue text-white neon-glow" : "text-text-4 hover:bg-blue/5 hover:text-blue"
                 )}
               >
                 {t}
               </button>
             ))}
           </div>
-          
           <div className="flex items-center gap-2">
-            <DropZone
-              onFilesSelected={handleFiles}
-              accept=".html,.css,.js"
-              title="Import"
-              description=""
-              className="p-1 border-none bg-transparent hover:bg-blue/5 rounded-lg"
-              icon={<Upload className="w-4 h-4 text-text-4" />}
-            />
-            <button 
-              onClick={handleCopyCode}
-              className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors"
-              title="Copy Code"
-            >
+            <DropZone onFilesSelected={handleFiles} accept=".html,.css,.js" title="Import" description="" className="p-1 border-none bg-transparent hover:bg-blue/5 rounded-lg" icon={<Upload className="w-4 h-4 text-text-4" />} />
+            <button onClick={handleCopyCode} aria-label="Copy code" className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors" title="Copy Code">
               {codeCopied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
             </button>
-            <button 
-              onClick={handleClear}
-              className="p-2 text-text-4 hover:bg-blue/5 hover:text-red-500 rounded-lg transition-colors"
-              title="Clear Editor"
-            >
+            <button onClick={handleClear} aria-label="Clear code" className="p-2 text-text-4 hover:bg-blue/5 hover:text-red-500 rounded-lg transition-colors" title="Clear Editor">
               <Trash2 className="w-4 h-4" />
             </button>
-            <div className="w-[1px] h-4 bg-border mx-1" />
-            <button 
-              onClick={() => setIsCdnOpen(!isCdnOpen)}
-              className={cn(
-                "p-2 rounded-lg transition-colors",
-                isCdnOpen ? "text-blue bg-blue/10" : "text-text-4 hover:bg-blue/5 hover:text-blue"
-              )}
-              title="External Libraries"
-            >
+            <div className="w-px h-4 bg-border mx-1" />
+            <button onClick={() => setIsCdnOpen(!isCdnOpen)} aria-label="Open libraries" className={cn("p-2 rounded-lg transition-colors", isCdnOpen ? "text-blue bg-blue/10" : "text-text-4 hover:bg-blue/5 hover:text-blue")} title="External Libraries">
               <Plus className="w-4 h-4" />
             </button>
-            <button 
-              onClick={handleShare}
-              className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors"
-              title="Copy Share Link"
-            >
+            <button onClick={handleShare} aria-label="Share project" className="p-2 text-text-4 hover:bg-blue/5 hover:text-blue rounded-lg transition-colors" title="Copy Share Link">
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Monaco Editor */}
         <div className="flex-1 overflow-hidden relative">
-          <EngineLoader
-            checkInit={checkMonaco}
-            loadingMessage="Initializing Monaco Editor..."
-            errorMessage="Failed to load editor engine. Check your connection or retry."
-          >
-            <Editor
-              theme="vs-dark"
-              language={activeTab === "js" ? "javascript" : activeTab}
+          {isMobile ? (
+            <textarea
+              className="w-full h-full p-6 bg-mat-base text-text-2 font-mono text-sm outline-none resize-none"
               value={activeTab === "html" ? html : activeTab === "css" ? css : js}
-              onChange={(v) => {
-                if (activeTab === "html") setHtml(v || "");
-                else if (activeTab === "css") setCss(v || "");
-                else setJs(v || "");
+              onChange={(e) => {
+                const v = e.target.value;
+                if (activeTab === "html") setHtml(v);
+                else if (activeTab === "css") setCss(v);
+                else setJs(v);
               }}
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                fontFamily: "JetBrains Mono, monospace",
-                padding: { top: 20 },
-                lineNumbers: "on",
-                roundedSelection: true,
-                scrollBeyondLastLine: false,
-                automaticLayout: true,
-                tabSize: 2,
-              }}
+              placeholder={`Enter ${activeTab.toUpperCase()} code...`}
             />
-          </EngineLoader>
-          
-          {/* CDN Overlay */}
-          <AnimatePresence>
-            {isCdnOpen && (
-              <m.div
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                className="absolute inset-0 z-20 bg-surface dark:bg-black/90 p-6 flex flex-col space-y-6"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black uppercase tracking-widest text-text"><label htmlFor={cdnInputId}>External Libraries</label></h3>
-                  <button onClick={() => setIsCdnOpen(false)} className="text-text-4 hover:text-blue"><X className="w-5 h-5" /></button>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      placeholder="CDN URL (CSS or JS)..."
-                      className="flex-1 bg-bg border border-border rounded-xl px-4 py-2 text-xs outline-none focus:border-blue"
-                      value={newCdn}
-                      onChange={e => setNewCdn(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && addCdn()}
-                    />
-                    <button onClick={addCdn} className="px-4 bg-blue text-white rounded-xl text-xs font-bold">Add</button>
-                  </div>
-                  
-                  <div className="flex-1 overflow-y-auto space-y-2">
-                    {cdns.length === 0 && <p className="text-xs text-text-4 text-center py-8">No libraries added.</p>}
-                    {cdns.map(url => (
-                      <div key={url} className="flex items-center justify-between p-3 bg-bg border border-border rounded-xl">
-                        <span className="text-xs font-mono truncate text-text-3 max-w-52">{url}</span>
-                        <button onClick={() => removeCdn(url)} className="text-text-4 hover:text-red-500 transition-colors">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="pt-4 border-t border-border">
-                      <p className="text-xs font-bold text-text-4 uppercase mb-2">Common Presets</p>
-                      <div className="flex flex-wrap gap-2">
-                        {[
-                          { name: "Tailwind", url: "https://cdn.tailwindcss.com" },
-                          { name: "Bootstrap", url: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" },
-                          { name: "jQuery", url: "https://code.jquery.com/jquery-3.7.0.min.js" },
-                          { name: "React", url: "https://unpkg.com/react@18/umd/react.development.js" }
-                        ].map(lib => (
-                          <button 
-                            key={lib.name}
-                            onClick={() => !cdns.includes(lib.url) && setCdns([...cdns, lib.url])}
-                            className="px-3 py-1.5 rounded-lg bg-blue/5 border border-blue/10 text-xs font-bold text-blue hover:bg-blue hover:text-white transition-all"
-                          >
-                            + {lib.name}
-                          </button>
-                        ))}
-                      </div>
-                  </div>
-                </div>
-              </m.div>
-            )}
-          </AnimatePresence>
+          ) : (
+            <EngineLoader checkInit={checkMonaco} loadingMessage="Initializing Monaco Editor..." errorMessage="Failed to load editor engine. Check your connection or retry.">
+              <Editor
+                theme="vs-dark"
+                language={activeTab === "js" ? "javascript" : activeTab}
+                value={activeTab === "html" ? html : activeTab === "css" ? css : js}
+                onChange={(v) => {
+                  if (activeTab === "html") setHtml(v || "");
+                  else if (activeTab === "css") setCss(v || "");
+                  else setJs(v || "");
+                }}
+                options={{ minimap: { enabled: false }, fontSize: 14, fontFamily: "JetBrains Mono, monospace", padding: { top: 20 }, lineNumbers: "on", roundedSelection: true, scrollBeyondLastLine: false, automaticLayout: true, tabSize: 2 }}
+              />
+            </EngineLoader>
+          )}
+          <CdnOverlay isOpen={isCdnOpen} onClose={() => setIsCdnOpen(false)} inputId={cdnInputId} newCdn={newCdn} setNewCdn={setNewCdn} onAddCdn={addCdn} cdns={cdns} onRemoveCdn={removeCdn} onAddPreset={(url) => !cdns.includes(url) && setCdns([...cdns, url])} />
         </div>
       </div>
 
-      {/* ── Preview Side ─────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 bg-bg dark:bg-white/[0.02]">
-        {/* Preview Header */}
         <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5 overflow-x-auto no-scrollbar">
-            <SegmentedControl
-              activeId={device}
-              onChange={(id) => setDevice(id as Device)}
-              options={[
-                { id: "desktop", label: "Desktop", icon: <Laptop size={14} /> },
-                { id: "tablet", label: "Tablet", icon: <Tablet size={14} /> },
-                { id: "mobile", label: "Mobile", icon: <Smartphone size={14} /> },
-                { id: "mobile-xs", label: "Mobile XS", icon: <Smartphone size={14} /> },
-              ]}
-            />
-
+            <SegmentedControl activeId={device} onChange={(id) => setDevice(id as Device)} options={[{ id: "desktop", label: "Desktop", icon: <Laptop size={14} /> }, { id: "tablet", label: "Tablet", icon: <Tablet size={14} /> }, { id: "mobile", label: "Mobile", icon: <Smartphone size={14} /> }, { id: "mobile-xs", label: "Mobile XS", icon: <Smartphone size={14} /> }]} />
           <div className="flex items-center gap-2">
-            <button 
-              onClick={handleDownload}
-              className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border rounded-lg text-xs font-black uppercase tracking-widest text-text-4 hover:border-blue/30 hover:text-blue transition-all"
-            >
+            <button onClick={handleDownload} aria-label="Download project" className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border rounded-lg text-xs font-black uppercase tracking-widest text-text-4 hover:border-blue/30 hover:text-blue transition-all">
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Export</span>
             </button>
-            <button 
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 text-text-4 hover:text-blue"
-            >
+            <button onClick={() => setIsFullscreen(!isFullscreen)} aria-label="Toggle fullscreen" className="p-2 text-text-4 hover:text-blue">
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Sandbox Iframe */}
         <div className="flex-1 overflow-hidden p-4 md:p-8 flex items-center justify-center relative">
-            <div 
-              className="h-full bg-white rounded-xl shadow-2xl transition-all duration-500 overflow-hidden relative"
-              style={{ width: DEVICE_SIZES[device] }}
-            >
-              <iframe
-                ref={iframeRef}
-                title="Sandbox Preview"
-                className="w-full h-full border-none"
-                sandbox="allow-scripts allow-modals"
-              />
+            <div className="h-full bg-white rounded-xl shadow-2xl transition-all duration-500 overflow-hidden relative" style={{ width: DEVICE_SIZES[device] }}>
+              <iframe ref={iframeRef} title="Sandbox Preview" className="w-full h-full border-none" sandbox="allow-scripts" />
             </div>
-            
-            {/* Floating Console Toggle */}
-            <button 
-              onClick={() => setIsConsoleOpen(!isConsoleOpen)}
-              className={cn(
-                "absolute bottom-6 right-6 p-3 rounded-2xl shadow-xl transition-all flex items-center gap-2",
-                isConsoleOpen ? "bg-red-500 text-white" : "bg-surface border border-border text-text-2 hover:border-blue"
-              )}
-            >
+            <button onClick={() => setIsConsoleOpen(!isConsoleOpen)} aria-label="Toggle console" className={cn("absolute bottom-6 right-6 p-3 rounded-2xl shadow-xl transition-all flex items-center gap-2", isConsoleOpen ? "bg-red-500 text-white" : "bg-surface border border-border text-text-2 hover:border-blue")}>
               <Terminal className="w-4 h-4" />
               <span className="text-xs font-black uppercase tracking-widest">Console {logs.length > 0 && `(${logs.length})`}</span>
               {isConsoleOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronUp className="w-3 h-3" />}
             </button>
-
-            {/* Console Drawer */}
-            <AnimatePresence>
-              {isConsoleOpen && (
-                <m.div
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  exit={{ y: "100%" }}
-                  className="absolute bottom-20 right-6 w-80 max-h-72 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-                >
-                    <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5">
-                      <span className="text-tiny font-black uppercase tracking-widest text-blue-light">Output Logs</span>
-                      <button onClick={() => setLogs([])} className="text-tiny font-black uppercase tracking-widest text-red-400 hover:text-red-300">Clear</button>
-                    </div>
-                    <div className="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
-                      {logs.length === 0 && <p className="text-xs text-white/20 italic">No output yet...</p>}
-                      {logs.map(log => (
-                        <div key={log.id} className={cn(
-                          "text-xs font-mono break-all",
-                          log.type === "error" ? "text-red-400" : log.type === "warn" ? "text-yellow-400" : "text-blue-200"
-                        )}>
-                            <span className="opacity-30 mr-2">[{log.type}]</span>
-                            {log.content}
-                        </div>
-                      ))}
-                    </div>
-                </m.div>
-              )}
-            </AnimatePresence>
+            <ConsoleDrawer isOpen={isConsoleOpen} logs={logs} onClear={() => setLogs([])} />
         </div>
       </div>
     </div>

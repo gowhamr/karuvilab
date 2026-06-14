@@ -179,7 +179,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
             </div>
           ))}
           {dayEvents.length > 3 && (
-            <div className="text-[7px] md:text-micro font-black text-text-4 uppercase tracking-widest">
+            <div className="text-tiny md:text-micro font-black text-text-4 uppercase tracking-widest">
               <span className="md:hidden">+{dayEvents.length - 3}</span>
               <span className="hidden md:inline">+ {dayEvents.length - 3} more</span>
             </div>

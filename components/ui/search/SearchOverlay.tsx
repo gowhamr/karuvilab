@@ -4,6 +4,7 @@ import { m, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { searchTools } from '@/src/lib/search/searchEngine';
 import { useSearchStore } from '@/src/store/useSearchStore';
+import { useFavoriteStore } from '@/src/store/useFavoriteStore';
 import { ALL_TOOLS } from '@/src/registry';
 import { SearchResults } from './SearchResults';
 import { Search, X } from 'lucide-react';
@@ -40,14 +41,24 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     incrementToolVisit: s.incrementToolVisit
   })));
 
+  const favorites = useFavoriteStore(s => s.favorites);
+
+  // Compute favorite tools
+  const favoriteTools = useMemo(() => {
+    return favorites
+      .map(id => ALL_TOOLS.find(t => t.id === id))
+      .filter(Boolean) as any[];
+  }, [favorites]);
+
   // Compute popular tools for zero-state
   const popularTools = useMemo(() => {
     return Object.entries(popularToolsMap)
       .sort((a, b) => b[1] - a[1])
+      .filter(([id]) => !favorites.includes(id)) // Don't duplicate favorites in popular
       .slice(0, 8)
       .map(([id]) => ALL_TOOLS.find(t => t.id === id))
       .filter(Boolean) as any[];
-  }, [popularToolsMap]);
+  }, [popularToolsMap, favorites]);
 
   // Execute search (synchronous, fast)
   const results = useMemo(() => searchTools(query), [query]);
@@ -135,7 +146,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               "w-full overflow-hidden",
               "bg-mat-base sm:bg-mat-surface",
               "sm:rounded-2xl sm:max-w-2xl sm:mx-auto",
-              "sm:max-h-[600px]",
+              "sm:max-h-full",
               "sm:border sm:border-mat-border sm:shadow-2xl"
             )}
             onClick={e => e.stopPropagation()}
@@ -189,6 +200,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 onRemoveRecent={removeRecentQuery}
                 onClearRecent={clearRecentQueries}
                 popularTools={popularTools}
+                favoriteTools={favoriteTools}
               />
             </div>
 

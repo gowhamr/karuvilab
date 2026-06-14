@@ -117,7 +117,7 @@ export default function TaskReminderClient() {
           <button
             onClick={addTask}
             disabled={!newText.trim()}
-            className="h-[50px] px-8 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
+            className="h-12 px-8 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
           >
             Add Task
           </button>

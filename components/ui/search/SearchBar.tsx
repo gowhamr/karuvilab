@@ -32,7 +32,7 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
           "group flex items-center justify-between gap-3 bg-mat-raised shadow-mat-shine border border-mat-border transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50",
           isHero 
             ? "p-4 sm:p-5 rounded-2xl h-16 sm:h-20 w-full text-lg sm:text-xl font-bold hover:border-brand-primary/40 hover:bg-mat-hover" 
-            : "p-3 sm:px-4 sm:py-2 rounded-2xl h-11 w-full md:min-w-[240px] lg:min-w-[340px] text-sm font-medium hover:border-brand-primary/30 hover:bg-mat-hover",
+            : "p-3 sm:px-4 sm:py-2 rounded-2xl h-11 w-full md:min-w-60 lg:min-w-80 text-sm font-medium hover:border-brand-primary/30 hover:bg-mat-hover",
           className
         )}
       >

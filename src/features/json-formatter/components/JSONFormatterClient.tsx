@@ -225,7 +225,7 @@ export default function JSONFormatterClient() {
 
   const { output, error, parsed } = result;
 
-  if (!isLoaded) return <div className="animate-pulse h-[500px] bg-surface/50 rounded-4xl border border-border" />;
+  if (!isLoaded) return <div className="animate-pulse h-full bg-surface/50 rounded-4xl border border-border" />;
 
   return (
     <FocusModeWrapper
@@ -372,9 +372,11 @@ export default function JSONFormatterClient() {
               <p className="text-sm font-black uppercase tracking-widest text-text">Processing Data...</p>
             </div>
           ) : view === "tree" && parsed !== null ? (
-            <div className="p-6 space-y-6">
-              <div className="w-full px-6 py-4 bg-bg border border-border rounded-2xl overflow-auto max-h-[600px] custom-scrollbar">
-                <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
+            <div className="p-4 sm:p-6 w-full overflow-hidden">
+              <div className="w-full px-4 sm:px-6 py-4 bg-bg border border-border rounded-2xl overflow-x-auto overflow-y-auto max-h-[50vh] custom-scrollbar">
+                <div className="min-w-max">
+                  <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
+                </div>
               </div>
             </div>
           ) : (

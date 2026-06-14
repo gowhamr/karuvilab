@@ -130,7 +130,7 @@ export function ShareButton({ url, title = 'Check out this result on KaruviLab',
               role="menuitem"
               onClick={handleCopy}
               className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-text hover:bg-bg transition-colors"
-            >
+             aria-label="Check">
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-text-4" />}
               {copied ? 'Copied!' : 'Copy Link'}
             </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useEffect, useState, memo, useCallback } from "react";
+import { useMemo, useEffect, useState, memo, useCallback, useDeferredValue } from "react";
 import Link from "next/link";
 import { m, AnimatePresence, MotionConfig } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
@@ -79,10 +79,11 @@ const containerVariants = {
 } as const;
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { opacity: 0, y: 10, z: 0 },
   visible: {
     opacity: 1,
     y: 0,
+    z: 0,
     transition: {
       type: "spring",
       stiffness: 260,
@@ -144,12 +145,14 @@ export default function HomeClient() {
     return Array.from(merged).slice(0, 10);
   }, [popularToolsMap]);
 
+  const deferredActiveCategory = useDeferredValue(activeCategory);
+
   const filteredTools = useMemo(() => {
-    if (!activeCategory) return [];
+    if (!deferredActiveCategory) return [];
     return (ALL_TOOLS as ToolEntry[]).filter(tool => {
-      return tool.category === activeCategory;
+      return tool.category === deferredActiveCategory;
     });
-  }, [activeCategory]);
+  }, [deferredActiveCategory]);
 
   const handleCategoryChange = useCallback((id: string | null) => {
     setActiveCategory(id);
@@ -169,6 +172,7 @@ export default function HomeClient() {
             <div className="flex justify-center">
               <button
                 onClick={() => setIsPaletteOpen(true)}
+                aria-label="Open Quick Search"
                 className="h-12 px-6 rounded-xl border border-mat-border bg-transparent text-base font-bold text-text flex items-center justify-center gap-2 hover:bg-mat-hover hover:border-mat-border-focus focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors duration-150"
               >
                 <Command className="w-4 h-4" />
@@ -182,7 +186,7 @@ export default function HomeClient() {
         {/* ── 2. Sticky Category Chips (Full Width Container) ── */}
         <div 
           className={cn(
-            "sticky top-[60px] md:top-[72px] z-30 w-full py-2 bg-bg border-b border-border transition-all !opacity-100 overflow-hidden",
+            "sticky top-15 md:top-18 z-30 w-full py-2 bg-bg border-b border-border transition-all !opacity-100 overflow-hidden",
             isSidebarOpen && "invisible md:visible"
           )}
         >
@@ -193,7 +197,8 @@ export default function HomeClient() {
             {isFiltering && (
               <button
                 onClick={() => { handleCategoryChange(null); }}
-                className="text-tiny font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
+                aria-label="Clear active filter"
+                className="min-h-11 min-w-11 px-3 flex items-center justify-center text-xs font-bold text-blue hover:underline whitespace-nowrap uppercase tracking-widest"
               >
                 Clear
               </button>
@@ -239,56 +244,59 @@ export default function HomeClient() {
                   animate={{ opacity: 1 }}
                   className="space-y-8 md:space-y-10"
                 >
-                  {/* Recently Used */}
-                  {recentTools.length > 0 && (
-                    <div className="min-h-0 transition-all duration-300">
-                      <AnimatePresence>
-                        <m.section
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          style={{ overflow: "hidden" }}
-                        >
-                          <SectionHeader 
-                            title={t('common.recent')} 
-                            subtitle="Pick up where you left off"
-                            icon={Clock}
-                          />
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-                            {recentTools.map(tool => (
-                              <ToolCard key={tool.id} tool={tool} compact />
-                            ))}
-                          </div>
-                        </m.section>
-                      </AnimatePresence>
-                    </div>
-                  )}
+                  {/* Recently Used & Favorites (SSR Skeleton & Client Render) */}
+                  {!hydrated ? null : (
+                    <>
+                      {recentTools.length > 0 && (
+                        <div className="min-h-0 transition-all duration-300">
+                          <AnimatePresence>
+                            <m.section
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25 }}
+                              style={{ overflow: "hidden" }}
+                            >
+                              <SectionHeader 
+                                title={t('common.recent')} 
+                                subtitle="Pick up where you left off"
+                                icon={Clock}
+                              />
+                              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                                {recentTools.map(tool => (
+                                  <ToolCard key={tool.id} tool={tool} compact />
+                                ))}
+                              </div>
+                            </m.section>
+                          </AnimatePresence>
+                        </div>
+                      )}
 
-                  {/* Favorites */}
-                  {favoriteTools.length > 0 && (
-                    <div className="min-h-0 transition-all duration-300">
-                      <AnimatePresence>
-                        <m.section
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          style={{ overflow: "hidden" }}
-                        >
-                          <SectionHeader 
-                            title={t('common.favorites')} 
-                            subtitle="Your hand-picked toolkit"
-                            icon={Heart}
-                          />
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-                            {favoriteTools.map(tool => (
-                              <ToolCard key={tool.id} tool={tool} compact />
-                            ))}
-                          </div>
-                        </m.section>
-                      </AnimatePresence>
-                    </div>
+                      {favoriteTools.length > 0 && (
+                        <div className="min-h-0 transition-all duration-300">
+                          <AnimatePresence>
+                            <m.section
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25 }}
+                              style={{ overflow: "hidden" }}
+                            >
+                              <SectionHeader 
+                                title={t('common.favorites')} 
+                                subtitle="Your hand-picked toolkit"
+                                icon={Heart}
+                              />
+                              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                                {favoriteTools.map(tool => (
+                                  <ToolCard key={tool.id} tool={tool} compact />
+                                ))}
+                              </div>
+                            </m.section>
+                          </AnimatePresence>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   {/* Popular Tools */}
@@ -331,22 +339,38 @@ export default function HomeClient() {
                       initial="hidden"
                       whileInView="visible"
                       viewport={{ once: true }}
-                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 touch-pan-y"
                     >
-                      {(ALL_TOOLS as ToolEntry[]).slice(0, 16).map(tool => (
+                      {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
                         <m.div key={tool.id} variants={itemVariants}>
                           <ToolCard tool={tool} compact />
                         </m.div>
                       ))}
+
+                      {/* Integrated "Browse All" Card */}
+                      <m.div variants={itemVariants} className="col-span-2 sm:col-span-1 group">
+                        <Link 
+                          href="/all-tools"
+                          className={cn(
+                            "relative flex flex-row sm:flex-col items-center justify-center gap-3 sm:gap-1 bg-blue/5 border border-dashed border-blue/20 shadow-sm overflow-hidden transition-all duration-200 ease-out",
+                            "hover:border-blue/40 hover:bg-blue/10",
+                            "h-full min-h-20 md:min-h-24 p-4 sm:p-3 rounded-2xl"
+                          )}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-blue text-white flex items-center justify-center shadow-md shadow-blue/20 group-hover:scale-110 transition-transform">
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
+                          <div className="flex flex-col sm:items-center">
+                            <span className="text-xs font-black text-blue uppercase tracking-[0.2em] leading-tight">
+                              Browse All
+                            </span>
+                            <span className="text-xs font-black text-blue uppercase tracking-widest leading-tight">
+                              100+ Tools
+                            </span>
+                          </div>
+                        </Link>
+                      </m.div>
                     </m.div>
-                    <div className="mt-8 flex justify-center">
-                      <Link 
-                        href="/all-tools"
-                        className="w-full flex items-center justify-center gap-2 h-13 md:w-auto md:inline-flex md:px-6 md:h-12 bg-[--kv-mat-raised] border border-[--kv-mat-border] rounded-xl text-base font-semibold text-[--kv-text] hover:bg-[--kv-mat-hover] hover:border-[--kv-brand-primary]/40 hover:text-[--kv-brand-primary] transition-all duration-150"
-                      >
-                        Browse 100+ Tools <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
                   </section>
                 </m.div>
               )}

@@ -60,7 +60,7 @@ export default function SettingsClient() {
           </div>
         </div>
         <div className="flex-1 space-y-8">
-           <div className="h-[500px] w-full bg-surface rounded-5xl" />
+           <div className="h-full w-full bg-surface rounded-5xl" />
         </div>
       </div>
     );

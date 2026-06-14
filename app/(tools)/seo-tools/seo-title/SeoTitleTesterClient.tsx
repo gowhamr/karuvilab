@@ -155,7 +155,7 @@ export default function SeoTitleTesterClient() {
           <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Google Preview</h2>
             <p className="text-xs text-text-4">~600px width container with title truncation at 60 chars</p>
-            <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl p-5 max-w-[600px]">
+            <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl p-5 max-w-full">
               <p className="text-blue text-xl font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-full">
                 {title || "Your Title Here"}
               </p>

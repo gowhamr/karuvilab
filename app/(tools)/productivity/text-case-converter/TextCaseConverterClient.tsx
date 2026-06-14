@@ -109,7 +109,7 @@ export default function TextCaseConverterClient() {
           <label className="text-sm font-black uppercase tracking-widest text-text-4">Output</label>
           <CopyButton text={output} label="Copy Result" />
         </div>
-        <div className="min-h-[150px] p-6 bg-surface border border-border rounded-2xl text-text whitespace-pre-wrap break-words font-medium">
+        <div className="min-h-40 p-6 bg-surface border border-border rounded-2xl text-text whitespace-pre-wrap break-words font-medium">
           {output || <span className="text-text-4 italic">The converted text will appear here...</span>}
         </div>
       </div>

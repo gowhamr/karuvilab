@@ -17,12 +17,10 @@ import {
   Inbox
 } from 'lucide-react';
 import { BatchItem, useBatchStore } from '@/src/store/useBatchStore';
-import { useWorkflowStore, WorkflowItem } from '@/src/store/useWorkflowStore';
-import { findToolById, DataType } from '@/src/tool-registry';
-import { WorkflowSuggestions } from './WorkflowSuggestions';
 import { StatusBadge } from '@/components/system/StatusBadge';
 import { cn } from '@/src/lib/utils';
 import { useContextualActionBar } from '@/src/store/useContextualActionBar';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 interface BatchQueueProps {
   toolId: string;
@@ -52,11 +50,6 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
   const cancelItem = useBatchStore(state => state.cancelItem);
   const cancelAll = useBatchStore(state => state.cancelAll);
 
-  const syncToolOutput = useWorkflowStore(state => state.syncToolOutput);
-  
-  const syncedRef = useRef<string[]>([]);
-  const prevProcessingRef = useRef<boolean>(false);
-
   const stats = useMemo(() => {
     const total = items.length;
     const completed = items.filter(i => i.status === 'completed').length;
@@ -70,36 +63,6 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     
     return { total, completed, failed, processing, pending, originalSize, resultSize, saved };
   }, [items]);
-
-  // Sync with workflow store when processing finishes
-  useEffect(() => {
-    const wasProcessing = prevProcessingRef.current;
-    prevProcessingRef.current = isProcessing;
-
-    if (stats.completed > 0 && (!isProcessing || (wasProcessing && !isProcessing))) {
-      const tool = findToolById(toolId);
-      const outputType = (Array.isArray(tool?.output) ? tool?.output[0] : tool?.output) || 'any-file';
-      
-      const completedItems = items.filter(i => i.status === 'completed' && i.result);
-      const completedIds = completedItems.map(i => i.id);
-      
-      const alreadySynced = syncedRef.current.length === completedIds.length &&
-                           syncedRef.current.every((id, idx) => id === completedIds[idx]);
-
-      if (alreadySynced) return;
-
-      const workflowItems: WorkflowItem[] = completedItems.map(i => ({
-        blob: i.result!.blob,
-        name: i.result!.name,
-        type: outputType as DataType
-      }));
-      
-      if (workflowItems.length > 0) {
-        syncedRef.current = completedIds;
-        syncToolOutput(toolId, workflowItems);
-      }
-    }
-  }, [stats.completed, isProcessing, toolId, items.length, syncToolOutput]);
 
   const setBarConfig = useContextualActionBar(s => s.setBarConfig);
   const hideBar = useContextualActionBar(s => s.hide);
@@ -156,19 +119,15 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
   ]);
 
   if (items.length === 0) return (
-    <m.div 
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col items-center justify-center py-16 px-6 bg-surface border border-dashed border-border rounded-4xl text-center"
-    >
-      <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center mb-6 shadow-inner">
-        <Inbox className="w-8 h-8 text-text-4 opacity-30" />
-      </div>
-      <h3 className="text-xl font-black text-text mb-2 tracking-tight">Queue is empty</h3>
-      <p className="text-sm text-text-4 max-w-[240px] leading-relaxed">
-        Upload files to begin batch processing.
-      </p>
-    </m.div>
+    <EmptyState
+      icon={Inbox}
+      headline="Queue is empty"
+      toolType="batch"
+      toolId={toolId as any}
+      onDrop={() => {}}
+      dragState="idle"
+      subAction={{ label: "Upload files to begin batch processing", onClick: () => {} }}
+    />
   );
 
   return (
@@ -197,7 +156,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                 {stats.total} Files
               </span>
             </h3>
-            <div className="flex flex-wrap gap-4 text-xs font-black uppercase tracking-[0.15em] text-text-4" role="status">
+            <div className="flex flex-wrap gap-4 text-xs font-black uppercase tracking-[0.15em] text-text-4" role="status" aria-live="polite">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-green-500" /> {stats.completed} Complete</span>
               <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-blue" /> {stats.pending + stats.processing} Active</span>
               {stats.failed > 0 && <span className="flex items-center gap-1.5 text-red-500"><AlertCircle className="w-3 h-3" /> {stats.failed} Errors</span>}
@@ -244,7 +203,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       </div>
 
       {/* Staggered List */}
-      <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar-thin" role="list">
+      <div className="grid gap-3 max-h-full overflow-y-auto pr-2 custom-scrollbar-thin" role="list">
         <AnimatePresence initial={false} mode="popLayout">
           {items.map((item, index) => (
             <m.div
@@ -258,7 +217,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
               className={cn(
                 "group bg-surface-2 border rounded-xl p-4 flex items-center gap-4 transition-all relative",
                 item.status === 'completed' ? "border-green-500/10" : "border-border hover:border-blue/30",
-                item.status === 'failed' ? "border-red-500/30 border-l-[4px] border-l-red-500" : ""
+                item.status === 'failed' ? "border-red-500/30 border-l-4 border-l-red-500" : ""
               )}
             >
               <div className="w-14 h-14 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-bg border border-border shadow-inner overflow-hidden">

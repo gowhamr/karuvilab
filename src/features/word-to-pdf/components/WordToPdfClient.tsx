@@ -84,7 +84,7 @@ export default function WordToPdfClient() {
         onClick={convert}
         disabled={!file || processing}
         className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20 flex items-center justify-center gap-2"
-      >
+       aria-label="Loader2">
         {processing ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />

@@ -15,7 +15,7 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "postinstall": "node scripts/sync-workers.js",
-    "prebuild": "node scripts/generate-registries-pure.js && node scripts/sync-workers.js"
+    "prebuild": "npx tsx scripts/generate-registries.ts && node scripts/sync-workers.js"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",

@@ -85,7 +85,7 @@ export function KVLogo({
           {showSubtext && (
             <span className={cn(
               "font-black uppercase tracking-[0.4em] text-blue leading-none",
-              size === "sm" ? "text-[6px]" : 
+              size === "sm" ? "text-micro" : 
               size === "md" ? "text-micro" : 
               size === "lg" ? "text-xs" : "text-sm"
             )}>

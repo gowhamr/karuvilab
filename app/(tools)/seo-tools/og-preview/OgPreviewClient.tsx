@@ -87,7 +87,7 @@ export default function OgPreviewClient() {
           {/* Google Search */}
           <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Google Search</h2>
-            <div className="bg-surface rounded-2xl p-5 border border-border max-w-[560px] shadow-sm">
+            <div className="bg-surface rounded-2xl p-5 border border-border max-w-xl shadow-sm">
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-4 h-4 bg-blue rounded-full flex-shrink-0" />
                 <div>
@@ -103,11 +103,11 @@ export default function OgPreviewClient() {
           {/* Facebook / OG */}
           <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Facebook / Open Graph</h2>
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-[480px] shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-lg shadow-sm">
               {image ? (
-                <img src={image} alt="Facebook Open Graph preview" className="w-full h-[252px] object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                <img src={image} alt="Facebook Open Graph preview" className="w-full h-64 object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
               ) : (
-                <div className="w-full h-[252px] bg-bg flex items-center justify-center text-text-4 text-sm font-bold uppercase tracking-widest">
+                <div className="w-full h-64 bg-bg flex items-center justify-center text-text-4 text-sm font-bold uppercase tracking-widest">
                   No image — add an OG Image URL
                 </div>
               )}
@@ -122,7 +122,7 @@ export default function OgPreviewClient() {
           {/* Twitter */}
           <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-3">
             <h2 className="font-black text-text text-sm uppercase tracking-widest">Twitter / X Card</h2>
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-[480px] shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border overflow-hidden max-w-lg shadow-sm">
               {twitterCard === "summary_large_image" ? (
                 <>
                   {image ? (

@@ -197,7 +197,7 @@ export function EmptyState({
           }
         }}
         className={cn(
-          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-[240px] md:min-h-80 group",
+          "relative flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer border rounded-4xl p-8 md:p-12 min-h-60 md:min-h-80 group",
           dragStateClasses[dragState || "idle"],
           (dragState === "rejected" || isRejected) && dragStateClasses.rejected,
           isRejected && "animate-shake"
@@ -252,7 +252,7 @@ export function EmptyState({
         <button 
           onClick={handleSampleClick} 
           className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-xs font-black uppercase tracking-widest text-brand-primary flex items-center gap-2 hover:bg-brand-primary/20 transition-colors"
-        >
+         aria-label="Play Circle">
           <PlayCircle className="w-4 h-4" aria-hidden="true" /> {sampleCTA?.label || "Try Sample File"}
         </button>
       </m.div>

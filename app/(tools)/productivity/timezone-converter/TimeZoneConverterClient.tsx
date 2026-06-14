@@ -357,7 +357,7 @@ export default function TimeZoneConverterClient() {
                         {conv.tz.split('/').pop()?.replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <div className="text-xs text-text-4 font-bold truncate max-w-[150px]">
+                    <div className="text-xs text-text-4 font-bold truncate max-w-40">
                       {conv.tz}
                     </div>
                   </div>

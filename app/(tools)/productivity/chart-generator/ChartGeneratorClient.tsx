@@ -157,7 +157,7 @@ export default function ChartGeneratorClient() {
 
         {/* Chart Preview */}
         <div className="xl:col-span-8 space-y-6">
-          <div className="p-8 md:p-12 bg-surface border border-border rounded-6xl shadow-sm flex flex-col items-center justify-center min-h-[600px] relative overflow-hidden group/canvas">
+          <div className="p-8 md:p-12 bg-surface border border-border rounded-6xl shadow-sm flex flex-col items-center justify-center min-h-full relative overflow-hidden group/canvas">
             
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />

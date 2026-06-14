@@ -57,19 +57,12 @@ const SidebarItem = memo(function SidebarItem({
           ? `h-13 px-4 text-xs rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
           : `h-13 px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
       }`}
-      style={{
-        color: !isSmall && isActive ? color : undefined,
-        backgroundColor: !isSmall && isActive ? `color-mix(in srgb, ${color} 20%, transparent)` : undefined,
-      }}
     >
       <div 
         className={isSmall 
           ? "w-8 h-8 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center mr-3 group-hover:bg-blue/20 transition-all"
-          : `w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isActive ? "" : "bg-transparent group-hover:scale-105"}`
+          : `w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isActive ? "text-blue" : "bg-transparent group-hover:scale-105"}`
         }
-        style={{
-          color: !isSmall && isActive ? color : undefined,
-        }}
       >
         {Icon ? <Icon className={isSmall ? "w-3.5 h-3.5" : "w-5 h-5"} /> : <ToolIcon category={category} toolId={toolId} className={isSmall ? "w-3.5 h-3.5" : "w-5 h-5"} />}
       </div>
@@ -178,12 +171,9 @@ const SidebarContent = memo(function SidebarContent({
   }, [setIsOpen]);
 
   return (
-    <nav 
-      className="flex-1 overflow-y-auto p-4 space-y-8 no-scrollbar pb-24 md:pb-8"
-      style={{ contain: 'layout style' }}
-    >
+    <div className="flex-1 flex flex-col min-h-0">
       {/* Mobile Search (Sticky Layout) */}
-      <div className="md:hidden sticky top-0 z-20 bg-surface -mx-4 px-4 py-3 mb-4 border-b border-border">
+      <div className="md:hidden flex-shrink-0 z-20 bg-surface px-4 py-3 border-b border-border">
         <button 
           onClick={handleSearchClick}
           className="w-full h-12 flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
@@ -194,14 +184,18 @@ const SidebarContent = memo(function SidebarContent({
             </div>
             <span>{t('common.search').split('...')[0]}</span>
           </div>
-          <div className="flex items-center gap-0.5 px-1.5 py-1 bg-surface border border-border rounded-lg text-micro font-mono">
+          <div className="flex items-center gap-0.5 px-1.5 py-1 bg-surface border border-border rounded-lg text-xs font-mono">
             <Command className="w-2.5 h-2.5" />
             <span>K</span>
           </div>
         </button>
       </div>
 
-      <CoreLinks pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
+      <nav 
+        className="flex-1 overflow-y-auto p-4 space-y-8 no-scrollbar pb-24 md:pb-8"
+        style={{ contain: 'layout style' }}
+      >
+        <CoreLinks pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
       <CategoriesList pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
 
       {/* Personal Favorites */}
@@ -255,7 +249,8 @@ const SidebarContent = memo(function SidebarContent({
       )}
 
       <SupportLinks pathname={pathname} setIsOpen={setIsOpen} isHoverable={isHoverable} />
-    </nav>
+      </nav>
+    </div>
   );
 });
 
@@ -268,7 +263,6 @@ export function Sidebar() {
   const favoriteIds = useFavoriteStore(useShallow(state => state.favorites));
   const [recent, setRecent] = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const [isHoverable, setIsHoverable] = useState<boolean | null>(null);
 
   if (isFullscreen) return null;
 
@@ -276,9 +270,7 @@ export function Sidebar() {
 
   useEffect(() => {
     setHydrated(true);
-    const caps = getDeviceCapabilities();
-    setIsHoverable(!caps.isMobile);
-  }, [setIsSidebarOpen]);
+  }, []);
 
   useEffect(() => {
     if (hydrated) {
@@ -294,48 +286,45 @@ export function Sidebar() {
 
   return (
     <>
-      {isHoverable === false ? (
-        <MobileSidebar>
-          <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-mat-surface">
-            <Link href="/" onClick={closeSidebar}>
-              <KVLogo withText size="sm" loading="lazy" />
-            </Link>
-            <button
-              className="w-11 h-11 flex items-center justify-center hover:bg-mat-hover rounded-xl transition-colors text-text-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
-              onClick={closeSidebar}
-              aria-label="Close sidebar"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <SidebarContent 
-            pathname={pathname} 
-            recent={recent} 
-            favorites={favorites} 
-            setIsOpen={closeSidebar} 
-            isHoverable={isHoverable}
-          />
-        </MobileSidebar>
-      ) : (
-        /* Desktop Permanent Sidebar */
-        <aside 
-          className={`hidden md:flex fixed top-0 left-0 bottom-0 w-72 rounded-r-4xl bg-mat-surface border-r border-mat-border shadow-mat-shine z-sidebar flex-col overflow-hidden ${!hydrated ? 'invisible' : ''}`}
-          style={{ contain: 'layout style' }}
-        >
-          <div className="h-20 flex items-center px-8 border-b border-border bg-mat-surface">
-            <Link href="/">
-              <KVLogo withText size="md" loading="lazy" />
-            </Link>
-          </div>
-          <SidebarContent 
-            pathname={pathname} 
-            recent={recent} 
-            favorites={favorites} 
-            setIsOpen={closeSidebar} 
-            isHoverable={isHoverable || false}
-          />
-        </aside>
-      )}
+      <MobileSidebar>
+        <div className="h-16 flex items-center justify-between px-6 border-b border-border bg-mat-surface">
+          <Link href="/" onClick={closeSidebar}>
+            <KVLogo withText size="sm" loading="lazy" />
+          </Link>
+          <button
+            className="w-11 h-11 flex items-center justify-center hover:bg-mat-hover rounded-xl transition-colors text-text-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+            onClick={closeSidebar}
+            aria-label="Close sidebar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <SidebarContent 
+          pathname={pathname} 
+          recent={recent} 
+          favorites={favorites} 
+          setIsOpen={closeSidebar} 
+          isHoverable={false}
+        />
+      </MobileSidebar>
+
+      <aside 
+        className="hidden md:flex fixed top-0 left-0 bottom-0 w-72 rounded-r-4xl bg-mat-surface border-r border-mat-border shadow-mat-shine z-sidebar flex-col overflow-hidden"
+        style={{ contain: 'layout style' }}
+      >
+        <div className="h-20 flex items-center px-8 border-b border-border bg-mat-surface">
+          <Link href="/">
+            <KVLogo withText size="md" loading="lazy" />
+          </Link>
+        </div>
+        <SidebarContent 
+          pathname={pathname} 
+          recent={recent} 
+          favorites={favorites} 
+          setIsOpen={closeSidebar} 
+          isHoverable={true}
+        />
+      </aside>
     </>
   );
 }

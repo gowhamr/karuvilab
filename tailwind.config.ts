@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: tokens.colors,
+      fontSize: tokens.typography,
       boxShadow: tokens.shadows,
       transitionTimingFunction: {
         'expo': tokens.motion.ease.expo,
