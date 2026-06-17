@@ -99,17 +99,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-4 flex-shrink-0 justify-end">
-          {/* Search Trigger - Mobile Only */}
-          <div className="md:hidden flex items-center">
-             <button 
-                onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
-                className="h-11 px-4 flex items-center gap-2 bg-mat-surface hover:bg-mat-hover border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
-                aria-label="Search tools"
-             >
-                <Search className="w-4 h-4 text-text-3" />
-                <span className="text-sm font-medium text-text-3">Search</span>
-             </button>
-          </div>
+
 
           <div className="h-4 w-px bg-border/50 hidden sm:block" />
           
