@@ -35,7 +35,7 @@ export function HomeHero() {
       </div>
 
       {/* ── Headline ── */}
-      <h1 className="text-3xl sm:text-4xl md:text-[3.25rem] font-black tracking-tighter leading-[1.08] text-text max-w-2xl mb-3">
+      <h1 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tighter leading-[1.08] text-text max-w-2xl mb-3">
         Build faster with KV.{" "}
         <span className="bg-gradient-to-r from-blue via-indigo-500 to-purple-500 bg-clip-text text-transparent">
           Privacy you can trust.

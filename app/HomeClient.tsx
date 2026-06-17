@@ -16,6 +16,7 @@ import {
   Clock, Heart, Command, ChevronRight, Sparkles,
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { ToolIcon } from "@/components/ui/Icons";
 
 // ── Animation presets ─────────────────────────────────────────────────────────
 
@@ -119,11 +120,7 @@ const CategoryQuickNav = memo(function CategoryQuickNav() {
               style={{ background: `${cat.color}18` }}
               aria-hidden="true"
             >
-              {/* Category emoji/icon fallback via color dot */}
-              <span
-                className="w-3 h-3 rounded-full"
-                style={{ background: cat.color }}
-              />
+              <ToolIcon category={cat.id} className="w-4 h-4" />
             </span>
             <span className="text-[11px] font-bold text-text-muted group-hover:text-text leading-tight transition-colors">
               {cat.label}

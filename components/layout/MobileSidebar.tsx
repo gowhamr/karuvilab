@@ -60,17 +60,23 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   };
 
   return (
-    <div className="md:hidden absolute top-0 left-0 w-0 h-0">
+    <div className="md:hidden fixed inset-0 z-[100] pointer-events-none">
       {!isOpen && (
         <div 
-          className="fixed top-15 left-0 bottom-0 w-8 z-dropdown touch-none"
+          className="absolute top-15 left-0 bottom-0 w-8 z-[100] pointer-events-auto touch-none"
           onPointerDown={(e) => dragControls.start(e)}
         />
       )}
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <Backdrop onClick={() => setIsOpen(false)} opacity={backdropOpacity} />
+          <m.div
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            style={{ opacity: backdropOpacity }}
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] pointer-events-auto touch-none"
+            onClick={() => setIsOpen(false)}
+          />
         )}
       </AnimatePresence>
 
@@ -90,7 +96,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         tabIndex={-1}
         aria-label="Navigation Sidebar"
         className={cn(
-          "fixed top-0 left-0 bottom-0 w-72 bg-surface border-r border-border shadow-mat-shine z-dropdown rounded-r-4xl flex flex-col touch-none overflow-hidden outline-none"
+          "absolute top-0 left-0 bottom-0 w-[280px] bg-surface border-r border-border shadow-2xl z-[110] rounded-r-3xl flex flex-col touch-none overflow-hidden outline-none pointer-events-auto"
         )}
       >
         <div className="absolute inset-y-0 right-0 w-px bg-white/5 dark:bg-white/10" />
