@@ -12,8 +12,7 @@ interface CategoryChipsProps {
 
 export const CategoryChips = memo(function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const fadeLeftRef = useRef<HTMLDivElement>(null);
-  const fadeRightRef = useRef<HTMLDivElement>(null);
+
 
   const updateScrollState = useCallback(() => {
     const el = containerRef.current;
@@ -25,9 +24,22 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     const hasLeft = scrollLeft > 5;
     const hasRight = scrollLeft < maxScroll - 5;
 
-    // Toggle gradient fades
-    if (fadeLeftRef.current) fadeLeftRef.current.style.opacity = hasLeft ? "1" : "0";
-    if (fadeRightRef.current) fadeRightRef.current.style.opacity = hasRight ? "1" : "0";
+    if (!hasLeft && !hasRight) {
+      el.style.maskImage = "none";
+      el.style.webkitMaskImage = "none";
+    } else if (!hasLeft && hasRight) {
+      const mask = "linear-gradient(to right, black calc(100% - 48px), transparent)";
+      el.style.maskImage = mask;
+      el.style.webkitMaskImage = mask;
+    } else if (hasLeft && !hasRight) {
+      const mask = "linear-gradient(to right, transparent, black 48px)";
+      el.style.maskImage = mask;
+      el.style.webkitMaskImage = mask;
+    } else {
+      const mask = "linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent)";
+      el.style.maskImage = mask;
+      el.style.webkitMaskImage = mask;
+    }
   }, []);
 
   const handleKeyDown = useCallback(
@@ -100,16 +112,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
   }, [activeCategory]);
 
   return (
-    <div className="relative group/wrapper -mx-4 w-auto px-4 md:-mx-8 md:w-auto md:px-8 overflow-hidden">
-      {/* Left/Right Dynamic Fades — Purely visual indicators */}
-      <div 
-        ref={fadeLeftRef}
-        className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-bg via-bg/90 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300"
-      />
-      <div 
-        ref={fadeRightRef}
-        className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-bg via-bg/90 to-transparent pointer-events-none z-30 opacity-0 transition-opacity duration-300"
-      />
+    <div className="relative group/wrapper w-auto overflow-hidden">
 
       <div 
         ref={containerRef}
