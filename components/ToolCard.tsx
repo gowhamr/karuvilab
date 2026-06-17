@@ -70,7 +70,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
         <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
           <h3
             className={cn(
-              "font-bold text-text leading-tight tracking-tight truncate",
+              "font-bold text-text leading-tight tracking-tight line-clamp-2 text-balance",
               "group-hover:text-brand-primary transition-colors duration-150",
               compact ? "text-[13px]" : "text-[14px]"
             )}
