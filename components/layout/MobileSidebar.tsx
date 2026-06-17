@@ -60,7 +60,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   };
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden absolute top-0 left-0 w-0 h-0">
       {!isOpen && (
         <div 
           className="fixed top-15 left-0 bottom-0 w-8 z-dropdown touch-none"
@@ -90,11 +90,11 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         tabIndex={-1}
         aria-label="Navigation Sidebar"
         className={cn(
-          "fixed top-0 left-0 bottom-0 w-72 bg-mat-surface border-r border-mat-border shadow-mat-shine z-dropdown rounded-r-4xl flex flex-col touch-none overflow-hidden outline-none"
+          "fixed top-0 left-0 bottom-0 w-72 bg-surface border-r border-border shadow-mat-shine z-dropdown rounded-r-4xl flex flex-col touch-none overflow-hidden outline-none"
         )}
       >
         <div className="absolute inset-y-0 right-0 w-px bg-white/5 dark:bg-white/10" />
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
+        <div className="flex-1 flex flex-col h-full overflow-hidden bg-surface">
            {children}
         </div>
       </m.aside>

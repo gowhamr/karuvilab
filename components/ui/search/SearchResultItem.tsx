@@ -75,8 +75,8 @@ export const SearchResultItem = memo(function SearchResultItem({
             {highlightText(tool.name, query)}
           </span>
           <span className={cn(
-            "flex-shrink-0 text-tiny font-semibold uppercase tracking-wider text-text-4 opacity-60",
-            isFocused && "text-brand-primary opacity-90 font-black"
+            "flex-shrink-0 text-micro font-medium uppercase tracking-widest text-text-4 opacity-40 transition-all",
+            isFocused && "text-brand-primary opacity-60 font-bold"
           )}>
             {tool.category}
           </span>
