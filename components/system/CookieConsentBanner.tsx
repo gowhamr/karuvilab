@@ -35,9 +35,9 @@ export function CookieConsentBanner() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 20, opacity: 0 }}
-        className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-112 z-max"
+        className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-112 z-[9999]"
       >
-        <div className="backdrop-blur-md bg-surface/90 border border-border rounded-2xl shadow-surface-4 p-6 flex flex-col gap-6">
+        <div className="bg-surface border border-border rounded-2xl shadow-2xl p-6 flex flex-col gap-6">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center flex-shrink-0 text-blue">
               <Cookie className="w-5 h-5" />

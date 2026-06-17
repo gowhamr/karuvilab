@@ -403,7 +403,7 @@ export function Sidebar() {
       {/* ── Desktop fixed sidebar ── */}
       <aside
         className={cn(
-          "hidden md:flex fixed top-0 left-0 bottom-0 w-72 z-sidebar",
+          "hidden md:flex fixed top-0 left-0 bottom-0 w-sidebar z-sidebar",
           "flex-col overflow-hidden",
           "bg-surface border-r border-border",
           "rounded-r-3xl",
