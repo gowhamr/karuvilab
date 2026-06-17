@@ -24,22 +24,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     const hasLeft = scrollLeft > 5;
     const hasRight = scrollLeft < maxScroll - 5;
 
-    if (!hasLeft && !hasRight) {
-      el.style.maskImage = "none";
-      el.style.webkitMaskImage = "none";
-    } else if (!hasLeft && hasRight) {
-      const mask = "linear-gradient(to right, black calc(100% - 48px), transparent)";
-      el.style.maskImage = mask;
-      el.style.webkitMaskImage = mask;
-    } else if (hasLeft && !hasRight) {
-      const mask = "linear-gradient(to right, transparent, black 48px)";
-      el.style.maskImage = mask;
-      el.style.webkitMaskImage = mask;
-    } else {
-      const mask = "linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent)";
-      el.style.maskImage = mask;
-      el.style.webkitMaskImage = mask;
-    }
+    // Removed maskImage logic completely to prevent active vibrant pills from looking muddy when fading out.
   }, []);
 
   const handleKeyDown = useCallback(

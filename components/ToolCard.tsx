@@ -15,7 +15,7 @@ interface ToolCardProps {
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
   return (
     <m.div
-      className="relative w-full h-full flex flex-col group"
+      className="relative w-full flex-1 flex flex-col group"
       whileHover={{
         y: -3,
         transition: { duration: 0.18, ease: [0.16, 1, 0.3, 1] },
@@ -79,12 +79,12 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             {tool.name}
           </h3>
           {!compact && (
-            <p className="text-[11px] text-text-muted font-medium leading-relaxed">
+            <p className="text-[11px] text-text-muted font-medium line-clamp-3 leading-relaxed">
               {tool.desc}
             </p>
           )}
           {compact && (
-            <p className="text-[10px] text-text-muted font-medium leading-snug">
+            <p className="text-[10px] text-text-muted font-medium line-clamp-3 leading-snug">
               {tool.desc}
             </p>
           )}

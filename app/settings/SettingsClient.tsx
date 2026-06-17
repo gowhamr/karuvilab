@@ -11,6 +11,7 @@ import {
 import { m, AnimatePresence } from "framer-motion";
 import { useIsHydrated } from "@/src/store/settings/store";
 import Link from "next/link";
+import { cn } from "@/src/lib/utils";
 
 // --- Lazy Load Sections ---
 const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false });
@@ -25,7 +26,7 @@ const MENU_ITEMS = [
 
 export default function SettingsClient() {
   const isHydrated = useIsHydrated();
-  const [activeSection, setActiveSection] = useState('appearance');
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredItems = useMemo(() => {
@@ -70,7 +71,7 @@ export default function SettingsClient() {
     <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 min-h-screen">
       
       {/* ── Sidebar Navigation ─────────────────────────────────────────── */}
-      <aside className="w-full lg:w-80 flex-shrink-0 space-y-8">
+      <aside className={cn("w-full lg:w-80 flex-shrink-0 space-y-8", activeSection ? "hidden lg:block" : "block")}>
         <div className="space-y-6">
           <div className="px-4 space-y-6">
             <Link 
@@ -154,47 +155,61 @@ export default function SettingsClient() {
       </aside>
 
       {/* ── Active Section Content ────────────────────────────────────────── */}
-      <div className="flex-1 min-w-0 pb-32 lg:pb-0">
+      <div className={cn("flex-1 min-w-0 lg:pb-0", activeSection ? "block" : "hidden lg:block")}>
         <AnimatePresence mode="wait">
-          <m.div
-            key={activeSection}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-surface border border-border/40 rounded-4xl lg:rounded-6xl p-6 md:p-10 lg:p-16 shadow-premium relative overflow-hidden"
-          >
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
-            
-            <header className="mb-10 lg:mb-16 space-y-4 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-blue/5 flex items-center justify-center text-blue shadow-inner shadow-blue/10">
-                   {(() => {
-                     const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Sun;
-                     return <Icon className="w-6 h-6 lg:w-8 lg:h-8" />;
-                   })()}
-                </div>
-                <div>
-                  <h1 className="text-2xl lg:text-4xl font-black tracking-tight">
-                    {MENU_ITEMS.find(m => m.id === activeSection)?.label}
-                  </h1>
-                  <p className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 mt-1">
-                    {MENU_ITEMS.find(m => m.id === activeSection)?.group}
-                  </p>
-                </div>
-              </div>
-              <p className="text-sm text-text-4 font-medium max-w-2xl leading-relaxed pt-2">
-                {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. These preferences are synced across your local sessions automatically.
-              </p>
-            </header>
-
-            <div className="relative z-10 min-h-96">
-              {activeSection === 'appearance' && <AppearanceSection />}
-              {activeSection === 'privacy' && <PrivacySection />}
-              {activeSection === 'history' && <HistorySection />}
+          {!activeSection ? (
+            <div key="empty" className="hidden lg:flex flex-col items-center justify-center min-h-[500px] text-center space-y-4 text-text-4">
+              <Shield className="w-12 h-12 opacity-20" />
+              <p className="font-bold">Select a category to view settings</p>
             </div>
-          </m.div>
+          ) : (
+            <m.div
+              key={activeSection}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-surface border border-border/40 rounded-4xl lg:rounded-6xl p-6 md:p-10 lg:p-16 shadow-premium relative overflow-hidden"
+            >
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
+              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
+              
+              <header className="mb-6 lg:mb-16 space-y-4 relative z-10">
+                <button 
+                  onClick={() => setActiveSection(null)}
+                  className="lg:hidden inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest-sm text-text-4 hover:text-text mb-4"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Settings Menu
+                </button>
+                <div className="flex items-center gap-4">
+                  <div className="hidden lg:flex w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-blue/5 items-center justify-center text-blue shadow-inner shadow-blue/10">
+                     {(() => {
+                       const Icon = MENU_ITEMS.find(m => m.id === activeSection)?.icon || Sun;
+                       return <Icon className="w-6 h-6 lg:w-8 lg:h-8" />;
+                     })()}
+                  </div>
+                  <div>
+                    <h1 className="text-xl lg:text-4xl font-black tracking-tight">
+                      {MENU_ITEMS.find(m => m.id === activeSection)?.label}
+                    </h1>
+                    <p className="hidden lg:block text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 mt-1">
+                      {MENU_ITEMS.find(m => m.id === activeSection)?.group}
+                    </p>
+                  </div>
+                </div>
+                <p className="hidden lg:block text-sm text-text-4 font-medium max-w-2xl leading-relaxed pt-2">
+                  {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. These preferences are synced across your local sessions automatically.
+                </p>
+              </header>
+  
+              <div className="relative z-10 min-h-96">
+                {activeSection === 'appearance' && <AppearanceSection />}
+                {activeSection === 'privacy' && <PrivacySection />}
+                {activeSection === 'history' && <HistorySection />}
+              </div>
+            </m.div>
+          )}
         </AnimatePresence>
       </div>
 

@@ -119,21 +119,18 @@ export const PrivacySection = memo(function PrivacySection() {
         </label>
       </div>
 
-      <SettingRow 
-        label="Clear Tool Data" 
-        description="Wipe all locally stored tool inputs and processing history."
-        icon={RefreshCcw}
-        helpText="This will empty your local tool cache. Your theme preferences and favorites are kept safe."
-      >
+      <div className="pt-4 pb-2 border-b border-border/40 mb-6">
+        <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-4">Clear Tool Data</h4>
         <button 
           onClick={handleClearCache}
           disabled={isClearing}
-          className="px-4 py-2 bg-surface border border-border rounded-xl text-xs font-black uppercase hover:border-blue hover:text-blue transition-all disabled:opacity-50 flex items-center gap-2"
+          className="w-full flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-red-500/50 hover:text-red-500 hover:bg-red-500/5 transition-all disabled:opacity-50"
         >
-          {isClearing ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
-          Clear Cache
+          {isClearing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />}
+          {isClearing ? 'Clearing Cache...' : 'Clear Cache'}
         </button>
-      </SettingRow>
+        <p className="text-xs text-text-4 mt-3 font-medium text-center">This will empty your local tool cache. Your theme preferences and favorites are kept safe.</p>
+      </div>
 
       <div className="pt-12 border-t border-border/40 mt-8 space-y-12">
         <div>
@@ -160,7 +157,7 @@ export const PrivacySection = memo(function PrivacySection() {
         </div>
       </div>
 
-      <div className="pt-12 border-t border-border/40 mt-8">
+      <div className="pt-8 border-t border-border/40 mt-8">
         <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-red-500/60 mb-4">Danger Zone</h4>
         <button
           onClick={() => {
