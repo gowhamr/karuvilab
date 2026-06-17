@@ -6,8 +6,6 @@ import { PWARegistration } from "@/components/PWARegistration";
 import { ClientProviders } from "@/components/ClientProviders";
 import { MainLayout } from "@/components/system/MainLayout";
 import { RecoveryBanner } from "@/components/system/RecoveryBanner";
-import { CookieConsentBanner } from "@/components/system/CookieConsentBanner";
-import { AdSenseConditional } from "@/components/system/AdSenseConditional";
 import { StructuredData } from "@/src/lib/seo";
 import Script from "next/script";
 
@@ -121,8 +119,6 @@ export default function RootLayout({
         </a>
         <ClientProviders>
           <RecoveryBanner />
-          <CookieConsentBanner />
-          <AdSenseConditional />
           <MainLayout>
             {children}
           </MainLayout>
