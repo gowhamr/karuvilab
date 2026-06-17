@@ -8,7 +8,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { FavoriteButton } from './FavoriteButton';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
-import { TrustSection } from '../system/TrustSection';
+
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
 import { useMemo } from 'react';
@@ -185,7 +185,6 @@ export function ClientToolShell({ title, description, category, children, toolId
         </aside>
       </div>
 
-      <TrustSection requiresNetwork={currentTool?.requiresNetwork ?? false} />
 
       {related.length > 0 && (
         <section className="pt-12 border-t border-border space-y-8">
