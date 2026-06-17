@@ -406,29 +406,16 @@ export default function HomeClient() {
                         <ToolCard tool={tool} compact />
                       </m.div>
                     ))}
-
-                    {/* Browse-all card */}
-                    <m.div variants={fadeUp} className="col-span-2 sm:col-span-1 group">
-                      <Link
-                        href="/all-tools"
-                        aria-label="Browse all 100+ tools"
-                        className={cn(
-                          "relative flex flex-row sm:flex-col items-center justify-center gap-3 sm:gap-2",
-                          "h-full min-h-20 md:min-h-24 p-4 sm:p-3 rounded-2xl",
-                          "bg-blue/5 border border-dashed border-blue/25",
-                          "hover:border-blue/50 hover:bg-blue/10 hover:-translate-y-0.5",
-                          "transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-                        )}
-                      >
-                        <div className="w-9 h-9 rounded-full bg-blue text-white flex items-center justify-center shadow-md shadow-blue/20 group-hover:scale-110 transition-transform shrink-0">
-                          <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                        </div>
-                        <div className="flex flex-col sm:items-center text-left sm:text-center">
-                          <span className="text-xs font-black text-blue uppercase tracking-widest leading-tight">Browse All</span>
-                          <span className="text-[10px] font-bold text-blue/70 uppercase tracking-widest leading-tight">100+ Tools</span>
-                        </div>
-                      </Link>
-                    </m.div>
+                  </m.div>
+                  <m.div variants={fadeUp} className="flex justify-center mt-8">
+                    <Link
+                      href="/all-tools"
+                      aria-label="Browse all 100+ tools"
+                      className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-blue text-white text-sm font-bold shadow-md shadow-blue/25 hover:bg-blue-dark hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue/30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
+                    >
+                      Browse All 100+ Tools
+                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </Link>
                   </m.div>
                 </section>
 
