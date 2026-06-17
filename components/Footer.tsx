@@ -82,7 +82,7 @@ export function Footer() {
           {/* Quick Links Column Group */}
           <div className="flex-1 grid grid-cols-2 gap-4 md:gap-6 bg-surface border border-border rounded-2xl p-4 md:p-6 shadow-sm md:justify-items-end">
             <div className="space-y-3">
-              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-3">
                 Resources
               </h4>
               <ul className="space-y-0.5">
@@ -90,7 +90,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm font-bold text-text-muted hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
+                      className="text-sm font-medium text-text-4 hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>
@@ -99,7 +99,7 @@ export function Footer() {
               </ul>
             </div>
             <div className="space-y-3">
-              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
+              <h4 className="text-xs font-black uppercase tracking-widest text-text-3">
                 Legal
               </h4>
               <ul className="space-y-0.5">
@@ -107,7 +107,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm font-bold text-text-muted hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
+                      className="text-sm font-medium text-text-4 hover:text-blue transition-colors py-1 block flex items-center md:justify-end"
                     >
                       {link.label}
                     </Link>

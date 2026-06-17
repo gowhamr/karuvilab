@@ -15,7 +15,7 @@ interface ToolCardProps {
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
   return (
     <m.div
-      className="relative w-full h-full group"
+      className="relative w-full h-full flex flex-col group"
       whileHover={{
         y: -3,
         transition: { duration: 0.18, ease: [0.16, 1, 0.3, 1] },
@@ -30,7 +30,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
         href={`/${tool.href}`}
         className={cn(
           // Base
-          "relative flex flex-col h-full bg-mat-surface border border-mat-border",
+          "relative flex flex-col flex-1 h-full bg-mat-surface border border-mat-border",
           "overflow-hidden transition-all duration-150 ease-out",
           // Hover
           "hover:border-blue/30 hover:bg-mat-hover hover:shadow-md",
