@@ -262,7 +262,7 @@ export default function HomeClient() {
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-80"
                 >
                   {filteredTools.map(tool => (
-                    <m.div key={tool.id} variants={fadeUp}>
+                    <m.div key={tool.id} variants={fadeUp} className="h-full">
                       <ToolCard tool={tool} compact />
                     </m.div>
                   ))}
@@ -350,7 +350,7 @@ export default function HomeClient() {
                     className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
                   >
                     {popularTools.map(tool => (
-                      <m.div key={tool.id} variants={fadeUp}>
+                      <m.div key={tool.id} variants={fadeUp} className="h-full">
                         <ToolCard tool={tool} compact />
                       </m.div>
                     ))}
@@ -402,7 +402,7 @@ export default function HomeClient() {
                     className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
                   >
                     {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
-                      <m.div key={tool.id} variants={fadeUp}>
+                      <m.div key={tool.id} variants={fadeUp} className="h-full">
                         <ToolCard tool={tool} compact />
                       </m.div>
                     ))}
