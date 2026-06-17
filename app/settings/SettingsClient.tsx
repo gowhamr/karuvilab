@@ -184,7 +184,7 @@ export default function SettingsClient() {
                   </p>
                 </div>
               </div>
-              <p className="text-base lg:text-lg text-text-3 font-medium max-w-2xl leading-relaxed pt-2">
+              <p className="text-sm text-text-4 font-medium max-w-2xl leading-relaxed pt-2">
                 {MENU_ITEMS.find(m => m.id === activeSection)?.desc}. These preferences are synced across your local sessions automatically.
               </p>
             </header>

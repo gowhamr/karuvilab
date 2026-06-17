@@ -43,9 +43,8 @@ export function HomeHero() {
       </h1>
 
       {/* ── Sub-copy ── */}
-      <p className="text-sm sm:text-base text-text-muted font-medium max-w-md mx-auto leading-relaxed mb-5">
-        100+ local-first tools — files, PDFs, images, text and more.
-        <span className="hidden sm:inline"> Everything runs in your browser. Zero uploads, ever.</span>
+      <p className="text-sm sm:text-base text-text-4 max-w-xl mx-auto leading-relaxed font-medium mb-5">
+        Browser-native productivity tools running locally. Secure, lightning-fast, and completely free.
       </p>
 
       {/* ── CTAs ── */}

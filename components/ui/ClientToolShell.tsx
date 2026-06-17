@@ -65,8 +65,8 @@ export function ClientToolShell({ title, description, category, children, toolId
           </div>
         </div>
         <div className="space-y-4">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black">{title}</h1>
-          {description && <p className="text-text-3 text-lg leading-relaxed max-w-3xl">{description}</p>}
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight">{title}</h1>
+          {description && <p className="text-sm text-text-4 font-medium leading-relaxed max-w-3xl">{description}</p>}
         </div>
       </header>
 
