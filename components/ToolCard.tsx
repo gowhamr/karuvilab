@@ -84,7 +84,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             </p>
           )}
           {compact && (
-            <p className="text-[10px] text-text-muted font-medium line-clamp-1 leading-snug hidden sm:block">
+            <p className="text-[10px] text-text-muted font-medium line-clamp-2 leading-snug">
               {tool.desc}
             </p>
           )}

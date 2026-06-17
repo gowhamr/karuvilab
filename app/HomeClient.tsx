@@ -197,17 +197,7 @@ export default function HomeClient() {
 
         {/* ── Search bar (mobile only — desktop uses sidebar) ── */}
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 md:pt-6">
-          <div className="sm:hidden w-full">
-            <button
-              onClick={() => setIsPaletteOpen(true)}
-              aria-label="Open search palette"
-              className="w-full h-12 flex items-center gap-3 px-4 bg-surface border border-border rounded-2xl text-sm font-medium text-text-muted hover:border-blue/30 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-            >
-              <Command className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span className="flex-1 text-left">Search 100+ tools…</span>
-              <kbd className="hidden sm:inline text-xs font-mono border border-border rounded px-1.5 py-0.5">⌘K</kbd>
-            </button>
-          </div>
+
           <div className="hidden sm:block w-full max-w-xl mx-auto">
             <SearchBar variant="hero" />
           </div>
