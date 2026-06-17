@@ -124,21 +124,21 @@ export function Footer() {
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           {/* Branding */}
           <div className="flex items-center gap-2 shrink-0">
-            <KVLogo size="sm" withText={false} className="opacity-60 hover:opacity-100 transition-all" />
-            <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">
+            <KVLogo size="sm" withText={false} className="opacity-40 hover:opacity-100 transition-all" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-text-4">
               Powered by KaruviLab
             </span>
           </div>
 
           {/* Trust Strip */}
-          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-tiny font-bold uppercase tracking-widest-sm text-text-2">
-            <span className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-[10px] font-bold uppercase tracking-widest text-text-4">
+            <span className="flex items-center gap-1.5 opacity-80">
               <WifiOff className="w-3 h-3" /> Works Offline
             </span>
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5 opacity-80">
               <ShieldCheck className="w-3 h-3" /> 100% Private
             </span>
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5 opacity-80">
               <Cpu className="w-3 h-3" /> Local Processing
             </span>
           </div>
