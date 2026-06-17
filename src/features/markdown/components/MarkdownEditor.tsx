@@ -341,19 +341,19 @@ export function MarkdownEditor() {
           <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
             <button
               onClick={() => handleExport("html")}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
+              className="flex items-center gap-1.5 px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
             >
               <Code2 className="w-3.5 h-3.5" /> HTML
             </button>
             <button
               onClick={() => handleExport("pdf")}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
+              className="flex items-center gap-1.5 px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/5 hover:text-blue transition-all border-r border-border"
             >
               <FileText className="w-3.5 h-3.5" /> PDF
             </button>
             <button
               onClick={() => handleExport("word")}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-black uppercase tracking-widest text-text-3 hover:bg-blue/5 hover:text-blue transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/5 hover:text-blue transition-all"
             >
               <FileCode className="w-3.5 h-3.5" /> Word
             </button>
@@ -377,7 +377,7 @@ export function MarkdownEditor() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className={cn(
               "flex flex-col bg-surface border border-border rounded-4xl overflow-hidden shadow-sm w-full",
-              isThisToolFullscreen ? "h-full" : "h-[75vh] md:h-[70vh] min-h-full max-h-screen"
+              isThisToolFullscreen ? "h-full" : "h-tool-viewport md:h-tool-viewport min-h-full max-h-screen"
             )}
           >
             {/* Hide Toolbar in Preview mode on mobile */}
@@ -443,14 +443,14 @@ export function MarkdownEditor() {
             />
 
             {fileName && (
-              <div className="flex flex-col h-[60vh] min-h-96 max-h-[80vh] bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
+              <div className="flex flex-col h-[60vh] min-h-96 max-h-tool-viewport-lg bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
                 <div className="px-6 py-4 border-b border-border bg-bg/50 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue/10 rounded-2xl flex items-center justify-center shrink-0">
                       <FileCode className="w-5 h-5 text-blue" />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-xs font-black uppercase tracking-widest truncate">{fileName}</h4>
+                      <h4 className="text-tiny font-bold uppercase tracking-widest-sm truncate">{fileName}</h4>
                       <p className="text-xs font-bold text-text-4 uppercase tracking-tighter truncate">
                         {stats.words} words • {stats.chars} characters
                       </p>

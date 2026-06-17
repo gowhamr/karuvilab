@@ -94,7 +94,7 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
         {/* LEFT: Controls */}
         <div className="lg:col-span-7 bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Layers className="w-3.5 h-3.5" /> Glass Properties
             </h3>
           </div>
@@ -149,7 +149,7 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Export Code</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Export Code</h3>
                 <CopyButton text={outputTab === 'css' ? cssValue : tailwindValue} />
              </div>
 
@@ -166,7 +166,7 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
-             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Presets</h3>
+             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Presets</h3>
              <div className="grid grid-cols-2 gap-3">
                {PRESETS.map((p, i) => (
                  <button

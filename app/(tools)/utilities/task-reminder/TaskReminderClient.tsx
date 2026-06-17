@@ -117,7 +117,7 @@ export default function TaskReminderClient() {
           <button
             onClick={addTask}
             disabled={!newText.trim()}
-            className="h-12 px-8 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
+            className="h-12 px-8 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
           >
             Add Task
           </button>
@@ -202,7 +202,7 @@ export default function TaskReminderClient() {
         )}
       </div>
 
-      <p className="text-xs text-text-4 text-center font-black uppercase tracking-[0.2em]">
+      <p className="text-xs text-text-4 text-center font-black uppercase tracking-widest-lg">
         Data secured on your device via LocalStorage
       </p>
     </div>

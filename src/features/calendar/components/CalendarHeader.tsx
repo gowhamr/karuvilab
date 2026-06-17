@@ -80,7 +80,7 @@ export function CalendarHeader({
             </button>
             <button
               onClick={handleToday}
-              className="px-2 md:px-4 py-2 text-tiny md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 hover:text-indigo-600 transition-colors min-h-11"
+              className="px-2 md:px-4 py-2 text-tiny md:text-tiny font-bold uppercase tracking-widest-sm-md md:tracking-widest-lg text-text-4 hover:text-indigo-600 transition-colors min-h-11"
             >
               Today
             </button>
@@ -97,7 +97,7 @@ export function CalendarHeader({
         <div className="flex items-center gap-3 w-full md:w-auto">
           <button
             onClick={onToggleSidebar}
-            className="lg:hidden flex items-center justify-center gap-2 px-5 py-3.5 bg-surface border border-border/30 rounded-xl font-black text-xs md:text-xs uppercase tracking-[0.15em] hover:bg-hover active:scale-95 transition-all text-text-2 flex-1 min-h-11"
+            className="lg:hidden flex items-center justify-center gap-2 px-5 py-3.5 bg-surface border border-border/30 rounded-xl font-black text-xs md:text-xs uppercase tracking-widest-md hover:bg-hover active:scale-95 transition-all text-text-2 flex-1 min-h-11"
             aria-label="Toggle calendar settings"
           >
             <Settings className="w-4 h-4 text-indigo-500" />
@@ -106,7 +106,7 @@ export function CalendarHeader({
 
           <button
             onClick={onAddEvent}
-            className="flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 bg-indigo-600 text-white rounded-xl font-black text-xs md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group flex-1 md:flex-none min-h-11"
+            className="flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 bg-indigo-600 text-white rounded-xl font-black text-xs md:text-xs uppercase tracking-widest-md md:tracking-widest-lg hover:bg-indigo-700 transition-all shadow-lg md:shadow-xl shadow-indigo-500/30 active:scale-95 group flex-1 md:flex-none min-h-11"
           >
             <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform duration-300" />
             <span>New Event</span>
@@ -137,7 +137,7 @@ function ToggleGroupItem({ value, icon: Icon, label }: { value: string, icon: an
     <ToggleGroup.Item
       value={value}
       className={cn(
-        "flex items-center gap-3 px-6 py-3.5 md:py-3 rounded-xl text-xs md:text-xs font-black uppercase tracking-[0.15em] transition-all relative group min-h-11",
+        "flex items-center gap-3 px-6 py-3.5 md:py-3 rounded-xl text-xs md:text-tiny font-bold uppercase tracking-widest-sm-md transition-all relative group min-h-11",
         "data-[state=on]:bg-indigo-600 data-[state=on]:text-white data-[state=on]:shadow-lg data-[state=on]:shadow-indigo-500/20",
         "data-[state=off]:text-text-4 data-[state=off]:hover:bg-surface/50 data-[state=off]:hover:text-text-2"
       )}

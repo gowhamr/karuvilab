@@ -111,11 +111,11 @@ export default function ColorConverterClient() {
         <div className="flex gap-2">
           <div className={cn(
             "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
-            aa ? "bg-green-500/10 border-green-500/20 text-green-500" : "bg-red-500/10 border-red-500/20 text-red-500"
+            aa ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
           )}>AA {aa ? "PASS" : "FAIL"}</div>
           <div className={cn(
             "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
-            aaa ? "bg-green-500/10 border-green-500/20 text-green-500" : "bg-red-500/10 border-red-500/20 text-red-500"
+            aaa ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
           )}>AAA {aaa ? "PASS" : "FAIL"}</div>
         </div>
       </div>
@@ -166,17 +166,17 @@ export default function ColorConverterClient() {
                   transition={{ duration: 0.3 }}
                   className={cn(
                     "flex items-center gap-3 bg-surface border p-4 rounded-xl shadow-sm transition-colors",
-                    invalid ? "border-red-500/50" : "border-border"
+                    invalid ? "border-error/50" : "border-border"
                   )}
                 >
-                   <Hash className={cn("w-5 h-5", invalid ? "text-red-500" : "text-blue")} />
+                   <Hash className={cn("w-5 h-5", invalid ? "text-error" : "text-blue")} />
                    <input 
                      value={hex}
                      onChange={(e) => handleInputChange(e.target.value)}
                      className="bg-transparent outline-none font-mono font-bold text-xl w-full uppercase"
                      placeholder="#000000"
                    />
-                   {invalid && <AlertCircle className="w-4 h-4 text-red-500 animate-pulse" />}
+                   {invalid && <AlertCircle className="w-4 h-4 text-error animate-pulse" />}
                 </m.div>
              </div>
           </div>
@@ -187,7 +187,7 @@ export default function ColorConverterClient() {
           </div>
 
           <div className="space-y-4">
-             <h4 className="text-xs font-black text-text-4 uppercase tracking-[0.2em] flex items-center gap-2">
+             <h4 className="text-xs font-black text-text-4 uppercase tracking-widest-lg flex items-center gap-2">
                 <Sparkles className="w-3 h-3" /> Recent Palettes
              </h4>
              <div className="flex flex-wrap gap-3">

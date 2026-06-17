@@ -42,7 +42,7 @@ export function ImageConverterControls({
     <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
       {/* Format Selection */}
       <div className="space-y-4">
-        <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4">
+        <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">
           Output Format
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -50,7 +50,7 @@ export function ImageConverterControls({
             <button
               key={f.value}
               onClick={() => setTargetFmt(f.value)}
-              className={`relative py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border ${
+              className={`relative py-4 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all border ${
                 targetFmt === f.value
                   ? "bg-blue text-white border-blue shadow-lg shadow-blue/20"
                   : "bg-bg text-text-3 border-border hover:border-blue/50"
@@ -71,7 +71,7 @@ export function ImageConverterControls({
 
       {/* Presets */}
       <div className="space-y-4">
-        <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4">
+        <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">
           Conversion Preset
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

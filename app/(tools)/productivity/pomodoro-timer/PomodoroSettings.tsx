@@ -2,7 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, Clock } from "lucide-react";
-import { usePomodoroStore } from "@/src/store/usePomodoroStore";
+import { usePomodoroStore } from "@/src/features/pomodoro-timer/store";
 import { SliderField } from "@/components/ui/SliderField";
 
 import { useShallow } from "zustand/react/shallow";
@@ -23,7 +23,7 @@ export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] animate-in fade-in duration-200" />
+        <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-dropdown animate-in fade-in duration-200" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-surface border border-border p-8 rounded-4xl shadow-2xl z-[101] animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
@@ -78,7 +78,7 @@ export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
 
             <button
               onClick={onClose}
-              className="w-full mt-10 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-md shadow-blue/10 active:scale-[0.98] transition-all"
+              className="w-full mt-10 py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest-lg shadow-md shadow-blue/10 active:scale-98 transition-all"
             >
               Apply Changes
             </button>

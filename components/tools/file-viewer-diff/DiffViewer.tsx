@@ -31,7 +31,7 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
   
   return (
     <div className={cn("bg-surface border border-border rounded-2xl overflow-hidden flex flex-col font-mono text-xs", className)}>
-      <div className="flex bg-bg border-b border-border px-4 py-2 justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
+      <div className="flex bg-bg border-b border-border px-4 py-2 justify-between items-center text-tiny font-bold uppercase tracking-widest-sm text-text-4">
         <div className="flex-1">Original</div>
         <div className="w-px h-4 bg-border mx-4" />
         <div className="flex-1">Modified</div>
@@ -64,7 +64,7 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
                 <td className="w-10 px-2 text-right text-text-4 border-r border-border select-none bg-surface/50">
                   {line.lineA || ""}
                 </td>
-                <td className="px-4 py-0.5 whitespace-pre min-w-[50%] border-r border-border">
+                <td className="px-4 py-0.5 whitespace-pre min-w-1/2 border-r border-border">
                   {line.type !== 'added' ? line.text : ""}
                 </td>
                 
@@ -72,7 +72,7 @@ export function DiffViewer({ diff, className }: DiffViewerProps) {
                 <td className="w-10 px-2 text-right text-text-4 border-r border-border select-none bg-surface/50">
                   {line.lineB || ""}
                 </td>
-                <td className="px-4 py-0.5 whitespace-pre min-w-[50%]">
+                <td className="px-4 py-0.5 whitespace-pre min-w-1/2">
                   {line.type !== 'removed' ? line.text : ""}
                 </td>
               </tr>

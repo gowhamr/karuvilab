@@ -14,13 +14,13 @@ export const LineItemsSection = ({ items, currency, addItem, removeItem, updateI
   return (
     <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+        <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
            <div className="w-1.5 h-1.5 rounded-full bg-blue" />
            Line Items
         </h2>
         <button 
           onClick={addItem}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue/5 text-blue text-xs font-black uppercase tracking-widest hover:bg-blue/10 transition-all active:scale-95"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue/5 text-blue text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue/10 transition-all active:scale-95"
           aria-label="Add Item"
         >
           <Plus className="w-3.5 h-3.5" /> Add Item

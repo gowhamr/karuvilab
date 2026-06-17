@@ -27,7 +27,7 @@ export default function DownloadRenderer({ result }: { result: ToolResult }) {
       </div>
       <button
         onClick={() => download(result)}
-        className="mt-4 flex items-center gap-2 px-8 py-4 bg-brand-primary text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20"
+        className="mt-4 flex items-center gap-2 px-8 py-4 bg-brand-primary text-white rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20"
       >
         <Download className="w-4 h-4" />
         Download Again

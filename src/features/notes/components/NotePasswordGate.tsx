@@ -64,13 +64,13 @@ export function NotePasswordGate({
             <button
               type="button"
               onClick={onCancelUnlock}
-              className="flex-1 py-3 px-4 bg-surface hover:bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest text-text-3 hover:text-text transition-all"
+              className="flex-1 py-3 px-4 bg-surface hover:bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:text-text transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 px-4 bg-blue hover:bg-blue/90 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue/20"
+              className="flex-1 py-3 px-4 bg-blue hover:bg-blue/90 text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all shadow-lg shadow-blue/20"
             >
               Unlock
             </button>
@@ -115,13 +115,13 @@ export function NotePasswordGate({
             <button
               type="button"
               onClick={onCancelEncrypt}
-              className="flex-1 py-3 px-4 bg-surface hover:bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest text-text-3 hover:text-text transition-all"
+              className="flex-1 py-3 px-4 bg-surface hover:bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:text-text transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 px-4 bg-blue hover:bg-blue/90 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue/20"
+              className="flex-1 py-3 px-4 bg-blue hover:bg-blue/90 text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all shadow-lg shadow-blue/20"
             >
               Encrypt
             </button>

@@ -72,7 +72,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                         className="absolute left-0 right-0 border-t-2 border-red-500 z-20 pointer-events-none flex items-center"
                         style={{ top: `${(now.getHours() * 60 + now.getMinutes()) / 1440 * 1920}px` }}
                       >
-                        <div className="w-2.5 h-2.5 rounded-full bg-red-500 -ml-1.25 shadow-[0_0_12px_rgba(239,68,68,0.6)]" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-red-500 -ml-1.25 shadow-glow-error" />
                       </div>
                     )}
 
@@ -96,7 +96,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                             useCalendarStore.getState().setSelectedEvent(event.id);
                           }}
                           className={cn(
-                            "absolute left-1.5 right-1.5 rounded-2xl p-3 border shadow-md cursor-pointer z-10 overflow-hidden group hover:z-30 transition-all hover:shadow-xl hover:scale-[1.02]",
+                            "absolute left-1.5 right-1.5 rounded-2xl p-3 border shadow-md cursor-pointer z-10 overflow-hidden group hover:z-30 transition-all hover:shadow-xl hover:scale-102",
                             (COLOR_MAP as any)[event.color].bg,
                             (COLOR_MAP as any)[event.color].border,
                             (COLOR_MAP as any)[event.color].text
@@ -133,7 +133,7 @@ function HeaderCell({ day }: { day: Date }) {
 
   return (
     <div className="py-3 md:py-5 text-center border-r border-border/20 last:border-r-0 relative group">
-      <span className="text-tiny md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-text-4 block mb-1 md:mb-1.5">
+      <span className="text-tiny md:text-tiny font-bold uppercase tracking-widest-sm-md md:tracking-widest-lg text-text-4 block mb-1 md:mb-1.5">
         {format(day, 'EEE')}
       </span>
       <div className="flex flex-col items-center">

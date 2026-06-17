@@ -102,13 +102,13 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
     <div className="flex flex-col h-full bg-bg border border-border rounded-xl overflow-hidden shadow-sm">
       {!hideHeader && (
         <div className="flex items-center justify-between px-4 py-2 bg-surface border-b border-border">
-          <span className="text-xs font-black text-text-4 uppercase tracking-[0.2em] flex items-center gap-2">
+          <span className="text-xs font-black text-text-4 uppercase tracking-widest-lg flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-blue" />
             Live Preview
           </span>
           <button 
             onClick={onCopyRaw}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-black uppercase tracking-widest text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all"
           >
             <Copy className="w-3 h-3" />
             Copy MD

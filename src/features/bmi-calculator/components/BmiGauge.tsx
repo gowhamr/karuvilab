@@ -50,7 +50,7 @@ export function BmiGauge({ bmi, threshold }: BmiGaugeProps) {
         <text x="275" y="170" textAnchor="middle" className="text-xs fill-text-4 font-bold">40</text>
       </svg>
 
-      <div className="text-center mt-[-40px] space-y-1">
+      <div className="text-center -mt-10 space-y-1">
         <m.span 
           key={bmi}
           initial={{ scale: 0.8, opacity: 0 }}
@@ -59,7 +59,7 @@ export function BmiGauge({ bmi, threshold }: BmiGaugeProps) {
         >
           {bmi}
         </m.span>
-        <span className={cn("text-sm font-black uppercase tracking-[0.2em]", threshold.color)}>
+        <span className={cn("text-sm font-black uppercase tracking-widest-lg", threshold.color)}>
           {threshold.label}
         </span>
       </div>

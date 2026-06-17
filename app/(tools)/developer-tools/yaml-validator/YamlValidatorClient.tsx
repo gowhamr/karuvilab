@@ -122,13 +122,13 @@ export default function YamlValidatorClient() {
       <div className="h-16">
         {isLoading && <p className="text-blue">Processing...</p>}
         {error && (
-          <div className="flex items-center gap-2 text-red-500 bg-red-500/10 p-3 rounded-lg">
+          <div className="flex items-center gap-2 text-error bg-error/10 p-3 rounded-lg">
             <AlertTriangle className="w-5 h-5" />
             <p className="font-bold">{error}</p>
           </div>
         )}
         {output && !error && (
-          <div className="flex items-center gap-2 text-green-600 bg-green-500/10 p-3 rounded-lg">
+          <div className="flex items-center gap-2 text-success bg-success/10 p-3 rounded-lg">
             <CheckCircle className="w-5 h-5" />
             <p className="font-bold">Operation completed successfully.</p>
           </div>

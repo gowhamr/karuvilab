@@ -42,7 +42,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
       <div className="flex items-center justify-between">
         <h3 
           id={label.replace(/\s+/g, "-").toLowerCase() + "-label"}
-          className="flex items-center gap-2 text-text-2 text-xs font-black uppercase tracking-widest truncate"
+          className="flex items-center gap-2 text-text-2 text-tiny font-bold uppercase tracking-widest-sm truncate"
         >
           {Icon && <Icon className="w-4 h-4" aria-hidden="true" focusable="false" />}
           {label}

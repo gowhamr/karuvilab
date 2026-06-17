@@ -1,13 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
 import { QRCodeLoader } from "@/components/ui/QRCodeLoader";
 import { Loader2 } from "lucide-react";
-
-const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
 const ECC_OPTIONS = [
   { value: "L", label: "L — Low (7%)" },
@@ -130,7 +126,7 @@ export default function QRCodeGeneratorClient() {
           <button
             onClick={handleDownload}
             disabled={downloading || !qrBlobUrl}
-            className="w-full max-w-xs py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60"
+            className="w-full max-w-xs py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-60"
           >
             {downloading ? "Downloading…" : "Download PNG"}
           </button>

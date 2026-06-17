@@ -189,7 +189,7 @@ export default function AudioConverterClient() {
                     <button
                       key={f}
                       onClick={() => setTargetFormat(f)}
-                      className={`py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
+                      className={`py-4 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${
                         targetFormat === f 
                           ? "bg-blue text-white shadow-lg shadow-blue/20" 
                           : "bg-bg border border-border text-text-4 hover:border-blue/30"

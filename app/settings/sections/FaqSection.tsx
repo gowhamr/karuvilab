@@ -34,7 +34,7 @@ export const FaqSection = memo(function FaqSection() {
       </div>
 
       <div className="space-y-6">
-        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2">Knowledge Base</h4>
+        <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2">Knowledge Base</h4>
         <Accordion type="single" collapsible className="w-full space-y-4">
           {FAQ.map((item, i) => (
             <AccordionItem key={i} value={`item-${i}`} className="bg-surface border border-border shadow-sm rounded-2xl px-6 overflow-hidden hover:border-blue/30 hover:shadow-md transition-all duration-300 group">

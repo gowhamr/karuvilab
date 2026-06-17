@@ -16,7 +16,7 @@ export function MetricSmall({ label, value, icon: Icon, color = "text-text-2" }:
         <Icon className="w-5 h-5" />
       </div>
       <div className="text-center">
-        <p className="text-xs font-black uppercase tracking-widest text-text-4">{label}</p>
+        <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">{label}</p>
         <p className={cn("text-xl font-black tracking-tight", color)}>{value}</p>
       </div>
     </div>

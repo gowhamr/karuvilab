@@ -16,7 +16,7 @@ export const ImageQueue: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-2">
-        <h2 className="text-xs font-black uppercase tracking-widest text-text-4">
+        <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
           Queue • {items.length} Images
         </h2>
       </div>

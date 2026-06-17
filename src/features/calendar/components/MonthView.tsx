@@ -34,7 +34,7 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
           <div className="grid grid-cols-7 border-b border-border/30 bg-bg/50 sticky top-0 z-20 backdrop-blur-md">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
               <div key={day} className="py-3 md:py-5 text-center">
-                <span className="text-xs md:text-xs font-black uppercase tracking-[0.1em] md:tracking-[0.25em] text-text-4">
+                <span className="text-xs md:text-tiny font-bold uppercase tracking-widest-sm-sm md:tracking-widest-xl text-text-4">
                   <span className="md:hidden">{day[0]}</span>
                   <span className="hidden md:inline">{day}</span>
                 </span>
@@ -100,11 +100,22 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
     return importanceOrder[a.importance] - importanceOrder[b.importance];
   });
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <div
       onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`Day cell for ${format(day, 'MMMM d, yyyy')}`}
       className={cn(
-        "min-h-15 md:min-h-36 p-1 md:p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all",
+        "min-h-15 md:min-h-36 p-1 md:p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset",
         !isCurrentMonth && "bg-bg/20 opacity-40",
         isCurrentMonth && "hover:bg-indigo-500/5",
         isToday && "bg-indigo-500/[0.05]"

@@ -88,7 +88,7 @@ export default function UnixTimestampClient() {
       {/* 1. Live Clock Header */}
       <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
         <div>
-          <h2 className="text-xs font-black uppercase tracking-widest text-blue mb-1">Live Epoch Clock</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-blue mb-1">Live Epoch Clock</h2>
           <p className="text-text-4 text-sm font-medium">Updates every second</p>
         </div>
         <div className="flex items-center gap-4 bg-bg border border-border px-6 py-4 rounded-2xl shadow-inner">
@@ -103,7 +103,7 @@ export default function UnixTimestampClient() {
       {/* 2. Converter */}
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+          <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
             <ArrowLeftRight className="w-4 h-4" />
             Converter
           </h2>
@@ -131,7 +131,7 @@ export default function UnixTimestampClient() {
         </div>
 
         <div className="space-y-4">
-          <label className="text-xs font-black uppercase tracking-widest text-text-4 block">
+          <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block">
             {mode === 'toHuman' ? 'Enter Timestamp (Seconds or Milliseconds)' : 'Enter Date and Time'}
           </label>
           
@@ -188,7 +188,7 @@ export default function UnixTimestampClient() {
 
           </div>
         ) : (
-          <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 text-sm font-medium text-center">
+          <div className="p-6 bg-error/10 border border-error/20 rounded-2xl text-error text-sm font-medium text-center">
             Invalid input provided. Please enter a valid timestamp or date.
           </div>
         )}

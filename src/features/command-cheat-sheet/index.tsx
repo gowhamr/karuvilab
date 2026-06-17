@@ -173,7 +173,7 @@ export default function CommandCheatSheet() {
                       {command.category}
                     </span>
                   </div>
-                  <code className="text-lg font-mono text-text block group-hover:text-white transition-colors">
+                  <code className="text-lg font-mono text-text block group-hover:text-blue transition-colors">
                     {command.cmd}
                   </code>
                   <p className="text-sm text-text-4">

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { EmiInputs, AffordabilityInputs } from '../lib/emi-calculations';
-import { getDB } from '../lib/db';
+import { EmiInputs, AffordabilityInputs } from '../../lib/emi-calculations';
+import { getDB } from '../../lib/db';
 
 export interface SavedScenario {
   id: string;

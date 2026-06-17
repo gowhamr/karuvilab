@@ -85,7 +85,7 @@ export const SingleMode: React.FC = () => {
             <button
               onClick={() => activeItem && compressItem(activeItem.id)}
               disabled={!activeItem || activeItem.status === 'processing'}
-              className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-blue/20 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+              className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-102 active:scale-98 transition-all shadow-lg shadow-blue/20 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
             >
               {activeItem?.status === 'processing' ? (
                 <>

@@ -161,7 +161,7 @@ export default function VideoTrimClient() {
 
             <div className="p-8 space-y-8">
               <div className="space-y-4">
-                <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
+                <div className="flex justify-between items-center text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                   <span>{formatDuration(range[0] || 0)}</span>
                   <span className="text-blue bg-blue/5 px-2 py-0.5 rounded-full">
                     Selected: {formatDuration(selectedDuration)}
@@ -196,7 +196,7 @@ export default function VideoTrimClient() {
                     if (videoRef.current?.paused) videoRef.current.play();
                     else videoRef.current?.pause();
                   }}
-                  className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-2xl text-xs font-black uppercase tracking-widest hover:border-blue transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue transition-all"
                 >
                    <Play size={14} className="fill-current" /> Play Selection
                 </button>

@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { metadata } from "./metadata";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PWARegistration } from "@/components/PWARegistration";
 import { ClientProviders } from "@/components/ClientProviders";
 import { MainLayout } from "@/components/system/MainLayout";
@@ -117,7 +115,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
         <a 
           href="#main-content" 
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-blue focus:text-white focus:rounded-xl focus:font-black focus:uppercase focus:tracking-widest focus:shadow-2xl focus:shadow-blue/50 outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-dropdown focus:px-6 focus:py-3 focus:bg-blue focus:text-white focus:rounded-xl focus:font-black focus:uppercase focus:tracking-widest focus:shadow-2xl focus:shadow-blue/50 outline-none"
         >
           Skip to Content
         </a>
@@ -131,8 +129,6 @@ export default function RootLayout({
           <PWARegistration />
           <StructuredData />
         </ClientProviders>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

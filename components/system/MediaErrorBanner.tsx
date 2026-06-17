@@ -64,7 +64,7 @@ export function MediaErrorBanner({
         {retryAction && (
           <button
             onClick={retryAction}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-[0.2em] hover:opacity-90 active:scale-95 transition-all shadow-md shadow-blue/10"
+            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm-lg hover:opacity-90 active:scale-95 transition-all shadow-md shadow-blue/10"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Retry
@@ -73,7 +73,7 @@ export function MediaErrorBanner({
         {changeFileAction && (
           <button
             onClick={changeFileAction}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-surface border border-border text-text-2 rounded-xl text-xs font-black uppercase tracking-[0.2em] hover:border-blue/50 transition-all active:scale-95 shadow-sm"
+            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-surface border border-border text-text-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm-lg hover:border-blue/50 transition-all active:scale-95 shadow-sm"
           >
             <FilePlus className="w-3.5 h-3.5" />
             Try Different File

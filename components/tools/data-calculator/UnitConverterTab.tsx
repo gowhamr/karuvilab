@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { DATA_UNITS, convertData } from "@/src/lib/data-unit-utils";
-import { useDataCalcStore } from "@/src/store/useDataCalcStore";
+import { useDataCalcStore } from "@/src/features/data-calculator/store";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { ArrowUpDown, History as HistoryIcon, Trash2 } from "lucide-react";
 import { formatCurrency } from "@/src/lib/utils";
@@ -57,7 +57,7 @@ export function UnitConverterTab() {
       <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div className="space-y-4">
-            <label htmlFor="data-from-unit" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">From</label>
+            <label htmlFor="data-from-unit" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-1">From</label>
             <div className="flex gap-3">
               <select
                 id="data-from-unit"
@@ -82,7 +82,7 @@ export function UnitConverterTab() {
           </div>
 
           <div className="space-y-4">
-            <label htmlFor="data-to-unit" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">To</label>
+            <label htmlFor="data-to-unit" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-1">To</label>
             <div className="flex gap-3">
               <select
                 id="data-to-unit"
@@ -106,7 +106,7 @@ export function UnitConverterTab() {
         <div className="flex justify-between items-center gap-4">
           <button
             onClick={handleSwap}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl border border-border hover:border-blue hover:text-blue transition-all text-xs font-black uppercase tracking-widest bg-surface shadow-sm active:scale-95"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl border border-border hover:border-blue hover:text-blue transition-all text-tiny font-bold uppercase tracking-widest-sm bg-surface shadow-sm active:scale-95"
           >
             <ArrowUpDown className="w-4 h-4" />
             Swap Units
@@ -114,7 +114,7 @@ export function UnitConverterTab() {
           
           <button
             onClick={handleConvert}
-            className="px-8 py-3 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:bg-blue-600 transition-all active:scale-95"
+            className="px-8 py-3 bg-blue text-white rounded-2xl text-tiny font-bold uppercase tracking-widest-sm shadow-md shadow-blue/10 hover:bg-blue-600 transition-all active:scale-95"
           >
             Save to History
           </button>
@@ -141,7 +141,7 @@ export function UnitConverterTab() {
                   <tr key={u.id} className={u.id === toUnit ? "bg-blue/5" : "hover:bg-bg/30"}>
                     <td className="px-6 py-4 font-bold text-text-2">{u.label}</td>
                     <td className="px-6 py-4 text-right font-black text-text tabular-nums">{fmtNum(conv)}</td>
-                    <td className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">
+                    <td className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                       {u.type.toUpperCase()}
                     </td>
                   </tr>
@@ -162,7 +162,7 @@ export function UnitConverterTab() {
             </div>
             <button
               onClick={clearHistory}
-              className="text-xs font-black uppercase tracking-widest text-error hover:underline flex items-center gap-1"
+              className="text-tiny font-bold uppercase tracking-widest-sm text-error hover:underline flex items-center gap-1"
             >
               <Trash2 className="w-3 h-3" />
               Clear
@@ -171,7 +171,7 @@ export function UnitConverterTab() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {history.map((h) => (
               <div key={h.id} className="p-4 bg-surface border border-border rounded-2xl flex flex-col gap-1 shadow-sm">
-                <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
+                <div className="flex justify-between items-center text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                   <span>{new Date(h.timestamp).toLocaleTimeString()}</span>
                   <span className="text-blue">{h.fromUnit} → {h.toUnit}</span>
                 </div>

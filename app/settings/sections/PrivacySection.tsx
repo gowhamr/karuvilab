@@ -99,7 +99,7 @@ export const PrivacySection = memo(function PrivacySection() {
       >
         <div className="flex items-center gap-2 px-3 py-1.5 bg-blue/5 border border-blue/10 rounded-lg text-blue">
           <Shield className="w-3.5 h-3.5" />
-          <span className="text-xs font-black uppercase tracking-widest">Always Active</span>
+          <span className="text-tiny font-bold uppercase tracking-widest-sm">Always Active</span>
         </div>
       </SettingRow>
 
@@ -107,12 +107,12 @@ export const PrivacySection = memo(function PrivacySection() {
         <button
           onClick={exportSettings}
           disabled={isExporting}
-          className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-xs font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all"
+          className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue transition-all"
         >
           {isExporting ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
           Export Settings (Store)
         </button>
-        <label className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-xs font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all cursor-pointer">
+        <label className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue transition-all cursor-pointer">
           <Upload className="w-4 h-4" />
           Import Settings
           <input type="file" accept=".json" className="hidden" onChange={importSettings} />
@@ -151,8 +151,8 @@ export const PrivacySection = memo(function PrivacySection() {
           </h3>
           <Accordion type="single" collapsible className="w-full space-y-3">
             {FAQ.map((item, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="bg-[--kv-mat-surface] border border-mat-border shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
-                <AccordionTrigger className="text-sm font-bold tracking-wide py-3 text-[--kv-text] [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[--kv-text-muted] [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
+              <AccordionItem key={i} value={`item-${i}`} className="bg-mat-surface border border-mat-border shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
+                <AccordionTrigger className="text-sm font-bold tracking-wide py-3 text-text [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-text-muted [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
                 <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
               </AccordionItem>
             ))}
@@ -161,7 +161,7 @@ export const PrivacySection = memo(function PrivacySection() {
       </div>
 
       <div className="pt-12 border-t border-border/40 mt-8">
-        <h4 className="text-xs font-black uppercase tracking-widest text-red-500/60 mb-4">Danger Zone</h4>
+        <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-red-500/60 mb-4">Danger Zone</h4>
         <button
           onClick={() => {
             toast('DANGER: This will delete ALL your settings, favorites, and history. This cannot be undone.', 'error', {

@@ -58,7 +58,7 @@ export function ExportButtons({ schedule, loanName = "Loan_Scenario" }: ExportBu
       <button
         onClick={exportToCSV}
         disabled={isExporting}
-        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest text-text-2 hover:border-blue hover:text-blue transition-all disabled:opacity-50"
+        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-2 hover:border-blue hover:text-blue transition-all disabled:opacity-50"
        aria-label="Download">
         <Download className="w-4 h-4" />
         {isExporting ? "Preparing CSV..." : "Export CSV"}
@@ -66,7 +66,7 @@ export function ExportButtons({ schedule, loanName = "Loan_Scenario" }: ExportBu
 
       <button
         onClick={handlePrint}
-        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all"
+        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm shadow-xl shadow-blue/20 hover:scale-102 active:scale-95 transition-all"
       >
         <Printer className="w-4 h-4" />
         Print to PDF

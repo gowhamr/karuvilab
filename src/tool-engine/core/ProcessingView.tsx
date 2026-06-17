@@ -18,7 +18,7 @@ export function ProcessingView({ progress, onCancel }: ProcessingViewProps) {
       </div>
       
       <div className="space-y-4 w-full max-w-md">
-        <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest">
+        <div className="flex items-center justify-between text-tiny font-bold uppercase tracking-widest-sm">
           <span className="text-text-3">Processing locally...</span>
           <span className="text-brand-primary">{Math.round(progress)}%</span>
         </div>

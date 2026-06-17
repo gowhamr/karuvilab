@@ -98,7 +98,7 @@ export function SyntaxEditor({
         <m.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-600 font-black uppercase tracking-[0.15em]"
+          className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-600 font-black uppercase tracking-widest-md"
         >
           <Info className="w-4 h-4" />
           Performance Mode: Syntax highlighting disabled for large files (&gt;100KB)
@@ -116,7 +116,7 @@ export function SyntaxEditor({
         {showLineNumbers && (
           <div 
             ref={lineNumbersRef}
-            className="bg-surface border-r border-border text-text-4 text-right py-4 px-4 select-none flex-shrink-0 min-w-[4rem] hidden sm:block overflow-hidden sticky left-0 z-10"
+            className="bg-surface border-r border-border text-text-4 text-right py-4 px-4 select-none flex-shrink-0 min-w-16 hidden sm:block overflow-hidden sticky left-0 z-10"
           >
             {lines.map((_, i) => (
               <div 
@@ -172,7 +172,7 @@ export function SyntaxEditor({
                  key={i} 
                  className={cn(
                    "relative h-7 leading-7 px-6 group/line transition-colors duration-150",
-                   hoveredLine === i && "bg-blue/5 border-l-2 border-blue -ml-[2px]"
+                   hoveredLine === i && "bg-blue/5 border-l-2 border-blue -ml-0.5"
                  )}
                  onMouseEnter={() => setHoveredLine(i)}
                  onMouseLeave={() => setHoveredLine(null)}

@@ -85,7 +85,7 @@ export default function HmacGeneratorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <KeyRound className="w-3.5 h-3.5" /> Configuration
             </h3>
             <div className="flex bg-bg border border-border rounded-xl p-1">
@@ -163,7 +163,7 @@ export default function HmacGeneratorClient() {
         <div className="space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
                 <FileCheck className="w-3 h-3" /> 
                 {mode === 'verify' ? 'Computed Signature' : 'Generated Signature'}
               </h3>
@@ -223,7 +223,7 @@ export default function HmacGeneratorClient() {
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
              <div className="flex items-center gap-2 text-emerald-600 mb-2">
                <ShieldCheck className="w-4 h-4" />
-               <span className="text-xs font-black uppercase tracking-widest">Client-Side Security</span>
+               <span className="text-tiny font-bold uppercase tracking-widest-sm">Client-Side Security</span>
              </div>
              <p className="text-sm font-medium text-text-3 leading-relaxed">
                HMAC generation uses the browser's native <code className="text-blue bg-blue/10 px-1.5 py-0.5 rounded">crypto.subtle</code> API. The secret key and payload are processed entirely in memory and are <strong>never transmitted</strong> to any server.

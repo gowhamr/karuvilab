@@ -101,7 +101,7 @@ export function CompareTab() {
       {!diff ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <div className="space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Original File</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-2">Original File</h3>
             {!fileA ? (
               <DropZone onFilesSelected={handleFileA} accept="*" title="Upload Original" className="h-48" />
             ) : (
@@ -132,7 +132,7 @@ export function CompareTab() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Modified File</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-2">Modified File</h3>
             {!fileB ? (
               <DropZone onFilesSelected={handleFileB} accept="*" title="Upload Modified" className="h-48" />
             ) : (
@@ -166,7 +166,7 @@ export function CompareTab() {
             <button
               onClick={computeDiff}
               disabled={!fileA || !fileB || isComputing}
-              className="px-12 py-5 bg-blue text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale flex items-center gap-3"
+              className="px-12 py-5 bg-blue text-white font-black uppercase tracking-widest-lg rounded-2xl shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale flex items-center gap-3"
             >
               {isComputing ? (
                 <>
@@ -198,7 +198,7 @@ export function CompareTab() {
             
             <button 
               onClick={() => setDiff(null)}
-              className="text-xs font-black uppercase tracking-widest text-blue hover:underline"
+              className="text-tiny font-bold uppercase tracking-widest-sm text-blue hover:underline"
             >
               Start New Comparison
             </button>

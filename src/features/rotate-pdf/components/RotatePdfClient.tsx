@@ -114,7 +114,7 @@ export default function RotatePdfClient() {
               <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                 {Array.from({ length: pageCount }, (_, i) => (
                   <div key={i} className="flex items-center gap-4 bg-bg border border-border rounded-xl px-5 py-3">
-                    <label htmlFor={`rotate-page-${i}`} className="text-xs font-black uppercase tracking-widest text-text-4 w-20 flex-shrink-0">Page {i + 1}</label>
+                    <label htmlFor={`rotate-page-${i}`} className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 w-20 flex-shrink-0">Page {i + 1}</label>
                     <select
                       id={`rotate-page-${i}`}
                       className="flex-1 px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all cursor-pointer"
@@ -139,7 +139,7 @@ export default function RotatePdfClient() {
       <button
         onClick={rotate}
         disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-black rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
+        className="w-full py-4 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
       >
         {processing ? "Rotating…" : "Rotate & Download"}
       </button>

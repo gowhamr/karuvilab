@@ -82,12 +82,12 @@ export const DataSection = memo(function DataSection() {
           <button
             onClick={exportSettings}
             disabled={isExporting}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all"
+            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue transition-all"
            aria-label="Export JSON">
             {isExporting ? <Check className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
             Export JSON
           </button>
-          <label className="flex items-center justify-center gap-2 px-6 py-2.5 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-blue hover:text-blue transition-all cursor-pointer">
+          <label className="flex items-center justify-center gap-2 px-6 py-2.5 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue transition-all cursor-pointer">
             <Upload className="w-3.5 h-3.5" />
             Import
             <input type="file" accept=".json" className="hidden" onChange={importSettings} />
@@ -112,7 +112,7 @@ export const DataSection = memo(function DataSection() {
       </SettingRow>
 
       <div className="pt-12 border-t border-border/40 mt-8">
-        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-error/60 mb-6">System Recovery</h4>
+        <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-error/60 mb-6">System Recovery</h4>
         <div className="p-6 bg-error/[0.03] border border-error/10 rounded-3xl space-y-4">
           <p className="text-sm text-text-3 font-medium leading-relaxed">
             Factory resetting will permanently delete <span className="text-error font-bold">ALL</span> data including favorites, history, custom themes, and cached assets. This action is irreversible.

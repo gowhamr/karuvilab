@@ -131,7 +131,7 @@ export default function ImageToPdfClient() {
       <button
         onClick={convert}
         disabled={images.length === 0 || processing}
-        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
       >
         {processing ? "Creating PDF…" : `Convert ${images.length} image${images.length !== 1 ? "s" : ""} to PDF`}
       </button>

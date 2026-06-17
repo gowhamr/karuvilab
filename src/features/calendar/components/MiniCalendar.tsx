@@ -29,7 +29,7 @@ export function MiniCalendar({ onSelect }: { onAddEvent?: () => void, onSelect?:
   return (
     <div className="w-64 p-4 bg-surface border border-border rounded-3xl shadow-xl">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="text-xs font-black uppercase tracking-widest text-text">
+        <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text">
           {format(viewDate, 'MMMM yyyy')}
         </h4>
         <div className="flex gap-1">

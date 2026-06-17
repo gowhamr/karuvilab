@@ -12,6 +12,7 @@ const dbPromise = typeof window !== 'undefined'
   : null;
 
 const writeTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+const pendingResolves = new Map<string, Array<() => void>>();
 
 export const idbStorage = {
   getItem: async (key: string): Promise<string | null> => {
@@ -37,12 +38,24 @@ export const idbStorage = {
       clearTimeout(writeTimeouts.get(key)!);
     }
     
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
+      if (!pendingResolves.has(key)) {
+        pendingResolves.set(key, []);
+      }
+      pendingResolves.get(key)!.push(resolve);
+      
       writeTimeouts.set(key, setTimeout(async () => {
-        const db = await dbPromise;
-        await db.put(STORE_NAME, value, key);
-        writeTimeouts.delete(key);
-        resolve();
+        try {
+          const db = await dbPromise;
+          await db.put(STORE_NAME, value, key);
+        } catch (e) {
+          console.error('[idbStorage] Write error:', e);
+        } finally {
+          writeTimeouts.delete(key);
+          const resolves = pendingResolves.get(key) || [];
+          pendingResolves.delete(key);
+          resolves.forEach(res => res());
+        }
       }, 500));
     });
   },

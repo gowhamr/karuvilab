@@ -218,7 +218,7 @@ export default function RegexTesterClient() {
               <div className="font-mono text-sm text-text break-all leading-relaxed whitespace-pre-wrap bg-bg border border-border rounded-xl p-4">
                 {highlighted.map((part, i) =>
                   part.match
-                    ? <mark key={i} className="bg-blue/20 text-blue dark:text-blue-light rounded px-0.5">{part.text}</mark>
+                    ? <mark key={i} className="bg-blue/20 text-blue rounded px-0.5">{part.text}</mark>
                     : <span key={i}>{part.text}</span>
                 )}
               </div>
@@ -233,7 +233,7 @@ export default function RegexTesterClient() {
                   <div key={i} className="bg-bg border border-border rounded-xl p-3 text-sm">
                     <div className="flex items-center gap-3 flex-wrap">
                       <span className="text-xs font-bold text-text-4">#{i + 1}</span>
-                      <span className="font-mono text-blue dark:text-blue-light">"{m.value}"</span>
+                      <span className="font-mono text-blue">"{m.value}"</span>
                       <span className="text-xs text-text-4">at index {m.index}</span>
                     </div>
                     {m.groups.length > 0 && (

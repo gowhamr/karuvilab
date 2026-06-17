@@ -50,13 +50,13 @@ export function CookieConsentBanner() {
           <div className="grid grid-cols-2 gap-3">
             <button 
               onClick={() => handleConsent("rejected")}
-              className="px-4 py-3 border border-mat-border hover:bg-mat-hover text-text-3 font-black text-xs uppercase tracking-[0.2em] rounded-xl transition-all active:scale-95"
+              className="px-4 py-3 border border-mat-border hover:bg-mat-hover text-text-3 font-black text-xs uppercase tracking-widest-lg rounded-xl transition-all active:scale-95"
             >
               Reject All
             </button>
             <button 
               onClick={() => handleConsent("accepted")}
-              className="px-4 py-3 bg-blue hover:bg-blue-dark text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl transition-all shadow-md shadow-blue/10 active:scale-95"
+              className="px-4 py-3 bg-blue hover:bg-blue-dark text-white font-black text-xs uppercase tracking-widest-lg rounded-xl transition-all shadow-md shadow-blue/10 active:scale-95"
             >
               Accept All
             </button>

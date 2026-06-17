@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { useEmiStore } from "@/src/store/useEmiStore";
+import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { checkAffordability } from "@/src/lib/emi-calculations";
 import { cn } from "@/src/lib/utils";
 
@@ -65,7 +65,7 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
 
           <div className="space-y-4">
             <dl className="flex justify-between items-end">
-              <dt className="text-xs font-black uppercase tracking-widest text-text-4">Risk Indicator</dt>
+              <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Risk Indicator</dt>
               <dd className={cn("text-sm font-black uppercase tracking-widest", riskTextColors[result.riskLevel])}>
                 {result.riskLevel} Risk
               </dd>

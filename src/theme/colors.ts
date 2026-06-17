@@ -27,6 +27,7 @@ export const colors = {
     2: "var(--color-text-2)",
     3: "var(--color-text-3)",
     4: "var(--color-text-4)",
+    muted: "var(--kv-text-muted)",
   },
   mat: {
     base: "var(--color-mat-base)",

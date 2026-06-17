@@ -77,7 +77,7 @@ export function CalculatorActionBar({
       {onExport && showProjection && (
         <button
           onClick={onExport}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-black uppercase tracking-widest bg-blue text-white rounded-lg hover:bg-blue/90 transition-colors focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
+          className="flex items-center gap-2 px-3 py-1.5 text-tiny font-bold uppercase tracking-widest-sm bg-blue text-white rounded-lg hover:bg-blue/90 transition-colors focus-visible:ring-2 focus-visible:ring-blue/20 outline-none"
           aria-label="Export projection data as CSV"
         >
           <Download className="w-3.5 h-3.5" aria-hidden="true" />

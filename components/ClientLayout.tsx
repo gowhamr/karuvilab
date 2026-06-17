@@ -20,9 +20,9 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         <FeedbackModal />
         <div className="flex min-h-screen">
           <Sidebar />
-          <div className="flex-1 flex flex-col md:ml-[280px] min-w-0">
+          <div className="flex-1 flex flex-col md:ml-sidebar min-w-0">
             <Header />
-            <div className={`flex-1 md:pb-0 ${isBarVisible ? 'pb-[136px]' : 'pb-[72px]'}`}>
+            <div className={`flex-1 md:pb-0 ${isBarVisible ? 'pb-[136px] ' : 'pb-[72px]'}`}>
               {children}
             </div>
             <Footer />

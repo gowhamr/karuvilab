@@ -17,6 +17,7 @@ export default function TypingSpeedTestClient() {
   const [status, setStatus] = useState<"idle" | "typing" | "finished">("idle");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const targetText = SAMPLE_TEXTS[textIndex]!;
@@ -26,6 +27,7 @@ export default function TypingSpeedTestClient() {
     if (status === "idle") {
       setStatus("typing");
       setStartTime(Date.now());
+      setSecondsElapsed(0);
     }
     setInput(val);
 
@@ -40,6 +42,7 @@ export default function TypingSpeedTestClient() {
     setStatus("idle");
     setStartTime(null);
     setEndTime(null);
+    setSecondsElapsed(0);
     setTextIndex((textIndex + 1) % SAMPLE_TEXTS.length);
     setTimeout(() => inputRef.current?.focus(), 0);
   };
@@ -62,13 +65,13 @@ export default function TypingSpeedTestClient() {
       accuracy: Math.round(accuracy),
       time: Math.round(timeElapsed * 60)
     };
-  }, [input, status, startTime, endTime, targetText]);
+  }, [input, status, startTime, endTime, targetText, secondsElapsed]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (status === "typing") {
       interval = setInterval(() => {
-        setInput(i => i); // Force re-render for timer
+        setSecondsElapsed(prev => prev + 1);
       }, 1000);
     }
     return () => clearInterval(interval);
@@ -124,6 +127,7 @@ export default function TypingSpeedTestClient() {
           className="absolute inset-0 w-full h-full opacity-0 cursor-text resize-none"
           autoFocus
           spellCheck={false}
+          aria-label="Typing speed test input area. Type the words shown above."
         />
 
         {status === "finished" && (

@@ -37,13 +37,16 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
         </Slider.Track>
         <Slider.Thumb
           id={id}
-          className="block w-6 h-6 bg-[--kv-text] border border-[--kv-brand-primary] rounded-full shadow-md cursor-pointer hover:scale-110 focus-visible:ring-2 focus-visible:ring-[--kv-brand-primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--kv-mat-base] focus:outline-none transition-all active:scale-95"
+          className="block w-6 h-6 bg-text border border-brand-primary rounded-full shadow-md cursor-pointer hover:scale-110 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base focus:outline-none transition-all active:scale-95"
           aria-label={label}
           aria-valuetext={display}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value}
         />
       </Slider.Root>
 
-      <div className="flex justify-between text-xs text-text-4 font-black uppercase tracking-[0.1em]" aria-hidden="true">
+      <div className="flex justify-between text-xs text-text-4 font-black uppercase tracking-widest-sm" aria-hidden="true">
         <span>{format ? format(min) : min}</span>
         <span>{format ? format(max) : max}</span>
       </div>

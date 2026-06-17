@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Save, FolderOpen, Trash2, CircleCheckBig as CheckCircle2 } from "lucide-react";
-import { useEmiStore } from "@/src/store/useEmiStore";
+import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { formatCurrency } from "@/src/lib/utils";
 import { useShallow } from "zustand/react/shallow";
 
@@ -42,7 +42,7 @@ export function SaveLoadScenarios() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 bg-blue/5 border border-blue/10 p-5 rounded-2xl sm:rounded-3xl">
         <div className="space-y-1">
-          <h4 className="text-xs font-black uppercase tracking-widest text-blue">Save this Calculation</h4>
+          <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-blue">Save this Calculation</h4>
           <p className="text-xs font-bold text-text-4">Persist this scenario to your local browser storage.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
@@ -56,7 +56,7 @@ export function SaveLoadScenarios() {
           <button
             onClick={handleSave}
             disabled={!newName.trim() || saveStatus !== 'idle'}
-            className="px-6 py-2.5 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+            className="px-6 py-2.5 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm flex items-center justify-center gap-2 shadow-lg shadow-blue/20 hover:scale-102 active:scale-95 transition-all disabled:opacity-50"
            aria-label="Check Circle2">
             {saveStatus === 'done' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
             {saveStatus === 'saving' ? "Saving..." : saveStatus === 'done' ? "Saved" : "Save"}
@@ -72,7 +72,7 @@ export function SaveLoadScenarios() {
           >
             <div className="flex items-center gap-2.5">
               <FolderOpen className="w-4 h-4 text-blue" />
-              <span className="text-xs font-black uppercase tracking-widest">My Saved Scenarios ({savedScenarios.length})</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm">My Saved Scenarios ({savedScenarios.length})</span>
             </div>
             <span className="text-tiny text-text-4 font-bold uppercase">{showSaved ? "Hide" : "Show"}</span>
           </button>

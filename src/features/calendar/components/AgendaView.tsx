@@ -70,7 +70,7 @@ function AgendaDay({
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-end ml-4">
-        <h2 className="text-xs font-black uppercase tracking-[0.3em] text-indigo-500/50">
+        <h2 className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-indigo-500/50">
           {label}
         </h2>
       </div>
@@ -106,7 +106,7 @@ function AgendaDay({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="group bg-surface/40 backdrop-blur-xl border border-border/30 p-4 md:p-6 rounded-2xl md:rounded-4xl flex items-center gap-4 md:gap-6 hover:border-indigo-500/30 transition-all shadow-md hover:shadow-xl active:scale-[0.98]"
+              className="group bg-surface/40 backdrop-blur-xl border border-border/30 p-4 md:p-6 rounded-2xl md:rounded-4xl flex items-center gap-4 md:gap-6 hover:border-indigo-500/30 transition-all shadow-md hover:shadow-xl active:scale-98"
             >
               <div className="w-14 md:w-20 flex-shrink-0 text-center border-r border-border/20 pr-4 md:pr-6">
                 <div className="text-xs md:text-sm font-black text-text tabular-nums">

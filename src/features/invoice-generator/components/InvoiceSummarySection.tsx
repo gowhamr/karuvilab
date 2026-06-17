@@ -34,7 +34,7 @@ export const InvoiceSummarySection = ({
 }: InvoiceSummarySectionProps) => {
   return (
     <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8 sticky top-24 print:hidden">
-       <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Final Summary</h2>
+       <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Final Summary</h2>
        
        <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
@@ -93,7 +93,7 @@ export const InvoiceSummarySection = ({
           </div>
 
           <div className="pt-4 border-t border-blue/10 flex justify-between items-end">
-             <span className="text-xs font-black uppercase tracking-[0.2em] text-blue mb-1">Grand Total</span>
+             <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue mb-1">Grand Total</span>
              <span className="text-3xl font-black text-blue tabular-nums leading-none tracking-tighter">
                {currency}{totals.total.toLocaleString()}
              </span>

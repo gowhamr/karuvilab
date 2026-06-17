@@ -34,7 +34,7 @@ export function IntelligenceCard({ icon: Icon, title, requirement, current, isLa
          </div>
          {status !== 'pending' && (
            <div className={cn(
-             "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2",
+             "px-3 py-1.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm flex items-center gap-2",
              status === 'yes' ? "bg-success text-white shadow-lg shadow-success/20" : "bg-error/10 text-error"
            )}>
               {status === 'yes' ? (

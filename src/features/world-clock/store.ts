@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { idbStorage } from './idb-storage';
+import { idbStorage } from '../../store/idb-storage';
 
 export interface ClockItem {
   id: string;

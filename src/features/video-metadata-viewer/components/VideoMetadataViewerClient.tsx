@@ -114,13 +114,13 @@ export default function VideoMetadataViewerClient() {
             <div className="flex gap-2">
               <button 
                 onClick={copyAsJson}
-                className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-blue transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue transition-all"
               >
                 <Copy size={14} /> Copy JSON
               </button>
               <button 
                 onClick={() => setFile(null)}
-                className="flex items-center gap-2 px-6 py-3 bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:text-error transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:text-error transition-all"
               >
                 Clear
               </button>
@@ -140,7 +140,7 @@ export default function VideoMetadataViewerClient() {
           <div className="bg-surface border border-border rounded-4xl overflow-hidden">
             <div className="p-6 border-b border-border bg-bg/50 flex items-center gap-3">
               <Info size={16} className="text-blue" />
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Technical Stream Info</h3>
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3">Technical Stream Info</h3>
             </div>
             <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                <div className="space-y-4">

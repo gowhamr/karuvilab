@@ -44,7 +44,7 @@ export function TagFilter() {
               : "bg-surface border-border text-text-3 hover:border-blue/50 hover:text-blue"
           }`}
         >
-          <Hash size={12} className={filterTag === tag ? "text-blue-light" : "text-text-4"} />
+          <Hash size={12} className={filterTag === tag ? "text-white" : "text-text-4"} />
           {tag}
         </button>
       ))}

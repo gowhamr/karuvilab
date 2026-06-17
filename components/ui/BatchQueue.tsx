@@ -157,7 +157,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                 {stats.total} Files
               </span>
             </h3>
-            <div className="flex flex-wrap gap-4 text-xs font-black uppercase tracking-[0.15em] text-text-4" role="status" aria-live="polite">
+            <div className="flex flex-wrap gap-4 text-tiny font-bold uppercase tracking-widest-sm-md text-text-4" role="status" aria-live="polite">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-green-500" /> {stats.completed} Complete</span>
               <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-blue" /> {stats.pending + stats.processing} Active</span>
               {stats.failed > 0 && <span className="flex items-center gap-1.5 text-red-500"><AlertCircle className="w-3 h-3" /> {stats.failed} Errors</span>}

@@ -5,7 +5,7 @@ import { ToolInput } from "@/components/ui/ToolInput";
 import { SliderField } from "@/components/ui/SliderField";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
-import { useEmiStore } from "@/src/store/useEmiStore";
+import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { useShallow } from "zustand/react/shallow";
 
 export function EmiInputs() {
@@ -55,7 +55,7 @@ export function EmiInputs() {
       <Accordion type="single" collapsible className="bg-bg/50 border border-border rounded-2xl px-6">
         <AccordionItem value="advanced-settings" className="border-none">
           <AccordionTrigger className="hover:no-underline py-4">
-            <span className="text-xs font-black uppercase tracking-widest text-text-3">Advanced Settings</span>
+            <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Advanced Settings</span>
           </AccordionTrigger>
           <AccordionContent className="pb-6 space-y-6">
             {/* Floating Rate Stress Test */}

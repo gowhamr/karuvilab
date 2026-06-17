@@ -143,7 +143,7 @@ export default function GradientGeneratorClient() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5" /> Adjustments
             </h3>
             
@@ -180,7 +180,7 @@ export default function GradientGeneratorClient() {
 
           <div className="space-y-4 border-t border-border/50 pt-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
                 <Palette className="w-3.5 h-3.5" /> Color Stops ({config.colorStops.length}/8)
               </h3>
               <button 
@@ -239,7 +239,7 @@ export default function GradientGeneratorClient() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Export Code</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Export Code</h3>
                 <CopyButton text={outputTab === 'css' ? `background: ${cssValue};` : tailwindValue} />
              </div>
 
@@ -256,7 +256,7 @@ export default function GradientGeneratorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
-             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Preset Gallery</h3>
+             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Preset Gallery</h3>
              <div className="grid grid-cols-4 gap-3">
                {PRESETS.map((p, i) => (
                  <button

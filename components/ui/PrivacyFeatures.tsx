@@ -36,7 +36,7 @@ export function PrivacyFeatures() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="relative flex items-start gap-4 md:flex-col md:items-start p-4 md:p-8 bg-[--kv-mat-surface] border border-mat-border shadow-sm rounded-xl overflow-hidden group hover:border-[--kv-brand-primary]/30 hover:-translate-y-0.5 transition-all duration-300"
+            className="relative flex items-start gap-4 md:flex-col md:items-start p-4 md:p-8 bg-mat-surface border border-mat-border shadow-sm rounded-xl overflow-hidden group hover:border-[--kv-brand-primary]/30 hover:-translate-y-0.5 transition-all duration-300"
           >
             <div className="hidden sm:block absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-110 transition-all duration-700">
               <f.icon className="w-24 h-24" />
@@ -46,8 +46,8 @@ export function PrivacyFeatures() {
               <f.icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div>
-              <h3 className="text-base md:text-xl font-black text-[--kv-text] tracking-tight">{f.title}</h3>
-              <p className="text-sm md:text-sm text-[--kv-text-muted] font-medium mt-1 leading-relaxed">
+              <h3 className="text-base md:text-xl font-black text-text tracking-tight">{f.title}</h3>
+              <p className="text-sm md:text-sm text-text-muted font-medium mt-1 leading-relaxed">
                 {f.desc}
               </p>
             </div>

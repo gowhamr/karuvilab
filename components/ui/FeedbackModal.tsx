@@ -86,13 +86,13 @@ export function FeedbackModal() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && closeFeedback()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[300] bg-black/50 backdrop-blur-sm animate-in fade-in duration-300" />
+        <Dialog.Overlay className="fixed inset-0 z-fixed bg-black/50 backdrop-blur-sm animate-in fade-in duration-300" />
         
         <Dialog.Content className={cn(
-          "fixed z-[301] overflow-hidden flex flex-col transition-all duration-300",
+          "fixed z-fixed overflow-hidden flex flex-col transition-all duration-300",
           blurEnabled ? "kv-glass" : "bg-mat-overlay border border-mat-border shadow-mat-shine",
           // Mobile: Bottom Sheet
-          "bottom-0 left-0 right-0 rounded-t-[32px] max-h-[90vh] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-0",
+          "bottom-0 left-0 right-0 rounded-t-4xl max-h-[90vh] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-0",
           // Desktop: Centered Modal
           "md:bottom-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:rounded-4xl md:max-h-[85vh]"
         )}>
@@ -102,7 +102,7 @@ export function FeedbackModal() {
               <Dialog.Title className="text-xl font-black tracking-tight">
                 {isSuccess ? "Thank You!" : "Feedback"}
               </Dialog.Title>
-              <Dialog.Description className="text-xs font-black uppercase tracking-widest text-text-4">
+              <Dialog.Description className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                 {isSuccess ? "We've received your report" : "Help us improve KV"}
               </Dialog.Description>
             </div>
@@ -151,7 +151,7 @@ export function FeedbackModal() {
 
                   {/* Issue Type */}
                   <div className="space-y-2">
-                    <label htmlFor="issue-type" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Type of Feedback</label>
+                    <label htmlFor="issue-type" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Type of Feedback</label>
                     <div className="relative">
                       <select 
                         id="issue-type"
@@ -169,7 +169,7 @@ export function FeedbackModal() {
 
                   {/* Email Address */}
                   <div className="space-y-2">
-                    <label htmlFor="feedback-email" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Email Address</label>
+                    <label htmlFor="feedback-email" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Email Address</label>
                     <input 
                       id="feedback-email"
                       type="email"
@@ -183,7 +183,7 @@ export function FeedbackModal() {
 
                   {/* Description */}
                   <div className="space-y-2">
-                    <label htmlFor="feedback-description" className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Description</label>
+                    <label htmlFor="feedback-description" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Description</label>
                     <textarea 
                       id="feedback-description"
                       required
@@ -196,7 +196,7 @@ export function FeedbackModal() {
 
                   {/* Screenshot */}
                   <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Attach Screenshot (Optional)</label>
+                    <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Attach Screenshot (Optional)</label>
                     <FileUpload 
                       onFileSelect={setScreenshot}
                       className="group relative w-full h-20 border-2 border-dashed border-mat-border rounded-2xl flex items-center justify-center bg-mat-base/50 hover:bg-mat-surface hover:border-brand-primary/30 transition-colors cursor-pointer"
@@ -206,7 +206,7 @@ export function FeedbackModal() {
                   {/* System Info */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between ml-1">
-                       <label className="text-xs font-black uppercase tracking-widest text-text-4">Diagnostic Info</label>
+                       <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Diagnostic Info</label>
                        <span className="text-tiny font-bold text-text-4 opacity-60 italic">Captured automatically</span>
                     </div>
                     <div className="p-4 bg-elevated/50 border border-border rounded-2xl space-y-2 text-xs font-bold text-text-3 font-mono">
@@ -242,7 +242,7 @@ export function FeedbackModal() {
                     <button 
                       disabled={isSubmitting}
                       type="submit"
-                      className="w-full h-16 bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                      className="w-full h-16 bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-102 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                      aria-label="Send">
                       {isSubmitting ? (
                         <div className="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin" />

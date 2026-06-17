@@ -99,7 +99,7 @@ export function ViewEditTab() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-text truncate max-w-52">{fileA.name}</h3>
-                <p className="text-xs font-black uppercase tracking-widest text-text-4">
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                   {fileA.language} • {formatFileSize(fileA.size)}
                 </p>
               </div>
@@ -109,7 +109,7 @@ export function ViewEditTab() {
               {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
                 <button
                   onClick={handleBeautify}
-                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue hover:text-white transition-all flex items-center gap-2"
+                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue hover:text-white transition-all flex items-center gap-2"
                   title="Beautify / Format"
                 >
                   <Sparkles className="w-4 h-4" />
@@ -155,7 +155,7 @@ export function ViewEditTab() {
              
              <div className="flex flex-wrap items-center gap-6">
                <div className="space-y-1">
-                 <label htmlFor="viewer-language-select" className="text-xs font-black uppercase tracking-widest text-text-4">Language</label>
+                 <label htmlFor="viewer-language-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Language</label>
                  <select
                    id="viewer-language-select"
                    value={fileA.language}
@@ -172,7 +172,7 @@ export function ViewEditTab() {
                     onChange={(e) => updateSettings({ wordWrap: e.target.checked })}
                     className="accent-blue"
                   />
-                  <span className="text-xs font-black uppercase tracking-widest text-text-4">Word Wrap</span>
+                  <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Word Wrap</span>
                </label>
 
                <label className="flex items-center gap-2 cursor-pointer pt-4">
@@ -181,7 +181,7 @@ export function ViewEditTab() {
                     onChange={(e) => updateSettings({ showLineNumbers: e.target.checked })}
                     className="accent-blue"
                   />
-                  <span className="text-xs font-black uppercase tracking-widest text-text-4">Lines</span>
+                  <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Lines</span>
                </label>
              </div>
           </div>

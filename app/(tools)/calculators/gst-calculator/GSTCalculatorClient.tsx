@@ -94,7 +94,7 @@ Generated via KaruviLab`;
 
             <div className="space-y-3" role="group" aria-labelledby={rateLabelId}>
               <div className="flex items-center justify-between">
-                <label id={rateLabelId} className="text-xs font-black uppercase tracking-[0.2em] text-text-4">GST Rate Slab</label>
+                <label id={rateLabelId} className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">GST Rate Slab</label>
                 <span className="text-xs font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-full">{gstRate}% Selected</span>
               </div>
               <div className="grid grid-cols-5 gap-2">
@@ -118,7 +118,7 @@ Generated via KaruviLab`;
 
           <div className="space-y-6">
             <div className="space-y-3" role="group" aria-labelledby={modeLabelId}>
-              <label id={modeLabelId} className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Calculation Mode</label>
+              <label id={modeLabelId} className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Calculation Mode</label>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setMode("add")}
@@ -128,7 +128,7 @@ Generated via KaruviLab`;
                       : "bg-bg border-border text-text-3 hover:border-blue/30"
                   }`}
                 >
-                  <span className="text-xs font-black uppercase tracking-widest">Add GST</span>
+                  <span className="text-tiny font-bold uppercase tracking-widest-sm">Add GST</span>
                   <span className="text-tiny font-bold opacity-60">Net + Tax</span>
                 </button>
                 <button
@@ -139,7 +139,7 @@ Generated via KaruviLab`;
                       : "bg-bg border-border text-text-3 hover:border-blue/30"
                   }`}
                 >
-                  <span className="text-xs font-black uppercase tracking-widest">Remove GST</span>
+                  <span className="text-tiny font-bold uppercase tracking-widest-sm">Remove GST</span>
                   <span className="text-tiny font-bold opacity-60">Inclusive - Tax</span>
                 </button>
               </div>
@@ -151,7 +151,7 @@ Generated via KaruviLab`;
                   <ArrowRightLeft size={14} className="text-blue" />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest">Interstate Sale</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm">Interstate Sale</p>
                   <p className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Use IGST instead of CGST/SGST</p>
                 </div>
               </div>
@@ -191,7 +191,7 @@ Generated via KaruviLab`;
       {/* Breakdown Card */}
       <div className="bg-surface border border-border rounded-4xl overflow-hidden">
         <div className="p-6 border-b border-border bg-bg/50 flex items-center justify-between">
-          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-3">Tax Breakdown</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3">Tax Breakdown</h2>
           <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Local Currency (INR)</span>
         </div>
         <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -200,14 +200,14 @@ Generated via KaruviLab`;
               <>
                 <div className="flex justify-between items-center pb-4 border-b border-border/50">
                   <div>
-                    <dt className="text-xs font-black uppercase tracking-widest text-text-2">CGST</dt>
+                    <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">CGST</dt>
                     <dd className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Central Tax ({gstRate/2}%)</dd>
                   </div>
                   <dd className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.cgst, 2)}</dd>
                 </div>
                 <div className="flex justify-between items-center">
                   <div>
-                    <dt className="text-xs font-black uppercase tracking-widest text-text-2">SGST</dt>
+                    <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">SGST</dt>
                     <dd className="text-tiny font-bold text-text-4 uppercase tracking-tighter">State Tax ({gstRate/2}%)</dd>
                   </div>
                   <dd className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.sgst, 2)}</dd>
@@ -216,7 +216,7 @@ Generated via KaruviLab`;
             ) : (
               <div className="flex justify-between items-center h-full">
                 <div>
-                  <dt className="text-xs font-black uppercase tracking-widest text-text-2">IGST</dt>
+                  <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">IGST</dt>
                   <dd className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Integrated Tax ({gstRate}%)</dd>
                 </div>
                 <dd className="font-mono text-2xl font-black text-blue">{formatINR(taxBreakdown.igst, 2)}</dd>
@@ -227,7 +227,7 @@ Generated via KaruviLab`;
           <div className="bg-bg/50 rounded-2xl p-6 space-y-4">
             <div className="flex items-center gap-2 text-blue">
               <Info size={14} />
-              <span className="text-xs font-black uppercase tracking-[0.1em]">Calculation Details</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm-sm">Calculation Details</span>
             </div>
             <div className="space-y-2">
               <p className="text-xs font-medium leading-relaxed text-text-3 italic">

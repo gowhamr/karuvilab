@@ -28,7 +28,7 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.95 }}
       onClick={() => toggleFavorite(toolId)}
-      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${
         active
           ? "bg-red-500 text-white shadow-md shadow-red-500/10"
           : "bg-surface border border-border text-text-4 hover:border-red-500/30 hover:text-red-500"

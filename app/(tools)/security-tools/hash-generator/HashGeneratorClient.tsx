@@ -154,7 +154,7 @@ export default function HashGeneratorClient() {
           onClick={() => setMode("text")}
           className={cn(
             "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
-            mode === "text" ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02]" : "text-text-4 hover:text-text"
+            mode === "text" ? "bg-blue text-white shadow-md shadow-blue/10 scale-102" : "text-text-4 hover:text-text"
           )}
         >
           <Hash size={16} /> Text
@@ -163,7 +163,7 @@ export default function HashGeneratorClient() {
           onClick={() => setMode("file")}
           className={cn(
             "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
-            mode === "file" ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02]" : "text-text-4 hover:text-text"
+            mode === "file" ? "bg-blue text-white shadow-md shadow-blue/10 scale-102" : "text-text-4 hover:text-text"
           )}
         >
           <FileCode size={16} /> File
@@ -184,7 +184,7 @@ export default function HashGeneratorClient() {
               >
                 <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-black uppercase tracking-widest text-text-4">Enter Text Content</label>
+                    <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Enter Text Content</label>
                     <span className="text-xs font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
                   </div>
                   <textarea
@@ -196,7 +196,7 @@ export default function HashGeneratorClient() {
                   {text && (
                     <button 
                       onClick={() => setText("")}
-                      className="text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors flex items-center gap-1"
+                      className="text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:text-red-600 transition-colors flex items-center gap-1"
                     >
                       <Trash2 size={12} /> Clear Text
                     </button>
@@ -227,7 +227,7 @@ export default function HashGeneratorClient() {
                       </div>
                       <div>
                         <p className="text-sm font-bold truncate max-w-52">{file.name}</p>
-                        <p className="text-xs font-black uppercase tracking-widest text-text-4">{(file.size / 1024).toFixed(1)} KB</p>
+                        <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">{(file.size / 1024).toFixed(1)} KB</p>
                       </div>
                     </div>
                     <button 
@@ -253,14 +253,14 @@ export default function HashGeneratorClient() {
 
             {/* Algorithm Selection */}
             <div className="space-y-4">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Algorithms</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Algorithms</label>
               <div className="grid grid-cols-2 gap-2">
                 {ALGOS.map(algo => (
                   <button
                     key={algo}
                     onClick={() => toggleAlgo(algo)}
                     className={cn(
-                      "px-4 py-3 rounded-xl border text-xs font-black uppercase tracking-widest transition-all text-center",
+                      "px-4 py-3 rounded-xl border text-tiny font-bold uppercase tracking-widest-sm transition-all text-center",
                       selectedAlgos.includes(algo) 
                         ? "bg-blue border-blue text-white shadow-md shadow-blue/20" 
                         : "bg-bg border-border text-text-4 hover:border-blue/30"
@@ -274,14 +274,14 @@ export default function HashGeneratorClient() {
 
             {/* Output Encoding */}
             <div className="space-y-4 pt-4 border-t border-border">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Output Encoding</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Output Encoding</label>
               <div className="flex p-1 bg-bg border border-border rounded-xl">
                 {(['hex', 'base64'] as const).map(enc => (
                   <button
                     key={enc}
                     onClick={() => setEncoding(enc)}
                     className={cn(
-                      "flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all",
+                      "flex-1 py-2 rounded-lg text-tiny font-bold uppercase tracking-widest-sm transition-all",
                       encoding === enc ? "bg-surface text-blue shadow-sm" : "text-text-4 hover:text-text"
                     )}
                   >
@@ -294,7 +294,7 @@ export default function HashGeneratorClient() {
             {/* HMAC Support */}
             <div className="space-y-4 pt-4 border-t border-border">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
                   <Key size={12} className={useHmac ? "text-blue" : "text-text-4"} aria-hidden="true" /> HMAC Support
                 </label>
                 <button
@@ -340,7 +340,7 @@ export default function HashGeneratorClient() {
             <div className="p-4 bg-bg border border-border rounded-2xl space-y-2">
               <div className="flex items-center gap-2 text-blue">
                 <Terminal size={14} aria-hidden="true" />
-                <span className="text-xs font-black uppercase tracking-widest">Runtime Note</span>
+                <span className="text-tiny font-bold uppercase tracking-widest-sm">Runtime Note</span>
               </div>
               <p className="text-tiny text-text-4 font-medium leading-relaxed">
                 All cryptographic operations are performed on-device via Web Crypto API. Your keys and data are never transmitted.
@@ -359,7 +359,7 @@ export default function HashGeneratorClient() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between px-2">
-              <h2 className="text-xs font-black uppercase tracking-widest text-text flex items-center gap-2">
+              <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-text flex items-center gap-2">
                 Generated Hashes {isProcessing && <Loader2 size={12} className="animate-spin text-blue" aria-hidden="true" />}
               </h2>
               {progress && (
@@ -390,7 +390,7 @@ export default function HashGeneratorClient() {
                         )}>
                           {algo.split('-')[1] || algo}
                         </div>
-                        <span className="text-xs font-black uppercase tracking-widest text-text-4">
+                        <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                           {useHmac ? `HMAC-${algo}` : algo}
                         </span>
                       </div>
@@ -436,7 +436,7 @@ export default function HashGeneratorClient() {
             return (
               <div key={i} className="flex flex-col items-center text-center space-y-2 p-6 border border-border rounded-4xl">
                 <Icon className="text-blue" size={24} aria-hidden="true" />
-                <h3 className="text-xs font-black uppercase tracking-widest">{item.title}</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm">{item.title}</h3>
                 <p className="text-tiny font-medium text-text-4 uppercase">{item.desc}</p>
               </div>
             );

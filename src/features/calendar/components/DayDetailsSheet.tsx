@@ -68,7 +68,7 @@ export function DayDetailsSheet({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-            className="fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-2xl border-t border-border/30 rounded-t-[48px] z-50 p-10 shadow-[0_-20px_80px_rgba(0,0,0,0.2)] max-h-[90vh] overflow-y-auto no-scrollbar md:hidden"
+            className="fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-2xl border-t border-border/30 rounded-t-6xl z-50 p-10 shadow-[0_-20px_80px_rgba(0,0,0,0.2)] max-h-[90vh] overflow-y-auto no-scrollbar md:hidden"
           >
             {/* Handle */}
             <div className="w-16 h-1.5 bg-indigo-500/10 rounded-full mx-auto mb-10" />
@@ -76,7 +76,7 @@ export function DayDetailsSheet({
             <div className="flex items-center justify-between mb-10">
               <div className="space-y-1">
                 <h2 className="text-3xl font-black tracking-tighter text-text">{format(date, 'EEEE, d')}</h2>
-                <p className="text-xs font-bold text-text-4 uppercase tracking-[0.2em] opacity-60">{format(date, 'MMMM yyyy')}</p>
+                <p className="text-xs font-bold text-text-4 uppercase tracking-widest-lg opacity-60">{format(date, 'MMMM yyyy')}</p>
               </div>
               <button 
                 onClick={() => onAddEvent(date)}
@@ -90,7 +90,7 @@ export function DayDetailsSheet({
               {/* Festivals & Observances */}
               {sortedWorldEvents.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-xs font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Today's Context</h3>
+                  <h3 className="text-tiny font-bold uppercase tracking-widest-sm-xl text-indigo-500/40 ml-2">Today's Context</h3>
                   <div className="grid gap-3">
                     {sortedWorldEvents.map((f) => (
                       <div 
@@ -116,7 +116,7 @@ export function DayDetailsSheet({
 
               {/* Personal Events */}
               <div className="space-y-4">
-                <h3 className="text-xs font-black uppercase tracking-[0.25em] text-indigo-500/40 ml-2">Schedule</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-xl text-indigo-500/40 ml-2">Schedule</h3>
                 {dayEvents.length === 0 ? (
                   <div className="p-10 border-2 border-dashed border-border/20 rounded-5xl text-center space-y-3">
                     <div className="w-16 h-16 bg-indigo-500/5 rounded-3xl flex items-center justify-center mx-auto text-3xl">📭</div>
@@ -158,7 +158,7 @@ export function DayDetailsSheet({
 
             <button 
               onClick={onClose}
-              className="mt-14 w-full py-5 rounded-4xl bg-bg/50 border border-border/30 text-xs font-black uppercase tracking-[0.3em] text-text-4 hover:bg-surface transition-colors"
+              className="mt-14 w-full py-5 rounded-4xl bg-bg/50 border border-border/30 text-tiny font-bold uppercase tracking-widest-sm-2xl text-text-4 hover:bg-surface transition-colors"
             >
               Dismiss
             </button>

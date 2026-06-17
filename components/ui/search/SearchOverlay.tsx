@@ -153,7 +153,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           >
             {/* Search Input Header */}
             <div className="flex-shrink-0 flex items-center h-14 px-4 border-b border-mat-border bg-mat-surface">
-              <Search className="w-5 h-5 text-[--kv-text-muted] shrink-0" />
+              <Search className="w-5 h-5 text-text-muted shrink-0" />
               <input
                 ref={inputRef}
                 value={query}
@@ -163,7 +163,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Search 100+ tools..."
-                className="flex-1 h-full bg-transparent border-none outline-none text-base font-medium text-[--kv-text] placeholder:text-[--kv-text-muted] px-3"
+                className="flex-1 h-full bg-transparent border-none outline-none text-base font-medium text-text placeholder:text-text-muted px-3"
                 autoComplete="off"
                 spellCheck={false}
                 autoCorrect="off"
@@ -171,7 +171,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               {query && (
                 <button
                   onClick={() => { setQuery(''); const input = inputRef.current; if(input) input.focus(); }}
-                  className="w-11 h-11 flex items-center justify-center text-[--kv-text-muted] hover:text-[--kv-text] rounded-full transition-colors"
+                  className="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text rounded-full transition-colors"
                   aria-label="Clear search"
                 >
                   <X className="w-4 h-4" />

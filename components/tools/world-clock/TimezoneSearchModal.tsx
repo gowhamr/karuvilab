@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Globe, Plus } from 'lucide-react';
 import { getAllTimezones, COMMON_CITIES } from '@/src/lib/timezone-data';
-import { useWorldClockStore } from '@/src/store/useWorldClockStore';
+import { useWorldClockStore } from '@/src/features/world-clock/store';
 
 interface TimezoneSearchModalProps {
   isOpen: boolean;
@@ -61,7 +61,7 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -50, opacity: 0 }}
             transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-            className="w-full max-w-2xl bg-surface border border-border rounded-3xl shadow-2xl flex flex-col max-h-[80vh]"
+            className="w-full max-w-2xl bg-surface border border-border rounded-3xl shadow-2xl flex flex-col max-h-tool-viewport-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

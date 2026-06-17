@@ -73,7 +73,7 @@ export function CalendarSidebar() {
       {/* Upcoming Events Widget */}
       {worldEventsSettings.showUpcomingWidget && (
         <div className="bg-surface/40 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-3xl p-5 shadow-sm space-y-4">
-          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-3 flex items-center gap-2">
+          <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3 flex items-center gap-2">
             <Globe className="w-4 h-4 text-indigo-500" />
             Upcoming World Events
           </h3>
@@ -82,7 +82,7 @@ export function CalendarSidebar() {
               <div
                 key={event.id}
                 onClick={() => setSelectedWorldEvent({ event, date })}
-                className="flex items-center gap-3 p-2.5 rounded-xl bg-surface-2/30 hover:bg-hover border border-border/10 cursor-pointer transition-all active:scale-[0.98]"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-surface-2/30 hover:bg-hover border border-border/10 cursor-pointer transition-all active:scale-98"
               >
                 <span className="text-2xl" role="img" aria-label={event.name}>
                   {event.emoji}
@@ -119,7 +119,7 @@ export function CalendarSidebar() {
 
       {/* Settings Panel */}
       <div className="bg-surface/40 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-3xl p-5 shadow-sm space-y-5">
-        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-3 flex items-center gap-2">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3 flex items-center gap-2">
           <Settings className="w-4 h-4 text-indigo-500" />
           Event Preferences
         </h3>
@@ -128,7 +128,7 @@ export function CalendarSidebar() {
         <button
           onClick={() => updateWorldEventsSettings({ showWorldEvents: !showWorldEvents })}
           className={cn(
-            "w-full flex items-center justify-between p-3 rounded-xl border transition-all active:scale-[0.98]",
+            "w-full flex items-center justify-between p-3 rounded-xl border transition-all active:scale-98",
             showWorldEvents 
               ? "bg-indigo-600/10 border-indigo-500/30 text-indigo-400" 
               : "bg-surface-2/30 border-border/20 text-text-4 hover:text-text-3"
@@ -153,7 +153,7 @@ export function CalendarSidebar() {
           <div className="space-y-5 animate-in fade-in duration-200">
             {/* Visual Options */}
             <div className="space-y-2.5">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Display Options</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Display Options</label>
               <div className="space-y-2">
                 <button
                   onClick={() => updateWorldEventsSettings({ highlightIndianEvents: !highlightIndianEvents })}
@@ -184,7 +184,7 @@ export function CalendarSidebar() {
 
             {/* Importance filters */}
             <div className="space-y-2.5 border-t border-border/20 pt-4">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Importance</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Importance</label>
               <div className="flex flex-wrap gap-1.5">
                 {IMPORTANCE_INFOS.map((imp) => {
                   const isActive = showImportance.includes(imp.id);
@@ -208,7 +208,7 @@ export function CalendarSidebar() {
 
             {/* Categories checkbox list */}
             <div className="space-y-2.5 border-t border-border/20 pt-4">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5">
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-1.5">
                 <Filter className="w-3.5 h-3.5 text-indigo-500/80" />
                 Categories
               </label>

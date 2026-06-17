@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { X, Plus, ArrowRightLeft } from "lucide-react";
-import { useEmiStore, SavedScenario } from "@/src/store/useEmiStore";
+import { useEmiStore, SavedScenario } from "@/src/features/emi-calculator/store";
 import { generateSchedule } from "@/src/lib/emi-calculations";
 import { formatCurrency } from "@/src/lib/utils";
 import { cn } from "@/src/lib/utils";
@@ -40,7 +40,7 @@ export function ComparisonView() {
         </div>
         <button 
           onClick={clearComparison}
-          className="text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors"
+          className="text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:text-red-600 transition-colors"
         >
           Clear All
         </button>
@@ -58,7 +58,7 @@ export function ComparisonView() {
 
             <div className="space-y-6">
               <div>
-                <p className="text-xs font-black uppercase tracking-widest text-blue mb-1">Scenario</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-blue mb-1">Scenario</p>
                 <p className="text-sm font-black text-text truncate">{d.name}</p>
               </div>
 
@@ -103,7 +103,7 @@ export function ComparisonView() {
             <div className="w-10 h-10 rounded-full bg-bg flex items-center justify-center group-hover:bg-blue group-hover:text-white transition-all">
               <Plus className="w-5 h-5" />
             </div>
-            <span className="text-xs font-black uppercase tracking-widest">Add Current</span>
+            <span className="text-tiny font-bold uppercase tracking-widest-sm">Add Current</span>
           </button>
         )}
       </div>

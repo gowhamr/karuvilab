@@ -226,7 +226,7 @@ export default function CspBuilderClient() {
           <button 
             key={name}
             onClick={() => setConfig({ directives: JSON.parse(JSON.stringify(directives)), reportOnly: false })} 
-            className="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-surface transition-all whitespace-nowrap"
+            className="px-5 py-2.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:bg-surface transition-all whitespace-nowrap"
           >
             {name}
           </button>
@@ -235,7 +235,7 @@ export default function CspBuilderClient() {
 
       {/* Import Section */}
       <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
-        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
            Import & Analyze Existing Policy
         </h3>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -248,7 +248,7 @@ export default function CspBuilderClient() {
           />
           <button 
             onClick={handleImport}
-            className="px-8 py-3 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-md hover:shadow-lg active:scale-95 transition-all"
+            className="px-8 py-3 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm shadow-md hover:shadow-lg active:scale-95 transition-all"
           >
             Analyze
           </button>
@@ -262,7 +262,7 @@ export default function CspBuilderClient() {
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
                 <Shield className="w-3.5 h-3.5" /> Directives Configuration
               </h3>
               <div className="flex items-center gap-3">
@@ -360,7 +360,7 @@ export default function CspBuilderClient() {
           
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Export Policy</h3>
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Export Policy</h3>
               <div className="flex items-center gap-2">
                 <div className={cn(
                   "px-2 py-0.5 rounded-full text-tiny font-black uppercase",
@@ -405,7 +405,7 @@ export default function CspBuilderClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
                Security Analysis
             </h3>
             {securityScore.warnings.length === 0 ? (

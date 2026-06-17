@@ -71,7 +71,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
 
       <div className="bg-surface border border-border rounded-2xl overflow-hidden" role="table" aria-label="Amortisation Schedule">
         <div 
-          className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-xs font-black uppercase tracking-widest text-text-4"
+          className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-tiny font-bold uppercase tracking-widest-sm text-text-4"
           role="row"
         >
           <span role="columnheader">Month</span>

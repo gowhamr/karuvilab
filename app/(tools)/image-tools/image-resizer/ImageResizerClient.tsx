@@ -151,7 +151,7 @@ export default function ImageResizerClient() {
               onChange={e => setLockRatio(e.target.checked)}
             />
 
-            <button onClick={resize} disabled={!originalUrl || processing} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">
+            <button onClick={resize} disabled={!originalUrl || processing} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">
               {processing ? "Processing…" : "Resize Image"}
             </button>
           </div>
@@ -167,7 +167,7 @@ export default function ImageResizerClient() {
                 <span>{width} × {height}px</span>
                 <span>{resizedSize}</span>
               </div>
-              <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+              <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
                 Download Resized Image
               </button>
             </>

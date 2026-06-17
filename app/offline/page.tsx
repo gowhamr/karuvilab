@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 export default function OfflinePage() {
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 text-center space-y-8">
+    <div className="min-h-tool-viewport-lg flex flex-col items-center justify-center p-6 text-center space-y-8">
       <motion.div 
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -27,7 +27,7 @@ export default function OfflinePage() {
         <button 
           onClick={() => window.location.reload()}
           aria-label="Reload application"
-          className="flex items-center gap-2 px-8 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-md shadow-blue/10 hover:scale-[1.02] active:scale-95 transition-all"
+          className="flex items-center gap-2 px-8 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-md shadow-blue/10 hover:scale-102 active:scale-95 transition-all"
         >
           <RefreshCw size={18} />
           Try Again

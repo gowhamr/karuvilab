@@ -151,7 +151,7 @@ export default function GifCreatorClient() {
                <div className="flex items-center gap-3 w-full sm:w-auto justify-between">
                   <div className="flex items-center gap-2 px-4 py-2 bg-bg border border-border rounded-xl">
                     <Settings size={14} className="text-text-4" />
-                    <label htmlFor={delayId} className="text-xs font-black uppercase tracking-widest text-text-3">Delay:</label>
+                    <label htmlFor={delayId} className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Delay:</label>
                     <input 
                       type="number" 
                       min="10"
@@ -225,7 +225,7 @@ export default function GifCreatorClient() {
             <button
               onClick={handleCreate}
               disabled={status === "processing" || frames.length < 2}
-              className="w-full py-5 bg-blue text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full py-5 bg-blue text-white rounded-2xl font-black uppercase tracking-widest-lg shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {status === "processing" ? (
                 <>

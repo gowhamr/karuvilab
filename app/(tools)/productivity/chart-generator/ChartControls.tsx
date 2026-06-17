@@ -69,7 +69,7 @@ export default function ChartControls({
       {/* Main Config */}
       <div className="p-6 bg-surface border border-border rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Chart Configuration</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Chart Configuration</h2>
           <div className="flex bg-bg p-1 rounded-xl border border-border">
             {(["bar", "line", "area", "pie", "doughnut"] as const).map((t) => (
               <button
@@ -93,7 +93,7 @@ export default function ChartControls({
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Chart Title</label>
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Chart Title</label>
             <div className="relative group">
               <Type className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
               <input
@@ -151,7 +151,7 @@ export default function ChartControls({
           )}
 
           <div className="space-y-3">
-            <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Color Palette</label>
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Color Palette</label>
             <div className="flex flex-wrap gap-2">
               {PALETTES.map((p, i) => (
                 <button
@@ -175,7 +175,7 @@ export default function ChartControls({
       {/* Data Points */}
       <div className="p-6 bg-surface border border-border rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Data Points</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Data Points</h2>
           <button 
             onClick={() => setShowImport(!showImport)}
             className="text-xs font-black text-blue hover:underline"
@@ -272,7 +272,7 @@ export default function ChartControls({
 
             <button 
               onClick={addPoint}
-              className="w-full py-4 bg-blue/5 border-2 border-dashed border-blue/20 rounded-2xl text-blue font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-blue/10 hover:border-blue/30 transition-all active:scale-[0.98]"
+              className="w-full py-4 bg-blue/5 border-2 border-dashed border-blue/20 rounded-2xl text-blue font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-blue/10 hover:border-blue/30 transition-all active:scale-98"
             >
               <Plus className="w-4 h-4" /> Add Data Point
             </button>

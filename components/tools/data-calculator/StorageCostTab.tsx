@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { DATA_UNITS, STORAGE_PROVIDERS, calculateStorageCost } from "@/src/lib/data-unit-utils";
-import { useDataCalcStore } from "@/src/store/useDataCalcStore";
+import { useDataCalcStore } from "@/src/features/data-calculator/store";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { SliderField } from "@/components/ui/SliderField";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -37,7 +37,7 @@ export function StorageCostTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
           <div className="space-y-6">
-            <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-blue flex items-center gap-2">
               <HardDrive className="w-4 h-4" />
               Storage Volume
             </h3>
@@ -50,7 +50,7 @@ export function StorageCostTab() {
                 onChange={setDataSize}
               />
               <div className="space-y-2">
-                <label htmlFor="data-unit-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Unit</label>
+                <label htmlFor="data-unit-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-1">Unit</label>
                 <select
                   id="data-unit-select"
                   value={dataUnit}
@@ -66,14 +66,14 @@ export function StorageCostTab() {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-blue flex items-center gap-2">
               <DollarSign className="w-4 h-4" />
               Pricing Model
             </h3>
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="provider-preset-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Provider Preset</label>
+                <label htmlFor="provider-preset-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-1">Provider Preset</label>
                 <select
                   id="provider-preset-select"
                   value={provider}
@@ -96,7 +96,7 @@ export function StorageCostTab() {
           </div>
 
           <div className="space-y-6 pt-4 border-t border-border/50">
-            <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-blue flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               Storage Duration
             </h3>
@@ -125,17 +125,17 @@ export function StorageCostTab() {
           <div className="p-8 bg-surface border border-border rounded-4xl space-y-6">
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
-              <h4 className="text-xs font-black uppercase tracking-widest">Cost Analysis</h4>
+              <h4 className="text-tiny font-bold uppercase tracking-widest-sm">Cost Analysis</h4>
             </div>
             
             <div className="space-y-4">
               <div className="p-4 bg-bg rounded-2xl border border-border/50 space-y-2">
-                <p className="text-xs font-black uppercase tracking-widest text-text-4">Capacity</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Capacity</p>
                 <p className="text-sm font-bold text-text">{dataSize} {dataUnit}</p>
               </div>
               
               <div className="p-4 bg-bg rounded-2xl border border-border/50 space-y-2">
-                <p className="text-xs font-black uppercase tracking-widest text-text-4">Monthly Rate</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Monthly Rate</p>
                 <p className="text-sm font-bold text-text">
                   ${(totalCost / durationMonths).toLocaleString(undefined, { minimumFractionDigits: 4 })} / month
                 </p>

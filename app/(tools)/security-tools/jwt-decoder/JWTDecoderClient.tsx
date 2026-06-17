@@ -83,7 +83,7 @@ export default function JWTDecoderClient() {
         />
         {token && decoded && !("error" in decoded) && (
           <div className="flex items-center gap-2">
-            <div className={`px-3 py-1 rounded-full text-xs font-bold ${isExpired ? "bg-red-500/10 text-red-500" : "bg-green-500/10 text-green-600"}`}>
+            <div className={`px-3 py-1 rounded-full text-xs font-bold ${isExpired ? "bg-error/10 text-error" : "bg-success/10 text-success"}`}>
               {isExpired ? "Expired" : "Valid"}
             </div>
             {decoded.payload.exp && (
@@ -96,7 +96,7 @@ export default function JWTDecoderClient() {
       </div>
 
       {decoded && ("error" in decoded) && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-sm text-red-500">
+        <div className="bg-error/10 border border-error/20 rounded-xl p-4 text-sm text-error">
           {decoded.error}
         </div>
       )}

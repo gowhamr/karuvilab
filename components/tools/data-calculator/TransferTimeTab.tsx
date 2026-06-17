@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { DATA_UNITS, BANDWIDTH_UNITS, calculateTransferTime, formatDuration } from "@/src/lib/data-unit-utils";
-import { useDataCalcStore } from "@/src/store/useDataCalcStore";
+import { useDataCalcStore } from "@/src/features/data-calculator/store";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { SliderField } from "@/components/ui/SliderField";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -31,7 +31,7 @@ export function TransferTimeTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
           <div className="space-y-6">
-            <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-blue flex items-center gap-2">
               <FileText className="w-4 h-4" />
               File Configuration
             </h3>
@@ -44,7 +44,7 @@ export function TransferTimeTab() {
                 onChange={setFileSize}
               />
               <div className="space-y-2">
-                <label htmlFor="file-unit-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Unit</label>
+                <label htmlFor="file-unit-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-1">Unit</label>
                 <select
                   id="file-unit-select"
                   value={fileUnit}
@@ -60,7 +60,7 @@ export function TransferTimeTab() {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xs font-black uppercase tracking-widest text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-blue flex items-center gap-2">
               <Wifi className="w-4 h-4" />
               Network Configuration
             </h3>
@@ -73,7 +73,7 @@ export function TransferTimeTab() {
                 onChange={setBandwidth}
               />
               <div className="space-y-2">
-                <label htmlFor="bandwidth-unit-select" className="text-xs font-black uppercase tracking-widest text-text-4 px-1">Speed Unit</label>
+                <label htmlFor="bandwidth-unit-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-1">Speed Unit</label>
                 <select
                   id="bandwidth-unit-select"
                   value={bandwidthUnit}
@@ -89,7 +89,7 @@ export function TransferTimeTab() {
           </div>
 
           <div className="space-y-6 pt-4 border-t border-border/50">
-            <h3 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
               <Settings2 className="w-4 h-4" />
               Advanced Settings
             </h3>
@@ -118,7 +118,7 @@ export function TransferTimeTab() {
           />
           
           <div className="p-8 bg-surface border border-border rounded-4xl space-y-4">
-            <h4 className="text-xs font-black uppercase tracking-widest text-text-4">Detailed Breakdown</h4>
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Detailed Breakdown</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center py-2 border-b border-border/50">
                 <span className="text-xs font-bold text-text-2">Total Bits (incl. overhead)</span>

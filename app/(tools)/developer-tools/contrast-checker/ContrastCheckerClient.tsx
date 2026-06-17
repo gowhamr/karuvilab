@@ -63,7 +63,7 @@ export default function ContrastCheckerClient() {
         {/* LEFT COLUMN: Controls */}
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Eye className="w-3.5 h-3.5" /> Color Selection
             </h3>
           </div>
@@ -122,11 +122,11 @@ export default function ContrastCheckerClient() {
 
           <div className="pt-6 border-t border-border/50">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Contrast Ratio</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Contrast Ratio</span>
               <span className={cn(
-                "px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest",
-                result.level === 'aaa' ? "bg-emerald-500/10 text-emerald-500" :
-                result.level === 'aa' ? "bg-blue/10 text-blue" : "bg-red-500/10 text-red-500"
+                "px-3 py-1 rounded-lg text-tiny font-bold uppercase tracking-widest-sm",
+                result.level === 'aaa' ? "bg-success/10 text-success" :
+                result.level === 'aa' ? "bg-blue/10 text-blue" : "bg-error/10 text-error"
               )}>
                 {result.level === 'fail' ? 'FAIL' : `Pass ${result.level.toUpperCase()}`}
               </span>
@@ -135,7 +135,7 @@ export default function ContrastCheckerClient() {
             <div className="text-center bg-bg border border-border p-6 rounded-3xl">
               <span className={cn(
                 "text-6xl font-black tracking-tighter block",
-                result.level === 'fail' ? "text-red-500" : "text-text"
+                result.level === 'fail' ? "text-error" : "text-text"
               )}>
                 {result.ratioDisplay}
               </span>
@@ -151,21 +151,21 @@ export default function ContrastCheckerClient() {
           >
             <div style={{ color: fg }} className="space-y-6 transition-colors duration-300">
               <div>
-                <h4 className="text-xs font-black uppercase tracking-[0.2em] opacity-50 mb-2">Normal Text (16px)</h4>
+                <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">Normal Text (16px)</h4>
                 <p className="text-base">
                   The quick brown fox jumps over the lazy dog. A good contrast ratio ensures that users with visual impairments can read the text comfortably.
                 </p>
               </div>
               
               <div>
-                <h4 className="text-xs font-black uppercase tracking-[0.2em] opacity-50 mb-2">Large Text (24px Bold)</h4>
+                <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">Large Text (24px Bold)</h4>
                 <p className="text-2xl font-bold tracking-tight">
                   Design for Accessibility
                 </p>
               </div>
 
               <div>
-                <h4 className="text-xs font-black uppercase tracking-[0.2em] opacity-50 mb-2">UI Component</h4>
+                <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">UI Component</h4>
                 <div className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold border transition-colors duration-300" style={{ borderColor: fg }}>
                   Interactive Button
                 </div>
@@ -174,7 +174,7 @@ export default function ContrastCheckerClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">WCAG Compliance</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">WCAG Compliance</h3>
             
             <div className="grid grid-cols-2 gap-4">
               {[
@@ -190,9 +190,9 @@ export default function ContrastCheckerClient() {
                     <span className="text-tiny font-medium text-text-4 uppercase tracking-widest">Req: {item.req}</span>
                   </div>
                   {item.pass ? (
-                    <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center"><Check className="w-3 h-3 text-emerald-500" /></div>
+                    <div className="w-6 h-6 rounded-full bg-success/10 flex items-center justify-center"><Check className="w-3 h-3 text-success" /></div>
                   ) : (
-                    <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center"><AlertTriangle className="w-3 h-3 text-red-500" /></div>
+                    <div className="w-6 h-6 rounded-full bg-error/10 flex items-center justify-center"><AlertTriangle className="w-3 h-3 text-error" /></div>
                   )}
                 </div>
               ))}

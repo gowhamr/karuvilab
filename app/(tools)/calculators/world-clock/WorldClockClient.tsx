@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useWorldClockStore } from "@/src/store/useWorldClockStore";
+import { useWorldClockStore } from "@/src/features/world-clock/store";
 import { Plus, Trash2, Globe, Clock, Star } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { AnalogClock } from "@/components/tools/world-clock/AnalogClock";
@@ -150,7 +150,7 @@ export default function WorldClockClient() {
           <div className="w-16 h-16 rounded-full bg-surface border border-border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ease-expo">
             <Plus className="w-8 h-8" />
           </div>
-          <span className="text-sm font-black uppercase tracking-[0.2em]">Add Clock</span>
+          <span className="text-sm font-black uppercase tracking-widest-lg">Add Clock</span>
         </button>
       </div>
 

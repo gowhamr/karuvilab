@@ -84,7 +84,7 @@ export default function NpsCalculatorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <TrendingUp className="w-3.5 h-3.5" /> Investment Details
             </h3>
 
@@ -138,7 +138,7 @@ export default function NpsCalculatorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Briefcase className="w-3.5 h-3.5" /> Post-Retirement Allocation
             </h3>
 
@@ -178,17 +178,17 @@ export default function NpsCalculatorClient() {
             <div className="absolute -top-32 -right-32 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700 bg-blue" />
             
             <div className="text-center border-b border-border/50 pb-8">
-              <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-2">Total Estimated Corpus</p>
+              <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-2">Total Estimated Corpus</p>
               <span className="text-4xl sm:text-5xl md:text-6xl font-black text-text tracking-tighter block">{formatCurrency(result.estimatedCorpus)}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-8 pt-4">
                <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-1">Total Invested</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Total Invested</p>
                   <span className="text-xl font-bold text-text-2">{formatCurrency(result.totalInvested)}</span>
                </div>
                <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-1">Wealth Gained</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Wealth Gained</p>
                   <span className="text-xl font-bold text-green-500">+{formatCurrency(result.estimatedCorpus - result.totalInvested)}</span>
                </div>
             </div>

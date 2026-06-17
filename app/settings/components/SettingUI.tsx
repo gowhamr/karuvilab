@@ -23,7 +23,7 @@ export const SettingRow = memo(function SettingRow({ label, description, childre
         )}
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text">{label}</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text">{label}</h3>
             {helpText && <SettingHelp text={helpText} />}
           </div>
           {description && <p className="text-sm text-text-3 font-medium leading-relaxed max-w-lg">{description}</p>}
@@ -111,7 +111,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
           aria-checked={value === opt.value}
           onClick={() => onChange(opt.value)}
           className={`
-            px-3 sm:px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 relative flex-1 min-w-15
+            px-3 sm:px-5 py-2.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative flex-1 min-w-15
             ${value === opt.value 
               ? 'text-text' 
               : 'text-text-4 hover:text-text'}

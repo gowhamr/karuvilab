@@ -43,7 +43,7 @@ export function EmptyState({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl mb-10 text-left">
         {benefits && benefits.length > 0 && (
           <div className="space-y-4">
-            <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
               <Zap className="w-3 h-3 text-blue" /> Key Benefits
             </h4>
             <ul className="space-y-2">
@@ -59,7 +59,7 @@ export function EmptyState({
 
         {formats && formats.length > 0 && (
           <div className="space-y-4">
-            <h4 className="text-xs font-black uppercase tracking-widest text-text-4">Supported Formats</h4>
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Supported Formats</h4>
             <div className="flex flex-wrap gap-2">
               {formats.map((f, i) => (
                 <span key={i} className="px-2.5 py-1 bg-bg border border-border rounded-lg text-xs font-black text-text-4 uppercase tracking-tighter">
@@ -82,7 +82,7 @@ export function EmptyState({
       {cta && (
         <button
           onClick={cta.onClick}
-          className="h-14 px-8 bg-blue text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-blue/10"
+          className="h-14 px-8 bg-blue text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-102 active:scale-95 transition-all shadow-md shadow-blue/10"
         >
           {cta.label}
         </button>
@@ -90,7 +90,7 @@ export function EmptyState({
 
       {workflow && workflow.length > 0 && (
         <div className="mt-12 pt-12 border-t border-border w-full text-left">
-          <p className="text-xs font-black uppercase tracking-widest text-text-4 mb-6">Standard Workflow</p>
+          <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-6">Standard Workflow</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {workflow.map((step, idx) => (
               <div key={idx} className="space-y-2">

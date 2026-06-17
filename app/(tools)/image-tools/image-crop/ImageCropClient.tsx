@@ -200,7 +200,7 @@ export default function ImageCropClient() {
                 </div>
               </div>
 
-              <button onClick={doCrop} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+              <button onClick={doCrop} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
                 Crop Image
               </button>
             </div>
@@ -212,7 +212,7 @@ export default function ImageCropClient() {
               <>
                 <img src={croppedUrl} alt="Cropped" className="mx-auto max-h-64 rounded-xl object-contain border border-border" />
                 <p className="text-xs text-text-4 text-center">{cropW} × {cropH}px</p>
-                <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+                <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
                   Download Cropped Image
                 </button>
               </>

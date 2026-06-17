@@ -101,7 +101,7 @@ export function SpeedGauge({ value, max = 100, color = "#4F46E5", label = "Mbps"
         <span className="text-5xl md:text-6xl font-black text-text tracking-tighter">
           {Math.round(value)}
         </span>
-        <span className="text-sm font-black text-text-4 uppercase tracking-[0.2em] mt-1">
+        <span className="text-sm font-black text-text-4 uppercase tracking-widest-lg mt-1">
           {label}
         </span>
       </div>

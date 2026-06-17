@@ -130,14 +130,14 @@ export default function WorkHoursClient() {
                   <td className="px-3 py-2 text-right font-bold text-text">
                     {fmtHours(row.hours)}
                   </td>
-                  <td className="px-3 py-2 text-right font-bold text-yellow-500">
+                  <td className="px-3 py-2 text-right font-bold text-warn">
                     {row.overtime > 0 ? fmtHours(row.overtime) : "—"}
                   </td>
                   <td className="px-2 py-2">
                     {rows.length > 1 && (
                       <button
                         onClick={() => removeRow(row.id)}
-                        className="px-2 py-1.5 rounded-lg border border-border hover:border-red-500 hover:text-red-500 transition-colors text-text-4 text-xs"
+                        className="px-2 py-1.5 rounded-lg border border-border hover:border-error hover:text-error transition-colors text-text-4 text-xs"
                       >
                         ✕
                       </button>

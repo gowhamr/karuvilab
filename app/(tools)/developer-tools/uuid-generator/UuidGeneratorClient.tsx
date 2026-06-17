@@ -133,7 +133,7 @@ export default function UuidGeneratorClient() {
     <div className="max-w-4xl mx-auto space-y-10 pb-12">
       {/* 1. Main Generator Section */}
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
           <Fingerprint className="w-4 h-4" />
           UUID Generator
         </h2>
@@ -156,7 +156,7 @@ export default function UuidGeneratorClient() {
         {version === 'v5' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-bg/50 p-4 rounded-2xl border border-border/50">
             <div>
-              <label className="text-xs font-black uppercase tracking-widest text-text-4 block mb-2">Namespace</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Namespace</label>
               <select 
                 value={v5Namespace} 
                 onChange={(e) => setV5Namespace(e.target.value)}
@@ -169,7 +169,7 @@ export default function UuidGeneratorClient() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-black uppercase tracking-widest text-text-4 block mb-2">Name String</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Name String</label>
               <input 
                 type="text" 
                 value={v5Name} 
@@ -217,7 +217,7 @@ export default function UuidGeneratorClient() {
 
       {/* 2. Bulk Generation */}
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
-        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
           <List className="w-4 h-4" />
           Bulk Generation
         </h2>
@@ -259,7 +259,7 @@ export default function UuidGeneratorClient() {
 
       {/* 3. Validator */}
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
-        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
           <ShieldCheck className="w-4 h-4" />
           UUID Validator
         </h2>
@@ -275,19 +275,19 @@ export default function UuidGeneratorClient() {
         {validatorInput && (
           <div className="pt-2">
             {validateUUID(validatorInput) ? (
-              <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl">
-                <Check className="w-5 h-5 text-green-500" />
+              <div className="flex items-center gap-3 p-4 bg-success/10 border border-success/20 rounded-2xl">
+                <Check className="w-5 h-5 text-success" />
                 <div>
-                  <p className="text-green-600 dark:text-green-400 font-bold">Valid UUID</p>
-                  <p className="text-xs text-green-600/70 font-medium mt-0.5">Detected Version: {detectVersion(validatorInput)}</p>
+                  <p className="text-success font-bold">Valid UUID</p>
+                  <p className="text-xs text-success/70 font-medium mt-0.5">Detected Version: {detectVersion(validatorInput)}</p>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                <AlertCircle className="w-5 h-5 text-red-500" />
+              <div className="flex items-center gap-3 p-4 bg-error/10 border border-error/20 rounded-2xl">
+                <AlertCircle className="w-5 h-5 text-error" />
                 <div>
-                  <p className="text-red-600 dark:text-red-400 font-bold">Invalid UUID Format</p>
-                  <p className="text-xs text-red-600/70 font-medium mt-0.5">Ensure it follows the 8-4-4-4-12 hex pattern.</p>
+                  <p className="text-error font-bold">Invalid UUID Format</p>
+                  <p className="text-xs text-error/70 font-medium mt-0.5">Ensure it follows the 8-4-4-4-12 hex pattern.</p>
                 </div>
               </div>
             )}

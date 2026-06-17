@@ -101,7 +101,7 @@ export default function HashMapVisualizer() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="flex items-center gap-3 text-sm bg-blue/10 border border-blue/20 text-blue-light p-4 rounded-2xl"
+            className="flex items-center gap-3 text-sm bg-blue/10 border border-blue/20 text-blue p-4 rounded-2xl"
           >
             <Info className="w-4 h-4 flex-shrink-0" />
             <span>
@@ -140,7 +140,7 @@ export default function HashMapVisualizer() {
                     >
                       <div className="flex justify-between items-start gap-2">
                         <div className="min-w-0">
-                          <p className="text-xs font-mono text-blue-light truncate">{entry.key}</p>
+                          <p className="text-xs font-mono text-blue truncate">{entry.key}</p>
                           <p className="text-sm text-text-2 truncate">{entry.value}</p>
                         </div>
                         <button 

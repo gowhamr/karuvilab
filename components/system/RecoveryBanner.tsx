@@ -28,7 +28,7 @@ export function RecoveryBanner() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        className="fixed top-20 left-1/2 -translate-x-1/2 z-[500] w-[90%] max-w-lg"
+        className="fixed top-20 left-1/2 -translate-x-1/2 z-modal w-11/12 max-w-lg"
       >
         <div className={`p-4 rounded-2xl shadow-xl border border-border border-l-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-surface ${isError ? 'border-l-red-500 text-red-600 dark:text-red-400' : 'border-l-amber-500 text-amber-700 dark:text-amber-400'}`}>
           <div className="flex items-start gap-3">

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { idbStorage } from './idb-storage'; // Assuming a shared IndexedDB storage wrapper
+import { idbStorage } from '../../store/idb-storage';
 
 interface PomodoroSession {
   id: string;

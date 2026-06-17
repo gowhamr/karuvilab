@@ -150,7 +150,7 @@ export function ClientToolShell({ title, description, category, children, toolId
             <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl p-8 space-y-6 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
               <div className="space-y-1">
                 <h2 className="text-xl font-bold">Quick Guide</h2>
-                <p className="text-xs font-black uppercase tracking-widest text-text-4">How it works</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">How it works</p>
               </div>
               <ol className="space-y-4">
                 {parsedContent.howTo.map((step, i) => (

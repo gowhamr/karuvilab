@@ -234,7 +234,7 @@ export default function ImageConverterClient() {
               📥
             </div>
             <div className="space-y-2">
-              <p className="font-black text-text-3 uppercase tracking-[0.3em] text-sm">Waiting for your files</p>
+              <p className="font-black text-text-3 uppercase tracking-widest-2xl text-sm">Waiting for your files</p>
               <p className="text-xs text-text-4 font-medium">Drop images here or click 'Add images' above</p>
             </div>
           </motion.div>

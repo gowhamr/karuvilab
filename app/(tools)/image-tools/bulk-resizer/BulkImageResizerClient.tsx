@@ -140,7 +140,7 @@ export default function BulkImageResizerClient() {
 
             <div className="space-y-6">
               <div className="space-y-3">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4">Target Width (px)</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Target Width (px)</label>
                 <input 
                   type="number" 
                   className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold" 
@@ -150,7 +150,7 @@ export default function BulkImageResizerClient() {
                 />
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4">Target Height (px)</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Target Height (px)</label>
                 <input 
                   type="number" 
                   className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold" 

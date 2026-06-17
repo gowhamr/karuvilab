@@ -16,6 +16,7 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import DOMPurify from "isomorphic-dompurify";
 import { DropZone } from "@/components/ui/DropZone";
+import { logger } from "@/src/lib/logger";
 
 import { CdnOverlay } from "./CdnOverlay";
 import { ConsoleDrawer } from "./ConsoleDrawer";
@@ -111,7 +112,7 @@ export default function HtmlViewerClient() {
         setJs(decoded.js || "");
         if (decoded.cdns) setCdns(decoded.cdns);
       } catch (e) {
-        console.error("Failed to parse code from URL", e);
+        logger.error("Failed to parse code from URL", { error: e });
       }
     } else {
       const saved = localStorage.getItem("karuvi-html-viewer");
@@ -260,8 +261,8 @@ export default function HtmlViewerClient() {
 
   return (
     <div className={cn(
-      "relative flex flex-col lg:flex-row h-[70vh] min-h-full border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
-      isFullscreen && "fixed inset-0 z-[100] h-screen w-screen rounded-none m-0"
+      "relative flex flex-col lg:flex-row h-tool-viewport min-h-full border border-border dark:border-white/5 rounded-3xl overflow-hidden bg-surface dark:bg-black/20 premium-card-shadow transition-all duration-500",
+      isFullscreen && "fixed inset-0 z-dropdown h-screen w-screen rounded-none m-0"
     )}>
       <div className="flex-1 flex flex-col min-w-0 border-r border-border dark:border-white/5">
         <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5">
@@ -272,7 +273,7 @@ export default function HtmlViewerClient() {
                 onClick={() => setActiveTab(t)}
                 aria-label={`Switch to ${t.toUpperCase()} editor`}
                 className={cn(
-                  "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                  "px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all",
                   activeTab === t ? "bg-blue text-white neon-glow" : "text-text-4 hover:bg-blue/5 hover:text-blue"
                 )}
               >
@@ -334,7 +335,7 @@ export default function HtmlViewerClient() {
         <div className="h-14 flex items-center justify-between px-4 bg-bg dark:bg-white/5 border-b border-border dark:border-white/5 overflow-x-auto no-scrollbar">
             <SegmentedControl activeId={device} onChange={(id) => setDevice(id as Device)} options={[{ id: "desktop", label: "Desktop", icon: <Laptop size={14} /> }, { id: "tablet", label: "Tablet", icon: <Tablet size={14} /> }, { id: "mobile", label: "Mobile", icon: <Smartphone size={14} /> }, { id: "mobile-xs", label: "Mobile XS", icon: <Smartphone size={14} /> }]} />
           <div className="flex items-center gap-2">
-            <button onClick={handleDownload} aria-label="Download project" className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border rounded-lg text-xs font-black uppercase tracking-widest text-text-4 hover:border-blue/30 hover:text-blue transition-all">
+            <button onClick={handleDownload} aria-label="Download project" className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border rounded-lg text-tiny font-bold uppercase tracking-widest-sm text-text-4 hover:border-blue/30 hover:text-blue transition-all">
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Export</span>
             </button>
@@ -350,7 +351,7 @@ export default function HtmlViewerClient() {
             </div>
             <button onClick={() => setIsConsoleOpen(!isConsoleOpen)} aria-label="Toggle console" className={cn("absolute bottom-6 right-6 p-3 rounded-2xl shadow-xl transition-all flex items-center gap-2", isConsoleOpen ? "bg-red-500 text-white" : "bg-surface border border-border text-text-2 hover:border-blue")}>
               <Terminal className="w-4 h-4" />
-              <span className="text-xs font-black uppercase tracking-widest">Console {logs.length > 0 && `(${logs.length})`}</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm">Console {logs.length > 0 && `(${logs.length})`}</span>
               {isConsoleOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronUp className="w-3 h-3" />}
             </button>
             <ConsoleDrawer isOpen={isConsoleOpen} logs={logs} onClear={() => setLogs([])} />

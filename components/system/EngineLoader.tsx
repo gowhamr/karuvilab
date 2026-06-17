@@ -107,7 +107,7 @@ export function EngineLoader({
           </div>
           <button
             onClick={handleRetry}
-            className="flex items-center gap-2 px-6 py-2.5 bg-error text-white rounded-xl text-xs font-black uppercase tracking-[0.2em] hover:opacity-90 transition-all mx-auto active:scale-95 shadow-md shadow-error/10"
+            className="flex items-center gap-2 px-6 py-2.5 bg-error text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm-lg hover:opacity-90 transition-all mx-auto active:scale-95 shadow-md shadow-error/10"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Retry Initialization
@@ -126,7 +126,7 @@ export function EngineLoader({
           <div className="w-12 h-12 bg-blue/10 rounded-2xl flex items-center justify-center mx-auto">
             <Loader2 className="w-6 h-6 text-blue animate-spin" />
           </div>
-          <p className="text-xs font-black text-blue uppercase tracking-[0.3em] animate-pulse">
+          <p className="text-xs font-black text-blue uppercase tracking-widest-2xl animate-pulse">
             {loadingMessage}
           </p>
         </m.div>

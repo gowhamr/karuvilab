@@ -143,12 +143,12 @@ export function ImportNoteModal({ open, onOpenChange }: ImportNoteModalProps) {
             </Dialog.Close>
           </div>
 
-          <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto custom-scrollbar">
+          <div className="p-6 space-y-6 max-h-tool-viewport overflow-y-auto custom-scrollbar">
             {!decryptedNote ? (
               <form onSubmit={handleDecrypt} className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-black uppercase tracking-widest text-text-3">Ciphertext</label>
+                    <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Ciphertext</label>
                     <button
                       type="button"
                       onClick={handlePaste}
@@ -167,7 +167,7 @@ export function ImportNoteModal({ open, onOpenChange }: ImportNoteModalProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-black uppercase tracking-widest text-text-3">Decryption Password</label>
+                  <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Decryption Password</label>
                   <input
                     type="password"
                     value={password}
@@ -183,7 +183,7 @@ export function ImportNoteModal({ open, onOpenChange }: ImportNoteModalProps) {
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-blue hover:bg-blue/90 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue/20 flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-blue hover:bg-blue/90 text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all shadow-lg shadow-blue/20 flex items-center justify-center gap-2"
                 >
                   Decrypt Note
                   <ChevronRight size={14} />
@@ -229,19 +229,19 @@ export function ImportNoteModal({ open, onOpenChange }: ImportNoteModalProps) {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => setDecryptedNote(null)}
-                    className="flex-1 py-3 border border-border bg-transparent text-text-3 hover:text-text hover:bg-bg/50 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
+                    className="flex-1 py-3 border border-border bg-transparent text-text-3 hover:text-text hover:bg-bg/50 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all"
                   >
                     Back to edit
                   </button>
                   <button
                     onClick={() => handleImport(false)}
-                    className="flex-1 py-3 border border-blue/20 bg-blue/5 text-blue hover:bg-blue/10 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
+                    className="flex-1 py-3 border border-blue/20 bg-blue/5 text-blue hover:bg-blue/10 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all"
                   >
                     Import Decrypted
                   </button>
                   <button
                     onClick={() => handleImport(true)}
-                    className="flex-1 py-3 bg-blue hover:bg-blue/90 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue/20 flex items-center justify-center gap-1.5"
+                    className="flex-1 py-3 bg-blue hover:bg-blue/90 text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all shadow-lg shadow-blue/20 flex items-center justify-center gap-1.5"
                   >
                     <Download size={14} />
                     Import Encrypted

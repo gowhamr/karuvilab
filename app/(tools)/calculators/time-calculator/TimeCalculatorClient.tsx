@@ -94,7 +94,7 @@ export default function TimeCalculatorClient() {
                   {rows.length > 1 && (
                     <button
                       onClick={() => removeRow(i)}
-                      className="px-3 py-3 rounded-xl border border-border hover:border-red-500 hover:text-red-500 transition-colors text-text-4"
+                      className="px-3 py-3 rounded-xl border border-border hover:border-error hover:text-error transition-colors text-text-4"
                     >
                       ✕
                     </button>

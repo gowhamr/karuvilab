@@ -41,13 +41,13 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, icon: Icon,
           <h2 className="text-base md:text-lg font-black tracking-tight text-text flex items-center gap-2">
             {title}
             {badge && (
-              <span className="px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 text-xs font-black uppercase tracking-widest text-blue shadow-sm">
+              <span className="px-2 py-0.5 rounded-full bg-blue/5 border border-blue/10 text-tiny font-bold uppercase tracking-widest-sm text-blue shadow-sm">
                 {badge}
               </span>
             )}
           </h2>
           {subtitle && (
-            <p className="text-xs md:text-xs text-[--kv-text-muted] font-bold uppercase tracking-[0.15em]">
+            <p className="text-xs md:text-xs text-text-muted font-bold uppercase tracking-widest-md">
               {subtitle}
             </p>
           )}
@@ -309,19 +309,9 @@ export default function HomeClient() {
                       href="/all-tools"
                     />
                     
-                    {/* Mobile: 2-col grid */}
-                    <div className="sm:hidden grid grid-cols-2 gap-3">
-                      {popularTools.slice(0, 6).map(tool => (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                      {popularTools.slice(0, 10).map(tool => (
                         <ToolCard key={tool.id} tool={tool} compact />
-                      ))}
-                    </div>
-
-                    {/* Tablet+ carousel */}
-                    <div className="hidden sm:flex overflow-x-auto no-scrollbar gap-3 pb-2 snap-x snap-mandatory">
-                      {popularTools.map(tool => (
-                        <div key={tool.id} className="min-w-56 snap-start shrink-0">
-                          <ToolCard tool={tool} />
-                        </div>
                       ))}
                     </div>
                   </section>
@@ -361,10 +351,10 @@ export default function HomeClient() {
                             <ArrowRight className="w-4 h-4" />
                           </div>
                           <div className="flex flex-col sm:items-center">
-                            <span className="text-xs font-black text-blue uppercase tracking-[0.2em] leading-tight">
+                            <span className="text-tiny font-bold text-blue uppercase tracking-widest-lg leading-tight">
                               Browse All
                             </span>
-                            <span className="text-xs font-black text-blue uppercase tracking-widest leading-tight">
+                            <span className="text-tiny font-bold text-blue uppercase tracking-widest-sm leading-tight">
                               100+ Tools
                             </span>
                           </div>

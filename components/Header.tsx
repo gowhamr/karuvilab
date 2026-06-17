@@ -26,25 +26,6 @@ export function Header() {
   if (isFullscreen) return null;
 
   useEffect(() => {
-    const el = themeToggleRef.current;
-    if (!el) return;
-
-    const updateAriaLabel = () => {
-      const btn = el.querySelector("button");
-      if (btn) {
-        btn.setAttribute("aria-label", "Toggle theme");
-      }
-    };
-
-    updateAriaLabel();
-
-    const observer = new MutationObserver(updateAriaLabel);
-    observer.observe(el, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
@@ -67,12 +48,9 @@ export function Header() {
             <Menu className="w-6 h-6" />
           </button>
 
-          <Link href="/" className="min-h-11 flex items-center">
-            {/* Desktop: Full Logo with Image and Subtext */}
-            <KVLogo withText size="md" className="hidden md:flex" loading="lazy" />
-            
+          <Link href="/" className="min-h-11 flex items-center md:hidden">
             {/* Mobile: Just the 'KaruviLab' text for maximum space efficiency */}
-            <div className="md:hidden flex items-center">
+            <div className="flex items-center">
               <span className="font-dm-serif font-black text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-text via-text to-text-3">
                 KaruviLab
               </span>
@@ -125,7 +103,7 @@ export function Header() {
           <div className="md:hidden flex items-center">
              <button 
                 onClick={() => useSearchStore.getState().setIsPaletteOpen(true)}
-                className="h-11 px-4 flex items-center gap-2 bg-[--kv-mat-surface] hover:bg-[--kv-mat-hover] border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
+                className="h-11 px-4 flex items-center gap-2 bg-mat-surface hover:bg-mat-hover border border-border/60 rounded-full text-text-2 hover:text-blue transition-all shadow-sm"
                 aria-label="Search tools"
              >
                 <Search className="w-4 h-4 text-text-3" />

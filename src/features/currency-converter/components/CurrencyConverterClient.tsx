@@ -163,7 +163,7 @@ export default function CurrencyConverterClient() {
           </p>
           <button 
             onClick={() => fetchRates(true)}
-            className="px-6 py-3 bg-blue text-white rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-3 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:scale-105 active:scale-95 transition-all"
           >
             Retry Connection
           </button>
@@ -186,7 +186,7 @@ export default function CurrencyConverterClient() {
           <div className="px-5 py-3 border-b border-border flex items-center justify-between bg-surface/50">
             <div className="flex items-center gap-2 text-text-4">
               <Terminal size={14} />
-              <span className="text-xs font-black uppercase tracking-widest">Network Diagnostics</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm">Network Diagnostics</span>
             </div>
             <button 
               onClick={() => setShowDebug(false)}
@@ -290,7 +290,7 @@ export default function CurrencyConverterClient() {
 
             {/* Freshness Indicator */}
             <div className="flex items-center justify-between pt-2">
-              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-text-4" aria-live="polite">
+              <div className="flex items-center gap-2 text-tiny font-bold uppercase tracking-widest-sm text-text-4" aria-live="polite">
                 {isLoading ? (
                   <>
                     <RefreshCw size={10} className="animate-spin text-blue" />
@@ -321,7 +321,7 @@ export default function CurrencyConverterClient() {
                 onClick={() => fetchRates(true)}
                 disabled={isLoading}
                 aria-label="Refresh exchange rates"
-                className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-blue hover:opacity-70 disabled:opacity-30 transition-opacity"
+                className="flex items-center gap-1.5 text-tiny font-bold uppercase tracking-widest-sm text-blue hover:opacity-70 disabled:opacity-30 transition-opacity"
               >
                 <RefreshCw size={10} className={cn(isLoading && "animate-spin")} />
                 Refresh

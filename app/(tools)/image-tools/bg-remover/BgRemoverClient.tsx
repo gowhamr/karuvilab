@@ -99,7 +99,7 @@ export default function BgRemoverClient() {
             </div>
             
             {error && (
-              <div className="p-3 bg-red-500/10 text-red-500 text-xs rounded-xl border border-red-500/20">
+              <div className="p-3 bg-error/10 text-error text-xs rounded-xl border border-error/20">
                 {error}
               </div>
             )}
@@ -131,7 +131,7 @@ export default function BgRemoverClient() {
             <button
               onClick={removeBackground}
               disabled={!originalUrl || processing}
-              className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+              className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
             >
               Remove Background
             </button>
@@ -146,7 +146,7 @@ export default function BgRemoverClient() {
                 <div className="bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%23ccc%22/%3E%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%23ccc%22/%3E%3C/svg%3E')] rounded-xl overflow-hidden">
                   <img src={resultUrl} alt="Result" className="mx-auto max-h-64 object-contain" />
                 </div>
-                <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+                <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
                   Download PNG
                 </button>
               </>

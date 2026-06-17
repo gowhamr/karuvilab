@@ -63,7 +63,7 @@ export default function GlobalError({
               <button
                 onClick={() => reset()}
                 aria-label="Reload and try recovery"
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white font-black rounded-2xl text-sm uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-[1.02] active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white font-black rounded-2xl text-sm uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-102 active:scale-95 transition-all"
               >
                 <RefreshCcw className="w-4 h-4" />
                 Reload Application

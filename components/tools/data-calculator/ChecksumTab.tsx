@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { useDataCalcStore } from "@/src/store/useDataCalcStore";
+import { useDataCalcStore } from "@/src/features/data-calculator/store";
 import { workerManager } from "@/src/workers/manager";
 import { DropZone } from "@/components/ui/DropZone";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -70,7 +70,7 @@ export function ChecksumTab() {
             <button
               onClick={() => setMode('text')}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all",
                 mode === 'text' ? "bg-surface text-blue shadow-sm" : "text-text-4 hover:text-text-2"
               )}
             >
@@ -80,7 +80,7 @@ export function ChecksumTab() {
             <button
               onClick={() => setMode('file')}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all",
                 mode === 'file' ? "bg-surface text-blue shadow-sm" : "text-text-4 hover:text-text-2"
               )}
             >
@@ -95,7 +95,7 @@ export function ChecksumTab() {
                 key={algo}
                 onClick={() => setChecksumAlgo(algo)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest border transition-all",
+                  "px-3 py-1.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm border transition-all",
                   checksumAlgo === algo 
                     ? "bg-blue border-blue text-white shadow-md shadow-blue/10" 
                     : "bg-bg border-border text-text-3 hover:border-blue hover:text-blue"
@@ -118,7 +118,7 @@ export function ChecksumTab() {
             <button
               disabled={!textInput || isHashing}
               onClick={() => calculateHash(textInput)}
-              className="w-full py-4 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:bg-blue-600 transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
+              className="w-full py-4 bg-blue text-white rounded-2xl text-tiny font-bold uppercase tracking-widest-sm shadow-md shadow-blue/10 hover:bg-blue-600 transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3"
             >
               {isHashing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
               Generate {checksumAlgo}
@@ -139,7 +139,7 @@ export function ChecksumTab() {
 
         {isHashing && (
           <div className="space-y-3 animate-in fade-in duration-500">
-            <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-text-4">
+            <div className="flex justify-between items-center text-tiny font-bold uppercase tracking-widest-sm text-text-4">
               <span className="flex items-center gap-2">
                 <Loader2 className="w-3 h-3 animate-spin text-blue" />
                 Computing Hash...
@@ -166,7 +166,7 @@ export function ChecksumTab() {
           <div className="space-y-4 animate-in slide-in-from-bottom-2 fade-in duration-500">
             <div className="space-y-2">
               <div className="flex items-center justify-between px-1">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
                   <Fingerprint className="w-3 h-3" />
                   {checksumAlgo} Hash
                 </label>
@@ -190,7 +190,7 @@ export function ChecksumTab() {
       </div>
 
       <div className="p-8 bg-surface border border-border rounded-4xl space-y-4">
-        <h3 className="text-xs font-black uppercase tracking-widest text-text flex items-center gap-2">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text flex items-center gap-2">
           <Settings2 className="w-4 h-4 text-text-4" />
           Technical Information
         </h3>

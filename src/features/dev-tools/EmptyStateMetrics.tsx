@@ -69,7 +69,7 @@ export function EmptyStateMetrics() {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-black tracking-tight">Empty State Performance</h2>
-          <p className="text-xs font-black uppercase tracking-widest text-text-4">Local Diagnostics Dashboard</p>
+          <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Local Diagnostics Dashboard</p>
         </div>
         <div className="flex gap-4">
            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-500 rounded-lg text-xs font-black uppercase">
@@ -84,7 +84,7 @@ export function EmptyStateMetrics() {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-separate border-spacing-y-2">
           <thead>
-            <tr className="text-xs font-black uppercase tracking-widest text-text-4">
+            <tr className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
               <th className="px-4 py-2">Tool</th>
               <th className="px-4 py-2"><div className="flex items-center gap-1.5"><Eye className="w-3 h-3" /> Views</div></th>
               <th className="px-4 py-2"><div className="flex items-center gap-1.5"><MousePointer2 className="w-3 h-3" /> Eng.</div></th>

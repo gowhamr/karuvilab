@@ -94,13 +94,13 @@ export default function SeoTitleTesterClient() {
 
   const { score, criteria } = useMemo(() => analyzeTtitle(title), [title]);
 
-  const scoreColor = score >= 70 ? "text-green-500" : score >= 40 ? "text-yellow-500" : "text-red-500";
-  const scoreBg = score >= 70 ? "bg-green-500" : score >= 40 ? "bg-yellow-500" : "bg-red-500";
+  const scoreColor = score >= 70 ? "text-success" : score >= 40 ? "text-warn" : "text-error";
+  const scoreBg = score >= 70 ? "bg-success" : score >= 40 ? "bg-warn" : "bg-error";
 
   const passIcon = (pass: boolean | "warn") =>
     pass === true ? "✓" : pass === "warn" ? "⚠" : "✗";
   const passColor = (pass: boolean | "warn") =>
-    pass === true ? "text-green-500" : pass === "warn" ? "text-yellow-500" : "text-red-500";
+    pass === true ? "text-success" : pass === "warn" ? "text-warn" : "text-error";
 
   return (
     <div className="space-y-6">

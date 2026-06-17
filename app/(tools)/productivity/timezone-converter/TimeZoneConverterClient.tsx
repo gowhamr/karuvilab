@@ -324,7 +324,7 @@ export default function TimeZoneConverterClient() {
         </div>
 
         {/* Info Bar */}
-        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-xs font-bold text-text-4 uppercase tracking-[0.2em]">
+        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-xs font-bold text-text-4 uppercase tracking-widest-lg">
           <div className="flex items-center gap-2">
             <Info className="w-3 h-3" />
             Comparing {targetTZs.length} zones to {sourceTZ}

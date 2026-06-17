@@ -11,7 +11,7 @@ export default function TextRenderer({ result }: { result: ToolResult }) {
   return (
     <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl overflow-hidden flex flex-col">
       <div className="flex items-center justify-between px-6 py-4 border-b border-mat-border bg-mat-base/50">
-        <h3 className="text-xs font-black uppercase tracking-widest text-text-4">Output</h3>
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Output</h3>
         <CopyButton text={text} />
       </div>
       <div className="p-6 overflow-auto max-h-full custom-scrollbar bg-transparent">

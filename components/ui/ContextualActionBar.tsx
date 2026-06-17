@@ -25,7 +25,7 @@ export function ContextualActionBar() {
         {config.type === "idle" && (
           <button
             onClick={config.onClick}
-            className="w-full h-11 bg-brand-primary text-white font-black rounded-xl text-xs uppercase tracking-widest hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            className="w-full h-11 bg-brand-primary text-white font-black rounded-xl text-xs uppercase tracking-widest hover:opacity-90 active:scale-98 transition-all flex items-center justify-center gap-2"
           >
             {config.label}
           </button>
@@ -34,7 +34,7 @@ export function ContextualActionBar() {
         {config.type === "processing" && (
           <div className="w-full flex items-center gap-4">
             <div className="flex-1 space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-text-3">
+              <div className="flex items-center justify-between text-tiny font-bold uppercase tracking-widest-sm text-text-3">
                 <span className="flex items-center gap-1.5">
                   <Loader2 className="w-3 h-3 animate-spin text-brand-primary" />
                   {config.label || "Processing..."}
@@ -51,7 +51,7 @@ export function ContextualActionBar() {
             {config.onCancel && (
               <button
                 onClick={config.onCancel}
-                className="px-3 py-2 text-xs font-black uppercase tracking-widest text-red-500 hover:bg-red-500/5 rounded-lg border border-red-500/10 transition-colors"
+                className="px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:bg-red-500/5 rounded-lg border border-red-500/10 transition-colors"
               >
                 Cancel
               </button>
@@ -63,14 +63,14 @@ export function ContextualActionBar() {
           <div className="w-full flex gap-2">
             <button
               onClick={config.onPrimaryClick}
-              className="flex-1 h-11 bg-brand-primary text-white font-black rounded-xl text-xs uppercase tracking-widest hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center"
+              className="flex-1 h-11 bg-brand-primary text-white font-black rounded-xl text-xs uppercase tracking-widest hover:opacity-90 active:scale-98 transition-all flex items-center justify-center"
             >
               {config.primaryLabel}
             </button>
             {config.secondaryLabel && config.onSecondaryClick && (
               <button
                 onClick={config.onSecondaryClick}
-                className="flex-1 h-11 bg-mat-base border border-mat-border text-text font-black rounded-xl text-xs uppercase tracking-widest hover:bg-mat-hover active:scale-[0.98] transition-all flex items-center justify-center"
+                className="flex-1 h-11 bg-mat-base border border-mat-border text-text font-black rounded-xl text-xs uppercase tracking-widest hover:bg-mat-hover active:scale-98 transition-all flex items-center justify-center"
               >
                 {config.secondaryLabel}
               </button>

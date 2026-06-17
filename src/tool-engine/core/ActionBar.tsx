@@ -42,7 +42,7 @@ export function ActionBar({ result, config, onReset }: ActionBarProps) {
       {config.capabilities.downloadable && result.outputType !== "download" && result.blob && (
         <button
           onClick={() => download(result)}
-          className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20"
+          className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20"
         >
           <Download className="w-4 h-4" />
           Download
@@ -52,14 +52,14 @@ export function ActionBar({ result, config, onReset }: ActionBarProps) {
       {result.outputType === "text" && result.text && (
         <CopyButton 
           text={result.text} 
-          className="px-6 py-3 bg-mat-raised border border-mat-border rounded-xl text-xs font-black uppercase tracking-widest text-text-2 hover:bg-mat-hover hover:text-text transition-colors shadow-mat-shine"
+          className="px-6 py-3 bg-mat-raised border border-mat-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-2 hover:bg-mat-hover hover:text-text transition-colors shadow-mat-shine"
           label="Copy Result"
         />
       )}
 
       <button
         onClick={onReset}
-        className="flex items-center gap-2 px-6 py-3 bg-mat-raised border border-mat-border rounded-xl text-xs font-black uppercase tracking-widest text-text-2 hover:bg-mat-hover hover:text-text transition-colors shadow-mat-shine ml-auto"
+        className="flex items-center gap-2 px-6 py-3 bg-mat-raised border border-mat-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-2 hover:bg-mat-hover hover:text-text transition-colors shadow-mat-shine ml-auto"
       >
         <RefreshCcw className="w-4 h-4" />
         Process Another

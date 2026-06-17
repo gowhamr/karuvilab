@@ -73,7 +73,7 @@ export function KVLogo({
       </m.div>
 
       {withText && (
-        <div className="flex flex-col -space-y-1">
+        <div className="flex flex-col">
           <span className={cn(
             "font-dm-serif font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-text via-text to-text-3",
             size === "sm" ? "text-lg" : 
@@ -82,16 +82,6 @@ export function KVLogo({
           )}>
             KaruviLab
           </span>
-          {showSubtext && (
-            <span className={cn(
-              "font-black uppercase tracking-[0.4em] text-blue leading-none",
-              size === "sm" ? "text-micro" : 
-              size === "md" ? "text-micro" : 
-              size === "lg" ? "text-xs" : "text-sm"
-            )}>
-              Elite Tools
-            </span>
-          )}
         </div>
       )}
     </div>

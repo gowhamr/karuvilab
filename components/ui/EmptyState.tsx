@@ -28,7 +28,7 @@ const TRUST_COPY: Record<"A" | "B" | "C", { title: string, desc: string }> = {
 const TRUST_VARIANTS = ["A", "B", "C"] as const;
 
 const dragStateClasses = {
-  idle:     "border-dashed border-[--kv-mat-border]",
+  idle:     "border-dashed border-mat-border",
   hover:    "border-dashed border-brand-primary/40 bg-brand-primary/10",
   over:     "border-solid border-brand-primary bg-brand-primary/15",
   rejected: "border-solid border-red-500 bg-red-500/10",
@@ -244,14 +244,14 @@ export function EmptyState({
         </div>
 
         {outcomeText && (
-          <p className="text-xs text-[--kv-text-muted] italic mb-8">
+          <p className="text-xs text-text-muted italic mb-8">
             Result: {outcomeText.replace(/^Result:\s*/i, '').slice(0, 52)}
           </p>
         )}
 
         <button 
           onClick={handleSampleClick} 
-          className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-xs font-black uppercase tracking-widest text-brand-primary flex items-center gap-2 hover:bg-brand-primary/20 transition-colors"
+          className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-brand-primary flex items-center gap-2 hover:bg-brand-primary/20 transition-colors"
          aria-label="Play Circle">
           <PlayCircle className="w-4 h-4" aria-hidden="true" /> {sampleCTA?.label || "Try Sample File"}
         </button>

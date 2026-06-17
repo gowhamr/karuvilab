@@ -117,7 +117,7 @@ const InflationCalculatorClient = memo(function InflationCalculatorClient() {
               {result.rows.map((row) => (
                 <tr key={row.year} className="border-b border-border/50 hover:bg-bg/30 transition-colors">
                   <td className="px-4 py-3 font-bold">Year {row.year}</td>
-                  <td className="px-4 py-3 text-right text-red-500">{inr(row.futureCost)}</td>
+                  <td className="px-4 py-3 text-right text-error">{inr(row.futureCost)}</td>
                   <td className="px-4 py-3 text-right font-bold text-blue">{inr(row.power)}</td>
                 </tr>
               ))}

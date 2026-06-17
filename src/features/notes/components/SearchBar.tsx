@@ -42,7 +42,7 @@ export function SearchBar({ onImportClick }: SearchBarProps) {
         {onImportClick && (
           <button
             onClick={onImportClick}
-            className="flex items-center gap-2 px-5 py-3 bg-surface border border-border hover:border-blue/30 text-text-3 hover:text-blue rounded-2xl text-xs font-black uppercase tracking-widest transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-2 px-5 py-3 bg-surface border border-border hover:border-blue/30 text-text-3 hover:text-blue rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all cursor-pointer shadow-sm"
             title="Decrypt Shared Note"
           >
             <Unlock size={14} className="text-blue" />

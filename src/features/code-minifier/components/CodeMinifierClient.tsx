@@ -92,7 +92,7 @@ export default function CodeMinifierClient() {
       {/* Settings & Mode */}
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+          <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
             <Layers className="w-4 h-4" />
             Minification Engine
           </h2>
@@ -118,7 +118,7 @@ export default function CodeMinifierClient() {
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2 flex items-center gap-2">
+        <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2 flex items-center gap-2">
           <Zap className="w-3 h-3" />
           Processing Queue
         </h2>
@@ -136,7 +136,7 @@ export default function CodeMinifierClient() {
           <div className="w-16 h-16 bg-blue/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue/10">
             <Code className="w-8 h-8 text-blue" />
           </div>
-          <p className="font-black text-text-4 uppercase tracking-[0.2em] text-xs">Add files to start minifying</p>
+          <p className="font-black text-text-4 uppercase tracking-widest-lg text-xs">Add files to start minifying</p>
         </div>
       )}
       </div>

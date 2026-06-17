@@ -99,7 +99,7 @@ export default function BmiCalculatorClient() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <User className="w-3.5 h-3.5" />
               Height
             </h3>
@@ -162,7 +162,7 @@ export default function BmiCalculatorClient() {
 
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Scale className="w-3.5 h-3.5" />
               Weight
             </h3>
@@ -251,16 +251,16 @@ export default function BmiCalculatorClient() {
             <m.div 
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-amber-500/10 border border-amber-500/30 rounded-3xl p-6 flex gap-4 items-start"
+              className="bg-warn/10 border border-warn/30 rounded-3xl p-6 flex gap-4 items-start"
             >
-              <Info className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-warn flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-amber-600 dark:text-amber-400 text-sm font-black uppercase tracking-widest">
+                <p className="text-warn text-sm font-black uppercase tracking-widest">
                   Asian Body Type Context
                 </p>
                 <p className="text-text-3 text-sm mt-1 leading-relaxed">
                   The World Health Organization (WHO) recommends lower BMI thresholds for South Asian and 
-                  East Asian populations. By these guidelines, your BMI of <strong>{result.bmi}</strong> falls in the <strong className="text-text uppercase tracking-tight underline decoration-amber-500/50">{result.asianCategory}</strong> range 
+                  East Asian populations. By these guidelines, your BMI of <strong>{result.bmi}</strong> falls in the <strong className="text-text uppercase tracking-tight underline decoration-warn/50">{result.asianCategory}</strong> range 
                   (overweight threshold: ≥23, obese: ≥27.5).
                 </p>
               </div>
@@ -268,15 +268,15 @@ export default function BmiCalculatorClient() {
           )}
 
           <div className="space-y-4">
-            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2">BMI Categories (WHO Standards)</h2>
+            <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2">BMI Categories (WHO Standards)</h2>
             <div className="bg-surface border border-border rounded-3xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-bg/50 border-b border-border">
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">Category</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">BMI Range</th>
-                      <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-4">Asian BMI Range</th>
+                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">Category</th>
+                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">BMI Range</th>
+                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">Asian BMI Range</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -315,7 +315,7 @@ export default function BmiCalculatorClient() {
             </div>
           </div>
 
-          <p className="text-text-4 text-xs text-center uppercase tracking-[0.2em] mt-8">
+          <p className="text-text-4 text-xs text-center uppercase tracking-widest-lg mt-8">
             🔒 Your height and weight are never stored or transmitted. All calculations happen locally in your browser.
           </p>
         </m.div>

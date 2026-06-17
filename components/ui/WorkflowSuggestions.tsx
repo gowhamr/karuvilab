@@ -13,7 +13,7 @@ export function WorkflowSuggestions() {
 
   return (
     <div className="mt-12 space-y-6">
-      <div className="flex items-center gap-2 text-blue font-black uppercase tracking-[0.2em] text-xs">
+      <div className="flex items-center gap-2 text-blue font-black uppercase tracking-widest-lg text-xs">
         <Sparkles className="w-4 h-4" />
         Next in Workflow
       </div>

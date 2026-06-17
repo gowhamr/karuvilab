@@ -170,7 +170,7 @@ export function FocusModeWrapper({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="
-              fixed inset-0 z-[490]
+              fixed inset-0 z-modalBackdrop
               bg-bg
               flex flex-col
             "

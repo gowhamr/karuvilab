@@ -61,10 +61,10 @@ export const HistorySection = memo(function HistorySection() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-black uppercase tracking-widest text-text-4">{history.length} Saved Calculations</h3>
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">{history.length} Saved Calculations</h3>
         <button 
           onClick={clearHistory}
-          className="text-xs font-black uppercase tracking-widest text-red-500 hover:underline flex items-center gap-1"
+          className="text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:underline flex items-center gap-1"
         >
           <Trash2 className="w-3 h-3" />
           Clear All
@@ -82,7 +82,7 @@ export const HistorySection = memo(function HistorySection() {
               <div className="flex items-start justify-between relative z-10">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black uppercase tracking-widest text-blue bg-blue/5 px-2 py-0.5 rounded">
+                    <span className="text-tiny font-bold uppercase tracking-widest-sm text-blue bg-blue/5 px-2 py-0.5 rounded">
                       {tool?.name || item.toolId}
                     </span>
                     <span className="text-xs font-bold text-text-4 flex items-center gap-1">

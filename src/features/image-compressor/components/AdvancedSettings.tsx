@@ -74,7 +74,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
 
         {/* Format Selector */}
         <div className="space-y-3">
-          <label className="text-xs font-black uppercase tracking-widest text-text-4">Output Format</label>
+          <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Output Format</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {(['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as CompressionFormat[]).map((fmt) => (
               <button
@@ -96,7 +96,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
         {/* Resize Controls */}
         <div className="space-y-3 pt-2 border-t border-border/50">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-black uppercase tracking-widest text-text-4">Dimensions</label>
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Dimensions</label>
             <button 
               onClick={() => update({ maintainAspectRatio: !settings.maintainAspectRatio })}
               className={`p-1 rounded-md transition-colors ${settings.maintainAspectRatio ? 'text-blue' : 'text-text-4'}`}

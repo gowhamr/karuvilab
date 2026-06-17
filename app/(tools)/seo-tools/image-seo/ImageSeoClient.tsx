@@ -110,7 +110,7 @@ export default function ImageSeoClient() {
             key={t}
             onClick={() => setTab(t)}
             className={cn(
-              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-200",
+              "px-6 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-200",
               tab === t 
                 ? "bg-blue text-white shadow-md shadow-blue/10" 
                 : "text-text-4 hover:text-blue hover:bg-blue/5"
@@ -172,7 +172,7 @@ export default function ImageSeoClient() {
 
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em] px-1">Describe Image Content</label>
+                    <label className="text-xs font-black text-text-4 uppercase tracking-widest-lg px-1">Describe Image Content</label>
                     <textarea
                       className="w-full px-4 py-4 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all resize-none text-sm font-medium"
                       rows={3}
@@ -183,7 +183,7 @@ export default function ImageSeoClient() {
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em] px-1">Custom Filename</label>
+                      <label className="text-xs font-black text-text-4 uppercase tracking-widest-lg px-1">Custom Filename</label>
                       <div className="flex gap-2">
                         <input
                           type="text"
@@ -202,7 +202,7 @@ export default function ImageSeoClient() {
                     </div>
                     <button 
                       onClick={generateSEO}
-                      className="w-full py-4 bg-blue text-white font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-xl hover:shadow-blue/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                      className="w-full py-4 bg-blue text-white font-black text-xs uppercase tracking-widest-lg rounded-xl hover:shadow-xl hover:shadow-blue/30 active:scale-98 transition-all flex items-center justify-center gap-3"
                     >
                       <Zap className="w-4 h-4 fill-current" />
                       Generate SEO Plan
@@ -228,7 +228,7 @@ export default function ImageSeoClient() {
                   <div className="space-y-8 flex-1">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em]">Primary Alt Text</label>
+                        <label className="text-xs font-black text-text-4 uppercase tracking-widest-lg">Primary Alt Text</label>
                         <CopyButton text={generatedAlt} />
                       </div>
                       <div className="p-5 bg-bg border border-border rounded-2xl font-bold text-text-2 text-lg shadow-inner">
@@ -238,7 +238,7 @@ export default function ImageSeoClient() {
 
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-black text-text-4 uppercase tracking-[0.2em]">HTML Implementation</label>
+                        <label className="text-xs font-black text-text-4 uppercase tracking-widest-lg">HTML Implementation</label>
                         <CopyButton text={`<img src="${finalFilename}" alt="${generatedAlt}" />`} label="Copy code" />
                       </div>
                       <div className="p-5 bg-bg border border-border rounded-2xl font-mono text-xs text-blue break-all leading-relaxed shadow-inner">
@@ -254,7 +254,7 @@ export default function ImageSeoClient() {
                       {activeFile && (
                         <button 
                           onClick={() => downloadFile(activeFile, finalFilename)}
-                          className="w-full py-5 bg-green-600 text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl hover:shadow-2xl hover:shadow-green-500/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                          className="w-full py-5 bg-green-600 text-white font-black text-sm uppercase tracking-widest-lg rounded-2xl hover:shadow-2xl hover:shadow-green-500/30 active:scale-98 transition-all flex items-center justify-center gap-3"
                         >
                           <Download className="w-5 h-5" />
                           Download with SEO Name
@@ -297,7 +297,7 @@ export default function ImageSeoClient() {
                 </div>
                 
                 <div className="relative group overflow-hidden rounded-2xl">
-                   <button className="px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-[0.2em] flex items-center gap-3 hover:shadow-xl transition-all">
+                   <button className="px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-widest-lg flex items-center gap-3 hover:shadow-xl transition-all">
                       <Upload className="w-4 h-4" />
                       Select Multiple Files
                    </button>

@@ -87,7 +87,7 @@ export function OfflineSyncIndicator() {
             <span className={`relative inline-flex rounded-full h-2 w-2 ${current.dotColor}`} />
           </span>
           <Icon className="w-4 h-4" />
-          <span className="hidden md:inline text-xs font-black uppercase tracking-widest">{current.label}</span>
+          <span className="hidden md:inline text-tiny font-bold uppercase tracking-widest-sm">{current.label}</span>
         </button>
       </Popover.Trigger>
 
@@ -95,11 +95,11 @@ export function OfflineSyncIndicator() {
         <Popover.Content
           align="end"
           sideOffset={8}
-          className="z-[500] w-80 bg-surface border border-border rounded-3xl shadow-2xl p-5 space-y-4 animate-in fade-in zoom-in-95 duration-200 outline-none"
+          className="z-modal w-80 bg-surface border border-border rounded-3xl shadow-2xl p-5 space-y-4 animate-in fade-in zoom-in-95 duration-200 outline-none"
         >
           {/* Header Status */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-text-4">
+            <div className="flex items-center gap-2 text-tiny font-bold uppercase tracking-widest-sm text-text-4">
               <span className={`w-2 h-2 rounded-full ${current.dotColor}`} />
               Sync Status
             </div>
@@ -113,7 +113,7 @@ export function OfflineSyncIndicator() {
           <div className="flex items-start gap-3 p-3 bg-bg border border-border/50 rounded-2xl">
             <Shield className="w-4 h-4 text-success shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <h4 className="text-xs font-black uppercase tracking-widest text-text-2">100% Client-Side</h4>
+              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">100% Client-Side</h4>
               <p className="text-xs text-text-3 leading-normal">
                 KaruviLab processes all sensitive data in-browser. Your inputs are never transmitted to any external servers.
               </p>
@@ -122,7 +122,7 @@ export function OfflineSyncIndicator() {
 
           {/* Network-dependent Tools List */}
           <div className="space-y-2.5">
-            <h4 className="text-xs font-black uppercase tracking-widest text-text-4">
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
               Network Requirements
             </h4>
             <div className="space-y-1.5">

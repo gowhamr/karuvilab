@@ -200,7 +200,7 @@ export default function MicCameraTesterClient() {
               {/* Device Selectors */}
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="video-select" className="text-xs font-black uppercase tracking-widest text-text-4 ml-2">Camera</label>
+                  <label htmlFor="video-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-2">Camera</label>
                   <select 
                     id="video-select"
                     className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue outline-none"
@@ -216,7 +216,7 @@ export default function MicCameraTesterClient() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="audio-select" className="text-xs font-black uppercase tracking-widest text-text-4 ml-2">Microphone</label>
+                  <label htmlFor="audio-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-2">Microphone</label>
                   <select 
                     id="audio-select"
                     className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue outline-none"
@@ -243,7 +243,7 @@ export default function MicCameraTesterClient() {
                 </dl>
                 <div className="h-3 bg-bg rounded-full overflow-hidden border border-border">
                   <m.div 
-                    className="h-full bg-blue shadow-[0_0_20px_rgba(79,70,229,0.5)]"
+                    className="h-full bg-blue shadow-glow-primary"
                     animate={{ width: `${Math.min(audioLevel * 1.5, 100)}%` }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />

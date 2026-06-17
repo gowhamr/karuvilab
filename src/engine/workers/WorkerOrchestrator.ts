@@ -140,6 +140,14 @@ class WorkerOrchestrator {
     }
   }
 
+  private get globalWorkerCount(): number {
+    return (
+      this.pools.compute.workers.length +
+      this.pools.media.workers.length +
+      this.pools.heavy.workers.length
+    );
+  }
+
   private async getWorker(poolType: PoolType) {
     this.init();
     
@@ -147,7 +155,7 @@ class WorkerOrchestrator {
     const idle = poolObj.workers.find(w => !w.busy);
     if (idle) return idle;
 
-    if (poolObj.workers.length < this.maxWorkers) {
+    if (this.globalWorkerCount < this.maxWorkers) {
       try {
         const worker = new Worker(
           new URL('../../workers/karuvi.worker.ts', import.meta.url),

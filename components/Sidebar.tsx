@@ -55,7 +55,7 @@ const SidebarItem = memo(function SidebarItem({
       className={`group flex items-center transition-all font-bold outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base ${
         isSmall 
           ? `h-13 px-4 text-xs rounded-xl ${isActive ? "bg-blue/10 text-blue" : "text-text-3 hover:text-blue hover:bg-blue/5"}`
-          : `h-13 px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-[--kv-mat-hover]"}`
+          : `h-13 px-3 rounded-2xl text-sm ${isActive ? "bg-blue/5 text-blue" : "text-text-3 hover:text-text hover:bg-mat-hover"}`
       }`}
     >
       <div 
@@ -99,7 +99,7 @@ const CoreLinks = memo(function CoreLinks({ pathname, setIsOpen, isHoverable }: 
 const CategoriesList = memo(function CategoriesList({ pathname, setIsOpen, isHoverable }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   return (
     <div className="space-y-4">
-      <div className="px-5 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-[0.15em]">
+      <div className="px-5 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-widest-md">
         <LayoutGrid className="w-4 h-4" />
         Universal Tools
       </div>
@@ -176,6 +176,7 @@ const SidebarContent = memo(function SidebarContent({
       <div className="md:hidden flex-shrink-0 z-20 bg-surface px-4 py-3 border-b border-border">
         <button 
           onClick={handleSearchClick}
+          aria-label="Search"
           className="w-full h-12 flex items-center justify-between px-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text-4 hover:border-blue/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
         >
           <div className="flex items-center gap-3">
@@ -201,7 +202,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Personal Favorites */}
       {favorites.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-[0.20em]">
+          <div className="px-4 flex items-center gap-2 text-tiny font-bold text-text-4 uppercase tracking-widest-md">
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             {t('common.favorites')}
           </div>
@@ -226,7 +227,7 @@ const SidebarContent = memo(function SidebarContent({
       {/* Recently Used */}
       {recent.length > 0 && (
         <div className="space-y-3">
-          <div className="px-4 flex items-center gap-2 text-xs font-black text-text-4 uppercase tracking-[0.20em]">
+          <div className="px-4 flex items-center gap-2 text-tiny font-bold text-text-4 uppercase tracking-widest-md">
             <Clock className="w-3.5 h-3.5" />
             {t('common.recent')}
           </div>

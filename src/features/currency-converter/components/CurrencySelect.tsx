@@ -82,7 +82,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
       className={cn(
         "z-[200] bg-surface border border-border shadow-2xl flex flex-col",
         isMobile 
-          ? "fixed inset-x-4 top-[10%] bottom-[10%] rounded-4xl max-h-[80vh]" 
+          ? "fixed inset-x-4 top-[10%] bottom-[10%] rounded-4xl max-h-tool-viewport-lg" 
           : "absolute top-full left-0 right-0 mt-2 rounded-2xl max-h-96"
       )}
     >
@@ -104,7 +104,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
       {/* List */}
       <div className="overflow-y-auto p-2 space-y-1 custom-scrollbar flex-1">
         {filteredOptions.length === 0 ? (
-          <div className="py-12 text-center text-text-4 text-xs font-black uppercase tracking-widest">
+          <div className="py-12 text-center text-text-4 text-tiny font-bold uppercase tracking-widest-sm">
             No currencies found
           </div>
         ) : (
@@ -144,7 +144,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
                     </div>
                     <div className={cn(
                       "text-xs truncate font-medium uppercase tracking-tighter",
-                      value === opt.code ? "text-blue-light" : "text-text-4"
+                      value === opt.code ? "text-blue" : "text-text-4"
                     )}>
                       {opt.name}
                     </div>
@@ -179,7 +179,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
 
   return (
     <div className="flex-1 flex flex-col gap-3 relative" ref={containerRef}>
-      <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">{label}</label>
+      <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">{label}</label>
       
       <button
         onClick={() => setIsOpen(!isOpen)}

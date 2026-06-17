@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { useEmiStore } from "@/src/store/useEmiStore";
+import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { useSessionStore } from "@/src/store/useSessionStore";
 import { SessionRestoredBanner } from "@/components/ui/SessionRestoredBanner";
 import { EmiInputs as EmiInputsType, EmiResult } from "@/src/lib/emi-calculations";
@@ -148,11 +148,11 @@ export default function EMICalculatorClient() {
             className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-md border-t border-border p-4 shadow-2xl flex items-center justify-between"
           >
             <div className="space-y-0.5">
-               <p className="text-xs font-black uppercase tracking-widest text-text-4">Monthly EMI</p>
+               <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Monthly EMI</p>
                <p className="text-lg font-black text-text">{formatCurrency(result.monthlyEmi)}</p>
             </div>
             <div className="text-right space-y-0.5">
-               <p className="text-xs font-black uppercase tracking-widest text-text-4">Total Interest</p>
+               <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Total Interest</p>
                <p className="text-sm font-bold text-text-3">{formatCurrency(result.totalInterest)}</p>
             </div>
           </m.div>
@@ -163,7 +163,7 @@ export default function EMICalculatorClient() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-surface border border-border rounded-2xl sm:rounded-4xl p-4 sm:p-8 shadow-sm">
-            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue mb-8 flex items-center gap-3">
+            <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue mb-8 flex items-center gap-3">
               <Calculator className="w-4 h-4" />
               Loan Configuration
             </h2>
@@ -175,7 +175,7 @@ export default function EMICalculatorClient() {
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Loan Summary</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-2">Loan Summary</h2>
           
           <div ref={resultRef} className="space-y-6">
             <MetricCard
@@ -210,7 +210,7 @@ export default function EMICalculatorClient() {
             { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-10" /> }
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
-              <span className="text-xs font-black uppercase tracking-widest">Effective Tenure</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm">Effective Tenure</span>
             </div>
             <p className="text-2xl sm:text-3xl font-black text-text tabular-nums">
               {result?.effectiveTenure || 0} <span className="text-sm text-text-4 font-bold">Months</span>

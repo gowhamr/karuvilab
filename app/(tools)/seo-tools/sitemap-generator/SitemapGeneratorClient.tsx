@@ -136,7 +136,7 @@ export default function SitemapGeneratorClient() {
       {/* Top Bar: Base Settings */}
       <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm flex flex-col md:flex-row items-end gap-6">
         <div className="flex-1 w-full space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-text-4 ml-1">Website Base URL</label>
+          <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Website Base URL</label>
           <div className="relative group">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-blue">
               <Globe size={18} aria-hidden="true" />
@@ -176,7 +176,7 @@ export default function SitemapGeneratorClient() {
               <button 
                 onClick={() => setActiveTab('editor')}
                 className={cn(
-                  "px-8 py-4 text-xs font-black uppercase tracking-widest transition-all",
+                  "px-8 py-4 text-tiny font-bold uppercase tracking-widest-sm transition-all",
                   activeTab === 'editor' ? "text-blue border-b-2 border-blue bg-surface" : "text-text-4 hover:text-text"
                 )}
               >
@@ -185,7 +185,7 @@ export default function SitemapGeneratorClient() {
               <button 
                 onClick={() => setActiveTab('import')}
                 className={cn(
-                  "px-8 py-4 text-xs font-black uppercase tracking-widest transition-all",
+                  "px-8 py-4 text-tiny font-bold uppercase tracking-widest-sm transition-all",
                   activeTab === 'import' ? "text-blue border-b-2 border-blue bg-surface" : "text-text-4 hover:text-text"
                 )}
               >
@@ -293,7 +293,7 @@ export default function SitemapGeneratorClient() {
                     <button 
                       onClick={importFromText}
                       disabled={!bulkInput.trim()}
-                      className="w-full py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
+                      className="w-full py-4 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-102 active:scale-95 transition-all shadow-md shadow-blue/10 disabled:opacity-50 disabled:grayscale disabled:scale-100"
                     >
                       Import URLs
                     </button>
@@ -321,7 +321,7 @@ export default function SitemapGeneratorClient() {
             </div>
 
             <div className="space-y-3 pt-2">
-              <p className="text-tiny font-black uppercase tracking-[0.2em] text-text-4 text-center">Export Sitemap</p>
+              <p className="text-tiny font-black uppercase tracking-widest-lg text-text-4 text-center">Export Sitemap</p>
               <div className="grid grid-cols-3 gap-2">
                 <button 
                   onClick={() => downloadFile('xml')}

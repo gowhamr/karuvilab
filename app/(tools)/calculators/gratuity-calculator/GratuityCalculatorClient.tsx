@@ -76,7 +76,7 @@ export default function GratuityCalculatorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Award className="w-3.5 h-3.5" /> Employment Details
             </h3>
           </div>
@@ -156,11 +156,11 @@ export default function GratuityCalculatorClient() {
             <m.div 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-red-500/10 border border-red-500/20 rounded-3xl p-6 flex gap-4 items-start"
+              className="bg-error/10 border border-error/20 rounded-3xl p-6 flex gap-4 items-start"
             >
-              <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+              <AlertTriangle className="w-5 h-5 text-error shrink-0" />
               <div>
-                <p className="text-red-600 dark:text-red-400 text-sm font-black uppercase tracking-widest">
+                <p className="text-error text-sm font-black uppercase tracking-widest">
                   Not Eligible for Gratuity
                 </p>
                 <p className="text-text-3 text-sm mt-1 leading-relaxed font-medium">
@@ -181,17 +181,17 @@ export default function GratuityCalculatorClient() {
               <MetricCard 
                 label="Tax Exempt (Up to ₹20L)" 
                 value={formatCurrency(result.taxExempt)} 
-                className="bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400" 
+                className="bg-success/10 border-success/30 text-success" 
               />
               <MetricCard 
                 label="Taxable Amount" 
                 value={formatCurrency(result.taxable)} 
-                className={result.taxable > 0 ? "bg-red-500/5 border-red-500/20 text-red-500" : "bg-bg border-border"} 
+                className={result.taxable > 0 ? "bg-error/5 border-error/20 text-error" : "bg-bg border-border"} 
               />
             </div>
 
             <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
-              <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
                 <Info className="w-3 h-3" /> Calculation Breakdown
               </h4>
               

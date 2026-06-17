@@ -18,7 +18,7 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ hours, minutes, second
   const secondsRotation = seconds * 6;
 
   return (
-    <div className="relative w-10 h-10">
+    <div className="relative w-10 h-10" aria-hidden="true">
       {/* Clock Face */}
       <div className="w-full h-full rounded-full bg-bg border border-surface" />
 

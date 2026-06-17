@@ -59,7 +59,7 @@ export default function TdsCalculatorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Percent className="w-3.5 h-3.5" /> Payment Details
             </h3>
           </div>
@@ -140,11 +140,11 @@ export default function TdsCalculatorClient() {
             <m.div 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-emerald-500/10 border border-emerald-500/20 rounded-3xl p-6 flex gap-4 items-start"
+              className="bg-success/10 border border-success/20 rounded-3xl p-6 flex gap-4 items-start"
             >
-              <Info className="w-5 h-5 text-emerald-500 shrink-0" />
+              <Info className="w-5 h-5 text-success shrink-0" />
               <div>
-                <p className="text-emerald-600 dark:text-emerald-400 text-sm font-black uppercase tracking-widest">
+                <p className="text-success text-sm font-black uppercase tracking-widest">
                   No TDS Required
                 </p>
                 <p className="text-text-3 text-sm mt-1 leading-relaxed font-medium">
@@ -158,23 +158,23 @@ export default function TdsCalculatorClient() {
             <MetricCard 
               label="TDS Rate Applied" 
               value={`${result.rate}%`} 
-              className={cn("col-span-2", !hasPan && "bg-red-500/5 border-red-500/20 text-red-500")} 
+              className={cn("col-span-2", !hasPan && "bg-error/5 border-error/20 text-error")} 
               sub={!hasPan ? "Higher rate due to absent PAN" : undefined}
             />
             <MetricCard 
               label="TDS Amount to Deduct" 
               value={`- ${formatCurrency(result.tdsAmount)}`} 
-              className="bg-red-500/5 border-red-500/20 text-red-500" 
+              className="bg-error/5 border-error/20 text-error" 
             />
             <MetricCard 
               label="Net Payable to Payee" 
               value={formatCurrency(result.netAmount)} 
-              className="bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400" 
+              className="bg-success/10 border-success/30 text-success" 
             />
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
-            <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
               <Info className="w-3 h-3" /> Section Details: {activeSection.code.split('_')[0]}
             </h4>
             

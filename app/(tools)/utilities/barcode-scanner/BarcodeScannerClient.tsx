@@ -135,7 +135,7 @@ export default function BarcodeScannerClient() {
                   <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
                   <div className="absolute inset-0 border-[40px] border-black/40 pointer-events-none" />
                   <m.div 
-                    className="absolute inset-x-12 h-0.5 bg-blue shadow-[0_0_20px_rgba(79,70,229,1)]"
+                    className="absolute inset-x-12 h-0.5 bg-blue shadow-glow-primary"
                     animate={{ top: ["20%", "80%", "20%"] }}
                     transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
                   />

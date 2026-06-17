@@ -81,7 +81,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={() => {
                   this.setState({ hasError: false, error: undefined, showDetails: false });
                 }}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-md shadow-blue/10 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl text-tiny font-bold uppercase tracking-widest-sm shadow-md shadow-blue/10 hover:scale-102 active:scale-98 transition-all"
               >
                 <RefreshCw className="w-4 h-4" />
                 Retry Component
@@ -95,7 +95,7 @@ export class ErrorBoundary extends Component<Props, State> {
                       window.location.reload();
                     }
                   }}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-blue/30 transition-all"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue/30 transition-all"
                 >
                   <RefreshCw className="w-3 h-3" />
                   Reload App
@@ -109,7 +109,7 @@ export class ErrorBoundary extends Component<Props, State> {
                       url: typeof window !== 'undefined' ? window.location.href : 'unknown'
                     }
                   })}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-xs font-black uppercase tracking-widest hover:border-red-500/30 hover:text-red-500 transition-all"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-red-500/30 hover:text-red-500 transition-all"
                 >
                   <Flag className="w-3 h-3" />
                   Report Issue
@@ -120,7 +120,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="w-full max-w-md pt-4">
               <button 
                 onClick={() => this.setState(s => ({ showDetails: !s.showDetails }))}
-                className="text-xs font-black uppercase tracking-widest text-text-4 hover:text-blue transition-colors mb-4"
+                className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 hover:text-blue transition-colors mb-4"
               >
                 {this.state.showDetails ? "Hide Error Details" : "Show Error Details"}
               </button>

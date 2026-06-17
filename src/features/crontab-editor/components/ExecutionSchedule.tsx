@@ -39,7 +39,7 @@ export const ExecutionSchedule = ({ nextRuns, formatRelative }: ExecutionSchedul
               </span>
             </div>
           </div>
-          <span className="text-xs font-black uppercase tracking-widest text-blue bg-blue/5 px-3 py-1.5 rounded-xl border border-blue/10">
+          <span className="text-tiny font-bold uppercase tracking-widest-sm text-blue bg-blue/5 px-3 py-1.5 rounded-xl border border-blue/10">
             {formatRelative(date)}
           </span>
         </m.div>

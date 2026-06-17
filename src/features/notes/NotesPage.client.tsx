@@ -78,7 +78,7 @@ export default function NotesPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "relative flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-xs font-black uppercase tracking-widest transition-all outline-none",
+                  "relative flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-tiny font-bold uppercase tracking-widest-sm transition-all outline-none",
                   activeTab === tab.id ? "text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text hover:bg-bg"
                 )}
               >
@@ -119,7 +119,7 @@ export default function NotesPage() {
                 onClick: () => emptyTrash()
               });
             }}
-            className="flex items-center gap-2 px-6 py-2 border border-error/20 text-error bg-error/5 hover:bg-error/10 rounded-full text-xs font-black uppercase tracking-widest transition-all"
+            className="flex items-center gap-2 px-6 py-2 border border-error/20 text-error bg-error/5 hover:bg-error/10 rounded-full text-tiny font-bold uppercase tracking-widest-sm transition-all"
           >
             <Trash2 size={14} />
             Empty Trash

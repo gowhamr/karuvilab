@@ -30,8 +30,8 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
       <Link 
         href={`/${tool.href}`}
         className={cn(
-          "relative flex flex-col bg-[--kv-mat-surface] border border-mat-border shadow-sm overflow-hidden transition-all duration-150 ease-out",
-          "hover:border-[--kv-mat-border-focus] hover:bg-[--kv-mat-hover]",
+          "relative flex flex-col bg-mat-surface border border-mat-border shadow-sm overflow-hidden transition-all duration-150 ease-out",
+          "hover:border-mat-border-focus hover:bg-mat-hover",
           compact 
             ? "min-h-20 md:min-h-24 p-2 md:p-3 rounded-2xl" 
             : "min-h-24 md:min-h-32 p-4 md:p-6 rounded-4xl"
@@ -63,7 +63,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
               {tool.name}
             </h3>
           </div>
-          <p className="text-[--kv-text-muted] text-xs md:text-sm font-medium line-clamp-2 leading-relaxed">
+          <p className="text-text-muted text-xs md:text-sm font-medium line-clamp-2 leading-relaxed">
             {tool.desc}
           </p>
         </div>

@@ -285,9 +285,9 @@ body {
   background-color: var(--bg);
   color: var(--text);
   transition: 
-    background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
-    color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+    color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   letter-spacing: -0.01em;
   min-height: 100dvh;
   min-height: 100svh;
@@ -295,10 +295,10 @@ body {
 
 header, aside, footer, nav, .mat-surface-1, .mat-surface-2, .mat-surface-3, .kv-glass, .bg-surface, .bg-bg, .bg-bg-input, .border-border {
   transition: 
-    background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
-    border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
-    color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+    color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body.sidebar-open {

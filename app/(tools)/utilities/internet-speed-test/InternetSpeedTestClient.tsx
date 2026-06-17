@@ -76,7 +76,7 @@ export default function InternetSpeedTestClient() {
         
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
            <div className="space-y-2 text-center md:text-left">
-              <h2 className="text-sm font-black uppercase tracking-[0.3em] text-blue flex items-center justify-center md:justify-start gap-3">
+              <h2 className="text-sm font-black uppercase tracking-widest-2xl text-blue flex items-center justify-center md:justify-start gap-3">
                 <Gauge className="w-4 h-4" />
                 Network Diagnostic
               </h2>
@@ -148,7 +148,7 @@ export default function InternetSpeedTestClient() {
            <div className="overflow-x-auto">
               <table className="w-full text-left">
                  <thead>
-                    <tr className="text-micro font-black uppercase tracking-[0.2em] text-text-4 border-b border-border">
+                    <tr className="text-micro font-black uppercase tracking-widest-lg text-text-4 border-b border-border">
                        <th className="py-4 px-4">Timestamp</th>
                        <th className="py-4 px-4">Download</th>
                        <th className="py-4 px-4">Upload</th>

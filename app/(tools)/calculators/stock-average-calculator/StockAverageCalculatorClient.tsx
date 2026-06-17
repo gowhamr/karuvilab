@@ -82,7 +82,7 @@ const StockAverageCalculatorClient = memo(function StockAverageCalculatorClient(
             <div className="col-span-1 flex justify-end">
               <button
                 onClick={() => removeOrder(order.id)}
-                className="p-2 text-text-4 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                className="p-2 text-text-4 hover:text-error hover:bg-error/10 rounded-lg transition-colors"
                 title="Remove"
               >
                 <Trash2 className="w-4 h-4" />
@@ -96,7 +96,7 @@ const StockAverageCalculatorClient = memo(function StockAverageCalculatorClient(
           className="w-full py-3 flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-xl text-text-4 hover:border-blue hover:text-blue transition-all group"
         >
           <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
-          <span className="text-xs font-black uppercase tracking-widest">Add Buy Order</span>
+          <span className="text-tiny font-bold uppercase tracking-widest-sm">Add Buy Order</span>
         </button>
       </div>
 

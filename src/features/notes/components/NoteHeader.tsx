@@ -106,7 +106,7 @@ export function NoteHeader({
             </button>
           </Popover.Trigger>
           <Popover.Portal>
-            <Popover.Content align="end" sideOffset={8} className="z-[500] w-56 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 p-1">
+            <Popover.Content align="end" sideOffset={8} className="z-modal w-56 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 p-1">
               <button
                 onClick={() => onTogglePin(localNote.id)}
                 className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-text-3 hover:text-text hover:bg-bg rounded-xl transition-all"

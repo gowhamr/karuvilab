@@ -125,12 +125,12 @@ export default function LoremIpsumClient() {
 
   const handleDownload = () => {
     const blob = new Blob([output], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    const url = blobManager.create(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'lorem-ipsum.txt';
     a.click();
-    URL.revokeObjectURL(url);
+    blobManager.revoke(url);
   };
 
   const wordCount = output.split(/\\s+/).filter(w => w.length > 0).length;
@@ -141,7 +141,7 @@ export default function LoremIpsumClient() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
           <FileText className="w-4 h-4" />
           Lorem Ipsum Generator
         </h2>
@@ -149,7 +149,7 @@ export default function LoremIpsumClient() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Unit</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Unit</label>
               <div className="flex bg-bg border border-border rounded-xl p-1">
                 {(['words', 'sentences', 'paragraphs'] as LoremUnit[]).map(u => (
                   <button
@@ -167,7 +167,7 @@ export default function LoremIpsumClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Count</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Count</label>
               <div className="flex items-center gap-4">
                 <input
                   type="range"
@@ -189,7 +189,7 @@ export default function LoremIpsumClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-black uppercase tracking-widest text-text-4">Variant</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Variant</label>
               <div className="grid grid-cols-2 gap-2">
                 {(['classic', 'tech', 'hipster', 'random'] as LoremVariant[]).map(v => (
                   <button
@@ -232,7 +232,7 @@ export default function LoremIpsumClient() {
 
             {options.unit === 'paragraphs' && (
               <div className="space-y-4">
-                <label className="text-xs font-black uppercase tracking-widest text-text-4">Sentences per Paragraph</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Sentences per Paragraph</label>
                 <div className="flex items-center gap-4">
                   <input
                     type="number"
@@ -262,7 +262,7 @@ export default function LoremIpsumClient() {
 
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-text-4">
+          <div className="flex items-center gap-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">
             <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" /> {paragraphCount} Paragraphs</span>
             <span className="flex items-center gap-1.5"><AlignLeft className="w-3.5 h-3.5" /> {sentenceCount} Sentences</span>
             <span className="flex items-center gap-1.5"><TextIcon className="w-3.5 h-3.5" /> {wordCount} Words</span>

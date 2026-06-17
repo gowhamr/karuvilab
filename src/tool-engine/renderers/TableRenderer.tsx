@@ -20,7 +20,7 @@ export default function TableRenderer({ result }: { result: ToolResult }) {
           <thead className="bg-mat-base/50 sticky top-0 z-10">
             <tr>
               {headers.map((h, i) => (
-                <th key={i} className="px-6 py-4 text-xs font-black uppercase tracking-widest text-text-3 border-b border-mat-border">
+                <th key={i} className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-3 border-b border-mat-border">
                   {h}
                 </th>
               ))}

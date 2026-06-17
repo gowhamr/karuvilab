@@ -98,7 +98,7 @@ export default function HraCalculatorClient() {
         {/* LEFT COLUMN: Inputs */}
         <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Home className="w-3.5 h-3.5" /> Salary & Rent Details
             </h3>
             <span className="text-xs font-bold text-text-4 uppercase bg-bg px-2 py-1 rounded-md">Monthly Values</span>
@@ -191,7 +191,7 @@ export default function HraCalculatorClient() {
         {/* RIGHT COLUMN: Results */}
         <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4">Calculation Results</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Calculation Results</h3>
             <button
               onClick={() => setIsAnnual(!isAnnual)}
               className="text-xs font-bold uppercase tracking-widest text-blue hover:underline"
@@ -204,12 +204,12 @@ export default function HraCalculatorClient() {
             <MetricCard 
               label="Exempt HRA (Tax Free)" 
               value={formatCurrency(result.exemption * mult)} 
-              className="bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400" 
+              className="bg-success/10 border-success/30 text-success" 
             />
             <MetricCard 
               label="Taxable HRA" 
               value={formatCurrency(result.taxable * mult)} 
-              className="bg-red-500/5 border-red-500/20 text-red-500" 
+              className="bg-error/5 border-error/20 text-error" 
             />
           </div>
 
@@ -222,7 +222,7 @@ export default function HraCalculatorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-widest text-text-4 flex items-center gap-2">
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
               <Info className="w-3 h-3" /> The 3 Conditions (Sec 10(13A))
             </h4>
             
@@ -250,7 +250,7 @@ export default function HraCalculatorClient() {
             </div>
             
             {result.exemption === 0 && (
-              <p className="text-xs font-bold text-amber-500 bg-amber-500/10 p-4 rounded-xl border border-amber-500/20 mt-4">
+              <p className="text-xs font-bold text-warn bg-warn/10 p-4 rounded-xl border border-warn/20 mt-4">
                 Since you pay less rent than 10% of your Basic+DA salary, you cannot claim any HRA exemption. The entire HRA received is taxable.
               </p>
             )}

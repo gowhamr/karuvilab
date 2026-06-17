@@ -117,10 +117,10 @@ export default function ExtractImagesClient() {
         {images.length > 0 && (
           <div className="bg-surface border border-border p-5 rounded-4xl shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-black text-text-2 text-xs uppercase tracking-[0.2em]">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
+              <h2 className="font-black text-text-2 text-xs uppercase tracking-widest-lg">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
               <button 
                 onClick={downloadAll} 
-                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-xs font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10"
+                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-tiny font-bold uppercase tracking-widest-sm rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10"
               >
                 <Download className="w-3.5 h-3.5" /> Download All
               </button>

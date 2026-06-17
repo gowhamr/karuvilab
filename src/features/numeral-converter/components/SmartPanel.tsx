@@ -173,7 +173,7 @@ export function SmartPanel({
         <div className="md:col-span-2 xl:col-span-3 flex justify-center">
            <button 
              onClick={() => setShowAdvanced(!showAdvanced)}
-             className="px-6 py-2 bg-bg border border-border rounded-full text-xs font-black uppercase tracking-widest text-text-3 hover:text-blue hover:border-blue/30 transition-all shadow-sm"
+             className="px-6 py-2 bg-bg border border-border rounded-full text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:text-blue hover:border-blue/30 transition-all shadow-sm"
            >
              {showAdvanced ? "Hide Advanced Formats" : "Show All 20+ Formats"}
            </button>

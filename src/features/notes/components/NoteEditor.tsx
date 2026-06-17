@@ -347,7 +347,7 @@ export function NoteEditor() {
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyDown={handleAddTag}
                     placeholder="Add tag..."
-                    className="bg-transparent text-xs font-black uppercase tracking-widest text-text outline-none w-20 placeholder:text-text-4"
+                    className="bg-transparent text-tiny font-bold uppercase tracking-widest-sm text-text outline-none w-20 placeholder:text-text-4"
                   />
                 </div>
 

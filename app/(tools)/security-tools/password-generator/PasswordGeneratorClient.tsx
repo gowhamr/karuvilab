@@ -59,11 +59,11 @@ function getStrength(password: string): StrengthInfo {
   if (entropy > 100) score++;
   if (entropy > 120) score++;
 
-  if (score <= 1) return { label: "Very Weak", color: "text-red-500", score, entropy, crackTime };
-  if (score === 2) return { label: "Weak", color: "text-red-400", score, entropy, crackTime };
-  if (score === 3) return { label: "Fair", color: "text-amber-500", score, entropy, crackTime };
-  if (score === 4) return { label: "Strong", color: "text-blue-500", score, entropy, crackTime };
-  return { label: "Excellent", color: "text-emerald-500", score, entropy, crackTime };
+  if (score <= 1) return { label: "Very Weak", color: "text-error", score, entropy, crackTime };
+  if (score === 2) return { label: "Weak", color: "text-error/80", score, entropy, crackTime };
+  if (score === 3) return { label: "Fair", color: "text-warn", score, entropy, crackTime };
+  if (score === 4) return { label: "Strong", color: "text-blue", score, entropy, crackTime };
+  return { label: "Excellent", color: "text-success", score, entropy, crackTime };
 }
 
 function generatePassword(length: number, useUpper: boolean, useLower: boolean, useNums: boolean, useSyms: boolean): string {
@@ -133,7 +133,7 @@ export default function PasswordGeneratorClient() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+            <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
               <Lock className="w-4 h-4" />
               Generator Parameters
             </h2>
@@ -157,7 +157,7 @@ export default function PasswordGeneratorClient() {
 
               <button
                 onClick={generate}
-                className="w-full py-4 bg-blue text-white text-sm font-black uppercase tracking-widest rounded-xl hover:shadow-lg hover:shadow-blue/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
+                className="w-full py-4 bg-blue text-white text-sm font-black uppercase tracking-widest rounded-xl hover:shadow-lg hover:shadow-blue/20 active:scale-98 transition-all flex items-center justify-center gap-2 group"
               >
                 <Zap className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 Generate Secure Passwords
@@ -177,7 +177,7 @@ export default function PasswordGeneratorClient() {
                   <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
                     <div className="flex items-center gap-2 text-text-4">
                       <Fingerprint className="w-3.5 h-3.5" />
-                      <span className="text-xs font-black uppercase tracking-widest">Entropy</span>
+                      <span className="text-tiny font-bold uppercase tracking-widest-sm">Entropy</span>
                     </div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-2xl font-black text-text">{Math.floor(strength?.entropy || 0)}</span>
@@ -189,7 +189,7 @@ export default function PasswordGeneratorClient() {
                   <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
                     <div className="flex items-center gap-2 text-text-4">
                       <Clock className="w-3.5 h-3.5" />
-                      <span className="text-xs font-black uppercase tracking-widest">Crack Time</span>
+                      <span className="text-tiny font-bold uppercase tracking-widest-sm">Crack Time</span>
                     </div>
                     <span className={cn("text-xl font-black block", strength?.color)}>{strength?.crackTime}</span>
                     <p className="text-xs text-text-3 font-medium">Estimate using GPU clusters.</p>
@@ -198,17 +198,17 @@ export default function PasswordGeneratorClient() {
                   <div className={cn(
                     "p-5 rounded-3xl space-y-3 border transition-colors",
                     breachInfo.loading ? "bg-surface border-border" :
-                    breachInfo.count === 0 ? "bg-emerald-500/5 border-emerald-500/20" :
-                    breachInfo.count && breachInfo.count > 0 ? "bg-red-500/5 border-red-500/20" : "bg-surface border-border"
+                    breachInfo.count === 0 ? "bg-success/5 border-success/20" :
+                    breachInfo.count && breachInfo.count > 0 ? "bg-error/5 border-error/20" : "bg-surface border-border"
                   )}>
                     <div className="flex items-center gap-2 text-text-4">
-                      <AlertTriangle className={cn("w-3.5 h-3.5", breachInfo.count ? "text-red-500" : "text-emerald-500")} />
-                      <span className="text-xs font-black uppercase tracking-widest">Breach Check</span>
+                      <AlertTriangle className={cn("w-3.5 h-3.5", breachInfo.count ? "text-error" : "text-success")} />
+                      <span className="text-tiny font-bold uppercase tracking-widest-sm">Breach Check</span>
                     </div>
                     {breachInfo.loading ? (
                       <div className="h-6 w-24 bg-mat-base animate-pulse rounded-lg" />
                     ) : (
-                      <span className={cn("text-xl font-black block", breachInfo.count ? "text-red-500" : "text-emerald-500")}>
+                      <span className={cn("text-xl font-black block", breachInfo.count ? "text-error" : "text-success")}>
                         {breachInfo.count === 0 ? "Clear" : breachInfo.count ? `${breachInfo.count.toLocaleString()} times` : "Unknown"}
                       </span>
                     )}
@@ -218,7 +218,7 @@ export default function PasswordGeneratorClient() {
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between px-2">
-                    <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+                    <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
                       <ShieldCheck className="w-4 h-4" />
                       Results
                     </h2>
@@ -259,7 +259,7 @@ export default function PasswordGeneratorClient() {
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-2">Security Audit</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2">Security Audit</h2>
           
           <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3">
@@ -274,7 +274,7 @@ export default function PasswordGeneratorClient() {
 
             {history.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 flex items-center gap-2">
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
                   <History className="w-3.5 h-3.5" />
                   Recent History
                 </h3>

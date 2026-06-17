@@ -127,7 +127,7 @@ export default function ImageBase64Client() {
               onChange={e => setDecodeInput(e.target.value)}
               placeholder="data:image/jpeg;base64,/9j/4AAQSkZJRgAB..."
             />
-            <button onClick={handleDecode} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+            <button onClick={handleDecode} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
               Decode
             </button>
           </div>

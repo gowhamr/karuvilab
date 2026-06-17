@@ -93,7 +93,7 @@ export default function DiscountCalculatorClient() {
         />
 
         <div className="p-6 bg-bg rounded-2xl border border-border flex items-center justify-between shadow-inner">
-          <span className="text-xs font-black uppercase tracking-widest text-text-4">Required discount</span>
+          <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Required discount</span>
           <span className="text-3xl font-black text-blue tabular-nums">
             {reverse.pctOff > 0
               ? fmt(reverse.pctOff) + "%"

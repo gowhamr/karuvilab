@@ -128,7 +128,7 @@ export function EventModal({
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2 no-scrollbar">
+          <form onSubmit={handleSubmit} className="space-y-6 max-h-tool-viewport overflow-y-auto pr-2 no-scrollbar">
             <ToolInput
               label="Event Title"
               value={title}
@@ -138,7 +138,7 @@ export function EventModal({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4 ml-4">Start Time</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 ml-4">Start Time</label>
                 <div className="relative group">
                   <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
                   <input
@@ -150,7 +150,7 @@ export function EventModal({
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4 ml-4">End Time</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 ml-4">End Time</label>
                 <div className="relative group">
                   <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
                   <input
@@ -174,7 +174,7 @@ export function EventModal({
               </div>
 
               <div className="flex items-center gap-3 border-l border-border/40 pl-6">
-                <label htmlFor="event-recurrence" className="text-xs font-black uppercase tracking-widest text-text-4">Repeat</label>
+                <label htmlFor="event-recurrence" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Repeat</label>
                 <select
                   id="event-recurrence"
                   value={recurrence}
@@ -212,7 +212,7 @@ export function EventModal({
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-black uppercase tracking-[0.2em] text-text-4 ml-4">Category Color</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 ml-4">Category Color</label>
               <div className="flex flex-wrap gap-3 px-2">
                 {(Object.keys(COLOR_MAP) as EventColor[]).map((c) => (
                   <button
@@ -236,14 +236,14 @@ export function EventModal({
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="px-6 h-14 bg-error/10 text-error rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:bg-error hover:text-white transition-all active:scale-95"
+                  className="px-6 h-14 bg-error/10 text-error rounded-3xl font-black text-xs uppercase tracking-widest-lg hover:bg-error hover:text-white transition-all active:scale-95"
                 >
                   Delete
                 </button>
               )}
               <button
                 type="submit"
-                className="flex-1 h-14 bg-blue text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-dark transition-all shadow-xl shadow-blue/20 active:scale-95"
+                className="flex-1 h-14 bg-blue text-white rounded-3xl font-black text-xs uppercase tracking-widest-lg hover:bg-blue-dark transition-all shadow-xl shadow-blue/20 active:scale-95"
               >
                 {editingEvent ? "Save Changes" : "Create Event"}
               </button>

@@ -3,7 +3,7 @@
 import React from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { useEmiStore } from "@/src/store/useEmiStore";
+import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { formatCurrency } from "@/src/lib/utils";
 
 export function PrepaymentSection({ savings }: { savings?: { interest: number; months: number } | undefined }) {

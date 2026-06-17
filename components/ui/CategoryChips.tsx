@@ -100,7 +100,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
   }, [activeCategory]);
 
   return (
-    <div className="relative group/wrapper w-[calc(100%+2rem)] -ml-4 md:w-[calc(100%+4rem)] md:-ml-8 overflow-hidden">
+    <div className="relative group/wrapper -mx-4 w-auto px-4 md:-mx-8 md:w-auto md:px-8 overflow-hidden">
       {/* Left/Right Dynamic Fades — Purely visual indicators */}
       <div 
         ref={fadeLeftRef}
@@ -128,10 +128,10 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           whileHover={{ scale: 1.05, y: -1 }}
           whileTap={{ scale: 0.95 }}
           className={`
-            relative flex-shrink-0 min-h-11 py-2 px-4 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+            relative flex-shrink-0 min-h-11 py-2 px-4 rounded-full text-tiny font-bold uppercase tracking-widest-sm transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
             ${!activeCategory 
               ? "text-white shadow-md shadow-blue/15" 
-              : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface shadow-sm"}
+              : "text-text-muted hover:text-text hover:bg-mat-hover bg-mat-surface shadow-sm"}
           `}
         >
           {!activeCategory && (
@@ -156,10 +156,10 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
             className={`
-              relative flex-shrink-0 min-h-11 flex items-center gap-2.5 py-2 px-4 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+              relative flex-shrink-0 min-h-11 flex items-center gap-2.5 py-2 px-4 rounded-full text-tiny font-bold uppercase tracking-widest-sm transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
               ${activeCategory === cat.id 
                 ? "text-white" 
-                : "text-[--kv-text-muted] hover:text-[--kv-text] hover:bg-mat-hover bg-mat-surface shadow-sm"}
+                : "text-text-muted hover:text-text hover:bg-mat-hover bg-mat-surface shadow-sm"}
             `}
           >
             {activeCategory === cat.id && (

@@ -27,7 +27,7 @@ export const FieldBreakdown = ({ fields, localExpression, fontSize, onFieldChang
           )}
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-text-4 group-hover:text-blue transition-colors">
+            <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 group-hover:text-blue transition-colors">
               {field.label}
             </span>
             <span className="text-tiny font-bold text-text-4 bg-bg px-2 py-0.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">

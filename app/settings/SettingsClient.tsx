@@ -75,7 +75,7 @@ export default function SettingsClient() {
           <div className="px-4 space-y-6">
             <Link 
               href="/"
-              className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-text-4 hover:text-blue transition-colors"
+              className="inline-flex items-center gap-2 text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 hover:text-blue transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back to Dashboard
@@ -98,7 +98,7 @@ export default function SettingsClient() {
           <nav className="space-y-8 max-h-[calc(100vh-250px)] overflow-y-auto no-scrollbar px-1" role="tablist">
             {Object.entries(groupedItems).map(([group, items]) => (
               <div key={group} className="space-y-2">
-                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-text-4 px-4">{group}</h2>
+                <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-4">{group}</h2>
                 <div className="space-y-1">
                   {items.map((item) => (
                     <button
@@ -120,7 +120,7 @@ export default function SettingsClient() {
                         <item.icon className="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-black uppercase tracking-widest leading-none mb-1">{item.label}</div>
+                        <div className="text-tiny font-bold uppercase tracking-widest-sm leading-none mb-1">{item.label}</div>
                         <div className={`text-xs truncate font-medium ${activeSection === item.id ? 'text-indigo-100' : 'text-text-4'}`}>
                           {item.desc}
                         </div>
@@ -179,7 +179,7 @@ export default function SettingsClient() {
                   <h1 className="text-2xl lg:text-4xl font-black tracking-tight">
                     {MENU_ITEMS.find(m => m.id === activeSection)?.label}
                   </h1>
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-text-4 mt-1">
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 mt-1">
                     {MENU_ITEMS.find(m => m.id === activeSection)?.group}
                   </p>
                 </div>

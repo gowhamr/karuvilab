@@ -68,7 +68,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
               {hasMore && (
                 <button 
                   onClick={() => setShowAll(true)}
-                  className="text-blue hover:underline text-xs font-black uppercase tracking-widest mt-2 block"
+                  className="text-blue hover:underline text-tiny font-bold uppercase tracking-widest-sm mt-2 block"
                 >
                   + Show all {value.length} items
                 </button>
@@ -119,7 +119,7 @@ function TreeNode({ value, depth = 0, maxAutoExpandDepth = 10 }: TreeNodeProps) 
               {hasMore && (
                 <button 
                   onClick={() => setShowAll(true)}
-                  className="text-blue hover:underline text-xs font-black uppercase tracking-widest mt-2 block"
+                  className="text-blue hover:underline text-tiny font-bold uppercase tracking-widest-sm mt-2 block"
                 >
                   + Show all {entries.length} keys
                 </button>
@@ -277,11 +277,11 @@ export default function JSONFormatterClient() {
         </div>
 
         <aside className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-xs font-black uppercase tracking-widest text-text-4 px-2">Settings</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-2">Settings</h2>
           <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
             {mode === "beautify" && (
               <div className="space-y-4">
-                <p className="text-xs font-black uppercase tracking-widest text-text-3">Indentation</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Indentation</p>
                 <div className="flex flex-wrap gap-2">
                   {([2, 4, "tab"] as Indent[]).map(v => (
                     <button
@@ -317,7 +317,7 @@ export default function JSONFormatterClient() {
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-blue flex items-center gap-3">
+            <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
               <Code className="w-4 h-4" />
               Output
             </h2>
