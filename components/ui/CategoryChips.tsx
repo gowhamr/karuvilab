@@ -14,6 +14,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
   const containerRef = useRef<HTMLDivElement>(null);
 
 
+  const [hasLeft, setHasLeft] = useState(false);
+  const [hasRight, setHasRight] = useState(true);
+
   const updateScrollState = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -21,10 +24,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     const scrollLeft = el.scrollLeft;
     const maxScroll = el.scrollWidth - el.clientWidth;
 
-    const hasLeft = scrollLeft > 5;
-    const hasRight = scrollLeft < maxScroll - 5;
-
-    // Removed maskImage logic completely to prevent active vibrant pills from looking muddy when fading out.
+    setHasLeft(scrollLeft > 5);
+    setHasRight(scrollLeft < maxScroll - 5);
   }, []);
 
   const handleKeyDown = useCallback(
@@ -98,8 +99,13 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
   return (
     <div className="relative group/wrapper w-auto overflow-hidden">
-      {/* Right scroll mask to indicate overflow without muddying the start of the list */}
-      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-bg to-transparent pointer-events-none z-20" />
+      {/* Dynamic Scroll Masks */}
+      {hasLeft && (
+        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-bg via-bg/80 to-transparent pointer-events-none z-20 transition-opacity duration-300" />
+      )}
+      {hasRight && (
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-20 transition-opacity duration-300" />
+      )}
 
       <div 
         ref={containerRef}
