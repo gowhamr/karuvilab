@@ -93,10 +93,6 @@ export function Header() {
           </nav>
         </div>
 
-        {/* Center Search - Desktop Only */}
-        <div className="hidden md:flex flex-1 justify-center max-w-xl mx-auto px-4">
-           <SearchBar className="md:min-w-72 lg:min-w-96" />
-        </div>
 
         <div className="flex items-center gap-1.5 md:gap-4 flex-shrink-0 justify-end">
 

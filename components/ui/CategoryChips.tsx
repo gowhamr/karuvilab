@@ -98,6 +98,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
   return (
     <div className="relative group/wrapper w-auto overflow-hidden">
+      {/* Right scroll mask to indicate overflow without muddying the start of the list */}
+      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-bg to-transparent pointer-events-none z-20" />
 
       <div 
         ref={containerRef}
@@ -125,7 +127,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           {!activeCategory && (
             <m.div 
               layoutId="active-cat"
-              className="absolute inset-0 bg-gradient-to-r from-blue to-blue-dark rounded-full -z-10"
+              className="absolute inset-0 bg-blue rounded-full -z-10"
+              style={{ boxShadow: `0 4px 12px -2px rgba(79, 70, 229, 0.25)` }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}

@@ -14,14 +14,14 @@ export function MainLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen">
       <Sidebar />
       <div className={`
-        flex-1 flex flex-col min-w-0
+        flex-1 flex flex-col min-w-0 relative overflow-x-hidden
         transition-all duration-300 ease-expo
         ${isFullscreen ? 'ml-0' : 'md:ml-sidebar'}
       `}>
         <Header />
         <main
           id="main-content"
-          className="flex-1 outline-none"
+          className="flex-1 outline-none relative overflow-x-hidden"
           tabIndex={-1}
         >
           {children}

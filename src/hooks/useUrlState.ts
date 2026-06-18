@@ -39,13 +39,16 @@ export function useUrlState<T extends ParamSchema>(
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [isSynced, setIsSynced] = useState(false);
 
+  const defaultsStr = JSON.stringify(defaults);
+
   const parseFromUrl = useCallback((): T => {
-    const result = { ...defaults } as T;
-    for (const key in defaults) {
+    const currentDefaults = JSON.parse(defaultsStr) as T;
+    const result = { ...currentDefaults } as T;
+    for (const key in currentDefaults) {
       const paramKey = prefix ? `${prefix}_${key}` : key;
       const raw = searchParams.get(paramKey);
       if (raw === null) continue;
-      const defaultVal = defaults[key];
+      const defaultVal = currentDefaults[key];
       try {
         if (typeof defaultVal === 'number') {
           const parsed = Number(raw);
@@ -60,7 +63,7 @@ export function useUrlState<T extends ParamSchema>(
       }
     }
     return result;
-  }, [defaults, prefix, encode, searchParams]);
+  }, [defaultsStr, prefix, encode, searchParams]);
 
   const [state, setStateInternal] = useState<T>(() => parseFromUrl());
 
@@ -116,7 +119,10 @@ export function useUrlState<T extends ParamSchema>(
 
   useEffect(() => {
     const parsed = parseFromUrl();
-    setStateInternal(parsed);
+    setStateInternal(prev => {
+      if (JSON.stringify(prev) === JSON.stringify(parsed)) return prev;
+      return parsed;
+    });
     setIsSynced(true);
   }, [parseFromUrl]);
 

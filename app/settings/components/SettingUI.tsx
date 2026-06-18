@@ -103,30 +103,42 @@ interface SettingSelectProps {
 
 export const SettingSelect = memo(function SettingSelect({ options, value, onChange }: SettingSelectProps) {
   return (
-    <div className="flex flex-wrap p-1.5 bg-bg border border-border rounded-2xl shadow-inner gap-1" role="radiogroup">
-      {options.map((opt) => (
-        <button
-          key={opt.value}
-          role="radio"
-          aria-checked={value === opt.value}
-          onClick={() => onChange(opt.value)}
-          className={`
-            px-3 sm:px-5 py-2.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative flex-1 min-w-15
-            ${value === opt.value 
-              ? 'text-text' 
-              : 'text-text-4 hover:text-text'}
-          `}
-        >
-          {value === opt.value && (
-            <m.div 
-              layoutId="active-setting"
-              className="absolute inset-0 bg-surface border border-border/40 rounded-xl shadow-sm -z-10"
-              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-            />
-          )}
-          {opt.label}
-        </button>
-      ))}
+    <div className="flex p-1.5 bg-surface border border-border/80 rounded-2xl shadow-inner relative" role="radiogroup">
+      {options.map((opt, i) => {
+        const isActive = value === opt.value;
+        const isLast = i === options.length - 1;
+        const nextIsActive = options[i+1]?.value === value;
+        
+        return (
+          <div key={opt.value} className="flex-1 flex items-center relative">
+            <button
+              role="radio"
+              aria-checked={isActive}
+              onClick={() => onChange(opt.value)}
+              className={`
+                w-full py-3 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative z-10
+                ${isActive 
+                  ? 'text-white' 
+                  : 'text-text-4 hover:text-text'}
+              `}
+            >
+              {isActive && (
+                <m.div 
+                  layoutId="active-setting"
+                  className="absolute inset-0 bg-blue rounded-xl shadow-md -z-10"
+                  transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                />
+              )}
+              {opt.label}
+            </button>
+            
+            {/* Divider - only show if neither this nor next is active, and not last */}
+            {!isLast && !isActive && !nextIsActive && (
+              <div className="absolute right-0 h-6 w-[1.5px] bg-border z-0" />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 });

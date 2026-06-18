@@ -1,33 +1,66 @@
 "use client";
 
-import { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { 
   Sun, Shield, 
   RefreshCw,
   ChevronRight, ArrowLeft,
-  History as HistoryIcon, Search
+  History as HistoryIcon, Search,
+  HelpCircle
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
-import { useIsHydrated } from "@/src/store/settings/store";
+import { useIsHydrated, useSettingsStore } from "@/src/store/settings/store";
 import Link from "next/link";
 import { cn } from "@/src/lib/utils";
+import { formatBytes } from "@/src/utils";
 
 // --- Lazy Load Sections ---
 const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false });
 const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false });
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
+const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false });
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes & modes', group: 'Personalization' },
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
-  { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History & PINS' },
+  { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History' },
+  { id: 'help', label: 'Support & FAQ', icon: HelpCircle, desc: 'Security, help', group: 'Support' },
 ];
 
 export default function SettingsClient() {
   const isHydrated = useIsHydrated();
+  const theme = useSettingsStore(s => s.appearance.theme);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [storageUsage, setStorageUsage] = useState<string>("...");
+
+  // Storage estimation
+  useEffect(() => {
+    if (!isHydrated) return;
+    
+    async function estimateStorage() {
+      if ('storage' in navigator && 'estimate' in navigator.storage) {
+        try {
+          const { usage } = await navigator.storage.estimate();
+          setStorageUsage(formatBytes(usage || 0));
+        } catch (e) {
+          setStorageUsage("Unknown");
+        }
+      } else {
+        setStorageUsage("N/A");
+      }
+    }
+    
+    estimateStorage();
+  }, [isHydrated, activeSection]);
+
+  const indicators = useMemo(() => ({
+    appearance: theme.charAt(0).toUpperCase() + theme.slice(1),
+    privacy: storageUsage,
+    history: "",
+    help: "v2.1"
+  }), [theme, storageUsage]);
 
   const filteredItems = useMemo(() => {
     if (!searchQuery) return MENU_ITEMS;
@@ -57,7 +90,7 @@ export default function SettingsClient() {
         <div className="w-full lg:w-80 space-y-4">
           <div className="h-8 w-32 bg-surface rounded-lg" />
           <div className="space-y-2">
-            {[1,2,3,4,5,6].map(i => <div key={i} className="h-14 w-full bg-surface rounded-2xl" />)}
+            {[1,2,3,4].map(i => <div key={i} className="h-14 w-full bg-surface rounded-2xl" />)}
           </div>
         </div>
         <div className="flex-1 space-y-8">
@@ -101,36 +134,51 @@ export default function SettingsClient() {
               <div key={group} className="space-y-2">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-4">{group}</h2>
                 <div className="space-y-1">
-                  {items.map((item) => (
-                    <button
-                      key={item.id}
-                      role="tab"
-                      aria-selected={activeSection === item.id}
-                      onClick={() => setActiveSection(item.id)}
-                      className={`
-                        w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative
-                        ${activeSection === item.id 
-                          ? 'bg-blue text-white shadow-md shadow-blue/10' 
-                          : 'hover:bg-blue/5 text-text-2'}
-                      `}
-                    >
-                      <div className={`
-                        w-10 h-10 rounded-xl flex items-center justify-center transition-colors
-                        ${activeSection === item.id ? 'bg-white/20' : 'bg-surface border border-border group-hover:bg-blue/10'}
-                      `}>
-                        <item.icon className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-tiny font-bold uppercase tracking-widest-sm leading-none mb-1">{item.label}</div>
-                        <div className={`text-xs truncate font-medium ${activeSection === item.id ? 'text-indigo-100' : 'text-text-4'}`}>
-                          {item.desc}
+                  {items.map((item) => {
+                    const indicator = indicators[item.id as keyof typeof indicators];
+                    const isActive = activeSection === item.id;
+                    
+                    return (
+                      <button
+                        key={item.id}
+                        role="tab"
+                        aria-selected={isActive}
+                        onClick={() => setActiveSection(item.id)}
+                        className={`
+                          w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative
+                          ${isActive 
+                            ? 'bg-blue text-white shadow-md shadow-blue/10' 
+                            : 'hover:bg-blue/5 text-text-2'}
+                        `}
+                      >
+                        <div className={`
+                          w-10 h-10 rounded-xl flex items-center justify-center transition-colors
+                          ${isActive ? 'bg-white/20' : 'bg-surface border border-border group-hover:bg-blue/10'}
+                        `}>
+                          <item.icon className="w-5 h-5" />
                         </div>
-                      </div>
-                      {activeSection === item.id && (
-                        <ChevronRight className="w-4 h-4 opacity-60" />
-                      )}
-                    </button>
-                  ))}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="text-tiny font-bold uppercase tracking-widest-sm leading-none">{item.label}</div>
+                            {indicator && (
+                              <span className={cn(
+                                "text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded",
+                                isActive ? "bg-white/20 text-white" : "bg-blue/5 text-blue/60 group-hover:text-blue/80"
+                              )}>
+                                {indicator}
+                              </span>
+                            )}
+                          </div>
+                          <div className={`text-[11px] truncate font-medium mt-1 ${isActive ? 'text-indigo-100' : 'text-text-4'}`}>
+                            {item.desc}
+                          </div>
+                        </div>
+                        {isActive && (
+                          <ChevronRight className="w-4 h-4 opacity-60" />
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -207,6 +255,7 @@ export default function SettingsClient() {
                 {activeSection === 'appearance' && <AppearanceSection />}
                 {activeSection === 'privacy' && <PrivacySection />}
                 {activeSection === 'history' && <HistorySection />}
+                {activeSection === 'help' && <HelpSection />}
               </div>
             </m.div>
           )}

@@ -12,21 +12,7 @@ import { useToast } from "@/components/ui/Toast";
 import { PrivacyFeatures } from "@/components/ui/PrivacyFeatures";
 import dynamic from "next/dynamic";
 
-const Accordion = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.Accordion), { ssr: false });
-const AccordionItem = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionItem), { ssr: false });
-const AccordionTrigger = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionTrigger), { ssr: false });
-const AccordionContent = dynamic(() => import("@/components/ui/Accordion").then(mod => mod.AccordionContent), { ssr: false });
-
-const FAQ = [
-  { q: "Is KV free for commercial use?", a: "Yes. KV (KaruviLab) is 100% free for personal and commercial projects. No limits, no subscriptions, no credit cards required." },
-  { q: "How secure is my data on KV?", a: "Security is our core mission. All processing happens locally in your browser. Your files and text never leave your device." },
-  { q: "Can I use these tools offline?", a: "Most KV tools are designed to work offline once loaded. Since processing is 100% client-side, you can disconnect and keep working." },
-  { q: "Do you store any of my inputs or outputs?", a: "Absolutely not. KV does not have a backend that processes your data. Everything stays in your browser's volatile memory." },
-];
-
 export const PrivacySection = memo(function PrivacySection() {
-  const privacy = useSettingsStore(state => state.privacy);
-  const updatePrivacy = useSettingsStore(state => state.updatePrivacy);
   const resetAll = useSettingsStore(state => state.resetAll);
   const [isExporting, setIsExporting] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
@@ -90,7 +76,8 @@ export const PrivacySection = memo(function PrivacySection() {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-12">
+      {/* --- Essential Processing Notice --- */}
       <SettingRow 
         label="Local-First Processing" 
         description="All tool logic runs strictly in your browser. This setting cannot be disabled."
@@ -103,87 +90,83 @@ export const PrivacySection = memo(function PrivacySection() {
         </div>
       </SettingRow>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
-        <button
-          onClick={exportSettings}
-          disabled={isExporting}
-          className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue transition-all"
-        >
-          {isExporting ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
-          Export Settings (Store)
-        </button>
-        <label className="flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue transition-all cursor-pointer">
-          <Upload className="w-4 h-4" />
-          Import Settings
-          <input type="file" accept=".json" className="hidden" onChange={importSettings} />
-        </label>
-      </div>
+      {/* --- Data Management Grid --- */}
+      <section className="space-y-6">
+        <h3 className="text-sm font-black text-text uppercase tracking-widest flex items-center gap-2">
+          <HardDrive className="w-4 h-4 text-blue" />
+          Data Management
+        </h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={exportSettings}
+            disabled={isExporting}
+            className="flex items-center justify-center gap-3 p-6 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue hover:bg-blue/5 transition-all group"
+          >
+            {isExporting ? <Check className="w-5 h-5" /> : <Download className="w-5 h-5 text-text-4 group-hover:text-blue" />}
+            Export Settings (JSON)
+          </button>
+          
+          <label className="flex items-center justify-center gap-3 p-6 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue hover:text-blue hover:bg-blue/5 transition-all cursor-pointer group">
+            <Upload className="w-5 h-5 text-text-4 group-hover:text-blue" />
+            Import Settings
+            <input type="file" accept=".json" className="hidden" onChange={importSettings} />
+          </label>
 
-      <div className="pt-4 pb-2 border-b border-border/40 mb-6">
-        <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-4">Clear Tool Data</h4>
-        <button 
-          onClick={handleClearCache}
-          disabled={isClearing}
-          className="w-full flex items-center justify-center gap-3 p-4 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-red-500/50 hover:text-red-500 hover:bg-red-500/5 transition-all disabled:opacity-50"
-        >
-          {isClearing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />}
-          {isClearing ? 'Clearing Cache...' : 'Clear Cache'}
-        </button>
-        <p className="text-xs text-text-4 mt-3 font-medium text-center">This will empty your local tool cache. Your theme preferences and favorites are kept safe.</p>
-      </div>
-
-      <div className="pt-12 border-t border-border/40 mt-8 space-y-12">
-        <div>
-          <h3 className="text-sm font-black text-text mb-6 uppercase tracking-widest flex items-center gap-2">
-            <Shield className="w-4 h-4 text-blue" />
-            Built for Privacy
-          </h3>
-          <PrivacyFeatures />
+          <button 
+            onClick={handleClearCache}
+            disabled={isClearing}
+            className="sm:col-span-2 flex items-center justify-center gap-3 p-6 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-red-500/50 hover:text-red-500 hover:bg-red-500/5 transition-all disabled:opacity-50 group"
+          >
+            {isClearing ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCcw className="w-5 h-5 text-text-4 group-hover:text-red-500" />}
+            {isClearing ? 'Clearing Storage...' : 'Clear All Tool Data'}
+          </button>
         </div>
+        <p className="text-xs text-text-4 font-medium leading-relaxed max-w-xl">
+          Use these controls to backup your settings or wipe the local storage used by tools. 
+          KaruviLab never stores your data on a server, but clearing cache will reset local tool states.
+        </p>
+      </section>
 
-        <div>
-          <h3 className="text-sm font-black text-text mb-4 uppercase tracking-widest flex items-center gap-2">
-            <Shield className="w-4 h-4 text-blue" />
-            Frequently Asked
-          </h3>
-          <Accordion type="single" collapsible className="w-full space-y-3">
-            {FAQ.map((item, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="bg-mat-surface border border-mat-border shadow-sm rounded-xl px-4 overflow-hidden hover:border-[--kv-brand-primary]/30 hover:shadow-md transition-all duration-200">
-                <AccordionTrigger className="text-sm font-bold tracking-wide py-3 text-text [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-text-muted [&>svg]:shrink-0 hover:no-underline text-left leading-snug">{item.q}</AccordionTrigger>
-                <AccordionContent className="text-xs text-text-3 font-semibold pb-3 leading-relaxed">{item.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </div>
+      {/* --- Danger Zone --- */}
+      <section className="pt-12 border-t border-border/40">
+        <div className="p-8 bg-red-500/5 border border-red-500/10 rounded-3xl space-y-6">
+          <div className="space-y-2">
+            <h4 className="text-sm font-black uppercase tracking-widest text-red-500 flex items-center gap-2">
+              <Trash2 className="w-4 h-4" />
+              Danger Zone
+            </h4>
+            <p className="text-sm text-red-500/80 font-medium leading-relaxed">
+              Factory reset will permanently wipe all settings, favorites, history, and cached assets. 
+              The application will revert to its initial state.
+            </p>
+          </div>
 
-      <div className="pt-8 border-t border-border/40 mt-8">
-        <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-red-500/60 mb-4">Danger Zone</h4>
-        <button
-          onClick={() => {
-            toast('DANGER: This will delete ALL your settings, favorites, and history. This cannot be undone.', 'error', {
-              label: 'Reset',
-              onClick: async () => {
-                setIsReseting(true);
-                try {
-                  await performFactoryReset();
-                } catch (err) {
-                  console.error("Factory Reset failed:", err);
-                  // Fallback attempt
-                  localStorage.clear();
-                  resetAll();
-                  window.location.reload();
+          <button
+            onClick={() => {
+              toast('DANGER: This will delete ALL your settings, favorites, and history. This cannot be undone.', 'error', {
+                label: 'Reset',
+                onClick: async () => {
+                  setIsReseting(true);
+                  try {
+                    await performFactoryReset();
+                  } catch (err) {
+                    console.error("Factory Reset failed:", err);
+                    localStorage.clear();
+                    resetAll();
+                    window.location.reload();
+                  }
                 }
-              }
-            });
-          }}
-          disabled={isReseting}
-          className="w-full sm:w-auto px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-        >
-          {isReseting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-          {isReseting ? 'Resetting...' : 'Factory Reset App'}
-        </button>
-      </div>
+              });
+            }}
+            disabled={isReseting}
+            className="w-full sm:w-auto px-8 py-4 bg-red-500 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-lg shadow-red-500/20"
+          >
+            {isReseting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+            {isReseting ? 'Resetting...' : 'Factory Reset App'}
+          </button>
+        </div>
+      </section>
     </div>
   );
 });

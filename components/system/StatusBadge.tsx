@@ -1,7 +1,7 @@
-import { Loader2, Clock, CheckCircle2, WifiOff, Database, AlertCircle } from "lucide-react";
+import { Loader2, Clock, CheckCircle2, WifiOff, Database, AlertCircle, XCircle } from "lucide-react";
 import { memo } from "react";
 
-export type StatusType = "processing" | "queued" | "saved" | "offline" | "cached" | "error" | "complete" | "idle";
+export type StatusType = "processing" | "queued" | "saved" | "offline" | "cached" | "error" | "complete" | "idle" | "pending" | "completed" | "failed" | "cancelled";
 
 interface StatusBadgeProps {
   status: StatusType;
@@ -18,14 +18,18 @@ const statusConfig: Record<StatusType, { icon: any; defaultLabel: string; colors
   cached: { icon: Database, defaultLabel: "Cached locally", colors: "bg-ocean/10 text-ocean" },
   error: { icon: AlertCircle, defaultLabel: "Error", colors: "bg-error/10 text-error" },
   complete: { icon: CheckCircle2, defaultLabel: "Complete", colors: "bg-success/10 text-success" },
+  pending: { icon: Clock, defaultLabel: "Pending", colors: "bg-hover/50 text-text-3" },
+  completed: { icon: CheckCircle2, defaultLabel: "Completed", colors: "bg-success/10 text-success" },
+  failed: { icon: AlertCircle, defaultLabel: "Failed", colors: "bg-error/10 text-error" },
+  cancelled: { icon: XCircle, defaultLabel: "Cancelled", colors: "bg-warn/10 text-warn" },
 };
 
 export const StatusBadge = memo(function StatusBadge({ status, label, className = "" }: StatusBadgeProps) {
   if (status === "idle") return null;
 
-  const config = statusConfig[status];
-  const Icon = config.icon;
-  const displayLabel = label || config.defaultLabel;
+  const config = statusConfig[status] || statusConfig.idle;
+  const Icon = config?.icon;
+  const displayLabel = label || config?.defaultLabel || "Unknown";
 
   return (
     <div 

@@ -40,7 +40,7 @@ export function WorkflowSuggestions() {
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
                   style={{ backgroundColor: `${getToolColor(tool)}15`, color: getToolColor(tool) }}
                 >
-                  {tool.icon || '🛠️'}
+                  {tool?.icon || '🛠️'}
                 </div>
                 <div>
                   <h4 className="font-black text-sm group-hover:text-blue transition-colors line-clamp-1">{tool.name}</h4>

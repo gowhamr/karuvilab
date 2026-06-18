@@ -80,12 +80,19 @@ export const BottomNav = memo(function BottomNav() {
                   isActive ? "text-brand-primary" : "text-text-4 hover:text-text"
                 }`}
               >
-                <div className={`p-2.5 rounded-xl transition-all ${
+                <div className={`relative flex flex-col items-center p-2.5 rounded-xl transition-all ${
                   isActive 
-                    ? "bg-brand-primary/10 text-brand-primary" 
+                    ? "text-brand-primary" 
                     : "bg-transparent text-text-4 hover:bg-mat-hover"
                 }`}>
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-5 h-5" fill={isActive ? "currentColor" : "none"} />
+                  {isActive && (
+                    <m.div 
+                      layoutId="nav-indicator"
+                      className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-primary shadow-[0_0_8px_rgba(79,70,229,0.8)]"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
                 </div>
               </Link>
             </m.div>

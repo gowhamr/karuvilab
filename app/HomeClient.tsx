@@ -82,55 +82,6 @@ const SectionHeader = memo(function SectionHeader({
   );
 });
 
-// ── Category Quick-nav cards ──────────────────────────────────────────────────
-
-const CategoryQuickNav = memo(function CategoryQuickNav() {
-  const cats = CATEGORIES.slice(0, 6);
-  return (
-    <section aria-labelledby="categories-heading" className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 id="categories-heading" className="text-base font-black tracking-tight text-text flex items-center gap-2">
-          <span className="w-9 h-9 rounded-xl bg-blue/8 border border-blue/12 flex items-center justify-center text-blue">
-            <LayoutGrid className="w-4 h-4" aria-hidden="true" />
-          </span>
-          Categories
-        </h2>
-        <Link
-          href="/all-tools"
-          className="flex items-center gap-1 min-h-11 px-3 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-all uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-        >
-          All <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
-        </Link>
-      </div>
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
-        {cats.map((cat) => (
-          <Link
-            key={cat.id}
-            href={`/${cat.href}`}
-            className={cn(
-              "flex flex-col items-center gap-2 p-3 rounded-2xl border text-center",
-              "bg-mat-surface border-mat-border",
-              "hover:border-blue/30 hover:bg-blue/5 hover:-translate-y-0.5",
-              "transition-all duration-150 ease-out group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-            )}
-            aria-label={`Browse ${cat.label}`}
-          >
-            <span
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-lg transition-transform duration-150 group-hover:scale-110"
-              style={{ background: `${cat.color}18` }}
-              aria-hidden="true"
-            >
-              <ToolIcon category={cat.id} className="w-4 h-4" />
-            </span>
-            <span className="text-[11px] font-bold text-text-muted group-hover:text-text leading-tight transition-colors">
-              {cat.label}
-            </span>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-});
 
 // ── Page Component ─────────────────────────────────────────────────────────────
 
@@ -195,13 +146,7 @@ export default function HomeClient() {
     <MotionConfig reducedMotion="user">
       <div className="w-full space-y-0 pb-16">
 
-        {/* ── Search bar (mobile only — desktop uses sidebar) ── */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 md:pt-6">
 
-          <div className="hidden sm:block w-full max-w-xl mx-auto">
-            <SearchBar variant="hero" />
-          </div>
-        </div>
 
         {/* ── Sticky category chip bar ── */}
         <div
@@ -320,8 +265,6 @@ export default function HomeClient() {
                   </AnimatePresence>
                 )}
 
-                {/* Category quick-nav */}
-                <CategoryQuickNav />
 
                 {/* Popular Tools */}
                 <section aria-labelledby="popular-heading">
