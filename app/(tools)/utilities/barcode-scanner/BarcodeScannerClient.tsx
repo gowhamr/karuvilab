@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useWorkflowStore } from "@/src/store/workflowStore";
 import { DropZone } from "@/components/ui/DropZone";
 import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -8,6 +10,7 @@ import { Camera, Image as ImageIcon, VideoOff, ScanLine, Copy, ExternalLink } fr
 import { m } from "framer-motion";
 
 export default function BarcodeScannerClient() {
+  const router = useRouter();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [mode, setMode] = useState<"camera" | "image">("camera");
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -170,15 +173,28 @@ export default function BarcodeScannerClient() {
             value={result || ""}
             label="Scanned Data"
           />
-          {result && result.startsWith("http") && (
-            <a 
-              href={result}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-4 bg-blue/10 text-blue rounded-2xl font-bold hover:bg-blue/20 transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" /> Open Link
-            </a>
+          {result && (
+            <div className="flex flex-col gap-3">
+              {result.startsWith("http") && (
+                <a 
+                  href={result}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-4 bg-blue/10 text-blue rounded-2xl font-bold hover:bg-blue/20 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" /> Open Link
+                </a>
+              )}
+              <button
+                onClick={() => {
+                  useWorkflowStore.getState().setPendingQrData(result);
+                  router.push('/utilities/qrcode');
+                }}
+                className="flex items-center justify-center gap-2 w-full py-4 bg-blue text-white rounded-2xl font-bold hover:bg-blue-dark transition-colors shadow-lg shadow-blue/20"
+              >
+                Recreate QR
+              </button>
+            </div>
           )}
           {format && (
             <div className="p-4 bg-surface border border-border rounded-2xl flex items-center justify-between">

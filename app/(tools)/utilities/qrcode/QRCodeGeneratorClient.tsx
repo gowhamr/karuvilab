@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useWorkflowStore } from "@/src/store/workflowStore";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
 import { QRCodeLoader } from "@/components/ui/QRCodeLoader";
@@ -20,6 +21,13 @@ export default function QRCodeGeneratorClient() {
   const [isLibLoaded, setIsLibLoaded] = useState(false);
   const [qrBlobUrl, setQrBlobUrl] = useState<string | null>(null);
   const { createUrl, revokeUrl } = useObjectUrlManager();
+
+  useEffect(() => {
+    const pendingData = useWorkflowStore.getState().consumePendingQrData();
+    if (pendingData) {
+      setInput(pendingData);
+    }
+  }, []);
 
   useEffect(() => {
     if (isLibLoaded && input && (window as any).QRCode) {

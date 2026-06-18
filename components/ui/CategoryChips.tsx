@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useRef, useCallback, useEffect } from "react";
+import { memo, useRef, useCallback, useEffect, useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "./Icons";
 import { m } from "framer-motion";
