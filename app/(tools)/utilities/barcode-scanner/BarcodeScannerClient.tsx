@@ -8,9 +8,11 @@ import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { Camera, Image as ImageIcon, VideoOff, ScanLine, Copy, ExternalLink } from "lucide-react";
 import { m } from "framer-motion";
+import { useToast } from "@/components/ui/Toast";
 
 export default function BarcodeScannerClient() {
   const router = useRouter();
+  const { toast } = useToast();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [mode, setMode] = useState<"camera" | "image">("camera");
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -33,6 +35,7 @@ export default function BarcodeScannerClient() {
       scanFrame();
     } catch (err: any) {
       setError("Could not access camera. Please allow permissions or try image upload.");
+      toast("Could not access camera", "error");
       setMode("image");
     }
   };
@@ -65,8 +68,27 @@ export default function BarcodeScannerClient() {
         const barcodeDetector = new (window as any).BarcodeDetector();
         const barcodes = await barcodeDetector.detect(videoRef.current);
         if (barcodes.length > 0) {
-          setResult(barcodes[0].rawValue);
+          const res = barcodes[0].rawValue;
+          setResult(res);
           setFormat(barcodes[0].format);
+          
+          // Try to play a subtle beep if possible, else just toast
+          try {
+            const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 800;
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
+          } catch(e) {}
+
+          toast("Scan Successful!", "success");
           stopCamera();
           return;
         }
@@ -100,14 +122,18 @@ export default function BarcodeScannerClient() {
         if (barcodes.length > 0) {
           setResult(barcodes[0].rawValue);
           setFormat(barcodes[0].format);
+          toast("Barcode found in image!", "success");
         } else {
           setError("No barcode found in image.");
+          toast("No barcode found in this image.", "error");
         }
       } catch (e) {
         setError("Error analyzing image.");
+        toast("Failed to analyze image.", "error");
       }
     } else {
       setError("Native BarcodeDetector API not supported in this browser.");
+      toast("Scanner API not supported here.", "error");
     }
     revokeUrl(url);
   };

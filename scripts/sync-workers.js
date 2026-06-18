@@ -23,6 +23,10 @@ const WORKERS = [
     src: 'node_modules/monaco-editor/min/vs',
     dest: 'public/lib/monaco/vs',
     isDir: true
+  },
+  {
+    src: 'node_modules/qrcode/build/qrcode.js',
+    dest: 'public/lib/qrcode/qrcode.min.js'
   }
 ];
 
