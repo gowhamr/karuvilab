@@ -37,6 +37,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((prev) => {
       // Prevent duplicate messages
       if (prev.some((t) => t.message === message)) return prev;
+
+      let nextToasts = [...prev];
+
+      // Prevent stacking of panic-inducing destructive alerts
+      if (type === "error" || type === "warn") {
+        nextToasts = nextToasts.filter(t => t.type !== "error" && t.type !== "warn");
+      }
       
       const id = Math.random().toString(36).slice(2, 9);
       const newToast = { id, message, type, ...(action ? { action } : {}) };
@@ -45,7 +52,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         setToasts((p) => p.filter((t) => t.id !== id));
       }, action ? 8000 : 4000);
       
-      return [...prev, newToast];
+      return [...nextToasts, newToast];
     });
   }, []);
 
@@ -65,7 +72,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {/* Toast Container */}
       <div 
-        className="fixed bottom-24 md:bottom-8 right-4 md:right-6 z-toast flex flex-col gap-3 pointer-events-none items-end"
+        className="fixed bottom-[110px] md:bottom-8 right-4 md:right-6 z-[9999] flex flex-col gap-3 pointer-events-none items-end"
         role="log"
         aria-live="polite"
         aria-atomic="true"
@@ -88,12 +95,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               exit={{ opacity: 0, scale: 0.9, x: 20, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className={`
-                pointer-events-auto p-4 rounded-2xl shadow-xl shadow-black/10 dark:shadow-black/40 border flex items-center gap-3 min-w-72 max-w-96
-                bg-surface border-border touch-none overflow-hidden
-                ${t.type === "success" ? "border-success/20" : ""}
-                ${t.type === "error" ? "border-error/20" : ""}
-                ${t.type === "info" ? "border-brand-primary/20" : ""}
-                ${t.type === "warn" ? "border-warn/20" : ""}
+                pointer-events-auto p-4 rounded-2xl shadow-2xl shadow-black/20 dark:shadow-black/60 border flex flex-wrap sm:flex-nowrap items-center gap-3 min-w-72 max-w-96
+                bg-surface/95 backdrop-blur-xl border-border touch-none overflow-hidden
+                ${t.type === "success" ? "border-success/30" : ""}
+                ${t.type === "error" ? "border-error/30" : ""}
+                ${t.type === "info" ? "border-brand-primary/30" : ""}
+                ${t.type === "warn" ? "border-warn/30" : ""}
               `}
               role="alert"
             >
@@ -104,32 +111,34 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 "bg-warn"
               }`} />
               <div className="flex-shrink-0 ml-1">{icons[t.type]}</div>
-              <span className="text-sm font-bold text-text flex-1 leading-snug">{t.message}</span>
+              <span className="text-sm font-bold text-text flex-1 leading-snug min-w-[200px]">{t.message}</span>
               
-              {t.action && (
-                <button
-                  onClick={() => {
-                    t.action!.onClick();
-                    removeToast(t.id);
-                  }}
-                  className={`ml-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all
-                    ${t.type === 'success' ? 'bg-success hover:opacity-90 text-white' : 
-                      t.type === 'error' ? 'bg-error hover:opacity-90 text-white' : 
-                      t.type === 'warn' ? 'bg-warn hover:opacity-90 text-white' : 
-                      'bg-blue hover:bg-blue-dark text-white'}`}
-                >
-                  {t.action.label}
-                </button>
-              )}
-              
-              <div className="flex items-center pl-2 ml-2 border-l border-border h-8">
-                <button 
-                  onClick={() => removeToast(t.id)}
-                  className="p-1.5 rounded-lg hover:bg-mat-hover transition-colors text-text-4 hover:text-text pointer-events-auto"
-                  aria-label={`Dismiss: ${t.message.slice(0, 40)}`}
-                >
-                  <X className="w-4 h-4" />
-                </button>
+              <div className="flex items-center gap-4 ml-auto pl-2 sm:pl-0 sm:border-l sm:border-border/50">
+                {t.action && (
+                  <button
+                    onClick={() => {
+                      t.action!.onClick();
+                      removeToast(t.id);
+                    }}
+                    className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all
+                      ${t.type === 'success' ? 'bg-success hover:opacity-90 text-white' : 
+                        t.type === 'error' ? 'bg-error hover:opacity-90 text-white shadow-lg shadow-error/20' : 
+                        t.type === 'warn' ? 'bg-warn hover:opacity-90 text-white shadow-lg shadow-warn/20' : 
+                        'bg-blue hover:bg-blue-dark text-white'}`}
+                  >
+                    {t.action.label}
+                  </button>
+                )}
+                
+                <div className="flex items-center h-8">
+                  <button 
+                    onClick={() => removeToast(t.id)}
+                    className="p-2 rounded-xl hover:bg-mat-hover transition-colors text-text-4 hover:text-text pointer-events-auto flex-shrink-0"
+                    aria-label={`Dismiss: ${t.message.slice(0, 40)}`}
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </m.div>
           ))}

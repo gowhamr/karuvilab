@@ -105,36 +105,38 @@ export default function QRCodeGeneratorClient() {
         </div>
       </div>
 
-      {input && (
-        <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm flex flex-col items-center gap-6">
-          <div className="bg-surface p-4 rounded-2xl shadow-sm min-w-52 min-h-52 flex items-center justify-center">
-            {!isLibLoaded || !qrBlobUrl ? (
-               <div className="flex flex-col items-center gap-2">
-                 <Loader2 className="w-8 h-8 animate-spin text-blue/30" />
-                 <span className="text-xs font-bold text-text-4">GENERATING...</span>
-               </div>
-            ) : (
-              <img
-                src={qrBlobUrl}
-                alt="QR Code"
-                width={size}
-                height={size}
-                className="rounded-lg max-w-full h-auto"
-              />
-            )}
-          </div>
-          <button
-            onClick={handleDownload}
-            disabled={downloading || !qrBlobUrl}
-            className="w-full max-w-xs py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-60"
-          >
-            {downloading ? "Downloading…" : "Download PNG"}
-          </button>
-          <p className="text-xs text-text-4 text-center">
-            Zero-Upload: QR codes are generated entirely in your browser.
-          </p>
+      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm flex flex-col items-center gap-6">
+        <div className="bg-bg border-2 border-dashed border-border rounded-2xl p-4 min-w-[256px] min-h-[256px] flex items-center justify-center">
+          {!input ? (
+            <span className="text-sm font-medium text-text-4 text-center px-4">
+              Enter text or URL<br/>to generate QR code
+            </span>
+          ) : !isLibLoaded || !qrBlobUrl ? (
+            <div className="flex flex-col items-center gap-3">
+              <Loader2 className="w-8 h-8 animate-spin text-blue" />
+              <span className="text-xs font-bold text-text-3 tracking-widest uppercase">Generating</span>
+            </div>
+          ) : (
+            <img
+              src={qrBlobUrl}
+              alt="QR Code"
+              width={size}
+              height={size}
+              className="rounded-xl max-w-full h-auto bg-white p-2"
+            />
+          )}
         </div>
-      )}
+        <button
+          onClick={handleDownload}
+          disabled={downloading || !qrBlobUrl}
+          className="w-full max-w-xs py-4 bg-brand-primary text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:hover:scale-100 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:outline-none"
+        >
+          {downloading ? "Downloading…" : "Download PNG"}
+        </button>
+        <p className="text-xs text-text-4 text-center font-medium">
+          Zero-Upload: QR codes are generated entirely in your browser.
+        </p>
+      </div>
     </div>
   );
 }

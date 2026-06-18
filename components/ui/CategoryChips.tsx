@@ -101,10 +101,10 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     <div className="relative group/wrapper w-auto overflow-hidden">
       {/* Dynamic Scroll Masks */}
       {hasLeft && (
-        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-bg via-bg/80 to-transparent pointer-events-none z-20 transition-opacity duration-300" />
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-bg via-bg/80 to-bg/0 pointer-events-none z-20 transition-opacity duration-300" />
       )}
       {hasRight && (
-        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-20 transition-opacity duration-300" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-bg via-bg/80 to-bg/0 pointer-events-none z-20 transition-opacity duration-300" />
       )}
 
       <div 

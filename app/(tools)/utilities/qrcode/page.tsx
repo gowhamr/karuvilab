@@ -13,7 +13,7 @@ export default function page() {
   return (
     <ToolShell
       title="QR Code Generator"
-      description="Generate QR codes from any URL or text. Uses a public API — requires internet access."
+      description="Generate QR codes from any URL or text. Processing is 100% local — no internet access required."
       category={cat}
     >
       <QRCodeGeneratorClientWrapper />

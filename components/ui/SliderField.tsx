@@ -21,7 +21,7 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <label htmlFor={id} className="text-sm font-bold text-text-2">{label}</label>
-        <span className="text-sm font-black text-blue" aria-hidden="true">{display}</span>
+        <span className="text-sm font-black text-text" aria-hidden="true">{display}</span>
       </div>
 
       <Slider.Root
@@ -32,8 +32,8 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
         min={min}
         step={step}
       >
-        <Slider.Track className="bg-border relative grow rounded-full h-2">
-          <Slider.Range className="absolute bg-blue rounded-full h-full" />
+        <Slider.Track className="bg-blue/20 relative grow rounded-full h-2">
+          <Slider.Range className="absolute bg-brand-primary rounded-full h-full" />
         </Slider.Track>
         <Slider.Thumb
           id={id}
