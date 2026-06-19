@@ -34,6 +34,8 @@ export function SegmentedControl<T extends string | number>(props: SegmentedCont
     "aria-labelledby": ariaLabelledby 
   } = props;
 
+  const id = React.useId();
+
   return (
     <div
       role="tablist"
@@ -65,7 +67,7 @@ export function SegmentedControl<T extends string | number>(props: SegmentedCont
           >
             {isActive && (
               <m.div
-                layoutId="segmented-active"
+                layoutId={`segmented-active-${id}`}
                 className="absolute inset-0 bg-blue rounded-xl shadow-md shadow-blue/10 z-0"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
