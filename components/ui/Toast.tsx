@@ -72,7 +72,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {/* Toast Container */}
       <div 
-        className="fixed bottom-[110px] md:bottom-8 right-4 md:right-6 z-[9999] flex flex-col gap-3 pointer-events-none items-end"
+        className="fixed bottom-[110px] md:bottom-8 right-4 md:right-6 z-max flex flex-col gap-3 pointer-events-none items-end"
         role="log"
         aria-live="polite"
         aria-atomic="true"

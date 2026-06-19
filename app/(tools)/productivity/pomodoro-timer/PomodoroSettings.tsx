@@ -24,7 +24,7 @@ export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-dropdown animate-in fade-in duration-200" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-surface border border-border p-8 rounded-4xl shadow-2xl z-[101] animate-in zoom-in-95 duration-200">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-surface border border-border p-8 rounded-4xl shadow-2xl z-modal animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue">

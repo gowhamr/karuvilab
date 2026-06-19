@@ -83,12 +83,16 @@
   --spacing-dock: 64px;
   --spacing-sidebar: 280px;
 
-  --z-sidebar: 40;
   --z-header: 30;
-  --z-dropdown: 50;
-  --z-modal: 100;
-  --z-backdrop: 90;
+  --z-sidebar: 40;
   --z-nav: 45;
+  --z-dropdown: 50;
+  --z-backdrop: 80;
+  --z-drawer: 90;
+  --z-modal: 100;
+  --z-popover: 120;
+  --z-toast: 200;
+  --z-max: 9999;
 }
 
 @layer utilities {

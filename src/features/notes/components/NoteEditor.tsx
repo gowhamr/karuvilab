@@ -186,10 +186,10 @@ export function NoteEditor() {
   return (
     <Dialog.Root open={!!selectedNoteId} onOpenChange={(open) => !open && setSelectedNoteId(null)}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[400] bg-bg/60 backdrop-blur-sm animate-in fade-in duration-300" />
+        <Dialog.Overlay className="fixed inset-0 z-backdrop bg-bg/60 backdrop-blur-sm animate-in fade-in duration-300" />
         
         <Dialog.Content className={cn(
-          "fixed z-[401] bg-surface border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 outline-none",
+          "fixed z-modal bg-surface border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 outline-none",
           "inset-0 md:inset-10 lg:inset-20 md:rounded-4xl md:max-w-4xl md:mx-auto"
         )}>
           {localNote.isEncrypted && !isUnlocked ? (

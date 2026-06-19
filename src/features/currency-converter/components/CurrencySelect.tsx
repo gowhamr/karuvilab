@@ -80,7 +80,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
       exit={{ opacity: 0, y: isMobile ? 20 : 10, scale: isMobile ? 1 : 0.95 }}
       transition={{ type: "spring", damping: 25, stiffness: 400 }}
       className={cn(
-        "z-[200] bg-surface border border-border shadow-2xl flex flex-col",
+        "z-popover bg-surface border border-border shadow-2xl flex flex-col",
         isMobile 
           ? "fixed inset-x-4 top-[10%] bottom-[10%] rounded-4xl max-h-tool-viewport-lg" 
           : "absolute top-full left-0 right-0 mt-2 rounded-2xl max-h-96"
@@ -216,7 +216,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsOpen(false)}
-                className="fixed inset-0 z-[150] bg-black/40 backdrop-blur-sm"
+                className="fixed inset-0 z-backdrop bg-black/40 backdrop-blur-sm"
               />
             )}
             {dropdownContent}
