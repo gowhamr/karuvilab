@@ -246,7 +246,7 @@ export default function JSONFormatterClient() {
                 <div className="h-full bg-blue animate-progress w-full" />
               </div>
             )}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-border/50">
               <h2 className="text-sm font-black uppercase tracking-widest text-text flex items-center gap-3">
                 <FileJson className="w-4 h-4 text-blue" />
                 Source JSON
@@ -292,7 +292,7 @@ export default function JSONFormatterClient() {
                         "px-4 py-2 rounded-xl text-xs font-bold transition-all border",
                         indent === v 
                           ? "bg-blue border-blue text-white shadow-lg" 
-                          : "bg-bg border-border text-text-2 hover:border-blue/30"
+                          : "bg-surface-hover border-border text-text-2 hover:border-blue/30"
                       )}
                     >
                       {v === "tab" ? "Tab" : `${v} Spc`}
@@ -315,16 +315,16 @@ export default function JSONFormatterClient() {
       </div>
 
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3 flex-wrap">
             <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
               <Code className="w-4 h-4" />
               Output
             </h2>
             <StatusBadge status={isProcessing ? "processing" : error ? "error" : output ? "complete" : "idle"} />
-            <PrivacyBadge message="Local processing" className="ml-2 hidden sm:inline-flex" />
+            <PrivacyBadge message="Local processing" className="hidden sm:inline-flex" />
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <SegmentedControl
               aria-label="Output View"
               options={[
@@ -335,6 +335,7 @@ export default function JSONFormatterClient() {
               onChange={setView}
               disabled={isProcessing}
             />
+            <div className="w-px h-6 bg-border hidden sm:block" />
             <CopyButton text={output} disabled={isProcessing || !output} />
           </div>
         </div>
@@ -356,13 +357,6 @@ export default function JSONFormatterClient() {
               onDragLeave={() => setDragState('idle')}
               outcomeText="Result: Format and validate JSON instantly"
               sampleCTA={{ label: "Try Sample JSON" }}
-              subAction={{
-                label: "Focus Input",
-                onClick: () => {
-                  const el = document.querySelector('textarea') as HTMLTextAreaElement;
-                  if (el) el.focus();
-                }
-              }}
             />
           ) : isProcessing ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">
