@@ -21,39 +21,7 @@ const FAQ = [
 
 export const HelpSection = memo(function HelpSection() {
   return (
-    <div className="space-y-12">
-      {/* --- Security Highlight --- */}
-      <section className="space-y-6">
-        <div className="flex items-start gap-4 p-6 bg-surface border border-border rounded-2xl group hover:border-blue/30 transition-all">
-          <div className="w-12 h-12 rounded-xl bg-blue/5 flex items-center justify-center text-blue shrink-0 group-hover:bg-blue/10 transition-colors">
-            <Shield className="w-6 h-6" />
-          </div>
-          <div className="space-y-2 flex-1">
-            <h2 className="text-sm font-black tracking-tight uppercase text-text flex items-center gap-2">
-              Security is our foundation
-            </h2>
-            <p className="text-sm text-text-3 font-medium leading-relaxed max-w-2xl">
-              KaruviLab eliminates data breach risks by moving processing from the cloud to your local device. 
-              No sign-ups, no cookies, no compromise. All processing happens entirely within your browser.
-            </p>
-            <div className="pt-2 flex gap-4">
-              <Link 
-                href="/privacy" 
-                className="text-xs font-bold text-blue hover:text-blue-500 transition-colors flex items-center gap-1"
-              >
-                Privacy Policy <ArrowRight className="w-3 h-3" />
-              </Link>
-              <Link 
-                href="/about" 
-                className="text-xs font-bold text-text-4 hover:text-text transition-colors flex items-center gap-1"
-              >
-                Learn More <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
+    <div className="space-y-8">
       {/* --- FAQ Section --- */}
       <section className="space-y-6">
         <header className="flex items-center justify-between">

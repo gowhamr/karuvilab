@@ -91,7 +91,7 @@ export const PrivacySection = memo(function PrivacySection() {
       </SettingRow>
 
       {/* --- Data Management Grid --- */}
-      <section className="space-y-6">
+      <section className="space-y-6 pt-10 border-t border-border/40">
         <h3 className="text-sm font-black text-text uppercase tracking-widest flex items-center gap-2">
           <HardDrive className="w-4 h-4 text-blue" />
           Data Management
@@ -116,9 +116,9 @@ export const PrivacySection = memo(function PrivacySection() {
           <button 
             onClick={handleClearCache}
             disabled={isClearing}
-            className="sm:col-span-2 flex items-center justify-center gap-3 p-6 bg-surface border border-border rounded-2xl text-tiny font-bold uppercase tracking-widest-sm hover:border-red-500/50 hover:text-red-500 hover:bg-red-500/5 transition-all disabled:opacity-50 group"
+            className="sm:col-span-2 flex items-center justify-center gap-3 p-6 bg-surface border border-red-500/30 dark:border-red-500/20 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm text-red-600 dark:text-red-400 hover:border-red-500/60 hover:bg-red-500/5 transition-all disabled:opacity-50 group shadow-sm shadow-red-500/5"
           >
-            {isClearing ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCcw className="w-5 h-5 text-text-4 group-hover:text-red-500" />}
+            {isClearing ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCcw className="w-5 h-5 text-red-500/70 group-hover:text-red-500" />}
             {isClearing ? 'Clearing Storage...' : 'Clear All Tool Data'}
           </button>
         </div>
@@ -136,7 +136,7 @@ export const PrivacySection = memo(function PrivacySection() {
               <Trash2 className="w-4 h-4" />
               Danger Zone
             </h4>
-            <p className="text-sm text-red-500/80 font-medium leading-relaxed">
+            <p className="text-sm text-red-600 dark:text-red-300 font-medium leading-relaxed">
               Factory reset will permanently wipe all settings, favorites, history, and cached assets. 
               The application will revert to its initial state.
             </p>
