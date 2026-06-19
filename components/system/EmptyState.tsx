@@ -93,7 +93,7 @@ export function EmptyState({
           <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-6">Standard Workflow</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {workflow.map((step, idx) => (
-              <div key={idx} className="space-y-2">
+              <div key={idx} className="flex flex-col gap-1">
                 <span className="text-xs font-black text-blue/40 uppercase tracking-widest">Step {idx + 1}</span>
                 <p className="text-xs font-bold text-text-2 leading-snug">{step}</p>
               </div>

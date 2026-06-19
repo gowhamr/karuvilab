@@ -19,8 +19,8 @@ const CompareTab = dynamic(() => import('./CompareTab').then(mod => mod.CompareT
 });
 
 const TABS = [
-  { id: 'view', label: 'View / Edit', icon: FileText, component: ViewEditTab },
-  { id: 'compare', label: 'Compare Files', icon: Files, component: CompareTab },
+  { id: 'view', label: 'Editor', icon: FileText, component: ViewEditTab },
+  { id: 'compare', label: 'Compare', icon: Files, component: CompareTab },
 ];
 
 export default function FileViewerDiffClient() {
@@ -62,9 +62,9 @@ export default function FileViewerDiffClient() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={cn(
-                "flex items-center gap-2.5 px-6 py-3 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300",
+                "flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl text-xs font-bold uppercase tracking-widest transition-all duration-300",
                 activeTab === tab.id
-                  ? "bg-blue text-white shadow-md shadow-blue/10 scale-105"
+                  ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02] sm:scale-105"
                   : "text-text-4 hover:text-text-2 hover:bg-bg/50"
               )}
             >

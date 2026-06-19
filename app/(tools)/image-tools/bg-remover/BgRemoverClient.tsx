@@ -131,7 +131,7 @@ export default function BgRemoverClient() {
             <button
               onClick={removeBackground}
               disabled={!originalUrl || processing}
-              className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+              className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
             >
               Remove Background
             </button>
@@ -156,7 +156,6 @@ export default function BgRemoverClient() {
                 description="Upload an image and click 'Remove Background' to see the result here."
                 icon={<ImageIcon className="w-6 h-6" />}
                 workflow={["Upload an image", "Adjust color and tolerance", "Download transparent PNG"]}
-                className="h-64"
               />
             )}
           </div>
