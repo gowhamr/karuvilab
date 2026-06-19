@@ -54,5 +54,5 @@ export function buildSearchIndex(): IndexedTool[] {
     };
   });
 
-  return cachedIndex;
+  return cachedIndex!;
 }

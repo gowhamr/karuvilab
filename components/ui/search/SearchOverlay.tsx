@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { searchTools } from '@/src/lib/search/searchEngine';
 import { useSearchStore } from '@/src/store/useSearchStore';
 import { useFavoriteStore } from '@/src/store/useFavoriteStore';
-import { ALL_TOOLS } from '@/src/registry';
+import { ALL_TOOLS } from '@/src/tool-registry';
 import { SearchResults } from './SearchResults';
 import { Search, X } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';

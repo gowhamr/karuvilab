@@ -729,7 +729,9 @@ const api: WorkerAPI = {
   async extractImagesFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
     if (typeof (pdfjsLib as any).GlobalWorkerOptions !== 'undefined') {
-      (pdfjsLib as any).GlobalWorkerOptions.workerSrc = "";
+      (pdfjsLib as any).GlobalWorkerOptions.workerSrc = typeof location !== 'undefined' && location.origin 
+        ? `${location.origin}/pdf.worker.min.mjs` 
+        : 'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
     }
 
     const pdf = await pdfjsLib.getDocument({ data: file }).promise;
@@ -796,7 +798,9 @@ const api: WorkerAPI = {
   async extractTextFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
     if (typeof (pdfjsLib as any).GlobalWorkerOptions !== 'undefined') {
-      (pdfjsLib as any).GlobalWorkerOptions.workerSrc = "";
+      (pdfjsLib as any).GlobalWorkerOptions.workerSrc = typeof location !== 'undefined' && location.origin 
+        ? `${location.origin}/pdf.worker.min.mjs` 
+        : 'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
     }
 
     const pdf = await pdfjsLib.getDocument({ data: file }).promise;

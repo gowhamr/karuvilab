@@ -6,7 +6,7 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ToolInput } from "@/components/ui/ToolInput";
 
-const cat = CATEGORIES.find(c => c.id === "seo")!;
+
 
 const STOP_WORDS = new Set([
   "a","an","the","in","on","at","of","and","or","but","for","to","with","from",

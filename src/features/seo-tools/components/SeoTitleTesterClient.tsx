@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 
-const cat = CATEGORIES.find(c => c.id === "seo")!;
+
 
 const POWER_WORDS = ["amazing","best","free","new","now","proven","ultimate","complete","essential","incredible","powerful","instant","guaranteed","exclusive","secret","insider","remarkable","surprising","outstanding","phenomenal","revolutionary","breakthrough"];
 const POSITIVE_WORDS = ["great","good","best","top","better","amazing","excellent","wonderful","brilliant","perfect","awesome","fantastic","love","easy","simple","fast","quick","powerful","ultimate","leading","effective","proven","trusted","reliable","smart","beautiful","fun","incredible","outstanding","rewarding","helpful","comprehensive","expert","premium","superior","innovative"];

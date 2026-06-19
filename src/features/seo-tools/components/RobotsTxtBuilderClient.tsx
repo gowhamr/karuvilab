@@ -5,7 +5,7 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
-const cat = CATEGORIES.find(c => c.id === "seo")!;
+
 
 interface RuleSet {
   id: number;

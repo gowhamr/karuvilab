@@ -5,7 +5,7 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ToolInput } from "@/components/ui/ToolInput";
 
-const cat = CATEGORIES.find(c => c.id === "seo")!;
+
 
 const OG_TYPES = ["website", "article", "book", "profile", "music.song", "video.movie"];
 const TWITTER_CARDS = ["summary", "summary_large_image"];

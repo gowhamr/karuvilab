@@ -16,7 +16,7 @@ import { BatchQueue } from "@/components/ui/BatchQueue";
 import { useBatchStore } from "@/src/store/useBatchStore";
 import { ToolShell } from "@/components/ui/ToolShell";
 
-const cat = CATEGORIES.find(c => c.id === "seo")!;
+
 const toolId = "image-seo";
 
 function toSlug(s: string): string {

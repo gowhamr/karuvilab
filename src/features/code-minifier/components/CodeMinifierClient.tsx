@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { workerManager } from "@/src/workers/manager";
 import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
@@ -7,24 +7,38 @@ import { createZip, downloadBlob } from "@/src/lib/zip";
 import { DropZone } from "@/components/ui/DropZone";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useRecoveryStore } from "@/src/store/useRecoveryStore";
-import { Layers, Code, FileCode, Zap } from "lucide-react";
+import { Layers, Code, FileCode, Zap, Type, FileText } from "lucide-react";
 import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { CopyButton } from "@/components/ui/CopyButton";
+import { StatusBadge } from "@/components/system/StatusBadge";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 
 const toolId = "code-minifier";
 
 type Lang = "css" | "js" | "html";
+type InputMode = "file" | "text";
 
 export default function CodeMinifierClient() {
   const [lang, setLang] = useState<Lang>("css");
+  const [inputMode, setInputMode] = useState<InputMode>("file");
   const [isProcessing, setIsProcessing] = useState(false);
   const [fontSize, setFontSize] = useState(14);
-  const showBanner = useRecoveryStore(state => state.showBanner);
+  const [wordWrap, setWordWrap] = useState(false);
+  
+  // Text mode state
+  const [textInput, setTextInput] = useState("");
+  const [textOutput, setTextOutput] = useState("");
+  const [textError, setTextError] = useState("");
+  const [isTextProcessing, setIsTextProcessing] = useState(false);
 
+  const showBanner = useRecoveryStore(state => state.showBanner);
   const addItems = useBatchStore(state => state.addItems);
   const startProcessing = useBatchStore(state => state.startProcessing);
   const updateItem = useBatchStore(state => state.updateItem);
   const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
 
+  // File processing
   const minifySingle = async (item: BatchItem): Promise<any> => {
     const code = await item.file.text();
     const result = await workerManager.minifyCode(
@@ -81,64 +95,171 @@ export default function CodeMinifierClient() {
     }
   };
 
+  // Text processing
+  useEffect(() => {
+    if (inputMode !== "text") return;
+    if (!textInput.trim()) {
+      setTextOutput("");
+      setTextError("");
+      return;
+    }
+
+    const controller = new AbortController();
+    const run = async () => {
+      setIsTextProcessing(true);
+      setTextError("");
+      try {
+        const result = await workerManager.minifyCode(textInput, lang, undefined, controller.signal);
+        if (!controller.signal.aborted) {
+          if (result.error) {
+            setTextError(result.error.message);
+            setTextOutput("");
+          } else {
+            setTextOutput(result.code);
+            setTextError("");
+          }
+        }
+      } catch (err: any) {
+        if (!controller.signal.aborted) {
+          setTextError(err.message || "Failed to minify code");
+          setTextOutput("");
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsTextProcessing(false);
+        }
+      }
+    };
+
+    run();
+    return () => controller.abort();
+  }, [textInput, lang, inputMode]);
+
   return (
     <FocusModeWrapper
       toolId="code-minifier"
       toolName="JS/TS Minifier"
       language={lang === "js" ? "javascript" : lang}
       onFontSizeChange={setFontSize}
+      {...(inputMode === "text" && { onWrapToggle: () => setWordWrap(v => !v) })}
+      charCount={inputMode === "text" ? textOutput.length : 0}
+      lineCount={inputMode === "text" ? (textOutput ? textOutput.split('\n').length : 0) : 0}
     >
       <div className="space-y-12 w-full">
-      {/* Settings & Mode */}
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-            <Layers className="w-4 h-4" />
-            Minification Engine
-          </h2>
-          
-          <SegmentedControl aria-labelledby="engine-label"
-            options={[
-              { id: "css", label: "CSS", icon: <Code className="w-3 h-3" /> },
-              { id: "js", label: "JS", icon: <FileCode className="w-3 h-3" /> },
-              { id: "html", label: "HTML", icon: <Layers className="w-3 h-3" /> },
-            ]}
-            activeId={lang}
-            onChange={(id) => setLang(id as Lang)}
-          />
-        </div>
-
-        <DropZone
-          onFilesSelected={handleFiles}
-          accept={lang === 'js' ? '.js,.mjs,.cjs' : lang === 'css' ? '.css' : '.html,.htm'}
-          multiple
-          title={`Drop your ${lang.toUpperCase()} files here`}
-          description="Local-first processing. No files are uploaded to any server."
-        />
-      </div>
-
-      <div className="space-y-6">
-        <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2 flex items-center gap-2">
-          <Zap className="w-3 h-3" />
-          Processing Queue
-        </h2>
-        <BatchQueue 
-          toolId={toolId}
-          isProcessing={isProcessing}
-          onProcess={processAll}
-          onDownload={downloadOne}
-          onDownloadAll={downloadAll}
-        />
-      </div>
-
-      {items.length === 0 && (
-        <div className="py-20 text-center space-y-4 opacity-40">
-          <div className="w-16 h-16 bg-blue/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue/10">
-            <Code className="w-8 h-8 text-blue" />
+        {/* Settings & Mode */}
+        <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
+              <Layers className="w-4 h-4" />
+              Minification Engine
+            </h2>
+            
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <SegmentedControl aria-labelledby="input-mode-label"
+                options={[
+                  { id: "file", label: "File Upload", icon: <FileText className="w-3 h-3" /> },
+                  { id: "text", label: "Text Input", icon: <Type className="w-3 h-3" /> },
+                ]}
+                activeId={inputMode}
+                onChange={(id) => setInputMode(id as InputMode)}
+              />
+              <div className="w-px h-6 bg-border hidden sm:block" />
+              <SegmentedControl aria-labelledby="engine-label"
+                options={[
+                  { id: "css", label: "CSS", icon: <Code className="w-3 h-3" /> },
+                  { id: "js", label: "JS", icon: <FileCode className="w-3 h-3" /> },
+                  { id: "html", label: "HTML", icon: <Layers className="w-3 h-3" /> },
+                ]}
+                activeId={lang}
+                onChange={(id) => setLang(id as Lang)}
+              />
+            </div>
           </div>
-          <p className="font-black text-text-4 uppercase tracking-widest-lg text-xs">Add files to start minifying</p>
+
+          {inputMode === "file" && (
+            <DropZone
+              onFilesSelected={handleFiles}
+              accept={lang === 'js' ? '.js,.mjs,.cjs' : lang === 'css' ? '.css' : '.html,.htm'}
+              multiple
+              title={`Drop your ${lang.toUpperCase()} files here`}
+              description="Local-first processing. No files are uploaded to any server."
+            />
+          )}
         </div>
-      )}
+
+        {inputMode === "file" ? (
+          <div className="space-y-6">
+            <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2 flex items-center gap-2">
+              <Zap className="w-3 h-3" />
+              Processing Queue
+            </h2>
+            <BatchQueue 
+              toolId={toolId}
+              isProcessing={isProcessing}
+              onProcess={processAll}
+              onDownload={downloadOne}
+              onDownloadAll={downloadAll}
+            />
+
+            {items.length === 0 && (
+              <div className="py-20 text-center space-y-4 opacity-40">
+                <div className="w-16 h-16 bg-blue/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue/10">
+                  <Code className="w-8 h-8 text-blue" />
+                </div>
+                <p className="font-black text-text-4 uppercase tracking-widest-lg text-xs">Add files to start minifying</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="space-y-4">
+              <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm">
+                <ToolInput
+                  label="Input Code"
+                  value={textInput}
+                  onChange={setTextInput}
+                  placeholder={`Paste your ${lang.toUpperCase()} code here...`}
+                  rows={20}
+                  mono
+                  style={{ fontSize: `${fontSize}px` }}
+                  error={textError}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4 lg:sticky lg:top-8">
+              <div className="flex items-center justify-between mb-4 px-2">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
+                    <Code className="w-3 h-3" /> Output
+                  </h2>
+                  <StatusBadge status={isTextProcessing ? "processing" : textError ? "error" : textOutput ? "complete" : "idle"} />
+                  <PrivacyBadge message="Local processing" className="hidden sm:inline-flex" />
+                </div>
+                <CopyButton text={textOutput} disabled={isTextProcessing || !textOutput} />
+              </div>
+              <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-[500px] relative overflow-hidden">
+                {isTextProcessing ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">
+                    <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center animate-pulse">
+                      <Zap size={24} />
+                    </div>
+                    <p className="text-sm font-black uppercase tracking-widest text-text">Minifying...</p>
+                  </div>
+                ) : (
+                  <textarea
+                    readOnly
+                    aria-label="Minified output"
+                    className={`w-full min-h-[500px] p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+                    style={{ fontSize: `${fontSize}px` }}
+                    value={textOutput}
+                    placeholder="Minified code will appear here..."
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </FocusModeWrapper>
   );

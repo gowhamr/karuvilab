@@ -1359,34 +1359,6 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "image-seo",
-    "name": "Image SEO & File Renamer",
-    "desc": "Generate SEO alt text and optimized filenames for images, PDF, and documents.",
-    "href": "seo-tools/image-seo/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "stable",
-    "lastAdded": null,
-    "keywords": [
-      "image seo",
-      "alt text generator",
-      "file renamer",
-      "seo filename",
-      "pdf renamer",
-      "docx renamer",
-      "image optimization",
-      "accessibility"
-    ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
-    "requiresNetwork": false
-  },
-  {
     "id": "image-to-pdf",
     "name": "Image to PDF",
     "desc": "Convert images into a single PDF",
@@ -1735,30 +1707,6 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "meta-tags",
-    "name": "Meta Tags Generator",
-    "desc": "Build SEO meta tags",
-    "href": "seo-tools/meta-tags/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": true,
-    "status": "stable",
-    "lastAdded": null,
-    "keywords": [
-      "seo",
-      "meta",
-      "tags",
-      "head"
-    ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
-    "requiresNetwork": false
-  },
-  {
     "id": "mic-camera-tester",
     "name": "Mic & Camera Tester",
     "desc": "Test your microphone and camera",
@@ -1916,30 +1864,6 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Math & Units",
-    "requiresNetwork": false
-  },
-  {
-    "id": "og-preview",
-    "name": "OG Preview",
-    "desc": "Preview Open Graph cards",
-    "href": "seo-tools/og-preview/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "stable",
-    "lastAdded": null,
-    "keywords": [
-      "og",
-      "open graph",
-      "preview",
-      "social"
-    ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2212,30 +2136,6 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "robots-txt",
-    "name": "robots.txt Builder",
-    "desc": "Create robots.txt files",
-    "href": "seo-tools/robots-txt/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "stable",
-    "lastAdded": null,
-    "keywords": [
-      "robots",
-      "txt",
-      "crawl",
-      "seo"
-    ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
-    "requiresNetwork": false
-  },
-  {
     "id": "rotate-pdf",
     "name": "Rotate PDF",
     "desc": "Rotate one or all pages",
@@ -2333,25 +2233,37 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "seo-title",
-    "name": "SEO Title Tester",
-    "desc": "Score SEO title tags",
-    "href": "seo-tools/seo-title/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
+    "id": "seo-tools",
+    "name": "SEO Tools",
+    "desc": "A comprehensive suite of SEO tools including Meta Tags Generator, Robots.txt Builder, Sitemap Generator, Image SEO, and more.",
+    "href": "/developer-tools/seo-tools",
+    "category": "developer",
+    "icon": "Search",
+    "color": "emerald",
     "featured": false,
-    "popular": false,
+    "popular": true,
     "status": "stable",
-    "lastAdded": null,
+    "lastAdded": "2026-06-19",
     "keywords": [
       "seo",
-      "title",
-      "tag",
-      "score"
+      "meta tags",
+      "robots.txt",
+      "sitemap",
+      "slug",
+      "og preview",
+      "search engine optimization"
     ],
-    "input": null,
-    "output": null,
+    "input": [
+      "text",
+      "json",
+      "image"
+    ],
+    "output": [
+      "text",
+      "html",
+      "json",
+      "image"
+    ],
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2381,53 +2293,6 @@ export const CORE_TOOLS: ToolEntry[] = [
       "emi-calculator"
     ],
     "subCategory": "Financial",
-    "requiresNetwork": false
-  },
-  {
-    "id": "sitemap-generator",
-    "name": "Sitemap Generator",
-    "desc": "Build XML sitemaps",
-    "href": "seo-tools/sitemap-generator/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "stable",
-    "lastAdded": null,
-    "keywords": [
-      "sitemap",
-      "xml",
-      "seo"
-    ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
-    "requiresNetwork": false
-  },
-  {
-    "id": "slug-generator",
-    "name": "Slug Generator",
-    "desc": "URL-safe slugs from text",
-    "href": "seo-tools/slug-generator/",
-    "category": "seo",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "stable",
-    "lastAdded": null,
-    "keywords": [
-      "slug",
-      "url",
-      "permalink",
-      "seo"
-    ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
     "requiresNetwork": false
   },
   {

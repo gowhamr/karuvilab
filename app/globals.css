@@ -188,6 +188,7 @@ html.preload *:after {
 }
 
 :root {
+  --text-6xl: 3.75rem; /* 60px */
   color-scheme: light;
   --blue:         #4F46E5;
   --ocean-blue:   #0077B6;

@@ -4,7 +4,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { ToolInput } from "@/components/ui/ToolInput";
 
-const cat = CATEGORIES.find(c => c.id === "seo")!;
+
 const TWITTER_CARDS = ["summary", "summary_large_image"];
 
 export default function OgPreviewClient() {
