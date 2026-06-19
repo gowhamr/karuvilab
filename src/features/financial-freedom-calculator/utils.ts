@@ -39,7 +39,43 @@ export function calculateFIRE(inputs: FinancialInputs): FinancialResults {
   // Required Corpus based on future expenses and safe withdrawal rate
   const requiredCorpus = futureAnnualExpenses / safeWithdrawal;
 
+  const isDeficit = monthlyExpenses > monthlyIncome;
+
+  if (isDeficit) {
+    const projections: ProjectionData[] = [];
+    const currentYear = new Date().getFullYear();
+    const currentBalance = currentSavings + totalWindfall;
+
+    for (let age = currentAge; age <= MAX_AGE; age++) {
+      const yearIndex = age - currentAge;
+      const yearlyFutureExpenses = annualExpensesToday * Math.pow(1 + inflation, yearIndex);
+      const yearlyTargetCorpus = yearlyFutureExpenses / safeWithdrawal;
+      
+      projections.push({
+        age,
+        year: currentYear + yearIndex,
+        netWorth: currentBalance, // No growth, halted calculation
+        contributions: currentBalance,
+        interest: 0,
+        withdrawal: 0,
+        targetCorpus: Math.round(yearlyTargetCorpus)
+      });
+    }
+
+    return {
+      requiredCorpus: Math.round(requiredCorpus),
+      yearsToFI: -1,
+      monthlySavingsNeeded: 0,
+      monthlySavingsShortfall: 0,
+      actualMonthlySavings: 0,
+      projectedRetirementCorpus: currentBalance,
+      isAchievable: false,
+      projections
+    };
+  }
+
   let currentBalance = currentSavings + totalWindfall;
+  let corpusAtRetirement = currentBalance;
   let currentMonthlyIncome = monthlyIncome;
   let currentMonthlyExpenses = monthlyExpenses;
   let accumulatedContributions = currentSavings + totalWindfall;
@@ -79,6 +115,7 @@ export function calculateFIRE(inputs: FinancialInputs): FinancialResults {
       interestEarned = yearlyInterest;
       currentBalance = balanceForYear;
       accumulatedContributions += yearlyContribution;
+      corpusAtRetirement = currentBalance;
 
       // Apply annual growth and inflation at the end of the year
       currentMonthlyIncome *= (1 + incomeGrowth);
@@ -112,7 +149,7 @@ export function calculateFIRE(inputs: FinancialInputs): FinancialResults {
     });
   }
 
-  const projectedRetirementCorpus = projections.find(p => p.age === retirementAge)?.netWorth || 0;
+  const projectedRetirementCorpus = corpusAtRetirement;
   
   // Calculate required monthly savings to reach requiredCorpus in yearsToRetirement
   // PMT formula: P = (r * FV) / ((1 + r)^n - 1)

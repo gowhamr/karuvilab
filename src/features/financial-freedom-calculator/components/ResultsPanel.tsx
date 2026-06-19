@@ -31,13 +31,19 @@ export function ResultsPanel() {
           sub={`At age ${inputs.retirementAge} (inflation adjusted)`}
         />
         
-        <MetricCard
-          label="Years to FI"
-          value={yearsToFI === -1 ? 'Never' : `${yearsToFI} yrs`}
-          icon={Clock}
-          sub={yearsToFI === -1 ? 'Cannot reach FI with current savings' : `Reach FI at age ${inputs.currentAge + yearsToFI}`}
-          trend={yearsToFI !== -1 && yearsToFI <= (inputs.retirementAge - inputs.currentAge) ? { value: 'On Track', isPositive: true } : { value: 'Falling Short', isPositive: false }}
-        />
+          <MetricCard
+            label="Years to FI"
+            value={yearsToFI === -1 ? 'Never' : `${yearsToFI} yrs`}
+            icon={Clock}
+            sub={
+              inputs.monthlyExpenses > inputs.monthlyIncome 
+                ? 'Deficit: Insufficient Income to Save' 
+                : yearsToFI === -1 
+                  ? 'Cannot reach FI with current savings' 
+                  : `Reach FI at age ${inputs.currentAge + yearsToFI}`
+            }
+            trend={yearsToFI !== -1 && yearsToFI <= (inputs.retirementAge - inputs.currentAge) ? { value: 'On Track', isPositive: true } : { value: 'Falling Short', isPositive: false }}
+          />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

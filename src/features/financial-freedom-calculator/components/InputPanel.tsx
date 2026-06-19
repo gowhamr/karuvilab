@@ -57,16 +57,23 @@ export function InputPanel() {
             format={formatCurrency}
           />
           
-          <SliderField
-            id="monthlyExpenses"
-            label="Monthly Expenses"
-            min={0}
-            max={2000000}
-            step={1000}
-            value={inputs.monthlyExpenses}
-            onChange={(v) => setInputs({ monthlyExpenses: v })}
-            format={formatCurrency}
-          />
+          <div className={inputs.monthlyExpenses > inputs.monthlyIncome ? "p-4 rounded-xl border-2 border-error bg-error/5 space-y-3" : "space-y-1"}>
+            <SliderField
+              id="monthlyExpenses"
+              label="Monthly Expenses"
+              min={0}
+              max={2000000}
+              step={1000}
+              value={inputs.monthlyExpenses}
+              onChange={(v) => setInputs({ monthlyExpenses: v })}
+              format={formatCurrency}
+            />
+            {inputs.monthlyExpenses > inputs.monthlyIncome && (
+              <div className="text-sm font-bold text-error bg-error/10 p-3 rounded-lg border border-error/20">
+                Warning: Your monthly expenses exceed your income. You are currently running a deficit and cannot reach Financial Independence.
+              </div>
+            )}
+          </div>
           
           <SliderField
             id="expectedAnnualReturn"
