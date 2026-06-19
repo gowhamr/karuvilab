@@ -97,11 +97,11 @@ const SidebarItem = memo(function SidebarItem({
 
       <span className="flex-1 truncate leading-none">{label}</span>
 
-      {/* Category color dot (non-active) */}
-      {color && !isActive && (
+      {/* Category color dot placeholder to maintain alignment */}
+      {!isActive && (
         <span
-          className="w-1.5 h-1.5 rounded-full shrink-0 opacity-60"
-          style={{ background: color }}
+          className={cn("w-1.5 h-1.5 rounded-full shrink-0", color ? "opacity-60" : "bg-transparent")}
+          style={color ? { background: color } : undefined}
           aria-hidden="true"
         />
       )}
@@ -125,7 +125,7 @@ const SidebarItem = memo(function SidebarItem({
 
 function SectionLabel({ icon: Icon, children }: { icon?: LucideIcon; children: React.ReactNode }) {
   return (
-    <div className="px-3 mb-1 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-widest">
+    <div className="px-3 mb-2 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-widest">
       {Icon && <Icon className="w-3 h-3 shrink-0" aria-hidden="true" />}
       {children}
     </div>
@@ -189,7 +189,7 @@ const SupportLinks = memo(function SupportLinks({
 }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   const t = useI18n(s => s.t);
   return (
-    <div className="space-y-0.5 pt-4 border-t border-border/60">
+    <div className="space-y-0.5 pt-6 mt-4 border-t border-border/60">
       <SectionLabel>More</SectionLabel>
       {SUPPORT_LINKS.map(link => (
         <SidebarItem
@@ -241,7 +241,7 @@ const SidebarContent = memo(function SidebarContent({
         >
           <Search className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
           <span className="flex-1 text-left">{t("common.search").split("...")[0]}…</span>
-          <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 bg-surface border border-border rounded-md text-[10px] font-mono">
+          <kbd className="hidden md:flex items-center gap-0.5 px-1.5 py-0.5 bg-surface border border-border rounded-md text-[10px] font-mono">
             <Command className="w-2.5 h-2.5" aria-hidden="true" />K
           </kbd>
         </button>
@@ -387,14 +387,14 @@ export function Sidebar() {
           </Link>
           <button
             className={cn(
-              "w-9 h-9 flex items-center justify-center rounded-lg",
+              "w-11 h-11 shrink-0 flex items-center justify-center rounded-xl mr-1",
               "text-text-4 hover:text-text hover:bg-mat-hover",
               "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
             )}
             onClick={closeSidebar}
             aria-label="Close sidebar"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
         {sharedContent}
