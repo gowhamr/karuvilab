@@ -19,7 +19,7 @@ export const invoice_generator: ToolEntry = {
     'custom logo invoice',
     'professional pdf invoice'
   ],
-  popular: true,
+  popular: false,
   featured: true,
   difficulty: 'beginner',
   searchIntent: 'informational',

@@ -9,7 +9,7 @@ export const hmac_generator: ToolEntry = {
   category: 'security',
   keywords: ['hmac', 'mac', 'hash authentication', 'sha256 hmac', 'signature generator', 'jwt signature'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'intermediate',
   priority: 0.9,
   searchIntent: 'action',

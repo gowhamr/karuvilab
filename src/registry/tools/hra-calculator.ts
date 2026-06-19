@@ -9,7 +9,7 @@ export const hra_calculator: ToolEntry = {
   category: 'calculators',
   keywords: ['hra calculator', 'house rent allowance', 'tax exemption', 'rent tax benefit', 'income tax'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.8,
   searchIntent: 'action',

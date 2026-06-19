@@ -9,7 +9,7 @@ export const unix_timestamp: ToolEntry = {
   category: 'developer',
   keywords: ['unix timestamp', 'epoch', 'date converter', 'time', 'iso 8601'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.9,
   searchIntent: 'action',

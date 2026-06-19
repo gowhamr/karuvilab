@@ -9,5 +9,5 @@ export const text_case_converter: ToolEntry = {
   input: 'text',
   output: 'text',
   keywords: ['text converter', 'uppercase', 'lowercase', 'camelcase', 'snake_case'],
-  popular: true,
+  popular: false,
 };

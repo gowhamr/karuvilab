@@ -11,7 +11,7 @@ export const csv_to_json: ToolEntry = {
   output: 'json',
   keywords: ['csv to json', 'json to csv', 'converter', 'data parser', 'data format', 'delimiter'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.9,
   searchIntent: 'action',

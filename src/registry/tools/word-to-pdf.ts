@@ -8,7 +8,7 @@ export const word_to_pdf: ToolEntry = {
   category: 'pdf',
   subCategory: 'Conversion',
   keywords: ['word to pdf', 'docx to pdf', 'convert word', 'pdf converter'],
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   status: 'stable',
   priority: 0.8,

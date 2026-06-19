@@ -8,7 +8,7 @@ export const gif_creator: ToolEntry = {
   category: 'media',
   subCategory: 'Animation',
   keywords: ['gif creator', 'make gif', 'animated gif maker', 'images to gif', 'online gif maker', 'private gif tool'],
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   searchIntent: 'action',
   priority: 0.7,

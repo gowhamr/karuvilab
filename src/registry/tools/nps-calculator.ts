@@ -9,7 +9,7 @@ export const nps_calculator: ToolEntry = {
   category: 'calculators',
   keywords: ['nps calculator', 'national pension system', 'retirement planning', 'pension calculator', '80ccd'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.9,
   searchIntent: 'action',

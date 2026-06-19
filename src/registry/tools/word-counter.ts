@@ -9,5 +9,5 @@ export const word_counter: ToolEntry = {
   input: 'text',
   output: 'none',
   keywords: ['word count', 'character count', 'reading time', 'text analysis'],
-  popular: true,
+  popular: false,
 };

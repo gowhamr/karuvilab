@@ -9,7 +9,7 @@ export const tds_calculator: ToolEntry = {
   category: 'calculators',
   keywords: ['tds calculator', 'tax deducted at source', '194J', '194A', '194I', 'tds rate'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'intermediate',
   priority: 0.8,
   searchIntent: 'action',

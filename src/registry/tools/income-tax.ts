@@ -9,7 +9,7 @@ export const income_tax: ToolEntry = {
   category: 'calculators',
   keywords: ['income tax', 'tax calculator', 'new regime', 'old regime', 'FY 2025-26', 'salary tax', 'tax india'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.95,
   searchIntent: 'action',

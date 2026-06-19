@@ -9,7 +9,7 @@ export const gradient_generator: ToolEntry = {
   category: 'developer',
   keywords: ['gradient generator', 'css gradient', 'tailwind gradient', 'linear gradient', 'radial gradient', 'conic gradient'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.9,
   searchIntent: 'action',

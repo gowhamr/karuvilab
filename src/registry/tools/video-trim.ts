@@ -8,7 +8,7 @@ export const video_trim: ToolEntry = {
   category: 'media',
   subCategory: 'Video',
   keywords: ['video trim', 'cut video', 'mp4 trimmer', 'webm cutter', 'fast video trim', 'private video editor'],
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   searchIntent: 'action',
   priority: 0.9,

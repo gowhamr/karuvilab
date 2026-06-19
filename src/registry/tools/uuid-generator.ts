@@ -9,7 +9,7 @@ export const uuid_generator: ToolEntry = {
   category: 'developer',
   keywords: ['uuid', 'guid', 'unique id', 'v4', 'random', 'identifier'],
   status: 'new',
-  popular: true,
+  popular: false,
   difficulty: 'beginner',
   priority: 0.9,
   searchIntent: 'action',
