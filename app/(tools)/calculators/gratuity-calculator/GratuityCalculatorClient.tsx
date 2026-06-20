@@ -121,7 +121,7 @@ export default function GratuityCalculatorClient() {
                 Gratuity Act 1972 Coverage
                 <div className="group relative">
                   <Info className="w-3.5 h-3.5 text-text-4 cursor-pointer" />
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-surface border border-border shadow-xl rounded-xl text-xs text-text-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-surface border border-border shadow-xl rounded-xl text-xs text-text-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-content">
                     If your employer has 10 or more employees, they are typically covered under the Act.
                   </div>
                 </div>

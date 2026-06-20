@@ -34,7 +34,7 @@ export function CdnOverlay({
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
-          className="absolute inset-0 z-20 bg-surface dark:bg-black/90 p-6 flex flex-col space-y-6"
+          className="absolute inset-0 z-above bg-surface dark:bg-black/90 p-6 flex flex-col space-y-6"
         >
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-black uppercase tracking-widest text-text">

@@ -209,7 +209,7 @@ export default function TimeZoneConverterClient() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 right-0 z-50 mt-2 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
+                        className="absolute top-full left-0 right-0 z-dropdown mt-2 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
                       >
                         <div className="p-3 border-b border-border bg-bg/50">
                           <div className="relative">
@@ -297,7 +297,7 @@ export default function TimeZoneConverterClient() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 right-0 z-50 mt-2 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
+                        className="absolute top-full left-0 right-0 z-dropdown mt-2 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
                       >
                         <div className="max-h-60 overflow-y-auto p-2 space-y-1">
                           {filteredZones.map(zone => (
@@ -348,7 +348,7 @@ export default function TimeZoneConverterClient() {
               {/* Decorative Background Icon */}
               <Globe className="absolute -right-4 -bottom-4 w-24 h-24 text-blue/5 group-hover:text-blue/10 transition-colors pointer-events-none" />
               
-              <div className="relative z-10 space-y-4">
+              <div className="relative z-content space-y-4">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-blue">
@@ -439,7 +439,7 @@ export default function TimeZoneConverterClient() {
               setIsSearchingTarget(false);
               setSearchTerm("");
             }}
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] md:hidden"
+            className="fixed inset-0 z-backdrop bg-black/20 backdrop-blur-[2px] md:hidden"
           />
         )}
       </AnimatePresence>

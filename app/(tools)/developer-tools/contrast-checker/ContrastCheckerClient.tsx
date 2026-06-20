@@ -89,7 +89,7 @@ export default function ContrastCheckerClient() {
               </div>
             </div>
 
-            <div className="absolute top-1/2 left-4 -translate-y-1/2 z-10">
+            <div className="absolute top-1/2 left-4 -translate-y-1/2 z-content">
               <button 
                 onClick={swapColors}
                 className="w-8 h-8 bg-surface border border-border rounded-full flex items-center justify-center text-text-3 hover:text-blue hover:border-blue shadow-sm transition-all"

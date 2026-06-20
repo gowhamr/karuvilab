@@ -294,11 +294,11 @@ export default function RegexTesterClient() {
         <div className="relative w-full border-b border-border/50 pb-2">
           {/* Gradient Fades */}
           <div 
-            className="absolute left-0 top-0 bottom-2 w-10 bg-gradient-to-r from-surface to-transparent pointer-events-none transition-opacity duration-200 z-10"
+            className="absolute left-0 top-0 bottom-2 w-10 bg-gradient-to-r from-surface to-transparent pointer-events-none transition-opacity duration-200 z-content"
             style={{ opacity: showLeftScrollBtn ? 1 : 0 }}
           />
           <div 
-            className="absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-surface to-transparent pointer-events-none transition-opacity duration-200 z-10"
+            className="absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-surface to-transparent pointer-events-none transition-opacity duration-200 z-content"
             style={{ opacity: showRightScrollBtn ? 1 : 0 }}
           />
 
@@ -306,7 +306,7 @@ export default function RegexTesterClient() {
           {showLeftScrollBtn && (
             <button 
               onClick={() => scrollContainerRef.current?.scrollBy({ left: -200, behavior: "smooth" })}
-              className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface border border-border shadow-sm flex items-center justify-center text-text-2 hover:bg-bg hover:text-blue transition-all z-20 cursor-pointer hidden md:flex"
+              className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface border border-border shadow-sm flex items-center justify-center text-text-2 hover:bg-bg hover:text-blue transition-all z-above cursor-pointer hidden md:flex"
               aria-label="Scroll left"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -315,7 +315,7 @@ export default function RegexTesterClient() {
           {showRightScrollBtn && (
             <button 
               onClick={() => scrollContainerRef.current?.scrollBy({ left: 200, behavior: "smooth" })}
-              className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface border border-border shadow-sm flex items-center justify-center text-text-2 hover:bg-bg hover:text-blue transition-all z-20 cursor-pointer hidden md:flex"
+              className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface border border-border shadow-sm flex items-center justify-center text-text-2 hover:bg-bg hover:text-blue transition-all z-above cursor-pointer hidden md:flex"
               aria-label="Scroll right"
             >
               <ChevronRight className="w-4 h-4" />

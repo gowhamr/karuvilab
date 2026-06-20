@@ -28,7 +28,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
           days.length > 1 ? "md:min-w-0" : ""
         )} style={{ minWidth: days.length > 1 ? (typeof window !== 'undefined' && window.innerWidth < 768 ? '700px' : '1000px') : 'auto' }}>
           {/* Headers */}
-          <div className="flex border-b border-border/30 bg-bg/50 sticky top-0 z-30 backdrop-blur-md">
+          <div className="flex border-b border-border/30 bg-bg/50 sticky top-0 z-sidebar backdrop-blur-md">
             <div className="w-12 md:w-16 border-r border-border/20 flex-shrink-0" />
             <div className={cn("grid flex-1", days.length > 1 ? "grid-cols-7" : "grid-cols-1")}>
               {days.map(day => (
@@ -40,7 +40,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
           {/* Grid Content */}
           <div className="flex-1 overflow-y-auto no-scrollbar relative min-h-full">
             {/* Time Labels */}
-            <div className="absolute top-0 left-0 bottom-0 w-12 md:w-16 border-r border-border/20 bg-bg/20 z-10">
+            <div className="absolute top-0 left-0 bottom-0 w-12 md:w-16 border-r border-border/20 bg-bg/20 z-content">
               {hours.map(hour => (
                 <div key={hour.toISOString()} className="h-20 px-1 md:px-2 pt-1 text-micro md:text-tiny font-black text-text-4 uppercase text-right">
                   {format(hour, 'h a')}
@@ -69,7 +69,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                     {/* Current Time Indicator */}
                     {isToday && (
                       <div 
-                        className="absolute left-0 right-0 border-t-2 border-red-500 z-20 pointer-events-none flex items-center"
+                        className="absolute left-0 right-0 border-t-2 border-red-500 z-above pointer-events-none flex items-center"
                         style={{ top: `${(now.getHours() * 60 + now.getMinutes()) / 1440 * 1920}px` }}
                       >
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500 -ml-1.25 shadow-glow-error" />
@@ -96,7 +96,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                             useCalendarStore.getState().setSelectedEvent(event.id);
                           }}
                           className={cn(
-                            "absolute left-1.5 right-1.5 rounded-2xl p-3 border shadow-md cursor-pointer z-10 overflow-hidden group hover:z-30 transition-all hover:shadow-xl hover:scale-102",
+                            "absolute left-1.5 right-1.5 rounded-2xl p-3 border shadow-md cursor-pointer z-content overflow-hidden group hover:z-sidebar transition-all hover:shadow-xl hover:scale-102",
                             (COLOR_MAP as any)[event.color].bg,
                             (COLOR_MAP as any)[event.color].border,
                             (COLOR_MAP as any)[event.color].text

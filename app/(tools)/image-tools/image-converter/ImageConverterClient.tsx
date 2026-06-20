@@ -248,7 +248,7 @@ export default function ImageConverterClient() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-surface/80 backdrop-blur-sm flex items-center justify-center p-6"
+            className="fixed inset-0 z-modal bg-surface/80 backdrop-blur-sm flex items-center justify-center p-6"
           >
             <div className="bg-surface border border-border rounded-4xl p-10 shadow-2xl max-w-sm w-full text-center space-y-6">
               <Loader2 className="w-12 h-12 text-blue animate-spin mx-auto" />

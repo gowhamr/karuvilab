@@ -101,17 +101,17 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     <div className="relative group/wrapper w-auto overflow-hidden">
       {/* Dynamic Scroll Masks */}
       {hasLeft && (
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-bg via-bg/80 to-bg/0 pointer-events-none z-20 transition-opacity duration-300" />
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-bg via-bg/80 to-bg/0 pointer-events-none z-above transition-opacity duration-300" />
       )}
       {hasRight && (
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-bg via-bg/80 to-bg/0 pointer-events-none z-20 transition-opacity duration-300" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-bg via-bg/80 to-bg/0 pointer-events-none z-above transition-opacity duration-300" />
       )}
 
       <div 
         ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-10"
+        className="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-content"
       >
         <m.button
           role="tab"
@@ -133,7 +133,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           {!activeCategory && (
             <m.div 
               layoutId="active-cat"
-              className="absolute inset-0 bg-blue rounded-full -z-10"
+              className="absolute inset-0 bg-blue rounded-full z-behind"
               style={{ boxShadow: `0 4px 12px -2px rgba(79, 70, 229, 0.25)` }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
@@ -162,7 +162,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             {activeCategory === cat.id && (
               <m.div 
                 layoutId="active-cat"
-                className="absolute inset-0 rounded-full -z-10"
+                className="absolute inset-0 rounded-full z-behind"
                 style={{ 
                   backgroundColor: cat.color,
                   boxShadow: `0 4px 12px -2px ${cat.color}25`

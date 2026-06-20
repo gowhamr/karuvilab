@@ -83,16 +83,20 @@
   --spacing-dock: 64px;
   --spacing-sidebar: 280px;
 
-  --z-header: 30;
-  --z-sidebar: 40;
-  --z-nav: 45;
-  --z-dropdown: 50;
-  --z-backdrop: 80;
-  --z-drawer: 90;
-  --z-modal: 100;
-  --z-popover: 120;
-  --z-toast: 200;
-  --z-max: 9999;
+  --z-behind:        -10;  /* zindex.ts: behind */
+  --z-base:            0;  /* zindex.ts: base */
+  --z-content:        10;  /* zindex.ts: content */
+  --z-above:          20;  /* zindex.ts: above */
+  --z-sidebar:        30;  /* zindex.ts: sidebar */
+  --z-header:         40;  /* zindex.ts: header */
+  --z-nav:            60;  /* zindex.ts: nav */
+  --z-backdrop:       90;  /* zindex.ts: backdrop */
+  --z-dropdown:      100;  /* zindex.ts: dropdown */
+  --z-modal-backdrop: 400; /* zindex.ts: modalBackdrop */
+  --z-modal:         500;  /* zindex.ts: modal */
+  --z-popover:       600;  /* zindex.ts: popover */
+  --z-toast:         800;  /* zindex.ts: toast */
+  --z-max:          1000;  /* zindex.ts: max */
 }
 
 @layer utilities {

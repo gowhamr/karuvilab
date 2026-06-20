@@ -123,7 +123,7 @@ export function ShareButton({ url, title = 'Check out this result on KaruviLab',
             animate="visible"
             exit="exit"
             transition={SPRING}
-            className="absolute right-0 top-full mt-2 w-56 bg-surface border border-border rounded-2xl shadow-2xl shadow-black/30 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2 w-56 bg-surface border border-border rounded-2xl shadow-2xl shadow-black/30 overflow-hidden z-dropdown"
           >
             {/* Copy link */}
             <button

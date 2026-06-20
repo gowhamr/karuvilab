@@ -60,7 +60,7 @@ export default function FinancialFreedomCalculatorClient() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full mt-2 left-0 w-64 bg-surface border border-border shadow-xl rounded-xl p-4 z-10"
+                    className="absolute top-full mt-2 left-0 w-64 bg-surface border border-border shadow-xl rounded-xl p-4 z-content"
                   >
                     <label htmlFor="scenarioName" className="block text-xs font-bold uppercase tracking-wider text-text-2 mb-2">
                       Scenario Name

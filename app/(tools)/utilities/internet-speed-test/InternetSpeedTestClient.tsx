@@ -113,8 +113,8 @@ export default function InternetSpeedTestClient() {
                 onClick={handleStart}
                 className="group relative px-10 py-5 bg-blue text-white rounded-2xl font-black text-xl shadow-2xl shadow-blue/30 hover:scale-105 transition-all active:scale-95 flex items-center gap-4 overflow-hidden"
                aria-label="Refresh Cw">
-                <RefreshCw className={cn("w-6 h-6 relative z-10", (status !== 'idle' && status !== 'completed' && status !== 'error') && "animate-spin")} />
-                <span className="relative z-10">{status === 'idle' ? 'Start Test' : 'Run Again'}</span>
+                <RefreshCw className={cn("w-6 h-6 relative z-content", (status !== 'idle' && status !== 'completed' && status !== 'error') && "animate-spin")} />
+                <span className="relative z-content">{status === 'idle' ? 'Start Test' : 'Run Again'}</span>
               </button>
             ) : (
               <button onClick={cancelTest} className="px-10 py-5 bg-error/10 text-error border border-error/20 rounded-2xl font-black text-xl hover:bg-error/20 transition-all active:scale-95 flex items-center gap-4">
@@ -194,7 +194,7 @@ function IntelligenceCard({ icon: Icon, title, requirement, current, isLatency, 
       "bg-surface border p-6 rounded-4xl space-y-4 transition-all duration-500 relative overflow-hidden group",
       status === 'yes' ? "border-success/20 shadow-lg shadow-success/5" : "border-border"
     )}>
-      <div className="flex items-center justify-between relative z-10">
+      <div className="flex items-center justify-between relative z-content">
          <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500", status === 'yes' ? "bg-success/10 text-success scale-110" : "bg-bg text-text-4")}><Icon className="w-6 h-6" /></div>
          {status !== 'pending' && (
            <div className={cn("px-3 py-1.5 rounded-xl text-micro font-black uppercase tracking-widest flex items-center gap-2", status === 'yes' ? "bg-success text-white shadow-lg shadow-success/20" : "bg-error/10 text-error")}>
@@ -202,8 +202,8 @@ function IntelligenceCard({ icon: Icon, title, requirement, current, isLatency, 
            </div>
          )}
       </div>
-      <div className="space-y-1 relative z-10"><h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3><p className="text-xs text-text-4 leading-relaxed font-medium">{desc}</p></div>
-      <div className="pt-2 flex items-center gap-3 relative z-10">
+      <div className="space-y-1 relative z-content"><h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3><p className="text-xs text-text-4 leading-relaxed font-medium">{desc}</p></div>
+      <div className="pt-2 flex items-center gap-3 relative z-content">
          <div className="h-1.5 flex-1 bg-bg rounded-full overflow-hidden">
             <motion.div className={cn("h-full", status === 'yes' ? "bg-success" : "bg-text-4/30")} initial={{ width: 0 }} animate={{ width: status === 'yes' ? '100%' : status === 'no' ? '40%' : '0%' }} transition={{ duration: 1, ease: "easeOut" }} />
          </div>

@@ -68,16 +68,16 @@ export function SegmentedControl<T extends string | number>(props: SegmentedCont
             {isActive && (
               <m.div
                 layoutId={`segmented-active-${id}`}
-                className="absolute inset-0 bg-blue rounded-xl shadow-md shadow-blue/10 z-0"
+                className="absolute inset-0 bg-blue rounded-xl shadow-md shadow-blue/10 z-base"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
             {option.icon && (
-              <span className={cn("relative z-10 transition-transform", isActive && "scale-110")}>
+              <span className={cn("relative z-content transition-transform", isActive && "scale-110")}>
                 {option.icon}
               </span>
             )}
-            <span className="relative z-10">{option.label}</span>
+            <span className="relative z-content">{option.label}</span>
           </button>
         );
       })}

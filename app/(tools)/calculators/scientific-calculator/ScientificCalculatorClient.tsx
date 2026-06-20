@@ -250,7 +250,7 @@ export default function ScientificCalculatorClient() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className={`w-full lg:w-80 bg-surface border border-border rounded-4xl overflow-hidden flex flex-col h-full lg:h-full shadow-xl lg:shadow-none ${!showHistory ? 'hidden lg:flex' : 'fixed inset-4 z-50 lg:relative lg:inset-0'}`}
+            className={`w-full lg:w-80 bg-surface border border-border rounded-4xl overflow-hidden flex flex-col h-full lg:h-full shadow-xl lg:shadow-none ${!showHistory ? 'hidden lg:flex' : 'fixed inset-4 z-modal lg:relative lg:inset-0'}`}
           >
             <div className="p-6 border-b border-border flex justify-between items-center bg-bg/30">
               <div className="flex items-center gap-2 font-bold text-text">
@@ -309,7 +309,7 @@ export default function ScientificCalculatorClient() {
       {/* Mobile History Toggle Overlay */}
       {showHistory && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden" 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-backdrop lg:hidden" 
           onClick={() => setShowHistory(false)}
         />
       )}

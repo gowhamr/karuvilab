@@ -131,7 +131,7 @@ export function FocusModeWrapper({
             aria-label="Enter focus mode (F11)"
             title="Focus mode (F11)"
             className={`
-              absolute z-10
+              absolute z-content
               ${triggerPosition === 'top-right'
                 ? 'top-3 right-3'
                 : 'bottom-3 right-3'}
@@ -170,7 +170,7 @@ export function FocusModeWrapper({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="
-              fixed inset-0 z-modalBackdrop
+              fixed inset-0 z-modal
               bg-bg
               flex flex-col
             "

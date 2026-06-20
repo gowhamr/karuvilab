@@ -31,7 +31,7 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
       <div className="flex-1 flex flex-col overflow-x-auto no-scrollbar">
         <div className="min-w-80 md:min-w-full flex-1 flex flex-col">
           {/* Weekday Headers */}
-          <div className="grid grid-cols-7 border-b border-border/30 bg-bg/50 sticky top-0 z-20 backdrop-blur-md">
+          <div className="grid grid-cols-7 border-b border-border/30 bg-bg/50 sticky top-0 z-above backdrop-blur-md">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
               <div key={day} className="py-3 md:py-5 text-center">
                 <span className="text-xs md:text-tiny font-bold uppercase tracking-widest-sm-sm md:tracking-widest-xl text-text-4">

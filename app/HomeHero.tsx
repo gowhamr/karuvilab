@@ -17,15 +17,15 @@ export function HomeHero() {
       {/* ── Ambient glows ── */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-screen h-72 scale-x-[1.4] scale-y-125 bg-gradient-to-r from-blue/10 via-indigo-500/8 to-purple-500/10 rounded-full blur-[100px] -z-10"
+        className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-screen h-72 scale-x-[1.4] scale-y-125 bg-gradient-to-r from-blue/10 via-indigo-500/8 to-purple-500/10 rounded-full blur-[100px] z-behind"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[30%] left-[10%] w-48 h-48 bg-blue/5 rounded-full blur-[60px] -z-10"
+        className="pointer-events-none absolute top-[30%] left-[10%] w-48 h-48 bg-blue/5 rounded-full blur-[60px] z-behind"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[20%] right-[8%] w-40 h-40 bg-purple-500/5 rounded-full blur-[60px] -z-10"
+        className="pointer-events-none absolute top-[20%] right-[8%] w-40 h-40 bg-purple-500/5 rounded-full blur-[60px] z-behind"
       />
 
       {/* ── Tag pill ── */}

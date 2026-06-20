@@ -128,7 +128,7 @@ export default function CalendarPage() {
           </AnimatePresence>
 
           {isLoading && (
-            <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-40 rounded-4xl border border-border/20">
+            <div className="absolute inset-0 bg-surface/20 backdrop-blur-md flex items-center justify-center z-above rounded-4xl border border-border/20">
               <div className="w-14 h-14 border-4 border-blue/10 border-t-blue rounded-full animate-spin shadow-lg shadow-blue/20" />
             </div>
           )}
@@ -166,7 +166,7 @@ export default function CalendarPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsSidebarOpen(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 lg:hidden"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modalBackdrop lg:hidden"
             />
             {/* Slide-in Drawer */}
             <motion.div
@@ -174,7 +174,7 @@ export default function CalendarPage() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 280 }}
-              className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-80 bg-surface/95 backdrop-blur-2xl border-r border-border/40 z-50 p-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar lg:hidden"
+              className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-80 bg-surface/95 backdrop-blur-2xl border-r border-border/40 z-modal p-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar lg:hidden"
             >
               <div className="flex items-center justify-between mb-6">
                 <span className="text-sm font-black uppercase tracking-wider text-text-3">Preferences</span>

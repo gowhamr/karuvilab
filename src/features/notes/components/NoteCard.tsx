@@ -40,7 +40,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
     >
       {/* Pin Badge */}
       {note.pinned && (
-        <div className="absolute -top-2 -right-2 bg-blue text-white p-1.5 rounded-full shadow-lg z-10">
+        <div className="absolute -top-2 -right-2 bg-blue text-white p-1.5 rounded-full shadow-lg z-content">
           <Pin size={12} fill="currentColor" />
         </div>
       )}

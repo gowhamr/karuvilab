@@ -24,7 +24,7 @@ export function ConsoleDrawer({ isOpen, logs, onClear }: ConsoleDrawerProps) {
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
-          className="absolute bottom-20 right-6 w-80 max-h-72 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-30"
+          className="absolute bottom-20 right-6 w-80 max-h-72 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-dropdown"
         >
             <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5">
               <span className="text-xs font-black uppercase tracking-widest text-blue">Output Logs</span>

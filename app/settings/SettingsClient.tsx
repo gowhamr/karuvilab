@@ -222,7 +222,7 @@ export default function SettingsClient() {
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue/5 blur-3xl rounded-full pointer-events-none" />
               
-              <header className="mb-6 lg:mb-16 space-y-4 relative z-10">
+              <header className="mb-6 lg:mb-16 space-y-4 relative z-content">
                 <button 
                   onClick={() => setActiveSection(null)}
                   className="lg:hidden inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest-sm text-text-4 hover:text-text mb-4"
@@ -251,7 +251,7 @@ export default function SettingsClient() {
                 </p>
               </header>
   
-              <div className="relative z-10 min-h-96">
+              <div className="relative z-content min-h-96">
                 {activeSection === 'appearance' && <AppearanceSection />}
                 {activeSection === 'privacy' && <PrivacySection />}
                 {activeSection === 'history' && <HistorySection />}

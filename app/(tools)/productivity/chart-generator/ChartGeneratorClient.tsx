@@ -162,7 +162,7 @@ export default function ChartGeneratorClient() {
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-            <div className="relative z-10 w-full flex flex-col items-center gap-12">
+            <div className="relative z-content w-full flex flex-col items-center gap-12">
               {options.title && (
                 <m.h2 
                   key={options.title}

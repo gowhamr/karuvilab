@@ -56,7 +56,7 @@ export function ClientToolShell({ title, description, category, children, toolId
       animate={{ opacity: 1, y: 0 }}
       className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4"
     >
-      <header className="space-y-6 relative z-50">
+      <header className="space-y-6 relative z-above">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <Breadcrumbs category={category} title={title} />
           <div className="flex items-center gap-2">

@@ -87,7 +87,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
       )}
     >
       {/* Search Header */}
-      <div className="p-4 bg-bg/50 border-b border-border sticky top-0 z-10 backdrop-blur-md">
+      <div className="p-4 bg-bg/50 border-b border-border sticky top-0 z-content backdrop-blur-md">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4" />
           <input

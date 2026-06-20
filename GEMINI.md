@@ -1,5 +1,5 @@
 # KaruviLab (KV) — Elite Engineering Manifesto
-**Version:** 3.0.0 | **Last Updated:** 2026-06-04 | **Status:** ACTIVE
+**Version:** 3.1.0 | **Last Updated:** 2026-06-20 | **Status:** ACTIVE
 
 > This document is the **single source of truth** for KaruviLab's identity, architecture, and engineering standards.
 > All human contributors and AI agents (Gemini CLI, Cursor, Claude Code, etc.) **must** adhere strictly to every rule defined herein.
@@ -31,6 +31,7 @@ The following patterns are **NEVER** allowed under any circumstances:
 | P-16 | `eval()` or `new Function()` outside trusted worker contexts | Use safe alternatives |
 | P-17 | Non-semantic HTML (e.g., `<div>` for buttons) | Use correct semantic HTML elements |
 | P-18 | Unversioned IndexedDB stores | All stores must define an explicit `version` |
+| P-19 | Raw numeric z-index Tailwind classes (`z-10`, `z-20`, `z-30`, `z-50`, etc.) | Use named tokens from `src/theme/zindex.ts` (`z-content`, `z-modal`, etc.) |
 
 ---
 
@@ -662,6 +663,106 @@ Any rule in this document may only be bypassed by:
 3. Getting explicit review approval before merging
 
 **No undocumented exceptions. Ever.**
+
+---
+
+## 26. Z-Index SOP — Preventing Layout Overlap Regressions
+
+> **This rule exists because sidebar/modal overlap bugs regressed 10+ times.** Root cause: two parallel z-index scales with contradictory values. This SOP permanently eliminates that class of bug.
+
+### 26.1 Single Source of Truth
+
+**`src/theme/zindex.ts` is the ONLY place z-index values may be defined.**
+
+- The `app/globals.css` `@theme` section contains CSS custom properties (`--z-*`) that **must mirror** `zindex.ts` exactly. Never change one without changing the other.
+- `tailwind.config.ts` consumes `zindex.ts` via `zIndex: tokens.zIndex`, producing named Tailwind classes.
+- Never define a new z-index value anywhere else in the codebase.
+
+### 26.2 Canonical Z-Index Stack
+
+| Token | Value | Use For |
+|-------|-------|---------|
+| `z-behind` | -10 | Decorative blobs, background pseudo-elements |
+| `z-base` | 0 | Document flow (default) |
+| `z-content` | 10 | Local stacking helpers inside a component |
+| `z-above` | 20 | Slightly-elevated siblings (e.g. active chip) |
+| `z-sidebar` | 30 | Desktop sidebar `<aside>`, sticky scroll-container headers |
+| `z-header` | 40 | Page-level sticky `<header>` |
+| `z-nav` | 60 | Fixed `<BottomNav>` (mobile only) |
+| `z-backdrop` | 90 | Dark scrim **behind** a drawer/sidebar (not a modal) |
+| `z-dropdown` | 100 | Dropdowns, tooltips, small absolute popovers |
+| `z-modalBackdrop` | 400 | Scrim **behind** a full-screen modal/dialog |
+| `z-modal` | 500 | Full-screen modals, drawers, search overlay, mobile sidebar panel |
+| `z-popover` | 600 | Floating selects that must clear open modals |
+| `z-toast` | 800 | Transient session-restored / info banners |
+| `z-max` | 1000 | Always-on-top: Toasts, cookie consent |
+
+### 26.3 Prohibited Patterns (enforced by P-19)
+
+```tsx
+// ❌ FORBIDDEN — raw numeric class
+<div className="fixed inset-0 z-50">...</div>
+
+// ✅ REQUIRED — named design token
+<div className="fixed inset-0 z-modal">...</div>
+```
+
+The following raw classes are **banned** in production code:
+`z-0`, `z-10`, `z-20`, `z-30`, `z-40`, `z-50`, `z-60`, `z-70`, `z-80`, `z-90`, `z-100`
+
+### 26.4 Adding a New Layer
+
+1. Open `src/theme/zindex.ts`
+2. Insert the new token with a value that fits logically between existing layers
+3. Add the matching `--z-{name}` entry to `app/globals.css` `@theme` section with the same value
+4. Use the named class (`z-{token-name}`) in your component
+5. Document it in the table in Section 26.2 of this file
+
+### 26.5 Checklist Before Every Push
+
+> Run this mental checklist any time you touch layout, modals, sidebars, or any `fixed`/`sticky` positioned element:
+
+- [ ] Does every new `z-` class use a **named token** from `zindex.ts`?
+- [ ] Does anything `fixed` or `sticky` have a z-index? If yes, is it in the stack above?
+- [ ] Are `z-backdrop` (90) and `z-modalBackdrop` (400) used correctly? Backdrop = behind drawer; ModalBackdrop = behind full-screen dialog.
+- [ ] Is the mobile `BottomNav` (`z-nav=60`) covered by any fixed element that should appear above it?
+- [ ] Does any component create an **unexpected stacking context** (e.g., `transform`, `filter`, `will-change`, `isolation: isolate`) that could trap descendant z-indexes?
+- [ ] Are `globals.css` CSS custom property values still in sync with `zindex.ts`?
+
+### 26.6 Stacking Context Gotchas
+
+These CSS properties **create a new stacking context**, which means child `z-index` values become relative to that element, not the document root:
+- `transform` (any non-none value)
+- `filter` (any non-none value)
+- `will-change: transform`
+- `opacity` < 1
+- `isolation: isolate`
+- `position: fixed` or `position: sticky`
+- `mix-blend-mode`
+
+**Rule:** Never apply `transform`, `filter`, or `will-change` to the `<Sidebar>`, `<Header>`, `<BottomNav>`, or any layout scaffolding component. These properties can trap child z-indexes and cause modals/dropdowns inside them to be clipped at the wrong z level.
+
+### 26.7 Component-to-Token Reference
+
+| Component | File | Required Token |
+|-----------|------|----------------|
+| Desktop Sidebar `<aside>` | `Sidebar.tsx` | `z-sidebar` |
+| Sticky `<header>` | `Header.tsx` | `z-header` |
+| BottomNav `<nav>` | `BottomNav.tsx` | `z-nav` |
+| Mobile sidebar scrim | `MobileSidebar.tsx` | `z-backdrop` |
+| Mobile sidebar panel | `MobileSidebar.tsx` | `z-modal` |
+| SearchOverlay | `SearchOverlay.tsx` | `z-modal` |
+| Any Modal backdrop/scrim | any | `z-modalBackdrop` |
+| Any Modal panel/content | any | `z-modal` |
+| QRModal backdrop | `QRModal.tsx` | `z-modalBackdrop` |
+| QRModal panel | `QRModal.tsx` | `z-modal` |
+| Dropdown menus | `ShareButton`, `ToolMoreMenu` | `z-dropdown` |
+| Toast container | `Toast.tsx` | `z-max` |
+| Cookie consent | `CookieConsentBanner.tsx` | `z-max` |
+| PWA install banner | `PWARegistration.tsx` | `z-max` |
+| RecoveryBanner | `RecoveryBanner.tsx` | `z-modal` |
+| SessionRestoredBanner | `SessionRestoredBanner.tsx` | `z-toast` |
+| FocusModeWrapper overlay | `FocusModeWrapper.tsx` | `z-modal` |
 
 ---
 

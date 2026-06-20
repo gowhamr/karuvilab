@@ -75,14 +75,14 @@ export function Header() {
                   href={link.href}
                   onMouseEnter={() => setHoveredLink(link.href)}
                   className={cn(
-                    "relative flex items-center h-12 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors z-10",
+                    "relative flex items-center h-12 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors z-content",
                     isActive || isHovered ? "text-blue" : "text-text-3 hover:text-blue"
                   )}
                 >
                   {((hoveredLink === link.href) || (!hoveredLink && isActive)) && (
                     <m.div
                       layoutId="header-nav-pill"
-                      className="absolute inset-0 bg-blue/5 rounded-lg -z-10"
+                      className="absolute inset-0 bg-blue/5 rounded-lg z-behind"
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}

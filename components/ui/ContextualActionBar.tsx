@@ -13,7 +13,7 @@ export function ContextualActionBar() {
 
   return (
     <div 
-      className="fixed bottom-[calc(60px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 md:hidden px-4 pb-2"
+      className="fixed bottom-[calc(60px+env(safe-area-inset-bottom,0px))] left-0 right-0 z-sidebar md:hidden px-4 pb-2"
     >
       <m.div
         initial={{ opacity: 0, y: 15 }}

@@ -145,7 +145,7 @@ export default function EMICalculatorClient() {
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-md border-t border-border p-4 shadow-2xl flex items-center justify-between"
+            className="md:hidden fixed bottom-0 left-0 right-0 z-nav bg-surface/90 backdrop-blur-md border-t border-border p-4 shadow-2xl flex items-center justify-between"
           >
             <div className="space-y-0.5">
                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Monthly EMI</p>
@@ -207,7 +207,7 @@ export default function EMICalculatorClient() {
           />
 
           <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-2xl sm:rounded-4xl space-y-3 relative overflow-hidden">
-            { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-10" /> }
+            { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-content" /> }
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
               <span className="text-tiny font-bold uppercase tracking-widest-sm">Effective Tenure</span>

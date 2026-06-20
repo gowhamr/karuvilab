@@ -182,7 +182,7 @@ export default function PomodoroTimerClient() {
       </div>
 
       {/* Mode Switcher */}
-      <div className="flex p-1.5 bg-surface border border-border rounded-2xl shadow-premium relative z-10">
+      <div className="flex p-1.5 bg-surface border border-border rounded-2xl shadow-premium relative z-content">
         {(['focus', 'break'] as const).map((m) => (
           <button
             key={m}
@@ -195,11 +195,11 @@ export default function PomodoroTimerClient() {
             {mode === m && (
               <motion.div
                 layoutId="pomo-mode"
-                className="absolute inset-0 bg-blue rounded-2xl -z-10 shadow-md shadow-blue/10"
+                className="absolute inset-0 bg-blue rounded-2xl z-behind shadow-md shadow-blue/10"
                 transition={TRANSITION}
               />
             )}
-            <span className="relative z-10 flex items-center gap-2">
+            <span className="relative z-content flex items-center gap-2">
               {m === 'focus' ? <Sparkles size={14} /> : <Coffee size={14} />}
               {m}
             </span>
@@ -216,7 +216,7 @@ export default function PomodoroTimerClient() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1.1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute inset-0 bg-blue/20 blur-3xl rounded-full -z-10"
+              className="absolute inset-0 bg-blue/20 blur-3xl rounded-full z-behind"
               transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
             />
           )}
@@ -248,7 +248,7 @@ export default function PomodoroTimerClient() {
               strokeLinecap="round"
             />
           </svg>
-          <div className="text-center z-10">
+          <div className="text-center z-content">
             <motion.p 
               key={timeLeft}
               initial={{ scale: 0.95, opacity: 0.8 }}

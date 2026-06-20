@@ -728,10 +728,11 @@ const api: WorkerAPI = {
 
   async extractImagesFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
-    if (typeof (pdfjsLib as any).GlobalWorkerOptions !== 'undefined') {
-      (pdfjsLib as any).GlobalWorkerOptions.workerSrc = typeof location !== 'undefined' && location.origin 
-        ? `${location.origin}/pdf.worker.min.mjs` 
-        : 'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
+    const workerUrl = 'https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs';
+    if (pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+      (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
     }
 
     const pdf = await pdfjsLib.getDocument({ data: file }).promise;
@@ -797,10 +798,11 @@ const api: WorkerAPI = {
 
   async extractTextFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
-    if (typeof (pdfjsLib as any).GlobalWorkerOptions !== 'undefined') {
-      (pdfjsLib as any).GlobalWorkerOptions.workerSrc = typeof location !== 'undefined' && location.origin 
-        ? `${location.origin}/pdf.worker.min.mjs` 
-        : 'https://unpkg.com/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
+    const workerUrl = 'https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs';
+    if (pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+      (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
     }
 
     const pdf = await pdfjsLib.getDocument({ data: file }).promise;

@@ -45,7 +45,7 @@ export function MediaPreviewPlayer({
       )}
       
       {/* Privacy overlay hint */}
-      <div className="absolute top-4 right-4 z-10 px-2 py-1 bg-black/40 backdrop-blur-md rounded-lg text-micro font-black text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+      <div className="absolute top-4 right-4 z-content px-2 py-1 bg-black/40 backdrop-blur-md rounded-lg text-micro font-black text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
         Local Preview
       </div>
     </div>

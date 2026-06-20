@@ -145,7 +145,7 @@ export default function ImageSeoClient() {
 
                 <div className="group relative p-8 bg-bg border-2 border-dashed border-border rounded-2xl text-center hover:border-blue transition-all overflow-hidden shadow-inner">
                   {preview ? (
-                    <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10">
+                    <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-content">
                       <img src={preview} alt="Preview" className="mx-auto max-h-64 rounded-xl shadow-lg object-contain" />
                       <button 
                         onClick={() => { setPreview(null); setActiveFile(null); }}

@@ -41,7 +41,7 @@ export const ImageQueue: React.FC = () => {
               )}
 
               {/* Thumbnail */}
-              <div className="w-14 h-14 rounded-xl overflow-hidden bg-bg border border-border shrink-0 relative z-10 flex items-center justify-center text-text-4">
+              <div className="w-14 h-14 rounded-xl overflow-hidden bg-bg border border-border shrink-0 relative z-content flex items-center justify-center text-text-4">
                 {item.previewUrl ? (
                   <img src={item.previewUrl} alt={`Preview of ${item.file.name}`} className="w-full h-full object-cover" />
                 ) : (
@@ -50,7 +50,7 @@ export const ImageQueue: React.FC = () => {
               </div>
 
               {/* Info */}
-              <div className="flex-1 min-w-0 relative z-10">
+              <div className="flex-1 min-w-0 relative z-content">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-black uppercase truncate pr-4">{item.file.name}</span>
                   <button 
@@ -105,7 +105,7 @@ export const ImageQueue: React.FC = () => {
               </div>
 
               {/* Action */}
-              <div className="relative z-10">
+              <div className="relative z-content">
                 {item.status === 'completed' ? (
                   <a 
                     href={item.compressedUrl!} 

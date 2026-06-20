@@ -17,7 +17,7 @@ export default function TableRenderer({ result }: { result: ToolResult }) {
     <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl overflow-hidden">
       <div className="overflow-x-auto custom-scrollbar max-h-full">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-mat-base/50 sticky top-0 z-10">
+          <thead className="bg-mat-base/50 sticky top-0 z-content">
             <tr>
               {headers.map((h, i) => (
                 <th key={i} className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-3 border-b border-mat-border">

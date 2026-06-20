@@ -98,8 +98,8 @@ export const BatchMode: React.FC = () => {
                       style={{ width: `${zipProgress}%` }}
                     />
                   )}
-                  <Download size={14} className="relative z-10" />
-                  <span className="relative z-10">{zipProgress > 0 ? `${zipProgress}%` : 'ZIP All'}</span>
+                  <Download size={14} className="relative z-content" />
+                  <span className="relative z-content">{zipProgress > 0 ? `${zipProgress}%` : 'ZIP All'}</span>
                 </button>
 
                 <button

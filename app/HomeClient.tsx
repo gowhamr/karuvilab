@@ -151,7 +151,7 @@ export default function HomeClient() {
         {/* ── Sticky category chip bar ── */}
         <div
           className={cn(
-            "sticky top-15 md:top-18 z-30 w-full py-2 bg-bg/95 backdrop-blur-sm border-b border-border transition-opacity",
+            "sticky top-15 md:top-18 z-sidebar w-full py-2 bg-bg/95 backdrop-blur-sm border-b border-border transition-opacity",
             isSidebarOpen && "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
           )}
         >

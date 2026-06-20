@@ -52,7 +52,7 @@ export const SearchResultItem = memo(function SearchResultItem({
       className={cn(
         "w-full flex items-center gap-4 p-3 md:p-4 text-left transition-all duration-75 min-h-14 md:min-h-16 border-l-4",
         isFocused 
-          ? "bg-surface border-brand-primary shadow-sm z-10" 
+          ? "bg-surface border-brand-primary shadow-sm z-content" 
           : "bg-transparent border-transparent hover:bg-surface/50"
       )}
      aria-label="Tool">

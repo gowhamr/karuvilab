@@ -85,7 +85,7 @@ export default function NotesPage() {
                 {activeTab === tab.id && (
                   <m.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-blue rounded-xl -z-10"
+                    className="absolute inset-0 bg-blue rounded-xl z-behind"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -139,7 +139,7 @@ export default function NotesPage() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleCreateNote}
-        className="fixed bottom-24 md:bottom-10 right-6 md:right-10 w-16 h-16 bg-blue text-white rounded-full flex items-center justify-center shadow-2xl shadow-blue/40 z-50 group hover:bg-blue/90 transition-colors outline-none focus-visible:ring-4 focus-visible:ring-blue/20"
+        className="fixed bottom-24 md:bottom-10 right-6 md:right-10 w-16 h-16 bg-blue text-white rounded-full flex items-center justify-center shadow-2xl shadow-blue/40 z-max group hover:bg-blue/90 transition-colors outline-none focus-visible:ring-4 focus-visible:ring-blue/20"
         title="Create New Note"
       >
         <Plus size={32} className="group-hover:rotate-90 transition-transform duration-300" />

@@ -25,7 +25,7 @@ export function IntelligenceCard({ icon: Icon, title, requirement, current, isLa
         <div className="absolute top-0 right-0 w-24 h-24 bg-success/5 rounded-full -mr-12 -mt-12 blur-2xl" />
       )}
       
-      <div className="flex items-center justify-between relative z-10">
+      <div className="flex items-center justify-between relative z-content">
          <div className={cn(
            "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500",
            status === 'yes' ? "bg-success/10 text-success scale-110" : "bg-bg text-text-4"
@@ -52,12 +52,12 @@ export function IntelligenceCard({ icon: Icon, title, requirement, current, isLa
          )}
       </div>
       
-      <div className="space-y-1 relative z-10">
+      <div className="space-y-1 relative z-content">
         <h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3>
         <p className="text-xs text-text-4 leading-relaxed font-medium">{desc}</p>
       </div>
       
-      <div className="pt-2 flex items-center gap-3 relative z-10">
+      <div className="pt-2 flex items-center gap-3 relative z-content">
          <div className="h-1.5 flex-1 bg-bg rounded-full overflow-hidden">
             <motion.div 
               className={cn("h-full", status === 'yes' ? "bg-success" : "bg-text-4/30")}

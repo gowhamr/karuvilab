@@ -38,7 +38,7 @@ export function MediaEmptyState({
             rotate: [0, -5, 5, 0]
           }}
           transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-          className="w-24 h-24 bg-blue/10 rounded-3xl flex items-center justify-center text-blue relative z-10"
+          className="w-24 h-24 bg-blue/10 rounded-3xl flex items-center justify-center text-blue relative z-content"
         >
           <Icon className="w-12 h-12" />
         </m.div>

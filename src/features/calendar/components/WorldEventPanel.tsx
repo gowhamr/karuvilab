@@ -24,7 +24,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modalBackdrop"
       />
 
       {/* Slide-in Panel */}
@@ -33,7 +33,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", damping: 30, stiffness: 280 }}
-        className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-surface/90 backdrop-blur-2xl border-l border-border/40 z-50 p-6 md:p-8 flex flex-col shadow-2xl overflow-y-auto no-scrollbar"
+        className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-surface/90 backdrop-blur-2xl border-l border-border/40 z-modal p-6 md:p-8 flex flex-col shadow-2xl overflow-y-auto no-scrollbar"
       >
         {/* Header Actions */}
         <div className="flex items-center justify-between mb-6">

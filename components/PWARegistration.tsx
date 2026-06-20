@@ -139,7 +139,7 @@ export function PWARegistration() {
         exit={{ opacity: 0, y: 50, scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="
-          fixed left-4 right-4 z-50
+          fixed left-4 right-4 z-max
           bottom-24 md:bottom-6 md:right-auto md:left-6 md:w-96
           p-5 rounded-3xl
           bg-mat-surface border border-mat-border shadow-2xl shadow-mat-shine

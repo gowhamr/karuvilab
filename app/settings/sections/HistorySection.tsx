@@ -79,7 +79,7 @@ export const HistorySection = memo(function HistorySection() {
               key={item.id} 
               className="group bg-surface border border-border rounded-2xl p-4 hover:border-blue transition-all relative overflow-hidden"
             >
-              <div className="flex items-start justify-between relative z-10">
+              <div className="flex items-start justify-between relative z-content">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-tiny font-bold uppercase tracking-widest-sm text-blue bg-blue/5 px-2 py-0.5 rounded">

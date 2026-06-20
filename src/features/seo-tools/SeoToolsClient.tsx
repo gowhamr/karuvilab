@@ -41,11 +41,11 @@ export default function SeoToolsClient() {
             {activeTab === tab.id && (
               <m.div
                 layoutId="seoTabsBg"
-                className="absolute inset-0 bg-blue rounded-xl z-0"
+                className="absolute inset-0 bg-blue rounded-xl z-base"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}
-            <span className="relative z-10">{tab.label}</span>
+            <span className="relative z-content">{tab.label}</span>
           </button>
         ))}
       </div>

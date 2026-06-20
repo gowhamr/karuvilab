@@ -116,7 +116,7 @@ export function SyntaxEditor({
         {showLineNumbers && (
           <div 
             ref={lineNumbersRef}
-            className="bg-surface border-r border-border text-text-4 text-right py-4 px-4 select-none flex-shrink-0 min-w-16 hidden sm:block overflow-hidden sticky left-0 z-10"
+            className="bg-surface border-r border-border text-text-4 text-right py-4 px-4 select-none flex-shrink-0 min-w-16 hidden sm:block overflow-hidden sticky left-0 z-content"
           >
             {lines.map((_, i) => (
               <div 
@@ -140,7 +140,7 @@ export function SyntaxEditor({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 z-20 pointer-events-none"
+                className="absolute inset-0 z-above pointer-events-none"
               >
                 {Array.from({ length: 20 }).map((_, i) => (
                   <div key={i} className="h-7 w-full px-4 py-2">
@@ -166,7 +166,7 @@ export function SyntaxEditor({
           )}
           
           {/* Interaction Layer (Overlay for line hover/copy) */}
-          <div className="absolute inset-0 pointer-events-none z-10 py-4">
+          <div className="absolute inset-0 pointer-events-none z-content py-4">
              {lines.map((lineText, i) => (
                <div 
                  key={i} 

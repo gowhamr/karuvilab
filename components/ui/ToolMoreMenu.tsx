@@ -115,7 +115,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="absolute right-0 top-full mt-2 w-56 bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-50 overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-56 bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-dropdown overflow-hidden"
           >
             <div className="px-3 py-2 text-micro font-black text-text-4 uppercase tracking-widest-lg border-b border-mat-border mb-1">
               Tool Options

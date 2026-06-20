@@ -55,7 +55,7 @@ export const SettingHelp = memo(function SettingHelp({ text }: { text: string })
             initial={{ opacity: 0, y: 5, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 5, scale: 0.95 }}
-            className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-4 bg-surface border border-border rounded-2xl shadow-premium text-xs font-medium text-text-3 leading-relaxed pointer-events-none"
+            className="absolute z-dropdown bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-4 bg-surface border border-border rounded-2xl shadow-premium text-xs font-medium text-text-3 leading-relaxed pointer-events-none"
           >
             <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-surface" />
             {text}
@@ -116,7 +116,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
               aria-checked={isActive}
               onClick={() => onChange(opt.value)}
               className={`
-                w-full py-3 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative z-10
+                w-full py-3 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative z-content
                 ${isActive 
                   ? 'text-white' 
                   : 'text-text-4 hover:text-text'}
@@ -125,7 +125,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
               {isActive && (
                 <m.div 
                   layoutId="active-setting"
-                  className="absolute inset-0 bg-blue rounded-xl shadow-md -z-10"
+                  className="absolute inset-0 bg-blue rounded-xl shadow-md z-behind"
                   transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                 />
               )}
@@ -134,7 +134,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
             
             {/* Divider - only show if neither this nor next is active, and not last */}
             {!isLast && !isActive && !nextIsActive && (
-              <div className="absolute right-0 h-6 w-0.5 bg-border z-0" />
+              <div className="absolute right-0 h-6 w-0.5 bg-border z-base" />
             )}
           </div>
         );

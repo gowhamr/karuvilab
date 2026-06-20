@@ -123,7 +123,7 @@ export default function FakeDataGeneratorPage() {
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
             <ShieldCheck className="w-32 h-32 text-blue" />
           </div>
-          <div className="relative z-10 space-y-6 max-w-3xl">
+          <div className="relative z-content space-y-6 max-w-3xl">
             <h3 className="text-2xl font-black text-text flex items-center gap-3">
               <ShieldCheck className="w-8 h-8 text-blue" />
               Privacy & Security Standards

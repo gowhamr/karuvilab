@@ -64,7 +64,7 @@ export function CalendarHeader({
               </button>
             </Popover.Trigger>
             <Popover.Portal>
-              <Popover.Content className="z-50 animate-in fade-in zoom-in-95 duration-200" sideOffset={12} align="start">
+              <Popover.Content className="z-popover animate-in fade-in zoom-in-95 duration-200" sideOffset={12} align="start">
                 <MiniCalendar onSelect={() => setIsPickerOpen(false)} />
               </Popover.Content>
             </Popover.Portal>
