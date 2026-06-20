@@ -39,7 +39,7 @@ export default function FinancialFreedomCalculatorClient() {
           <div className="flex gap-2">
             <button
               onClick={resetInputs}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-text-2 bg-surface border border-border hover:bg-surface-hover transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-text-2 bg-surface border border-border hover:bg-mat-hover transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               Reset Defaults
@@ -71,7 +71,7 @@ export default function FinancialFreedomCalculatorClient() {
                       value={scenarioName}
                       onChange={(e) => setScenarioName(e.target.value)}
                       placeholder="e.g., Aggressive Savings"
-                      className="w-full bg-surface-hover border border-border rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-blue transition-colors mb-3"
+                      className="w-full bg-mat-hover border border-border rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-blue transition-colors mb-3"
                       autoFocus
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') handleSaveScenario();
@@ -101,7 +101,7 @@ export default function FinancialFreedomCalculatorClient() {
           
           <button
             onClick={toggleComparisonMode}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${isComparisonMode ? 'bg-blue text-white' : 'bg-surface border border-border text-text-2 hover:bg-surface-hover'}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${isComparisonMode ? 'bg-blue text-white' : 'bg-surface border border-border text-text-2 hover:bg-mat-hover'}`}
           >
             <Layers className="w-4 h-4" />
             Compare ({scenariosCount})

@@ -67,6 +67,7 @@ export function InputPanel() {
               value={inputs.monthlyExpenses}
               onChange={(v) => setInputs({ monthlyExpenses: v })}
               format={formatCurrency}
+              error={inputs.monthlyExpenses > inputs.monthlyIncome}
             />
             {inputs.monthlyExpenses > inputs.monthlyIncome && (
               <div className="text-sm font-bold text-error bg-error/10 p-3 rounded-lg border border-error/20">

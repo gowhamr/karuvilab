@@ -134,7 +134,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
             
             {/* Divider - only show if neither this nor next is active, and not last */}
             {!isLast && !isActive && !nextIsActive && (
-              <div className="absolute right-0 h-6 w-[1.5px] bg-border z-0" />
+              <div className="absolute right-0 h-6 w-0.5 bg-border z-0" />
             )}
           </div>
         );

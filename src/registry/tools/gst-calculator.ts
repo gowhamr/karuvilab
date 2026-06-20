@@ -17,8 +17,7 @@ export const gst_calculator: ToolEntry = {
     "online gst calculator",
     "gst amount calculator"
   ],
-  "popular": true,
-  "featured": true,
+    "featured": true,
   "difficulty": "beginner",
   "searchIntent": "informational",
   "schemaType": "WebApplication",

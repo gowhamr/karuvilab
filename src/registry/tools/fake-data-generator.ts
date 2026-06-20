@@ -6,6 +6,7 @@ export const fake_data_generator: ToolEntry = {
   "desc": "Generate realistic fake data for testing",
   "href": "developer-tools/fake-data-generator/",
   "category": "developer",
+  "output": ["json", "csv", "sql"],
   "keywords": [
     "fake data",
     "mock data",
@@ -17,6 +18,7 @@ export const fake_data_generator: ToolEntry = {
   "difficulty": "intermediate",
   "searchIntent": "transactional",
   "priority": 0.8,
+  "popular": true,
   "status": "new",
   "schemaType": "WebApplication"
 };

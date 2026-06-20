@@ -2,7 +2,7 @@ export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
-export type DataType = 'image' | 'pdf' | 'text' | 'json' | 'csv' | 'zip' | 'any-file' | 'none' | 'html' | 'url' | 'password';
+export type DataType = 'image' | 'pdf' | 'text' | 'json' | 'csv' | 'zip' | 'any-file' | 'none' | 'html' | 'url' | 'password' | 'sql';
 
 export interface SEOContent {
   detailedDescription: string;

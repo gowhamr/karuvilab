@@ -20,6 +20,8 @@ import {
   Copy
 } from "lucide-react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useWorkflowStore } from "@/src/store/useWorkflowStore";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 
 // --- Data Constants ---
 const FIRST_NAMES = ["James", "Mary", "Robert", "Patricia", "John", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah", "Christopher", "Karen", "Charles", "Lisa", "Matthew", "Nancy", "Anthony", "Betty", "Mark", "Sandra", "Donald", "Ashley"];
@@ -111,7 +113,9 @@ export default function FakeDataGeneratorClient() {
       }
 
       if (format === "json") {
-        setResult(JSON.stringify(rows, null, 2));
+        const txt = JSON.stringify(rows, null, 2);
+        setResult(txt);
+        useWorkflowStore.getState().syncToolOutput("fake-data-generator", [{ text: txt, name: "fake-data.json", type: "json" }]);
       } else if (format === "csv") {
         const headers = activeFields.map(f => f.id);
         const csv = [
@@ -119,6 +123,7 @@ export default function FakeDataGeneratorClient() {
           ...rows.map(r => headers.map(h => `"${r[h]}"`).join(","))
         ].join("\n");
         setResult(csv);
+        useWorkflowStore.getState().syncToolOutput("fake-data-generator", [{ text: csv, name: "fake-data.csv", type: "csv" }]);
       } else if (format === "sql") {
         const tableName = "fake_data";
         const headers = activeFields.map(f => f.id);
@@ -130,6 +135,7 @@ export default function FakeDataGeneratorClient() {
           return `INSERT INTO ${tableName} (${headers.join(", ")}) VALUES (${values});`;
         }).join("\n");
         setResult(sql);
+        useWorkflowStore.getState().syncToolOutput("fake-data-generator", [{ text: sql, name: "fake-data.sql", type: "sql" }]);
       }
       setIsGenerating(false);
     }, 100);
@@ -272,6 +278,7 @@ export default function FakeDataGeneratorClient() {
                </div>
             )}
           </div>
+          <WorkflowSuggestions />
         </div>
       </div>
     </div>

@@ -118,7 +118,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": false,
+    "popular": true,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -629,7 +629,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": true,
-    "popular": true,
+    "popular": false,
     "status": "new",
     "lastAdded": null,
     "keywords": [
@@ -731,7 +731,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": "#4F46E5",
     "featured": true,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -783,7 +783,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": false,
+    "popular": true,
     "status": "new",
     "lastAdded": null,
     "keywords": [
@@ -795,7 +795,11 @@ export const CORE_TOOLS: ToolEntry[] = [
       "sql"
     ],
     "input": null,
-    "output": null,
+    "output": [
+      "json",
+      "csv",
+      "sql"
+    ],
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -833,7 +837,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": true,
-    "popular": true,
+    "popular": false,
     "status": "new",
     "lastAdded": null,
     "keywords": [
@@ -864,7 +868,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": "#4F46E5",
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -1060,7 +1064,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": true,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -1088,7 +1092,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -1215,7 +1219,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "new",
     "lastAdded": null,
     "keywords": [
@@ -1269,7 +1273,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -1501,7 +1505,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": false,
+    "popular": true,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -1509,8 +1513,14 @@ export const CORE_TOOLS: ToolEntry[] = [
       "csv",
       "convert"
     ],
-    "input": null,
-    "output": null,
+    "input": [
+      "json",
+      "csv"
+    ],
+    "output": [
+      "json",
+      "csv"
+    ],
     "related": [
       "json-formatter",
       "unit-converter"
@@ -1898,7 +1908,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -1925,7 +1935,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -2048,7 +2058,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -2095,7 +2105,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [
@@ -2277,7 +2287,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "icon": null,
     "color": null,
     "featured": false,
-    "popular": true,
+    "popular": false,
     "status": "stable",
     "lastAdded": null,
     "keywords": [

@@ -12,6 +12,5 @@ export const hash_generator: ToolEntry = {
     "sha",
     "checksum"
   ],
-  "popular": true,
-  "priority": 0.8
+    "priority": 0.8
 };

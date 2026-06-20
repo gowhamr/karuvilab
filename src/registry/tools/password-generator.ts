@@ -12,8 +12,7 @@ export const password_generator: ToolEntry = {
     "strong",
     "generator"
   ],
-  "popular": true,
-  "difficulty": "beginner",
+    "difficulty": "beginner",
   "searchIntent": "transactional",
   "priority": 0.9,
   "icon": "",

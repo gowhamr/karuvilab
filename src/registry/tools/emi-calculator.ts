@@ -14,8 +14,7 @@ export const emi_calculator: ToolEntry = {
     "mortgage",
     "amortization"
   ],
-  "popular": true,
-  "featured": true,
+    "featured": true,
   "difficulty": "beginner",
   "searchIntent": "transactional",
   "priority": 0.9,

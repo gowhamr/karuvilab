@@ -6,6 +6,9 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
 import { DropZone } from "@/components/ui/DropZone";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
+import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
+import { useWorkflowStore } from "@/src/store/useWorkflowStore";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -15,6 +18,10 @@ export default function LockUnlockPdfClient() {
   const unlockId = useId();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
+
+  useWorkflowInput((files) => {
+    if (files && files[0]) setFile(files[0]);
+  });
   const [mode, setMode] = useState<"lock" | "unlock">("lock");
   const [password, setPassword] = useState("");
   const [ownerPassword, setOwnerPassword] = useState("");
@@ -48,24 +55,30 @@ export default function LockUnlockPdfClient() {
           },
         } as any);
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
+        const name = file.name.replace(/\.pdf$/i, "") + "-locked.pdf";
         const url = createUrl(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = file.name.replace(/\.pdf$/i, "") + "-locked.pdf";
+        a.download = name;
         a.click();
-        revokeUrl(url);
+        
+        useWorkflowStore.getState().syncToolOutput("lock-unlock", [{ blob, name, type: "pdf" }]);
+        setTimeout(() => revokeUrl(url), 100);
         setSuccess("PDF locked successfully and downloaded.");
       } else {
         if (!unlockPassword) { setError("Please enter the PDF password."); setProcessing(false); return; }
         const doc = await PDFDocument.load(bytes, { password: unlockPassword } as any);
         const outBytes = await doc.save();
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
+        const name = file.name.replace(/\.pdf$/i, "") + "-unlocked.pdf";
         const url = createUrl(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = file.name.replace(/\.pdf$/i, "") + "-unlocked.pdf";
+        a.download = name;
         a.click();
-        revokeUrl(url);
+        
+        useWorkflowStore.getState().syncToolOutput("lock-unlock", [{ blob, name, type: "pdf" }]);
+        setTimeout(() => revokeUrl(url), 100);
         setSuccess("PDF unlocked successfully and downloaded.");
       }
     } catch (e: any) {
@@ -131,6 +144,8 @@ export default function LockUnlockPdfClient() {
       >
         {processing ? "Processing…" : mode === "lock" ? "Lock PDF" : "Unlock PDF"}
       </button>
+
+      <WorkflowSuggestions />
     </div>
   );
 }

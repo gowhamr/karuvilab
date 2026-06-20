@@ -22,8 +22,7 @@ export const file_viewer_diff: ToolEntry = {
     "source code"
   ],
   "featured": true,
-  "popular": true,
-  "difficulty": "intermediate",
+    "difficulty": "intermediate",
   "status": "new",
   "schemaType": "SoftwareApplication"
 };

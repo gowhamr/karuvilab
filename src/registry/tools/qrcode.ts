@@ -11,5 +11,4 @@ export const qrcode: ToolEntry = {
     "qrcode",
     "barcode"
   ],
-  "popular": true
-};
+  };

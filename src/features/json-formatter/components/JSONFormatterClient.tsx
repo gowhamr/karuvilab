@@ -14,6 +14,8 @@ import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { formatError } from "@/src/lib/formatError";
 import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 
 type Indent = 2 | 4 | "tab";
 
@@ -159,6 +161,11 @@ export default function JSONFormatterClient() {
   const setIndent = (v: Indent) => setState(prev => ({ ...prev, indent: v }));
   const setView = (v: "raw" | "tree") => setState(prev => ({ ...prev, view: v }));
 
+  const { suggestedText } = useWorkflowIntegration("json-formatter");
+  useEffect(() => {
+    if (suggestedText) setInput(suggestedText);
+  }, [suggestedText]);
+
   useEffect(() => {
     if (!input.trim()) {
       setResult({ output: "", error: null, parsed: null });
@@ -292,7 +299,7 @@ export default function JSONFormatterClient() {
                         "px-4 py-2 rounded-xl text-xs font-bold transition-all border",
                         indent === v 
                           ? "bg-blue border-blue text-white shadow-lg" 
-                          : "bg-surface-hover border-border text-text-2 hover:border-blue/30"
+                          : "bg-mat-hover border-border text-text-2 hover:border-blue/30"
                       )}
                     >
                       {v === "tab" ? "Tab" : `${v} Spc`}
@@ -384,6 +391,7 @@ export default function JSONFormatterClient() {
             />
           )}
         </div>
+        <WorkflowSuggestions />
       </div>
       </div>
     </FocusModeWrapper>

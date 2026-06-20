@@ -12,5 +12,4 @@ export const regex_tester: ToolEntry = {
     "match",
     "pattern"
   ],
-  "popular": true
-};
+  };

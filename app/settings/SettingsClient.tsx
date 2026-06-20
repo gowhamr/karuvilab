@@ -206,7 +206,7 @@ export default function SettingsClient() {
       <div className={cn("flex-1 min-w-0 lg:pb-0", activeSection ? "block" : "hidden lg:block")}>
         <AnimatePresence mode="wait">
           {!activeSection ? (
-            <div key="empty" className="hidden lg:flex flex-col items-center justify-center min-h-[500px] text-center space-y-4 text-text-4">
+            <div key="empty" className="hidden lg:flex flex-col items-center justify-center min-h-128 text-center space-y-4 text-text-4">
               <Shield className="w-12 h-12 opacity-20" />
               <p className="font-bold">Select a category to view settings</p>
             </div>

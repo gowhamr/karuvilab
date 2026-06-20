@@ -96,10 +96,13 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         style={{ x, contain: 'layout style' }}
         role="dialog"
         aria-modal={isOpen}
+        aria-hidden={!isOpen}
+        // @ts-expect-error – inert is a valid HTML attribute but not yet in React's types
+        inert={!isOpen ? '' : undefined}
         tabIndex={-1}
         aria-label="Navigation Sidebar"
         className={cn(
-          "absolute top-0 left-0 bottom-0 w-sidebar bg-surface border-r border-border shadow-2xl z-drawer rounded-tr-2xl rounded-br-none flex flex-col touch-none overflow-hidden outline-none pointer-events-auto",
+          "absolute top-0 left-0 bottom-0 w-sidebar bg-surface border-r border-border shadow-2xl z-modal rounded-tr-2xl rounded-br-none flex flex-col touch-none overflow-hidden outline-none pointer-events-auto",
           "will-change-transform"
         )}
       >

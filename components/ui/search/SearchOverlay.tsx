@@ -46,7 +46,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   // Compute favorite tools
   const favoriteTools = useMemo(() => {
     return favorites
-      .map(id => ALL_TOOLS.find(t => t.id === id))
+      .map(id => ALL_TOOLS.find((t: any) => t.id === id))
       .filter(Boolean) as any[];
   }, [favorites]);
 
@@ -56,7 +56,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       .sort((a, b) => b[1] - a[1])
       .filter(([id]) => !favorites.includes(id)) // Don't duplicate favorites in popular
       .slice(0, 8)
-      .map(([id]) => ALL_TOOLS.find(t => t.id === id))
+      .map(([id]) => ALL_TOOLS.find((t: any) => t.id === id))
       .filter(Boolean) as any[];
   }, [popularToolsMap, favorites]);
 
@@ -81,7 +81,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   }, [isOpen]);
 
   const handleSelect = (toolId: string) => {
-    const tool = ALL_TOOLS.find(t => t.id === toolId);
+    const tool = ALL_TOOLS.find((t: any) => t.id === toolId);
     if (tool) {
       if (query.trim()) addRecentQuery(query);
       incrementToolVisit(toolId);
@@ -126,14 +126,14 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
   return (
     <AnimatePresence>
-      {/* NOTE: z-50 shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
+      {/* NOTE: z-modal shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
       {isOpen && (
         <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex flex-col bg-mat-base sm:bg-black/85 sm:backdrop-blur-md sm:p-4 md:p-12 lg:p-24"
+          className="fixed inset-0 z-modal flex flex-col bg-mat-base sm:bg-black/85 sm:backdrop-blur-md sm:p-4 md:p-12 lg:p-24"
           onClick={onClose}
         >
           <m.div

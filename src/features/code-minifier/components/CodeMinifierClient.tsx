@@ -238,7 +238,7 @@ export default function CodeMinifierClient() {
                 </div>
                 <CopyButton text={textOutput} disabled={isTextProcessing || !textOutput} />
               </div>
-              <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-[500px] relative overflow-hidden">
+              <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-128 relative overflow-hidden">
                 {isTextProcessing ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center space-y-4 text-blue">
                     <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center animate-pulse">
@@ -250,7 +250,7 @@ export default function CodeMinifierClient() {
                   <textarea
                     readOnly
                     aria-label="Minified output"
-                    className={`w-full min-h-[500px] p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+                    className={`w-full min-h-128 p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
                     style={{ fontSize: `${fontSize}px` }}
                     value={textOutput}
                     placeholder="Minified code will appear here..."

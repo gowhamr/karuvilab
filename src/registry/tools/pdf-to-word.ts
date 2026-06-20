@@ -14,5 +14,4 @@ export const pdf_to_word: ToolEntry = {
     "docx",
     "convert"
   ],
-  "popular": true
-};
+  };

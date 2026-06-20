@@ -17,7 +17,7 @@ export function HomeHero() {
       {/* ── Ambient glows ── */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-[140%] h-72 bg-gradient-to-r from-blue/10 via-indigo-500/8 to-purple-500/10 rounded-full blur-[100px] -z-10"
+        className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-screen h-72 scale-x-[1.4] scale-y-125 bg-gradient-to-r from-blue/10 via-indigo-500/8 to-purple-500/10 rounded-full blur-[100px] -z-10"
       />
       <div
         aria-hidden="true"

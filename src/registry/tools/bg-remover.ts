@@ -14,5 +14,5 @@ export const bg_remover: ToolEntry = {
     "remove",
     "transparent"
   ],
-  "popular": false
+  "popular": true
 };

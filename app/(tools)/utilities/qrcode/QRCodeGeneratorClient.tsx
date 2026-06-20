@@ -393,7 +393,7 @@ export default function QRCodeGeneratorClient() {
       </div>
 
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm flex flex-col items-center gap-6">
-        <div className="bg-white border border-border rounded-2xl p-6 min-w-[256px] min-h-[256px] flex items-center justify-center shadow-inner relative overflow-hidden">
+        <div className="bg-white border border-border rounded-2xl p-6 min-w-64 min-h-64 flex items-center justify-center shadow-inner relative overflow-hidden">
           {!getFinalString() ? (
             <span className="text-sm font-medium text-text-4/60 text-center px-4 relative z-10">
               Enter data above<br/>to generate QR code

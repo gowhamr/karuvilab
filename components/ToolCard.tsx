@@ -38,7 +38,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2",
           // Size
           compact
-            ? "min-h-[5.5rem] md:min-h-24 p-3 md:p-3.5 rounded-2xl gap-2"
+            ? "min-h-22 md:min-h-24 p-3 md:p-3.5 rounded-2xl gap-2"
             : "min-h-28 md:min-h-36 p-4 md:p-5 rounded-3xl gap-3"
         )}
       >

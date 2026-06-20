@@ -13,8 +13,7 @@ export const sip_calculator: ToolEntry = {
     "mutual fund",
     "returns"
   ],
-  "popular": true,
-  "difficulty": "beginner",
+    "difficulty": "beginner",
   "searchIntent": "transactional",
   "priority": 0.8,
   "icon": "",

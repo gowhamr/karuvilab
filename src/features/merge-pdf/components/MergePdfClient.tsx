@@ -13,9 +13,14 @@ const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
 interface PdfFile { name: string; file: File; }
 
+import { useWorkflowStore } from "@/src/store/useWorkflowStore";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
+import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
+
 export default function MergePdfClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [files, setFiles] = useState<PdfFile[]>([]);
+
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState<TaskProgress | null>(null);
   const [error, setError] = useState("");
@@ -25,6 +30,8 @@ export default function MergePdfClient() {
     if (!fl) return;
     setFiles(prev => [...prev, ...Array.from(fl).map(f => ({ name: f.name, file: f }))]);
   };
+
+  useWorkflowInput(addFiles);
 
   const removeFile = (i: number) => setFiles(f => f.filter((_, idx) => idx !== i));
 
@@ -72,6 +79,12 @@ export default function MergePdfClient() {
       a.href = url;
       a.download = "merged.pdf";
       a.click();
+      
+      useWorkflowStore.getState().syncToolOutput("merge-pdf", [{ 
+        blob, 
+        name: "merged.pdf", 
+        type: "pdf" 
+      }]);
       
       // Delay revocation slightly to ensure browser starts download
       setTimeout(() => revokeUrl(url), 100);
@@ -158,6 +171,8 @@ export default function MergePdfClient() {
           </button>
         )}
       </div>
+
+      <WorkflowSuggestions />
     </div>
   );
 }

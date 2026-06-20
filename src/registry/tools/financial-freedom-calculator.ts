@@ -15,8 +15,7 @@ export const financial_freedom_calculator: ToolEntry = {
     "net worth",
     "corpus"
   ],
-  "popular": true,
-  "featured": false,
+    "featured": false,
   "difficulty": "intermediate",
   "searchIntent": "informational",
   "priority": 0.8,

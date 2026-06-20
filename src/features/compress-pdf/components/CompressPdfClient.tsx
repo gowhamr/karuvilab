@@ -9,6 +9,8 @@ import { EmptyState } from "@/components/system/EmptyState";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { formatError } from "@/src/lib/formatError";
 import { FileText } from "lucide-react";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
+import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
 
 const toolId = "compress-pdf";
 
@@ -51,6 +53,8 @@ export default function CompressPdfClient() {
     if (!files || files.length === 0) return;
     addItems(toolId, Array.from(files));
   };
+
+  useWorkflowInput(handleFiles);
 
   const processAll = async () => {
     setIsProcessing(true);
@@ -98,6 +102,8 @@ export default function CompressPdfClient() {
           workflow={["Drop PDF files", "Click 'Process All'", "Download optimized PDFs"]}
         />
       )}
+      
+      <WorkflowSuggestions />
     </div>
   );
 }

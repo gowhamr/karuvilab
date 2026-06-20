@@ -111,7 +111,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 "bg-warn"
               }`} />
               <div className="flex-shrink-0 ml-1">{icons[t.type]}</div>
-              <span className="text-sm font-bold text-text flex-1 leading-snug min-w-[200px]">{t.message}</span>
+              <span className="text-sm font-bold text-text flex-1 leading-snug min-w-52">{t.message}</span>
               
               <div className="flex items-center gap-4 ml-auto pl-2 sm:pl-0 sm:border-l sm:border-border/50">
                 {t.action && (

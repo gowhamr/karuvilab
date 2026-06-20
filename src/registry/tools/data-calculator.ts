@@ -21,8 +21,7 @@ export const data_calculator: ToolEntry = {
   "searchIntent": "transactional",
   "schemaType": "WebApplication",
   "featured": true,
-  "popular": true,
-  "related": [
+    "related": [
     "unit-converter",
     "json-formatter",
     "qrcode"

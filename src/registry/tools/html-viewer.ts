@@ -15,8 +15,7 @@ export const html_viewer: ToolEntry = {
     "javascript",
     "css"
   ],
-  "popular": true,
-  "difficulty": "intermediate",
+    "difficulty": "intermediate",
   "searchIntent": "transactional",
   "priority": 0.95,
   "related": [

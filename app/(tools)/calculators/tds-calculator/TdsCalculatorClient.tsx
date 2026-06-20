@@ -181,7 +181,7 @@ export default function TdsCalculatorClient() {
             <div className="space-y-4 font-mono text-sm">
               <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
                 <span>Description</span>
-                <strong className="text-text text-right max-w-[60%]">{activeSection.description}</strong>
+                <strong className="text-text text-right max-w-3/5">{activeSection.description}</strong>
               </div>
               <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
                 <span>Exemption Limit</span>

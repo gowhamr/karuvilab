@@ -7,11 +7,11 @@
 import { CORE_TOOLS } from './registry/core-registry';
 import { toolRelationships } from './registry/tool-relationships';
 
-export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'productivity' | 'media' | 'seo';
+export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'productivity' | 'media';
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
-export type DataType = 'image' | 'pdf' | 'text' | 'json' | 'csv' | 'zip' | 'any-file' | 'none' | 'html' | 'url' | 'password';
+export type DataType = 'image' | 'pdf' | 'text' | 'json' | 'csv' | 'zip' | 'any-file' | 'none' | 'html' | 'url' | 'password' | 'sql';
 
 export interface SEOContent {
   detailedDescription: string;
@@ -86,8 +86,7 @@ export const CATEGORIES: CategoryEntry[] = [
   { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '', description: 'Essential utilities for formatting, minifying, and debugging code.', color: '#6366F1' },
   { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.', color: '#64748B' },
   { id: 'productivity', label: 'Productivity',    href: 'productivity/',    emoji: '🚀', description: 'Professional tools to manage your time and workflow privately.', color: '#4F46E5' },
-  { id: 'media',        label: 'Media Tools',     href: 'media-tools/',     emoji: '🎬', description: 'Professional browser-native tools for video, audio, and GIF editing.', color: '#6366F1' },
-  { id: 'seo',          label: 'SEO Tools',       href: 'seo-tools/',       emoji: '🔍', description: 'Tools to optimize your web presence and improve search rankings.', color: '#10B981' },
+  { id: 'media',        label: 'Media Tools',     href: 'media-tools/',     emoji: '🎬', description: 'Professional browser-native tools for video, audio, and GIF editing.', color: '#6366F1' }
 ];
 
 export const SUBCATEGORY_COLORS: Record<string, string> = {
