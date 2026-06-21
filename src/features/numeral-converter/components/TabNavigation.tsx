@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeftRight, Hash, TextCursorInput, ShieldCheck } from 'lucide-react';
+import { useDragScroll } from '@/src/hooks/useDragScroll';
 
 interface TabNavigationProps {
   activeTab: string;
@@ -7,6 +8,8 @@ interface TabNavigationProps {
 }
 
 export const TabNavigation = ({ activeTab, onTabChange }: TabNavigationProps) => {
+  const { containerRef, events, dragged } = useDragScroll<HTMLDivElement>();
+
   const tabs = [
     { id: 'smart', label: 'Smart Converter', icon: ArrowLeftRight },
     { id: 'number', label: 'Single Number', icon: Hash },
@@ -16,13 +19,23 @@ export const TabNavigation = ({ activeTab, onTabChange }: TabNavigationProps) =>
   ];
 
   return (
-    <div className="flex overflow-x-auto p-1 bg-bg border border-border rounded-2xl w-full scrollbar-none">
+    <div 
+      ref={containerRef}
+      {...events}
+      className="flex overflow-x-auto p-1 bg-bg border border-border rounded-2xl w-full scrollbar-none select-none"
+    >
       {tabs.map((t) => {
         const Icon = t.icon;
         return (
           <button
             key={t.id}
-            onClick={() => onTabChange(t.id)}
+            onClick={(e) => {
+              if (dragged) {
+                e.preventDefault();
+                return;
+              }
+              onTabChange(t.id);
+            }}
             aria-label={t.label}
             className={'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black whitespace-nowrap transition-all ' + (activeTab === t.id ? 'bg-blue text-white shadow-md shadow-blue/10' : 'text-text-3 hover:text-text hover:bg-bg/50')}
           >

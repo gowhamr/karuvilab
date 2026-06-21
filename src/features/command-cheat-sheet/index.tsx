@@ -115,9 +115,12 @@ const COMMANDS: Command[] = [
 
 const CATEGORIES = ['All', ...Array.from(new Set(COMMANDS.map(c => c.category)))];
 
+import { useDragScroll } from '@/src/hooks/useDragScroll';
+
 export default function CommandCheatSheet() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
+  const { containerRef, events, dragged } = useDragScroll<HTMLDivElement>();
 
   const filteredCommands = useMemo(() => {
     return COMMANDS.filter(c => {
@@ -138,11 +141,21 @@ export default function CommandCheatSheet() {
             placeholder="Search commands or descriptions..."
           />
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-4 pt-1 px-1 w-full lg:w-auto no-scrollbar snap-x">
+        <div 
+          ref={containerRef}
+          {...events}
+          className="flex gap-2 overflow-x-auto pb-4 pt-1 px-1 w-full lg:w-auto no-scrollbar snap-x select-none"
+        >
           {CATEGORIES.map(cat => (
             <button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
+              onClick={(e) => {
+                if (dragged) {
+                  e.preventDefault();
+                  return;
+                }
+                setActiveCategory(cat);
+              }}
               className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all whitespace-nowrap snap-start ${
                 activeCategory === cat 
                   ? 'bg-blue text-white shadow-xl shadow-blue/30 scale-105' 

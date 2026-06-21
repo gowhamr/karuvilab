@@ -1,9 +1,10 @@
 "use client";
 
-import { memo, useRef, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolIcon } from "./Icons";
 import { m } from "framer-motion";
+import { useDragScroll } from "@/src/hooks/useDragScroll";
 
 interface CategoryChipsProps {
   activeCategory: string | null;
@@ -11,8 +12,7 @@ interface CategoryChipsProps {
 }
 
 export const CategoryChips = memo(function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
+  const { containerRef, events, dragged } = useDragScroll<HTMLDivElement>();
 
   const [hasLeft, setHasLeft] = useState(false);
   const [hasRight, setHasRight] = useState(true);
@@ -26,7 +26,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
     setHasLeft(scrollLeft > 5);
     setHasRight(scrollLeft < maxScroll - 5);
-  }, []);
+  }, [containerRef]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, currentIndex: number) => {
@@ -53,24 +53,17 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
         (items[nextIndex] as HTMLElement).focus();
       }
     },
-    []
+    [containerRef]
   );
 
-  // Monitor scroll for fades & arrows
+  // Monitor scroll for fades
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     updateScrollState();
 
-    const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) {
-        el.scrollLeft += e.deltaY;
-      }
-    };
-
     el.addEventListener("scroll", updateScrollState, { passive: true });
-    el.addEventListener("wheel", handleWheel, { passive: true });
     window.addEventListener("resize", updateScrollState);
 
     // Initial check with small delay to handle client layout calculations
@@ -78,11 +71,10 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
     return () => {
       el.removeEventListener("scroll", updateScrollState);
-      el.removeEventListener("wheel", handleWheel);
       window.removeEventListener("resize", updateScrollState);
       clearTimeout(timer);
     };
-  }, [updateScrollState]);
+  }, [updateScrollState, containerRef]);
 
   // Center active category chip on load or state change
   useEffect(() => {
@@ -95,7 +87,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
       const scrollLeft = target.offsetLeft - (container.clientWidth / 2) + (target.clientWidth / 2);
       container.scrollTo({ left: scrollLeft, behavior: "smooth" });
     }
-  }, [activeCategory]);
+  }, [activeCategory, containerRef]);
 
   return (
     <div className="relative group/wrapper w-auto overflow-hidden">
@@ -111,14 +103,21 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
         ref={containerRef}
         role="tablist"
         aria-label="Filter by category"
-        className="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-content"
+        {...events}
+        className="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-content select-none"
       >
         <m.button
           role="tab"
           id="tab-all"
           aria-selected={!activeCategory}
           aria-controls="tool-grid-panel"
-          onClick={() => onCategoryChange(null)}
+          onClick={(e) => {
+            if (dragged) {
+              e.preventDefault();
+              return;
+            }
+            onCategoryChange(null);
+          }}
           onKeyDown={(e) => handleKeyDown(e, 0)}
           tabIndex={!activeCategory ? 0 : -1}
           whileHover={{ scale: 1.05, y: -1 }}
@@ -147,7 +146,13 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             id={`tab-${cat.id}`}
             aria-selected={activeCategory === cat.id}
             aria-controls="tool-grid-panel"
-            onClick={() => onCategoryChange(cat.id)}
+            onClick={(e) => {
+              if (dragged) {
+                e.preventDefault();
+                return;
+              }
+              onCategoryChange(cat.id);
+            }}
             onKeyDown={(e) => handleKeyDown(e, index + 1)}
             tabIndex={activeCategory === cat.id ? 0 : -1}
             whileHover={{ scale: 1.05, y: -1 }}

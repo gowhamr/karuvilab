@@ -18,6 +18,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { MiniCalendar } from "./MiniCalendar";
 import { cn } from "@/src/lib/utils";
 import { useState } from "react";
+import { useDragScroll } from "@/src/hooks/useDragScroll";
 
 export function CalendarHeader({ 
   onAddEvent, 
@@ -31,6 +32,7 @@ export function CalendarHeader({
   const currentView = useCalendarStore(state => state.currentView);
   const setCurrentView = useCalendarStore(state => state.setCurrentView);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const { containerRef, events, dragged } = useDragScroll<HTMLDivElement>();
 
   const handlePrev = () => {
     if (currentView === 'month') setCurrentDate(subMonths(currentDate, 1));
@@ -115,11 +117,18 @@ export function CalendarHeader({
       </div>
 
       {/* Bottom Row: View Switching */}
-      <div className="overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+      <div 
+        ref={containerRef}
+        {...events}
+        className="overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 select-none"
+      >
         <ToggleGroup.Root
           type="single"
           value={currentView}
-          onValueChange={(value) => value && setCurrentView(value as any)}
+          onValueChange={(value) => {
+            if (dragged) return;
+            if (value) setCurrentView(value as any);
+          }}
           className="flex bg-surface/30 backdrop-blur-xl border border-border/20 rounded-2xl p-1.5 w-max md:w-auto"
         >
           <ToggleGroupItem value="month" icon={LayoutGrid} label="Month" />
