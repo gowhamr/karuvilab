@@ -101,16 +101,11 @@ export default function HomeClient() {
   const recordEngagement = useAnalyticsStore(state => state.recordEngagement);
 
   useEffect(() => {
-    setHydrated(true);
     setRecentTools(getRecentTools().slice(0, 5));
+    setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
+    setHydrated(true);
     recordView("homepage");
-  }, [recordView]);
-
-  useEffect(() => {
-    if (hydrated) {
-      setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
-    }
-  }, [favoriteIds, hydrated]);
+  }, [favoriteIds, recordView]);
 
   const popularToolsMap = useSearchStore(state => state.popularTools);
   const popularTools = useMemo(() => {
@@ -191,15 +186,15 @@ export default function HomeClient() {
                   icon={LayoutGrid}
                 />
                 <m.div
-                  variants={stagger}
-                  initial="hidden"
-                  animate="visible"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-80 content-start"
                 >
                   {filteredTools.map(tool => (
-                    <m.div key={tool.id} variants={fadeUp} className="flex flex-col h-full">
+                    <div key={tool.id} className="flex flex-col h-full">
                       <ToolCard tool={tool} compact />
-                    </m.div>
+                    </div>
                   ))}
                 </m.div>
               </m.section>
@@ -276,16 +271,16 @@ export default function HomeClient() {
                     href="/all-tools"
                   />
                   <m.div
-                    variants={stagger}
-                    initial="hidden"
-                    whileInView="visible"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.4 }}
                     className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
                   >
                     {popularTools.map(tool => (
-                      <m.div key={tool.id} variants={fadeUp} className="flex flex-col h-full">
+                      <div key={tool.id} className="flex flex-col h-full">
                         <ToolCard tool={tool} compact />
-                      </m.div>
+                      </div>
                     ))}
                   </m.div>
                 </section>
@@ -328,16 +323,16 @@ export default function HomeClient() {
                     href="/all-tools"
                   />
                   <m.div
-                    variants={stagger}
-                    initial="hidden"
-                    whileInView="visible"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.4 }}
                     className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
                   >
                     {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
-                      <m.div key={tool.id} variants={fadeUp} className="flex flex-col h-full">
+                      <div key={tool.id} className="flex flex-col h-full">
                         <ToolCard tool={tool} compact />
-                      </m.div>
+                      </div>
                     ))}
                   </m.div>
                   <m.div variants={fadeUp} className="flex justify-center mt-8">

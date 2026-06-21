@@ -69,6 +69,7 @@ export function Footer() {
                     <Link
                       key={tool.id}
                       href={`/${tool.href}`}
+                      prefetch={false}
                       className="px-3 py-1.5 bg-surface border border-border/50 rounded-xl text-sm font-bold text-text-2 hover:bg-surface-hover hover:text-blue transition-all shadow-sm active:scale-95"
                     >
                       {tool.name}
@@ -90,6 +91,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
+                      prefetch={false}
                       className="text-sm font-medium text-text-3 hover:text-blue transition-colors block"
                     >
                       {link.label}
@@ -107,6 +109,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
+                      prefetch={false}
                       className="text-sm font-medium text-text-3 hover:text-blue transition-colors block"
                     >
                       {link.label}

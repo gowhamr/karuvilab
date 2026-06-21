@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ToolEntry } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { cn } from "@/src/lib/utils";
-import { m } from "framer-motion";
+
 
 interface ToolCardProps {
   tool: ToolEntry;
@@ -14,20 +14,13 @@ interface ToolCardProps {
 
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
   return (
-    <m.div
-      className="relative w-full flex-1 flex flex-col group"
-      whileHover={{
-        y: -3,
-        transition: { duration: 0.18, ease: [0.16, 1, 0.3, 1] },
-      }}
-      whileTap={{
-        scale: 0.97,
-        transition: { type: "spring", stiffness: 400, damping: 28 },
-      }}
+    <div
+      className="relative w-full flex-1 flex flex-col group hover:-translate-y-[3px] active:scale-[0.97] transition-transform duration-200 ease-out"
       style={{ touchAction: "manipulation" }}
     >
       <Link
         href={`/${tool.href}`}
+        prefetch={false}
         className={cn(
           // Base
           "relative flex flex-col flex-1 h-full bg-mat-surface border border-mat-border",
@@ -90,6 +83,6 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           )}
         </div>
       </Link>
-    </m.div>
+    </div>
   );
 });
