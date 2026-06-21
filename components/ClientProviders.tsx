@@ -4,8 +4,9 @@ import { ToastProvider } from "@/components/ui/Toast";
 import { LazyMotion, domAnimation, MotionConfig } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useStorageMonitor } from "@/src/lib/hooks/use-storage-monitor";
-import { FeedbackModal } from "@/components/ui/FeedbackModal";
-import { SearchManager } from "@/components/ui/search/SearchManager";
+
+const FeedbackModal = dynamic(() => import("@/components/ui/FeedbackModal").then(mod => ({ default: mod.FeedbackModal })), { ssr: false });
+const SearchManager = dynamic(() => import("@/components/ui/search/SearchManager").then(mod => ({ default: mod.SearchManager })), { ssr: false });
 
 import { FullscreenProvider } from "@/src/contexts/FullscreenContext";
 

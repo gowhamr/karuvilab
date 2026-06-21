@@ -4,63 +4,25 @@ import BmiCalculatorWrapper from './BmiCalculatorWrapper';
 
 export const dynamic = 'force-static';
 
-interface Props {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
-
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const params = await searchParams;
-  const h = params['h'];
-  const w = params['w'];
-  const unit = params['unit'];
-
-  const hasSharedResult = h !== undefined && w !== undefined;
-
-  if (hasSharedResult) {
-    const heightVal = Array.isArray(h) ? h[0] : h;
-    const weightVal = Array.isArray(w) ? w[0] : w;
-    const unitLabel = unit === 'imperial' ? 'lbs/ft' : 'kg/cm';
-
-    const dynamicTitle = `BMI Result (${weightVal} ${unit === 'imperial' ? 'lbs' : 'kg'}, ${heightVal} ${unit === 'imperial' ? 'in' : 'cm'}) – KV`;
-    const dynamicDesc = `Shared BMI calculation: height ${heightVal}, weight ${weightVal} (${unitLabel}). See the result on KaruviLab BMI Calculator.`;
-
-    return {
-      title: dynamicTitle,
-      description: dynamicDesc,
-      openGraph: {
-        title: dynamicTitle,
-        description: dynamicDesc,
-        url: 'https://karuvilab.com/tools/calculators/bmi-calculator/',
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: dynamicTitle,
-        description: dynamicDesc,
-      },
-    };
-  }
-
-  return {
-    title: 'BMI Calculator – KV',
-    description: 'Calculate your Body Mass Index instantly. Visual gauge, healthy range indicator, metric & imperial support. 100% private — no data leaves your browser.',
-    keywords: ['bmi calculator', 'body mass index', 'bmi chart', 'healthy weight', 'bmi india', 'weight calculator'],
-    alternates: {
-      canonical: 'https://karuvilab.com/tools/calculators/bmi-calculator/',
-    },
-    openGraph: {
-      title: 'BMI Calculator – KaruviLab',
-      description: 'Instant BMI calculator with visual gauge and healthy range indicator. Free, private, browser-native.',
-      url: 'https://karuvilab.com/tools/calculators/bmi-calculator/',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'BMI Calculator – KaruviLab',
-      description: 'Calculate BMI instantly with healthy range visual. 100% private.',
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: 'BMI Calculator – KV',
+  description: 'Calculate your Body Mass Index instantly. Visual gauge, healthy range indicator, metric & imperial support. 100% private — no data leaves your browser.',
+  keywords: ['bmi calculator', 'body mass index', 'bmi chart', 'healthy weight', 'bmi india', 'weight calculator'],
+  alternates: {
+    canonical: 'https://karuvilab.com/tools/calculators/bmi-calculator/',
+  },
+  openGraph: {
+    title: 'BMI Calculator – KaruviLab',
+    description: 'Instant BMI calculator with visual gauge and healthy range indicator. Free, private, browser-native.',
+    url: 'https://karuvilab.com/tools/calculators/bmi-calculator/',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BMI Calculator – KaruviLab',
+    description: 'Calculate BMI instantly with healthy range visual. 100% private.',
+  },
+};
 
 // JSON-LD structured data
 const jsonLd = {

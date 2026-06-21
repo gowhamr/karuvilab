@@ -59,7 +59,7 @@ export function CalendarHeader({
                 aria-label="Open date picker"
                 className="text-left group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-2xl p-2 -m-2 transition-all min-h-11"
               >
-                <h2 className="text-2xl md:text-5xl font-black tracking-tighter font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-2 md:gap-3">
+                <h2 className="text-xl md:text-3xl font-black tracking-tighter font-serif text-text group-hover:text-indigo-600 transition-colors flex items-center gap-2 md:gap-3">
                   {format(currentDate, 'MMMM')} <span className="text-text-4 font-sans font-normal opacity-50">{format(currentDate, 'yyyy')}</span>
                   <ChevronDown className="w-4 h-4 md:w-6 md:h-6 text-text-4 opacity-40 group-hover:opacity-100 transition-all" />
                 </h2>
