@@ -138,7 +138,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
-          All
+          <span className="relative z-base">All</span>
         </m.button>
         {CATEGORIES.map((cat, index) => (
           <m.button
@@ -170,8 +170,8 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
-            <ToolIcon category={cat.id} className={`w-3.5 h-3.5 ${activeCategory === cat.id ? "text-white" : "text-text-4 group-hover:text-text"}`} aria-hidden="true" />
-            <span className="whitespace-nowrap">{cat.label}</span>
+            <ToolIcon category={cat.id} className={`relative z-base w-3.5 h-3.5 ${activeCategory === cat.id ? "text-white" : "text-text-4 group-hover:text-text"}`} aria-hidden="true" />
+            <span className="relative z-base whitespace-nowrap">{cat.label}</span>
           </m.button>
         ))}
         {/* Large spacer for right gutter to ensure last item clears the fade and feels spacious */}

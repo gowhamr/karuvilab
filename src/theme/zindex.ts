@@ -29,20 +29,20 @@
  *   max         1000   Toasts (always-on-top), cookie consent, skip-link
  */
 export const zIndex = {
-  behind:        -10,
-  base:            0,
-  content:        10,
-  above:          20,
-  sidebar:        30,
-  header:         40,
-  nav:            60,
-  backdrop:       90,
-  dropdown:      100,
-  'modal-backdrop': 400,
-  modal:         500,
-  popover:       600,
-  toast:         800,
-  max:          1000,
+  behind:        '-10',
+  base:          '0',
+  content:       '10',
+  above:         '20',
+  sidebar:       '30',
+  header:        '40',
+  nav:           '60',
+  backdrop:      '90',
+  dropdown:      '100',
+  'modal-backdrop': '400',
+  modal:         '500',
+  popover:       '600',
+  toast:         '800',
+  max:           '1000',
 } as const;
 
 export type ZIndexToken = keyof typeof zIndex;
