@@ -31,9 +31,10 @@ export interface ClientToolShellProps {
     alternatives?: string[] | undefined;
     relatedTools?: string[] | undefined;
   };
+  fullWidth?: boolean;
 }
 
-export function ClientToolShell({ title, description, category, children, toolId, content }: ClientToolShellProps) {
+export function ClientToolShell({ title, description, category, children, toolId, content, fullWidth }: ClientToolShellProps) {
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
@@ -54,7 +55,7 @@ export function ClientToolShell({ title, description, category, children, toolId
     <m.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-6xl mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24 px-4"
+      className={`${fullWidth ? "w-full max-w-none px-4 md:px-8" : "max-w-6xl px-4"} mx-auto space-y-12 sm:space-y-16 lg:space-y-20 pb-24`}
     >
       <header className="space-y-6 relative z-above">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

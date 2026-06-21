@@ -13,6 +13,7 @@ export default function page() {
       title="Calendar"
       description="Professional, fully local-first calendar for managing your time privately."
       category={cat}
+      fullWidth={true}
     >
       <CalendarPage />
     </ToolShell>
