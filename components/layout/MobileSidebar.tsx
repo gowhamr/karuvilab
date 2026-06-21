@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { m, useMotionValue, useTransform, animate, PanInfo, useDragControls, AnimatePresence } from "framer-motion";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { Backdrop } from "./Backdrop";
 import { cn } from "@/src/lib/utils";
 
 const SIDEBAR_WIDTH = 280;
@@ -60,7 +59,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   };
 
   return (
-    <div className="md:hidden fixed inset-0 z-backdrop pointer-events-none">
+    <div className={cn("md:hidden fixed inset-0 pointer-events-none", isOpen ? "z-modal" : "z-backdrop")}>
       <AnimatePresence>
         {!isOpen && (
           <div 

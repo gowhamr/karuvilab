@@ -309,7 +309,7 @@ export default function ScientificCalculatorClient() {
       {/* Mobile History Toggle Overlay */}
       {showHistory && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-backdrop lg:hidden" 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-modal-backdrop lg:hidden" 
           onClick={() => setShowHistory(false)}
         />
       )}

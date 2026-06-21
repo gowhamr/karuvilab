@@ -86,10 +86,10 @@ export function FeedbackModal() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && closeFeedback()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-fixed bg-black/50 backdrop-blur-sm animate-in fade-in duration-300" />
+        <Dialog.Overlay className="fixed inset-0 z-modal-backdrop bg-black/50 backdrop-blur-sm animate-in fade-in duration-300" />
         
         <Dialog.Content className={cn(
-          "fixed z-fixed overflow-hidden flex flex-col transition-all duration-300",
+          "fixed z-modal overflow-hidden flex flex-col transition-all duration-300",
           blurEnabled ? "kv-glass" : "bg-mat-overlay border border-mat-border shadow-mat-shine",
           // Mobile: Bottom Sheet
           "bottom-0 left-0 right-0 rounded-t-4xl max-h-[90vh] animate-in slide-in-from-bottom-full md:slide-in-from-bottom-0",

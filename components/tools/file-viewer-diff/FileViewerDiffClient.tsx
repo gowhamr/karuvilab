@@ -64,7 +64,7 @@ export default function FileViewerDiffClient() {
               className={cn(
                 "flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl text-xs font-bold uppercase tracking-widest transition-all duration-300",
                 activeTab === tab.id
-                  ? "bg-blue text-white shadow-md shadow-blue/10 scale-[1.02] sm:scale-105"
+                  ? "bg-blue text-white shadow-md shadow-blue/10 scale-102 sm:scale-105"
                   : "text-text-4 hover:text-text-2 hover:bg-bg/50"
               )}
             >

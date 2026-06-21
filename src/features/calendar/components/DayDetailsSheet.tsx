@@ -59,7 +59,7 @@ export function DayDetailsSheet({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-surface/20 backdrop-blur-md z-modalBackdrop md:hidden"
+            className="fixed inset-0 bg-surface/20 backdrop-blur-md z-modal-backdrop md:hidden"
           />
           
           {/* Sheet */}

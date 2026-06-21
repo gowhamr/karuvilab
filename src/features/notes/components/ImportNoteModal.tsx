@@ -126,7 +126,7 @@ export function ImportNoteModal({ open, onOpenChange }: ImportNoteModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-backdrop bg-bg/60 backdrop-blur-sm animate-in fade-in duration-300" />
+        <Dialog.Overlay className="fixed inset-0 z-modal-backdrop bg-bg/60 backdrop-blur-sm animate-in fade-in duration-300" />
         
         <Dialog.Content className={cn(
           "fixed z-modal bg-surface border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 outline-none",

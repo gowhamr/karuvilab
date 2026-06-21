@@ -166,7 +166,7 @@ export default function CalendarPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsSidebarOpen(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modalBackdrop lg:hidden"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modal-backdrop lg:hidden"
             />
             {/* Slide-in Drawer */}
             <motion.div

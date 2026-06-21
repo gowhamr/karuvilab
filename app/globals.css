@@ -82,6 +82,8 @@
   --spacing-stripe: 52px;
   --spacing-dock: 64px;
   --spacing-sidebar: 280px;
+  --spacing-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --spacing-nav-action: calc(60px + env(safe-area-inset-bottom, 0px));
 
   --z-behind:        -10;  /* zindex.ts: behind */
   --z-base:            0;  /* zindex.ts: base */

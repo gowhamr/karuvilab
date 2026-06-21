@@ -120,7 +120,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                       t.action!.onClick();
                       removeToast(t.id);
                     }}
-                    className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all
+                    className={`px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all
                       ${t.type === 'success' ? 'bg-success hover:opacity-90 text-white' : 
                         t.type === 'error' ? 'bg-error hover:opacity-90 text-white shadow-lg shadow-error/20' : 
                         t.type === 'warn' ? 'bg-warn hover:opacity-90 text-white shadow-lg shadow-warn/20' : 

@@ -9,8 +9,8 @@ const replacements = [
   { regex: /min-w-\[4rem\]/g, replacement: 'min-w-16' },
   { regex: /min-w-\[50\%\]/g, replacement: 'min-w-1/2' },
   { regex: /-ml-\[2px\]/g, replacement: '-ml-0.5' },
-  { regex: /bottom-\[calc\\(60px\+env\\(safe-area-inset-bottom,0px\\)\\)\]/g, replacement: 'bottom-nav-action' },
-  { regex: /pb-\[env\\(safe-area-inset-bottom,0px\\)\]/g, replacement: 'pb-safe-bottom' },
+  { regex: /bottom-\[calc\(60px\+env\(safe-area-inset-bottom,0px\)\)\]/g, replacement: 'bottom-nav-action' },
+  { regex: /pb-\[env\(safe-area-inset-bottom,0px\)\]/g, replacement: 'pb-safe-bottom' },
   { regex: /w-\[90\%\]/g, replacement: 'w-11/12' },
 ];
 

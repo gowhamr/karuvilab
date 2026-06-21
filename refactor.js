@@ -10,8 +10,8 @@ const replacements = [
   { regex: /tracking-\[0\.3em\]/g, replacement: 'tracking-widest-2xl' },
   { regex: /tracking-\[0\.4em\]/g, replacement: 'tracking-widest-3xl' },
   { regex: /z-\[100\]/g, replacement: 'z-dropdown' },
-  { regex: /z-\[300\]/g, replacement: 'z-fixed' },
-  { regex: /z-\[301\]/g, replacement: 'z-fixed' },
+  { regex: /z-\[300\]/g, replacement: 'z-modalBackdrop' },
+  { regex: /z-\[301\]/g, replacement: 'z-modal' },
   { regex: /z-\[490\]/g, replacement: 'z-modalBackdrop' },
   { regex: /z-\[500\]/g, replacement: 'z-modal' },
   { regex: /z-\[60\]/g, replacement: 'z-nav' },
@@ -27,9 +27,9 @@ const replacements = [
   { regex: /text-\[--kv-text-muted\]/g, replacement: 'text-text-muted' },
   { regex: /text-\[--kv-text\]/g, replacement: 'text-text' },
   { regex: /text-\[--kv-brand-primary\]/g, replacement: 'text-brand-primary' },
-  { regex: /pb-\[env\\(safe-area-inset-bottom,0px\\)\]/g, replacement: 'pb-safe-bottom' },
-  { regex: /pb-\[env\\(safe-area-inset-bottom\\)\]/g, replacement: 'pb-safe-bottom' },
-  { regex: /bottom-\[calc\\(60px\+env\\(safe-area-inset-bottom,0px\\)\\)\]/g, replacement: 'bottom-nav-action' },
+  { regex: /pb-\[env\(safe-area-inset-bottom,0px\)\]/g, replacement: 'pb-safe-bottom' },
+  { regex: /pb-\[env\(safe-area-inset-bottom\)\]/g, replacement: 'pb-safe-bottom' },
+  { regex: /bottom-\[calc\(60px\+env\(safe-area-inset-bottom,0px\)\)\]/g, replacement: 'bottom-nav-action' },
   { regex: /pb-\[136px\]/g, replacement: 'pb-[136px] ' }
 ];
 

@@ -216,7 +216,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsOpen(false)}
-                className="fixed inset-0 z-backdrop bg-black/40 backdrop-blur-sm"
+                className="fixed inset-0 z-modal-backdrop bg-black/40 backdrop-blur-sm"
               />
             )}
             {dropdownContent}

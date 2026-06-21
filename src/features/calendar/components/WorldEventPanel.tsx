@@ -24,7 +24,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modalBackdrop"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modal-backdrop"
       />
 
       {/* Slide-in Panel */}

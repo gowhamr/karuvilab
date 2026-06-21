@@ -38,7 +38,7 @@ export const zIndex = {
   nav:            60,
   backdrop:       90,
   dropdown:      100,
-  modalBackdrop: 400,
+  'modal-backdrop': 400,
   modal:         500,
   popover:       600,
   toast:         800,

@@ -27,10 +27,10 @@ export function ConsoleDrawer({ isOpen, logs, onClear }: ConsoleDrawerProps) {
           className="absolute bottom-20 right-6 w-80 max-h-72 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-dropdown"
         >
             <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5">
-              <span className="text-xs font-black uppercase tracking-widest text-blue">Output Logs</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm text-blue">Output Logs</span>
               <button 
                 onClick={onClear} 
-                className="text-xs font-black uppercase tracking-widest text-red-400 hover:text-red-300"
+                className="text-tiny font-bold uppercase tracking-widest-sm text-red-400 hover:text-red-300"
                 aria-label="Clear console logs"
               >
                 Clear
