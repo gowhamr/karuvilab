@@ -58,9 +58,11 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'F11') {
-        e.preventDefault();
         const targetId = activeToolId || currentToolId;
-        if (targetId) toggle(targetId);
+        if (targetId) {
+          e.preventDefault();
+          toggle(targetId);
+        }
       }
       if (e.key === 'Escape' && isFullscreen) {
         exit();
