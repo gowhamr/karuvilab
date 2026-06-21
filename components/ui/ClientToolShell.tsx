@@ -31,7 +31,7 @@ export interface ClientToolShellProps {
     alternatives?: string[] | undefined;
     relatedTools?: string[] | undefined;
   };
-  fullWidth?: boolean;
+  fullWidth?: boolean | undefined;
 }
 
 export function ClientToolShell({ title, description, category, children, toolId, content, fullWidth }: ClientToolShellProps) {
