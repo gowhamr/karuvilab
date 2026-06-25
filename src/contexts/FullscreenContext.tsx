@@ -60,7 +60,7 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
       if (e.key === 'F11') {
         const targetId = activeToolId || currentToolId;
         if (targetId) {
-          e.preventDefault();
+          // Do not prevent default so native F11 still works
           toggle(targetId);
         }
       }

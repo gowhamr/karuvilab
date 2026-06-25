@@ -70,7 +70,7 @@ export default function NotesPage() {
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8 min-h-screen pb-32">
       {/* Tabs Section */}
       <div className="flex justify-start">
-        <div className="flex items-center gap-1 bg-surface border border-border rounded-2xl p-1 shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">
+        <div className="relative z-0 flex items-center gap-1 bg-surface border border-border rounded-2xl p-1 shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -79,7 +79,7 @@ export default function NotesPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
                   "relative flex-1 md:flex-none flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-tiny font-bold uppercase tracking-widest-sm transition-all outline-none",
-                  activeTab === tab.id ? "text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text hover:bg-bg"
+                  activeTab === tab.id ? "text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text hover:bg-bg"
                 )}
               >
                 {activeTab === tab.id && (
@@ -89,11 +89,11 @@ export default function NotesPage() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <Icon size={14} className={activeTab === tab.id ? "text-white/80" : "text-text-4"} />
-                <span>{tab.label}</span>
+                <Icon size={14} className={cn("relative z-10", activeTab === tab.id ? "text-white/80" : "text-text-muted")} />
+                <span className="relative z-10">{tab.label}</span>
                 {counts[tab.id] > 0 && (
                   <span className={cn(
-                    "px-1.5 py-0.5 rounded-md text-tiny ml-1",
+                    "relative z-10 px-1.5 py-0.5 rounded-md text-tiny ml-1",
                     activeTab === tab.id ? "bg-white/20 text-white" : "bg-blue/10 text-blue"
                   )}>
                     {counts[tab.id]}
@@ -184,7 +184,7 @@ function NoteListWrapper({ status }: { status: StatusTab }) {
 
   if (finalNotes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-text-4 opacity-50 space-y-4">
+      <div className="flex flex-col items-center justify-center py-20 text-text-muted opacity-60 space-y-4">
         <Inbox size={64} strokeWidth={1} />
         <p className="text-sm font-medium uppercase tracking-widest">
           {status === "active" ? "No notes found" : `Your ${status} is empty`}
