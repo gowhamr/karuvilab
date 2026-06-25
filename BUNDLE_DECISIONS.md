@@ -27,3 +27,28 @@ This file tracks every new dependency added to the project, its impact on bundle
 - **Purpose:** Client-side QR code generation
 - **Alternatives:** None viable (all others require server-side generation)
 - **Justification:** Essential for local, privacy-first QR code generation tool without public APIs. Down-versioned to 1.5.1 because 1.5.3 dropped the pre-built browser bundle.
+
+### 2026-06-25
+- **Library:** `framer-motion`
+- **Impact:** ~35KB gzipped
+- **Purpose:** Hardware-accelerated animations
+- **Alternatives:** CSS transitions (insufficient for complex orchestration)
+- **Justification:** Required for premium enterprise UX, micro-interactions, and view transitions.
+
+- **Library:** `mammoth`
+- **Impact:** ~40KB gzipped (Dynamic Import)
+- **Purpose:** Client-side .docx parsing and HTML conversion
+- **Alternatives:** None viable for browser-only extraction
+- **Justification:** Required for document conversion tools without sending data to servers.
+
+- **Library:** `mermaid`
+- **Impact:** ~1.2MB gzipped (Dynamic Import strictly required)
+- **Purpose:** Client-side diagram generation from Markdown
+- **Alternatives:** Server-side PlantUML (violates zero-server-upload)
+- **Justification:** Enables local-first diagram rendering for the Markdown tool suite.
+
+- **Library:** `gifenc`
+- **Impact:** ~15KB gzipped (Dynamic Import)
+- **Purpose:** Client-side GIF generation/encoding
+- **Alternatives:** gif.js (abandoned), FFmpeg.wasm (too heavy, ~25MB)
+- **Justification:** Lightweight GIF encoder for local image processing tools.

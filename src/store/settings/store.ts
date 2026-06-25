@@ -11,6 +11,7 @@ import { createSettingsStore } from './index';
 // Status: ACTIVE — see EXCEPTIONS.md
 
 import { idbStorage } from '../idb-storage';
+import { logger } from '../../lib/logger';
 
 const settingsIdbStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -28,7 +29,7 @@ const settingsIdbStorage = {
       const localData = localStorage.getItem('karuvi-settings');
       legacyLocalObj = localData ? JSON.parse(localData) : null;
     } catch (e) {
-      console.warn("[settingsIdbStorage] Failed to read legacy localStorage settings:", e);
+      logger.warn("[settingsIdbStorage] Failed to read legacy localStorage settings", { error: e });
     }
 
     const legacyIdbData = await idbStorage.getItem('karuvi-settings-privacy');
@@ -83,10 +84,10 @@ const settingsIdbStorage = {
           localStorage.removeItem('karuvi-settings');
         }
       } catch (e) {
-        console.warn("[settingsIdbStorage] Failed to mirror appearance during migration:", e);
+        logger.warn("[settingsIdbStorage] Failed to mirror appearance during migration", { error: e });
       }
 
-      console.log("[settingsIdbStorage] Successfully migrated legacy settings to unified IndexedDB storage.");
+      logger.info("[settingsIdbStorage] Successfully migrated legacy settings to unified IndexedDB storage.");
       return mergedString;
     }
 
@@ -109,7 +110,7 @@ const settingsIdbStorage = {
       });
       localStorage.setItem('karuvi-settings', mirrorValue);
     } catch (e) {
-      console.warn("[settingsIdbStorage] Failed to mirror appearance to localStorage:", e);
+      logger.warn("[settingsIdbStorage] Failed to mirror appearance to localStorage", { error: e });
     }
   },
   removeItem: async (name: string): Promise<void> => {
@@ -118,7 +119,7 @@ const settingsIdbStorage = {
     try {
       localStorage.removeItem('karuvi-settings');
     } catch (e) {
-      console.warn("[settingsIdbStorage] Failed to remove localStorage settings:", e);
+      logger.warn("[settingsIdbStorage] Failed to remove localStorage settings", { error: e });
     }
   }
 };

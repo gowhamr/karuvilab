@@ -5,6 +5,7 @@ import Link from "next/link";
 import { m, AnimatePresence, MotionConfig } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
+import { HomeHero } from "./HomeHero";
 import { SearchBar } from "@/components/ui/search/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
@@ -13,7 +14,7 @@ import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { useI18n } from "@/src/lib/i18n/store";
 import {
   ArrowRight, LayoutGrid, TrendingUp,
-  Clock, Heart, Command, ChevronRight, Sparkles,
+  Clock, Heart, Command, ChevronRight, Sparkles, Play,
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ToolIcon } from "@/components/ui/Icons";
@@ -137,9 +138,17 @@ export default function HomeClient() {
 
   const isFiltering = !!activeCategory;
 
+  const continueWorkingTool = useMemo(() => {
+    return recentTools.length > 0 ? recentTools[0] : null;
+  }, [recentTools]);
+
+  const isReturning = hydrated && (recentTools.length > 0 || favoriteTools.length > 0);
+
   return (
     <MotionConfig reducedMotion="user">
       <div className="w-full space-y-0 pb-16">
+
+        <HomeHero isReturning={isReturning} />
 
 
 
@@ -207,6 +216,30 @@ export default function HomeClient() {
                 animate={{ opacity: 1 }}
                 className="space-y-10 md:space-y-12"
               >
+
+                {/* Continue Working */}
+                {hydrated && continueWorkingTool && (
+                  <AnimatePresence>
+                    <m.section
+                      key="continue-working"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.22 }}
+                      style={{ overflow: "hidden" }}
+                      aria-labelledby="continue-working-heading"
+                    >
+                      <SectionHeader
+                        title="Continue Working"
+                        subtitle="Jump right back in"
+                        icon={Play}
+                      />
+                      <div className="max-w-2xl">
+                        <ToolCard tool={continueWorkingTool} />
+                      </div>
+                    </m.section>
+                  </AnimatePresence>
+                )}
 
                 {/* Recently Used */}
                 {hydrated && recentTools.length > 0 && (

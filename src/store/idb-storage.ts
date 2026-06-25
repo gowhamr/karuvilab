@@ -1,4 +1,5 @@
 import { openDB } from 'idb';
+import { logger } from '../lib/logger';
 
 const DB_NAME = 'karuvilab-storage';
 const STORE_NAME = 'keyval';
@@ -26,7 +27,7 @@ export const idbStorage = {
         val = legacyVal;
         await db.put(STORE_NAME, val, key);
         localStorage.removeItem(key);
-        console.log(`[idbStorage] Transparently migrated legacy key "${key}" from localStorage to IndexedDB.`);
+        logger.info(`[idbStorage] Transparently migrated legacy key "${key}" from localStorage to IndexedDB.`);
       }
     }
     return val;
@@ -49,7 +50,7 @@ export const idbStorage = {
           const db = await dbPromise;
           await db.put(STORE_NAME, value, key);
         } catch (e) {
-          console.error('[idbStorage] Write error:', e);
+          logger.error('[idbStorage] Write error:', { error: e });
         } finally {
           writeTimeouts.delete(key);
           const resolves = pendingResolves.get(key) || [];
