@@ -31,85 +31,68 @@ export function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-mat-base border-t border-border/60 mt-auto pb-24 md:pb-16 z-content relative">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 flex flex-col gap-8">
+    <footer className="w-full bg-mat-base border-t border-border/60 mt-auto pb-24 md:pb-8 z-content relative">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 flex flex-col md:flex-row md:justify-between gap-8 md:gap-12">
         
-        {/* 2-Column Mobile Layout for Links */}
-        <div className="grid grid-cols-2 gap-8 md:flex md:gap-24">
-          {/* Resources */}
-          <div className="space-y-4">
-            <h4 className="text-base font-bold tracking-[0.08em] text-text-2">
-              Resources
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {navigationLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    prefetch={false}
-                    className="text-base font-medium text-text-3 hover:text-blue transition-colors block w-fit"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Legal */}
-          <div className="space-y-4">
-            <h4 className="text-base font-bold tracking-[0.08em] text-text-2">
-              Legal
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {legalLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    prefetch={false}
-                    className="text-base font-medium text-text-3 hover:text-blue transition-colors block w-fit"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="h-px w-full bg-border/60" />
-
-        {/* Bottom Section */}
-        <div className="flex flex-col gap-6">
-          {/* Brand Section */}
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3">
-              <KVLogo size="sm" withText={false} loading="lazy" className="opacity-80 hover:opacity-100 transition-all" />
-              <span className="text-base font-bold tracking-widest text-text-2 uppercase">
-                KARUVILAB
-              </span>
+        {/* Brand & Trust Badges */}
+        <div className="flex flex-col gap-3 md:max-w-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 flex items-center justify-center opacity-80">
+              <KVLogo size="sm" withText={false} />
             </div>
-            <span className="text-base text-text-muted pl-[52px]">Privacy-first toolkit</span>
+            <span className="text-sm font-bold tracking-widest text-text-2 uppercase">
+              KARUVILAB
+            </span>
           </div>
-
-          {/* Trust Badges */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[14px] text-text-3 pl-[52px]">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1.5 whitespace-nowrap">
-                <WifiOff className="w-4 h-4 text-text-muted" /> Works Offline
-              </span>
-              <span className="text-border/60">•</span>
-              <span className="flex items-center gap-1.5 whitespace-nowrap">
-                <ShieldCheck className="w-4 h-4 text-text-muted" /> 100% Private
-              </span>
-            </div>
-            <span className="hidden sm:block text-border/60">•</span>
-            <span className="flex items-center gap-1.5 whitespace-nowrap">
-              <Cpu className="w-4 h-4 text-text-muted" /> Local Processing
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-text-muted">
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <WifiOff className="w-3 h-3" /> Offline
+            </span>
+            <span>&bull;</span>
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <ShieldCheck className="w-3 h-3" /> Private
+            </span>
+            <span>&bull;</span>
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <Cpu className="w-3 h-3" /> Local
             </span>
           </div>
         </div>
-        
+
+        {/* Resources (One Column) */}
+        <div className="flex flex-col">
+          <ul className="flex flex-col gap-2.5">
+            {navigationLinks.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  prefetch={false}
+                  className="text-sm font-medium text-text-3 hover:text-blue transition-colors block w-fit"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 mt-6 pt-6 border-t border-border/60">
+        {/* Legal (One Row) */}
+        <ul className="flex flex-row flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-muted">
+          <li>&copy; {new Date().getFullYear()} KaruviLab</li>
+          {legalLinks.map((link) => (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                prefetch={false}
+                className="hover:text-text-3 transition-colors"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </footer>
   );
