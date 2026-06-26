@@ -4,7 +4,7 @@ export const seoTools: ToolEntry = {
   id: 'seo-tools',
   name: 'SEO Tools',
   desc: 'A comprehensive suite of SEO tools including Meta Tags Generator, Robots.txt Builder, Sitemap Generator, Image SEO, and more.',
-  href: '/developer-tools/seo-tools',
+  href: 'developer-tools/seo-tools/',
   category: 'developer',
   icon: 'Search',
   color: 'emerald',
