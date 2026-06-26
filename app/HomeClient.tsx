@@ -263,35 +263,37 @@ export default function HomeClient() {
                 </section>
 
                 {/* Inline promo banner */}
-                <m.div
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                  className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                >
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent"
-                  />
-                  <div className="relative flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
-                      <Sparkles className="w-6 h-6" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <p className="font-black text-text text-base leading-tight">Discover 100+ free tools</p>
-                      <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
-                    </div>
-                  </div>
-                  <Link
-                    href="/all-tools"
-                    className="relative inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-blue text-white text-sm font-bold shadow-md shadow-blue/25 hover:bg-blue-dark hover:-translate-y-0.5 transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
+                {!isReturning && (
+                  <m.div
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                    className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                   >
-                    Browse All <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                  </Link>
-                </m.div>
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent"
+                    />
+                    <div className="relative flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
+                        <Sparkles className="w-6 h-6" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <p className="font-black text-text text-base leading-tight">Discover 100+ free tools</p>
+                        <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
+                      </div>
+                    </div>
+                    <Link
+                      href="/all-tools"
+                      className="relative inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-blue text-white text-sm font-bold shadow-md shadow-blue/25 hover:bg-blue-dark hover:-translate-y-0.5 transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
+                    >
+                      Browse All <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </Link>
+                  </m.div>
+                )}
 
-                {/* All Tools Grid */}
+                {/* All Tools Grid (Adaptive limit based on user state) */}
                 <section aria-labelledby="all-tools-heading" id="tools">
                   <SectionHeader
                     title={t("common.all")}
@@ -306,7 +308,7 @@ export default function HomeClient() {
                     transition={{ duration: 0.4 }}
                     className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
                   >
-                    {(ALL_TOOLS as ToolEntry[]).slice(0, 15).map(tool => (
+                    {(ALL_TOOLS as ToolEntry[]).slice(0, isReturning ? 10 : 15).map(tool => (
                       <div key={tool.id} className="flex flex-col h-full">
                         <ToolCard tool={tool} compact />
                       </div>
