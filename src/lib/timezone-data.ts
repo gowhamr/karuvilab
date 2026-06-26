@@ -30,11 +30,16 @@ export function getAllTimezones() {
     return COMMON_CITIES;
   }
   
+  const commonMap = new Map(COMMON_CITIES.map(c => [c.tz, c]));
   const zones = Intl.supportedValuesOf('timeZone');
+  
   return zones.map(tz => {
+    if (commonMap.has(tz)) {
+      return commonMap.get(tz)!;
+    }
     const parts = tz.split('/');
     const city = (parts[parts.length - 1] || '').replace(/_/g, ' ');
-    const country = parts.length > 1 ? parts[0] : '';
+    const country = parts.length > 1 ? (parts[0] || '').replace(/_/g, ' ') : '';
     return { city, country, tz };
   });
 }

@@ -120,7 +120,7 @@ export default function WorldClockClient() {
                    <div className={cn("px-2.5 py-1 rounded-full text-tiny font-black uppercase tracking-widest", biz ? "bg-success/10 text-success" : "bg-text-4/10 text-text-4")}>
                     {biz ? "Open" : "Closed"}
                   </div>
-                  <button onClick={() => removeClock(id)} className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-error/10 text-text-4 hover:text-error rounded-lg transition-all" title="Remove clock">
+                  <button onClick={() => removeClock(id)} className="opacity-100 md:opacity-0 group-hover:opacity-100 p-1.5 hover:bg-error/10 text-text-4 hover:text-error rounded-lg transition-all" title="Remove clock">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
