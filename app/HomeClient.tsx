@@ -6,6 +6,7 @@ import { m, AnimatePresence, MotionConfig } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { HomeHero } from "./HomeHero";
+import { QuickActionsDashboard } from "@/components/ui/QuickActionsDashboard";
 import { SearchBar } from "@/components/ui/search/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
@@ -217,78 +218,21 @@ export default function HomeClient() {
                 className="space-y-10 md:space-y-12"
               >
 
-                {/* Continue Working */}
-                {hydrated && continueWorkingTool && (
+                {/* Quick Actions Dashboard */}
+                {hydrated && (
                   <AnimatePresence>
                     <m.section
-                      key="continue-working"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
+                      key="quick-actions"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.22 }}
-                      style={{ overflow: "hidden" }}
-                      aria-labelledby="continue-working-heading"
                     >
-                      <SectionHeader
-                        title="Continue Working"
-                        subtitle="Jump right back in"
-                        icon={Play}
+                      <QuickActionsDashboard 
+                        continueTool={continueWorkingTool}
+                        recentTools={recentTools}
+                        favoriteTools={favoriteTools}
                       />
-                      <div className="max-w-2xl">
-                        <ToolCard tool={continueWorkingTool} />
-                      </div>
-                    </m.section>
-                  </AnimatePresence>
-                )}
-
-                {/* Recently Used */}
-                {hydrated && recentTools.length > 0 && (
-                  <AnimatePresence>
-                    <m.section
-                      key="recent"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.22 }}
-                      style={{ overflow: "hidden" }}
-                      aria-labelledby="recent-heading"
-                    >
-                      <SectionHeader
-                        title={t("common.recent")}
-                        subtitle="Pick up where you left off"
-                        icon={Clock}
-                      />
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-                        {recentTools.map(tool => (
-                          <ToolCard key={tool.id} tool={tool} compact />
-                        ))}
-                      </div>
-                    </m.section>
-                  </AnimatePresence>
-                )}
-
-                {/* Favorites */}
-                {hydrated && favoriteTools.length > 0 && (
-                  <AnimatePresence>
-                    <m.section
-                      key="favorites"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.22 }}
-                      style={{ overflow: "hidden" }}
-                      aria-labelledby="favorites-heading"
-                    >
-                      <SectionHeader
-                        title={t("common.favorites")}
-                        subtitle="Your hand-picked toolkit"
-                        icon={Heart}
-                      />
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-                        {favoriteTools.map(tool => (
-                          <ToolCard key={tool.id} tool={tool} compact />
-                        ))}
-                      </div>
                     </m.section>
                   </AnimatePresence>
                 )}
