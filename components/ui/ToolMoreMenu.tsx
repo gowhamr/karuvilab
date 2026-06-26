@@ -105,7 +105,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
   ];
 
   const xClass = position.x === "right" ? "right-0" : "left-0";
-  const yClass = position.y === "top" ? "bottom-full mb-2" : "top-full mt-2";
+  const yClass = position.y === "top" ? "bottom-full mb-1.5" : "top-full mt-1.5";
   const originClass = position.y === "top" 
     ? (position.x === "right" ? "origin-bottom-right" : "origin-bottom-left")
     : (position.x === "right" ? "origin-top-right" : "origin-top-left");
@@ -114,7 +114,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
     <div className="relative flex items-center gap-2" ref={menuRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`min-w-11 min-h-11 p-2.5 border rounded-xl transition-all active:scale-90 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center z-above relative ${
+        className={`w-10 h-10 p-2 border rounded-xl transition-all active:scale-90 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center z-above relative ${
           isOpen ? "bg-blue border-blue text-white" : "bg-surface border-border text-text-3 hover:text-blue hover:border-blue/30"
         }`}
         aria-label="More options"
@@ -130,10 +130,10 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
           <m.div
             id={menuId}
             role="menu"
-            initial={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 10 : -10 }}
+            initial={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 6 : -6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 10 : -10 }}
-            className={`absolute ${xClass} ${yClass} w-56 max-w-[calc(100vw-2rem)] bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-[9999] overflow-hidden ${originClass}`}
+            exit={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 6 : -6 }}
+            className={`absolute ${xClass} ${yClass} w-52 max-w-[calc(100vw-2rem)] bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-[9999] overflow-hidden ${originClass}`}
           >
             <div className="px-3 py-2 text-micro font-black text-text-4 uppercase tracking-widest-lg border-b border-mat-border mb-2">
               Tool Options

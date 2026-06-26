@@ -17,7 +17,7 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
 
   if (!hydrated) {
     return (
-      <div className="w-32 h-10 bg-surface border border-border rounded-xl shimmer-wrapper opacity-50" />
+      <div className="w-10 h-10 bg-surface border border-border rounded-xl shimmer-wrapper opacity-50" />
     );
   }
 
@@ -28,7 +28,7 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.9 }}
       onClick={() => toggleFavorite(toolId)}
-      className={`min-w-11 min-h-11 p-2.5 rounded-xl transition-all shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center ${
+      className={`w-10 h-10 p-2 rounded-xl transition-all shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue/20 flex items-center justify-center ${
         active
           ? "bg-red-500/10 border border-red-500/20 text-red-500"
           : "bg-surface border border-border text-text-3 hover:text-red-500 hover:border-red-500/30 hover:bg-red-500/5"

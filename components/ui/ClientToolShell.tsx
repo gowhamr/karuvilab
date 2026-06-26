@@ -57,13 +57,15 @@ export function ClientToolShell({ title, description, category, children, toolId
       animate={{ opacity: 1, y: 0 }}
       className={`${fullWidth ? "w-full max-w-none px-4 md:px-8" : "max-w-6xl px-4"} mx-auto space-y-8 sm:space-y-10 lg:space-y-12 pb-24`}
     >
-      <header className="space-y-4 md:space-y-6 relative z-above">
+      <header className="space-y-3 md:space-y-4 relative z-above">
         <Breadcrumbs category={category} title={title} />
         
         <div className="flex flex-col gap-3 md:gap-4">
-          <div className="flex items-start justify-between gap-4">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight">{title}</h1>
-            <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-row items-start gap-3">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
+              {title}
+            </h1>
+            <div className="flex items-center gap-2 shrink-0 mt-0.5 md:mt-1">
               {currentTool && <FavoriteButton toolId={currentTool.id} />}
               <ToolMoreMenu toolId={finalToolId} toolName={title} />
             </div>
