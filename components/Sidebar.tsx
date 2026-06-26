@@ -96,15 +96,6 @@ const SidebarItem = memo(function SidebarItem({
       </div>
 
       <span className="flex-1 truncate leading-none">{label}</span>
-
-      {/* Category color dot placeholder to maintain alignment */}
-      {!isActive && (
-        <span
-          className={cn("w-1.5 h-1.5 rounded-full shrink-0", color ? "opacity-60" : "bg-transparent")}
-          style={color ? { background: color } : undefined}
-          aria-hidden="true"
-        />
-      )}
     </Link>
   );
 

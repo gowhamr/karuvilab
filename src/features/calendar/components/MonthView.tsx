@@ -115,7 +115,7 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
       tabIndex={0}
       aria-label={`Day cell for ${format(day, 'MMMM d, yyyy')}`}
       className={cn(
-        "min-h-15 md:min-h-36 p-1 md:p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset",
+        "min-h-[72px] md:min-h-36 p-1 md:p-2 border-r border-b border-border/20 last:border-r-0 relative group cursor-pointer transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset",
         !isCurrentMonth && "bg-bg/20 opacity-40",
         isCurrentMonth && "hover:bg-indigo-500/5",
         isToday && "bg-indigo-500/[0.05]"
@@ -124,17 +124,20 @@ function DayCell({ day, isCurrentMonth, onClick, onAddEvent }: { day: Date, isCu
       <div className="flex justify-between items-start mb-1 md:mb-2">
         <div className="flex flex-col">
           <span className={cn(
-            "w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-lg md:rounded-xl text-xs md:text-sm font-black transition-all",
-            isToday ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-text-2"
+            "w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full md:rounded-xl text-sm font-black transition-all",
+            isToday ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/30" : "text-text-2 group-hover:bg-surface"
           )}>
             {format(day, 'd')}
           </span>
         </div>
 
-        <div className="flex flex-col items-end gap-1">
-          <div className="flex gap-0.5">
+        <div className="flex flex-col items-end gap-1 mt-1 md:mt-0">
+          <div className="flex gap-1 items-center">
             {sortedWorldEvents.slice(0, 3).map((evt) => (
-              <span key={evt.id} title={evt.name} className="text-xs md:text-xs">{evt.emoji}</span>
+              <div key={evt.id} title={evt.name}>
+                <span className="hidden md:inline text-xs">{evt.emoji}</span>
+                <div className={cn("w-1.5 h-1.5 rounded-full md:hidden", evt.colors.bg)} />
+              </div>
             ))}
           </div>
         </div>
