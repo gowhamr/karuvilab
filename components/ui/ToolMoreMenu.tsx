@@ -16,10 +16,24 @@ interface ToolMoreMenuProps {
 
 export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [position, setPosition] = useState<{x: "left" | "right", y: "top" | "bottom"}>({ x: "right", y: "bottom" });
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = `menu-${toolId}`;
   const openFeedback = useSupportStore(state => state.openFeedback);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (isOpen && menuRef.current) {
+      const rect = menuRef.current.getBoundingClientRect();
+      const isNearLeft = rect.left < 250;
+      const isNearBottom = rect.bottom > window.innerHeight - 350;
+
+      setPosition({
+        x: isNearLeft ? "left" : "right",
+        y: isNearBottom ? "top" : "bottom"
+      });
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -90,6 +104,12 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
     },
   ];
 
+  const xClass = position.x === "right" ? "right-0" : "left-0";
+  const yClass = position.y === "top" ? "bottom-full mb-2" : "top-full mt-2";
+  const originClass = position.y === "top" 
+    ? (position.x === "right" ? "origin-bottom-right" : "origin-bottom-left")
+    : (position.x === "right" ? "origin-top-right" : "origin-top-left");
+
   return (
     <div className="relative flex items-center gap-2" ref={menuRef}>
       <button 
@@ -110,10 +130,10 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
           <m.div
             id={menuId}
             role="menu"
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 10 : -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="absolute right-0 top-full mt-2 w-56 max-w-[calc(100vw-2rem)] bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-[9999] overflow-hidden origin-top-right"
+            exit={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 10 : -10 }}
+            className={`absolute ${xClass} ${yClass} w-56 max-w-[calc(100vw-2rem)] bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-[9999] overflow-hidden ${originClass}`}
           >
             <div className="px-3 py-2 text-micro font-black text-text-4 uppercase tracking-widest-lg border-b border-mat-border mb-2">
               Tool Options
