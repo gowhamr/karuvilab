@@ -1,22 +1,22 @@
-import UtcIstConverterClientWrapper from "./UtcIstConverterClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
+import UtcIstConverterClientWrapper from './UtcIstConverterClientWrapper';
 
-import { generateToolMetadata } from "@/src/lib/seo";
-
-const toolId = "utc-ist-converter";
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+const toolId = 'utc-ist-converter';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function UtcIstConverter() {
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="UTC ↔ IST Converter"
       description="Convert between UTC and Indian Standard Time (UTC+5:30). Times stay in sync."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "The UTC to IST Converter is an essential utility for professionals working in global environments, particularly those collaborating with teams in India. Indian Standard Time (IST) is consistently UTC+5:30, with no daylight saving time adjustments. This tool provides real-time clocks for both zones and a synchronized conversion interface, allowing you to quickly determine local times for meetings, server logs, or release schedules. It also includes a quick-reference guide for standard IST business hours and their UTC equivalents.",
         howTo: [

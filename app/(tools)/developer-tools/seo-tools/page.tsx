@@ -1,21 +1,23 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
+
 import SeoToolsClientWrapper from './SeoToolsClientWrapper';
-import { ALL_TOOLS } from '@/src/tool-registry';
 
-const tool = ALL_TOOLS.find(t => t.id === 'seo-tools');
+const toolId = 'seo-tools';
+const cat = CATEGORIES.find(c => c.id === 'developer');
 
-export const metadata: Metadata = {
-  title: `${tool?.name} – KV`,
-  description: tool?.desc,
-  alternates: {
-    canonical: `https://karuvilab.com${tool?.href}/`,
-  },
-};
+export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function SeoToolsPage() {
+export default function Page() {
   return (
-    <ToolShell title={tool?.name || 'SEO Tools'} description={tool?.desc || ''}>
+    <ToolShell 
+      title="seo-tools"
+      description=""
+      category={cat}
+      toolId={toolId}
+    >
       <SeoToolsClientWrapper />
     </ToolShell>
   );

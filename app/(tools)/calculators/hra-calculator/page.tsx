@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import HraCalculatorWrapper from './HraCalculatorWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'HRA Calculator – KV',
-  description: 'Calculate HRA exemption limit.',
-  alternates: { canonical: 'https://karuvilab.com/tools/calculators/hra-calculator/' }
-};
+import HraCalculatorWrapper from './HraCalculatorWrapper';
+
+const toolId = 'hra-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'HRA Calculator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/calculators/hra-calculator/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="hra-calculator-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="HRA Calculator">
-        <HraCalculatorWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="HRA Calculator"
+      description="Calculate HRA exemption limit."
+      category={cat}
+      toolId={toolId}
+    >
+      <HraCalculatorWrapper />
+    </ToolShell>
   );
 }

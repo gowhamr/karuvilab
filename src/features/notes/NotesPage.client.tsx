@@ -8,6 +8,7 @@ import { NoteList } from "./components/NoteList";
 import { NoteEditor } from "./components/NoteEditor";
 import { NoteCard } from "./components/NoteCard";
 import { ImportNoteModal } from "./components/ImportNoteModal";
+import { FolderSidebar } from "./components/FolderSidebar";
 import { m, AnimatePresence } from "framer-motion";
 import { Plus, Archive, Trash2, StickyNote, Inbox, LucideIcon } from "lucide-react";
 import { generateId } from "./utils";
@@ -28,9 +29,13 @@ export default function NotesPage() {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const { toast } = useToast();
 
+  const fetchFolders = useNotesStore(state => state.fetchFolders);
+  const filter = useNotesStore(state => state.filter);
+
   useEffect(() => {
     fetchNotes();
-  }, [fetchNotes]);
+    fetchFolders();
+  }, [fetchNotes, fetchFolders]);
 
   const handleCreateNote = () => {
     const id = generateId();
@@ -44,6 +49,7 @@ export default function NotesPage() {
       isDeleted: false,
       isChecklist: false,
       checklistItems: [],
+      folderId: filter.folderId, // Inherit current folder
     };
     addNote(newNote);
     setSelectedNoteId(id);
@@ -67,10 +73,13 @@ export default function NotesPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8 min-h-screen pb-32">
-      {/* Tabs Section */}
-      <div className="flex justify-start">
-        <div className="relative z-0 flex items-center gap-1 bg-surface border border-border rounded-2xl p-1 shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">
+    <div className="flex flex-col md:flex-row min-h-[calc(100vh-4rem)] bg-bg">
+      <FolderSidebar />
+      
+      <main className="flex-1 max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-8 pb-32">
+        {/* Tabs Section */}
+        <div className="flex justify-start">
+          <div className="relative z-base flex items-center gap-1 bg-surface border border-border rounded-2xl p-1 shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -89,11 +98,11 @@ export default function NotesPage() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <Icon size={14} className={cn("relative z-10", activeTab === tab.id ? "text-white/80" : "text-text-muted")} />
-                <span className="relative z-10">{tab.label}</span>
+                <Icon size={14} className={cn("relative z-content", activeTab === tab.id ? "text-white/80" : "text-text-muted")} />
+                <span className="relative z-content">{tab.label}</span>
                 {counts[tab.id] > 0 && (
                   <span className={cn(
-                    "relative z-10 px-1.5 py-0.5 rounded-md text-tiny ml-1",
+                    "relative z-content px-1.5 py-0.5 rounded-md text-tiny ml-1",
                     activeTab === tab.id ? "bg-white/20 text-white" : "bg-blue/10 text-blue"
                   )}>
                     {counts[tab.id]}
@@ -144,6 +153,7 @@ export default function NotesPage() {
       >
         <Plus size={32} className="group-hover:rotate-90 transition-transform duration-300" />
       </m.button>
+      </main>
     </div>
   );
 }
@@ -165,6 +175,7 @@ function NoteListWrapper({ status }: { status: StatusTab }) {
   // Apply search/tag filtering if active
   const finalNotes = filtered.filter(note => {
     if (status === "active") {
+      if (filter.folderId && note.folderId !== filter.folderId) return false;
       if (filter.tag && !note.tags.includes(filter.tag)) return false;
       if (filter.search) {
         const search = filter.search.toLowerCase();

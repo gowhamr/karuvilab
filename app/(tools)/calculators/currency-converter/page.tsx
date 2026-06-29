@@ -13,6 +13,7 @@ export default function page() {
       title="Currency Converter"
       description="Convert between major world currencies with live market rates and offline support."
       category={cat}
+      toolId="currency-converter"
     >
       <CurrencyConverterClientWrapper />
     </ToolShell>

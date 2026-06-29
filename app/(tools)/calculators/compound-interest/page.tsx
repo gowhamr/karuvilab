@@ -14,6 +14,7 @@ export default function page() {
       title="Compound Interest Calculator"
       description="Calculate compounded growth on your principal investment over time."
       category={cat}
+      toolId="compound-interest"
     >
       <CompoundInterestClientWrapper />
     </ToolShell>

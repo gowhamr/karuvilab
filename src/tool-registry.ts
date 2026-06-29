@@ -60,6 +60,7 @@ export interface ToolEntry {
   lastUpdated?: string; // ISO format: YYYY-MM-DD
   lastAdded?: string;   // ISO format: YYYY-MM-DD
   requiresNetwork?: boolean;
+  visibleExamples?: number;
 }
 
 export function isNewTool(tool: ToolEntry): boolean {

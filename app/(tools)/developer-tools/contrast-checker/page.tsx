@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import ContrastCheckerWrapper from './ContrastCheckerWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Contrast Checker – KV',
-  description: 'WCAG contrast ratio checker.',
-  alternates: { canonical: 'https://karuvilab.com/tools/developer-tools/contrast-checker/' }
-};
+import ContrastCheckerWrapper from './ContrastCheckerWrapper';
+
+const toolId = 'contrast-checker';
+const cat = CATEGORIES.find(c => c.id === 'developer');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Contrast Checker',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/developer-tools/contrast-checker/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="contrast-checker-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="Contrast Checker">
-        <ContrastCheckerWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="Contrast Checker"
+      description="WCAG contrast ratio checker."
+      category={cat}
+      toolId={toolId}
+    >
+      <ContrastCheckerWrapper />
+    </ToolShell>
   );
 }

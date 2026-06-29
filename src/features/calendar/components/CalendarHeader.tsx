@@ -46,7 +46,10 @@ export function CalendarHeader({
     else setCurrentDate(addDays(currentDate, 1));
   };
 
-  const handleToday = () => setCurrentDate(new Date());
+  const handleToday = () => {
+    setCurrentDate(new Date());
+    window.dispatchEvent(new CustomEvent('calendar-today-clicked'));
+  };
 
   return (
     <header className="flex flex-col gap-4 md:gap-6 pb-4 md:pb-6 border-b border-border/20 sticky top-0 z-above bg-bg/95 backdrop-blur-xl -mx-4 px-4 md:mx-0 md:px-0">
@@ -115,7 +118,7 @@ export function CalendarHeader({
           >
             <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
             <span className="hidden sm:inline">New Event</span>
-            <span className="sm:hidden">Add</span>
+            <span className="sm:hidden">New Event</span>
           </button>
         </div>
       </div>

@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import CsvToJsonWrapper from './CsvToJsonWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'CSV to JSON Converter – KV',
-  description: 'Convert CSV to JSON and JSON to CSV.',
-  alternates: { canonical: 'https://karuvilab.com/tools/developer-tools/csv-to-json/' }
-};
+import CsvToJsonWrapper from './CsvToJsonWrapper';
+
+const toolId = 'csv-to-json';
+const cat = CATEGORIES.find(c => c.id === 'developer');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'CSV to JSON Converter',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/developer-tools/csv-to-json/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="csv-to-json-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="CSV to JSON Converter">
-        <CsvToJsonWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="CSV to JSON Converter"
+      description="Convert CSV to JSON and JSON to CSV."
+      category={cat}
+      toolId={toolId}
+    >
+      <CsvToJsonWrapper />
+    </ToolShell>
   );
 }

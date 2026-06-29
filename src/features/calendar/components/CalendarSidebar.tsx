@@ -4,7 +4,7 @@ import { useCalendarStore } from "../store";
 import { getUpcomingEvents } from "../event-resolver";
 import { EventCategory, EventImportance, WorldEvent } from "../world-events-db";
 import { format } from "date-fns";
-import { Globe, Settings, Filter, Check, Eye, EyeOff } from "lucide-react";
+import { Globe, Settings, Filter, Check, Eye, EyeOff, ChevronDown } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useShallow } from "zustand/react/shallow";
 
@@ -91,8 +91,8 @@ export function CalendarSidebar() {
                   <p className="text-xs font-black text-text truncate">
                     {event.name}
                   </p>
-                  <p className="text-xs font-bold text-text-4">
-                    {format(date, 'MMM d')} ·{' '}
+                  <p className="text-[11px] font-bold text-text-4">
+                    {format(date, 'EEE, MMM d')} ·{' '}
                     {daysUntil === 0 ? 'Today' :
                      daysUntil === 1 ? 'Tomorrow' :
                      `In ${daysUntil} days`}
@@ -207,13 +207,33 @@ export function CalendarSidebar() {
             </div>
 
             {/* Categories checkbox list */}
-            <div className="space-y-2.5 border-t border-border/20 pt-4">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-1.5">
-                <Filter className="w-3.5 h-3.5 text-indigo-500/80" />
-                Categories
-              </label>
-              <div className="grid grid-cols-1 gap-2 max-h-52 overflow-y-auto pr-1 no-scrollbar">
-                {CATEGORY_INFOS.map((cat) => {
+            <div className="border-t border-border/20 pt-4">
+              <details className="group" open>
+                <summary className="flex items-center justify-between cursor-pointer list-none focus-visible:outline-none">
+                  <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-1.5 cursor-pointer">
+                    <Filter className="w-3.5 h-3.5 text-indigo-500/80" />
+                    Categories <span className="text-[10px] text-text-muted bg-surface-2 px-1.5 py-0.5 rounded-md">{showCategories.length} selected</span>
+                  </label>
+                  <ChevronDown className="w-4 h-4 text-text-4 group-open:rotate-180 transition-transform" />
+                </summary>
+                
+                <div className="mt-3 space-y-2">
+                  <div className="flex gap-2 mb-2">
+                    <button 
+                      onClick={() => updateWorldEventsSettings({ showCategories: CATEGORY_INFOS.map(c => c.id) })}
+                      className="flex-1 py-1.5 rounded-lg bg-surface-2 hover:bg-surface-2/80 text-xs font-bold text-text-3 transition-colors"
+                    >
+                      Select All
+                    </button>
+                    <button 
+                      onClick={() => updateWorldEventsSettings({ showCategories: [] })}
+                      className="flex-1 py-1.5 rounded-lg bg-surface-2 hover:bg-surface-2/80 text-xs font-bold text-text-3 transition-colors"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1.5 max-h-56 overflow-y-auto pr-1 no-scrollbar pb-2">
+                    {CATEGORY_INFOS.map((cat) => {
                   const isActive = showCategories.includes(cat.id);
                   return (
                     <button
@@ -239,7 +259,9 @@ export function CalendarSidebar() {
                     </button>
                   );
                 })}
-              </div>
+                  </div>
+                </div>
+              </details>
             </div>
           </div>
         )}

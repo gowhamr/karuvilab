@@ -1,19 +1,22 @@
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import AgeCalculatorClientWrapper from "./AgeCalculatorClientWrapper";
-import { generateToolMetadata } from "@/src/lib/seo";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+import AgeCalculatorClientWrapper from './AgeCalculatorClientWrapper';
 
-export const metadata: Metadata = generateToolMetadata("age-calculator");
+const toolId = 'age-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
 
-export default function AgeCalculator() {
+export const metadata: Metadata = generateToolMetadata(toolId);
+
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="Age Calculator"
       description="Calculate exact age in years, months, and days."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "The Age Calculator is a precision tool for determining the exact time elapsed between two dates. While most people use it to find their current age in years, this tool goes much further by providing a detailed breakdown into months, weeks, days, and even total months or weeks. It accurately accounts for leap years and the varying number of days in different months, ensuring 100% accuracy. Beyond just birthdays, it's incredibly useful for calculating the age of infants (often measured in weeks or months), project durations, or the time remaining until a significant event. The clean interface allows you to set a custom 'Calculate As Of' date, making it easy to find out how old you were on a specific historical date or how old you will be in the future.",
         howTo: [

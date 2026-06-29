@@ -14,6 +14,7 @@ export default function CAGRCalculator() {
       title="CAGR Calculator"
       description="Calculate Compound Annual Growth Rate (CAGR) for your investments."
       category={cat}
+      toolId="cagr-calculator"
     >
       <CAGRCalculatorClientWrapper />
     </ToolShell>

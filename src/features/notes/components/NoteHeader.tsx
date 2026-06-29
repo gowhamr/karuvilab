@@ -6,10 +6,11 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { 
   X, Pin, Archive, Trash2, CheckSquare, 
   Type, Eye, Edit3, ChevronLeft, MoreVertical,
-  Lock, Unlock, Key, Copy
+  Lock, Unlock, Key, Copy, Folder as FolderIcon
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { Note } from "../types";
+import { useNotesStore } from "../store";
 
 interface NoteHeaderProps {
   localNote: Note;
@@ -40,6 +41,8 @@ export function NoteHeader({
   onDecrypt,
   onCopyCiphertext
 }: NoteHeaderProps) {
+  const folders = useNotesStore(state => state.folders);
+
   return (
     <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-border/50 bg-bg/30">
       <div className="flex items-center gap-2">
@@ -96,6 +99,38 @@ export function NoteHeader({
       </div>
 
       <div className="flex items-center gap-1">
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <button 
+              className={cn("p-2 rounded-xl transition-all outline-none", localNote.folderId ? "text-blue bg-blue/10" : "text-text-3 hover:bg-surface hover:text-text")}
+              aria-label="Move to Folder"
+              title="Move to Folder"
+            >
+              <FolderIcon size={20} className={localNote.folderId ? "fill-current opacity-20" : ""} />
+            </button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content align="end" sideOffset={8} className="z-modal w-56 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 p-1 max-h-64 overflow-y-auto">
+              <button
+                onClick={() => onUpdate({ folderId: null })}
+                className={cn("w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold rounded-xl transition-all", !localNote.folderId ? "bg-blue/10 text-blue" : "text-text-3 hover:text-text hover:bg-bg")}
+              >
+                No Folder
+              </button>
+              {folders.length > 0 && <div className="h-px bg-border/50 my-1 mx-2" />}
+              {folders.map(f => (
+                <button
+                  key={f.id}
+                  onClick={() => onUpdate({ folderId: f.id })}
+                  className={cn("w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold rounded-xl transition-all truncate", localNote.folderId === f.id ? "bg-blue/10 text-blue" : "text-text-3 hover:text-text hover:bg-bg")}
+                >
+                  <span className="truncate">{f.name}</span>
+                </button>
+              ))}
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
+
         <Popover.Root>
           <Popover.Trigger asChild>
             <button 

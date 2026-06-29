@@ -1,20 +1,22 @@
-import StockAverageCalculatorClientWrapper from "./StockAverageCalculatorClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-import { generateToolMetadata } from "@/src/lib/seo";
+import StockAverageCalculatorClientWrapper from './StockAverageCalculatorClientWrapper';
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+const toolId = 'stock-average-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
 
-export const metadata: Metadata = generateToolMetadata("stock-average-calculator");
+export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function StockAverageCalculator() {
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="Stock Average Calculator"
       description="Calculate the weighted average buy price of your stock holdings."
       category={cat}
+      toolId={toolId}
     >
       <StockAverageCalculatorClientWrapper />
     </ToolShell>

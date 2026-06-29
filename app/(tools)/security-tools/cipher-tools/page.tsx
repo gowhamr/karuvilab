@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import CipherToolsWrapper from './CipherToolsWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Text Cipher Tools – KV',
-  description: 'Caesar, ROT13, Vigenere, XOR ciphers.',
-  alternates: { canonical: 'https://karuvilab.com/tools/security-tools/cipher-tools/' }
-};
+import CipherToolsWrapper from './CipherToolsWrapper';
+
+const toolId = 'cipher-tools';
+const cat = CATEGORIES.find(c => c.id === 'security');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Text Cipher Tools',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/security-tools/cipher-tools/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="cipher-tools-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="Text Cipher Tools">
-        <CipherToolsWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="Text Cipher Tools"
+      description="Caesar, ROT13, Vigenere, XOR ciphers."
+      category={cat}
+      toolId={toolId}
+    >
+      <CipherToolsWrapper />
+    </ToolShell>
   );
 }

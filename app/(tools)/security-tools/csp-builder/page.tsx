@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import CspBuilderWrapper from './CspBuilderWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'CSP Builder – KV',
-  description: 'Content Security Policy builder.',
-  alternates: { canonical: 'https://karuvilab.com/tools/security-tools/csp-builder/' }
-};
+import CspBuilderWrapper from './CspBuilderWrapper';
+
+const toolId = 'csp-builder';
+const cat = CATEGORIES.find(c => c.id === 'security');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'CSP Builder',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/security-tools/csp-builder/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="csp-builder-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="CSP Builder">
-        <CspBuilderWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="CSP Builder"
+      description="Content Security Policy builder."
+      category={cat}
+      toolId={toolId}
+    >
+      <CspBuilderWrapper />
+    </ToolShell>
   );
 }

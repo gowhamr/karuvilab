@@ -1,20 +1,22 @@
-import MutualFundReturnsClientWrapper from "./MutualFundReturnsClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-import { generateToolMetadata } from "@/src/lib/seo";
+import MutualFundReturnsClientWrapper from './MutualFundReturnsClientWrapper';
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+const toolId = 'mutual-fund-returns';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
 
-export const metadata: Metadata = generateToolMetadata("mutual-fund-returns");
+export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function MutualFundReturnsPage() {
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="Mutual Fund Returns Calculator"
       description="Calculate absolute and annualized returns for your mutual fund investments."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "Estimate the growth of your mutual fund investments based on past performance or expected returns. This tool calculates both absolute returns (total gain/loss) and CAGR (annualized returns), helping you understand how your wealth might grow over time. It supports both SIP and lumpsum inputs.",
         howTo: [

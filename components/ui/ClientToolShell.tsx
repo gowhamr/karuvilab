@@ -2,12 +2,16 @@
 
 import Link from 'next/link';
 import { ALL_TOOLS, CategoryEntry, getToolColor } from '@/src/tool-registry';
-import { Check, ArrowUpRight, ChevronRight } from 'lucide-react';
+import { Check, ArrowUpRight, ChevronRight, FileText, PlaySquare, Image as ImageIcon, Wrench } from 'lucide-react';
 import { ToolIcon } from '@/components/ui/Icons';
 import { ErrorBoundary } from './ErrorBoundary';
 import { FavoriteButton } from './FavoriteButton';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
+import { ToolHelpMenu } from './ToolHelpMenu';
+import { ToolInfoSection } from './ToolInfoSection';
+import { cn } from '@/src/lib/utils';
+import { useState } from 'react';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
@@ -21,6 +25,7 @@ export interface ClientToolShellProps {
   category?: CategoryEntry | undefined;
   children: React.ReactNode;
   toolId?: string | undefined;
+  visibleExamples?: number;
   content: {
     detailedDescription?: string | undefined;
     howTo?: string[] | undefined;
@@ -34,7 +39,75 @@ export interface ClientToolShellProps {
   fullWidth?: boolean | undefined;
 }
 
-export function ClientToolShell({ title, description, category, children, toolId, content, fullWidth }: ClientToolShellProps) {
+function UseCasesList({ useCases, visibleExamples = 2 }: { useCases: string[], visibleExamples?: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const showMoreButton = useCases.length > visibleExamples;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {useCases.map((uc, i) => (
+          <div 
+            key={i} 
+            className={cn(
+              "items-start gap-3 p-4 bg-surface-2 border border-border rounded-2xl",
+              !expanded && i >= visibleExamples ? "hidden" : "flex"
+            )}
+          >
+            <Check className="w-5 h-5 text-success shrink-0" />
+            <span className="text-text-2 text-sm">{uc}</span>
+          </div>
+        ))}
+      </div>
+      {showMoreButton && (
+        <button 
+          onClick={() => setExpanded(!expanded)}
+          className="text-sm font-bold text-blue hover:underline py-2"
+        >
+          {expanded ? "Show Less ▴" : "Show More ▾"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const visibleCount = 3;
+  const showMoreButton = faq.length > visibleCount;
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-4">
+        {faq.map((item, i) => (
+          <div 
+            key={i} 
+            className={cn(
+              "p-6 bg-surface-2 border border-border rounded-2xl space-y-3",
+              !expanded && i >= visibleCount ? "hidden" : "block"
+            )}
+          >
+            <h3 className="font-bold text-text">{item.question}</h3>
+            <div 
+              className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: item.answer }}
+            />
+          </div>
+        ))}
+      </div>
+      {showMoreButton && (
+        <button 
+          onClick={() => setExpanded(!expanded)}
+          className="text-sm font-bold text-blue hover:underline py-2"
+        >
+          {expanded ? "View Less FAQs ▴" : "View All FAQs ▾"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+export function ClientToolShell({ title, description, category, children, toolId, content, fullWidth, visibleExamples = 2 }: ClientToolShellProps) {
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
@@ -67,6 +140,7 @@ export function ClientToolShell({ title, description, category, children, toolId
             </h1>
             <div className="flex items-center gap-2 shrink-0 mt-0.5 md:mt-1">
               {currentTool && <FavoriteButton toolId={currentTool.id} />}
+              <ToolHelpMenu toolId={finalToolId} toolName={title} />
               <ToolMoreMenu toolId={finalToolId} toolName={title} />
             </div>
           </div>
@@ -78,121 +152,100 @@ export function ClientToolShell({ title, description, category, children, toolId
         </div>
       </header>
 
-      <section>
+      <section className="mb-12">
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] lg:grid-cols-3 gap-8 lg:gap-12">
-        <div className="md:col-span-1 lg:col-span-2 space-y-16">
-          {parsedContent.detailedDescription && (
-            <section className="space-y-4">
-              <h2 className="text-2xl font-bold">Deep Dive</h2>
-              <div 
-                className="prose prose-slate dark:prose-invert max-w-none text-text-3"
-                dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
-              />
-            </section>
-          )}
+      <div className="max-w-4xl mx-auto space-y-6">
+        {parsedContent.detailedDescription && (
+          <ToolInfoSection toolId={finalToolId} id="deep-dive" title="Deep Dive">
+            <div 
+              className="prose prose-slate dark:prose-invert max-w-none text-text-3"
+              dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
+            />
+          </ToolInfoSection>
+        )}
 
-          {content.useCases && content.useCases.length > 0 && (
-            <section className="space-y-6">
-              <h2 className="text-2xl font-bold">Use Cases</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {content.useCases.map((uc, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl">
-                    <Check className="w-5 h-5 text-success shrink-0" />
-                    <span className="text-text-2 text-sm">{uc}</span>
-                  </div>
-                ))}
+        {parsedContent.howTo && parsedContent.howTo.length > 0 && (
+          <ToolInfoSection toolId={finalToolId} id="quick-guide" title="Quick Guide">
+            <ol className="space-y-4">
+              {parsedContent.howTo.map((step, i) => (
+                <li key={i} className="flex gap-4 group">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
+                    {i + 1}
+                  </span>
+                  <div 
+                    className="text-text-2 text-sm leading-snug pt-0.5 prose prose-sm prose-slate dark:prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: step }}
+                  />
+                </li>
+              ))}
+            </ol>
+          </ToolInfoSection>
+        )}
+
+        {content.useCases && content.useCases.length > 0 && (
+          <ToolInfoSection toolId={finalToolId} id="use-cases" title="Use Cases">
+            <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
+          </ToolInfoSection>
+        )}
+
+        {parsedContent.faq && parsedContent.faq.length > 0 && (
+          <ToolInfoSection toolId={finalToolId} id="faq" title="Frequently Asked Questions">
+            <FAQList faq={parsedContent.faq} />
+          </ToolInfoSection>
+        )}
+
+        <ToolInfoSection toolId={finalToolId} id="help-docs" title="Help & Documentation">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Link href={`/docs/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-blue transition-colors group">
+              <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
+                <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
               </div>
-            </section>
-          )}
-
-          {content.examples && content.examples.length > 0 && (
-            <section className="space-y-6">
-              <h2 className="text-2xl font-bold">Examples</h2>
-              <div className="space-y-4">
-                {content.examples.map((ex, i) => (
-                  <div key={i} className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl overflow-hidden">
-                    <div className="px-4 py-2 border-b border-mat-border bg-mat-base/50">
-                      <span className="text-xs font-bold uppercase tracking-widest text-text-4">{ex.label}</span>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-mat-border">
-                      <div className="p-4 space-y-2">
-                        <p className="text-xs font-bold uppercase tracking-widest text-text-4">Input</p>
-                        <code className="text-sm font-mono text-text-2 block break-all">{ex.input}</code>
-                      </div>
-                      <div className="p-4 space-y-2">
-                        <p className="text-xs font-bold uppercase tracking-widest text-text-4">Output</p>
-                        <code className="text-sm font-mono text-blue block break-all">{ex.output}</code>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div>
+                <h4 className="font-bold text-sm text-text">Documentation</h4>
+                <p className="text-xs text-text-4">Read the full manual</p>
               </div>
-            </section>
-          )}
-
-          {parsedContent.faq && parsedContent.faq.length > 0 && (
-            <section className="space-y-6">
-              <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
-              <div className="space-y-4">
-                {parsedContent.faq.map((item, i) => (
-                  <div key={i} className="p-6 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl space-y-3">
-                    <h3 className="font-bold text-text">{item.question}</h3>
-                    <div 
-                      className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
-                      dangerouslySetInnerHTML={{ __html: item.answer }}
-                    />
-                  </div>
-                ))}
+            </Link>
+            
+            <Link href={`/tutorials/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-brand-primary transition-colors group">
+              <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center shrink-0">
+                <PlaySquare className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform" />
               </div>
-            </section>
-          )}
-        </div>
-
-        <aside className="space-y-8">
-          {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-            <section className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-4xl p-8 space-y-6 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
-              <div className="space-y-1">
-                <h2 className="text-xl font-bold">Quick Guide</h2>
-                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">How it works</p>
+              <div>
+                <h4 className="font-bold text-sm text-text">Tutorials</h4>
+                <p className="text-xs text-text-4">Step-by-step guides</p>
               </div>
-              <ol className="space-y-4">
-                {parsedContent.howTo.map((step, i) => (
-                  <li key={i} className="flex gap-4 group">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
-                      {i + 1}
-                    </span>
-                    <div 
-                      className="text-text-2 text-sm leading-snug pt-0.5"
-                      dangerouslySetInnerHTML={{ __html: step }}
-                    />
-                  </li>
-                ))}
-              </ol>
-            </section>
-          )}
+            </Link>
 
-          <ToolFeedback toolId={finalToolId} toolName={title} />
+            <Link href={`/examples/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-success transition-colors group">
+              <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
+                <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
+              </div>
+              <div>
+                <h4 className="font-bold text-sm text-text">Examples</h4>
+                <p className="text-xs text-text-4">See it in action</p>
+              </div>
+            </Link>
 
-          <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-6 space-y-4">
-            <h3 className="font-bold text-sm text-text">Need Help?</h3>
-            <p className="text-xs text-text-2 leading-relaxed">
-              Check our documentation or contact support for assistance with this tool.
-            </p>
-            <Link 
-              href="/help"
-              className="inline-flex items-center gap-2 text-xs font-bold text-blue hover:underline"
-            >
-              Visit Help Center <ArrowUpRight className="w-3 h-3" />
+            <Link href={`/troubleshooting/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-error transition-colors group">
+              <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
+                <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
+              </div>
+              <div>
+                <h4 className="font-bold text-sm text-text">Troubleshooting</h4>
+                <p className="text-xs text-text-4">Fix common issues</p>
+              </div>
             </Link>
           </div>
-        </aside>
+        </ToolInfoSection>
+        
+        <div className="pt-4">
+          <ToolFeedback toolId={finalToolId} toolName={title} />
+        </div>
       </div>
-
 
       {related.length > 0 && (
         <section className="pt-12 border-t border-border space-y-8">
@@ -207,9 +260,9 @@ export function ClientToolShell({ title, description, category, children, toolId
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
-                className="flex items-center gap-4 p-4 bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl hover:border-brand-primary/50 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+                className="flex items-center gap-4 p-4 bg-surface-2 border border-border shadow-sm rounded-2xl hover:border-brand-primary/50 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
               >
-                <div className="w-10 h-10 rounded-xl bg-mat-base flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
                   <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">

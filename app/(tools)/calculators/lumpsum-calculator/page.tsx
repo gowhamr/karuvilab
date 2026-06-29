@@ -1,20 +1,22 @@
-import LumpsumCalculatorClientWrapper from "./LumpsumCalculatorClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-import { generateToolMetadata } from "@/src/lib/seo";
+import LumpsumCalculatorClientWrapper from './LumpsumCalculatorClientWrapper';
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+const toolId = 'lumpsum-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
 
-export const metadata: Metadata = generateToolMetadata("lumpsum-calculator");
+export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function LumpsumCalculatorPage() {
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="Lumpsum Calculator"
       description="Calculate the future value of a one-time investment with compounding."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "Calculate the future value of a one-time investment using the power of compounding. This tool is perfect for seeing how a single deposit grows over several years at a fixed interest rate. It's ideal for planning fixed deposits or one-time mutual fund investments.",
         howTo: [

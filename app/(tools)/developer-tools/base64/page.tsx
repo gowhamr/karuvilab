@@ -1,22 +1,22 @@
-import Base64ClientWrapper from "./Base64ClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
+import Base64ClientWrapper from './Base64ClientWrapper';
 
-import { generateToolMetadata } from "@/src/lib/seo";
-
-const toolId = "base64";
-const cat = CATEGORIES.find(c => c.id === "developer")!;
+const toolId = 'base64';
+const cat = CATEGORIES.find(c => c.id === 'developer');
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function Base64Tool() {
+export default function Page() {
   return (
     <ToolShell 
-      title="Base64 Encoder / Decoder" 
-      description="Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants." 
+      title="Base64 Encoder / Decoder"
+      description="Encode text to Base64 or decode Base64 back to text. Supports standard and URL-safe variants."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "Base64 encoding is a process of converting binary data into an ASCII string format by translating it into a radix-64 representation. This is commonly used when there is a need to encode binary data that needs to be stored and transferred over media that are designed to deal with textual data. This tool allows you to easily encode plain text to Base64 and decode Base64 strings back to their original form. It also supports the URL-safe variant, which replaces '+' with '-' and '/' with '_', and removes padding characters, making it suitable for use in URLs and filenames.",
         howTo: [

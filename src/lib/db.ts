@@ -87,13 +87,25 @@ interface KaruviDB extends DBSchema {
       updatedAt: number;
       isEncrypted?: boolean;
       encryptedData?: string;
+      folderId?: string | null;
     };
     indexes: { 'by-updated': number };
+  };
+  'notes-folders': {
+    key: string;
+    value: {
+      id: string;
+      name: string;
+      parentId: string | null;
+      color?: string;
+      createdAt: number;
+      updatedAt: number;
+    };
   };
 }
 
 const DB_NAME = 'karuvilab-db';
-const DB_VERSION = 5; // Incremented version
+const DB_VERSION = 6; // Incremented version
 
 let dbPromise: Promise<IDBPDatabase<KaruviDB>> | null = null;
 
@@ -139,6 +151,10 @@ export const getDB = () => {
           const notesStore = db.createObjectStore('notes', { keyPath: 'id' });
           notesStore.createIndex('by-updated', 'updatedAt');
         }
+
+        if (oldVersion < 6) {
+          db.createObjectStore('notes-folders', { keyPath: 'id' });
+        }
       },
     });
   }
@@ -157,6 +173,9 @@ export async function saveNote(note: {
   checklistItems: { id: string; text: string; checked: boolean }[];
   createdAt: number;
   updatedAt: number;
+  isEncrypted?: boolean;
+  encryptedData?: string;
+  folderId?: string | null;
 }) {
   const db = await getDB();
   if (!db) return;
@@ -173,6 +192,31 @@ export async function deleteNote(id: string) {
   const db = await getDB();
   if (!db) return;
   await db.delete('notes', id);
+}
+
+export async function saveFolder(folder: {
+  id: string;
+  name: string;
+  parentId: string | null;
+  color?: string;
+  createdAt: number;
+  updatedAt: number;
+}) {
+  const db = await getDB();
+  if (!db) return;
+  await db.put('notes-folders', folder);
+}
+
+export async function getFolders() {
+  const db = await getDB();
+  if (!db) return [];
+  return db.getAll('notes-folders');
+}
+
+export async function deleteFolder(id: string) {
+  const db = await getDB();
+  if (!db) return;
+  await db.delete('notes-folders', id);
 }
 
 export async function saveCalendarEvent(event: {

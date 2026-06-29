@@ -49,7 +49,7 @@ export function KVLogo({
         )}
       >
         <Image
-          src="/logo.png"
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`}
           alt="KV Logo"
           width={pixelSize}
           height={pixelSize}

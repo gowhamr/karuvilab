@@ -1,20 +1,22 @@
-import PPFCalculatorClientWrapper from "./PPFCalculatorClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-import { generateToolMetadata } from "@/src/lib/seo";
+import PPFCalculatorClientWrapper from './PPFCalculatorClientWrapper';
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+const toolId = 'ppf-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
 
-export const metadata: Metadata = generateToolMetadata("ppf-calculator");
+export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function PPFCalculatorPage() {
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="PPF Calculator"
       description="Calculate PPF maturity amount and interest earned with annual compounding."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "The Public Provident Fund (PPF) is one of India's most popular long-term tax-saving investments. This calculator helps you estimate the maturity amount after the mandatory 15-year tenure, accounting for annual interest and maximum investment limits. It handles the specific PPF rules like annual compounding.",
         howTo: [

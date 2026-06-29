@@ -1,9 +1,10 @@
 import { create } from 'zustand';
-import { Note, NoteView, NoteFilter, NoteSortOption, NoteSortOrder } from './types';
-import { saveNote, getNotes, deleteNote } from '@/src/lib/db';
+import { Note, Folder, NoteView, NoteFilter, NoteSortOption, NoteSortOrder } from './types';
+import { saveNote, getNotes, deleteNote, saveFolder, getFolders, deleteFolder } from '@/src/lib/db';
 
 interface NotesState {
   notes: Note[];
+  folders: Folder[];
   viewMode: NoteView;
   filter: NoteFilter;
   isLoading: boolean;
@@ -14,6 +15,7 @@ interface NotesState {
   setViewMode: (mode: NoteView) => void;
   setSearch: (search: string) => void;
   setTagFilter: (tag: string | null) => void;
+  setFolderFilter: (folderId: string | null) => void;
   setSort: (sort: NoteSortOption, order: NoteSortOrder) => void;
   setSelectedNoteId: (id: string | null) => void;
 
@@ -25,6 +27,13 @@ interface NotesState {
   toggleArchive: (id: string) => Promise<void>;
   toggleDelete: (id: string) => Promise<void>;
   emptyTrash: () => Promise<void>;
+  moveToFolder: (noteId: string, folderId: string | null) => Promise<void>;
+
+  // Folder Actions
+  fetchFolders: () => Promise<void>;
+  addFolder: (folder: Omit<Folder, 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateFolder: (folder: Folder) => Promise<void>;
+  removeFolder: (id: string) => Promise<void>;
 
   // Encryption Actions
   encryptNote: (id: string, password: string) => Promise<void>;
@@ -35,10 +44,12 @@ interface NotesState {
 
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
+  folders: [],
   viewMode: 'grid',
   filter: {
     search: '',
     tag: null,
+    folderId: null,
     sort: 'updatedAt',
     order: 'desc',
   },
@@ -48,17 +59,18 @@ export const useNotesStore = create<NotesState>((set, get) => ({
 
   setViewMode: (viewMode) => set({ viewMode }),
   setSearch: (search) => set(state => ({ filter: { ...state.filter, search } })),
-  setTagFilter: (tag) => set(state => ({ filter: { ...state.filter, tag } })),
+  setTagFilter: (tag) => set(state => ({ filter: { ...state.filter, tag, folderId: null } })), // Clear folder filter if setting tag
+  setFolderFilter: (folderId) => set(state => ({ filter: { ...state.filter, folderId, tag: null } })), // Clear tag filter if setting folder
   setSort: (sort, order) => set(state => ({ filter: { ...state.filter, sort, order } })),
   setSelectedNoteId: (selectedNoteId) => set({ selectedNoteId }),
 
   fetchNotes: async () => {
     set({ isLoading: true });
     try {
-      const notes = await getNotes();
-      set({ notes: notes as Note[] });
+      const [notes, folders] = await Promise.all([getNotes(), getFolders()]);
+      set({ notes: notes as Note[], folders: folders as Folder[] });
     } catch (error) {
-      console.error('Failed to fetch notes:', error);
+      console.error('Failed to fetch notes/folders:', error);
     } finally {
       set({ isLoading: false });
     }
@@ -102,7 +114,9 @@ export const useNotesStore = create<NotesState>((set, get) => ({
             content: "This note is encrypted.",
             tags: [],
             isChecklist: false,
-            checklistItems: []
+            checklistItems: [],
+            // Preserve folder
+            folderId: note.folderId ?? null
           };
           await saveNote(noteForDB);
         } catch (err) {
@@ -120,7 +134,8 @@ export const useNotesStore = create<NotesState>((set, get) => ({
             content: existingNote.content,
             tags: existingNote.tags,
             isChecklist: existingNote.isChecklist,
-            checklistItems: existingNote.checklistItems
+            checklistItems: existingNote.checklistItems,
+            folderId: existingNote.folderId ?? null
           };
           if (existingNote.encryptedData) {
             noteForDB.encryptedData = existingNote.encryptedData;
@@ -221,6 +236,54 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }));
   },
 
+  moveToFolder: async (noteId, folderId) => {
+    const note = get().notes.find(n => n.id === noteId);
+    if (!note) return;
+    await get().updateNote({ ...note, folderId });
+  },
+
+  fetchFolders: async () => {
+    const folders = await getFolders();
+    set({ folders: folders as Folder[] });
+  },
+
+  addFolder: async (folderData) => {
+    const now = Date.now();
+    const newFolder: Folder = {
+      ...folderData,
+      createdAt: now,
+      updatedAt: now,
+    };
+    await saveFolder(newFolder);
+    set(state => ({ folders: [...state.folders, newFolder] }));
+  },
+
+  updateFolder: async (folder) => {
+    const updatedFolder = {
+      ...folder,
+      updatedAt: Date.now(),
+    };
+    await saveFolder(updatedFolder);
+    set(state => ({
+      folders: state.folders.map(f => f.id === folder.id ? updatedFolder : f)
+    }));
+  },
+
+  removeFolder: async (id) => {
+    await deleteFolder(id);
+    
+    // Unlink notes
+    const notesToUpdate = get().notes.filter(n => n.folderId === id);
+    for (const note of notesToUpdate) {
+      await get().updateNote({ ...note, folderId: null });
+    }
+
+    set(state => ({
+      folders: state.folders.filter(f => f.id !== id),
+      notes: state.notes.map(n => n.folderId === id ? { ...n, folderId: null } : n)
+    }));
+  },
+
   encryptNote: async (id, password) => {
     const note = get().notes.find(n => n.id === id);
     if (!note) return;
@@ -250,7 +313,8 @@ export const useNotesStore = create<NotesState>((set, get) => ({
         content: "This note is encrypted.",
         tags: [],
         isChecklist: false,
-        checklistItems: []
+        checklistItems: [],
+        folderId: note.folderId ?? null
       };
       await saveNote(noteForDB);
 

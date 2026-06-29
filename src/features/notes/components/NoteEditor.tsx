@@ -16,6 +16,10 @@ import { useToast } from "@/components/ui/Toast";
 
 import { NoteHeader } from "./NoteHeader";
 import { NotePasswordGate } from "./NotePasswordGate";
+import { useSpeechRecognition } from "../hooks/useSpeechRecognition";
+import { DrawingModal } from "./DrawingModal";
+import { OCRButton } from "./OCRButton";
+import { Mic, MicOff, PenTool } from "lucide-react";
 
 export function NoteEditor() {
   const notes = useNotesStore(state => state.notes);
@@ -50,6 +54,20 @@ export function NoteEditor() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [encryptionError, setEncryptionError] = useState("");
   const { toast } = useToast();
+
+  const [isDrawingModalOpen, setIsDrawingModalOpen] = useState(false);
+
+  const { isListening, toggleListening, error: speechError, isSupported: speechSupported } = useSpeechRecognition((transcript) => {
+    if (localNote) {
+      handleChange({ content: localNote.content + transcript });
+    }
+  });
+
+  useEffect(() => {
+    if (speechError) {
+      toast(`Speech error: ${speechError}`, "error");
+    }
+  }, [speechError, toast]);
 
   const isUnlocked = useMemo(() => {
     return localNote ? (!localNote.isEncrypted || !!notePasswords[localNote.id]) : false;
@@ -306,23 +324,57 @@ export function NoteEditor() {
                       dangerouslySetInnerHTML={{ __html: previewHtml || "Nothing to preview..." }}
                     />
                   ) : (
-                    <FocusModeWrapper
-                      toolId="notes"
-                      toolName="Notepad"
-                      wordCount={wordCount}
-                      charCount={charCount}
-                      lineCount={lineCount}
-                      onFontSizeChange={setFontSize}
-                      onWrapToggle={() => setWordWrap(v => !v)}
-                    >
-                      <textarea
-                        value={localNote.content}
-                        onChange={(e) => handleChange({ content: e.target.value })}
-                        placeholder="Start writing your thoughts... (Markdown supported)"
-                        className={`w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-96 ${wordWrap ? '' : 'whitespace-pre overflow-x-auto'}`}
-                        style={{ fontSize: `${fontSize}px` }}
-                      />
-                    </FocusModeWrapper>
+                    <div className="relative">
+                      {/* Editor Toolbar */}
+                      <div className="absolute top-2 right-2 flex items-center gap-2 z-content">
+                        {speechSupported && (
+                          <button
+                            onClick={toggleListening}
+                            className={cn(
+                              "p-2 rounded-xl backdrop-blur-md border transition-all",
+                              isListening 
+                                ? "bg-error/20 border-error/50 text-error shadow-[0_0_15px_rgba(239,68,68,0.3)] animate-pulse" 
+                                : "bg-surface/50 border-border text-text-muted hover:text-text hover:bg-surface"
+                            )}
+                            title={isListening ? "Stop Voice Note" : "Start Voice Note"}
+                          >
+                            {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+                          </button>
+                        )}
+                        <OCRButton 
+                          onResult={(text) => {
+                            if (localNote) {
+                              handleChange({ content: localNote.content + `\n\n> **OCR Extraction**:\n> ${text.split('\n').join('\n> ')}\n\n` });
+                            }
+                          }}
+                        />
+                        <button
+                          onClick={() => setIsDrawingModalOpen(true)}
+                          className="p-2 rounded-xl backdrop-blur-md bg-surface/50 border border-border text-text-muted hover:text-text hover:bg-surface transition-all"
+                          title="Add Sketch"
+                        >
+                          <PenTool size={16} />
+                        </button>
+                      </div>
+
+                      <FocusModeWrapper
+                        toolId="notes"
+                        toolName="Notepad"
+                        wordCount={wordCount}
+                        charCount={charCount}
+                        lineCount={lineCount}
+                        onFontSizeChange={setFontSize}
+                        onWrapToggle={() => setWordWrap(v => !v)}
+                      >
+                        <textarea
+                          value={localNote.content}
+                          onChange={(e) => handleChange({ content: e.target.value })}
+                          placeholder="Start writing your thoughts... (Markdown supported)"
+                          className={`w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-[400px] pt-12 ${wordWrap ? '' : 'whitespace-pre overflow-x-auto'}`}
+                          style={{ fontSize: `${fontSize}px` }}
+                        />
+                      </FocusModeWrapper>
+                    </div>
                   )}
                 </div>
               </div>
@@ -366,6 +418,18 @@ export function NoteEditor() {
           )}
         </Dialog.Content>
       </Dialog.Portal>
+      
+      {localNote && (
+        <DrawingModal
+          open={isDrawingModalOpen}
+          onOpenChange={setIsDrawingModalOpen}
+          onSave={(dataUrl) => {
+            handleChange({
+              content: localNote.content + `\n\n![Sketch](${dataUrl})\n\n`
+            });
+          }}
+        />
+      )}
     </Dialog.Root>
   );
 }

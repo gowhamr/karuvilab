@@ -13,6 +13,7 @@ export default function page() {
       title="Discount Calculator"
       description="Find discounted prices, savings, and what % off to reach your target price."
       category={cat}
+      toolId="discount-calculator"
     >
       <DiscountCalculatorClientWrapper />
     </ToolShell>

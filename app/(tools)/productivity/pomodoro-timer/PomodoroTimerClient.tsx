@@ -5,9 +5,10 @@ import { usePomodoroStore } from '@/src/features/pomodoro-timer/store';
 import { useSessionStore } from '@/src/store/useSessionStore';
 import { SessionRestoredBanner } from '@/components/ui/SessionRestoredBanner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, RotateCcw, Settings, Bell, Sparkles, Trophy, Coffee } from 'lucide-react';
+import { Play, Pause, RotateCcw, Settings, Bell, Sparkles, Trophy, Coffee, Timer } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { PomodoroSettings } from './PomodoroSettings';
+import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 
 // STYLE-001: Standardized animation tokens
 const TRANSITION = { type: "spring", bounce: 0.2, duration: 0.6 } as const;
@@ -45,6 +46,9 @@ export default function PomodoroTimerClient() {
   const loadState = useSessionStore(state => state.loadState);
   const clearState = useSessionStore(state => state.clearState);
   const [showRestoredBanner, setShowRestoredBanner] = useState(false);
+
+  const { displayMode, activeToolId } = useFullscreenContext();
+  const isDashboard = displayMode === 'dashboard' && activeToolId === 'pomodoro-timer';
 
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
   const [isActive, setIsActive] = useState(false);
@@ -147,6 +151,54 @@ export default function PomodoroTimerClient() {
   };
 
   const progress = timeLeft / totalDuration;
+
+  if (isDashboard) {
+    return (
+      <div className={cn("h-full w-full flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-1000", mode === 'focus' ? "bg-black text-white" : "bg-blue-950 text-blue-50")}>
+        <div className="flex flex-col items-center justify-center w-full max-w-7xl px-8 flex-1">
+          <motion.p 
+            key={timeLeft}
+            className="text-[14rem] md:text-[22rem] font-black font-mono tabular-nums tracking-tighter"
+          >
+            {formatTime(timeLeft)}
+          </motion.p>
+          <div className="flex items-center gap-6 mt-8 scale-150">
+            <button
+              onClick={resetTimer}
+              className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-white/20 text-white hover:border-white hover:bg-white/10 transition-all focus:outline-none"
+              title="Reset Timer"
+            >
+              <RotateCcw className="w-6 h-6" />
+            </button>
+
+            <button
+              onClick={toggleTimer}
+              className={cn(
+                "w-24 h-24 rounded-full flex items-center justify-center transition-all focus:outline-none text-white shadow-2xl",
+                isActive 
+                  ? "bg-error hover:bg-error/90 shadow-error/20" 
+                  : "bg-success hover:bg-success/90 shadow-success/20 pl-2"
+              )}
+              title={isActive ? "Pause" : "Start"}
+            >
+              {isActive ? <Pause className="w-10 h-10 fill-current" /> : <Play className="w-12 h-12 fill-current" />}
+            </button>
+            <div className="w-16 flex items-center justify-center opacity-50 font-bold uppercase tracking-widest text-xs">
+               {mode}
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-30 text-sm font-bold uppercase tracking-widest border-t-2 border-current pt-4">
+          <div className="flex items-center gap-2">
+            <Timer className="w-4 h-4" />
+            Pomodoro Focus Active
+          </div>
+          <div>Esc to Exit Full Screen</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex flex-col items-center justify-center gap-12 py-8 max-w-2xl mx-auto">

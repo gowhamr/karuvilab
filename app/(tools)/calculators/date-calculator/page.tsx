@@ -15,6 +15,7 @@ export default function DateCalculator() {
       title="Date Calculator"
       description="Calculate date differences or add/subtract time from any date."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "The Date Calculator is a versatile utility for all your calendar-based calculations. Whether you need to find the exact number of days between two historical events, calculate your project's deadline by adding business days, or determine exactly how many weeks have passed since a specific milestone, this tool provides precise answers. It handles complex calendar logic like varying month lengths and leap years automatically, giving you a detailed breakdown in years, months, weeks, and total days.",
         howTo: [

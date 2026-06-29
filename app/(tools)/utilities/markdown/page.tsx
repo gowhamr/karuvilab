@@ -1,19 +1,22 @@
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { generateToolMetadata } from "@/src/lib/seo";
-import MarkdownEditorWrapper from "@/src/features/markdown/MarkdownEditorWrapper";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-const cat = CATEGORIES.find((c) => c.id === "utilities")!;
+import MarkdownEditorWrapper from '@/src/features/markdown/MarkdownEditorWrapper';
 
-export const metadata: Metadata = generateToolMetadata("markdown");
+const toolId = 'markdown';
+const cat = CATEGORIES.find(c => c.id === 'utilities');
 
-export default function page() {
+export const metadata: Metadata = generateToolMetadata(toolId);
+
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="Markdown Editor"
       description="Write, preview and export Markdown with support for Mermaid diagrams and syntax highlighting."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "The KaruviLab Markdown Editor is a professional-grade tool designed for developers, technical writers, and students who need a fast, privacy-first environment for writing and documenting. Unlike traditional online editors, KaruviLab processes all your data locally in your browser. This means your sensitive notes, project plans, and documentation never leave your device, providing an unmatched level of security and peace of mind. The editor features a high-performance GitHub-style live preview, ensuring that what you see is exactly what you get. \n\nBeyond basic text formatting, our tool integrates Mermaid.js, allowing you to create complex flowcharts, sequence diagrams, and ER diagrams directly within your Markdown files. This makes it an essential tool for project planning and system architecture design. We've also included advanced productivity features like Find & Replace, scroll synchronization, and comprehensive word counts. Whether you're drafting a simple readme or a complex technical document, the KaruviLab Markdown Editor provides the precision and reliability you need to get the job done efficiently.",
         howTo: [

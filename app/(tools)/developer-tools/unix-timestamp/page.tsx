@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import UnixTimestampWrapper from './UnixTimestampWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Unix Timestamp Converter – KV',
-  description: 'Convert Unix timestamps to human-readable dates and back.',
-  alternates: { canonical: 'https://karuvilab.com/tools/developer-tools/unix-timestamp/' }
-};
+import UnixTimestampWrapper from './UnixTimestampWrapper';
+
+const toolId = 'unix-timestamp';
+const cat = CATEGORIES.find(c => c.id === 'developer');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Unix Timestamp Converter',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/developer-tools/unix-timestamp/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="unix-timestamp-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="Unix Timestamp Converter">
-        <UnixTimestampWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="Unix Timestamp Converter"
+      description="Convert Unix timestamps to human-readable dates and back."
+      category={cat}
+      toolId={toolId}
+    >
+      <UnixTimestampWrapper />
+    </ToolShell>
   );
 }

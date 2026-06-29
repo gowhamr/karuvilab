@@ -15,6 +15,7 @@ All entries reviewed and approved via PR.
 | E-005 | P-15 Hardcoded Colors   | SliderField thumb bg-white      | --kv-text used as token equivalent  | Light mode only | ACTIVE   |
 | E-006 | P-07 Inline Styles      | CategoryChips active color      | backgroundColor & boxShadow only    | Permanent       | ACTIVE   |
 | E-007 | P-15 Hardcoded colors   | Sidebar favorites Heart color   | Single red Heart icon               | Permanent       | ACTIVE   |
+| E-008 | KL-Security / CSP       | 'unsafe-eval' added to CSP      | Only used in strictly validated math worker context | Permanent | ACTIVE |
 
 ---
 
@@ -88,3 +89,9 @@ All entries reviewed and approved via PR.
 - **Resolution Date:** Permanent — semantic color.
 - **Status:** ACTIVE
 
+### E-008
+- **Rule:** KL-Security ("No eval(), new Function() outside trusted worker contexts" implies worker needs it, but global CSP lacked 'unsafe-eval')
+- **Reason:** Scientific Calculator (src/workers/karuvi.worker.ts) uses `eval()` inside a trusted worker to compute math expressions. Modern browsers enforce the document's CSP on workers, blocking execution.
+- **Mitigation:** Expressions are rigorously validated against `/^(?:[0-9+\-*/.%() \t]|Math\.[a-z0-9]+|\*\*|factorial)+$/i` before passing to `eval()`, preventing arbitrary code execution. `'unsafe-eval'` was added to global CSP to unblock the worker.
+- **Resolution Date:** Permanent — worker requires it for evaluateMath.
+- **Status:** ACTIVE

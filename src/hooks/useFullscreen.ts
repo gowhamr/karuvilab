@@ -57,8 +57,8 @@ export function useFullscreen(
     function handleKeyDown(e: KeyboardEvent) {
       // F11 toggle
       if (exitOnF11 && e.key === 'F11') {
+        e.preventDefault(); // Prevent browser native F11 which can cause conflicts
         toggle();
-        // Do not prevent default so native F11 still works
         return;
       }
       // Escape to exit only

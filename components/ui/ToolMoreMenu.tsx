@@ -133,7 +133,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
             initial={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 6 : -6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: position.y === "top" ? 6 : -6 }}
-            className={`absolute ${xClass} ${yClass} w-52 max-w-[calc(100vw-2rem)] bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-[9999] overflow-hidden ${originClass}`}
+            className={`absolute ${xClass} ${yClass} w-52 max-w-[calc(100vw-2rem)] bg-mat-raised border border-mat-border shadow-mat-shine rounded-2xl p-2 z-max overflow-hidden ${originClass}`}
           >
             <div className="px-3 py-2 text-micro font-black text-text-4 uppercase tracking-widest-lg border-b border-mat-border mb-2">
               Tool Options

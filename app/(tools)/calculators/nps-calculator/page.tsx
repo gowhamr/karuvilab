@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import NpsCalculatorWrapper from './NpsCalculatorWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'NPS Calculator – KV',
-  description: 'Calculate National Pension System returns.',
-  alternates: { canonical: 'https://karuvilab.com/tools/calculators/nps-calculator/' }
-};
+import NpsCalculatorWrapper from './NpsCalculatorWrapper';
+
+const toolId = 'nps-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'NPS Calculator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/calculators/nps-calculator/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="nps-calculator-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="NPS Calculator">
-        <NpsCalculatorWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="NPS Calculator"
+      description="Calculate National Pension System returns."
+      category={cat}
+      toolId={toolId}
+    >
+      <NpsCalculatorWrapper />
+    </ToolShell>
   );
 }

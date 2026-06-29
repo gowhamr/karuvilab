@@ -17,9 +17,9 @@ if (typeof workbox !== 'undefined') {
 
   // Cache names
   const CACHE_NAMES = {
-    static: 'karuvilab-static-1782027241274',
-    images: 'karuvilab-images-1782027241274',
-    pages: 'karuvilab-pages-1782027241274',
+    static: 'karuvilab-static-1782745931079',
+    images: 'karuvilab-images-1782745931079',
+    pages: 'karuvilab-pages-1782745931079',
     googleFonts: 'google-fonts',
   };
 
@@ -60,6 +60,21 @@ if (typeof workbox !== 'undefined') {
     new NetworkFirst({
       cacheName: CACHE_NAMES.pages,
       networkTimeoutSeconds: 3,
+      plugins: [
+        new CacheableResponsePlugin({
+          statuses: [0, 200],
+        }),
+      ],
+    })
+  );
+
+  // 4b. Cache Next.js App Router RSC payloads
+  registerRoute(
+    ({ request, url }) => {
+      return request.headers.has('rsc') || url.searchParams.has('_rsc');
+    },
+    new StaleWhileRevalidate({
+      cacheName: CACHE_NAMES.pages,
       plugins: [
         new CacheableResponsePlugin({
           statuses: [0, 200],

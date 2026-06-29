@@ -1,22 +1,22 @@
-import TaskReminderClientWrapper from "./TaskReminderClientWrapper";
-import { Metadata } from "next";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
+import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 
+import TaskReminderClientWrapper from './TaskReminderClientWrapper';
 
-import { generateToolMetadata } from "@/src/lib/seo";
-
-const toolId = "task-reminder";
-const cat = CATEGORIES.find(c => c.id === "utilities")!;
+const toolId = 'task-reminder';
+const cat = CATEGORIES.find(c => c.id === 'utilities');
 
 export const metadata: Metadata = generateToolMetadata(toolId);
 
-export default function TaskReminder() {
+export default function Page() {
   return (
-    <ToolShell
+    <ToolShell 
       title="Task Reminder"
       description="A simple local to-do list stored in your browser. No account required."
       category={cat}
+      toolId={toolId}
       content={{
         detailedDescription: "Task Reminder is a privacy-first productivity tool designed for quick, ephemeral to-do lists. Unlike traditional task managers that require accounts and sync your data to a cloud, this tool operates entirely within your browser's local storage. This means your tasks never leave your device, ensuring total privacy. It's perfect for daily punch lists, temporary reminders, or managing focus during a single work session without the overhead of a complex project management system.",
         howTo: [

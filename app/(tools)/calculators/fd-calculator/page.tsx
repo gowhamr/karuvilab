@@ -14,6 +14,7 @@ export default function FDCalculatorPage() {
       title="Fixed Deposit (FD) Calculator"
       description="Calculate FD maturity amount and interest earned with flexible compounding options."
       category={cat}
+      toolId="fd-calculator"
       content={{
         detailedDescription: "Fixed Deposits (FD) offer guaranteed returns over a set period. This calculator computes the maturity amount and interest earned for your FD, supporting different compounding frequencies like monthly, quarterly, semi-annual, or annual. It helps you compare different bank FD rates and tenures.",
         howTo: [

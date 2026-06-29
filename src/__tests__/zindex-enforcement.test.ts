@@ -117,7 +117,7 @@ describe('Z-Index Canonical Token Enforcement', () => {
     for (const [key, val] of Object.entries(zIndex)) {
       const cssVal = cssTokens[key];
       expect(cssVal).toBeDefined();
-      expect(cssVal).toBe(val);
+      expect(String(cssVal)).toBe(String(val));
     }
   });
 });

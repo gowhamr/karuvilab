@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import TdsCalculatorWrapper from './TdsCalculatorWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'TDS Calculator – KV',
-  description: 'Calculate Tax Deducted at Source.',
-  alternates: { canonical: 'https://karuvilab.com/tools/calculators/tds-calculator/' }
-};
+import TdsCalculatorWrapper from './TdsCalculatorWrapper';
+
+const toolId = 'tds-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'TDS Calculator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/calculators/tds-calculator/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="tds-calculator-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="TDS Calculator">
-        <TdsCalculatorWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="TDS Calculator"
+      description="Calculate Tax Deducted at Source."
+      category={cat}
+      toolId={toolId}
+    >
+      <TdsCalculatorWrapper />
+    </ToolShell>
   );
 }

@@ -8,23 +8,32 @@ import {
   ReactNode
 } from 'react';
 
+export type DisplayMode = 'normal' | 'focus' | 'dashboard';
+
 interface FullscreenContextValue {
-  isFullscreen: boolean;
+  displayMode: DisplayMode;
+  isFullscreen: boolean; // Alias for displayMode !== 'normal' for backwards compatibility
   activeToolId: string | null;
   currentToolId: string | null;
   registerTool: (toolId: string) => void;
   unregisterTool: (toolId: string) => void;
-  enter: (toolId: string) => void;
+  enterFocus: (toolId: string) => void;
+  enterDashboard: (toolId: string) => void;
+  enter: (toolId: string) => void; // Alias for enterFocus
   exit: () => void;
-  toggle: (toolId: string) => void;
+  toggleFocus: (toolId: string) => void;
+  toggleDashboard: (toolId: string) => void;
+  toggle: (toolId: string) => void; // Alias for toggleFocus
 }
 
 const FullscreenContext = createContext<FullscreenContextValue | null>(null);
 
 export function FullscreenProvider({ children }: { children: ReactNode }) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('normal');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [currentToolId, setCurrentToolId] = useState<string | null>(null);
+
+  const isFullscreen = displayMode !== 'normal';
 
   const registerTool = useCallback((toolId: string) => {
     setCurrentToolId(toolId);
@@ -34,43 +43,103 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
     setCurrentToolId(prev => prev === toolId ? null : prev);
   }, []);
 
-  const enter = useCallback((toolId: string) => {
-    setIsFullscreen(true);
-    setActiveToolId(toolId);
-    document.body.style.overflow = 'hidden';
-    window.dispatchEvent(new CustomEvent('kv-fullscreen-enter', {
-      detail: { toolId }
-    }));
-  }, []);
-
   const exit = useCallback(() => {
-    setIsFullscreen(false);
+    setDisplayMode('normal');
     setActiveToolId(null);
     document.body.style.overflow = '';
+    
+    // Exit native fullscreen if active
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    
     window.dispatchEvent(new CustomEvent('kv-fullscreen-exit'));
   }, []);
 
-  const toggle = useCallback((toolId: string) => {
-    isFullscreen ? exit() : enter(toolId);
-  }, [isFullscreen, enter, exit]);
+  const enterFocus = useCallback((toolId: string) => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    setDisplayMode('focus');
+    setActiveToolId(toolId);
+    document.body.style.overflow = 'hidden';
+    window.dispatchEvent(new CustomEvent('kv-fullscreen-enter', {
+      detail: { toolId, mode: 'focus' }
+    }));
+  }, []);
+
+  const enterDashboard = useCallback((toolId: string) => {
+    setDisplayMode('dashboard');
+    setActiveToolId(toolId);
+    document.body.style.overflow = 'hidden';
+    
+    // Try to enter native fullscreen
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.warn(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
+    }
+    
+    window.dispatchEvent(new CustomEvent('kv-fullscreen-enter', {
+      detail: { toolId, mode: 'dashboard' }
+    }));
+  }, []);
+
+  const toggleFocus = useCallback((toolId: string) => {
+    displayMode === 'focus' ? exit() : enterFocus(toolId);
+  }, [displayMode, enterFocus, exit]);
+
+  const toggleDashboard = useCallback((toolId: string) => {
+    displayMode === 'dashboard' ? exit() : enterDashboard(toolId);
+  }, [displayMode, enterDashboard, exit]);
 
   // Global keyboard handler
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      const targetId = activeToolId || currentToolId;
+      
+      // Ignore if typing in an input
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName) || (e.target as HTMLElement)?.isContentEditable) {
+        // Only allow Esc to exit
+        if (e.key === 'Escape' && isFullscreen) {
+          exit();
+        }
+        return;
+      }
+
       if (e.key === 'F11') {
-        const targetId = activeToolId || currentToolId;
         if (targetId) {
-          // Do not prevent default so native F11 still works
-          toggle(targetId);
+          e.preventDefault();
+          toggleDashboard(targetId);
         }
       }
+      
+      if (e.key === 'f' || e.key === 'F') {
+        // Toggle Focus mode with 'F' key
+        if (targetId && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          e.preventDefault();
+          toggleFocus(targetId);
+        }
+      }
+      
       if (e.key === 'Escape' && isFullscreen) {
         exit();
       }
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullscreen, activeToolId, currentToolId, toggle, exit]);
+  }, [isFullscreen, displayMode, activeToolId, currentToolId, toggleFocus, toggleDashboard, exit]);
+
+  // Sync state if native fullscreen is exited via browser UI (e.g. Esc)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement && displayMode === 'dashboard') {
+        exit();
+      }
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [displayMode, exit]);
 
   // Cleanup
   useEffect(() => {
@@ -79,7 +148,19 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
 
   return (
     <FullscreenContext.Provider value={{
-      isFullscreen, activeToolId, currentToolId, registerTool, unregisterTool, enter, exit, toggle
+      displayMode,
+      isFullscreen, 
+      activeToolId, 
+      currentToolId, 
+      registerTool, 
+      unregisterTool, 
+      enterFocus,
+      enterDashboard,
+      enter: enterFocus, // Legacy mapping
+      exit, 
+      toggleFocus,
+      toggleDashboard,
+      toggle: toggleFocus // Legacy mapping
     }}>
       {children}
     </FullscreenContext.Provider>

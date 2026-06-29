@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import IncomeTaxWrapper from './IncomeTaxWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Income Tax Calculator – KV',
-  description: 'Calculate income tax for FY 2025-26.',
-  alternates: { canonical: 'https://karuvilab.com/tools/calculators/income-tax/' }
-};
+import IncomeTaxWrapper from './IncomeTaxWrapper';
+
+const toolId = 'income-tax';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Income Tax Calculator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/calculators/income-tax/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="income-tax-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="Income Tax Calculator">
-        <IncomeTaxWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="Income Tax Calculator"
+      description="Calculate income tax for FY 2025-26."
+      category={cat}
+      toolId={toolId}
+    >
+      <IncomeTaxWrapper />
+    </ToolShell>
   );
 }

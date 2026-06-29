@@ -505,6 +505,31 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "countdown-timer",
+    "name": "Countdown Timer",
+    "desc": "A professional countdown timer with fullscreen dashboard mode and custom alarm sounds.",
+    "href": "productivity/countdown-timer/",
+    "category": "productivity",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "countdown",
+      "timer",
+      "alarm",
+      "time",
+      "productivity"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": "Time Management",
+    "requiresNetwork": false
+  },
+  {
     "id": "crontab-editor",
     "name": "Crontab Editor",
     "desc": "Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly.",
@@ -2422,6 +2447,31 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Financial",
+    "requiresNetwork": false
+  },
+  {
+    "id": "stopwatch",
+    "name": "Stopwatch",
+    "desc": "A precise, professional stopwatch with lap tracking and fullscreen dashboard mode.",
+    "href": "productivity/stopwatch/",
+    "category": "productivity",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "stopwatch",
+      "timer",
+      "lap",
+      "time",
+      "productivity"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": "Time Management",
     "requiresNetwork": false
   },
   {

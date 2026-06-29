@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import UuidGeneratorWrapper from './UuidGeneratorWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'UUID Generator – KV',
-  description: 'Generate RFC-compliant UUIDs (v1, v4, v5, v7).',
-  alternates: { canonical: 'https://karuvilab.com/tools/developer-tools/uuid-generator/' }
-};
+import UuidGeneratorWrapper from './UuidGeneratorWrapper';
+
+const toolId = 'uuid-generator';
+const cat = CATEGORIES.find(c => c.id === 'developer');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'UUID Generator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/developer-tools/uuid-generator/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="uuid-generator-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="UUID Generator">
-        <UuidGeneratorWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="UUID Generator"
+      description="Generate RFC-compliant UUIDs (v1, v4, v5, v7)."
+      category={cat}
+      toolId={toolId}
+    >
+      <UuidGeneratorWrapper />
+    </ToolShell>
   );
 }

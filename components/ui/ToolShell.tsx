@@ -5,18 +5,19 @@ import { ClientToolShell, ClientToolShellProps } from './ClientToolShell';
 interface ToolShellProps {
   title: string;
   description?: string;
-  category?: CategoryEntry;
+  category?: CategoryEntry | undefined;
   children: React.ReactNode;
   toolId?: string;
   content?: ClientToolShellProps['content'];
   fullWidth?: boolean;
+  visibleExamples?: number;
 }
 
 /**
  * ToolShell is now a Server Component to prevent the entire 400KB+ TOOL_CONTENT 
  * registry from being bundled into the client-side JavaScript.
  */
-export async function ToolShell({ title, description, category, children, toolId, content, fullWidth }: ToolShellProps) {
+export async function ToolShell({ title, description, category, children, toolId, content, fullWidth, visibleExamples }: ToolShellProps) {
   // Perform lookups on the server
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   
@@ -57,6 +58,7 @@ export async function ToolShell({ title, description, category, children, toolId
         toolId={toolId}
         content={mergedContent}
         fullWidth={fullWidth}
+        visibleExamples={visibleExamples ?? reg.visibleExamples ?? (currentTool as any)?.visibleExamples}
       >
         {children}
       </ClientToolShell>

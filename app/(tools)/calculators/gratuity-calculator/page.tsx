@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import GratuityCalculatorWrapper from './GratuityCalculatorWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Gratuity Calculator – KV',
-  description: 'Calculate Gratuity amount.',
-  alternates: { canonical: 'https://karuvilab.com/tools/calculators/gratuity-calculator/' }
-};
+import GratuityCalculatorWrapper from './GratuityCalculatorWrapper';
+
+const toolId = 'gratuity-calculator';
+const cat = CATEGORIES.find(c => c.id === 'calculators');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Gratuity Calculator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/calculators/gratuity-calculator/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="gratuity-calculator-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="Gratuity Calculator">
-        <GratuityCalculatorWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="Gratuity Calculator"
+      description="Calculate Gratuity amount."
+      category={cat}
+      toolId={toolId}
+    >
+      <GratuityCalculatorWrapper />
+    </ToolShell>
   );
 }

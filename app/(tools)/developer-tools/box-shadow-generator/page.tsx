@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import BoxShadowGeneratorWrapper from './BoxShadowGeneratorWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Box Shadow Generator – KV',
-  description: 'Visual box shadow generator.',
-  alternates: { canonical: 'https://karuvilab.com/tools/developer-tools/box-shadow-generator/' }
-};
+import BoxShadowGeneratorWrapper from './BoxShadowGeneratorWrapper';
+
+const toolId = 'box-shadow-generator';
+const cat = CATEGORIES.find(c => c.id === 'developer');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Box Shadow Generator',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/developer-tools/box-shadow-generator/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="box-shadow-generator-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="Box Shadow Generator">
-        <BoxShadowGeneratorWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="Box Shadow Generator"
+      description="Visual box shadow generator."
+      category={cat}
+      toolId={toolId}
+    >
+      <BoxShadowGeneratorWrapper />
+    </ToolShell>
   );
 }

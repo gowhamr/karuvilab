@@ -1,30 +1,24 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import XmlFormatterWrapper from './XmlFormatterWrapper';
-import Script from 'next/script';
+import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'XML Formatter – KV',
-  description: 'Format, minify, and validate XML.',
-  alternates: { canonical: 'https://karuvilab.com/tools/developer-tools/xml-formatter/' }
-};
+import XmlFormatterWrapper from './XmlFormatterWrapper';
+
+const toolId = 'xml-formatter';
+const cat = CATEGORIES.find(c => c.id === 'developer');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'XML Formatter',
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    url: 'https://karuvilab.com/tools/developer-tools/xml-formatter/',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
-  };
   return (
-    <>
-      <Script id="xml-formatter-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ToolShell title="XML Formatter">
-        <XmlFormatterWrapper />
-      </ToolShell>
-    </>
+    <ToolShell 
+      title="XML Formatter"
+      description="Format, minify, and validate XML."
+      category={cat}
+      toolId={toolId}
+    >
+      <XmlFormatterWrapper />
+    </ToolShell>
   );
 }

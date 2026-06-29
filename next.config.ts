@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
   async headers() {
     const cspHeader = `
       default-src 'self';
-      script-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net;
+      script-src 'self' 'unsafe-eval' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net;
       style-src 'self' 'unsafe-inline';
       img-src 'self' data: blob: https://pagead2.googlesyndication.com;
       worker-src 'self' blob:;

@@ -14,6 +14,7 @@ export default function page() {
       description="Professional, fully local-first calendar for managing your time privately."
       category={cat}
       fullWidth={true}
+      toolId="calendar"
     >
       <CalendarPage />
     </ToolShell>

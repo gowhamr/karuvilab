@@ -74,11 +74,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/icons/icon-180.png",
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -92,11 +87,6 @@ const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_
 const basePath = isGithubPages ? '/karuvilab' : '';
 
 if (isGithubPages) {
-  if (typeof metadata.icons === 'object' && metadata.icons !== null) {
-    if ('icon' in metadata.icons && typeof metadata.icons.icon === 'string') metadata.icons.icon = `${basePath}${metadata.icons.icon}`;
-    if ('shortcut' in metadata.icons && typeof metadata.icons.shortcut === 'string') metadata.icons.shortcut = `${basePath}${metadata.icons.shortcut}`;
-    if ('apple' in metadata.icons && typeof metadata.icons.apple === 'string') metadata.icons.apple = `${basePath}${metadata.icons.apple}`;
-  }
   metadata.manifest = `${basePath}${metadata.manifest}`;
 }
 
