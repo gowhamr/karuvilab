@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { 
   MoreVertical, Flag, Lightbulb, Shield, 
-  RotateCcw, ChevronRight, Share2 
+  RotateCcw, ChevronRight, Share2, HelpCircle
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useSupportStore } from "@/src/store/useSupportStore";
@@ -77,6 +77,11 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
       label: "Share Tool",
       icon: Share2,
       onClick: handleShare
+    },
+    {
+      label: "Help & Docs",
+      icon: HelpCircle,
+      onClick: () => { window.location.href = "/help"; }
     },
     { 
       label: "Report Issue", 

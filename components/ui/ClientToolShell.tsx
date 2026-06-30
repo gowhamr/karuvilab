@@ -8,7 +8,6 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { FavoriteButton } from './FavoriteButton';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
-import { ToolHelpMenu } from './ToolHelpMenu';
 import { ToolInfoSection } from './ToolInfoSection';
 import { cn } from '@/src/lib/utils';
 import { useState } from 'react';
@@ -140,7 +139,6 @@ export function ClientToolShell({ title, description, category, children, toolId
             </h1>
             <div className="flex items-center gap-2 shrink-0 mt-0.5 md:mt-1">
               {currentTool && <FavoriteButton toolId={currentTool.id} />}
-              <ToolHelpMenu toolId={finalToolId} toolName={title} />
               <ToolMoreMenu toolId={finalToolId} toolName={title} />
             </div>
           </div>
