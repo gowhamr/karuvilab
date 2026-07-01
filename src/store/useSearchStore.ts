@@ -62,6 +62,7 @@ export const useSearchStore = create<SearchState>()(
       }))
     }),
     {
+      version: 1,
       name: 'kv-search-storage',
       storage: createJSONStorage(() => idbStorage),
       // Only persist the search engine state, not the UI state

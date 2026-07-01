@@ -22,6 +22,7 @@ export const usePWAStore = create<PWAState>()(
       setHasHydrated: (val) => set({ hasHydrated: val }),
     }),
     {
+      version: 1,
       name: 'kv-pwa-storage',
       storage: createJSONStorage(() => idbStorage),
       onRehydrateStorage: (state) => {

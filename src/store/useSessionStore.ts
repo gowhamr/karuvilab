@@ -32,6 +32,7 @@ export const useSessionStore = create<SessionState>()(
       },
     }),
     {
+      version: 1,
       name: 'karuvilab-user-sessions',
       storage: createJSONStorage(() => idbStorage),
     }

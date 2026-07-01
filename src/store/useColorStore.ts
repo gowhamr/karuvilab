@@ -21,6 +21,7 @@ export const useColorStore = create<ColorState>()(
       clearHistory: () => set({ history: [] }),
     }),
     {
+      version: 1,
       name: 'karuvilab-color-history',
       storage: createJSONStorage(() => idbStorage),
     }

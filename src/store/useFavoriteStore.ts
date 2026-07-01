@@ -22,6 +22,7 @@ export const useFavoriteStore = create<FavoriteState>()(
       },
     }),
     {
+      version: 1,
       name: 'karuvi-favorites',
       storage: createJSONStorage(() => idbStorage),
     }

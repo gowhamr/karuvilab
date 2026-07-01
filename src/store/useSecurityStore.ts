@@ -36,6 +36,7 @@ export const useSecurityStore = create<SecurityState>()(
       clearAllHistory: () => set({ passwordHistory: [], idHistory: [], hashHistory: [] }),
     }),
     {
+      version: 1,
       name: 'karuvilab-security-storage',
       storage: createJSONStorage(() => idbStorage),
     }

@@ -89,6 +89,7 @@ export const useFinancialFreedomStore = create<FinancialFreedomState>()(
       },
     }),
     {
+      version: 1,
       name: 'kv-financial-freedom',
       storage: createJSONStorage(() => idbStorage),
       partialize: (state) => ({ 

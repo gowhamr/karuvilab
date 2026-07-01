@@ -36,6 +36,7 @@ export const useStopwatchStore = create<StopwatchState>()(
       })),
     }),
     {
+      version: 1,
       name: 'karuvi-stopwatch-settings',
       storage: createJSONStorage(() => idbStorage),
     }

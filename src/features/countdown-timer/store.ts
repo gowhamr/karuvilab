@@ -30,6 +30,7 @@ export const useCountdownTimerStore = create<CountdownTimerState>()(
       })),
     }),
     {
+      version: 1,
       name: 'karuvi-countdown-timer-settings',
       storage: createJSONStorage(() => idbStorage),
     }

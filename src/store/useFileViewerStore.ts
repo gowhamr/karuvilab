@@ -76,6 +76,7 @@ export const useFileViewerStore = create<FileViewerState>()(
       setActiveTab: (tab) => set({ activeTab: tab }),
     }),
     {
+      version: 1,
       name: 'kv-file-viewer-storage',
       storage: createJSONStorage(() => idbStorage),
       partialize: (state) => ({ settings: state.settings }), // Only persist settings

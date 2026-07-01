@@ -38,6 +38,7 @@ export const usePomodoroStore = create<PomodoroState>()(
         })),
     }),
     {
+      version: 1,
       name: 'karuvilab-pomodoro-storage',
       storage: createJSONStorage(() => idbStorage),
     }

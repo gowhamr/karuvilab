@@ -58,6 +58,7 @@ export const useWorldClockStore = create<WorldClockState>()(
       })),
     }),
     {
+      version: 1,
       name: 'karuvi-world-clocks',
       storage: createJSONStorage(() => idbStorage),
     }
