@@ -1,9 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export function useSpeechRecognition(onResult: (transcript: string) => void) {
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recognition, setRecognition] = useState<any>(null);
+
+  const onResultRef = useRef(onResult);
+  useEffect(() => {
+    onResultRef.current = onResult;
+  }, [onResult]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -21,7 +26,7 @@ export function useSpeechRecognition(onResult: (transcript: string) => void) {
             }
           }
           if (finalTranscript) {
-            onResult(finalTranscript);
+            onResultRef.current(finalTranscript);
           }
         };
 
@@ -40,7 +45,7 @@ export function useSpeechRecognition(onResult: (transcript: string) => void) {
         setError('Speech recognition not supported in this browser.');
       }
     }
-  }, [onResult]);
+  }, []);
 
   const toggleListening = useCallback(() => {
     if (!recognition) return;
