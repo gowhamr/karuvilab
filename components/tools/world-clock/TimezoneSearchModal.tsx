@@ -15,7 +15,7 @@ interface TimezoneSearchModalProps {
  * A full-screen modal for searching and adding timezones.
  * Provides a focused, keyboard-friendly search experience.
  */
-export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen, onClose }) => {
+export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.memo(({ isOpen, onClose }) => {
   const [search, setSearch] = useState('');
   const addClock = useWorldClockStore(state => state.addClock);
 
@@ -147,4 +147,4 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = ({ isOpen
       )}
     </AnimatePresence>
   );
-};
+});

@@ -7,21 +7,32 @@ import { cn } from "@/src/lib/utils";
 import { AnalogClock } from "@/components/tools/world-clock/AnalogClock";
 import { TimezoneSearchModal } from "@/components/tools/world-clock/TimezoneSearchModal";
 import * as Popover from '@radix-ui/react-popover';
-import { Settings2 } from "lucide-react";
 import { m } from "framer-motion";
+import { useToast } from "@/components/ui/Toast";
+import { useSupportStore } from "@/src/store/useSupportStore";
+import { Settings2 } from "lucide-react";
+
+const formatterCache = new Map<string, Intl.DateTimeFormat>();
+function getCachedFormatter(tz: string, options: Intl.DateTimeFormatOptions) {
+  const key = `${tz}-${JSON.stringify(options)}`;
+  let formatter = formatterCache.get(key);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat("en-US", { ...options, timeZone: tz });
+    formatterCache.set(key, formatter);
+  }
+  return formatter;
+}
 
 function getTimeInZone(tz: string, now: Date, hourFormat: 12 | 24, localTz: string) {
   try {
-    const timeParts = new Intl.DateTimeFormat("en-US", {
-      timeZone: tz,
+    const timeParts = getCachedFormatter(tz, {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
       hour12: hourFormat === 12,
     }).formatToParts(now);
     
-    const dateParts = new Intl.DateTimeFormat("en-US", {
-      timeZone: tz,
+    const dateParts = getCachedFormatter(tz, {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -38,8 +49,14 @@ function getTimeInZone(tz: string, now: Date, hourFormat: 12 | 24, localTz: stri
     const ampm = h >= 12 ? "PM" : "AM";
     const hour12 = h % 12 === 0 ? 12 : h % 12;
 
-    const nowLocal = new Date(now.toLocaleString("en-US", { timeZone: tz }));
-    const nowUtc = new Date(now.toLocaleString("en-US", { timeZone: "UTC" }));
+    const fullDateTimeOptions: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', month: 'numeric', day: 'numeric', 
+      hour: 'numeric', minute: 'numeric', second: 'numeric', 
+      hour12: false 
+    };
+    
+    const nowLocal = new Date(getCachedFormatter(tz, fullDateTimeOptions).format(now));
+    const nowUtc = new Date(getCachedFormatter("UTC", fullDateTimeOptions).format(now));
     const diffMs = nowLocal.getTime() - nowUtc.getTime();
     
     const diffH = Math.floor(Math.abs(diffMs) / 3600000);
@@ -48,7 +65,7 @@ function getTimeInZone(tz: string, now: Date, hourFormat: 12 | 24, localTz: stri
     const offset = `UTC${sign}${String(diffH).padStart(2, "0")}:${String(diffM).padStart(2, "0")}`;
 
     // Relative to Local
-    const baseLocal = new Date(now.toLocaleString("en-US", { timeZone: localTz })).getTime();
+    const baseLocal = new Date(getCachedFormatter(localTz, fullDateTimeOptions).format(now)).getTime();
     const relativeMs = nowLocal.getTime() - baseLocal;
     const relDiffH = Math.round(relativeMs / 3600000);
     let relativeText = "Same time";
@@ -76,7 +93,7 @@ function getTimeInZone(tz: string, now: Date, hourFormat: 12 | 24, localTz: stri
 
 function getBusinessStatus(tz: string, now: Date) {
   try {
-    const parts = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "numeric", weekday: "short", hour12: false }).formatToParts(now);
+    const parts = getCachedFormatter(tz, { hour: "numeric", minute: "numeric", weekday: "short", hour12: false }).formatToParts(now);
     const hour = parseInt(parts.find((p) => p.type === "hour")?.value ?? "0");
     const minute = parseInt(parts.find((p) => p.type === "minute")?.value ?? "0");
     const weekday = parts.find((p) => p.type === "weekday")?.value ?? "";
@@ -122,6 +139,9 @@ export default function WorldClockClient() {
   const { displayMode, activeToolId } = useFullscreenContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localTz, setLocalTz] = useState('');
+  const [filterMode, setFilterMode] = useState<"all" | "open">("all");
+  const { toast } = useToast();
+  const openFeedback = useSupportStore(state => state.openFeedback);
   
   const isDashboard = displayMode === 'dashboard' && activeToolId === 'world-clock';
 
@@ -131,6 +151,8 @@ export default function WorldClockClient() {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
+
+  const handleCloseModal = useCallback(() => setIsModalOpen(false), []);
 
   // Keyboard shortcut for adding clock
   useEffect(() => {
@@ -263,10 +285,27 @@ export default function WorldClockClient() {
   }
 
   const openClocks = clocks.filter(c => getBusinessStatus(c.tz, now).isOpen).length;
+  const displayClocks = filterMode === "all" ? clocks : clocks.filter(c => getBusinessStatus(c.tz, now).isOpen);
+
+  const handleSort = () => {
+    useWorldClockStore.setState(state => ({
+      clocks: [...state.clocks].sort((a, b) => a.city.localeCompare(b.city))
+    }));
+    toast("Sorted alphabetically", "success");
+  };
+
+  const handleExport = () => {
+    const csv = "City,Timezone,Country\n" + clocks.map(c => `${c.city},${c.tz},${c.country}`).join("\n");
+    const a = document.createElement("a");
+    a.href = `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`;
+    a.download = "world-clock-export.csv";
+    a.click();
+    toast("Exported to CSV", "success");
+  };
 
   return (
     <div className="space-y-8 max-w-[1400px] mx-auto">
-      <TimezoneSearchModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TimezoneSearchModal isOpen={isModalOpen} onClose={handleCloseModal} />
       
       {/* Quick Actions & Stats Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-surface border border-border rounded-3xl shadow-sm">
@@ -289,13 +328,13 @@ export default function WorldClockClient() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button className="px-4 py-2 bg-surface-2 border border-border rounded-xl text-xs font-bold uppercase tracking-widest text-text-3 hover:text-text hover:border-text-4 transition-all flex items-center gap-2">
+          <button onClick={handleSort} className="px-4 py-2 bg-surface-2 border border-border rounded-xl text-xs font-bold uppercase tracking-widest text-text-3 hover:text-text hover:border-text-4 transition-all flex items-center gap-2">
             <ArrowUpDown className="w-4 h-4" /> Sort
           </button>
-          <button className="px-4 py-2 bg-surface-2 border border-border rounded-xl text-xs font-bold uppercase tracking-widest text-text-3 hover:text-text hover:border-text-4 transition-all flex items-center gap-2">
-            <Filter className="w-4 h-4" /> Filter
+          <button onClick={() => setFilterMode(f => f === "all" ? "open" : "all")} className={cn("px-4 py-2 border rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2", filterMode === "open" ? "bg-success/10 border-success/30 text-success" : "bg-surface-2 border-border text-text-3 hover:text-text hover:border-text-4")}>
+            <Filter className="w-4 h-4" /> {filterMode === "all" ? "Filter" : "Showing Open"}
           </button>
-          <button className="px-4 py-2 bg-blue/10 border border-blue/20 rounded-xl text-xs font-bold uppercase tracking-widest text-blue hover:bg-blue/20 transition-all flex items-center gap-2">
+          <button onClick={handleExport} className="px-4 py-2 bg-blue/10 border border-blue/20 rounded-xl text-xs font-bold uppercase tracking-widest text-blue hover:bg-blue/20 transition-all flex items-center gap-2">
             <Download className="w-4 h-4" /> Export CSV
           </button>
         </div>
@@ -322,7 +361,7 @@ export default function WorldClockClient() {
         </button>
 
         {/* Clock Cards */}
-        {clocks.map(({ id, city, country, tz }) => {
+        {displayClocks.map(({ id, city, country, tz }) => {
           const t = getTimeInZone(tz, now, settings.hourFormat, localTz);
           const biz = getBusinessStatus(tz, now);
           const isLocal = tz === localTz;
@@ -345,7 +384,7 @@ export default function WorldClockClient() {
               )} />
 
               {/* Header */}
-              <div className="flex items-start justify-between relative z-10">
+              <div className="flex items-start justify-between relative z-content">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     {isLocal ? (
@@ -373,7 +412,7 @@ export default function WorldClockClient() {
               </div>
 
               {/* Clock Face & Time */}
-              <div className="flex flex-col items-center justify-center py-4 relative z-10">
+              <div className="flex flex-col items-center justify-center py-4 relative z-content">
                 <div className="flex items-center gap-6 w-full px-2">
                   <div className="shrink-0 drop-shadow-md">
                     <AnalogClock hours={t.hours} minutes={t.minutes} seconds={t.seconds} />
@@ -392,7 +431,7 @@ export default function WorldClockClient() {
               </div>
 
               {/* Footer details */}
-              <div className="space-y-3 relative z-10">
+              <div className="space-y-3 relative z-content">
                 {/* Business Hours Progress */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest">
@@ -438,7 +477,10 @@ export default function WorldClockClient() {
         
         <div className="flex items-center gap-4">
           <span className="opacity-50">v2.1.0</span>
-          <button className="flex items-center gap-2 text-blue hover:text-blue-400 transition-colors bg-blue/10 px-3 py-1.5 rounded-lg">
+          <button 
+            onClick={() => openFeedback("feature", { toolId: "world-clock", toolName: "World Clock" })}
+            className="flex items-center gap-2 text-blue hover:text-blue-400 transition-colors bg-blue/10 px-3 py-1.5 rounded-lg"
+          >
             Feedback <ArrowRight className="w-3 h-3" />
           </button>
         </div>
