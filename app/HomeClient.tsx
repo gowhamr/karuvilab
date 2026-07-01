@@ -245,7 +245,6 @@ export default function HomeClient() {
                     subtitle="Most-used across all users"
                     icon={TrendingUp}
                     badge="Hot"
-                    href="/all-tools"
                   />
                   <m.div
                     initial={{ opacity: 0, y: 16 }}
@@ -299,7 +298,6 @@ export default function HomeClient() {
                     title={t("common.all")}
                     subtitle="The complete universal toolkit"
                     icon={LayoutGrid}
-                    href="/all-tools"
                   />
                   <m.div
                     initial={{ opacity: 0, y: 16 }}
