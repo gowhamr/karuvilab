@@ -153,14 +153,7 @@ function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now
         t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5"
       )}
     >
-      {isDraggable && (
-        <div 
-          onPointerDown={(e) => dragControls.start(e)}
-          className="absolute top-1/2 -left-2 -translate-y-1/2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 lg:group-hover:opacity-30 p-2 text-text-4 z-above transition-opacity touch-none"
-        >
-          <GripVertical className="w-6 h-6 pointer-events-none" />
-        </div>
-      )}
+
 
       {/* Decorative Time of Day Gradient Background */}
       <div className={cn(
@@ -187,13 +180,23 @@ function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now
           </div>
         </div>
         
-        <button 
-          onClick={() => removeClock(id)} 
-          className="opacity-100 lg:opacity-0 group-hover:opacity-100 p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-4 hover:text-error rounded-xl transition-all shadow-sm" 
-          title="Remove clock"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+          {isDraggable && (
+            <div 
+              onPointerDown={(e) => dragControls.start(e)}
+              className="p-2 cursor-grab active:cursor-grabbing text-text-4 hover:text-text bg-surface-2 hover:bg-surface-2/80 rounded-xl touch-none flex items-center justify-center shadow-sm border border-transparent hover:border-border"
+            >
+              <GripVertical className="w-4 h-4 pointer-events-none" />
+            </div>
+          )}
+          <button 
+            onClick={() => removeClock(id)} 
+            className="p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-4 hover:text-error rounded-xl transition-all shadow-sm flex items-center justify-center" 
+            title="Remove clock"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Clock Face & Time */}
