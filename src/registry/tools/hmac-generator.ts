@@ -4,7 +4,7 @@ import { KeyRound } from 'lucide-react';
 export const hmac_generator: ToolEntry = {
   id: 'hmac-generator',
   name: 'HMAC Generator',
-  desc: 'Generate Hash-based Message Authentication Codes (HMAC) using SHA-256, SHA-512, and other algorithms natively in the browser.',
+  desc: 'Generate Hash-based Message Authentication Codes (HMAC) using SHA-256, SHA-512, and other algorithms natively in the browser',
   href: 'security-tools/hmac-generator/',
   category: 'security',
   keywords: ['hmac', 'mac', 'hash authentication', 'sha256 hmac', 'signature generator', 'jwt signature'],

@@ -4,7 +4,7 @@ import { Layers } from 'lucide-react';
 export const glassmorphism_generator: ToolEntry = {
   id: 'glassmorphism-generator',
   name: 'Glassmorphism Generator',
-  desc: 'Generate trendy glassmorphism CSS effects. Adjust blur, transparency, and tint to create beautiful frosted glass elements.',
+  desc: 'Generate trendy glassmorphism CSS effects. Adjust blur, transparency, and tint to create beautiful frosted glass elements',
   href: 'developer-tools/glassmorphism-generator/',
   category: 'developer',
   keywords: ['glassmorphism', 'glass css', 'frosted glass', 'backdrop filter', 'ui generator'],

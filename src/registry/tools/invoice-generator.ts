@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const invoice_generator: ToolEntry = {
   id: 'invoice-generator',
   name: 'Invoice Generator',
-  desc: 'Create professional branded invoices with custom logos, multiple templates, and automated tax calculations. 100% private and local.',
+  desc: 'Create professional branded invoices with custom logos, multiple templates, and automated tax calculations. 100% private and local',
   href: 'calculators/invoice-generator/',
   category: 'calculators',
   subCategory: 'Financial',

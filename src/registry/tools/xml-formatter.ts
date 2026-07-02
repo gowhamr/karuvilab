@@ -3,8 +3,8 @@ import { Code2 } from 'lucide-react';
 
 export const xml_formatter: ToolEntry = {
   id: 'xml-formatter',
-  name: 'XML Formatter',
-  desc: 'Format, beautify, minify, and validate XML documents in your browser. Fast, secure, and offline-capable.',
+  name: 'Xml Formatter',
+  desc: 'Format, beautify, minify, and validate XML documents in your browser. Fast, secure, and offline-capable',
   href: 'developer-tools/xml-formatter/',
   category: 'developer',
   input: 'text',

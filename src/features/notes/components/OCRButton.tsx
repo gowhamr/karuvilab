@@ -25,6 +25,8 @@ export function OCRButton({ onResult }: OCRButtonProps) {
         await new Promise((resolve, reject) => {
           const script = document.createElement('script');
           script.src = 'https://unpkg.com/tesseract.js@v5.0.3/dist/tesseract.min.js';
+          script.integrity = 'sha384-5KTRRh2s/UMauLg1EmP0LM9mOjREcgOtVWsQVVSVdaFEOWhFTw7VtuyPShsw+uHg';
+          script.crossOrigin = 'anonymous';
           script.onload = resolve;
           script.onerror = reject;
           document.head.appendChild(script);

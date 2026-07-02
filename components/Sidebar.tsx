@@ -415,11 +415,6 @@ export function Sidebar() {
 
         {desktopContent}
 
-        {/* Footer — version / branding strip */}
-        <div className="shrink-0 px-4 py-3 border-t border-border/60 flex items-center justify-between">
-          <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">KaruviLab</span>
-          <span className="text-[10px] text-text-4 font-mono opacity-60">v2</span>
-        </div>
       </aside>
     </>
   );

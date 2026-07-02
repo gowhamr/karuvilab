@@ -4,7 +4,7 @@ import { Award } from 'lucide-react';
 export const gratuity_calculator: ToolEntry = {
   id: 'gratuity-calculator',
   name: 'Gratuity Calculator',
-  desc: 'Calculate Gratuity amount for employees covered and not covered under the Payment of Gratuity Act 1972.',
+  desc: 'Calculate Gratuity amount for employees covered and not covered under the Payment of Gratuity Act 1972',
   href: 'calculators/gratuity-calculator/',
   category: 'calculators',
   keywords: ['gratuity calculator', 'gratuity act 1972', 'severance', 'employee benefits', 'retirement'],

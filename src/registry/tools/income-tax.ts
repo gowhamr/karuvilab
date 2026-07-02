@@ -4,7 +4,7 @@ import { IndianRupee } from 'lucide-react';
 export const income_tax: ToolEntry = {
   id: 'income-tax',
   name: 'Income Tax Calculator',
-  desc: 'Calculate income tax for FY 2025-26. Compare Old vs New regime and find the best tax-saving strategy.',
+  desc: 'Calculate income tax for FY 2025-26. Compare Old vs New regime and find the best tax-saving strategy',
   href: 'calculators/income-tax/',
   category: 'calculators',
   keywords: ['income tax', 'tax calculator', 'new regime', 'old regime', 'FY 2025-26', 'salary tax', 'tax india'],

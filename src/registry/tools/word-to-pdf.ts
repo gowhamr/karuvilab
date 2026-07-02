@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const word_to_pdf: ToolEntry = {
   id: 'word-to-pdf',
   name: 'Word to PDF',
-  desc: 'Convert Word documents (.docx) to PDF format.',
+  desc: 'Convert Word documents (.docx) to PDF format',
   href: 'pdf-tools/word-to-pdf/',
   category: 'pdf',
   subCategory: 'Conversion',

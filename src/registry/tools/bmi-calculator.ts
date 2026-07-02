@@ -4,7 +4,7 @@ import { Activity } from 'lucide-react';
 export const bmi_calculator: ToolEntry = {
   id: 'bmi-calculator',
   name: 'BMI Calculator',
-  desc: 'Calculate your Body Mass Index with visual healthy range indicator. Supports metric and imperial units with Indian body type context.',
+  desc: 'Calculate your Body Mass Index with visual healthy range indicator. Supports metric and imperial units with Indian body type context',
   href: 'calculators/bmi-calculator/',
   category: 'calculators',
   keywords: ['bmi calculator', 'body mass index', 'health', 'weight', 'fitness', 'healthy weight', 'bmi india'],

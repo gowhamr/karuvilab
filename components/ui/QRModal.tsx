@@ -66,6 +66,8 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
     // Load QRCode from CDN
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+    script.integrity = 'sha384-8k/674J8BfiDbYOO16+Z0gW2QiG+aRITthbJaaZpcE+AoWU0ep4TEMy8/xEhs4e3';
+    script.crossOrigin = 'anonymous';
     script.async = true;
     script.onload = () => renderQR();
     script.onerror = () => {

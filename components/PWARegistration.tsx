@@ -134,13 +134,13 @@ export function PWARegistration() {
         role="dialog"
         aria-modal="false"
         aria-label="Install KaruviLab PWA"
-        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+        initial={{ opacity: 0, y: -50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 50, scale: 0.95 }}
+        exit={{ opacity: 0, y: -50, scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="
           fixed left-4 right-4 z-max
-          bottom-24 md:bottom-6 md:right-auto md:left-6 md:w-96
+          top-20 md:top-24 md:right-6 md:left-auto md:w-96
           p-5 rounded-3xl
           bg-mat-surface border border-mat-border shadow-2xl shadow-mat-shine
           flex flex-col gap-4 outline-none focus:ring-2 focus:ring-blue/30
@@ -163,7 +163,7 @@ export function PWARegistration() {
           <div className="space-y-1">
             <h3 className="text-sm font-black text-text tracking-tight">Install KaruviLab</h3>
             <p className="text-xs text-text-3 leading-relaxed">
-              Use 100+ tools offline — no app store needed. Fully private, fast, and local-first.
+              Install as a private offline web app.
             </p>
           </div>
         </div>

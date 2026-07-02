@@ -4,7 +4,7 @@ import { Shield } from 'lucide-react';
 export const csp_builder: ToolEntry = {
   id: 'csp-builder',
   name: 'CSP Builder',
-  desc: 'Visual Content Security Policy (CSP) generator. Build, analyze, and export strict CSP headers to protect against XSS and injection attacks.',
+  desc: 'Visual Content Security Policy (CSP) generator. Build, analyze, and export strict CSP headers to protect against XSS and injection attacks',
   href: 'security-tools/csp-builder/',
   category: 'security',
   keywords: ['csp', 'content security policy', 'csp generator', 'xss protection', 'security headers', 'csp evaluator'],

@@ -3,8 +3,8 @@ import { Home } from 'lucide-react';
 
 export const hra_calculator: ToolEntry = {
   id: 'hra-calculator',
-  name: 'HRA Exemption Calculator',
-  desc: 'Calculate your House Rent Allowance (HRA) tax exemption limit based on Metro/Non-Metro rules.',
+  name: 'Hra Exemption Calculator',
+  desc: 'Calculate your House Rent Allowance (HRA) tax exemption limit based on Metro/Non-Metro rules',
   href: 'calculators/hra-calculator/',
   category: 'calculators',
   keywords: ['hra calculator', 'house rent allowance', 'tax exemption', 'rent tax benefit', 'income tax'],

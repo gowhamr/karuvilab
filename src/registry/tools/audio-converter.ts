@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const audio_converter: ToolEntry = {
   id: 'audio-converter',
   name: 'Audio Converter',
-  desc: 'Convert audio files locally between WAV, MP3, AAC, and Opus formats.',
+  desc: 'Convert audio files between WAV, MP3, AAC, and Opus formats',
   href: 'media-tools/audio-converter/',
   category: 'media',
   subCategory: 'Audio',

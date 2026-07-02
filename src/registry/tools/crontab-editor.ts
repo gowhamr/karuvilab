@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const crontab_editor: ToolEntry = {
   id: 'crontab-editor',
   name: 'Crontab Editor',
-  desc: 'Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly.',
+  desc: 'Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly',
   href: 'developer-tools/crontab-editor/',
   category: 'developer',
   keywords: ['cron', 'crontab', 'scheduler', 'linux', 'devops', 'automation'],

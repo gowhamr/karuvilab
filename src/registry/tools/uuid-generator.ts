@@ -4,7 +4,7 @@ import { Fingerprint } from 'lucide-react';
 export const uuid_generator: ToolEntry = {
   id: 'uuid-generator',
   name: 'UUID Generator',
-  desc: 'Generate RFC-compliant UUIDs (v1, v4, v5, v7). Bulk generation, format options, and UUID validator. 100% browser-native using Web Crypto API.',
+  desc: 'Generate RFC-compliant UUIDs (v1, v4, v5, v7). Bulk generation, format options, and UUID validator. 100% browser-native using Web Crypto API',
   href: 'developer-tools/uuid-generator/',
   category: 'developer',
   keywords: ['uuid', 'guid', 'unique id', 'v4', 'random', 'identifier'],

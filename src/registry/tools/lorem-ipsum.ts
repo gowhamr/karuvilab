@@ -4,7 +4,7 @@ import { FileText } from 'lucide-react';
 export const lorem_ipsum: ToolEntry = {
   id: 'lorem-ipsum',
   name: 'Lorem Ipsum Generator',
-  desc: 'Generate Lorem Ipsum placeholder text in words, sentences, or paragraphs with Classic, Hipster, or Tech variants.',
+  desc: 'Generate Lorem Ipsum placeholder text in words, sentences, or paragraphs with Classic, Hipster, or Tech variants',
   href: 'developer-tools/lorem-ipsum/',
   category: 'developer',
   keywords: ['lorem ipsum', 'placeholder text', 'dummy text', 'generator', 'hipster ipsum', 'tech ipsum'],

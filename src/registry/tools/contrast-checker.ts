@@ -4,7 +4,7 @@ import { Eye } from 'lucide-react';
 export const contrast_checker: ToolEntry = {
   id: 'contrast-checker',
   name: 'Contrast Checker',
-  desc: 'WCAG contrast ratio checker. Ensure your text and background colors are accessible with live previews and color suggestions.',
+  desc: 'WCAG contrast ratio checker. Ensure your text and background colors are accessible with live previews and color suggestions',
   href: 'developer-tools/contrast-checker/',
   category: 'developer',
   keywords: ['contrast checker', 'wcag contrast', 'accessibility checker', 'color contrast', 'a11y'],

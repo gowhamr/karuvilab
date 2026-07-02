@@ -4,7 +4,7 @@ import { Lock } from 'lucide-react';
 export const cipher_tools: ToolEntry = {
   id: 'cipher-tools',
   name: 'Text Cipher Tools',
-  desc: 'Encrypt and decrypt text using classic ciphers like Caesar, Vigenère, ROT13, XOR, and Morse Code natively in your browser.',
+  desc: 'Encrypt and decrypt text using classic ciphers like Caesar, Vigenère, ROT13, XOR, and Morse Code',
   href: 'security-tools/cipher-tools/',
   category: 'security',
   keywords: ['cipher', 'encryption', 'decryption', 'caesar cipher', 'vigenere', 'rot13', 'xor cipher', 'morse code'],

@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const video_trim: ToolEntry = {
   id: 'video-trim',
   name: 'Video Trimmer',
-  desc: 'Trim MP4, WebM, and MOV videos locally without re-encoding.',
+  desc: 'Trim MP4, WebM, and MOV videos without re-encoding',
   href: 'media-tools/video-trim/',
   category: 'media',
   subCategory: 'Video',

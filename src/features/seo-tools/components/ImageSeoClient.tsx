@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
+import Link from "next/link";
 import { CATEGORIES, ALL_TOOLS } from "@/src/tool-registry";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { 
@@ -394,9 +395,9 @@ export default function ImageSeoClient() {
                  SEO isn't just about names. Large images slow down your site. Use our local Bulk Image Resizer to optimize load times.
                </p>
             </div>
-            <button className="group px-8 py-4 bg-surface border border-border rounded-2xl font-black text-xs uppercase tracking-widest hover:border-blue/30 transition-all shadow-sm flex items-center gap-3">
+            <Link href="/image/image-resizer" className="group px-8 py-4 bg-surface border border-border rounded-2xl font-black text-xs uppercase tracking-widest hover:border-blue/30 transition-all shadow-sm flex items-center gap-3">
                Image Resizer <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
          </div>
       </section>
     </div>

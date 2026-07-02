@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const countdown_timer: ToolEntry = {
   id: 'countdown-timer',
   name: 'Countdown Timer',
-  desc: 'A professional countdown timer with fullscreen dashboard mode and custom alarm sounds.',
+  desc: 'A professional countdown timer with fullscreen dashboard mode and custom alarm sounds',
   href: 'productivity/countdown-timer/',
   category: 'productivity',
   subCategory: 'Time Management',

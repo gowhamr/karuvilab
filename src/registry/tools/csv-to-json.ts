@@ -4,7 +4,7 @@ import { ArrowLeftRight } from 'lucide-react';
 export const csv_to_json: ToolEntry = {
   id: 'csv-to-json',
   name: 'CSV to JSON Converter',
-  desc: 'Convert CSV to JSON and JSON to CSV natively in your browser. Supports custom delimiters, headers, and advanced parsing options.',
+  desc: 'Convert CSV to JSON and JSON to CSV Supports custom delimiters, headers, and advanced parsing options',
   href: 'developer-tools/csv-to-json/',
   category: 'developer',
   input: 'csv',

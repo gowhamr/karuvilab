@@ -3,8 +3,8 @@ import { TrendingUp } from 'lucide-react';
 
 export const nps_calculator: ToolEntry = {
   id: 'nps-calculator',
-  name: 'NPS Calculator',
-  desc: 'Plan your retirement with the National Pension System. Estimate your corpus, monthly pension, and tax benefits.',
+  name: 'Nps Calculator',
+  desc: 'Plan your retirement with the National Pension System. Estimate your corpus, monthly pension, and tax benefits',
   href: 'calculators/nps-calculator/',
   category: 'calculators',
   keywords: ['nps calculator', 'national pension system', 'retirement planning', 'pension calculator', '80ccd'],

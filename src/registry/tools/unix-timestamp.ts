@@ -4,7 +4,7 @@ import { Timer } from 'lucide-react';
 export const unix_timestamp: ToolEntry = {
   id: 'unix-timestamp',
   name: 'Unix Timestamp Converter',
-  desc: 'Convert Unix timestamps to human-readable dates and back. Live clock, timezone support, relative time display.',
+  desc: 'Convert Unix timestamps to human-readable dates and back. Live clock, timezone support, relative time display',
   href: 'developer-tools/unix-timestamp/',
   category: 'developer',
   keywords: ['unix timestamp', 'epoch', 'date converter', 'time', 'iso 8601'],

@@ -31,7 +31,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "audio-converter",
     "name": "Audio Converter",
-    "desc": "Convert audio files locally between WAV, MP3, AAC, and Opus formats.",
+    "desc": "Convert audio files between WAV, MP3, AAC, and Opus formats",
     "href": "media-tools/audio-converter/",
     "category": "media",
     "icon": null,
@@ -136,7 +136,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "bmi-calculator",
     "name": "BMI Calculator",
-    "desc": "Calculate your Body Mass Index with visual healthy range indicator. Supports metric and imperial units with Indian body type context.",
+    "desc": "Calculate your Body Mass Index with visual healthy range indicator. Supports metric and imperial units with Indian body type context",
     "href": "calculators/bmi-calculator/",
     "category": "calculators",
     "icon": null,
@@ -167,7 +167,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "box-shadow-generator",
     "name": "Box Shadow Generator",
-    "desc": "Visual box shadow generator. Layer multiple shadows to create deep, realistic UI depth with CSS and Tailwind export.",
+    "desc": "Visual box shadow generator. Layer multiple shadows to create deep, realistic UI depth with CSS and Tailwind export",
     "href": "developer-tools/box-shadow-generator/",
     "category": "developer",
     "icon": null,
@@ -296,7 +296,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "cipher-tools",
     "name": "Text Cipher Tools",
-    "desc": "Encrypt and decrypt text using classic ciphers like Caesar, Vigenère, ROT13, XOR, and Morse Code natively in your browser.",
+    "desc": "Encrypt and decrypt text using classic ciphers like Caesar, Vigenère, ROT13, XOR, and Morse Code",
     "href": "security-tools/cipher-tools/",
     "category": "security",
     "icon": null,
@@ -352,7 +352,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "color-converter",
     "name": "Color Converter",
-    "desc": "Convert colors between HEX, RGB, HSL, HSV, and CMYK formats.",
+    "desc": "Convert colors between HEX, RGB, HSL, HSV, and CMYK formats",
     "href": "developer-tools/color-converter/",
     "category": "developer",
     "icon": null,
@@ -376,7 +376,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "color-palette-extractor",
     "name": "Color Palette Extractor",
-    "desc": "Extract dominant colors from an image.",
+    "desc": "Extract dominant colors from an image",
     "href": "image-tools/color-palette-extractor/",
     "category": "image",
     "icon": null,
@@ -406,7 +406,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "command-cheat-sheet",
     "name": "Command Cheat Sheet",
-    "desc": "A searchable reference for Linux, Windows (CMD), and Git commands.",
+    "desc": "A searchable reference for Linux, Windows (CMD), and Git commands",
     "href": "developer-tools/command-cheat-sheet/",
     "category": "developer",
     "icon": null,
@@ -478,7 +478,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "contrast-checker",
     "name": "Contrast Checker",
-    "desc": "WCAG contrast ratio checker. Ensure your text and background colors are accessible with live previews and color suggestions.",
+    "desc": "WCAG contrast ratio checker. Ensure your text and background colors are accessible with live previews and color suggestions",
     "href": "developer-tools/contrast-checker/",
     "category": "developer",
     "icon": null,
@@ -507,7 +507,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "countdown-timer",
     "name": "Countdown Timer",
-    "desc": "A professional countdown timer with fullscreen dashboard mode and custom alarm sounds.",
+    "desc": "A professional countdown timer with fullscreen dashboard mode and custom alarm sounds",
     "href": "productivity/countdown-timer/",
     "category": "productivity",
     "icon": null,
@@ -532,7 +532,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "crontab-editor",
     "name": "Crontab Editor",
-    "desc": "Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly.",
+    "desc": "Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly",
     "href": "developer-tools/crontab-editor/",
     "category": "developer",
     "icon": null,
@@ -562,7 +562,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "csp-builder",
     "name": "CSP Builder",
-    "desc": "Visual Content Security Policy (CSP) generator. Build, analyze, and export strict CSP headers to protect against XSS and injection attacks.",
+    "desc": "Visual Content Security Policy (CSP) generator. Build, analyze, and export strict CSP headers to protect against XSS and injection attacks",
     "href": "security-tools/csp-builder/",
     "category": "security",
     "icon": null,
@@ -592,7 +592,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "csv-to-json",
     "name": "CSV to JSON Converter",
-    "desc": "Convert CSV to JSON and JSON to CSV natively in your browser. Supports custom delimiters, headers, and advanced parsing options.",
+    "desc": "Convert CSV to JSON and JSON to CSV Supports custom delimiters, headers, and advanced parsing options",
     "href": "developer-tools/csv-to-json/",
     "category": "developer",
     "icon": null,
@@ -941,8 +941,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "gif-creator",
-    "name": "GIF Creator",
-    "desc": "Create lightweight animated GIFs from uploaded images entirely inside your browser.",
+    "name": "Gif Creator",
+    "desc": "Create lightweight animated GIFs from uploaded images entirely inside your browser",
     "href": "media-tools/gif-creator/",
     "category": "media",
     "icon": null,
@@ -972,7 +972,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "glassmorphism-generator",
     "name": "Glassmorphism Generator",
-    "desc": "Generate trendy glassmorphism CSS effects. Adjust blur, transparency, and tint to create beautiful frosted glass elements.",
+    "desc": "Generate trendy glassmorphism CSS effects. Adjust blur, transparency, and tint to create beautiful frosted glass elements",
     "href": "developer-tools/glassmorphism-generator/",
     "category": "developer",
     "icon": null,
@@ -1001,7 +1001,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gradient-generator",
     "name": "CSS Gradient Generator",
-    "desc": "Visual CSS gradient builder. Generate Linear, Radial, and Conic gradients with multiple color stops and instant CSS/Tailwind export.",
+    "desc": "Visual CSS gradient builder. Generate Linear, Radial, and Conic gradients with multiple color stops and instant CSS/Tailwind export",
     "href": "developer-tools/gradient-generator/",
     "category": "developer",
     "icon": null,
@@ -1054,7 +1054,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gratuity-calculator",
     "name": "Gratuity Calculator",
-    "desc": "Calculate Gratuity amount for employees covered and not covered under the Payment of Gratuity Act 1972.",
+    "desc": "Calculate Gratuity amount for employees covered and not covered under the Payment of Gratuity Act 1972",
     "href": "calculators/gratuity-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1135,7 +1135,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hash-map-visualizer",
     "name": "Hash Map Visualizer",
-    "desc": "Interactive visualization of hash map operations.",
+    "desc": "Interactive visualization of hash map operations",
     "href": "developer-tools/hash-map-visualizer/",
     "category": "developer",
     "icon": null,
@@ -1157,7 +1157,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hmac-generator",
     "name": "HMAC Generator",
-    "desc": "Generate Hash-based Message Authentication Codes (HMAC) using SHA-256, SHA-512, and other algorithms natively in the browser.",
+    "desc": "Generate Hash-based Message Authentication Codes (HMAC) using SHA-256, SHA-512, and other algorithms natively in the browser",
     "href": "security-tools/hmac-generator/",
     "category": "security",
     "icon": null,
@@ -1186,8 +1186,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "hra-calculator",
-    "name": "HRA Exemption Calculator",
-    "desc": "Calculate your House Rent Allowance (HRA) tax exemption limit based on Metro/Non-Metro rules.",
+    "name": "Hra Exemption Calculator",
+    "desc": "Calculate your House Rent Allowance (HRA) tax exemption limit based on Metro/Non-Metro rules",
     "href": "calculators/hra-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1415,7 +1415,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "income-tax",
     "name": "Income Tax Calculator",
-    "desc": "Calculate income tax for FY 2025-26. Compare Old vs New regime and find the best tax-saving strategy.",
+    "desc": "Calculate income tax for FY 2025-26. Compare Old vs New regime and find the best tax-saving strategy",
     "href": "calculators/income-tax/",
     "category": "calculators",
     "icon": null,
@@ -1496,7 +1496,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "invoice-generator",
     "name": "Invoice Generator",
-    "desc": "Create professional branded invoices with custom logos, multiple templates, and automated tax calculations. 100% private and local.",
+    "desc": "Create professional branded invoices with custom logos, multiple templates, and automated tax calculations. 100% private and local",
     "href": "calculators/invoice-generator/",
     "category": "calculators",
     "icon": null,
@@ -1633,7 +1633,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "lorem-ipsum",
     "name": "Lorem Ipsum Generator",
-    "desc": "Generate Lorem Ipsum placeholder text in words, sentences, or paragraphs with Classic, Hipster, or Tech variants.",
+    "desc": "Generate Lorem Ipsum placeholder text in words, sentences, or paragraphs with Classic, Hipster, or Tech variants",
     "href": "developer-tools/lorem-ipsum/",
     "category": "developer",
     "icon": null,
@@ -1793,8 +1793,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "notes",
-    "name": "KV Secure Notes",
-    "desc": "Zero-transmission, AES-256 encrypted private notes with Markdown and checklists.",
+    "name": "Kv Secure Notes",
+    "desc": "Zero-transmission, AES-256 encrypted private notes with Markdown and checklists",
     "href": "productivity/notes/",
     "category": "productivity",
     "icon": "StickyNote",
@@ -1823,8 +1823,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "nps-calculator",
-    "name": "NPS Calculator",
-    "desc": "Plan your retirement with the National Pension System. Estimate your corpus, monthly pension, and tax benefits.",
+    "name": "Nps Calculator",
+    "desc": "Plan your retirement with the National Pension System. Estimate your corpus, monthly pension, and tax benefits",
     "href": "calculators/nps-calculator/",
     "category": "calculators",
     "icon": null,
@@ -2027,7 +2027,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "pomodoro-timer",
     "name": "Pomodoro Timer",
-    "desc": "A simple, customizable timer to help you focus.",
+    "desc": "A simple, customizable timer to help you focus",
     "href": "productivity/pomodoro-timer/",
     "category": "productivity",
     "icon": null,
@@ -2270,7 +2270,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "seo-tools",
     "name": "SEO Tools",
-    "desc": "A comprehensive suite of SEO tools including Meta Tags Generator, Robots.txt Builder, Sitemap Generator, Image SEO, and more.",
+    "desc": "A comprehensive suite of SEO tools including Meta Tags Generator, Robots.txt Builder, Sitemap Generator, Image SEO, and more",
     "href": "developer-tools/seo-tools/",
     "category": "developer",
     "icon": "Search",
@@ -2452,7 +2452,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "stopwatch",
     "name": "Stopwatch",
-    "desc": "A precise, professional stopwatch with lap tracking and fullscreen dashboard mode.",
+    "desc": "A precise, professional stopwatch with lap tracking and fullscreen dashboard mode",
     "href": "productivity/stopwatch/",
     "category": "productivity",
     "icon": null,
@@ -2525,8 +2525,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "tds-calculator",
-    "name": "TDS Calculator",
-    "desc": "Calculate Tax Deducted at Source (TDS) for salary, rent, professional fees, and interest (194J, 194I, 194A, etc.).",
+    "name": "Tds Calculator",
+    "desc": "Calculate Tax Deducted at Source (TDS) for salary, rent, professional fees, and interest (194J, 194I, 194A, etc.)",
     "href": "calculators/tds-calculator/",
     "category": "calculators",
     "icon": null,
@@ -2556,7 +2556,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "text-case-converter",
     "name": "Text Case Converter",
-    "desc": "Convert text between UPPERCASE, lowercase, Title Case, camelCase, and more.",
+    "desc": "Convert text between UPPERCASE, lowercase, Title Case, camelCase, and more",
     "href": "productivity/text-case-converter/",
     "category": "productivity",
     "icon": null,
@@ -2739,7 +2739,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "unix-timestamp",
     "name": "Unix Timestamp Converter",
-    "desc": "Convert Unix timestamps to human-readable dates and back. Live clock, timezone support, relative time display.",
+    "desc": "Convert Unix timestamps to human-readable dates and back. Live clock, timezone support, relative time display",
     "href": "developer-tools/unix-timestamp/",
     "category": "developer",
     "icon": null,
@@ -2840,7 +2840,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "uuid-generator",
     "name": "UUID Generator",
-    "desc": "Generate RFC-compliant UUIDs (v1, v4, v5, v7). Bulk generation, format options, and UUID validator. 100% browser-native using Web Crypto API.",
+    "desc": "Generate RFC-compliant UUIDs (v1, v4, v5, v7). Bulk generation, format options, and UUID validator. 100% browser-native using Web Crypto API",
     "href": "developer-tools/uuid-generator/",
     "category": "developer",
     "icon": null,
@@ -2893,7 +2893,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "video-metadata-viewer",
     "name": "Video Metadata Viewer",
-    "desc": "Instantly inspect video metadata locally without uploading or decoding the full file.",
+    "desc": "Instantly inspect video metadata or decoding the full file",
     "href": "media-tools/video-metadata-viewer/",
     "category": "media",
     "icon": null,
@@ -2922,7 +2922,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "video-trim",
     "name": "Video Trimmer",
-    "desc": "Trim MP4, WebM, and MOV videos locally without re-encoding.",
+    "desc": "Trim MP4, WebM, and MOV videos without re-encoding",
     "href": "media-tools/video-trim/",
     "category": "media",
     "icon": null,
@@ -3001,7 +3001,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "word-counter",
     "name": "Word Counter",
-    "desc": "Count words, characters, sentences, and paragraphs in real-time.",
+    "desc": "Count words, characters, sentences, and paragraphs in real-time",
     "href": "productivity/word-counter/",
     "category": "productivity",
     "icon": null,
@@ -3025,7 +3025,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "word-to-pdf",
     "name": "Word to PDF",
-    "desc": "Convert Word documents (.docx) to PDF format.",
+    "desc": "Convert Word documents (.docx) to PDF format",
     "href": "pdf-tools/word-to-pdf/",
     "category": "pdf",
     "icon": null,
@@ -3099,8 +3099,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "xml-formatter",
-    "name": "XML Formatter",
-    "desc": "Format, beautify, minify, and validate XML documents in your browser. Fast, secure, and offline-capable.",
+    "name": "Xml Formatter",
+    "desc": "Format, beautify, minify, and validate XML documents in your browser. Fast, secure, and offline-capable",
     "href": "developer-tools/xml-formatter/",
     "category": "developer",
     "icon": null,
@@ -3128,8 +3128,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "yaml-validator",
-    "name": "YAML Validator & Converter",
-    "desc": "Validate YAML syntax and convert between YAML and JSON.",
+    "name": "Yaml Validator & Converter",
+    "desc": "Validate YAML syntax and convert between YAML and JSON",
     "href": "developer-tools/yaml-validator/",
     "category": "developer",
     "icon": null,

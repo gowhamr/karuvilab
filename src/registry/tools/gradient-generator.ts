@@ -4,7 +4,7 @@ import { Palette } from 'lucide-react';
 export const gradient_generator: ToolEntry = {
   id: 'gradient-generator',
   name: 'CSS Gradient Generator',
-  desc: 'Visual CSS gradient builder. Generate Linear, Radial, and Conic gradients with multiple color stops and instant CSS/Tailwind export.',
+  desc: 'Visual CSS gradient builder. Generate Linear, Radial, and Conic gradients with multiple color stops and instant CSS/Tailwind export',
   href: 'developer-tools/gradient-generator/',
   category: 'developer',
   keywords: ['gradient generator', 'css gradient', 'tailwind gradient', 'linear gradient', 'radial gradient', 'conic gradient'],

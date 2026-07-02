@@ -198,7 +198,7 @@ export function ClientToolShell({ title, description, category, children, toolId
 
         <ToolInfoSection toolId={finalToolId} id="help-docs" title="Help & Documentation">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link href={`/docs/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-blue transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-blue transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
                 <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
               </div>
@@ -208,7 +208,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               </div>
             </Link>
             
-            <Link href={`/tutorials/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-brand-primary transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-brand-primary transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center shrink-0">
                 <PlaySquare className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform" />
               </div>
@@ -218,7 +218,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               </div>
             </Link>
 
-            <Link href={`/examples/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-success transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-success transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
                 <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
               </div>
@@ -228,7 +228,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               </div>
             </Link>
 
-            <Link href={`/troubleshooting/${finalToolId}`} className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-error transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-error transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
                 <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
               </div>

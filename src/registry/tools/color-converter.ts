@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const color_converter: ToolEntry = {
   id: 'color-converter',
   name: 'Color Converter',
-  desc: 'Convert colors between HEX, RGB, HSL, HSV, and CMYK formats.',
+  desc: 'Convert colors between HEX, RGB, HSL, HSV, and CMYK formats',
   href: 'developer-tools/color-converter/',
   category: 'developer',
   input: 'none',

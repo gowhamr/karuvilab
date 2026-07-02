@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const stopwatch: ToolEntry = {
   id: 'stopwatch',
   name: 'Stopwatch',
-  desc: 'A precise, professional stopwatch with lap tracking and fullscreen dashboard mode.',
+  desc: 'A precise, professional stopwatch with lap tracking and fullscreen dashboard mode',
   href: 'productivity/stopwatch/',
   category: 'productivity',
   subCategory: 'Time Management',

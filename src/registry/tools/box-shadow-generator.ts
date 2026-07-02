@@ -4,7 +4,7 @@ import { Square } from 'lucide-react';
 export const box_shadow_generator: ToolEntry = {
   id: 'box-shadow-generator',
   name: 'Box Shadow Generator',
-  desc: 'Visual box shadow generator. Layer multiple shadows to create deep, realistic UI depth with CSS and Tailwind export.',
+  desc: 'Visual box shadow generator. Layer multiple shadows to create deep, realistic UI depth with CSS and Tailwind export',
   href: 'developer-tools/box-shadow-generator/',
   category: 'developer',
   keywords: ['box shadow generator', 'css shadow', 'tailwind shadow', 'drop shadow', 'layered shadow'],

@@ -2,8 +2,8 @@ import { ToolEntry } from '../types';
 
 export const yaml_validator: ToolEntry = {
   id: 'yaml-validator',
-  name: 'YAML Validator & Converter',
-  desc: 'Validate YAML syntax and convert between YAML and JSON.',
+  name: 'Yaml Validator & Converter',
+  desc: 'Validate YAML syntax and convert between YAML and JSON',
   href: 'developer-tools/yaml-validator/',
   category: 'developer',
   subCategory: 'Format & Convert',

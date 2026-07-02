@@ -3,8 +3,8 @@ import { Percent } from 'lucide-react';
 
 export const tds_calculator: ToolEntry = {
   id: 'tds-calculator',
-  name: 'TDS Calculator',
-  desc: 'Calculate Tax Deducted at Source (TDS) for salary, rent, professional fees, and interest (194J, 194I, 194A, etc.).',
+  name: 'Tds Calculator',
+  desc: 'Calculate Tax Deducted at Source (TDS) for salary, rent, professional fees, and interest (194J, 194I, 194A, etc.)',
   href: 'calculators/tds-calculator/',
   category: 'calculators',
   keywords: ['tds calculator', 'tax deducted at source', '194J', '194A', '194I', 'tds rate'],
