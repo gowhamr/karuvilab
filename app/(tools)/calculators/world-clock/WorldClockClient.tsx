@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { useWorldClockStore } from "@/src/features/world-clock/store";
+import { useWorldClockStore, type ClockItem } from "@/src/features/world-clock/store";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { Plus, Trash2, Globe, Clock, Star, Maximize2, Search, ArrowUpDown, Filter, Download, ArrowRight, Sun, Moon, GripVertical } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { TimezoneSearchModal } from "@/components/tools/world-clock/TimezoneSearchModal";
 import * as Popover from '@radix-ui/react-popover';
-import { m, Reorder } from "framer-motion";
+import { m, Reorder, useDragControls } from "framer-motion";
 import { useToast } from "@/components/ui/Toast";
 import { useSupportStore } from "@/src/store/useSupportStore";
 import { Settings2 } from "lucide-react";
@@ -127,6 +127,113 @@ function getBusinessStatus(tz: string, now: Date) {
   } catch {
     return { isOpen: false, text: "", progress: 0 };
   }
+}
+
+function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now: Date, localTz: string, isDraggable: boolean }) {
+  const settings = useWorldClockStore(state => state.settings);
+  const removeClock = useWorldClockStore(state => state.removeClock);
+  const dragControls = useDragControls();
+
+  const { id, city, country, tz } = clock;
+  const t = getTimeInZone(tz, now, settings.hourFormat, localTz);
+  const biz = getBusinessStatus(tz, now);
+  const isLocal = tz === localTz;
+
+  return (
+    <Reorder.Item
+      layout
+      value={clock}
+      dragListener={false}
+      dragControls={dragControls}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={cn(
+        "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-[280px] relative overflow-hidden",
+        isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
+        t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5"
+      )}
+    >
+      {isDraggable && (
+        <div 
+          onPointerDown={(e) => dragControls.start(e)}
+          className="absolute top-1/2 -left-2 -translate-y-1/2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 lg:group-hover:opacity-30 p-2 text-text-4 z-above transition-opacity touch-none"
+        >
+          <GripVertical className="w-6 h-6 pointer-events-none" />
+        </div>
+      )}
+
+      {/* Decorative Time of Day Gradient Background */}
+      <div className={cn(
+        "absolute inset-0 opacity-[0.03] pointer-events-none transition-colors duration-1000",
+        t.isNight ? "bg-gradient-to-br from-indigo-900 to-black" : "bg-gradient-to-br from-blue to-amber-500"
+      )} />
+
+      {/* Header */}
+      <div className="flex items-start justify-between relative z-content">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            {isLocal ? (
+              <Star className="w-4 h-4 text-blue fill-current" />
+            ) : (
+              t.isNight ? <Moon className="w-4 h-4 text-text-4" /> : <Sun className="w-4 h-4 text-amber-500" />
+            )}
+            <h2 className="font-black text-xl text-text leading-tight tracking-tight">{city}</h2>
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-text-4 font-bold uppercase tracking-wider">{country}</p>
+            <span className="text-[10px] font-black uppercase tracking-widest bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
+              {t.relativeText}
+            </span>
+          </div>
+        </div>
+        
+        <button 
+          onClick={() => removeClock(id)} 
+          className="opacity-100 lg:opacity-0 group-hover:opacity-100 p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-4 hover:text-error rounded-xl transition-all shadow-sm" 
+          title="Remove clock"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Clock Face & Time */}
+      <div className="flex flex-col items-center justify-center py-8 relative z-content">
+        <div className="font-mono flex flex-col items-center justify-center">
+          <div className="flex items-baseline justify-center gap-1">
+            <p className="text-5xl md:text-6xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
+            <p className="text-2xl font-bold text-text-4 tabular-nums">:{t.displaySeconds}</p>
+          </div>
+          {settings.hourFormat === 12 && (
+            <p className="text-base font-black text-blue mt-1">{t.ampm}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Footer details */}
+      <div className="space-y-3 relative z-content">
+        {/* Business Hours Progress */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest">
+            <span className={biz.isOpen ? "text-success" : "text-text-4 opacity-70"}>
+              {biz.isOpen ? "Open" : "Closed"}
+            </span>
+            <span className="text-text-4">{biz.text}</span>
+          </div>
+          <div className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
+            <div 
+              className={cn("h-full rounded-full transition-all duration-1000", biz.isOpen ? "bg-success" : "bg-text-4 opacity-20")}
+              style={{ width: `${biz.progress}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between text-[11px] pt-3 border-t border-border/50">
+          <span className="text-text-3 font-bold uppercase tracking-wider">{t.date}</span>
+          <span className="text-text-4 font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
+        </div>
+      </div>
+    </Reorder.Item>
+  );
 }
 
 export default function WorldClockClient() {
@@ -346,106 +453,15 @@ export default function WorldClockClient() {
       >
         
         {/* Clock Cards */}
-        {displayClocks.map((clock) => {
-          const { id, city, country, tz } = clock;
-          const t = getTimeInZone(tz, now, settings.hourFormat, localTz);
-          const biz = getBusinessStatus(tz, now);
-          const isLocal = tz === localTz;
-          const isDraggable = filterMode === "all";
-
-          return (
-            <Reorder.Item
-              layout
-              key={id}
-              value={clock}
-              dragListener={isDraggable}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className={cn(
-                "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-[280px] relative overflow-hidden",
-                isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
-                t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5"
-              )}
-            >
-              {isDraggable && (
-                <div className="absolute top-1/2 -left-2 -translate-y-1/2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-30 p-2 text-text-4 z-above transition-opacity">
-                  <GripVertical className="w-6 h-6" />
-                </div>
-              )}
-
-              {/* Decorative Time of Day Gradient Background */}
-              <div className={cn(
-                "absolute inset-0 opacity-[0.03] pointer-events-none transition-colors duration-1000",
-                t.isNight ? "bg-gradient-to-br from-indigo-900 to-black" : "bg-gradient-to-br from-blue to-amber-500"
-              )} />
-
-              {/* Header */}
-              <div className="flex items-start justify-between relative z-content">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    {isLocal ? (
-                      <Star className="w-4 h-4 text-blue fill-current" />
-                    ) : (
-                      t.isNight ? <Moon className="w-4 h-4 text-text-4" /> : <Sun className="w-4 h-4 text-amber-500" />
-                    )}
-                    <h2 className="font-black text-xl text-text leading-tight tracking-tight">{city}</h2>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs text-text-4 font-bold uppercase tracking-wider">{country}</p>
-                    <span className="text-[10px] font-black uppercase tracking-widest bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
-                      {t.relativeText}
-                    </span>
-                  </div>
-                </div>
-                
-                <button 
-                  onClick={() => removeClock(id)} 
-                  className="opacity-100 lg:opacity-0 group-hover:opacity-100 p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-4 hover:text-error rounded-xl transition-all shadow-sm" 
-                  title="Remove clock"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Clock Face & Time */}
-              <div className="flex flex-col items-center justify-center py-8 relative z-content">
-                <div className="font-mono flex flex-col items-center justify-center">
-                  <div className="flex items-baseline justify-center gap-1">
-                    <p className="text-5xl md:text-6xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
-                    <p className="text-2xl font-bold text-text-4 tabular-nums">:{t.displaySeconds}</p>
-                  </div>
-                  {settings.hourFormat === 12 && (
-                    <p className="text-base font-black text-blue mt-1">{t.ampm}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Footer details */}
-              <div className="space-y-3 relative z-content">
-                {/* Business Hours Progress */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest">
-                    <span className={biz.isOpen ? "text-success" : "text-text-4 opacity-70"}>
-                      {biz.isOpen ? "Open" : "Closed"}
-                    </span>
-                    <span className="text-text-4">{biz.text}</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
-                    <div 
-                      className={cn("h-full rounded-full transition-all duration-1000", biz.isOpen ? "bg-success" : "bg-text-4 opacity-20")}
-                      style={{ width: `${biz.progress}%` }}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between text-[11px] pt-3 border-t border-border/50">
-                  <span className="text-text-3 font-bold uppercase tracking-wider">{t.date}</span>
-                  <span className="text-text-4 font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
-                </div>
-              </div>
-            </Reorder.Item>
-          );
-        })}
+        {displayClocks.map((clock) => (
+          <ClockCard 
+            key={clock.id} 
+            clock={clock} 
+            now={now} 
+            localTz={localTz} 
+            isDraggable={filterMode === "all"} 
+          />
+        ))}
       </Reorder.Group>
 
       {/* Enhanced Footer */}
