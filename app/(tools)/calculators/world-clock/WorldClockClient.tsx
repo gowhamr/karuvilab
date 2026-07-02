@@ -2,12 +2,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useWorldClockStore } from "@/src/features/world-clock/store";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
-import { Plus, Trash2, Globe, Clock, Star, Maximize2, Search, ArrowUpDown, Filter, Download, ArrowRight, Sun, Moon } from "lucide-react";
+import { Plus, Trash2, Globe, Clock, Star, Maximize2, Search, ArrowUpDown, Filter, Download, ArrowRight, Sun, Moon, GripVertical } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { AnalogClock } from "@/components/tools/world-clock/AnalogClock";
 import { TimezoneSearchModal } from "@/components/tools/world-clock/TimezoneSearchModal";
 import * as Popover from '@radix-ui/react-popover';
-import { m } from "framer-motion";
+import { m, Reorder } from "framer-motion";
 import { useToast } from "@/components/ui/Toast";
 import { useSupportStore } from "@/src/store/useSupportStore";
 import { Settings2 } from "lucide-react";
@@ -136,6 +135,7 @@ export default function WorldClockClient() {
   const settings = useWorldClockStore(state => state.settings);
   const updateSettings = useWorldClockStore(state => state.updateSettings);
   const removeClock = useWorldClockStore(state => state.removeClock);
+  const reorderClocks = useWorldClockStore(state => state.reorderClocks);
   const { displayMode, activeToolId } = useFullscreenContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localTz, setLocalTz] = useState('');
@@ -325,40 +325,54 @@ export default function WorldClockClient() {
              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-success animate-pulse" /> {openClocks} Open</span>
            </div>
            
-           <button onClick={handleSort} className="px-3 py-2.5 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-lg text-xs font-bold uppercase tracking-widest text-text-3 hover:text-text transition-all flex items-center gap-2 whitespace-nowrap">
-             <ArrowUpDown className="w-3.5 h-3.5" /> Sort
+           <button onClick={handleSort} title="Sort Alphabetically" className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center">
+             <ArrowUpDown className="w-4 h-4" />
            </button>
-           <button onClick={() => setFilterMode(f => f === "all" ? "open" : "all")} className={cn("px-3 py-2.5 border rounded-lg text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap", filterMode === "open" ? "bg-success/10 border-success/30 text-success" : "bg-surface-2 border-border text-text-3 hover:text-text")}>
-             <Filter className="w-3.5 h-3.5" /> {filterMode === "all" ? "Filter" : "Open"}
+           <button onClick={() => setFilterMode(f => f === "all" ? "open" : "all")} title="Toggle Open Only" className={cn("p-3 border rounded-xl transition-all flex items-center justify-center", filterMode === "open" ? "bg-success/10 border-success/30 text-success" : "bg-surface-2 border-border text-text-3 hover:text-text")}>
+             <Filter className="w-4 h-4" />
            </button>
-           <button onClick={handleExport} className="px-3 py-2.5 bg-blue/10 border border-blue/20 rounded-lg text-xs font-bold uppercase tracking-widest text-blue hover:bg-blue/20 transition-all flex items-center gap-2 whitespace-nowrap">
-             <Download className="w-3.5 h-3.5" /> Export
+           <button onClick={handleExport} title="Export to CSV" className="p-3 bg-blue/10 border border-blue/20 rounded-xl text-blue hover:bg-blue/20 transition-all flex items-center justify-center">
+             <Download className="w-4 h-4" />
            </button>
          </div>
       </div>
 
       {/* Grid Layout: scales up for ultrawide */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <Reorder.Group 
+        axis="y" 
+        values={clocks} 
+        onReorder={reorderClocks}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      >
         
-
-
         {/* Clock Cards */}
-        {displayClocks.map(({ id, city, country, tz }) => {
+        {displayClocks.map((clock) => {
+          const { id, city, country, tz } = clock;
           const t = getTimeInZone(tz, now, settings.hourFormat, localTz);
           const biz = getBusinessStatus(tz, now);
           const isLocal = tz === localTz;
+          const isDraggable = filterMode === "all";
 
           return (
-            <m.div
+            <Reorder.Item
               layout
               key={id}
+              value={clock}
+              dragListener={isDraggable}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className={cn(
                 "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-[280px] relative overflow-hidden",
-                isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md"
+                isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
+                t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5"
               )}
             >
+              {isDraggable && (
+                <div className="absolute top-1/2 -left-2 -translate-y-1/2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-30 p-2 text-text-4 z-above transition-opacity">
+                  <GripVertical className="w-6 h-6" />
+                </div>
+              )}
+
               {/* Decorative Time of Day Gradient Background */}
               <div className={cn(
                 "absolute inset-0 opacity-[0.03] pointer-events-none transition-colors duration-1000",
@@ -394,21 +408,15 @@ export default function WorldClockClient() {
               </div>
 
               {/* Clock Face & Time */}
-              <div className="flex flex-col items-center justify-center py-4 relative z-content">
-                <div className="flex items-center gap-6 w-full px-2">
-                  <div className="shrink-0 drop-shadow-md">
-                    <AnalogClock hours={t.hours} minutes={t.minutes} seconds={t.seconds} />
+              <div className="flex flex-col items-center justify-center py-8 relative z-content">
+                <div className="font-mono flex flex-col items-center justify-center">
+                  <div className="flex items-baseline justify-center gap-1">
+                    <p className="text-5xl md:text-6xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
+                    <p className="text-2xl font-bold text-text-4 tabular-nums">:{t.displaySeconds}</p>
                   </div>
-                  
-                  <div className="font-mono flex flex-col justify-center">
-                    <div className="flex items-baseline gap-1">
-                      <p className="text-4xl md:text-5xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
-                      <p className="text-xl font-bold text-text-4 tabular-nums">:{t.displaySeconds}</p>
-                    </div>
-                    {settings.hourFormat === 12 && (
-                      <p className="text-sm font-black text-blue mt-0.5">{t.ampm}</p>
-                    )}
-                  </div>
+                  {settings.hourFormat === 12 && (
+                    <p className="text-base font-black text-blue mt-1">{t.ampm}</p>
+                  )}
                 </div>
               </div>
 
@@ -435,10 +443,10 @@ export default function WorldClockClient() {
                   <span className="text-text-4 font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
                 </div>
               </div>
-            </m.div>
+            </Reorder.Item>
           );
         })}
-      </div>
+      </Reorder.Group>
 
       {/* Enhanced Footer */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-4 font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl mt-8">
