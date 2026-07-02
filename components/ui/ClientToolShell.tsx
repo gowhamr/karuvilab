@@ -10,13 +10,19 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
 import { ToolInfoSection } from './ToolInfoSection';
 import { cn } from '@/src/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
-import { useMemo } from 'react';
 import { parseAndSanitizeMarkdownSync } from '@/src/lib/security';
 import { ToolFeedback } from './ToolFeedback';
+
+function stripHtmlAndTruncate(html: string | undefined, maxLength: number = 80): string {
+  if (!html) return '';
+  const text = html.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+}
 
 export interface ClientToolShellProps {
   title: string;
@@ -111,6 +117,30 @@ export function ClientToolShell({ title, description, category, children, toolId
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
 
+  const storageKey = `kv-accordion-state-${finalToolId}`;
+  const [openSectionId, setOpenSectionId] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem(storageKey);
+      if (stored) {
+        setOpenSectionId(stored);
+      }
+    } catch (e) {}
+  }, [storageKey]);
+
+  const handleSectionToggle = (id: string, isOpen: boolean) => {
+    const newId = isOpen ? id : null;
+    setOpenSectionId(newId);
+    try {
+      if (newId) {
+        sessionStorage.setItem(storageKey, newId);
+      } else {
+        sessionStorage.removeItem(storageKey);
+      }
+    } catch (e) {}
+  };
+
   const parsedContent = useMemo(() => ({
     detailedDescription: content.detailedDescription ? parseAndSanitizeMarkdownSync(content.detailedDescription) : '',
     howTo: (content.howTo || []).map(step => parseAndSanitizeMarkdownSync(step)),
@@ -158,7 +188,14 @@ export function ClientToolShell({ title, description, category, children, toolId
 
       <div className="max-w-4xl mx-auto space-y-6">
         {parsedContent.detailedDescription && (
-          <ToolInfoSection toolId={finalToolId} id="deep-dive" title="Deep Dive">
+          <ToolInfoSection 
+            toolId={finalToolId} 
+            id="deep-dive" 
+            title="Deep Dive"
+            preview={stripHtmlAndTruncate(parsedContent.detailedDescription)}
+            isOpen={openSectionId === 'deep-dive'}
+            onToggle={(isOpen) => handleSectionToggle('deep-dive', isOpen)}
+          >
             <div 
               className="prose prose-slate dark:prose-invert max-w-none text-text-3"
               dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
@@ -167,7 +204,14 @@ export function ClientToolShell({ title, description, category, children, toolId
         )}
 
         {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-          <ToolInfoSection toolId={finalToolId} id="quick-guide" title="Quick Guide">
+          <ToolInfoSection 
+            toolId={finalToolId} 
+            id="quick-guide" 
+            title="Quick Guide"
+            preview={stripHtmlAndTruncate(parsedContent.howTo.join(' → '))}
+            isOpen={openSectionId === 'quick-guide'}
+            onToggle={(isOpen) => handleSectionToggle('quick-guide', isOpen)}
+          >
             <ol className="space-y-4">
               {parsedContent.howTo.map((step, i) => (
                 <li key={i} className="flex gap-4 group">
@@ -185,18 +229,39 @@ export function ClientToolShell({ title, description, category, children, toolId
         )}
 
         {content.useCases && content.useCases.length > 0 && (
-          <ToolInfoSection toolId={finalToolId} id="use-cases" title="Use Cases">
+          <ToolInfoSection 
+            toolId={finalToolId} 
+            id="use-cases" 
+            title="Use Cases"
+            preview={stripHtmlAndTruncate(content.useCases.join(', '))}
+            isOpen={openSectionId === 'use-cases'}
+            onToggle={(isOpen) => handleSectionToggle('use-cases', isOpen)}
+          >
             <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
           </ToolInfoSection>
         )}
 
         {parsedContent.faq && parsedContent.faq.length > 0 && (
-          <ToolInfoSection toolId={finalToolId} id="faq" title="Frequently Asked Questions">
+          <ToolInfoSection 
+            toolId={finalToolId} 
+            id="faq" 
+            title="Frequently Asked Questions"
+            preview={stripHtmlAndTruncate(parsedContent.faq.map(f => f.question).join(' '))}
+            isOpen={openSectionId === 'faq'}
+            onToggle={(isOpen) => handleSectionToggle('faq', isOpen)}
+          >
             <FAQList faq={parsedContent.faq} />
           </ToolInfoSection>
         )}
 
-        <ToolInfoSection toolId={finalToolId} id="help-docs" title="Help & Documentation">
+        <ToolInfoSection 
+          toolId={finalToolId} 
+          id="help-docs" 
+          title="Help & Documentation"
+          preview="Read the manual, watch tutorials, see examples, or troubleshoot issues."
+          isOpen={openSectionId === 'help-docs'}
+          onToggle={(isOpen) => handleSectionToggle('help-docs', isOpen)}
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-blue transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
