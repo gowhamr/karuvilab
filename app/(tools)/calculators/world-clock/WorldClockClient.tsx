@@ -6,7 +6,23 @@ import { Plus, Trash2, Globe, Clock, Star, Maximize2, Search, ArrowUpDown, Filte
 import { cn } from "@/src/lib/utils";
 import { TimezoneSearchModal } from "@/components/tools/world-clock/TimezoneSearchModal";
 import * as Popover from '@radix-ui/react-popover';
-import { m, Reorder, useDragControls } from "framer-motion";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useToast } from "@/components/ui/Toast";
 import { useSupportStore } from "@/src/store/useSupportStore";
 import { Settings2 } from "lucide-react";
@@ -132,7 +148,21 @@ function getBusinessStatus(tz: string, now: Date) {
 function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now: Date, localTz: string, isDraggable: boolean }) {
   const settings = useWorldClockStore(state => state.settings);
   const removeClock = useWorldClockStore(state => state.removeClock);
-  const dragControls = useDragControls();
+  
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: clock.id, disabled: !isDraggable });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 1,
+  };
 
   const { id, city, country, tz } = clock;
   const t = getTimeInZone(tz, now, settings.hourFormat, localTz);
@@ -140,17 +170,14 @@ function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now
   const isLocal = tz === localTz;
 
   return (
-    <Reorder.Item
-      layout
-      value={clock}
-      dragListener={false}
-      dragControls={dragControls}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
+    <div
+      ref={setNodeRef}
+      style={style}
       className={cn(
         "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-[280px] relative overflow-hidden",
         isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
-        t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5"
+        t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5",
+        isDragging ? "shadow-2xl scale-[1.02] opacity-90 border-blue/50" : ""
       )}
     >
 
@@ -183,7 +210,8 @@ function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now
         <div className="flex items-center gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
           {isDraggable && (
             <div 
-              onPointerDown={(e) => dragControls.start(e)}
+              {...attributes}
+              {...listeners}
               className="p-2 cursor-grab active:cursor-grabbing text-text-4 hover:text-text bg-surface-2 hover:bg-surface-2/80 rounded-xl touch-none flex items-center justify-center shadow-sm border border-transparent hover:border-border"
             >
               <GripVertical className="w-4 h-4 pointer-events-none" />
@@ -235,7 +263,7 @@ function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockItem, now
           <span className="text-text-4 font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
         </div>
       </div>
-    </Reorder.Item>
+    </div>
   );
 }
 
@@ -254,6 +282,29 @@ export default function WorldClockClient() {
   const openFeedback = useSupportStore(state => state.openFeedback);
   
   const isDashboard = displayMode === 'dashboard' && activeToolId === 'world-clock';
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = clocks.findIndex((c) => c.id === active.id);
+      const newIndex = clocks.findIndex((c) => c.id === over.id);
+      
+      const newClocks = arrayMove(clocks, oldIndex, newIndex);
+      reorderClocks(newClocks);
+    }
+  };
 
   useEffect(() => {
     setLocalTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
@@ -448,24 +499,29 @@ export default function WorldClockClient() {
       </div>
 
       {/* Grid Layout: scales up for ultrawide */}
-      <Reorder.Group 
-        axis="y" 
-        values={clocks} 
-        onReorder={reorderClocks}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      <DndContext 
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-        
-        {/* Clock Cards */}
-        {displayClocks.map((clock) => (
-          <ClockCard 
-            key={clock.id} 
-            clock={clock} 
-            now={now} 
-            localTz={localTz} 
-            isDraggable={filterMode === "all"} 
-          />
-        ))}
-      </Reorder.Group>
+        <SortableContext 
+          items={displayClocks.map(c => c.id)}
+          strategy={rectSortingStrategy}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {/* Clock Cards */}
+            {displayClocks.map((clock) => (
+              <ClockCard 
+                key={clock.id} 
+                clock={clock} 
+                now={now} 
+                localTz={localTz} 
+                isDraggable={filterMode === "all"} 
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       {/* Enhanced Footer */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-4 font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl mt-8">

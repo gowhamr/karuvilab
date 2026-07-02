@@ -52,3 +52,10 @@ This file tracks every new dependency added to the project, its impact on bundle
 - **Purpose:** Client-side GIF generation/encoding
 - **Alternatives:** gif.js (abandoned), FFmpeg.wasm (too heavy, ~25MB)
 - **Justification:** Lightweight GIF encoder for local image processing tools.
+
+### 2026-07-02
+- **Library:** `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`
+- **Impact:** ~15KB gzipped
+- **Purpose:** Robust 2D grid drag-and-drop reordering for desktop and mobile touch
+- **Alternatives:** `framer-motion`'s `Reorder` (limited to 1D lists, glitchy on CSS grids), HTML5 native Drag and Drop (broken on mobile Safari/Chrome without large polyfills).
+- **Justification:** Required for a smooth drag-to-reorder UX on grid layouts (e.g., World Clock) across both desktop and mobile devices.
