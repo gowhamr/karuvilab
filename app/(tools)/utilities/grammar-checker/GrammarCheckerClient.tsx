@@ -143,6 +143,7 @@ export default function GrammarCheckerClient() {
           placeholder="Type or paste your text here for a basic grammar check…"
           value={text}
           onChange={e => setText(e.target.value)}
+          spellCheck={false}
         />
       </div>
 
