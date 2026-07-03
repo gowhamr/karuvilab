@@ -23,13 +23,13 @@ export function Header() {
   const themeToggleRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname() || "";
 
-  if (isFullscreen) return null;
-
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  if (isFullscreen) return null;
 
   return (
     <header 
