@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useWorldClockStore, type ClockItem } from "@/src/features/world-clock/store";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
-import { Plus, Trash2, Globe, Clock, Star, Maximize2, Search, ArrowUpDown, Filter, Download, ArrowRight, Sun, Moon, GripVertical } from "lucide-react";
+import { Plus, Trash2, Globe, Clock, Star, Maximize2, Minimize2, Search, ArrowUpDown, Filter, Download, ArrowRight, Sun, Moon, GripVertical } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { TimezoneSearchModal } from "@/components/tools/world-clock/TimezoneSearchModal";
 import * as Popover from '@radix-ui/react-popover';
@@ -274,7 +274,7 @@ export default function WorldClockClient() {
   const updateSettings = useWorldClockStore(state => state.updateSettings);
   const removeClock = useWorldClockStore(state => state.removeClock);
   const reorderClocks = useWorldClockStore(state => state.reorderClocks);
-  const { displayMode, activeToolId } = useFullscreenContext();
+  const { displayMode, activeToolId, toggleFocus } = useFullscreenContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localTz, setLocalTz] = useState('');
   const [filterMode, setFilterMode] = useState<"all" | "open">("all");
@@ -282,6 +282,7 @@ export default function WorldClockClient() {
   const openFeedback = useSupportStore(state => state.openFeedback);
   
   const isDashboard = displayMode === 'dashboard' && activeToolId === 'world-clock';
+  const isFocus = displayMode === 'focus' && activeToolId === 'world-clock';
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -465,7 +466,7 @@ export default function WorldClockClient() {
   };
 
   return (
-    <div className="space-y-8 max-w-[1400px] mx-auto">
+    <div className={cn("space-y-8 mx-auto transition-all duration-300", isFocus ? "max-w-none pt-4 pb-12 px-4 sm:px-8" : "max-w-[1400px]")}>
       <TimezoneSearchModal isOpen={isModalOpen} onClose={handleCloseModal} />
       
       {/* Header: Primary Search Action & Minimized Stats/Tools */}
@@ -494,6 +495,16 @@ export default function WorldClockClient() {
            </button>
            <button onClick={handleExport} title="Export to CSV" className="p-3 bg-blue/10 border border-blue/20 rounded-xl text-blue hover:bg-blue/20 transition-all flex items-center justify-center">
              <Download className="w-4 h-4" />
+           </button>
+           
+           <div className="w-[1px] h-8 bg-border mx-1" />
+           
+           <button 
+             onClick={() => toggleFocus('world-clock')} 
+             title={isFocus ? "Exit Focus Mode (Esc)" : "Focus Mode (F)"} 
+             className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center"
+           >
+             {isFocus ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
            </button>
          </div>
       </div>
