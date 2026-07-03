@@ -20,9 +20,13 @@ const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").t
 const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false });
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
 const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false });
+const WorldClockSection = dynamic(() => import("./sections/WorldClockSection").then(m => m.WorldClockSection), { ssr: false });
+
+import { Globe } from "lucide-react";
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes & modes', group: 'Personalization' },
+  { id: 'world_clock', label: 'World Clock', icon: Globe, desc: 'Clock preferences', group: 'Tools' },
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
   { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History' },
   { id: 'help', label: 'Support & FAQ', icon: HelpCircle, desc: 'Security, help', group: 'Support' },
@@ -253,6 +257,7 @@ export default function SettingsClient() {
   
               <div className="relative z-content min-h-96">
                 {activeSection === 'appearance' && <AppearanceSection />}
+                {activeSection === 'world_clock' && <WorldClockSection />}
                 {activeSection === 'privacy' && <PrivacySection />}
                 {activeSection === 'history' && <HistorySection />}
                 {activeSection === 'help' && <HelpSection />}

@@ -7,6 +7,7 @@ export interface ClockItem {
   city: string;
   country: string;
   tz: string;
+  customLabel?: string;
 }
 
 interface WorldClockSettings {
@@ -16,6 +17,7 @@ interface WorldClockSettings {
   showUtcOffset: boolean;
   showBusinessHours: boolean;
   dashboardTheme: 'dark' | 'light' | 'amoled' | 'blue' | 'matrix';
+  primaryLabel: 'city' | 'country' | 'custom';
 }
 
 interface WorldClockState {
@@ -24,6 +26,7 @@ interface WorldClockState {
   addClock: (clock: ClockItem) => void;
   removeClock: (id: string) => void;
   reorderClocks: (clocks: ClockItem[]) => void;
+  updateClock: (id: string, updates: Partial<ClockItem>) => void;
   updateSettings: (settings: Partial<WorldClockSettings>) => void;
 }
 
@@ -41,6 +44,7 @@ const DEFAULT_SETTINGS: WorldClockSettings = {
   showUtcOffset: true,
   showBusinessHours: true,
   dashboardTheme: 'dark',
+  primaryLabel: 'city',
 };
 
 export const useWorldClockStore = create<WorldClockState>()(
@@ -52,6 +56,9 @@ export const useWorldClockStore = create<WorldClockState>()(
         clocks: [...state.clocks, { ...clock, id: Math.random().toString(36).substring(7) }] 
       })),
       removeClock: (id) => set((state) => ({ clocks: state.clocks.filter((c) => c.id !== id) })),
+      updateClock: (id, updates) => set((state) => ({
+        clocks: state.clocks.map(c => c.id === id ? { ...c, ...updates } : c)
+      })),
       reorderClocks: (clocks) => set({ clocks }),
       updateSettings: (newSettings) => set((state) => ({
         settings: { ...state.settings, ...newSettings }
