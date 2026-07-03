@@ -4,6 +4,7 @@ import { SettingsStore, AppearanceSettings, AccessibilitySettings, PrivacySettin
 export const initialSettings = {
   appearance: {
     theme: 'system',
+    desktopSidebarOpen: true,
   } as AppearanceSettings,
   accessibility: {
     fontScaling: 1.0,
@@ -30,6 +31,14 @@ export const createSettingsStore: StateCreator<SettingsStore> = (set) => ({
 
   updateAppearance: (settings: Partial<AppearanceSettings>) =>
     set((state: SettingsStore) => ({ appearance: { ...state.appearance, ...settings } })),
+    
+  toggleDesktopSidebar: () => 
+    set((state: SettingsStore) => ({ 
+      appearance: { 
+        ...state.appearance, 
+        desktopSidebarOpen: state.appearance.desktopSidebarOpen === false ? true : false 
+      } 
+    })),
 
   updateAccessibility: (settings: Partial<AccessibilitySettings>) =>
     set((state: SettingsStore) => ({ accessibility: { ...state.accessibility, ...settings } })),

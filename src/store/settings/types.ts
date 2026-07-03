@@ -3,6 +3,7 @@ export type OutputFormat = 'json' | 'text' | 'csv' | 'xml';
 
 export interface AppearanceSettings {
   theme: ThemeMode;
+  desktopSidebarOpen?: boolean;
 }
 
 export interface AccessibilitySettings {
@@ -33,6 +34,7 @@ export interface SettingsState {
 
 export interface SettingsActions {
   updateAppearance: (settings: Partial<AppearanceSettings>) => void;
+  toggleDesktopSidebar: () => void;
   updateAccessibility: (settings: Partial<AccessibilitySettings>) => void;
   updatePrivacy: (settings: Partial<PrivacySettings>) => void;
   updateFocusMode: (settings: Partial<SettingsState['focusMode']>) => void;

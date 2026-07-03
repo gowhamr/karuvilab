@@ -13,11 +13,14 @@ import { cn } from "@/src/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
 
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
+import { useSettingsStore } from '@/src/store/settings/store';
 import { OfflineSyncIndicator } from "./system/OfflineSyncIndicator";
 
 export function Header() {
   const { isFullscreen } = useFullscreenContext();
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
+  const desktopSidebarOpen = useSettingsStore(s => s.appearance.desktopSidebarOpen !== false);
+  const toggleDesktopSidebar = useSettingsStore(s => s.toggleDesktopSidebar);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const themeToggleRef = useRef<HTMLDivElement>(null);
@@ -41,9 +44,18 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 h-full flex items-center justify-between gap-1.5 sm:gap-4 pt-safe">
         <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
           <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden min-w-11 min-h-11 -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center"
-            aria-label="Open menu"
+            onClick={() => {
+              if (window.innerWidth < 768) {
+                setIsSidebarOpen(true);
+              } else {
+                toggleDesktopSidebar();
+              }
+            }}
+            className={cn(
+              "min-w-11 min-h-11 -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center",
+              desktopSidebarOpen ? "md:hidden" : "flex"
+            )}
+            aria-label="Toggle menu"
           >
             <Menu className="w-6 h-6" />
           </button>

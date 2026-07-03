@@ -15,10 +15,11 @@ import { MobileSidebar } from "./layout/MobileSidebar";
 import {
   Home, Info, HelpCircle, Settings, Shield, FileWarning,
   X, Clock, Search, Command, LayoutGrid, Heart, LucideIcon,
-  ChevronRight,
+  ChevronRight, PanelLeftClose
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
+import { useSettingsStore } from "@/src/store/settings/store";
 
 // ── Support links ─────────────────────────────────────────────────────────────
 
@@ -323,6 +324,8 @@ export function Sidebar() {
   const { isFullscreen } = useFullscreenContext();
   const pathname          = usePathname() ?? "";
   const setIsSidebarOpen  = useSearchStore(s => s.setIsSidebarOpen);
+  const desktopSidebarOpen = useSettingsStore(s => s.appearance.desktopSidebarOpen !== false);
+  const toggleDesktopSidebar = useSettingsStore(s => s.toggleDesktopSidebar);
   const favoriteIds       = useFavoriteStore(useShallow(s => s.favorites));
   const [recent,   setRecent]   = useState<ToolEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -392,30 +395,43 @@ export function Sidebar() {
       </MobileSidebar>
 
       {/* ── Desktop fixed sidebar ── */}
-      <aside
-        className={cn(
-          "hidden md:flex fixed top-0 left-0 bottom-0 w-sidebar z-sidebar",
-          "flex-col overflow-hidden",
-          "bg-surface border-r border-border",
-          "rounded-r-3xl",
-        )}
-        style={{ contain: "layout style" }}
-        aria-label="Main sidebar navigation"
-      >
-        {/* Logo header */}
-        <div className="h-18 shrink-0 flex items-center px-6 border-b border-border/60">
-          <Link
-            href="/"
-            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-lg"
-            aria-label="KaruviLab home"
-          >
-            <KVLogo withText size="md" loading="lazy" />
-          </Link>
-        </div>
+      {desktopSidebarOpen && (
+        <aside
+          className={cn(
+            "hidden md:flex fixed top-0 left-0 bottom-0 w-sidebar z-sidebar",
+            "flex-col overflow-hidden",
+            "bg-surface border-r border-border",
+            "rounded-r-3xl",
+          )}
+          style={{ contain: "layout style" }}
+          aria-label="Main sidebar navigation"
+        >
+          {/* Logo header */}
+          <div className="h-18 shrink-0 flex items-center justify-between px-6 border-b border-border/60">
+            <Link
+              href="/"
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-lg"
+              aria-label="KaruviLab home"
+            >
+              <KVLogo withText size="md" loading="lazy" />
+            </Link>
+            <button
+              className={cn(
+                "w-9 h-9 shrink-0 flex items-center justify-center rounded-lg -mr-2",
+                "text-text-4 hover:text-text hover:bg-mat-hover",
+                "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+              )}
+              onClick={toggleDesktopSidebar}
+              aria-label="Close sidebar"
+            >
+              <PanelLeftClose className="w-5 h-5" />
+            </button>
+          </div>
 
-        {desktopContent}
+          {desktopContent}
 
-      </aside>
+        </aside>
+      )}
     </>
   );
 }
