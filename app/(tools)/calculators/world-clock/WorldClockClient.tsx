@@ -40,11 +40,12 @@ function getCachedFormatter(tz: string, options: Intl.DateTimeFormatOptions) {
 
 function getTimeInZone(tz: string, now: Date, hourFormat: 12 | 24, localTz: string) {
   try {
+    // ALWAYS use h23 (0-23) internally so we can accurately calculate AM/PM, Night/Day, and relative offsets without formatting bugs
     const timeParts = getCachedFormatter(tz, {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: hourFormat === 12,
+      hourCycle: "h23",
     }).formatToParts(now);
     
     const dateParts = getCachedFormatter(tz, {
@@ -53,9 +54,9 @@ function getTimeInZone(tz: string, now: Date, hourFormat: 12 | 24, localTz: stri
       day: "numeric",
     }).formatToParts(now);
 
-    const h = parseInt(timeParts.find((p) => p.type === "hour")?.value ?? "0");
-    const m = parseInt(timeParts.find((p) => p.type === "minute")?.value ?? "0");
-    const s = parseInt(timeParts.find((p) => p.type === "second")?.value ?? "0");
+    const h = parseInt(timeParts.find((p) => p.type === "hour")?.value ?? "0", 10);
+    const m = parseInt(timeParts.find((p) => p.type === "minute")?.value ?? "0", 10);
+    const s = parseInt(timeParts.find((p) => p.type === "second")?.value ?? "0", 10);
     
     const wday = dateParts.find((p) => p.type === "weekday")?.value ?? "";
     const month = dateParts.find((p) => p.type === "month")?.value ?? "";
