@@ -15,5 +15,6 @@ export const compress_pdf: ToolEntry = {
     "size"
   ],
   "popular": true,
-  "priority": 0.8
+  "priority": 0.8,
+  "related": ["merge-pdf", "split-pdf", "lock-unlock-pdf", "watermark-pdf"]
 };

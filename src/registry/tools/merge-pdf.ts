@@ -18,5 +18,6 @@ export const merge_pdf: ToolEntry = {
   "popular": true,
   "priority": 0.8,
   "status": "stable",
-  "lastUpdated": "2024-05-18"
+  "lastUpdated": "2024-05-18",
+  "related": ["split-pdf", "compress-pdf", "page-numbering"]
 };

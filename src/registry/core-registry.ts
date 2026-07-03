@@ -471,7 +471,12 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "pdf",
     "output": "pdf",
-    "related": [],
+    "related": [
+      "merge-pdf",
+      "split-pdf",
+      "lock-unlock-pdf",
+      "watermark-pdf"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1737,7 +1742,11 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "pdf",
     "output": "pdf",
-    "related": [],
+    "related": [
+      "split-pdf",
+      "compress-pdf",
+      "page-numbering"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
