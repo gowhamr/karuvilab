@@ -65,19 +65,19 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             className={cn(
               "font-bold text-text leading-tight tracking-tight line-clamp-2 text-balance",
               "group-hover:text-brand-primary transition-colors duration-150",
-              compact ? "text-[13px]" : "text-[14px]"
+              compact ? "text-sm" : "text-base"
             )}
             title={tool.name}
           >
             {tool.name}
           </h3>
           {!compact && (
-            <p className="text-[11px] text-text-muted font-medium line-clamp-2 leading-relaxed">
+            <p className="text-xs text-text-muted font-medium line-clamp-2 leading-relaxed">
               {tool.desc}
             </p>
           )}
           {compact && (
-            <p className="text-[10px] text-text-muted font-medium line-clamp-2 leading-snug">
+            <p className="text-xs text-text-muted font-medium line-clamp-2 leading-snug">
               {tool.desc}
             </p>
           )}

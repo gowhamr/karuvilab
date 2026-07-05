@@ -1,15 +1,24 @@
 import { ToolEntry } from '../types';
 
 export const hash_map_visualizer: ToolEntry = {
-  id: 'hash-map-visualizer',
-  name: 'Hash Map Visualizer',
-  desc: 'Interactive visualization of hash map operations',
-  href: 'developer-tools/hash-map-visualizer/',
-  category: 'developer',
-  input: 'none',
-  output: 'none',
-  keywords: ['hash map','data structures'],
-  status: 'new',
-  schemaType: 'SoftwareApplication',
-  lastUpdated: '2026-05-30'
+  "id": "hash-map-visualizer",
+  "name": "Hash Map Visualizer",
+  "desc": "Hash Map Visualizer tool",
+  "href": "developer-tools/hash-map-visualizer/",
+  "category": "developer",
+  "icon": null,
+  "color": null,
+  "featured": false,
+  "popular": false,
+  "status": "new",
+  "lastAdded": new Date().toISOString().split('T')[0],
+  "keywords": [
+    "hash map visualizer",
+    "developer"
+  ],
+  "input": null,
+  "output": null,
+  "related": [],
+  "subCategory": null,
+  "requiresNetwork": false
 };

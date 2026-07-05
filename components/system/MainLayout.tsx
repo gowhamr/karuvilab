@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState, Suspense } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
@@ -27,7 +27,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
   if (isEmbed) {
     return (
       <main id="main-content" className="flex-1 outline-none relative overflow-x-hidden min-h-screen bg-bg" tabIndex={-1}>
-        {children}
+        <Suspense fallback={null}>
+          {children}
+        </Suspense>
       </main>
     );
   }
@@ -46,7 +48,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
           className="flex-1 outline-none relative overflow-x-hidden"
           tabIndex={-1}
         >
-          {children}
+          <Suspense fallback={null}>
+            {children}
+          </Suspense>
         </main>
         <Footer />
         <BottomNav />

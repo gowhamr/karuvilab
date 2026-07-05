@@ -4,19 +4,20 @@ import React from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { useDraftStore } from '@/src/store/useDraftStore';
 import { X, Copy, Trash2, Send, Save } from 'lucide-react';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/Toast';
 
 export function DraftDrawer() {
   const { isOpen, setIsOpen, drafts, removeDraft, clearDrafts } = useDraftStore();
+  const { toast } = useToast();
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast.success("Draft copied to clipboard");
+    toast("Draft copied to clipboard", "success");
   };
 
   const handleSendToTool = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast.success("Copied to clipboard. Paste in any tool.");
+    toast("Copied to clipboard. Paste in any tool.", "success");
     setIsOpen(false);
   };
 

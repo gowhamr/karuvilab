@@ -88,7 +88,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
           </div>
           <div className="flex items-center gap-2">
             <p className="text-xs text-text-4 font-bold uppercase tracking-wider">{subtitle}</p>
-            <span className="text-[10px] font-black uppercase tracking-widest bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
+            <span className="text-xs font-black uppercase tracking-widest bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
               {t.relativeText}
             </span>
           </div>
@@ -145,7 +145,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-[11px] pt-3 border-t border-border/50">
+        <div className="flex items-center justify-between text-xs pt-3 border-t border-border/50">
           <span className="text-text-3 font-bold uppercase tracking-wider">{t.date}</span>
           <span className="text-text-4 font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
         </div>

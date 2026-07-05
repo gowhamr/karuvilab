@@ -164,7 +164,7 @@ export default function WorldClockClient() {
               if (settings.primaryLabel === 'custom') displayLabel = customLabel || city;
 
               return (
-                <div key={id} className="flex items-center justify-between py-6 px-10 bg-surface-2/10 backdrop-blur-md rounded-[40px] border border-border/20 shadow-2xl">
+                <div key={id} className="flex items-center justify-between py-6 px-10 bg-surface-2/10 backdrop-blur-md rounded-5xl border border-border/20 shadow-2xl">
                   <div className="flex flex-col w-1/3">
                     <span className="text-3xl md:text-5xl font-bold truncate opacity-90">{displayLabel}</span>
                     <span className="text-sm font-bold opacity-50 uppercase tracking-widest mt-1">{t.relativeText}</span>
@@ -244,7 +244,7 @@ export default function WorldClockClient() {
          >
            <Search className="w-4 h-4 fill-current" />
            Add City 
-           <kbd className="hidden sm:inline-flex px-2 py-0.5 bg-black/20 rounded text-[10px] shadow-inner font-mono tracking-normal">⌘K</kbd>
+           <kbd className="hidden sm:inline-flex px-2 py-0.5 bg-black/20 rounded text-xs shadow-inner font-mono tracking-normal">⌘K</kbd>
          </button>
 
          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto px-2 md:px-0 pb-1 md:pb-0 no-scrollbar">

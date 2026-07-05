@@ -1,0 +1,24 @@
+import { ToolEntry } from '../types';
+
+export const private_key_checker: ToolEntry = {
+  "id": "private-key-checker",
+  "name": "Private Key Checker",
+  "desc": "Private Key Checker tool",
+  "href": "security-tools/private-key-checker/",
+  "category": "security",
+  "icon": null,
+  "color": null,
+  "featured": false,
+  "popular": false,
+  "status": "new",
+  "lastAdded": new Date().toISOString().split('T')[0],
+  "keywords": [
+    "private key checker",
+    "security"
+  ],
+  "input": null,
+  "output": null,
+  "related": [],
+  "subCategory": null,
+  "requiresNetwork": false
+};

@@ -1,17 +1,24 @@
 import { ToolEntry } from '../types';
 
 export const video_metadata_viewer: ToolEntry = {
-  id: 'video-metadata-viewer',
-  name: 'Video Metadata Viewer',
-  desc: 'Instantly inspect video metadata or decoding the full file',
-  href: 'media-tools/video-metadata-viewer/',
-  category: 'media',
-  subCategory: 'Analysis',
-  keywords: ['video metadata', 'inspect video', 'video resolution checker', 'video codec info', 'mp4 analyzer'],
-  popular: false,
-  difficulty: 'beginner',
-  searchIntent: 'informational',
-  priority: 0.6,
-  status: 'new',
-  related: ['video-trim', 'audio-converter', 'file-validator']
+  "id": "video-metadata-viewer",
+  "name": "Video Metadata Viewer",
+  "desc": "Video Metadata Viewer tool",
+  "href": "media-tools/video-metadata-viewer/",
+  "category": "media",
+  "icon": null,
+  "color": null,
+  "featured": false,
+  "popular": false,
+  "status": "new",
+  "lastAdded": new Date().toISOString().split('T')[0],
+  "keywords": [
+    "video metadata viewer",
+    "media"
+  ],
+  "input": null,
+  "output": null,
+  "related": [],
+  "subCategory": null,
+  "requiresNetwork": false
 };

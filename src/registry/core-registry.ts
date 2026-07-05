@@ -3,6 +3,28 @@ import { ToolEntry } from './types';
 
 export const CORE_TOOLS: ToolEntry[] = [
   {
+    "id": "aes-encrypt-decrypt",
+    "name": "Aes Encrypt Decrypt",
+    "desc": "Aes Encrypt Decrypt tool",
+    "href": "security-tools/aes-encrypt-decrypt/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "aes encrypt decrypt",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "age-calculator",
     "name": "Age Calculator",
     "desc": "Calculate age in years, months, and days",
@@ -31,7 +53,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "audio-converter",
     "name": "Audio Converter",
-    "desc": "Convert audio files between WAV, MP3, AAC, and Opus formats",
+    "desc": "Audio Converter tool",
     "href": "media-tools/audio-converter/",
     "category": "media",
     "icon": null,
@@ -39,22 +61,15 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-06-05",
+    "lastAdded": "2026-07-05",
     "keywords": [
       "audio converter",
-      "convert wav to mp3",
-      "mp3 converter",
-      "opus encoder",
-      "aac converter",
-      "private audio tool"
+      "media"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "video-trim",
-      "video-metadata-viewer"
-    ],
-    "subCategory": "Audio",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -110,6 +125,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "base64url-converter",
+    "name": "Base64url Converter",
+    "desc": "Base64url Converter tool",
+    "href": "security-tools/base64url-converter/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "base64url converter",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "bg-remover",
     "name": "Background Remover",
     "desc": "Remove image backgrounds locally",
@@ -135,8 +172,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "bmi-calculator",
-    "name": "BMI Calculator",
-    "desc": "Calculate your Body Mass Index with visual healthy range indicator. Supports metric and imperial units with Indian body type context",
+    "name": "Bmi Calculator",
+    "desc": "Bmi Calculator tool",
     "href": "calculators/bmi-calculator/",
     "category": "calculators",
     "icon": null,
@@ -144,30 +181,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "bmi calculator",
-      "body mass index",
-      "health",
-      "weight",
-      "fitness",
-      "healthy weight",
-      "bmi india"
+      "calculators"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "emi-calculator",
-      "age-calculator",
-      "sip-calculator"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "box-shadow-generator",
     "name": "Box Shadow Generator",
-    "desc": "Visual box shadow generator. Layer multiple shadows to create deep, realistic UI depth with CSS and Tailwind export",
+    "desc": "Box Shadow Generator tool",
     "href": "developer-tools/box-shadow-generator/",
     "category": "developer",
     "icon": null,
@@ -175,21 +203,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "box shadow generator",
-      "css shadow",
-      "tailwind shadow",
-      "drop shadow",
-      "layered shadow"
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "gradient-generator",
-      "glassmorphism-generator",
-      "color-converter"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -268,6 +289,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "card-masker",
+    "name": "Card Masker",
+    "desc": "Card Masker tool",
+    "href": "security-tools/card-masker/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "card masker",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "chart-generator",
     "name": "Chart & Graph Generator",
     "desc": "Create beautiful charts from your data",
@@ -295,8 +338,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "cipher-tools",
-    "name": "Text Cipher Tools",
-    "desc": "Encrypt and decrypt text using classic ciphers like Caesar, Vigenère, ROT13, XOR, and Morse Code",
+    "name": "Cipher Tools",
+    "desc": "Cipher Tools tool",
     "href": "security-tools/cipher-tools/",
     "category": "security",
     "icon": null,
@@ -304,24 +347,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "cipher",
-      "encryption",
-      "decryption",
-      "caesar cipher",
-      "vigenere",
-      "rot13",
-      "xor cipher",
-      "morse code"
+      "cipher tools",
+      "security"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "base64",
-      "hash-generator",
-      "url-encoder"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -352,23 +385,21 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "color-converter",
     "name": "Color Converter",
-    "desc": "Convert colors between HEX, RGB, HSL, HSV, and CMYK formats",
+    "desc": "Color Converter tool",
     "href": "developer-tools/color-converter/",
     "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "color picker",
-      "hex to rgb",
-      "rgb to hsl",
-      "color space"
+      "color converter",
+      "developer"
     ],
-    "input": "none",
-    "output": "text",
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -376,37 +407,29 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "color-palette-extractor",
     "name": "Color Palette Extractor",
-    "desc": "Extract dominant colors from an image",
+    "desc": "Color Palette Extractor tool",
     "href": "image-tools/color-palette-extractor/",
     "category": "image",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "color",
-      "palette",
-      "extractor",
-      "image",
-      "design",
-      "hex"
+      "color palette extractor",
+      "image"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "image-compress",
-      "image-converter",
-      "image-resizer"
-    ],
-    "subCategory": "Analysis",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "command-cheat-sheet",
     "name": "Command Cheat Sheet",
-    "desc": "A searchable reference for Linux, Windows (CMD), and Git commands",
+    "desc": "Command Cheat Sheet tool",
     "href": "developer-tools/command-cheat-sheet/",
     "category": "developer",
     "icon": null,
@@ -414,15 +437,13 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "commands",
-      "linux",
-      "git",
-      "cheat sheet"
+      "command cheat sheet",
+      "developer"
     ],
-    "input": "none",
-    "output": "none",
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -481,9 +502,31 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "compress",
+    "name": "Compress",
+    "desc": "Compress tool",
+    "href": "image-tools/compress/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "compress",
+      "image"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "contrast-checker",
     "name": "Contrast Checker",
-    "desc": "WCAG contrast ratio checker. Ensure your text and background colors are accessible with live previews and color suggestions",
+    "desc": "Contrast Checker tool",
     "href": "developer-tools/contrast-checker/",
     "category": "developer",
     "icon": null,
@@ -491,28 +534,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "contrast checker",
-      "wcag contrast",
-      "accessibility checker",
-      "color contrast",
-      "a11y"
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "color-converter",
-      "gradient-generator",
-      "html-viewer"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "countdown-timer",
     "name": "Countdown Timer",
-    "desc": "A professional countdown timer with fullscreen dashboard mode and custom alarm sounds",
+    "desc": "Countdown Timer tool",
     "href": "productivity/countdown-timer/",
     "category": "productivity",
     "icon": null,
@@ -520,24 +556,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "countdown",
-      "timer",
-      "alarm",
-      "time",
+      "countdown timer",
       "productivity"
     ],
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": "Time Management",
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "crontab-editor",
     "name": "Crontab Editor",
-    "desc": "Visual cron schedule editor with human-readable preview. Build, validate and understand cron expressions instantly",
+    "desc": "Crontab Editor tool",
     "href": "developer-tools/crontab-editor/",
     "category": "developer",
     "icon": null,
@@ -545,59 +578,65 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "cron",
-      "crontab",
-      "scheduler",
-      "linux",
-      "devops",
-      "automation"
+      "crontab editor",
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "json-formatter",
-      "base64",
-      "regex-tester"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "csp-builder",
-    "name": "CSP Builder",
-    "desc": "Visual Content Security Policy (CSP) generator. Build, analyze, and export strict CSP headers to protect against XSS and injection attacks",
+    "name": "Csp Builder",
+    "desc": "Csp Builder tool",
     "href": "security-tools/csp-builder/",
     "category": "security",
     "icon": null,
     "color": null,
-    "featured": true,
+    "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "csp",
-      "content security policy",
-      "csp generator",
-      "xss protection",
-      "security headers",
-      "csp evaluator"
+      "csp builder",
+      "security"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "meta-tags",
-      "robots-txt",
-      "hmac-generator"
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "csr-generator",
+    "name": "Csr Generator",
+    "desc": "Csr Generator tool",
+    "href": "security-tools/csr-generator/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "csr generator",
+      "security"
     ],
+    "input": null,
+    "output": null,
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "csv-to-json",
-    "name": "CSV to JSON Converter",
-    "desc": "Convert CSV to JSON and JSON to CSV Supports custom delimiters, headers, and advanced parsing options",
+    "name": "Csv To Json",
+    "desc": "Csv To Json tool",
     "href": "developer-tools/csv-to-json/",
     "category": "developer",
     "icon": null,
@@ -605,22 +644,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "csv to json",
-      "json to csv",
-      "converter",
-      "data parser",
-      "data format",
-      "delimiter"
+      "developer"
     ],
-    "input": "csv",
-    "output": "json",
-    "related": [
-      "json-formatter",
-      "xml-formatter",
-      "fake-data-generator"
-    ],
+    "input": null,
+    "output": null,
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -729,6 +760,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "directory-manifest",
+    "name": "Directory Manifest",
+    "desc": "Directory Manifest tool",
+    "href": "security-tools/directory-manifest/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "directory manifest",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "discount-calculator",
     "name": "Discount Calculator",
     "desc": "Find sale price and savings",
@@ -750,6 +803,50 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Financial",
+    "requiresNetwork": false
+  },
+  {
+    "id": "ecdh-key-exchange",
+    "name": "Ecdh Key Exchange",
+    "desc": "Ecdh Key Exchange tool",
+    "href": "security-tools/ecdh-key-exchange/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "ecdh key exchange",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "ecdsa-sign",
+    "name": "Ecdsa Sign",
+    "desc": "Ecdsa Sign tool",
+    "href": "security-tools/ecdsa-sign/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "ecdsa sign",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -783,31 +880,24 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "emv-tlv-tree",
-    "name": "EMV TLV Tree",
-    "desc": "Parse and visualize EMV Tag-Length-Value data",
+    "name": "Emv Tlv Tree",
+    "desc": "Emv Tlv Tree tool",
     "href": "banking-tools/emv-tlv-tree/",
     "category": "banking",
-    "icon": "Nfc",
-    "color": "#3B82F6",
+    "icon": null,
+    "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
     "lastAdded": "2026-07-05",
     "keywords": [
-      "emv",
-      "tlv",
-      "tag length value",
-      "smart card",
-      "nfc",
+      "emv tlv tree",
       "banking"
     ],
-    "input": "text",
-    "output": "json",
-    "related": [
-      "track-2-parser",
-      "swift-mt-mx"
-    ],
-    "subCategory": "Card Data",
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -920,29 +1010,24 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "finacle-tools",
-    "name": "Finacle Log Parser",
-    "desc": "Parse and format Infosys Finacle trace logs and ISO 8583 messages",
+    "name": "Finacle Tools",
+    "desc": "Finacle Tools tool",
     "href": "banking-tools/finacle-tools/",
     "category": "banking",
-    "icon": "FileCode",
-    "color": "#8B5CF6",
+    "icon": null,
+    "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
     "lastAdded": "2026-07-05",
     "keywords": [
-      "finacle",
-      "iso 8583",
-      "banking",
-      "core banking",
-      "log parser"
+      "finacle tools",
+      "banking"
     ],
-    "input": "text",
-    "output": "json",
-    "related": [
-      "swift-mt-mx"
-    ],
-    "subCategory": "Core Banking",
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -1003,7 +1088,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gif-creator",
     "name": "Gif Creator",
-    "desc": "Create lightweight animated GIFs from uploaded images entirely inside your browser",
+    "desc": "Gif Creator tool",
     "href": "media-tools/gif-creator/",
     "category": "media",
     "icon": null,
@@ -1011,29 +1096,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "gif creator",
-      "make gif",
-      "animated gif maker",
-      "images to gif",
-      "online gif maker",
-      "private gif tool"
+      "media"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "image-compressor",
-      "image-resizer",
-      "image-converter"
-    ],
-    "subCategory": "Animation",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "glassmorphism-generator",
     "name": "Glassmorphism Generator",
-    "desc": "Generate trendy glassmorphism CSS effects. Adjust blur, transparency, and tint to create beautiful frosted glass elements",
+    "desc": "Glassmorphism Generator tool",
     "href": "developer-tools/glassmorphism-generator/",
     "category": "developer",
     "icon": null,
@@ -1041,28 +1118,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "glassmorphism",
-      "glass css",
-      "frosted glass",
-      "backdrop filter",
-      "ui generator"
+      "glassmorphism generator",
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "gradient-generator",
-      "box-shadow-generator",
-      "color-converter"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "gradient-generator",
-    "name": "CSS Gradient Generator",
-    "desc": "Visual CSS gradient builder. Generate Linear, Radial, and Conic gradients with multiple color stops and instant CSS/Tailwind export",
+    "name": "Gradient Generator",
+    "desc": "Gradient Generator tool",
     "href": "developer-tools/gradient-generator/",
     "category": "developer",
     "icon": null,
@@ -1070,22 +1140,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "gradient generator",
-      "css gradient",
-      "tailwind gradient",
-      "linear gradient",
-      "radial gradient",
-      "conic gradient"
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "color-converter",
-      "box-shadow-generator",
-      "glassmorphism-generator"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1115,7 +1177,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gratuity-calculator",
     "name": "Gratuity Calculator",
-    "desc": "Calculate Gratuity amount for employees covered and not covered under the Payment of Gratuity Act 1972",
+    "desc": "Gratuity Calculator tool",
     "href": "calculators/gratuity-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1123,21 +1185,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "gratuity calculator",
-      "gratuity act 1972",
-      "severance",
-      "employee benefits",
-      "retirement"
+      "calculators"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "salary-calculator",
-      "income-tax",
-      "nps-calculator"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1196,7 +1251,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hash-map-visualizer",
     "name": "Hash Map Visualizer",
-    "desc": "Interactive visualization of hash map operations",
+    "desc": "Hash Map Visualizer tool",
     "href": "developer-tools/hash-map-visualizer/",
     "category": "developer",
     "icon": null,
@@ -1204,21 +1259,43 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "hash map",
-      "data structures"
+      "hash map visualizer",
+      "developer"
     ],
-    "input": "none",
-    "output": "none",
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "hkdf-generator",
+    "name": "Hkdf Generator",
+    "desc": "Hkdf Generator tool",
+    "href": "security-tools/hkdf-generator/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "hkdf generator",
+      "security"
+    ],
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "hmac-generator",
-    "name": "HMAC Generator",
-    "desc": "Generate Hash-based Message Authentication Codes (HMAC) using SHA-256, SHA-512, and other algorithms natively in the browser",
+    "name": "Hmac Generator",
+    "desc": "Hmac Generator tool",
     "href": "security-tools/hmac-generator/",
     "category": "security",
     "icon": null,
@@ -1226,29 +1303,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "hmac",
-      "mac",
-      "hash authentication",
-      "sha256 hmac",
-      "signature generator",
-      "jwt signature"
+      "hmac generator",
+      "security"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "hash-generator",
-      "base64",
-      "jwt-decoder"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "hra-calculator",
-    "name": "Hra Exemption Calculator",
-    "desc": "Calculate your House Rent Allowance (HRA) tax exemption limit based on Metro/Non-Metro rules",
+    "name": "Hra Calculator",
+    "desc": "Hra Calculator tool",
     "href": "calculators/hra-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1256,20 +1325,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "hra calculator",
-      "house rent allowance",
-      "tax exemption",
-      "rent tax benefit",
-      "income tax"
+      "calculators"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "income-tax",
-      "salary-calculator"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1324,6 +1387,28 @@ export const CORE_TOOLS: ToolEntry[] = [
       "format",
       "json-formatter"
     ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "iban-validator",
+    "name": "Iban Validator",
+    "desc": "Iban Validator tool",
+    "href": "security-tools/iban-validator/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "iban validator",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1449,6 +1534,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "image-seo",
+    "name": "Image Seo",
+    "desc": "Image Seo tool",
+    "href": "seo-tools/image-seo/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "image seo",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "image-to-pdf",
     "name": "Image to PDF",
     "desc": "Convert images into a single PDF",
@@ -1475,8 +1582,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "income-tax",
-    "name": "Income Tax Calculator",
-    "desc": "Calculate income tax for FY 2025-26. Compare Old vs New regime and find the best tax-saving strategy",
+    "name": "Income Tax",
+    "desc": "Income Tax tool",
     "href": "calculators/income-tax/",
     "category": "calculators",
     "icon": null,
@@ -1484,23 +1591,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "income tax",
-      "tax calculator",
-      "new regime",
-      "old regime",
-      "FY 2025-26",
-      "salary tax",
-      "tax india"
+      "calculators"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "hra-calculator",
-      "tds-calculator",
-      "salary-calculator"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1557,29 +1655,67 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "invoice-generator",
     "name": "Invoice Generator",
-    "desc": "Create professional branded invoices with custom logos, multiple templates, and automated tax calculations. 100% private and local",
+    "desc": "Invoice Generator tool",
     "href": "calculators/invoice-generator/",
     "category": "calculators",
     "icon": null,
     "color": null,
-    "featured": true,
+    "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
       "invoice generator",
-      "pro invoice maker",
-      "free branded invoice",
-      "gst invoice creator",
-      "private invoice generator",
-      "offline invoice maker",
-      "custom logo invoice",
-      "professional pdf invoice"
+      "calculators"
     ],
-    "input": "none",
-    "output": "pdf",
+    "input": null,
+    "output": null,
     "related": [],
-    "subCategory": "Financial",
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "iso8583-bitmap-decoder",
+    "name": "Iso8583 Bitmap Decoder",
+    "desc": "Iso8583 Bitmap Decoder tool",
+    "href": "security-tools/iso8583-bitmap-decoder/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "iso8583 bitmap decoder",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "iso8583-message-parser",
+    "name": "Iso8583 Message Parser",
+    "desc": "Iso8583 Message Parser tool",
+    "href": "security-tools/iso8583-message-parser/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "iso8583 message parser",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -1692,9 +1828,31 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "log-analyzer",
+    "name": "Log Analyzer",
+    "desc": "Log Analyzer tool",
+    "href": "developer-tools/log-analyzer/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "log analyzer",
+      "developer"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "lorem-ipsum",
-    "name": "Lorem Ipsum Generator",
-    "desc": "Generate Lorem Ipsum placeholder text in words, sentences, or paragraphs with Classic, Hipster, or Tech variants",
+    "name": "Lorem Ipsum",
+    "desc": "Lorem Ipsum tool",
     "href": "developer-tools/lorem-ipsum/",
     "category": "developer",
     "icon": null,
@@ -1702,22 +1860,36 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "lorem ipsum",
-      "placeholder text",
-      "dummy text",
-      "generator",
-      "hipster ipsum",
-      "tech ipsum"
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "word-counter",
-      "text-case-converter",
-      "json-formatter"
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "luhn-validator",
+    "name": "Luhn Validator",
+    "desc": "Luhn Validator tool",
+    "href": "developer-tools/luhn-validator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "luhn validator",
+      "developer"
     ],
+    "input": null,
+    "output": null,
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1807,6 +1979,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "meta-tags",
+    "name": "Meta Tags",
+    "desc": "Meta Tags tool",
+    "href": "seo-tools/meta-tags/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "meta tags",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "mic-camera-tester",
     "name": "Mic & Camera Tester",
     "desc": "Test your microphone and camera",
@@ -1857,39 +2051,53 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "notes",
-    "name": "Kv Secure Notes",
-    "desc": "Zero-transmission, AES-256 encrypted private notes with Markdown and checklists",
-    "href": "productivity/notes/",
-    "category": "productivity",
-    "icon": "StickyNote",
-    "color": "#4F46E5",
-    "featured": true,
+    "id": "nanoid-generator",
+    "name": "Nanoid Generator",
+    "desc": "Nanoid Generator tool",
+    "href": "developer-tools/nanoid-generator/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "nanoid generator",
+      "developer"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "notes",
+    "name": "Notes",
+    "desc": "Notes tool",
+    "href": "productivity/notes/",
+    "category": "productivity",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
       "notes",
-      "notebook",
-      "private notes",
-      "offline notes",
-      "markdown notes",
-      "checklist"
+      "productivity"
     ],
-    "input": "text",
-    "output": "text",
-    "related": [
-      "calendar",
-      "task-reminder",
-      "markdown"
-    ],
+    "input": null,
+    "output": null,
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "nps-calculator",
     "name": "Nps Calculator",
-    "desc": "Plan your retirement with the National Pension System. Estimate your corpus, monthly pension, and tax benefits",
+    "desc": "Nps Calculator tool",
     "href": "calculators/nps-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1897,21 +2105,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "nps calculator",
-      "national pension system",
-      "retirement planning",
-      "pension calculator",
-      "80ccd"
+      "calculators"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "retirement-calculator",
-      "sip-calculator",
-      "income-tax"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1967,6 +2168,50 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "oauth-token-decoder",
+    "name": "Oauth Token Decoder",
+    "desc": "Oauth Token Decoder tool",
+    "href": "security-tools/oauth-token-decoder/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "oauth token decoder",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "og-preview",
+    "name": "Og Preview",
+    "desc": "Og Preview tool",
+    "href": "seo-tools/og-preview/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "og preview",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "page-numbering",
     "name": "Page Numbering",
     "desc": "Add page numbers to PDF",
@@ -2017,6 +2262,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "pbkdf2-generator",
+    "name": "Pbkdf2 Generator",
+    "desc": "Pbkdf2 Generator tool",
+    "href": "security-tools/pbkdf2-generator/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "pbkdf2 generator",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "pdf-to-word",
     "name": "PDF to Word",
     "desc": "Convert PDF text to editable Word",
@@ -2036,6 +2303,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "pdf",
     "output": "text",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "pem-viewer",
+    "name": "Pem Viewer",
+    "desc": "Pem Viewer tool",
+    "href": "security-tools/pem-viewer/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "pem viewer",
+      "security"
+    ],
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2092,26 +2381,23 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "pomodoro-timer",
     "name": "Pomodoro Timer",
-    "desc": "A simple, customizable timer to help you focus",
+    "desc": "Pomodoro Timer tool",
     "href": "productivity/pomodoro-timer/",
     "category": "productivity",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "pomodoro",
-      "timer",
-      "focus",
-      "productivity",
-      "stopwatch"
+      "pomodoro timer",
+      "productivity"
     ],
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": "Time Management",
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2137,6 +2423,50 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Financial",
+    "requiresNetwork": false
+  },
+  {
+    "id": "private-key-checker",
+    "name": "Private Key Checker",
+    "desc": "Private Key Checker tool",
+    "href": "security-tools/private-key-checker/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "private key checker",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "public-key-inspector",
+    "name": "Public Key Inspector",
+    "desc": "Public Key Inspector tool",
+    "href": "security-tools/public-key-inspector/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "public key inspector",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2236,6 +2566,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "robots-txt",
+    "name": "Robots Txt",
+    "desc": "Robots Txt tool",
+    "href": "seo-tools/robots-txt/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "robots txt",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "rotate-pdf",
     "name": "Rotate PDF",
     "desc": "Rotate one or all pages",
@@ -2255,6 +2607,72 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "pdf",
     "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "rsa-encrypt-decrypt",
+    "name": "Rsa Encrypt Decrypt",
+    "desc": "Rsa Encrypt Decrypt tool",
+    "href": "security-tools/rsa-encrypt-decrypt/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "rsa encrypt decrypt",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "rsa-key-generator",
+    "name": "Rsa Key Generator",
+    "desc": "Rsa Key Generator tool",
+    "href": "security-tools/rsa-key-generator/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "rsa key generator",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "rsa-sign-verify",
+    "name": "Rsa Sign Verify",
+    "desc": "Rsa Sign Verify tool",
+    "href": "security-tools/rsa-sign-verify/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "rsa sign verify",
+      "security"
+    ],
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2308,6 +2726,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "saml-decoder",
+    "name": "Saml Decoder",
+    "desc": "Saml Decoder tool",
+    "href": "security-tools/saml-decoder/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "saml decoder",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "scientific-calculator",
     "name": "Scientific Calculator",
     "desc": "Advanced mathematical calculations",
@@ -2333,37 +2773,45 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "seo-title",
+    "name": "Seo Title",
+    "desc": "Seo Title tool",
+    "href": "seo-tools/seo-title/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "seo title",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "seo-tools",
-    "name": "SEO Tools",
-    "desc": "A comprehensive suite of SEO tools including Meta Tags Generator, Robots.txt Builder, Sitemap Generator, Image SEO, and more",
+    "name": "Seo Tools",
+    "desc": "Seo Tools tool",
     "href": "developer-tools/seo-tools/",
     "category": "developer",
-    "icon": "Search",
-    "color": "emerald",
+    "icon": null,
+    "color": null,
     "featured": false,
-    "popular": true,
-    "status": "stable",
-    "lastAdded": "2026-06-19",
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "seo",
-      "meta tags",
-      "robots.txt",
-      "sitemap",
-      "slug",
-      "og preview",
-      "search engine optimization"
+      "seo tools",
+      "developer"
     ],
-    "input": [
-      "text",
-      "json",
-      "image"
-    ],
-    "output": [
-      "text",
-      "html",
-      "json",
-      "image"
-    ],
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2393,6 +2841,50 @@ export const CORE_TOOLS: ToolEntry[] = [
       "emi-calculator"
     ],
     "subCategory": "Financial",
+    "requiresNetwork": false
+  },
+  {
+    "id": "sitemap-generator",
+    "name": "Sitemap Generator",
+    "desc": "Sitemap Generator tool",
+    "href": "seo-tools/sitemap-generator/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "sitemap generator",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "slug-generator",
+    "name": "Slug Generator",
+    "desc": "Slug Generator tool",
+    "href": "seo-tools/slug-generator/",
+    "category": "seo",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "slug generator",
+      "seo"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2467,6 +2959,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "sql-formatter",
+    "name": "Sql Formatter",
+    "desc": "Sql Formatter tool",
+    "href": "developer-tools/sql-formatter/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "sql formatter",
+      "developer"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "standard-calculator",
     "name": "Standard Calculator",
     "desc": "Quick arithmetic calculator",
@@ -2517,7 +3031,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "stopwatch",
     "name": "Stopwatch",
-    "desc": "A precise, professional stopwatch with lap tracking and fullscreen dashboard mode",
+    "desc": "Stopwatch tool",
     "href": "productivity/stopwatch/",
     "category": "productivity",
     "icon": null,
@@ -2525,48 +3039,37 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "stopwatch",
-      "timer",
-      "lap",
-      "time",
       "productivity"
     ],
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": "Time Management",
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "swift-mt-mx",
-    "name": "SWIFT MT/MX Visualizer",
-    "desc": "Visualize and validate SWIFT MT and MX (ISO 20022) financial messages",
+    "name": "Swift Mt Mx",
+    "desc": "Swift Mt Mx tool",
     "href": "banking-tools/swift-mt-mx/",
     "category": "banking",
-    "icon": "Building",
-    "color": "#6366F1",
+    "icon": null,
+    "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
     "lastAdded": "2026-07-05",
     "keywords": [
-      "swift",
-      "mt",
-      "mx",
-      "iso 20022",
-      "banking",
-      "financial message",
-      "parser"
+      "swift mt mx",
+      "banking"
     ],
-    "input": "text",
-    "output": "json",
-    "related": [
-      "emv-tlv-tree",
-      "finacle-tools"
-    ],
-    "subCategory": "Messaging",
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2621,7 +3124,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "tds-calculator",
     "name": "Tds Calculator",
-    "desc": "Calculate Tax Deducted at Source (TDS) for salary, rent, professional fees, and interest (194J, 194I, 194A, etc.)",
+    "desc": "Tds Calculator tool",
     "href": "calculators/tds-calculator/",
     "category": "calculators",
     "icon": null,
@@ -2629,46 +3132,35 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "tds calculator",
-      "tax deducted at source",
-      "194J",
-      "194A",
-      "194I",
-      "tds rate"
+      "calculators"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "income-tax",
-      "gst-calculator",
-      "invoice-generator"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "text-case-converter",
     "name": "Text Case Converter",
-    "desc": "Convert text between UPPERCASE, lowercase, Title Case, camelCase, and more",
+    "desc": "Text Case Converter tool",
     "href": "productivity/text-case-converter/",
     "category": "productivity",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "text converter",
-      "uppercase",
-      "lowercase",
-      "camelcase",
-      "snake_case"
+      "text case converter",
+      "productivity"
     ],
-    "input": "text",
-    "output": "text",
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2781,32 +3273,47 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "track-2-parser",
-    "name": "Track 2 Parser",
-    "desc": "Parse and decode magnetic stripe Track 2 data instantly",
-    "href": "banking-tools/track-2-parser/",
-    "category": "banking",
-    "icon": "CreditCard",
-    "color": "#10B981",
-    "featured": true,
+    "id": "tlv-parser",
+    "name": "Tlv Parser",
+    "desc": "Tlv Parser tool",
+    "href": "security-tools/tlv-parser/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
     "popular": false,
     "status": "new",
     "lastAdded": "2026-07-05",
     "keywords": [
-      "track 2",
-      "magstripe",
-      "PAN",
-      "discretionary data",
-      "banking",
-      "parser"
+      "tlv parser",
+      "security"
     ],
-    "input": "text",
-    "output": "json",
-    "related": [
-      "emv-tlv-tree",
-      "swift-mt-mx"
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "track-2-parser",
+    "name": "Track 2 Parser",
+    "desc": "Track 2 Parser tool",
+    "href": "banking-tools/track-2-parser/",
+    "category": "banking",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "track 2 parser",
+      "banking"
     ],
-    "subCategory": "Card Data",
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2862,8 +3369,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "unix-timestamp",
-    "name": "Unix Timestamp Converter",
-    "desc": "Convert Unix timestamps to human-readable dates and back. Live clock, timezone support, relative time display",
+    "name": "Unix Timestamp",
+    "desc": "Unix Timestamp tool",
     "href": "developer-tools/unix-timestamp/",
     "category": "developer",
     "icon": null,
@@ -2871,21 +3378,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "unix timestamp",
-      "epoch",
-      "date converter",
-      "time",
-      "iso 8601"
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "crontab-editor",
-      "world-clock",
-      "timezone-converter"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -2963,8 +3463,8 @@ export const CORE_TOOLS: ToolEntry[] = [
   },
   {
     "id": "uuid-generator",
-    "name": "UUID Generator",
-    "desc": "Generate RFC-compliant UUIDs (v1, v4, v5, v7). Bulk generation, format options, and UUID validator. 100% browser-native using Web Crypto API",
+    "name": "Uuid Generator",
+    "desc": "Uuid Generator tool",
     "href": "developer-tools/uuid-generator/",
     "category": "developer",
     "icon": null,
@@ -2972,21 +3472,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "uuid",
-      "guid",
-      "unique id",
-      "v4",
-      "random",
-      "identifier"
+      "uuid generator",
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "hash-generator",
-      "crontab-editor"
-    ],
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -3017,7 +3510,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "video-metadata-viewer",
     "name": "Video Metadata Viewer",
-    "desc": "Instantly inspect video metadata or decoding the full file",
+    "desc": "Video Metadata Viewer tool",
     "href": "media-tools/video-metadata-viewer/",
     "category": "media",
     "icon": null,
@@ -3025,28 +3518,21 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "video metadata",
-      "inspect video",
-      "video resolution checker",
-      "video codec info",
-      "mp4 analyzer"
+      "video metadata viewer",
+      "media"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "video-trim",
-      "audio-converter",
-      "file-validator"
-    ],
-    "subCategory": "Analysis",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "video-trim",
-    "name": "Video Trimmer",
-    "desc": "Trim MP4, WebM, and MOV videos without re-encoding",
+    "name": "Video Trim",
+    "desc": "Video Trim tool",
     "href": "media-tools/video-trim/",
     "category": "media",
     "icon": null,
@@ -3054,23 +3540,15 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "video trim",
-      "cut video",
-      "mp4 trimmer",
-      "webm cutter",
-      "fast video trim",
-      "private video editor"
+      "media"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "audio-converter",
-      "video-metadata-viewer",
-      "gif-creator"
-    ],
-    "subCategory": "Video",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -3125,49 +3603,45 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "word-counter",
     "name": "Word Counter",
-    "desc": "Count words, characters, sentences, and paragraphs in real-time",
+    "desc": "Word Counter tool",
     "href": "productivity/word-counter/",
     "category": "productivity",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "word count",
-      "character count",
-      "reading time",
-      "text analysis"
+      "word counter",
+      "productivity"
     ],
-    "input": "text",
-    "output": "none",
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "word-to-pdf",
-    "name": "Word to PDF",
-    "desc": "Convert Word documents (.docx) to PDF format",
+    "name": "Word To Pdf",
+    "desc": "Word To Pdf tool",
     "href": "pdf-tools/word-to-pdf/",
     "category": "pdf",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
       "word to pdf",
-      "docx to pdf",
-      "convert word",
-      "pdf converter"
+      "pdf"
     ],
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": "Conversion",
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -3222,9 +3696,31 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "x509-viewer",
+    "name": "X509 Viewer",
+    "desc": "X509 Viewer tool",
+    "href": "security-tools/x509-viewer/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "x509 viewer",
+      "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "xml-formatter",
     "name": "Xml Formatter",
-    "desc": "Format, beautify, minify, and validate XML documents in your browser. Fast, secure, and offline-capable",
+    "desc": "Xml Formatter tool",
     "href": "developer-tools/xml-formatter/",
     "category": "developer",
     "icon": null,
@@ -3232,52 +3728,59 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": null,
+    "lastAdded": "2026-07-05",
     "keywords": [
       "xml formatter",
-      "xml beautifier",
-      "xml validator",
-      "minify xml",
-      "pretty print xml"
+      "developer"
     ],
-    "input": "text",
-    "output": "text",
-    "related": [
-      "json-formatter",
-      "csv-to-json",
-      "html-viewer"
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "yaml-json-converter",
+    "name": "Yaml Json Converter",
+    "desc": "Yaml Json Converter tool",
+    "href": "developer-tools/yaml-json-converter/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "yaml json converter",
+      "developer"
     ],
+    "input": null,
+    "output": null,
+    "related": [],
     "subCategory": null,
     "requiresNetwork": false
   },
   {
     "id": "yaml-validator",
-    "name": "Yaml Validator & Converter",
-    "desc": "Validate YAML syntax and convert between YAML and JSON",
+    "name": "Yaml Validator",
+    "desc": "Yaml Validator tool",
     "href": "developer-tools/yaml-validator/",
     "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
-    "lastAdded": null,
+    "status": "new",
+    "lastAdded": "2026-07-05",
     "keywords": [
-      "yaml",
-      "json",
-      "converter",
-      "validator",
-      "parser",
-      "formatter"
+      "yaml validator",
+      "developer"
     ],
     "input": null,
     "output": null,
-    "related": [
-      "json-formatter",
-      "diff-checker",
-      "code-minifier"
-    ],
-    "subCategory": "Format & Convert",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   }
 ] as any[];

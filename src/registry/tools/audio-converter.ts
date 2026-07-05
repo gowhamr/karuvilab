@@ -1,18 +1,24 @@
 import { ToolEntry } from '../types';
 
 export const audio_converter: ToolEntry = {
-  id: 'audio-converter',
-  name: 'Audio Converter',
-  desc: 'Convert audio files between WAV, MP3, AAC, and Opus formats',
-  href: 'media-tools/audio-converter/',
-  category: 'media',
-  subCategory: 'Audio',
-  keywords: ['audio converter', 'convert wav to mp3', 'mp3 converter', 'opus encoder', 'aac converter', 'private audio tool'],
-  popular: false,
-  difficulty: 'beginner',
-  searchIntent: 'action',
-  priority: 0.8,
-  status: 'new',
-  lastAdded: '2026-06-05',
-  related: ['video-trim', 'video-metadata-viewer']
+  "id": "audio-converter",
+  "name": "Audio Converter",
+  "desc": "Audio Converter tool",
+  "href": "media-tools/audio-converter/",
+  "category": "media",
+  "icon": null,
+  "color": null,
+  "featured": false,
+  "popular": false,
+  "status": "new",
+  "lastAdded": new Date().toISOString().split('T')[0],
+  "keywords": [
+    "audio converter",
+    "media"
+  ],
+  "input": null,
+  "output": null,
+  "related": [],
+  "subCategory": null,
+  "requiresNetwork": false
 };

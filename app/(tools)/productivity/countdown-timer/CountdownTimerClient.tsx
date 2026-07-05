@@ -190,17 +190,17 @@ export default function CountdownTimerClient() {
         <div className="flex items-center gap-4 text-5xl md:text-7xl font-mono font-black">
           <div className="flex flex-col items-center gap-2">
             <input type="text" value={inputH} onChange={handleInputChange(setInputH)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-            <span className="text-[10px] md:text-xs font-bold text-text-4 uppercase tracking-widest">Hours</span>
+            <span className="text-xs md:text-sm font-bold text-text-4 uppercase tracking-widest">Hours</span>
           </div>
           <span className="mb-6 md:mb-8">:</span>
           <div className="flex flex-col items-center gap-2">
             <input type="text" value={inputM} onChange={handleInputChange(setInputM)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-            <span className="text-[10px] md:text-xs font-bold text-text-4 uppercase tracking-widest">Mins</span>
+            <span className="text-xs md:text-sm font-bold text-text-4 uppercase tracking-widest">Mins</span>
           </div>
           <span className="mb-6 md:mb-8">:</span>
           <div className="flex flex-col items-center gap-2">
             <input type="text" value={inputS} onChange={handleInputChange(setInputS)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-            <span className="text-[10px] md:text-xs font-bold text-text-4 uppercase tracking-widest">Secs</span>
+            <span className="text-xs md:text-sm font-bold text-text-4 uppercase tracking-widest">Secs</span>
           </div>
         </div>
       </div>
@@ -380,7 +380,7 @@ export default function CountdownTimerClient() {
         <SettingsPopover />
       </div>
       
-      <div className="bg-surface border border-border rounded-[40px] p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative min-h-[400px]">
+      <div className="bg-surface border border-border rounded-5xl p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative min-h-[400px]">
         {!isRunning && !isPaused && !isFinished ? (
           <InputScreen />
         ) : (

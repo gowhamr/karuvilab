@@ -1,13 +1,24 @@
 import { ToolEntry } from '../types';
 
 export const text_case_converter: ToolEntry = {
-  id: 'text-case-converter',
-  name: 'Text Case Converter',
-  desc: 'Convert text between UPPERCASE, lowercase, Title Case, camelCase, and more',
-  href: 'productivity/text-case-converter/',
-  category: 'productivity',
-  input: 'text',
-  output: 'text',
-  keywords: ['text converter', 'uppercase', 'lowercase', 'camelcase', 'snake_case'],
-  popular: false,
+  "id": "text-case-converter",
+  "name": "Text Case Converter",
+  "desc": "Text Case Converter tool",
+  "href": "productivity/text-case-converter/",
+  "category": "productivity",
+  "icon": null,
+  "color": null,
+  "featured": false,
+  "popular": false,
+  "status": "new",
+  "lastAdded": new Date().toISOString().split('T')[0],
+  "keywords": [
+    "text case converter",
+    "productivity"
+  ],
+  "input": null,
+  "output": null,
+  "related": [],
+  "subCategory": null,
+  "requiresNetwork": false
 };

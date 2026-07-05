@@ -5,13 +5,14 @@ import { m, AnimatePresence } from 'framer-motion';
 import { Copy, Save, ArrowRight } from 'lucide-react';
 import { useDraftStore } from '@/src/store/useDraftStore';
 import { useSearchStore } from '@/src/store/useSearchStore';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/Toast';
 
 export function GlobalSelectionToolbar() {
   const [selection, setSelection] = useState<{ text: string; x: number; y: number } | null>(null);
   const addDraft = useDraftStore(s => s.addDraft);
   const setIsPaletteOpen = useSearchStore(s => s.setIsPaletteOpen);
   const setSearchQuery = useSearchStore(s => s.setSearchQuery);
+  const { toast } = useToast();
   const isMouseDown = useRef(false);
 
   useEffect(() => {
@@ -65,13 +66,13 @@ export function GlobalSelectionToolbar() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(selection.text);
-    toast.success("Copied to clipboard");
+    toast("Copied to clipboard", "success");
     setSelection(null);
   };
 
   const handleSaveDraft = () => {
     addDraft(selection.text, 'selection');
-    toast.success("Saved to Drafts");
+    toast("Saved to Drafts", "success");
     setSelection(null);
   };
 

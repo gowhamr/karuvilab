@@ -1,17 +1,24 @@
 import { ToolEntry } from '../types';
 
 export const video_trim: ToolEntry = {
-  id: 'video-trim',
-  name: 'Video Trimmer',
-  desc: 'Trim MP4, WebM, and MOV videos without re-encoding',
-  href: 'media-tools/video-trim/',
-  category: 'media',
-  subCategory: 'Video',
-  keywords: ['video trim', 'cut video', 'mp4 trimmer', 'webm cutter', 'fast video trim', 'private video editor'],
-  popular: false,
-  difficulty: 'beginner',
-  searchIntent: 'action',
-  priority: 0.9,
-  status: 'new',
-  related: ['audio-converter', 'video-metadata-viewer', 'gif-creator']
+  "id": "video-trim",
+  "name": "Video Trim",
+  "desc": "Video Trim tool",
+  "href": "media-tools/video-trim/",
+  "category": "media",
+  "icon": null,
+  "color": null,
+  "featured": false,
+  "popular": false,
+  "status": "new",
+  "lastAdded": new Date().toISOString().split('T')[0],
+  "keywords": [
+    "video trim",
+    "media"
+  ],
+  "input": null,
+  "output": null,
+  "related": [],
+  "subCategory": null,
+  "requiresNetwork": false
 };

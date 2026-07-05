@@ -281,7 +281,7 @@ export default function StopwatchClient() {
         <SettingsPopover />
       </div>
       
-      <div className="bg-surface border border-border rounded-[40px] p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative">
+      <div className="bg-surface border border-border rounded-5xl p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative">
         <MainClock />
         <Controls />
       </div>

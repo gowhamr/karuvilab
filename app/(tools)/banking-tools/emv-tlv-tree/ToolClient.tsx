@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
-import { ToolOutput } from '@/components/ui/ToolOutput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 export default function ToolClient() {
   const [input, setInput] = useState('');
@@ -41,7 +41,7 @@ export default function ToolClient() {
         placeholder="Paste hex-encoded EMV TLV data (e.g. 9F0206000000001000...)" 
         label="TLV Hex Data"
       />
-      <ToolOutput 
+      <ToolResultArea 
         value={output} 
         label="Parsed Tree"
         language="json"

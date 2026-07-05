@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
-import { ToolOutput } from '@/components/ui/ToolOutput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 export default function ToolClient() {
   const [input, setInput] = useState('');
@@ -45,7 +45,7 @@ export default function ToolClient() {
         placeholder="Paste SWIFT MT (e.g. {1:F01...}) or MX (XML) message here" 
         label="SWIFT Message"
       />
-      <ToolOutput 
+      <ToolResultArea 
         value={output} 
         label="Parsed Message"
         language="json"

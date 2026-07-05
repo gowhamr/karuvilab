@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
-import { ToolOutput } from '@/components/ui/ToolOutput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 export default function ToolClient() {
   const [input, setInput] = useState('');
@@ -51,7 +51,7 @@ export default function ToolClient() {
         placeholder="Paste Track 2 data here (e.g. ;1234567890123456=2412120...)" 
         label="Track 2 Data"
       />
-      <ToolOutput 
+      <ToolResultArea 
         value={output} 
         label="Parsed Data"
         language="json"
