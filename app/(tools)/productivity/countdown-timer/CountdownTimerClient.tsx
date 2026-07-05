@@ -184,29 +184,57 @@ export default function CountdownTimerClient() {
   };
 
   const InputScreen = () => (
-    <div className={cn("flex flex-col items-center justify-center gap-8", isDashboard ? "scale-150" : "")}>
-      <div className="flex items-center gap-4 text-5xl md:text-7xl font-mono font-black">
-        <div className="flex flex-col items-center gap-2">
-          <input type="text" value={inputH} onChange={handleInputChange(setInputH)} className="w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-          <span className="text-sm font-bold text-text-4 uppercase tracking-widest">Hours</span>
-        </div>
-        <span className="mb-8">:</span>
-        <div className="flex flex-col items-center gap-2">
-          <input type="text" value={inputM} onChange={handleInputChange(setInputM)} className="w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-          <span className="text-sm font-bold text-text-4 uppercase tracking-widest">Mins</span>
-        </div>
-        <span className="mb-8">:</span>
-        <div className="flex flex-col items-center gap-2">
-          <input type="text" value={inputS} onChange={handleInputChange(setInputS)} className="w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-          <span className="text-sm font-bold text-text-4 uppercase tracking-widest">Secs</span>
+    <div className={cn("flex flex-col items-center justify-center gap-6", isDashboard ? "scale-125 md:scale-150" : "")}>
+      <div className="flex flex-col items-center gap-2 mb-2">
+        <p className="text-sm font-bold text-text-4 uppercase tracking-widest">Custom Timer</p>
+        <div className="flex items-center gap-4 text-5xl md:text-7xl font-mono font-black">
+          <div className="flex flex-col items-center gap-2">
+            <input type="text" value={inputH} onChange={handleInputChange(setInputH)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
+            <span className="text-[10px] md:text-xs font-bold text-text-4 uppercase tracking-widest">Hours</span>
+          </div>
+          <span className="mb-6 md:mb-8">:</span>
+          <div className="flex flex-col items-center gap-2">
+            <input type="text" value={inputM} onChange={handleInputChange(setInputM)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
+            <span className="text-[10px] md:text-xs font-bold text-text-4 uppercase tracking-widest">Mins</span>
+          </div>
+          <span className="mb-6 md:mb-8">:</span>
+          <div className="flex flex-col items-center gap-2">
+            <input type="text" value={inputS} onChange={handleInputChange(setInputS)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
+            <span className="text-[10px] md:text-xs font-bold text-text-4 uppercase tracking-widest">Secs</span>
+          </div>
         </div>
       </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-2 max-w-sm mb-4">
+        {[
+          { label: '1m', h: '00', m: '01', s: '00' },
+          { label: '3m', h: '00', m: '03', s: '00' },
+          { label: '5m', h: '00', m: '05', s: '00' },
+          { label: '10m', h: '00', m: '10', s: '00' },
+          { label: '15m', h: '00', m: '15', s: '00' },
+          { label: '30m', h: '00', m: '30', s: '00' },
+          { label: '1h', h: '01', m: '00', s: '00' },
+        ].map(preset => (
+          <button
+            key={preset.label}
+            onClick={() => {
+              setInputH(preset.h);
+              setInputM(preset.m);
+              setInputS(preset.s);
+            }}
+            className="px-3 py-1.5 rounded-lg bg-surface-2 hover:bg-bg border border-border text-xs font-bold transition-all focus:ring-2 focus:ring-blue"
+          >
+            {preset.label}
+          </button>
+        ))}
+      </div>
+
       <button
         onClick={handleStart}
         disabled={totalInputMs <= 0}
-        className="px-12 py-4 bg-blue hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-xl rounded-full tracking-widest uppercase flex items-center gap-3 shadow-xl shadow-blue/20 transition-all active:scale-95"
+        className="px-10 py-3 md:px-12 md:py-4 bg-blue hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-lg md:text-xl rounded-full tracking-widest uppercase flex items-center gap-3 shadow-xl shadow-blue/20 transition-all active:scale-95"
       >
-        <Play className="w-6 h-6 fill-current" />
+        <Play className="w-5 h-5 md:w-6 md:h-6 fill-current" />
         Start Timer
       </button>
     </div>

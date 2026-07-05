@@ -13,9 +13,17 @@ interface QuickActionsProps {
   continueTool: ToolEntry | null | undefined;
   recentTools: ToolEntry[];
   favoriteTools: ToolEntry[];
+  frequentlyUsedTools: ToolEntry[];
+  suggestedTools: ToolEntry[];
 }
 
-export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools }: QuickActionsProps) {
+export function QuickActionsDashboard({ 
+  continueTool, 
+  recentTools, 
+  favoriteTools,
+  frequentlyUsedTools,
+  suggestedTools 
+}: QuickActionsProps) {
   const router = useRouter();
   const setIsPaletteOpen = useSearchStore(s => s.setIsPaletteOpen);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -248,6 +256,57 @@ export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools
                   <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-3 group-hover:text-blue" />
                 </div>
                 <span className="text-sm font-medium text-text-2 group-hover:text-text truncate">{tool.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Frequently Used Tools ── */}
+      {frequentlyUsedTools.length > 0 && (
+        <section>
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <TrendingUp className="w-3.5 h-3.5 text-green-500" />
+            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Frequently Used</h3>
+          </div>
+          <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
+            {frequentlyUsedTools.slice(0, 10).map(tool => (
+              <Link
+                key={`freq-${tool.id}`}
+                href={tool.href}
+                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-bg border border-border hover:border-green-500/30 hover:bg-green-500/5 transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+              >
+                <div className="w-6 h-6 rounded-md bg-surface border border-border flex items-center justify-center shrink-0 group-hover:border-green-500/30 transition-colors">
+                  <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-3 group-hover:text-green-500" />
+                </div>
+                <span className="text-sm font-medium text-text-2 group-hover:text-text truncate">{tool.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Suggested for You ── */}
+      {suggestedTools.length > 0 && (
+        <section>
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Suggested for You</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {suggestedTools.map(tool => (
+              <Link
+                key={`sugg-${tool.id}`}
+                href={tool.href}
+                className="group flex items-center gap-3 p-3 rounded-xl bg-bg border border-border hover:border-amber-500/40 hover:bg-amber-500/5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              >
+                <div className="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <ToolIcon category={tool.category} className="w-5 h-5 text-amber-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold text-text truncate group-hover:text-amber-500 transition-colors">{tool.name}</p>
+                  <p className="text-[10px] text-text-muted truncate">Based on recent workflow</p>
+                </div>
               </Link>
             ))}
           </div>

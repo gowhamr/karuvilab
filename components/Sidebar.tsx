@@ -131,14 +131,24 @@ const CoreLinks = memo(function CoreLinks({
 }: { pathname: string; setIsOpen: () => void; isHoverable: boolean }) {
   const t = useI18n(s => s.t);
   return (
-    <SidebarItem
-      href="/"
-      isActive={pathname === "/"}
-      onClick={setIsOpen}
-      label={t("common.home")}
-      icon={Home}
-      isHoverable={isHoverable}
-    />
+    <>
+      <SidebarItem
+        href="/"
+        isActive={pathname === "/"}
+        onClick={setIsOpen}
+        label={t("common.home")}
+        icon={Home}
+        isHoverable={isHoverable}
+      />
+      <SidebarItem
+        href="/workbench"
+        isActive={pathname === "/workbench"}
+        onClick={setIsOpen}
+        label="Workbench"
+        icon={LayoutGrid} // You can use AppWindow or LayoutGrid, I'll use LayoutGrid since AppWindow isn't imported here
+        isHoverable={isHoverable}
+      />
+    </>
   );
 });
 

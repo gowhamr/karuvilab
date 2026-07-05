@@ -1,7 +1,7 @@
-// components/ui/search/SearchResults.tsx
 import React, { memo } from "react";
 import { SearchResult } from "@/src/lib/search/searchEngine";
 import { SearchResultItem } from "./SearchResultItem";
+import { VirtualList } from "@/components/ui/VirtualList";
 
 interface SearchResultsProps {
   results: SearchResult[];
@@ -161,16 +161,21 @@ export const SearchResults = memo(function SearchResults({
   // relying on the searchEngine's sorting.
 
   return (
-    <div className="py-2" role="listbox">
-      {results.map((result, index) => (
-        <SearchResultItem
-          key={result.tool.id}
-          result={result}
-          isFocused={index === focusedIndex}
-          onSelect={() => onSelect(result.tool.id)}
-          query={query}
-        />
-      ))}
+    <div className="py-2 h-full overflow-hidden" role="listbox">
+      <VirtualList
+        items={results}
+        itemHeight={64}
+        className="h-full w-full overflow-y-auto overflow-x-hidden no-scrollbar"
+        renderItem={(result, index) => (
+          <SearchResultItem
+            key={result.tool.id}
+            result={result}
+            isFocused={index === focusedIndex}
+            onSelect={() => onSelect(result.tool.id)}
+            query={query}
+          />
+        )}
+      />
     </div>
   );
 });

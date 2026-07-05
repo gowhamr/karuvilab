@@ -7,17 +7,20 @@ import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useSettingsStore } from "@/src/store/settings/store";
-import { useSearchParams } from "next/navigation";
+import { AriaLiveAnnouncer } from '@/src/lib/a11y/AriaLiveAnnouncer';
+import { Toaster as SonnerToaster } from 'sonner';
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const { isFullscreen } = useFullscreenContext();
   const desktopSidebarOpen = useSettingsStore(s => s.appearance.desktopSidebarOpen !== false);
-  const searchParams = useSearchParams();
   const [isEmbed, setIsEmbed] = useState(false);
 
   useEffect(() => {
-    setIsEmbed(searchParams?.get("embed") === "true");
-  }, [searchParams]);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setIsEmbed(params.get("embed") === "true");
+    }
+  }, []);
 
   if (isEmbed) {
     return (
@@ -46,6 +49,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <Footer />
         <BottomNav />
       </div>
+      <AriaLiveAnnouncer />
     </div>
   );
 }

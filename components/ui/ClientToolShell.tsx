@@ -12,12 +12,12 @@ import { ToolInfoSection } from './ToolInfoSection';
 import { cn } from '@/src/lib/utils';
 import { useState, useEffect, useMemo } from 'react';
 import { FocusModeWrapper } from './FocusModeWrapper';
-import { useSearchParams } from 'next/navigation';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
 import { parseAndSanitizeMarkdownSync } from '@/src/lib/security';
 import { ToolFeedback } from './ToolFeedback';
+import { useIntelligenceStore } from '@/src/store/useIntelligenceStore';
 
 function stripHtmlAndTruncate(html: string | undefined, maxLength: number = 80): string {
   if (!html) return '';
@@ -119,8 +119,24 @@ export function ClientToolShell({ title, description, category, children, toolId
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
 
+  const recordTransition = useIntelligenceStore(s => s.recordTransition);
+  
+  useEffect(() => {
+    if (finalToolId) {
+      recordTransition(finalToolId);
+    }
+  }, [finalToolId, recordTransition]);
+
   const searchParams = useSearchParams();
-  const isEmbed = searchParams?.get("embed") === "true";
+
+  const [isEmbed, setIsEmbed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setIsEmbed(params.get("embed") === "true");
+    }
+  }, []);
 
   const storageKey = `kv-accordion-state-${finalToolId}`;
   const [openSectionId, setOpenSectionId] = useState<string | null>(null);
@@ -157,6 +173,13 @@ export function ClientToolShell({ title, description, category, children, toolId
 
   const relatedIds = content.relatedTools ?? currentTool?.related ?? [];
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
+
+  const getSuggestions = useIntelligenceStore(s => s.getSuggestions);
+  const suggestionIds = useMemo(() => getSuggestions(finalToolId), [finalToolId, getSuggestions]);
+  // Filter out the current tool and any explicitly related tools, so we only show ML discovered workflows.
+  const suggestions = useMemo(() => 
+    ALL_TOOLS.filter(t => suggestionIds.includes(t.id) && t.id !== finalToolId && !relatedIds.includes(t.id))
+  , [suggestionIds, finalToolId, relatedIds]);
 
   return (
     <m.div 
@@ -349,6 +372,36 @@ export function ClientToolShell({ title, description, category, children, toolId
                 </div>
               </Link>
             ))}
+            </div>
+          </section>
+        )}
+        
+        {suggestions.length > 0 && (
+          <section className="pt-12 border-t border-border space-y-8">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-blue/10 flex items-center justify-center">
+                  ✨
+                </span>
+                Suggested Next Steps
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {suggestions.map(tool => (
+                <Link
+                  key={tool.id}
+                  href={`/${tool.href}`}
+                  className="flex items-center gap-4 p-4 bg-surface-2 border border-border shadow-sm rounded-2xl hover:border-blue/50 hover:bg-blue/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
+                    <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5 text-blue" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-sm truncate group-hover:text-blue transition-colors">{tool.name}</h3>
+                    <p className="text-xs text-text-4 truncate">Based on your workflow</p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}

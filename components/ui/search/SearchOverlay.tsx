@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { searchTools } from '@/src/lib/search/searchEngine';
+import { searchSystemActions } from '@/src/lib/search/systemActions';
 import { useSearchStore } from '@/src/store/useSearchStore';
 import { useFavoriteStore } from '@/src/store/useFavoriteStore';
 import { ALL_TOOLS } from '@/src/tool-registry';
@@ -11,18 +12,22 @@ import { Search, X, Clipboard } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { supportsBlur } from '@/src/lib/deviceCapability';
 import { cn } from "@/src/lib/utils";
+import { useFocusTrap } from '@/src/lib/a11y/useFocusTrap';
 
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  initialQuery?: string;
 }
 
-export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
+export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOverlayProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(containerRef, isOpen);
   const [blurEnabled, setBlurEnabled] = useState(false);
   
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   
   const { 
@@ -60,8 +65,53 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       .filter(Boolean) as any[];
   }, [popularToolsMap, favorites]);
 
+  // Check if system command
+  const isSystemAction = query.trim().startsWith('>');
+  const systemActions = useMemo(() => isSystemAction ? searchSystemActions(query) : [], [query, isSystemAction]);
+
   // Execute search (synchronous, fast)
-  const results = useMemo(() => searchTools(query), [query]);
+  const results = useMemo(() => isSystemAction ? [] : searchTools(query), [query, isSystemAction]);
+
+  const handleSystemAction = (actionId: string) => {
+    const action = systemActions.find(a => a.id === actionId);
+    if (action) {
+      action.action();
+      onClose();
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      setQuery(`> process ${file.name}`);
+      // Wait for a bit to let the query update visually before auto-routing
+      setTimeout(async () => {
+        // Auto-detect based on extension or mime
+        const ext = file.name.split('.').pop()?.toLowerCase();
+        let toolId = 'all-tools';
+        if (ext === 'pdf') toolId = 'pdf-tools';
+        else if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(ext || '')) toolId = 'image-tools';
+        else if (ext === 'json') toolId = 'json-formatter';
+        else if (ext === 'csv') toolId = 'csv-json-converter';
+        else if (ext === 'xml') toolId = 'xml-formatter';
+        else if (ext === 'sql') toolId = 'sql-formatter';
+        
+        const tool = ALL_TOOLS.find((t: any) => t.id === toolId || t.href.includes(toolId));
+        if (tool) {
+           router.push(`/${tool.href}`);
+           onClose();
+        }
+      }, 500);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   // Reset state on open/close
   useEffect(() => {
@@ -96,20 +146,29 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       return;
     }
 
-    if (!query.trim() && results.length === 0) return;
+    const totalItems = isSystemAction ? systemActions.length : results.length;
+    if (!query.trim() && totalItems === 0) return;
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setFocusedIndex(prev => (prev < results.length - 1 ? prev + 1 : prev));
+      setFocusedIndex(prev => (prev < totalItems - 1 ? prev + 1 : prev));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setFocusedIndex(prev => (prev > 0 ? prev - 1 : prev));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (focusedIndex >= 0 && focusedIndex < results.length && results[focusedIndex]) {
-        handleSelect(results[focusedIndex]!.tool.id);
-      } else if (results.length > 0 && results[0]) {
-        handleSelect(results[0]!.tool.id);
+      if (isSystemAction) {
+        if (focusedIndex >= 0 && focusedIndex < systemActions.length) {
+          handleSystemAction(systemActions[focusedIndex]!.id);
+        } else if (systemActions.length > 0) {
+          handleSystemAction(systemActions[0]!.id);
+        }
+      } else {
+        if (focusedIndex >= 0 && focusedIndex < results.length && results[focusedIndex]) {
+          handleSelect(results[focusedIndex]!.tool.id);
+        } else if (results.length > 0 && results[0]) {
+          handleSelect(results[0]!.tool.id);
+        }
       }
     }
   };
@@ -141,7 +200,8 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
           {/* Modal Container */}
           <div className="fixed inset-0 z-modal flex flex-col sm:p-4 md:p-12 lg:p-24 pointer-events-none">
-            <m.div
+              <m.div
+              ref={containerRef}
               initial={{ y: -8, scale: 0.98 }}
               animate={{ y: 0, scale: 1 }}
               exit={{ y: -8, scale: 0.98 }}
@@ -155,10 +215,16 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 "sm:border sm:border-mat-border sm:shadow-2xl"
               )}
               onClick={e => e.stopPropagation()}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
             >
               {/* Search Input Header */}
               <div className="flex-shrink-0 flex items-center h-14 px-4 border-b border-mat-border bg-mat-surface">
-                <Search className="w-5 h-5 text-text-muted shrink-0" />
+                {isSystemAction ? (
+                  <span className="text-xl font-bold text-brand-primary mr-2">{'>'}</span>
+                ) : (
+                  <Search className="w-5 h-5 text-text-muted shrink-0" />
+                )}
                 <input
                   ref={inputRef}
                   value={query}
@@ -213,18 +279,52 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
               {/* Results Area */}
               <div className="flex-1 overflow-y-auto overscroll-contain bg-mat-base sm:bg-transparent">
-                <SearchResults
-                  results={results}
-                  query={query}
-                  focusedIndex={focusedIndex}
-                  onSelect={handleSelect}
-                  recentQueries={recentQueries}
-                  onSelectRecent={setQuery}
-                  onRemoveRecent={removeRecentQuery}
-                  onClearRecent={clearRecentQueries}
-                  popularTools={popularTools}
-                  favoriteTools={favoriteTools}
-                />
+                {isSystemAction ? (
+                  <div className="py-2" role="listbox">
+                    {systemActions.map((action, index) => (
+                      <button
+                        key={action.id}
+                        onClick={() => handleSystemAction(action.id)}
+                        role="option"
+                        aria-selected={index === focusedIndex}
+                        className={cn(
+                          "w-full flex items-center gap-4 p-3 md:p-4 text-left transition-all duration-75 min-h-14 border-l-4",
+                          index === focusedIndex 
+                            ? "bg-surface border-brand-primary shadow-sm" 
+                            : "bg-transparent border-transparent hover:bg-surface/50"
+                        )}
+                      >
+                        <div className={cn(
+                          "flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-150",
+                          index === focusedIndex ? "bg-brand-primary text-white scale-105 shadow-sm" : "bg-brand-primary/10 text-brand-primary"
+                        )}>
+                          <span className="text-xl">⚡</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm md:text-base font-bold text-text truncate">
+                            {action.name}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                    {systemActions.length === 0 && (
+                      <div className="p-8 text-center text-text-4">No system actions found.</div>
+                    )}
+                  </div>
+                ) : (
+                  <SearchResults
+                    results={results}
+                    query={query}
+                    focusedIndex={focusedIndex}
+                    onSelect={handleSelect}
+                    recentQueries={recentQueries}
+                    onSelectRecent={setQuery}
+                    onRemoveRecent={removeRecentQuery}
+                    onClearRecent={clearRecentQueries}
+                    popularTools={popularTools}
+                    favoriteTools={favoriteTools}
+                  />
+                )}
               </div>
 
               {/* Footer Hints (Desktop only) */}

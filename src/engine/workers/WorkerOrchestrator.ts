@@ -15,6 +15,8 @@ interface QueuedTask {
   timeout?: number | undefined;
   maxSizeMB?: number | undefined;
   retrying?: boolean | undefined;
+  priority?: 'high' | 'normal' | 'low' | undefined;
+  timestamp: number;
 }
 
 function getPayloadSize(arg: unknown): number {
@@ -247,7 +249,10 @@ class WorkerOrchestrator {
 
     const workerEntry = await this.getWorker(poolType);
     if (!workerEntry) {
-      poolObj.queue.unshift(task);
+      // Re-insert at the front if we didn't get a worker, but since we are replacing `.shift()`, 
+      // we need to maintain priority.
+      task.priority = 'high'; // Boost priority on retry
+      this.insertToQueue(poolType, task);
       setTimeout(() => this.processQueue(poolType), 100);
       return;
     }
@@ -332,6 +337,31 @@ class WorkerOrchestrator {
   }
 
   /**
+   * Helper to insert a task into the queue based on priority
+   */
+  private insertToQueue(poolType: PoolType, task: QueuedTask) {
+    const poolObj = this.pools[poolType];
+    const priorityWeight = { high: 3, normal: 2, low: 1 };
+    
+    // Find the right insertion index
+    let index = 0;
+    for (let i = 0; i < poolObj.queue.length; i++) {
+      const current = poolObj.queue[i];
+      const taskWeight = priorityWeight[task.priority || 'normal'];
+      const currentWeight = priorityWeight[current.priority || 'normal'];
+      
+      if (taskWeight > currentWeight) {
+        break; // Insert before lower priority
+      } else if (taskWeight === currentWeight && task.timestamp < current.timestamp) {
+        break; // Insert before newer tasks of same priority
+      }
+      index++;
+    }
+    
+    poolObj.queue.splice(index, 0, task);
+  }
+
+  /**
    * Dispatches a worker task from the appropriate pool.
    */
   dispatch<T>(
@@ -343,7 +373,8 @@ class WorkerOrchestrator {
     idempotent: boolean = true,
     retriesLeft: number = 2,
     maxSizeMB?: number,
-    timeout?: number
+    timeout?: number,
+    priority: 'high' | 'normal' | 'low' = 'normal'
   ): Promise<T> {
     if (maxSizeMB !== undefined) {
       const payloadSize = args.reduce<number>((sum, arg) => sum + getPayloadSize(arg), 0);
@@ -354,10 +385,9 @@ class WorkerOrchestrator {
     }
 
     const poolType = METHOD_TO_POOL[method] || 'compute';
-    const poolObj = this.pools[poolType];
-
+    
     return new Promise((resolve, reject) => {
-      poolObj.queue.push({ 
+      this.insertToQueue(poolType, { 
         method, 
         args, 
         transferables, 
@@ -368,7 +398,9 @@ class WorkerOrchestrator {
         idempotent,
         retriesLeft,
         maxSizeMB,
-        timeout
+        timeout,
+        priority,
+        timestamp: Date.now()
       });
       this.processQueue(poolType);
     });

@@ -11,6 +11,7 @@ import { SearchBar } from "@/components/ui/search/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
+import { useIntelligenceStore } from "@/src/store/useIntelligenceStore";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { useI18n } from "@/src/lib/i18n/store";
 import {
@@ -143,6 +144,14 @@ export default function HomeClient() {
     return recentTools.length > 0 ? recentTools[0] : null;
   }, [recentTools]);
 
+  const getSuggestions = useIntelligenceStore(s => s.getSuggestions);
+  
+  const suggestedTools = useMemo(() => {
+    if (!continueWorkingTool) return [];
+    const ids = getSuggestions(continueWorkingTool.id, 5);
+    return ALL_TOOLS.filter(t => ids.includes(t.id));
+  }, [continueWorkingTool, getSuggestions]);
+
   const isReturning = hydrated && (recentTools.length > 0 || favoriteTools.length > 0);
 
   return (
@@ -232,6 +241,8 @@ export default function HomeClient() {
                         continueTool={continueWorkingTool}
                         recentTools={recentTools}
                         favoriteTools={favoriteTools}
+                        frequentlyUsedTools={popularTools}
+                        suggestedTools={suggestedTools}
                       />
                     </m.section>
                   </AnimatePresence>
