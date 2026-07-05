@@ -13,7 +13,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { formatError } from "@/src/lib/formatError";
-import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 
@@ -234,16 +234,16 @@ export default function JSONFormatterClient() {
 
   if (!isLoaded) return <div className="animate-pulse h-full bg-surface/50 rounded-4xl border border-border" />;
 
+  useFocusModeIntegration({
+    charCount: output.length,
+    lineCount: output ? output.split('\n').length : 0,
+    language: "json",
+    onFontSizeChange: setFontSize,
+    onWrapToggle: () => setWordWrap(v => !v)
+  });
+
   return (
-    <FocusModeWrapper
-      toolId="json-formatter"
-      toolName="JSON Formatter"
-      charCount={output.length}
-      lineCount={output ? output.split('\n').length : 0}
-      language="json"
-      onFontSizeChange={setFontSize}
-      onWrapToggle={() => setWordWrap(v => !v)}
-    >
+    <div className="w-full">
       <div className="space-y-12 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
@@ -394,6 +394,6 @@ export default function JSONFormatterClient() {
         <WorkflowSuggestions />
       </div>
       </div>
-    </FocusModeWrapper>
+    </div>
   );
 }

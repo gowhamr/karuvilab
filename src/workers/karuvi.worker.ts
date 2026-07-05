@@ -1,5 +1,5 @@
 import * as Comlink from "comlink";
-import { WorkerAPI, CompressionSettings, EmiInputs, EmiResult, DiffLine } from "./types";
+import { WorkerAPI, CompressionSettings, EmiInputs, EmiResult, DiffLine, ProgressCallback } from "./types";
 
 // MD5 implementation (from core.worker.ts)
 function md5(input: string | Uint8Array): string {
@@ -92,8 +92,24 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
 }
 
 const api: WorkerAPI = {
+  // Security Worker Methods Stubs (handled by crypto.worker.ts)
+  directoryHashManifest: async () => [],
+  aesEncrypt: async () => '',
+  aesDecrypt: async () => '',
+  generateRsaKeyPair: async () => ({ publicKeyPem: '', privateKeyPem: '' }),
+  rsaEncrypt: async () => '',
+  rsaDecrypt: async () => '',
+  rsaSign: async () => '',
+  rsaVerify: async () => true,
+  ecdsaGenerateKeyPair: async () => ({ publicKeyPem: '', privateKeyPem: '' }),
+  ecdsaSign: async () => '',
+  ecdsaVerify: async () => true,
+  ecdhDeriveSecret: async () => '',
+  pbkdf2Derive: async () => ({ hex: '', base64: '' }),
+  hkdfDerive: async () => ({ hex: '', base64: '' }),
+
   // Hash Tasks
-  async generateHashes(text: string, algos: string[], encoding: 'hex' | 'base64' = 'hex', onProgress) {
+  async generateHashes(text: string, algos: string[], encoding: 'hex' | 'base64' = 'hex', onProgress?: ProgressCallback) {
     if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
       throw new Error("Input text too large or invalid (max 10MB)");
     }

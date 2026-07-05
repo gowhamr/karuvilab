@@ -9,6 +9,7 @@ const FeedbackModal = dynamic(() => import("@/components/ui/FeedbackModal").then
 const SearchManager = dynamic(() => import("@/components/ui/search/SearchManager").then(mod => ({ default: mod.SearchManager })), { ssr: false });
 
 import { FullscreenProvider } from "@/src/contexts/FullscreenContext";
+import { FocusModeControlsProvider } from "@/src/contexts/FocusModeControlsContext";
 
 function StorageMonitor() {
   useStorageMonitor();
@@ -21,10 +22,12 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
       <MotionConfig reducedMotion="user">
         <ToastProvider>
           <FullscreenProvider>
-            <StorageMonitor />
-            <FeedbackModal />
-            <SearchManager />
-            {children}
+            <FocusModeControlsProvider>
+              <StorageMonitor />
+              <FeedbackModal />
+              <SearchManager />
+              {children}
+            </FocusModeControlsProvider>
           </FullscreenProvider>
         </ToastProvider>
       </MotionConfig>

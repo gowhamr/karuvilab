@@ -1,4 +1,4 @@
-import { Sparkles, CloudOff, Lock, UserMinus, Zap, ArrowRight } from "lucide-react";
+import { Sparkles, CloudOff, Lock, UserMinus, Zap, ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/src/lib/utils";
 import { SearchBar } from "@/components/ui/search/SearchBar";
@@ -10,15 +10,29 @@ const TRUST_ITEMS = [
   { icon: Zap,      text: "Instant" },
 ];
 
-function getGreeting() {
+function getGreeting(): string {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
   if (hour < 18) return "Good afternoon";
   return "Good evening";
 }
 
+function getFormattedDate(): string {
+  const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+  return new Date().toLocaleDateString('en-US', options);
+}
+
+const TIPS = [
+  "KV processes 100% of your data inside your browser. No files are ever uploaded.",
+  "Use Ctrl+K or Cmd+K anytime to quickly search and switch between 150+ tools.",
+  "Drag & drop files directly onto supported tools for instant execution.",
+  "Favorite your frequently used tools to pin them to your personal dashboard."
+];
+
 export function HomeHero({ isReturning = false }: { isReturning?: boolean }) {
   const greeting = getGreeting();
+  const dateStr = getFormattedDate();
+  const todayTip = TIPS[new Date().getDay() % TIPS.length];
 
   if (isReturning) {
     return (
@@ -30,12 +44,17 @@ export function HomeHero({ isReturning = false }: { isReturning?: boolean }) {
           aria-hidden="true"
           className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-screen h-48 scale-x-[1.4] scale-y-125 bg-gradient-to-r from-blue/5 via-indigo-500/5 to-purple-500/5 rounded-full blur-[80px] z-behind"
         />
+
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue/5 border border-blue/15 text-[11px] font-bold text-text-muted mb-3">
+          <Calendar className="w-3 h-3 text-blue" />
+          <span>{dateStr}</span>
+        </div>
         
-        <h1 className="font-black tracking-tight text-text text-2xl md:text-3xl lg:text-4xl max-w-lg mb-2">
+        <h1 className="font-black tracking-tight text-text text-2xl md:text-3xl lg:text-4xl max-w-lg mb-1">
           {greeting} <span className="inline-block animate-wave origin-[70%_70%]">👋</span>
         </h1>
-        <p className="text-sm sm:text-base text-text-4 font-medium mb-6">
-          Continue where you left off
+        <p className="text-xs sm:text-sm text-text-muted font-medium mb-5 max-w-md mx-auto">
+          💡 <span className="text-text-2">{todayTip}</span>
         </p>
 
         <div className="w-full max-w-2xl mx-auto relative z-content mb-4">

@@ -8,7 +8,7 @@ import { DropZone } from "@/components/ui/DropZone";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useRecoveryStore } from "@/src/store/useRecoveryStore";
 import { Layers, Code, FileCode, Zap, Type, FileText } from "lucide-react";
-import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { ToolInput } from "@/components/ui/ToolInput";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { StatusBadge } from "@/components/system/StatusBadge";
@@ -135,16 +135,16 @@ export default function CodeMinifierClient() {
     return () => controller.abort();
   }, [textInput, lang, inputMode]);
 
+  useFocusModeIntegration({
+    language: lang === "js" ? "javascript" : lang,
+    onFontSizeChange: setFontSize,
+    ...(inputMode === "text" && { onWrapToggle: () => setWordWrap(v => !v) }),
+    charCount: inputMode === "text" ? textOutput.length : 0,
+    lineCount: inputMode === "text" ? (textOutput ? textOutput.split('\n').length : 0) : 0
+  });
+
   return (
-    <FocusModeWrapper
-      toolId="code-minifier"
-      toolName="JS/TS Minifier"
-      language={lang === "js" ? "javascript" : lang}
-      onFontSizeChange={setFontSize}
-      {...(inputMode === "text" && { onWrapToggle: () => setWordWrap(v => !v) })}
-      charCount={inputMode === "text" ? textOutput.length : 0}
-      lineCount={inputMode === "text" ? (textOutput ? textOutput.split('\n').length : 0) : 0}
-    >
+    <div className="w-full">
       <div className="space-y-12 w-full">
         {/* Settings & Mode */}
         <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
@@ -261,6 +261,6 @@ export default function CodeMinifierClient() {
           </div>
         )}
       </div>
-    </FocusModeWrapper>
+    </div>
   );
 }

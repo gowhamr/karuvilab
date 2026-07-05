@@ -10,7 +10,7 @@ import { m } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
-import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { DropZone } from "@/components/ui/DropZone";
 import { useToast } from "@/components/ui/Toast";
@@ -38,6 +38,8 @@ export function MarkdownEditor() {
   const [wordWrap, setWordWrap] = useState(true);
   
   const { isFullscreen, activeToolId } = useFullscreenContext();
+
+
   const isThisToolFullscreen = isFullscreen && activeToolId === "markdown-editor";
   
   const [showFind, setShowFind] = useState(false);
@@ -51,6 +53,15 @@ export function MarkdownEditor() {
   const activeMd = mode === "editor" ? md : uploadMd;
   const html = useMemo(() => MarkdownService.parse(activeMd), [activeMd]);
   const stats = useMemo(() => MarkdownService.getStats(activeMd), [activeMd]);
+
+  useFocusModeIntegration({
+    wordCount: stats.words,
+    charCount: stats.chars,
+    lineCount: md.split('\n').length,
+    language: "markdown",
+    onFontSizeChange: setFontSize,
+    onWrapToggle: () => setWordWrap(v => !v)
+  });
 
   // Insert logic
   const insertAtCursor = useCallback((before: string, after = "", insert = "") => {
@@ -362,17 +373,8 @@ export function MarkdownEditor() {
       </div>
 
       {mode === "editor" ? (
-        <FocusModeWrapper
-          toolId="markdown"
-          toolName="Markdown Editor"
-          wordCount={stats.words}
-          charCount={stats.chars}
-          lineCount={md.split('\n').length}
-          language="markdown"
-          onFontSizeChange={setFontSize}
-          onWrapToggle={() => setWordWrap(v => !v)}
-        >
-          <m.div 
+        <div className="w-full">
+          <m.div
             layout
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className={cn(
@@ -433,9 +435,9 @@ export function MarkdownEditor() {
               <StatBar stats={stats} />
             </div>
           </m.div>
-        </FocusModeWrapper>
+        </div>
       ) : (
-          <div className="space-y-6">
+        <div className="space-y-6">
             <DropZone
               onFilesSelected={handleFileUpload}
               accept=".md,.markdown"

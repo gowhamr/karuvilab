@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { m } from "framer-motion";
-import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { 
   X, Hash, CheckSquare, Trash, Sparkles, Plus
 } from "lucide-react";
@@ -105,6 +105,14 @@ export function NoteEditor() {
       renderMarkdown(localNote.content).then(setPreviewHtml);
     }
   }, [isPreview, localNote]);
+
+  useFocusModeIntegration({
+    wordCount,
+    charCount,
+    lineCount,
+    onFontSizeChange: setFontSize,
+    onWrapToggle: () => setWordWrap(v => !v)
+  });
 
   if (!localNote) return null;
 
@@ -357,15 +365,7 @@ export function NoteEditor() {
                         </button>
                       </div>
 
-                      <FocusModeWrapper
-                        toolId="notes"
-                        toolName="Notepad"
-                        wordCount={wordCount}
-                        charCount={charCount}
-                        lineCount={lineCount}
-                        onFontSizeChange={setFontSize}
-                        onWrapToggle={() => setWordWrap(v => !v)}
-                      >
+                      <div className="w-full">
                         <textarea
                           value={localNote.content}
                           onChange={(e) => handleChange({ content: e.target.value })}
@@ -373,7 +373,7 @@ export function NoteEditor() {
                           className={`w-full h-full bg-transparent outline-none border-none text-lg text-text-2 leading-relaxed resize-none min-h-[400px] pt-12 ${wordWrap ? '' : 'whitespace-pre overflow-x-auto'}`}
                           style={{ fontSize: `${fontSize}px` }}
                         />
-                      </FocusModeWrapper>
+                      </div>
                     </div>
                   )}
                 </div>

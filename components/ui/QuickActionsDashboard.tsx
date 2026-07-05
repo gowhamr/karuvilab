@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useRef } from "react";
 import Link from "next/link";
-import { m, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
-import { Clock, Play, Pin, ChevronRight, Heart, Sparkles } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { Clock, Play, ChevronRight, Heart, Sparkles, Clipboard, Upload, Search, Zap } from "lucide-react";
+import { detectContentToolSuggestion } from "@/src/lib/search/intelligentDetector";
+import { useSearchStore } from "@/src/store/useSearchStore";
 import { ToolIcon } from "./Icons";
 
 interface QuickActionsProps {
@@ -15,6 +16,56 @@ interface QuickActionsProps {
 }
 
 export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools }: QuickActionsProps) {
+  const router = useRouter();
+  const setIsPaletteOpen = useSearchStore(s => s.setIsPaletteOpen);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [pasteNotice, setPasteNotice] = useState<string | null>(null);
+
+  const handlePasteDetect = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text || !text.trim()) {
+        setPasteNotice("Clipboard is empty");
+        setTimeout(() => setPasteNotice(null), 3000);
+        return;
+      }
+      const suggestion = detectContentToolSuggestion(text);
+      if (suggestion) {
+        const tool = ALL_TOOLS.find(t => t.id === suggestion.toolId || t.href.includes(suggestion.toolId));
+        if (tool) {
+          router.push(`/${tool.href}`);
+          return;
+        }
+      }
+      // Fallback: open search palette prefilled
+      useSearchStore.getState().setSearchQuery(text.slice(0, 40));
+      setIsPaletteOpen(true);
+    } catch {
+      setIsPaletteOpen(true);
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (ext === 'pdf') {
+      router.push('/pdf-tools');
+    } else if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(ext || '')) {
+      router.push('/image-tools');
+    } else if (ext === 'json') {
+      router.push('/developer-tools/json-formatter');
+    } else if (ext === 'csv') {
+      router.push('/developer-tools/csv-json-converter');
+    } else if (ext === 'xml') {
+      router.push('/developer-tools/xml-formatter');
+    } else if (ext === 'sql') {
+      router.push('/developer-tools/sql-formatter');
+    } else {
+      router.push('/all-tools');
+    }
+  };
+
   const isEmpty = !continueTool && recentTools.length === 0 && favoriteTools.length === 0;
 
   if (isEmpty) {
@@ -42,7 +93,91 @@ export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools
   return (
     <div className="bg-surface border border-border rounded-3xl p-4 md:p-6 space-y-8 shadow-sm">
       
-      {/* ── Continue Working ── */}
+      {/* ── Smart Quick Actions Strip ── */}
+      <section>
+        <div className="flex items-center gap-2 mb-3 px-1">
+          <Zap className="w-3.5 h-3.5 text-blue" />
+          <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Smart Quick Actions</h3>
+          {pasteNotice && <span className="text-xs font-semibold text-rose-400 ml-auto animate-pulse">{pasteNotice}</span>}
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {continueTool ? (
+            <Link
+              href={continueTool.href}
+              className="flex items-center gap-2.5 p-3 rounded-2xl bg-blue/10 border border-blue/20 hover:bg-blue/15 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center text-white shrink-0 shadow-sm">
+                <Play className="w-4 h-4 fill-current ml-0.5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-text truncate">Resume</p>
+                <p className="text-[10px] text-text-muted truncate">{continueTool.name}</p>
+              </div>
+            </Link>
+          ) : (
+            <button
+              onClick={() => setIsPaletteOpen(true)}
+              className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <div className="w-8 h-8 rounded-xl bg-blue/10 flex items-center justify-center text-blue shrink-0">
+                <Search className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-text truncate">Search Tools</p>
+                <p className="text-[10px] text-text-muted truncate">Ctrl+K Palette</p>
+              </div>
+            </button>
+          )}
+
+          <button
+            onClick={handlePasteDetect}
+            className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+          >
+            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
+              <Clipboard className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-text truncate">Paste & Detect</p>
+              <p className="text-[10px] text-text-muted truncate">Auto tool match</p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+          >
+            <div className="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 shrink-0">
+              <Upload className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-text truncate">Upload File</p>
+              <p className="text-[10px] text-text-muted truncate">Auto route format</p>
+            </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              className="hidden"
+              aria-label="Upload file for quick action"
+            />
+          </button>
+
+          <button
+            onClick={() => setIsPaletteOpen(true)}
+            className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+          >
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0">
+              <Search className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-text truncate">Command Bar</p>
+              <p className="text-[10px] text-text-muted truncate">Explore 150+ tools</p>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      {/* ── Continue Working Detailed Card ── */}
       {continueTool && (
         <section>
           <div className="flex items-center gap-2 mb-3 px-1">
@@ -62,7 +197,7 @@ export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools
                   {continueTool.name}
                 </h4>
                 <p className="text-xs text-text-muted mt-0.5">
-                  Last used recently
+                  Last active tool in your session
                 </p>
               </div>
             </div>
@@ -77,7 +212,7 @@ export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools
       {favoriteTools.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-3 px-1">
-            <Heart className="w-3.5 h-3.5 text-rose-500" />
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-current" />
             <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Favorites</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
@@ -95,15 +230,15 @@ export function QuickActionsDashboard({ continueTool, recentTools, favoriteTools
         </section>
       )}
 
-      {/* ── Recent ── */}
+      {/* ── Recent Tools ── */}
       {recentTools.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-3 px-1">
             <Clock className="w-3.5 h-3.5 text-text-muted" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Recent</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Recently Used</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
-            {recentTools.map(tool => (
+            {recentTools.slice(0, 10).map(tool => (
               <Link
                 key={`rec-${tool.id}`}
                 href={tool.href}

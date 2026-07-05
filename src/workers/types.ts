@@ -51,6 +51,13 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<string>;
 
+  directoryHashManifest(
+    files: Array<{ path: string; buffer: ArrayBuffer }>,
+    algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback
+  ): Promise<Array<{ path: string; size: number; hash: string }>>;
+
   generateHmac(
     text: string,
     key: string,
@@ -67,6 +74,103 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<string>;
   
+  // Encryption & Key Tasks
+  aesEncrypt(
+    plaintext: string,
+    password: string,
+    mode?: 'GCM' | 'CBC',
+    keySize?: 128 | 192 | 256,
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  aesDecrypt(
+    ciphertextB64: string,
+    password: string,
+    mode?: 'GCM' | 'CBC',
+    keySize?: 128 | 192 | 256,
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  generateRsaKeyPair(
+    modulusLength?: 1024 | 2048 | 3072 | 4096,
+    hash?: 'SHA-256' | 'SHA-512',
+    onProgress?: ProgressCallback
+  ): Promise<{ publicKeyPem: string; privateKeyPem: string }>;
+
+  rsaEncrypt(
+    plaintext: string,
+    publicKeyPem: string,
+    hash?: 'SHA-256' | 'SHA-512',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  rsaDecrypt(
+    ciphertextB64: string,
+    privateKeyPem: string,
+    hash?: 'SHA-256' | 'SHA-512',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  rsaSign(
+    plaintext: string,
+    privateKeyPem: string,
+    hash?: 'SHA-256' | 'SHA-512',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  rsaVerify(
+    plaintext: string,
+    signatureB64: string,
+    publicKeyPem: string,
+    hash?: 'SHA-256' | 'SHA-512',
+    onProgress?: ProgressCallback
+  ): Promise<boolean>;
+
+  ecdsaGenerateKeyPair(
+    curve?: 'P-256' | 'P-384' | 'P-521',
+    onProgress?: ProgressCallback
+  ): Promise<{ publicKeyPem: string; privateKeyPem: string }>;
+
+  ecdsaSign(
+    plaintext: string,
+    privateKeyPem: string,
+    curve?: 'P-256' | 'P-384' | 'P-521',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  ecdsaVerify(
+    plaintext: string,
+    signatureB64: string,
+    publicKeyPem: string,
+    curve?: 'P-256' | 'P-384' | 'P-521',
+    onProgress?: ProgressCallback
+  ): Promise<boolean>;
+
+  ecdhDeriveSecret(
+    partyAPrivateKeyPem: string,
+    partyBPublicKeyPem: string,
+    curve?: 'P-256' | 'P-384' | 'P-521',
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
+  pbkdf2Derive(
+    password: string,
+    salt: string,
+    iterations?: number,
+    hash?: string,
+    lengthBits?: number,
+    onProgress?: ProgressCallback
+  ): Promise<{ hex: string; base64: string }>;
+
+  hkdfDerive(
+    ikm: string,
+    salt: string,
+    info: string,
+    hash?: string,
+    lengthBits?: number,
+    onProgress?: ProgressCallback
+  ): Promise<{ hex: string; base64: string }>;
+
   // PDF Tasks
   mergePdfs(
     files: (Blob | ArrayBuffer)[], 

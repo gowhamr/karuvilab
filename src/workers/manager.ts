@@ -6,6 +6,20 @@ class WorkerManager {
     return typeof Worker !== "undefined";
   }
 
+  async run<K extends keyof WorkerAPI>(
+    method: K,
+    args: Parameters<WorkerAPI[K]>,
+    options?: { signal?: AbortSignal; onProgress?: ProgressCallback }
+  ): Promise<ReturnType<WorkerAPI[K]>> {
+    return workerOrchestrator.run(
+      method,
+      args as unknown[],
+      undefined,
+      options?.onProgress,
+      options?.signal
+    ) as Promise<ReturnType<WorkerAPI[K]>>;
+  }
+
   async calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult> {
     return workerOrchestrator.run<EmiResult>("calculateEmiSchedule", [inputs]);
   }

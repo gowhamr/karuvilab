@@ -11,6 +11,7 @@ import { ToolMoreMenu } from './ToolMoreMenu';
 import { ToolInfoSection } from './ToolInfoSection';
 import { cn } from '@/src/lib/utils';
 import { useState, useEffect, useMemo } from 'react';
+import { FocusModeWrapper } from './FocusModeWrapper';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
@@ -182,7 +183,9 @@ export function ClientToolShell({ title, description, category, children, toolId
 
       <section className="mb-12">
         <ErrorBoundary>
-          {children}
+          <FocusModeWrapper toolId={finalToolId} toolName={title}>
+            {children}
+          </FocusModeWrapper>
         </ErrorBoundary>
       </section>
 

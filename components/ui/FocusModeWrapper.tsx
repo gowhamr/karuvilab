@@ -6,17 +6,12 @@ import { Maximize2 } from 'lucide-react';
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 import { useSettingsStore } from '@/src/store/settings/store';
 import { FocusModeToolbar } from './FocusModeToolbar';
+import { useFocusModeControls } from '@/src/contexts/FocusModeControlsContext';
 
 interface FocusModeWrapperProps {
   toolId: string;
   toolName: string;
   children: ReactNode;
-  wordCount?: number;
-  charCount?: number;
-  lineCount?: number;
-  language?: string;
-  onFontSizeChange?: (size: number) => void;
-  onWrapToggle?: () => void;
   showTrigger?: boolean;       // default true
   triggerPosition?: 'top-right' | 'bottom-right';  // default top-right
 }
@@ -25,16 +20,12 @@ export function FocusModeWrapper({
   toolId,
   toolName,
   children,
-  wordCount,
-  charCount,
-  lineCount,
-  language,
-  onFontSizeChange,
-  onWrapToggle,
   showTrigger = true,
   triggerPosition = 'top-right',
 }: FocusModeWrapperProps) {
   const { displayMode, isFullscreen, enterFocus, enterDashboard, activeToolId, registerTool, unregisterTool } = useFullscreenContext();
+  const { controls } = useFocusModeControls();
+  const { wordCount, charCount, lineCount, language, onFontSizeChange, onWrapToggle } = controls;
   const isThisToolFullscreen = isFullscreen && activeToolId === toolId;
   const isDashboard = displayMode === 'dashboard' && activeToolId === toolId;
 

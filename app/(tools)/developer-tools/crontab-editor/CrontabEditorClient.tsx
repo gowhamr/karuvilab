@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Clock, Check, Copy, ChevronDown, ChevronUp, AlertCircle, Calendar, Zap, List } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
-import { FocusModeWrapper } from '@/components/ui/FocusModeWrapper';
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { useUrlState } from '@/src/hooks/useUrlState';
 import { ShareButton } from '@/components/ui/ShareButton';
 import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
@@ -94,13 +94,13 @@ export default function CrontabEditorClient() {
     return 'just now';
   };
 
+  useFocusModeIntegration({
+    language: "cron",
+    onFontSizeChange: setFontSize,
+  });
+
   return (
-    <FocusModeWrapper
-      toolId="crontab-editor"
-      toolName="Crontab Editor"
-      language="cron"
-      onFontSizeChange={setFontSize}
-    >
+    <div className="w-full">
       <div className="max-w-4xl mx-auto space-y-8 pb-12 w-full">
       <SharedResultBanner hasParams={hasParams} toolName="Crontab Editor" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
@@ -359,6 +359,6 @@ export default function CrontabEditorClient() {
         </div>
       </div>
       </div>
-    </FocusModeWrapper>
+    </div>
   );
 }

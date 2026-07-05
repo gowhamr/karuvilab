@@ -7,7 +7,7 @@ import { useSearchStore } from '@/src/store/useSearchStore';
 import { useFavoriteStore } from '@/src/store/useFavoriteStore';
 import { ALL_TOOLS } from '@/src/tool-registry';
 import { SearchResults } from './SearchResults';
-import { Search, X } from 'lucide-react';
+import { Search, X, Clipboard } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { supportsBlur } from '@/src/lib/deviceCapability';
 import { cn } from "@/src/lib/utils";
@@ -173,6 +173,24 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   spellCheck={false}
                   autoCorrect="off"
                 />
+                {!query && (
+                  <button
+                    onClick={async () => {
+                      try {
+                        const text = await navigator.clipboard.readText();
+                        if (text) {
+                          setQuery(text);
+                          setFocusedIndex(-1);
+                        }
+                      } catch {}
+                    }}
+                    className="flex items-center gap-1 min-h-11 px-2.5 py-1 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors mr-1"
+                    title="Paste from clipboard and detect tool"
+                  >
+                    <Clipboard className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Paste</span>
+                  </button>
+                )}
                 {query && (
                   <button
                     onClick={() => { setQuery(''); const input = inputRef.current; if(input) input.focus(); }}

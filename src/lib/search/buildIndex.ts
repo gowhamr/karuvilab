@@ -1,5 +1,5 @@
 // src/lib/search/buildIndex.ts
-import { ALL_TOOLS, ToolEntry } from '@/src/tool-registry';
+import { ALL_TOOLS, ToolEntry } from '../../tool-registry';
 import { expandSynonyms } from './synonyms';
 
 export interface IndexedTool extends ToolEntry {
@@ -24,7 +24,7 @@ let cachedIndex: IndexedTool[] | null = null;
 export function buildSearchIndex(): IndexedTool[] {
   if (cachedIndex) return cachedIndex;
 
-  cachedIndex = ALL_TOOLS.filter(t => t.status !== 'deprecated').map(tool => {
+  cachedIndex = (ALL_TOOLS as ToolEntry[]).filter(t => (t as any).status !== 'deprecated').map(tool => {
     // 1. Exact name tokens (highest priority)
     const exactNameTokens = tokenize(tool.name);
 
@@ -36,7 +36,7 @@ export function buildSearchIndex(): IndexedTool[] {
     tokenize(tool.desc).forEach(t => tokenSet.add(t));
     
     // Add keywords and their synonyms
-    tool.keywords.forEach(keyword => {
+    tool.keywords.forEach((keyword: string) => {
       tokenize(keyword).forEach(token => {
         tokenSet.add(token);
         expandSynonyms(token).forEach(syn => tokenSet.add(syn));

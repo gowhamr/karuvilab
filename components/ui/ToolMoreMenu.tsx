@@ -8,6 +8,8 @@ import {
 import { m, AnimatePresence } from "framer-motion";
 import { useSupportStore } from "@/src/store/useSupportStore";
 import { useToast } from "@/components/ui/Toast";
+import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
+import { Maximize2 } from "lucide-react";
 
 interface ToolMoreMenuProps {
   toolId: string;
@@ -21,6 +23,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
   const menuId = `menu-${toolId}`;
   const openFeedback = useSupportStore(state => state.openFeedback);
   const { toast } = useToast();
+  const { enterFocus } = useFullscreenContext();
 
   useEffect(() => {
     if (isOpen && menuRef.current) {
@@ -82,6 +85,14 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
       label: "Help & Docs",
       icon: HelpCircle,
       onClick: () => { window.location.href = "/help"; }
+    },
+    {
+      label: "Fullscreen Mode",
+      icon: Maximize2,
+      onClick: () => {
+        enterFocus(toolId);
+        setIsOpen(false);
+      }
     },
     { 
       label: "Report Issue", 

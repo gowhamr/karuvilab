@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { beautify, Language } from "@/src/lib/formatter-utils";
 
 const cat = CATEGORIES.find(c => c.id === "developer")!;
@@ -34,16 +34,16 @@ export default function CodeFormatterClient() {
   const toolId = lang === "sql" ? "sql-formatter" : (lang === "css" || lang === "html" ? "css-formatter" : "code-formatter");
   const toolName = lang === "sql" ? "SQL Formatter" : (lang === "css" || lang === "html" ? "CSS/HTML Formatter" : "Code Formatter");
 
+  useFocusModeIntegration({
+    charCount: output.length,
+    lineCount: output ? output.split('\n').length : 0,
+    language: lang,
+    onFontSizeChange: setFontSize,
+    onWrapToggle: () => setWordWrap(v => !v)
+  });
+
   return (
-    <FocusModeWrapper
-      toolId={toolId}
-      toolName={toolName}
-      charCount={output.length}
-      lineCount={output ? output.split('\n').length : 0}
-      language={lang}
-      onFontSizeChange={setFontSize}
-      onWrapToggle={() => setWordWrap(v => !v)}
-    >
+    <div className="w-full">
       <div className="space-y-6 w-full">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="flex flex-wrap gap-2">
@@ -105,7 +105,7 @@ export default function CodeFormatterClient() {
           </div>
         </div>
       )}
+      </div>
     </div>
-  </FocusModeWrapper>
 );
 }

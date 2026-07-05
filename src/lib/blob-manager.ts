@@ -67,6 +67,20 @@ class BlobManager {
       }
     }
   }
+
+  /**
+   * Helper to trigger a download for a Blob safely using blobManager.
+   */
+  download(blob: Blob, filename: string): void {
+    const url = this.create(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    this.revoke(url);
+  }
 }
 
 export const blobManager = new BlobManager();

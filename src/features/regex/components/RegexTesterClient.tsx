@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo, useRef, useEffect } from "react";
-import { FocusModeWrapper } from "@/components/ui/FocusModeWrapper";
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { REGEX_CATEGORIES, REGEX_LIBRARY, type RegexPattern } from "../library";
 import { 
   BookOpen, 
@@ -136,16 +136,16 @@ export default function RegexTesterClient() {
     } catch { return null; }
   }, [pattern, flagString, testString, result]);
 
+  useFocusModeIntegration({
+    charCount: testString.length,
+    lineCount: testString ? testString.split('\n').length : 0,
+    language: "regex",
+    onFontSizeChange: setFontSize,
+    onWrapToggle: () => setWordWrap(v => !v)
+  });
+
   return (
-    <FocusModeWrapper
-      toolId="regex-tester"
-      toolName="Regex Tester"
-      charCount={testString.length}
-      lineCount={testString ? testString.split('\n').length : 0}
-      language="regex"
-      onFontSizeChange={setFontSize}
-      onWrapToggle={() => setWordWrap(v => !v)}
-    >
+    <div className="w-full">
       <div className="space-y-6 w-full">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="space-y-2">
@@ -447,6 +447,6 @@ export default function RegexTesterClient() {
         )}
       </div>
       </div>
-    </FocusModeWrapper>
+    </div>
   );
 }

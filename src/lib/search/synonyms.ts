@@ -14,19 +14,25 @@ export const SYNONYM_MAP: Record<string, string[]> = {
   "unlock": ["decrypt", "remove password"],
   "find": ["search", "extract", "discover"],
 
-  // File Types
-  "text": ["string", "plain text", "txt", "words", "letters"],
-  "picture": ["image", "photo", "png", "jpg", "jpeg", "webp", "gif", "svg"],
-  "doc": ["document", "word", "docx"],
-  "sound": ["audio", "mp3", "wav", "music"],
-  "movie": ["video", "mp4", "webm"],
-  "data": ["json", "csv", "xml", "yaml", "yml"],
+  // File Extensions & Formats
+  "pdf": [".pdf", "pdf document", "acrobat"],
+  "image": ["picture", "photo", "png", "jpg", "jpeg", "webp", "gif", "svg", "ico", ".png", ".jpg", ".svg", ".webp"],
+  "text": ["string", "plain text", "txt", "words", "letters", ".txt"],
+  "doc": ["document", "word", "docx", ".doc", ".docx"],
+  "sound": ["audio", "mp3", "wav", "music", ".mp3", ".wav"],
+  "movie": ["video", "mp4", "webm", ".mp4", ".webm"],
+  "data": ["json", "csv", "xml", "yaml", "yml", ".json", ".csv", ".xml", ".yaml"],
 
-  // Specific Tool Synonyms
+  // Specific Tool & Domain Synonyms
   "calc": ["calculator", "math", "numbers"],
   "money": ["finance", "currency", "salary", "investment", "loan", "emi", "tax", "gst"],
+  "banking": ["iso8583", "emv", "tlv", "swift", "mt103", "mx", "bic", "iban", "finacle", "luhn", "pan", "apdu", "mti", "bitmap", "cryptogram"],
+  "iso8583": ["mti", "bitmap", "field decoder", "0100", "0200", "card processing", "payment gateway"],
+  "emv": ["tlv", "tag dictionary", "apdu", "chip card", "icc", "smartcard", "cryptogram"],
+  "swift": ["mt103", "mt202", "mx", "iso20022", "bic", "iban", "wire transfer", "pacs.008"],
+  "card": ["luhn", "pan", "track 2", "bin lookup", "expiry", "credit card", "debit card"],
   "time": ["clock", "date", "hours", "timezone", "utc", "ist"],
-  "dev": ["developer", "code", "programming", "json", "base64", "hash", "regex"],
+  "dev": ["developer", "code", "programming", "json", "base64", "hash", "regex", "sql", "js", "ts", "python"],
   "seo": ["search engine", "meta tags", "sitemap", "robots.txt", "slug"],
   "type": ["typing", "keyboard", "speed test"],
   "speed": ["internet", "bandwidth", "ping"],

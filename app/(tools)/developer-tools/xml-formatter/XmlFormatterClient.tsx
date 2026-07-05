@@ -6,7 +6,7 @@ import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { blobManager } from '@/src/lib/blob-manager';
-import { FocusModeWrapper } from '@/components/ui/FocusModeWrapper';
+import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 
 type XMLFormatMode = 'format' | 'minify' | 'validate';
@@ -154,16 +154,16 @@ export default function XmlFormatterClient() {
     blobManager.revoke(url);
   };
 
+  useFocusModeIntegration({
+    charCount: result.output.length,
+    lineCount: result.output ? result.output.split('\n').length : 0,
+    language: "xml",
+    onFontSizeChange: setFontSize,
+    onWrapToggle: () => setWordWrap(v => !v),
+  });
+
   return (
-    <FocusModeWrapper
-      toolId="xml-formatter"
-      toolName="XML Formatter"
-      charCount={result.output.length}
-      lineCount={result.output ? result.output.split('\n').length : 0}
-      language="xml"
-      onFontSizeChange={setFontSize}
-      onWrapToggle={() => setWordWrap(v => !v)}
-    >
+    <div className="w-full">
       <div className="max-w-6xl mx-auto space-y-8 pb-12 w-full">
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
         
@@ -321,7 +321,7 @@ export default function XmlFormatterClient() {
 
       </div>
       </div>
-    </FocusModeWrapper>
+    </div>
   );
 }
 
