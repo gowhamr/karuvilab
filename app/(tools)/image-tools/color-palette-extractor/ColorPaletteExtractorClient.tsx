@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { workerOrchestrator } from '@/src/engine/workers/WorkerOrchestrator';
 import { DropZone } from '@/components/ui/DropZone';
 import { CopyButton } from '@/components/ui/CopyButton';
@@ -15,9 +15,20 @@ export default function ColorPaletteExtractorClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<{ percent: number; message?: string }>({ percent: 0, message: '' });
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const handleFile = useCallback(async (file: File | undefined) => {
     if (!file) return;
+
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
 
     setIsLoading(true);
     setError(null);
@@ -32,10 +43,12 @@ export default function ColorPaletteExtractorClient() {
         'extractColorPalette',
         [buffer, 5],
         [buffer],
-        (p) => setProgress(p)
+        (p) => setProgress(p),
+        abortController.signal
       );
       setPalette(colors);
     } catch (e: any) {
+      if (e.name === 'AbortError') return;
       setError(e.message || 'Failed to extract colors.');
     } finally {
       setIsLoading(false);

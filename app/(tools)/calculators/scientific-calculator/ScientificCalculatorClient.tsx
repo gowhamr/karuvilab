@@ -19,6 +19,13 @@ export default function ScientificCalculatorClient() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const append = useCallback((val: string) => {
     setDisplay((prev) => {
@@ -49,6 +56,10 @@ export default function ScientificCalculatorClient() {
 
   const calculate = useCallback(async () => {
     if (display === "Error") return;
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     try {
       let expr = display
         .replace(/π/g, "Math.PI")
@@ -91,7 +102,7 @@ export default function ScientificCalculatorClient() {
         .replace(/sqrt\(/g, "Math.sqrt(")
         .replace(/cbrt\(/g, "Math.cbrt(");
 
-      const result = await workerOrchestrator.run<number>("evaluateMath", [expr]);
+      const result = await workerOrchestrator.run<number>("evaluateMath", [expr], undefined, undefined, abortController.signal);
       const formattedResult = String(Number(result.toFixed(10)));
       
       setHistory(prev => [{
@@ -103,7 +114,8 @@ export default function ScientificCalculatorClient() {
       setAns(formattedResult);
       setExpression(display + " =");
       setDisplay(formattedResult);
-    } catch (e) {
+    } catch (e: any) {
+      if (e.name === 'AbortError') return;
       setDisplay("Error");
     }
   }, [display, mode, ans]);

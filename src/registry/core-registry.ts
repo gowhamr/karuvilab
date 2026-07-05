@@ -782,6 +782,35 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "emv-tlv-tree",
+    "name": "EMV TLV Tree",
+    "desc": "Parse and visualize EMV Tag-Length-Value data",
+    "href": "banking-tools/emv-tlv-tree/",
+    "category": "banking",
+    "icon": "Nfc",
+    "color": "#3B82F6",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "emv",
+      "tlv",
+      "tag length value",
+      "smart card",
+      "nfc",
+      "banking"
+    ],
+    "input": "text",
+    "output": "json",
+    "related": [
+      "track-2-parser",
+      "swift-mt-mx"
+    ],
+    "subCategory": "Card Data",
+    "requiresNetwork": false
+  },
+  {
     "id": "extract-images",
     "name": "Extract Images",
     "desc": "Pull images out of a PDF",
@@ -887,6 +916,33 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "related": [],
     "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "finacle-tools",
+    "name": "Finacle Log Parser",
+    "desc": "Parse and format Infosys Finacle trace logs and ISO 8583 messages",
+    "href": "banking-tools/finacle-tools/",
+    "category": "banking",
+    "icon": "FileCode",
+    "color": "#8B5CF6",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "finacle",
+      "iso 8583",
+      "banking",
+      "core banking",
+      "log parser"
+    ],
+    "input": "text",
+    "output": "json",
+    "related": [
+      "swift-mt-mx"
+    ],
+    "subCategory": "Core Banking",
     "requiresNetwork": false
   },
   {
@@ -2484,6 +2540,36 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "swift-mt-mx",
+    "name": "SWIFT MT/MX Visualizer",
+    "desc": "Visualize and validate SWIFT MT and MX (ISO 20022) financial messages",
+    "href": "banking-tools/swift-mt-mx/",
+    "category": "banking",
+    "icon": "Building",
+    "color": "#6366F1",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "swift",
+      "mt",
+      "mx",
+      "iso 20022",
+      "banking",
+      "financial message",
+      "parser"
+    ],
+    "input": "text",
+    "output": "json",
+    "related": [
+      "emv-tlv-tree",
+      "finacle-tools"
+    ],
+    "subCategory": "Messaging",
+    "requiresNetwork": false
+  },
+  {
     "id": "swp-calculator",
     "name": "SWP Calculator",
     "desc": "Systematic Withdrawal Plan planning",
@@ -2692,6 +2778,35 @@ export const CORE_TOOLS: ToolEntry[] = [
       "time-calculator"
     ],
     "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "track-2-parser",
+    "name": "Track 2 Parser",
+    "desc": "Parse and decode magnetic stripe Track 2 data instantly",
+    "href": "banking-tools/track-2-parser/",
+    "category": "banking",
+    "icon": "CreditCard",
+    "color": "#10B981",
+    "featured": true,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "track 2",
+      "magstripe",
+      "PAN",
+      "discretionary data",
+      "banking",
+      "parser"
+    ],
+    "input": "text",
+    "output": "json",
+    "related": [
+      "emv-tlv-tree",
+      "swift-mt-mx"
+    ],
+    "subCategory": "Card Data",
     "requiresNetwork": false
   },
   {

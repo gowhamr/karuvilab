@@ -127,7 +127,7 @@ export function ClientToolShell({ title, description, category, children, toolId
     }
   }, [finalToolId, recordTransition]);
 
-  const searchParams = useSearchParams();
+
 
   const [isEmbed, setIsEmbed] = useState(false);
 

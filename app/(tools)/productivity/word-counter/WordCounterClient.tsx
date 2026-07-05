@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { DropZone } from "@/components/ui/DropZone";
@@ -11,6 +11,13 @@ import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 export default function WordCounterClient() {
   const [text, setText] = useState("");
   const { toast } = useToast();
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const stats = useMemo(() => {
     const trimmedText = text.trim();
@@ -53,15 +60,21 @@ export default function WordCounterClient() {
       };
       reader.readAsText(file);
     } else if (file.name.endsWith(".docx")) {
+      abortControllerRef.current?.abort();
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
       try {
         const arrayBuffer = await file.arrayBuffer();
         const extractedText = await workerOrchestrator.dispatch<string>(
           "extractRawTextFromDocx",
           [arrayBuffer],
-          [arrayBuffer]
+          [arrayBuffer],
+          undefined,
+          abortController.signal
         );
         setText(extractedText);
-      } catch (err) {
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
         console.error(err);
         toast("Failed to parse .docx file.", "error");
       }

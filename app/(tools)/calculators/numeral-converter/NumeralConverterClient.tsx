@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { 
   detectFormat, decodeToBytes, encodeFromBytes, decodeJWT 
 } from "@/src/features/numeral-converter/utils/conversion-helpers";
@@ -75,6 +75,13 @@ const SAMPLES = {
 export default function NumeralConverterClient() {
   const [activeTab, setActiveTab] = useState<TabMode>("smart");
   const { toast } = useToast();
+  const abortControllerRef = useRef<AbortController | null>(null);
+  
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
   
   // Input states
   const [inputValue, setInputValue] = useState<string>(SAMPLES.text);
@@ -176,15 +183,20 @@ export default function NumeralConverterClient() {
       return;
     }
 
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     const task = async () => {
       setIsConverting(true);
       try {
         const res = await workerOrchestrator.run<{ value: string; error: string }>("convertNumeral", [
           debouncedInput, encodeFromFormat, encodeToFormat, 
           { shift: caesarShiftVal, encodeAll: encodeAllEntities, escapeStyle: unicodeEscapeStyle }
-        ]);
+        ], undefined, undefined, abortController.signal);
         setAsyncEncodeResult({ output: res.value, error: res.error });
       } catch (e: any) {
+        if (e.name === 'AbortError') return;
         setAsyncEncodeResult({ output: "", error: "Worker failed: " + e.message });
       } finally { setIsConverting(false); }
     };

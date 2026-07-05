@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { SliderField } from "@/components/ui/SliderField";
@@ -89,8 +89,19 @@ export default function PasswordGeneratorClient() {
   const [history, setHistory] = useState<string[]>([]);
   const [breachInfo, setBreachInfo] = useState<{ count: number | null; loading: boolean }>({ count: null, loading: false });
 
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
+
   const checkBreach = async (password: string) => {
     if (!password) return;
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
     setBreachInfo({ count: null, loading: true });
     try {
       const msgUint8 = new TextEncoder().encode(password);
@@ -101,7 +112,7 @@ export default function PasswordGeneratorClient() {
       const prefix = hashHex.substring(0, 5);
       const suffix = hashHex.substring(5);
       
-      const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+      const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, { signal: abortController.signal });
       const text = await res.text();
       const lines = text.split("\n");
       const match = lines.find(line => line.split(":")[0] === suffix);
@@ -111,7 +122,8 @@ export default function PasswordGeneratorClient() {
       } else {
         setBreachInfo({ count: 0, loading: false });
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err.name === 'AbortError') return;
       console.error("HIBP Check failed", err);
       setBreachInfo({ count: null, loading: false });
     }
