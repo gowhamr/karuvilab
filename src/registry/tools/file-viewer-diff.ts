@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const file_viewer_diff: ToolEntry = {
+export const fileViewerDiff: ToolEntry = {
   "id": "file-viewer-diff",
   "name": "File Viewer & Diff",
   "desc": "Local text editor and diff checker",

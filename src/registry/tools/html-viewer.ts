@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const html_viewer: ToolEntry = {
+export const htmlViewer: ToolEntry = {
   "id": "html-viewer",
   "name": "HTML Online Viewer",
   "desc": "Professional live HTML/CSS/JS editor and sandboxed preview",

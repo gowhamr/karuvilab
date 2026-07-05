@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const aes_encrypt_decrypt: ToolEntry = {
+export const aesEncryptDecrypt: ToolEntry = {
   "id": "aes-encrypt-decrypt",
   "name": "Aes Encrypt Decrypt",
   "desc": "Aes Encrypt Decrypt tool",

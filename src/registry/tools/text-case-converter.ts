@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const text_case_converter: ToolEntry = {
+export const textCaseConverter: ToolEntry = {
   "id": "text-case-converter",
   "name": "Text Case Converter",
   "desc": "Text Case Converter tool",

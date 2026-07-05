@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const cipher_tools: ToolEntry = {
+export const cipherTools: ToolEntry = {
   "id": "cipher-tools",
   "name": "Cipher Tools",
   "desc": "Cipher Tools tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const color_palette_extractor: ToolEntry = {
+export const colorPaletteExtractor: ToolEntry = {
   "id": "color-palette-extractor",
   "name": "Color Palette Extractor",
   "desc": "Color Palette Extractor tool",

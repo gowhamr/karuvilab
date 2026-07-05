@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const log_analyzer: ToolEntry = {
+export const logAnalyzer: ToolEntry = {
   "id": "log-analyzer",
   "name": "Log Analyzer",
   "desc": "Log Analyzer tool",

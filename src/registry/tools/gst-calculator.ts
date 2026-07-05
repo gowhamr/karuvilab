@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const gst_calculator: ToolEntry = {
+export const gstCalculator: ToolEntry = {
   "id": "gst-calculator",
   "name": "GST Calculator",
   "desc": "Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.",

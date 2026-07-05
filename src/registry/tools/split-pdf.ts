@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const split_pdf: ToolEntry = {
+export const splitPdf: ToolEntry = {
   "id": "split-pdf",
   "name": "Split PDF",
   "desc": "Extract pages from a PDF",

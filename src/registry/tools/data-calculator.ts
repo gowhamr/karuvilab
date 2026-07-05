@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const data_calculator: ToolEntry = {
+export const dataCalculator: ToolEntry = {
   "id": "data-calculator",
   "name": "Data Calculator",
   "desc": "Units, transfer time, cost, & hashes",

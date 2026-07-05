@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const wifi_qr_code: ToolEntry = {
+export const wifiQrCode: ToolEntry = {
   "id": "wifi-qr-code",
   "name": "WiFi QR Code Generator",
   "desc": "Generate QR code to connect to WiFi",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const url_encoder: ToolEntry = {
+export const urlEncoder: ToolEntry = {
   "id": "url-encoder",
   "name": "URL Encoder",
   "desc": "Percent-encode and decode URLs",

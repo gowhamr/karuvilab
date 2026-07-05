@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const base64url_converter: ToolEntry = {
+export const base64urlConverter: ToolEntry = {
   "id": "base64url-converter",
   "name": "Base64url Converter",
   "desc": "Base64url Converter tool",

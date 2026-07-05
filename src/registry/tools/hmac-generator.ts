@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const hmac_generator: ToolEntry = {
+export const hmacGenerator: ToolEntry = {
   "id": "hmac-generator",
   "name": "Hmac Generator",
   "desc": "Hmac Generator tool",

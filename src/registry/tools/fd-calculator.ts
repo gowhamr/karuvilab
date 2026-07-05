@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const fd_calculator: ToolEntry = {
+export const fdCalculator: ToolEntry = {
   "id": "fd-calculator",
   "name": "Fixed Deposit (FD)",
   "desc": "FD maturity amount and interest earned",

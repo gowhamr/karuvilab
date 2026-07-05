@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const hkdf_generator: ToolEntry = {
+export const hkdfGenerator: ToolEntry = {
   "id": "hkdf-generator",
   "name": "Hkdf Generator",
   "desc": "Hkdf Generator tool",

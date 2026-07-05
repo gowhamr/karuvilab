@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const iban_validator: ToolEntry = {
+export const ibanValidator: ToolEntry = {
   "id": "iban-validator",
   "name": "Iban Validator",
   "desc": "Iban Validator tool",

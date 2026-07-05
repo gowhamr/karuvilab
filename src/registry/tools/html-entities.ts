@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const html_entities: ToolEntry = {
+export const htmlEntities: ToolEntry = {
   "id": "html-entities",
   "name": "HTML Entities",
   "desc": "Convert characters to HTML entities",

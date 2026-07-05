@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const split_copy: ToolEntry = {
+export const splitCopy: ToolEntry = {
   "id": "split-copy",
   "name": "Split & Copy",
   "desc": "Break long text into chunks",

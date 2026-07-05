@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const ecdsa_sign: ToolEntry = {
+export const ecdsaSign: ToolEntry = {
   "id": "ecdsa-sign",
   "name": "Ecdsa Sign",
   "desc": "Ecdsa Sign tool",

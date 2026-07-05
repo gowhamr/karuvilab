@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const fake_data_generator: ToolEntry = {
+export const fakeDataGenerator: ToolEntry = {
   "id": "fake-data-generator",
   "name": "Fake Data Generator",
   "desc": "Generate realistic fake data for testing",

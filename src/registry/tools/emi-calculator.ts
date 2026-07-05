@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const emi_calculator: ToolEntry = {
+export const emiCalculator: ToolEntry = {
   "id": "emi-calculator",
   "name": "EMI Calculator",
   "desc": "Loan EMI, interest, and amortization",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const typing_speed_test: ToolEntry = {
+export const typingSpeedTest: ToolEntry = {
   "id": "typing-speed-test",
   "name": "Typing Speed Test",
   "desc": "Test and improve your typing WPM",

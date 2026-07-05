@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const pem_viewer: ToolEntry = {
+export const pemViewer: ToolEntry = {
   "id": "pem-viewer",
   "name": "Pem Viewer",
   "desc": "Pem Viewer tool",

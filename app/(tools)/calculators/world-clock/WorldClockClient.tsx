@@ -233,7 +233,7 @@ export default function WorldClockClient() {
   };
 
   return (
-    <div className={cn("space-y-8 mx-auto transition-all duration-300", isFocus ? "max-w-none pt-4 pb-12 px-4 sm:px-8" : "max-w-[1400px]")}>
+    <div className={cn("space-y-8 mx-auto transition-all duration-300 w-full", isFocus ? "max-w-none pt-4 pb-12 px-4 sm:px-8" : "max-w-7xl")}>
       <TimezoneSearchModal isOpen={isModalOpen} onClose={handleCloseModal} />
       
       {/* Header: Primary Search Action & Minimized Stats/Tools */}
@@ -264,7 +264,7 @@ export default function WorldClockClient() {
              <Download className="w-4 h-4" />
            </button>
            
-           <div className="w-[1px] h-8 bg-border mx-1" />
+           <div className="w-px h-8 bg-border mx-1" />
            
            <button 
              onClick={() => toggleFocus('world-clock')} 

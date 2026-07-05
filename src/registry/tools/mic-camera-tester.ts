@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const mic_camera_tester: ToolEntry = {
+export const micCameraTester: ToolEntry = {
   "id": "mic-camera-tester",
   "name": "Mic & Camera Tester",
   "desc": "Test your microphone and camera",

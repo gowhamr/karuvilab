@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const mutual_fund_returns: ToolEntry = {
+export const mutualFundReturns: ToolEntry = {
   "id": "mutual-fund-returns",
   "name": "Mutual Fund Returns",
   "desc": "Calculate absolute and annualized returns",

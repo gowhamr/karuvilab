@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const ppf_calculator: ToolEntry = {
+export const ppfCalculator: ToolEntry = {
   "id": "ppf-calculator",
   "name": "PPF Calculator",
   "desc": "Public Provident Fund maturity & interest",

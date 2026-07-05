@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const unix_timestamp: ToolEntry = {
+export const unixTimestamp: ToolEntry = {
   "id": "unix-timestamp",
   "name": "Unix Timestamp",
   "desc": "Unix Timestamp tool",

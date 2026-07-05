@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const lock_unlock_pdf: ToolEntry = {
+export const lockUnlockPdf: ToolEntry = {
   "id": "lock-unlock-pdf",
   "name": "Lock / Unlock PDF",
   "desc": "Add or remove PDF passwords",

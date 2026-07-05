@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const contrast_checker: ToolEntry = {
+export const contrastChecker: ToolEntry = {
   "id": "contrast-checker",
   "name": "Contrast Checker",
   "desc": "Contrast Checker tool",

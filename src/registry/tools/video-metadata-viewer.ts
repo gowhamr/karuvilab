@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const video_metadata_viewer: ToolEntry = {
+export const videoMetadataViewer: ToolEntry = {
   "id": "video-metadata-viewer",
   "name": "Video Metadata Viewer",
   "desc": "Video Metadata Viewer tool",

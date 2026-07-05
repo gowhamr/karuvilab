@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const glassmorphism_generator: ToolEntry = {
+export const glassmorphismGenerator: ToolEntry = {
   "id": "glassmorphism-generator",
   "name": "Glassmorphism Generator",
   "desc": "Glassmorphism Generator tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const iso8583_bitmap_decoder: ToolEntry = {
+export const iso8583BitmapDecoder: ToolEntry = {
   "id": "iso8583-bitmap-decoder",
   "name": "Iso8583 Bitmap Decoder",
   "desc": "Iso8583 Bitmap Decoder tool",

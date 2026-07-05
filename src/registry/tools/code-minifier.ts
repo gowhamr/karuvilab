@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const code_minifier: ToolEntry = {
+export const codeMinifier: ToolEntry = {
   "id": "code-minifier",
   "name": "Code Minifier",
   "desc": "Minify CSS, JS, and HTML",

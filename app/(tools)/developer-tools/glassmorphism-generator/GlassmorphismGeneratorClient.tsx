@@ -55,7 +55,7 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
     const closestBlur = Object.keys(blurMap).reduce((prev, curr) => Math.abs(Number(curr) - config.blur) < Math.abs(Number(prev) - config.blur) ? curr : prev);
     const bl = blurMap[Number(closestBlur)] || 'md';
 
-    return `bg-[${config.tintColor}]/${op} backdrop-blur-${bl} border-[${config.borderWidth}px] border-[${config.tintColor === '#ffffff' ? '#ffffff' : '#000'}]/${config.borderOpacity} rounded-[${config.borderRadius}px] shadow-[0_4px_30px_rgba(0,0,0,${config.shadowIntensity/100})]`;
+    return `bg-` + `[${config.tintColor}]/${op} backdrop-blur-${bl} border-` + `[${config.borderWidth}px] border-` + `[${config.tintColor === '#ffffff' ? '#ffffff' : '#000'}]/${config.borderOpacity} rounded-` + `[${config.borderRadius}px] shadow-` + `[0_4px_30px_rgba(0,0,0,${config.shadowIntensity/100})]`;
   }, [config]);
 
   return (

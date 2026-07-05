@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const video_trim: ToolEntry = {
+export const videoTrim: ToolEntry = {
   "id": "video-trim",
   "name": "Video Trim",
   "desc": "Video Trim tool",

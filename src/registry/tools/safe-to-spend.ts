@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const safe_to_spend: ToolEntry = {
+export const safeToSpend: ToolEntry = {
   "id": "safe-to-spend",
   "name": "Safe-to-Spend",
   "desc": "Daily budget planner",

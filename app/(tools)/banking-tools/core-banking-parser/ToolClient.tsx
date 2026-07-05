@@ -2,18 +2,18 @@
 
 import React, { useState } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
-import { ToolOutput } from '@/components/ui/ToolOutput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 export default function ToolClient() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   
-  const parseFinacleLog = (data: string) => {
+  const parseCoreBankingLog = (data: string) => {
     try {
       if (!data.trim()) return '';
-      // Mock parser for Finacle trace logs
+      // Mock parser for core banking trace logs
       const parsed = {
-        message: "Parsed Finacle Log (Mock Data)",
+        message: "Parsed Core Banking Log (Mock Data)",
         rawLength: data.length,
         iso8583: {
           mti: "0200",
@@ -28,13 +28,13 @@ export default function ToolClient() {
       
       return JSON.stringify(parsed, null, 2);
     } catch {
-      return 'Failed to parse Finacle log';
+      return 'Failed to parse core banking log';
     }
   };
 
   const handleInput = (val: string) => {
     setInput(val);
-    setOutput(parseFinacleLog(val));
+    setOutput(parseCoreBankingLog(val));
   };
 
   return (
@@ -42,10 +42,10 @@ export default function ToolClient() {
       <ToolInput 
         value={input} 
         onChange={handleInput} 
-        placeholder="Paste Finacle trace log or ISO 8583 hex string here" 
-        label="Finacle Log / ISO 8583"
+        placeholder="Paste Core Banking trace log or ISO 8583 hex string here" 
+        label="Core Banking Log / ISO 8583"
       />
-      <ToolOutput 
+      <ToolResultArea 
         value={output} 
         label="Parsed Data"
         language="json"

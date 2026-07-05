@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const rsa_key_generator: ToolEntry = {
+export const rsaKeyGenerator: ToolEntry = {
   "id": "rsa-key-generator",
   "name": "Rsa Key Generator",
   "desc": "Rsa Key Generator tool",

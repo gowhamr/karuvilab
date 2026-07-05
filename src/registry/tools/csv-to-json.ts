@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const csv_to_json: ToolEntry = {
+export const csvToJson: ToolEntry = {
   "id": "csv-to-json",
   "name": "Csv To Json",
   "desc": "Csv To Json tool",

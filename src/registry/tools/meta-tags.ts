@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const meta_tags: ToolEntry = {
+export const metaTags: ToolEntry = {
   "id": "meta-tags",
   "name": "Meta Tags",
   "desc": "Meta Tags tool",

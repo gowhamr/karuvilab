@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const cagr_calculator: ToolEntry = {
+export const cagrCalculator: ToolEntry = {
   "id": "cagr-calculator",
   "name": "CAGR Calculator",
   "desc": "Compound Annual Growth Rate",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const iso8583_message_parser: ToolEntry = {
+export const iso8583MessageParser: ToolEntry = {
   "id": "iso8583-message-parser",
   "name": "Iso8583 Message Parser",
   "desc": "Iso8583 Message Parser tool",

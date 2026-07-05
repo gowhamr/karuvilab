@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const gif_creator: ToolEntry = {
+export const gifCreator: ToolEntry = {
   "id": "gif-creator",
   "name": "Gif Creator",
   "desc": "Gif Creator tool",

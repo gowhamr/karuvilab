@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const swp_calculator: ToolEntry = {
+export const swpCalculator: ToolEntry = {
   "id": "swp-calculator",
   "name": "SWP Calculator",
   "desc": "Systematic Withdrawal Plan planning",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const world_clock: ToolEntry = {
+export const worldClock: ToolEntry = {
   "id": "world-clock",
   "name": "World Clock",
   "desc": "Track time across multiple cities with business hour indicators. Ideal for global teams.",

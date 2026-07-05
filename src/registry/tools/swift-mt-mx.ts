@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const swift_mt_mx: ToolEntry = {
+export const swiftMtMx: ToolEntry = {
   "id": "swift-mt-mx",
   "name": "Swift Mt Mx",
   "desc": "Swift Mt Mx tool",

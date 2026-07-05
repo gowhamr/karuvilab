@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const page_numbering: ToolEntry = {
+export const pageNumbering: ToolEntry = {
   "id": "page-numbering",
   "name": "Page Numbering",
   "desc": "Add page numbers to PDF",

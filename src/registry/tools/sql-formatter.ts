@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const sql_formatter: ToolEntry = {
+export const sqlFormatter: ToolEntry = {
   "id": "sql-formatter",
   "name": "Sql Formatter",
   "desc": "Sql Formatter tool",

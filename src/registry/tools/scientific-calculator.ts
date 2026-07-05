@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const scientific_calculator: ToolEntry = {
+export const scientificCalculator: ToolEntry = {
   "id": "scientific-calculator",
   "name": "Scientific Calculator",
   "desc": "Advanced mathematical calculations",

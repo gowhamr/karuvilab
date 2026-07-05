@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const rd_calculator: ToolEntry = {
+export const rdCalculator: ToolEntry = {
   "id": "rd-calculator",
   "name": "Recurring Deposit (RD)",
   "desc": "RD maturity and interest calculation",

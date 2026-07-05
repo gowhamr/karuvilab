@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const track_2_parser: ToolEntry = {
+export const track2Parser: ToolEntry = {
   "id": "track-2-parser",
   "name": "Track 2 Parser",
   "desc": "Track 2 Parser tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const audio_converter: ToolEntry = {
+export const audioConverter: ToolEntry = {
   "id": "audio-converter",
   "name": "Audio Converter",
   "desc": "Audio Converter tool",

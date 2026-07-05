@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const salary_calculator: ToolEntry = {
+export const salaryCalculator: ToolEntry = {
   "id": "salary-calculator",
   "name": "Salary Calculator",
   "desc": "Indian take-home salary breakdown",

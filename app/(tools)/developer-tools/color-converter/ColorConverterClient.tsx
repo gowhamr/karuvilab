@@ -131,7 +131,10 @@ export default function ColorConverterClient() {
         <div className="space-y-8">
           <div className="flex items-start gap-8">
              <div className="relative group">
-                <div className="w-24 h-24 rounded-2xl overflow-hidden bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEADJgY0AAL///8HMRiZmYAsRgY0AAL///8HMRiZmYAsRgYQYAIWAgD8D2IAAAAA')] bg-repeat shadow-2xl border-4 border-surface ring-1 ring-white/10">
+                <div 
+                  className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl border-4 border-surface ring-1 ring-white/10"
+                  style={{ backgroundImage: "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEADJgY0AAL///8HMRiZmYAsRgY0AAL///8HMRiZmYAsRgYQYAIWAgD8D2IAAAAA')", backgroundRepeat: "repeat" }}
+                >
                    <m.div 
                      animate={{ backgroundColor: hex }}
                      className="w-full h-full shadow-inner" 

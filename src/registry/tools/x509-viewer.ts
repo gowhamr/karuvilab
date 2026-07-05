@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const x509_viewer: ToolEntry = {
+export const x509Viewer: ToolEntry = {
   "id": "x509-viewer",
   "name": "X509 Viewer",
   "desc": "X509 Viewer tool",

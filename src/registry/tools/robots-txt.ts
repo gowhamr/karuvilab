@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const robots_txt: ToolEntry = {
+export const robotsTxt: ToolEntry = {
   "id": "robots-txt",
   "name": "Robots Txt",
   "desc": "Robots Txt tool",

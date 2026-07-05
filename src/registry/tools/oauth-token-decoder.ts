@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const oauth_token_decoder: ToolEntry = {
+export const oauthTokenDecoder: ToolEntry = {
   "id": "oauth-token-decoder",
   "name": "Oauth Token Decoder",
   "desc": "Oauth Token Decoder tool",

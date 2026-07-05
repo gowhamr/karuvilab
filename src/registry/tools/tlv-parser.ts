@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const tlv_parser: ToolEntry = {
+export const tlvParser: ToolEntry = {
   "id": "tlv-parser",
   "name": "Tlv Parser",
   "desc": "Tlv Parser tool",

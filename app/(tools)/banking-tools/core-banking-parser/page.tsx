@@ -1,14 +1,14 @@
 import { Metadata } from 'next';
-import { finacleTools } from '@/src/registry/tools/finacle-tools';
+import { coreBankingParser } from '@/src/registry/tools/core-banking-parser';
 import { ToolShell } from '@/components/ui/ToolShell';
 import ToolClientWrapper from './ToolClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = generateToolMetadata(finacleTools);
+export const metadata: Metadata = generateToolMetadata(coreBankingParser);
 
-export default function FinacleToolsPage() {
+export default function CoreBankingParserPage() {
   return (
-    <ToolShell toolId={finacleTools.id}>
+    <ToolShell toolId={coreBankingParser.id}>
       <ToolClientWrapper />
     </ToolShell>
   );

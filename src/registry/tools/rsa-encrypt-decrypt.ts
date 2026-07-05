@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const rsa_encrypt_decrypt: ToolEntry = {
+export const rsaEncryptDecrypt: ToolEntry = {
   "id": "rsa-encrypt-decrypt",
   "name": "Rsa Encrypt Decrypt",
   "desc": "Rsa Encrypt Decrypt tool",

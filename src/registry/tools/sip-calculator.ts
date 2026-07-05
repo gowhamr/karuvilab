@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const sip_calculator: ToolEntry = {
+export const sipCalculator: ToolEntry = {
   "id": "sip-calculator",
   "name": "SIP Calculator",
   "desc": "Project mutual-fund SIP returns",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const hash_generator: ToolEntry = {
+export const hashGenerator: ToolEntry = {
   "id": "hash-generator",
   "name": "Hash Generator",
   "desc": "MD5, SHA-1/256/512 hashes",

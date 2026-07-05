@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const unit_converter: ToolEntry = {
+export const unitConverter: ToolEntry = {
   "id": "unit-converter",
   "name": "Unit Converter",
   "desc": "Length, weight, volume, and more",

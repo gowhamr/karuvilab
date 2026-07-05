@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const utc_ist_converter: ToolEntry = {
+export const utcIstConverter: ToolEntry = {
   "id": "utc-ist-converter",
   "name": "UTC ↔ IST",
   "desc": "Convert between UTC and IST",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const pomodoro_timer: ToolEntry = {
+export const pomodoroTimer: ToolEntry = {
   "id": "pomodoro-timer",
   "name": "Pomodoro Timer",
   "desc": "Pomodoro Timer tool",

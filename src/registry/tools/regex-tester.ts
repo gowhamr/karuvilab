@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const regex_tester: ToolEntry = {
+export const regexTester: ToolEntry = {
   "id": "regex-tester",
   "name": "Regex Tester",
   "desc": "Test regular expressions live",

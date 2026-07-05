@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const lumpsum_calculator: ToolEntry = {
+export const lumpsumCalculator: ToolEntry = {
   "id": "lumpsum-calculator",
   "name": "Lumpsum Calculator",
   "desc": "Future value of one-time investment",

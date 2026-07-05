@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const merge_pdf: ToolEntry = {
+export const mergePdf: ToolEntry = {
   "id": "merge-pdf",
   "name": "Merge PDF",
   "desc": "Combine multiple PDFs into one",

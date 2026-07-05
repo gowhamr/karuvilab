@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const phone_mockup_generator: ToolEntry = {
+export const phoneMockupGenerator: ToolEntry = {
   "id": "phone-mockup-generator",
   "name": "Phone Mockup Generator",
   "desc": "Wrap screenshots in realistic device frames",

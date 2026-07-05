@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const box_shadow_generator: ToolEntry = {
+export const boxShadowGenerator: ToolEntry = {
   "id": "box-shadow-generator",
   "name": "Box Shadow Generator",
   "desc": "Box Shadow Generator tool",

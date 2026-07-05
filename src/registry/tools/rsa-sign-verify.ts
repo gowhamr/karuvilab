@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const rsa_sign_verify: ToolEntry = {
+export const rsaSignVerify: ToolEntry = {
   "id": "rsa-sign-verify",
   "name": "Rsa Sign Verify",
   "desc": "Rsa Sign Verify tool",

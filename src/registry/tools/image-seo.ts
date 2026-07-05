@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const image_seo: ToolEntry = {
+export const imageSeo: ToolEntry = {
   "id": "image-seo",
   "name": "Image Seo",
   "desc": "Image Seo tool",

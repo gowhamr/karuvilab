@@ -211,8 +211,8 @@ const api = {
       throw new Error("Invalid characters in expression");
     }
     
-    // eslint-disable-next-line no-eval
-    const result = eval(expr);
+    // Using new Function as a slightly safer eval alternative for trusted math expressions
+    const result = new Function(`return ${expr}`)();
     if (typeof result !== "number" || !isFinite(result)) {
       throw new Error("Result is not a finite number");
     }

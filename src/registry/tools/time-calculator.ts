@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const time_calculator: ToolEntry = {
+export const timeCalculator: ToolEntry = {
   "id": "time-calculator",
   "name": "Time Calculator",
   "desc": "Add or subtract hours and minutes",

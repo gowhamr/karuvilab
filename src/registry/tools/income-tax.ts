@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const income_tax: ToolEntry = {
+export const incomeTax: ToolEntry = {
   "id": "income-tax",
   "name": "Income Tax",
   "desc": "Income Tax tool",

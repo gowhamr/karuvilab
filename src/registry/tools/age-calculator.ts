@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const age_calculator: ToolEntry = {
+export const ageCalculator: ToolEntry = {
   "id": "age-calculator",
   "name": "Age Calculator",
   "desc": "Calculate age in years, months, and days",

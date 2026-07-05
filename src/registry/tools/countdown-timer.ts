@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const countdown_timer: ToolEntry = {
+export const countdownTimer: ToolEntry = {
   "id": "countdown-timer",
   "name": "Countdown Timer",
   "desc": "Countdown Timer tool",

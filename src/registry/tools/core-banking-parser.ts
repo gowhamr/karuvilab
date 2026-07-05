@@ -1,10 +1,10 @@
 import { ToolEntry } from '../types';
 
-export const finacle_tools: ToolEntry = {
-  "id": "finacle-tools",
-  "name": "Finacle Tools",
-  "desc": "Finacle Tools tool",
-  "href": "banking-tools/finacle-tools/",
+export const coreBankingParser: ToolEntry = {
+  "id": "core-banking-parser",
+  "name": "Core Banking Parser",
+  "desc": "Parse core banking trace logs into JSON",
+  "href": "banking-tools/core-banking-parser/",
   "category": "banking",
   "icon": null,
   "color": null,

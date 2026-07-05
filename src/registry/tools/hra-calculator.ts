@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const hra_calculator: ToolEntry = {
+export const hraCalculator: ToolEntry = {
   "id": "hra-calculator",
   "name": "Hra Calculator",
   "desc": "Hra Calculator tool",

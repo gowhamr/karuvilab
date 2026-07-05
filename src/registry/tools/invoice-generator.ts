@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const invoice_generator: ToolEntry = {
+export const invoiceGenerator: ToolEntry = {
   "id": "invoice-generator",
   "name": "Invoice Generator",
   "desc": "Invoice Generator tool",

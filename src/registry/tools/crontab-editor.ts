@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const crontab_editor: ToolEntry = {
+export const crontabEditor: ToolEntry = {
   "id": "crontab-editor",
   "name": "Crontab Editor",
   "desc": "Crontab Editor tool",

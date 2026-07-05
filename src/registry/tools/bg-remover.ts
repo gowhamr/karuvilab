@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const bg_remover: ToolEntry = {
+export const bgRemover: ToolEntry = {
   "id": "bg-remover",
   "name": "Background Remover",
   "desc": "Remove image backgrounds locally",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const text_sorter_deduper: ToolEntry = {
+export const textSorterDeduper: ToolEntry = {
   "id": "text-sorter-deduper",
   "name": "Text Sorter & Deduplicator",
   "desc": "Sort and remove duplicates from text",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const command_cheat_sheet: ToolEntry = {
+export const commandCheatSheet: ToolEntry = {
   "id": "command-cheat-sheet",
   "name": "Command Cheat Sheet",
   "desc": "Command Cheat Sheet tool",

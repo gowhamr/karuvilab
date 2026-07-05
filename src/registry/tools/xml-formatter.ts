@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const xml_formatter: ToolEntry = {
+export const xmlFormatter: ToolEntry = {
   "id": "xml-formatter",
   "name": "Xml Formatter",
   "desc": "Xml Formatter tool",

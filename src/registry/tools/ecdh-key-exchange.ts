@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const ecdh_key_exchange: ToolEntry = {
+export const ecdhKeyExchange: ToolEntry = {
   "id": "ecdh-key-exchange",
   "name": "Ecdh Key Exchange",
   "desc": "Ecdh Key Exchange tool",

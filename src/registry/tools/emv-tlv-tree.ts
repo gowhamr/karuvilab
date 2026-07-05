@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const emv_tlv_tree: ToolEntry = {
+export const emvTlvTree: ToolEntry = {
   "id": "emv-tlv-tree",
   "name": "Emv Tlv Tree",
   "desc": "Emv Tlv Tree tool",

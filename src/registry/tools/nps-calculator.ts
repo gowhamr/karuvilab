@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const nps_calculator: ToolEntry = {
+export const npsCalculator: ToolEntry = {
   "id": "nps-calculator",
   "name": "Nps Calculator",
   "desc": "Nps Calculator tool",

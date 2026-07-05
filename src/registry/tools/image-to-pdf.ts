@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const image_to_pdf: ToolEntry = {
+export const imageToPdf: ToolEntry = {
   "id": "image-to-pdf",
   "name": "Image to PDF",
   "desc": "Convert images into a single PDF",

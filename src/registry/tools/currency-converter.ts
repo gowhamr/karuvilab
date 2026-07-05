@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const currency_converter: ToolEntry = {
+export const currencyConverter: ToolEntry = {
   "id": "currency-converter",
   "name": "Currency Converter",
   "desc": "Convert between world currencies",

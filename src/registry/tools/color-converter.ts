@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const color_converter: ToolEntry = {
+export const colorConverter: ToolEntry = {
   "id": "color-converter",
   "name": "Color Converter",
   "desc": "Color Converter tool",

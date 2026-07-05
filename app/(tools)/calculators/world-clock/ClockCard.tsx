@@ -50,7 +50,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
       ref={setNodeRef}
       style={style}
       className={cn(
-        "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-[280px] relative overflow-hidden",
+        "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-72 relative overflow-hidden",
         isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
         t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5",
         isDragging ? "shadow-2xl scale-[1.02] opacity-90 border-blue/50" : ""

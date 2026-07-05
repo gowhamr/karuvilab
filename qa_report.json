@@ -1,123 +1,2765 @@
 {
-  "summary": {
-    "total_issues": 4,
-    "p0_count": 0,
-    "p1_count": 1,
-    "p2_count": 2,
-    "p3_count": 1,
-    "overall_product_readiness": "MOSTLY_READY",
-    "platform_trust_score": 90,
-    "ui_ux_consistency_score": 75,
-    "accessibility_score": 92,
-    "performance_score": 88
-  },
-  "issues": [
+  "filesScanned": 1264,
+  "largeFiles": [
     {
-      "issue_id": "KV-001",
-      "severity": "P1",
-      "tool_or_system": "System-wide / Tool Routing",
-      "issue_type": "Trust",
-      "description": "Systemic violation of KL-07: The 'ssr: false' directive is missing from page routes (app/(tools)/.../page.tsx) for tools utilizing browser-only APIs.",
-      "reproduction_steps": "1. Inspect page.tsx for tools like Internet Speed Test or Typing Speed Test. 2. Observe direct imports of client components or missing ssr: false in dynamic() calls within the page route.",
-      "expected": "KL-07 mandates that the 'ssr: false' directive MUST be in the page route, not hidden in child wrappers or missing entirely.",
-      "actual": "Most tools either lack the directive entirely or hide it in a *Wrapper.tsx component, violating the strict architectural guardrail.",
-      "root_cause": "Inconsistent application of KL-07 during tool development.",
-      "user_impact": "Potential hydration mismatches, flickering on load, and initialization failures for tools relying on browser-specific APIs.",
-      "fix_recommendation": "Move dynamic() with ssr: false directly into the app/(tools)/[category]/[id]/page.tsx files.",
-      "remove_instead": false
+      "file": "/app/(tools)/calculators/numeral-converter/helpers.ts",
+      "lines": 558
     },
     {
-      "issue_id": "KV-002",
-      "severity": "P2",
-      "tool_or_system": "Design System / Multiple Tools",
-      "issue_type": "UI/UX",
-      "description": "Widespread violation of Design System tokens: Hardcoded Tailwind colors (slate, indigo, orange, etc.) used in several tools.",
-      "reproduction_steps": "Search for 'slate-' or 'indigo-' in src/features/. Identified in: Command Cheat Sheet, Hash Map Visualizer, Currency Converter (Debug), Calendar, Pomodoro Timer, Image SEO, and PrivacyBadge.",
-      "expected": "All visual primitives must use the design token system defined in src/theme/ (e.g., surface, border, text-1).",
-      "actual": "Many tools use hardcoded Tailwind colors, causing visual inconsistency between tools and broken theme support for those specific elements.",
-      "root_cause": "Legacy code or copy-pasted components that weren't migrated to KV tokens.",
-      "user_impact": "Subtle visual inconsistencies and potential readability issues in dark mode or high-contrast themes.",
-      "fix_recommendation": "Refactor identified components to use KV tokens (e.g., replace bg-slate-900 with bg-surface or bg-bg).",
-      "remove_instead": false
+      "file": "/src/content/blog/articles.ts",
+      "lines": 578
     },
     {
-      "issue_id": "KV-003",
-      "severity": "P2",
-      "tool_or_system": "Architecture / Blob Management",
-      "issue_type": "Trust",
-      "description": "Redundant and violating Blob URL management in src/utils.ts.",
-      "reproduction_steps": "Check src/utils.ts lines 180-195. Observe a standalone createObjectURL implementation.",
-      "expected": "KL-01 mandates zero raw URL.createObjectURL usage outside the central blobManager or useObjectUrlManager.",
-      "actual": "src/utils.ts provides a redundant createObjectURL function that is still used by several utilities (calculator-utils.ts, zip.ts), fragmenting memory management.",
-      "root_cause": "Redundant utility functions created outside the primary blobManager architecture.",
-      "user_impact": "Increased risk of memory leaks as the central blobManager cannot track or revoke URLs created via src/utils.ts.",
-      "fix_recommendation": "Deprecate createObjectURL in src/utils.ts and migrate all callers to use blobManager.",
-      "remove_instead": false
+      "file": "/src/features/calendar/world-events-db.ts",
+      "lines": 922
     },
     {
-      "issue_id": "KV-004",
-      "severity": "P3",
-      "tool_or_system": "Financial Freedom Calculator",
-      "issue_type": "Performance",
-      "description": "Missing ssr: false for Financial Freedom Calculator despite Canvas usage.",
-      "reproduction_steps": "Open app/(tools)/calculators/financial-freedom-calculator/page.tsx. Observe direct import of Client component.",
-      "expected": "Tools using browser-only APIs like Canvas must be loaded with ssr: false.",
-      "actual": "The tool is loaded synchronously on the server, relying on useEffect guards inside the component which is less efficient than dynamic(ssr: false).",
-      "root_cause": "Missing dynamic import wrapper.",
-      "user_impact": "Minor hydration overhead.",
-      "fix_recommendation": "Wrap the client component in dynamic() with ssr: false.",
-      "remove_instead": false
+      "file": "/src/features/numeral-converter/utils/conversion-helpers.ts",
+      "lines": 558
+    },
+    {
+      "file": "/src/features/regex/library.ts",
+      "lines": 1029
+    },
+    {
+      "file": "/src/registry/categories/calculators.ts",
+      "lines": 1045
+    },
+    {
+      "file": "/src/registry/categories/developer.ts",
+      "lines": 781
+    },
+    {
+      "file": "/src/registry/categories/security.ts",
+      "lines": 556
+    },
+    {
+      "file": "/src/registry/core-registry.ts",
+      "lines": 3787
+    },
+    {
+      "file": "/src/workers/karuvi.worker.ts",
+      "lines": 875
     }
   ],
-  "tool_scores": [
-    {
-      "tool_id": "image-compressor",
-      "tool_name": "Image Compressor",
-      "scores": {
-        "functionality": 10,
-        "ux": 10,
-        "visual_consistency": 10,
-        "accessibility": 10,
-        "performance": 10,
-        "trust": 10,
-        "offline": 10,
-        "recovery": 10
+  "violations": {
+    "ArbitraryTailwind": [
+      {
+        "file": "/app/(tools)/calculators/world-clock/ClockCard.tsx",
+        "line": 53,
+        "match": "h-[280px]"
       },
-      "overall": 100
-    },
-    {
-      "tool_id": "command-cheat-sheet",
-      "tool_name": "Command Cheat Sheet",
-      "scores": {
-        "functionality": 10,
-        "ux": 7,
-        "visual_consistency": 4,
-        "accessibility": 8,
-        "performance": 10,
-        "trust": 9,
-        "offline": 10,
-        "recovery": 10
+      {
+        "file": "/app/(tools)/calculators/world-clock/WorldClockClient.tsx",
+        "line": 236,
+        "match": "w-[1400px]"
       },
-      "overall": 78
-    }
-  ],
-  "top_trust_risks": [
-    "Memory leaks from untracked Blob URLs (KV-003)",
-    "Hydration failures in browser-heavy tools (KV-001)"
-  ],
-  "features_to_remove": [],
-  "features_to_prioritize": [
-    "Refactor all page.tsx to comply with KL-07",
-    "Global sweep for hardcoded color tokens"
-  ],
-  "strongest_tools": [
-    "Image Compressor",
-    "PDF Tools Suite",
-    "Pomodoro Timer"
-  ],
-  "weakest_tools": [
-    "Command Cheat Sheet",
-    "Hash Map Visualizer",
-    "Internet Speed Test (due to token violations)"
-  ]
+      {
+        "file": "/app/(tools)/calculators/world-clock/WorldClockClient.tsx",
+        "line": 267,
+        "match": "w-[1px]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/color-converter/ColorConverterClient.tsx",
+        "line": 134,
+        "match": "bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEADJgY0AAL///8HMRiZmYAsRgY0AAL///8HMRiZmYAsRgYQYAIWAgD8D2IAAAAA')]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/glassmorphism-generator/GlassmorphismGeneratorClient.tsx",
+        "line": 58,
+        "match": "bg-[${config.tintColor}]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/glassmorphism-generator/GlassmorphismGeneratorClient.tsx",
+        "line": 58,
+        "match": "rounded-[${config.borderRadius}px]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/gradient-generator/GradientGeneratorClient.tsx",
+        "line": 46,
+        "match": "bg-[${generateCSS(config).replace(/ /g, '_')}]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/log-analyzer/LogAnalyzerClient.tsx",
+        "line": 112,
+        "match": "w-[200px]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/log-analyzer/LogAnalyzerClient.tsx",
+        "line": 145,
+        "match": "h-[450px]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/log-analyzer/LogAnalyzerClient.tsx",
+        "line": 161,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/log-analyzer/LogAnalyzerClient.tsx",
+        "line": 167,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/(tools)/image-tools/bg-remover/BgRemoverClient.tsx",
+        "line": 146,
+        "match": "bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%23ccc%22/%3E%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%23ccc%22/%3E%3C/svg%3E')]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 166,
+        "match": "text-[10rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 167,
+        "match": "text-[10rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 167,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 168,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 168,
+        "match": "text-[18rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 169,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 383,
+        "match": "h-[400px]"
+      },
+      {
+        "file": "/app/(tools)/productivity/pomodoro-timer/PomodoroTimerClient.tsx",
+        "line": 161,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/pomodoro-timer/PomodoroTimerClient.tsx",
+        "line": 161,
+        "match": "text-[22rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 106,
+        "match": "text-[10rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 107,
+        "match": "text-[10rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 107,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 108,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 108,
+        "match": "text-[18rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 109,
+        "match": "text-[14rem]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 211,
+        "match": "h-[40vh]"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 211,
+        "match": "h-[500px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/cipher-tools/CipherToolsClient.tsx",
+        "line": 233,
+        "match": "gap-[1.5px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/iso8583-bitmap-decoder/ISO8583BitmapClient.tsx",
+        "line": 156,
+        "match": "h-[500px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/JWTDecoderClient.tsx",
+        "line": 110,
+        "match": "h-[44px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/JWTDecoderClient.tsx",
+        "line": 117,
+        "match": "h-[44px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/JWTDecoderClient.tsx",
+        "line": 138,
+        "match": "h-[120px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/JWTDecoderClient.tsx",
+        "line": 161,
+        "match": "h-[44px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/ApiSnippets.tsx",
+        "line": 40,
+        "match": "h-[44px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/ApiSnippets.tsx",
+        "line": 40,
+        "match": "h-[32px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 18,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 22,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 26,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 30,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 34,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 38,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/DeveloperAnalysis.tsx",
+        "line": 42,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/JwtPartsView.tsx",
+        "line": 42,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/JwtPartsView.tsx",
+        "line": 49,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/JwtPartsView.tsx",
+        "line": 71,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/JwtPartsView.tsx",
+        "line": 77,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/JwtPartsView.tsx",
+        "line": 78,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/SecurityInsights.tsx",
+        "line": 143,
+        "match": "h-[44px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/SecurityInsights.tsx",
+        "line": 143,
+        "match": "h-[36px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/SecurityInsights.tsx",
+        "line": 148,
+        "match": "h-[44px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/SecurityInsights.tsx",
+        "line": 148,
+        "match": "h-[36px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/tlv-parser/TlvParserClient.tsx",
+        "line": 176,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/tlv-parser/TlvParserClient.tsx",
+        "line": 180,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/x509-viewer/X509Client.tsx",
+        "line": 138,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/x509-viewer/X509Client.tsx",
+        "line": 140,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/(tools)/security-tools/x509-viewer/X509Client.tsx",
+        "line": 141,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/HomeClient.tsx",
+        "line": 65,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 45,
+        "match": "top-[-10%]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 48,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 75,
+        "match": "top-[-10%]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 79,
+        "match": "top-[30%]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 79,
+        "match": "left-[10%]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 83,
+        "match": "top-[20%]"
+      },
+      {
+        "file": "/app/HomeHero.tsx",
+        "line": 83,
+        "match": "right-[8%]"
+      },
+      {
+        "file": "/app/not-found.tsx",
+        "line": 12,
+        "match": "h-[80vh]"
+      },
+      {
+        "file": "/app/not-found.tsx",
+        "line": 24,
+        "match": "text-[10rem]"
+      },
+      {
+        "file": "/app/not-found.tsx",
+        "line": 27,
+        "match": "mt-[-2rem]"
+      },
+      {
+        "file": "/app/not-found.tsx",
+        "line": 27,
+        "match": "mt-[-3rem]"
+      },
+      {
+        "file": "/app/settings/SettingsClient.tsx",
+        "line": 136,
+        "match": "h-[calc(100vh-250px)]"
+      },
+      {
+        "file": "/app/settings/SettingsClient.tsx",
+        "line": 169,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/app/settings/SettingsClient.tsx",
+        "line": 176,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/app/workbench/WorkbenchClient.tsx",
+        "line": 96,
+        "match": "h-[calc(100vh-4rem)]"
+      },
+      {
+        "file": "/app/workbench/WorkbenchClient.tsx",
+        "line": 112,
+        "match": "w-[120px]"
+      },
+      {
+        "file": "/components/ClientLayout.tsx",
+        "line": 25,
+        "match": "pb-[136px]"
+      },
+      {
+        "file": "/components/ClientLayout.tsx",
+        "line": 25,
+        "match": "pb-[72px]"
+      },
+      {
+        "file": "/components/Sidebar.tsx",
+        "line": 120,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/Sidebar.tsx",
+        "line": 246,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/tools/world-clock/AnalogClock.tsx",
+        "line": 30,
+        "match": "h-[25%]"
+      },
+      {
+        "file": "/components/tools/world-clock/AnalogClock.tsx",
+        "line": 36,
+        "match": "h-[35%]"
+      },
+      {
+        "file": "/components/tools/world-clock/AnalogClock.tsx",
+        "line": 42,
+        "match": "h-[40%]"
+      },
+      {
+        "file": "/components/ui/DraftDrawer.tsx",
+        "line": 40,
+        "match": "w-[400px]"
+      },
+      {
+        "file": "/components/ui/FeedbackModal.tsx",
+        "line": 95,
+        "match": "h-[90vh]"
+      },
+      {
+        "file": "/components/ui/FeedbackModal.tsx",
+        "line": 97,
+        "match": "h-[85vh]"
+      },
+      {
+        "file": "/components/ui/PrivacyFeatures.tsx",
+        "line": 74,
+        "match": "text-[#1E293B]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 122,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 135,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 149,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 162,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 182,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 231,
+        "match": "w-[140px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 253,
+        "match": "w-[140px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 277,
+        "match": "w-[140px]"
+      },
+      {
+        "file": "/components/ui/QuickActionsDashboard.tsx",
+        "line": 308,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/components/ui/Toast.tsx",
+        "line": 75,
+        "match": "bottom-[110px]"
+      },
+      {
+        "file": "/components/ui/ToolMoreMenu.tsx",
+        "line": 152,
+        "match": "w-[calc(100vw-2rem)]"
+      },
+      {
+        "file": "/components/ui/search/SearchResultItem.tsx",
+        "line": 78,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/src/features/calendar/CalendarPage.tsx",
+        "line": 177,
+        "match": "w-[85vw]"
+      },
+      {
+        "file": "/src/features/calendar/components/CalendarSidebar.tsx",
+        "line": 94,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/src/features/calendar/components/CalendarSidebar.tsx",
+        "line": 215,
+        "match": "text-[10px]"
+      },
+      {
+        "file": "/src/features/calendar/components/DayDetailsSheet.tsx",
+        "line": 71,
+        "match": "h-[90vh]"
+      },
+      {
+        "file": "/src/features/calendar/components/MonthView.tsx",
+        "line": 159,
+        "match": "h-[72px]"
+      },
+      {
+        "file": "/src/features/calendar/components/MonthView.tsx",
+        "line": 174,
+        "match": "text-[9px]"
+      },
+      {
+        "file": "/src/features/calendar/components/MonthView.tsx",
+        "line": 182,
+        "match": "text-[11px]"
+      },
+      {
+        "file": "/src/features/calendar/components/MonthView.tsx",
+        "line": 247,
+        "match": "text-[9px]"
+      },
+      {
+        "file": "/src/features/calendar/components/WorldEventPanel.tsx",
+        "line": 97,
+        "match": "bottom-[2px]"
+      },
+      {
+        "file": "/src/features/currency-converter/components/CurrencySelect.tsx",
+        "line": 85,
+        "match": "top-[10%]"
+      },
+      {
+        "file": "/src/features/currency-converter/components/CurrencySelect.tsx",
+        "line": 85,
+        "match": "bottom-[10%]"
+      },
+      {
+        "file": "/src/features/json-formatter/components/JSONFormatterClient.tsx",
+        "line": 377,
+        "match": "h-[50vh]"
+      },
+      {
+        "file": "/src/features/markdown/components/MarkdownEditor.tsx",
+        "line": 448,
+        "match": "h-[60vh]"
+      },
+      {
+        "file": "/src/features/notes/NotesPage.client.tsx",
+        "line": 76,
+        "match": "h-[calc(100vh-4rem)]"
+      },
+      {
+        "file": "/src/features/notes/components/NoteEditor.tsx",
+        "line": 373,
+        "match": "h-[400px]"
+      }
+    ],
+    "HardcodedZIndex": [
+      {
+        "file": "/app/workbench/WorkbenchClient.tsx",
+        "line": 160,
+        "match": "z-10"
+      },
+      {
+        "file": "/app/workbench/WorkbenchClient.tsx",
+        "line": 161,
+        "match": "z-10"
+      },
+      {
+        "file": "/app/workbench/WorkbenchClient.tsx",
+        "line": 209,
+        "match": "z-50"
+      },
+      {
+        "file": "/components/ui/DraftDrawer.tsx",
+        "line": 32,
+        "match": "z-40"
+      },
+      {
+        "file": "/components/ui/DraftDrawer.tsx",
+        "line": 40,
+        "match": "z-50"
+      }
+    ],
+    "ConsoleLog": [
+      {
+        "file": "/src/features/html-viewer/components/HtmlViewerClient.tsx",
+        "line": 38,
+        "match": "console.log("
+      },
+      {
+        "file": "/src/features/markdown/constants.ts",
+        "line": 80,
+        "match": "console.log("
+      },
+      {
+        "file": "/src/features/notes/components/OCRButton.tsx",
+        "line": 41,
+        "match": "console.log("
+      },
+      {
+        "file": "/src/tool-engine/validators/validateRegistry.ts",
+        "line": 150,
+        "match": "console.log("
+      }
+    ],
+    "ExhaustiveDeps": [],
+    "RawObjectURL": [
+      {
+        "file": "/src/__tests__/app-security-hardening.test.ts",
+        "line": 31,
+        "match": "URL.createObjectURL"
+      },
+      {
+        "file": "/src/__tests__/app-security-hardening.test.ts",
+        "line": 32,
+        "match": "URL.createObjectURL"
+      },
+      {
+        "file": "/src/__tests__/app-security-hardening.test.ts",
+        "line": 36,
+        "match": "URL.createObjectURL"
+      },
+      {
+        "file": "/src/__tests__/app-security-hardening.test.ts",
+        "line": 48,
+        "match": "URL.createObjectURL"
+      },
+      {
+        "file": "/src/lib/blob-manager.ts",
+        "line": 19,
+        "match": "URL.createObjectURL"
+      }
+    ],
+    "AnyType": [
+      {
+        "file": "/app/(tools)/calculators/gst-calculator/GSTCalculatorClient.tsx",
+        "line": 34,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/calculators/invoice-generator/InvoiceGeneratorClient.tsx",
+        "line": 100,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/invoice-generator/InvoiceGeneratorClient.tsx",
+        "line": 115,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/NumeralConverterClient.tsx",
+        "line": 110,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/NumeralConverterClient.tsx",
+        "line": 113,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/NumeralConverterClient.tsx",
+        "line": 198,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/NumeralConverterClient.tsx",
+        "line": 216,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/helpers.ts",
+        "line": 279,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/helpers.ts",
+        "line": 450,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/helpers.ts",
+        "line": 451,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/numeral-converter/helpers.ts",
+        "line": 490,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/scientific-calculator/ScientificCalculatorClient.tsx",
+        "line": 117,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/calculators/world-clock/WorldClockClient.tsx",
+        "line": 136,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/base64/Base64Client.tsx",
+        "line": 35,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/base64/Base64Client.tsx",
+        "line": 41,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/box-shadow-generator/BoxShadowGeneratorClient.tsx",
+        "line": 78,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/fake-data-generator/FakeDataGeneratorClient.tsx",
+        "line": 108,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/fake-data-generator/FakeDataGeneratorClient.tsx",
+        "line": 192,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/fake-data-generator/FakeDataGeneratorClient.tsx",
+        "line": 288,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/gradient-generator/GradientGeneratorClient.tsx",
+        "line": 87,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/gradient-generator/GradientGeneratorClient.tsx",
+        "line": 171,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/developer-tools/yaml-validator/YamlValidatorClient.tsx",
+        "line": 55,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/image-tools/bg-remover/BgRemoverClient.tsx",
+        "line": 48,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/image-tools/color-palette-extractor/ColorPaletteExtractorClient.tsx",
+        "line": 50,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/image-tools/image-converter/ImageConverterClient.tsx",
+        "line": 109,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/image-tools/image-resizer/ImageResizerClient.tsx",
+        "line": 80,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/chart-generator/ChartControls.tsx",
+        "line": 22,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/productivity/chart-generator/ChartGeneratorClient.tsx",
+        "line": 43,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 12,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 303,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/countdown-timer/CountdownTimerClient.tsx",
+        "line": 321,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/pomodoro-timer/PomodoroTimerClient.tsx",
+        "line": 19,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 166,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/stopwatch/StopwatchClient.tsx",
+        "line": 184,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/timezone-converter/TimeZoneConverterClient.tsx",
+        "line": 188,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/wifi-qr-code/WifiQrCodeClient.tsx",
+        "line": 23,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/wifi-qr-code/WifiQrCodeClient.tsx",
+        "line": 26,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/productivity/word-counter/WordCounterClient.tsx",
+        "line": 76,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/aes-encrypt-decrypt/AesClient.tsx",
+        "line": 80,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/aes-encrypt-decrypt/AesClient.tsx",
+        "line": 93,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/cipher-tools/CipherToolsClient.tsx",
+        "line": 110,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/csr-generator/CsrClient.tsx",
+        "line": 117,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/directory-manifest/DirectoryManifestClient.tsx",
+        "line": 102,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/ecdh-key-exchange/EcdhClient.tsx",
+        "line": 64,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/hash-generator/HashGeneratorClient.tsx",
+        "line": 114,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/hash-generator/HashGeneratorClient.tsx",
+        "line": 119,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/hash-generator/HashGeneratorClient.tsx",
+        "line": 435,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/SecurityInsights.tsx",
+        "line": 62,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/components/SecurityInsights.tsx",
+        "line": 63,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/utils.ts",
+        "line": 3,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/jwt-decoder/utils.ts",
+        "line": 4,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/password-generator/PasswordGeneratorClient.tsx",
+        "line": 125,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/rsa-encrypt-decrypt/RsaCryptClient.tsx",
+        "line": 88,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/rsa-key-generator/RsaKeyGenClient.tsx",
+        "line": 66,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/security-tools/rsa-sign-verify/RsaSignClient.tsx",
+        "line": 94,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/utilities/barcode-scanner/BarcodeScannerClient.tsx",
+        "line": 36,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/utilities/barcode-scanner/BarcodeScannerClient.tsx",
+        "line": 68,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/utilities/barcode-scanner/BarcodeScannerClient.tsx",
+        "line": 77,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/utilities/barcode-scanner/BarcodeScannerClient.tsx",
+        "line": 120,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/utilities/internet-speed-test/InternetSpeedTestClient.tsx",
+        "line": 176,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/utilities/internet-speed-test/InternetSpeedTestClient.tsx",
+        "line": 188,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/utilities/internet-speed-test/useSpeedTest.ts",
+        "line": 160,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/utilities/mic-camera-tester/MicCameraTesterClient.tsx",
+        "line": 89,
+        "match": ": any"
+      },
+      {
+        "file": "/app/(tools)/utilities/qrcode/QRCodeGeneratorClient.tsx",
+        "line": 127,
+        "match": "as any"
+      },
+      {
+        "file": "/app/(tools)/utilities/qrcode/QRCodeGeneratorClient.tsx",
+        "line": 130,
+        "match": "as any"
+      },
+      {
+        "file": "/app/api/contact/route.ts",
+        "line": 4,
+        "match": ": any"
+      },
+      {
+        "file": "/app/api/contact/route.ts",
+        "line": 46,
+        "match": ": any"
+      },
+      {
+        "file": "/app/api/send-feedback/route.ts",
+        "line": 30,
+        "match": ": any"
+      },
+      {
+        "file": "/app/blog/[slug]/page.tsx",
+        "line": 20,
+        "match": "as any"
+      },
+      {
+        "file": "/app/dev-tools/page.tsx",
+        "line": 11,
+        "match": ": any"
+      },
+      {
+        "file": "/app/settings/components/SettingUI.tsx",
+        "line": 101,
+        "match": ": any"
+      },
+      {
+        "file": "/app/settings/sections/HistorySection.tsx",
+        "line": 19,
+        "match": ": any"
+      },
+      {
+        "file": "/app/settings/sections/HistorySection.tsx",
+        "line": 19,
+        "match": ": any"
+      },
+      {
+        "file": "/components/PWARegistration.tsx",
+        "line": 54,
+        "match": "as any"
+      },
+      {
+        "file": "/components/PWARegistration.tsx",
+        "line": 56,
+        "match": "as any"
+      },
+      {
+        "file": "/components/Sidebar.tsx",
+        "line": 202,
+        "match": "as any"
+      },
+      {
+        "file": "/components/layout/Backdrop.tsx",
+        "line": 7,
+        "match": ": any"
+      },
+      {
+        "file": "/components/layout/MobileSidebar.tsx",
+        "line": 50,
+        "match": ": any"
+      },
+      {
+        "file": "/components/system/MediaStatusBadge.tsx",
+        "line": 26,
+        "match": ": any"
+      },
+      {
+        "file": "/components/system/StatusBadge.tsx",
+        "line": 12,
+        "match": ": any"
+      },
+      {
+        "file": "/components/tools/data-calculator/ChecksumTab.tsx",
+        "line": 56,
+        "match": ": any"
+      },
+      {
+        "file": "/components/tools/data-calculator/ChecksumTab.tsx",
+        "line": 205,
+        "match": ": any"
+      },
+      {
+        "file": "/components/tools/file-viewer-diff/DiffViewer.tsx",
+        "line": 48,
+        "match": "as any"
+      },
+      {
+        "file": "/components/tools/file-viewer-diff/FileViewerDiffClient.tsx",
+        "line": 63,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/BatchQueue.tsx",
+        "line": 44,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/BatchQueue.tsx",
+        "line": 127,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/BatchQueue.tsx",
+        "line": 236,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/FeedbackModal.tsx",
+        "line": 13,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/FeedbackModal.tsx",
+        "line": 79,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/MediaDropZone.tsx",
+        "line": 43,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/QRCodeLoader.tsx",
+        "line": 6,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/ToolFeedback.tsx",
+        "line": 119,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/ToolShell.tsx",
+        "line": 24,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/ToolShell.tsx",
+        "line": 61,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/search/SearchOverlay.tsx",
+        "line": 54,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/search/SearchOverlay.tsx",
+        "line": 55,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/search/SearchOverlay.tsx",
+        "line": 64,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/search/SearchOverlay.tsx",
+        "line": 65,
+        "match": "as any"
+      },
+      {
+        "file": "/components/ui/search/SearchOverlay.tsx",
+        "line": 102,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/search/SearchOverlay.tsx",
+        "line": 134,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/search/SearchResults.tsx",
+        "line": 15,
+        "match": ": any"
+      },
+      {
+        "file": "/components/ui/search/SearchResults.tsx",
+        "line": 16,
+        "match": ": any"
+      },
+      {
+        "file": "/src/__tests__/modern-seo-security.test.ts",
+        "line": 86,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/modern-seo-security.test.ts",
+        "line": 87,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/seo-breadcrumbs.test.tsx",
+        "line": 45,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 6,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 16,
+        "match": ": any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 17,
+        "match": ": any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 40,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 45,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 46,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 47,
+        "match": "as any"
+      },
+      {
+        "file": "/src/__tests__/worker-orchestration.test.ts",
+        "line": 73,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/memory/index.ts",
+        "line": 9,
+        "match": "as any"
+      },
+      {
+        "file": "/src/engine/memory/index.ts",
+        "line": 10,
+        "match": "as any"
+      },
+      {
+        "file": "/src/engine/types.ts",
+        "line": 12,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/types.ts",
+        "line": 16,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/types.ts",
+        "line": 17,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 115,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 131,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 145,
+        "match": "as any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 226,
+        "match": "as any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 304,
+        "match": ": any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 318,
+        "match": "as any"
+      },
+      {
+        "file": "/src/engine/workers/WorkerOrchestrator.ts",
+        "line": 325,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/audio-converter/components/AudioConverterClient.tsx",
+        "line": 97,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/audio-converter/components/AudioConverterClient.tsx",
+        "line": 145,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/base64/processor.ts",
+        "line": 59,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/calendar/components/AgendaView.tsx",
+        "line": 139,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/AgendaView.tsx",
+        "line": 140,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/AgendaView.tsx",
+        "line": 141,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/CalendarHeader.tsx",
+        "line": 137,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/CalendarHeader.tsx",
+        "line": 151,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/calendar/components/DayDetailsSheet.tsx",
+        "line": 150,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/EventModal.tsx",
+        "line": 74,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/calendar/components/TimeGridView.tsx",
+        "line": 100,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/TimeGridView.tsx",
+        "line": 101,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/calendar/components/TimeGridView.tsx",
+        "line": 102,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/code-minifier/components/CodeMinifierClient.tsx",
+        "line": 122,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/compress-pdf/components/CompressPdfClient.tsx",
+        "line": 35,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/compress-pdf/components/CompressPdfClient.tsx",
+        "line": 47,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 30,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 49,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 88,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 144,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 172,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 191,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 206,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/rates-service.ts",
+        "line": 232,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/currency-converter/store.ts",
+        "line": 54,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/extract-images/components/ExtractImagesClient.tsx",
+        "line": 49,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/extract-images/components/ExtractImagesClient.tsx",
+        "line": 67,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/gif-creator/components/GifCreatorClient.tsx",
+        "line": 111,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/html-viewer/components/HtmlViewerClient.tsx",
+        "line": 95,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/html-viewer/components/HtmlViewerClient.tsx",
+        "line": 99,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/html-viewer/components/HtmlViewerClient.tsx",
+        "line": 147,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/html-viewer/components/HtmlViewerClient.tsx",
+        "line": 260,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/image-compressor/components/ImageCompressorClient.tsx",
+        "line": 13,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/image-compressor/processor.ts",
+        "line": 62,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/image-compressor/processor.ts",
+        "line": 74,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/image-compressor/processor.ts",
+        "line": 107,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/image-compressor/store.ts",
+        "line": 157,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/image-compressor/utils/safe-process.ts",
+        "line": 19,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/image-to-pdf/components/ImageToPdfClient.tsx",
+        "line": 70,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/image-to-pdf/components/ImageToPdfClient.tsx",
+        "line": 77,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/invoice-generator/components/LineItemsSection.tsx",
+        "line": 10,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/json-formatter/components/JSONFormatterClient.tsx",
+        "line": 154,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/json-formatter/components/JSONFormatterClient.tsx",
+        "line": 154,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/json-formatter/components/JSONFormatterClient.tsx",
+        "line": 220,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/lock-unlock/components/LockUnlockPdfClient.tsx",
+        "line": 56,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/lock-unlock/components/LockUnlockPdfClient.tsx",
+        "line": 57,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/lock-unlock/components/LockUnlockPdfClient.tsx",
+        "line": 70,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/lock-unlock/components/LockUnlockPdfClient.tsx",
+        "line": 72,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/lock-unlock/components/LockUnlockPdfClient.tsx",
+        "line": 84,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownEditorWrapper.client.tsx",
+        "line": 32,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownEditorWrapper.client.tsx",
+        "line": 49,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownEditorWrapper.client.tsx",
+        "line": 54,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownEditorWrapper.client.tsx",
+        "line": 70,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownEditorWrapper.client.tsx",
+        "line": 94,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownEditorWrapper.client.tsx",
+        "line": 94,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/MarkdownService.ts",
+        "line": 14,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/markdown/components/MarkdownEditor.tsx",
+        "line": 323,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/components/MarkdownEditor.tsx",
+        "line": 335,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/components/MarkdownPreview.tsx",
+        "line": 20,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/markdown/components/MarkdownPreview.tsx",
+        "line": 75,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/merge-pdf/components/MergePdfClient.tsx",
+        "line": 91,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/notes/components/ImportNoteModal.tsx",
+        "line": 33,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/notes/components/ImportNoteModal.tsx",
+        "line": 60,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/notes/components/ImportNoteModal.tsx",
+        "line": 206,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/notes/components/OCRButton.tsx",
+        "line": 24,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/notes/components/OCRButton.tsx",
+        "line": 36,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/notes/components/OCRButton.tsx",
+        "line": 39,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/notes/hooks/useSpeechRecognition.ts",
+        "line": 15,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/notes/hooks/useSpeechRecognition.ts",
+        "line": 15,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/notes/hooks/useSpeechRecognition.ts",
+        "line": 21,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/notes/hooks/useSpeechRecognition.ts",
+        "line": 33,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/components/JwtPanel.tsx",
+        "line": 8,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/components/SmartPanel.tsx",
+        "line": 11,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/components/SmartPanel.tsx",
+        "line": 18,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/components/SmartPanel.tsx",
+        "line": 20,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/components/SmartPanel.tsx",
+        "line": 236,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/numeral-converter/components/TextPanel.tsx",
+        "line": 7,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/hooks/useNumeralConversion.ts",
+        "line": 5,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/utils/conversion-helpers.ts",
+        "line": 279,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/utils/conversion-helpers.ts",
+        "line": 450,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/utils/conversion-helpers.ts",
+        "line": 451,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/numeral-converter/utils/conversion-helpers.ts",
+        "line": 490,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/page-numbering/components/PageNumberingClient.tsx",
+        "line": 51,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/page-numbering/components/PageNumberingClient.tsx",
+        "line": 65,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/page-numbering/components/PageNumberingClient.tsx",
+        "line": 72,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/pdf-merger/processor.ts",
+        "line": 75,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/pdf-merger/processor.ts",
+        "line": 107,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/pdf-to-word/components/PdfToWordClient.tsx",
+        "line": 40,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/pdf-to-word/components/PdfToWordClient.tsx",
+        "line": 47,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/rotate-pdf/components/RotatePdfClient.tsx",
+        "line": 46,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/rotate-pdf/components/RotatePdfClient.tsx",
+        "line": 52,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/rotate-pdf/components/RotatePdfClient.tsx",
+        "line": 59,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/seo-tools/components/ImageSeoClient.tsx",
+        "line": 20,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/split-pdf/components/SplitPdfClient.tsx",
+        "line": 77,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/split-pdf/components/SplitPdfClient.tsx",
+        "line": 79,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/split-pdf/components/SplitPdfClient.tsx",
+        "line": 89,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/video-metadata-viewer/components/VideoMetadataViewerClient.tsx",
+        "line": 71,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/video-trim/components/VideoTrimClient.tsx",
+        "line": 58,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/watermark-pdf/components/WatermarkPdfClient.tsx",
+        "line": 59,
+        "match": "as any"
+      },
+      {
+        "file": "/src/features/watermark-pdf/components/WatermarkPdfClient.tsx",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/features/word-to-pdf/components/WordToPdfClient.tsx",
+        "line": 47,
+        "match": ": any"
+      },
+      {
+        "file": "/src/format-utils.ts",
+        "line": 45,
+        "match": "as any"
+      },
+      {
+        "file": "/src/format-utils.ts",
+        "line": 46,
+        "match": "as any"
+      },
+      {
+        "file": "/src/format-utils.ts",
+        "line": 56,
+        "match": "as any"
+      },
+      {
+        "file": "/src/format-utils.ts",
+        "line": 57,
+        "match": "as any"
+      },
+      {
+        "file": "/src/format-utils.ts",
+        "line": 76,
+        "match": "as any"
+      },
+      {
+        "file": "/src/format-utils.ts",
+        "line": 77,
+        "match": "as any"
+      },
+      {
+        "file": "/src/hooks/useAutoSave.ts",
+        "line": 9,
+        "match": ": any"
+      },
+      {
+        "file": "/src/hooks/useAutoSave.ts",
+        "line": 18,
+        "match": ": any"
+      },
+      {
+        "file": "/src/hooks/useFullscreen.ts",
+        "line": 33,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/blob-manager.ts",
+        "line": 9,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/blob-manager.ts",
+        "line": 18,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/blob-manager.ts",
+        "line": 89,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/blob-manager.ts",
+        "line": 90,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/calculator-utils.ts",
+        "line": 41,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/calculator-utils.ts",
+        "line": 43,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/calculator-utils.ts",
+        "line": 45,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/calculator-utils.ts",
+        "line": 52,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 42,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 67,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 231,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 389,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 389,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 389,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 395,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 414,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 414,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 425,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/db.ts",
+        "line": 425,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/deviceCapability.ts",
+        "line": 25,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/email.ts",
+        "line": 2,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/factory-reset.ts",
+        "line": 103,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/formatError.ts",
+        "line": 37,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/formatError.ts",
+        "line": 38,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/i18n/index.ts",
+        "line": 75,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/search/buildIndex.ts",
+        "line": 27,
+        "match": "as any"
+      },
+      {
+        "file": "/src/lib/workflow-hook.ts",
+        "line": 8,
+        "match": ": any"
+      },
+      {
+        "file": "/src/lib/zip.ts",
+        "line": 17,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/calculators.ts",
+        "line": 1044,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/developer.ts",
+        "line": 780,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/image.ts",
+        "line": 229,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/media.ts",
+        "line": 122,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/pdf.ts",
+        "line": 267,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/productivity.ts",
+        "line": 270,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/security.ts",
+        "line": 555,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/seo.ts",
+        "line": 175,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/categories/utilities.ts",
+        "line": 279,
+        "match": "as any"
+      },
+      {
+        "file": "/src/registry/core-registry.ts",
+        "line": 3786,
+        "match": "as any"
+      },
+      {
+        "file": "/src/security/sanitization.ts",
+        "line": 41,
+        "match": ": any"
+      },
+      {
+        "file": "/src/security/sanitization.ts",
+        "line": 41,
+        "match": ": any"
+      },
+      {
+        "file": "/src/security/sanitization.ts",
+        "line": 63,
+        "match": ": any"
+      },
+      {
+        "file": "/src/security/sanitization.ts",
+        "line": 63,
+        "match": ": any"
+      },
+      {
+        "file": "/src/store/createSelectors.ts",
+        "line": 13,
+        "match": "as any"
+      },
+      {
+        "file": "/src/store/settings/store.ts",
+        "line": 27,
+        "match": ": any"
+      },
+      {
+        "file": "/src/store/settings/store.ts",
+        "line": 136,
+        "match": ": any"
+      },
+      {
+        "file": "/src/store/useBatchStore.ts",
+        "line": 158,
+        "match": ": any"
+      },
+      {
+        "file": "/src/store/useSessionStore.ts",
+        "line": 7,
+        "match": ": any"
+      },
+      {
+        "file": "/src/store/useTemplateStore.ts",
+        "line": 9,
+        "match": ": any"
+      },
+      {
+        "file": "/src/store/useTemplateStore.ts",
+        "line": 15,
+        "match": ": any"
+      },
+      {
+        "file": "/src/tool-engine/hooks/useProcessing.ts",
+        "line": 23,
+        "match": ": any"
+      },
+      {
+        "file": "/src/tool-engine/hooks/useProcessing.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/tool-engine/hooks/useToolEngine.ts",
+        "line": 37,
+        "match": ": any"
+      },
+      {
+        "file": "/src/tool-engine/renderers/CustomRenderer.tsx",
+        "line": 10,
+        "match": ": any"
+      },
+      {
+        "file": "/src/tool-engine/renderers/TableRenderer.tsx",
+        "line": 14,
+        "match": "as any"
+      },
+      {
+        "file": "/src/tool-engine/renderers/TableRenderer.tsx",
+        "line": 30,
+        "match": ": any"
+      },
+      {
+        "file": "/src/tool-engine/validators/validateRegistry.ts",
+        "line": 70,
+        "match": "as any"
+      },
+      {
+        "file": "/src/tool-engine/validators/validateRegistry.ts",
+        "line": 152,
+        "match": ": any"
+      },
+      {
+        "file": "/src/utils.ts",
+        "line": 167,
+        "match": "as any"
+      },
+      {
+        "file": "/src/utils.ts",
+        "line": 240,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 6,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 12,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 29,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 63,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 63,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 91,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 107,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 112,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 127,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 194,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 227,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 234,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 19,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 19,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 20,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 21,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 84,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 100,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 110,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 119,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 141,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 156,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 175,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 184,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 211,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 235,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 253,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 260,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 267,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 274,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 281,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 291,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 299,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 306,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 318,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/crypto.worker.ts",
+        "line": 329,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 5,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 22,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 32,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 32,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 34,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 35,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 52,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 57,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 98,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 98,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 100,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 101,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 118,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 134,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 134,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 140,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 140,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/document.worker.ts",
+        "line": 204,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 5,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 5,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 5,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 5,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 8,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 35,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 35,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 35,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 59,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 66,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 93,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 100,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 100,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 100,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 100,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 143,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 150,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 211,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 219,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 219,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 307,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 314,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 314,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 314,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 314,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/image.worker.ts",
+        "line": 314,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 19,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 19,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 20,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 21,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 66,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 78,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 91,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 190,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 224,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 258,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 309,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 380,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 480,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 494,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 562,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 578,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 631,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 750,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 751,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 768,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 773,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 820,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 821,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 838,
+        "match": "as any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 855,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 862,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/manager.ts",
+        "line": 124,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/manager.ts",
+        "line": 124,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/types.ts",
+        "line": 239,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/types.ts",
+        "line": 239,
+        "match": ": any"
+      },
+      {
+        "file": "/src/workers/types.ts",
+        "line": 300,
+        "match": ": any"
+      }
+    ],
+    "Eval": [
+      {
+        "file": "/src/security/csp.ts",
+        "line": 9,
+        "match": "eval("
+      },
+      {
+        "file": "/src/security/securityAudit.ts",
+        "line": 17,
+        "match": "eval("
+      },
+      {
+        "file": "/src/workers/compute.worker.ts",
+        "line": 215,
+        "match": "eval("
+      },
+      {
+        "file": "/src/workers/karuvi.worker.ts",
+        "line": 613,
+        "match": "eval("
+      }
+    ]
+  }
 }

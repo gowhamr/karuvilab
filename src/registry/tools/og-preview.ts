@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const og_preview: ToolEntry = {
+export const ogPreview: ToolEntry = {
   "id": "og-preview",
   "name": "Og Preview",
   "desc": "Og Preview tool",

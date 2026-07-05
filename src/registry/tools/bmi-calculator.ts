@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const bmi_calculator: ToolEntry = {
+export const bmiCalculator: ToolEntry = {
   "id": "bmi-calculator",
   "name": "Bmi Calculator",
   "desc": "Bmi Calculator tool",

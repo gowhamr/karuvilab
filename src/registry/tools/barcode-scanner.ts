@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const barcode_scanner: ToolEntry = {
+export const barcodeScanner: ToolEntry = {
   "id": "barcode-scanner",
   "name": "Barcode & QR Scanner",
   "desc": "Scan barcodes and QR codes using camera",

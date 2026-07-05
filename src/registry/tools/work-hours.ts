@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const work_hours: ToolEntry = {
+export const workHours: ToolEntry = {
   "id": "work-hours",
   "name": "Work Hours",
   "desc": "Timesheet and overtime tracker",

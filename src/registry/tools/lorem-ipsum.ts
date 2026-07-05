@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const lorem_ipsum: ToolEntry = {
+export const loremIpsum: ToolEntry = {
   "id": "lorem-ipsum",
   "name": "Lorem Ipsum",
   "desc": "Lorem Ipsum tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const extract_images: ToolEntry = {
+export const extractImages: ToolEntry = {
   "id": "extract-images",
   "name": "Extract Images",
   "desc": "Pull images out of a PDF",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const compound_interest: ToolEntry = {
+export const compoundInterest: ToolEntry = {
   "id": "compound-interest",
   "name": "Compound Interest Calculator",
   "desc": "Calculate compounded growth on your investment.",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const slug_generator: ToolEntry = {
+export const slugGenerator: ToolEntry = {
   "id": "slug-generator",
   "name": "Slug Generator",
   "desc": "Slug Generator tool",

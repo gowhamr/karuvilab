@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const compress_pdf: ToolEntry = {
+export const compressPdf: ToolEntry = {
   "id": "compress-pdf",
   "name": "Compress PDF",
   "desc": "Reduce PDF file size",

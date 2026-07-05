@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const text_utility: ToolEntry = {
+export const textUtility: ToolEntry = {
   "id": "text-utility",
   "name": "Text Utility",
   "desc": "Clean, case convert, count words",

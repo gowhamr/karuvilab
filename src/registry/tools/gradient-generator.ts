@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const gradient_generator: ToolEntry = {
+export const gradientGenerator: ToolEntry = {
   "id": "gradient-generator",
   "name": "Gradient Generator",
   "desc": "Gradient Generator tool",

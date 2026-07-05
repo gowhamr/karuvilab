@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const bulk_resizer: ToolEntry = {
+export const bulkResizer: ToolEntry = {
   "id": "bulk-resizer",
   "name": "Bulk Image Resize",
   "desc": "Resize many images at once",

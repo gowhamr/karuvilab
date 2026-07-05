@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const directory_manifest: ToolEntry = {
+export const directoryManifest: ToolEntry = {
   "id": "directory-manifest",
   "name": "Directory Manifest",
   "desc": "Directory Manifest tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const image_crop: ToolEntry = {
+export const imageCrop: ToolEntry = {
   "id": "image-crop",
   "name": "Image Crop",
   "desc": "Crop images to ratio or freeform",

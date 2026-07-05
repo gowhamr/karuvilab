@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const hash_map_visualizer: ToolEntry = {
+export const hashMapVisualizer: ToolEntry = {
   "id": "hash-map-visualizer",
   "name": "Hash Map Visualizer",
   "desc": "Hash Map Visualizer tool",

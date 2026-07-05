@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const yaml_validator: ToolEntry = {
+export const yamlValidator: ToolEntry = {
   "id": "yaml-validator",
   "name": "Yaml Validator",
   "desc": "Yaml Validator tool",

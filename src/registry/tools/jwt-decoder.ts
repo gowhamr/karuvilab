@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const jwt_decoder: ToolEntry = {
+export const jwtDecoder: ToolEntry = {
   "id": "jwt-decoder",
   "name": "JWT Decoder",
   "desc": "Inspect JSON Web Tokens",

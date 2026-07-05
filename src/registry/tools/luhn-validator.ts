@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const luhn_validator: ToolEntry = {
+export const luhnValidator: ToolEntry = {
   "id": "luhn-validator",
   "name": "Luhn Validator",
   "desc": "Luhn Validator tool",

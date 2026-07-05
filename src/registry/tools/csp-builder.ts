@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const csp_builder: ToolEntry = {
+export const cspBuilder: ToolEntry = {
   "id": "csp-builder",
   "name": "Csp Builder",
   "desc": "Csp Builder tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const percentage_calculator: ToolEntry = {
+export const percentageCalculator: ToolEntry = {
   "id": "percentage-calculator",
   "name": "Percentage Calculator",
   "desc": "Find percentages and ratios",

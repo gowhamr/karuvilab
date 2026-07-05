@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const json_formatter: ToolEntry = {
+export const jsonFormatter: ToolEntry = {
   "id": "json-formatter",
   "name": "JSON Formatter",
   "desc": "Format and validate JSON",

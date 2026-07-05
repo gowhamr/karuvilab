@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const internet_speed_test: ToolEntry = {
+export const internetSpeedTest: ToolEntry = {
   "id": "internet-speed-test",
   "name": "Speed Tester",
   "desc": "Measure your internet connection speed",

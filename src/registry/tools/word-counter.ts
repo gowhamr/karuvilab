@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const word_counter: ToolEntry = {
+export const wordCounter: ToolEntry = {
   "id": "word-counter",
   "name": "Word Counter",
   "desc": "Word Counter tool",

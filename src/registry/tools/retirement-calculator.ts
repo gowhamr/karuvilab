@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const retirement_calculator: ToolEntry = {
+export const retirementCalculator: ToolEntry = {
   "id": "retirement-calculator",
   "name": "Retirement Planner",
   "desc": "Corpus needed for your retirement",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const private_key_checker: ToolEntry = {
+export const privateKeyChecker: ToolEntry = {
   "id": "private-key-checker",
   "name": "Private Key Checker",
   "desc": "Private Key Checker tool",

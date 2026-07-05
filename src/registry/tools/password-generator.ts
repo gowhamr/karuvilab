@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const password_generator: ToolEntry = {
+export const passwordGenerator: ToolEntry = {
   "id": "password-generator",
   "name": "Password Generator",
   "desc": "Strong, random passwords",

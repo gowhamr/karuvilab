@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const date_calculator: ToolEntry = {
+export const dateCalculator: ToolEntry = {
   "id": "date-calculator",
   "name": "Date Calculator",
   "desc": "Add, subtract, or diff dates",

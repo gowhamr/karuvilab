@@ -157,8 +157,8 @@ export default function WorkbenchClient() {
         onTouchEnd={handleTouchEnd}
       >
         {/* Invisible edge swipe zones for mobile */}
-        <div className="absolute top-0 bottom-0 left-0 w-6 z-10 md:hidden" />
-        <div className="absolute top-0 bottom-0 right-0 w-6 z-10 md:hidden" />
+        <div className="absolute top-0 bottom-0 left-0 w-6 z-content md:hidden" />
+        <div className="absolute top-0 bottom-0 right-0 w-6 z-content md:hidden" />
 
         {tabs.length === 0 && !isPickerOpen && (
           <div className="flex-1 flex flex-col items-center justify-center text-center p-6 opacity-60">
@@ -206,7 +206,7 @@ export default function WorkbenchClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/80 backdrop-blur-md z-50 flex flex-col p-4 md:p-12"
+              className="absolute inset-0 bg-surface/80 backdrop-blur-md z-modal flex flex-col p-4 md:p-12"
             >
               <div className="max-w-3xl w-full mx-auto bg-surface border border-border shadow-2xl rounded-3xl flex flex-col max-h-full overflow-hidden">
                 <div className="p-4 border-b border-border flex items-center gap-3">

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const pbkdf2_generator: ToolEntry = {
+export const pbkdf2Generator: ToolEntry = {
   "id": "pbkdf2-generator",
   "name": "Pbkdf2 Generator",
   "desc": "Pbkdf2 Generator tool",

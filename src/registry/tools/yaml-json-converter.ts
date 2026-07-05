@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const yaml_json_converter: ToolEntry = {
+export const yamlJsonConverter: ToolEntry = {
   "id": "yaml-json-converter",
   "name": "Yaml Json Converter",
   "desc": "Yaml Json Converter tool",

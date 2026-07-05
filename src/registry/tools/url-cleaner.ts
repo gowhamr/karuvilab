@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const url_cleaner: ToolEntry = {
+export const urlCleaner: ToolEntry = {
   "id": "url-cleaner",
   "name": "URL Cleaner",
   "desc": "Strip tracking parameters",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const grammar_checker: ToolEntry = {
+export const grammarChecker: ToolEntry = {
   "id": "grammar-checker",
   "name": "Grammar Checker",
   "desc": "Spot common writing errors",

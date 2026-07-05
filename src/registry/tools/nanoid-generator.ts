@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const nanoid_generator: ToolEntry = {
+export const nanoidGenerator: ToolEntry = {
   "id": "nanoid-generator",
   "name": "Nanoid Generator",
   "desc": "Nanoid Generator tool",

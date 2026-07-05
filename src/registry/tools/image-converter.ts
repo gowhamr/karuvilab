@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const image_converter: ToolEntry = {
+export const imageConverter: ToolEntry = {
   "id": "image-converter",
   "name": "Image Converter",
   "desc": "Convert between JPG, PNG, WebP, AVIF, and BMP",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const sitemap_generator: ToolEntry = {
+export const sitemapGenerator: ToolEntry = {
   "id": "sitemap-generator",
   "name": "Sitemap Generator",
   "desc": "Sitemap Generator tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const chart_generator: ToolEntry = {
+export const chartGenerator: ToolEntry = {
   "id": "chart-generator",
   "name": "Chart & Graph Generator",
   "desc": "Create beautiful charts from your data",

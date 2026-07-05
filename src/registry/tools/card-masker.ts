@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const card_masker: ToolEntry = {
+export const cardMasker: ToolEntry = {
   "id": "card-masker",
   "name": "Card Masker",
   "desc": "Card Masker tool",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const inflation_calculator: ToolEntry = {
+export const inflationCalculator: ToolEntry = {
   "id": "inflation-calculator",
   "name": "Inflation Calculator",
   "desc": "Purchasing power over time",

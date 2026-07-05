@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const financial_freedom_calculator: ToolEntry = {
+export const financialFreedomCalculator: ToolEntry = {
   "id": "financial-freedom-calculator",
   "name": "Financial Freedom Calculator",
   "desc": "Calculate your path to FIRE and plan your retirement.",

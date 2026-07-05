@@ -37,9 +37,7 @@ export function OCRButton({ onResult }: OCRButtonProps) {
       
       const worker = await Tesseract.createWorker('eng', 1, {
         logger: (m: any) => {
-          if (m.status === 'recognizing text' && m.progress % 0.2 === 0) {
-            console.log(`OCR Progress: ${Math.round(m.progress * 100)}%`);
-          }
+          // OCR Progress reporting disabled in production
         }
       });
 

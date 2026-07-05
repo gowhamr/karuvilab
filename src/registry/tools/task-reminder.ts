@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const task_reminder: ToolEntry = {
+export const taskReminder: ToolEntry = {
   "id": "task-reminder",
   "name": "Task Reminder",
   "desc": "Lightweight private to-do list",

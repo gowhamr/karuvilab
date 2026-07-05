@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const watermark_pdf: ToolEntry = {
+export const watermarkPdf: ToolEntry = {
   "id": "watermark-pdf",
   "name": "Watermark PDF",
   "desc": "Add text or image watermark",

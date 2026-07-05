@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const rotate_pdf: ToolEntry = {
+export const rotatePdf: ToolEntry = {
   "id": "rotate-pdf",
   "name": "Rotate PDF",
   "desc": "Rotate one or all pages",

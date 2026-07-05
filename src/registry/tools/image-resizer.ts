@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const image_resizer: ToolEntry = {
+export const imageResizer: ToolEntry = {
   "id": "image-resizer",
   "name": "Image Resizer",
   "desc": "Resize images to exact dimensions",

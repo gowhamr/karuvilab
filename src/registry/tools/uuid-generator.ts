@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const uuid_generator: ToolEntry = {
+export const uuidGenerator: ToolEntry = {
   "id": "uuid-generator",
   "name": "Uuid Generator",
   "desc": "Uuid Generator tool",

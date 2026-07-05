@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const pdf_to_word: ToolEntry = {
+export const pdfToWord: ToolEntry = {
   "id": "pdf-to-word",
   "name": "PDF to Word",
   "desc": "Convert PDF text to editable Word",

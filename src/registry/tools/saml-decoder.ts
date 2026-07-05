@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const saml_decoder: ToolEntry = {
+export const samlDecoder: ToolEntry = {
   "id": "saml-decoder",
   "name": "Saml Decoder",
   "desc": "Saml Decoder tool",

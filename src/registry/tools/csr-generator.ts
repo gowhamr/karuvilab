@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const csr_generator: ToolEntry = {
+export const csrGenerator: ToolEntry = {
   "id": "csr-generator",
   "name": "Csr Generator",
   "desc": "Csr Generator tool",

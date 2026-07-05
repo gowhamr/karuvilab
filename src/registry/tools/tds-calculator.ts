@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const tds_calculator: ToolEntry = {
+export const tdsCalculator: ToolEntry = {
   "id": "tds-calculator",
   "name": "Tds Calculator",
   "desc": "Tds Calculator tool",

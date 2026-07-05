@@ -546,6 +546,28 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "core-banking-parser",
+    "name": "Core Banking Parser",
+    "desc": "Parse core banking trace logs into JSON",
+    "href": "banking-tools/core-banking-parser/",
+    "category": "banking",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-05",
+    "keywords": [
+      "finacle tools",
+      "banking"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "countdown-timer",
     "name": "Countdown Timer",
     "desc": "Countdown Timer tool",
@@ -1004,28 +1026,6 @@ export const CORE_TOOLS: ToolEntry[] = [
       "any-file",
       "text"
     ],
-    "related": [],
-    "subCategory": null,
-    "requiresNetwork": false
-  },
-  {
-    "id": "finacle-tools",
-    "name": "Finacle Tools",
-    "desc": "Finacle Tools tool",
-    "href": "banking-tools/finacle-tools/",
-    "category": "banking",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "new",
-    "lastAdded": "2026-07-05",
-    "keywords": [
-      "finacle tools",
-      "banking"
-    ],
-    "input": null,
-    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false

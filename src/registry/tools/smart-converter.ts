@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const smart_converter: ToolEntry = {
+export const smartConverter: ToolEntry = {
   "id": "smart-converter",
   "name": "Smart Unit Converter",
   "desc": "Natural-language unit conversion",

@@ -1,6 +1,6 @@
 import { ToolEntry } from '../types';
 
-export const stock_average_calculator: ToolEntry = {
+export const stockAverageCalculator: ToolEntry = {
   "id": "stock-average-calculator",
   "name": "Stock Average",
   "desc": "Weighted average buy price for stocks",
