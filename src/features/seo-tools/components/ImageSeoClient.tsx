@@ -17,7 +17,7 @@ import { BatchQueue } from "@/components/ui/BatchQueue";
 import { useBatchStore } from "@/src/store/useBatchStore";
 import { ToolShell } from "@/components/ui/ToolShell";
 
-
+const EMPTY_ARRAY: any[] = [];
 const toolId = "image-seo";
 
 function toSlug(s: string): string {
@@ -55,7 +55,7 @@ export default function ImageSeoClient() {
   // Analyzer tab
   const [analyzeText, setAnalyzeText] = useState("");
 
-  const items = useBatchStore(state => state.items[toolId] || []);
+  const items = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
   const addItems = useBatchStore(state => state.addItems);
   const isProcessing = false; // We process instantly for renaming
 
