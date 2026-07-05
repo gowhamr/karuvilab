@@ -12,6 +12,7 @@ import { ToolInfoSection } from './ToolInfoSection';
 import { cn } from '@/src/lib/utils';
 import { useState, useEffect, useMemo } from 'react';
 import { FocusModeWrapper } from './FocusModeWrapper';
+import { useSearchParams } from 'next/navigation';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
@@ -118,6 +119,9 @@ export function ClientToolShell({ title, description, category, children, toolId
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
 
+  const searchParams = useSearchParams();
+  const isEmbed = searchParams?.get("embed") === "true";
+
   const storageKey = `kv-accordion-state-${finalToolId}`;
   const [openSectionId, setOpenSectionId] = useState<string | null>(null);
 
@@ -158,9 +162,14 @@ export function ClientToolShell({ title, description, category, children, toolId
     <m.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`${fullWidth ? "w-full max-w-none px-4 md:px-8" : "max-w-6xl px-4"} mx-auto space-y-8 sm:space-y-10 lg:space-y-12 pb-24`}
+      className={cn(
+        isEmbed ? "w-full max-w-none px-2 py-4" : fullWidth ? "w-full max-w-none px-4 md:px-8" : "max-w-6xl px-4",
+        "mx-auto space-y-8 sm:space-y-10 lg:space-y-12",
+        !isEmbed && "pb-24"
+      )}
     >
-      <header className="space-y-3 md:space-y-4 relative z-above">
+      {!isEmbed && (
+        <header className="space-y-3 md:space-y-4 relative z-above">
         <Breadcrumbs category={category} title={title} />
         
         <div className="flex flex-col gap-3 md:gap-4">
@@ -180,6 +189,7 @@ export function ClientToolShell({ title, description, category, children, toolId
           )}
         </div>
       </header>
+      )}
 
       <section className="mb-12">
         <ErrorBoundary>
@@ -189,9 +199,11 @@ export function ClientToolShell({ title, description, category, children, toolId
         </ErrorBoundary>
       </section>
 
-      <div className="max-w-4xl mx-auto space-y-6">
-        {parsedContent.detailedDescription && (
-          <ToolInfoSection 
+      {!isEmbed && (
+        <>
+          <div className="max-w-4xl mx-auto space-y-6">
+            {parsedContent.detailedDescription && (
+              <ToolInfoSection 
             toolId={finalToolId} 
             id="deep-dive" 
             title="Deep Dive"
@@ -337,8 +349,10 @@ export function ClientToolShell({ title, description, category, children, toolId
                 </div>
               </Link>
             ))}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
+        </>
       )}
     </m.div>
   );

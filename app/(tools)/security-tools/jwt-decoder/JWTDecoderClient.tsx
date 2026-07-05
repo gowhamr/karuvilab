@@ -1,10 +1,10 @@
 "use client";
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback, useDeferredValue } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { blobManager } from "@/src/lib/blob-manager";
 import { 
   ShieldCheck, ShieldAlert, AlertTriangle, Clock, Key, FileCode, 
-  Download, Upload, Zap, Layers, Fingerprint, Activity, Code, Shield
+  Download, Upload, Activity, Code, Shield, Layers
 } from "lucide-react";
 
 function b64urlDecode(str: string): string {
@@ -78,13 +78,14 @@ function timeRelative(ts: number): string {
 
 export default function JWTDecoderClient() {
   const [token, setToken] = useState("");
+  const deferredToken = useDeferredValue(token);
   const [secretOrKey, setSecretOrKey] = useState("");
   const [verifyStatus, setVerifyStatus] = useState<"idle" | "valid" | "invalid" | "error">("idle");
   const [snippetLang, setSnippetLang] = useState<"curl" | "js" | "node" | "python" | "go" | "java" | "csharp">("curl");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const decoded = useMemo(() => {
-    const raw = token.trim();
+    const raw = deferredToken.trim();
     if (!raw) return null;
     const parts = raw.split(".");
     if (parts.length !== 3) return { error: "Invalid JWT format: expected exactly 3 parts separated by dots (Header.Payload.Signature)." };
@@ -132,7 +133,7 @@ export default function JWTDecoderClient() {
     } catch (e) {
       return { error: "Failed to parse JWT: " + (e as Error).message };
     }
-  }, [token]);
+  }, [deferredToken]);
 
   // Expiration Analysis
   const expInfo = useMemo(() => {
@@ -171,7 +172,6 @@ export default function JWTDecoderClient() {
         const isValid = await window.crypto.subtle.verify("HMAC", key, signatureBytes.buffer as ArrayBuffer, dataToVerify);
         setVerifyStatus(isValid ? "valid" : "invalid");
       } else if (alg.startsWith("RS") || alg.startsWith("PS") || alg.startsWith("ES")) {
-        // PEM Import
         const pem = secretOrKey.trim();
         const b64 = pem.replace(/-----BEGIN (.*)-----/g, "").replace(/-----END (.*)-----/g, "").replace(/\s/g, "");
         const binary = atob(b64);
@@ -231,7 +231,8 @@ export default function JWTDecoderClient() {
 
   return (
     <div className="space-y-6">
-      <div 
+      <section 
+        aria-labelledby="input-heading"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -246,36 +247,49 @@ export default function JWTDecoderClient() {
         }}
         className="bg-surface border border-border p-5 md:p-6 rounded-3xl space-y-4 shadow-sm"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Key className="w-4 h-4 text-blue" />
-            <h2 className="text-sm font-bold text-text">Encoded JWT Input</h2>
+            <Key className="w-4 h-4 text-blue" aria-hidden="true" />
+            <h2 id="input-heading" className="text-sm font-bold text-text">Encoded JWT Input</h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
+              aria-label="Paste JWT from clipboard"
               onClick={async () => {
                 try {
                   const text = await navigator.clipboard.readText();
                   if (text) setToken(text);
                 } catch {}
               }}
-              className="text-xs font-bold text-blue hover:underline flex items-center gap-1 min-h-9 px-3 rounded-lg hover:bg-blue/5"
+              className="text-xs font-bold text-blue hover:underline flex items-center gap-1 min-h-[44px] md:min-h-9 px-3 rounded-lg hover:bg-blue/5"
             >
               Paste Clipboard
             </button>
             <button
+              aria-label="Upload .jwt file"
               onClick={() => fileInputRef.current?.click()}
-              className="text-xs font-bold text-text-muted hover:text-text flex items-center gap-1 min-h-9 px-3 rounded-lg border border-border hover:bg-bg"
+              className="text-xs font-bold text-text-muted hover:text-text flex items-center gap-1 min-h-[44px] md:min-h-9 px-3 rounded-lg border border-border hover:bg-bg"
             >
-              <Upload className="w-3.5 h-3.5" />
+              <Upload className="w-3.5 h-3.5" aria-hidden="true" />
               Upload .jwt
             </button>
-            <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".jwt,.txt" />
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileUpload} 
+              className="hidden" 
+              accept=".jwt,.txt" 
+              aria-hidden="true"
+              tabIndex={-1} 
+            />
           </div>
         </div>
 
+        <label htmlFor="jwt-input" className="sr-only">Paste encoded JWT token here</label>
         <textarea
-          className="w-full px-4 py-3 bg-bg border border-border rounded-2xl font-mono text-xs md:text-sm text-text focus:ring-2 focus:ring-blue outline-none transition-all resize-none leading-relaxed break-all"
+          id="jwt-input"
+          aria-invalid={decoded && "error" in decoded ? "true" : "false"}
+          className="w-full px-4 py-3 bg-bg border border-border rounded-2xl font-mono text-xs md:text-sm text-text focus:ring-2 focus:ring-blue outline-none transition-all resize-none leading-relaxed break-all min-h-[120px]"
           rows={4}
           placeholder="Paste encoded JWT token here (eyJhbGciOi...)..."
           value={token}
@@ -296,261 +310,269 @@ export default function JWTDecoderClient() {
 
             <div className="flex flex-wrap items-center gap-2">
               <button
+                aria-label="Download payload as JSON file"
                 onClick={() => {
                   const blob = new Blob([JSON.stringify(decoded.payload, null, 2)], { type: "application/json" });
                   blobManager.download(blob, `jwt-payload-${Date.now()}.json`);
                 }}
-                className="text-xs font-bold text-text hover:text-blue flex items-center gap-1 min-h-9 px-3 rounded-lg border border-border hover:bg-bg"
+                className="text-xs font-bold text-text hover:text-blue flex items-center gap-1 min-h-[44px] md:min-h-9 px-3 rounded-lg border border-border hover:bg-bg"
               >
-                <Download className="w-3.5 h-3.5" /> Pretty JSON
+                <Download className="w-3.5 h-3.5" aria-hidden="true" /> Pretty JSON
               </button>
               <CopyButton text={decoded.raw} label="Copy JWT" />
             </div>
           </div>
         )}
-      </div>
+      </section>
 
-      {decoded && "error" in decoded && (
-        <div className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-4 text-xs font-medium text-rose-400 flex items-center gap-3">
-          <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" />
-          <div>
-            <p className="font-bold">Invalid JWT</p>
-            <p className="mt-0.5">{decoded.error}</p>
+      <div aria-live="polite" className="space-y-6">
+        {decoded && "error" in decoded && (
+          <div role="alert" className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-4 text-xs font-medium text-rose-400 flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" aria-hidden="true" />
+            <div>
+              <p className="font-bold">Invalid JWT</p>
+              <p className="mt-0.5">{decoded.error}</p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {decoded && !("error" in decoded) && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-            
-            {/* Expiration Card */}
-            <div className={`p-4 rounded-2xl border flex items-start gap-3 ${
-              expInfo?.isExpired 
-                ? "bg-rose-500/10 border-rose-500/20 text-rose-400" 
-                : expInfo?.expiresSoon 
-                ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
-                : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-            }`}>
-              <Clock className="w-5 h-5 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider">Expiration Status</p>
-                <p className="text-sm font-black mt-0.5">{expInfo?.statusLabel ?? "No Expiry Claim"}</p>
-                {expInfo && <p className="text-xs opacity-80 mt-1">{expInfo.relativeText} ({expInfo.formatted})</p>}
-              </div>
-            </div>
-
-            {/* Algorithm Safety Card */}
-            <div className={`p-4 rounded-2xl border flex items-start gap-3 ${
-              decoded.header.alg === "none"
-                ? "bg-rose-500/10 border-rose-500/20 text-rose-400"
-                : "bg-blue/10 border-blue/20 text-blue"
-            }`}>
-              {decoded.header.alg === "none" ? (
-                <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-              ) : (
-                <ShieldCheck className="w-5 h-5 text-blue shrink-0 mt-0.5" />
-              )}
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider">Algorithm Security</p>
-                <p className="text-sm font-black mt-0.5">
-                  {decoded.header.alg === "none" ? "Unsafe (alg: none)" : `${decoded.header.alg} Standard`}
-                </p>
-                <p className="text-xs opacity-80 mt-1">
-                  {decoded.header.alg === "none" 
-                    ? "Tokens with alg:none carry no cryptographic signature protection."
-                    : "Cryptographic signature algorithm declared in header."}
-                </p>
-              </div>
-            </div>
-
-            {/* Signature Verification Card */}
-            <div className="p-4 rounded-2xl border border-border bg-surface flex items-start gap-3">
-              <ShieldAlert className="w-5 h-5 text-text-muted shrink-0 mt-0.5" />
-              <div className="w-full">
-                <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Signature Verification</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <input
-                    type="password"
-                    placeholder={decoded.header.alg?.startsWith("HS") ? "Enter HMAC Secret..." : "Paste PEM Public Key..."}
-                    value={secretOrKey}
-                    onChange={(e) => setSecretOrKey(e.target.value)}
-                    className="w-full px-2.5 py-1 bg-bg border border-border rounded-lg text-xs font-mono outline-none focus:border-blue"
-                  />
-                  <button
-                    onClick={verifySignature}
-                    className="px-3 py-1 rounded-lg bg-blue text-white text-xs font-bold hover:bg-blue-dark transition-all shrink-0"
-                  >
-                    Verify
-                  </button>
+        {decoded && !("error" in decoded) && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+              
+              {/* Expiration Card */}
+              <div className={`p-4 rounded-2xl border flex items-start gap-3 ${
+                expInfo?.isExpired 
+                  ? "bg-rose-500/10 border-rose-500/20 text-rose-400" 
+                  : expInfo?.expiresSoon 
+                  ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                  : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+              }`}>
+                <Clock className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider">Expiration Status</h3>
+                  <p className="text-sm font-black mt-0.5">{expInfo?.statusLabel ?? "No Expiry Claim"}</p>
+                  {expInfo && <p className="text-xs opacity-80 mt-1">{expInfo.relativeText} ({expInfo.formatted})</p>}
                 </div>
-                {verifyStatus !== "idle" && (
-                  <p className={`text-xs font-bold mt-2 ${
-                    verifyStatus === "valid" ? "text-emerald-400" : "text-rose-400"
-                  }`}>
-                    {verifyStatus === "valid" ? "✅ Signature Verified Valid" : "❌ Invalid Signature Match"}
-                  </p>
+              </div>
+
+              {/* Algorithm Safety Card */}
+              <div className={`p-4 rounded-2xl border flex items-start gap-3 ${
+                decoded.header.alg === "none"
+                  ? "bg-rose-500/10 border-rose-500/20 text-rose-400"
+                  : "bg-blue/10 border-blue/20 text-blue"
+              }`}>
+                {decoded.header.alg === "none" ? (
+                  <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" aria-hidden="true" />
+                ) : (
+                  <ShieldCheck className="w-5 h-5 text-blue shrink-0 mt-0.5" aria-hidden="true" />
                 )}
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider">Algorithm Security</h3>
+                  <p className="text-sm font-black mt-0.5">
+                    {decoded.header.alg === "none" ? "Unsafe (alg: none)" : `${decoded.header.alg} Standard`}
+                  </p>
+                  <p className="text-xs opacity-80 mt-1">
+                    {decoded.header.alg === "none" 
+                      ? "Tokens with alg:none carry no cryptographic signature protection."
+                      : "Cryptographic signature algorithm declared in header."}
+                  </p>
+                </div>
               </div>
+
+              {/* Signature Verification Card */}
+              <div className="p-4 rounded-2xl border border-border bg-surface flex items-start gap-3">
+                <ShieldAlert className="w-5 h-5 text-text-muted shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="w-full">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted">Signature Verification</h3>
+                  <div className="flex flex-wrap items-center gap-2 mt-1">
+                    <label htmlFor="signature-secret" className="sr-only">Signature Secret or PEM Key</label>
+                    <input
+                      id="signature-secret"
+                      type="password"
+                      placeholder={decoded.header.alg?.startsWith("HS") ? "Enter HMAC Secret..." : "Paste PEM Public Key..."}
+                      value={secretOrKey}
+                      onChange={(e) => setSecretOrKey(e.target.value)}
+                      className="w-full md:flex-1 min-h-[44px] md:min-h-[36px] px-2.5 py-1 bg-bg border border-border rounded-lg text-xs font-mono outline-none focus:border-blue"
+                    />
+                    <button
+                      aria-label="Verify Signature"
+                      onClick={verifySignature}
+                      className="w-full md:w-auto min-h-[44px] md:min-h-[36px] px-3 py-1 rounded-lg bg-blue text-white text-xs font-bold hover:bg-blue-dark transition-all shrink-0"
+                    >
+                      Verify
+                    </button>
+                  </div>
+                  {verifyStatus !== "idle" && (
+                    <p role="status" className={`text-xs font-bold mt-2 ${
+                      verifyStatus === "valid" ? "text-emerald-400" : "text-rose-400"
+                    }`}>
+                      {verifyStatus === "valid" ? "✅ Signature Verified Valid" : "❌ Invalid Signature Match"}
+                    </p>
+                  )}
+                </div>
+              </div>
+
             </div>
 
-          </div>
+            {/* ── Developer Analysis Panel ── */}
+            <section aria-labelledby="analysis-heading" className="bg-surface border border-border p-5 rounded-3xl space-y-4">
+               <div className="flex items-center justify-between">
+                  <h3 id="analysis-heading" className="text-sm font-bold text-text flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-blue" aria-hidden="true" /> Developer Analysis
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Total Size</p>
+                      <p className="text-sm font-mono text-text mt-1">{decoded.sizes.total} B</p>
+                   </div>
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Header Size</p>
+                      <p className="text-sm font-mono text-purple-400 mt-1">{decoded.sizes.header} B</p>
+                   </div>
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Payload Size</p>
+                      <p className="text-sm font-mono text-blue mt-1">{decoded.sizes.payload} B</p>
+                   </div>
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Signature Size</p>
+                      <p className="text-sm font-mono text-emerald-400 mt-1">{decoded.sizes.sig} B</p>
+                   </div>
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Encoding</p>
+                      <p className="text-sm font-mono text-text mt-1">Base64URL</p>
+                   </div>
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Token Entropy</p>
+                      <p className="text-sm font-mono text-text mt-1">{decoded.entropy.total} bits</p>
+                   </div>
+                   <div className="bg-bg border border-border rounded-xl p-3">
+                      <p className="text-[10px] uppercase font-bold text-text-muted">Signature Entropy</p>
+                      <p className="text-sm font-mono text-text mt-1">{decoded.entropy.sig} bits</p>
+                   </div>
+                </div>
+            </section>
 
-          {/* ── Developer Analysis Panel ── */}
-          <div className="bg-surface border border-border p-5 rounded-3xl space-y-4">
-             <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-text flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-blue" /> Developer Analysis
-                </h3>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Total Size</p>
-                    <p className="text-sm font-mono text-text mt-1">{decoded.sizes.total} B</p>
-                 </div>
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Header Size</p>
-                    <p className="text-sm font-mono text-purple-400 mt-1">{decoded.sizes.header} B</p>
-                 </div>
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Payload Size</p>
-                    <p className="text-sm font-mono text-blue mt-1">{decoded.sizes.payload} B</p>
-                 </div>
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Signature Size</p>
-                    <p className="text-sm font-mono text-emerald-400 mt-1">{decoded.sizes.sig} B</p>
-                 </div>
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Encoding</p>
-                    <p className="text-sm font-mono text-text mt-1">Base64URL</p>
-                 </div>
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Token Entropy</p>
-                    <p className="text-sm font-mono text-text mt-1">{decoded.entropy.total} bits</p>
-                 </div>
-                 <div className="bg-bg border border-border rounded-xl p-3">
-                    <p className="text-[10px] uppercase font-bold text-text-muted">Signature Entropy</p>
-                    <p className="text-sm font-mono text-text mt-1">{decoded.entropy.sig} bits</p>
-                 </div>
-              </div>
-          </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              {/* Header Column */}
+              <section aria-labelledby="header-heading" className="bg-surface border border-border p-5 rounded-3xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 id="header-heading" className="text-sm font-bold text-text flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-purple-500" aria-hidden="true" /> Header
+                  </h3>
+                  <CopyButton text={JSON.stringify(decoded.header, null, 2)} label="Copy" />
+                </div>
+                <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-purple-400 leading-relaxed overflow-x-auto">
+                  {JSON.stringify(decoded.header, null, 2)}
+                </pre>
+              </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            {/* Header Column */}
-            <div className="bg-surface border border-border p-5 rounded-3xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-text flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-purple-500" /> Header
-                </h3>
-                <CopyButton text={JSON.stringify(decoded.header, null, 2)} label="Copy" />
-              </div>
-              <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-purple-400 leading-relaxed overflow-x-auto">
-                {JSON.stringify(decoded.header, null, 2)}
-              </pre>
-            </div>
-
-            {/* Payload Column */}
-            <div className="bg-surface border border-border p-5 rounded-3xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-text flex items-center gap-2">
-                  <FileCode className="w-4 h-4 text-blue" /> Payload
-                </h3>
-                <CopyButton text={JSON.stringify(decoded.payload, null, 2)} label="Copy" />
-              </div>
-              <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-                {Object.entries(decoded.payload).map(([k, v]) => {
-                  const isTime = ["exp", "iat", "nbf"].includes(k) && typeof v === "number";
-                  return (
-                    <div key={k} className="bg-bg border border-border rounded-xl p-3 flex flex-col gap-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-blue font-mono">{k}</span>
-                        {CLAIM_DESCRIPTIONS[k] && (
-                          <span className="text-[10px] font-semibold text-text-muted">{CLAIM_DESCRIPTIONS[k]}</span>
+              {/* Payload Column */}
+              <section aria-labelledby="payload-heading" className="bg-surface border border-border p-5 rounded-3xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 id="payload-heading" className="text-sm font-bold text-text flex items-center gap-2">
+                    <FileCode className="w-4 h-4 text-blue" aria-hidden="true" /> Payload
+                  </h3>
+                  <CopyButton text={JSON.stringify(decoded.payload, null, 2)} label="Copy" />
+                </div>
+                <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+                  {Object.entries(decoded.payload).map(([k, v]) => {
+                    const isTime = ["exp", "iat", "nbf"].includes(k) && typeof v === "number";
+                    return (
+                      <div key={k} className="bg-bg border border-border rounded-xl p-3 flex flex-col gap-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-blue font-mono">{k}</span>
+                          {CLAIM_DESCRIPTIONS[k] && (
+                            <span className="text-[10px] font-semibold text-text-muted">{CLAIM_DESCRIPTIONS[k]}</span>
+                          )}
+                        </div>
+                        <div className="font-mono text-xs text-text break-all">
+                          {typeof v === "object" ? JSON.stringify(v) : String(v)}
+                        </div>
+                        {isTime && typeof v === "number" && (
+                          <div className="text-[11px] text-text-muted pt-1 border-t border-border/50">
+                            📅 {formatTimestamp(v)} ({timeRelative(v)})
+                          </div>
                         )}
                       </div>
-                      <div className="font-mono text-xs text-text break-all">
-                        {typeof v === "object" ? JSON.stringify(v) : String(v)}
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* Signature Column */}
+              <section aria-labelledby="signature-heading" className="bg-surface border border-border p-5 rounded-3xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 id="signature-heading" className="text-sm font-bold text-text flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-emerald-500" aria-hidden="true" /> Signature
+                  </h3>
+                  {decoded.sig && <CopyButton text={decoded.sig} label="Copy" />}
+                </div>
+                
+                {decoded.sig ? (
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-text-muted mb-1">Raw Base64URL</p>
+                      <div className="p-3 rounded-xl bg-bg border border-border font-mono text-xs text-emerald-400 break-all">
+                        {decoded.sig}
                       </div>
-                      {isTime && typeof v === "number" && (
-                        <div className="text-[11px] text-text-muted pt-1 border-t border-border/50">
-                          📅 {formatTimestamp(v)} ({timeRelative(v)})
-                        </div>
-                      )}
                     </div>
-                  );
-                })}
-              </div>
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-text-muted mb-1">Hex View</p>
+                      <div className="p-3 rounded-xl bg-bg border border-border font-mono text-[10px] text-text-muted break-all max-h-40 overflow-y-auto">
+                        {bufferToHex(base64UrlToBuffer(decoded.sig))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 rounded-xl bg-bg border border-border text-xs text-text-muted italic text-center">
+                    Unsigned JWT
+                  </div>
+                )}
+              </section>
+
             </div>
 
-            {/* Signature Column */}
-            <div className="bg-surface border border-border p-5 rounded-3xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-text flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-emerald-500" /> Signature
+            {/* ── Code Snippet Generator ── */}
+            <section aria-labelledby="snippets-heading" className="bg-surface border border-border p-5 rounded-3xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 id="snippets-heading" className="text-sm font-bold text-text flex items-center gap-2">
+                  <Code className="w-4 h-4 text-amber-500" aria-hidden="true" /> API Request Snippets
                 </h3>
-                {decoded.sig && <CopyButton text={decoded.sig} label="Copy" />}
+                <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Code Snippet Languages">
+                  {(["curl", "js", "node", "python", "go", "java", "csharp"] as const).map(lang => (
+                    <button
+                      key={lang}
+                      role="tab"
+                      aria-selected={snippetLang === lang}
+                      onClick={() => setSnippetLang(lang)}
+                      className={`min-h-[44px] md:min-h-[32px] px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                        snippetLang === lang 
+                          ? "bg-blue text-white shadow-sm" 
+                          : "bg-bg text-text-muted hover:text-text border border-border"
+                      }`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
               </div>
-              
-              {decoded.sig ? (
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-[10px] uppercase font-bold text-text-muted mb-1">Raw Base64URL</p>
-                    <div className="p-3 rounded-xl bg-bg border border-border font-mono text-xs text-emerald-400 break-all">
-                      {decoded.sig}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase font-bold text-text-muted mb-1">Hex View</p>
-                    <div className="p-3 rounded-xl bg-bg border border-border font-mono text-[10px] text-text-muted break-all max-h-40 overflow-y-auto">
-                      {bufferToHex(base64UrlToBuffer(decoded.sig))}
-                    </div>
-                  </div>
+
+              <div className="relative">
+                <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-amber-400 leading-relaxed overflow-x-auto">
+                  {codeSnippets[snippetLang]}
+                </pre>
+                <div className="absolute top-3 right-3">
+                  <CopyButton text={codeSnippets[snippetLang] || ""} aria-label={`Copy ${snippetLang} snippet`} />
                 </div>
-              ) : (
-                <div className="p-4 rounded-xl bg-bg border border-border text-xs text-text-muted italic text-center">
-                  Unsigned JWT
-                </div>
-              )}
-            </div>
+              </div>
+            </section>
 
           </div>
-
-          {/* ── Code Snippet Generator ── */}
-          <div className="bg-surface border border-border p-5 rounded-3xl space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-sm font-bold text-text flex items-center gap-2">
-                <Code className="w-4 h-4 text-amber-500" /> API Request Snippets
-              </h3>
-              <div className="flex flex-wrap items-center gap-1.5">
-                {(["curl", "js", "node", "python", "go", "java", "csharp"] as const).map(lang => (
-                  <button
-                    key={lang}
-                    onClick={() => setSnippetLang(lang)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                      snippetLang === lang 
-                        ? "bg-blue text-white shadow-sm" 
-                        : "bg-bg text-text-muted hover:text-text border border-border"
-                    }`}
-                  >
-                    {lang}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative">
-              <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-amber-400 leading-relaxed overflow-x-auto">
-                {codeSnippets[snippetLang]}
-              </pre>
-              <div className="absolute top-3 right-3">
-                <CopyButton text={codeSnippets[snippetLang] || ""} />
-              </div>
-            </div>
-          </div>
-
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
