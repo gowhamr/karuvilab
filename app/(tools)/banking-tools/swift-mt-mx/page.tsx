@@ -8,7 +8,7 @@ export const metadata: Metadata = generateToolMetadata(swiftMtMx.id);
 
 export default function SwiftMtMxPage() {
   return (
-    <ToolShell toolId={swiftMtMx.id}>
+    <ToolShell title={swiftMtMx.name} toolId={swiftMtMx.id}>
       <ToolClientWrapper />
     </ToolShell>
   );

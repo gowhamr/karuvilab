@@ -8,7 +8,11 @@ export const metadata: Metadata = generateToolMetadata(coreBankingParser.id);
 
 export default function CoreBankingParserPage() {
   return (
-    <ToolShell toolId={coreBankingParser.id}>
+    <ToolShell 
+      toolId={coreBankingParser.id}
+      title={coreBankingParser.name}
+      description={coreBankingParser.description}
+    >
       <ToolClientWrapper />
     </ToolShell>
   );

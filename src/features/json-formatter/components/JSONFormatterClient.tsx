@@ -232,8 +232,6 @@ export default function JSONFormatterClient() {
 
   const { output, error, parsed } = result;
 
-  if (!isLoaded) return <div className="animate-pulse h-full bg-surface/50 rounded-4xl border border-border" />;
-
   useFocusModeIntegration({
     charCount: output.length,
     lineCount: output ? output.split('\n').length : 0,
@@ -241,6 +239,8 @@ export default function JSONFormatterClient() {
     onFontSizeChange: setFontSize,
     onWrapToggle: () => setWordWrap(v => !v)
   });
+
+  if (!isLoaded) return <div className="animate-pulse h-full bg-surface/50 rounded-4xl border border-border" />;
 
   return (
     <div className="w-full">

@@ -8,7 +8,7 @@ export const metadata: Metadata = generateToolMetadata(emvTlvTree.id);
 
 export default function EmvTlvTreePage() {
   return (
-    <ToolShell toolId={emvTlvTree.id}>
+    <ToolShell title={emvTlvTree.name} toolId={emvTlvTree.id}>
       <ToolClientWrapper />
     </ToolShell>
   );

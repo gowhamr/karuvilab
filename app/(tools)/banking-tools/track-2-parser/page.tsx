@@ -8,7 +8,7 @@ export const metadata: Metadata = generateToolMetadata(track2Parser.id);
 
 export default function Track2ParserPage() {
   return (
-    <ToolShell toolId={track2Parser.id}>
+    <ToolShell title={track2Parser.name} toolId={track2Parser.id}>
       <ToolClientWrapper />
     </ToolShell>
   );
