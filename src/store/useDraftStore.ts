@@ -5,7 +5,7 @@ import { idbStorage } from './idb-storage';
 export interface DraftItem {
   id: string;
   content: string;
-  sourceToolId?: string;
+  sourceToolId?: string | undefined;
   timestamp: number;
 }
 

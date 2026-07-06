@@ -19,8 +19,8 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
       const focusableEls = getFocusableElements();
       if (focusableEls.length === 0) return;
 
-      const firstEl = focusableEls[0];
-      const lastEl = focusableEls[focusableEls.length - 1];
+      const firstEl = focusableEls[0]!;
+      const lastEl = focusableEls[focusableEls.length - 1]!;
 
       if (e.shiftKey) { // Shift + Tab
         if (document.activeElement === firstEl) {

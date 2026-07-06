@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { idbStorage } from './idb-storage';
 
 interface TransitionModel {
@@ -37,7 +37,7 @@ export const useIntelligenceStore = create<IntelligenceState>()(
             }
             newTransitions[last.id] = {
               ...newTransitions[last.id],
-              [toolId]: (newTransitions[last.id][toolId] || 0) + 1,
+              [toolId]: (newTransitions[last.id]?.[toolId] || 0) + 1,
             };
           }
 
@@ -61,7 +61,7 @@ export const useIntelligenceStore = create<IntelligenceState>()(
     }),
     {
       name: 'kv-intelligence-model',
-      storage: idbStorage,
+      storage: createJSONStorage(() => idbStorage),
       version: 1,
     }
   )

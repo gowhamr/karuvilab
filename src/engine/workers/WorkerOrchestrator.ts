@@ -346,7 +346,7 @@ class WorkerOrchestrator {
     // Find the right insertion index
     let index = 0;
     for (let i = 0; i < poolObj.queue.length; i++) {
-      const current = poolObj.queue[i];
+      const current = poolObj.queue[i]!;
       const taskWeight = priorityWeight[task.priority || 'normal'];
       const currentWeight = priorityWeight[current.priority || 'normal'];
       

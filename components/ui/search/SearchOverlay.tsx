@@ -85,7 +85,7 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
     e.stopPropagation();
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];
+      const file = e.dataTransfer.files[0]!;
       setQuery(`> process ${file.name}`);
       // Wait for a bit to let the query update visually before auto-routing
       setTimeout(async () => {

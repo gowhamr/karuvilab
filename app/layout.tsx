@@ -8,7 +8,7 @@ import { MainLayout } from "@/components/system/MainLayout";
 import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 import { StructuredData } from "@/src/lib/seo";
 import Script from "next/script";
-
+import { SpeedInsights } from '@vercel/speed-insights/next';
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -124,6 +124,7 @@ export default function RootLayout({
           </MainLayout>
           <PWARegistration />
           <StructuredData />
+          <SpeedInsights />
         </ClientProviders>
       </body>
     </html>

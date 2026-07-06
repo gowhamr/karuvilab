@@ -11,7 +11,7 @@ export default function CoreBankingParserPage() {
     <ToolShell 
       toolId={coreBankingParser.id}
       title={coreBankingParser.name}
-      description={coreBankingParser.description}
+      description={coreBankingParser.desc}
     >
       <ToolClientWrapper />
     </ToolShell>

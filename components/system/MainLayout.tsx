@@ -10,7 +10,6 @@ import { useSettingsStore } from "@/src/store/settings/store";
 import { AriaLiveAnnouncer } from '@/src/lib/a11y/AriaLiveAnnouncer';
 import { DraftDrawer } from '@/components/ui/DraftDrawer';
 import { GlobalSelectionToolbar } from '@/components/ui/GlobalSelectionToolbar';
-import { Toaster as SonnerToaster } from 'sonner';
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const { isFullscreen } = useFullscreenContext();

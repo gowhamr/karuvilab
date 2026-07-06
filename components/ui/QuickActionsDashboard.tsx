@@ -4,7 +4,7 @@ import { useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
-import { Clock, Play, ChevronRight, Heart, Sparkles, Clipboard, Upload, Search, Zap } from "lucide-react";
+import { Clock, Play, ChevronRight, Heart, Sparkles, Clipboard, Upload, Search, Zap, TrendingUp } from "lucide-react";
 import { detectContentToolSuggestion } from "@/src/lib/search/intelligentDetector";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { ToolIcon } from "./Icons";

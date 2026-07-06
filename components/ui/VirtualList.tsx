@@ -73,7 +73,7 @@ export function VirtualList<T>({
           height: itemHeight
         }}
       >
-        {renderItem(items[i], i)}
+        {renderItem(items[i]!, i)}
       </div>
     );
   }

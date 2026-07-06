@@ -43,7 +43,7 @@ export default function WorkbenchClient() {
     setTabs(prev => prev.filter(t => t.id !== id));
     if (activeTabId === id) {
       const remaining = tabs.filter(t => t.id !== id);
-      setActiveTabId(remaining.length > 0 ? remaining[remaining.length - 1].id : null);
+      setActiveTabId(remaining.length > 0 ? remaining[remaining.length - 1]?.id ?? null : null);
     }
     if (splitTabId === id) {
       setSplitTabId(null);
