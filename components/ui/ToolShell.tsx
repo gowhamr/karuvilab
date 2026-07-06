@@ -45,7 +45,7 @@ export async function ToolShell({ title, description, category, children, toolId
     examples:            content?.examples            ?? reg.examples,
     commonErrors:        content?.commonErrors        ?? reg.commonErrors,
     alternatives:        content?.alternatives        ?? reg.alternatives,
-    relatedTools:        content?.relatedTools        ?? currentTool?.related,
+    relatedTools:        content?.relatedTools        ?? currentTool?.related ?? undefined,
   };
 
   return (

@@ -1,4 +1,4 @@
-export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'productivity' | 'media';
+export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'productivity' | 'media' | 'banking' | 'seo';
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
@@ -18,40 +18,40 @@ export interface ToolEntry {
   category: Category;
   
   // Workflow Chaining
-  input?: DataType | DataType[] | null;
-  output?: DataType | DataType[] | null;
+  input?: DataType | DataType[] | null | undefined;
+  output?: DataType | DataType[] | null | undefined;
   
   // Discovery & SEO
   keywords: string[];
-  searchIntent?: string | null; // e.g., "transactional", "informational"
-  canonicalUrl?: string | null;
-  priority?: number | null; // 0 to 1 for sitemap (e.g., 0.8)
+  searchIntent?: string | null | undefined; // e.g., "transactional", "informational"
+  canonicalUrl?: string | null | undefined;
+  priority?: number | null | undefined; // 0 to 1 for sitemap (e.g., 0.8)
   
   // UI & UX
-  icon?: string | null; // Emoji or SVG path
-  color?: string | null; // Brand color for the tool
-  featured?: boolean | null;
-  popular?: boolean | null;
-  difficulty?: Difficulty | null;
+  icon?: string | null | undefined; // Emoji or SVG path
+  color?: string | null | undefined; // Brand color for the tool
+  featured?: boolean | null | undefined;
+  popular?: boolean | null | undefined;
+  difficulty?: Difficulty | null | undefined;
   
   // Semantic Intelligence
-  related?: string[] | null; // Array of tool IDs
+  related?: string[] | null | undefined; // Array of tool IDs
   
   // Content Engine
-  seoContent?: SEOContent | null;
-  schemaType?: 'SoftwareApplication' | 'WebApplication' | null;
-  sampleAssetKey?: string | null;
+  seoContent?: SEOContent | null | undefined;
+  schemaType?: 'SoftwareApplication' | 'WebApplication' | null | undefined;
+  sampleAssetKey?: string | null | undefined;
   
   // Custom grouping
-  subCategory?: string | null;
+  subCategory?: string | null | undefined;
   
   // Analytics & Management
-  analyticsId?: string | null;
-  status?: 'stable' | 'beta' | 'deprecated' | 'new' | null;
-  lastUpdated?: string | null; // ISO format: YYYY-MM-DD
-  lastAdded?: string | null;   // ISO format: YYYY-MM-DD
-  requiresNetwork?: boolean | null;
-  visibleExamples?: number | null;
+  analyticsId?: string | null | undefined;
+  status?: 'stable' | 'beta' | 'deprecated' | 'new' | null | undefined;
+  lastUpdated?: string | null | undefined; // ISO format: YYYY-MM-DD
+  lastAdded?: string | null | undefined;   // ISO format: YYYY-MM-DD
+  requiresNetwork?: boolean | null | undefined;
+  visibleExamples?: number | null | undefined;
 }
 export interface CategoryEntry {
   id: Category;

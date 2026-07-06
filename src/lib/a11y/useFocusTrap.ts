@@ -40,7 +40,7 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
     // Initial focus
     const focusable = getFocusableElements();
     if (focusable.length > 0 && !el.contains(document.activeElement)) {
-      focusable[0].focus();
+      focusable[0]!.focus();
     }
 
     return () => {

@@ -7,7 +7,7 @@
 import { CORE_TOOLS } from './registry/core-registry';
 import { toolRelationships } from './registry/tool-relationships';
 
-export type {
+import type {
   Category,
   Difficulty,
   DataType,
@@ -15,6 +15,15 @@ export type {
   ToolEntry,
   CategoryEntry
 } from './registry/types';
+
+export type {
+  Category,
+  Difficulty,
+  DataType,
+  SEOContent,
+  ToolEntry,
+  CategoryEntry
+};
 
 export function isNewTool(tool: ToolEntry): boolean {
   if (!tool.lastAdded) return false;

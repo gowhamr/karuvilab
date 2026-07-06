@@ -62,12 +62,12 @@ export default function WorkbenchClient() {
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    setTouchStart(e.targetTouches[0]!.clientX);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return;
-    const touchEnd = e.changedTouches[0].clientX;
+    const touchEnd = e.changedTouches[0]!.clientX;
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
@@ -85,7 +85,7 @@ export default function WorkbenchClient() {
         }
         
         if (newIndex !== currentIndex) {
-          setActiveTabId(tabs[newIndex].id);
+          setActiveTabId(tabs[newIndex]!.id);
         }
       }
     }
