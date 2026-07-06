@@ -73,6 +73,32 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "banking-tools",
+    "name": "Banking Tools",
+    "desc": "Advanced financial data parsers for EMV, SWIFT, and core banking logs",
+    "href": "developer-tools/banking-tools/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": "2026-07-06",
+    "keywords": [
+      "banking tools",
+      "iso 8583",
+      "emv tlv",
+      "swift parser",
+      "track 2",
+      "developer"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "barcode-scanner",
     "name": "Barcode & QR Scanner",
     "desc": "Scan barcodes and QR codes using camera",
@@ -3783,4 +3809,4 @@ export const CORE_TOOLS: ToolEntry[] = [
     "subCategory": null,
     "requiresNetwork": false
   }
-] as any[];
+];

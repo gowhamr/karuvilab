@@ -409,8 +409,7 @@ class WorkerOrchestrator {
   /**
    * @deprecated Use dispatch()
    */
-  run<T>(...args: Parameters<this["dispatch"]>): Promise<T> {
-    // @ts-ignore
+  run<T>(...args: Parameters<WorkerOrchestrator["dispatch"]>): Promise<T> {
     return this.dispatch(...args);
   }
 

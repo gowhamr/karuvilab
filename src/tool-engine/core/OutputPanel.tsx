@@ -68,8 +68,7 @@ export function OutputPanel({ result, config, onReset }: OutputPanelProps) {
       logger.error(
         "OutputPanel received unknown outputType",
         {
-          // @ts-ignore - explicitly logging unknown type
-          outputType: result.outputType,
+          error: { outputType: (result as any).outputType },
           toolId:     config.id,
           action:     "OutputPanel.render"
         }
