@@ -4,7 +4,7 @@ import { ToolShell } from '@/components/ui/ToolShell';
 import ToolClientWrapper from './ToolClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = generateToolMetadata(track2Parser);
+export const metadata: Metadata = generateToolMetadata(track2Parser.id);
 
 export default function Track2ParserPage() {
   return (

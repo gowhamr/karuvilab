@@ -4,7 +4,7 @@ import { ToolShell } from '@/components/ui/ToolShell';
 import ToolClientWrapper from './ToolClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = generateToolMetadata(coreBankingParser);
+export const metadata: Metadata = generateToolMetadata(coreBankingParser.id);
 
 export default function CoreBankingParserPage() {
   return (

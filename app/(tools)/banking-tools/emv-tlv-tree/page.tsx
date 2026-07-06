@@ -4,7 +4,7 @@ import { ToolShell } from '@/components/ui/ToolShell';
 import ToolClientWrapper from './ToolClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
 
-export const metadata: Metadata = generateToolMetadata(emvTlvTree);
+export const metadata: Metadata = generateToolMetadata(emvTlvTree.id);
 
 export default function EmvTlvTreePage() {
   return (
