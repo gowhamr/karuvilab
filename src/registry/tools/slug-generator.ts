@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const slugGenerator: ToolEntry = {
   "id": "slug-generator",
   "name": "Slug Generator",
-  "desc": "Slug Generator tool",
+  "desc": "Convert text into URL-friendly slug strings.",
   "href": "seo-tools/slug-generator/",
   "category": "seo",
   "icon": null,

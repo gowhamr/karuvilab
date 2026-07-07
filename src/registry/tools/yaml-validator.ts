@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const yamlValidator: ToolEntry = {
   "id": "yaml-validator",
   "name": "Yaml Validator",
-  "desc": "Yaml Validator tool",
+  "desc": "Verify and validate YAML syntax correctness.",
   "href": "developer-tools/yaml-validator/",
   "category": "developer",
   "icon": null,

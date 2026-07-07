@@ -109,7 +109,7 @@ export default function SitemapGeneratorClient() {
   const downloadFile = (format: 'xml' | 'csv' | 'json') => {
     let content = "";
     let mime = "";
-    let filename = `sitemap.${format}`;
+    const filename = `sitemap.${format}`;
 
     if (format === 'xml') {
       content = generatedXml;

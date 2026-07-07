@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const luhnValidator: ToolEntry = {
   "id": "luhn-validator",
   "name": "Luhn Validator",
-  "desc": "Luhn Validator tool",
+  "desc": "Check identification card numbers using the Luhn checksum algorithm.",
   "href": "developer-tools/luhn-validator/",
   "category": "developer",
   "icon": null,

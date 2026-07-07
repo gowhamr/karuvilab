@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const pbkdf2Generator: ToolEntry = {
   "id": "pbkdf2-generator",
   "name": "Pbkdf2 Generator",
-  "desc": "Pbkdf2 Generator tool",
+  "desc": "Derive cryptographic keys using PBKDF2 password hashing.",
   "href": "security-tools/pbkdf2-generator/",
   "category": "security",
   "icon": null,

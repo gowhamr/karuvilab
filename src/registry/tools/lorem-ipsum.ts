@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const loremIpsum: ToolEntry = {
   "id": "lorem-ipsum",
   "name": "Lorem Ipsum",
-  "desc": "Lorem Ipsum tool",
+  "desc": "Generate custom dummy placeholder text for layouts and copy.",
   "href": "developer-tools/lorem-ipsum/",
   "category": "developer",
   "icon": null,

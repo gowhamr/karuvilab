@@ -70,7 +70,11 @@ export default function JSONCSVConverterClient() {
   const addToChain = useWorkflowStore(state => state.addToChain);
 
   useEffect(() => {
-    if (suggestedText) setInput(suggestedText);
+    if (suggestedText) {
+      Promise.resolve().then(() => {
+        setInput(suggestedText);
+      });
+    }
   }, [suggestedText]);
 
   const { output, error } = useMemo(() => {

@@ -179,7 +179,7 @@ export function getNextRuns(expr: string, count: number): Date[] {
   const dows = getValues(dow, 0, 7).map(d => d === 7 ? 0 : d);
 
   const runs: Date[] = [];
-  let current = new Date();
+  const current = new Date();
   current.setSeconds(0, 0);
   current.setMinutes(current.getMinutes() + 1);
 

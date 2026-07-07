@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const pomodoroTimer: ToolEntry = {
   "id": "pomodoro-timer",
   "name": "Pomodoro Timer",
-  "desc": "Pomodoro Timer tool",
+  "desc": "Boost your focus and productivity using the Pomodoro technique.",
   "href": "productivity/pomodoro-timer/",
   "category": "productivity",
   "icon": null,

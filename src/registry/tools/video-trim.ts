@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const videoTrim: ToolEntry = {
   "id": "video-trim",
   "name": "Video Trim",
-  "desc": "Video Trim tool",
+  "desc": "Trim and cut MP4 video clips directly in your browser.",
   "href": "media-tools/video-trim/",
   "category": "media",
   "icon": null,

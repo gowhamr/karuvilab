@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const base64urlConverter: ToolEntry = {
   "id": "base64url-converter",
   "name": "Base64url Converter",
-  "desc": "Base64url Converter tool",
+  "desc": "Encode or decode text to URL-safe Base64 format to safely transmit data.",
   "href": "security-tools/base64url-converter/",
   "category": "security",
   "icon": null,

@@ -17,7 +17,9 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(getDeviceCapabilities().isMobile);
+    Promise.resolve().then(() => {
+      setIsMobile(getDeviceCapabilities().isMobile);
+    });
   }, []);
 
   const isHero = variant === "hero";

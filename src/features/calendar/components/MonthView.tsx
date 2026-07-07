@@ -19,12 +19,17 @@ export function MonthView({ onAddEvent }: { onAddEvent: (date: Date) => void }) 
   const days = getMonthDays(currentDate);
   const monthStart = startOfMonth(currentDate);
   
-  const prevMonthRef = useRef(monthStart.getTime());
-  const direction = monthStart.getTime() > prevMonthRef.current ? 1 : monthStart.getTime() < prevMonthRef.current ? -1 : 0;
+  const [direction, setDirection] = useState(0);
+  const [prevMonth, setPrevMonth] = useState(monthStart.getTime());
   
   useEffect(() => {
-    prevMonthRef.current = monthStart.getTime();
-  }, [monthStart]);
+    if (monthStart.getTime() !== prevMonth) {
+      Promise.resolve().then(() => {
+        setDirection(monthStart.getTime() > prevMonth ? 1 : -1);
+        setPrevMonth(monthStart.getTime());
+      });
+    }
+  }, [monthStart, prevMonth]);
 
   useEffect(() => {
     const handleTodayClicked = () => {

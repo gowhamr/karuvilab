@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const aesEncryptDecrypt: ToolEntry = {
   "id": "aes-encrypt-decrypt",
   "name": "Aes Encrypt Decrypt",
-  "desc": "Aes Encrypt Decrypt tool",
+  "desc": "Encrypt and decrypt text or files using AES, entirely in your browser.",
   "href": "security-tools/aes-encrypt-decrypt/",
   "category": "security",
   "icon": null,

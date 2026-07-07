@@ -113,12 +113,13 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
     e.stopPropagation();
   };
 
-  // Reset state on open/close
   useEffect(() => {
     if (isOpen) {
-      setBlurEnabled(supportsBlur());
-      setQuery('');
-      setFocusedIndex(-1);
+      Promise.resolve().then(() => {
+        setBlurEnabled(supportsBlur());
+        setQuery('');
+        setFocusedIndex(-1);
+      });
       // Autofocus input
       setTimeout(() => {
         const input = inputRef.current;

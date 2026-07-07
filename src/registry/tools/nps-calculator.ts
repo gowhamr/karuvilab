@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const npsCalculator: ToolEntry = {
   "id": "nps-calculator",
   "name": "Nps Calculator",
-  "desc": "Nps Calculator tool",
+  "desc": "Calculate National Pension Scheme (NPS) maturity amounts.",
   "href": "calculators/nps-calculator/",
   "category": "calculators",
   "icon": null,

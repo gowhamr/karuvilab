@@ -68,9 +68,12 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobile]);
 
-  // Reset search when opening
   useEffect(() => {
-    if (isOpen) setSearch("");
+    if (isOpen) {
+      Promise.resolve().then(() => {
+        setSearch("");
+      });
+    }
   }, [isOpen]);
 
   const dropdownContent = (

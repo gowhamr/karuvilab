@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const nanoidGenerator: ToolEntry = {
   "id": "nanoid-generator",
   "name": "Nanoid Generator",
-  "desc": "Nanoid Generator tool",
+  "desc": "Generate secure, URL-friendly unique string IDs using NanoID.",
   "href": "developer-tools/nanoid-generator/",
   "category": "developer",
   "icon": null,

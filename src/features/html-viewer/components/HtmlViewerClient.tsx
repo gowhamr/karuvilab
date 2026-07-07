@@ -107,10 +107,12 @@ export default function HtmlViewerClient() {
     if (codeParam) {
       try {
         const decoded = JSON.parse(LZString.decompressFromEncodedURIComponent(codeParam));
-        setHtml(decoded.html || "");
-        setCss(decoded.css || "");
-        setJs(decoded.js || "");
-        if (decoded.cdns) setCdns(decoded.cdns);
+        Promise.resolve().then(() => {
+          setHtml(decoded.html || "");
+          setCss(decoded.css || "");
+          setJs(decoded.js || "");
+          if (decoded.cdns) setCdns(decoded.cdns);
+        });
       } catch (e) {
         logger.error("Failed to parse code from URL", { error: e });
       }
@@ -119,10 +121,12 @@ export default function HtmlViewerClient() {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          setHtml(parsed.html || DEFAULT_CODE.html);
-          setCss(parsed.css || DEFAULT_CODE.css);
-          setJs(parsed.js || DEFAULT_CODE.js);
-          if (parsed.cdns) setCdns(parsed.cdns);
+          Promise.resolve().then(() => {
+            setHtml(parsed.html || DEFAULT_CODE.html);
+            setCss(parsed.css || DEFAULT_CODE.css);
+            setJs(parsed.js || DEFAULT_CODE.js);
+            if (parsed.cdns) setCdns(parsed.cdns);
+          });
         } catch {}
       }
     }

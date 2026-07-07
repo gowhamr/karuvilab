@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const xmlFormatter: ToolEntry = {
   "id": "xml-formatter",
   "name": "Xml Formatter",
-  "desc": "Xml Formatter tool",
+  "desc": "Format and prettify nested XML documents to inspect data tags.",
   "href": "developer-tools/xml-formatter/",
   "category": "developer",
   "icon": null,

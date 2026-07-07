@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const yamlJsonConverter: ToolEntry = {
   "id": "yaml-json-converter",
   "name": "Yaml Json Converter",
-  "desc": "Yaml Json Converter tool",
+  "desc": "Convert between YAML formatting and JSON objects.",
   "href": "developer-tools/yaml-json-converter/",
   "category": "developer",
   "icon": null,

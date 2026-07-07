@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const countdownTimer: ToolEntry = {
   "id": "countdown-timer",
   "name": "Countdown Timer",
-  "desc": "Countdown Timer tool",
+  "desc": "Set timers for upcoming milestones or deadlines to keep track of tasks.",
   "href": "productivity/countdown-timer/",
   "category": "productivity",
   "icon": null,

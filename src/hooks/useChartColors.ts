@@ -31,14 +31,16 @@ export function useChartColors() {
       return val || fallback;
     };
 
-    setColors({
-      blue: getVar('--blue', KV_BLUE),
-      success: getVar('--success', KV_SUCCESS),
-      error: getVar('--error', KV_ERROR),
-      warn: getVar('--warn', KV_WARN),
-      text: getVar('--text', '#0F172A'),
-      muted: getVar('--text-4', '#94A3B8'),
-      border: getVar('--border', '#DDE4EE'),
+    Promise.resolve().then(() => {
+      setColors({
+        blue: getVar('--blue', KV_BLUE),
+        success: getVar('--success', KV_SUCCESS),
+        error: getVar('--error', KV_ERROR),
+        warn: getVar('--warn', KV_WARN),
+        text: getVar('--text', '#0F172A'),
+        muted: getVar('--text-4', '#94A3B8'),
+        border: getVar('--border', '#DDE4EE'),
+      });
     });
   }, []);
 

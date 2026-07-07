@@ -57,7 +57,9 @@ export function NumberPanel({ initialDec = "42" }: NumberPanelProps) {
   useEffect(() => {
     try {
       if (numberDec) {
-        setNumberBaseN(BigInt(numberDec).toString(customBase).toUpperCase());
+        Promise.resolve().then(() => {
+          setNumberBaseN(BigInt(numberDec).toString(customBase).toUpperCase());
+        });
       }
     } catch {}
   }, [customBase, numberDec]);

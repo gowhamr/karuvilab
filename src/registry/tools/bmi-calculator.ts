@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const bmiCalculator: ToolEntry = {
   "id": "bmi-calculator",
   "name": "Bmi Calculator",
-  "desc": "Bmi Calculator tool",
+  "desc": "Calculate your Body Mass Index (BMI) and health category to track fitness goals.",
   "href": "calculators/bmi-calculator/",
   "category": "calculators",
   "icon": null,

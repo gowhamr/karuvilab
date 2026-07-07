@@ -45,7 +45,9 @@ export function FocusModeToolbar({
   // Auto-hide toolbar after 3s of mouse inactivity in fullscreen
   useEffect(() => {
     if (!isFullscreen || !autoHide) {
-      setIsVisible(true);
+      Promise.resolve().then(() => {
+        setIsVisible(true);
+      });
       return;
     }
     let timeout: ReturnType<typeof setTimeout>;

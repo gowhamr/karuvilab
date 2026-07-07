@@ -112,7 +112,7 @@ const api = {
       const content = await page.getTextContent();
 
       let lastY = -1;
-      let pageLines: string[] = [];
+      const pageLines: string[] = [];
       let currentLine: string[] = [];
 
       for (const item of (content.items as any[])) {

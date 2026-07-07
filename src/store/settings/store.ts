@@ -149,7 +149,8 @@ import { useState, useEffect } from 'react';
 export function useIsHydrated() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    setHydrated(true);
+    const handle = setTimeout(() => setHydrated(true), 0);
+    return () => clearTimeout(handle);
   }, []);
   return hydrated;
 }

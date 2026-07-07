@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const cipherTools: ToolEntry = {
   "id": "cipher-tools",
   "name": "Cipher Tools",
-  "desc": "Cipher Tools tool",
+  "desc": "Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.",
   "href": "security-tools/cipher-tools/",
   "category": "security",
   "icon": null,

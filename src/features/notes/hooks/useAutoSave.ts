@@ -9,14 +9,11 @@ export function useAutoSave<T>(data: T, onSave: (data: T) => void, delay: number
     onSaveRef.current = onSave;
   }, [onSave]);
 
-  const debouncedSave = useCallback(
-    debounce((d: unknown) => {
-      onSaveRef.current(d as T);
-    }, delay),
-    [delay]
-  );
-
   useEffect(() => {
-    debouncedSave(data);
-  }, [data, debouncedSave]);
+    const timer = setTimeout(() => {
+      onSaveRef.current(data);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [data, delay]);
 }

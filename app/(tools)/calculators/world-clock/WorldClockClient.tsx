@@ -305,7 +305,7 @@ export default function WorldClockClient() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-4 font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl mt-8">
         <div className="flex flex-wrap items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+            <div className="w-2 h-2 rounded-full bg-success animate-pulse shadow-glow-success" />
             Auto Refresh Active
           </div>
           <div className="flex items-center gap-2">

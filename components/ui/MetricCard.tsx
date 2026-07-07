@@ -61,6 +61,8 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         )}
       </div>
       <div 
+        aria-live="polite"
+        aria-atomic="true"
         className={cn(
           "text-2xl sm:text-3xl font-black tabular-nums break-words leading-tight transition-colors", 
           accent ? "text-brand-primary" : "text-text",

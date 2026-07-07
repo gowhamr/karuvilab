@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -76,6 +76,17 @@ export default function CurrencyConverterClient() {
   const swapCurrencies = useCurrencyStore(state => state.swapCurrencies);
 
   const [showDebug, setShowDebug] = useState(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+
+  useEffect(() => {
+    Promise.resolve().then(() => {
+      setCurrentTime(Date.now());
+    });
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Initial fetch
   useEffect(() => {
@@ -97,20 +108,20 @@ export default function CurrencyConverterClient() {
     }));
   }, [currencies]);
 
-  const convert = (val: number, f: string, t: string) => {
+  const convert = useCallback((val: number, f: string, t: string) => {
     if (!ratesData) return 0;
     const baseRate = ratesData.rates[f] || 1;
     const targetRate = ratesData.rates[t] || 1;
     // Cross conversion through base (1/baseRate converts to USD, then * targetRate)
     return (val / baseRate) * targetRate;
-  };
+  }, [ratesData]);
 
   const result = useMemo(() => {
     const v = parseFloat(amount) || 0;
     return convert(v, from, to);
-  }, [amount, from, to, ratesData]);
+  }, [amount, from, to, convert]);
 
-  const rate = useMemo(() => convert(1, from, to), [from, to, ratesData]);
+  const rate = useMemo(() => convert(1, from, to), [from, to, convert]);
 
   const fmt = (n: number, currency: string): string => {
     const sym = CURRENCY_SYMBOLS[currency] ?? currency;
@@ -119,7 +130,8 @@ export default function CurrencyConverterClient() {
   };
 
   const getTimeAgo = (timestamp: number) => {
-    const seconds = Math.floor((Date.now() - timestamp) / 1000);
+    if (!currentTime) return "loading...";
+    const seconds = Math.floor((currentTime - timestamp) / 1000);
     if (seconds < 60) return "just now";
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;
@@ -128,7 +140,7 @@ export default function CurrencyConverterClient() {
     return new Date(timestamp).toLocaleDateString();
   };
 
-  const isStale = ratesData && (Date.now() > ratesData.expiresAt);
+  const isStale = ratesData && currentTime > 0 && (currentTime > ratesData.expiresAt);
   const isOffline = typeof navigator !== 'undefined' && !navigator.onLine;
 
   return (

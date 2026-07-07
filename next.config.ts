@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
       worker-src 'self' blob: https://unpkg.com;
       connect-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev;
       object-src 'none';
-      frame-ancestors 'none';
+      frame-ancestors 'self';
       base-uri 'self';
     `.replace(/\s{2,}/g, ' ').trim();
 

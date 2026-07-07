@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const rsaEncryptDecrypt: ToolEntry = {
   "id": "rsa-encrypt-decrypt",
   "name": "Rsa Encrypt Decrypt",
-  "desc": "Rsa Encrypt Decrypt tool",
+  "desc": "Encrypt or decrypt payloads using secure RSA key pairs.",
   "href": "security-tools/rsa-encrypt-decrypt/",
   "category": "security",
   "icon": null,

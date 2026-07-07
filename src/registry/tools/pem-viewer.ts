@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const pemViewer: ToolEntry = {
   "id": "pem-viewer",
   "name": "Pem Viewer",
-  "desc": "Pem Viewer tool",
+  "desc": "Inspect and parse PEM certificate and private key files.",
   "href": "security-tools/pem-viewer/",
   "category": "security",
   "icon": null,

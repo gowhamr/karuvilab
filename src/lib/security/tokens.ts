@@ -271,7 +271,7 @@ export function parseSaml(input: string): SamlParsed {
 function formatXml(xml: string): string {
   let formatted = "";
   const reg = /(>)(<)(\/*)/g;
-  let xmlCleaned = xml.replace(reg, "$1\r\n$2$3");
+  const xmlCleaned = xml.replace(reg, "$1\r\n$2$3");
   let pad = 0;
   xmlCleaned.split("\r\n").forEach((node) => {
     let indent = 0;

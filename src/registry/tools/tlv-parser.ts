@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const tlvParser: ToolEntry = {
   "id": "tlv-parser",
   "name": "Tlv Parser",
-  "desc": "Tlv Parser tool",
+  "desc": "Parse and visualize EMV TLV hex streams into clear tree structures.",
   "href": "security-tools/tlv-parser/",
   "category": "security",
   "icon": null,

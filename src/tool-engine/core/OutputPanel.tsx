@@ -12,6 +12,7 @@ import PreviewRenderer from "../renderers/PreviewRenderer";
 import JsonRenderer from "../renderers/JsonRenderer";
 import TableRenderer from "../renderers/TableRenderer";
 import ChartRenderer from "../renderers/ChartRenderer";
+import CustomRenderer from "../renderers/CustomRenderer";
 import type { ToolConfig } from "../types/ToolConfig";
 import type { ToolResult } from "../types/ToolResult";
 
@@ -44,24 +45,7 @@ export function OutputPanel({ result, config, onReset }: OutputPanelProps) {
       return <ChartRenderer result={result} />;
 
     case "custom": {
-      if (!config.customRenderer) {
-        logger.error(
-          "outputType=custom but no customRenderer in ToolConfig",
-          { toolId: config.id, action: "OutputPanel.render" }
-        );
-        return <ErrorView error="Renderer not configured for this tool." onReset={onReset} />;
-      }
-
-      const CustomRenderer = lazy(
-        () => config.customRenderer!()
-                .then(m => ({ default: m.default }))
-      );
-
-      return (
-        <Suspense fallback={<ToolSkeleton />}>
-          <CustomRenderer result={result} />
-        </Suspense>
-      );
+      return <CustomRenderer result={result} config={config} />;
     }
 
     default: {

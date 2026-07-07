@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Info, ChevronRight, BookOpen } from 'lucide-react';
@@ -13,22 +13,22 @@ interface Entry {
 
 const BUCKET_COUNT = 8;
 
+const simpleHash = (s: string) => {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash << 5) - hash + s.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
 export default function HashMapVisualizer() {
   const [buckets, setBuckets] = useState<Entry[][]>(Array.from({ length: BUCKET_COUNT }, () => []));
   const [keyInput, setKeyInput] = useState('');
   const [valInput, setValInput] = useState('');
-  const [lastAction, setLastAction] = useState<{ type: string; key: string; bucket: number; hash: number } | null>(null);
+  const [lastAction, setLastAction] = useState<{ type: string; key: string; bucket: number; hash: number; timestamp: number } | null>(null);
 
-  const simpleHash = (s: string) => {
-    let hash = 0;
-    for (let i = 0; i < s.length; i++) {
-      hash = (hash << 5) - hash + s.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash);
-  };
-
-  const handleInsert = () => {
+  const handleInsert = useCallback(() => {
     if (!keyInput) return;
     const hash = simpleHash(keyInput);
     const bucketIdx = hash % BUCKET_COUNT;
@@ -47,12 +47,12 @@ export default function HashMapVisualizer() {
       return newBuckets;
     });
 
-    setLastAction({ type: 'insert', key: keyInput, bucket: bucketIdx, hash });
+    setLastAction({ type: 'insert', key: keyInput, bucket: bucketIdx, hash, timestamp: Date.now() });
     setKeyInput('');
     setValInput('');
-  };
+  }, [keyInput, valInput]);
 
-  const handleDelete = (key: string) => {
+  const handleDelete = useCallback((key: string) => {
     const hash = simpleHash(key);
     const bucketIdx = hash % BUCKET_COUNT;
     
@@ -64,8 +64,8 @@ export default function HashMapVisualizer() {
       }
       return newBuckets;
     });
-    setLastAction({ type: 'delete', key, bucket: bucketIdx, hash });
-  };
+    setLastAction({ type: 'delete', key, bucket: bucketIdx, hash, timestamp: Date.now() });
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -97,7 +97,7 @@ export default function HashMapVisualizer() {
       <AnimatePresence mode="wait">
         {lastAction && (
           <motion.div
-            key={`${lastAction.type}-${lastAction.key}-${Date.now()}`}
+            key={`${lastAction.type}-${lastAction.key}-${lastAction.timestamp}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}

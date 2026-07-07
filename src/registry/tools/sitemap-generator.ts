@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const sitemapGenerator: ToolEntry = {
   "id": "sitemap-generator",
   "name": "Sitemap Generator",
-  "desc": "Sitemap Generator tool",
+  "desc": "Generate XML sitemaps to index website pages.",
   "href": "seo-tools/sitemap-generator/",
   "category": "seo",
   "icon": null,

@@ -137,4 +137,6 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
     </div>
     );
     }
-    );
+);
+
+MarkdownPreview.displayName = "MarkdownPreview";

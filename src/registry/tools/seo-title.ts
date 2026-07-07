@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const seoTitle: ToolEntry = {
   "id": "seo-title",
   "name": "Seo Title",
-  "desc": "Seo Title tool",
+  "desc": "Optimize SEO title tags to maximize search engine click-through rates.",
   "href": "seo-tools/seo-title/",
   "category": "seo",
   "icon": null,

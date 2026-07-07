@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const invoiceGenerator: ToolEntry = {
   "id": "invoice-generator",
   "name": "Invoice Generator",
-  "desc": "Invoice Generator tool",
+  "desc": "Build professional custom invoices and download them as PDFs.",
   "href": "calculators/invoice-generator/",
   "category": "calculators",
   "icon": null,

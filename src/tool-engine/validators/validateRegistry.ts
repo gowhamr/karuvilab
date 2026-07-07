@@ -22,7 +22,7 @@ const VALID_OUTPUT_TYPES = new Set([
   "custom",
 ]);
 
-function verifyProcessorPath(processorFn: Function): string | null {
+function verifyProcessorPath(processorFn: () => unknown): string | null {
   const str = processorFn.toString();
   const match = str.match(/import\(['"]([^'"]+)['"]\)/);
   if (!match || !match[1]) {

@@ -57,6 +57,10 @@ export function NoteEditor() {
 
   const [isDrawingModalOpen, setIsDrawingModalOpen] = useState(false);
 
+  const handleChange = useCallback((updates: Partial<Note>) => {
+    setLocalNote(prev => prev ? { ...prev, ...updates } : null);
+  }, []);
+
   const { isListening, toggleListening, error: speechError, isSupported: speechSupported } = useSpeechRecognition((transcript) => {
     if (localNote) {
       handleChange({ content: localNote.content + transcript });
@@ -76,23 +80,27 @@ export function NoteEditor() {
   const wordCount = useMemo(() => {
     if (!localNote?.content) return 0;
     return localNote.content.trim() ? localNote.content.trim().split(/\s+/).length : 0;
-  }, [localNote?.content]);
+  }, [localNote]);
 
-  const charCount = useMemo(() => localNote?.content?.length || 0, [localNote?.content]);
-  const lineCount = useMemo(() => localNote?.content?.split('\n').length || 0, [localNote?.content]);
+  const charCount = useMemo(() => localNote?.content?.length || 0, [localNote]);
+  const lineCount = useMemo(() => localNote?.content?.split('\n').length || 0, [localNote]);
 
   useEffect(() => {
     if (initialNote) {
-      setLocalNote(initialNote);
-      setIsPreview(false);
-      setUnlockPassword("");
-      setUnlockError("");
-      setIsEncrypting(false);
-      setEncryptionPassword("");
-      setConfirmPassword("");
-      setEncryptionError("");
+      Promise.resolve().then(() => {
+        setLocalNote(initialNote);
+        setIsPreview(false);
+        setUnlockPassword("");
+        setUnlockError("");
+        setIsEncrypting(false);
+        setEncryptionPassword("");
+        setConfirmPassword("");
+        setEncryptionError("");
+      });
     } else {
-      setLocalNote(null);
+      Promise.resolve().then(() => {
+        setLocalNote(null);
+      });
     }
   }, [initialNote]);
 
@@ -171,9 +179,7 @@ export function NoteEditor() {
     toast("Ciphertext copied to clipboard!", "success");
   };
 
-  const handleChange = (updates: Partial<Note>) => {
-    setLocalNote(prev => prev ? { ...prev, ...updates } : null);
-  };
+
 
   const handleAddTag = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && newTag.trim()) {

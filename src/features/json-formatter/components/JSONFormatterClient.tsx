@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
@@ -156,20 +156,26 @@ export default function JSONFormatterClient() {
   });
   const [dragState, setDragState] = useState<'idle' | 'hover' | 'over' | 'rejected'>('idle');
 
-  const setMode = (m: "beautify" | "minify") => setState(prev => ({ ...prev, mode: m, view: "raw" }));
-  const setInput = (i: string) => setState(prev => ({ ...prev, input: i }));
-  const setIndent = (v: Indent) => setState(prev => ({ ...prev, indent: v }));
-  const setView = (v: "raw" | "tree") => setState(prev => ({ ...prev, view: v }));
+  const setMode = useCallback((m: "beautify" | "minify") => setState(prev => ({ ...prev, mode: m, view: "raw" })), [setState]);
+  const setInput = useCallback((i: string) => setState(prev => ({ ...prev, input: i })), [setState]);
+  const setIndent = useCallback((v: Indent) => setState(prev => ({ ...prev, indent: v })), [setState]);
+  const setView = useCallback((v: "raw" | "tree") => setState(prev => ({ ...prev, view: v })), [setState]);
 
   const { suggestedText } = useWorkflowIntegration("json-formatter");
   useEffect(() => {
-    if (suggestedText) setInput(suggestedText);
-  }, [suggestedText]);
+    if (suggestedText) {
+      Promise.resolve().then(() => {
+        setInput(suggestedText);
+      });
+    }
+  }, [suggestedText, setInput]);
 
   useEffect(() => {
     if (!input.trim()) {
-      setResult({ output: "", error: null, parsed: null });
-      setIsProcessing(false);
+      Promise.resolve().then(() => {
+        setResult({ output: "", error: null, parsed: null });
+        setIsProcessing(false);
+      });
       return;
     }
 
@@ -228,7 +234,7 @@ export default function JSONFormatterClient() {
 
     run();
     return () => abortController.abort();
-  }, [input, mode, indent]);
+  }, [input, mode, indent, recordConversion]);
 
   const { output, error, parsed } = result;
 

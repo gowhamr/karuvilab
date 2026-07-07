@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const commandCheatSheet: ToolEntry = {
   "id": "command-cheat-sheet",
   "name": "Command Cheat Sheet",
-  "desc": "Command Cheat Sheet tool",
+  "desc": "Look up development and system commands instantly to speed up your workflow.",
   "href": "developer-tools/command-cheat-sheet/",
   "category": "developer",
   "icon": null,

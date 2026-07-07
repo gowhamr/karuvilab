@@ -62,9 +62,7 @@ export default function VideoMetadataViewerClient() {
         duration: video.duration || 0,
         width: video.videoWidth || 0,
         height: video.videoHeight || 0,
-        // Basic codec detection via property if available
-        // @ts-ignore
-        codec: video.getVideoPlaybackQuality?.().codec || "H.264 / AVC"
+        codec: (video as any).getVideoPlaybackQuality?.()?.codec || "H.264 / AVC"
       });
 
       setStatus("complete");

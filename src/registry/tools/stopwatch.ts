@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const stopwatch: ToolEntry = {
   "id": "stopwatch",
   "name": "Stopwatch",
-  "desc": "Stopwatch tool",
+  "desc": "Track elapsed time with lap support for productivity logging.",
   "href": "productivity/stopwatch/",
   "category": "productivity",
   "icon": null,

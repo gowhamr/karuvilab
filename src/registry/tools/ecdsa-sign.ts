@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const ecdsaSign: ToolEntry = {
   "id": "ecdsa-sign",
   "name": "Ecdsa Sign",
-  "desc": "Ecdsa Sign tool",
+  "desc": "Sign and verify payload strings using secure ECDSA certificates.",
   "href": "security-tools/ecdsa-sign/",
   "category": "security",
   "icon": null,

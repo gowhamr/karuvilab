@@ -27,12 +27,13 @@ export function useObjectUrlManager(options: { autoRevoke?: boolean } = { autoRe
   }, []);
 
   useEffect(() => {
+    const currentUrls = urls.current;
     return () => {
       if (options.autoRevoke) {
-        urls.current.forEach(url => {
+        currentUrls.forEach(url => {
           blobManager.revoke(url);
         });
-        urls.current.clear();
+        currentUrls.clear();
       }
     };
   }, [options.autoRevoke]);
@@ -105,7 +106,9 @@ export function useOnlineStatus() {
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
-    setIsOnline(navigator.onLine);
+    Promise.resolve().then(() => {
+      setIsOnline(navigator.onLine);
+    });
     const online = () => setIsOnline(true);
     const offline = () => setIsOnline(false);
     window.addEventListener('online', online);
@@ -127,7 +130,9 @@ export function usePerformanceSettings() {
       const isLowPerf = (navigator.hardwareConcurrency || 4) < 4;
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (isLowPerf || prefersReducedMotion) {
-        setShouldBlur(false);
+        Promise.resolve().then(() => {
+          setShouldBlur(false);
+        });
       }
     }
   }, []);

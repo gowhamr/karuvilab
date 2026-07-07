@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const boxShadowGenerator: ToolEntry = {
   "id": "box-shadow-generator",
   "name": "Box Shadow Generator",
-  "desc": "Box Shadow Generator tool",
+  "desc": "Design CSS box shadows visually and copy clean CSS snippets for layouts.",
   "href": "developer-tools/box-shadow-generator/",
   "category": "developer",
   "icon": null,

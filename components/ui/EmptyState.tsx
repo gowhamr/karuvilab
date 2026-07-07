@@ -153,7 +153,9 @@ export function EmptyState({
 
   useEffect(() => {
     if (dragState === "rejected") {
-      setIsRejected(true);
+      Promise.resolve().then(() => {
+        setIsRejected(true);
+      });
       const timer = setTimeout(() => setIsRejected(false), 2000);
       return () => clearTimeout(timer);
     }

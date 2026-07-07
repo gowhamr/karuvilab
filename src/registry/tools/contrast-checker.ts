@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const contrastChecker: ToolEntry = {
   "id": "contrast-checker",
   "name": "Contrast Checker",
-  "desc": "Contrast Checker tool",
+  "desc": "Verify background and foreground contrast to meet WCAG accessibility standards.",
   "href": "developer-tools/contrast-checker/",
   "category": "developer",
   "icon": null,

@@ -50,7 +50,7 @@ export function KVLogo({
       >
         <Image
           src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`}
-          alt="KV Logo"
+          alt="KaruviLab Logo"
           width={pixelSize}
           height={pixelSize}
           className="object-contain"

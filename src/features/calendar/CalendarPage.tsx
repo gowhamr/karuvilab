@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useCalendarStore } from "./store";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { MonthView } from "./components/MonthView";
@@ -44,6 +44,23 @@ export default function CalendarPage() {
   const [initialDate, setInitialDate] = useState<Date>(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const handlePrev = useCallback(() => {
+    if (currentView === 'month') setCurrentDate(subMonths(currentDate, 1));
+    else if (currentView === 'week') setCurrentDate(subWeeks(currentDate, 1));
+    else setCurrentDate(subDays(currentDate, 1));
+  }, [currentView, currentDate, setCurrentDate]);
+
+  const handleNext = useCallback(() => {
+    if (currentView === 'month') setCurrentDate(addMonths(currentDate, 1));
+    else if (currentView === 'week') setCurrentDate(addWeeks(currentDate, 1));
+    else setCurrentDate(addDays(currentDate, 1));
+  }, [currentView, currentDate, setCurrentDate]);
+
+  const handleAddEvent = useCallback((date?: Date) => {
+    setInitialDate(date || new Date());
+    setIsModalOpen(true);
+  }, [setIsModalOpen]);
+
   useReminders();
 
   useEffect(() => {
@@ -86,24 +103,7 @@ export default function CalendarPage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentView, currentDate]);
-
-  const handlePrev = () => {
-    if (currentView === 'month') setCurrentDate(subMonths(currentDate, 1));
-    else if (currentView === 'week') setCurrentDate(subWeeks(currentDate, 1));
-    else setCurrentDate(subDays(currentDate, 1));
-  };
-
-  const handleNext = () => {
-    if (currentView === 'month') setCurrentDate(addMonths(currentDate, 1));
-    else if (currentView === 'week') setCurrentDate(addWeeks(currentDate, 1));
-    else setCurrentDate(addDays(currentDate, 1));
-  };
-
-  const handleAddEvent = (date?: Date) => {
-    setInitialDate(date || new Date());
-    setIsModalOpen(true);
-  };
+  }, [currentView, currentDate, setCurrentDate, setCurrentView, handleAddEvent, handlePrev, handleNext]);
 
   return (
     <div className="w-full space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">

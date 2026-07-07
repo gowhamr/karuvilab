@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const sqlFormatter: ToolEntry = {
   "id": "sql-formatter",
   "name": "Sql Formatter",
-  "desc": "Sql Formatter tool",
+  "desc": "Beautify and format complex SQL queries to improve readability.",
   "href": "developer-tools/sql-formatter/",
   "category": "developer",
   "icon": null,

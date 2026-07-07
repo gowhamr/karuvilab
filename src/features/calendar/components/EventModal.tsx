@@ -45,25 +45,29 @@ export function EventModal({
 
   useEffect(() => {
     if (editingEvent) {
-      setTitle(editingEvent.title);
-      setStartDate(format(parseISO(editingEvent.startDate), "yyyy-MM-dd'T'HH:mm"));
-      setEndDate(format(parseISO(editingEvent.endDate), "yyyy-MM-dd'T'HH:mm"));
-      setAllDay(editingEvent.allDay);
-      setLocation(editingEvent.location || "");
-      setDescription(editingEvent.description || "");
-      setColor(editingEvent.color);
-      setRecurrence(editingEvent.recurrence?.type || "none");
+      Promise.resolve().then(() => {
+        setTitle(editingEvent.title);
+        setStartDate(format(parseISO(editingEvent.startDate), "yyyy-MM-dd'T'HH:mm"));
+        setEndDate(format(parseISO(editingEvent.endDate), "yyyy-MM-dd'T'HH:mm"));
+        setAllDay(editingEvent.allDay);
+        setLocation(editingEvent.location || "");
+        setDescription(editingEvent.description || "");
+        setColor(editingEvent.color);
+        setRecurrence(editingEvent.recurrence?.type || "none");
+      });
     } else if (initialDate) {
       const start = startOfHour(initialDate);
       const end = addHours(start, 1);
-      setTitle("");
-      setStartDate(format(start, "yyyy-MM-dd'T'HH:mm"));
-      setEndDate(format(end, "yyyy-MM-dd'T'HH:mm"));
-      setAllDay(false);
-      setLocation("");
-      setDescription("");
-      setColor("indigo");
-      setRecurrence("none");
+      Promise.resolve().then(() => {
+        setTitle("");
+        setStartDate(format(start, "yyyy-MM-dd'T'HH:mm"));
+        setEndDate(format(end, "yyyy-MM-dd'T'HH:mm"));
+        setAllDay(false);
+        setLocation("");
+        setDescription("");
+        setColor("indigo");
+        setRecurrence("none");
+      });
     }
   }, [editingEvent, initialDate, isOpen]);
 

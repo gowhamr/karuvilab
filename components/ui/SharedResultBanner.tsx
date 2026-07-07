@@ -22,10 +22,11 @@ export function SharedResultBanner({ hasParams, toolName }: SharedResultBannerPr
   const [isDismissed, setIsDismissed] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Only show on mount when params present — do not re-show if dismissed
   useEffect(() => {
     if (hasParams && !isDismissed) {
-      setIsVisible(true);
+      Promise.resolve().then(() => {
+        setIsVisible(true);
+      });
     }
   }, [hasParams, isDismissed]);
 

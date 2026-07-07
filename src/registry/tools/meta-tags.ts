@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const metaTags: ToolEntry = {
   "id": "meta-tags",
   "name": "Meta Tags",
-  "desc": "Meta Tags tool",
+  "desc": "Generate and preview HTML meta tags to optimize website social sharing.",
   "href": "seo-tools/meta-tags/",
   "category": "seo",
   "icon": null,

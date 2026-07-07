@@ -41,7 +41,7 @@ export function Footer() {
               <KVLogo size="sm" withText={false} />
             </div>
             <span className="text-sm font-bold tracking-widest text-text-2 uppercase">
-              KARUVILAB
+              KaruviLab
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-text-muted">

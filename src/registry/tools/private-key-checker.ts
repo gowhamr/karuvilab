@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const privateKeyChecker: ToolEntry = {
   "id": "private-key-checker",
   "name": "Private Key Checker",
-  "desc": "Private Key Checker tool",
+  "desc": "Validate private key structures and format compatibility.",
   "href": "security-tools/private-key-checker/",
   "category": "security",
   "icon": null,

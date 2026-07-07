@@ -29,6 +29,7 @@ export default function PhoneMockupGeneratorClient() {
   };
 
   useEffect(() => {
+    let active = true;
     if (image && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -37,6 +38,7 @@ export default function PhoneMockupGeneratorClient() {
       const img = new Image();
       img.src = image;
       img.onload = () => {
+        if (!active) return;
         const padding = 100;
         canvas.width = selectedDevice.width + padding * 2;
         canvas.height = selectedDevice.height + padding * 2;
@@ -95,6 +97,13 @@ export default function PhoneMockupGeneratorClient() {
         ctx.restore();
       };
     }
+    return () => {
+      active = false;
+      if (canvasRef.current) {
+        canvasRef.current.width = 0;
+        canvasRef.current.height = 0;
+      }
+    };
   }, [image, selectedDevice, bgColor]);
 
   const download = () => {

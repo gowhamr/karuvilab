@@ -294,12 +294,6 @@ export default function HomeClient() {
                         <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
                       </div>
                     </div>
-                    <Link
-                      href="/all-tools"
-                      className="relative inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-blue text-white text-sm font-bold shadow-md shadow-blue/25 hover:bg-blue-dark hover:-translate-y-0.5 transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
-                    >
-                      Browse All <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                    </Link>
                   </m.div>
                 )}
 
@@ -322,16 +316,6 @@ export default function HomeClient() {
                         <ToolCard tool={tool} compact />
                       </div>
                     ))}
-                  </m.div>
-                  <m.div variants={fadeUp} className="flex justify-center mt-8">
-                    <Link
-                      href="/all-tools"
-                      aria-label="Browse all 100+ tools"
-                      className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-blue text-white text-sm font-bold shadow-md shadow-blue/25 hover:bg-blue-dark hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue/30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
-                    >
-                      Browse All 100+ Tools
-                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                    </Link>
                   </m.div>
                 </section>
 

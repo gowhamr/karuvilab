@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const csrGenerator: ToolEntry = {
   "id": "csr-generator",
   "name": "Csr Generator",
-  "desc": "Csr Generator tool",
+  "desc": "Generate CSR requests and private keys locally to secure web servers.",
   "href": "security-tools/csr-generator/",
   "category": "security",
   "icon": null,

@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const videoMetadataViewer: ToolEntry = {
   "id": "video-metadata-viewer",
   "name": "Video Metadata Viewer",
-  "desc": "Video Metadata Viewer tool",
+  "desc": "Extract and inspect resolution, codec, and duration metadata from video files.",
   "href": "media-tools/video-metadata-viewer/",
   "category": "media",
   "icon": null,

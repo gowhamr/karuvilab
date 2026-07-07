@@ -13,6 +13,13 @@ interface ManifestItem {
   hash: string;
 }
 
+declare module 'react' {
+  interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
+    webkitdirectory?: string | boolean;
+    directory?: string | boolean;
+  }
+}
+
 export default function DirectoryManifestClient() {
   const [algo, setAlgo] = useState<string>("SHA-256");
   const [encoding, setEncoding] = useState<'hex' | 'base64'>('hex');
@@ -112,7 +119,6 @@ export default function DirectoryManifestClient() {
           <input
             ref={fileInputRef}
             type="file"
-            /* @ts-ignore */
             webkitdirectory=""
             directory=""
             multiple

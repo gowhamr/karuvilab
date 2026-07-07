@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const cardMasker: ToolEntry = {
   "id": "card-masker",
   "name": "Card Masker",
-  "desc": "Card Masker tool",
+  "desc": "Mask card numbers automatically to securely display and store sensitive financial info.",
   "href": "security-tools/card-masker/",
   "category": "security",
   "icon": null,

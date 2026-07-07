@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const iso8583BitmapDecoder: ToolEntry = {
   "id": "iso8583-bitmap-decoder",
   "name": "Iso8583 Bitmap Decoder",
-  "desc": "Iso8583 Bitmap Decoder tool",
+  "desc": "Parse and visualize ISO 8583 payment card transaction bitmaps.",
   "href": "security-tools/iso8583-bitmap-decoder/",
   "category": "security",
   "icon": null,

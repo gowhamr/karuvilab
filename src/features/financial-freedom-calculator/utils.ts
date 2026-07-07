@@ -84,7 +84,7 @@ export function calculateFIRE(inputs: FinancialInputs): FinancialResults {
   const currentYear = new Date().getFullYear();
 
   let fiAge = -1;
-  let targetCorpusAtAge = requiredCorpus; // This is the corpus needed at retirement age
+  const targetCorpusAtAge = requiredCorpus; // This is the corpus needed at retirement age
 
   for (let age = currentAge; age <= MAX_AGE; age++) {
     const yearIndex = age - currentAge;

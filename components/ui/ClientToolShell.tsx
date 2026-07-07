@@ -134,7 +134,9 @@ export function ClientToolShell({ title, description, category, children, toolId
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      setIsEmbed(params.get("embed") === "true");
+      Promise.resolve().then(() => {
+        setIsEmbed(params.get("embed") === "true");
+      });
     }
   }, []);
 
@@ -145,7 +147,9 @@ export function ClientToolShell({ title, description, category, children, toolId
     try {
       const stored = sessionStorage.getItem(storageKey);
       if (stored) {
-        setOpenSectionId(stored);
+        Promise.resolve().then(() => {
+          setOpenSectionId(stored);
+        });
       }
     } catch (e) {}
   }, [storageKey]);
@@ -171,7 +175,7 @@ export function ClientToolShell({ title, description, category, children, toolId
     }))
   }), [content.detailedDescription, content.howTo, content.faq]);
 
-  const relatedIds = content.relatedTools ?? currentTool?.related ?? [];
+  const relatedIds = useMemo(() => content.relatedTools ?? currentTool?.related ?? [], [content.relatedTools, currentTool?.related]);
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   const getSuggestions = useIntelligenceStore(s => s.getSuggestions);
@@ -200,6 +204,16 @@ export function ClientToolShell({ title, description, category, children, toolId
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
               {title}
             </h1>
+            {currentTool?.difficulty && (
+              <span className={cn(
+                "mt-1.5 md:mt-2.5 inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
+                currentTool.difficulty === 'beginner' && "bg-success/10 text-success ring-success/20",
+                currentTool.difficulty === 'intermediate' && "bg-warn/10 text-warn ring-warn/20",
+                currentTool.difficulty === 'advanced' && "bg-error/10 text-error ring-error/20"
+              )}>
+                {currentTool.difficulty.charAt(0).toUpperCase() + currentTool.difficulty.slice(1)}
+              </span>
+            )}
             <div className="flex items-center gap-2 shrink-0 mt-0.5 md:mt-1">
               {currentTool && <FavoriteButton toolId={currentTool.id} />}
               <ToolMoreMenu toolId={finalToolId} toolName={title} />
@@ -214,7 +228,7 @@ export function ClientToolShell({ title, description, category, children, toolId
       </header>
       )}
 
-      <section className="mb-12">
+      <section className="mb-12" aria-live="polite" aria-atomic="false">
         <ErrorBoundary>
           <FocusModeWrapper toolId={finalToolId} toolName={title}>
             {children}

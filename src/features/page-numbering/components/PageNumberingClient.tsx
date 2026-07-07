@@ -52,9 +52,9 @@ export default function PageNumberingClient() {
         const { width, height } = page.getSize();
         const numStr = `${prefix}${startNum + i}${suffix}`;
         const textWidth = numStr.length * fontSize * 0.5;
-        let x: number, y: number;
         const isBottom = position.startsWith("bottom");
-        y = isBottom ? margin : height - margin - fontSize;
+        const y = isBottom ? margin : height - margin - fontSize;
+        let x: number;
         if (position.includes("center")) x = (width - textWidth) / 2;
         else if (position.includes("right")) x = width - textWidth - margin;
         else x = margin;

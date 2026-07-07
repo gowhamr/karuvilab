@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const hraCalculator: ToolEntry = {
   "id": "hra-calculator",
   "name": "Hra Calculator",
-  "desc": "Hra Calculator tool",
+  "desc": "Calculate your House Rent Allowance tax exemptions.",
   "href": "calculators/hra-calculator/",
   "category": "calculators",
   "icon": null,

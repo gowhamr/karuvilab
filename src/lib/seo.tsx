@@ -12,7 +12,7 @@ export function generateToolMetadata(toolId: string): Metadata {
   const tool = ALL_TOOLS.find((t) => t.id === toolId);
   if (!tool) return {};
 
-  const title = `${tool.name} | KaruviLab`;
+  const title = `${tool.name} – KV`;
   const description = tool.desc;
   const url = `${BASE_URL}/${tool.href.replace(/\/$/, "")}/`;
 

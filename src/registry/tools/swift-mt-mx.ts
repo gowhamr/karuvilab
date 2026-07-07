@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const swiftMtMx: ToolEntry = {
   "id": "swift-mt-mx",
   "name": "Swift Mt Mx",
-  "desc": "Swift Mt Mx tool",
+  "desc": "Parse and inspect SWIFT MT and MX banking message structures.",
   "href": "banking-tools/swift-mt-mx/",
   "category": "banking",
   "icon": null,

@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const csvToJson: ToolEntry = {
   "id": "csv-to-json",
   "name": "Csv To Json",
-  "desc": "Csv To Json tool",
+  "desc": "Convert tabular CSV file content into structured JSON objects.",
   "href": "developer-tools/csv-to-json/",
   "category": "developer",
   "icon": null,

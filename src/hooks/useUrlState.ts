@@ -119,11 +119,13 @@ export function useUrlState<T extends ParamSchema>(
 
   useEffect(() => {
     const parsed = parseFromUrl();
-    setStateInternal(prev => {
-      if (JSON.stringify(prev) === JSON.stringify(parsed)) return prev;
-      return parsed;
+    Promise.resolve().then(() => {
+      setStateInternal(prev => {
+        if (JSON.stringify(prev) === JSON.stringify(parsed)) return prev;
+        return parsed;
+      });
+      setIsSynced(true);
     });
-    setIsSynced(true);
   }, [parseFromUrl]);
 
   const shareUrl = typeof window !== 'undefined'

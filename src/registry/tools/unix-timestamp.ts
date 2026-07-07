@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const unixTimestamp: ToolEntry = {
   "id": "unix-timestamp",
   "name": "Unix Timestamp",
-  "desc": "Unix Timestamp tool",
+  "desc": "Convert between epoch timestamps and human-readable dates.",
   "href": "developer-tools/unix-timestamp/",
   "category": "developer",
   "icon": null,

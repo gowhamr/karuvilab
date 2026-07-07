@@ -5,7 +5,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "aes-encrypt-decrypt",
     "name": "Aes Encrypt Decrypt",
-    "desc": "Aes Encrypt Decrypt tool",
+    "desc": "Encrypt and decrypt text or files using AES, entirely in your browser.",
     "href": "security-tools/aes-encrypt-decrypt/",
     "category": "security",
     "icon": null,
@@ -13,7 +13,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "aes encrypt decrypt",
       "security"
@@ -53,7 +53,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "audio-converter",
     "name": "Audio Converter",
-    "desc": "Audio Converter tool",
+    "desc": "Convert audio files between formats like MP3 and WAV locally for compatibility.",
     "href": "media-tools/audio-converter/",
     "category": "media",
     "icon": null,
@@ -61,7 +61,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "audio converter",
       "media"
@@ -83,7 +83,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "banking tools",
       "iso 8583",
@@ -153,7 +153,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "base64url-converter",
     "name": "Base64url Converter",
-    "desc": "Base64url Converter tool",
+    "desc": "Encode or decode text to URL-safe Base64 format to safely transmit data.",
     "href": "security-tools/base64url-converter/",
     "category": "security",
     "icon": null,
@@ -161,7 +161,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "base64url converter",
       "security"
@@ -199,7 +199,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "bmi-calculator",
     "name": "Bmi Calculator",
-    "desc": "Bmi Calculator tool",
+    "desc": "Calculate your Body Mass Index (BMI) and health category to track fitness goals.",
     "href": "calculators/bmi-calculator/",
     "category": "calculators",
     "icon": null,
@@ -207,7 +207,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "bmi calculator",
       "calculators"
@@ -221,7 +221,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "box-shadow-generator",
     "name": "Box Shadow Generator",
-    "desc": "Box Shadow Generator tool",
+    "desc": "Design CSS box shadows visually and copy clean CSS snippets for layouts.",
     "href": "developer-tools/box-shadow-generator/",
     "category": "developer",
     "icon": null,
@@ -229,7 +229,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "box shadow generator",
       "developer"
@@ -317,7 +317,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "card-masker",
     "name": "Card Masker",
-    "desc": "Card Masker tool",
+    "desc": "Mask card numbers automatically to securely display and store sensitive financial info.",
     "href": "security-tools/card-masker/",
     "category": "security",
     "icon": null,
@@ -325,7 +325,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "card masker",
       "security"
@@ -365,7 +365,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "cipher-tools",
     "name": "Cipher Tools",
-    "desc": "Cipher Tools tool",
+    "desc": "Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.",
     "href": "security-tools/cipher-tools/",
     "category": "security",
     "icon": null,
@@ -373,7 +373,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "cipher tools",
       "security"
@@ -411,7 +411,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "color-converter",
     "name": "Color Converter",
-    "desc": "Color Converter tool",
+    "desc": "Convert color formats (HEX, RGB, HSL) to style web applications.",
     "href": "developer-tools/color-converter/",
     "category": "developer",
     "icon": null,
@@ -419,7 +419,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "color converter",
       "developer"
@@ -433,7 +433,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "color-palette-extractor",
     "name": "Color Palette Extractor",
-    "desc": "Color Palette Extractor tool",
+    "desc": "Extract dominant color palettes from any image to design themes.",
     "href": "image-tools/color-palette-extractor/",
     "category": "image",
     "icon": null,
@@ -441,7 +441,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "color palette extractor",
       "image"
@@ -455,7 +455,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "command-cheat-sheet",
     "name": "Command Cheat Sheet",
-    "desc": "Command Cheat Sheet tool",
+    "desc": "Look up development and system commands instantly to speed up your workflow.",
     "href": "developer-tools/command-cheat-sheet/",
     "category": "developer",
     "icon": null,
@@ -463,7 +463,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "command cheat sheet",
       "developer"
@@ -530,7 +530,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "compress",
     "name": "Compress",
-    "desc": "Compress tool",
+    "desc": "Bundle files and folders into optimized ZIP archives to save storage space.",
     "href": "image-tools/compress/",
     "category": "image",
     "icon": null,
@@ -538,7 +538,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "compress",
       "image"
@@ -552,7 +552,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "contrast-checker",
     "name": "Contrast Checker",
-    "desc": "Contrast Checker tool",
+    "desc": "Verify background and foreground contrast to meet WCAG accessibility standards.",
     "href": "developer-tools/contrast-checker/",
     "category": "developer",
     "icon": null,
@@ -560,7 +560,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "contrast checker",
       "developer"
@@ -582,7 +582,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "finacle tools",
       "banking"
@@ -596,7 +596,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "countdown-timer",
     "name": "Countdown Timer",
-    "desc": "Countdown Timer tool",
+    "desc": "Set timers for upcoming milestones or deadlines to keep track of tasks.",
     "href": "productivity/countdown-timer/",
     "category": "productivity",
     "icon": null,
@@ -604,7 +604,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "countdown timer",
       "productivity"
@@ -618,7 +618,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "crontab-editor",
     "name": "Crontab Editor",
-    "desc": "Crontab Editor tool",
+    "desc": "Build crontab expressions visually and translate them to plain English.",
     "href": "developer-tools/crontab-editor/",
     "category": "developer",
     "icon": null,
@@ -626,7 +626,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "crontab editor",
       "developer"
@@ -640,7 +640,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "csp-builder",
     "name": "Csp Builder",
-    "desc": "Csp Builder tool",
+    "desc": "Construct secure Content Security Policy headers to protect sites from XSS.",
     "href": "security-tools/csp-builder/",
     "category": "security",
     "icon": null,
@@ -648,7 +648,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "csp builder",
       "security"
@@ -662,7 +662,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "csr-generator",
     "name": "Csr Generator",
-    "desc": "Csr Generator tool",
+    "desc": "Generate CSR requests and private keys locally to secure web servers.",
     "href": "security-tools/csr-generator/",
     "category": "security",
     "icon": null,
@@ -670,7 +670,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "csr generator",
       "security"
@@ -684,7 +684,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "csv-to-json",
     "name": "Csv To Json",
-    "desc": "Csv To Json tool",
+    "desc": "Convert tabular CSV file content into structured JSON objects.",
     "href": "developer-tools/csv-to-json/",
     "category": "developer",
     "icon": null,
@@ -692,7 +692,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "csv to json",
       "developer"
@@ -810,7 +810,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "directory-manifest",
     "name": "Directory Manifest",
-    "desc": "Directory Manifest tool",
+    "desc": "Generate recursive folder maps of local directories to document structure.",
     "href": "security-tools/directory-manifest/",
     "category": "security",
     "icon": null,
@@ -818,7 +818,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "directory manifest",
       "security"
@@ -856,7 +856,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "ecdh-key-exchange",
     "name": "Ecdh Key Exchange",
-    "desc": "Ecdh Key Exchange tool",
+    "desc": "Generate shared cryptographic keys using ECDH protocols.",
     "href": "security-tools/ecdh-key-exchange/",
     "category": "security",
     "icon": null,
@@ -864,7 +864,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "ecdh key exchange",
       "security"
@@ -878,7 +878,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "ecdsa-sign",
     "name": "Ecdsa Sign",
-    "desc": "Ecdsa Sign tool",
+    "desc": "Sign and verify payload strings using secure ECDSA certificates.",
     "href": "security-tools/ecdsa-sign/",
     "category": "security",
     "icon": null,
@@ -886,7 +886,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "ecdsa sign",
       "security"
@@ -929,7 +929,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "emv-tlv-tree",
     "name": "Emv Tlv Tree",
-    "desc": "Emv Tlv Tree tool",
+    "desc": "Inspect and parse EMV TLV payment packets for bank transaction analysis.",
     "href": "banking-tools/emv-tlv-tree/",
     "category": "banking",
     "icon": null,
@@ -937,7 +937,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "emv tlv tree",
       "banking"
@@ -1114,7 +1114,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gif-creator",
     "name": "Gif Creator",
-    "desc": "Gif Creator tool",
+    "desc": "Convert videos or image frames into optimized, loopable animated GIF files.",
     "href": "media-tools/gif-creator/",
     "category": "media",
     "icon": null,
@@ -1122,7 +1122,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "gif creator",
       "media"
@@ -1136,7 +1136,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "glassmorphism-generator",
     "name": "Glassmorphism Generator",
-    "desc": "Glassmorphism Generator tool",
+    "desc": "Generate CSS code for modern frosted-glass card designs.",
     "href": "developer-tools/glassmorphism-generator/",
     "category": "developer",
     "icon": null,
@@ -1144,7 +1144,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "glassmorphism generator",
       "developer"
@@ -1158,7 +1158,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gradient-generator",
     "name": "Gradient Generator",
-    "desc": "Gradient Generator tool",
+    "desc": "Design linear and radial CSS gradients visually for backgrounds.",
     "href": "developer-tools/gradient-generator/",
     "category": "developer",
     "icon": null,
@@ -1166,7 +1166,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "gradient generator",
       "developer"
@@ -1203,7 +1203,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "gratuity-calculator",
     "name": "Gratuity Calculator",
-    "desc": "Gratuity Calculator tool",
+    "desc": "Estimate standard gratuity benefits based on salary and tenure.",
     "href": "calculators/gratuity-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1211,7 +1211,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "gratuity calculator",
       "calculators"
@@ -1277,7 +1277,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hash-map-visualizer",
     "name": "Hash Map Visualizer",
-    "desc": "Hash Map Visualizer tool",
+    "desc": "Visualize collision resolution strategies in hash map indexes.",
     "href": "developer-tools/hash-map-visualizer/",
     "category": "developer",
     "icon": null,
@@ -1285,7 +1285,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "hash map visualizer",
       "developer"
@@ -1299,7 +1299,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hkdf-generator",
     "name": "Hkdf Generator",
-    "desc": "Hkdf Generator tool",
+    "desc": "Derive cryptographically strong keys from raw input using HKDF.",
     "href": "security-tools/hkdf-generator/",
     "category": "security",
     "icon": null,
@@ -1307,7 +1307,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "hkdf generator",
       "security"
@@ -1321,7 +1321,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hmac-generator",
     "name": "Hmac Generator",
-    "desc": "Hmac Generator tool",
+    "desc": "Calculate keyed-hash message authentication codes (HMAC) to verify integrity.",
     "href": "security-tools/hmac-generator/",
     "category": "security",
     "icon": null,
@@ -1329,7 +1329,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "hmac generator",
       "security"
@@ -1343,7 +1343,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "hra-calculator",
     "name": "Hra Calculator",
-    "desc": "Hra Calculator tool",
+    "desc": "Calculate your House Rent Allowance tax exemptions.",
     "href": "calculators/hra-calculator/",
     "category": "calculators",
     "icon": null,
@@ -1351,7 +1351,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "hra calculator",
       "calculators"
@@ -1419,7 +1419,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "iban-validator",
     "name": "Iban Validator",
-    "desc": "Iban Validator tool",
+    "desc": "Check the validity and checksums of IBAN bank account numbers.",
     "href": "security-tools/iban-validator/",
     "category": "security",
     "icon": null,
@@ -1427,7 +1427,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "iban validator",
       "security"
@@ -1562,7 +1562,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "image-seo",
     "name": "Image Seo",
-    "desc": "Image Seo tool",
+    "desc": "Optimize image file names and alt attributes to rank higher on search engines.",
     "href": "seo-tools/image-seo/",
     "category": "seo",
     "icon": null,
@@ -1570,7 +1570,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "image seo",
       "seo"
@@ -1609,7 +1609,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "income-tax",
     "name": "Income Tax",
-    "desc": "Income Tax tool",
+    "desc": "Calculate annual income tax estimates and select the best tax regime.",
     "href": "calculators/income-tax/",
     "category": "calculators",
     "icon": null,
@@ -1617,7 +1617,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "income tax",
       "calculators"
@@ -1681,7 +1681,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "invoice-generator",
     "name": "Invoice Generator",
-    "desc": "Invoice Generator tool",
+    "desc": "Build professional custom invoices and download them as PDFs.",
     "href": "calculators/invoice-generator/",
     "category": "calculators",
     "icon": null,
@@ -1689,7 +1689,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "invoice generator",
       "calculators"
@@ -1703,7 +1703,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "iso8583-bitmap-decoder",
     "name": "Iso8583 Bitmap Decoder",
-    "desc": "Iso8583 Bitmap Decoder tool",
+    "desc": "Parse and visualize ISO 8583 payment card transaction bitmaps.",
     "href": "security-tools/iso8583-bitmap-decoder/",
     "category": "security",
     "icon": null,
@@ -1711,7 +1711,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "iso8583 bitmap decoder",
       "security"
@@ -1725,7 +1725,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "iso8583-message-parser",
     "name": "Iso8583 Message Parser",
-    "desc": "Iso8583 Message Parser tool",
+    "desc": "Decode raw financial transaction strings into human-readable messages.",
     "href": "security-tools/iso8583-message-parser/",
     "category": "security",
     "icon": null,
@@ -1733,7 +1733,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "iso8583 message parser",
       "security"
@@ -1856,7 +1856,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "log-analyzer",
     "name": "Log Analyzer",
-    "desc": "Log Analyzer tool",
+    "desc": "Analyze and filter server and application access log files.",
     "href": "developer-tools/log-analyzer/",
     "category": "developer",
     "icon": null,
@@ -1864,7 +1864,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "log analyzer",
       "developer"
@@ -1878,7 +1878,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "lorem-ipsum",
     "name": "Lorem Ipsum",
-    "desc": "Lorem Ipsum tool",
+    "desc": "Generate custom dummy placeholder text for layouts and copy.",
     "href": "developer-tools/lorem-ipsum/",
     "category": "developer",
     "icon": null,
@@ -1886,7 +1886,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "lorem ipsum",
       "developer"
@@ -1900,7 +1900,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "luhn-validator",
     "name": "Luhn Validator",
-    "desc": "Luhn Validator tool",
+    "desc": "Check identification card numbers using the Luhn checksum algorithm.",
     "href": "developer-tools/luhn-validator/",
     "category": "developer",
     "icon": null,
@@ -1908,7 +1908,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "luhn validator",
       "developer"
@@ -2007,7 +2007,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "meta-tags",
     "name": "Meta Tags",
-    "desc": "Meta Tags tool",
+    "desc": "Generate and preview HTML meta tags to optimize website social sharing.",
     "href": "seo-tools/meta-tags/",
     "category": "seo",
     "icon": null,
@@ -2015,7 +2015,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "meta tags",
       "seo"
@@ -2079,7 +2079,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "nanoid-generator",
     "name": "Nanoid Generator",
-    "desc": "Nanoid Generator tool",
+    "desc": "Generate secure, URL-friendly unique string IDs using NanoID.",
     "href": "developer-tools/nanoid-generator/",
     "category": "developer",
     "icon": null,
@@ -2087,7 +2087,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "nanoid generator",
       "developer"
@@ -2101,7 +2101,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "notes",
     "name": "Notes",
-    "desc": "Notes tool",
+    "desc": "Write and save markdown notes locally in your browser.",
     "href": "productivity/notes/",
     "category": "productivity",
     "icon": null,
@@ -2109,7 +2109,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "notes",
       "productivity"
@@ -2123,7 +2123,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "nps-calculator",
     "name": "Nps Calculator",
-    "desc": "Nps Calculator tool",
+    "desc": "Calculate National Pension Scheme (NPS) maturity amounts.",
     "href": "calculators/nps-calculator/",
     "category": "calculators",
     "icon": null,
@@ -2131,7 +2131,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "nps calculator",
       "calculators"
@@ -2196,7 +2196,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "oauth-token-decoder",
     "name": "Oauth Token Decoder",
-    "desc": "Oauth Token Decoder tool",
+    "desc": "Inspect and decode OAuth 2.0 access and refresh token payloads.",
     "href": "security-tools/oauth-token-decoder/",
     "category": "security",
     "icon": null,
@@ -2204,7 +2204,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "oauth token decoder",
       "security"
@@ -2218,7 +2218,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "og-preview",
     "name": "Og Preview",
-    "desc": "Og Preview tool",
+    "desc": "Preview Open Graph card layouts for social media platforms.",
     "href": "seo-tools/og-preview/",
     "category": "seo",
     "icon": null,
@@ -2226,7 +2226,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "og preview",
       "seo"
@@ -2290,7 +2290,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "pbkdf2-generator",
     "name": "Pbkdf2 Generator",
-    "desc": "Pbkdf2 Generator tool",
+    "desc": "Derive cryptographic keys using PBKDF2 password hashing.",
     "href": "security-tools/pbkdf2-generator/",
     "category": "security",
     "icon": null,
@@ -2298,7 +2298,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "pbkdf2 generator",
       "security"
@@ -2336,7 +2336,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "pem-viewer",
     "name": "Pem Viewer",
-    "desc": "Pem Viewer tool",
+    "desc": "Inspect and parse PEM certificate and private key files.",
     "href": "security-tools/pem-viewer/",
     "category": "security",
     "icon": null,
@@ -2344,7 +2344,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "pem viewer",
       "security"
@@ -2407,7 +2407,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "pomodoro-timer",
     "name": "Pomodoro Timer",
-    "desc": "Pomodoro Timer tool",
+    "desc": "Boost your focus and productivity using the Pomodoro technique.",
     "href": "productivity/pomodoro-timer/",
     "category": "productivity",
     "icon": null,
@@ -2415,7 +2415,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "pomodoro timer",
       "productivity"
@@ -2454,7 +2454,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "private-key-checker",
     "name": "Private Key Checker",
-    "desc": "Private Key Checker tool",
+    "desc": "Validate private key structures and format compatibility.",
     "href": "security-tools/private-key-checker/",
     "category": "security",
     "icon": null,
@@ -2462,7 +2462,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "private key checker",
       "security"
@@ -2476,7 +2476,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "public-key-inspector",
     "name": "Public Key Inspector",
-    "desc": "Public Key Inspector tool",
+    "desc": "Inspect and display properties of public keys.",
     "href": "security-tools/public-key-inspector/",
     "category": "security",
     "icon": null,
@@ -2484,7 +2484,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "public key inspector",
       "security"
@@ -2594,7 +2594,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "robots-txt",
     "name": "Robots Txt",
-    "desc": "Robots Txt tool",
+    "desc": "Generate and validate robots.txt configurations for SEO crawlers.",
     "href": "seo-tools/robots-txt/",
     "category": "seo",
     "icon": null,
@@ -2602,7 +2602,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "robots txt",
       "seo"
@@ -2640,7 +2640,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "rsa-encrypt-decrypt",
     "name": "Rsa Encrypt Decrypt",
-    "desc": "Rsa Encrypt Decrypt tool",
+    "desc": "Encrypt or decrypt payloads using secure RSA key pairs.",
     "href": "security-tools/rsa-encrypt-decrypt/",
     "category": "security",
     "icon": null,
@@ -2648,7 +2648,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "rsa encrypt decrypt",
       "security"
@@ -2662,7 +2662,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "rsa-key-generator",
     "name": "Rsa Key Generator",
-    "desc": "Rsa Key Generator tool",
+    "desc": "Generate public and private RSA key pairs locally for authentication.",
     "href": "security-tools/rsa-key-generator/",
     "category": "security",
     "icon": null,
@@ -2670,7 +2670,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "rsa key generator",
       "security"
@@ -2684,7 +2684,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "rsa-sign-verify",
     "name": "Rsa Sign Verify",
-    "desc": "Rsa Sign Verify tool",
+    "desc": "Sign messages or verify signatures using RSA keys.",
     "href": "security-tools/rsa-sign-verify/",
     "category": "security",
     "icon": null,
@@ -2692,7 +2692,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "rsa sign verify",
       "security"
@@ -2754,7 +2754,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "saml-decoder",
     "name": "Saml Decoder",
-    "desc": "Saml Decoder tool",
+    "desc": "Decode and format SAML assertion payloads for identity analysis.",
     "href": "security-tools/saml-decoder/",
     "category": "security",
     "icon": null,
@@ -2762,7 +2762,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "saml decoder",
       "security"
@@ -2801,7 +2801,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "seo-title",
     "name": "Seo Title",
-    "desc": "Seo Title tool",
+    "desc": "Optimize SEO title tags to maximize search engine click-through rates.",
     "href": "seo-tools/seo-title/",
     "category": "seo",
     "icon": null,
@@ -2809,7 +2809,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "seo title",
       "seo"
@@ -2823,7 +2823,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "seo-tools",
     "name": "Seo Tools",
-    "desc": "Seo Tools tool",
+    "desc": "Inspect and optimize website SEO meta tags and preview search snippets.",
     "href": "developer-tools/seo-tools/",
     "category": "developer",
     "icon": null,
@@ -2831,7 +2831,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "seo tools",
       "developer"
@@ -2872,7 +2872,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "sitemap-generator",
     "name": "Sitemap Generator",
-    "desc": "Sitemap Generator tool",
+    "desc": "Generate XML sitemaps to index website pages.",
     "href": "seo-tools/sitemap-generator/",
     "category": "seo",
     "icon": null,
@@ -2880,7 +2880,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "sitemap generator",
       "seo"
@@ -2894,7 +2894,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "slug-generator",
     "name": "Slug Generator",
-    "desc": "Slug Generator tool",
+    "desc": "Convert text into URL-friendly slug strings.",
     "href": "seo-tools/slug-generator/",
     "category": "seo",
     "icon": null,
@@ -2902,7 +2902,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "slug generator",
       "seo"
@@ -2987,7 +2987,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "sql-formatter",
     "name": "Sql Formatter",
-    "desc": "Sql Formatter tool",
+    "desc": "Beautify and format complex SQL queries to improve readability.",
     "href": "developer-tools/sql-formatter/",
     "category": "developer",
     "icon": null,
@@ -2995,7 +2995,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "sql formatter",
       "developer"
@@ -3057,7 +3057,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "stopwatch",
     "name": "Stopwatch",
-    "desc": "Stopwatch tool",
+    "desc": "Track elapsed time with lap support for productivity logging.",
     "href": "productivity/stopwatch/",
     "category": "productivity",
     "icon": null,
@@ -3065,7 +3065,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "stopwatch",
       "productivity"
@@ -3079,7 +3079,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "swift-mt-mx",
     "name": "Swift Mt Mx",
-    "desc": "Swift Mt Mx tool",
+    "desc": "Parse and inspect SWIFT MT and MX banking message structures.",
     "href": "banking-tools/swift-mt-mx/",
     "category": "banking",
     "icon": null,
@@ -3087,7 +3087,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "swift mt mx",
       "banking"
@@ -3150,7 +3150,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "tds-calculator",
     "name": "Tds Calculator",
-    "desc": "Tds Calculator tool",
+    "desc": "Calculate Tax Deducted at Source (TDS) percentages.",
     "href": "calculators/tds-calculator/",
     "category": "calculators",
     "icon": null,
@@ -3158,7 +3158,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "tds calculator",
       "calculators"
@@ -3172,7 +3172,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "text-case-converter",
     "name": "Text Case Converter",
-    "desc": "Text Case Converter tool",
+    "desc": "Convert text between UPPERCASE, lowercase, and sentence case styles.",
     "href": "productivity/text-case-converter/",
     "category": "productivity",
     "icon": null,
@@ -3180,7 +3180,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "text case converter",
       "productivity"
@@ -3301,7 +3301,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "tlv-parser",
     "name": "Tlv Parser",
-    "desc": "Tlv Parser tool",
+    "desc": "Parse and visualize EMV TLV hex streams into clear tree structures.",
     "href": "security-tools/tlv-parser/",
     "category": "security",
     "icon": null,
@@ -3309,7 +3309,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "tlv parser",
       "security"
@@ -3323,7 +3323,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "track-2-parser",
     "name": "Track 2 Parser",
-    "desc": "Track 2 Parser tool",
+    "desc": "Decode magnetic stripe Track 2 data for payment card testing.",
     "href": "banking-tools/track-2-parser/",
     "category": "banking",
     "icon": null,
@@ -3331,7 +3331,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "track 2 parser",
       "banking"
@@ -3396,7 +3396,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "unix-timestamp",
     "name": "Unix Timestamp",
-    "desc": "Unix Timestamp tool",
+    "desc": "Convert between epoch timestamps and human-readable dates.",
     "href": "developer-tools/unix-timestamp/",
     "category": "developer",
     "icon": null,
@@ -3404,7 +3404,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "unix timestamp",
       "developer"
@@ -3490,7 +3490,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "uuid-generator",
     "name": "Uuid Generator",
-    "desc": "Uuid Generator tool",
+    "desc": "Generate secure v4 UUIDs for database and entity keys.",
     "href": "developer-tools/uuid-generator/",
     "category": "developer",
     "icon": null,
@@ -3498,7 +3498,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "uuid generator",
       "developer"
@@ -3536,7 +3536,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "video-metadata-viewer",
     "name": "Video Metadata Viewer",
-    "desc": "Video Metadata Viewer tool",
+    "desc": "Extract and inspect resolution, codec, and duration metadata from video files.",
     "href": "media-tools/video-metadata-viewer/",
     "category": "media",
     "icon": null,
@@ -3544,7 +3544,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "video metadata viewer",
       "media"
@@ -3558,7 +3558,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "video-trim",
     "name": "Video Trim",
-    "desc": "Video Trim tool",
+    "desc": "Trim and cut MP4 video clips directly in your browser.",
     "href": "media-tools/video-trim/",
     "category": "media",
     "icon": null,
@@ -3566,7 +3566,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "video trim",
       "media"
@@ -3629,7 +3629,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "word-counter",
     "name": "Word Counter",
-    "desc": "Word Counter tool",
+    "desc": "Count characters, words, sentences, and reading times for any text.",
     "href": "productivity/word-counter/",
     "category": "productivity",
     "icon": null,
@@ -3637,7 +3637,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "word counter",
       "productivity"
@@ -3651,7 +3651,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "word-to-pdf",
     "name": "Word To Pdf",
-    "desc": "Word To Pdf tool",
+    "desc": "Convert Word documents (DOCX) into standard PDF files locally.",
     "href": "pdf-tools/word-to-pdf/",
     "category": "pdf",
     "icon": null,
@@ -3659,7 +3659,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "word to pdf",
       "pdf"
@@ -3724,7 +3724,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "x509-viewer",
     "name": "X509 Viewer",
-    "desc": "X509 Viewer tool",
+    "desc": "Inspect and validate X.509 security certificates and expiry details.",
     "href": "security-tools/x509-viewer/",
     "category": "security",
     "icon": null,
@@ -3732,7 +3732,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "x509 viewer",
       "security"
@@ -3746,7 +3746,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "xml-formatter",
     "name": "Xml Formatter",
-    "desc": "Xml Formatter tool",
+    "desc": "Format and prettify nested XML documents to inspect data tags.",
     "href": "developer-tools/xml-formatter/",
     "category": "developer",
     "icon": null,
@@ -3754,7 +3754,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "xml formatter",
       "developer"
@@ -3768,7 +3768,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "yaml-json-converter",
     "name": "Yaml Json Converter",
-    "desc": "Yaml Json Converter tool",
+    "desc": "Convert between YAML formatting and JSON objects.",
     "href": "developer-tools/yaml-json-converter/",
     "category": "developer",
     "icon": null,
@@ -3776,7 +3776,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "yaml json converter",
       "developer"
@@ -3790,7 +3790,7 @@ export const CORE_TOOLS: ToolEntry[] = [
   {
     "id": "yaml-validator",
     "name": "Yaml Validator",
-    "desc": "Yaml Validator tool",
+    "desc": "Verify and validate YAML syntax correctness.",
     "href": "developer-tools/yaml-validator/",
     "category": "developer",
     "icon": null,
@@ -3798,7 +3798,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-06",
+    "lastAdded": "2026-07-07",
     "keywords": [
       "yaml validator",
       "developer"

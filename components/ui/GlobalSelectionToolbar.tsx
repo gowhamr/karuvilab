@@ -92,7 +92,7 @@ export function GlobalSelectionToolbar() {
         animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
         exit={{ opacity: 0, scale: 0.95, y: 5, x: '-50%' }}
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-        className="fixed z-[100] flex items-center bg-surface border border-border shadow-xl shadow-black/10 rounded-xl p-1 gap-1"
+        className="fixed z-dropdown flex items-center bg-surface border border-border shadow-xl shadow-black/10 rounded-xl p-1 gap-1"
         style={{
           left: selection.x,
           top: Math.max(10, selection.y - 40) // prevent going off top screen

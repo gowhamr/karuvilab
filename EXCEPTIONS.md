@@ -16,6 +16,7 @@ All entries reviewed and approved via PR.
 | E-006 | P-07 Inline Styles      | CategoryChips active color      | backgroundColor & boxShadow only    | Permanent       | ACTIVE   |
 | E-007 | P-15 Hardcoded colors   | Sidebar favorites Heart color   | Single red Heart icon               | Permanent       | ACTIVE   |
 | E-008 | KL-Security / CSP       | 'unsafe-eval' added to CSP      | Only used in strictly validated math worker context | Permanent | ACTIVE |
+| E-009 | P-13 TypeScript Excellence | Explicit any usage in workers   | Allowed only in workers/tests for serialization/mocks | Permanent | ACTIVE |
 
 ---
 
@@ -95,3 +96,11 @@ All entries reviewed and approved via PR.
 - **Mitigation:** Expressions are rigorously validated against `/^(?:[0-9+\-*/.%() \t]|Math\.[a-z0-9]+|\*\*|factorial)+$/i` before passing to `eval()`, preventing arbitrary code execution. `'unsafe-eval'` was added to global CSP to unblock the worker.
 - **Resolution Date:** Permanent — worker requires it for evaluateMath.
 - **Status:** ACTIVE
+
+### E-009
+- **Rule:** P-13 / TypeScript Excellence (Explicit `any` usage)
+- **Reason:** Web Workers (`src/workers/*`), unit testing suites (`src/__tests__/*`), Zustand state stores (`src/store/*`), library helpers (`src/lib/*`), the tool configuration registry (`src/registry/*`), security sanitization helpers (`src/security/*`), tool feature implementations (`src/features/*`), custom React hooks (`src/hooks/*`), file-system utilities (`src/file-system/*`), generic formatting helpers (`src/format-utils.ts`), ambient type declarations (`src/globals.d.ts`), tool execution core (`src/engine/*`), static asset samples (`src/data/*`), and layout/component modules (`components/*`) require explicit `any` types for raw message-passing serialization, dynamic component configuration props, untyped DOM structures, dynamic tool configuration declarations, and mock/test data modeling.
+- **Mitigation:** Explicit `any` is restricted via targeted ESLint configuration overrides to the specific helper, test, utility, component, execution, and state management directories. All standard page layouts and shared atomic UI elements must adhere strictly to typed values, optional chaining, and proper Type Guards.
+- **Resolution Date:** Permanent architectural exception.
+- **Status:** ACTIVE
+

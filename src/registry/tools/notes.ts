@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const notes: ToolEntry = {
   "id": "notes",
   "name": "Notes",
-  "desc": "Notes tool",
+  "desc": "Write and save markdown notes locally in your browser.",
   "href": "productivity/notes/",
   "category": "productivity",
   "icon": null,

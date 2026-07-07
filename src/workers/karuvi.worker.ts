@@ -422,7 +422,7 @@ const api: WorkerAPI = {
         centroids.push(pixels[Math.floor(Math.random() * pixels.length)]!);
       }
 
-      let assignments = new Array(pixels.length);
+      const assignments = new Array(pixels.length);
       const MAX_ITERATIONS = 10;
 
       for (let iter = 0; iter < MAX_ITERATIONS; iter++) {
@@ -624,8 +624,7 @@ const api: WorkerAPI = {
 
   // Media Tasks
   async encodeMp3(left, right, sampleRate, onProgress) {
-    // @ts-ignore
-    const lamejs = await import("lamejs");
+    const lamejs = (await import("lamejs")) as any;
     const mp3encoder = new lamejs.Mp3Encoder(right ? 2 : 1, sampleRate, 128);
     const mp3Data: any[] = [];
     const sampleBlockSize = 1152;
@@ -653,8 +652,7 @@ const api: WorkerAPI = {
   },
 
   async createGif(frames, width, height, delay, onProgress) {
-    // @ts-ignore
-    const { GIFEncoder, quantize, applyPalette } = await import('gifenc');
+    const { GIFEncoder, quantize, applyPalette } = (await import('gifenc')) as any;
     const gif = new GIFEncoder();
     
     for (let i = 0; i < frames.length; i++) {
@@ -831,7 +829,7 @@ const api: WorkerAPI = {
       const content = await page.getTextContent();
 
       let lastY = -1;
-      let pageLines: string[] = [];
+      const pageLines: string[] = [];
       let currentLine: string[] = [];
 
       for (const item of (content.items as any[])) {

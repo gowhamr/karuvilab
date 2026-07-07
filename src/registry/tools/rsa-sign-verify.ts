@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const rsaSignVerify: ToolEntry = {
   "id": "rsa-sign-verify",
   "name": "Rsa Sign Verify",
-  "desc": "Rsa Sign Verify tool",
+  "desc": "Sign messages or verify signatures using RSA keys.",
   "href": "security-tools/rsa-sign-verify/",
   "category": "security",
   "icon": null,

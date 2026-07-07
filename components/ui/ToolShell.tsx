@@ -32,7 +32,7 @@ export async function ToolShell({ title, description, category, children, toolId
             contentModule.default || 
             {};
     } catch (err) {
-      console.warn(`No on-demand SEO content found for tool: ${currentTool.id}`);
+      // Content modules are optional, silently ignore missing ones
     }
   }
 

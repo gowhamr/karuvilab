@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const logAnalyzer: ToolEntry = {
   "id": "log-analyzer",
   "name": "Log Analyzer",
-  "desc": "Log Analyzer tool",
+  "desc": "Analyze and filter server and application access log files.",
   "href": "developer-tools/log-analyzer/",
   "category": "developer",
   "icon": null,

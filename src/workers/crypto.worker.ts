@@ -189,7 +189,7 @@ const api = {
     if (onProgress) onProgress({ percent: 20, message: "Deriving AES key using PBKDF2..." });
     const keyMaterial = await self.crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
     const key = await self.crypto.subtle.deriveKey(
-      { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+      { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
       keyMaterial,
       { name: `AES-${mode}`, length: keySize },
       false,
@@ -218,7 +218,7 @@ const api = {
     if (onProgress) onProgress({ percent: 20, message: "Deriving AES key..." });
     const keyMaterial = await self.crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
     const key = await self.crypto.subtle.deriveKey(
-      { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+      { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
       keyMaterial,
       { name: `AES-${mode}`, length: keySize },
       false,
@@ -315,7 +315,7 @@ const api = {
   },
 
   // ─── KEY DERIVATION (PBKDF2 / HKDF) ────────────────────────────────────────
-  async pbkdf2Derive(password: string, salt: string, iterations = 100000, hash = "SHA-256", lengthBits = 256, onProgress?: any) {
+  async pbkdf2Derive(password: string, salt: string, iterations = 600000, hash = "SHA-256", lengthBits = 256, onProgress?: any) {
     const enc = new TextEncoder();
     const keyMaterial = await self.crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
     const bits = await self.crypto.subtle.deriveBits(

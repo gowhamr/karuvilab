@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const robotsTxt: ToolEntry = {
   "id": "robots-txt",
   "name": "Robots Txt",
-  "desc": "Robots Txt tool",
+  "desc": "Generate and validate robots.txt configurations for SEO crawlers.",
   "href": "seo-tools/robots-txt/",
   "category": "seo",
   "icon": null,

@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const glassmorphismGenerator: ToolEntry = {
   "id": "glassmorphism-generator",
   "name": "Glassmorphism Generator",
-  "desc": "Glassmorphism Generator tool",
+  "desc": "Generate CSS code for modern frosted-glass card designs.",
   "href": "developer-tools/glassmorphism-generator/",
   "category": "developer",
   "icon": null,

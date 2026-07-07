@@ -23,7 +23,7 @@ function getFormattedDate(): string {
 }
 
 const TIPS = [
-  "KV processes 100% of your data inside your browser. No files are ever uploaded.",
+  "KaruviLab processes 100% of your data inside your browser. No files are ever uploaded.",
   "Use Ctrl+K or Cmd+K anytime to quickly search and switch between 150+ tools.",
   "Drag & drop files directly onto supported tools for instant execution.",
   "Favorite your frequently used tools to pin them to your personal dashboard."
@@ -91,7 +91,7 @@ export function HomeHero({ isReturning = false }: { isReturning?: boolean }) {
 
       {/* ── Headline ── */}
       <h1 className="font-black tracking-tighter text-text mx-auto text-balance transition-all duration-500 text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-xl mb-4">
-        Build faster with KV.{" "}
+        Build faster with KaruviLab.{" "}
         <span className="bg-gradient-to-r from-blue via-indigo-500 to-purple-500 bg-clip-text text-transparent">
           Privacy you can trust.
         </span>

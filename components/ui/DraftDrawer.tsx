@@ -29,7 +29,7 @@ export function DraftDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-modal-backdrop bg-black/50 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
           <m.div
@@ -37,7 +37,7 @@ export function DraftDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 bottom-0 w-full md:w-[400px] z-50 bg-bg border-l border-border shadow-2xl flex flex-col"
+            className="fixed top-0 right-0 bottom-0 w-full md:w-[400px] z-modal bg-bg border-l border-border shadow-2xl flex flex-col"
           >
             <div className="flex items-center justify-between p-4 border-b border-border">
               <h2 className="text-lg font-bold flex items-center gap-2">

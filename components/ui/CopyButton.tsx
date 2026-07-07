@@ -58,6 +58,9 @@ export function CopyButton({
           </svg>
         )}
         <span aria-hidden="true">{copied ? "Copied!" : label}</span>
+        <span className="sr-only" aria-live="polite">
+          {copied ? "Copied to clipboard" : ""}
+        </span>
       </div>
     </m.button>
   );

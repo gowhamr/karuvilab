@@ -76,7 +76,9 @@ export default function RegexTesterClient() {
   }, [activeLibCategory]);
 
   useEffect(() => {
-    setVisibleCount(12);
+    Promise.resolve().then(() => {
+      setVisibleCount(12);
+    });
   }, [activeLibCategory, librarySearch]);
 
   const handleCopyPattern = (id: string, text: string) => {

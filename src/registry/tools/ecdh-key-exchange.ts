@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const ecdhKeyExchange: ToolEntry = {
   "id": "ecdh-key-exchange",
   "name": "Ecdh Key Exchange",
-  "desc": "Ecdh Key Exchange tool",
+  "desc": "Generate shared cryptographic keys using ECDH protocols.",
   "href": "security-tools/ecdh-key-exchange/",
   "category": "security",
   "icon": null,

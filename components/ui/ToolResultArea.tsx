@@ -77,6 +77,7 @@ export function ToolResultArea({
       {error ? (
         <div 
           role="alert"
+          aria-live="assertive"
           className="w-full px-4 py-3 bg-error/5 border border-error/20 rounded-xl text-error text-sm font-medium"
         >
           {error}

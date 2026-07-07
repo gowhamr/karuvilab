@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const imageSeo: ToolEntry = {
   "id": "image-seo",
   "name": "Image Seo",
-  "desc": "Image Seo tool",
+  "desc": "Optimize image file names and alt attributes to rank higher on search engines.",
   "href": "seo-tools/image-seo/",
   "category": "seo",
   "icon": null,

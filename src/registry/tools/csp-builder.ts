@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const cspBuilder: ToolEntry = {
   "id": "csp-builder",
   "name": "Csp Builder",
-  "desc": "Csp Builder tool",
+  "desc": "Construct secure Content Security Policy headers to protect sites from XSS.",
   "href": "security-tools/csp-builder/",
   "category": "security",
   "icon": null,

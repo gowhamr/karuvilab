@@ -22,11 +22,12 @@ interface ToolShellProps {
 
 export function ToolShell({ toolId }: ToolShellProps) {
   const config = toolConfigMap.get(toolId);
-
-  if (!config) {
-    notFound();
-    return null;
-  }
+  const activeConfig = config || ({
+    id: "",
+    name: "",
+    category: "",
+    emptyState: { icon: null }
+  } as unknown as ToolConfig);
 
   const { 
     phase, 
@@ -37,13 +38,17 @@ export function ToolShell({ toolId }: ToolShellProps) {
     handleInput, 
     cancel, 
     reset 
-  } = useToolEngine(config);
+  } = useToolEngine(activeConfig);
 
   const emptyStateIcon = useMemo(() => {
-    if (config.emptyState.icon) return config.emptyState.icon;
-    // Fallback to generic icon or category icon
+    if (activeConfig.emptyState?.icon) return activeConfig.emptyState.icon;
     return SettingsIcon;
-  }, [config.emptyState.icon]);
+  }, [activeConfig.emptyState?.icon]);
+
+  if (!config) {
+    notFound();
+    return null;
+  }
 
   return (
     <ToolErrorBoundary toolId={config.id}>

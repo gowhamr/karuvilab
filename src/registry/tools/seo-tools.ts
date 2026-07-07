@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const seoTools: ToolEntry = {
   "id": "seo-tools",
   "name": "Seo Tools",
-  "desc": "Seo Tools tool",
+  "desc": "Inspect and optimize website SEO meta tags and preview search snippets.",
   "href": "developer-tools/seo-tools/",
   "category": "developer",
   "icon": null,

@@ -115,6 +115,12 @@ export function AmortisationChart({ schedule }: AmortisationChartProps) {
     ctx.fillStyle = themeColors.text;
     ctx.fillText("Interest", padding.left + 95, legendY);
 
+    return () => {
+      if (canvasRef.current) {
+        canvasRef.current.width = 0;
+        canvasRef.current.height = 0;
+      }
+    };
   }, [schedule, themeColors]);
 
   return (

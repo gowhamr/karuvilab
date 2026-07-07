@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const ogPreview: ToolEntry = {
   "id": "og-preview",
   "name": "Og Preview",
-  "desc": "Og Preview tool",
+  "desc": "Preview Open Graph card layouts for social media platforms.",
   "href": "seo-tools/og-preview/",
   "category": "seo",
   "icon": null,

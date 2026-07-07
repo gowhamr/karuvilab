@@ -76,24 +76,43 @@ export function QuickActionsDashboard({
 
   const isEmpty = !continueTool && recentTools.length === 0 && favoriteTools.length === 0;
 
+  const starterTools = useMemo(() => {
+    const starterIds = ["merge-pdf", "json-formatter", "image-compress", "url-encoder"];
+    return ALL_TOOLS.filter(t => starterIds.includes(t.id));
+  }, []);
+
   if (isEmpty) {
     return (
-      <div className="bg-surface border border-border rounded-3xl p-6 md:p-8 text-center flex flex-col items-center justify-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
-          <Sparkles className="w-6 h-6" />
+      <div className="bg-surface border border-border rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
+        <div className="text-center flex flex-col items-center justify-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+            <Sparkles className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-text">Start exploring your toolkit</h2>
+            <p className="text-sm text-text-muted mt-1 max-w-sm mx-auto">
+              Choose a popular starter tool below or browse the full collection to get started.
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-black text-text">Start exploring your toolkit</h2>
-          <p className="text-sm text-text-muted mt-1 max-w-sm mx-auto">
-            Tools you use frequently or mark as favorite will appear here for quick access.
-          </p>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+          {starterTools.map(tool => (
+            <Link
+              key={tool.id}
+              href={`/${tool.href}`}
+              className="flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-bg border border-border hover:border-blue/30 hover:bg-blue/5 transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue gap-2"
+            >
+              <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue shrink-0">
+                <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-text truncate max-w-[140px]">{tool.name}</p>
+                <p className="text-[10px] text-text-muted truncate max-w-[140px] mt-0.5">{tool.desc}</p>
+              </div>
+            </Link>
+          ))}
         </div>
-        <Link 
-          href="/all-tools"
-          className="mt-2 inline-flex items-center gap-2 h-10 px-5 rounded-xl bg-blue text-white text-sm font-bold hover:bg-blue-dark transition-all"
-        >
-          Browse All Tools <ChevronRight className="w-4 h-4" />
-        </Link>
       </div>
     );
   }

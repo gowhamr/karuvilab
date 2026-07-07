@@ -414,7 +414,7 @@ function parseASN1Time(bytes: Uint8Array): string {
   if (str.length >= 12) {
     if (str.length === 13 || str.length === 15) { // UTCTime (YYMMDDhhmmssZ) or GeneralizedTime (YYYYMMDDhhmmssZ)
       if (str.length <= 13) {
-        let yy = parseInt(str.substring(0, 2), 10);
+        const yy = parseInt(str.substring(0, 2), 10);
         year = yy >= 50 ? 1900 + yy : 2000 + yy;
         month = parseInt(str.substring(2, 4), 10) - 1;
         day = parseInt(str.substring(4, 6), 10);

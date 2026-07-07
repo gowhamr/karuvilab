@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const tdsCalculator: ToolEntry = {
   "id": "tds-calculator",
   "name": "Tds Calculator",
-  "desc": "Tds Calculator tool",
+  "desc": "Calculate Tax Deducted at Source (TDS) percentages.",
   "href": "calculators/tds-calculator/",
   "category": "calculators",
   "icon": null,

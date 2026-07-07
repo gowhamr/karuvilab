@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const audioConverter: ToolEntry = {
   "id": "audio-converter",
   "name": "Audio Converter",
-  "desc": "Audio Converter tool",
+  "desc": "Convert audio files between formats like MP3 and WAV locally for compatibility.",
   "href": "media-tools/audio-converter/",
   "category": "media",
   "icon": null,

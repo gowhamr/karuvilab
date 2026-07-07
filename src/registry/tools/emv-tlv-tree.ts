@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const emvTlvTree: ToolEntry = {
   "id": "emv-tlv-tree",
   "name": "Emv Tlv Tree",
-  "desc": "Emv Tlv Tree tool",
+  "desc": "Inspect and parse EMV TLV payment packets for bank transaction analysis.",
   "href": "banking-tools/emv-tlv-tree/",
   "category": "banking",
   "icon": null,

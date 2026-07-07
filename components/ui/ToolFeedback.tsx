@@ -19,15 +19,18 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Handle client-side hydration to read from localStorage safely
   useEffect(() => {
-    setMounted(true);
+    Promise.resolve().then(() => {
+      setMounted(true);
+    });
     try {
       const saved = localStorage.getItem(`kv-feedback-${toolId}`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        setVote(parsed.vote);
-        setSubmitted(parsed.submitted);
+        Promise.resolve().then(() => {
+          setVote(parsed.vote);
+          setSubmitted(parsed.submitted);
+        });
       }
     } catch (e) {
       console.error('Error reading feedback from localStorage:', e);

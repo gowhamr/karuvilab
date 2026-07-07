@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const ibanValidator: ToolEntry = {
   "id": "iban-validator",
   "name": "Iban Validator",
-  "desc": "Iban Validator tool",
+  "desc": "Check the validity and checksums of IBAN bank account numbers.",
   "href": "security-tools/iban-validator/",
   "category": "security",
   "icon": null,

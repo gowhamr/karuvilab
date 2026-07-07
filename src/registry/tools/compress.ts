@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const compress: ToolEntry = {
   "id": "compress",
   "name": "Compress",
-  "desc": "Compress tool",
+  "desc": "Bundle files and folders into optimized ZIP archives to save storage space.",
   "href": "image-tools/compress/",
   "category": "image",
   "icon": null,

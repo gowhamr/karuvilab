@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const incomeTax: ToolEntry = {
   "id": "income-tax",
   "name": "Income Tax",
-  "desc": "Income Tax tool",
+  "desc": "Calculate annual income tax estimates and select the best tax regime.",
   "href": "calculators/income-tax/",
   "category": "calculators",
   "icon": null,

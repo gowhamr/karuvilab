@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const publicKeyInspector: ToolEntry = {
   "id": "public-key-inspector",
   "name": "Public Key Inspector",
-  "desc": "Public Key Inspector tool",
+  "desc": "Inspect and display properties of public keys.",
   "href": "security-tools/public-key-inspector/",
   "category": "security",
   "icon": null,

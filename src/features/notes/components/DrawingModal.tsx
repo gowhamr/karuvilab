@@ -35,14 +35,12 @@ export function DrawingModal({ open, onOpenChange, onSave }: DrawingModalProps) 
 
   useEffect(() => {
     if (!open) {
-      setPaths([]);
-      setCurrentPath(null);
+      Promise.resolve().then(() => {
+        setPaths([]);
+        setCurrentPath(null);
+      });
     }
   }, [open]);
-
-  useEffect(() => {
-    redraw();
-  }, [paths, currentPath, open]);
 
   const redraw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -74,6 +72,17 @@ export function DrawingModal({ open, onOpenChange, onSave }: DrawingModalProps) 
       ctx.stroke();
     }
   }, [paths, currentPath]);
+
+  useEffect(() => {
+    redraw();
+    const canvas = canvasRef.current;
+    return () => {
+      if (canvas) {
+        canvas.width = 0;
+        canvas.height = 0;
+      }
+    };
+  }, [paths, currentPath, open, redraw]);
 
   const getCoordinates = (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent): Point | null => {
     const canvas = canvasRef.current;

@@ -252,7 +252,7 @@ const api = {
         centroids.push(pixels[Math.floor(Math.random() * pixels.length)]!);
       }
 
-      let assignments = new Array(pixels.length);
+      const assignments = new Array(pixels.length);
       const MAX_ITERATIONS = 10;
 
       for (let iter = 0; iter < MAX_ITERATIONS; iter++) {

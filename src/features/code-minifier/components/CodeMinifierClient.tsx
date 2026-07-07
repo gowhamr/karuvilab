@@ -99,8 +99,10 @@ export default function CodeMinifierClient() {
   useEffect(() => {
     if (inputMode !== "text") return;
     if (!textInput.trim()) {
-      setTextOutput("");
-      setTextError("");
+      Promise.resolve().then(() => {
+        setTextOutput("");
+        setTextError("");
+      });
       return;
     }
 

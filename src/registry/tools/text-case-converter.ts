@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const textCaseConverter: ToolEntry = {
   "id": "text-case-converter",
   "name": "Text Case Converter",
-  "desc": "Text Case Converter tool",
+  "desc": "Convert text between UPPERCASE, lowercase, and sentence case styles.",
   "href": "productivity/text-case-converter/",
   "category": "productivity",
   "icon": null,

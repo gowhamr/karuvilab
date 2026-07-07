@@ -37,7 +37,7 @@ export async function encryptData(data: string, password: string): Promise<strin
     {
       name: "PBKDF2",
       salt: salt,
-      iterations: 100000,
+      iterations: 600000,
       hash: "SHA-256"
     },
     passwordKey,
@@ -101,7 +101,7 @@ export async function decryptData(encryptedString: string, password: string): Pr
     {
       name: "PBKDF2",
       salt: salt,
-      iterations: 100000,
+      iterations: 600000,
       hash: "SHA-256"
     },
     passwordKey,

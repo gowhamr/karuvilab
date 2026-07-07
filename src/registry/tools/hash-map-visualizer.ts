@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const hashMapVisualizer: ToolEntry = {
   "id": "hash-map-visualizer",
   "name": "Hash Map Visualizer",
-  "desc": "Hash Map Visualizer tool",
+  "desc": "Visualize collision resolution strategies in hash map indexes.",
   "href": "developer-tools/hash-map-visualizer/",
   "category": "developer",
   "icon": null,

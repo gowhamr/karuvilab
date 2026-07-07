@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const samlDecoder: ToolEntry = {
   "id": "saml-decoder",
   "name": "Saml Decoder",
-  "desc": "Saml Decoder tool",
+  "desc": "Decode and format SAML assertion payloads for identity analysis.",
   "href": "security-tools/saml-decoder/",
   "category": "security",
   "icon": null,

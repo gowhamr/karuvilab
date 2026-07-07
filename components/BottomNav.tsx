@@ -28,7 +28,7 @@ export const BottomNav = memo(function BottomNav() {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-nav md:hidden bg-surface border-t border-border px-4 pb-safe-bottom shadow-[0_-4px_16px_rgba(0,0,0,0.06)] dark:shadow-none !opacity-100"
+      className="fixed bottom-0 left-0 right-0 z-nav md:hidden bg-surface border-t border-border px-4 pb-safe-bottom shadow-lg dark:shadow-none !opacity-100"
       style={{ 
         contain: 'layout style paint'
       }}
@@ -89,7 +89,7 @@ export const BottomNav = memo(function BottomNav() {
                   {isActive && (
                     <m.div 
                       layoutId="nav-indicator"
-                      className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-primary shadow-[0_0_8px_rgba(79,70,229,0.8)]"
+                      className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-primary shadow-glow-primary"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}

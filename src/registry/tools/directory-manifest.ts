@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const directoryManifest: ToolEntry = {
   "id": "directory-manifest",
   "name": "Directory Manifest",
-  "desc": "Directory Manifest tool",
+  "desc": "Generate recursive folder maps of local directories to document structure.",
   "href": "security-tools/directory-manifest/",
   "category": "security",
   "icon": null,

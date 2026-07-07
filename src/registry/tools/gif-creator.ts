@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const gifCreator: ToolEntry = {
   "id": "gif-creator",
   "name": "Gif Creator",
-  "desc": "Gif Creator tool",
+  "desc": "Convert videos or image frames into optimized, loopable animated GIF files.",
   "href": "media-tools/gif-creator/",
   "category": "media",
   "icon": null,

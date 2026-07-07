@@ -27,26 +27,34 @@ class ObjectUrlManager {
 
 export const objectUrlManager = new ObjectUrlManager();
 
-/**
- * Hook for managing blob URLs within components safely.
- */
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export const useObjectUrl = (blob: Blob | null) => {
-  const urlRef = useRef<string | null>(null);
+  const [url, setUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    let active = true;
+    let newUrl: string | null = null;
+
     if (blob) {
-      urlRef.current = objectUrlManager.create(blob);
+      newUrl = objectUrlManager.create(blob);
+      const urlToSet = newUrl;
+      Promise.resolve().then(() => {
+        if (active) setUrl(urlToSet);
+      });
+    } else {
+      Promise.resolve().then(() => {
+        if (active) setUrl(null);
+      });
     }
 
     return () => {
-      if (urlRef.current) {
-        objectUrlManager.revoke(urlRef.current);
-        urlRef.current = null;
+      active = false;
+      if (newUrl) {
+        objectUrlManager.revoke(newUrl);
       }
     };
   }, [blob]);
 
-  return urlRef.current;
+  return url;
 };

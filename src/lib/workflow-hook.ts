@@ -59,7 +59,9 @@ export function useWorkflowIntegration(toolId: string) {
     );
 
     if (compatibleText) {
-      setSuggestedText(compatibleText.text!);
+      Promise.resolve().then(() => {
+        setSuggestedText(compatibleText.text!);
+      });
       loadedRef.current = fingerprint;
     }
   }, [toolId, activeItems, addItems, currentItems]);

@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const uuidGenerator: ToolEntry = {
   "id": "uuid-generator",
   "name": "Uuid Generator",
-  "desc": "Uuid Generator tool",
+  "desc": "Generate secure v4 UUIDs for database and entity keys.",
   "href": "developer-tools/uuid-generator/",
   "category": "developer",
   "icon": null,

@@ -40,9 +40,13 @@ export function useSpeechRecognition(onResult: (transcript: string) => void) {
           setIsListening(false);
         };
 
-        setRecognition(recognitionInstance);
+        Promise.resolve().then(() => {
+          setRecognition(recognitionInstance);
+        });
       } else {
-        setError('Speech recognition not supported in this browser.');
+        Promise.resolve().then(() => {
+          setError('Speech recognition not supported in this browser.');
+        });
       }
     }
   }, []);

@@ -6,14 +6,23 @@ export default function PreviewRenderer({ result }: { result: ToolResult }) {
   const [url, setUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!result.blob) {
-      setUrl(null);
-      return;
-    }
-    const newUrl = blobManager.create(result.blob);
-    setUrl(newUrl);
+    let newUrl: string | null = null;
+
+    const applyUpdate = () => {
+      if (!result.blob) {
+        setUrl(null);
+      } else {
+        newUrl = blobManager.create(result.blob);
+        setUrl(newUrl);
+      }
+    };
+
+    Promise.resolve().then(applyUpdate);
+
     return () => {
-      blobManager.revoke(newUrl);
+      if (newUrl) {
+        blobManager.revoke(newUrl);
+      }
     };
   }, [result.blob]);
 

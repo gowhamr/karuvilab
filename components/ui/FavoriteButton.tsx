@@ -12,7 +12,9 @@ export function FavoriteButton({ toolId }: { toolId: string }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setHydrated(true);
+    Promise.resolve().then(() => {
+      setHydrated(true);
+    });
   }, []);
 
   if (!hydrated) {

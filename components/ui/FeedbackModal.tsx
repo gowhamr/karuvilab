@@ -37,13 +37,15 @@ export function FeedbackModal() {
 
   useEffect(() => {
     if (isOpen) {
-      setBlurEnabled(supportsBlur());
-      setSysInfo(getSystemInfo());
-      setIsSuccess(false);
-      setDescription("");
-      setFromEmail("");
-      setScreenshot(null);
-      setErrorMessage("");
+      Promise.resolve().then(() => {
+        setBlurEnabled(supportsBlur());
+        setSysInfo(getSystemInfo());
+        setIsSuccess(false);
+        setDescription("");
+        setFromEmail("");
+        setScreenshot(null);
+        setErrorMessage("");
+      });
     }
   }, [isOpen]);
 

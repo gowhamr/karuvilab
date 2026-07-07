@@ -132,6 +132,12 @@ export function ProjectionChart() {
       ctx.setLineDash([]);
     }
 
+    return () => {
+      if (canvas) {
+        canvas.width = 0;
+        canvas.height = 0;
+      }
+    };
   }, [projections, retirementAge]);
 
   return (
