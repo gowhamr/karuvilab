@@ -90,7 +90,7 @@ export function DraftDrawer() {
                         {draft.content}
                       </pre>
                     </div>
-                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-border opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-border opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => handleCopy(draft.content)}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-text-3 hover:text-text hover:bg-bg transition-colors"
