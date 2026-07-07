@@ -1,11 +1,14 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ToolEntry } from "@/src/tool-registry";
 import { ToolIcon } from "@/components/ui/Icons";
 import { cn } from "@/src/lib/utils";
-
+import { useFavoriteStore } from "@/src/store/useFavoriteStore";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Heart } from "lucide-react";
 
 interface ToolCardProps {
   tool: ToolEntry;
@@ -13,76 +16,85 @@ interface ToolCardProps {
 }
 
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
+  const favorites = useFavoriteStore(state => state.favorites);
+  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  const isFavorite = hydrated && favorites.includes(tool.id);
+  const isOffline = !tool.requiresNetwork;
+
+  const handleFavClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(tool.id);
+  }, [toggleFavorite, tool.id]);
+
   return (
-    <div
-      className="relative w-full flex-1 flex flex-col group hover:-translate-y-[3px] active:scale-[0.97] transition-transform duration-200 ease-out"
-      style={{ touchAction: "manipulation" }}
-    >
+    <div className="relative group w-full h-full">
       <Link
         href={`/${tool.href}`}
-        prefetch={false}
-        className={cn(
-          // Base
-          "relative flex flex-col flex-1 h-full bg-mat-surface border border-mat-border",
-          "overflow-hidden transition-all duration-150 ease-out",
-          // Hover
-          "hover:border-blue/30 hover:bg-mat-hover hover:shadow-md",
-          // Focus
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2",
-          // Size
-          compact
-            ? "min-h-22 md:min-h-24 p-3 md:p-3.5 rounded-2xl gap-2"
-            : "min-h-28 md:min-h-36 p-4 md:p-5 rounded-3xl gap-3"
-        )}
+        aria-label={tool.name}
+        className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-card"
       >
-        {/* Subtle top shimmer */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        />
-
-        {/* Icon */}
-        <div
+        <Card
+          variant="interactive"
+          padding={compact ? "sm" : "md"}
           className={cn(
-            "rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0",
-            "bg-blue/5 border border-blue/10 text-blue",
-            compact
-              ? "w-9 h-9"
-              : "w-11 h-11 md:w-12 md:h-12"
+            "flex flex-col h-full gap-3 select-none justify-between",
+            compact ? "min-h-[105px]" : "min-h-[160px]"
           )}
-          aria-hidden="true"
         >
-          <ToolIcon
-            toolId={tool.id}
-            category={tool.category}
-            className={compact ? "w-4 h-4" : "w-5 h-5 md:w-6 md:h-6"}
-          />
-        </div>
+          <div className="space-y-3">
+            <div className="flex items-start justify-between">
+              <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform duration-200">
+                <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
+              </div>
+            </div>
 
-        {/* Text */}
-        <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
-          <h3
-            className={cn(
-              "font-bold text-text leading-tight tracking-tight line-clamp-2 text-balance",
-              "group-hover:text-brand-primary transition-colors duration-150",
-              compact ? "text-sm" : "text-base"
+            <div className="space-y-1">
+              <h3 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors line-clamp-1">
+                {tool.name}
+              </h3>
+              <p className="text-caption text-text-secondary line-clamp-2 leading-relaxed">
+                {tool.desc}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap mt-auto">
+            <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-[10px]">
+              {tool.category}
+            </Badge>
+            {isOffline && (
+              <Badge variant="success" size="sm" className="text-[10px]">
+                Offline
+              </Badge>
             )}
-            title={tool.name}
-          >
-            {tool.name}
-          </h3>
-          {!compact && (
-            <p className="text-xs text-text-muted font-medium line-clamp-2 leading-relaxed">
-              {tool.desc}
-            </p>
-          )}
-          {compact && (
-            <p className="text-xs text-text-muted font-medium line-clamp-2 leading-snug">
-              {tool.desc}
-            </p>
-          )}
-        </div>
+          </div>
+        </Card>
       </Link>
+
+      {hydrated && (
+        <button
+          onClick={handleFavClick}
+          className={cn(
+            "absolute top-3 right-3 z-content p-1.5 rounded-full border transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-90",
+            isFavorite
+              ? "bg-danger/10 border-danger/20 text-danger"
+              : "bg-surface border-divider text-text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger/5"
+          )}
+          aria-label={isFavorite ? `Remove ${tool.name} from favorites` : `Add ${tool.name} to favorites`}
+          aria-pressed={isFavorite}
+        >
+          <Heart className={cn("w-3.5 h-3.5", isFavorite && "fill-current")} aria-hidden="true" />
+        </button>
+      )}
     </div>
   );
 });
+
+ToolCard.displayName = "ToolCard";

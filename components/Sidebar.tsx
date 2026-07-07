@@ -58,21 +58,21 @@ const SidebarItem = memo(function SidebarItem({
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "group relative flex items-center gap-3 rounded-xl transition-all duration-150 outline-none",
-        "focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2",
+        "group relative flex items-center gap-3 rounded-btn transition-all duration-150 outline-none",
+        "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
         compact
-          ? "h-10 px-3 text-xs font-semibold"
-          : "h-11 px-3 text-sm font-semibold",
+          ? "h-10 px-3 text-caption font-semibold"
+          : "h-11 px-3 text-body font-semibold",
         isActive
-          ? "bg-blue/10 text-blue"
-          : "text-text-3 hover:text-text hover:bg-mat-hover"
+          ? "bg-primary/10 text-primary"
+          : "text-text-secondary hover:text-text-primary hover:bg-surface-elevated"
       )}
     >
       {/* Active indicator bar */}
       {isActive && (
         <m.span
           layoutId="sidebar-active-pill"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-blue"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
           aria-hidden="true"
         />
@@ -84,8 +84,8 @@ const SidebarItem = memo(function SidebarItem({
           "flex items-center justify-center shrink-0 rounded-lg transition-all duration-150",
           compact ? "w-7 h-7" : "w-9 h-9",
           isActive
-            ? "bg-blue/15 text-blue"
-            : "bg-mat-base text-text-3 group-hover:bg-blue/8 group-hover:text-blue"
+            ? "bg-primary/15 text-primary"
+            : "bg-surface-elevated text-text-secondary group-hover:bg-primary/8 group-hover:text-primary"
         )}
         style={color && !isActive ? { background: `${color}15`, color } : undefined}
         aria-hidden="true"
@@ -117,10 +117,14 @@ const SidebarItem = memo(function SidebarItem({
 
 function SectionLabel({ icon: Icon, children }: { icon?: LucideIcon; children: React.ReactNode }) {
   return (
-    <div className="px-3 mb-2 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-widest">
+    <p
+      role="group"
+      aria-label={typeof children === 'string' ? children : undefined}
+      className="px-3 mb-2 flex items-center gap-2 text-[10px] font-black text-text-4 uppercase tracking-widest"
+    >
       {Icon && <Icon className="w-3 h-3 shrink-0" aria-hidden="true" />}
-      {children}
-    </div>
+      <span>{children}</span>
+    </p>
   );
 }
 
@@ -234,6 +238,7 @@ const SidebarContent = memo(function SidebarContent({
         <button
           onClick={handleSearchClick}
           aria-label="Search tools (⌘K)"
+          aria-haspopup="dialog"
           className={cn(
             "w-full h-10 flex items-center gap-2.5 px-3 rounded-xl",
             "bg-mat-base border border-border text-text-4 text-xs font-medium",
@@ -342,9 +347,17 @@ export function Sidebar() {
 
   const closeSidebar = useCallback(() => setIsSidebarOpen(false), [setIsSidebarOpen]);
 
-  useEffect(() => { setHydrated(true); }, []);
   useEffect(() => {
-    if (hydrated) setRecent(getRecentTools().slice(0, 5));
+    Promise.resolve().then(() => {
+      setHydrated(true);
+    });
+  }, []);
+  useEffect(() => {
+    if (hydrated) {
+      Promise.resolve().then(() => {
+        setRecent(getRecentTools().slice(0, 5));
+      });
+    }
   }, [pathname, hydrated]);
 
   const favorites = useMemo(() => {
@@ -407,6 +420,7 @@ export function Sidebar() {
       {/* ── Desktop fixed sidebar ── */}
       {desktopSidebarOpen && (
         <aside
+          id="desktop-sidebar"
           className={cn(
             "hidden md:flex fixed top-0 left-0 bottom-0 w-sidebar z-sidebar",
             "flex-col overflow-hidden",

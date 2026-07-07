@@ -148,3 +148,5 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.mem
     </AnimatePresence>
   );
 });
+
+TimezoneSearchModal.displayName = "TimezoneSearchModal";

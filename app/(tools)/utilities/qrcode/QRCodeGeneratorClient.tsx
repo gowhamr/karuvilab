@@ -95,7 +95,7 @@ export default function QRCodeGeneratorClient() {
     }
   }, []);
 
-  const getFinalString = () => {
+  const getFinalString = useCallback(() => {
     if (template === "upi") {
       if (!upiId) return "";
       let str = `upi://pay?pa=${encodeURIComponent(upiId)}`;
@@ -119,7 +119,10 @@ export default function QRCodeGeneratorClient() {
       return str;
     }
     return input;
-  };
+  }, [
+    template, upiId, payeeName, amount, wifiSsid, wifiEncryption, wifiPassword, wifiHidden,
+    vcardFirstName, vcardLastName, vcardCompany, vcardPhone, vcardEmail, vcardWebsite, input
+  ]);
 
   useEffect(() => {
     const finalInput = getFinalString();
@@ -152,11 +155,7 @@ export default function QRCodeGeneratorClient() {
         return null;
       });
     }
-  }, [
-    input, upiId, payeeName, amount, template, size, ecc, isLibLoaded, createUrl, revokeUrl,
-    wifiSsid, wifiPassword, wifiEncryption, wifiHidden,
-    vcardFirstName, vcardLastName, vcardPhone, vcardEmail, vcardCompany, vcardWebsite
-  ]);
+  }, [getFinalString, isLibLoaded, size, ecc, createUrl, revokeUrl]);
 
   const handleDownload = async () => {
     if (!qrBlobUrl) return;

@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import { sanitizeHtml } from '@/src/lib/security';
+import { logger } from '@/src/lib/logger';
 
 const MERMAID_LANGS = new Set([
   'mermaid', 'flowchart', 'flowcharttd', 'flowchartlr',
@@ -51,8 +52,10 @@ export class MarkdownService {
       const rawHtml = marked.parse(md, { renderer, gfm: true, breaks: true }) as string;
       return sanitizeHtml(rawHtml);
     } catch (e) {
-      console.error('Markdown parse error:', e);
-      return `<p class="text-error">Parse error: ${(e as Error).message}</p>`;
+      logger.error('Markdown parse error', { error: e });
+      // Escape the error message before embedding in HTML to prevent XSS (P-06)
+      const safeMsg = this.escapeHtml((e as Error).message || 'Unknown error');
+      return `<p class="text-error">Parse error: ${safeMsg}</p>`;
     }
   }
 

@@ -51,12 +51,18 @@ export default function CrontabEditorClient() {
   const [cheatsheetOpen, setCheatsheetOpen] = useState<boolean>(false);
   const [isQrOpen, setIsQrOpen] = useState(false);
 
+  const [now, setNow] = useState<number>(0);
+
+  useEffect(() => {
+    setNow(Date.now());
+  }, []);
+
   useEffect(() => {
     if (state.expr && state.expr !== localExpression) {
       setLocalExpression(state.expr as string);
       setParsed(parseCronExpression(state.expr as string));
     }
-  }, [state.expr]);
+  }, [state.expr, localExpression]);
 
   const handleExpressionChange = (val: string) => {
     setLocalExpression(val);
@@ -83,7 +89,8 @@ export default function CrontabEditorClient() {
   };
 
   const formatRelative = (date: Date) => {
-    const diff = date.getTime() - Date.now();
+    if (now === 0) return 'calculating...';
+    const diff = date.getTime() - now;
     const mins = Math.floor(diff / 60000);
     const hours = Math.floor(mins / 60);
     const days = Math.floor(hours / 24);

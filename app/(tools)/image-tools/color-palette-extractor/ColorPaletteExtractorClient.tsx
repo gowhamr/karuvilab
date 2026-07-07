@@ -53,7 +53,7 @@ export default function ColorPaletteExtractorClient() {
     } finally {
       setIsLoading(false);
     }
-  }, [imageUrl]);
+  }, [imageUrl, createUrl, revokeUrl]);
 
   return (
     <div className="space-y-8">

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
+import { logger } from "@/src/lib/logger";
 
 /**
  * KaruviLab Root Error Boundary
@@ -16,23 +17,24 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Global Critical Error:", error);
+    // NOTE: Cannot import logger here since this wraps the entire HTML/body.
+    // Use native console for this critical last-resort boundary only.
+     
+    console.error("[KV:CRITICAL] Global error boundary:", error.message, error.digest);
 
     // Detect if this is a chunk loading error (common after new deployments)
-    const isChunkError = 
-      error.message.includes("ChunkLoadError") || 
+    const isChunkError =
+      error.message.includes("ChunkLoadError") ||
       error.message.toLowerCase().includes("loading chunk") ||
       error.message.toLowerCase().includes("loading failed");
 
     if (isChunkError) {
-      console.warn("Chunk error detected. Triggering automatic reload...");
-      
       // Prevent infinite reload loops
       const reloadKey = "karuvi.last_reload";
       const lastReload = parseInt(sessionStorage.getItem(reloadKey) || "0");
       const now = Date.now();
-      
-      if (now - lastReload > 5000) { // Only auto-reload if last one was > 5s ago
+
+      if (now - lastReload > 5000) {
         sessionStorage.setItem(reloadKey, now.toString());
         setTimeout(() => window.location.reload(), 1000);
       }
@@ -42,12 +44,16 @@ export default function GlobalError({
   return (
     <html lang="en">
       <body className="bg-bg text-text antialiased">
-        <div className="min-h-screen flex items-center justify-center p-6 text-center">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="min-h-screen flex items-center justify-center p-6 text-center"
+        >
           <div className="max-w-md w-full space-y-8 animate-in fade-in zoom-in-95 duration-500">
             <div className="relative inline-flex mx-auto">
-              <div className="absolute -inset-4 bg-error/10 blur-2xl rounded-full" />
+              <div className="absolute -inset-4 bg-error/10 blur-2xl rounded-full" aria-hidden="true" />
               <div className="w-20 h-20 bg-surface border border-error/20 rounded-2xl flex items-center justify-center text-error relative">
-                <AlertTriangle className="w-10 h-10" />
+                <AlertTriangle className="w-10 h-10" aria-hidden="true" />
               </div>
             </div>
 
@@ -65,7 +71,7 @@ export default function GlobalError({
                 aria-label="Reload and try recovery"
                 className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white font-black rounded-2xl text-sm uppercase tracking-widest shadow-lg shadow-blue/20 hover:scale-102 active:scale-95 transition-all"
               >
-                <RefreshCcw className="w-4 h-4" />
+                <RefreshCcw className="w-4 h-4" aria-hidden="true" />
                 Reload Application
               </button>
               

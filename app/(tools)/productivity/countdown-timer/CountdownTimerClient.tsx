@@ -82,93 +82,89 @@ export default function CountdownTimerClient() {
 
   const totalInputMs = (parseInt(inputH || "0") * 3600 + parseInt(inputM || "0") * 60 + parseInt(inputS || "0")) * 1000;
 
-  const animate = useCallback((time: number) => {
-    if (targetTime !== null && isRunning && !isPaused) {
-      const now = performance.now();
-      const timeLeft = Math.max(0, targetTime - now);
-      setRemainingTime(timeLeft);
-      
-      if (timeLeft <= 0) {
-        setIsRunning(false);
-        setIsFinished(true);
-        if (settings.soundEnabled && !alarmPlayedRef.current) {
-          playAlarmBeep();
-          alarmPlayedRef.current = true;
+  const animateRef = useRef<(time: number) => void>(() => {});
+
+  useEffect(() => {
+    animateRef.current = (time: number) => {
+      if (targetTime !== null && isRunning && !isPaused) {
+        const now = performance.now();
+        const timeLeft = Math.max(0, targetTime - now);
+        setRemainingTime(timeLeft);
+        
+        if (timeLeft <= 0) {
+          setIsRunning(false);
+          setIsFinished(true);
+          if (settings.soundEnabled && !alarmPlayedRef.current) {
+            playAlarmBeep();
+            alarmPlayedRef.current = true;
+          }
+          return; // stop animation
         }
-        return; // stop animation
       }
-    }
-    requestRef.current = requestAnimationFrame(animate);
-  }, [targetTime, isRunning, isPaused, settings.soundEnabled]);
+      requestRef.current = requestAnimationFrame(animateRef.current);
+    };
+  });
 
   useEffect(() => {
     if (isRunning && !isPaused) {
-      requestRef.current = requestAnimationFrame(animate);
+      requestRef.current = requestAnimationFrame(animateRef.current);
     }
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [isRunning, isPaused, animate]);
+  }, [isRunning, isPaused]);
 
   const handleStart = () => {
     if (totalInputMs <= 0) return;
-    
+    const now = performance.now();
+    setTargetTime(now + (remainingTime > 0 ? remainingTime : totalInputMs));
+    setIsRunning(true);
+    setIsPaused(false);
     setIsFinished(false);
-    alarmPlayedRef.current = false;
-    
-    if (isPaused) {
-      // Resume
-      setTargetTime(performance.now() + pauseDuration);
-      setIsPaused(false);
-    } else {
-      // Fresh start
-      setTargetTime(performance.now() + totalInputMs);
-      setRemainingTime(totalInputMs);
-      setIsRunning(true);
-      setIsPaused(false);
-    }
   };
 
   const handlePause = () => {
     setIsPaused(true);
-    setPauseDuration(remainingTime);
+    setIsRunning(false);
+    if (requestRef.current) cancelAnimationFrame(requestRef.current);
   };
 
   const handleReset = () => {
     setIsRunning(false);
     setIsPaused(false);
     setIsFinished(false);
+    setRemainingTime(0);
     setTargetTime(null);
-    setRemainingTime(totalInputMs);
     alarmPlayedRef.current = false;
+    if (requestRef.current) cancelAnimationFrame(requestRef.current);
   };
 
   const handleStopAlarm = () => {
     setIsFinished(false);
-    setRemainingTime(totalInputMs); // reset to original input visually
+    handleReset();
   };
 
-  const displayString = isRunning || isPaused || isFinished 
-    ? formatTime(remainingTime, settings.showMilliseconds)
-    : formatTime(totalInputMs, settings.showMilliseconds);
+  const displayString = useMemo(() => {
+    const timeToFormat = isRunning || isPaused || isFinished ? remainingTime : totalInputMs;
+    const ms = Math.floor((timeToFormat % 1000) / 10);
+    const totalSecs = Math.floor(timeToFormat / 1000);
+    const secs = totalSecs % 60;
+    const mins = Math.floor(totalSecs / 60) % 60;
+    const hrs = Math.floor(totalSecs / 3600);
 
-  // Layout calculations
-  const bgClasses = isDashboard ? {
-    dark: 'bg-bg text-text',
-    light: 'bg-slate-50 text-slate-900',
-    amoled: 'bg-black text-white',
-    blue: 'bg-blue-950 text-blue-50',
-    matrix: 'bg-black text-green-500',
-  }[settings.dashboardTheme] || 'bg-bg text-text' : '';
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const base = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+    return settings.showMilliseconds ? `${base}.${pad(ms)}` : base;
+  }, [remainingTime, totalInputMs, isRunning, isPaused, isFinished, settings.showMilliseconds]);
 
   const textSize = isDashboard ? {
-    small: 'text-6xl md:text-8xl',
-    medium: 'text-8xl md:text-[10rem]',
-    large: 'text-[10rem] md:text-[14rem]',
-    huge: 'text-[14rem] md:text-[18rem]',
+    small: 'text-4xl md:text-6xl',
+    medium: 'text-6xl md:text-8xl',
+    large: 'text-8xl md:text-[12rem]',
+    huge: 'text-[10rem] md:text-[16rem]'
   }[settings.clockSize] || 'text-8xl md:text-[14rem]' : 'text-6xl md:text-8xl';
 
-  const MainClock = () => (
+  const renderMainClock = () => (
     <div className={cn("font-mono font-black tabular-nums tracking-tighter text-center transition-colors", 
       textSize,
       isFinished ? "text-error animate-pulse" : ""
@@ -183,7 +179,7 @@ export default function CountdownTimerClient() {
     setter(val);
   };
 
-  const InputScreen = () => (
+  const renderInputScreen = () => (
     <div className={cn("flex flex-col items-center justify-center gap-6", isDashboard ? "scale-125 md:scale-150" : "")}>
       <div className="flex flex-col items-center gap-2 mb-2">
         <p className="text-sm font-bold text-text-4 uppercase tracking-widest">Custom Timer</p>
@@ -222,7 +218,7 @@ export default function CountdownTimerClient() {
               setInputM(preset.m);
               setInputS(preset.s);
             }}
-            className="px-3 py-1.5 rounded-lg bg-surface-2 hover:bg-bg border border-border text-xs font-bold transition-all focus:ring-2 focus:ring-blue"
+            className="px-3 py-1.5 rounded-lg bg-surface-elevated hover:bg-bg border border-border text-xs font-bold transition-all focus:ring-2 focus:ring-blue"
           >
             {preset.label}
           </button>
@@ -240,7 +236,7 @@ export default function CountdownTimerClient() {
     </div>
   );
 
-  const Controls = () => {
+  const renderControls = () => {
     if (isFinished) {
       return (
         <div className={cn("flex items-center justify-center gap-6", isDashboard ? "mt-12 scale-150" : "mt-8")}>
@@ -281,11 +277,11 @@ export default function CountdownTimerClient() {
     );
   };
 
-  const SettingsPopover = () => (
+  const renderSettingsPopover = () => (
     <Popover.Root>
       <Popover.Trigger asChild>
         <button className={cn("p-3 rounded-xl backdrop-blur-md transition-colors border", 
-          isDashboard ? "bg-surface-2/20 hover:bg-surface-2/40 border-border/10" : "bg-surface hover:bg-surface-2 border-border"
+          isDashboard ? "bg-surface-elevated/20 hover:bg-surface-elevated/40 border-border/10" : "bg-surface hover:bg-surface-elevated border-border"
         )}>
           <Settings2 className="w-6 h-6 opacity-60 hover:opacity-100" />
         </button>
@@ -301,7 +297,7 @@ export default function CountdownTimerClient() {
                 <select 
                   value={settings.dashboardTheme} 
                   onChange={e => updateSettings({ dashboardTheme: e.target.value as any })}
-                  className="w-full bg-surface-2 border border-border rounded-lg p-2 text-sm outline-none"
+                  className="w-full bg-surface-elevated border border-border rounded-lg p-2 text-sm outline-none"
                 >
                   <option value="dark">Dark (Default)</option>
                   <option value="amoled">Pitch Black (AMOLED)</option>
@@ -319,7 +315,7 @@ export default function CountdownTimerClient() {
                     <button 
                       key={size}
                       onClick={() => updateSettings({ clockSize: size as any })}
-                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-2 text-text-4 hover:text-text")}
+                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-elevated text-text-4 hover:text-text")}
                     >
                       {size}
                     </button>
@@ -344,20 +340,28 @@ export default function CountdownTimerClient() {
     </Popover.Root>
   );
 
+  const bgClasses = isDashboard ? {
+    dark: 'bg-bg text-text',
+    light: 'bg-slate-50 text-slate-900',
+    amoled: 'bg-black text-white',
+    blue: 'bg-blue-950 text-blue-50',
+    matrix: 'bg-black text-green-500',
+  }[settings.dashboardTheme] || 'bg-bg text-text' : '';
+
   if (isDashboard) {
     return (
       <div className={cn("h-full w-full flex flex-col items-center justify-center relative overflow-hidden", bgClasses)}>
         <div className="absolute top-6 right-6 z-modal">
-          <SettingsPopover />
+          {renderSettingsPopover()}
         </div>
         
         <div className="flex flex-col items-center justify-center w-full max-w-7xl px-8 flex-1">
           {!isRunning && !isPaused && !isFinished ? (
-            <InputScreen />
+            renderInputScreen()
           ) : (
             <>
-              <MainClock />
-              <Controls />
+              {renderMainClock()}
+              {renderControls()}
             </>
           )}
         </div>
@@ -377,16 +381,16 @@ export default function CountdownTimerClient() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto flex flex-col items-center py-12">
       <div className="w-full flex justify-end px-4">
-        <SettingsPopover />
+        {renderSettingsPopover()}
       </div>
       
       <div className="bg-surface border border-border rounded-5xl p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative min-h-[400px]">
         {!isRunning && !isPaused && !isFinished ? (
-          <InputScreen />
+          renderInputScreen()
         ) : (
           <>
-            <MainClock />
-            <Controls />
+            {renderMainClock()}
+            {renderControls()}
           </>
         )}
       </div>

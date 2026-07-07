@@ -11,9 +11,10 @@ import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
 import { QRModal } from '@/components/ui/QRModal';
 
 // Utility functions
-function toRelative(date: Date): string {
+function toRelative(date: Date, now: number): string {
+  if (now === 0) return 'calculating...';
   const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-  const diff = (date.getTime() - Date.now()) / 1000;
+  const diff = (date.getTime() - now) / 1000;
   
   if (Math.abs(diff) < 60) return rtf.format(Math.round(diff), 'second');
   if (Math.abs(diff) < 3600) return rtf.format(Math.round(diff / 60), 'minute');
@@ -48,18 +49,19 @@ export default function UnixTimestampClient() {
     }
   }, [initDone, rawTs, rawDate, setState]);
 
-  const inputTs = rawTs === '0' && !initDone ? Math.floor(Date.now() / 1000).toString() : rawTs;
-  const inputDate = rawDate === '' && !initDone ? new Date().toISOString().slice(0, 16) : rawDate;
+  const inputTs = rawTs === '0' && !initDone ? '0' : rawTs;
+  const inputDate = rawDate === '' && !initDone ? '' : rawDate;
 
   const setMode = useCallback((m: 'toHuman' | 'toUnix') => setState({ mode: m }), [setState]);
   const setInputTs = useCallback((v: string) => setState({ ts: v }), [setState]);
   const setInputDate = useCallback((v: string) => setState({ date: v }), [setState]);
 
-  const [liveTime, setLiveTime] = useState<number>(Math.floor(Date.now() / 1000));
+  const [liveTime, setLiveTime] = useState<number>(0);
   const [timezone, setTimezone] = useState<string>(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
   // Live clock
   useEffect(() => {
+    setLiveTime(Math.floor(Date.now() / 1000));
     const interval = setInterval(() => {
       setLiveTime(Math.floor(Date.now() / 1000));
     }, 1000);
@@ -182,7 +184,7 @@ export default function UnixTimestampClient() {
             <div className="bg-blue/5 border border-blue/20 rounded-2xl p-5 space-y-1">
               <span className="text-tiny font-black uppercase tracking-widest text-blue flex items-center gap-1.5"><Clock className="w-3 h-3"/> Relative Time</span>
               <div className="flex items-center justify-between gap-4">
-                <span className="font-mono text-sm font-bold text-blue">{toRelative(parsedDate)}</span>
+                <span className="font-mono text-sm font-bold text-blue">{toRelative(parsedDate, liveTime * 1000)}</span>
               </div>
             </div>
 

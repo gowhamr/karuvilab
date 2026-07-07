@@ -202,6 +202,9 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
           {/* Modal Container */}
           <div className="fixed inset-0 z-modal flex flex-col sm:p-4 md:p-12 lg:p-24 pointer-events-none">
               <m.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Search tools"
               ref={containerRef}
               initial={{ y: -8, scale: 0.98 }}
               animate={{ y: 0, scale: 1 }}
@@ -222,12 +225,19 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
               {/* Search Input Header */}
               <div className="flex-shrink-0 flex items-center h-14 px-4 border-b border-mat-border bg-mat-surface">
                 {isSystemAction ? (
-                  <span className="text-xl font-bold text-brand-primary mr-2">{'>'}</span>
+                  <span className="text-xl font-bold text-brand-primary mr-2" aria-hidden="true">{'>'}</span>
                 ) : (
-                  <Search className="w-5 h-5 text-text-muted shrink-0" />
+                  <Search className="w-5 h-5 text-text-muted shrink-0" aria-hidden="true" />
                 )}
                 <input
                   ref={inputRef}
+                  id="search-overlay-input"
+                  role="combobox"
+                  aria-autocomplete="list"
+                  aria-expanded={results.length > 0 || isSystemAction}
+                  aria-haspopup="listbox"
+                  aria-controls="search-results-list"
+                  aria-activedescendant={focusedIndex >= 0 ? `search-result-${focusedIndex}` : undefined}
                   value={query}
                   onChange={e => {
                     setQuery(e.target.value);
@@ -251,10 +261,10 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
                         }
                       } catch {}
                     }}
-                    className="flex items-center gap-1 min-h-11 px-2.5 py-1 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors mr-1"
-                    title="Paste from clipboard and detect tool"
+                    aria-label="Paste from clipboard"
+                    className="flex items-center gap-1 min-h-11 px-2.5 py-1 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors mr-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
                   >
-                    <Clipboard className="w-3.5 h-3.5" />
+                    <Clipboard className="w-3.5 h-3.5" aria-hidden="true" />
                     <span className="hidden sm:inline">Paste</span>
                   </button>
                 )}
@@ -262,13 +272,14 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
                   <button
                     onClick={() => { setQuery(''); const input = inputRef.current; if(input) input.focus(); }}
                     className="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text rounded-full transition-colors"
-                    aria-label="Clear search"
+                    aria-label="Clear search query"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-4 h-4" aria-hidden="true" />
                   </button>
                 )}
                 <button
                   onClick={onClose}
+                  aria-label="Cancel search"
                   className="sm:hidden min-w-11 min-h-11 flex items-center justify-center text-sm font-semibold text-brand-primary ml-1"
                 >
                   Cancel

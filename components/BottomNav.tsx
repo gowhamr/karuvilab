@@ -3,99 +3,83 @@
 import React, { memo, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, LayoutGrid, Settings } from "lucide-react";
+import { Home, Search, Layers, Grid, Settings } from "lucide-react";
 import { useSearchStore } from "@/src/store/useSearchStore";
-import { m } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Search", action: "search", icon: Search },
-  { label: "Tools", action: "menu", icon: LayoutGrid },
+  { label: "Workbench", href: "/workbench", icon: Layers },
+  { label: "All Tools", href: "/all-tools", icon: Grid },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export const BottomNav = memo(function BottomNav() {
   const { isFullscreen } = useFullscreenContext();
-  const pathname = usePathname();
+  const pathname = usePathname() || "";
   const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
-  const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
 
-  const handleSearch = useCallback(() => setIsPaletteOpen(true), [setIsPaletteOpen]);
-  const handleMenu = useCallback(() => setIsSidebarOpen(true), [setIsSidebarOpen]);
+  const handleSearch = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsPaletteOpen(true);
+  }, [setIsPaletteOpen]);
 
   if (isFullscreen) return null;
 
   return (
-    <nav 
-      className="fixed bottom-0 left-0 right-0 z-nav md:hidden bg-surface border-t border-border px-4 pb-safe-bottom shadow-lg dark:shadow-none !opacity-100"
-      style={{ 
-        contain: 'layout style paint'
-      }}
+    <nav
+      className="fixed left-4 right-4 z-nav md:hidden bg-surface/80 backdrop-blur-lg border border-divider rounded-fab py-2 px-3 shadow-xl shadow-black/20"
+      style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
+      aria-label="Mobile navigation"
     >
-      <div className="flex items-center justify-between h-16 max-w-md mx-auto">
+      <div className="flex items-center justify-between max-w-md mx-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
-          const isActive = item.href === pathname;
+          const isActive = item.href ? (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) : false;
 
           if (item.action === "search") {
             return (
-              <m.button
+              <button
                 key={item.label}
-                whileTap={{ scale: 0.95 }}
                 onClick={handleSearch}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-12 min-h-12 outline-none"
+                className="relative flex flex-col items-center justify-center text-text-secondary hover:text-primary transition-colors w-12 h-12 outline-none rounded-full focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label="Search"
               >
-                <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
-                  <Icon className="w-5 h-5 text-text-3" />
-                </div>
-              </m.button>
-            );
-          }
-
-          if (item.action === "menu") {
-            return (
-              <m.button
-                key={item.label}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleMenu}
-                className="flex flex-col items-center justify-center gap-1 text-text-4 hover:text-brand-primary transition-colors min-w-12 min-h-12 outline-none"
-                aria-label="Menu"
-              >
-                <div className="p-2.5 rounded-xl hover:bg-mat-hover transition-colors">
-                  <Icon className="w-5 h-5 text-text-3" />
-                </div>
-              </m.button>
+                <Icon className="w-5 h-5" strokeWidth={2} />
+                <span className="sr-only">Search</span>
+              </button>
             );
           }
 
           return (
-            <m.div key={item.label} whileTap={{ scale: 0.95 }}>
-              <Link
-                href={item.href!}
-                aria-label={item.label}
-                aria-current={isActive ? "page" : undefined}
-                className={`flex flex-col items-center justify-center gap-1 transition-all min-w-12 min-h-12 outline-none ${
-                  isActive ? "text-brand-primary" : "text-text-4 hover:text-text"
-                }`}
-              >
-                <div className={`relative flex flex-col items-center p-2.5 rounded-xl transition-all ${
-                  isActive 
-                    ? "text-brand-primary" 
-                    : "bg-transparent text-text-4 hover:bg-mat-hover"
-                }`}>
-                  <Icon className="w-5 h-5" fill={isActive ? "currentColor" : "none"} />
+            <Link
+              key={item.label}
+              href={item.href!}
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
+              className="relative flex flex-col items-center justify-center w-12 h-12 outline-none rounded-full focus-visible:ring-2 focus-visible:ring-primary group"
+            >
+              <div className="relative flex items-center justify-center transition-transform active:scale-95">
+                <Icon 
+                  className={`w-5 h-5 transition-colors duration-150 ${
+                    isActive ? "text-primary" : "text-text-secondary group-hover:text-text-primary"
+                  }`} 
+                  strokeWidth={2} 
+                />
+                
+                <AnimatePresence>
                   {isActive && (
-                    <m.div 
-                      layoutId="nav-indicator"
-                      className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-primary shadow-glow-primary"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    <m.span 
+                      layoutId="mobile-nav-dot"
+                      className="absolute -bottom-1.5 w-1 h-1 rounded-full bg-primary"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </div>
-              </Link>
-            </m.div>
+                </AnimatePresence>
+              </div>
+            </Link>
           );
         })}
       </div>

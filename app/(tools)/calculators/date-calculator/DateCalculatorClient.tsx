@@ -16,8 +16,8 @@ function diffDates(from: string, to: string) {
   const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
 
   // Years / months / days
-  let ya = a < b ? a : b;
-  let yb = a < b ? b : a;
+  const ya = a < b ? a : b;
+  const yb = a < b ? b : a;
   let years = yb.getFullYear() - ya.getFullYear();
   let months = yb.getMonth() - ya.getMonth();
   let days = yb.getDate() - ya.getDate();

@@ -144,7 +144,7 @@ export function SyntaxEditor({
               >
                 {Array.from({ length: 20 }).map((_, i) => (
                   <div key={i} className="h-7 w-full px-4 py-2">
-                    <div className="h-full bg-surface-2 rounded shimmer-wrapper opacity-20" style={{ width: `${Math.random() * 60 + 20}%` }} />
+                    <div className="h-full bg-surface-2 rounded shimmer-wrapper opacity-20" style={{ width: `${((i * 17) % 60) + 20}%` }} />
                   </div>
                 ))}
               </m.div>

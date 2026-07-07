@@ -58,9 +58,11 @@ export function Header() {
               "min-w-11 min-h-11 -ml-2 text-text-3 hover:text-blue hover:bg-blue/5 rounded-lg transition-all flex items-center justify-center",
               desktopSidebarOpen ? "md:hidden" : "flex"
             )}
-            aria-label="Toggle menu"
+            aria-label="Toggle sidebar menu"
+            aria-expanded={desktopSidebarOpen}
+            aria-controls="desktop-sidebar"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-6 h-6" aria-hidden="true" />
           </button>
 
           <Link href="/" className="min-h-11 flex items-center md:hidden">
@@ -77,11 +79,12 @@ export function Header() {
             onMouseLeave={() => setHoveredLink(null)}
           >
             {[
-              { label: "Calculators", href: "/calculators" },
-              { label: "PDF Tools", href: "/pdf-tools" },
-              { label: "Image Tools", href: "/image-tools" },
+              { label: "Home", href: "/" },
+              { label: "All Tools", href: "/all-tools" },
+              { label: "Workbench", href: "/workbench" },
+              { label: "Settings", href: "/settings" },
             ].map((link) => {
-              const isActive = pathname.startsWith(link.href);
+              const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
               const isHovered = hoveredLink === link.href;
 
               return (
@@ -91,13 +94,13 @@ export function Header() {
                   onMouseEnter={() => setHoveredLink(link.href)}
                   className={cn(
                     "relative flex items-center h-12 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors z-content",
-                    isActive || isHovered ? "text-blue" : "text-text-3 hover:text-blue"
+                    isActive || isHovered ? "text-primary" : "text-text-secondary hover:text-text-primary"
                   )}
                 >
                   {((hoveredLink === link.href) || (!hoveredLink && isActive)) && (
                     <m.div
                       layoutId="header-nav-pill"
-                      className="absolute inset-0 bg-blue/5 rounded-lg z-behind"
+                      className="absolute inset-0 bg-primary/5 rounded-lg z-behind"
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -113,12 +116,12 @@ export function Header() {
 
           <button
             onClick={() => setDraftDrawerOpen(true)}
-            className="relative flex items-center justify-center min-w-11 min-h-11 rounded-xl text-text-3 hover:text-brand-primary hover:bg-brand-primary/10 transition-colors"
-            title="Open Drafts"
+            className="relative flex items-center justify-center min-w-11 min-h-11 rounded-xl text-text-3 hover:text-brand-primary hover:bg-brand-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+            aria-label={draftsCount > 0 ? `Open Drafts (${draftsCount} saved)` : "Open Drafts"}
           >
-            <Save className="w-5 h-5" />
+            <Save className="w-5 h-5" aria-hidden="true" />
             {draftsCount > 0 && (
-              <span className="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full" aria-hidden="true" />
             )}
           </button>
 

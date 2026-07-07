@@ -23,9 +23,9 @@ export function MediaErrorBanner({
   className,
 }: MediaErrorBannerProps) {
   const getIcon = () => {
-    if (errorCode === "UNSUPPORTED_FORMAT") return <FileWarning className="w-5 h-5 text-red-500" />;
+    if (errorCode === "UNSUPPORTED_FORMAT") return <FileWarning className="w-5 h-5 text-error" />;
     if (errorCode === "ENGINE_LOAD_FAILED") return <WifiOff className="w-5 h-5 text-amber-500" />;
-    return <AlertTriangle className="w-5 h-5 text-red-500" />;
+    return <AlertTriangle className="w-5 h-5 text-error" />;
   };
 
   return (
@@ -37,15 +37,15 @@ export function MediaErrorBanner({
       className={cn(
         "p-6 rounded-4xl border-l-4 shadow-sm backdrop-blur-md flex flex-col md:flex-row gap-6 items-start md:items-center justify-between",
         errorCode === "ENGINE_LOAD_FAILED" 
-          ? "bg-amber-500/5 border-amber-500/40 text-amber-900 dark:text-amber-200" 
-          : "bg-red-500/5 border-red-500/40 text-red-900 dark:text-red-200",
+          ? "bg-amber-500/5 border-amber-500/40 text-warning" 
+          : "bg-error/5 border-error/40 text-danger",
         className
       )}
     >
       <div className="flex items-start gap-4">
         <div className={cn(
           "p-3 rounded-2xl shrink-0",
-          errorCode === "ENGINE_LOAD_FAILED" ? "bg-amber-500/10" : "bg-red-500/10"
+          errorCode === "ENGINE_LOAD_FAILED" ? "bg-amber-500/10" : "bg-error/10"
         )}>
           {getIcon()}
         </div>

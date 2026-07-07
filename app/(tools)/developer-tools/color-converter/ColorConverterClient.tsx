@@ -30,7 +30,8 @@ function rgbToHex(r: number, g: number, b: number) {
 function rgbToHsl(r: number, g: number, b: number) {
   r /= 255; g /= 255; b /= 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s = 0, l = (max + min) / 2;
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
 
   if (max !== min) {
     const d = max - min;
@@ -60,6 +61,26 @@ function getContrastRatio(lum1: number, lum2: number) {
 }
 
 const FORMATS = ["HEX", "RGB", "HSL"] as const;
+
+const ContrastBadge = ({ ratio, label }: { ratio: number, label: string }) => {
+  const aa = ratio >= 4.5;
+  const aaa = ratio >= 7;
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-black text-text-4 uppercase tracking-widest">{label}</p>
+      <div className="flex gap-2">
+        <div className={cn(
+          "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
+          aa ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
+        )}>AA {aa ? "PASS" : "FAIL"}</div>
+        <div className={cn(
+          "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
+          aaa ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
+        )}>AAA {aaa ? "PASS" : "FAIL"}</div>
+      </div>
+    </div>
+  );
+};
 
 export default function ColorConverterClient() {
   const { state, setState, shareUrl, hasParams } = useUrlState({
@@ -102,25 +123,7 @@ export default function ColorConverterClient() {
     }
   };
 
-  const ContrastBadge = ({ ratio, label }: { ratio: number, label: string }) => {
-    const aa = ratio >= 4.5;
-    const aaa = ratio >= 7;
-    return (
-      <div className="space-y-2">
-        <p className="text-xs font-black text-text-4 uppercase tracking-widest">{label}</p>
-        <div className="flex gap-2">
-          <div className={cn(
-            "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
-            aa ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
-          )}>AA {aa ? "PASS" : "FAIL"}</div>
-          <div className={cn(
-            "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
-            aaa ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
-          )}>AAA {aaa ? "PASS" : "FAIL"}</div>
-        </div>
-      </div>
-    );
-  };
+  
 
   return (
     <div className="space-y-12">

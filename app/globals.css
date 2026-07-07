@@ -47,6 +47,16 @@
   --color-text-3: var(--text-3);
   --color-text-4: var(--text-4);
 
+  /* Brand Spec Mappings */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-divider: var(--divider);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-surface-elevated: var(--surface-elevated);
+
   /* Material Design System v2.0 */
   --color-mat-base: var(--kv-mat-base);
   --color-mat-surface: var(--kv-mat-surface);
@@ -76,6 +86,14 @@
   --radius-4xl: 32px;
   --radius-5xl: 40px;
   --radius-6xl: 48px;
+
+  /* Spec Radii */
+  --radius-card: var(--radius-card-val);
+  --radius-btn: var(--radius-btn-val);
+  --radius-input: var(--radius-input-val);
+  --radius-bottom-sheet: var(--radius-bottom-sheet-val);
+  --radius-dialog: var(--radius-dialog-val);
+  --radius-fab: var(--radius-fab-val);
 
   --shadow-glow: 0 4px 12px rgba(99, 102, 241, 0.1);
   --shadow-premium: 0 1px 2px rgba(0,0,0,0.05);
@@ -202,7 +220,28 @@ html.preload *:after {
   --blue-dark:    #4338CA;
   --blue-light:   #EEF2FF;
   --blue-glow:    rgba(79, 70, 229, 0.08);
-  --success:      #10B981;
+
+  /* Spec Brand Variables (Light Mode defaults) */
+  --primary:         #4F46E5;
+  --secondary:       #3B82F6;
+  --success:         #10B981;
+  --warning:         #F59E0B;
+  --danger:          #EF4444;
+  --divider:         rgba(15, 23, 42, 0.08);
+  --text-primary:    #0F172A;
+  --text-secondary:  #475569;
+  --bg:              #FFFFFF;
+  --surface:         #FFFFFF;
+  --surface-elevated:#F8FAFC;
+
+  /* Spec Radius Variables */
+  --radius-card-val:         22px;
+  --radius-btn-val:          16px;
+  --radius-input-val:        18px;
+  --radius-bottom-sheet-val: 32px;
+  --radius-dialog-val:       28px;
+  --radius-fab-val:          999px;
+
   --error:        #EF4444;
   --warn:         #F59E0B;
 
@@ -214,23 +253,20 @@ html.preload *:after {
   --border:       #DDE4EE;
   --border-rgb:   221, 228, 238;
   --border-2:     #CBD5E1;
-  --bg:           #F8FAFC;
-  --bg-rgb:       248, 250, 252;
-  --surface:      #FFFFFF;
-  --elevated:     #F8FAFC;
   --hover:        #F1F5F9;
   --bg-input:     #F8FAFC;
 
   --border-focus:   #4F46E5;
+  --elevated:       var(--surface-elevated);
 
   /* Material Light Overrides */
-  --kv-mat-base:          #F8FAFC;
-  --kv-mat-surface:       #FFFFFF;
-  --kv-mat-raised:        #F1F5F9;
+  --kv-mat-base:          var(--bg);
+  --kv-mat-surface:       var(--surface);
+  --kv-mat-raised:        var(--surface-elevated);
   --kv-mat-overlay:       #FFFFFF;
   --kv-mat-hover:         #F1F5F9;
-  --kv-mat-border:        #E2E8F0;
-  --kv-mat-border-focus:  #4F46E5;
+  --kv-mat-border:        var(--divider);
+  --kv-mat-border-focus:  var(--primary);
   --kv-mat-shine:         rgba(255, 255, 255, 0.5);
   
   --kv-glass-bg:          rgba(255, 255, 255, 0.85);
@@ -245,51 +281,61 @@ html.preload *:after {
 }
 
 [data-theme="dark"] {
-  --success:      #34D399;
-  --error:        #F87171;
-  --warn:         #FBBF24;
+  --success:      #28C76F;
+  --error:        #FF5C8A;
+  --warn:         #FFB020;
   color-scheme: dark;
-  --blue:        #818CF8;
-  --blue-dark:   #6366F1;
-  --blue-light:  rgba(79, 70, 229, 0.1);
-  --blue-glow:   rgba(79, 70, 229, 0.12);
-  
-  --text:        #F8FAFC;
-  --text-rgb:    248, 250, 252;
-  --text-2:      #CBD5E1;
-  --text-3:      #A0AEC0;
-  --text-4:      #8B99AE;
+  --blue:        #4D8DFF;
+  --blue-dark:   #7C5CFF;
+  --blue-light:  rgba(124, 92, 255, 0.1);
+  --blue-glow:   rgba(124, 92, 255, 0.15);
 
-  /* Restore Material Dark Tokens */
-  --kv-mat-base:          #0A0F1E;
-  --kv-mat-surface:       #0F172A;
-  --kv-mat-raised:        #1E293B;
-  --kv-mat-overlay:       #263348;
-  --kv-mat-hover:         #2D3D55;
-  --kv-mat-border:        rgba(255, 255, 255, 0.06);
-  --kv-mat-border-focus:  rgba(79, 70, 229, 0.6);
-  --kv-mat-shine:         rgba(255, 255, 255, 0.07);
+  /* Spec Brand Variables (Dark Mode) */
+  --primary:         #7C5CFF;
+  --secondary:       #4D8DFF;
+  --success-spec:    #28C76F;
+  --warning-spec:    #FFB020;
+  --danger-spec:     #FF5C8A;
+  --divider:         rgba(255, 255, 255, 0.08);
+  --text-primary:    #FFFFFF;
+  --text-secondary:  #AAB3C5;
+  --bg:              #070B14;
+  --surface:         #101626;
+  --surface-elevated:#171F33;
 
-  --kv-glass-bg:          rgba(15, 23, 42, 0.75);
+  --text:        #FFFFFF;
+  --text-rgb:    255, 255, 255;
+  --text-2:      #AAB3C5;
+  --text-3:      #8F9AAE;
+  --text-4:      #768297;
+
+  /* Material Dark Tokens Overrides */
+  --kv-mat-base:          var(--bg);
+  --kv-mat-surface:       var(--surface);
+  --kv-mat-raised:        var(--surface-elevated);
+  --kv-mat-overlay:       #1E2538;
+  --kv-mat-hover:         #1D2436;
+  --kv-mat-border:        var(--divider);
+  --kv-mat-border-focus:  var(--primary);
+  --kv-mat-shine:         rgba(255, 255, 255, 0.04);
+
+  --kv-glass-bg:          rgba(16, 22, 38, 0.75);
   --kv-glass-border:      rgba(255, 255, 255, 0.08);
   --kv-glass-shine:       rgba(255, 255, 255, 0.04);
 
   --border:      var(--kv-mat-border);
   --border-rgb:  255, 255, 255;
-  --border-2:    #334155;
-  --bg:          var(--kv-mat-base);
-  --bg-rgb:      2, 6, 23;
-  --surface:     var(--kv-mat-surface);
+  --border-2:    #1E2538;
   --elevated:    var(--kv-mat-raised);
   --hover:       var(--kv-mat-hover);
   --bg-input:    var(--kv-mat-base);
   --border-focus: var(--kv-mat-border-focus);
 
   /* Contrast Overrides for Dark Mode */
-  --kv-text:             #F8FAFC;
-  --kv-text-muted:       #94A3B8;
+  --kv-text:             #FFFFFF;
+  --kv-text-muted:       #AAB3C5;
   --kv-chip-border:      rgba(255, 255, 255, 0.10);
-  --kv-trust-text:       #94A3B8;
+  --kv-trust-text:       #AAB3C5;
 }
 
 html {

@@ -124,7 +124,7 @@ export default function HashGeneratorClient() {
       setIsProcessing(false);
       setProgress(null);
     }
-  }, [mode, text, file, selectedAlgos, hmacKey, useHmac]);
+  }, [mode, text, file, selectedAlgos, hmacKey, useHmac, encoding]);
 
   // Real-time update for text
   useEffect(() => {

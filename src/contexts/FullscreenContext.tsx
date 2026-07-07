@@ -86,11 +86,11 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleFocus = useCallback((toolId: string) => {
-    displayMode === 'focus' ? exit() : enterFocus(toolId);
+    if (displayMode === 'focus') { exit(); } else { enterFocus(toolId); }
   }, [displayMode, enterFocus, exit]);
 
   const toggleDashboard = useCallback((toolId: string) => {
-    displayMode === 'dashboard' ? exit() : enterDashboard(toolId);
+    if (displayMode === 'dashboard') { exit(); } else { enterDashboard(toolId); }
   }, [displayMode, enterDashboard, exit]);
 
   // Global keyboard handler

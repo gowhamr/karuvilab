@@ -70,7 +70,7 @@ export default function TlvParserClient() {
         if (idx >= cleanHex.length) break;
 
         // Length parsing (Single or multi-byte)
-        let lengthByte = parseInt(cleanHex.substring(idx, idx + 2), 16);
+        const lengthByte = parseInt(cleanHex.substring(idx, idx + 2), 16);
         idx += 2;
         let length = lengthByte;
 

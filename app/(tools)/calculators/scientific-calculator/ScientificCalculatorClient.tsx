@@ -11,6 +11,49 @@ interface HistoryItem {
   timestamp: number;
 }
 
+const SCI_BUTTONS = [
+  { label: "sin", type: "append", value: "sin(" },
+  { label: "cos", type: "append", value: "cos(" },
+  { label: "tan", type: "append", value: "tan(" },
+  { label: "asin", type: "append", value: "asin(" },
+  { label: "acos", type: "append", value: "acos(" },
+  { label: "atan", type: "append", value: "atan(" },
+  { label: "log", type: "append", value: "log(" },
+  { label: "ln", type: "append", value: "ln(" },
+  { label: "x^y", type: "append", value: "^" },
+  { label: "sqrt", type: "append", value: "sqrt(" },
+  { label: "cbrt", type: "append", value: "cbrt(" },
+  { label: "x!", type: "append", value: "!" },
+  { label: "π", type: "append", value: "π" },
+  { label: "e", type: "append", value: "e" },
+  { label: "Ans", type: "append", value: "Ans" },
+  { label: "(", type: "append", value: "(" },
+  { label: ")", type: "append", value: ")" },
+  { label: "MODE", type: "mode", className: "text-blue bg-blue/5" },
+];
+
+const BASIC_BUTTONS = [
+  { label: "7", type: "append", value: "7" },
+  { label: "8", type: "append", value: "8" },
+  { label: "9", type: "append", value: "9" },
+  { label: "÷", type: "append", value: "/", className: "text-blue bg-blue/5" },
+  { label: "4", type: "append", value: "4" },
+  { label: "5", type: "append", value: "5" },
+  { label: "6", type: "append", value: "6" },
+  { label: "×", type: "append", value: "*", className: "text-blue bg-blue/5" },
+  { label: "1", type: "append", value: "1" },
+  { label: "2", type: "append", value: "2" },
+  { label: "3", type: "append", value: "3" },
+  { label: "−", type: "append", value: "-", className: "text-blue bg-blue/5" },
+  { label: "0", type: "append", value: "0" },
+  { label: ".", type: "append", value: "." },
+  { label: "AC", type: "clear", className: "text-error bg-error/5" },
+  { label: "+", type: "append", value: "+", className: "text-blue bg-blue/5" },
+  { label: "DEL", type: "backspace", className: "text-text-3" },
+  { label: "%", type: "append", value: "%", className: "text-text-3" },
+  { label: "=", type: "calculate", className: "col-span-2 bg-blue text-white hover:bg-blue/90 shadow-md shadow-blue/10" },
+];
+
 export default function ScientificCalculatorClient() {
   const [display, setDisplay] = useState("0");
   const [expression, setExpression] = useState("");
@@ -18,6 +61,7 @@ export default function ScientificCalculatorClient() {
   const [ans, setAns] = useState<string>("0");
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -152,48 +196,19 @@ export default function ScientificCalculatorClient() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [append, backspace, calculate, clear]);
 
-  const sciButtons = [
-    { label: "sin", action: () => append("sin(") },
-    { label: "cos", action: () => append("cos(") },
-    { label: "tan", action: () => append("tan(") },
-    { label: "asin", action: () => append("asin(") },
-    { label: "acos", action: () => append("acos(") },
-    { label: "atan", action: () => append("atan(") },
-    { label: "log", action: () => append("log(") },
-    { label: "ln", action: () => append("ln(") },
-    { label: "x^y", action: () => append("^") },
-    { label: "sqrt", action: () => append("sqrt(") },
-    { label: "cbrt", action: () => append("cbrt(") },
-    { label: "x!", action: () => append("!") },
-    { label: "π", action: () => append("π") },
-    { label: "e", action: () => append("e") },
-    { label: "Ans", action: () => append("Ans") },
-    { label: "(", action: () => append("(") },
-    { label: ")", action: () => append(")") },
-    { label: mode.toUpperCase(), action: () => setMode(mode === "deg" ? "rad" : "deg"), className: "text-blue bg-blue/5" },
-  ];
-
-  const basicButtons = [
-    { label: "7", action: () => append("7") },
-    { label: "8", action: () => append("8") },
-    { label: "9", action: () => append("9") },
-    { label: "÷", action: () => append("/"), className: "text-blue bg-blue/5" },
-    { label: "4", action: () => append("4") },
-    { label: "5", action: () => append("5") },
-    { label: "6", action: () => append("6") },
-    { label: "×", action: () => append("*"), className: "text-blue bg-blue/5" },
-    { label: "1", action: () => append("1") },
-    { label: "2", action: () => append("2") },
-    { label: "3", action: () => append("3") },
-    { label: "−", action: () => append("-"), className: "text-blue bg-blue/5" },
-    { label: "0", action: () => append("0") },
-    { label: ".", action: () => append(".") },
-    { label: "AC", action: clear, className: "text-error bg-error/5" },
-    { label: "+", action: () => append("+"), className: "text-blue bg-blue/5" },
-    { label: "DEL", action: backspace, className: "text-text-3" },
-    { label: "%", action: () => append("%"), className: "text-text-3" },
-    { label: "=", action: calculate, className: "col-span-2 bg-blue text-white hover:bg-blue/90 shadow-md shadow-blue/10" },
-  ];
+  const handleButtonClick = useCallback((btn: typeof BASIC_BUTTONS[0] | typeof SCI_BUTTONS[0]) => {
+    if (btn.type === "append" && btn.value) {
+      append(btn.value);
+    } else if (btn.type === "clear") {
+      clear();
+    } else if (btn.type === "backspace") {
+      backspace();
+    } else if (btn.type === "calculate") {
+      calculate();
+    } else if (btn.type === "mode") {
+      setMode(prev => prev === "deg" ? "rad" : "deg");
+    }
+  }, [append, clear, backspace, calculate]);
 
   return (
     <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
@@ -225,27 +240,27 @@ export default function ScientificCalculatorClient() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           {/* Scientific Section */}
           <div className="md:col-span-2 grid grid-cols-3 gap-2 p-2 bg-bg/50 rounded-3xl border border-border/50">
-            {sciButtons.map((btn, i) => (
+            {SCI_BUTTONS.map((btn, i) => (
               <m.button
                 key={`sci-${i}`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={btn.action}
+                onClick={() => handleButtonClick(btn)}
                 className={`p-3 text-xs font-bold rounded-xl border border-border bg-surface hover:border-blue/30 hover:bg-surface/80 transition-all ${btn.className || "text-text-2"}`}
               >
-                {btn.label}
+                {btn.label === "MODE" ? mode.toUpperCase() : btn.label}
               </m.button>
             ))}
           </div>
 
           {/* Basic Section */}
           <div className="md:col-span-3 grid grid-cols-4 gap-2 p-2 bg-bg/50 rounded-3xl border border-border/50">
-            {basicButtons.map((btn, i) => (
+            {BASIC_BUTTONS.map((btn, i) => (
               <m.button
                 key={`basic-${i}`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={btn.action}
+                onClick={() => handleButtonClick(btn)}
                 className={`p-4 text-lg font-bold rounded-xl border border-border bg-surface hover:border-blue/30 hover:bg-surface/80 transition-all flex items-center justify-center ${btn.className || "text-text"}`}
               >
                 {btn.label}

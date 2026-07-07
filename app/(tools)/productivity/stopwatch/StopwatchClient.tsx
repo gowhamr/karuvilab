@@ -40,21 +40,25 @@ export default function StopwatchClient() {
   
   const requestRef = useRef<number | null>(null);
   
-  const animate = useCallback((time: number) => {
-    if (startTime !== null && isRunning) {
-      setElapsed(performance.now() - startTime);
-    }
-    requestRef.current = requestAnimationFrame(animate);
-  }, [startTime, isRunning]);
+  const animateRef = useRef<(time: number) => void>(() => {});
+
+  useEffect(() => {
+    animateRef.current = (time: number) => {
+      if (startTime !== null && isRunning) {
+        setElapsed(performance.now() - startTime);
+      }
+      requestRef.current = requestAnimationFrame(animateRef.current);
+    };
+  });
 
   useEffect(() => {
     if (isRunning) {
-      requestRef.current = requestAnimationFrame(animate);
+      requestRef.current = requestAnimationFrame(animateRef.current);
     }
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [isRunning, animate]);
+  }, [isRunning]);
 
   const toggleStart = () => {
     if (isRunning) {
@@ -108,13 +112,13 @@ export default function StopwatchClient() {
     huge: 'text-[14rem] md:text-[18rem]',
   }[settings.clockSize] || 'text-8xl md:text-[14rem]' : 'text-6xl md:text-8xl';
 
-  const MainClock = () => (
+  const renderMainClock = () => (
     <div className={cn("font-mono font-black tabular-nums tracking-tighter text-center", textSize)}>
       {displayString}
     </div>
   );
 
-  const Controls = () => (
+  const renderControls = () => (
     <div className={cn("flex items-center justify-center gap-6", isDashboard ? "mt-12 scale-150" : "mt-8")}>
       <button
         onClick={handleLapOrReset}
@@ -144,7 +148,7 @@ export default function StopwatchClient() {
     </div>
   );
 
-  const SettingsPopover = () => (
+  const renderSettingsPopover = () => (
     <Popover.Root>
       <Popover.Trigger asChild>
         <button className={cn("p-3 rounded-xl backdrop-blur-md transition-colors border", 
@@ -207,7 +211,7 @@ export default function StopwatchClient() {
     </Popover.Root>
   );
 
-  const LapsList = () => (
+  const renderLapsList = () => (
     <div className={cn("w-full max-w-2xl mx-auto flex-1 overflow-auto mt-12", isDashboard ? "max-h-[40vh]" : "max-h-[500px]")}>
       {laps.length === 0 ? (
         <div className="text-center text-text-4 opacity-50 py-8 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
@@ -254,13 +258,13 @@ export default function StopwatchClient() {
     return (
       <div className={cn("h-full w-full flex flex-col items-center justify-center relative overflow-hidden", bgClasses)}>
         <div className="absolute top-6 right-6 z-modal">
-          <SettingsPopover />
+          {renderSettingsPopover()}
         </div>
         
         <div className="flex flex-col items-center justify-center w-full max-w-7xl px-8 flex-1">
-          <MainClock />
-          <Controls />
-          {settings.showLaps && <LapsList />}
+          {renderMainClock()}
+          {renderControls()}
+          {settings.showLaps && renderLapsList()}
         </div>
 
         <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-30 text-sm font-bold uppercase tracking-widest border-t-2 border-current pt-4">
@@ -278,15 +282,15 @@ export default function StopwatchClient() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto flex flex-col items-center py-12">
       <div className="w-full flex justify-end px-4">
-        <SettingsPopover />
+        {renderSettingsPopover()}
       </div>
       
       <div className="bg-surface border border-border rounded-5xl p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative">
-        <MainClock />
-        <Controls />
+        {renderMainClock()}
+        {renderControls()}
       </div>
 
-      {settings.showLaps && <LapsList />}
+      {settings.showLaps && renderLapsList()}
     </div>
   );
 }

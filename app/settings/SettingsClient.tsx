@@ -16,11 +16,13 @@ import { cn } from "@/src/lib/utils";
 import { formatBytes } from "@/src/utils";
 
 // --- Lazy Load Sections ---
-const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false });
-const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false });
-const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false });
-const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false });
-const WorldClockSection = dynamic(() => import("./sections/WorldClockSection").then(m => m.WorldClockSection), { ssr: false });
+const SectionSkeleton = () => <div className="animate-pulse space-y-4"><div className="h-8 w-1/3 bg-surface rounded-lg" /><div className="h-32 w-full bg-surface rounded-2xl" /><div className="h-32 w-full bg-surface rounded-2xl" /></div>;
+
+const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false, loading: () => <SectionSkeleton /> });
+const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false, loading: () => <SectionSkeleton /> });
+const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false, loading: () => <SectionSkeleton /> });
+const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false, loading: () => <SectionSkeleton /> });
+const WorldClockSection = dynamic(() => import("./sections/WorldClockSection").then(m => m.WorldClockSection), { ssr: false, loading: () => <SectionSkeleton /> });
 
 import { Globe } from "lucide-react";
 
@@ -48,7 +50,7 @@ export default function SettingsClient() {
         try {
           const { usage } = await navigator.storage.estimate();
           setStorageUsage(formatBytes(usage || 0));
-        } catch (e) {
+        } catch {
           setStorageUsage("Unknown");
         }
       } else {
@@ -128,6 +130,7 @@ export default function SettingsClient() {
                 placeholder="Search settings..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search settings"
                 className="w-full h-12 pl-11 pr-4 bg-bg border border-border rounded-2xl text-xs font-bold text-text placeholder:text-text-4 focus:border-blue/40 outline-none transition-all"
               />
             </div>

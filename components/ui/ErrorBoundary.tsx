@@ -4,6 +4,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw, Flag } from "lucide-react";
 import { useSupportStore } from "@/src/store/useSupportStore";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
+import { logger } from "@/src/lib/logger";
 
 interface Props {
   children: ReactNode;
@@ -27,11 +28,12 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    logger.error("Component error boundary caught", { error, action: "error-boundary" });
+    void errorInfo; // errorInfo logged via context above
 
     // Detect if this is a chunk loading error
-    const isChunkError = 
-      error.message.includes("ChunkLoadError") || 
+    const isChunkError =
+      error.message.includes("ChunkLoadError") ||
       error.message.toLowerCase().includes("loading chunk") ||
       error.message.toLowerCase().includes("loading failed");
 
@@ -39,7 +41,7 @@ export class ErrorBoundary extends Component<Props, State> {
       const reloadKey = "karuvi.last_component_reload";
       const lastReload = parseInt(sessionStorage.getItem(reloadKey) || "0");
       const now = Date.now();
-      
+
       if (now - lastReload > 5000) {
         sessionStorage.setItem(reloadKey, now.toString());
         setTimeout(() => {
@@ -59,14 +61,14 @@ export class ErrorBoundary extends Component<Props, State> {
       
       return (
         this.props.fallback || (
-          <div 
-            role="alert" 
+          <div
+            role="alert"
             aria-live="assertive"
-            className="flex flex-col items-center justify-center p-8 sm:p-12 bg-surface border border-border rounded-5xl space-y-8 text-center animate-in fade-in zoom-in-95 duration-500 shadow-2xl shadow-red-500/5 overflow-hidden"
+            className="flex flex-col items-center justify-center p-8 sm:p-12 bg-surface border border-border rounded-5xl space-y-8 text-center animate-in fade-in zoom-in-95 duration-500 shadow-2xl shadow-error/5 overflow-hidden"
           >
-            <div className="w-20 h-20 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 relative">
-              <AlertTriangle className="w-10 h-10" />
-              <div className="absolute inset-0 rounded-2xl border border-red-500/20 animate-ping" />
+            <div className="w-20 h-20 rounded-2xl bg-error/10 flex items-center justify-center text-error relative">
+              <AlertTriangle className="w-10 h-10" aria-hidden="true" />
+              <div className="absolute inset-0 rounded-2xl border border-error/20 animate-ping" aria-hidden="true" />
             </div>
             
             <div className="space-y-3">
@@ -81,9 +83,10 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={() => {
                   this.setState({ hasError: false, error: undefined, showDetails: false });
                 }}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue text-white rounded-2xl text-tiny font-bold uppercase tracking-widest-sm shadow-md shadow-blue/10 hover:scale-102 active:scale-98 transition-all"
+                aria-label="Retry loading this component"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white rounded-2xl text-tiny font-bold uppercase tracking-widest-sm shadow-md shadow-primary/10 hover:bg-primary/90 active:scale-98 transition-all"
               >
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className="w-4 h-4" aria-hidden="true" />
                 Retry Component
               </button>
               
@@ -95,13 +98,14 @@ export class ErrorBoundary extends Component<Props, State> {
                       window.location.reload();
                     }
                   }}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-blue/30 transition-all"
+                  aria-label="Reload the entire application"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-primary/30 transition-all"
                 >
-                  <RefreshCw className="w-3 h-3" />
+                  <RefreshCw className="w-3 h-3" aria-hidden="true" />
                   Reload App
                 </button>
                 <button
-                  onClick={() => useSupportStore.getState().openFeedback("bug", { 
+                  onClick={() => useSupportStore.getState().openFeedback("bug", {
                     error: errorMsg,
                     stack: errorStack,
                     metadata: {
@@ -109,27 +113,30 @@ export class ErrorBoundary extends Component<Props, State> {
                       url: typeof window !== 'undefined' ? window.location.href : 'unknown'
                     }
                   })}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-red-500/30 hover:text-red-500 transition-all"
+                  aria-label="Report this bug to our team"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:border-error/30 hover:text-error transition-all"
                 >
-                  <Flag className="w-3 h-3" />
+                  <Flag className="w-3 h-3" aria-hidden="true" />
                   Report Issue
                 </button>
               </div>
             </div>
 
             <div className="w-full max-w-md pt-4">
-              <button 
+              <button
                 onClick={() => this.setState(s => ({ showDetails: !s.showDetails }))}
-                className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 hover:text-blue transition-colors mb-4"
+                aria-expanded={this.state.showDetails}
+                aria-controls="error-details"
+                className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 hover:text-primary transition-colors mb-4"
               >
                 {this.state.showDetails ? "Hide Error Details" : "Show Error Details"}
               </button>
               
               {this.state.showDetails && (
-                <div className="text-left p-6 bg-bg border border-border rounded-2xl overflow-auto max-h-60 animate-in slide-in-from-top-4 duration-300">
+                <div id="error-details" className="text-left p-6 bg-bg border border-border rounded-2xl overflow-auto max-h-60 animate-in slide-in-from-top-4 duration-300">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-xs font-black uppercase text-red-500 mb-1">Error Message</p>
+                      <p className="text-xs font-black uppercase text-error mb-1">Error Message</p>
                       <code className="text-xs font-mono text-text-2 break-all">{errorMsg}</code>
                     </div>
                     {errorStack && (

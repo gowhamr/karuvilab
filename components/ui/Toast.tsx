@@ -51,16 +51,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   return (
     <ToastContext.Provider value={{ toast }}>
-      <Toaster 
-        theme="dark" 
-        closeButton 
-        richColors 
+      <Toaster
+        closeButton
+        richColors
         position="bottom-right"
+        theme="system"
         toastOptions={{
-          style: {
-            borderRadius: '24px',
-            fontFamily: 'var(--font-inter), sans-serif',
-          }
+          classNames: {
+            toast: "rounded-3xl font-inter",
+          },
         }}
       />
       {children}

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, DM_Serif_Display } from "next/font/google";
+import { Inter, DM_Serif_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import { metadata } from "./metadata";
 import { PWARegistration } from "@/components/PWARegistration";
@@ -9,10 +9,18 @@ import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 import { StructuredData } from "@/src/lib/seo";
 import Script from "next/script";
 import { SpeedInsights } from '@vercel/speed-insights/next';
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+});
+
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-poppins",
 });
 
 const dmSerif = DM_Serif_Display({
@@ -41,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable} preload`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${poppins.variable} ${dmSerif.variable} preload`}>
       <head>
         {/* LCP Font Preloads — prevents FOUT and improves LCP score */}
         <link rel="preload" as="font" type="font/woff2" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" crossOrigin="anonymous" />

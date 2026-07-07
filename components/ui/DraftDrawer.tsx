@@ -3,11 +3,20 @@
 import React from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { useDraftStore } from '@/src/store/useDraftStore';
+import { useShallow } from 'zustand/react/shallow';
 import { X, Copy, Trash2, Send, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 
 export function DraftDrawer() {
-  const { isOpen, setIsOpen, drafts, removeDraft, clearDrafts } = useDraftStore();
+  const { isOpen, setIsOpen, drafts, removeDraft, clearDrafts } = useDraftStore(
+    useShallow((s) => ({
+      isOpen: s.isOpen,
+      setIsOpen: s.setIsOpen,
+      drafts: s.drafts,
+      removeDraft: s.removeDraft,
+      clearDrafts: s.clearDrafts,
+    }))
+  );
   const { toast } = useToast();
 
   const handleCopy = (content: string) => {

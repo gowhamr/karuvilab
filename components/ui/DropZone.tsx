@@ -79,8 +79,8 @@ export function DropZone({
         whileTap={{ scale: 0.995 }}
         animate={{ 
           scale: isDragging ? 1.02 : 1,
-          borderColor: isDragging ? "var(--blue)" : error ? "rgb(239, 68, 68)" : "var(--border)",
-          backgroundColor: isDragging ? "var(--blue-glow)" : error ? "rgba(239, 68, 68, 0.05)" : "var(--surface)"
+          borderColor: isDragging ? "var(--blue)" : error ? "var(--error)" : "var(--border)",
+          backgroundColor: isDragging ? "var(--blue-glow)" : error ? "var(--error-glow)" : "var(--surface)"
         }}
         className={cn(
           "relative group cursor-pointer overflow-hidden rounded-3xl border-2 border-dashed transition-colors duration-300",
@@ -100,8 +100,9 @@ export function DropZone({
           }
         }}
         aria-label={`${title}. ${description}`}
-        aria-invalid={!!error}
+        data-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
+        aria-dropeffect="copy"
       >
         <m.div
           animate={{ 
@@ -172,9 +173,9 @@ export function DropZone({
             exit={{ opacity: 0, height: 0 }}
             id={errorId}
             role="alert"
-            className="flex items-center gap-2 text-xs font-bold text-red-500 bg-red-500/5 p-3 rounded-xl border border-red-500/20 overflow-hidden"
+            className="flex items-center gap-2 text-xs font-bold text-error bg-error/5 p-3 rounded-xl border border-error/20 overflow-hidden"
           >
-            <AlertCircle className="w-4 h-4" />
+            <AlertCircle className="w-4 h-4" aria-hidden="true" />
             {error}
           </m.div>
         )}

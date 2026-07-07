@@ -21,6 +21,10 @@ export function RecoveryBanner() {
   const isError = type === 'idb_error' || type === 'worker_crash' || type === 'queue_error';
   const Icon = isError ? AlertCircle : AlertTriangle;
 
+  const colorClasses = isError
+    ? { border: "border-l-error", text: "text-error", btn: "bg-error text-white hover:bg-error/80" }
+    : { border: "border-l-warning", text: "text-warning", btn: "bg-warning text-white hover:bg-warning/80" };
+
   return (
     <AnimatePresence>
       <m.div
@@ -31,9 +35,9 @@ export function RecoveryBanner() {
         exit={{ opacity: 0, y: -20 }}
         className="fixed top-20 left-1/2 -translate-x-1/2 z-modal w-11/12 max-w-lg"
       >
-        <div className={`p-4 rounded-2xl shadow-xl border border-border border-l-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-surface ${isError ? 'border-l-red-500 text-red-600 dark:text-red-400' : 'border-l-amber-500 text-amber-700 dark:text-amber-400'}`}>
+        <div className={`p-4 rounded-2xl shadow-xl border border-border ${colorClasses.border} border-l-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-surface ${colorClasses.text}`}>
           <div className="flex items-start gap-3">
-            <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div className="space-y-1">
               <h3 className="font-bold text-sm tracking-tight">System Notice</h3>
               <p className="text-xs font-medium opacity-80 leading-relaxed">{message}</p>
@@ -47,7 +51,8 @@ export function RecoveryBanner() {
                   action.onClick();
                   dismissBanner();
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${isError ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-amber-500 text-white hover:bg-amber-600'}`}
+                aria-label={action.label}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${colorClasses.btn}`}
               >
                 {action.label}
               </button>

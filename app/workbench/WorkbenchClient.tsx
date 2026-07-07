@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { ALL_TOOLS, ToolEntry } from "@/src/tool-registry";
 import { Plus, X, Columns, Maximize2, Search, AppWindow } from "lucide-react";
 import { cn } from "@/src/lib/utils";
@@ -32,33 +32,32 @@ export default function WorkbenchClient() {
     );
   }, [searchQuery]);
 
-  const addTab = (tool: ToolEntry) => {
+  const addTab = useCallback((tool: ToolEntry) => {
     const newTab: Tab = { id: Date.now().toString(), tool };
     setTabs(prev => [...prev, newTab]);
     setActiveTabId(newTab.id);
     setIsPickerOpen(false);
-  };
+  }, []);
 
-  const removeTab = (id: string, e: React.MouseEvent) => {
+  const removeTab = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setTabs(prev => prev.filter(t => t.id !== id));
-    if (activeTabId === id) {
-      const remaining = tabs.filter(t => t.id !== id);
-      setActiveTabId(remaining.length > 0 ? remaining[remaining.length - 1]?.id ?? null : null);
-    }
-    if (splitTabId === id) {
-      setSplitTabId(null);
-    }
-  };
+    setTabs(prev => {
+      const remaining = prev.filter(t => t.id !== id);
+      setActiveTabId(curr => {
+        if (curr === id) {
+          return remaining.length > 0 ? remaining[remaining.length - 1]?.id ?? null : null;
+        }
+        return curr;
+      });
+      return remaining;
+    });
+    setSplitTabId(curr => curr === id ? null : curr);
+  }, []);
 
-  const toggleSplit = (id: string, e: React.MouseEvent) => {
+  const toggleSplit = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (splitTabId === id) {
-      setSplitTabId(null);
-    } else {
-      setSplitTabId(id);
-    }
-  };
+    setSplitTabId(curr => curr === id ? null : id);
+  }, []);
 
   const { handleTouchStart, handleTouchEnd } = useWorkbenchTouch({
     tabs,

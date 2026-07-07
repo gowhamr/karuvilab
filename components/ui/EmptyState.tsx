@@ -6,7 +6,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { m, AnimatePresence, motion } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { 
   LucideIcon, 
   X, 
@@ -17,7 +17,6 @@ import {
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { SampleAssetKey, loadSample } from "@/src/data/sampleAssets";
 import { cn } from "@/src/lib/utils";
-import { useReducedMotion } from "framer-motion";
 
 const TRUST_COPY: Record<"A" | "B" | "C", { title: string, desc: string }> = {
   A: { title: "Processing: 100% Local", desc: "No uploads. No account. No tracking." },
@@ -31,7 +30,7 @@ const dragStateClasses = {
   idle:     "border-dashed border-mat-border",
   hover:    "border-dashed border-brand-primary/40 bg-brand-primary/10",
   over:     "border-solid border-brand-primary bg-brand-primary/15",
-  rejected: "border-solid border-red-500 bg-red-500/10",
+  rejected: "border-solid border-danger bg-danger/10",
 } as const;
 
 function resolveTrustVariant(
@@ -119,7 +118,7 @@ export function EmptyState({
     return () => { handleExit(); window.removeEventListener("pagehide", handleExit); };
   }, [toolId, recordView, recordBounce]);
 
-  const onBrowse = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const onBrowse = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     handleEngagement();
     if (subAction?.onClick) {
@@ -127,17 +126,17 @@ export function EmptyState({
     } else {
       fileInputRef.current?.click();
     }
-  };
+  }, [handleEngagement, subAction]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
       onDrop(files);
     }
     e.target.value = ''; // Reset
-  };
+  }, [onDrop]);
 
-  const handleSampleClick = async (e: React.MouseEvent) => {
+  const handleSampleClick = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
     handleEngagement();
     if (sampleCTA?.onClick) {
@@ -149,7 +148,7 @@ export function EmptyState({
         onDrop(files);
       }
     }
-  };
+  }, [handleEngagement, sampleCTA, toolId, onDrop]);
 
   useEffect(() => {
     if (dragState === "rejected") {
@@ -162,7 +161,7 @@ export function EmptyState({
   }, [dragState]);
 
   return (
-    <motion.div layout className={cn("flex flex-col gap-4 w-full", className)}>
+    <m.div layout className={cn("flex flex-col gap-4 w-full", className)}>
       <AnimatePresence>
         {lastSession && (
           <m.div
@@ -177,7 +176,7 @@ export function EmptyState({
             <span className="text-sm text-text-3 font-bold truncate">↩ {lastSession.label} · Continue?</span>
             <div className="flex items-center gap-2">
               <button onClick={() => { handleEngagement(); lastSession.onRestore(); }} className="text-sm font-black text-brand-primary min-w-11 min-h-11">Restore</button>
-              <button onClick={lastSession.onDismiss} className="min-w-11 min-h-11 text-text-4" aria-label="Dismiss session restore"><X className="w-4 h-4" /></button>
+              <button onClick={lastSession.onDismiss} className="min-w-11 min-h-11 text-text-4" aria-label="Dismiss session restore"><X className="w-4 h-4" aria-hidden="true" /></button>
             </div>
           </m.div>
         )}
@@ -204,6 +203,7 @@ export function EmptyState({
           (dragState === "rejected" || isRejected) && dragStateClasses.rejected,
           isRejected && "animate-shake"
         )}
+        aria-dropeffect="copy"
       >
         <input
           ref={fileInputRef}
@@ -216,7 +216,7 @@ export function EmptyState({
         />
 
         <div className={cn("mb-6 p-6 rounded-3xl bg-mat-base border border-mat-border transition-all", dragState === "over" && "scale-110 text-brand-primary", isRejected && "text-error")}>
-          {isRejected ? <XCircleIcon className="w-12 h-12" /> : <Icon className="w-12 h-12" />}
+          {isRejected ? <XCircleIcon className="w-12 h-12" aria-hidden="true" /> : <Icon className="w-12 h-12" aria-hidden="true" />}
         </div>
 
         <h2 className="text-xl md:text-2xl font-black text-text mb-2 tracking-tight">
@@ -250,14 +250,15 @@ export function EmptyState({
             Result: {outcomeText.replace(/^Result:\s*/i, '').slice(0, 52)}
           </p>
         )}
-
-        <button 
-          onClick={handleSampleClick} 
-          className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-brand-primary flex items-center gap-2 hover:bg-brand-primary/20 transition-colors"
-         aria-label="Play Circle">
-          <PlayCircle className="w-4 h-4" aria-hidden="true" /> {sampleCTA?.label || "Try Sample File"}
-        </button>
       </m.div>
-    </motion.div>
+
+      {/* Try Sample File button — placed outside role='button' div to avoid invalid ARIA nesting */}
+      <button 
+        onClick={handleSampleClick} 
+        className="h-11 px-6 bg-brand-primary/10 border border-brand-primary/20 rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-brand-primary flex items-center gap-2 hover:bg-brand-primary/20 transition-colors self-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+        aria-label={sampleCTA?.label || "Try a sample file"}>
+        <PlayCircle className="w-4 h-4" aria-hidden="true" /> {sampleCTA?.label || "Try Sample File"}
+      </button>
+    </m.div>
   );
 }

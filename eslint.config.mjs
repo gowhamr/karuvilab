@@ -1,5 +1,6 @@
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
+import reactHooks from "eslint-plugin-react-hooks";
 
 const config = [
   {
@@ -13,12 +14,16 @@ const config = [
       "dist/**",
       "scripts/**",
       "*.js",
-      "*.ts"
+      "*.ts",
+      "*.cjs"
     ]
   },
   ...nextCoreWebVitals,
   ...nextTypescript,
   {
+    plugins: {
+      "react-hooks": reactHooks
+    },
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": "off",
@@ -26,11 +31,15 @@ const config = [
       "no-console": "off",
       "jsx-a11y/control-has-associated-label": "off",
       "react/no-unescaped-entities": "off",
-      "@typescript-eslint/no-empty-object-type": "off"
+      "@typescript-eslint/no-empty-object-type": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "@next/next/no-img-element": "off"
     }
   },
   {
     files: [
+      "app/**/*.ts",
+      "app/**/*.tsx",
       "src/workers/**/*.ts",
       "src/workers/**/*.js",
       "src/engine/workers/**/*.ts",

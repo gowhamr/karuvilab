@@ -19,7 +19,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      setIsEmbed(params.get("embed") === "true");
+      Promise.resolve().then(() => {
+        setIsEmbed(params.get("embed") === "true");
+      });
     }
   }, []);
 

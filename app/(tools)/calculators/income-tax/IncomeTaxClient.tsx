@@ -70,7 +70,7 @@ function calculateTaxForRegime(
   regime: TaxRegime,
   age: AgeGroup
 ): TaxResult {
-  let taxableIncome = Math.max(0, grossIncome - deductions);
+  const taxableIncome = Math.max(0, grossIncome - deductions);
   
   let slabs = NEW_REGIME_SLABS;
   if (regime === 'old') {

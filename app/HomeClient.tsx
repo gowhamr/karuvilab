@@ -45,10 +45,11 @@ interface SectionHeaderProps {
   icon?: React.ElementType;
   badge?: string;
   href?: string;
+  headingId?: string;
 }
 
 const SectionHeader = memo(function SectionHeader({
-  title, subtitle, icon: Icon, badge, href,
+  title, subtitle, icon: Icon, badge, href, headingId,
 }: SectionHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-5 md:mb-6">
@@ -59,7 +60,7 @@ const SectionHeader = memo(function SectionHeader({
           </div>
         )}
         <div>
-          <h2 className="text-base md:text-lg font-black tracking-tight text-text flex items-center gap-2">
+          <h2 id={headingId} className="text-base md:text-lg font-black tracking-tight text-text flex items-center gap-2">
             {title}
             {badge && (
               <span className="px-2 py-0.5 rounded-full bg-blue/8 border border-blue/12 text-[10px] font-bold uppercase tracking-widest text-blue">
@@ -91,7 +92,6 @@ const SectionHeader = memo(function SectionHeader({
 export default function HomeClient() {
   const activeCategory   = useSearchStore(state => state.activeCategory);
   const setActiveCategory = useSearchStore(state => state.setActiveCategory);
-  const setIsPaletteOpen  = useSearchStore(state => state.setIsPaletteOpen);
   const isSidebarOpen     = useSearchStore(state => state.isSidebarOpen);
 
   const favoriteIds = useFavoriteStore(state => state.favorites);
@@ -156,7 +156,7 @@ export default function HomeClient() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="w-full space-y-0 pb-16">
+      <div className="w-full space-y-0 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-16">
 
         <HomeHero isReturning={isReturning} />
 
@@ -256,6 +256,7 @@ export default function HomeClient() {
                     subtitle="Most-used across all users"
                     icon={TrendingUp}
                     badge="Hot"
+                    headingId="popular-heading"
                   />
                   <m.div
                     initial={{ opacity: 0, y: 16 }}
@@ -303,6 +304,7 @@ export default function HomeClient() {
                     title={t("common.all")}
                     subtitle="The complete universal toolkit"
                     icon={LayoutGrid}
+                    headingId="all-tools-heading"
                   />
                   <m.div
                     initial={{ opacity: 0, y: 16 }}

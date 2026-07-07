@@ -97,11 +97,12 @@ export default function PhoneMockupGeneratorClient() {
         ctx.restore();
       };
     }
+    const canvas = canvasRef.current;
     return () => {
       active = false;
-      if (canvasRef.current) {
-        canvasRef.current.width = 0;
-        canvasRef.current.height = 0;
+      if (canvas) {
+        canvas.width = 0;
+        canvas.height = 0;
       }
     };
   }, [image, selectedDevice, bgColor]);

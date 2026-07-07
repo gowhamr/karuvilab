@@ -198,7 +198,7 @@ const api = {
   },
 
   async evaluateMath(expr: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const factorial = (n: number): number => {
       if (n < 0 || n > 170) return NaN;
       if (n === 0) return 1;

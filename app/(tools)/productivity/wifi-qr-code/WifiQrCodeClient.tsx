@@ -16,10 +16,21 @@ export default function WifiQrCodeClient() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLibLoaded, setIsLibLoaded] = useState(false);
   const [qrBlobUrl, setQrBlobUrl] = useState<string | null>(null);
+  const urlToRevokeRef = useRef<string | null>(null);
 
   const wifiData = ssid ? `WIFI:S:${ssid};T:${type};P:${password};${hidden ? 'H:true' : ''};;` : "";
 
   useEffect(() => {
+    return () => {
+      if (urlToRevokeRef.current) {
+        revokeUrl(urlToRevokeRef.current);
+      }
+    };
+  }, [revokeUrl]);
+
+  useEffect(() => {
+    let active = true;
+
     if (isLibLoaded && wifiData && (window as any).QRCode) {
       const generateLocalQr = async () => {
         try {
@@ -28,10 +39,15 @@ export default function WifiQrCodeClient() {
             margin: 2,
             color: { dark: "#000000", light: "#ffffff" }
           });
+          if (!active) return;
           const res = await fetch(dataUrl);
           const blob = await res.blob();
           const url = createUrl(blob);
-          if (qrBlobUrl) revokeUrl(qrBlobUrl);
+          
+          if (urlToRevokeRef.current) {
+            revokeUrl(urlToRevokeRef.current);
+          }
+          urlToRevokeRef.current = url;
           setQrBlobUrl(url);
         } catch (err) {
           console.error("QR Generation failed:", err);
@@ -39,9 +55,16 @@ export default function WifiQrCodeClient() {
       };
       generateLocalQr();
     } else {
-      if (qrBlobUrl) revokeUrl(qrBlobUrl);
+      if (urlToRevokeRef.current) {
+        revokeUrl(urlToRevokeRef.current);
+        urlToRevokeRef.current = null;
+      }
       setQrBlobUrl(null);
     }
+
+    return () => {
+      active = false;
+    };
   }, [wifiData, isLibLoaded, createUrl, revokeUrl]);
 
   const downloadQr = async () => {

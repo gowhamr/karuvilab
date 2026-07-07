@@ -37,7 +37,9 @@ export default function EMICalculatorClient() {
       setIsHydrated(true);
     });
     if (useSessionStore.persist.hasHydrated()) {
-      setIsHydrated(true);
+      Promise.resolve().then(() => {
+        setIsHydrated(true);
+      });
     }
     return unsub;
   }, []);
@@ -45,10 +47,12 @@ export default function EMICalculatorClient() {
   // Load state only after hydration
   useEffect(() => {
     if (!isHydrated) return;
-    const savedState = loadState<EmiInputsType>( 'emi-calculator');
+    const savedState = loadState<EmiInputsType>('emi-calculator');
     if (savedState) {
-      setInputs(savedState);
-      setShowRestoredBanner(true);
+      Promise.resolve().then(() => {
+        setInputs(savedState);
+        setShowRestoredBanner(true);
+      });
     }
   }, [isHydrated, loadState, setInputs]);
 
@@ -71,7 +75,7 @@ export default function EMICalculatorClient() {
 
     calculate();
     return () => { active = false; };
-  }, [inputs, saveState]);
+  }, [inputs, saveState, isHydrated]);
 
   const summary = useMemo(() => {
     if (!result) return "";

@@ -26,7 +26,7 @@ const RDCalculatorClient = memo(function RDCalculatorClient() {
     const totalInterest = maturity - totalInvested;
 
     const rows: { year: number; invested: number; value: number; interest: number }[] = [];
-    let currentMaturity = 0;
+    const currentMaturity = 0;
     for (let y = 1; y <= years; y++) {
       const ny = y * 12;
       const val = monthly * (Math.pow(1 + i, ny) - 1) / (1 - Math.pow(1 + i, -1/3));

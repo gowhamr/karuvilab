@@ -3,18 +3,20 @@
 import React from "react";
 import Link from "next/link";
 import { WifiOff, Home, RefreshCw } from "lucide-react";
-import { motion } from "framer-motion";
+import { m, MotionConfig } from "framer-motion";
 
 export default function OfflinePage() {
   return (
-    <div className="min-h-tool-viewport-lg flex flex-col items-center justify-center p-6 text-center space-y-8">
-      <motion.div 
+    <MotionConfig reducedMotion="user">
+    <main className="min-h-tool-viewport-lg flex flex-col items-center justify-center p-6 text-center space-y-8">
+      <m.div 
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="w-24 h-24 rounded-3xl bg-blue/10 flex items-center justify-center text-blue"
+        aria-hidden="true"
       >
-        <WifiOff size={48} />
-      </motion.div>
+        <WifiOff size={48} aria-hidden="true" />
+      </m.div>
 
       <div className="space-y-3 max-w-md">
         <h1 className="text-3xl font-black uppercase tracking-tight">You're Offline</h1>
@@ -29,7 +31,7 @@ export default function OfflinePage() {
           aria-label="Reload application"
           className="flex items-center gap-2 px-8 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl shadow-md shadow-blue/10 hover:scale-102 active:scale-95 transition-all"
         >
-          <RefreshCw size={18} />
+          <RefreshCw size={18} aria-hidden="true" />
           Try Again
         </button>
         
@@ -37,7 +39,7 @@ export default function OfflinePage() {
           href="/"
           className="flex items-center gap-2 px-8 py-4 bg-surface border border-border text-text font-black uppercase tracking-widest rounded-2xl hover:bg-bg transition-all"
         >
-          <Home size={18} />
+          <Home size={18} aria-hidden="true" />
           Go Home
         </Link>
       </div>
@@ -52,6 +54,7 @@ export default function OfflinePage() {
           <p className="text-xs text-text-3 font-medium">Your data never leaves your device, connection or no connection.</p>
         </div>
       </div>
-    </div>
+    </main>
+    </MotionConfig>
   );
 }

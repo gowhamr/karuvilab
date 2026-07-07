@@ -8,6 +8,9 @@ import { Clock, Play, ChevronRight, Heart, Sparkles, Clipboard, Upload, Search, 
 import { detectContentToolSuggestion } from "@/src/lib/search/intelligentDetector";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { ToolIcon } from "./Icons";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 interface QuickActionsProps {
   continueTool: ToolEntry | null | undefined;
@@ -83,14 +86,14 @@ export function QuickActionsDashboard({
 
   if (isEmpty) {
     return (
-      <div className="bg-surface border border-border rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
+      <Card variant="glass" padding="lg" className="space-y-6 shadow-sm">
         <div className="text-center flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
             <Sparkles className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-black text-text">Start exploring your toolkit</h2>
-            <p className="text-sm text-text-muted mt-1 max-w-sm mx-auto">
+            <h2 className="text-lg font-black text-text-primary">Start exploring your toolkit</h2>
+            <p className="text-sm text-text-secondary mt-1 max-w-sm mx-auto">
               Choose a popular starter tool below or browse the full collection to get started.
             </p>
           </div>
@@ -98,87 +101,89 @@ export function QuickActionsDashboard({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
           {starterTools.map(tool => (
-            <Link
-              key={tool.id}
-              href={`/${tool.href}`}
-              className="flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-bg border border-border hover:border-blue/30 hover:bg-blue/5 transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue gap-2"
-            >
-              <div className="w-10 h-10 rounded-xl bg-blue/5 border border-blue/10 flex items-center justify-center text-blue shrink-0">
-                <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-text truncate max-w-[140px]">{tool.name}</p>
-                <p className="text-[10px] text-text-muted truncate max-w-[140px] mt-0.5">{tool.desc}</p>
-              </div>
+            <Link key={tool.id} href={`/${tool.href}`} passHref legacyBehavior>
+              <Card
+                variant="interactive"
+                padding="sm"
+                className="flex flex-col items-center justify-center text-center gap-2 group focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0 transition-transform group-hover:scale-105">
+                  <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-caption font-bold text-text-primary truncate max-w-[140px]">{tool.name}</p>
+                  <p className="text-tiny text-text-secondary truncate max-w-[140px] mt-0.5">{tool.desc}</p>
+                </div>
+              </Card>
             </Link>
           ))}
         </div>
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div className="bg-surface border border-border rounded-3xl p-4 md:p-6 space-y-8 shadow-sm">
+    <Card variant="default" padding="md" className="space-y-8 shadow-sm">
       
       {/* ── Smart Quick Actions Strip ── */}
-      <section>
+      <section aria-label="Smart Quick Actions">
         <div className="flex items-center gap-2 mb-3 px-1">
-          <Zap className="w-3.5 h-3.5 text-blue" />
-          <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Smart Quick Actions</h3>
-          {pasteNotice && <span className="text-xs font-semibold text-rose-400 ml-auto animate-pulse">{pasteNotice}</span>}
+          <Zap className="w-3.5 h-3.5 text-primary" />
+          <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h3>
+          {pasteNotice && <span className="text-caption font-bold text-danger ml-auto animate-pulse">{pasteNotice}</span>}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {continueTool ? (
             <Link
               href={continueTool.href}
-              className="flex items-center gap-2.5 p-3 rounded-2xl bg-blue/10 border border-blue/20 hover:bg-blue/15 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+              className="flex items-center gap-2.5 p-3 rounded-md bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center text-white shrink-0 shadow-sm">
+              <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-text-primary shrink-0 shadow-sm">
                 <Play className="w-4 h-4 fill-current ml-0.5" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-bold text-text truncate">Resume</p>
-                <p className="text-[10px] text-text-muted truncate">{continueTool.name}</p>
+                <p className="text-caption font-bold text-text-primary truncate">Resume</p>
+                <p className="text-tiny text-text-secondary truncate">{continueTool.name}</p>
               </div>
             </Link>
           ) : (
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+              className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <div className="w-8 h-8 rounded-xl bg-blue/10 flex items-center justify-center text-blue shrink-0">
+              <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
                 <Search className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-bold text-text truncate">Search Tools</p>
-                <p className="text-[10px] text-text-muted truncate">Ctrl+K Palette</p>
+                <p className="text-caption font-bold text-text-primary truncate">Search Tools</p>
+                <p className="text-tiny text-text-secondary truncate">Ctrl+K Palette</p>
               </div>
             </button>
           )}
 
           <button
             onClick={handlePasteDetect}
-            className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
+            <div className="w-8 h-8 rounded-md bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
               <Clipboard className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-text truncate">Paste & Detect</p>
-              <p className="text-[10px] text-text-muted truncate">Auto tool match</p>
+              <p className="text-caption font-bold text-text-primary truncate">Paste & Detect</p>
+              <p className="text-tiny text-text-secondary truncate">Auto tool match</p>
             </div>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 shrink-0">
+            <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
               <Upload className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-text truncate">Upload File</p>
-              <p className="text-[10px] text-text-muted truncate">Auto route format</p>
+              <p className="text-caption font-bold text-text-primary truncate">Upload File</p>
+              <p className="text-tiny text-text-secondary truncate">Auto route format</p>
             </div>
             <input
               type="file"
@@ -191,14 +196,14 @@ export function QuickActionsDashboard({
 
           <button
             onClick={() => setIsPaletteOpen(true)}
-            className="flex items-center gap-2.5 p-3 rounded-2xl bg-bg border border-border hover:border-blue/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0">
+            <div className="w-8 h-8 rounded-md bg-warning/10 flex items-center justify-center text-warning shrink-0">
               <Search className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-text truncate">Command Bar</p>
-              <p className="text-[10px] text-text-muted truncate">Explore 150+ tools</p>
+              <p className="text-caption font-bold text-text-primary truncate">Command Bar</p>
+              <p className="text-tiny text-text-secondary truncate">Explore 150+ tools</p>
             </div>
           </button>
         </div>
@@ -206,51 +211,58 @@ export function QuickActionsDashboard({
 
       {/* ── Continue Working Detailed Card ── */}
       {continueTool && (
-        <section>
+        <section aria-label="Continue Working">
           <div className="flex items-center gap-2 mb-3 px-1">
-            <Play className="w-3.5 h-3.5 text-blue" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Continue Working</h3>
+            <Play className="w-3.5 h-3.5 text-primary" />
+            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Continue Working</h3>
           </div>
-          <Link
-            href={continueTool.href}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-bg border border-border hover:border-blue/30 hover:bg-blue/5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-surface border border-border flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                <ToolIcon category={continueTool.category} className="w-6 h-6 text-text" />
+          <Link href={continueTool.href} passHref legacyBehavior>
+            <Card
+              variant="interactive"
+              padding="md"
+              className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-bg border border-divider flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <ToolIcon category={continueTool.category} className="w-6 h-6 text-text-primary" />
+                </div>
+                <div>
+                  <h4 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors">
+                    {continueTool.name}
+                  </h4>
+                  <p className="text-caption text-text-secondary mt-0.5">
+                    Last active tool in your session
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-base font-bold text-text group-hover:text-blue transition-colors">
-                  {continueTool.name}
-                </h4>
-                <p className="text-xs text-text-muted mt-0.5">
-                  Last active tool in your session
-                </p>
-              </div>
-            </div>
-            <div className="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-blue text-white text-xs font-bold sm:w-auto w-full group-hover:shadow-md group-hover:shadow-blue/20 transition-all">
-              Resume
-            </div>
+              <Button
+                variant="primary"
+                size="sm"
+                className="sm:w-auto w-full group-hover:shadow-md"
+              >
+                Resume
+              </Button>
+            </Card>
           </Link>
         </section>
       )}
 
       {/* ── Favorites (Pinned) ── */}
       {favoriteTools.length > 0 && (
-        <section>
+        <section aria-label="Favorites">
           <div className="flex items-center gap-2 mb-3 px-1">
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-current" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Favorites</h3>
+            <Heart className="w-3.5 h-3.5 text-danger fill-current" />
+            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Favorites</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
             {favoriteTools.map(tool => (
               <Link
                 key={`fav-${tool.id}`}
                 href={tool.href}
-                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-bg border border-border hover:border-border-focus hover:bg-mat-hover transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-md bg-bg border border-divider hover:border-primary/30 hover:bg-surface-elevated transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <ToolIcon category={tool.category} className="w-4 h-4 text-text-3 group-hover:text-rose-500 transition-colors" />
-                <span className="text-sm font-semibold text-text truncate">{tool.name}</span>
+                <ToolIcon category={tool.category} className="w-4 h-4 text-text-secondary group-hover:text-danger transition-colors" />
+                <span className="text-caption font-semibold text-text-primary truncate">{tool.name}</span>
               </Link>
             ))}
           </div>
@@ -259,22 +271,22 @@ export function QuickActionsDashboard({
 
       {/* ── Recent Tools ── */}
       {recentTools.length > 0 && (
-        <section>
+        <section aria-label="Recently Used">
           <div className="flex items-center gap-2 mb-3 px-1">
-            <Clock className="w-3.5 h-3.5 text-text-muted" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Recently Used</h3>
+            <Clock className="w-3.5 h-3.5 text-text-secondary" />
+            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Recently Used</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
             {recentTools.slice(0, 10).map(tool => (
               <Link
                 key={`rec-${tool.id}`}
                 href={tool.href}
-                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-bg border border-border hover:border-border-focus hover:bg-mat-hover transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-md bg-bg border border-divider hover:border-primary/30 hover:bg-surface-elevated transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <div className="w-6 h-6 rounded-md bg-surface border border-border flex items-center justify-center shrink-0 group-hover:border-blue/30 transition-colors">
-                  <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-3 group-hover:text-blue" />
+                <div className="w-6 h-6 rounded-md bg-surface border border-divider flex items-center justify-center shrink-0 group-hover:border-primary/30 transition-colors">
+                  <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-secondary group-hover:text-primary" />
                 </div>
-                <span className="text-sm font-medium text-text-2 group-hover:text-text truncate">{tool.name}</span>
+                <span className="text-caption font-medium text-text-secondary group-hover:text-text-primary truncate">{tool.name}</span>
               </Link>
             ))}
           </div>
@@ -283,22 +295,22 @@ export function QuickActionsDashboard({
 
       {/* ── Frequently Used Tools ── */}
       {frequentlyUsedTools.length > 0 && (
-        <section>
+        <section aria-label="Frequently Used">
           <div className="flex items-center gap-2 mb-3 px-1">
-            <TrendingUp className="w-3.5 h-3.5 text-green-500" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Frequently Used</h3>
+            <TrendingUp className="w-3.5 h-3.5 text-success" />
+            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Frequently Used</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
             {frequentlyUsedTools.slice(0, 10).map(tool => (
               <Link
                 key={`freq-${tool.id}`}
                 href={tool.href}
-                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-bg border border-border hover:border-green-500/30 hover:bg-green-500/5 transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-md bg-bg border border-divider hover:border-success/30 hover:bg-success/5 transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success"
               >
-                <div className="w-6 h-6 rounded-md bg-surface border border-border flex items-center justify-center shrink-0 group-hover:border-green-500/30 transition-colors">
-                  <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-3 group-hover:text-green-500" />
+                <div className="w-6 h-6 rounded-md bg-surface border border-divider flex items-center justify-center shrink-0 group-hover:border-success/30 transition-colors">
+                  <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-secondary group-hover:text-success" />
                 </div>
-                <span className="text-sm font-medium text-text-2 group-hover:text-text truncate">{tool.name}</span>
+                <span className="text-caption font-medium text-text-secondary group-hover:text-text-primary truncate">{tool.name}</span>
               </Link>
             ))}
           </div>
@@ -307,31 +319,32 @@ export function QuickActionsDashboard({
 
       {/* ── Suggested for You ── */}
       {suggestedTools.length > 0 && (
-        <section>
+        <section aria-label="Suggested for You">
           <div className="flex items-center gap-2 mb-3 px-1">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">Suggested for You</h3>
+            <Sparkles className="w-3.5 h-3.5 text-warning" />
+            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Suggested for You</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {suggestedTools.map(tool => (
-              <Link
-                key={`sugg-${tool.id}`}
-                href={tool.href}
-                className="group flex items-center gap-3 p-3 rounded-xl bg-bg border border-border hover:border-amber-500/40 hover:bg-amber-500/5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-              >
-                <div className="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <ToolIcon category={tool.category} className="w-5 h-5 text-amber-500" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold text-text truncate group-hover:text-amber-500 transition-colors">{tool.name}</p>
-                  <p className="text-[10px] text-text-muted truncate">Based on recent workflow</p>
-                </div>
+              <Link key={`sugg-${tool.id}`} href={tool.href} passHref legacyBehavior>
+                <Card
+                  variant="interactive"
+                  padding="sm"
+                  className="flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-surface border border-divider flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <ToolIcon category={tool.category} className="w-5 h-5 text-warning" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-caption font-bold text-text-primary truncate group-hover:text-warning transition-colors">{tool.name}</p>
+                    <p className="text-tiny text-text-secondary truncate">Based on recent workflow</p>
+                  </div>
+                </Card>
               </Link>
             ))}
           </div>
         </section>
       )}
-
-    </div>
+    </Card>
   );
 }

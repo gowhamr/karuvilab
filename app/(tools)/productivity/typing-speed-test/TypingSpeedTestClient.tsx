@@ -50,7 +50,7 @@ export default function TypingSpeedTestClient() {
   const stats = useMemo(() => {
     if (status === "idle") return { wpm: 0, accuracy: 0, time: 0 };
     
-    const timeElapsed = (status === "finished" ? (endTime! - startTime!) : (Date.now() - startTime!)) / 1000 / 60; // in minutes
+    const timeElapsed = (status === "finished" ? (endTime! - startTime!) / 1000 : secondsElapsed) / 60; // in minutes
     
     let correctChars = 0;
     for (let i = 0; i < input.length; i++) {

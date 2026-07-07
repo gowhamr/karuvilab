@@ -17,7 +17,7 @@ function hexToRgbLinear(hex: string): number[] {
   if (c.length === 3) c = c.split('').map(x => x + x).join('');
   
   return [0, 2, 4].map(i => {
-    let val = parseInt(c.substring(i, i + 2), 16) / 255;
+    const val = parseInt(c.substring(i, i + 2), 16) / 255;
     return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
   });
 }

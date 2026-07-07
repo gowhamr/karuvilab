@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ALL_TOOLS, CategoryEntry, getToolColor } from '@/src/tool-registry';
+import { ALL_TOOLS, CategoryEntry } from '@/src/tool-registry';
 import { Check, ArrowUpRight, ChevronRight, FileText, PlaySquare, Image as ImageIcon, Wrench } from 'lucide-react';
 import { ToolIcon } from '@/components/ui/Icons';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -15,7 +15,7 @@ import { FocusModeWrapper } from './FocusModeWrapper';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
-import { parseAndSanitizeMarkdownSync } from '@/src/lib/security';
+import { parseAndSanitizeMarkdownSync, sanitizeHtml } from '@/src/lib/security';
 import { ToolFeedback } from './ToolFeedback';
 import { useIntelligenceStore } from '@/src/store/useIntelligenceStore';
 
@@ -57,7 +57,7 @@ function UseCasesList({ useCases, visibleExamples = 2 }: { useCases: string[], v
           <div 
             key={i} 
             className={cn(
-              "items-start gap-3 p-4 bg-surface-2 border border-border rounded-2xl",
+              "items-start gap-3 p-4 bg-surface-elevated border border-border rounded-2xl",
               !expanded && i >= visibleExamples ? "hidden" : "flex"
             )}
           >
@@ -90,14 +90,14 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
           <div 
             key={i} 
             className={cn(
-              "p-6 bg-surface-2 border border-border rounded-2xl space-y-3",
+              "p-6 bg-surface-elevated border border-border rounded-2xl space-y-3",
               !expanded && i >= visibleCount ? "hidden" : "block"
             )}
           >
             <h3 className="font-bold text-text">{item.question}</h3>
             <div 
               className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: item.answer }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.answer) }}
             />
           </div>
         ))}
@@ -315,7 +315,7 @@ export function ClientToolShell({ title, description, category, children, toolId
           onToggle={(isOpen) => handleSectionToggle('help-docs', isOpen)}
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-blue transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
                 <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
               </div>
@@ -325,7 +325,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               </div>
             </Link>
             
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-brand-primary transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-brand-primary transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center shrink-0">
                 <PlaySquare className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform" />
               </div>
@@ -335,7 +335,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               </div>
             </Link>
 
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-success transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
                 <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
               </div>
@@ -345,7 +345,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               </div>
             </Link>
 
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-2 border border-border rounded-xl hover:border-error transition-colors group">
+            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group">
               <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
                 <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
               </div>
@@ -375,7 +375,7 @@ export function ClientToolShell({ title, description, category, children, toolId
               <Link
                 key={tool.id}
                 href={`/${tool.href}`}
-                className="flex items-center gap-4 p-4 bg-surface-2 border border-border shadow-sm rounded-2xl hover:border-brand-primary/50 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+                className="flex items-center gap-4 p-4 bg-surface-elevated border border-border shadow-sm rounded-2xl hover:border-brand-primary/50 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
               >
                 <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
                   <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
@@ -405,7 +405,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                 <Link
                   key={tool.id}
                   href={`/${tool.href}`}
-                  className="flex items-center gap-4 p-4 bg-surface-2 border border-border shadow-sm rounded-2xl hover:border-blue/50 hover:bg-blue/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                  className="flex items-center gap-4 p-4 bg-surface-elevated border border-border shadow-sm rounded-2xl hover:border-blue/50 hover:bg-blue/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
                 >
                   <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
                     <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5 text-blue" />

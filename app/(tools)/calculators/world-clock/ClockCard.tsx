@@ -53,7 +53,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
         "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-72 relative overflow-hidden",
         isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
         t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5",
-        isDragging ? "shadow-2xl scale-[1.02] opacity-90 border-blue/50" : ""
+        isDragging ? "shadow-2xl scale-102 opacity-90 border-blue/50" : ""
       )}
     >
 
@@ -88,7 +88,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
           </div>
           <div className="flex items-center gap-2">
             <p className="text-xs text-text-4 font-bold uppercase tracking-wider">{subtitle}</p>
-            <span className="text-xs font-black uppercase tracking-widest bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
+            <span className="text-tiny font-bold uppercase tracking-widest-sm bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
               {t.relativeText}
             </span>
           </div>

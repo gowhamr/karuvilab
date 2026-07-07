@@ -49,7 +49,7 @@ function vigenere(text: string, key: string, decrypt: boolean = false): string {
 function xorConvert(text: string, key: string, isDecrypt: boolean = false): string {
   if (!key) return text;
   
-  let inputChars: number[] = [];
+  const inputChars: number[] = [];
   if (isDecrypt) {
     const hex = text.replace(/\s+/g, '');
     for (let i = 0; i < hex.length; i += 2) {

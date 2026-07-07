@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useWorkflowStore } from "@/src/store/workflowStore";
 import { DropZone } from "@/components/ui/DropZone";
@@ -23,88 +23,95 @@ export default function BarcodeScannerClient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  const startCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: "environment" } 
-      });
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-      scanFrame();
-    } catch (err: any) {
-      setError("Could not access camera. Please allow permissions or try image upload.");
-      toast("Could not access camera", "error");
-      setMode("image");
-    }
-  };
-
-  const stopCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      setStream(null);
-    }
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-  };
+  const [scanTrigger, setScanTrigger] = useState(0);
 
   useEffect(() => {
-    if (mode === "camera") {
-      startCamera();
-    } else {
-      stopCamera();
+    if (mode !== "camera") {
+      return;
     }
-    return () => stopCamera();
-  }, [mode]);
-
-  const scanFrame = async () => {
-    if (!videoRef.current || !canvasRef.current) return;
     
-    // Check if native BarcodeDetector is available
-    if ('BarcodeDetector' in window) {
-      try {
-        const barcodeDetector = new (window as any).BarcodeDetector();
-        const barcodes = await barcodeDetector.detect(videoRef.current);
-        if (barcodes.length > 0) {
-          const res = barcodes[0].rawValue;
-          setResult(res);
-          setFormat(barcodes[0].format);
-          
-          // Try to play a subtle beep if possible, else just toast
-          try {
-            const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.type = 'sine';
-            oscillator.frequency.value = 800;
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
-            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.1);
-          } catch(e) {}
+    let active = true;
+    let localStream: MediaStream | null = null;
+    let localAnimationFrame: number | null = null;
 
-          toast("Scan Successful!", "success");
-          stopCamera();
-          return;
-        }
-      } catch (e) {
-        // Fallback or ignore
+    const stopCameraInternal = () => {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
       }
-    }
+      setStream(null);
+      if (localAnimationFrame) {
+        cancelAnimationFrame(localAnimationFrame);
+      }
+    };
 
-    // Since we can't reliably load zxing sync here without a bundler setup,
-    // we'll simulate a scan or rely purely on native for the demo.
-    // In production, we'd dynamically import @zxing/library here.
-    
-    if (stream) {
-      animationFrameRef.current = requestAnimationFrame(scanFrame);
-    }
-  };
+    const scanFrameInternal = async () => {
+      if (!videoRef.current || !canvasRef.current) return;
+      
+      // Check if native BarcodeDetector is available
+      if ('BarcodeDetector' in window) {
+        try {
+          const barcodeDetector = new (window as any).BarcodeDetector();
+          const barcodes = await barcodeDetector.detect(videoRef.current);
+          if (barcodes.length > 0 && active) {
+            const res = barcodes[0].rawValue;
+            setResult(res);
+            setFormat(barcodes[0].format);
+            
+            // Try to play a subtle beep if possible, else just toast
+            try {
+              const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+              const oscillator = audioCtx.createOscillator();
+              const gainNode = audioCtx.createGain();
+              oscillator.connect(gainNode);
+              gainNode.connect(audioCtx.destination);
+              oscillator.type = 'sine';
+              oscillator.frequency.value = 800;
+              gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+              gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+              gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+              oscillator.start();
+              oscillator.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {}
+
+            toast("Scan Successful!", "success");
+            stopCameraInternal();
+            return;
+          }
+        } catch (e) {
+          // Fallback or ignore
+        }
+      }
+      
+      if (active) {
+        localAnimationFrame = requestAnimationFrame(scanFrameInternal);
+      }
+    };
+
+    const startCameraInternal = async () => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: "environment" } 
+        });
+        localStream = mediaStream;
+        setStream(mediaStream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+        scanFrameInternal();
+      } catch (err: any) {
+        setError("Could not access camera. Please allow permissions or try image upload.");
+        toast("Could not access camera", "error");
+        setMode("image");
+      }
+    };
+
+    startCameraInternal();
+
+    return () => {
+      active = false;
+      stopCameraInternal();
+    };
+  }, [mode, scanTrigger, toast]);
 
   const handleImageUpload = async (files: FileList | File[]) => {
     const file = files[0];
@@ -233,7 +240,7 @@ export default function BarcodeScannerClient() {
               onClick={() => {
                 setResult(null);
                 setFormat(null);
-                startCamera();
+                setScanTrigger(prev => prev + 1);
               }}
               className="w-full py-4 bg-surface border border-border text-text-2 rounded-2xl font-bold hover:border-blue hover:text-blue transition-all"
             >

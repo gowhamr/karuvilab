@@ -14,7 +14,7 @@ export function Footer() {
     setMounted(true);
   }, []);
 
-  if (isFullscreen || !mounted) return null;
+  if (isFullscreen) return null;
 
   const navigationLinks = [
     { label: "All Tools", href: "/all-tools" },
@@ -46,53 +46,55 @@ export function Footer() {
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-text-muted">
             <span className="flex items-center gap-1 whitespace-nowrap">
-              <WifiOff className="w-3 h-3" /> Offline
+              <WifiOff className="w-3 h-3" aria-hidden="true" /> Offline
             </span>
-            <span>&bull;</span>
+            <span aria-hidden="true">&bull;</span>
             <span className="flex items-center gap-1 whitespace-nowrap">
-              <ShieldCheck className="w-3 h-3" /> Private
+              <ShieldCheck className="w-3 h-3" aria-hidden="true" /> Private
             </span>
-            <span>&bull;</span>
+            <span aria-hidden="true">&bull;</span>
             <span className="flex items-center gap-1 whitespace-nowrap">
-              <Cpu className="w-3 h-3" /> Local
+              <Cpu className="w-3 h-3" aria-hidden="true" /> Local
             </span>
           </div>
         </div>
 
         {/* Resources (One Column) */}
-        <div className="flex flex-col">
+        <nav aria-label="Site navigation">
           <ul className="flex flex-col gap-2.5">
             {navigationLinks.map((link) => (
               <li key={link.label}>
                 <Link
                   href={link.href}
                   prefetch={false}
-                  className="text-sm font-medium text-text-3 hover:text-blue transition-colors block w-fit"
+                  className="text-sm font-medium text-text-3 hover:text-blue transition-colors block w-fit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 mt-6 pt-6 border-t border-border/60">
         {/* Legal (One Row) */}
-        <ul className="flex flex-row flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-muted">
-          <li>&copy; {new Date().getFullYear()} KaruviLab</li>
-          {legalLinks.map((link) => (
-            <li key={link.label}>
-              <Link
-                href={link.href}
-                prefetch={false}
-                className="hover:text-text-3 transition-colors"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <nav aria-label="Legal links">
+          <ul className="flex flex-row flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-muted">
+            <li aria-label="Copyright">&copy; {mounted ? new Date().getFullYear() : ""} KaruviLab</li>
+            {legalLinks.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  prefetch={false}
+                  className="hover:text-text-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </footer>
   );

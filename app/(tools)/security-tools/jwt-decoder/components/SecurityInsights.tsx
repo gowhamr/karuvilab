@@ -10,15 +10,16 @@ interface SecurityInsightsProps {
 export function SecurityInsights({ decoded }: SecurityInsightsProps) {
   const [secretOrKey, setSecretOrKey] = useState("");
   const [verifyStatus, setVerifyStatus] = useState<"idle" | "valid" | "invalid" | "error">("idle");
+  const [nowMs, setNowMs] = useState(0);
 
   useEffect(() => {
     setVerifyStatus("idle");
+    setNowMs(Date.now());
   }, [decoded.raw]);
 
   const expInfo = useMemo(() => {
-    if (!decoded.payload.exp) return null;
+    if (!decoded.payload.exp || nowMs === 0) return null;
     const expMs = decoded.payload.exp * 1000;
-    const nowMs = Date.now();
     const diffMs = expMs - nowMs;
     const isExpired = diffMs <= 0;
     const expiresSoon = !isExpired && diffMs < 300000;
@@ -30,7 +31,7 @@ export function SecurityInsights({ decoded }: SecurityInsightsProps) {
       relativeText: timeRelative(decoded.payload.exp),
       formatted: formatTimestamp(decoded.payload.exp),
     };
-  }, [decoded]);
+  }, [decoded, nowMs]);
 
   const verifySignature = useCallback(async () => {
     if (!secretOrKey.trim()) return;

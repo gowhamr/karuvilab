@@ -15,20 +15,7 @@ export default function YamlValidatorClient() {
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const initialInput = searchParams.get('input');
-    if (initialInput) {
-      try {
-        const decoded = decodeURIComponent(initialInput);
-        setInput(decoded);
-        handleProcess('json_to_yaml', decoded);
-      } catch (e) {
-        console.error("Failed to decode URL input:", e);
-      }
-    }
-  }, [searchParams]);
-
-  const handleProcess = async (action: Action, currentInput = input) => {
+  const handleProcess = useCallback(async (action: Action, currentInput = input) => {
     if (!currentInput.trim()) {
       setError('Input is empty.');
       return;
@@ -57,7 +44,20 @@ export default function YamlValidatorClient() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [input]);
+
+  useEffect(() => {
+    const initialInput = searchParams.get('input');
+    if (initialInput) {
+      try {
+        const decoded = decodeURIComponent(initialInput);
+        setInput(decoded);
+        handleProcess('json_to_yaml', decoded);
+      } catch (e) {
+        console.error("Failed to decode URL input:", e);
+      }
+    }
+  }, [searchParams, handleProcess]);
 
   return (
     <div className="space-y-6">

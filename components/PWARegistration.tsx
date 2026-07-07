@@ -6,6 +6,7 @@ import { X, Download, Share } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePWAStore } from '@/src/store/usePWAStore';
 import { useSearchStore } from '@/src/store/useSearchStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useToast } from '@/components/ui/Toast';
 
 export function PWARegistration() {
@@ -17,7 +18,15 @@ export function PWARegistration() {
   const bannerRef = useRef<HTMLDivElement>(null);
 
   // Read persisted PWA state and hydration state from Zustand + IndexedDB
-  const { pwaVisitCount, pwaDismissedAt, incrementPWAVisit, dismissPWA, hasHydrated } = usePWAStore();
+  const { pwaVisitCount, pwaDismissedAt, incrementPWAVisit, dismissPWA, hasHydrated } = usePWAStore(
+    useShallow((s) => ({
+      pwaVisitCount: s.pwaVisitCount,
+      pwaDismissedAt: s.pwaDismissedAt,
+      incrementPWAVisit: s.incrementPWAVisit,
+      dismissPWA: s.dismissPWA,
+      hasHydrated: s.hasHydrated,
+    }))
+  );
   
   // Read Search store state to hide install prompt when search palette is open
   const isPaletteOpen = useSearchStore((s) => s.isPaletteOpen);
@@ -55,8 +64,10 @@ export function PWARegistration() {
     const safari = /^((?!chrome|android).)*safari/i.test(ua);
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
 
-    setIsIOS(ios);
-    setIsSafari(safari);
+    Promise.resolve().then(() => {
+      setIsIOS(ios);
+      setIsSafari(safari);
+    });
 
     if (isStandalone) return; // Already installed, do nothing
 
@@ -64,7 +75,9 @@ export function PWARegistration() {
     let currentVisits = pwaVisitCount;
     if (!sessionStorage.getItem('kv-visit-incremented')) {
       currentVisits = pwaVisitCount + 1;
-      incrementPWAVisit();
+      Promise.resolve().then(() => {
+        incrementPWAVisit();
+      });
       sessionStorage.setItem('kv-visit-incremented', 'true');
     }
 
@@ -76,7 +89,9 @@ export function PWARegistration() {
 
     // Rule: Show after 2nd visit immediately, OR 30 seconds into first visit
     if (currentVisits >= 2) {
-      setShowPrompt(true);
+      Promise.resolve().then(() => {
+        setShowPrompt(true);
+      });
     } else {
       const timer = setTimeout(() => {
         setShowPrompt(true);

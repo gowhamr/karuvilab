@@ -230,7 +230,7 @@ function DayCell({ day, isCurrentMonth, isSelected, onClick, onAddEvent }: { day
                 onAddEvent(day);
               }}
               className={cn(
-                "hidden md:block px-2 py-1 rounded-lg text-tiny font-bold truncate border shadow-sm transition-transform hover:scale-[1.02]",
+                "hidden md:block px-2 py-1 rounded-lg text-tiny font-bold truncate border shadow-sm transition-transform hover:scale-102",
                 COLOR_MAP[event.color].bg,
                 COLOR_MAP[event.color].border,
                 COLOR_MAP[event.color].text

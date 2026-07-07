@@ -1,5 +1,5 @@
 import { Loader2, Clock, CheckCircle2, WifiOff, Database, AlertCircle, XCircle } from "lucide-react";
-import { memo } from "react";
+import React, { memo } from "react";
 
 export type StatusType = "processing" | "queued" | "saved" | "offline" | "cached" | "error" | "complete" | "idle" | "pending" | "completed" | "failed" | "cancelled";
 
@@ -9,7 +9,7 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-const statusConfig: Record<StatusType, { icon: any; defaultLabel: string; colors: string; animation?: string }> = {
+const statusConfig: Record<StatusType, { icon: React.ElementType | null; defaultLabel: string; colors: string; animation?: string }> = {
   idle: { icon: null, defaultLabel: "", colors: "" },
   processing: { icon: Loader2, defaultLabel: "Processing...", colors: "bg-blue/10 text-blue", animation: "animate-spin" },
   queued: { icon: Clock, defaultLabel: "Queued", colors: "bg-hover/50 text-text-3" },
@@ -32,10 +32,10 @@ export const StatusBadge = memo(function StatusBadge({ status, label, className 
   const displayLabel = label || config?.defaultLabel || "Unknown";
 
   return (
-    <div 
+    <div
       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${config.colors} ${className}`}
-      role={status === "error" ? "alert" : "status"}
-      aria-live="polite"
+      role={status === "error" || status === "failed" ? "alert" : "status"}
+      aria-live={status === "error" || status === "failed" ? "assertive" : "polite"}
     >
       {Icon && <Icon className={`w-3.5 h-3.5 ${config.animation || ""}`} aria-hidden="true" />}
       <span>{displayLabel}</span>

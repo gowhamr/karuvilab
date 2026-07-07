@@ -593,7 +593,7 @@ const api: WorkerAPI = {
   // Math Tasks
   async evaluateMath(expr: string) {
     // Injected helpers for eval
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const factorial = (n: number): number => {
       if (n < 0 || n > 170) return NaN;
       if (n === 0) return 1;

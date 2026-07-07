@@ -151,7 +151,7 @@ export default function WorldClockClient() {
         <div className="flex flex-col gap-12 w-full max-w-7xl px-8 relative z-content">
           <div className="flex items-center justify-center gap-4 opacity-50 mb-4">
             <Globe className="w-12 h-12" />
-            <h1 className="text-4xl md:text-5xl font-black tracking-[0.3em] uppercase">World Clock</h1>
+            <h1 className="text-4xl md:text-5xl font-black tracking-widest-2xl uppercase">World Clock</h1>
           </div>
           
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

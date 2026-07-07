@@ -231,7 +231,7 @@ export default function HelpPage() {
             </div>
             <div className="space-y-5">
               <div className="space-y-3">
-                <h3 className="text-xs font-black uppercase tracking-widest text-text-4">For Developers</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">For Developers</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2 text-sm text-text-2 font-medium">
                     <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5 opacity-70" />
@@ -245,7 +245,7 @@ export default function HelpPage() {
               </div>
               
               <div className="space-y-3">
-                <h3 className="text-xs font-black uppercase tracking-widest text-text-4 mt-6">For Creators</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mt-6">For Creators</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2 text-sm text-text-2 font-medium">
                     <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5 opacity-70" />

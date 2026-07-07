@@ -45,8 +45,10 @@ export function EngineLoader({
 
   const check = useCallback(() => {
     if (checkInit()) {
-      setIsReady(true);
-      setHasError(false);
+      Promise.resolve().then(() => {
+        setIsReady(true);
+        setHasError(false);
+      });
       return true;
     }
     return false;
@@ -77,11 +79,11 @@ export function EngineLoader({
     };
   }, [check, checkInit, timeout, retryCount]);
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     setHasError(false);
     setIsReady(false);
     setRetryCount(prev => prev + 1);
-  };
+  }, []);
 
   if (isReady) return <>{children}</>;
 
@@ -97,7 +99,7 @@ export function EngineLoader({
           className="p-8 bg-error/5 border border-error/10 rounded-4xl text-center space-y-4"
         >
           <div className="w-12 h-12 bg-error/10 rounded-2xl flex items-center justify-center mx-auto">
-            <AlertCircle className="w-6 h-6 text-error" />
+            <AlertCircle className="w-6 h-6 text-error" aria-hidden="true" />
           </div>
           <div className="space-y-1">
             <h3 className="font-black text-text uppercase tracking-widest text-sm">Engine Load Failure</h3>
@@ -107,9 +109,10 @@ export function EngineLoader({
           </div>
           <button
             onClick={handleRetry}
+            aria-label="Retry engine initialization"
             className="flex items-center gap-2 px-6 py-2.5 bg-error text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm-lg hover:opacity-90 transition-all mx-auto active:scale-95 shadow-md shadow-error/10"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
             Retry Initialization
           </button>
         </m.div>
@@ -124,7 +127,7 @@ export function EngineLoader({
           className="p-12 bg-surface border border-border rounded-4xl text-center space-y-4"
         >
           <div className="w-12 h-12 bg-blue/10 rounded-2xl flex items-center justify-center mx-auto">
-            <Loader2 className="w-6 h-6 text-blue animate-spin" />
+            <Loader2 className="w-6 h-6 text-blue animate-spin" aria-hidden="true" />
           </div>
           <p className="text-xs font-black text-blue uppercase tracking-widest-2xl animate-pulse">
             {loadingMessage}

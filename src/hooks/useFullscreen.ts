@@ -49,7 +49,7 @@ export function useFullscreen(
   }, [onExit]);
 
   const toggle = useCallback(() => {
-    isFullscreen ? exit() : enter();
+    if (isFullscreen) { exit(); } else { enter(); }
   }, [isFullscreen, enter, exit]);
 
   // Keyboard listeners

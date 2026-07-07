@@ -46,13 +46,13 @@ export function ToolInput({
   const errorId = `${id}-error`;
 
   const baseClasses = cn(
-    "w-full px-4 py-3 bg-bg border rounded-xl outline-none transition-all min-h-12 text-text",
-    mono ? "font-mono text-sm md:text-sm" : "text-base", // Force 16px on mobile to prevent zoom
+    "w-full px-4 py-3 bg-bg border rounded-input outline-none transition-all min-h-12 text-text-primary",
+    mono ? "font-mono text-caption" : "text-body", // Force clean text sizing
     error 
-      ? "border-red-500 focus:ring-4 focus:ring-inset focus:ring-red-500/10 focus:border-red-500" 
-      : "border-border focus:ring-4 focus:ring-inset focus:ring-blue/10 focus:border-blue",
-    "placeholder:text-text-3/80",
-    (readOnly || loading) && "bg-surface cursor-default",
+      ? "border-danger focus:ring-4 focus:ring-inset focus:ring-danger/10 focus:border-danger" 
+      : "border-divider focus:ring-4 focus:ring-inset focus:ring-primary/10 focus:border-primary",
+    "placeholder:text-text-secondary/60",
+    (readOnly || loading) && "bg-surface/50 cursor-default",
     loading && "opacity-50 pointer-events-none",
     className
   );
@@ -112,7 +112,7 @@ export function ToolInput({
         <p 
           id={errorId}
           role="alert"
-          className="px-1 text-xs text-red-500 font-bold"
+          className="px-1 text-xs text-danger font-bold"
         >
           {error}
         </p>
