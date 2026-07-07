@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { workerOrchestrator } from '@/src/engine/workers/WorkerOrchestrator';
 import { CopyButton } from '@/components/ui/CopyButton';
