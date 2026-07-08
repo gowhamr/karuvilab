@@ -79,26 +79,130 @@ function derToPem(der: ArrayBuffer, type: string): string {
   return `-----BEGIN ${type}-----\n${lines}\n-----END ${type}-----`;
 }
 
+function sha224_js(input: string | Uint8Array): ArrayBuffer {
+  const K = new Uint32Array([
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+  ]);
+
+  const H = new Uint32Array([
+    0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939,
+    0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4
+  ]);
+
+  const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
+  const len = bytes.length;
+  const blocks = (((len + 8) >> 6) + 1);
+  const W = new Uint32Array(64);
+
+  for (let i = 0; i < blocks; i++) {
+    for (let j = 0; j < 16; j++) {
+      const offset = i * 64 + j * 4;
+      let val = 0;
+      for (let k = 0; k < 4; k++) {
+        const p = offset + k;
+        if (p < len) val = (val << 8) | bytes[p]!;
+        else if (p === len) val = (val << 8) | 0x80;
+        else val = val << 8;
+      }
+      W[j] = val;
+    }
+
+    if (i === blocks - 1) {
+      const lenBits = len * 8;
+      W[14] = Math.floor(lenBits / 0x100000000);
+      W[15] = lenBits & 0xFFFFFFFF;
+    }
+
+    for (let j = 16; j < 64; j++) {
+      const w15 = W[j - 15]!, w2 = W[j - 2]!;
+      const s0 = (w15 >>> 7 | w15 << 25) ^ (w15 >>> 18 | w15 << 14) ^ (w15 >>> 3);
+      const s1 = (w2 >>> 17 | w2 << 15) ^ (w2 >>> 19 | w2 << 13) ^ (w2 >>> 10);
+      W[j] = (W[j - 16]! + s0 + W[j - 7]! + s1) | 0;
+    }
+
+    let a = H[0]!, b = H[1]!, c = H[2]!, d = H[3]!, e = H[4]!, f = H[5]!, g = H[6]!, h = H[7]!;
+
+    for (let j = 0; j < 64; j++) {
+      const s1 = (e >>> 6 | e << 26) ^ (e >>> 11 | e << 21) ^ (e >>> 25 | e << 7);
+      const ch = (e & f) ^ (~e & g);
+      const temp1 = (h + s1 + ch + K[j]! + W[j]!) | 0;
+      const s0 = (a >>> 2 | a << 30) ^ (a >>> 13 | a << 19) ^ (a >>> 22 | a << 10);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const temp2 = (s0 + maj) | 0;
+
+      h = g; g = f; f = e; e = (d + temp1) | 0;
+      d = c; c = b; b = a; a = (temp1 + temp2) | 0;
+    }
+
+    H[0] = (H[0]! + a) | 0; H[1] = (H[1]! + b) | 0; H[2] = (H[2]! + c) | 0; H[3] = (H[3]! + d) | 0;
+    H[4] = (H[4]! + e) | 0; H[5] = (H[5]! + f) | 0; H[6] = (H[6]! + g) | 0; H[7] = (H[7]! + h) | 0;
+  }
+
+  const buffer = new ArrayBuffer(28);
+  const view = new DataView(buffer);
+  for (let i = 0; i < 7; i++) view.setUint32(i * 4, H[i]!, false);
+  return buffer;
+}
+
+function hmac_sha224_js(key: string, message: string | Uint8Array): ArrayBuffer {
+  let keyBytes = new TextEncoder().encode(key);
+  const msgBytes = typeof message === "string" ? new TextEncoder().encode(message) : message;
+
+  if (keyBytes.length > 64) {
+    keyBytes = new Uint8Array(sha224_js(keyBytes));
+  }
+
+  const oKeyPad = new Uint8Array(64);
+  const iKeyPad = new Uint8Array(64);
+  for (let i = 0; i < 64; i++) {
+    const b = i < keyBytes.length ? keyBytes[i]! : 0;
+    oKeyPad[i] = b ^ 0x5c;
+    iKeyPad[i] = b ^ 0x36;
+  }
+
+  const innerInput = new Uint8Array(64 + msgBytes.length);
+  innerInput.set(iKeyPad);
+  innerInput.set(msgBytes, 64);
+  const innerHash = new Uint8Array(sha224_js(innerInput));
+
+  const outerInput = new Uint8Array(64 + 28);
+  outerInput.set(oKeyPad);
+  outerInput.set(innerHash, 64);
+  return sha224_js(outerInput);
+}
+
 async function sha(algo: string, input: string | Uint8Array): Promise<ArrayBuffer> {
   const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
+  if (algo === "SHA224" || algo === "SHA-224") {
+    return sha224_js(bytes);
+  }
+
   const cryptoProvider = self.crypto || (globalThis as any).crypto;
   if (!cryptoProvider?.subtle) {
     throw new Error("Web Crypto API (subtle) is not available.");
   }
-  const webCryptoAlgo = algo.replace("SHA1", "SHA-1").replace("SHA224", "SHA-256").replace("SHA", "SHA-");
+  const webCryptoAlgo = algo.replace(/SHA-?/, "SHA-");
   const res = await cryptoProvider.subtle.digest(webCryptoAlgo, bytes.buffer as ArrayBuffer);
-  if (algo === "SHA224" || algo === "SHA-224") {
-    return res.slice(0, 28); // 224 bits = 28 bytes
-  }
   return res;
 }
 
 async function hmac(algo: string, key: string, input: string | Uint8Array): Promise<ArrayBuffer> {
+  if (algo === "SHA224" || algo === "SHA-224") {
+    return hmac_sha224_js(key, input);
+  }
+
   const encoder = new TextEncoder();
   const keyData = encoder.encode(key);
   const data = typeof input === "string" ? encoder.encode(input) : input;
   const cryptoProvider = self.crypto || (globalThis as any).crypto;
-  const webCryptoAlgo = algo.replace("SHA1", "SHA-1").replace("SHA224", "SHA-256").replace("SHA", "SHA-");
+  const webCryptoAlgo = algo.replace(/SHA-?/, "SHA-");
 
   const cryptoKey = await cryptoProvider.subtle.importKey(
     "raw",
@@ -107,11 +211,7 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
     false,
     ["sign"]
   );
-  const res = await cryptoProvider.subtle.sign("HMAC", cryptoKey, data as any);
-  if (algo === "SHA224" || algo === "SHA-224") {
-    return res.slice(0, 28);
-  }
-  return res;
+  return await cryptoProvider.subtle.sign("HMAC", cryptoKey, data as any);
 }
 
 const api = {
