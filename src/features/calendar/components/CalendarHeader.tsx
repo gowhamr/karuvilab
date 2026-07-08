@@ -7,11 +7,13 @@ import {
   ChevronRight, 
   ChevronDown,
   Calendar as CalendarIcon, 
+  CalendarDays,
   Plus,
   LayoutGrid,
   Rows,
   List,
-  Settings
+  Settings,
+  Search
 } from "lucide-react";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import * as Popover from "@radix-ui/react-popover";
@@ -22,10 +24,12 @@ import { useDragScroll } from "@/src/hooks/useDragScroll";
 
 export function CalendarHeader({ 
   onAddEvent, 
-  onToggleSidebar 
+  onToggleSidebar,
+  onSearch
 }: { 
   onAddEvent: () => void; 
   onToggleSidebar: () => void;
+  onSearch: () => void;
 }) {
   const currentDate = useCalendarStore(state => state.currentDate);
   const setCurrentDate = useCalendarStore(state => state.setCurrentDate);
@@ -73,7 +77,7 @@ export function CalendarHeader({
                 className="text-center group outline-none focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-2 py-1 transition-all flex items-center gap-2"
               >
                 <h2 className="text-lg md:text-2xl font-black tracking-tight text-text group-hover:text-indigo-600 transition-colors">
-                  {format(currentDate, 'MMMM')} <span className="opacity-50">{format(currentDate, 'yyyy')}</span>
+                  {currentView === 'year' ? format(currentDate, 'yyyy') : format(currentDate, 'MMMM')} {currentView !== 'year' && <span className="opacity-50">{format(currentDate, 'yyyy')}</span>}
                 </h2>
                 <ChevronDown className="w-4 h-4 text-text-4 opacity-40 group-hover:opacity-100 transition-all" />
               </button>
@@ -96,6 +100,15 @@ export function CalendarHeader({
 
         {/* Action Group */}
         <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto no-scrollbar pb-1 md:pb-0 shrink-0">
+          <button
+            onClick={onSearch}
+            className="flex items-center justify-center gap-2 px-4 py-3 md:py-2.5 bg-surface border border-border/30 rounded-xl font-bold text-xs uppercase tracking-widest hover:text-indigo-600 hover:border-indigo-500/30 transition-all active:scale-95 text-text-2 min-h-11 md:min-h-0 whitespace-nowrap shrink-0 animate-in fade-in duration-200"
+            aria-label="Open search dialog"
+          >
+            <Search className="w-4 h-4 text-indigo-500" />
+            <span>Search</span>
+          </button>
+
           <button
             onClick={handleToday}
             className="px-4 py-3 md:py-2.5 bg-surface border border-border/30 text-xs font-bold uppercase tracking-widest text-text-3 hover:text-indigo-600 hover:border-indigo-500/30 rounded-xl transition-all active:scale-95 min-h-11 md:min-h-0 whitespace-nowrap"
@@ -142,6 +155,7 @@ export function CalendarHeader({
           <ToggleGroupItem value="week" icon={Rows} label="Week" />
           <ToggleGroupItem value="day" icon={CalendarIcon} label="Day" />
           <ToggleGroupItem value="agenda" icon={List} label="Agenda" />
+          <ToggleGroupItem value="year" icon={CalendarDays} label="Year" />
         </ToggleGroup.Root>
       </div>
     </header>

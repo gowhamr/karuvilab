@@ -5,7 +5,7 @@ import { format, isSameDay, parseISO } from "date-fns";
 import { X, Plus, MapPin, AlignLeft, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { COLOR_MAP } from "../constants";
-import { getFestivalsForDay, getObservancesForDay } from "../utils";
+import { getEventsForDay, getFestivalsForDay, getObservancesForDay } from "../utils";
 import { cn } from "@/src/lib/utils";
 import { WorldEvent } from "../world-events-db";
 
@@ -29,7 +29,7 @@ export function DayDetailsSheet({
   const showImportance = useCalendarStore(state => state.worldEventsSettings.showImportance);
   const highlightIndianEvents = useCalendarStore(state => state.worldEventsSettings.highlightIndianEvents);
 
-  const dayEvents = events.filter(e => isSameDay(parseISO(e.startDate), date));
+  const dayEvents = getEventsForDay(date, events);
   const festivals = getFestivalsForDay(date);
   const observances = getObservancesForDay(date);
 

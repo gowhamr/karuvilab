@@ -7,6 +7,7 @@ import { COLOR_MAP } from "../constants";
 import { cn } from "@/src/lib/utils";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { computeEventPositions } from "../utils/layout-solver";
 
 export function TimeGridView({ days }: { days: Date[] }) {
   const events = useCalendarStore(state => state.events);
@@ -62,6 +63,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
               {/* Day Columns */}
               {days.map(day => {
                 const dayEvents = getEventsInInterval(startOfDay(day), endOfDay(day), events);
+                const positionedEvents = computeEventPositions(dayEvents);
                 const isToday = format(day, 'yyyy-MM-dd') === format(now, 'yyyy-MM-dd');
 
                 return (
@@ -77,7 +79,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                     )}
 
                     {/* Event Cards */}
-                    {dayEvents.map(event => {
+                    {positionedEvents.map(({ event, column, totalColumns }) => {
                       const start = parseISO(event.startDate);
                       const end = parseISO(event.endDate);
                       const startMin = start.getHours() * 60 + start.getMinutes();
@@ -87,21 +89,31 @@ export function TimeGridView({ days }: { days: Date[] }) {
                       const top = (startMin / 1440) * 1920;
                       const height = (duration / 1440) * 1920;
 
+                      // Column width adjustments
+                      const widthPercentage = 100 / totalColumns;
+                      const leftOffset = column * widthPercentage;
+
                       return (
                         <motion.div
                           key={event.id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           onClick={() => {
-                            useCalendarStore.getState().setSelectedEvent(event.id);
+                            const baseId = event.id.split(':')[0] || null;
+                            useCalendarStore.getState().setSelectedEvent(baseId);
                           }}
                           className={cn(
-                            "absolute left-1.5 right-1.5 rounded-2xl p-3 border shadow-md cursor-pointer z-content overflow-hidden group hover:z-sidebar transition-all hover:shadow-xl hover:scale-102",
+                            "absolute rounded-2xl p-3 border shadow-md cursor-pointer z-content overflow-hidden group hover:z-sidebar transition-all hover:shadow-xl hover:scale-102",
                             (COLOR_MAP as any)[event.color].bg,
                             (COLOR_MAP as any)[event.color].border,
                             (COLOR_MAP as any)[event.color].text
                           )}
-                          style={{ top: `${top}px`, height: `${Math.max(height, 35)}px` }}
+                          style={{ 
+                            top: `${top}px`, 
+                            height: `${Math.max(height, 35)}px`,
+                            left: `calc(${leftOffset}% + 4px)`,
+                            width: `calc(${widthPercentage}% - 8px)`
+                          }}
                         >
                           <div className="text-xs font-black truncate">{event.title}</div>
                           {duration >= 45 && (

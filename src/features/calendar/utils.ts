@@ -16,6 +16,7 @@ import {
 import { CalendarEvent } from './types';
 import { getEventsForDate } from './event-resolver';
 import { WorldEvent } from './world-events-db';
+import { getExpandedEvents } from './utils/recurrence';
 
 export const getMonthDays = (date: Date) => {
   const start = startOfWeek(startOfMonth(date));
@@ -37,10 +38,7 @@ export const formatEventTime = (dateStr: string, allDay: boolean) => {
 };
 
 export const getEventsForDay = (date: Date, events: CalendarEvent[]) => {
-  return events.filter(event => {
-    const start = parseISO(event.startDate);
-    return isSameDay(start, date);
-  });
+  return getExpandedEvents(events, startOfDay(date), endOfDay(date));
 };
 
 export const getFestivalsForDay = (date: Date): WorldEvent[] => {
@@ -64,11 +62,9 @@ export const getObservancesForDay = (date: Date): WorldEvent[] => {
 };
 
 export const getEventsInInterval = (start: Date, end: Date, events: CalendarEvent[]) => {
-  return events.filter(event => {
-    const eventStart = parseISO(event.startDate);
-    return isWithinInterval(eventStart, { start, end });
-  });
+  return getExpandedEvents(events, start, end);
 };
 
 export const generateId = () => Math.random().toString(36).substring(2, 11);
+
 

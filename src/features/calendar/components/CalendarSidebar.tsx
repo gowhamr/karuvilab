@@ -4,14 +4,101 @@ import { useCalendarStore } from "../store";
 import { getUpcomingEvents } from "../event-resolver";
 import { EventCategory, EventImportance, WorldEvent } from "../world-events-db";
 import { format } from "date-fns";
-import { Globe, Settings, Filter, Check, Eye, EyeOff, ChevronDown } from "lucide-react";
+import { Globe, Settings, Filter, Check, Eye, EyeOff, ChevronDown, Database, Download, Upload, FileSpreadsheet, RotateCcw } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useShallow } from "zustand/react/shallow";
+import { useToast } from "@/components/ui/Toast";
+import { blobManager } from "@/src/lib/blob-manager";
+import { exportToICS, parseICS } from "../utils/ics";
 
 export function CalendarSidebar() {
   const worldEventsSettings = useCalendarStore(state => state.worldEventsSettings);
   const updateWorldEventsSettings = useCalendarStore(state => state.updateWorldEventsSettings);
   const setSelectedWorldEvent = useCalendarStore(state => state.setSelectedWorldEvent);
+  const events = useCalendarStore(state => state.events);
+  const addEvent = useCalendarStore(state => state.addEvent);
+  const fetchEvents = useCalendarStore(state => state.fetchEvents);
+  const { toast } = useToast();
+
+  const handleExportICS = () => {
+    try {
+      const icsString = exportToICS(events);
+      const blob = new Blob([icsString], { type: 'text/calendar;charset=utf-8' });
+      blobManager.download(blob, `karuvilab-calendar-${format(new Date(), 'yyyy-MM-dd')}.ics`);
+      toast("Events exported successfully as ICS file", "success");
+    } catch (err) {
+      console.error(err);
+      toast("Failed to export ICS file", "error");
+    }
+  };
+
+  const handleImportICS = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target?.result as string;
+        const parsed = parseICS(text);
+        if (parsed.length === 0) {
+          toast("No valid calendar events found in this file.", "error");
+          return;
+        }
+
+        for (const rawEvt of parsed) {
+          await addEvent(rawEvt);
+        }
+        await fetchEvents();
+        toast(`Successfully imported ${parsed.length} events!`, "success");
+      } catch (err) {
+        console.error(err);
+        toast("Failed to parse ICS file.", "error");
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleBackupJSON = () => {
+    try {
+      const dataStr = JSON.stringify(events, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      blobManager.download(blob, `karuvilab-calendar-backup-${format(new Date(), 'yyyy-MM-dd')}.json`);
+      toast("Calendar backup downloaded successfully", "success");
+    } catch (err) {
+      console.error(err);
+      toast("Failed to backup calendar data", "error");
+    }
+  };
+
+  const handleRestoreJSON = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target?.result as string;
+        const restored = JSON.parse(text);
+        if (!Array.isArray(restored)) {
+          toast("Invalid backup format. Must be a JSON array of events.", "error");
+          return;
+        }
+
+        for (const rawEvt of restored) {
+          if (rawEvt.id && rawEvt.title && rawEvt.startDate && rawEvt.endDate) {
+            await addEvent(rawEvt);
+          }
+        }
+        await fetchEvents();
+        toast("Calendar restored from backup successfully!", "success");
+      } catch (err) {
+        console.error(err);
+        toast("Failed to restore calendar from backup.", "error");
+      }
+    };
+    reader.readAsText(file);
+  };
 
   const {
     showWorldEvents,
@@ -265,6 +352,58 @@ export function CalendarSidebar() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Import / Export & Backup */}
+      <div className="bg-surface/40 backdrop-blur-xl border border-border/30 rounded-2xl md:rounded-3xl p-5 shadow-sm space-y-4">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3 flex items-center gap-2">
+          <Database className="w-4 h-4 text-indigo-500" />
+          Data & Portability
+        </h3>
+
+        <div className="space-y-3 pt-1">
+          {/* Export ICS */}
+          <button
+            onClick={handleExportICS}
+            className="w-full py-2.5 bg-surface-2 hover:bg-hover border border-border/10 rounded-xl text-xs font-bold text-text-2 hover:text-text transition-all active:scale-98 text-left px-3 flex items-center justify-between"
+          >
+            <span>Export Events (.ics)</span>
+            <Download className="w-3.5 h-3.5 text-text-4" />
+          </button>
+
+          {/* Import ICS */}
+          <label className="w-full py-2.5 bg-surface-2 hover:bg-hover border border-border/10 rounded-xl text-xs font-bold text-text-2 hover:text-text transition-all active:scale-98 cursor-pointer px-3 flex items-center justify-between">
+            <span>Import Events (.ics)</span>
+            <Upload className="w-3.5 h-3.5 text-text-4" />
+            <input
+              type="file"
+              accept=".ics"
+              onChange={handleImportICS}
+              className="hidden"
+            />
+          </label>
+
+          {/* Backup JSON */}
+          <button
+            onClick={handleBackupJSON}
+            className="w-full py-2.5 bg-surface-2 hover:bg-hover border border-border/10 rounded-xl text-xs font-bold text-text-2 hover:text-text transition-all active:scale-98 text-left px-3 flex items-center justify-between"
+          >
+            <span>Backup Data (JSON)</span>
+            <FileSpreadsheet className="w-3.5 h-3.5 text-text-4" />
+          </button>
+
+          {/* Restore JSON */}
+          <label className="w-full py-2.5 bg-surface-2 hover:bg-hover border border-border/10 rounded-xl text-xs font-bold text-text-2 hover:text-text transition-all active:scale-98 cursor-pointer px-3 flex items-center justify-between">
+            <span>Restore Backup (JSON)</span>
+            <RotateCcw className="w-3.5 h-3.5 text-text-4" />
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleRestoreJSON}
+              className="hidden"
+            />
+          </label>
+        </div>
       </div>
     </aside>
   );

@@ -1,3 +1,4 @@
+import { calculator } from "./tools/calculator";
 import { ToolContent } from '../registry/types';
 import { hashGenerator } from './tools/hash-generator';
 import { passwordGenerator } from './tools/password-generator';
@@ -56,7 +57,7 @@ import { sitemapGenerator } from './tools/sitemap-generator';
 import { robotsTxt } from './tools/robots-txt';
 import { seoTitle } from './tools/seo-title';
 import { urlCleaner } from './tools/url-cleaner';
-import { standardCalculator } from './tools/standard-calculator';
+
 import { timeCalculator } from './tools/time-calculator';
 import { imageSeo } from './tools/image-seo';
 import { fileValidator } from './tools/validate';
@@ -139,7 +140,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "robots-txt": robotsTxt,
   "seo-title": seoTitle,
   "url-cleaner": urlCleaner,
-  "standard-calculator": standardCalculator,
+  "standard-calculator": 
   "time-calculator": timeCalculator,
   "image-seo": imageSeo,
   "validate": fileValidator,

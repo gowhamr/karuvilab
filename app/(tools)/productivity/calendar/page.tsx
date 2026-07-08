@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { generateToolMetadata } from "@/src/lib/seo";
-import CalendarPage from "@/src/features/calendar/CalendarPage";
+import ToolClientWrapper from "./ToolClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("calendar");
 
@@ -16,7 +16,7 @@ export default function page() {
       fullWidth={true}
       toolId="calendar"
     >
-      <CalendarPage />
+      <ToolClientWrapper />
     </ToolShell>
   );
 }

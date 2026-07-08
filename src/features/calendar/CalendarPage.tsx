@@ -7,10 +7,12 @@ import { MonthView } from "./components/MonthView";
 import { WeekView } from "./components/WeekView";
 import { DayView } from "./components/DayView";
 import { AgendaView } from "./components/AgendaView";
+import { YearView } from "./components/YearView";
+import { SearchModal } from "./components/SearchModal";
 import { EventModal } from "./components/EventModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReminders } from "./hooks/useReminders";
-import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from "date-fns";
+import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays, addYears, subYears } from "date-fns";
 
 import { useShallow } from "zustand/react/shallow";
 import { WorldEventPanel } from "./components/WorldEventPanel";
@@ -43,16 +45,19 @@ export default function CalendarPage() {
 
   const [initialDate, setInitialDate] = useState<Date>(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handlePrev = useCallback(() => {
     if (currentView === 'month') setCurrentDate(subMonths(currentDate, 1));
     else if (currentView === 'week') setCurrentDate(subWeeks(currentDate, 1));
+    else if (currentView === 'year') setCurrentDate(subYears(currentDate, 1));
     else setCurrentDate(subDays(currentDate, 1));
   }, [currentView, currentDate, setCurrentDate]);
 
   const handleNext = useCallback(() => {
     if (currentView === 'month') setCurrentDate(addMonths(currentDate, 1));
     else if (currentView === 'week') setCurrentDate(addWeeks(currentDate, 1));
+    else if (currentView === 'year') setCurrentDate(addYears(currentDate, 1));
     else setCurrentDate(addDays(currentDate, 1));
   }, [currentView, currentDate, setCurrentDate]);
 
@@ -92,6 +97,14 @@ export default function CalendarPage() {
         case 'a':
           setCurrentView('agenda');
           break;
+        case 'y':
+          setCurrentView('year');
+          break;
+        case 's':
+        case '/':
+          e.preventDefault();
+          setIsSearchOpen(true);
+          break;
         case 'arrowleft':
           handlePrev();
           break;
@@ -107,7 +120,11 @@ export default function CalendarPage() {
 
   return (
     <div className="w-full space-y-4 md:space-y-8 min-h-screen flex flex-col pb-10">
-      <CalendarHeader onAddEvent={() => handleAddEvent()} onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
+      <CalendarHeader 
+        onAddEvent={() => handleAddEvent()} 
+        onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} 
+        onSearch={() => setIsSearchOpen(true)}
+      />
 
       <div className="flex-1 flex flex-col lg:flex-row gap-6 md:gap-8 min-h-0 relative">
         <div className="flex-1 flex flex-col min-h-0 relative">
@@ -124,6 +141,7 @@ export default function CalendarPage() {
               {currentView === 'week' && <WeekView />}
               {currentView === 'day' && <DayView />}
               {currentView === 'agenda' && <AgendaView />}
+              {currentView === 'year' && <YearView />}
             </motion.div>
           </AnimatePresence>
 
@@ -144,6 +162,11 @@ export default function CalendarPage() {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         initialDate={initialDate}
+      />
+
+      <SearchModal 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
       />
 
       <AnimatePresence>

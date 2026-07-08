@@ -1,4 +1,4 @@
-export type CalendarView = 'month' | 'week' | 'day' | 'agenda';
+export type CalendarView = 'month' | 'week' | 'day' | 'agenda' | 'year';
 
 export type EventColor = 'indigo' | 'blue' | 'green' | 'yellow' | 'orange' | 'red' | 'purple' | 'pink';
 
@@ -17,7 +17,10 @@ export interface CalendarEvent {
     type: RecurrenceType;
     endDate?: string; // ISO string
     count?: number;
+    exceptions?: string[]; // ISO start dates of instances that are skipped or replaced
   };
+  parentId?: string; // For exception events, links to the parent recurring series
+  exceptionOriginalDate?: string; // The original start date of the occurrence this exception replaces
   reminderMinutes?: number;
   createdAt: number;
   updatedAt: number;
@@ -33,4 +36,3 @@ export interface CalendarWorldEventsSettings {
   showUpcomingWidget: boolean;        // sidebar widget
   compactBadges: boolean;             // show only emoji vs emoji+name
 }
-

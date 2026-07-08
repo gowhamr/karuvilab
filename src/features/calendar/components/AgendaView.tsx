@@ -5,7 +5,7 @@ import { format, parseISO, isSameDay, isToday, isTomorrow } from "date-fns";
 import { COLOR_MAP } from "../constants";
 import { cn } from "@/src/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { getFestivalsForDay, getObservancesForDay } from "../utils";
+import { getEventsForDay, getFestivalsForDay, getObservancesForDay } from "../utils";
 import { addDays, startOfDay, eachDayOfInterval } from "date-fns";
 import { CalendarEvent } from "../types";
 import { WorldEvent } from "../world-events-db";
@@ -20,7 +20,7 @@ export function AgendaView() {
   const days = eachDayOfInterval({ start: today, end: endDate });
 
   const agendaDays = days.map(day => {
-    const dayEvents = events.filter(e => isSameDay(parseISO(e.startDate), day));
+    const dayEvents = getEventsForDay(day, events);
     const festivals = getFestivalsForDay(day);
     const observances = getObservancesForDay(day);
 
