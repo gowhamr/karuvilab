@@ -49,13 +49,13 @@ export default function CalculatorClient() {
   const isScientific = mode === 'scientific' || isLandscape;
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto h-[700px] max-h-[85vh] bg-bg rounded-3xl overflow-hidden shadow-2xl border border-border flex flex-col md:flex-row">
+    <div className="relative w-full max-w-4xl mx-auto h-[700px] max-h-[85vh] bg-surface rounded-3xl overflow-hidden shadow-2xl border border-border flex flex-col md:flex-row">
       <div className="flex-1 flex flex-col p-4 space-y-4">
         {/* Header Controls */}
         <div className="flex justify-between items-center px-2">
           <button 
             onClick={toggleScientific}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface hover:bg-surface-2 border border-border text-xs font-semibold text-text transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface hover:bg-surface-2 border border-border text-xs font-semibold text-text-primary transition-colors"
           >
             {isScientific ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
             {isScientific ? 'Standard' : 'Scientific'}
@@ -63,7 +63,7 @@ export default function CalculatorClient() {
           
           <button
             onClick={toggleHistory}
-            className="p-2 rounded-full bg-surface hover:bg-surface-2 border border-border text-text transition-colors"
+            className="p-2 rounded-full bg-surface hover:bg-surface-2 border border-border text-text-primary transition-colors"
             title="History"
           >
             <History className="w-4 h-4" />

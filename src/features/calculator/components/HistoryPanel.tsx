@@ -25,7 +25,7 @@ export const HistoryPanel = () => {
       <div className="flex items-center justify-between p-4 border-b border-border">
         <h3 className="font-bold text-text">History</h3>
         <div className="flex items-center gap-2">
-          <button onClick={clearHistory} className="p-2 text-text-4 hover:text-red-500 rounded-xl hover:bg-red-500/10">
+          <button onClick={clearHistory} className="p-2 text-text-4 hover:text-danger rounded-xl hover:bg-danger/10">
             <Trash2 className="w-4 h-4" />
           </button>
           <button onClick={toggleHistory} className="p-2 text-text-4 hover:text-text rounded-xl hover:bg-surface">
@@ -46,7 +46,7 @@ export const HistoryPanel = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-bg rounded-xl p-3 border border-border group cursor-pointer hover:border-brand-primary/50 transition-colors"
+                className="bg-surface rounded-xl p-3 border border-border group cursor-pointer hover:border-primary/50 transition-colors"
                 onClick={() => loadHistory(item)}
               >
                 <div className="flex justify-between items-start mb-2">
@@ -56,7 +56,7 @@ export const HistoryPanel = () => {
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={(e) => { e.stopPropagation(); pinHistory(item.id); }}
-                      className={`p-1.5 rounded-md hover:bg-surface ${item.isPinned ? 'text-brand-primary' : 'text-text-4'}`}
+                      className={`p-1.5 rounded-md hover:bg-surface-2 ${item.isPinned ? 'text-primary' : 'text-text-4'}`}
                     >
                       {item.isPinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
                     </button>
