@@ -35,7 +35,7 @@ interface LogEntry {
 const DEFAULT_CODE = {
   html: `<!-- Professional HTML Online Viewer -->\n<div class="container">\n  <h1>Hello, KaruviLab!</h1>\n  <p>Start editing to see real-time changes.</p>\n  <button id="action-btn">Click Me</button>\n</div>`,
   css: `/* Add your styles here */\n.container {\n  padding: 2rem;\n  text-align: center;\n  font-family: system-ui, -apple-system, sans-serif;\n  background: #f0f4ff;\n  border-radius: 20px;\n  box-shadow: 0 10px 30px rgba(0,0,0,0.1);\n}\n\nh1 { color: #4F46E5; margin-bottom: 1rem; }\n\nbutton {\n  padding: 0.8rem 1.5rem;\n  background: #4F46E5;\n  color: white;\n  border: none;\n  border-radius: 10px;\n  cursor: pointer;\n  font-weight: bold;\n  transition: transform 0.2s;\n}\n\nbutton:hover { transform: scale(1.05); }`,
-  js: `// Add your interactivity here\nconst btn = document.getElementById('action-btn');\n\nbtn.addEventListener('click', () => {\n  console.log('Button clicked!');\n  alert('Greetings from the Sandbox!');\n});`
+  js: `// Add your interactivity here\nconst btn = document.getElementById('action-btn');\n\nbtn.addEventListener('click', () => {\n  btn.textContent = 'Clicked!';\n  btn.style.background = '#059669';\n});`
 };
 
 const DEVICE_SIZES = {

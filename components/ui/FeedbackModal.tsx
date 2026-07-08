@@ -10,7 +10,7 @@ import { cn } from "@/src/lib/utils";
 import { FileUpload } from "./FileUpload";
 import { supportsBlur } from "@/src/lib/deviceCapability";
 
-const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: any }[] = [
+const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: React.ElementType }[] = [
   { value: "calculation", label: "Calculation Wrong", icon: AlertCircle },
   { value: "bug", label: "UI Broken", icon: AlertCircle },
   { value: "performance", label: "Performance Issue", icon: AlertCircle },

@@ -40,7 +40,7 @@ export function MediaDropZone({
     }
   };
 
-  const dropZoneProps: any = {
+  const dropZoneProps: Record<string, unknown> = {
     onFilesSelected: (files: FileList | File[]) => {
       const file = files instanceof FileList ? files[0] : files[0];
       if (file) onFileSelect(file);

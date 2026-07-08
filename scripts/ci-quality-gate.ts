@@ -37,13 +37,7 @@ if (fs.existsSync(toolsDir)) {
       const toolId = `${category}/${tool}`;
       const toolDetailPath = path.join(catPath, tool);
       
-      const files = fs.readdirSync(toolDetailPath);
-      const wrapperFile = files.find(f => f.endsWith('Wrapper.tsx'));
-      const clientFile = files.find(f => f.endsWith('Client.tsx') && !f.endsWith('Wrapper.tsx'));
-      
       const hasPage = fs.existsSync(path.join(toolDetailPath, 'page.tsx'));
-      const hasWrapper = !!wrapperFile;
-      const hasClient = !!clientFile;
       
       if (hasPage) {
         // Enforce 3-file pattern for interactive browser tools
@@ -51,8 +45,35 @@ if (fs.existsSync(toolsDir)) {
         
         // If page imports dynamic ToolClient, verify wrapper exists
         if (pageContent.includes('ClientWrapper') || pageContent.includes('Wrapper')) {
-          if (!hasWrapper || !hasClient) {
-            fail(`Tool "${toolId}" violates 3-file architecture. Found page.tsx but missing ClientWrapper.tsx or Client.tsx.`);
+          let targetDir = toolDetailPath;
+          const importMatch = pageContent.match(/import\s+\w+ClientWrapper\s+from\s+['"]([^'"]+)['"]/i) || 
+                              pageContent.match(/import\s+\w+Wrapper\s+from\s+['"]([^'"]+)['"]/i);
+          if (importMatch && importMatch[1]) {
+            const importPath = importMatch[1];
+            if (importPath.startsWith('@/src/features/')) {
+              targetDir = path.join(process.cwd(), importPath.replace('@/', ''));
+            } else if (importPath.startsWith('src/features/')) {
+              targetDir = path.join(process.cwd(), importPath);
+            } else if (importPath.startsWith('../') || importPath.startsWith('./')) {
+              targetDir = path.resolve(toolDetailPath, importPath);
+            }
+            if (!fs.existsSync(targetDir) || !fs.statSync(targetDir).isDirectory()) {
+              targetDir = path.dirname(targetDir);
+            }
+          }
+
+          if (fs.existsSync(targetDir) && fs.statSync(targetDir).isDirectory()) {
+            const targetFiles = fs.readdirSync(targetDir);
+            const hasWrapper = targetFiles.some(f => f.toLowerCase().endsWith('wrapper.tsx'));
+            const hasClient = targetFiles.some(f => f.toLowerCase().endsWith('client.tsx') && !f.toLowerCase().endsWith('wrapper.tsx')) ||
+                              targetFiles.some(f => f.endsWith('Page.tsx') && !f.endsWith('Wrapper.tsx')) ||
+                              targetFiles.some(f => f.toLowerCase().includes('client') && !f.toLowerCase().includes('wrapper')) ||
+                              targetFiles.some(f => f.toLowerCase().includes('page') && !f.toLowerCase().includes('wrapper'));
+            if (!hasWrapper || !hasClient) {
+              fail(`Tool "${toolId}" violates 3-file architecture. Found page.tsx but missing ClientWrapper or Client in resolved folder: ${targetDir}`);
+            }
+          } else {
+            fail(`Tool "${toolId}" violates 3-file architecture. Resolved target folder does not exist: ${targetDir}`);
           }
         }
         
@@ -63,12 +84,39 @@ if (fs.existsSync(toolsDir)) {
         if (pageContent.includes('useState') || pageContent.includes('useEffect')) {
           fail(`page.tsx in tool "${toolId}" must not use hooks (useState/useEffect).`);
         }
-      }
-      
-      if (hasWrapper && wrapperFile) {
-        const wrapperContent = fs.readFileSync(path.join(toolDetailPath, wrapperFile), 'utf-8');
-        if (!wrapperContent.includes('"use client"') && !wrapperContent.includes("'use client'")) {
-          fail(`${wrapperFile} in tool "${toolId}" must contain "use client" directive.`);
+
+        // Validate "use client" in wrapper
+        let wrapperFilePath = '';
+        const importMatch = pageContent.match(/import\s+\w+ClientWrapper\s+from\s+['"]([^'"]+)['"]/i) || 
+                            pageContent.match(/import\s+\w+Wrapper\s+from\s+['"]([^'"]+)['"]/i);
+        if (importMatch && importMatch[1]) {
+          const importPath = importMatch[1];
+          let targetPath = '';
+          if (importPath.startsWith('@/src/features/')) {
+            targetPath = path.join(process.cwd(), importPath.replace('@/', ''));
+          } else if (importPath.startsWith('src/features/')) {
+            targetPath = path.join(process.cwd(), importPath);
+          } else if (importPath.startsWith('../') || importPath.startsWith('./')) {
+            targetPath = path.resolve(toolDetailPath, importPath);
+          }
+          if (fs.existsSync(targetPath + '.tsx')) {
+            wrapperFilePath = targetPath + '.tsx';
+          } else if (fs.existsSync(targetPath + '.ts')) {
+            wrapperFilePath = targetPath + '.ts';
+          }
+        } else {
+          const files = fs.readdirSync(toolDetailPath);
+          const wrapperFile = files.find(f => f.endsWith('Wrapper.tsx'));
+          if (wrapperFile) {
+            wrapperFilePath = path.join(toolDetailPath, wrapperFile);
+          }
+        }
+
+        if (wrapperFilePath && fs.existsSync(wrapperFilePath)) {
+          const wrapperContent = fs.readFileSync(wrapperFilePath, 'utf-8');
+          if (!wrapperContent.includes('"use client"') && !wrapperContent.includes("'use client'")) {
+            fail(`${path.basename(wrapperFilePath)} in tool "${toolId}" must contain "use client" directive.`);
+          }
         }
       }
     }

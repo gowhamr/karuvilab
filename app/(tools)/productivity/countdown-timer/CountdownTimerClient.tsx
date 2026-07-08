@@ -296,7 +296,7 @@ export default function CountdownTimerClient() {
                 <label className="text-xs font-bold text-text-3">Theme (Dashboard)</label>
                 <select 
                   value={settings.dashboardTheme} 
-                  onChange={e => updateSettings({ dashboardTheme: e.target.value as any })}
+                  onChange={e => updateSettings({ dashboardTheme: e.target.value as "dark" | "amoled" | "light" | "matrix" })}
                   className="w-full bg-surface-elevated border border-border rounded-lg p-2 text-sm outline-none"
                 >
                   <option value="dark">Dark (Default)</option>
@@ -314,7 +314,7 @@ export default function CountdownTimerClient() {
                   {['small', 'medium', 'large', 'huge'].map(size => (
                     <button 
                       key={size}
-                      onClick={() => updateSettings({ clockSize: size as any })}
+                      onClick={() => updateSettings({ clockSize: size as "small" | "medium" | "large" | "huge" })}
                       className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-elevated text-text-4 hover:text-text")}
                     >
                       {size}

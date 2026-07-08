@@ -20,7 +20,7 @@ export const HistoryPanel = () => {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 300, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="absolute right-0 top-0 bottom-0 w-80 bg-surface-2 border-l border-border shadow-2xl z-20 flex flex-col"
+      className="absolute right-0 top-0 bottom-0 w-80 bg-surface-2 border-l border-border shadow-2xl z-above flex flex-col"
     >
       <div className="flex items-center justify-between p-4 border-b border-border">
         <h3 className="font-bold text-text">History</h3>

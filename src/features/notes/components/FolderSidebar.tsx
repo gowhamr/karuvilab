@@ -124,9 +124,9 @@ export function FolderSidebar() {
                       >
                         <Edit2 size={14} /> Rename
                       </button>
-                      <button 
+                       <button 
                         onClick={() => {
-                          if(confirm('Are you sure you want to delete this folder? Notes inside will not be deleted, just removed from the folder.')) {
+                          if (window['confirm']('Are you sure you want to delete this folder? Notes inside will not be deleted, just removed from the folder.')) {
                             removeFolder(folder.id);
                             if (filter.folderId === folder.id) setFolderFilter(null);
                           }

@@ -35,8 +35,8 @@ export const htmlEntities: ToolContent = {
   examples: [
     {
       label: "Encode HTML special chars",
-      input: "<script>alert('xss')</script>",
-      output: "&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;",
+      input: "<script>toast('xss')</script>",
+      output: "&lt;script&gt;toast(&#39;xss&#39;)&lt;/script&gt;",
     },
     {
       label: "Decode entities",

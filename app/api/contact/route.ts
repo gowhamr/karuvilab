@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 // Lazy initialization to avoid build-time errors
-let resendInstance: any = null;
+let resendInstance: unknown = null;
 const getResend = async () => {
   if (!resendInstance) {
     const apiKey = process.env.RESEND_API_KEY;

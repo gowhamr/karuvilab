@@ -25,7 +25,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
   }, []);
 
   const isFavorite = hydrated && favorites.includes(tool.id);
-  const isOffline = !tool.requiresNetwork;
+
 
   const handleFavClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -69,11 +69,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-[10px]">
               {tool.category}
             </Badge>
-            {isOffline && (
-              <Badge variant="success" size="sm" className="text-[10px]">
-                Offline
-              </Badge>
-            )}
+
           </div>
         </Card>
       </Link>

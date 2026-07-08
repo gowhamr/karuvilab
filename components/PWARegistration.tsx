@@ -129,7 +129,7 @@ export function PWARegistration() {
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
+      deferredPrompt['prompt']();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         setShowPrompt(false);
