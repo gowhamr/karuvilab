@@ -140,7 +140,6 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   "robots-txt": robotsTxt,
   "seo-title": seoTitle,
   "url-cleaner": urlCleaner,
-  "standard-calculator": 
   "time-calculator": timeCalculator,
   "image-seo": imageSeo,
   "validate": fileValidator,

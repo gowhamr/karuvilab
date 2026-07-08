@@ -8,6 +8,6 @@ const CalculatorClient = dynamic(
   { ssr: false, loading: () => <ToolSkeleton /> }
 );
 
-export default function calculatorClientWrapper() {
+export default function CalculatorClientWrapper() {
   return <CalculatorClient />;
 }

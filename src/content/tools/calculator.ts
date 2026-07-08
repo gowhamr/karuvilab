@@ -1,13 +1,11 @@
 import { ToolContent } from '@/src/registry/types';
 
 export const calculator: ToolContent = {
-  title: "Calculator",
-  description: "A professional, unified calculator featuring seamless standard and scientific modes, calculation history, memory functions, and fully responsive layouts.",
   detailedDescription: `
     <p>The <strong>Calculator</strong> provides a fully integrated mathematical workspace that merges standard and scientific functionalities into one premium interface. It runs completely locally with <strong>Zero-Server-Upload</strong> privacy.</p>
     <p>It supports instant evaluation, robust offline history management, configurable precision settings, responsive design for desktop and mobile devices, and gesture-driven actions.</p>
   `,
-  howToUse: [
+  howTo: [
     "Enter an expression using the on-screen keypad or your physical keyboard.",
     "On mobile, rotate your device to landscape or toggle the sidebar to access scientific functions.",
     "Access your calculation history from the panel to reuse previous results.",
@@ -34,7 +32,7 @@ export const calculator: ToolContent = {
       description: "combines functions and powers"
     }
   ],
-  faqs: [
+  faq: [
     {
       question: "Is this calculator offline?",
       answer: "Yes, it works entirely in your browser without any network connection."

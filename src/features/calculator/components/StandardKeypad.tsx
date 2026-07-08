@@ -41,8 +41,8 @@ export const StandardKeypad = () => {
           key={i}
           label={k.label}
           onClick={k.action}
-          variant={k.variant}
-          className={k.className}
+          variant={k.variant || 'default'}
+          className={k.className || ''}
         />
       ))}
     </div>
