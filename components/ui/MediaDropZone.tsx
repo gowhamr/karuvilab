@@ -40,7 +40,7 @@ export function MediaDropZone({
     }
   };
 
-  const dropZoneProps: Record<string, unknown> = {
+  const props: any = {
     onFilesSelected: (files: FileList | File[]) => {
       const file = files instanceof FileList ? files[0] : files[0];
       if (file) onFileSelect(file);
@@ -51,7 +51,7 @@ export function MediaDropZone({
     icon: getIcon(),
   };
 
-  if (maxSize) dropZoneProps.maxSize = maxSize;
+  if (maxSize) props.maxSize = maxSize;
 
-  return <DropZone {...dropZoneProps} />;
+  return <DropZone {...props} />;
 }

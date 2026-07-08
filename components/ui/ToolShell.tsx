@@ -21,7 +21,7 @@ export async function ToolShell({ title, description, category, children, toolId
   // Perform lookups on the server
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   
-  let reg: Record<string, unknown> = {};
+  let reg: any = {};
   if (currentTool) {
     try {
       // Load tool SEO content dynamically on demand on the server

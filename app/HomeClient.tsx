@@ -7,19 +7,17 @@ import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-reg
 import { ToolCard } from "@/components/ToolCard";
 import { HomeHero } from "./HomeHero";
 import { QuickActionsDashboard } from "@/components/ui/QuickActionsDashboard";
-import { SearchBar } from "@/components/ui/search/SearchBar";
 import { CategoryChips } from "@/components/ui/CategoryChips";
+import { CollectionsDashboard } from "@/components/ui/collections/CollectionsDashboard";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useIntelligenceStore } from "@/src/store/useIntelligenceStore";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { useI18n } from "@/src/lib/i18n/store";
 import {
-  ArrowRight, LayoutGrid, TrendingUp,
-  Clock, Heart, Command, ChevronRight, Sparkles, Play,
+  LayoutGrid, TrendingUp, ChevronRight, Sparkles, SlidersHorizontal, FolderHeart
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { ToolIcon } from "@/components/ui/Icons";
 
 // ── Animation presets ─────────────────────────────────────────────────────────
 
@@ -32,10 +30,74 @@ const fadeUp = {
   },
 } as const;
 
-const stagger = {
-  hidden:  { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.045 } },
-} as const;
+// ── Smart Categories definition ───────────────────────────────────────────────
+
+export interface SmartCategory {
+  id: string;
+  label: string;
+  emoji: string;
+}
+
+export const SMART_CATEGORIES: SmartCategory[] = [
+  { id: "popular", label: "Popular", emoji: "🔥" },
+  { id: "favorites", label: "Favorites", emoji: "⭐" },
+  { id: "recent", label: "Recently Used", emoji: "🕒" },
+  { id: "new", label: "New Releases", emoji: "🆕" },
+  { id: "pdf", label: "PDF", emoji: "📄" },
+  { id: "image", label: "Image", emoji: "🖼" },
+  { id: "media", label: "Media", emoji: "🎬" },
+  { id: "developer", label: "Developer", emoji: "💻" },
+  { id: "security", label: "Security", emoji: "🔒" },
+  { id: "finance", label: "Finance", emoji: "📈" },
+  { id: "student", label: "Student", emoji: "🎓" },
+  { id: "business", label: "Business", emoji: "🏢" },
+  { id: "travel", label: "Travel", emoji: "🌍" },
+  { id: "design", label: "Design", emoji: "🎨" },
+  { id: "productivity", label: "Productivity", emoji: "📅" },
+  { id: "offline-only", label: "Offline Only", emoji: "📦" },
+  { id: "advanced", label: "Advanced", emoji: "⚙️" }
+];
+
+const matchesSmartCategory = (tool: ToolEntry, categoryId: string, favoriteIds: string[], recentToolIds: string[]): boolean => {
+  switch (categoryId) {
+    case "popular":
+      return !!tool.popular;
+    case "favorites":
+      return favoriteIds.includes(tool.id);
+    case "recent":
+      return recentToolIds.includes(tool.id);
+    case "new":
+      return tool.status === "new" || (tool.lastAdded ? (Date.now() - new Date(tool.lastAdded).getTime() < 14 * 24 * 60 * 60 * 1000) : false);
+    case "pdf":
+      return tool.category === "pdf" || tool.keywords.includes("pdf");
+    case "image":
+      return tool.category === "image" || tool.keywords.includes("image") || tool.keywords.includes("png") || tool.keywords.includes("jpg");
+    case "media":
+      return tool.category === "media" || tool.category === "image";
+    case "developer":
+      return tool.category === "developer" || tool.keywords.includes("code") || tool.keywords.includes("json") || tool.keywords.includes("developer");
+    case "security":
+      return tool.category === "security" || tool.keywords.includes("encrypt") || tool.keywords.includes("hash") || tool.keywords.includes("password");
+    case "finance":
+      return tool.subCategory === "Financial" || tool.keywords.includes("finance") || tool.keywords.includes("interest") || tool.keywords.includes("tax");
+    case "student":
+      return ["standard-calculator", "scientific-calculator", "unit-converter", "grammar-checker", "markdown", "age-calculator"].includes(tool.id) || tool.category === "calculators";
+    case "business":
+      return ["gst-calculator", "invoice-generator", "salary-calculator", "qrcode"].includes(tool.id) || tool.keywords.includes("business");
+    case "travel":
+      return ["currency-converter", "world-clock", "unit-converter"].includes(tool.id) || tool.keywords.includes("travel");
+    case "design":
+      return ["gradient-generator", "box-shadow-generator", "glassmorphism-generator", "color-palette-extractor", "image-crop"].includes(tool.id) || tool.category === "image";
+    case "productivity":
+      return tool.category === "productivity" || tool.category === "utilities";
+    case "offline-only":
+      return tool.requiresNetwork !== true;
+    case "advanced":
+      return tool.difficulty === "advanced" || tool.category === "developer" || tool.category === "security";
+    default:
+      return tool.category === categoryId;
+  }
+};
 
 // ── Section Header ─────────────────────────────────────────────────────────────
 
@@ -86,7 +148,6 @@ const SectionHeader = memo(function SectionHeader({
   );
 });
 
-
 // ── Page Component ─────────────────────────────────────────────────────────────
 
 export default function HomeClient() {
@@ -102,6 +163,13 @@ export default function HomeClient() {
 
   const recordView       = useAnalyticsStore(state => state.recordView);
   const recordEngagement = useAnalyticsStore(state => state.recordEngagement);
+
+  // Home Tabs
+  const [activeTab, setActiveTab] = useState<"tools" | "collections">("tools");
+  
+  // Smart Filtering
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [showSmartFilters, setShowSmartFilters] = useState(false);
 
   useEffect(() => {
     setRecentTools(getRecentTools().slice(0, 5));
@@ -129,16 +197,42 @@ export default function HomeClient() {
 
   const deferredActiveCategory = useDeferredValue(activeCategory);
   const filteredTools = useMemo(() => {
-    if (!deferredActiveCategory) return [];
-    return (ALL_TOOLS as ToolEntry[]).filter(t => t.category === deferredActiveCategory);
-  }, [deferredActiveCategory]);
+    let list = ALL_TOOLS as ToolEntry[];
+    
+    // Apply category filter if active
+    if (deferredActiveCategory) {
+      list = list.filter(t => t.category === deferredActiveCategory);
+    }
+    
+    // Apply smart filters (AND logic)
+    if (activeFilters.length > 0) {
+      list = list.filter(tool => 
+        activeFilters.every(filterId => 
+          matchesSmartCategory(tool, filterId, favoriteIds, recentTools.map(r => r.id))
+        )
+      );
+    }
+
+    return list;
+  }, [deferredActiveCategory, activeFilters, favoriteIds, recentTools]);
 
   const handleCategoryChange = useCallback((id: string | null) => {
     setActiveCategory(id);
     if (id) recordEngagement("homepage");
   }, [setActiveCategory, recordEngagement]);
 
-  const isFiltering = !!activeCategory;
+  const toggleSmartFilter = (filterId: string) => {
+    setActiveFilters(prev => 
+      prev.includes(filterId) ? prev.filter(id => id !== filterId) : [...prev, filterId]
+    );
+  };
+
+  const handleClearFilters = () => {
+    handleCategoryChange(null);
+    setActiveFilters([]);
+  };
+
+  const isFiltering = !!activeCategory || activeFilters.length > 0;
 
   const continueWorkingTool = useMemo(() => {
     return recentTools.length > 0 ? recentTools[0] : null;
@@ -160,171 +254,268 @@ export default function HomeClient() {
 
         <HomeHero isReturning={isReturning} />
 
-
-
-        {/* ── Sticky category chip bar ── */}
-        <div
-          className={cn(
-            "sticky top-15 md:top-18 z-sidebar w-full py-2 bg-bg/95 backdrop-blur-sm border-b border-border transition-opacity",
-            isSidebarOpen && "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
-          )}
-        >
-          <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-            </div>
-            {isFiltering && (
-              <button
-                onClick={() => handleCategoryChange(null)}
-                aria-label="Clear active filter"
-                className="min-h-11 px-3 flex items-center gap-1 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors uppercase tracking-widest shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-              >
-                Clear
-              </button>
+        {/* ── Main Tab Navigation ── */}
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex border-b border-border/80 gap-6">
+          <button
+            onClick={() => setActiveTab("tools")}
+            className={cn(
+              "pb-3 text-sm font-black uppercase tracking-widest transition-all relative",
+              activeTab === "tools" ? "text-text" : "text-text-4 hover:text-text-2"
             )}
-          </div>
+          >
+            Browse Tools
+            {activeTab === "tools" && (
+              <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+            )}
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("collections")}
+            className={cn(
+              "pb-3 text-sm font-black uppercase tracking-widest transition-all relative flex items-center gap-1.5",
+              activeTab === "collections" ? "text-text" : "text-text-4 hover:text-text-2"
+            )}
+          >
+            <FolderHeart className="w-4 h-4" /> Tool Collections
+            {activeTab === "collections" && (
+              <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+            )}
+          </button>
         </div>
 
-        {/* ── Main content ── */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8 space-y-10 md:space-y-12">
-          <AnimatePresence mode="wait">
+        {activeTab === "tools" ? (
+          <>
+            {/* ── Sticky category chip bar ── */}
+            <div
+              className={cn(
+                "sticky top-15 md:top-18 z-sidebar w-full py-2 bg-bg/95 backdrop-blur-sm border-b border-border transition-opacity",
+                isSidebarOpen && "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
+              )}
+            >
+              <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
+                </div>
+                
+                <div className="flex items-center gap-2 shrink-0">
+                  {/* Smart Filters toggle */}
+                  <button
+                    onClick={() => setShowSmartFilters(!showSmartFilters)}
+                    className={cn(
+                      "min-h-11 px-3 flex items-center gap-1.5 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
+                      activeFilters.length > 0 ? "border-brand-primary/50 text-brand-primary bg-brand-primary/5" : "border-border/80 text-text-3"
+                    )}
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5" /> Filters 
+                    {activeFilters.length > 0 && <span className="bg-brand-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{activeFilters.length}</span>}
+                  </button>
 
-            {/* ── FILTERING STATE ── */}
-            {isFiltering ? (
-              <m.section
-                key="category-results"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-6"
-                aria-live="polite"
-              >
-                <SectionHeader
-                  title={CATEGORIES.find(c => c.id === activeCategory)?.label ?? "Tools"}
-                  subtitle={`${filteredTools.length} tools in this category`}
-                  icon={LayoutGrid}
-                />
-                <m.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-80 content-start"
-                >
-                  {filteredTools.map(tool => (
-                    <div key={tool.id} className="flex flex-col h-full">
-                      <ToolCard tool={tool} compact />
-                    </div>
-                  ))}
-                </m.div>
-              </m.section>
-            ) : (
-
-              /* ── DEFAULT STATE ── */
-              <m.div
-                key="default-content"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-10 md:space-y-12"
-              >
-
-                {/* Quick Actions Dashboard */}
-                {hydrated && (
-                  <AnimatePresence>
-                    <m.section
-                      key="quick-actions"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.22 }}
+                  {isFiltering && (
+                    <button
+                      onClick={handleClearFilters}
+                      aria-label="Clear active filter"
+                      className="min-h-11 px-3 flex items-center gap-1 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
                     >
-                      <QuickActionsDashboard 
-                        continueTool={continueWorkingTool}
-                        recentTools={recentTools}
-                        favoriteTools={favoriteTools}
-                        frequentlyUsedTools={popularTools}
-                        suggestedTools={suggestedTools}
-                      />
-                    </m.section>
-                  </AnimatePresence>
-                )}
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
 
-
-                {/* Popular Tools */}
-                <section aria-labelledby="popular-heading">
-                  <SectionHeader
-                    title={t("common.popular")}
-                    subtitle="Most-used across all users"
-                    icon={TrendingUp}
-                    badge="Hot"
-                    headingId="popular-heading"
-                  />
-                  <m.div
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.4 }}
-                    className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
-                  >
-                    {popularTools.map(tool => (
-                      <div key={tool.id} className="flex flex-col h-full">
-                        <ToolCard tool={tool} compact />
-                      </div>
-                    ))}
-                  </m.div>
-                </section>
-
-                {/* Inline promo banner */}
-                {!isReturning && (
-                  <m.div
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                    className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                  >
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent"
-                    />
-                    <div className="relative flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
-                        <Sparkles className="w-6 h-6" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <p className="font-black text-text text-base leading-tight">Discover 100+ free tools</p>
-                        <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
-                      </div>
+            {/* ── Smart Filters Panel ── */}
+            <AnimatePresence>
+              {showSmartFilters && (
+                <m.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="w-full bg-surface-2/40 border-b border-border/80 overflow-hidden"
+                >
+                  <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 space-y-3">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Smart Categories & Filtering</span>
+                    <div className="flex flex-wrap gap-2">
+                      {SMART_CATEGORIES.map(cat => {
+                        const isSelected = activeFilters.includes(cat.id);
+                        return (
+                          <button
+                            key={cat.id}
+                            onClick={() => toggleSmartFilter(cat.id)}
+                            className={cn(
+                              "px-3 py-1.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 select-none active:scale-95",
+                              isSelected 
+                                ? "bg-brand-primary border-brand-primary text-white shadow-md shadow-brand-primary/10" 
+                                : "bg-surface border-border text-text-3 hover:text-text hover:border-text-4/30"
+                            )}
+                          >
+                            <span>{cat.emoji}</span>
+                            <span>{cat.label}</span>
+                          </button>
+                        );
+                      })}
                     </div>
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
+
+            {/* ── Main content ── */}
+            <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8 space-y-10 md:space-y-12">
+              <AnimatePresence mode="wait">
+
+                {/* ── FILTERING STATE ── */}
+                {isFiltering ? (
+                  <m.section
+                    key="category-results"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-6"
+                    aria-live="polite"
+                  >
+                    <SectionHeader
+                      title={activeCategory ? (CATEGORIES.find(c => c.id === activeCategory)?.label ?? "Tools") : "Smart Search Results"}
+                      subtitle={`${filteredTools.length} tools match active filters`}
+                      icon={LayoutGrid}
+                    />
+                    
+                    {filteredTools.length === 0 ? (
+                      <div className="text-center py-20 bg-surface-2/10 border border-dashed border-border rounded-3xl flex flex-col items-center gap-3">
+                        <SlidersHorizontal className="w-8 h-8 text-text-4" />
+                        <div>
+                          <p className="text-sm font-bold text-text">No tools match selected filter combination</p>
+                          <p className="text-xs text-text-muted mt-1">Try clearing some of the active filters.</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <m.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-80 content-start"
+                      >
+                        {filteredTools.map(tool => (
+                          <div key={tool.id} className="flex flex-col h-full">
+                            <ToolCard tool={tool} compact />
+                          </div>
+                        ))}
+                      </m.div>
+                    )}
+                  </m.section>
+                ) : (
+
+                  /* ── DEFAULT STATE ── */
+                  <m.div
+                    key="default-content"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="space-y-10 md:space-y-12"
+                  >
+
+                    {/* Quick Actions Dashboard */}
+                    {hydrated && (
+                      <AnimatePresence>
+                        <m.section
+                          key="quick-actions"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.22 }}
+                        >
+                          <QuickActionsDashboard 
+                            continueTool={continueWorkingTool}
+                            recentTools={recentTools}
+                            favoriteTools={favoriteTools}
+                            frequentlyUsedTools={popularTools}
+                            suggestedTools={suggestedTools}
+                          />
+                        </m.section>
+                      </AnimatePresence>
+                    )}
+
+
+                    {/* Popular Tools */}
+                    <section aria-labelledby="popular-heading">
+                      <SectionHeader
+                        title={t("common.popular")}
+                        subtitle="Most-used across all users"
+                        icon={TrendingUp}
+                        badge="Hot"
+                        headingId="popular-heading"
+                      />
+                      <m.div
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.4 }}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
+                      >
+                        {popularTools.map(tool => (
+                          <div key={tool.id} className="flex flex-col h-full">
+                            <ToolCard tool={tool} compact />
+                          </div>
+                        ))}
+                      </m.div>
+                    </section>
+
+                    {/* Inline promo banner */}
+                    {!isReturning && (
+                      <m.div
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                      >
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent"
+                        />
+                        <div className="relative flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
+                            <Sparkles className="w-6 h-6" aria-hidden="true" />
+                          </div>
+                          <div>
+                            <p className="font-black text-text text-base leading-tight">Discover 100+ free tools</p>
+                            <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
+                          </div>
+                        </div>
+                      </m.div>
+                    )}
+
+                    {/* All Tools Grid (Adaptive limit based on user state) */}
+                    <section aria-labelledby="all-tools-heading" id="tools">
+                      <SectionHeader
+                        title={t("common.all")}
+                        subtitle="The complete universal toolkit"
+                        icon={LayoutGrid}
+                        headingId="all-tools-heading"
+                      />
+                      <m.div
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: 0.4 }}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
+                      >
+                        {(ALL_TOOLS as ToolEntry[]).slice(0, isReturning ? 10 : 15).map(tool => (
+                          <div key={tool.id} className="flex flex-col h-full">
+                            <ToolCard tool={tool} compact />
+                          </div>
+                        ))}
+                      </m.div>
+                    </section>
+
                   </m.div>
                 )}
-
-                {/* All Tools Grid (Adaptive limit based on user state) */}
-                <section aria-labelledby="all-tools-heading" id="tools">
-                  <SectionHeader
-                    title={t("common.all")}
-                    subtitle="The complete universal toolkit"
-                    icon={LayoutGrid}
-                    headingId="all-tools-heading"
-                  />
-                  <m.div
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.4 }}
-                    className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
-                  >
-                    {(ALL_TOOLS as ToolEntry[]).slice(0, isReturning ? 10 : 15).map(tool => (
-                      <div key={tool.id} className="flex flex-col h-full">
-                        <ToolCard tool={tool} compact />
-                      </div>
-                    ))}
-                  </m.div>
-                </section>
-
-              </m.div>
-            )}
-          </AnimatePresence>
-        </div>
+              </AnimatePresence>
+            </div>
+          </>
+        ) : (
+          <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8">
+            <CollectionsDashboard />
+          </div>
+        )}
       </div>
     </MotionConfig>
   );

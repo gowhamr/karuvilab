@@ -23,7 +23,7 @@ export function MediaStatusBadge({ status, label, className }: MediaStatusBadgeP
     customLabel = label || "Ready";
   }
 
-  const props: Record<string, unknown> = { status: baseStatus };
+  const props: any = { status: baseStatus };
   if (customLabel) props.label = customLabel;
   if (className) props.className = className;
 

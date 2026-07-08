@@ -238,129 +238,110 @@ export function ClientToolShell({ title, description, category, children, toolId
 
       {!isEmbed && (
         <>
-          <div className="max-w-4xl mx-auto space-y-6">
-            {parsedContent.detailedDescription && (
-              <ToolInfoSection 
-            toolId={finalToolId} 
-            id="deep-dive" 
-            title="Deep Dive"
-            preview={stripHtmlAndTruncate(parsedContent.detailedDescription)}
-            isOpen={openSectionId === 'deep-dive'}
-            onToggle={(isOpen) => handleSectionToggle('deep-dive', isOpen)}
-          >
-            <div 
-              className="prose prose-slate dark:prose-invert max-w-none text-text-3"
-              dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
-            />
-          </ToolInfoSection>
-        )}
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="pt-4 pb-8">
+              <ToolFeedback toolId={finalToolId} toolName={title} />
+            </div>
 
-        {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-          <ToolInfoSection 
-            toolId={finalToolId} 
-            id="quick-guide" 
-            title="Quick Guide"
-            preview={stripHtmlAndTruncate(parsedContent.howTo.join(' → '))}
-            isOpen={openSectionId === 'quick-guide'}
-            onToggle={(isOpen) => handleSectionToggle('quick-guide', isOpen)}
-          >
-            <ol className="space-y-4">
-              {parsedContent.howTo.map((step, i) => (
-                <li key={i} className="flex gap-4 group">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
-                    {i + 1}
-                  </span>
-                  <div 
-                    className="text-text-2 text-sm leading-snug pt-0.5 prose prose-sm prose-slate dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: step }}
-                  />
-                </li>
-              ))}
-            </ol>
-          </ToolInfoSection>
-        )}
+            <ToolInfoSection 
+              toolId={finalToolId} 
+              id="learn-more" 
+              title="📚 Learn More"
+              preview="Quick guide, tips, FAQ, deep dive, and documentation."
+              isOpen={openSectionId === 'learn-more'}
+              onToggle={(isOpen) => handleSectionToggle('learn-more', isOpen)}
+            >
+              <div className="space-y-10">
+                {parsedContent.howTo && parsedContent.howTo.length > 0 && (
+                  <section>
+                    <h3 className="text-lg font-bold text-text mb-4">Quick Guide</h3>
+                    <ol className="space-y-4">
+                      {parsedContent.howTo.map((step, i) => (
+                        <li key={i} className="flex gap-4 group">
+                          <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
+                            {i + 1}
+                          </span>
+                          <div 
+                            className="text-text-2 text-sm leading-snug pt-0.5 prose prose-sm prose-slate dark:prose-invert max-w-none"
+                            dangerouslySetInnerHTML={{ __html: step }}
+                          />
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                )}
 
-        {content.useCases && content.useCases.length > 0 && (
-          <ToolInfoSection 
-            toolId={finalToolId} 
-            id="use-cases" 
-            title="Use Cases"
-            preview={stripHtmlAndTruncate(content.useCases.join(', '))}
-            isOpen={openSectionId === 'use-cases'}
-            onToggle={(isOpen) => handleSectionToggle('use-cases', isOpen)}
-          >
-            <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
-          </ToolInfoSection>
-        )}
+                {content.useCases && content.useCases.length > 0 && (
+                  <section>
+                    <h3 className="text-lg font-bold text-text mb-4">Tips & Use Cases</h3>
+                    <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
+                  </section>
+                )}
 
-        {parsedContent.faq && parsedContent.faq.length > 0 && (
-          <ToolInfoSection 
-            toolId={finalToolId} 
-            id="faq" 
-            title="Frequently Asked Questions"
-            preview={stripHtmlAndTruncate(parsedContent.faq.map(f => f.question).join(' '))}
-            isOpen={openSectionId === 'faq'}
-            onToggle={(isOpen) => handleSectionToggle('faq', isOpen)}
-          >
-            <FAQList faq={parsedContent.faq} />
-          </ToolInfoSection>
-        )}
+                {parsedContent.faq && parsedContent.faq.length > 0 && (
+                  <section>
+                    <h3 className="text-lg font-bold text-text mb-4">Frequently Asked Questions</h3>
+                    <FAQList faq={parsedContent.faq} />
+                  </section>
+                )}
 
-        <ToolInfoSection 
-          toolId={finalToolId} 
-          id="help-docs" 
-          title="Help & Documentation"
-          preview="Read the manual, watch tutorials, see examples, or troubleshoot issues."
-          isOpen={openSectionId === 'help-docs'}
-          onToggle={(isOpen) => handleSectionToggle('help-docs', isOpen)}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group">
-              <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
-                <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
-              </div>
-              <div>
-                <h4 className="font-bold text-sm text-text">Documentation</h4>
-                <p className="text-xs text-text-4">Read the full manual</p>
-              </div>
-            </Link>
-            
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-brand-primary transition-colors group">
-              <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center shrink-0">
-                <PlaySquare className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform" />
-              </div>
-              <div>
-                <h4 className="font-bold text-sm text-text">Tutorials</h4>
-                <p className="text-xs text-text-4">Step-by-step guides</p>
-              </div>
-            </Link>
+                {parsedContent.detailedDescription && (
+                  <section>
+                    <h3 className="text-lg font-bold text-text mb-4">Deep Dive</h3>
+                    <div 
+                      className="prose prose-slate dark:prose-invert max-w-none text-text-3"
+                      dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
+                    />
+                  </section>
+                )}
 
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group">
-              <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
-                <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
-              </div>
-              <div>
-                <h4 className="font-bold text-sm text-text">Examples</h4>
-                <p className="text-xs text-text-4">See it in action</p>
-              </div>
-            </Link>
+                <section>
+                  <h3 className="text-lg font-bold text-text mb-4">Documentation & Help</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group">
+                      <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
+                        <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm text-text">Documentation</h4>
+                        <p className="text-xs text-text-4">Read the full manual</p>
+                      </div>
+                    </Link>
+                    
+                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-primary transition-colors group">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                        <PlaySquare className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm text-text">Tutorials</h4>
+                        <p className="text-xs text-text-4">Step-by-step guides</p>
+                      </div>
+                    </Link>
 
-            <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group">
-              <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
-                <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
+                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group">
+                      <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
+                        <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm text-text">Examples</h4>
+                        <p className="text-xs text-text-4">See it in action</p>
+                      </div>
+                    </Link>
+
+                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group">
+                      <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
+                        <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm text-text">Troubleshooting</h4>
+                        <p className="text-xs text-text-4">Fix common issues</p>
+                      </div>
+                    </Link>
+                  </div>
+                </section>
               </div>
-              <div>
-                <h4 className="font-bold text-sm text-text">Troubleshooting</h4>
-                <p className="text-xs text-text-4">Fix common issues</p>
-              </div>
-            </Link>
+            </ToolInfoSection>
           </div>
-        </ToolInfoSection>
-        
-        <div className="pt-4">
-          <ToolFeedback toolId={finalToolId} toolName={title} />
-        </div>
-      </div>
 
       {related.length > 0 && (
         <section className="pt-12 border-t border-border space-y-8">

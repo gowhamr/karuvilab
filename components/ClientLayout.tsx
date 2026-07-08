@@ -11,6 +11,8 @@ import { FeedbackModal } from "@/components/ui/FeedbackModal";
 import { ContextualActionBar } from "@/components/ui/ContextualActionBar";
 import { useContextualActionBar } from "@/src/store/useContextualActionBar";
 
+import { GlobalDragDrop } from "@/components/ui/GlobalDragDrop";
+
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const isBarVisible = useContextualActionBar((s) => s.visible);
 
@@ -18,6 +20,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <LazyMotion features={domAnimation}>
       <ToastProvider>
         <FeedbackModal />
+        <GlobalDragDrop />
         <div className="flex min-h-screen">
           <Sidebar />
           <div className="flex-1 flex flex-col md:ml-sidebar min-w-0 relative overflow-x-hidden">
