@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, File as FileIcon, X, ArrowRight, Clock, Info } from "lucide-react";
@@ -75,6 +75,36 @@ export function GlobalDragDrop() {
     };
   }, [previews]);
 
+  const handleFilesSelected = useCallback((files: File[]) => {
+    setSelectedFiles(files);
+    setShowModal(true);
+
+    // Generate previews for images
+    const newPreviews: Record<string, string> = {};
+    files.forEach(file => {
+      if (file.type.startsWith("image/")) {
+        newPreviews[file.name] = URL.createObjectURL(file);
+      }
+    });
+    setPreviews(newPreviews);
+
+    // Save metadata in recent uploads list
+    const newRecents: RecentUpload[] = files.map(f => ({
+      name: f.name,
+      size: f.size,
+      type: f.type,
+      timestamp: Date.now()
+    }));
+    
+    setRecentUploads(prev => {
+      const combined = [...newRecents, ...prev].slice(0, 10);
+      try {
+        localStorage.setItem("kv-recent-uploads", JSON.stringify(combined));
+      } catch {}
+      return combined;
+    });
+  }, []);
+
   // Window drag events
   useEffect(() => {
     const handleDragEnter = (e: DragEvent) => {
@@ -118,37 +148,7 @@ export function GlobalDragDrop() {
       window.removeEventListener("dragover", handleDragOver);
       window.removeEventListener("drop", handleDrop);
     };
-  }, []);
-
-  const handleFilesSelected = (files: File[]) => {
-    setSelectedFiles(files);
-    setShowModal(true);
-
-    // Generate previews for images
-    const newPreviews: Record<string, string> = {};
-    files.forEach(file => {
-      if (file.type.startsWith("image/")) {
-        newPreviews[file.name] = URL.createObjectURL(file);
-      }
-    });
-    setPreviews(newPreviews);
-
-    // Save metadata in recent uploads list
-    const newRecents: RecentUpload[] = files.map(f => ({
-      name: f.name,
-      size: f.size,
-      type: f.type,
-      timestamp: Date.now()
-    }));
-    
-    setRecentUploads(prev => {
-      const combined = [...newRecents, ...prev].slice(0, 10);
-      try {
-        localStorage.setItem("kv-recent-uploads", JSON.stringify(combined));
-      } catch {}
-      return combined;
-    });
-  };
+  }, [handleFilesSelected]);
 
   const getFileExtension = (filename: string): string => {
     return filename.split(".").pop()?.toLowerCase() || "";
