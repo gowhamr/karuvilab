@@ -36,6 +36,13 @@ export async function ToolShell({ title, description, category, children, toolId
     }
   }
 
+  let relatedTools = content?.relatedTools ?? currentTool?.related ?? undefined;
+  
+  if ((!relatedTools || relatedTools.length === 0) && currentTool && category) {
+    const sameCategoryTools = ALL_TOOLS.filter(t => t.category === category.id && t.id !== currentTool.id);
+    relatedTools = sameCategoryTools.slice(0, 4).map(t => t.id);
+  }
+
   // Merge registry content with props content on the server
   const mergedContent: ClientToolShellProps['content'] = {
     detailedDescription: content?.detailedDescription ?? reg.detailedDescription,
@@ -45,7 +52,7 @@ export async function ToolShell({ title, description, category, children, toolId
     examples:            content?.examples            ?? reg.examples,
     commonErrors:        content?.commonErrors        ?? reg.commonErrors,
     alternatives:        content?.alternatives        ?? reg.alternatives,
-    relatedTools:        content?.relatedTools        ?? currentTool?.related ?? undefined,
+    relatedTools:        relatedTools,
   };
 
   return (
