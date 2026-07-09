@@ -175,7 +175,11 @@ export function ClientToolShell({ title, description, category, children, toolId
     }))
   }), [content.detailedDescription, content.howTo, content.faq]);
 
-  const relatedIds = useMemo(() => content.relatedTools ?? currentTool?.related ?? [], [content.relatedTools, currentTool?.related]);
+  const relatedIds = useMemo(() => {
+    const rawIds = content.relatedTools ?? currentTool?.related ?? [];
+    return [...new Set(rawIds)].filter(id => id !== finalToolId);
+  }, [content.relatedTools, currentTool?.related, finalToolId]);
+  
   const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
 
   const getSuggestions = useIntelligenceStore(s => s.getSuggestions);
@@ -298,7 +302,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                 <section>
                   <h3 className="text-lg font-bold text-text mb-4">Documentation & Help</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group">
+                    <Link href="/help#documentation" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
                       <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
                         <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
                       </div>
@@ -308,7 +312,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                       </div>
                     </Link>
                     
-                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-primary transition-colors group">
+                    <Link href="/help#tutorials" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-primary transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                         <PlaySquare className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
                       </div>
@@ -318,7 +322,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                       </div>
                     </Link>
 
-                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group">
+                    <Link href="/help#examples" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success">
                       <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
                         <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
                       </div>
@@ -328,7 +332,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                       </div>
                     </Link>
 
-                    <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group">
+                    <Link href="/help#troubleshooting" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error">
                       <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
                         <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
                       </div>
