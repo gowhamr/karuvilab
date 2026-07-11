@@ -1,0 +1,24 @@
+import { ToolEntry } from '../types';
+
+export const ticTacToe: ToolEntry = {
+  id: 'tic-tac-toe',
+  name: 'Tic-Tac-Toe',
+  desc: 'Classic 2-player Tic-Tac-Toe right in your browser. No downloads, no sign-in.',
+  href: 'break-time-tools/tic-tac-toe/',
+  category: 'break-time',
+  icon: null,
+  color: '#8B5CF6',
+  featured: false,
+  popular: false,
+  status: 'new',
+  lastAdded: '2026-07-09',
+  keywords: ['tic tac toe', 'game', 'fun', 'brain break', 'two player', 'noughts and crosses'],
+  input: null,
+  output: null,
+  related: ['memory-match', 'game-2048'],
+  subCategory: 'Games',
+  requiresNetwork: false,
+  difficulty: 'beginner',
+  priority: 0.8,
+  schemaType: 'WebApplication',
+};

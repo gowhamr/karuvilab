@@ -13,7 +13,7 @@ import {
   Timer, ArrowLeftRight, Code2,
   IndianRupee, Home, Award, TrendingUp as TrendingUpIcon,
   Palette, Eye, Square, Layers as LayersIcon,
-  KeyRound, Shield
+  KeyRound, Shield, Gamepad2, LayoutGrid, Keyboard, Brain
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -26,6 +26,7 @@ export const CATEGORY_ICONS: Record<string, any> = {
   seo: Globe2,
   productivity: ZapIcon,
   media: Video,
+  'break-time': Gamepad2,
 };
 
 export const TOOL_ICONS: Record<string, any> = {
@@ -135,6 +136,13 @@ export const TOOL_ICONS: Record<string, any> = {
   "audio-converter": Music2,
   "gif-creator": Film,
   "video-metadata-viewer": Info,
+
+  // Break Time Tools
+  "tic-tac-toe": LayoutGrid,
+  "game-2048": Brain,
+  "memory-match": LayoutGrid,
+  "reaction-time": Zap,
+  "color-match": Palette,
 };
 
 export const TRUST_INDICATORS = [
@@ -161,4 +169,13 @@ const CATEGORIES_FALLBACK: Record<string, any> = {
   seo: Globe2,
   productivity: ZapIcon,
   media: Video,
+  'break-time': Gamepad2,
+};
+
+// Break Time tool icons
+export const BREAK_TIME_ICONS: Record<string, any> = {
+  'tic-tac-toe': LayoutGrid,
+  'game-2048': Brain,
+  'memory-match': LayoutGrid,
+  'typing-speed-test': Keyboard,
 };

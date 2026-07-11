@@ -2,6 +2,7 @@
 
 import { useMemo, useEffect, useState, memo, useCallback, useDeferredValue } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { m, AnimatePresence, MotionConfig } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
@@ -15,9 +16,14 @@ import { useIntelligenceStore } from "@/src/store/useIntelligenceStore";
 import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { useI18n } from "@/src/lib/i18n/store";
 import {
-  LayoutGrid, TrendingUp, ChevronRight, Sparkles, SlidersHorizontal, FolderHeart
+  LayoutGrid, TrendingUp, ChevronRight, Sparkles, SlidersHorizontal, FolderHeart,
+  Dices, Clock, Heart, Compass
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { CATEGORY_ICONS } from "@/components/ui/Icons";
 
 // ── Animation presets ─────────────────────────────────────────────────────────
 
@@ -31,6 +37,15 @@ const fadeUp = {
 } as const;
 
 // ── Smart Categories definition ───────────────────────────────────────────────
+
+// Curated suggestions when no favorites are set
+const CURATED_SUGGESTIONS = [
+  "reaction-time",
+  "color-match",
+  "currency-converter",
+  "gst-calculator",
+  "qrcode"
+];
 
 export interface SmartCategory {
   id: string;
@@ -151,6 +166,7 @@ const SectionHeader = memo(function SectionHeader({
 // ── Page Component ─────────────────────────────────────────────────────────────
 
 export default function HomeClient() {
+  const router = useRouter();
   const activeCategory   = useSearchStore(state => state.activeCategory);
   const setActiveCategory = useSearchStore(state => state.setActiveCategory);
   const isSidebarOpen     = useSearchStore(state => state.isSidebarOpen);
@@ -246,6 +262,44 @@ export default function HomeClient() {
     return ALL_TOOLS.filter(t => ids.includes(t.id));
   }, [continueWorkingTool, getSuggestions]);
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    ALL_TOOLS.forEach(tool => {
+      counts[tool.category] = (counts[tool.category] || 0) + 1;
+    });
+    return counts;
+  }, []);
+
+  const recentlyAddedTools = useMemo(() => {
+    return [...ALL_TOOLS]
+      .filter(t => t.lastAdded)
+      .sort((a, b) => new Date(b.lastAdded!).getTime() - new Date(a.lastAdded!).getTime())
+      .slice(0, 3);
+  }, []);
+
+  const localMostUsedTools = useMemo(() => {
+    const sorted = Object.entries(popularToolsMap)
+      .filter(([, count]) => count > 0)
+      .sort((a, b) => b[1] - a[1])
+      .map(([id]) => ALL_TOOLS.find(t => t.id === id))
+      .filter(Boolean) as ToolEntry[];
+      
+    if (sorted.length > 0) return sorted.slice(0, 3);
+    return ALL_TOOLS.filter(t => t.popular).slice(0, 3);
+  }, [popularToolsMap]);
+
+  const recommendedTools = useMemo(() => {
+    return ALL_TOOLS.filter(t => CURATED_SUGGESTIONS.includes(t.id));
+  }, []);
+
+  const handleSurpriseMe = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * ALL_TOOLS.length);
+    const tool = ALL_TOOLS[randomIndex];
+    if (tool) {
+      router.push(`/${tool.href}`);
+    }
+  }, [router]);
+
   const isReturning = hydrated && (recentTools.length > 0 || favoriteTools.length > 0);
 
   return (
@@ -255,7 +309,7 @@ export default function HomeClient() {
         <HomeHero isReturning={isReturning} />
 
         {/* ── Main Tab Navigation ── */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex border-b border-border/80 gap-6">
+        <div id="tools-tabs-nav" className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex border-b border-border/80 gap-6">
           <button
             onClick={() => setActiveTab("tools")}
             className={cn(
@@ -505,6 +559,245 @@ export default function HomeClient() {
                         ))}
                       </m.div>
                     </section>
+
+                    {/* Phase 2: Continue Exploring Section */}
+                    <section className="space-y-6 text-center max-w-2xl mx-auto py-8">
+                      <div className="space-y-2">
+                        <h2 className="text-xl md:text-2xl font-black tracking-tight text-text flex items-center justify-center gap-2">
+                          🚀 Continue Exploring
+                        </h2>
+                        <p className="text-xs md:text-sm text-text-muted max-w-xl mx-auto leading-relaxed">
+                          You've explored only a small selection. Discover 150+ privacy-first tools built to run locally.
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-center gap-3">
+                        <Link href="/all-tools" passHref legacyBehavior>
+                          <Button variant="primary" size="md" className="min-w-[160px] cursor-pointer">
+                            Browse All Tools
+                          </Button>
+                        </Link>
+                        <Button 
+                          variant="secondary" 
+                          size="md" 
+                          className="min-w-[160px] cursor-pointer"
+                          onClick={() => {
+                            const el = document.getElementById("tools-tabs-nav") || document.getElementById("tools");
+                            el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                        >
+                          Browse Categories
+                        </Button>
+                      </div>
+                    </section>
+
+                    {/* Phase 3: Popular Categories Section */}
+                    <section className="space-y-6">
+                      <SectionHeader
+                        title="Popular Categories"
+                        subtitle="Find specialized toolsets for your tasks"
+                        icon={LayoutGrid}
+                      />
+                      <div className="flex gap-4 overflow-x-auto pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-3 no-scrollbar snap-x snap-mandatory">
+                        {CATEGORIES.map(cat => {
+                          const IconComponent = CATEGORY_ICONS[cat.id] || Sparkles;
+                          const count = categoryCounts[cat.id] || 0;
+                          return (
+                            <Link 
+                              key={cat.id} 
+                              href={`/${cat.href}`} 
+                              className="snap-start shrink-0 w-[280px] md:w-auto block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-card"
+                            >
+                              <Card 
+                                variant="interactive" 
+                                padding="md" 
+                                className="h-full flex flex-col justify-between min-h-[140px] group transition-all duration-200"
+                              >
+                                <div className="space-y-3">
+                                  <div className="flex items-center justify-between">
+                                    <div 
+                                      className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
+                                      style={{ 
+                                        backgroundColor: `${cat.color}10`, 
+                                        color: cat.color,
+                                        border: `1px solid ${cat.color}20` 
+                                      }}
+                                    >
+                                      <IconComponent className="w-5 h-5" />
+                                    </div>
+                                    <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-[10px] font-bold">
+                                      {count} {count === 1 ? 'tool' : 'tools'}
+                                    </Badge>
+                                  </div>
+                                  <div>
+                                    <h3 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors">
+                                      {cat.label}
+                                    </h3>
+                                    <p className="text-caption text-text-secondary mt-1 line-clamp-2 leading-relaxed">
+                                      {cat.description}
+                                    </p>
+                                  </div>
+                                </div>
+                              </Card>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </section>
+
+                    {/* Phase 4: Discovery Section */}
+                    <section className="space-y-6">
+                      <SectionHeader
+                        title="Discover Something New"
+                        subtitle="Interactive ways to find your next tool"
+                        icon={Sparkles}
+                      />
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {/* Surprise Me Card */}
+                        <Card variant="glass" padding="md" className="flex flex-col justify-between min-h-[185px] h-full">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg" aria-hidden="true">🎲</span>
+                              <h3 className="text-body font-black text-text-primary">Surprise Me</h3>
+                            </div>
+                            <p className="text-caption text-text-secondary leading-relaxed">
+                              Can't decide? Let us pick a random privacy-first tool for you to explore.
+                            </p>
+                          </div>
+                          <Button 
+                            variant="primary" 
+                            size="sm" 
+                            className="w-full mt-4 cursor-pointer"
+                            onClick={handleSurpriseMe}
+                          >
+                            Roll the Dice
+                          </Button>
+                        </Card>
+
+                        {/* Recently Added Card */}
+                        <Card variant="default" padding="md" className="flex flex-col justify-between min-h-[185px] h-full">
+                          <div className="space-y-2.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg" aria-hidden="true">🆕</span>
+                              <h3 className="text-body font-black text-text-primary">Recently Added</h3>
+                            </div>
+                            <div className="space-y-1.5">
+                              {recentlyAddedTools.map(tool => (
+                                <Link 
+                                  key={tool.id} 
+                                  href={`/${tool.href}`}
+                                  className="flex items-center justify-between text-xs text-text-secondary hover:text-primary transition-colors py-0.5"
+                                >
+                                  <span className="font-semibold truncate max-w-[130px]">{tool.name}</span>
+                                  <span className="text-[10px] text-text-muted">{tool.lastAdded}</span>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                          <Link href="/all-tools?sort=newest" passHref legacyBehavior>
+                            <Button variant="ghost" size="sm" className="w-full mt-4 text-[11px] h-[32px] px-3 font-bold uppercase tracking-wider cursor-pointer">
+                              View New Releases
+                            </Button>
+                          </Link>
+                        </Card>
+
+                        {/* Most Used Card */}
+                        <Card variant="default" padding="md" className="flex flex-col justify-between min-h-[185px] h-full">
+                          <div className="space-y-2.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg" aria-hidden="true">⭐</span>
+                              <h3 className="text-body font-black text-text-primary">Most Used</h3>
+                            </div>
+                            <div className="space-y-1.5">
+                              {localMostUsedTools.map(tool => (
+                                <Link 
+                                  key={tool.id} 
+                                  href={`/${tool.href}`}
+                                  className="flex items-center justify-between text-xs text-text-secondary hover:text-primary transition-colors py-0.5"
+                                >
+                                  <span className="font-semibold truncate max-w-[140px]">{tool.name}</span>
+                                  <Badge variant="neutral" size="sm" className="bg-surface-elevated/40 text-[9px] py-0 px-1.5 border-0">
+                                    {hydrated && popularToolsMap[tool.id] ? `${popularToolsMap[tool.id]} visits` : 'Popular'}
+                                  </Badge>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                          <Link href="/all-tools?sort=popular" passHref legacyBehavior>
+                            <Button variant="ghost" size="sm" className="w-full mt-4 text-[11px] h-[32px] px-3 font-bold uppercase tracking-wider cursor-pointer">
+                              View Popular
+                            </Button>
+                          </Link>
+                        </Card>
+
+                        {/* Trending Tools Card - Deferred */}
+                        <Card variant="default" padding="md" className="flex flex-col justify-between min-h-[185px] h-full opacity-75 border-dashed border-border/80">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-text-secondary">
+                              <span className="text-lg opacity-60" aria-hidden="true">🔥</span>
+                              <h3 className="text-body font-black text-text-secondary">Trending Tools</h3>
+                            </div>
+                            <p className="text-[10px] text-text-muted leading-relaxed">
+                              <span className="font-bold text-text-secondary block mb-0.5">Status: Deferred</span>
+                              Local-first architecture operates without server tracking. Global trending metrics are omitted by design to protect your absolute privacy.
+                            </p>
+                          </div>
+                          <div className="text-[9px] font-bold text-text-muted uppercase tracking-widest text-center mt-3">
+                            Privacy Protected
+                          </div>
+                        </Card>
+                      </div>
+                    </section>
+
+                    {/* Phase 5: Personal Section */}
+                    {hydrated && favoriteIds.length > 0 ? (
+                      <section className="space-y-6">
+                        <SectionHeader
+                          title="Continue where you left off"
+                          subtitle="Your favorited tools for quick access"
+                          icon={Heart}
+                        />
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                          {favoriteTools.map(tool => (
+                            <div key={tool.id} className="flex flex-col h-full">
+                              <ToolCard tool={tool} compact />
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    ) : (
+                      <section className="space-y-6">
+                        <SectionHeader
+                          title="Recommended for You"
+                          subtitle="Hand-picked local tools to get you started"
+                          icon={Sparkles}
+                        />
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                          {recommendedTools.map(tool => (
+                            <div key={tool.id} className="flex flex-col h-full">
+                              <ToolCard tool={tool} compact />
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {/* Phase 6: Footer Transition */}
+                    <div className="relative pt-12 pb-4">
+                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div className="w-full border-t border-divider/60" />
+                      </div>
+                      <div className="relative flex justify-center">
+                        <div className="px-4 bg-bg text-text-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-brand-primary/50" />
+                          End of Toolkit
+                          <div className="w-1.5 h-1.5 rounded-full bg-brand-primary/50" />
+                        </div>
+                      </div>
+                      <div 
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-24 bg-gradient-to-t from-brand-primary/4 via-brand-primary/1 to-transparent blur-2xl pointer-events-none" 
+                        style={{ contentVisibility: 'auto' }}
+                      />
+                    </div>
 
                   </m.div>
                 )}

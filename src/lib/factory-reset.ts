@@ -106,5 +106,30 @@ export async function clearToolData() {
     await tx.done;
   }
 
+  // Clear keyval store in karuvilab-storage (idbStorage) selectively to preserve settings and favorites
+  try {
+    const { openDB } = await import('idb');
+    const storeDb = await openDB('karuvilab-storage', 1);
+    if (storeDb) {
+      const tx = storeDb.transaction('keyval', 'readwrite');
+      const store = tx.objectStore('keyval');
+      const keys = await store.getAllKeys();
+      const preservedKeys = ['karuvi-settings-db', 'karuvi-favorites'];
+      
+      await Promise.all(
+        keys.map(key => {
+          if (typeof key === 'string' && !preservedKeys.includes(key)) {
+            return store.delete(key);
+          }
+          return Promise.resolve();
+        })
+      );
+      await tx.done;
+      logger.info('✅ karuvilab-storage keyval store cleared (settings and favorites preserved)');
+    }
+  } catch (e) {
+    logger.error('❌ Failed to clear karuvilab-storage keyval store', { error: e });
+  }
+
   logger.info('✅ Tool data cleared');
 }

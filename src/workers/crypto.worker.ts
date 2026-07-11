@@ -46,13 +46,13 @@ function md5(input: string | Uint8Array): string {
     .join("");
 }
 
-function bufToHex(buf: ArrayBuffer): string {
+function bufToHex(buf: ArrayBuffer | ArrayBufferLike): string {
   return Array.from(new Uint8Array(buf))
     .map(b => b.toString(16).padStart(2, "0"))
     .join("");
 }
 
-function bufToBase64(buf: ArrayBuffer): string {
+function bufToBase64(buf: ArrayBuffer | ArrayBufferLike): string {
   let binary = "";
   const bytes = new Uint8Array(buf);
   for (let i = 0; i < bytes.byteLength; i++) {
@@ -281,52 +281,121 @@ const api = {
   },
 
   // ─── AES ENCRYPTION ────────────────────────────────────────────────────────
-  async aesEncrypt(plaintext: string, password: string, mode: 'GCM' | 'CBC' = 'GCM', keySize: 128 | 192 | 256 = 256, onProgress?: any) {
+  async aesEncrypt(plaintext: string, passwordOrHexKey: string, mode: 'GCM' | 'CBC' = 'GCM', keySize: 128 | 192 | 256 = 256, isRawKey: boolean = false, customIvHex?: string, onProgress?: any) {
     const enc = new TextEncoder();
-    const salt = self.crypto.getRandomValues(new Uint8Array(16));
-    const iv = self.crypto.getRandomValues(new Uint8Array(mode === 'GCM' ? 12 : 16));
+    
+    let iv: Uint8Array;
+    if (customIvHex) {
+       const ivMatch = customIvHex.match(/[\da-f]{2}/gi);
+       if (!ivMatch) throw new Error("Invalid IV hex string");
+       iv = new Uint8Array(ivMatch.map(h => parseInt(h, 16)));
+    } else {
+       iv = self.crypto.getRandomValues(new Uint8Array(mode === 'GCM' ? 12 : 16));
+    }
+    
+    let key: CryptoKey;
+    let salt = new Uint8Array(0);
 
-    if (onProgress) onProgress({ percent: 20, message: "Deriving AES key using PBKDF2..." });
-    const keyMaterial = await self.crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
-    const key = await self.crypto.subtle.deriveKey(
-      { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
-      keyMaterial,
-      { name: `AES-${mode}`, length: keySize },
-      false,
-      ["encrypt"]
-    );
+    if (isRawKey) {
+      if (onProgress) onProgress({ percent: 20, message: "Using raw AES key..." });
+      const keyMatch = passwordOrHexKey.match(/[\da-f]{2}/gi);
+      if (!keyMatch) throw new Error("Invalid hex key string");
+      const keyBytes = new Uint8Array(keyMatch.map(h => parseInt(h, 16)));
+      if (keyBytes.length * 8 !== keySize) {
+        throw new Error(`Raw key length (${keyBytes.length * 8} bits) does not match expected size (${keySize} bits)`);
+      }
+      key = await self.crypto.subtle.importKey("raw", keyBytes, { name: `AES-${mode}`, length: keySize }, false, ["encrypt"]);
+    } else {
+      salt = self.crypto.getRandomValues(new Uint8Array(16));
+      if (onProgress) onProgress({ percent: 20, message: "Deriving AES key using PBKDF2..." });
+      const keyMaterial = await self.crypto.subtle.importKey("raw", enc.encode(passwordOrHexKey), "PBKDF2", false, ["deriveKey"]);
+      key = await self.crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
+        keyMaterial,
+        { name: `AES-${mode}`, length: keySize },
+        false,
+        ["encrypt"]
+      );
+    }
 
     if (onProgress) onProgress({ percent: 60, message: "Encrypting plaintext..." });
-    const cipherBuf = await self.crypto.subtle.encrypt({ name: `AES-${mode}`, iv }, key, enc.encode(plaintext));
+    const cipherBuf = await self.crypto.subtle.encrypt({ name: `AES-${mode}`, iv: iv as BufferSource }, key, enc.encode(plaintext));
 
-    const combined = new Uint8Array(salt.length + iv.length + cipherBuf.byteLength);
-    combined.set(salt, 0);
-    combined.set(iv, 16);
-    combined.set(new Uint8Array(cipherBuf), 16 + iv.length);
+    let combined: Uint8Array;
+    if (isRawKey) {
+      // For raw key mode, we return just IV + ciphertext
+      combined = new Uint8Array(iv.length + cipherBuf.byteLength);
+      combined.set(iv, 0);
+      combined.set(new Uint8Array(cipherBuf), iv.length);
+    } else {
+      combined = new Uint8Array(salt.length + iv.length + cipherBuf.byteLength);
+      combined.set(salt, 0);
+      combined.set(iv, 16);
+      combined.set(new Uint8Array(cipherBuf), 16 + iv.length);
+    }
 
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return bufToBase64(combined.buffer);
+    
+    return {
+      ciphertextBase64: bufToBase64(combined.buffer),
+      ivHex: bufToHex(iv.buffer)
+    };
   },
 
-  async aesDecrypt(ciphertextB64: string, password: string, mode: 'GCM' | 'CBC' = 'GCM', keySize: 128 | 192 | 256 = 256, onProgress?: any) {
+  async aesDecrypt(ciphertextB64: string, passwordOrHexKey: string, mode: 'GCM' | 'CBC' = 'GCM', keySize: 128 | 192 | 256 = 256, isRawKey: boolean = false, customIvHex?: string, onProgress?: any) {
     const combined = new Uint8Array(base64ToBuf(ciphertextB64));
     const ivLen = mode === 'GCM' ? 12 : 16;
-    const salt = combined.slice(0, 16);
-    const iv = combined.slice(16, 16 + ivLen);
-    const cipher = combined.slice(16 + ivLen);
+    
+    let iv: Uint8Array;
+    let cipher: Uint8Array;
+    let key: CryptoKey;
 
-    if (onProgress) onProgress({ percent: 20, message: "Deriving AES key..." });
-    const keyMaterial = await self.crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
-    const key = await self.crypto.subtle.deriveKey(
-      { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
-      keyMaterial,
-      { name: `AES-${mode}`, length: keySize },
-      false,
-      ["decrypt"]
-    );
+    if (isRawKey) {
+      if (customIvHex) {
+        const ivMatch = customIvHex.match(/[\da-f]{2}/gi);
+        if (!ivMatch) throw new Error("Invalid IV hex string");
+        iv = new Uint8Array(ivMatch.map(h => parseInt(h, 16)));
+        cipher = combined; // In this case, we expect just the ciphertext if IV is external.
+                           // Actually, let's assume the combined buffer is still IV + ciphertext
+                           // if customIvHex is not provided, or just ciphertext if customIvHex is provided.
+        // Wait, to keep it simple: if customIvHex is provided, we assume combined is just ciphertext.
+        // But if combined includes IV, we should extract it.
+        // Let's assume standard format for our app: IV + ciphertext (raw) or SALT + IV + ciphertext (PBKDF2).
+        if (customIvHex) {
+           cipher = combined; // Assume pure ciphertext input if custom IV is explicitly given
+        } else {
+           iv = combined.slice(0, ivLen);
+           cipher = combined.slice(ivLen);
+        }
+      } else {
+        iv = combined.slice(0, ivLen);
+        cipher = combined.slice(ivLen);
+      }
+      
+      const keyMatch = passwordOrHexKey.match(/[\da-f]{2}/gi);
+      if (!keyMatch) throw new Error("Invalid hex key string");
+      const keyBytes = new Uint8Array(keyMatch.map(h => parseInt(h, 16)));
+      
+      if (onProgress) onProgress({ percent: 20, message: "Using raw AES key..." });
+      key = await self.crypto.subtle.importKey("raw", keyBytes, { name: `AES-${mode}`, length: keySize }, false, ["decrypt"]);
+    } else {
+      const salt = combined.slice(0, 16);
+      iv = combined.slice(16, 16 + ivLen);
+      cipher = combined.slice(16 + ivLen);
+
+      if (onProgress) onProgress({ percent: 20, message: "Deriving AES key..." });
+      const keyMaterial = await self.crypto.subtle.importKey("raw", new TextEncoder().encode(passwordOrHexKey), "PBKDF2", false, ["deriveKey"]);
+      key = await self.crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" },
+        keyMaterial,
+        { name: `AES-${mode}`, length: keySize },
+        false,
+        ["decrypt"]
+      );
+    }
 
     if (onProgress) onProgress({ percent: 60, message: "Decrypting ciphertext..." });
-    const plainBuf = await self.crypto.subtle.decrypt({ name: `AES-${mode}`, iv }, key, cipher);
+    const plainBuf = await self.crypto.subtle.decrypt({ name: `AES-${mode}`, iv: iv as BufferSource }, key, cipher as BufferSource);
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return new TextDecoder().decode(plainBuf);
   },

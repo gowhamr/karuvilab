@@ -9,6 +9,7 @@ export const initialSettings = {
   accessibility: {
     fontScaling: 1.0,
     highContrast: false,
+    reduceMotion: false,
   } as AccessibilitySettings,
   privacy: {
     localOnly: true,

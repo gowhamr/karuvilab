@@ -4,9 +4,54 @@ import { useState, useMemo } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { CheckCircle2, XCircle, Landmark, ShieldCheck } from "lucide-react";
 
-export function validateIban(ibanStr: string): boolean {
+const IBAN_LENGTHS: Record<string, number> = {
+  AD: 24, AE: 23, AL: 28, AT: 20, AZ: 28,
+  BA: 20, BE: 16, BG: 22, BH: 22, BR: 29, BY: 28,
+  CH: 21, CR: 22, CY: 28, CZ: 24,
+  DE: 22, DK: 18, DO: 28,
+  EE: 20, ES: 24,
+  FI: 18, FO: 18, FR: 27,
+  GB: 22, GE: 22, GI: 23, GL: 18, GR: 27, GT: 28,
+  HR: 21, HU: 28,
+  IE: 22, IL: 23, IS: 26, IT: 27,
+  JO: 30,
+  KW: 30, KZ: 20,
+  LB: 28, LI: 21, LT: 20, LU: 20, LV: 21,
+  MC: 27, MD: 24, ME: 22, MK: 19, MR: 27, MT: 31, MU: 30,
+  NL: 18, NO: 15,
+  PK: 24, PL: 28, PS: 29, PT: 25,
+  QA: 29,
+  RO: 24, RS: 22,
+  SA: 24, SC: 31, SE: 24, SI: 19, SK: 24, SM: 27, ST: 25, SV: 24,
+  TL: 23, TN: 24, TR: 26,
+  UA: 29,
+  VG: 24, XK: 20
+};
+
+export interface IbanValidationResult {
+  isValid: boolean;
+  error?: string;
+}
+
+export function validateIbanDetails(ibanStr: string): IbanValidationResult {
   const cleaned = ibanStr.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
-  if (cleaned.length < 14 || cleaned.length > 34) return false;
+  if (cleaned.length < 4) {
+    return { isValid: false, error: "IBAN is too short (minimum 4 characters)." };
+  }
+
+  const country = cleaned.substring(0, 2);
+  if (!/^[A-Z]{2}$/.test(country)) {
+    return { isValid: false, error: "IBAN must start with a 2-letter country code." };
+  }
+
+  const expectedLength = IBAN_LENGTHS[country];
+  if (expectedLength === undefined) {
+    if (cleaned.length < 14 || cleaned.length > 34) {
+      return { isValid: false, error: "Unsupported country format: length must be 14-34 characters." };
+    }
+  } else if (cleaned.length !== expectedLength) {
+    return { isValid: false, error: `Invalid length for ${country}. Expected ${expectedLength} characters, got ${cleaned.length}.` };
+  }
 
   // Rearrange: Move first 4 characters to end
   const rearranged = cleaned.substring(4) + cleaned.substring(0, 4);
@@ -24,10 +69,18 @@ export function validateIban(ibanStr: string): boolean {
 
   // Modulo 97 calculation
   try {
-    return BigInt(numericStr) % BigInt(97) === BigInt(1);
+    const valid = BigInt(numericStr) % BigInt(97) === BigInt(1);
+    if (!valid) {
+      return { isValid: false, error: "Modulo-97 checksum validation failed (invalid check digits)." };
+    }
+    return { isValid: true };
   } catch {
-    return false;
+    return { isValid: false, error: "Failed to parse numeric representation." };
   }
+}
+
+export function validateIban(ibanStr: string): boolean {
+  return validateIbanDetails(ibanStr).isValid;
 }
 
 export function validateBic(bicStr: string): boolean {
@@ -40,7 +93,8 @@ export default function IbanClient() {
   const [bicInput, setBicInput] = useState("DBEKDE33XXX");
 
   const cleanIban = useMemo(() => ibanInput.replace(/[^A-Za-z0-9]/g, "").toUpperCase(), [ibanInput]);
-  const isIbanValid = useMemo(() => validateIban(cleanIban), [cleanIban]);
+  const validation = useMemo(() => validateIbanDetails(cleanIban), [cleanIban]);
+  const isIbanValid = validation.isValid;
 
   const cleanBic = useMemo(() => bicInput.replace(/\s/g, "").toUpperCase(), [bicInput]);
   const isBicValid = useMemo(() => validateBic(cleanBic), [cleanBic]);
@@ -79,7 +133,7 @@ export default function IbanClient() {
             <div className="flex items-center gap-3">
               {isIbanValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
               <div>
-                <h4 className="font-bold text-sm font-sans">{isIbanValid ? 'VALID IBAN (ISO 13616 Mod-97 PASS)' : 'INVALID IBAN Checksum / Format'}</h4>
+                <h4 className="font-bold text-sm font-sans">{isIbanValid ? 'VALID IBAN (ISO 13616 Mod-97 PASS)' : (validation.error || 'INVALID IBAN Checksum / Format')}</h4>
                 {ibanDetails && (
                   <p className="text-xs font-mono opacity-80 mt-0.5">
                     Country: {ibanDetails.countryCode} | Checksum: {ibanDetails.checksum} | BBAN: {ibanDetails.bban}

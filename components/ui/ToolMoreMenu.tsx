@@ -84,7 +84,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
     {
       label: "Help & Docs",
       icon: HelpCircle,
-      onClick: () => { window.location.href = "/help"; }
+      onClick: () => { window.location.href = "/help#documentation"; }
     },
     {
       label: "Fullscreen Mode",
@@ -168,7 +168,7 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
                         setIsOpen(false);
                       }}
                       className={`
-                        w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group outline-none focus:bg-brand-primary/5 active:scale-98
+                        w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:bg-brand-primary/5 active:scale-98
                         ${item.danger ? "hover:bg-red-500/5 text-red-500/80 active:bg-red-500/10" : "hover:bg-brand-primary/5 text-text-2 hover:text-brand-primary active:bg-brand-primary/10"}
                       `}
                     >

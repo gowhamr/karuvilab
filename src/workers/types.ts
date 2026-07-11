@@ -177,6 +177,18 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  compressPdf(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  splitPdf(
+    file: ArrayBuffer,
+    splitAll: boolean,
+    rangesStr: string,
+    onProgress?: ProgressCallback
+  ): Promise<{ data: Uint8Array; ext: string; count: number }>;
+
   // Image Tasks (Standard)
   compressImage(
     file: ArrayBuffer, 

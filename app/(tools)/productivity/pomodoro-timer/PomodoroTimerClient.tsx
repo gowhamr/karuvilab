@@ -7,6 +7,7 @@ import { SessionRestoredBanner } from '@/components/ui/SessionRestoredBanner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Settings, Bell, Sparkles, Trophy, Coffee, Timer } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { sendNotification } from '@/src/lib/notifications';
 import { PomodoroSettings } from './PomodoroSettings';
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 
@@ -96,15 +97,15 @@ export default function PomodoroTimerClient() {
     playSound();
     addSession({ startTime: Date.now(), duration: totalDuration / 60, type: mode, completed: true });
     
-    if (notificationStatus === 'granted') {
-      new Notification(`Pomodoro: ${mode === 'focus' ? 'Focus' : 'Break'} session complete!`);
-    }
+    sendNotification(`Pomodoro: ${mode === 'focus' ? 'Focus' : 'Break'} session complete!`, {
+      icon: '/icon.png'
+    });
 
     const nextMode = mode === 'focus' ? 'break' : 'focus';
     setMode(nextMode);
     setTimeLeft((nextMode === 'focus' ? focusDuration : breakDuration) * 60);
     setIsActive(false);
-  }, [mode, focusDuration, breakDuration, addSession, totalDuration, notificationStatus]);
+  }, [mode, focusDuration, breakDuration, addSession, totalDuration]);
 
   useEffect(() => {
     if (isActive) {

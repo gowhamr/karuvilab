@@ -28,17 +28,11 @@ export const EMV_TAG_DICTIONARY: Record<string, string> = {
   "A5": "FCI Proprietary Template",
 };
 
-export interface TlvElement {
-  tag: string;
-  tagName: string;
-  length: number;
-  valueHex: string;
-  valueAscii: string;
-}
+import { parseBERTLV } from "@/src/lib/emv/tlv";
 
 export default function TlvParserClient() {
   const [hexInput, setHexInput] = useState("9F02060000000010009F03060000000000009F1A0208409F2608123456789ABCDEF09F36020015");
-  const [elements, setElements] = useState<TlvElement[]>([]);
+  const [elements, setElements] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleParse = useCallback(() => {
@@ -52,63 +46,7 @@ export default function TlvParserClient() {
     }
 
     try {
-      const result: TlvElement[] = [];
-      let idx = 0;
-
-      while (idx < cleanHex.length) {
-        // Tag parsing (1 or 2 bytes)
-        let tag = cleanHex.substring(idx, idx + 2);
-        idx += 2;
-
-        // If sub-bits 1-5 of first byte are all 1s (0x1F), tag continues into next byte
-        const tagFirstByte = parseInt(tag, 16);
-        if ((tagFirstByte & 0x1F) === 0x1F && idx < cleanHex.length) {
-          tag += cleanHex.substring(idx, idx + 2);
-          idx += 2;
-        }
-
-        if (idx >= cleanHex.length) break;
-
-        // Length parsing (Single or multi-byte)
-        const lengthByte = parseInt(cleanHex.substring(idx, idx + 2), 16);
-        idx += 2;
-        let length = lengthByte;
-
-        if (lengthByte & 0x80) { // Multi-byte length
-          const numLengthBytes = lengthByte & 0x7F;
-          let lenHex = "";
-          for (let i = 0; i < numLengthBytes && idx < cleanHex.length; i++) {
-            lenHex += cleanHex.substring(idx, idx + 2);
-            idx += 2;
-          }
-          length = parseInt(lenHex, 16);
-        }
-
-        // Value parsing
-        const valCharCount = length * 2;
-        if (idx + valCharCount > cleanHex.length) {
-          throw new Error(`Truncated value for Tag ${tag}: expected ${length} bytes (${valCharCount} hex chars), remaining ${cleanHex.length - idx}`);
-        }
-
-        const valueHex = cleanHex.substring(idx, idx + valCharCount);
-        idx += valCharCount;
-
-        // Convert value to printable ASCII
-        let ascii = "";
-        for (let i = 0; i < valueHex.length; i += 2) {
-          const code = parseInt(valueHex.substring(i, i + 2), 16);
-          ascii += code >= 32 && code <= 126 ? String.fromCharCode(code) : ".";
-        }
-
-        result.push({
-          tag,
-          tagName: EMV_TAG_DICTIONARY[tag] || `Tag ${tag}`,
-          length,
-          valueHex,
-          valueAscii: ascii,
-        });
-      }
-
+      const result = parseBERTLV(cleanHex);
       setElements(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to parse TLV data stream");
@@ -156,34 +94,9 @@ export default function TlvParserClient() {
             <CopyButton text={JSON.stringify(elements, null, 2)} />
           </div>
 
-          <div className="space-y-3">
-            {elements.map((el, i) => (
-              <div key={i} className="p-4 rounded-xl bg-surface-2 border border-border space-y-2 text-xs font-mono">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
-                      Tag {el.tag}
-                    </span>
-                    <span className="font-sans font-bold text-sm text-text">{el.tagName}</span>
-                  </div>
-                  <span className="text-text-muted font-sans">
-                    Length: <strong>{el.length}</strong> bytes
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1">
-                  <div>
-                    <span className="text-text-muted font-sans block text-[11px]">Hex Value:</span>
-                    <span className="text-sky-300 font-bold break-all">{el.valueHex}</span>
-                  </div>
-                  <div>
-                    <span className="text-text-muted font-sans block text-[11px]">ASCII Representation:</span>
-                    <span className="text-emerald-400 font-bold break-all">{el.valueAscii}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+            <pre className="text-xs font-mono whitespace-pre-wrap overflow-x-auto">
+              {JSON.stringify(elements, null, 2)}
+            </pre>
         </div>
       )}
     </div>

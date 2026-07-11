@@ -63,14 +63,36 @@ const api = {
     }
   },
 
-  async resizeImage(file: any, width: any, height: any, format: any, quality: any, onProgress: any) {
+  async resizeImage(file: any, width: any, height: any, mode: any, format: any, quality: any, onProgress: any) {
     let imgBitmap: ImageBitmap | null = null;
     try {
       const blob = new Blob([file]);
       imgBitmap = await createImageBitmap(blob);
       
-      const targetW = Math.max(1, Math.floor(width));
-      const targetH = Math.max(1, Math.floor(height));
+      let targetW = Math.max(1, Math.floor(width));
+      let targetH = Math.max(1, Math.floor(height));
+      const origW = imgBitmap.width;
+      const origH = imgBitmap.height;
+
+      let drawX = 0, drawY = 0, drawW = targetW, drawH = targetH;
+      
+      if (mode === "fit") {
+        const ratio = Math.min(targetW / origW, targetH / origH);
+        drawW = origW * ratio;
+        drawH = origH * ratio;
+        // Resize canvas to exactly fit the image
+        targetW = drawW;
+        targetH = drawH;
+      } else if (mode === "fill") {
+        const ratio = Math.max(targetW / origW, targetH / origH);
+        drawW = origW * ratio;
+        drawH = origH * ratio;
+        drawX = (targetW - drawW) / 2;
+        drawY = (targetH - drawH) / 2;
+      } else if (mode === "stretch") {
+        drawW = targetW;
+        drawH = targetH;
+      }
 
       if (typeof OffscreenCanvas === 'undefined') {
         throw new Error("OffscreenCanvas not supported in this browser.");
@@ -82,7 +104,13 @@ const api = {
 
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(imgBitmap, 0, 0, targetW, targetH);
+      
+      if (format === 'image/jpeg') {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, targetW, targetH);
+      }
+      
+      ctx.drawImage(imgBitmap, drawX, drawY, drawW, drawH);
       
       const compressedBlob = await canvas.convertToBlob({ type: format, quality: quality / 100 });
       if (!compressedBlob) throw new Error("Canvas export failed");

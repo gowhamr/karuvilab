@@ -73,10 +73,7 @@ export default function ImageResizerClient() {
 
     const result = await safeImageProcess(async () => {
       const buffer = await file.arrayBuffer();
-      // NOTE: The worker currently only supports standard (fit-inside) resize. 
-      // Do not expose mode selectors (fit/fill/stretch) in the UI until the 
-      // worker is updated to handle these parameters.
-      const resultBytes = await workerManager.resizeImage(buffer, w, h, "image/jpeg", 92);
+      const resultBytes = await workerManager.resizeImage(buffer, w, h, mode, "image/jpeg", 92);
       const blob = new Blob([resultBytes as any], { type: "image/jpeg" });
       return {
         url: createUrl(blob),
@@ -145,11 +142,25 @@ export default function ImageResizerClient() {
               />
             </div>
 
-            <Checkbox
-              label="Lock aspect ratio"
-              checked={lockRatio}
-              onChange={e => setLockRatio(e.target.checked)}
-            />
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <Checkbox
+                label="Lock aspect ratio"
+                checked={lockRatio}
+                onChange={e => setLockRatio(e.target.checked)}
+              />
+              
+              <div className="flex gap-2 bg-bg p-1 rounded-xl border border-border w-full sm:w-auto">
+                {(["fit", "fill", "stretch"] as const).map(m => (
+                  <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-bold capitalize transition-all ${mode === m ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text-2"}`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <button onClick={resize} disabled={!originalUrl || processing} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">
               {processing ? "Processing…" : "Resize Image"}

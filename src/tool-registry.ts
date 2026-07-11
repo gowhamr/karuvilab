@@ -40,7 +40,8 @@ export const CATEGORIES: CategoryEntry[] = [
   { id: 'developer',   label: 'Developer Tools', href: 'developer-tools/', emoji: '', description: 'Essential utilities for formatting, minifying, and debugging code.', color: '#6366F1' },
   { id: 'utilities',   label: 'Daily Utilities', href: 'utilities/',       emoji: '', description: 'Lightweight helpers for text, reminders, and daily productivity.', color: '#64748B' },
   { id: 'productivity', label: 'Productivity',    href: 'productivity/',    emoji: '🚀', description: 'Professional tools to manage your time and workflow privately.', color: '#4F46E5' },
-  { id: 'media',        label: 'Media Tools',     href: 'media-tools/',     emoji: '🎬', description: 'Professional browser-native tools for video, audio, and GIF editing.', color: '#6366F1' }
+  { id: 'media',        label: 'Media Tools',     href: 'media-tools/',       emoji: '🎬', description: 'Professional browser-native tools for video, audio, and GIF editing.', color: '#6366F1' },
+  { id: 'break-time',   label: 'Break Time',      href: 'break-time-tools/',  emoji: '🧩', description: 'Quick offline brain-training games and focus breaks — no sign-in, no ads.', color: '#8B5CF6' }
 ];
 
 export const SUBCATEGORY_COLORS: Record<string, string> = {

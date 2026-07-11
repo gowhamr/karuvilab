@@ -86,8 +86,8 @@ export default function MergePdfClient() {
         type: "pdf" 
       }]);
       
-      // Delay revocation slightly to ensure browser starts download
-      setTimeout(() => revokeUrl(url), 100);
+      // Delay revocation by 5 seconds to ensure browser starts download even for massive blobs
+      setTimeout(() => revokeUrl(url), 5000);
     } catch (e: any) {
       if (e.message === "Task cancelled") {
         setError("Merge cancelled.");

@@ -153,7 +153,7 @@ export default function HashGeneratorClient() {
         <button
           onClick={() => setMode("text")}
           className={cn(
-            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
+            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
             mode === "text" ? "bg-blue text-white shadow-md shadow-blue/10 scale-102" : "text-text-4 hover:text-text"
           )}
         >
@@ -162,7 +162,7 @@ export default function HashGeneratorClient() {
         <button
           onClick={() => setMode("file")}
           className={cn(
-            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
+            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
             mode === "file" ? "bg-blue text-white shadow-md shadow-blue/10 scale-102" : "text-text-4 hover:text-text"
           )}
         >
@@ -196,7 +196,7 @@ export default function HashGeneratorClient() {
                   {text && (
                     <button 
                       onClick={() => setText("")}
-                      className="text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:text-red-600 transition-colors flex items-center gap-1"
+                      className="text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:text-red-600 transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded-sm"
                     >
                       <Trash2 size={12} /> Clear Text
                     </button>
@@ -232,7 +232,7 @@ export default function HashGeneratorClient() {
                     </div>
                     <button 
                       onClick={() => setFile(null)}
-                      className="p-2 text-text-4 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                      className="p-2 text-text-4 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded-lg"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -260,7 +260,7 @@ export default function HashGeneratorClient() {
                     key={algo}
                     onClick={() => toggleAlgo(algo)}
                     className={cn(
-                      "px-4 py-3 rounded-xl border text-tiny font-bold uppercase tracking-widest-sm transition-all text-center",
+                      "px-4 py-3 rounded-xl border text-tiny font-bold uppercase tracking-widest-sm transition-all text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue",
                       selectedAlgos.includes(algo) 
                         ? "bg-blue border-blue text-white shadow-md shadow-blue/20" 
                         : "bg-bg border-border text-text-4 hover:border-blue/30"
@@ -281,7 +281,7 @@ export default function HashGeneratorClient() {
                     key={enc}
                     onClick={() => setEncoding(enc)}
                     className={cn(
-                      "flex-1 py-2 rounded-lg text-tiny font-bold uppercase tracking-widest-sm transition-all",
+                      "flex-1 py-2 rounded-lg text-tiny font-bold uppercase tracking-widest-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue",
                       encoding === enc ? "bg-surface text-blue shadow-sm" : "text-text-4 hover:text-text"
                     )}
                   >
@@ -302,7 +302,7 @@ export default function HashGeneratorClient() {
                   aria-label="Toggle HMAC Support"
                   aria-pressed={useHmac}
                   className={cn(
-                    "w-10 h-5 rounded-full relative transition-all",
+                    "w-10 h-5 rounded-full relative transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
                     useHmac ? "bg-blue" : "bg-border"
                   )}
                 >

@@ -196,6 +196,89 @@ const api: WorkerAPI = {
     return result;
   },
 
+  async compressPdf(file: ArrayBuffer, onProgress?: ProgressCallback): Promise<Uint8Array> {
+    if (onProgress) onProgress({ percent: 10, message: "Loading PDF..." });
+    const { PDFDocument } = await import("pdf-lib");
+    const doc = await PDFDocument.load(file, { updateMetadata: false });
+    
+    if (onProgress) onProgress({ percent: 50, message: "Optimizing structure..." });
+    const outBytes = await doc.save({ useObjectStreams: true });
+    
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return outBytes;
+  },
+
+  async splitPdf(file: ArrayBuffer, splitAll: boolean, rangesStr: string, onProgress?: ProgressCallback): Promise<{ data: Uint8Array; ext: string; count: number }> {
+    if (onProgress) onProgress({ percent: 10, message: "Loading PDF..." });
+    const { PDFDocument } = await import("pdf-lib");
+    const srcDoc = await PDFDocument.load(file);
+    const total = srcDoc.getPageCount();
+
+    function parseRanges(input: string, maxPage: number): number[][] {
+      const parts = input.split(",").map(s => s.trim()).filter(Boolean);
+      const out: number[][] = [];
+      for (const p of parts) {
+        if (p.includes("-")) {
+          const [a, b] = p.split("-").map(n => parseInt(n.trim()));
+          if (a === undefined || b === undefined) continue;
+          if (!isNaN(a) && !isNaN(b) && a >= 1 && b <= maxPage && a <= b) {
+            const pages: number[] = [];
+            for (let i = a; i <= b; i++) pages.push(i - 1);
+            out.push(pages);
+          }
+        } else {
+          const n = parseInt(p);
+          if (!isNaN(n) && n >= 1 && n <= maxPage) out.push([n - 1]);
+        }
+      }
+      return out;
+    }
+
+    const groups = splitAll
+      ? Array.from({ length: total }, (_, i) => [i])
+      : parseRanges(rangesStr, total);
+
+    if (groups.length === 0) {
+      throw new Error("No valid page ranges found.");
+    }
+
+    if (groups.length === 1) {
+      if (onProgress) onProgress({ percent: 50, message: "Extracting pages..." });
+      const newDoc = await PDFDocument.create();
+      const pages = await newDoc.copyPages(srcDoc, groups[0]!);
+      pages.forEach((p: any) => newDoc.addPage(p));
+      if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
+      const outBytes = await newDoc.save();
+      if (onProgress) onProgress({ percent: 100, message: "Done!" });
+      return { data: outBytes, ext: "pdf", count: 1 };
+    }
+
+    // Multiple groups -> zip them up
+    const fflate = await import("fflate");
+    const zipFiles: Record<string, Uint8Array> = {};
+
+    for (let g = 0; g < groups.length; g++) {
+      if (onProgress) onProgress({ percent: 10 + (g / groups.length) * 80, message: `Processing part ${g + 1}/${groups.length}...` });
+      const newDoc = await PDFDocument.create();
+      const pages = await newDoc.copyPages(srcDoc, groups[g]!);
+      pages.forEach((p: any) => newDoc.addPage(p));
+      const outBytes = await newDoc.save();
+      const label = splitAll ? `page-${groups[g]![0]! + 1}` : `part-${g + 1}`;
+      zipFiles[`${label}.pdf`] = outBytes;
+    }
+
+    if (onProgress) onProgress({ percent: 95, message: "Zipping parts..." });
+    const zipData = await new Promise<Uint8Array>((resolve, reject) => {
+      fflate.zip(zipFiles, (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
+    });
+
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return { data: zipData, ext: "zip", count: groups.length };
+  },
+
   // Image Tasks (Standard)
   async compressImage(file: ArrayBuffer, format, quality, onProgress) {
     let imgBitmap: ImageBitmap | null = null;

@@ -6,7 +6,8 @@ import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ToolInput } from "@/components/ui/ToolInput";
-
+import { workerManager } from "@/src/workers/manager";
+import { TaskProgress } from "@/src/workers/types";
 import { DropZone } from "@/components/ui/DropZone";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
@@ -39,7 +40,9 @@ export default function SplitPdfClient() {
   const [ranges, setRanges] = useState("1-3, 4-6");
   const [splitAll, setSplitAll] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState<TaskProgress | null>(null);
   const [error, setError] = useState("");
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
 
   const loadFile = async (files: FileList | File[]) => {
     const f = files[0];
@@ -56,40 +59,49 @@ export default function SplitPdfClient() {
 
   const split = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
+    
+    const controller = new AbortController();
+    setAbortController(controller);
     setProcessing(true);
     setError("");
+    setProgress({ percent: 0, message: "Preparing to split..." });
+    
     try {
-      const { PDFDocument } = PDFLib;
       const bytes = await file.arrayBuffer();
-      const srcDoc = await PDFDocument.load(bytes);
-      const total = srcDoc.getPageCount();
-      setPageCount(total);
-
-      const groups = splitAll
-        ? Array.from({ length: total }, (_, i) => [i])
-        : parseRanges(ranges, total);
-
-      if (groups.length === 0) { setError("No valid page ranges found."); setProcessing(false); return; }
-
-      for (let g = 0; g < groups.length; g++) {
-        const newDoc = await PDFDocument.create();
-        const pages = await newDoc.copyPages(srcDoc, groups[g]!);
-        pages.forEach((p: any) => newDoc.addPage(p));
-        const outBytes = await newDoc.save();
-        const blob = new Blob([outBytes as any], { type: "application/pdf" });
-        const url = createUrl(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        const label = splitAll ? `page-${groups[g]![0]! + 1}` : `part-${g + 1}`;
-        a.download = `${file.name.replace(/\.pdf$/i, "")}-${label}.pdf`;
-        a.click();
-        setTimeout(() => revokeUrl(url), 100);
-        await new Promise(r => setTimeout(r, 150));
-      }
+      const result = await workerManager.splitPdf(
+        bytes,
+        splitAll,
+        ranges,
+        (p) => setProgress(p),
+        controller.signal
+      );
+      
+      const mime = result.ext === "zip" ? "application/zip" : "application/pdf";
+      const blob = new Blob([result.data as any], { type: mime });
+      const url = createUrl(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${file.name.replace(/\.pdf$/i, "")}-split.${result.ext}`;
+      a.click();
+      
+      // Revoke after a longer delay (5s) for larger zips to start downloading
+      setTimeout(() => revokeUrl(url), 5000);
+      
     } catch (e: any) {
-      setError(e?.message || "Failed to split PDF.");
+      if (e.message === "Task cancelled") {
+        setError("Split cancelled.");
+      } else {
+        setError(e?.message || "Failed to split PDF.");
+      }
+    } finally {
+      setProcessing(false);
+      setProgress(null);
+      setAbortController(null);
     }
-    setProcessing(false);
+  };
+
+  const cancelSplit = () => {
+    abortController?.abort();
   };
 
   return (
@@ -149,13 +161,38 @@ export default function SplitPdfClient() {
 
       {error && <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 text-xs font-bold uppercase tracking-wider text-center">{error}</div>}
 
-      <button
-        onClick={split}
-        disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
-      >
-        {processing ? "Splitting…" : "Split PDF"}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={split}
+          disabled={!file || processing}
+          className="flex-1 py-4 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20 flex flex-col items-center justify-center gap-1"
+        >
+          {processing ? (
+            <>
+              <span>{progress?.message || "Splitting..."}</span>
+              {progress && (
+                <div className="w-48 h-1 bg-white/20 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-white transition-all duration-300" 
+                    style={{ width: `${progress.percent}%` }}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            "Split PDF"
+          )}
+        </button>
+
+        {processing && (
+          <button
+            onClick={cancelSplit}
+            className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </div>
   );
 }

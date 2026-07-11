@@ -81,6 +81,7 @@ export const SettingSwitch = memo(function SettingSwitch({ checked, onChange, di
       disabled={disabled}
       className={`
         relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue/20
+        before:content-[""] before:absolute before:-inset-3 before:block
         ${checked ? 'bg-blue' : 'bg-bg border border-border'}
         ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:scale-105 active:scale-95'}
       `}
@@ -116,7 +117,7 @@ export const SettingSelect = memo(function SettingSelect({ options, value, onCha
               aria-checked={isActive}
               onClick={() => onChange(opt.value)}
               className={`
-                w-full py-3 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative z-content
+                w-full py-4 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all duration-300 relative z-content
                 ${isActive 
                   ? 'text-white' 
                   : 'text-text-4 hover:text-text'}

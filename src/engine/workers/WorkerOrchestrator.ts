@@ -67,6 +67,8 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
 
   // Media Pool (heavy file manipulation, image/PDF processing)
   mergePdfs: 'media',
+  compressPdf: 'media',
+  splitPdf: 'media',
   compressImage: 'media',
   resizeImage: 'media',
   removeBackground: 'media',

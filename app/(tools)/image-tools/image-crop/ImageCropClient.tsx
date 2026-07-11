@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -23,12 +25,18 @@ export default function ImageCropClient() {
   const [origW, setOrigW] = useState(0);
   const [origH, setOrigH] = useState(0);
   const [fileName, setFileName] = useState("image");
-  const [cropX, setCropX] = useState(0);
-  const [cropY, setCropY] = useState(0);
-  const [cropW, setCropW] = useState(0);
-  const [cropH, setCropH] = useState(0);
+  const [crop, setCrop] = useState<Crop>({
+    unit: "%",
+    x: 10,
+    y: 10,
+    width: 80,
+    height: 80
+  });
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
+  const [aspect, setAspect] = useState<number | undefined>(undefined);
   const [preset, setPreset] = useState("Free");
   const [croppedUrl, setCroppedUrl] = useState<string | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
@@ -45,10 +53,14 @@ export default function ImageCropClient() {
       const h = img.naturalHeight;
       setOrigW(w);
       setOrigH(h);
-      setCropX(0);
-      setCropY(0);
-      setCropW(w);
-      setCropH(h);
+      setCrop({
+        unit: 'px',
+        x: w * 0.1,
+        y: h * 0.1,
+        width: w * 0.8,
+        height: h * 0.8
+      });
+      setCompletedCrop(null);
     };
     img.src = url;
   };
@@ -56,67 +68,70 @@ export default function ImageCropClient() {
   const applyPreset = (label: string) => {
     setPreset(label);
     const p = PRESETS.find(x => x.label === label)!;
-    if (!origW || !origH || p.w === 0) return;
-    const ratio = p.w / p.h;
-    const imgRatio = origW / origH;
-    let w: number, h: number;
-    if (ratio > imgRatio) {
-      w = origW;
-      h = Math.round(origW / ratio);
+    if (p.w === 0) {
+      setAspect(undefined);
     } else {
-      h = origH;
-      w = Math.round(origH * ratio);
+      setAspect(p.w / p.h);
+      if (imgRef.current) {
+        const { width, height } = imgRef.current;
+        const ratio = p.w / p.h;
+        let cW = width;
+        let cH = width / ratio;
+        if (cH > height) {
+          cH = height;
+          cW = height * ratio;
+        }
+        setCrop({
+          unit: 'px',
+          x: (width - cW) / 2,
+          y: (height - cH) / 2,
+          width: cW,
+          height: cH
+        });
+      }
     }
-    const x = Math.round((origW - w) / 2);
-    const y = Math.round((origH - h) / 2);
-    setCropX(x);
-    setCropY(y);
-    setCropW(w);
-    setCropH(h);
   };
 
-  const handleCropWChange = (val: string) => {
-    const w = parseInt(val) || 0;
-    setCropW(w);
-    const p = PRESETS.find(x => x.label === preset);
-    if (p && p.w && p.h) {
-      setCropH(Math.round(w * p.h / p.w));
-    }
-  };
-
-  const handleCropHChange = (val: string) => {
-    const h = parseInt(val) || 0;
-    setCropH(h);
-    const p = PRESETS.find(x => x.label === preset);
-    if (p && p.w && p.h) {
-      setCropW(Math.round(h * p.w / p.h));
-    }
-  };
 
   const doCrop = () => {
-    if (!originalUrl || !cropW || !cropH) return;
+    if (!originalUrl || !completedCrop || !imgRef.current) return;
     const canvas = document.createElement("canvas");
-    canvas.width = cropW;
-    canvas.height = cropH;
+    
+    const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+    const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+    
+    canvas.width = completedCrop.width * scaleX;
+    canvas.height = completedCrop.height * scaleY;
+    
     const ctx = canvas.getContext("2d")!;
-    const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-      canvas.toBlob(blob => {
-        if (blob) {
-          if (croppedUrl) revokeUrl(croppedUrl);
-          setCroppedUrl(createUrl(blob));
-        }
-      }, "image/jpeg", 0.92);
-    };
-    img.src = originalUrl;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+      imgRef.current,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+    
+    canvas.toBlob(blob => {
+      if (blob) {
+        if (croppedUrl) revokeUrl(croppedUrl);
+        setCroppedUrl(createUrl(blob));
+      }
+    }, "image/jpeg", 0.92);
   };
 
   const download = () => {
     if (!croppedUrl) return;
     const a = document.createElement("a");
     a.href = croppedUrl;
-    a.download = `${fileName}-cropped-${cropW}x${cropH}.jpg`;
+    a.download = `${fileName}-cropped.jpg`;
     a.click();
   };
 
@@ -141,21 +156,28 @@ export default function ImageCropClient() {
 
           {/* Image preview with crop overlay */}
           {originalUrl && origW > 0 && (
-            <div className="bg-surface border border-border rounded-2xl overflow-hidden p-4">
-              <div className="relative inline-block" style={{ width: origW * scale, height: origH * scale }}>
-                <img src={originalUrl} alt="" style={{ width: origW * scale, height: origH * scale, display: "block" }} />
-                {cropW > 0 && cropH > 0 && (
-                  <div
-                    className="absolute border border-blue bg-blue/10"
-                    style={{
-                      left: cropX * scale,
-                      top: cropY * scale,
-                      width: cropW * scale,
-                      height: cropH * scale,
-                    }}
-                  />
-                )}
-              </div>
+            <div className="bg-surface border border-border rounded-2xl overflow-hidden p-4 flex justify-center items-center">
+              {(() => {
+                const cropProps: any = {
+                  crop,
+                  onChange: (c: PixelCrop) => setCrop(c),
+                  onComplete: (c: PixelCrop) => setCompletedCrop(c),
+                  className: "max-w-full"
+                };
+                if (aspect !== undefined) {
+                  cropProps.aspect = aspect;
+                }
+                return (
+                  <ReactCrop {...cropProps}>
+                    <img 
+                      ref={imgRef} 
+                      src={originalUrl} 
+                      alt="Crop preview" 
+                      className="max-w-full h-auto max-h-[60vh] object-contain rounded-lg"
+                    />
+                  </ReactCrop>
+                );
+              })()}
             </div>
           )}
 
@@ -184,19 +206,19 @@ export default function ImageCropClient() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">X (left)</label>
-                  <input type="number" className={inputClass} value={cropX} min={0} max={origW - 1} onChange={e => setCropX(Math.max(0, parseInt(e.target.value) || 0))} />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.x) : 0} disabled />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">Y (top)</label>
-                  <input type="number" className={inputClass} value={cropY} min={0} max={origH - 1} onChange={e => setCropY(Math.max(0, parseInt(e.target.value) || 0))} />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.y) : 0} disabled />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">Width</label>
-                  <input type="number" className={inputClass} value={cropW} min={1} max={origW} onChange={e => handleCropWChange(e.target.value)} />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.width) : 0} disabled />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">Height</label>
-                  <input type="number" className={inputClass} value={cropH} min={1} max={origH} onChange={e => handleCropHChange(e.target.value)} />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.height) : 0} disabled />
                 </div>
               </div>
 
@@ -211,7 +233,6 @@ export default function ImageCropClient() {
             {croppedUrl ? (
               <>
                 <img src={croppedUrl} alt="Cropped" className="mx-auto max-h-64 rounded-xl object-contain border border-border" />
-                <p className="text-xs text-text-4 text-center">{cropW} × {cropH}px</p>
                 <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
                   Download Cropped Image
                 </button>

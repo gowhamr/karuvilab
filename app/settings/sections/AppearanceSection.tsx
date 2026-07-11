@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSelect } from "../components/SettingUI";
 import { Sun } from "lucide-react";
@@ -8,6 +8,14 @@ import { Sun } from "lucide-react";
 export const AppearanceSection = memo(function AppearanceSection() {
   const appearance = useSettingsStore(state => state.appearance);
   const updateAppearance = useSettingsStore(state => state.updateAppearance);
+
+  const handleThemeChange = useCallback((theme: any) => {
+    updateAppearance({ theme });
+    const resolved = theme === "system"
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : theme;
+    document.documentElement.setAttribute("data-theme", resolved);
+  }, [updateAppearance]);
 
   return (
     <div className="space-y-2">
@@ -19,13 +27,7 @@ export const AppearanceSection = memo(function AppearanceSection() {
       >
         <SettingSelect 
           value={appearance.theme}
-          onChange={(theme) => {
-            updateAppearance({ theme });
-            const resolved = theme === "system"
-              ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-              : theme;
-            document.documentElement.setAttribute("data-theme", resolved);
-          }}
+          onChange={handleThemeChange}
           options={[
             { label: 'Light', value: 'light' },
             { label: 'Dark', value: 'dark' },

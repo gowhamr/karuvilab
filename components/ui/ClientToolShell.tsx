@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ALL_TOOLS, CategoryEntry } from '@/src/tool-registry';
-import { Check, ArrowUpRight, ChevronRight, FileText, PlaySquare, Image as ImageIcon, Wrench } from 'lucide-react';
+import { Check, ArrowUpRight, ChevronRight, FileText, PlaySquare, Image as ImageIcon, Wrench, Share2 } from 'lucide-react';
 import { ToolIcon } from '@/components/ui/Icons';
 import { ErrorBoundary } from './ErrorBoundary';
 import { FavoriteButton } from './FavoriteButton';
@@ -10,7 +10,7 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
 import { ToolInfoSection } from './ToolInfoSection';
 import { cn } from '@/src/lib/utils';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { FocusModeWrapper } from './FocusModeWrapper';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
@@ -18,6 +18,11 @@ import { m } from 'framer-motion';
 import { parseAndSanitizeMarkdownSync, sanitizeHtml } from '@/src/lib/security';
 import { ToolFeedback } from './ToolFeedback';
 import { useIntelligenceStore } from '@/src/store/useIntelligenceStore';
+
+import { ToolCard } from '@/components/ToolCard';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { toast } from 'sonner';
 
 function stripHtmlAndTruncate(html: string | undefined, maxLength: number = 80): string {
   if (!html) return '';
@@ -69,7 +74,7 @@ function UseCasesList({ useCases, visibleExamples = 2 }: { useCases: string[], v
       {showMoreButton && (
         <button 
           onClick={() => setExpanded(!expanded)}
-          className="text-sm font-bold text-blue hover:underline py-2"
+          className="text-sm font-bold text-blue hover:underline py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-sm"
         >
           {expanded ? "Show Less ▴" : "Show More ▾"}
         </button>
@@ -105,7 +110,7 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
       {showMoreButton && (
         <button 
           onClick={() => setExpanded(!expanded)}
-          className="text-sm font-bold text-blue hover:underline py-2"
+          className="text-sm font-bold text-blue hover:underline py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-sm"
         >
           {expanded ? "View Less FAQs ▴" : "View All FAQs ▾"}
         </button>
@@ -175,12 +180,32 @@ export function ClientToolShell({ title, description, category, children, toolId
     }))
   }), [content.detailedDescription, content.howTo, content.faq]);
 
+  const [activeTab, setActiveTab] = useState<'tool' | 'related'>('tool');
+
+  const related = useMemo(() => {
+    if (!category?.id) return [];
+    return ALL_TOOLS.filter(t => t.category === category.id && t.id !== finalToolId);
+  }, [category, finalToolId]);
+
   const relatedIds = useMemo(() => {
-    const rawIds = content.relatedTools ?? currentTool?.related ?? [];
-    return [...new Set(rawIds)].filter(id => id !== finalToolId);
-  }, [content.relatedTools, currentTool?.related, finalToolId]);
-  
-  const related = ALL_TOOLS.filter(t => relatedIds.includes(t.id));
+    return related.map(t => t.id);
+  }, [related]);
+
+  const handleShare = useCallback(async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `KV - ${title}`,
+          url: window.location.href,
+        });
+      } else {
+        throw new Error("Share API not available");
+      }
+    } catch {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard");
+    }
+  }, [title]);
 
   const getSuggestions = useIntelligenceStore(s => s.getSuggestions);
   const suggestionIds = useMemo(() => getSuggestions(finalToolId), [finalToolId, getSuggestions]);
@@ -200,212 +225,263 @@ export function ClientToolShell({ title, description, category, children, toolId
       )}
     >
       {!isEmbed && (
-        <header className="space-y-3 md:space-y-4 relative z-above">
-        <Breadcrumbs category={category} title={title} />
-        
-        <div className="flex flex-col gap-3 md:gap-4">
-          <div className="flex flex-row items-start gap-3">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
-              {title}
-            </h1>
-            {currentTool?.difficulty && (
-              <span className={cn(
-                "mt-1.5 md:mt-2.5 inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
-                currentTool.difficulty === 'beginner' && "bg-success/10 text-success ring-success/20",
-                currentTool.difficulty === 'intermediate' && "bg-warn/10 text-warn ring-warn/20",
-                currentTool.difficulty === 'advanced' && "bg-error/10 text-error ring-error/20"
-              )}>
-                {currentTool.difficulty.charAt(0).toUpperCase() + currentTool.difficulty.slice(1)}
-              </span>
-            )}
-            <div className="flex items-center gap-2 shrink-0 mt-0.5 md:mt-1">
+        <header className="space-y-4 relative z-above">
+          <Breadcrumbs category={category} title={title} />
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-divider pb-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0">
+                <ToolIcon toolId={finalToolId} category={category?.id} className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-2xl md:text-3xl font-black tracking-tight leading-none text-text-primary">
+                    {title}
+                  </h1>
+                  {category && (
+                    <Badge variant="primary" size="sm" className="bg-primary/10 text-primary border border-primary/20">
+                      {category.label}
+                    </Badge>
+                  )}
+                  {currentTool?.difficulty && (
+                    <Badge 
+                      variant={
+                        currentTool.difficulty === 'beginner' ? 'success' :
+                        currentTool.difficulty === 'intermediate' ? 'warning' : 'danger'
+                      } 
+                      size="sm"
+                    >
+                      {currentTool.difficulty}
+                    </Badge>
+                  )}
+                </div>
+                {description && (
+                  <p className="text-sm text-text-muted max-w-2xl leading-relaxed">
+                    {description}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleShare}
+                className="h-10 px-3 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-primary font-bold"
+                aria-label="Share this tool"
+              >
+                <Share2 className="w-4 h-4" />
+                <span>Share</span>
+              </Button>
               {currentTool && <FavoriteButton toolId={currentTool.id} />}
               <ToolMoreMenu toolId={finalToolId} toolName={title} />
             </div>
           </div>
-          {description && (
-            <p className="text-sm md:text-base text-text-4 font-medium leading-relaxed max-w-3xl">
-              {description}
-            </p>
-          )}
+        </header>
+      )}
+
+      {!isEmbed && related.length > 0 && (
+        <div className="flex border-b border-divider gap-6">
+          <button
+            onClick={() => setActiveTab('tool')}
+            className={cn(
+              "pb-3 font-bold text-sm border-b-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xs relative px-1 cursor-pointer",
+              activeTab === 'tool'
+                ? "border-primary text-text-primary font-black"
+                : "border-transparent text-text-secondary hover:text-text-primary"
+            )}
+            role="tab"
+            aria-selected={activeTab === 'tool'}
+          >
+            Tool
+          </button>
+          <button
+            onClick={() => setActiveTab('related')}
+            className={cn(
+              "pb-3 font-bold text-sm border-b-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xs relative px-1 cursor-pointer",
+              activeTab === 'related'
+                ? "border-primary text-text-primary font-black"
+                : "border-transparent text-text-secondary hover:text-text-primary"
+            )}
+            role="tab"
+            aria-selected={activeTab === 'related'}
+          >
+            Related Tools ({related.length})
+          </button>
         </div>
-      </header>
       )}
 
-      <section className="mb-12" aria-live="polite" aria-atomic="false">
-        <ErrorBoundary>
-          <FocusModeWrapper toolId={finalToolId} toolName={title}>
-            {children}
-          </FocusModeWrapper>
-        </ErrorBoundary>
-      </section>
+      <div className="space-y-10">
+        {activeTab === 'tool' ? (
+          <>
+            <section className="mb-12" aria-live="polite" aria-atomic="false">
+              <ErrorBoundary>
+                <FocusModeWrapper toolId={finalToolId} toolName={title}>
+                  {children}
+                </FocusModeWrapper>
+              </ErrorBoundary>
+            </section>
 
-      {!isEmbed && (
-        <>
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="pt-4 pb-8">
-              <ToolFeedback toolId={finalToolId} toolName={title} />
-            </div>
+            {!isEmbed && (
+              <>
+                <div className="max-w-4xl mx-auto space-y-8">
+                  <div className="pt-4 pb-8">
+                    <ToolFeedback toolId={finalToolId} toolName={title} />
+                  </div>
 
-            <ToolInfoSection 
-              toolId={finalToolId} 
-              id="learn-more" 
-              title="📚 Learn More"
-              preview="Quick guide, tips, FAQ, deep dive, and documentation."
-              isOpen={openSectionId === 'learn-more'}
-              onToggle={(isOpen) => handleSectionToggle('learn-more', isOpen)}
-            >
-              <div className="space-y-10">
-                {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-                  <section>
-                    <h3 className="text-lg font-bold text-text mb-4">Quick Guide</h3>
-                    <ol className="space-y-4">
-                      {parsedContent.howTo.map((step, i) => (
-                        <li key={i} className="flex gap-4 group">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
-                            {i + 1}
-                          </span>
+                  <ToolInfoSection 
+                    toolId={finalToolId} 
+                    id="learn-more" 
+                    title="📚 Learn More"
+                    preview="Quick guide, tips, FAQ, deep dive, and documentation."
+                    isOpen={openSectionId === 'learn-more'}
+                    onToggle={(isOpen) => handleSectionToggle('learn-more', isOpen)}
+                  >
+                    <div className="space-y-10">
+                      {parsedContent.howTo && parsedContent.howTo.length > 0 && (
+                        <section>
+                          <h3 className="text-lg font-bold text-text mb-4">Quick Guide</h3>
+                          <ol className="space-y-4">
+                            {parsedContent.howTo.map((step, i) => (
+                              <li key={i} className="flex gap-4 group">
+                                <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
+                                  {i + 1}
+                                </span>
+                                <div 
+                                  className="text-text-2 text-sm leading-snug pt-0.5 prose prose-sm prose-slate dark:prose-invert max-w-none"
+                                  dangerouslySetInnerHTML={{ __html: step }}
+                                />
+                              </li>
+                            ))}
+                          </ol>
+                        </section>
+                      )}
+
+                      {content.useCases && content.useCases.length > 0 && (
+                        <section>
+                          <h3 className="text-lg font-bold text-text mb-4">Tips & Use Cases</h3>
+                          <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
+                        </section>
+                      )}
+
+                      {parsedContent.faq && parsedContent.faq.length > 0 && (
+                        <section>
+                          <h3 className="text-lg font-bold text-text mb-4">Frequently Asked Questions</h3>
+                          <FAQList faq={parsedContent.faq} />
+                        </section>
+                      )}
+
+                      {parsedContent.detailedDescription && (
+                        <section>
+                          <h3 className="text-lg font-bold text-text mb-4">Deep Dive</h3>
                           <div 
-                            className="text-text-2 text-sm leading-snug pt-0.5 prose prose-sm prose-slate dark:prose-invert max-w-none"
-                            dangerouslySetInnerHTML={{ __html: step }}
+                            className="prose prose-slate dark:prose-invert max-w-none text-text-3"
+                            dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
                           />
-                        </li>
+                        </section>
+                      )}
+
+                      <section>
+                        <h3 className="text-lg font-bold text-text mb-4">Documentation & Help</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <Link href="/help#documentation" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+                            <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
+                              <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-sm text-text">Documentation</h4>
+                              <p className="text-xs text-text-4">Read the full manual</p>
+                            </div>
+                          </Link>
+                          
+                          <Link href="/help#tutorials" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-primary transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                              <PlaySquare className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-sm text-text">Tutorials</h4>
+                              <p className="text-xs text-text-4">Step-by-step guides</p>
+                            </div>
+                          </Link>
+
+                          <Link href="/help#examples" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success">
+                            <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
+                              <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-sm text-text">Examples</h4>
+                              <p className="text-xs text-text-4">See it in action</p>
+                            </div>
+                          </Link>
+
+                          <Link href="/help#troubleshooting" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error">
+                            <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
+                              <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-sm text-text">Troubleshooting</h4>
+                              <p className="text-xs text-text-4">Fix common issues</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </section>
+                    </div>
+                  </ToolInfoSection>
+                </div>
+
+                {suggestions.length > 0 && (
+                  <section className="pt-12 border-t border-border space-y-8">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-2xl font-bold flex items-center gap-2">
+                        <span className="w-8 h-8 rounded-full bg-blue/10 flex items-center justify-center">
+                          ✨
+                        </span>
+                        Suggested Next Steps
+                      </h2>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {suggestions.map(tool => (
+                        <Link
+                          key={tool.id}
+                          href={`/${tool.href}`}
+                          className="flex items-center gap-4 p-4 bg-surface-elevated border border-border shadow-sm rounded-2xl hover:border-blue/50 hover:bg-blue/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
+                            <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5 text-blue" />
+                          </div>
+                          <div className="min-w-0">
+                            <h3 className="font-bold text-sm truncate group-hover:text-blue transition-colors">{tool.name}</h3>
+                            <p className="text-xs text-text-4 truncate">Based on your workflow</p>
+                          </div>
+                        </Link>
                       ))}
-                    </ol>
+                    </div>
                   </section>
                 )}
-
-                {content.useCases && content.useCases.length > 0 && (
-                  <section>
-                    <h3 className="text-lg font-bold text-text mb-4">Tips & Use Cases</h3>
-                    <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
-                  </section>
-                )}
-
-                {parsedContent.faq && parsedContent.faq.length > 0 && (
-                  <section>
-                    <h3 className="text-lg font-bold text-text mb-4">Frequently Asked Questions</h3>
-                    <FAQList faq={parsedContent.faq} />
-                  </section>
-                )}
-
-                {parsedContent.detailedDescription && (
-                  <section>
-                    <h3 className="text-lg font-bold text-text mb-4">Deep Dive</h3>
-                    <div 
-                      className="prose prose-slate dark:prose-invert max-w-none text-text-3"
-                      dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
-                    />
-                  </section>
-                )}
-
-                <section>
-                  <h3 className="text-lg font-bold text-text mb-4">Documentation & Help</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Link href="/help#documentation" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
-                      <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
-                        <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-sm text-text">Documentation</h4>
-                        <p className="text-xs text-text-4">Read the full manual</p>
-                      </div>
-                    </Link>
-                    
-                    <Link href="/help#tutorials" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-primary transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <PlaySquare className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-sm text-text">Tutorials</h4>
-                        <p className="text-xs text-text-4">Step-by-step guides</p>
-                      </div>
-                    </Link>
-
-                    <Link href="/help#examples" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success">
-                      <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
-                        <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-sm text-text">Examples</h4>
-                        <p className="text-xs text-text-4">See it in action</p>
-                      </div>
-                    </Link>
-
-                    <Link href="/help#troubleshooting" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error">
-                      <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
-                        <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-sm text-text">Troubleshooting</h4>
-                        <p className="text-xs text-text-4">Fix common issues</p>
-                      </div>
-                    </Link>
-                  </div>
-                </section>
-              </div>
-            </ToolInfoSection>
-          </div>
-
-      {related.length > 0 && (
-        <section className="pt-12 border-t border-border space-y-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Related Tools</h2>
-            <Link href="/all-tools" className="text-xs font-bold uppercase tracking-widest text-blue hover:underline">
-              Browse all <ChevronRight className="inline w-3 h-3" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {related.map(tool => (
-              <Link
-                key={tool.id}
-                href={`/${tool.href}`}
-                className="flex items-center gap-4 p-4 bg-surface-elevated border border-border shadow-sm rounded-2xl hover:border-brand-primary/50 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
-              >
-                <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
-                  <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-sm truncate group-hover:text-brand-primary transition-colors">{tool.name}</h3>
-                  <p className="text-xs text-text-4 truncate">{tool.desc}</p>
-                </div>
-              </Link>
-            ))}
-            </div>
-          </section>
-        )}
-        
-        {suggestions.length > 0 && (
-          <section className="pt-12 border-t border-border space-y-8">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-blue/10 flex items-center justify-center">
-                  ✨
-                </span>
-                Suggested Next Steps
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {suggestions.map(tool => (
-                <Link
-                  key={tool.id}
-                  href={`/${tool.href}`}
-                  className="flex items-center gap-4 p-4 bg-surface-elevated border border-border shadow-sm rounded-2xl hover:border-blue/50 hover:bg-blue/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">
-                    <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5 text-blue" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-sm truncate group-hover:text-blue transition-colors">{tool.name}</h3>
-                    <p className="text-xs text-text-4 truncate">Based on your workflow</p>
-                  </div>
+              </>
+            )}
+          </>
+        ) : (
+          related.length > 0 && (
+            <section className="space-y-6 pt-2" aria-live="polite">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-black text-text-primary">Related Tools in {category?.label}</h2>
+                <Link href="/all-tools" className="text-xs font-bold uppercase tracking-widest text-blue hover:underline">
+                  Browse all <ChevronRight className="inline w-3 h-3" />
                 </Link>
-              ))}
-            </div>
-          </section>
+              </div>
+              <div className="flex gap-4 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4 snap-x">
+                {related.map(tool => (
+                  <div key={tool.id} className="w-[280px] shrink-0 snap-start h-full">
+                    <ToolCard tool={tool} compact />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
         )}
-        </>
-      )}
+      </div>
     </m.div>
   );
 }

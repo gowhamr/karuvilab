@@ -7,6 +7,7 @@ import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatc
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
+import { TaskProgress } from "@/src/workers/types";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -71,9 +72,10 @@ export default function BulkImageResizerClient() {
         buffer,
         nw,
         nh,
+        "fit",
         "image/jpeg",
         90,
-        (p) => {
+        (p: TaskProgress) => {
           updateItem(toolId, item.id, { progress: p.percent, message: p.message });
         },
         item.abortController?.signal

@@ -9,6 +9,7 @@ export interface AppearanceSettings {
 export interface AccessibilitySettings {
   fontScaling: number; // 1.0 = 100%
   highContrast: boolean;
+  reduceMotion?: boolean;
 }
 
 export interface PrivacySettings {

@@ -179,7 +179,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
             </div>
             <button
               onClick={resetFeedback}
-              className="text-xs font-bold text-brand-primary hover:underline uppercase tracking-wider pt-2"
+              className="text-xs font-bold text-brand-primary hover:underline uppercase tracking-wider pt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm"
             >
               Change feedback
             </button>
@@ -282,7 +282,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-9 bg-brand-primary text-white rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md hover:scale-102 active:scale-95 transition-all disabled:opacity-50"
+                    className="w-full h-9 bg-brand-primary text-white rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md hover:scale-102 active:scale-95 transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                    aria-label="Send">
                     {isSubmitting ? (
                       <div className="w-3.5 h-3.5 border border-white/30 border-t-white rounded-full animate-spin" />

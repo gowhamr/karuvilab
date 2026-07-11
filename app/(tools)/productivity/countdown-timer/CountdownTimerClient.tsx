@@ -5,6 +5,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useCountdownTimerStore } from "@/src/features/countdown-timer/store";
+import { sendNotification } from "@/src/lib/notifications";
 
 // Helper to play a simple beep using Web Audio API so we don't need external files
 function playAlarmBeep() {
@@ -96,6 +97,7 @@ export default function CountdownTimerClient() {
           setIsFinished(true);
           if (settings.soundEnabled && !alarmPlayedRef.current) {
             playAlarmBeep();
+            sendNotification("Timer Finished", { body: "Your countdown timer has ended!", icon: "/icon.png" });
             alarmPlayedRef.current = true;
           }
           return; // stop animation
@@ -116,6 +118,9 @@ export default function CountdownTimerClient() {
 
   const handleStart = () => {
     if (totalInputMs <= 0) return;
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
     const now = performance.now();
     setTargetTime(now + (remainingTime > 0 ? remainingTime : totalInputMs));
     setIsRunning(true);

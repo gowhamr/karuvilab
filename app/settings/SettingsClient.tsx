@@ -3,7 +3,7 @@
 import { useState, useMemo, memo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { 
-  Sun, Shield, 
+  Sun, Shield, Sparkles,
   RefreshCw,
   ChevronRight, ArrowLeft,
   History as HistoryIcon, Search,
@@ -19,6 +19,7 @@ import { formatBytes } from "@/src/utils";
 const SectionSkeleton = () => <div className="animate-pulse space-y-4"><div className="h-8 w-1/3 bg-surface rounded-lg" /><div className="h-32 w-full bg-surface rounded-2xl" /><div className="h-32 w-full bg-surface rounded-2xl" /></div>;
 
 const AppearanceSection = dynamic(() => import("./sections/AppearanceSection").then(m => m.AppearanceSection), { ssr: false, loading: () => <SectionSkeleton /> });
+const AccessibilitySection = dynamic(() => import("./sections/AccessibilitySection").then(m => m.AccessibilitySection), { ssr: false, loading: () => <SectionSkeleton /> });
 const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m => m.PrivacySection), { ssr: false, loading: () => <SectionSkeleton /> });
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false, loading: () => <SectionSkeleton /> });
 const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false, loading: () => <SectionSkeleton /> });
@@ -28,6 +29,7 @@ import { Globe } from "lucide-react";
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes & modes', group: 'Personalization' },
+  { id: 'accessibility', label: 'Accessibility', icon: Sparkles, desc: 'Reduced motion, font size', group: 'Personalization' },
   { id: 'world_clock', label: 'World Clock', icon: Globe, desc: 'Clock preferences', group: 'Tools' },
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
   { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History' },
@@ -63,6 +65,7 @@ export default function SettingsClient() {
 
   const indicators = useMemo(() => ({
     appearance: theme.charAt(0).toUpperCase() + theme.slice(1),
+    accessibility: "",
     privacy: storageUsage,
     history: "",
     help: "v2.1"
@@ -260,6 +263,7 @@ export default function SettingsClient() {
   
               <div className="relative z-content min-h-96">
                 {activeSection === 'appearance' && <AppearanceSection />}
+                {activeSection === 'accessibility' && <AccessibilitySection />}
                 {activeSection === 'world_clock' && <WorldClockSection />}
                 {activeSection === 'privacy' && <PrivacySection />}
                 {activeSection === 'history' && <HistorySection />}

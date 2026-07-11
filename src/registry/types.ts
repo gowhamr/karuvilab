@@ -1,4 +1,4 @@
-export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'productivity' | 'media' | 'banking' | 'seo';
+export type Category = 'calculators' | 'pdf' | 'image' | 'security' | 'developer' | 'utilities' | 'productivity' | 'media' | 'banking' | 'seo' | 'break-time';
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 

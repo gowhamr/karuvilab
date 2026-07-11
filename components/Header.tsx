@@ -76,6 +76,7 @@ export function Header() {
 
           <nav 
             className="hidden xl:flex items-center gap-1"
+            aria-label="Header navigation"
             onMouseLeave={() => setHoveredLink(null)}
           >
             {[

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { ISO8583_FIELD_NAMES } from "../iso8583-bitmap-decoder/ISO8583BitmapClient";
+import { Eye, AlertCircle, CheckCircle2 } from "lucide-react";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { FileText, CheckCircle2, AlertCircle, Eye } from "lucide-react";
+import { parseIso8583, ParsedISOField } from "@/src/lib/iso8583/parser";
 
 export const MTI_DESCRIPTIONS: Record<string, string> = {
   "0100": "Authorization Request",
@@ -15,12 +15,6 @@ export const MTI_DESCRIPTIONS: Record<string, string> = {
   "0800": "Network Management Request (Echo/Signon)",
   "0810": "Network Management Response",
 };
-
-export interface ParsedISOField {
-  field: number;
-  name: string;
-  value: string;
-}
 
 export default function ISO8583ParserClient() {
   const [msgInput, setMsgInput] = useState("0200722464010880000016411111111111111111000000000010000007051200001234561200002606");
@@ -37,59 +31,12 @@ export default function ISO8583ParserClient() {
     setMtiDesc("");
     setBitmapHex("");
 
-    const cleaned = msgInput.replace(/\s/g, "");
-    if (cleaned.length < 20) {
-      setError("Input string too short for valid ISO 8583 MTI + Bitmap");
-      return;
-    }
-
     try {
-      // MTI: First 4 characters
-      const parsedMti = cleaned.substring(0, 4);
-      setMti(parsedMti);
-      setMtiDesc(MTI_DESCRIPTIONS[parsedMti] || "Custom / Unknown MTI");
-
-      // Bitmap: Next 16 chars (or 32 if secondary)
-      let bmapHex = cleaned.substring(4, 20);
-      const firstByte = parseInt(bmapHex.substring(0, 2), 16);
-      if (firstByte & 0x80) { // Field 1 bit set -> 32 hex chars bitmap
-        bmapHex = cleaned.substring(4, 36);
-      }
-      setBitmapHex(bmapHex);
-
-      // Remaining payload parse simulation
-      const payload = cleaned.substring(4 + bmapHex.length);
-      const parsedFields: ParsedISOField[] = [];
-
-      // Extract present field numbers from bitmap
-      const bytes: number[] = [];
-      for (let i = 0; i < bmapHex.length; i += 2) {
-        bytes.push(parseInt(bmapHex.substring(i, i + 2), 16));
-      }
-
-      let offset = 0;
-      bytes.forEach((b, byteIdx) => {
-        for (let bit = 7; bit >= 0; bit--) {
-          if (b & (1 << bit)) {
-            const fieldNum = byteIdx * 8 + (8 - bit);
-            if (fieldNum === 1) return; // Bitmap itself
-
-            let val = "RAW_DATA";
-            if (offset < payload.length) {
-              val = payload.substring(offset, Math.min(offset + 12, payload.length));
-              offset += 12;
-            }
-
-            parsedFields.push({
-              field: fieldNum,
-              name: ISO8583_FIELD_NAMES[fieldNum] || `Field ${fieldNum}`,
-              value: val,
-            });
-          }
-        }
-      });
-
-      setFields(parsedFields);
+      const parsed = parseIso8583(msgInput);
+      setMti(parsed.mti);
+      setMtiDesc(MTI_DESCRIPTIONS[parsed.mti] || "Custom / Unknown MTI");
+      setBitmapHex(parsed.bitmapHex);
+      setFields(parsed.fields);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to parse ISO 8583 message payload");
     }

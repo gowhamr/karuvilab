@@ -113,15 +113,17 @@ export default function FileValidatorClient() {
       checks.push({ label: "File Size", status: "valid", value: formatBytes(file.size) });
     }
 
-    // PDF page count (basic)
-    let pdfPageCount: number | null = null;
+    // PDF page count — using pdf-lib for accurate results on compressed/linearized PDFs
     if (ext === "pdf" || file.type === "application/pdf") {
       try {
-        const text = await file.text();
-        const matches = text.match(/\/Type\s*\/Page[^s]/g);
-        pdfPageCount = matches ? matches.length : null;
-        checks.push({ label: "PDF Pages", status: "info", value: pdfPageCount != null ? `~${pdfPageCount} pages detected` : "Unable to count pages" });
-      } catch { /* skip */ }
+        const { PDFDocument } = await import("pdf-lib");
+        const arrayBuf = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuf, { ignoreEncryption: true });
+        const pageCount = pdfDoc.getPageCount();
+        checks.push({ label: "PDF Pages", status: "info", value: `${pageCount} page${pageCount !== 1 ? "s" : ""}` });
+      } catch {
+        checks.push({ label: "PDF Pages", status: "warning", value: "Unable to count pages (PDF may be malformed or encrypted)" });
+      }
     }
 
     // Image dimensions

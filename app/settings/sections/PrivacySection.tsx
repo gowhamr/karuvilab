@@ -4,12 +4,13 @@ import { memo } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSwitch } from "../components/SettingUI";
 import { Shield, HardDrive, LineChart, History, Trash2, Download, Upload, Check, RefreshCcw, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { performFactoryReset, clearToolData } from "@/src/lib/factory-reset";
 
 import { useToast } from "@/components/ui/Toast";
 import { PrivacyFeatures } from "@/components/ui/PrivacyFeatures";
+import { logger } from "@/src/lib/logger";
 import dynamic from "next/dynamic";
 
 export const PrivacySection = memo(function PrivacySection() {
@@ -19,6 +20,14 @@ export const PrivacySection = memo(function PrivacySection() {
   const [isClearing, setIsClearing] = useState(false);
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const { toast } = useToast();
+  const exportTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cancel pending timeout on unmount to avoid React state-update-on-unmounted-component warning
+  useEffect(() => {
+    return () => {
+      if (exportTimeoutRef.current) clearTimeout(exportTimeoutRef.current);
+    };
+  }, []);
 
   const exportSettings = () => {
     setIsExporting(true);
@@ -35,9 +44,12 @@ export const PrivacySection = memo(function PrivacySection() {
     const a = document.createElement("a");
     a.href = url;
     a.download = `karuvilab-settings-${new Date().toISOString().split('T')[0]}.json`;
+    // Firefox requires the anchor to be in the DOM to trigger download
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     revokeUrl(url);
-    setTimeout(() => setIsExporting(false), 1000);
+    exportTimeoutRef.current = setTimeout(() => setIsExporting(false), 1000);
   };
 
   const importSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +78,7 @@ export const PrivacySection = memo(function PrivacySection() {
           await clearToolData();
           toast("Cache cleared successfully.", "success");
         } catch (err) {
-          console.error("Clear Cache failed:", err);
+          logger.error("Clear Cache failed", { error: err });
           toast("Failed to clear some data.", "error");
         } finally {
           setIsClearing(false);
@@ -151,7 +163,7 @@ export const PrivacySection = memo(function PrivacySection() {
                   try {
                     await performFactoryReset();
                   } catch (err) {
-                    console.error("Factory Reset failed:", err);
+                    logger.error("Factory Reset failed", { error: err });
                     localStorage.clear();
                     resetAll();
                     window.location.reload();

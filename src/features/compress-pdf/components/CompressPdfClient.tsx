@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import * as PDFLib from "pdf-lib";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
@@ -11,6 +10,7 @@ import { formatError } from "@/src/lib/formatError";
 import { FileText } from "lucide-react";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
+import { workerManager } from "@/src/workers/manager";
 
 const toolId = "compress-pdf";
 
@@ -25,13 +25,12 @@ export default function CompressPdfClient() {
   const compressSingle = async (item: BatchItem): Promise<any> => {
     try {
       updateItem(toolId, item.id, { message: "Loading PDF..." });
-      const { PDFDocument } = PDFLib;
       const bytes = await item.file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes, { updateMetadata: false });
       
-      updateItem(toolId, item.id, { message: "Optimizing structure...", progress: 50 });
-      // Re-save with pdf-lib (removes redundant objects, rebuilds xref)
-      const outBytes = await doc.save({ useObjectStreams: true });
+      const outBytes = await workerManager.compressPdf(
+        bytes,
+        (progress) => updateItem(toolId, item.id, { message: progress.message || "Processing...", progress: progress.percent })
+      );
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
       
       const name = item.file.name.replace(/\.pdf$/i, "") + "-compressed.pdf";

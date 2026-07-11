@@ -145,6 +145,14 @@ const CoreLinks = memo(function CoreLinks({
         isHoverable={isHoverable}
       />
       <SidebarItem
+        href="/favorites"
+        isActive={pathname === "/favorites"}
+        onClick={setIsOpen}
+        label="Favorites"
+        icon={Heart}
+        isHoverable={isHoverable}
+      />
+      <SidebarItem
         href="/workbench"
         isActive={pathname === "/workbench"}
         onClick={setIsOpen}
@@ -225,11 +233,14 @@ const SidebarContent = memo(function SidebarContent({
   isHoverable: boolean;
 }) {
   const t = useI18n(s => s.t);
+  const [showAllFavorites, setShowAllFavorites] = useState(false);
 
   const handleSearchClick = useCallback(() => {
     setIsOpen();
     useSearchStore.getState().setIsPaletteOpen(true);
   }, [setIsOpen]);
+
+  const visibleFavorites = showAllFavorites ? favorites : favorites.slice(0, 5);
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
@@ -280,7 +291,7 @@ const SidebarContent = memo(function SidebarContent({
               className="space-y-0.5 overflow-hidden"
             >
               <SectionLabel icon={Heart}>{t("common.favorites")}</SectionLabel>
-              {favorites.map(tool => (
+              {visibleFavorites.map(tool => (
                 <SidebarItem
                   key={tool.id}
                   href={`/${tool.href}`}
@@ -293,6 +304,14 @@ const SidebarContent = memo(function SidebarContent({
                   isHoverable={isHoverable}
                 />
               ))}
+              {favorites.length > 5 && (
+                <button
+                  onClick={() => setShowAllFavorites(prev => !prev)}
+                  className="group relative flex items-center justify-center gap-2 w-full h-8 mt-1 rounded-btn text-[11px] font-bold uppercase tracking-widest text-text-4 hover:text-text-3 hover:bg-surface-elevated transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                >
+                  {showAllFavorites ? "Show less" : `Show all (${favorites.length})`}
+                </button>
+              )}
             </m.div>
           )}
         </AnimatePresence>
@@ -363,7 +382,7 @@ export function Sidebar() {
   const favorites = useMemo(() => {
     if (!hydrated || favoriteIds.length === 0) return [];
     const favSet = new Set(favoriteIds);
-    return ALL_TOOLS.filter(t => favSet.has(t.id)).slice(0, 10);
+    return ALL_TOOLS.filter(t => favSet.has(t.id));
   }, [favoriteIds, hydrated]);
 
   if (isFullscreen) return null;

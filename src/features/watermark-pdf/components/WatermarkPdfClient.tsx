@@ -12,15 +12,20 @@ export default function WatermarkPdfClient() {
   const textId = useId();
   const colorId = useId();
   const { createUrl, revokeUrl } = useObjectUrlManager();
-  const [file, setFile] = useState<File | null>(null);
+  const [watermarkType, setWatermarkType] = useState<"text" | "image">("text");
+  const [watermarkImage, setWatermarkImage] = useState<File | null>(null);
+  const [watermarkImageUrl, setWatermarkImageUrl] = useState<string | null>(null);
   const [watermarkText, setWatermarkText] = useState("CONFIDENTIAL");
   const [opacity, setOpacity] = useState(0.3);
   const [fontSize, setFontSize] = useState(60);
   const [color, setColor] = useState("#cc0000");
   const [angle, setAngle] = useState(45);
+  const [scale, setScale] = useState(0.5); // For image scale
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
@@ -33,7 +38,8 @@ export default function WatermarkPdfClient() {
 
   const addWatermark = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
-    if (!watermarkText.trim()) { setError("Please enter watermark text."); return; }
+    if (watermarkType === "text" && !watermarkText.trim()) { setError("Please enter watermark text."); return; }
+    if (watermarkType === "image" && !watermarkImage) { setError("Please select a watermark image."); return; }
     setProcessing(true);
     setError("");
     try {
@@ -41,18 +47,51 @@ export default function WatermarkPdfClient() {
       const bytes = await file.arrayBuffer();
       const doc = await PDFDocument.load(bytes);
       const pages = doc.getPages();
+
+      let embeddedImage: any = null;
+      let imgWidth = 0;
+      let imgHeight = 0;
+
+      if (watermarkType === "image" && watermarkImage) {
+        const imgBytes = await watermarkImage.arrayBuffer();
+        if (watermarkImage.type === "image/png") {
+          embeddedImage = await doc.embedPng(imgBytes);
+        } else if (watermarkImage.type === "image/jpeg" || watermarkImage.type === "image/jpg") {
+          embeddedImage = await doc.embedJpg(imgBytes);
+        } else {
+          throw new Error("Only PNG and JPG images are supported for watermarking.");
+        }
+        
+        // Scale the image down a bit to fit logically in the page bounds (e.g., base scale)
+        const imgDims = embeddedImage.scale(scale);
+        imgWidth = imgDims.width;
+        imgHeight = imgDims.height;
+      }
+
       const { r, g, b } = hexToRgb(color);
 
       for (const page of pages) {
         const { width, height } = page.getSize();
-        page.drawText(watermarkText, {
-          x: width / 2 - (watermarkText.length * fontSize * 0.3),
-          y: height / 2,
-          size: fontSize,
-          color: rgb(r, g, b),
-          opacity: opacity,
-          rotate: degrees(angle),
-        });
+        
+        if (watermarkType === "text") {
+          page.drawText(watermarkText, {
+            x: width / 2 - (watermarkText.length * fontSize * 0.3),
+            y: height / 2,
+            size: fontSize,
+            color: rgb(r, g, b),
+            opacity: opacity,
+            rotate: degrees(angle),
+          });
+        } else if (embeddedImage) {
+          page.drawImage(embeddedImage, {
+            x: width / 2 - (imgWidth / 2),
+            y: height / 2 - (imgHeight / 2),
+            width: imgWidth,
+            height: imgHeight,
+            opacity: opacity,
+            rotate: degrees(angle),
+          });
+        }
       }
 
       const outBytes = await doc.save();
@@ -95,29 +134,99 @@ export default function WatermarkPdfClient() {
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Watermark Settings</h2>
-
-            <div className="space-y-1">
-              <label htmlFor={textId} className="text-sm font-medium">Watermark Text</label>
-              <input id={textId} type="text" className={inputClass} value={watermarkText} onChange={e => setWatermarkText(e.target.value)} placeholder="CONFIDENTIAL" />
+            
+            <div className="flex bg-bg p-1 rounded-xl border border-border">
+              <button
+                onClick={() => setWatermarkType("text")}
+                className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${watermarkType === "text" ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text-2"}`}
+              >
+                Text
+              </button>
+              <button
+                onClick={() => setWatermarkType("image")}
+                className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${watermarkType === "image" ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text-2"}`}
+              >
+                Image
+              </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            {watermarkType === "text" ? (
               <div className="space-y-1">
-                <label htmlFor={colorId} className="text-sm font-medium">Color</label>
-                <div className="flex items-center gap-2">
-                  <input id={colorId} type="color" value={color} onChange={e => setColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                  <input type="text" className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none" value={color} onChange={e => setColor(e.target.value)} />
+                <label htmlFor={textId} className="text-sm font-medium">Watermark Text</label>
+                <input id={textId} type="text" className={inputClass} value={watermarkText} onChange={e => setWatermarkText(e.target.value)} placeholder="CONFIDENTIAL" />
+              </div>
+            ) : (
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Watermark Image</label>
+                <div
+                  className="bg-bg border-2 border-dashed border-border rounded-xl p-4 text-center cursor-pointer hover:border-blue transition-colors"
+                  onClick={() => imageRef.current?.click()}
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => {
+                    e.preventDefault();
+                    const f = e.dataTransfer.files?.[0];
+                    if (f && (f.type === "image/png" || f.type === "image/jpeg")) {
+                      if (watermarkImageUrl) revokeUrl(watermarkImageUrl);
+                      setWatermarkImage(f);
+                      setWatermarkImageUrl(createUrl(f));
+                    }
+                  }}
+                >
+                  {watermarkImageUrl ? (
+                    <img src={watermarkImageUrl} alt="Watermark" className="mx-auto max-h-16 object-contain" />
+                  ) : (
+                    <p className="text-xs font-bold text-text-4">Drop PNG/JPG here or click</p>
+                  )}
+                  <input
+                    ref={imageRef}
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    className="hidden"
+                    onChange={e => {
+                      const f = e.target.files?.[0];
+                      if (f) {
+                        if (watermarkImageUrl) revokeUrl(watermarkImageUrl);
+                        setWatermarkImage(f);
+                        setWatermarkImageUrl(createUrl(f));
+                      }
+                    }}
+                  />
                 </div>
               </div>
-              <SliderField
-                id="fontSize"
-                label="Font Size"
-                min={20}
-                max={150}
-                value={fontSize}
-                onChange={setFontSize}
-                format={v => `${v}px`}
-              />
+            )}
+
+            <div className="grid grid-cols-2 gap-3">
+              {watermarkType === "text" && (
+                <div className="space-y-1">
+                  <label htmlFor={colorId} className="text-sm font-medium">Color</label>
+                  <div className="flex items-center gap-2">
+                    <input id={colorId} type="color" value={color} onChange={e => setColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
+                    <input type="text" className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none" value={color} onChange={e => setColor(e.target.value)} />
+                  </div>
+                </div>
+              )}
+              {watermarkType === "text" ? (
+                <SliderField
+                  id="fontSize"
+                  label="Font Size"
+                  min={20}
+                  max={150}
+                  value={fontSize}
+                  onChange={setFontSize}
+                  format={v => `${v}px`}
+                />
+              ) : (
+                <SliderField
+                  id="scale"
+                  label="Image Scale"
+                  min={0.1}
+                  max={2}
+                  step={0.1}
+                  value={scale}
+                  onChange={setScale}
+                  format={v => `${Math.round(v * 100)}%`}
+                />
+              )}
             </div>
 
             <SliderField
@@ -148,19 +257,37 @@ export default function WatermarkPdfClient() {
           <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Preview</h2>
           <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl overflow-hidden aspect-[3/4] flex items-center justify-center relative">
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span
-                style={{
-                  fontSize: `${Math.max(14, fontSize / 3)}px`,
-                  color: color,
-                  opacity: opacity,
-                  transform: `rotate(-${angle}deg)`,
-                  fontWeight: "bold",
-                  letterSpacing: "0.05em",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {watermarkText || "WATERMARK"}
-              </span>
+              {watermarkType === "text" ? (
+                <span
+                  style={{
+                    fontSize: `${Math.max(14, fontSize / 3)}px`,
+                    color: color,
+                    opacity: opacity,
+                    transform: `rotate(-${angle}deg)`,
+                    fontWeight: "bold",
+                    letterSpacing: "0.05em",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {watermarkText || "WATERMARK"}
+                </span>
+              ) : (
+                watermarkImageUrl ? (
+                  <img
+                    src={watermarkImageUrl}
+                    alt="Watermark"
+                    style={{
+                      opacity: opacity,
+                      transform: `rotate(-${angle}deg) scale(${scale * 0.5})`,
+                      maxWidth: "80%",
+                      maxHeight: "80%",
+                      objectFit: "contain"
+                    }}
+                  />
+                ) : (
+                  <span className="text-text-4 font-bold uppercase">Image</span>
+                )
+              )}
             </div>
             <div className="text-text-4 text-xs">Page preview</div>
           </div>

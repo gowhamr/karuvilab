@@ -7,3 +7,4 @@ export * from './productivity';
 export * from './security';
 export * from './pdf';
 export * from './seo';
+export * from './break-time';

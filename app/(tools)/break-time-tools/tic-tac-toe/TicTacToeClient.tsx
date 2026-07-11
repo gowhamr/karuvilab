@@ -18,7 +18,7 @@ const WINNING_LINES = [
   [0, 4, 8], [2, 4, 6],             // diagonals
 ];
 
-const SCORE_KEY = "karuvi.fun.ttt.scores";
+const SCORE_KEY = "karuvi.breaktime.ttt.scores";
 
 interface Scores {
   x: number;
@@ -51,7 +51,7 @@ export default function TicTacToeClient() {
   const [winResult, setWinResult] = useState<{ winner: Player | "draw"; line: number[] | null } | null>(null);
   const [scoresLoaded, setScoresLoaded] = useState(false);
 
-  // Load persisted scores on mount
+  // Load persisted scores on mount with legacy migration
   useEffect(() => {
     idbStorage.getItem(SCORE_KEY).then((raw) => {
       if (raw) {
@@ -60,8 +60,23 @@ export default function TicTacToeClient() {
         } catch {
           logger.warn("[TicTacToe] Failed to parse persisted scores");
         }
+        setScoresLoaded(true);
+      } else {
+        // Migration from legacy namespace
+        idbStorage.getItem("karuvi.fun.ttt.scores").then((legacy) => {
+          if (legacy) {
+            try {
+              const parsed = JSON.parse(legacy);
+              setScores(parsed);
+              idbStorage.setItem(SCORE_KEY, legacy);
+              idbStorage.removeItem("karuvi.fun.ttt.scores");
+            } catch {
+              logger.warn("[TicTacToe] Failed to parse legacy persisted scores");
+            }
+          }
+          setScoresLoaded(true);
+        }).catch(() => setScoresLoaded(true));
       }
-      setScoresLoaded(true);
     });
   }, []);
 
@@ -129,12 +144,12 @@ export default function TicTacToeClient() {
               key={label}
               className={`rounded-2xl border p-4 flex flex-col items-center gap-1 transition-all ${
                 isActive
-                  ? "border-[#8B5CF6] bg-[#8B5CF6]/10"
+                  ? "border-primary bg-primary/10"
                   : "border-border bg-surface"
               }`}
               aria-label={`${label} score: ${count}`}
             >
-              <Trophy className="w-4 h-4 text-[#8B5CF6]" aria-hidden="true" />
+              <Trophy className="w-4 h-4 text-primary" aria-hidden="true" />
               <span className="text-2xl font-black text-text">{count}</span>
               <span className="text-xs font-bold text-text-4 uppercase tracking-widest">
                 {label === "Draw" ? "Draws" : `Player ${label}`}
@@ -172,11 +187,11 @@ export default function TicTacToeClient() {
               whileTap={!cell && !winner ? { scale: 0.96 } : {}}
               className={`
                 aspect-square rounded-2xl border-2 flex items-center justify-center text-5xl font-black transition-all
-                ${isWinCell ? "border-[#8B5CF6] bg-[#8B5CF6]/20" : "border-border bg-surface"}
-                ${!cell && !winner ? "hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/5 cursor-pointer" : ""}
+                ${isWinCell ? "border-primary bg-primary/20" : "border-border bg-surface"}
+                ${!cell && !winner ? "hover:border-primary/50 hover:bg-primary/5 cursor-pointer" : ""}
                 ${cell ? "cursor-default" : ""}
                 ${winner && !isWinCell ? "opacity-40" : ""}
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
               `}
             >
               <AnimatePresence mode="wait">
@@ -187,7 +202,7 @@ export default function TicTacToeClient() {
                     animate={{ scale: 1, rotate: 0 }}
                     exit={{ scale: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className={cell === "X" ? "text-[#6366F1]" : "text-[#EC4899]"}
+                    className={cell === "X" ? "text-blue" : "text-danger"}
                   >
                     {cell}
                   </m.span>
@@ -202,7 +217,7 @@ export default function TicTacToeClient() {
       <div className="flex gap-3 justify-center">
         <button
           onClick={resetGame}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#8B5CF6] text-white rounded-xl font-bold hover:bg-[#7C3AED] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]"
+          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           aria-label="Start a new game"
         >
           <RotateCcw className="w-4 h-4" aria-hidden="true" />
@@ -210,7 +225,7 @@ export default function TicTacToeClient() {
         </button>
         <button
           onClick={resetAll}
-          className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-border text-text-2 rounded-xl font-bold hover:border-[#8B5CF6] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]"
+          className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-border text-text-2 rounded-xl font-bold hover:border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           aria-label="Reset all scores"
         >
           Reset Scores

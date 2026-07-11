@@ -75,6 +75,24 @@ class WorkerManager {
     return workerOrchestrator.run("mergePdfs", [files], undefined, onProgress, abortSignal, true, 2);
   }
 
+  async compressPdf(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("compressPdf", [file], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async splitPdf(
+    file: ArrayBuffer,
+    splitAll: boolean,
+    rangesStr: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<{ data: Uint8Array; ext: string; count: number }> {
+    return workerOrchestrator.run("splitPdf", [file, splitAll, rangesStr], [file], onProgress, abortSignal, true, 2);
+  }
+
   async compressImage(
     file: ArrayBuffer, 
     format: "image/jpeg" | "image/png" | "image/webp" | "image/avif" | "image/bmp",
@@ -89,12 +107,13 @@ class WorkerManager {
     file: ArrayBuffer,
     width: number,
     height: number,
+    mode: "fit" | "fill" | "stretch",
     format: "image/jpeg" | "image/png" | "image/webp" | "image/avif" | "image/bmp",
     quality: number,
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("resizeImage", [file, width, height, format, quality], [file], onProgress, abortSignal, true, 2);
+    return workerOrchestrator.run("resizeImage", [file, width, height, mode, format, quality], [file], onProgress, abortSignal, true, 2);
   }
 
   async removeBackground(

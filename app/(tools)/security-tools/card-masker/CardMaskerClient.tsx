@@ -4,30 +4,63 @@ import { useState, useMemo } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ShieldAlert, CreditCard, Lock } from "lucide-react";
 
+export function luhnCheck(digits: string): boolean {
+  if (digits.length < 13 || digits.length > 19) return false;
+  let sum = 0;
+  let shouldDouble = false;
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let val = parseInt(digits[i]!, 10);
+    if (shouldDouble) {
+      val *= 2;
+      if (val > 9) val -= 9;
+    }
+    sum += val;
+    shouldDouble = !shouldDouble;
+  }
+  return sum % 10 === 0;
+}
+
 export function maskPan(panStr: string, firstDigits: number = 6, lastDigits: number = 4, maskChar: string = "*"): string {
   const digits = panStr.replace(/\D/g, "");
   if (digits.length <= firstDigits + lastDigits) return panStr;
 
-  const first = digits.substring(0, firstDigits);
-  const last = digits.substring(digits.length - lastDigits);
-  const middle = maskChar.repeat(digits.length - firstDigits - lastDigits);
-
-  // Group into 4s for readable display
-  const masked = first + middle + last;
-  return masked.match(/.{1,4}/g)?.join(" ") || masked;
+  let digitIndex = 0;
+  let result = "";
+  for (let i = 0; i < panStr.length; i++) {
+    const char = panStr[i]!;
+    if (/\d/.test(char)) {
+      if (digitIndex >= firstDigits && digitIndex < digits.length - lastDigits) {
+        result += maskChar;
+      } else {
+        result += char;
+      }
+      digitIndex++;
+    } else {
+      result += char;
+    }
+  }
+  return result;
 }
 
 export default function CardMaskerClient() {
-  const [inputText, setInputText] = useState(`Transaction 10293: User 4532015112830366 charged $49.99
-Log Entry 8821: PAN 5412751234567890 approved
-Audit Log: Card 378282246310005 processed`);
+  const [inputText, setInputText] = useState(`Transaction 10293: User 4532 0151 1283 0366 charged $49.99
+Log Entry 8821: PAN 5412-7512-3456-7890 approved
+Audit Log: Card 3782-822463-10005 processed
+Phone check: +1 555-555-5555 should not be masked.`);
 
   const [firstDigits, setFirstDigits] = useState(6);
   const [lastDigits, setLastDigits] = useState(4);
 
   const maskedOutput = useMemo(() => {
-    // Find all 13-19 digit card sequences in text and mask them
-    return inputText.replace(/\b\d{13,19}\b/g, (match) => maskPan(match, firstDigits, lastDigits, "*"));
+    // Matches 13-19 digit candidate sequences separated by optional single space/hyphen
+    const candidateRegex = /\b\d(?:[\s-]?\d){12,18}\b/g;
+    return inputText.replace(candidateRegex, (match) => {
+      const cleanDigits = match.replace(/[\s-]/g, "");
+      if (luhnCheck(cleanDigits)) {
+        return maskPan(match, firstDigits, lastDigits, "*");
+      }
+      return match;
+    });
   }, [inputText, firstDigits, lastDigits]);
 
   return (

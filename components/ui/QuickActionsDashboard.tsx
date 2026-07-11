@@ -185,14 +185,14 @@ export function QuickActionsDashboard({
               <p className="text-caption font-bold text-text-primary truncate">Upload File</p>
               <p className="text-tiny text-text-secondary truncate">Auto route format</p>
             </div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              className="hidden"
-              aria-label="Upload file for quick action"
-            />
           </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            className="hidden"
+            aria-label="Upload file for quick action"
+          />
 
           <button
             onClick={() => setIsPaletteOpen(true)}

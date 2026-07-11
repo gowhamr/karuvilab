@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { ToolResultArea } from '@/components/ui/ToolResultArea';
+import { parseIso8583 } from '@/src/lib/iso8583/parser';
 
 export default function ToolClient() {
   const [input, setInput] = useState('');
@@ -11,24 +12,14 @@ export default function ToolClient() {
   const parseCoreBankingLog = (data: string) => {
     try {
       if (!data.trim()) return '';
-      // Mock parser for core banking trace logs
-      const parsed = {
-        message: "Parsed Core Banking Log (Mock Data)",
+      const parsed = parseIso8583(data);
+      return JSON.stringify({
+        message: "Parsed Core Banking / ISO 8583 Log",
         rawLength: data.length,
-        iso8583: {
-          mti: "0200",
-          bitmap: "F238800128E08000",
-          fields: [
-            { id: 2, name: "PAN", value: "XXXXXXXXXXXX1234" },
-            { id: 3, name: "Processing Code", value: "000000" },
-            { id: 4, name: "Amount, Transaction", value: "000000001000" }
-          ]
-        }
-      };
-      
-      return JSON.stringify(parsed, null, 2);
-    } catch {
-      return 'Failed to parse core banking log';
+        iso8583: parsed
+      }, null, 2);
+    } catch (err: any) {
+      return `Failed to parse core banking log: ${err.message}`;
     }
   };
 

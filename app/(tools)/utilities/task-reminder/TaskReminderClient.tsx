@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { useToast } from "@/components/ui/Toast";
+import { sendNotification } from "@/src/lib/notifications";
 
 const LS_KEY = "karuvilab-tasks";
 
@@ -22,6 +23,11 @@ function loadTasks(): Task[] {
   } catch { return []; }
 }
 
+function isOverdue(task: Task) {
+  if (!task.dueDate || task.done) return false;
+  return new Date(task.dueDate) < new Date(new Date().toDateString());
+}
+
 function saveTasks(tasks: Task[]) {
   if (typeof window === "undefined") return;
   localStorage.setItem(LS_KEY, JSON.stringify(tasks));
@@ -36,8 +42,25 @@ export default function TaskReminderClient() {
   const { toast } = useToast();
 
   useEffect(() => {
-    setTasks(loadTasks());
+    const loaded = loadTasks();
+    setTasks(loaded);
     setMounted(true);
+    
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+    
+    const overdueCount = loaded.filter(t => isOverdue(t)).length;
+    const dueTodayCount = loaded.filter(t => !t.done && t.dueDate === new Date().toISOString().split("T")[0]).length;
+    
+    if (overdueCount > 0 || dueTodayCount > 0) {
+      setTimeout(() => {
+        sendNotification("Task Reminder", {
+          body: `You have ${dueTodayCount} task(s) due today and ${overdueCount} overdue.`,
+          icon: "/icon.png"
+        });
+      }, 2000);
+    }
   }, []);
 
   const persist = useCallback((updated: Task[]) => {
@@ -74,10 +97,6 @@ export default function TaskReminderClient() {
     toast("Cleared completed tasks");
   };
 
-  const isOverdue = (task: Task) => {
-    if (!task.dueDate || task.done) return false;
-    return new Date(task.dueDate) < new Date(new Date().toDateString());
-  };
 
   const filtered = tasks.filter(t =>
     filter === "all" ? true :
