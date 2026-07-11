@@ -5,39 +5,57 @@ import { ToolShell } from "@/components/ui/ToolShell";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
-const MISSPELLINGS: [RegExp, string][] = [
-  [/\bteh\b/gi, "the"],
-  [/\brecieve\b/gi, "receive"],
-  [/\bseperate\b/gi, "separate"],
-  [/\boccured\b/gi, "occurred"],
-  [/\bdefinately\b/gi, "definitely"],
-  [/\baccomodate\b/gi, "accommodate"],
-  [/\bbelieve\b/gi, "believe"],
-  [/\bcalender\b/gi, "calendar"],
-  [/\bcommited\b/gi, "committed"],
-  [/\bconsious\b/gi, "conscious"],
-  [/\bembarrass\b/gi, "embarrass"],
-  [/\bexistance\b/gi, "existence"],
-  [/\bforiegn\b/gi, "foreign"],
-  [/\bgoverment\b/gi, "government"],
-  [/\bgaurd\b/gi, "guard"],
-  [/\bindependant\b/gi, "independent"],
-  [/\blibary\b/gi, "library"],
-  [/\bneccesary\b/gi, "necessary"],
-  [/\boccasionaly\b/gi, "occasionally"],
-  [/\bperseverance\b/gi, "perseverance"],
-  [/\bprivelege\b/gi, "privilege"],
-  [/\buntil\b/gi, "until"],
-  [/\bwierd\b/gi, "weird"],
-  [/\byoure\b/gi, "you're"],
-  [/\bthier\b/gi, "their"],
-];
+const MISSPELLINGS: Record<string, string> = {
+  "teh": "the", "recieve": "receive", "seperate": "separate", "occured": "occurred",
+  "definately": "definitely", "accomodate": "accommodate", "believe": "believe",
+  "calender": "calendar", "commited": "committed", "consious": "conscious",
+  "embarrass": "embarrass", "existance": "existence", "foriegn": "foreign",
+  "goverment": "government", "gaurd": "guard", "independant": "independent",
+  "libary": "library", "neccesary": "necessary", "occasionaly": "occasionally",
+  "perseverance": "perseverance", "privelege": "privilege", "wierd": "weird",
+  "youre": "you're", "thier": "their", "untill": "until", "truely": "truly",
+  "tommorrow": "tomorrow", "treshold": "threshold", "suprise": "surprise",
+  "publically": "publicly", "peice": "piece", "patience": "patience",
+  "originaly": "originally", "noticeible": "noticeable", "minut": "minute",
+  "maintenence": "maintenance", "lightnig": "lightning", "knowlege": "knowledge",
+  "immediatly": "immediately", "heighth": "height", "fourty": "forty",
+  "enviroment": "environment", "dilema": "dilemma", "desperate": "desperate",
+  "definetly": "definitely", "colleague": "colleague", "cemetery": "cemetery",
+  "business": "business", "basicly": "basically", "arguement": "argument",
+  "apparenty": "apparently", "acheive": "achieve", "dont": "don't", "cant": "can't",
+  "wont": "won't", "shouldnt": "shouldn't", "couldnt": "couldn't", "wouldnt": "wouldn't",
+  "doesnt": "doesn't", "isnt": "isn't", "arent": "aren't", "wasnt": "wasn't",
+  "werent": "weren't", "hasnt": "hasn't", "havent": "haven't", "hadnt": "hadn't"
+};
 
 const PASSIVE_INDICATORS = [
   "is being", "are being", "was being", "were being",
   "has been", "have been", "had been",
   "will be", "would be", "could be", "should be",
   "is done", "was done", "are made", "was made",
+];
+
+const REDUNDANCIES: [RegExp, string][] = [
+  [/\bcollaborate\s+together\b/gi, "collaborate"],
+  [/\badvance\s+warning\b/gi, "warning"],
+  [/\badded\s+bonus\b/gi, "bonus"],
+  [/\bbasic\s+fundamentals\b/gi, "fundamentals"],
+  [/\bfree\s+gift\b/gi, "gift"],
+  [/\brepeat\s+again\b/gi, "repeat"],
+  [/\bsum\s+total\b/gi, "total"],
+  [/\bunexpected\s+surprise\b/gi, "surprise"],
+];
+
+const WORDY_PHRASES: [RegExp, string][] = [
+  [/\bdue\s+to\s+the\s+fact\s+that\b/gi, "because"],
+  [/\bat\s+this\s+point\s+in\s+time\b/gi, "now"],
+  [/\bin\s+order\s+to\b/gi, "to"],
+  [/\ba\s+large\s+number\s+of\b/gi, "many"],
+  [/\bfor\s+the\s+purpose\s+of\b/gi, "for / to"],
+  [/\bwith\s+the\s+exception\s+of\b/gi, "except"],
+  [/\bin\s+the\s+event\s+that\b/gi, "if"],
+  [/\bmake\s+a\s+decision\b/gi, "decide"],
+  [/\btake\s+action\b/gi, "act"],
 ];
 
 interface Issue {
@@ -68,24 +86,77 @@ function analyzeText(text: string): Issue[] {
   }
 
   // Sentences not starting with capital
-  const sentences = text.split(/(?<=[.!?])\s+/);
-  let pos = 0;
-  for (const sentence of sentences) {
-    const trimmed = sentence.trim();
-    if (trimmed && /^[a-z]/.test(trimmed)) {
-      const idx = text.indexOf(trimmed, pos);
-      if (idx >= 0) {
-        issues.push({ type: "capitalization", message: "Sentence should start with a capital letter", original: trimmed[0] ?? "", suggestion: (trimmed[0] ?? "").toUpperCase(), start: idx, end: idx + 1 });
-      }
-    }
-    pos += sentence.length + 1;
+  const sentenceRe = /(?:^|[.!?]\s+)([a-z])/g;
+  while ((m = sentenceRe.exec(text)) !== null) {
+    // Find index of the actual character group matched
+    const char = m[1] || "";
+    const charIndex = m.index + m[0].length - 1;
+    issues.push({
+      type: "capitalization",
+      message: "Sentence should start with a capital letter",
+      original: char,
+      suggestion: char.toUpperCase(),
+      start: charIndex,
+      end: charIndex + 1
+    });
+  }
+
+  // Standalone 'i' capitalization
+  const iRe = /\b(i)\b/g;
+  while ((m = iRe.exec(text)) !== null) {
+    issues.push({
+      type: "capitalization",
+      message: "Personal pronoun 'I' should be capitalized",
+      original: m[0] ?? "",
+      suggestion: "I",
+      start: m.index,
+      end: m.index + 1
+    });
   }
 
   // Misspellings
-  for (const [re, suggestion] of MISSPELLINGS) {
+  const wordRe = /\b[a-zA-Z']+\b/g;
+  while ((m = wordRe.exec(text)) !== null) {
+    const word = (m[0] ?? "").toLowerCase();
+    if (MISSPELLINGS[word] !== undefined) {
+      issues.push({
+        type: "misspelling",
+        message: `Possible misspelling: "${m[0] ?? ""}"`,
+        original: m[0] ?? "",
+        suggestion: MISSPELLINGS[word],
+        start: m.index,
+        end: m.index + (m[0] ?? "").length
+      });
+    }
+  }
+
+  // Redundancies
+  for (const [re, suggestion] of REDUNDANCIES) {
     re.lastIndex = 0;
     while ((m = re.exec(text)) !== null) {
-      issues.push({ type: "misspelling", message: `Possible misspelling: "${m[0] ?? ""}"`, original: m[0] ?? "", suggestion, start: m.index, end: m.index + (m[0] ?? "").length });
+      issues.push({
+        type: "passive", // Categorize style improvements as passive/style
+        message: `Redundant phrasing: "${m[0] ?? ""}"`,
+        original: m[0] ?? "",
+        suggestion,
+        start: m.index,
+        end: m.index + (m[0] ?? "").length
+      });
+    }
+  }
+
+  // Wordy Phrases
+  for (const [re, suggestion] of WORDY_PHRASES) {
+    re.lastIndex = 0;
+    while ((m = re.exec(text)) !== null) {
+      issues.push({
+        type: "passive",
+        message: `Wordy phrase, consider simplifying: "${m[0] ?? ""}"`,
+        original: m[0] ?? "",
+        suggestion,
+        start: m.index,
+        end: m.index + (m[0] ?? "").length
+      });
     }
   }
 
@@ -109,7 +180,7 @@ const TYPE_STYLES: Record<string, string> = {
 };
 
 export default function GrammarCheckerClient() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("Teh government should cooperate together in order to make a decision. i believe this has been completed.");
   const [hovered, setHovered] = useState<number | null>(null);
 
   const issues = useMemo(() => (text ? analyzeText(text) : []), [text]);
@@ -119,9 +190,12 @@ export default function GrammarCheckerClient() {
     const parts: { text: string; issue: Issue | null }[] = [];
     let last = 0;
     for (const issue of issues) {
-      if (issue.start > last) parts.push({ text: text.slice(last, issue.start), issue: null });
-      parts.push({ text: text.slice(issue.start, issue.end), issue });
-      last = issue.end;
+      // Handle overlapping issues safely
+      if (issue.start >= last) {
+        if (issue.start > last) parts.push({ text: text.slice(last, issue.start), issue: null });
+        parts.push({ text: text.slice(issue.start, issue.end), issue });
+        last = issue.end;
+      }
     }
     if (last < text.length) parts.push({ text: text.slice(last), issue: null });
     return parts;
@@ -155,7 +229,7 @@ export default function GrammarCheckerClient() {
               { key: "capitalization", label: "Capitalization", color: "text-blue" },
               { key: "missing-space", label: "Missing Spaces", color: "text-orange-500" },
               { key: "double-space", label: "Double Spaces", color: "text-yellow-600" },
-              { key: "passive", label: "Passive Voice", color: "text-purple-500" },
+              { key: "passive", label: "Passive & Style", color: "text-purple-500" },
             ].map(({ key, label, color }) => (
               <div key={key} className="bg-surface border border-border p-3 rounded-xl">
                 <dd className={`text-xl font-black ${color}`}>{counts[key]}</dd>

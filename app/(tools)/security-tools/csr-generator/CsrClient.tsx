@@ -6,6 +6,62 @@ import { workerManager } from "@/src/workers/manager";
 import { FileText, Key, Download, RefreshCw, AlertCircle } from "lucide-react";
 import { blobManager } from "@/src/lib/blob-manager";
 
+function concat(...arrays: Uint8Array[]): Uint8Array {
+  const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
+  const result = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const arr of arrays) {
+    result.set(arr, offset);
+    offset += arr.length;
+  }
+  return result;
+}
+
+function derEncode(tag: number, value: Uint8Array): Uint8Array {
+  let lenBytes: number[];
+  const len = value.length;
+  if (len < 128) {
+    lenBytes = [len];
+  } else {
+    const bytes: number[] = [];
+    let temp = len;
+    while (temp > 0) {
+      bytes.unshift(temp & 0xFF);
+      temp = temp >> 8;
+    }
+    lenBytes = [0x80 | bytes.length, ...bytes];
+  }
+  const result = new Uint8Array(1 + lenBytes.length + len);
+  result[0] = tag;
+  result.set(lenBytes, 1);
+  result.set(value, 1 + lenBytes.length);
+  return result;
+}
+
+function makeRDN(oid: Uint8Array, valueStr: string): Uint8Array {
+  const valueBytes = new TextEncoder().encode(valueStr);
+  const valEncoded = derEncode(0x13, valueBytes); // PrintableString
+  const oidEncoded = derEncode(0x06, oid); // OID
+  const seq = derEncode(0x30, concat(oidEncoded, valEncoded));
+  return derEncode(0x31, seq); // SET (0x31)
+}
+
+function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array): string {
+  let binary = "";
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]!);
+  }
+  return btoa(binary);
+}
+
+function formatPem(base64: string, header: string, footer: string): string {
+  const matches = base64.match(/.{1,64}/g);
+  const body = matches ? matches.join("\n") : base64;
+  return `${header}\n${body}\n${footer}`;
+}
+
 export default function CsrClient() {
   const [commonName, setCommonName] = useState("example.com");
   const [organization, setOrganization] = useState("My Company Ltd");
@@ -27,19 +83,75 @@ export default function CsrClient() {
     setError(null);
 
     try {
-      // Generate RSA Keypair
-      const keypair = await workerManager.run('generateRsaKeyPair', [keySize, 'SHA-256']);
-      setPrivateKeyPem(keypair.privateKeyPem);
+      // 1. Generate RSA key pair via Web Crypto
+      const keypair = await window.crypto.subtle.generateKey(
+        {
+          name: "RSASSA-PKCS1-v1_5",
+          modulusLength: keySize,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: "SHA-256",
+        },
+        true,
+        ["sign", "verify"]
+      );
 
-      // Create synthetic CSR block format with Subject details
-      const subjectStr = `/CN=${commonName}/O=${organization}/OU=${unit}/C=${country}`;
-      const mockCsr = `-----BEGIN CERTIFICATE REQUEST-----\n` +
-        `Subject: ${subjectStr}\n` +
-        `Key Algorithm: RSA ${keySize}-bit\n` +
-        `PublicKey: ${keypair.publicKeyPem.replace(/-----[^-]+-----/g, '').replace(/\s/g, '').slice(0, 64)}...\n` +
-        `-----END CERTIFICATE REQUEST-----`;
+      // 2. Export SPKI and PKCS#8
+      const spki = await window.crypto.subtle.exportKey("spki", keypair.publicKey);
+      const pkcs8 = await window.crypto.subtle.exportKey("pkcs8", keypair.privateKey);
+
+      // 3. Construct Subject Name SEQUENCE of SETs of AttributeTypeAndValue
+      const rdns: Uint8Array[] = [];
       
-      setCsrPem(mockCsr);
+      // Common Name (2.5.4.3)
+      rdns.push(makeRDN(new Uint8Array([0x55, 0x04, 0x03]), commonName.trim()));
+      
+      // Organization (2.5.4.10)
+      if (organization.trim()) {
+        rdns.push(makeRDN(new Uint8Array([0x55, 0x04, 0x0A]), organization.trim()));
+      }
+      
+      // Organizational Unit (2.5.4.11)
+      if (unit.trim()) {
+        rdns.push(makeRDN(new Uint8Array([0x55, 0x04, 0x0B]), unit.trim()));
+      }
+      
+      // Country (2.5.4.6)
+      if (country.trim()) {
+        rdns.push(makeRDN(new Uint8Array([0x55, 0x04, 0x06]), country.trim().toUpperCase()));
+      }
+
+      const subject = derEncode(0x30, concat(...rdns));
+
+      // 4. Construct CertificationRequestInfo (CRI)
+      const version = derEncode(0x02, new Uint8Array([0x00])); // Integer 0
+      const subjectPKInfo = new Uint8Array(spki);
+      const attributes = new Uint8Array([0xA0, 0x00]); // [0] Context-specific constructed tag, length 0
+
+      const cri = derEncode(0x30, concat(version, subject, subjectPKInfo, attributes));
+
+      // 5. Sign CRI bytes
+      const signature = await window.crypto.subtle.sign(
+        "RSASSA-PKCS1-v1_5",
+        keypair.privateKey,
+        cri as any
+      );
+
+      // 6. Construct outer CertificationRequest sequence
+      // sigAlg: sha256WithRSAEncryption (1.2.840.113549.1.1.11) and NULL parameters
+      const sigAlg = derEncode(0x30, concat(
+        derEncode(0x06, new Uint8Array([0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0B])),
+        new Uint8Array([0x05, 0x00])
+      ));
+      const sigBitString = derEncode(0x03, concat(new Uint8Array([0x00]), new Uint8Array(signature)));
+
+      const csrBytes = derEncode(0x30, concat(cri, sigAlg, sigBitString));
+
+      // 7. Format PEMs
+      const csrBase64 = arrayBufferToBase64(csrBytes);
+      const pkcs8Base64 = arrayBufferToBase64(pkcs8);
+
+      setCsrPem(formatPem(csrBase64, "-----BEGIN CERTIFICATE REQUEST-----", "-----END CERTIFICATE REQUEST-----"));
+      setPrivateKeyPem(formatPem(pkcs8Base64, "-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----"));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'CSR Generation failed');
     } finally {
