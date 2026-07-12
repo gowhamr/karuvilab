@@ -15,31 +15,32 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
   staticPageGenerationTimeout: 300,
-  async headers() {
-    const cspHeader = `
-      default-src 'self';
-      script-src 'self' 'unsafe-eval' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com;
-      style-src 'self' 'unsafe-inline';
-      img-src 'self' data: blob: https://pagead2.googlesyndication.com;
-      worker-src 'self' blob: https://unpkg.com;
-      connect-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev;
-      object-src 'none';
-      frame-ancestors 'self';
-      base-uri 'self';
-    `.replace(/\s{2,}/g, ' ').trim();
-
-    return [
-      {
-        source: "/:path*",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: cspHeader,
-          },
-        ],
-      },
-    ];
-  },
+  ...(isGithubPages ? {} : {
+    async headers() {
+      const cspHeader = `
+        default-src 'self';
+        script-src 'self' 'unsafe-eval' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: blob: https://pagead2.googlesyndication.com;
+        worker-src 'self' blob: https://unpkg.com;
+        connect-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev;
+        object-src 'none';
+        frame-ancestors 'self';
+        base-uri 'self';
+      `.replace(/\s{2,}/g, ' ').trim();
+      return [
+        {
+          source: "/:path*",
+          headers: [
+            {
+              key: "Content-Security-Policy",
+              value: cspHeader,
+            },
+          ],
+        },
+      ];
+    }
+  }),
 
 
   ...(isGithubPages ? {} : {

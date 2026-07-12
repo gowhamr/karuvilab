@@ -1,4 +1,3 @@
-import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import reactHooks from "eslint-plugin-react-hooks";
 
 const config = [
@@ -17,7 +16,6 @@ const config = [
       "*.cjs"
     ]
   },
-  ...nextCoreWebVitals,
   {
     plugins: {
       "react-hooks": reactHooks
