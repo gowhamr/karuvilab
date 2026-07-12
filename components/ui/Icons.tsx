@@ -13,7 +13,7 @@ import {
   Timer, ArrowLeftRight, Code2,
   IndianRupee, Home, Award, TrendingUp as TrendingUpIcon,
   Palette, Eye, Square, Layers as LayersIcon,
-  KeyRound, Shield, Gamepad2, LayoutGrid, Keyboard, Brain
+  KeyRound, Shield, Gamepad2, LayoutGrid, Keyboard, Brain, Bomb
   } from "lucide-react";
 
 export const CATEGORY_ICONS: Record<string, any> = {
@@ -139,10 +139,14 @@ export const TOOL_ICONS: Record<string, any> = {
 
   // Break Time Tools
   "tic-tac-toe": LayoutGrid,
-  "game-2048": Brain,
-  "memory-match": LayoutGrid,
+  "game-2048": Award,
+  "memory-match": Brain,
   "reaction-time": Zap,
   "color-match": Palette,
+  "snake-game": Gamepad2,
+  "word-guess": Keyboard,
+  "sudoku": Table,
+  "minesweeper": Bomb,
 };
 
 export const TRUST_INDICATORS = [
@@ -175,7 +179,12 @@ const CATEGORIES_FALLBACK: Record<string, any> = {
 // Break Time tool icons
 export const BREAK_TIME_ICONS: Record<string, any> = {
   'tic-tac-toe': LayoutGrid,
-  'game-2048': Brain,
-  'memory-match': LayoutGrid,
-  'typing-speed-test': Keyboard,
+  'game-2048': Award,
+  'memory-match': Brain,
+  'reaction-time': Zap,
+  'color-match': Palette,
+  'snake-game': Gamepad2,
+  'word-guess': Keyboard,
+  'sudoku': Table,
+  'minesweeper': Bomb,
 };

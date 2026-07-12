@@ -17,6 +17,7 @@ export default function ExtractImagesClient() {
   const [processing, setProcessing] = useState(false);
   const [images, setImages] = useState<ExtractedImage[]>([]);
   const [progress, setProgress] = useState("");
+  const [progressPercent, setProgressPercent] = useState(0);
   const [error, setError] = useState("");
   const { createUrl, revokeUrl } = useObjectUrlManager();
 
@@ -28,6 +29,7 @@ export default function ExtractImagesClient() {
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
+    setProgressPercent(0);
     
     // Revoke any previous image URLs to avoid memory leaks
     images.forEach(img => revokeUrl(img.url));
@@ -46,7 +48,12 @@ export default function ExtractImagesClient() {
         "extractImagesFromPdf",
         [bytes],
         [bytes],
-        (p: any) => setProgress(p.message || `Processing page...`)
+        (p: any) => {
+          setProgress(p.message || `Processing page...`);
+          if (typeof p.percent === "number") {
+            setProgressPercent(p.percent);
+          }
+        }
       );
 
       const extracted = results.map(item => {
@@ -63,11 +70,13 @@ export default function ExtractImagesClient() {
 
       setImages(extracted);
       setProgress("");
+      setProgressPercent(0);
       if (extracted.length === 0) setError("No extractable images found in this PDF.");
     } catch (e: any) {
       console.error("Image extraction error:", e);
       setError(e?.message || "Failed to extract images.");
       setProgress("");
+      setProgressPercent(0);
     }
     setProcessing(false);
   };
@@ -104,7 +113,20 @@ export default function ExtractImagesClient() {
         />
 
         {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm font-bold">{error}</div>}
-        {progress && <div className="p-4 bg-surface border border-border rounded-xl text-sm text-text-3 flex items-center gap-2 font-bold uppercase tracking-widest"><Loader2 className="w-4 h-4 animate-spin text-blue" />{progress}</div>}
+        {progress && (
+          <div className="p-4 bg-surface border border-border rounded-xl space-y-3">
+            <div className="text-sm text-text-3 flex items-center gap-2 font-bold uppercase tracking-widest">
+              <Loader2 className="w-4 h-4 animate-spin text-blue" />
+              {progress}
+            </div>
+            <div className="w-full bg-surface-2 rounded-full h-1.5 overflow-hidden">
+              <div 
+                className="bg-blue h-1.5 rounded-full transition-all duration-300" 
+                style={{ width: `${progressPercent}%` }} 
+              />
+            </div>
+          </div>
+        )}
 
         <button
           onClick={extract}

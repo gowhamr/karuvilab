@@ -6,12 +6,13 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { FileText, Download, Loader2, AlertCircle, FileCode } from "lucide-react";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
+import { useProgress } from "@/src/contexts/ProgressContext";
 
 export default function WordToPdfClient() {
   const { toast } = useToast();
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
-  const [processing, setProcessing] = useState(false);
+  const { state: progressState, startProcessing, setStage, finishProcessing } = useProgress();
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{ blob: Blob; name: string } | null>(null);
 
@@ -26,7 +27,8 @@ export default function WordToPdfClient() {
 
   const convert = async () => {
     if (!file) return;
-    setProcessing(true);
+    startProcessing("heavy");
+    setStage("Converting to PDF...");
     setError(null);
 
     try {
@@ -48,8 +50,9 @@ export default function WordToPdfClient() {
       console.error(err);
       setError(err.message || "Failed to convert document.");
       toast("Conversion failed", "error");
+      finishProcessing(false, new Error(err.message || "Failed to convert document."));
     } finally {
-      setProcessing(false);
+      finishProcessing(true);
     }
   };
 
@@ -82,10 +85,10 @@ export default function WordToPdfClient() {
 
       <button
         onClick={convert}
-        disabled={!file || processing}
+        disabled={!file || progressState.isProcessing}
         className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20 flex items-center justify-center gap-2"
        aria-label="Loader2">
-        {processing ? (
+        {progressState.isProcessing ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
             Converting...

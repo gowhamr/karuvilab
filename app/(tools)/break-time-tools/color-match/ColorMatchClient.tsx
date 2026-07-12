@@ -236,12 +236,12 @@ export default function ColorMatchClient() {
                 A target color block will be shown. You have 5 seconds to select the exact matching swatch from 4 similar choices.
               </p>
             </div>
-            <button
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               onClick={startGame}
-              className="rounded-btn px-6 py-3 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95"
+              className="rounded-btn px-6 py-3 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
             >
               Start Game
-            </button>
+            </m.button>
           </m.div>
         )}
 
@@ -282,10 +282,10 @@ export default function ColorMatchClient() {
             {/* Swatch Grid */}
             <div className="grid grid-cols-2 gap-4">
               {swatches.map((swatch, idx) => (
-                <button
+                <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                   key={swatch.id}
                   onClick={() => selectSwatch(swatch)}
-                  className="p-3 rounded-card border-2 border-divider bg-surface hover:border-primary/50 active:scale-[0.98] transition-all flex flex-col items-center gap-3 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="p-3 rounded-card border-2 border-divider bg-surface hover:border-primary/50  transition-all flex flex-col items-center gap-3 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   aria-label={`Color swatch option ${idx + 1}`}
                 >
                   <div
@@ -298,7 +298,7 @@ export default function ColorMatchClient() {
                     </kbd>
                     <span className="text-xs font-bold text-text-muted">Select</span>
                   </div>
-                </button>
+                </m.button>
               ))}
             </div>
           </m.div>
@@ -336,18 +336,18 @@ export default function ColorMatchClient() {
             </div>
 
             <div className="flex justify-center gap-3">
-              <button
+              <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 onClick={() => setGameState("idle")}
-                className="rounded-btn px-5 py-2.5 bg-surface border border-divider font-bold text-text-secondary hover:text-text-primary transition-all active:scale-95"
+                className="rounded-btn px-5 py-2.5 bg-surface border border-divider font-bold text-text-secondary hover:text-text-primary transition-all "
               >
                 Back Menu
-              </button>
-              <button
+              </m.button>
+              <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 onClick={startGame}
-                className="rounded-btn px-6 py-2.5 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95"
+                className="rounded-btn px-6 py-2.5 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
               >
                 Play Again
-              </button>
+              </m.button>
             </div>
           </m.div>
         )}

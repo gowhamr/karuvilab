@@ -9,9 +9,11 @@ import { FavoriteButton } from './FavoriteButton';
 import { Breadcrumbs } from './Breadcrumbs';
 import { ToolMoreMenu } from './ToolMoreMenu';
 import { ToolInfoSection } from './ToolInfoSection';
+import { ProgressOverlay, ProgressToast } from '@/components/ui/Progress';
 import { cn } from '@/src/lib/utils';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { FocusModeWrapper } from './FocusModeWrapper';
+import { ProgressProvider } from '@/src/contexts/ProgressContext';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
@@ -318,7 +320,11 @@ export function ClientToolShell({ title, description, category, children, toolId
             <section className="mb-12" aria-live="polite" aria-atomic="false">
               <ErrorBoundary>
                 <FocusModeWrapper toolId={finalToolId} toolName={title}>
-                  {children}
+                  <ProgressProvider>
+                    <ProgressOverlay />
+                    <ProgressToast />
+                    {children}
+                  </ProgressProvider>
                 </FocusModeWrapper>
               </ErrorBoundary>
             </section>

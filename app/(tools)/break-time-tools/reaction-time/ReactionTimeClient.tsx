@@ -132,7 +132,7 @@ export default function ReactionTimeClient() {
       </div>
 
       {/* Main interactive screen */}
-      <button
+      <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
         onClick={handleTrigger}
         className={`w-full aspect-[4/3] rounded-card border-2 transition-all flex flex-col items-center justify-center gap-4 text-center cursor-pointer select-none outline-none focus-visible:ring-4 focus-visible:ring-primary/40 relative overflow-hidden ${
           gameState === "idle" && "border-divider bg-surface hover:border-primary/40 hover:bg-surface-elevated/20"
@@ -229,7 +229,7 @@ export default function ReactionTimeClient() {
             </m.div>
           )}
         </AnimatePresence>
-      </button>
+      </m.button>
 
       {/* Control Buttons */}
       {history.length > 0 && (
@@ -237,12 +237,12 @@ export default function ReactionTimeClient() {
           <p className="text-xs text-text-muted">
             Test results are persisted locally.
           </p>
-          <button
+          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={resetHistory}
-            className="rounded-btn px-4 py-2 bg-surface border border-divider text-text-muted hover:text-text-primary hover:border-danger/30 hover:bg-danger/5 transition-all text-xs font-bold flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95"
+            className="rounded-btn px-4 py-2 bg-surface border border-divider text-text-muted hover:text-text-primary hover:border-danger/30 hover:bg-danger/5 transition-all text-xs font-bold flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
           >
             <RotateCcw className="w-3.5 h-3.5" /> Clear History
-          </button>
+          </m.button>
         </div>
       )}
     </div>

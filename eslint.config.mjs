@@ -35,42 +35,6 @@ const config = [
       "react-hooks/set-state-in-effect": "off",
       "@next/next/no-img-element": "off"
     }
-  },
-  {
-    files: [
-      "app/**/*.ts",
-      "app/**/*.tsx",
-      "src/workers/**/*.ts",
-      "src/workers/**/*.js",
-      "src/engine/workers/**/*.ts",
-      "src/engine/workers/**/*.js",
-      "src/__tests__/**/*.ts",
-      "src/__tests__/**/*.tsx",
-      "src/tool-engine/**/*.ts",
-      "src/tool-engine/**/*.tsx",
-      "src/utils.ts",
-      "src/store/**/*.ts",
-      "src/lib/**/*.ts",
-      "src/lib/**/*.tsx",
-      "src/registry/**/*.ts",
-      "src/security/**/*.ts",
-      "src/features/**/*.ts",
-      "src/features/**/*.tsx",
-      "src/hooks/**/*.ts",
-      "src/hooks/**/*.tsx",
-      "src/file-system/**/*.ts",
-      "src/file-system/**/*.tsx",
-      "src/globals.d.ts",
-      "src/format-utils.ts",
-      "src/engine/**/*.ts",
-      "src/engine/**/*.tsx",
-      "src/data/**/*.ts",
-      "components/**/*.ts",
-      "components/**/*.tsx"
-    ],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off"
-    }
   }
 ];
 

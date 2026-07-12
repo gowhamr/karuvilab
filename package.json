@@ -27,6 +27,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/wicg-file-system-access": "^2023.10.7",
+    "@typescript-eslint/eslint-plugin": "8.63.1-alpha.11",
+    "@typescript-eslint/parser": "8.63.1-alpha.11",
     "@vitest/ui": "^1.6.1",
     "esbuild": "^0.21.5",
     "eslint": "^9.39.4",
@@ -34,7 +36,8 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.2.4",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
+    "typescript-eslint": "8.63.1-alpha.11",
     "vitest": "^1.6.1"
   },
   "dependencies": {
@@ -88,5 +91,11 @@
     "workbox-window": "^7.4.1",
     "yaml": "2.9.0",
     "zustand": "^5.0.13"
+  },
+  "overrides": {
+    "@typescript-eslint/eslint-plugin": "8.63.1-alpha.11",
+    "@typescript-eslint/parser": "8.63.1-alpha.11",
+    "@typescript-eslint/typescript-estree": "8.63.1-alpha.11",
+    "@typescript-eslint/utils": "8.63.1-alpha.11"
   }
 }

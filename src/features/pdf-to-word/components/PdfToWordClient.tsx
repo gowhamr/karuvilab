@@ -8,13 +8,14 @@ import { FileText, Download, Loader2, AlertCircle } from "lucide-react";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { logger } from "@/src/lib/logger";
+import { useProgress } from "@/src/contexts/ProgressContext";
 
 import { Document, Packer, Paragraph, TextRun } from "docx";
 
 export default function PdfToWordClient() {
   const { toast } = useToast();
   const [file, setFile] = useState<File | null>(null);
-  const [processing, setProcessing] = useState(false);
+  const { state: progressState, startProcessing, setStage, finishProcessing } = useProgress();
   const [text, setText] = useState("");
   const [pageCount, setPageCount] = useState(0);
   const [error, setError] = useState("");
@@ -27,7 +28,8 @@ export default function PdfToWordClient() {
 
   const extract = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
-    setProcessing(true);
+    startProcessing("heavy");
+    setStage("Preparing to extract...");
     setError("");
     setText("");
     try {
@@ -37,7 +39,7 @@ export default function PdfToWordClient() {
         "extractTextFromPdf",
         [bytes],
         [bytes],
-        (p: any) => logger.info(p.message || "Extracting...")
+        (p: any) => setStage(p.message || "Extracting...")
       );
 
       setText(extractedText);
@@ -47,13 +49,15 @@ export default function PdfToWordClient() {
     } catch (e: any) {
       console.error("PDF extraction error:", e);
       setError(e?.message || "Failed to extract text.");
+      finishProcessing(false, new Error(e?.message || "Failed to extract text."));
+    } finally {
+      finishProcessing(true);
     }
-    setProcessing(false);
   };
 
   const downloadDocx = async () => {
     if (!text) return;
-    setProcessing(true);
+    startProcessing("short");
     try {
       const sections = text.split("\n\n--- Page Break ---\n\n").map(pageContent => ({
         properties: {},
@@ -78,8 +82,10 @@ export default function PdfToWordClient() {
     } catch (err) {
       logger.error("DOCX Generation error:", { error: err });
       toast("Failed to generate .docx", "error");
+      finishProcessing(false, err as Error);
+    } finally {
+      finishProcessing(true);
     }
-    setProcessing(false);
   };
 
   return (
@@ -122,10 +128,10 @@ export default function PdfToWordClient() {
 
           <button
             onClick={extract}
-            disabled={!file || processing}
+            disabled={!file || progressState.isProcessing}
             className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
           >
-            {processing ? "Extracting content..." : "Extract PDF Content"}
+            {progressState.isProcessing ? "Extracting content..." : "Extract PDF Content"}
           </button>
 
           {text && (

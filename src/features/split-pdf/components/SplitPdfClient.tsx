@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
+import { useProgress } from "@/src/contexts/ProgressContext";
 import { DropZone } from "@/components/ui/DropZone";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
@@ -39,8 +40,7 @@ export default function SplitPdfClient() {
   const [pageCount, setPageCount] = useState(0);
   const [ranges, setRanges] = useState("1-3, 4-6");
   const [splitAll, setSplitAll] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [progress, setProgress] = useState<TaskProgress | null>(null);
+  const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
   const [error, setError] = useState("");
   const [abortController, setAbortController] = useState<AbortController | null>(null);
 
@@ -62,9 +62,9 @@ export default function SplitPdfClient() {
     
     const controller = new AbortController();
     setAbortController(controller);
-    setProcessing(true);
-    setError("");
-    setProgress({ percent: 0, message: "Preparing to split..." });
+    startProcessing("heavy");
+    setStage("Preparing to split...");
+    setProgress(0);
     
     try {
       const bytes = await file.arrayBuffer();
@@ -72,7 +72,10 @@ export default function SplitPdfClient() {
         bytes,
         splitAll,
         ranges,
-        (p) => setProgress(p),
+        (p) => {
+          setStage(p.message || "Splitting...");
+          setProgress(p.percent);
+        },
         controller.signal
       );
       
@@ -90,12 +93,13 @@ export default function SplitPdfClient() {
     } catch (e: any) {
       if (e.message === "Task cancelled") {
         setError("Split cancelled.");
+        finishProcessing(false, new Error("Split cancelled."));
       } else {
         setError(e?.message || "Failed to split PDF.");
+        finishProcessing(false, new Error(e?.message || "Failed to split PDF."));
       }
     } finally {
-      setProcessing(false);
-      setProgress(null);
+      finishProcessing(true);
       setAbortController(null);
     }
   };
@@ -164,27 +168,13 @@ export default function SplitPdfClient() {
       <div className="flex gap-4">
         <button
           onClick={split}
-          disabled={!file || processing}
+          disabled={!file || progressState.isProcessing}
           className="flex-1 py-4 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20 flex flex-col items-center justify-center gap-1"
         >
-          {processing ? (
-            <>
-              <span>{progress?.message || "Splitting..."}</span>
-              {progress && (
-                <div className="w-48 h-1 bg-white/20 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-white transition-all duration-300" 
-                    style={{ width: `${progress.percent}%` }}
-                  />
-                </div>
-              )}
-            </>
-          ) : (
-            "Split PDF"
-          )}
+          {progressState.isProcessing ? "Processing..." : "Split PDF"}
         </button>
 
-        {processing && (
+        {progressState.isProcessing && (
           <button
             onClick={cancelSplit}
             className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"

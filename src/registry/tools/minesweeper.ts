@@ -1,0 +1,24 @@
+import { ToolEntry } from '../types';
+
+export const minesweeper: ToolEntry = {
+  id: 'minesweeper',
+  name: 'Minesweeper',
+  desc: 'Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.',
+  href: 'break-time-tools/minesweeper/',
+  category: 'break-time',
+  icon: null,
+  color: '#8B5CF6',
+  featured: false,
+  popular: false,
+  status: 'new',
+  lastAdded: '2026-07-11',
+  keywords: ['minesweeper', 'mines', 'logic game', 'classic game', 'brain break', 'offline'],
+  input: null,
+  output: null,
+  related: ['sudoku', 'game-2048', 'memory-match'],
+  subCategory: 'Puzzles',
+  requiresNetwork: false,
+  difficulty: 'intermediate',
+  priority: 0.8,
+  schemaType: 'WebApplication',
+};

@@ -221,7 +221,6 @@ export default function GifCreatorClient() {
                <MetricCard label="Duration" value={`${((frames.length * delay) / 1000).toFixed(1)}s`} icon={Play} />
             </div>
 
-            {/* Action Button */}
             <button
               onClick={handleCreate}
               disabled={status === "processing" || frames.length < 2}
@@ -239,6 +238,15 @@ export default function GifCreatorClient() {
                 </>
               )}
             </button>
+
+            {status === "processing" && (
+              <div className="w-full bg-surface-2 rounded-full h-1.5 overflow-hidden">
+                <div 
+                  className="bg-blue h-1.5 rounded-full transition-all duration-300" 
+                  style={{ width: `${progress}%` }} 
+                />
+              </div>
+            )}
 
             <AnimatePresence>
               {error && (

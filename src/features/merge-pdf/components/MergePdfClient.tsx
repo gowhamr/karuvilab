@@ -4,6 +4,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
+import { useProgress } from "@/src/contexts/ProgressContext";
 
 import { useObjectUrlManager } from "@/src/lib/hooks";
 
@@ -21,8 +22,7 @@ export default function MergePdfClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [files, setFiles] = useState<PdfFile[]>([]);
 
-  const [processing, setProcessing] = useState(false);
-  const [progress, setProgress] = useState<TaskProgress | null>(null);
+  const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
   const [error, setError] = useState("");
   const [abortController, setAbortController] = useState<AbortController | null>(null);
 
@@ -52,16 +52,13 @@ export default function MergePdfClient() {
 
     const controller = new AbortController();
     setAbortController(controller);
-    setProcessing(true);
-    setError("");
-    setProgress({ 
-      percent: 0, 
-      message: isLarge ? "Large files detected. Merging sequentially to save memory..." : "Preparing files..." 
-    });
+    startProcessing("heavy");
+    setStage(isLarge ? "Large files detected. Merging sequentially to save memory..." : "Preparing files...");
+    setProgress(0);
     
     // UI Warning for mobile
     if (isLarge && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      setProgress(p => ({ ...p!, message: "Processing >30MB on mobile. Please keep the app open..." }));
+      setStage("Processing >30MB on mobile. Please keep the app open...");
     }
     
     try {
@@ -69,7 +66,10 @@ export default function MergePdfClient() {
       // They are cloned (not read into memory yet) when passed.
       const bytes = await workerManager.mergePdfs(
         files.map(f => f.file),
-        (p) => setProgress(p),
+        (p) => {
+          setStage(p.message || "Merging...");
+          setProgress(p.percent);
+        },
         controller.signal
       );
 
@@ -91,12 +91,13 @@ export default function MergePdfClient() {
     } catch (e: any) {
       if (e.message === "Task cancelled") {
         setError("Merge cancelled.");
+        finishProcessing(false, new Error("Merge cancelled."));
       } else {
         setError(e?.message || "Failed to merge PDFs.");
+        finishProcessing(false, new Error(e?.message || "Failed to merge PDFs."));
       }
     } finally {
-      setProcessing(false);
-      setProgress(null);
+      finishProcessing(true);
       setAbortController(null);
     }
   };
@@ -142,27 +143,13 @@ export default function MergePdfClient() {
       <div className="flex gap-4">
         <button
           onClick={merge}
-          disabled={files.length < 2 || processing}
+          disabled={files.length < 2 || progressState.isProcessing}
           className="flex-1 py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 flex flex-col items-center justify-center gap-1"
         >
-          {processing ? (
-            <>
-              <span>{progress?.message || "Merging..."}</span>
-              {progress && (
-                <div className="w-48 h-1 bg-white/20 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-white transition-all duration-300" 
-                    style={{ width: `${progress.percent}%` }}
-                  />
-                </div>
-              )}
-            </>
-          ) : (
-            `Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`
-          )}
+          {progressState.isProcessing ? "Processing..." : `Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`}
         </button>
 
-        {processing && (
+        {progressState.isProcessing && (
           <button
             onClick={cancelMerge}
             className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"

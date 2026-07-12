@@ -77,6 +77,15 @@ const nextConfig = {
       ...config.experiments,
       asyncWebAssembly: true,
     };
+    
+    // Explicitly add aliases since Next.js might fail to parse tsconfig paths with TS7
+    const path = import("node:path");
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': process.cwd()
+    };
+    
     return config;
   },
 };

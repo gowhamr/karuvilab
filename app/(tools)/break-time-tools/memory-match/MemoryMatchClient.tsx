@@ -2,15 +2,31 @@
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { RotateCcw, Trophy, Timer } from "lucide-react";
+import { RotateCcw, Trophy, Timer, Eye } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
 
-// ─── Card data ────────────────────────────────────────────────────────────────
+// ─── Constants & Types ────────────────────────────────────────────────────────
 
-const CARD_EMOJIS = ["🦊", "🐼", "🦁", "🐸", "🦋", "🐬", "🦜", "🦄"];
+const CARD_POOL = ["🦊", "🐼", "🦁", "🐸", "🦋", "🐬", "🦜", "🦄", "🐙", "🐯", "🐨", "🐒"];
 
-const BEST_SCORE_KEY = "karuvi.breaktime.memory.best"; // best = fewest moves
+type Difficulty = "easy" | "medium" | "hard";
+
+interface DifficultyConfig {
+  rows: number;
+  cols: number;
+  pairs: number;
+}
+
+const DIFFICULTIES: Record<Difficulty, DifficultyConfig> = {
+  easy: { rows: 3, cols: 4, pairs: 6 },
+  medium: { rows: 4, cols: 4, pairs: 8 },
+  hard: { rows: 5, cols: 4, pairs: 10 },
+};
+
+function getBestScoreKey(diff: Difficulty) {
+  return `karuvi.breaktime.memory.best.${diff}`;
+}
 
 interface Card {
   id: number;       // unique per slot
@@ -29,8 +45,9 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function buildDeck(): Card[] {
-  const pairs = CARD_EMOJIS.flatMap((emoji, pairId) => [
+function buildDeck(config: DifficultyConfig): Card[] {
+  const selectedEmojis = shuffle(CARD_POOL).slice(0, config.pairs);
+  const pairs = selectedEmojis.flatMap((emoji, pairId) => [
     { id: pairId * 2,     emoji, pairId, flipped: false, matched: false },
     { id: pairId * 2 + 1, emoji, pairId, flipped: false, matched: false },
   ]);
@@ -38,14 +55,22 @@ function buildDeck(): Card[] {
 }
 
 const EMPTY_BEST = 9999;
+const SPRING_CONFIG = { type: "spring" as const, stiffness: 300, damping: 30 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MemoryMatchClient() {
-  const [cards, setCards] = useState<Card[]>(buildDeck);
+  const [difficulty, setDifficulty] = useState<Difficulty>("medium");
+  const [cards, setCards] = useState<Card[]>(() => buildDeck(DIFFICULTIES.medium));
   const [flippedIds, setFlippedIds] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
-  const [best, setBest] = useState(EMPTY_BEST);
+  
+  // Best scores state per difficulty
+  const [bestScores, setBestScores] = useState<Record<Difficulty, number>>({
+    easy: EMPTY_BEST,
+    medium: EMPTY_BEST,
+    hard: EMPTY_BEST,
+  });
   const [bestLoaded, setBestLoaded] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [gameWon, setGameWon] = useState(false);
@@ -55,34 +80,42 @@ export default function MemoryMatchClient() {
   const flipTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startedRef = useRef(false);
 
-  // Load best score with legacy migration support
+  // Load best scores on mount
   useEffect(() => {
-    idbStorage.getItem(BEST_SCORE_KEY).then((raw) => {
-      if (raw) {
-        setBest(parseInt(raw, 10) || EMPTY_BEST);
-        setBestLoaded(true);
-      } else {
-        // Check legacy key
-        idbStorage.getItem("karuvi.fun.memory.best").then((legacy) => {
-          if (legacy) {
-            const val = parseInt(legacy, 10) || EMPTY_BEST;
-            setBest(val);
-            idbStorage.setItem(BEST_SCORE_KEY, legacy);
-            idbStorage.removeItem("karuvi.fun.memory.best");
+    const loadAllBest = async () => {
+      try {
+        const loadedScores = { easy: EMPTY_BEST, medium: EMPTY_BEST, hard: EMPTY_BEST } as Record<Difficulty, number>;
+        
+        // Try reading v2 keys
+        for (const diff of ["easy", "medium", "hard"] as const) {
+          const val = await idbStorage.getItem(getBestScoreKey(diff));
+          if (val) {
+            loadedScores[diff] = parseInt(val, 10) || EMPTY_BEST;
           }
-          setBestLoaded(true);
-        });
-      }
-    });
-  }, []);
+        }
 
-  // Persist best
-  useEffect(() => {
-    if (!bestLoaded || best === EMPTY_BEST) return;
-    idbStorage.setItem(BEST_SCORE_KEY, String(best)).catch((e) =>
-      logger.error("[MemoryMatch] Failed to persist best score", { error: e })
-    );
-  }, [best, bestLoaded]);
+        // Migrate legacy best if present (mapped to medium difficulty)
+        const legacyVal = await idbStorage.getItem("karuvi.breaktime.memory.best");
+        const oldestVal = await idbStorage.getItem("karuvi.fun.memory.best");
+        const migrationSource = legacyVal || oldestVal;
+
+        if (migrationSource && loadedScores.medium === EMPTY_BEST) {
+          const val = parseInt(migrationSource, 10) || EMPTY_BEST;
+          loadedScores.medium = val;
+          await idbStorage.setItem(getBestScoreKey("medium"), String(val));
+          if (legacyVal) await idbStorage.removeItem("karuvi.breaktime.memory.best");
+          if (oldestVal) await idbStorage.removeItem("karuvi.fun.memory.best");
+        }
+
+        setBestScores(loadedScores);
+        setBestLoaded(true);
+      } catch (e) {
+        logger.error("[MemoryMatch] Failed to load scores", { error: e });
+        setBestLoaded(true);
+      }
+    };
+    loadAllBest();
+  }, []);
 
   // Timer — starts on first flip, stops on win
   useEffect(() => {
@@ -102,7 +135,7 @@ export default function MemoryMatchClient() {
     timerRef.current = setInterval(() => setElapsed(p => p + 1), 1000);
   }, []);
 
-  const resetGame = useCallback(() => {
+  const resetGame = useCallback((diff: Difficulty = difficulty) => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = null;
     if (flipTimeoutRef.current) {
@@ -110,42 +143,42 @@ export default function MemoryMatchClient() {
       flipTimeoutRef.current = null;
     }
     startedRef.current = false;
-    setCards(buildDeck());
+    setCards(buildDeck(DIFFICULTIES[diff]));
     setFlippedIds([]);
     setMoves(0);
     setElapsed(0);
     setGameWon(false);
     lockRef.current = false;
     setIsLocked(false);
-  }, []);
+  }, [difficulty]);
+
+  const handleDifficultyChange = useCallback((diff: Difficulty) => {
+    setDifficulty(diff);
+    resetGame(diff);
+  }, [resetGame]);
 
   const handleCardClick = useCallback((cardId: number) => {
     if (lockRef.current || gameWon) return;
 
-    setCards(prev => {
-      const card = prev.find(c => c.id === cardId);
-      if (!card || card.flipped || card.matched) return prev;
-      return prev;
-    });
+    const clickedCard = cards.find(c => c.id === cardId);
+    if (!clickedCard || clickedCard.flipped || clickedCard.matched) return;
+
+    startTimer();
 
     setFlippedIds(prev => {
-      const card = cards.find(c => c.id === cardId);
-      if (!card || card.flipped || card.matched || lockRef.current) return prev;
-
-      startTimer();
       const next = [...prev, cardId];
 
       if (next.length === 2) {
         lockRef.current = true;
         setIsLocked(true);
         const [a, b] = next.map(id => cards.find(c => c.id === id)!);
-        const matched = a?.pairId === b?.pairId;
+        const isMatched = a?.pairId === b?.pairId;
 
         flipTimeoutRef.current = setTimeout(() => {
           setCards(prevCards => {
             const updated = prevCards.map(c => {
               if (next.includes(c.id)) {
-                return { ...c, flipped: matched ? true : false, matched: matched ? true : c.matched };
+                return { ...c, flipped: isMatched, matched: isMatched };
               }
               return c;
             });
@@ -153,7 +186,19 @@ export default function MemoryMatchClient() {
             if (allMatched) {
               const finalMoves = moves + 1;
               setGameWon(true);
-              setBest(b => Math.min(b, finalMoves));
+              setBestScores(scores => {
+                const currentBest = scores[difficulty];
+                if (finalMoves < currentBest) {
+                  const updatedScores = { ...scores, [difficulty]: finalMoves };
+                  if (bestLoaded) {
+                    idbStorage.setItem(getBestScoreKey(difficulty), String(finalMoves)).catch(e =>
+                      logger.error("[MemoryMatch] Failed to save best score", { error: e })
+                    );
+                  }
+                  return updatedScores;
+                }
+                return scores;
+              });
             }
             return updated;
           });
@@ -162,7 +207,7 @@ export default function MemoryMatchClient() {
           lockRef.current = false;
           setIsLocked(false);
           flipTimeoutRef.current = null;
-        }, 700);
+        }, 600);
 
         // Flip both cards face-up temporarily
         setCards(prev =>
@@ -177,17 +222,37 @@ export default function MemoryMatchClient() {
       );
       return next;
     });
-  }, [cards, gameWon, moves, startTimer]);
+  }, [cards, gameWon, moves, startTimer, difficulty, bestLoaded]);
 
   const matchedCount = cards.filter(c => c.matched).length / 2;
-  const totalPairs = CARD_EMOJIS.length;
+  const config = DIFFICULTIES[difficulty];
+  const totalPairs = config.pairs;
   const progressPct = (matchedCount / totalPairs) * 100;
 
   const formatTime = (s: number) =>
     `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
+  const currentBest = bestScores[difficulty];
+
   return (
     <div className="max-w-lg mx-auto space-y-6">
+      {/* ── Difficulty Switcher ── */}
+      <div className="flex gap-2 justify-center">
+        {(["easy", "medium", "hard"] as const).map((diff) => (
+          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            key={diff}
+            onClick={() => handleDifficultyChange(diff)}
+            className={`px-4 py-2 rounded-xl font-bold text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+              difficulty === diff
+                ? "bg-primary text-white"
+                : "bg-surface border border-border text-text-2 hover:border-primary/50"
+            }`}
+          >
+            {diff.toUpperCase()} ({DIFFICULTIES[diff].rows}x{DIFFICULTIES[diff].cols})
+          </m.button>
+        ))}
+      </div>
+
       {/* ── Stats ── */}
       <div className="grid grid-cols-3 gap-3">
         {[
@@ -208,18 +273,21 @@ export default function MemoryMatchClient() {
         <m.div
           className="h-full bg-primary rounded-full"
           animate={{ width: `${progressPct}%` }}
-          transition={{ type: "spring", stiffness: 200, damping: 30 }}
+          transition={SPRING_CONFIG}
         />
       </div>
 
       {/* ── Card Grid ── */}
       <div
-        className="grid grid-cols-4 gap-3"
+        className={`grid gap-3`}
+        style={{
+          gridTemplateColumns: `repeat(${config.cols}, minmax(0, 1fr))`
+        }}
         role="list"
         aria-label="Memory match cards"
       >
         {cards.map(card => (
-          <button
+          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             key={card.id}
             onClick={() => handleCardClick(card.id)}
             disabled={card.matched || card.flipped || isLocked || gameWon}
@@ -227,44 +295,45 @@ export default function MemoryMatchClient() {
             aria-pressed={card.flipped || card.matched}
             className={`
               aspect-square rounded-2xl border-2 flex items-center justify-center text-3xl transition-all
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 
               ${card.matched ? "border-primary bg-primary/10 cursor-default" : "border-border bg-surface cursor-pointer hover:border-primary/50"}
               ${!card.flipped && !card.matched ? "hover:bg-primary/5" : ""}
             `}
           >
             <m.div
               animate={{ rotateY: card.flipped || card.matched ? 0 : 180 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               style={{ backfaceVisibility: "hidden" }}
+              className="flex items-center justify-center"
             >
               {card.flipped || card.matched ? (
                 <m.span
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  transition={SPRING_CONFIG}
                 >
                   {card.emoji}
                 </m.span>
               ) : (
-                <span className="text-text-4 text-2xl">🎴</span>
+                <Eye className="w-6 h-6 text-text-4" />
               )}
             </m.div>
-          </button>
+          </m.button>
         ))}
       </div>
 
       {/* ── Controls ── */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-text-4">
-          Best: {best === EMPTY_BEST ? "–" : `${best} moves`}
+        <p className="text-sm text-text-4 font-bold">
+          Best ({difficulty}): {currentBest === EMPTY_BEST ? "–" : `${currentBest} moves`}
         </p>
-        <button
-          onClick={resetGame}
-          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+          onClick={() => resetGame()}
+          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
           aria-label="Start a new game"
         >
           <RotateCcw className="w-4 h-4" aria-hidden="true" /> New Game
-        </button>
+        </m.button>
       </div>
 
       {/* ── Win Overlay ── */}
@@ -282,14 +351,14 @@ export default function MemoryMatchClient() {
             <h2 className="text-xl font-black text-text">You matched all pairs!</h2>
             <p className="text-text-3">
               {moves} moves · {formatTime(elapsed)}
-              {best === moves ? " · 🏆 New best!" : ""}
+              {currentBest === moves ? " · 🏆 New best!" : ""}
             </p>
-            <button
-              onClick={resetGame}
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onClick={() => resetGame()}
               className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               Play Again
-            </button>
+            </m.button>
           </m.div>
         )}
       </AnimatePresence>
