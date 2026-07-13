@@ -3,7 +3,7 @@
 import { useCalendarStore } from "../store";
 import { format, isSameDay, parseISO } from "date-fns";
 import { X, Plus, MapPin, AlignLeft, Clock } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { COLOR_MAP } from "../constants";
 import { getEventsForDay, getFestivalsForDay, getObservancesForDay } from "../utils";
 import { cn } from "@/src/lib/utils";
@@ -54,7 +54,7 @@ export function DayDetailsSheet({
       {isOpen && (
         <>
           {/* Overlay */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -63,7 +63,7 @@ export function DayDetailsSheet({
           />
           
           {/* Sheet */}
-          <motion.div
+          <m.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
@@ -137,7 +137,7 @@ export function DayDetailsSheet({
                 ) : (
                   <div className="grid gap-4">
                     {dayEvents.map(event => (
-                      <motion.div 
+                      <m.div 
                         key={event.id}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => {
@@ -161,7 +161,7 @@ export function DayDetailsSheet({
                             )}
                           </div>
                         </div>
-                      </motion.div>
+                      </m.div>
                     ))}
                   </div>
                 )}
@@ -174,7 +174,7 @@ export function DayDetailsSheet({
             >
               Dismiss
             </button>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

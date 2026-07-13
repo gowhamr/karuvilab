@@ -5,7 +5,7 @@ import { format, parseISO, startOfDay, endOfDay, differenceInMinutes, addHours }
 import { getEventsInInterval } from "../utils";
 import { COLOR_MAP } from "../constants";
 import { cn } from "@/src/lib/utils";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useEffect, useState } from "react";
 import { computeEventPositions } from "../utils/layout-solver";
 
@@ -94,7 +94,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                       const leftOffset = column * widthPercentage;
 
                       return (
-                        <motion.div
+                        <m.div
                           key={event.id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -126,7 +126,7 @@ export function TimeGridView({ days }: { days: Date[] }) {
                               <span className="text-xs">📍</span> {event.location}
                             </div>
                           )}
-                        </motion.div>
+                        </m.div>
                       );
                     })}
                   </div>

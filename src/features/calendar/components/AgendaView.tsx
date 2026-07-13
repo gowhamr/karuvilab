@@ -4,7 +4,7 @@ import { useCalendarStore } from "../store";
 import { format, parseISO, isSameDay, isToday, isTomorrow } from "date-fns";
 import { COLOR_MAP } from "../constants";
 import { cn } from "@/src/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { getEventsForDay, getFestivalsForDay, getObservancesForDay } from "../utils";
 import { addDays, startOfDay, eachDayOfInterval } from "date-fns";
 import { CalendarEvent } from "../types";
@@ -100,7 +100,7 @@ function AgendaDay({
         {/* Personal Events */}
         <AnimatePresence mode="popLayout">
           {dayEvents.map(event => (
-            <motion.div
+            <m.div
               key={event.id}
               layout
               initial={{ opacity: 0, scale: 0.95 }}
@@ -143,7 +143,7 @@ function AgendaDay({
               >
                 <span className="text-base md:text-lg font-black" aria-hidden="true">✎</span>
               </button>
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

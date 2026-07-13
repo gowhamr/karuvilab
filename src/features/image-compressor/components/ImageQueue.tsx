@@ -4,7 +4,7 @@ import React from 'react';
 import { useImageCompressStore } from '../store';
 import { formatSize, getReduction } from '../utils';
 import { X, CheckCircle2, AlertCircle, Download, RefreshCw, Image as ImageIcon } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 
 export const ImageQueue: React.FC = () => {
   const items = useImageCompressStore(state => state.items);
@@ -24,7 +24,7 @@ export const ImageQueue: React.FC = () => {
       <div className="grid gap-3">
         <AnimatePresence mode="popLayout">
           {items.map((item) => (
-            <motion.div
+            <m.div
               key={item.id}
               layout
               initial={{ opacity: 0, y: 10 }}
@@ -126,7 +126,7 @@ export const ImageQueue: React.FC = () => {
                   </button>
                 )}
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

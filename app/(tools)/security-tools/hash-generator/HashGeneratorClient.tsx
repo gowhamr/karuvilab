@@ -24,7 +24,7 @@ import {
   Lock,
   Zap
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 
 const toolId = "hash-generator";
@@ -175,7 +175,7 @@ export default function HashGeneratorClient() {
         <div className="lg:col-span-7 space-y-6">
           <AnimatePresence mode="wait">
             {mode === "text" ? (
-              <motion.div
+              <m.div
                 key="text-input"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -202,9 +202,9 @@ export default function HashGeneratorClient() {
                     </button>
                   )}
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="file-input"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -238,7 +238,7 @@ export default function HashGeneratorClient() {
                     </button>
                   </div>
                 )}
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
@@ -314,7 +314,7 @@ export default function HashGeneratorClient() {
               </div>
 
               {useHmac && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   className="space-y-3"
@@ -332,7 +332,7 @@ export default function HashGeneratorClient() {
                   <p className="text-tiny text-text-4 leading-relaxed italic">
                     HMAC (Hash-based Message Authentication Code) uses a secret key for verifiable authentication.
                   </p>
-                </motion.div>
+                </m.div>
               )}
             </div>
 
@@ -353,7 +353,7 @@ export default function HashGeneratorClient() {
       {/* Results Area */}
       <AnimatePresence>
         {(Object.keys(results).length > 0 || isProcessing) && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
@@ -420,7 +420,7 @@ export default function HashGeneratorClient() {
                 );
               })}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

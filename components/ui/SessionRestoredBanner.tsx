@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 interface SessionRestoredBannerProps {
@@ -23,7 +23,7 @@ export function SessionRestoredBanner({ isVisible, onClear, onDismiss }: Session
     <AnimatePresence>
       {/* NOTE: z-toast used to show above other content */}
       {isVisible && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -38,7 +38,7 @@ export function SessionRestoredBanner({ isVisible, onClear, onDismiss }: Session
           >
             <X className="w-4 h-4" />
           </button>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

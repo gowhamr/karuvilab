@@ -4,7 +4,7 @@ import { useWorkflowStore } from "@/src/store/useWorkflowStore";
 import { ToolEntry, getToolColor } from "@/src/tool-registry";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export function WorkflowSuggestions() {
   const suggestions = useWorkflowStore(state => state.suggestions);
@@ -20,7 +20,7 @@ export function WorkflowSuggestions() {
       
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {suggestions.map((tool, idx) => (
-          <motion.div
+          <m.div
             key={tool.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ export function WorkflowSuggestions() {
                 </div>
               </div>
             </Link>
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </div>

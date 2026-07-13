@@ -2,7 +2,7 @@
 
 import { WorldEvent } from "../world-events-db";
 import { X, Globe, ExternalLink, Calendar } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { format } from "date-fns";
 import { useState } from "react";
 import { cn } from "@/src/lib/utils";
@@ -19,7 +19,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
   return (
     <>
       {/* Backdrop */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -28,7 +28,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
       />
 
       {/* Slide-in Panel */}
-      <motion.div
+      <m.div
         initial={{ x: "100%" }}
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
@@ -182,7 +182,7 @@ export function WorldEventPanel({ event, date, onClose }: WorldEventPanelProps) 
             </div>
           )}
         </div>
-      </motion.div>
+      </m.div>
     </>
   );
 }

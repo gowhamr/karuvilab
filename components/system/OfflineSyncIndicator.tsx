@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, Shield } from 'lucide-react';
 import { useOnlineStatus } from '@/src/lib/hooks';
 import { ALL_TOOLS, findToolByPath } from '@/src/tool-registry';

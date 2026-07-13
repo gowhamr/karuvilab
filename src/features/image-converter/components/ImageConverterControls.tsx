@@ -4,7 +4,7 @@ import { IMAGE_FORMATS, PRESETS, ImageFormat, ConversionPreset } from "../types"
 import { SliderField } from "@/components/ui/SliderField";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
 import { Settings2, Zap, Scaling, Crown } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface ImageConverterControlsProps {
   targetFmt: ImageFormat;
@@ -58,7 +58,7 @@ export function ImageConverterControls({
             >
               {f.label}
               {targetFmt === f.value && (
-                <motion.div
+                <m.div
                   layoutId="active-fmt"
                   className="absolute inset-0 rounded-2xl border-2 border-white/20"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}

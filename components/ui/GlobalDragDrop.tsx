@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Upload, File as FileIcon, X, ArrowRight, Clock, Info } from "lucide-react";
 import { ALL_TOOLS, ToolEntry } from "@/src/tool-registry";
 import { useWorkflowStore, WorkflowItem } from "@/src/store/useWorkflowStore";
@@ -222,13 +222,13 @@ export function GlobalDragDrop() {
       {/* ── Drag Overlay ── */}
       <AnimatePresence>
         {isDragging && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-max bg-surface/80 backdrop-blur-md flex items-center justify-center p-8 pointer-events-none"
           >
-            <motion.div
+            <m.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -244,8 +244,8 @@ export function GlobalDragDrop() {
                   Support PDFs, Images, JSON, CSV, audio, and video formats.
                 </p>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -253,7 +253,7 @@ export function GlobalDragDrop() {
       <AnimatePresence>
         {showModal && selectedFiles.length > 0 && (
           <div className="fixed inset-0 z-modal bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -383,7 +383,7 @@ export function GlobalDragDrop() {
                   Cancel
                 </button>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         )}
       </AnimatePresence>

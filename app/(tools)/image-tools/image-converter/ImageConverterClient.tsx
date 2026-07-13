@@ -11,7 +11,7 @@ import { DropZone } from "@/components/ui/DropZone";
 import { ImageConverterControls } from "@/src/features/image-converter/components/ImageConverterControls";
 import { ImageFormat, ConversionPreset, IMAGE_FORMATS, PRESETS } from "@/src/features/image-converter/types";
 import { createBatchZip } from "@/src/features/image-converter/utils/zip-utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { FileDown, ImageIcon, Sparkles, AlertCircle, Loader2 } from "lucide-react";
 
 const toolId = "image-converter";
@@ -202,7 +202,7 @@ export default function ImageConverterClient() {
       {/* Zone 2: Queue & Results */}
       <AnimatePresence mode="wait">
         {hasItems ? (
-          <motion.section
+          <m.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
@@ -223,9 +223,9 @@ export default function ImageConverterClient() {
               onDownloadAll={allCompleted ? handleDownloadAll : undefined}
               renderThumbnail={renderThumbnail}
             />
-          </motion.section>
+          </m.section>
         ) : (
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             className="py-32 flex flex-col items-center justify-center text-center space-y-6 border-2 border-dashed border-border rounded-4xl"
@@ -237,14 +237,14 @@ export default function ImageConverterClient() {
               <p className="font-black text-text-3 uppercase tracking-widest-2xl text-sm">Waiting for your files</p>
               <p className="text-xs text-text-4 font-medium">Drop images here or click 'Add images' above</p>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* Global Zipping Overlay */}
       <AnimatePresence>
         {isZipping && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -257,7 +257,7 @@ export default function ImageConverterClient() {
                 <p className="text-sm text-text-4 font-medium">Compressing your converted images into a single ZIP file...</p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

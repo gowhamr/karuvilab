@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Workbox } from 'workbox-window';
 import { X, Download, Share } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { usePWAStore } from '@/src/store/usePWAStore';
 import { useSearchStore } from '@/src/store/useSearchStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -152,7 +152,7 @@ export function PWARegistration() {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         ref={bannerRef}
         tabIndex={-1}
         role="dialog"
@@ -220,7 +220,7 @@ export function PWARegistration() {
             </button>
           </div>
         )}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }

@@ -6,7 +6,7 @@ import { DropZone } from '@/components/ui/DropZone';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { useObjectUrlManager } from '@/src/lib/hooks';
 import { Image as ImageIcon, Loader, Palette } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 export default function ColorPaletteExtractorClient() {
   const [palette, setPalette] = useState<string[]>([]);
@@ -70,9 +70,9 @@ export default function ColorPaletteExtractorClient() {
 
       {imageUrl && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <img src={imageUrl} alt="Preview" className="rounded-2xl shadow-lg w-full h-auto object-contain" />
-          </motion.div>
+          </m.div>
           
           <div className="space-y-4">
              <div className="flex items-center gap-2">
@@ -80,7 +80,7 @@ export default function ColorPaletteExtractorClient() {
                 <h2 className="text-lg font-bold">Extracted Palette</h2>
              </div>
             {palette.length > 0 && (
-              <motion.div className="flex flex-wrap gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <m.div className="flex flex-wrap gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {palette.map((color) => (
                   <div key={color} className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-border">
                     <div
@@ -91,7 +91,7 @@ export default function ColorPaletteExtractorClient() {
                     <CopyButton text={color} />
                   </div>
                 ))}
-              </motion.div>
+              </m.div>
             )}
           </div>
         </div>

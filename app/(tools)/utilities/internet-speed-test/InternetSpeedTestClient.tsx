@@ -9,7 +9,7 @@ import {
   MapPin, Globe, Server, History, Share2, CheckCircle2, Video, 
   Gamepad2, MonitorPlay, Wifi, SignalHigh, Timer, Info, X
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 import { useToast } from "@/components/ui/Toast";
 import { useSpeedTest, TestResult } from "./useSpeedTest";
@@ -21,7 +21,7 @@ const PulseRing = ({ active, color = "rgba(79, 70, 229, 0.4)" }: { active: boole
   <AnimatePresence>
     {active && (
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <motion.div
+        <m.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: [1, 1.4, 1.6], opacity: [0.6, 0.3, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
@@ -205,7 +205,7 @@ function IntelligenceCard({ icon: Icon, title, requirement, current, isLatency, 
       <div className="space-y-1 relative z-content"><h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3><p className="text-xs text-text-4 leading-relaxed font-medium">{desc}</p></div>
       <div className="pt-2 flex items-center gap-3 relative z-content">
          <div className="h-1.5 flex-1 bg-bg rounded-full overflow-hidden">
-            <motion.div className={cn("h-full", status === 'yes' ? "bg-success" : "bg-text-4/30")} initial={{ width: 0 }} animate={{ width: status === 'yes' ? '100%' : status === 'no' ? '40%' : '0%' }} transition={{ duration: 1, ease: "easeOut" }} />
+            <m.div className={cn("h-full", status === 'yes' ? "bg-success" : "bg-text-4/30")} initial={{ width: 0 }} animate={{ width: status === 'yes' ? '100%' : status === 'no' ? '40%' : '0%' }} transition={{ duration: 1, ease: "easeOut" }} />
          </div>
          <span className="text-micro font-black text-text-3 tabular-nums">{isLatency ? `${requirement}ms` : `${requirement}Mbps`}</span>
       </div>

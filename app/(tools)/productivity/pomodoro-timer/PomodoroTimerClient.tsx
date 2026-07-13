@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePomodoroStore } from '@/src/features/pomodoro-timer/store';
 import { useSessionStore } from '@/src/store/useSessionStore';
 import { SessionRestoredBanner } from '@/components/ui/SessionRestoredBanner';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Settings, Bell, Sparkles, Trophy, Coffee, Timer } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { sendNotification } from '@/src/lib/notifications';
@@ -157,12 +157,12 @@ export default function PomodoroTimerClient() {
     return (
       <div className={cn("h-full w-full flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-1000", mode === 'focus' ? "bg-black text-white" : "bg-blue-950 text-blue-50")}>
         <div className="flex flex-col items-center justify-center w-full max-w-7xl px-8 flex-1">
-          <motion.p 
+          <m.p 
             key={timeLeft}
             className="text-[14rem] md:text-[22rem] font-black font-mono tabular-nums tracking-tighter"
           >
             {formatTime(timeLeft)}
-          </motion.p>
+          </m.p>
           <div className="flex items-center gap-6 mt-8 scale-150">
             <button
               onClick={resetTimer}
@@ -246,7 +246,7 @@ export default function PomodoroTimerClient() {
             )}
           >
             {mode === m && (
-              <motion.div
+              <m.div
                 layoutId="pomo-mode"
                 className="absolute inset-0 bg-blue rounded-2xl z-behind shadow-md shadow-blue/10"
                 transition={TRANSITION}
@@ -265,7 +265,7 @@ export default function PomodoroTimerClient() {
         {/* Glow Effect */}
         <AnimatePresence>
           {isActive && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1.1 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -286,7 +286,7 @@ export default function PomodoroTimerClient() {
               fill="transparent"
               className="text-white/5"
             />
-            <motion.circle
+            <m.circle
               cx="50"
               cy="50"
               r="48"
@@ -302,14 +302,14 @@ export default function PomodoroTimerClient() {
             />
           </svg>
           <div className="text-center z-content">
-            <motion.p 
+            <m.p 
               key={timeLeft}
               initial={{ scale: 0.95, opacity: 0.8 }}
               animate={{ scale: 1, opacity: 1 }}
               className="text-7xl font-black font-mono tabular-nums tracking-tighter text-text"
             >
               {formatTime(timeLeft)}
-            </motion.p>
+            </m.p>
             <p className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-text-4 mt-2">
               {isActive ? 'Keep Going' : 'Ready?'}
             </p>
@@ -319,7 +319,7 @@ export default function PomodoroTimerClient() {
 
       {/* Controls */}
       <div className="flex items-center gap-8">
-        <motion.button 
+        <m.button 
           whileHover={{ scale: 1.1, rotate: -30 }}
           whileTap={{ scale: 0.9 }}
           onClick={resetTimer} 
@@ -327,18 +327,18 @@ export default function PomodoroTimerClient() {
           className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
         >
           <RotateCcw className="w-6 h-6" />
-        </motion.button>
+        </m.button>
         
-        <motion.button 
+        <m.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={toggleTimer} 
           className="w-28 h-28 rounded-5xl bg-blue text-white flex items-center justify-center shadow-2xl shadow-blue/40 hover:bg-blue/90 transition-all border-4 border-white/10"
         >
           {isActive ? <Pause className="w-12 h-12" /> : <Play className="w-12 h-12 ml-1" />}
-        </motion.button>
+        </m.button>
 
-        <motion.button 
+        <m.button 
           whileHover={{ scale: 1.1, rotate: 30 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsSettingsOpen(true)} 
@@ -346,7 +346,7 @@ export default function PomodoroTimerClient() {
           className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
         >
           <Settings className="w-6 h-6" />
-        </motion.button>
+        </m.button>
       </div>
       
       {/* Footer Info */}

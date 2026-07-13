@@ -219,15 +219,16 @@ export default function HomeClient() {
     if (id) recordEngagement("homepage");
   }, [setActiveCategory, recordEngagement]);
 
-  const toggleSmartFilter = (filterId: string) => {
+  const toggleSmartFilter = useCallback((filterId: string) => {
     setActiveFilters(prev => 
       prev.includes(filterId) ? prev.filter(id => id !== filterId) : [...prev, filterId]
     );
-  };
+  }, []);
 
-  const handleClearFilters = () => {
+  const handleClearFilters = useCallback(() => {
     handleCategoryChange(null);
     setActiveFilters([]);
+  }, [handleCategoryChange]);
   };
 
   const isFiltering = !!activeCategory || activeFilters.length > 0;
@@ -590,9 +591,11 @@ export default function HomeClient() {
             <AnimatePresence>
               {showSmartFilters && (
                 <m.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={{ opacity: 1, scaleY: 1 }}
+                  exit={{ opacity: 0, scaleY: 0 }}
+                  style={{ transformOrigin: 'top' }}
+                  transition={{ duration: 0.2 }}
                   className="w-full bg-surface-2/40 border-b border-border/80 overflow-hidden"
                 >
                   <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 space-y-3">

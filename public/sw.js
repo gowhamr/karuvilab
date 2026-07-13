@@ -49,7 +49,7 @@ if (typeof workbox !== 'undefined') {
   // 3. Cache Next.js Static Assets (_next/static)
   registerRoute(
     ({ url }) => url.pathname.includes('/_next/static/'),
-    new StaleWhileRevalidate({
+    new CacheFirst({
       cacheName: CACHE_NAMES.static,
     })
   );

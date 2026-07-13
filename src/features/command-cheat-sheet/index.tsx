@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { LiveFilterBar } from '@/components/ui/LiveFilterBar';
 import { CopyButton } from '@/components/ui/CopyButton';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
 
 interface Command {
@@ -172,7 +172,7 @@ export default function CommandCheatSheet() {
         <AnimatePresence mode="popLayout">
           {filteredCommands.length > 0 ? (
             filteredCommands.map((command, i) => (
-              <motion.div
+              <m.div
                 key={command.cmd}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -194,10 +194,10 @@ export default function CommandCheatSheet() {
                   </p>
                 </div>
                 <CopyButton text={command.cmd} className="flex-shrink-0" />
-              </motion.div>
+              </m.div>
             ))
           ) : (
-            <motion.div 
+            <m.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-center py-12 bg-surface/30 rounded-3xl border border-dashed border-border"
@@ -207,7 +207,7 @@ export default function CommandCheatSheet() {
               </div>
               <h3 className="text-text-3 font-medium">No commands found</h3>
               <p className="text-text-4 text-sm">Try adjusting your search or category filter.</p>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

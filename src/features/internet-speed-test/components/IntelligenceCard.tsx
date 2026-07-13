@@ -1,6 +1,6 @@
 import React from 'react';
 import { LucideIcon, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 
 interface IntelligenceCardProps {
@@ -59,7 +59,7 @@ export function IntelligenceCard({ icon: Icon, title, requirement, current, isLa
       
       <div className="pt-2 flex items-center gap-3 relative z-content">
          <div className="h-1.5 flex-1 bg-bg rounded-full overflow-hidden">
-            <motion.div 
+            <m.div 
               className={cn("h-full", status === 'yes' ? "bg-success" : "bg-text-4/30")}
               initial={{ width: 0 }}
               animate={{ width: status === 'yes' ? '100%' : status === 'no' ? '40%' : '0%' }}

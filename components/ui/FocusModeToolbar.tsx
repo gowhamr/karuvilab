@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import {
   Minimize2, Clock, AlignLeft, Keyboard,
   ChevronUp, ChevronDown
@@ -98,7 +98,7 @@ export function FocusModeToolbar({
   return (
     <AnimatePresence>
       {(isVisible || !autoHide) && (
-        <motion.div
+        <m.div
           initial={{ y: -48, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -48, opacity: 0 }}
@@ -251,7 +251,7 @@ export function FocusModeToolbar({
               </div>
             )}
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

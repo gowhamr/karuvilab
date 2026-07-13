@@ -10,7 +10,7 @@ import { AgendaView } from "./components/AgendaView";
 import { YearView } from "./components/YearView";
 import { SearchModal } from "./components/SearchModal";
 import { EventModal } from "./components/EventModal";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useReminders } from "./hooks/useReminders";
 import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays, addYears, subYears } from "date-fns";
 
@@ -129,7 +129,7 @@ export default function CalendarPage() {
       <div className="flex-1 flex flex-col lg:flex-row gap-6 md:gap-8 min-h-0 relative">
         <div className="flex-1 flex flex-col min-h-0 relative">
           <AnimatePresence mode="wait">
-            <motion.div
+            <m.div
               key={currentView}
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -142,7 +142,7 @@ export default function CalendarPage() {
               {currentView === 'day' && <DayView />}
               {currentView === 'agenda' && <AgendaView />}
               {currentView === 'year' && <YearView />}
-            </motion.div>
+            </m.div>
           </AnimatePresence>
 
           {isLoading && (
@@ -184,7 +184,7 @@ export default function CalendarPage() {
         {isSidebarOpen && (
           <>
             {/* Backdrop */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -192,7 +192,7 @@ export default function CalendarPage() {
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-modal-backdrop lg:hidden"
             />
             {/* Slide-in Drawer */}
-            <motion.div
+            <m.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
@@ -209,7 +209,7 @@ export default function CalendarPage() {
                 </button>
               </div>
               <CalendarSidebar />
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

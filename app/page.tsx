@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import HomeClient from "./HomeClient";
-import { HomeHero } from "./HomeHero";
 
 export const metadata: Metadata = {
   title: "KaruviLab — Free Private Browser Tools",

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Info, ChevronRight, BookOpen } from 'lucide-react';
 
 interface Entry {
@@ -96,7 +96,7 @@ export default function HashMapVisualizer() {
 
       <AnimatePresence mode="wait">
         {lastAction && (
-          <motion.div
+          <m.div
             key={`${lastAction.type}-${lastAction.key}-${lastAction.timestamp}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -111,7 +111,7 @@ export default function HashMapVisualizer() {
               Bucket: <code className="bg-blue/20 px-1 rounded">{lastAction.bucket}</code> 
               (Hash % {BUCKET_COUNT})
             </span>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -131,7 +131,7 @@ export default function HashMapVisualizer() {
               <AnimatePresence>
                 {bucket && bucket.length > 0 ? (
                   bucket.map((entry) => (
-                    <motion.div
+                    <m.div
                       key={entry.key}
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
@@ -150,7 +150,7 @@ export default function HashMapVisualizer() {
                           <Trash2 className="w-3 h-3" />
                         </button>
                       </div>
-                    </motion.div>
+                    </m.div>
                   ))
                 ) : (
                   <div className="h-full flex items-center justify-center py-8 opacity-20 italic text-xs text-text-4">

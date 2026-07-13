@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Maximize2 } from 'lucide-react';
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 import { useSettingsStore } from '@/src/store/settings/store';
@@ -153,7 +153,7 @@ export function FocusModeWrapper({
       {/* Fullscreen mode — Portal overlay */}
       <AnimatePresence>
         {isThisToolFullscreen && (
-          <motion.div
+          <m.div
             ref={overlayRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -186,7 +186,7 @@ export function FocusModeWrapper({
             <div className="flex-1 overflow-auto bg-bg p-4 md:p-6">
               {children}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

@@ -12,7 +12,7 @@ import {
   ArrowUpRight, 
   Info 
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 interface Match {
   value: string;
@@ -356,7 +356,7 @@ export default function RegexTesterClient() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence mode="popLayout">
             {filteredPatterns.slice(0, visibleCount).map((pat) => (
-              <motion.div
+              <m.div
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -417,7 +417,7 @@ export default function RegexTesterClient() {
                     <ArrowUpRight className="w-3 h-3" />
                   </button>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </AnimatePresence>
         </div>

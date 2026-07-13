@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 interface PulseRingProps {
   active: boolean;
@@ -10,7 +10,7 @@ export const PulseRing = ({ active, color = "rgba(79, 70, 229, 0.4)" }: PulseRin
   <AnimatePresence>
     {active && (
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <motion.div
+        <m.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ 
             scale: [1, 1.4, 1.6], 
@@ -24,7 +24,7 @@ export const PulseRing = ({ active, color = "rgba(79, 70, 229, 0.4)" }: PulseRin
           className="absolute w-full h-full rounded-full border"
           style={{ borderColor: color }}
         />
-        <motion.div
+        <m.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ 
             scale: [1, 1.2, 1.4], 

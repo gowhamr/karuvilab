@@ -8,7 +8,6 @@ import { MainLayout } from "@/components/system/MainLayout";
 import { RecoveryBanner } from "@/components/system/RecoveryBanner";
 import { StructuredData } from "@/src/lib/seo";
 import Script from "next/script";
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +16,7 @@ const inter = Inter({
 });
 
 const poppins = Poppins({
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "600", "700"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-poppins",
@@ -51,14 +50,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${poppins.variable} ${dmSerif.variable} preload`}>
       <head>
-        {/* LCP Font Preloads — prevents FOUT and improves LCP score */}
-        <link rel="preload" as="font" type="font/woff2" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" crossOrigin="anonymous" />
-        <link rel="preload" as="font" type="font/woff2" href="/_next/static/media/fa3e259cafa8f47e-s.p.woff2" crossOrigin="anonymous" />
-
         {/* AdSense DNS Prefetch — reduces latency when ad scripts load */}
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagservices.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -132,7 +126,6 @@ export default function RootLayout({
           </MainLayout>
           <PWARegistration />
           <StructuredData />
-          <SpeedInsights />
         </ClientProviders>
       </body>
     </html>

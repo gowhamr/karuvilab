@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 
 interface SpeedGaugeProps {
@@ -63,7 +63,7 @@ export function SpeedGauge({ value, max = 100, color = "#4F46E5", label = "Mbps"
           }}
         />
         {/* Progress Arc */}
-        <motion.circle
+        <m.circle
           cx={size / 2}
           cy={size / 2}
           r={radius}

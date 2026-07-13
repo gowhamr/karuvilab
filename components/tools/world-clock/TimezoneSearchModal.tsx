@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Search, X, Globe, Plus } from 'lucide-react';
 import { getAllTimezones, COMMON_CITIES } from '@/src/lib/timezone-data';
 import { useWorldClockStore } from '@/src/features/world-clock/store';
@@ -51,7 +51,7 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.mem
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -61,7 +61,7 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.mem
 
           {/* Modal Container */}
           <div className="fixed inset-0 z-modal flex items-start justify-center p-4 sm:p-16 pointer-events-none">
-            <motion.div
+            <m.div
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -50, opacity: 0 }}
@@ -103,9 +103,9 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.mem
               <div className="flex-1 overflow-y-auto p-6 space-y-2">
                 <AnimatePresence mode="popLayout">
                   {filteredZones.length > 0 ? (
-                    <motion.ul className="space-y-1">
+                    <m.ul className="space-y-1">
                       {filteredZones.map((zone, idx) => (
-                        <motion.li
+                        <m.li
                           key={zone.tz}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -126,22 +126,22 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.mem
                               <Plus className="w-5 h-5 text-text-4 group-hover:text-blue transition-transform group-hover:scale-125" />
                             </div>
                           </button>
-                        </motion.li>
+                        </m.li>
                       ))}
-                    </motion.ul>
+                    </m.ul>
                   ) : (
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="text-center py-12"
                     >
                       <p className="font-bold text-text">No results found.</p>
                       <p className="text-sm text-text-4">Try a different search term.</p>
-                    </motion.div>
+                    </m.div>
                   )}
                 </AnimatePresence>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </>
       )}
