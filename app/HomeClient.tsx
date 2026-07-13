@@ -516,32 +516,60 @@ export default function HomeClient() {
         <HomeHero isReturning={isReturning} />
 
         {/* ── Main Tab Navigation ── */}
-        <div id="tools-tabs-nav" className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex border-b border-border/80 gap-6">
-          <button
-            onClick={() => setActiveTab("tools")}
-            className={cn(
-              "pb-3 pt-2 text-sm font-black uppercase tracking-widest transition-all relative min-h-11 px-4 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg",
-              activeTab === "tools" ? "text-text" : "text-text-4 hover:text-text-2"
-            )}
-          >
-            Browse Tools
-            {activeTab === "tools" && (
-              <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
-            )}
-          </button>
-          
-          <button
-            onClick={() => setActiveTab("collections")}
-            className={cn(
-              "pb-3 pt-2 text-sm font-black uppercase tracking-widest transition-all relative flex items-center justify-center gap-1.5 min-h-11 px-4 outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg",
-              activeTab === "collections" ? "text-text" : "text-text-4 hover:text-text-2"
-            )}
-          >
-            <FolderHeart className="w-4 h-4" /> Tool Collections
-            {activeTab === "collections" && (
-              <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
-            )}
-          </button>
+        <div id="tools-tabs-nav" className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex items-end justify-between border-b border-border/80">
+          <div className="flex gap-6">
+            <button
+              onClick={() => setActiveTab("tools")}
+              className={cn(
+                "pb-3 pt-2 text-sm font-black uppercase tracking-widest transition-all relative min-h-11 px-4 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg",
+                activeTab === "tools" ? "text-text" : "text-text-4 hover:text-text-2"
+              )}
+            >
+              Browse Tools
+              {activeTab === "tools" && (
+                <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+              )}
+            </button>
+            
+            <button
+              onClick={() => setActiveTab("collections")}
+              className={cn(
+                "pb-3 pt-2 text-sm font-black uppercase tracking-widest transition-all relative flex items-center justify-center gap-1.5 min-h-11 px-4 outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg",
+                activeTab === "collections" ? "text-text" : "text-text-4 hover:text-text-2"
+              )}
+            >
+              <FolderHeart className="w-4 h-4" /> Tool Collections
+              {activeTab === "collections" && (
+                <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+              )}
+            </button>
+          </div>
+
+          {activeTab === "tools" && (
+            <div className="flex items-center gap-2 shrink-0 pb-2">
+              <button
+                onClick={() => setShowSmartFilters(!showSmartFilters)}
+                aria-label="Toggle filters"
+                className={cn(
+                  "min-h-9 min-w-9 px-2 flex items-center justify-center gap-1 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
+                  activeFilters.length > 0 ? "border-brand-primary/50 text-brand-primary bg-brand-primary/5" : "border-border/80 text-text-3"
+                )}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                {activeFilters.length > 0 && <span className="bg-brand-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{activeFilters.length}</span>}
+              </button>
+
+              {isFiltering && (
+                <button
+                  onClick={handleClearFilters}
+                  aria-label="Clear active filter"
+                  className="min-h-9 px-2 flex items-center gap-1 text-[10px] font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {activeTab === "tools" ? (
@@ -553,35 +581,8 @@ export default function HomeClient() {
                 isSidebarOpen && "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
               )}
             >
-              <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-                </div>
-                
-                <div className="flex items-center gap-2 shrink-0">
-                  {/* Smart Filters toggle */}
-                  <button
-                    onClick={() => setShowSmartFilters(!showSmartFilters)}
-                    aria-label="Toggle filters"
-                    className={cn(
-                      "min-h-11 min-w-11 px-3 flex items-center justify-center gap-1.5 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
-                      activeFilters.length > 0 ? "border-brand-primary/50 text-brand-primary bg-brand-primary/5" : "border-border/80 text-text-3"
-                    )}
-                  >
-                    <SlidersHorizontal className="w-3.5 h-3.5" />
-                    {activeFilters.length > 0 && <span className="bg-brand-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{activeFilters.length}</span>}
-                  </button>
-
-                  {isFiltering && (
-                    <button
-                      onClick={handleClearFilters}
-                      aria-label="Clear active filter"
-                      className="min-h-11 px-3 flex items-center gap-1 text-xs font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
+              <div className="max-w-7xl mx-auto px-4 md:px-8">
+                <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
               </div>
             </div>
 
