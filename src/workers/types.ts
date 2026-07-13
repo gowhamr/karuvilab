@@ -172,6 +172,32 @@ export interface WorkerAPI {
   ): Promise<{ hex: string; base64: string }>;
 
   // PDF Tasks
+  getPdfPageCount(file: ArrayBuffer): Promise<number>;
+
+  rotatePdf(
+    file: ArrayBuffer,
+    rotateAll: boolean,
+    allAngle: number,
+    pageAngles: number[],
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  watermarkPdf(
+    file: ArrayBuffer,
+    options: {
+      type: "text" | "image";
+      text?: string;
+      imageBytes?: ArrayBuffer;
+      imageType?: string;
+      opacity: number;
+      fontSize: number;
+      colorHex: string;
+      angle: number;
+      scale: number;
+    },
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   mergePdfs(
     files: (Blob | ArrayBuffer)[], 
     onProgress?: ProgressCallback
@@ -188,6 +214,38 @@ export interface WorkerAPI {
     rangesStr: string,
     onProgress?: ProgressCallback
   ): Promise<{ data: Uint8Array; ext: string; count: number }>;
+
+  convertImagesToPdf(
+    images: Array<{ buffer: ArrayBuffer, mime: string }>,
+    pageSize: "a4" | "letter" | "fit",
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  lockPdf(
+    file: ArrayBuffer,
+    userPassword: string,
+    ownerPassword?: string,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  unlockPdf(
+    file: ArrayBuffer,
+    password: string,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  addPageNumbersToPdf(
+    file: ArrayBuffer,
+    options: {
+      startNum: number;
+      prefix: string;
+      suffix: string;
+      position: "bottom-center" | "bottom-right" | "bottom-left" | "top-center" | "top-right" | "top-left";
+      fontSize: number;
+      colorHex: string;
+    },
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
 
   // Image Tasks (Standard)
   compressImage(

@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef } from "react";
-import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -50,10 +49,9 @@ export default function SplitPdfClient() {
     setFile(f);
     setError("");
     try {
-      const { PDFDocument } = PDFLib;
       const bytes = await f.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      setPageCount(doc.getPageCount());
+      const count = await workerManager.getPdfPageCount(bytes);
+      setPageCount(count);
     } catch { setPageCount(0); }
   };
 

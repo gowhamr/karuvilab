@@ -66,6 +66,13 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   detectNumeralFormat: 'compute',
 
   // Media Pool (heavy file manipulation, image/PDF processing)
+  getPdfPageCount: 'media',
+  rotatePdf: 'media',
+  watermarkPdf: 'media',
+  convertImagesToPdf: 'media',
+  lockPdf: 'media',
+  unlockPdf: 'media',
+  addPageNumbersToPdf: 'media',
   mergePdfs: 'media',
   compressPdf: 'media',
   splitPdf: 'media',

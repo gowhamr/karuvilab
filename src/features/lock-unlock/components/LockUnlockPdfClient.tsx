@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useId } from "react";
-import * as PDFLib from "pdf-lib";
+// Removed pdf-lib import
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -38,22 +38,18 @@ export default function LockUnlockPdfClient() {
     setError("");
     setSuccess("");
     try {
-      const { PDFDocument } = PDFLib;
+      const { workerManager } = await import("@/src/workers/manager");
       const bytes = await file.arrayBuffer();
 
       if (mode === "lock") {
         if (!password) { setError("Please enter a user password."); setProcessing(false); return; }
-        const doc = await PDFDocument.load(bytes);
-        const outBytes = await doc.save({
-          userPassword: password,
-          ownerPassword: ownerPassword || password,
-          permissions: {
-            printing: "highResolution",
-            modifying: false,
-            copying: false,
-            annotating: false,
-          },
-        } as any);
+        
+        const outBytes = await workerManager.lockPdf(
+          bytes,
+          password,
+          ownerPassword || password
+        );
+        
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
         const name = file.name.replace(/\.pdf$/i, "") + "-locked.pdf";
         const url = createUrl(blob);
@@ -67,8 +63,12 @@ export default function LockUnlockPdfClient() {
         setSuccess("PDF locked successfully and downloaded.");
       } else {
         if (!unlockPassword) { setError("Please enter the PDF password."); setProcessing(false); return; }
-        const doc = await PDFDocument.load(bytes, { password: unlockPassword } as any);
-        const outBytes = await doc.save();
+        
+        const outBytes = await workerManager.unlockPdf(
+          bytes,
+          unlockPassword
+        );
+        
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
         const name = file.name.replace(/\.pdf$/i, "") + "-unlocked.pdf";
         const url = createUrl(blob);
@@ -82,7 +82,7 @@ export default function LockUnlockPdfClient() {
         setSuccess("PDF unlocked successfully and downloaded.");
       }
     } catch (e: any) {
-      if (e?.message?.includes("password")) {
+      if (e?.message?.includes("password") || e?.message?.includes("Password")) {
         setError("Incorrect password. Please check and try again.");
       } else {
         setError(e?.message || "Failed to process PDF.");

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useId } from "react";
-import * as PDFLib from "pdf-lib";
+// Removed pdf-lib import
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -30,38 +30,23 @@ export default function PageNumberingClient() {
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
   const POSITIONS: Position[] = ["bottom-center","bottom-right","bottom-left","top-center","top-right","top-left"];
 
-  const hexToRgb = (hex: string) => ({
-    r: parseInt(hex.slice(1, 3), 16) / 255,
-    g: parseInt(hex.slice(3, 5), 16) / 255,
-    b: parseInt(hex.slice(5, 7), 16) / 255,
-  });
-
   const addNumbers = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
     setProcessing(true);
     setError("");
     try {
-      const { PDFDocument, rgb } = PDFLib;
+      const { workerManager } = await import("@/src/workers/manager");
       const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const pages = doc.getPages();
-      const { r, g, b } = hexToRgb(color);
-      const margin = 20;
-
-      pages.forEach((page: any, i: number) => {
-        const { width, height } = page.getSize();
-        const numStr = `${prefix}${startNum + i}${suffix}`;
-        const textWidth = numStr.length * fontSize * 0.5;
-        const isBottom = position.startsWith("bottom");
-        const y = isBottom ? margin : height - margin - fontSize;
-        let x: number;
-        if (position.includes("center")) x = (width - textWidth) / 2;
-        else if (position.includes("right")) x = width - textWidth - margin;
-        else x = margin;
-        page.drawText(numStr, { x, y, size: fontSize, color: rgb(r, g, b) });
+      
+      const outBytes = await workerManager.addPageNumbersToPdf(bytes, {
+        startNum,
+        prefix,
+        suffix,
+        position,
+        fontSize,
+        colorHex: color,
       });
 
-      const outBytes = await doc.save();
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
       const url = createUrl(blob);
       const a = document.createElement("a");

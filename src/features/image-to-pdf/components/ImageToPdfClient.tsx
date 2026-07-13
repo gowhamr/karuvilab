@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import * as PDFLib from "pdf-lib";
+// Removed pdf-lib import
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -49,24 +49,20 @@ export default function ImageToPdfClient() {
     setProcessing(true);
     setError("");
     try {
-      const { PDFDocument } = PDFLib;
-      const pdf = await PDFDocument.create();
-      for (const item of images) {
-        const bytes = await item.file.arrayBuffer();
-        const mime = item.file.type;
-        let img;
-        if (mime === "image/png") img = await pdf.embedPng(bytes);
-        else img = await pdf.embedJpg(bytes);
-        const { width: iw, height: ih } = img;
-        let pw = iw, ph = ih;
-        if (pageSize === "a4") { [pw, ph] = PAGE_SIZES.a4!; }
-        else if (pageSize === "letter") { [pw, ph] = PAGE_SIZES.letter!; }
-        const page = pdf.addPage([pw, ph]);
-        const scale = Math.min(pw / iw, ph / ih);
-        const dw = iw * scale, dh = ih * scale;
-        page.drawImage(img, { x: (pw - dw) / 2, y: (ph - dh) / 2, width: dw, height: dh });
-      }
-      const bytes = await pdf.save();
+      const items = await Promise.all(images.map(async (item) => ({
+        buffer: await item.file.arrayBuffer(),
+        mime: item.file.type
+      })));
+
+      const { workerManager } = await import("@/src/workers/manager");
+      const bytes = await workerManager.convertImagesToPdf(
+        items,
+        pageSize,
+        (progress) => {
+          // Progress reporting can be added here
+        }
+      );
+      
       const blob = new Blob([bytes as any], { type: "application/pdf" });
       const url = createUrl(blob);
       const a = document.createElement("a");

@@ -1,10 +1,11 @@
 "use client";
 import { useState, useRef } from "react";
-import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { workerManager } from "@/src/workers/manager";
+import { useProgress } from "@/src/contexts/ProgressContext";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -14,19 +15,19 @@ export default function RotatePdfClient() {
   const [rotateAll, setRotateAll] = useState(true);
   const [allAngle, setAllAngle] = useState(90);
   const [pageAngles, setPageAngles] = useState<number[]>([]);
-  const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  
+  const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
 
   const loadFile = async (f: File) => {
     setFile(f);
     setError("");
     try {
-      const { PDFDocument } = PDFLib;
       const bytes = await f.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const count = doc.getPageCount();
+      const count = await workerManager.getPdfPageCount(bytes);
       setPageCount(count);
       setPageAngles(Array(count).fill(90));
     } catch { setPageCount(0); }
@@ -34,21 +35,30 @@ export default function RotatePdfClient() {
 
   const rotate = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
-    setProcessing(true);
+    
+    const controller = new AbortController();
+    setAbortController(controller);
+    startProcessing("heavy");
+    setStage("Preparing to rotate...");
+    setProgress(0);
     setError("");
+
     try {
-      const { PDFDocument, degrees } = PDFLib;
       const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const pages = doc.getPages();
-      const count = pages.length;
-      if (pageAngles.length === 0) setPageAngles(Array(count).fill(90));
-      pages.forEach((page: any, i: number) => {
-        const angle = rotateAll ? allAngle : (pageAngles[i] || 90);
-        const current = page.getRotation().angle;
-        page.setRotation(degrees((current + angle) % 360));
-      });
-      const outBytes = await doc.save();
+      if (pageAngles.length === 0) setPageAngles(Array(pageCount).fill(90));
+      
+      const outBytes = await workerManager.rotatePdf(
+        bytes,
+        rotateAll,
+        allAngle,
+        pageAngles,
+        (p) => {
+          setStage(p.message || "Rotating...");
+          setProgress(p.percent);
+        },
+        controller.signal
+      );
+      
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
       const url = createUrl(blob);
       const a = document.createElement("a");
@@ -57,9 +67,19 @@ export default function RotatePdfClient() {
       a.click();
       revokeUrl(url);
     } catch (e: any) {
-      setError(e?.message || "Failed to rotate PDF.");
+      if (e.message === "Task cancelled") {
+        setError("Rotate cancelled.");
+      } else {
+        setError(e?.message || "Failed to rotate PDF.");
+      }
+    } finally {
+      finishProcessing(true);
+      setAbortController(null);
     }
-    setProcessing(false);
+  };
+
+  const cancelRotate = () => {
+    abortController?.abort();
   };
 
   return (
@@ -136,13 +156,23 @@ export default function RotatePdfClient() {
 
       {error && <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 text-xs font-bold uppercase tracking-wider text-center">{error}</div>}
 
-      <button
-        onClick={rotate}
-        disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
-      >
-        {processing ? "Rotating…" : "Rotate & Download"}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={rotate}
+          disabled={!file || progressState.isProcessing}
+          className="flex-1 py-4 bg-blue text-white font-black rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
+        >
+          {progressState.isProcessing ? "Rotating…" : "Rotate & Download"}
+        </button>
+        {progressState.isProcessing && (
+          <button
+            onClick={cancelRotate}
+            className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </div>
   );
 }

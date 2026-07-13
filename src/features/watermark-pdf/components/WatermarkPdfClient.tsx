@@ -1,10 +1,11 @@
 "use client";
 import { useState, useRef, useId } from "react";
-import * as PDFLib from "pdf-lib";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
+import { workerManager } from "@/src/workers/manager";
+import { useProgress } from "@/src/contexts/ProgressContext";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -21,80 +22,58 @@ export default function WatermarkPdfClient() {
   const [color, setColor] = useState("#cc0000");
   const [angle, setAngle] = useState(45);
   const [scale, setScale] = useState(0.5); // For image scale
-  const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLInputElement>(null);
 
-  const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
+  const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
 
-  const hexToRgb = (hex: string) => {
-    const r = parseInt(hex.slice(1, 3), 16) / 255;
-    const g = parseInt(hex.slice(3, 5), 16) / 255;
-    const b = parseInt(hex.slice(5, 7), 16) / 255;
-    return { r, g, b };
-  };
+  const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
   const addWatermark = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
     if (watermarkType === "text" && !watermarkText.trim()) { setError("Please enter watermark text."); return; }
     if (watermarkType === "image" && !watermarkImage) { setError("Please select a watermark image."); return; }
-    setProcessing(true);
+    
+    const controller = new AbortController();
+    setAbortController(controller);
+    startProcessing("heavy");
+    setStage("Preparing to add watermark...");
+    setProgress(0);
     setError("");
+    
     try {
-      const { PDFDocument, rgb, degrees } = PDFLib;
-      const bytes = await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
-      const pages = doc.getPages();
-
-      let embeddedImage: any = null;
-      let imgWidth = 0;
-      let imgHeight = 0;
-
+      const fileBytes = await file.arrayBuffer();
+      let imageBytes: ArrayBuffer | undefined = undefined;
+      let imageType: string | undefined = undefined;
+      
       if (watermarkType === "image" && watermarkImage) {
-        const imgBytes = await watermarkImage.arrayBuffer();
-        if (watermarkImage.type === "image/png") {
-          embeddedImage = await doc.embedPng(imgBytes);
-        } else if (watermarkImage.type === "image/jpeg" || watermarkImage.type === "image/jpg") {
-          embeddedImage = await doc.embedJpg(imgBytes);
-        } else {
-          throw new Error("Only PNG and JPG images are supported for watermarking.");
-        }
-        
-        // Scale the image down a bit to fit logically in the page bounds (e.g., base scale)
-        const imgDims = embeddedImage.scale(scale);
-        imgWidth = imgDims.width;
-        imgHeight = imgDims.height;
+        imageBytes = await watermarkImage.arrayBuffer();
+        imageType = watermarkImage.type;
       }
-
-      const { r, g, b } = hexToRgb(color);
-
-      for (const page of pages) {
-        const { width, height } = page.getSize();
-        
-        if (watermarkType === "text") {
-          page.drawText(watermarkText, {
-            x: width / 2 - (watermarkText.length * fontSize * 0.3),
-            y: height / 2,
-            size: fontSize,
-            color: rgb(r, g, b),
-            opacity: opacity,
-            rotate: degrees(angle),
-          });
-        } else if (embeddedImage) {
-          page.drawImage(embeddedImage, {
-            x: width / 2 - (imgWidth / 2),
-            y: height / 2 - (imgHeight / 2),
-            width: imgWidth,
-            height: imgHeight,
-            opacity: opacity,
-            rotate: degrees(angle),
-          });
-        }
-      }
-
-      const outBytes = await doc.save();
+      
+      const outBytes = await workerManager.watermarkPdf(
+        fileBytes,
+        {
+          type: watermarkType,
+          text: watermarkText,
+          imageBytes,
+          imageType,
+          opacity,
+          fontSize,
+          colorHex: color,
+          angle,
+          scale
+        } as any,
+        (p) => {
+          setStage(p.message || "Watermarking...");
+          setProgress(p.percent);
+        },
+        controller.signal
+      );
+      
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
       const url = createUrl(blob);
       const a = document.createElement("a");
@@ -103,9 +82,19 @@ export default function WatermarkPdfClient() {
       a.click();
       setTimeout(() => revokeUrl(url), 100);
     } catch (e: any) {
-      setError(e?.message || "Failed to add watermark.");
+      if (e.message === "Task cancelled") {
+        setError("Watermark cancelled.");
+      } else {
+        setError(e?.message || "Failed to add watermark.");
+      }
+    } finally {
+      finishProcessing(true);
+      setAbortController(null);
     }
-    setProcessing(false);
+  };
+  
+  const cancelWatermark = () => {
+    abortController?.abort();
   };
 
   return (
@@ -296,13 +285,23 @@ export default function WatermarkPdfClient() {
 
       {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
 
-      <button
-        onClick={addWatermark}
-        disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-      >
-        {processing ? "Adding watermark…" : "Add Watermark & Download"}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={addWatermark}
+          disabled={!file || progressState.isProcessing}
+          className="flex-1 py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+        >
+          {progressState.isProcessing ? "Adding watermark…" : "Add Watermark & Download"}
+        </button>
+        {progressState.isProcessing && (
+          <button
+            onClick={cancelWatermark}
+            className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </div>
   );
 }

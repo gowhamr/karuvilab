@@ -66,6 +66,42 @@ class WorkerManager {
     return workerOrchestrator.run("generateFileHmac", [file, key, algo, encoding], [file], onProgress, abortSignal);
   }
 
+  async getPdfPageCount(file: ArrayBuffer): Promise<number> {
+    return workerOrchestrator.run("getPdfPageCount", [file]);
+  }
+
+  async rotatePdf(
+    file: ArrayBuffer,
+    rotateAll: boolean,
+    allAngle: number,
+    pageAngles: number[],
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("rotatePdf", [file, rotateAll, allAngle, pageAngles], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async watermarkPdf(
+    file: ArrayBuffer,
+    options: {
+      type: "text" | "image";
+      text?: string;
+      imageBytes?: ArrayBuffer;
+      imageType?: string;
+      opacity: number;
+      fontSize: number;
+      colorHex: string;
+      angle: number;
+      scale: number;
+    },
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    const transfers: ArrayBuffer[] = [file];
+    if (options.imageBytes) transfers.push(options.imageBytes);
+    return workerOrchestrator.run("watermarkPdf", [file, options], transfers, onProgress, abortSignal, true, 2);
+  }
+
   async mergePdfs(
     files: (Blob | ArrayBuffer)[], 
     onProgress?: ProgressCallback,
@@ -91,6 +127,51 @@ class WorkerManager {
     abortSignal?: AbortSignal
   ): Promise<{ data: Uint8Array; ext: string; count: number }> {
     return workerOrchestrator.run("splitPdf", [file, splitAll, rangesStr], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async convertImagesToPdf(
+    images: Array<{ buffer: ArrayBuffer, mime: string }>,
+    pageSize: "a4" | "letter" | "fit",
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    const buffers = images.map(i => i.buffer);
+    return workerOrchestrator.run("convertImagesToPdf", [images, pageSize], buffers, onProgress, abortSignal, true, 2);
+  }
+
+  async lockPdf(
+    file: ArrayBuffer,
+    userPassword: string,
+    ownerPassword?: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("lockPdf", [file, userPassword, ownerPassword], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async unlockPdf(
+    file: ArrayBuffer,
+    password: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("unlockPdf", [file, password], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async addPageNumbersToPdf(
+    file: ArrayBuffer,
+    options: {
+      startNum: number;
+      prefix: string;
+      suffix: string;
+      position: "bottom-center" | "bottom-right" | "bottom-left" | "top-center" | "top-right" | "top-left";
+      fontSize: number;
+      colorHex: string;
+    },
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("addPageNumbersToPdf", [file, options], [file], onProgress, abortSignal, true, 2);
   }
 
   async compressImage(
