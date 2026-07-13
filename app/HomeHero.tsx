@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn } from "@/src/lib/utils";
 import { SearchBar } from "@/components/ui/search/SearchBar";
 import { Button } from "@/components/ui/Button";
+import { m, AnimatePresence } from "framer-motion";
 
 const TRUST_ITEMS = [
   { icon: CloudOff, text: "No Uploads" },
@@ -42,12 +43,18 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
   const dateStr = getFormattedDate();
   const todayTip = TIPS[new Date().getDay() % TIPS.length];
 
-  if (isReturning) {
-    return (
-      <section
-        aria-label="Welcome back to KaruviLab"
-        className="relative flex flex-col items-center text-center px-4 pt-6 md:pt-10 pb-4 overflow-hidden motion-safe:transition-all motion-safe:duration-500"
-      >
+  return (
+    <AnimatePresence mode="wait">
+      {isReturning ? (
+        <m.section
+          key="returning-hero"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          aria-label="Welcome back to KaruviLab"
+          className="relative flex flex-col items-center text-center px-4 pt-6 md:pt-10 pb-4 overflow-hidden"
+        >
         <div
           aria-hidden="true"
           className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-screen h-48 scale-x-[1.4] scale-y-125 bg-gradient-to-r from-blue/5 via-indigo-500/5 to-purple-500/5 rounded-full blur-[80px] z-behind"
@@ -68,16 +75,18 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
         <div className="w-full max-w-2xl mx-auto relative z-content mb-4">
           <SearchBar variant="hero" />
         </div>
-      </section>
-    );
-  }
-
-  return (
-    <section
-      aria-label="Welcome to KaruviLab"
-      className="relative flex flex-col items-center text-center px-4 pt-6 md:pt-10 pb-2 overflow-hidden motion-safe:transition-all motion-safe:duration-500"
-    >
-      {/* ── Ambient glows ── */}
+      </m.section>
+      ) : (
+      <m.section
+        key="new-hero"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.3 }}
+        aria-label="Welcome to KaruviLab"
+        className="relative flex flex-col items-center text-center px-4 pt-6 md:pt-10 pb-2 overflow-hidden"
+      >
+        {/* ── Ambient glows ── */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-[-10%] left-1/2 -translate-x-1/2 w-screen h-72 scale-x-[1.4] scale-y-125 bg-gradient-to-r from-blue/10 via-indigo-500/8 to-purple-500/10 rounded-full blur-[100px] z-behind"
@@ -144,12 +153,13 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
         ))}
       </div>
 
-      {/* ── Divider ── */}
       <div
         aria-hidden="true"
         className="w-full max-w-5xl mx-auto bg-gradient-to-r from-transparent via-divider to-transparent transition-all duration-500 mt-8 h-px opacity-100"
       />
-    </section>
+    </m.section>
+    )}
+    </AnimatePresence>
   );
 });
 
