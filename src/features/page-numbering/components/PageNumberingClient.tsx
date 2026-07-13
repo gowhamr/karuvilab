@@ -25,10 +25,30 @@ export default function PageNumberingClient() {
   const [color, setColor] = useState("#333333");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
+  const [totalPages, setTotalPages] = useState<number | null>(null);
+  const [includeTotal, setIncludeTotal] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
   const POSITIONS: Position[] = ["bottom-center","bottom-right","bottom-left","top-center","top-right","top-left"];
+
+  const handleFileChange = async (f?: File | null) => {
+    if (!f) {
+      setFile(null);
+      setTotalPages(null);
+      return;
+    }
+    setFile(f);
+    try {
+      const { workerManager } = await import("@/src/workers/manager");
+      const bytes = await f.arrayBuffer();
+      const count = await workerManager.getPdfPageCount(bytes);
+      setTotalPages(count);
+    } catch (e) {
+      console.error("Failed to get total pages:", e);
+    }
+  };
+
 
   const addNumbers = async () => {
     if (!file) { setError("Please select a PDF file."); return; }
@@ -38,10 +58,11 @@ export default function PageNumberingClient() {
       const { workerManager } = await import("@/src/workers/manager");
       const bytes = await file.arrayBuffer();
       
+      const finalSuffix = includeTotal && totalPages ? `${suffix} of ${totalPages}` : suffix;
       const outBytes = await workerManager.addPageNumbersToPdf(bytes, {
         startNum,
         prefix,
-        suffix,
+        suffix: finalSuffix,
         position,
         fontSize,
         colorHex: color,
@@ -68,7 +89,7 @@ export default function PageNumberingClient() {
             className="bg-surface border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-blue transition-colors"
             onClick={() => fileRef.current?.click()}
             onDragOver={e => e.preventDefault()}
-            onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) setFile(f); }}
+            onDrop={e => { e.preventDefault(); handleFileChange(e.dataTransfer.files?.[0]); }}
           >
             {file ? (
               <div className="space-y-1">
@@ -81,7 +102,7 @@ export default function PageNumberingClient() {
                 <p className="font-semibold text-text-2">Drop a PDF here</p>
               </>
             )}
-            <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) setFile(f); }} />
+            <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => handleFileChange(e.target.files?.[0])} />
           </div>
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
@@ -98,7 +119,20 @@ export default function PageNumberingClient() {
               </div>
               <div className="space-y-1">
                 <label htmlFor={suffixId} className="text-sm font-medium">Suffix</label>
-                <input id={suffixId} type="text" className={inputClass} value={suffix} onChange={e => setSuffix(e.target.value)} placeholder=" of N" />
+                <input id={suffixId} type="text" className={inputClass} value={suffix} onChange={e => setSuffix(e.target.value)} placeholder="" />
+              </div>
+              <div className="col-span-3 flex items-center gap-2 mt-1">
+                <input
+                  type="checkbox"
+                  id="includeTotal"
+                  checked={includeTotal}
+                  onChange={(e) => setIncludeTotal(e.target.checked)}
+                  disabled={!totalPages}
+                  className="rounded border-border text-blue focus:ring-blue cursor-pointer disabled:opacity-50"
+                />
+                <label htmlFor="includeTotal" className={`text-sm font-medium ${!totalPages ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+                  Include total pages (e.g. Page 1 {suffix} of {totalPages || 'N'})
+                </label>
               </div>
             </div>
 
@@ -153,7 +187,7 @@ export default function PageNumberingClient() {
                     { top: 8, left: 8 }),
               }}
             >
-              {`${prefix}${startNum}${suffix}`}
+              {`${prefix}${startNum}${includeTotal && totalPages ? `${suffix} of ${totalPages}` : suffix}`}
             </div>
           </div>
         </div>
