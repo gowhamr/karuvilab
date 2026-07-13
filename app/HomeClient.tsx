@@ -17,7 +17,7 @@ import { useAnalyticsStore } from "@/src/store/analyticsStore";
 import { useI18n } from "@/src/lib/i18n/store";
 import {
   LayoutGrid, TrendingUp, ChevronRight, Sparkles, SlidersHorizontal, FolderHeart,
-  Heart
+  Heart, FilterX
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -516,12 +516,12 @@ export default function HomeClient() {
         <HomeHero isReturning={isReturning} />
 
         {/* ── Main Tab Navigation ── */}
-        <div id="tools-tabs-nav" className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex items-end justify-between border-b border-border/80">
-          <div className="flex gap-6">
+        <div id="tools-tabs-nav" className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex items-end justify-between border-b border-border/80 gap-x-2">
+          <div className="flex gap-2 md:gap-6 shrink">
             <button
               onClick={() => setActiveTab("tools")}
               className={cn(
-                "pb-3 pt-2 text-sm font-black uppercase tracking-widest transition-all relative min-h-11 px-4 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg",
+                "pb-3 pt-2 text-[10px] sm:text-xs md:text-sm font-black uppercase tracking-widest transition-all relative min-h-11 px-2 md:px-4 flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg shrink-0",
                 activeTab === "tools" ? "text-text" : "text-text-4 hover:text-text-2"
               )}
             >
@@ -534,11 +534,11 @@ export default function HomeClient() {
             <button
               onClick={() => setActiveTab("collections")}
               className={cn(
-                "pb-3 pt-2 text-sm font-black uppercase tracking-widest transition-all relative flex items-center justify-center gap-1.5 min-h-11 px-4 outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg",
+                "pb-3 pt-2 text-[10px] sm:text-xs md:text-sm font-black uppercase tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-1.5 min-h-11 px-2 md:px-4 outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-t-lg shrink-0",
                 activeTab === "collections" ? "text-text" : "text-text-4 hover:text-text-2"
               )}
             >
-              <FolderHeart className="w-4 h-4" /> Tool Collections
+              <FolderHeart className="w-3 h-3 sm:w-4 sm:h-4 hidden xs:block" /> Tool Collections
               {activeTab === "collections" && (
                 <m.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
               )}
@@ -563,9 +563,10 @@ export default function HomeClient() {
                 <button
                   onClick={handleClearFilters}
                   aria-label="Clear active filter"
-                  className="min-h-9 px-2 flex items-center gap-1 text-[10px] font-bold text-blue hover:bg-blue/5 rounded-lg transition-colors uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                  title="Clear filters"
+                  className="min-h-9 min-w-9 flex items-center justify-center text-blue hover:text-blue-600 hover:bg-blue/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue border border-transparent hover:border-blue/20"
                 >
-                  Clear
+                  <FilterX className="w-4 h-4" />
                 </button>
               )}
             </div>
