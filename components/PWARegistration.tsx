@@ -18,13 +18,15 @@ export function PWARegistration() {
   const bannerRef = useRef<HTMLDivElement>(null);
 
   // Read persisted PWA state and hydration state from Zustand + IndexedDB
-  const { pwaVisitCount, pwaDismissedAt, incrementPWAVisit, dismissPWA, hasHydrated } = usePWAStore(
+  const { pwaVisitCount, pwaDismissedAt, incrementPWAVisit, dismissPWA, hasHydrated, forceShowPrompt, setForceShowPrompt } = usePWAStore(
     useShallow((s) => ({
       pwaVisitCount: s.pwaVisitCount,
       pwaDismissedAt: s.pwaDismissedAt,
       incrementPWAVisit: s.incrementPWAVisit,
       dismissPWA: s.dismissPWA,
       hasHydrated: s.hasHydrated,
+      forceShowPrompt: s.forceShowPrompt,
+      setForceShowPrompt: s.setForceShowPrompt,
     }))
   );
   
@@ -121,6 +123,13 @@ export function PWARegistration() {
       bannerRef.current.focus();
     }
   }, [showPrompt]);
+
+  useEffect(() => {
+    if (forceShowPrompt) {
+      setShowPrompt(true);
+      setForceShowPrompt(false);
+    }
+  }, [forceShowPrompt, setForceShowPrompt]);
 
   const handleDismiss = () => {
     setShowPrompt(false);

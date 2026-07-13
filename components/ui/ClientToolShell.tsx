@@ -17,7 +17,6 @@ import { ProgressProvider } from '@/src/contexts/ProgressContext';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
-import { parseAndSanitizeMarkdownSync, sanitizeHtml } from '@/src/lib/security';
 import { ToolFeedback } from './ToolFeedback';
 import { useIntelligenceStore } from '@/src/store/useIntelligenceStore';
 
@@ -49,6 +48,11 @@ export interface ClientToolShellProps {
     commonErrors?: { error: string; fix: string }[] | undefined;
     alternatives?: string[] | undefined;
     relatedTools?: string[] | undefined;
+  };
+  parsedContent?: {
+    detailedDescription: string;
+    howTo: string[];
+    faq: { question: string; answer: string }[];
   };
   fullWidth?: boolean | undefined;
 }
@@ -104,7 +108,7 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
             <h3 className="font-bold text-text">{item.question}</h3>
             <div 
               className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.answer) }}
+              dangerouslySetInnerHTML={{ __html: item.answer }}
             />
           </div>
         ))}
@@ -121,7 +125,7 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
   );
 }
 
-export function ClientToolShell({ title, description, category, children, toolId, content, fullWidth, visibleExamples = 2 }: ClientToolShellProps) {
+export function ClientToolShell({ title, description, category, children, toolId, content, parsedContent, fullWidth, visibleExamples = 2 }: ClientToolShellProps) {
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
@@ -173,14 +177,13 @@ export function ClientToolShell({ title, description, category, children, toolId
     } catch (e) {}
   };
 
-  const parsedContent = useMemo(() => ({
-    detailedDescription: content.detailedDescription ? parseAndSanitizeMarkdownSync(content.detailedDescription) : '',
-    howTo: (content.howTo || []).map(step => parseAndSanitizeMarkdownSync(step)),
-    faq: (content.faq || []).map(item => ({
-      question: item.question,
-      answer: parseAndSanitizeMarkdownSync(item.answer)
-    }))
-  }), [content.detailedDescription, content.howTo, content.faq]);
+  const fallbackParsedContent = useMemo(() => ({
+    detailedDescription: '',
+    howTo: [],
+    faq: []
+  }), []);
+
+  const finalParsedContent = parsedContent || fallbackParsedContent;
 
   const [activeTab, setActiveTab] = useState<'tool' | 'related'>('tool');
 
@@ -345,11 +348,11 @@ export function ClientToolShell({ title, description, category, children, toolId
                     onToggle={(isOpen) => handleSectionToggle('learn-more', isOpen)}
                   >
                     <div className="space-y-10">
-                      {parsedContent.howTo && parsedContent.howTo.length > 0 && (
-                        <section>
-                          <h3 className="text-lg font-bold text-text mb-4">Quick Guide</h3>
-                          <ol className="space-y-4">
-                            {parsedContent.howTo.map((step, i) => (
+                      {finalParsedContent.howTo && finalParsedContent.howTo.length > 0 && (
+                        <div className="space-y-4">
+                          <h2 className="text-xl font-black text-text tracking-tight">How to use</h2>
+                          <div className="space-y-3">
+                            {finalParsedContent.howTo.map((step, i) => (
                               <li key={i} className="flex gap-4 group">
                                 <span className="flex-shrink-0 w-6 h-6 rounded-lg bg-blue/10 text-blue flex items-center justify-center text-xs font-bold">
                                   {i + 1}
@@ -360,8 +363,8 @@ export function ClientToolShell({ title, description, category, children, toolId
                                 />
                               </li>
                             ))}
-                          </ol>
-                        </section>
+                          </div>
+                        </div>
                       )}
 
                       {content.useCases && content.useCases.length > 0 && (
@@ -371,21 +374,21 @@ export function ClientToolShell({ title, description, category, children, toolId
                         </section>
                       )}
 
-                      {parsedContent.faq && parsedContent.faq.length > 0 && (
-                        <section>
-                          <h3 className="text-lg font-bold text-text mb-4">Frequently Asked Questions</h3>
-                          <FAQList faq={parsedContent.faq} />
-                        </section>
+                      {finalParsedContent.faq && finalParsedContent.faq.length > 0 && (
+                        <div className="space-y-4">
+                          <h2 className="text-xl font-black text-text tracking-tight">Frequently Asked Questions</h2>
+                          <FAQList faq={finalParsedContent.faq} />
+                        </div>
                       )}
 
-                      {parsedContent.detailedDescription && (
-                        <section>
-                          <h3 className="text-lg font-bold text-text mb-4">Deep Dive</h3>
+                      {finalParsedContent.detailedDescription && (
+                        <div className="space-y-4">
+                          <h2 className="text-xl font-black text-text tracking-tight">About this tool</h2>
                           <div 
-                            className="prose prose-slate dark:prose-invert max-w-none text-text-3"
-                            dangerouslySetInnerHTML={{ __html: parsedContent.detailedDescription }}
+                            className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: finalParsedContent.detailedDescription }}
                           />
-                        </section>
+                        </div>
                       )}
 
                       <section>

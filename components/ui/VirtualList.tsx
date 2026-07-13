@@ -31,8 +31,15 @@ export function VirtualList<T>({
     const scrollParent = getScrollParent(container);
     if (!scrollParent) return;
 
+    let ticking = false;
     const handleScroll = () => {
-      setScrollTop(scrollParent.scrollTop);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollTop(scrollParent.scrollTop);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     const handleResize = () => {
@@ -43,7 +50,8 @@ export function VirtualList<T>({
     window.addEventListener("resize", handleResize);
     
     handleResize();
-    handleScroll();
+    // Invoke immediately to initialize scrollTop
+    setScrollTop(scrollParent.scrollTop);
 
     return () => {
       scrollParent.removeEventListener("scroll", handleScroll);

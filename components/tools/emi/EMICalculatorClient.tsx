@@ -125,13 +125,20 @@ export default function EMICalculatorClient() {
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!resultRef.current) return;
-      const rect = resultRef.current.getBoundingClientRect();
-      setIsSticky(rect.bottom < 0);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (!resultRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry) {
+          setIsSticky(!entry.isIntersecting && entry.boundingClientRect.bottom < 0);
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(resultRef.current);
+    return () => observer.disconnect();
   }, []);
 
   return (

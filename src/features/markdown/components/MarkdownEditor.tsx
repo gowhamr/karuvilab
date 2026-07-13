@@ -135,13 +135,20 @@ export function MarkdownEditor() {
     const prev = previewRef.current;
     if (!ta || !prev) return;
 
+    let ticking = false;
     const handleScroll = () => {
-      const pct = ta.scrollTop / (ta.scrollHeight - ta.clientHeight || 1);
-      const targetScroll = pct * (prev.scrollHeight - prev.clientHeight);
-      prev.scrollTop = targetScroll;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const pct = ta.scrollTop / (ta.scrollHeight - ta.clientHeight || 1);
+          const targetScroll = pct * (prev.scrollHeight - prev.clientHeight);
+          prev.scrollTop = targetScroll;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    ta.addEventListener("scroll", handleScroll);
+    ta.addEventListener("scroll", handleScroll, { passive: true });
     return () => ta.removeEventListener("scroll", handleScroll);
   }, [scrollSync, mode]);
 

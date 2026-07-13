@@ -13,21 +13,6 @@ interface CategoryChipsProps {
 
 export const CategoryChips = memo(function CategoryChips({ activeCategory, onCategoryChange }: CategoryChipsProps) {
   const { containerRef, events, dragged } = useDragScroll<HTMLDivElement>();
-
-  const [hasLeft, setHasLeft] = useState(false);
-  const [hasRight, setHasRight] = useState(true);
-
-  const updateScrollState = useCallback(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const scrollLeft = el.scrollLeft;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-
-    setHasLeft(scrollLeft > 5);
-    setHasRight(scrollLeft < maxScroll - 5);
-  }, [containerRef]);
-
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, currentIndex: number) => {
       const items = containerRef.current?.querySelectorAll('[role="tab"]');
@@ -56,26 +41,6 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     [containerRef]
   );
 
-  // Monitor scroll for fades
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    updateScrollState();
-
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
-
-    // Initial check with small delay to handle client layout calculations
-    const timer = setTimeout(updateScrollState, 100);
-
-    return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-      clearTimeout(timer);
-    };
-  }, [updateScrollState, containerRef]);
-
   // Center active category chip on load or state change
   useEffect(() => {
     const targetId = activeCategory ? `tab-${activeCategory}` : "tab-all";
@@ -91,14 +56,6 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
 
   return (
     <div className="relative group/wrapper w-auto overflow-hidden">
-      {/* Dynamic Scroll Masks */}
-      {hasLeft && (
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-bg via-bg/80 to-bg/0 pointer-events-none z-above transition-opacity duration-300" />
-      )}
-      {hasRight && (
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-bg via-bg/80 to-bg/0 pointer-events-none z-above transition-opacity duration-300" />
-      )}
-
       <div 
         ref={containerRef}
         role="tablist"

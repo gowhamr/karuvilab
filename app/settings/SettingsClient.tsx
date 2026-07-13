@@ -7,7 +7,7 @@ import {
   RefreshCw,
   ChevronRight, ArrowLeft,
   History as HistoryIcon, Search,
-  HelpCircle
+  HelpCircle, Download
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useIsHydrated, useSettingsStore } from "@/src/store/settings/store";
@@ -24,6 +24,7 @@ const PrivacySection = dynamic(() => import("./sections/PrivacySection").then(m 
 const HistorySection = dynamic(() => import("./sections/HistorySection").then(m => m.HistorySection), { ssr: false, loading: () => <SectionSkeleton /> });
 const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false, loading: () => <SectionSkeleton /> });
 const WorldClockSection = dynamic(() => import("./sections/WorldClockSection").then(m => m.WorldClockSection), { ssr: false, loading: () => <SectionSkeleton /> });
+const PWAInstallSection = dynamic(() => import("./sections/PWAInstallSection").then(m => m.PWAInstallSection), { ssr: false, loading: () => <SectionSkeleton /> });
 
 import { Globe } from "lucide-react";
 
@@ -32,6 +33,7 @@ const MENU_ITEMS = [
   { id: 'accessibility', label: 'Accessibility', icon: Sparkles, desc: 'Reduced motion, font size', group: 'Personalization' },
   { id: 'world_clock', label: 'World Clock', icon: Globe, desc: 'Clock preferences', group: 'Tools' },
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
+  { id: 'pwa', label: 'Install App', icon: Download, desc: 'Install as offline app', group: 'Application' },
   { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History' },
   { id: 'help', label: 'Support & FAQ', icon: HelpCircle, desc: 'Security, help', group: 'Support' },
 ];
@@ -110,7 +112,7 @@ export default function SettingsClient() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 min-h-screen">
+    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 min-h-screen pb-[calc(5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
       
       {/* ── Sidebar Navigation ─────────────────────────────────────────── */}
       <aside className={cn("w-full lg:w-80 flex-shrink-0 space-y-8", activeSection ? "hidden lg:block" : "block")}>
@@ -139,7 +141,7 @@ export default function SettingsClient() {
             </div>
           </div>
           
-          <nav className="space-y-8 max-h-[calc(100vh-250px)] overflow-y-auto no-scrollbar px-1" role="tablist">
+          <nav className="space-y-8 lg:max-h-[calc(100vh-250px)] lg:overflow-y-auto no-scrollbar px-1" role="tablist">
             {Object.entries(groupedItems).map(([group, items]) => (
               <div key={group} className="space-y-2">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-4">{group}</h2>
@@ -266,6 +268,7 @@ export default function SettingsClient() {
                 {activeSection === 'accessibility' && <AccessibilitySection />}
                 {activeSection === 'world_clock' && <WorldClockSection />}
                 {activeSection === 'privacy' && <PrivacySection />}
+                {activeSection === 'pwa' && <PWAInstallSection />}
                 {activeSection === 'history' && <HistorySection />}
                 {activeSection === 'help' && <HelpSection />}
               </div>

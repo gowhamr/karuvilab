@@ -9,6 +9,8 @@ interface PWAState {
   dismissPWA: () => void;
   hasHydrated: boolean;
   setHasHydrated: (val: boolean) => void;
+  forceShowPrompt: boolean;
+  setForceShowPrompt: (val: boolean) => void;
 }
 
 export const usePWAStore = create<PWAState>()(
@@ -20,6 +22,8 @@ export const usePWAStore = create<PWAState>()(
       dismissPWA: () => set({ pwaDismissedAt: Date.now() }),
       hasHydrated: false,
       setHasHydrated: (val) => set({ hasHydrated: val }),
+      forceShowPrompt: false,
+      setForceShowPrompt: (val) => set({ forceShowPrompt: val }),
     }),
     {
       version: 1,

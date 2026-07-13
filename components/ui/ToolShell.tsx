@@ -1,6 +1,7 @@
 import { ALL_TOOLS, CategoryEntry } from '@/src/tool-registry';
 import { StructuredData } from '@/src/lib/seo';
 import { ClientToolShell, ClientToolShellProps } from './ClientToolShell';
+import { marked } from 'marked';
 
 interface ToolShellProps {
   title: string;
@@ -55,6 +56,15 @@ export async function ToolShell({ title, description, category, children, toolId
     relatedTools:        relatedTools,
   };
 
+  const parsedContent: ClientToolShellProps['parsedContent'] = {
+    detailedDescription: mergedContent.detailedDescription ? await marked.parse(mergedContent.detailedDescription) : '',
+    howTo: await Promise.all((mergedContent.howTo || []).map(async step => await marked.parse(step))),
+    faq: await Promise.all((mergedContent.faq || []).map(async item => ({
+      question: item.question,
+      answer: await marked.parse(item.answer)
+    })))
+  };
+
   return (
     <>
       <StructuredData tool={currentTool} category={category} content={mergedContent} />
@@ -64,6 +74,7 @@ export async function ToolShell({ title, description, category, children, toolId
         category={category}
         toolId={toolId}
         content={mergedContent}
+        parsedContent={parsedContent}
         fullWidth={fullWidth}
         visibleExamples={visibleExamples ?? reg.visibleExamples ?? (currentTool as any)?.visibleExamples}
       >

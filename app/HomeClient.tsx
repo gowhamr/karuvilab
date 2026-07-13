@@ -562,12 +562,13 @@ export default function HomeClient() {
                   {/* Smart Filters toggle */}
                   <button
                     onClick={() => setShowSmartFilters(!showSmartFilters)}
+                    aria-label="Toggle filters"
                     className={cn(
-                      "min-h-11 px-3 flex items-center gap-1.5 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
+                      "min-h-11 min-w-11 px-3 flex items-center justify-center gap-1.5 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
                       activeFilters.length > 0 ? "border-brand-primary/50 text-brand-primary bg-brand-primary/5" : "border-border/80 text-text-3"
                     )}
                   >
-                    <SlidersHorizontal className="w-3.5 h-3.5" /> Filters 
+                    <SlidersHorizontal className="w-3.5 h-3.5" />
                     {activeFilters.length > 0 && <span className="bg-brand-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{activeFilters.length}</span>}
                   </button>
 
@@ -621,7 +622,12 @@ export default function HomeClient() {
             </AnimatePresence>
 
             {/* ── Main content ── */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8 space-y-10 md:space-y-12">
+            <div
+              id="tool-grid-panel"
+              role="tabpanel"
+              aria-labelledby={activeCategory ? `tab-${activeCategory}` : "tab-all"}
+              className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8 space-y-10 md:space-y-12"
+            >
               <AnimatePresence mode="wait">
 
                 {/* ── FILTERING STATE ── */}
