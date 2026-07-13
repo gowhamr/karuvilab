@@ -229,7 +229,6 @@ export default function HomeClient() {
     handleCategoryChange(null);
     setActiveFilters([]);
   }, [handleCategoryChange]);
-  };
 
   const isFiltering = !!activeCategory || activeFilters.length > 0;
 

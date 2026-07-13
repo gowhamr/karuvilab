@@ -236,16 +236,16 @@ export default function PomodoroTimerClient() {
 
       {/* Mode Switcher */}
       <div className="flex p-1.5 bg-surface border border-border rounded-2xl shadow-premium relative z-content">
-        {(['focus', 'break'] as const).map((m) => (
+        {(['focus', 'break'] as const).map((mType) => (
           <button
-            key={m}
-            onClick={() => switchMode(m)}
+            key={mType}
+            onClick={() => switchMode(mType)}
             className={cn(
               "relative px-8 py-3 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm-lg transition-all outline-none",
-              mode === m ? "text-white" : "text-text-4 hover:text-text"
+              mode === mType ? "text-white" : "text-text-4 hover:text-text"
             )}
           >
-            {mode === m && (
+            {mode === mType && (
               <m.div
                 layoutId="pomo-mode"
                 className="absolute inset-0 bg-blue rounded-2xl z-behind shadow-md shadow-blue/10"
@@ -253,8 +253,8 @@ export default function PomodoroTimerClient() {
               />
             )}
             <span className="relative z-content flex items-center gap-2">
-              {m === 'focus' ? <Sparkles size={14} /> : <Coffee size={14} />}
-              {m}
+              {mType === 'focus' ? <Sparkles size={14} /> : <Coffee size={14} />}
+              {mType}
             </span>
           </button>
         ))}
