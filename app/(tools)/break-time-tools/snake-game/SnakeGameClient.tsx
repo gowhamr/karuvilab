@@ -73,6 +73,7 @@ export default function SnakeGameClient() {
     { x: 10, y: 12 },
   ]);
   const [direction, setDirection] = useState<Direction>("UP");
+  const directionRef = useRef<Direction>("UP");
   const [food, setFood] = useState<Position & { type: "normal" | "golden", spawnTime: number }>({ x: 5, y: 5, type: "normal", spawnTime: Date.now() });
   const [score, setScore] = useState(0);
   const [floatingScores, setFloatingScores] = useState<{id: number, x: number, y: number, val: number}[]>([]);
@@ -198,6 +199,7 @@ export default function SnakeGameClient() {
     ];
     setSnake(initialSnake);
     setDirection("UP");
+    directionRef.current = "UP";
     inputQueueRef.current = [];
     setFood(generateFood(initialSnake));
     setScore(0);
@@ -235,7 +237,7 @@ export default function SnakeGameClient() {
   const changeDirection = useCallback((newDir: Direction) => {
     const lastInput = inputQueueRef.current.length > 0 
       ? inputQueueRef.current[inputQueueRef.current.length - 1] 
-      : direction;
+      : directionRef.current;
 
     if (newDir === lastInput) return;
     if (inputQueueRef.current.length >= 2) return;
@@ -244,7 +246,7 @@ export default function SnakeGameClient() {
     else if (newDir === "DOWN" && lastInput !== "UP") inputQueueRef.current.push("DOWN");
     else if (newDir === "LEFT" && lastInput !== "RIGHT") inputQueueRef.current.push("LEFT");
     else if (newDir === "RIGHT" && lastInput !== "LEFT") inputQueueRef.current.push("RIGHT");
-  }, [direction]);
+  }, []);
 
   // Keyboard handler
   useEffect(() => {
@@ -325,7 +327,8 @@ export default function SnakeGameClient() {
     const moveSnake = () => {
       setSnake(prevSnake => {
         const head = { ...prevSnake[0]! };
-        const currentDir = inputQueueRef.current.length > 0 ? inputQueueRef.current.shift()! : direction;
+        const currentDir = inputQueueRef.current.length > 0 ? inputQueueRef.current.shift()! : directionRef.current;
+        directionRef.current = currentDir;
         setDirection(currentDir);
 
         switch (currentDir) {
