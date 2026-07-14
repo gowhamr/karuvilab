@@ -237,6 +237,9 @@ export default function SnakeGameClient() {
       ? inputQueueRef.current[inputQueueRef.current.length - 1] 
       : direction;
 
+    if (newDir === lastInput) return;
+    if (inputQueueRef.current.length >= 2) return;
+
     if (newDir === "UP" && lastInput !== "DOWN") inputQueueRef.current.push("UP");
     else if (newDir === "DOWN" && lastInput !== "UP") inputQueueRef.current.push("DOWN");
     else if (newDir === "LEFT" && lastInput !== "RIGHT") inputQueueRef.current.push("LEFT");
@@ -377,7 +380,11 @@ export default function SnakeGameClient() {
         }
 
         // Self collision
-        if (!isInvincible && checkSelfCollision(head, prevSnake)) {
+        // The tail moves forward, so moving into the old tail's position is safe unless eating
+        const willEat = head.x === food.x && head.y === food.y;
+        const bodyToCheck = willEat ? prevSnake : prevSnake.slice(0, -1);
+        
+        if (!isInvincible && checkSelfCollision(head, bodyToCheck)) {
           triggerHaptic('death');
           setGameState("GAMEOVER");
           updateBest(score);
