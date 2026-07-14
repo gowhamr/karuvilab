@@ -73,6 +73,7 @@ export function Toolbar({
               <button
                 key={iIdx}
                 title={item.title}
+                aria-label={item.title}
                 onClick={() => {
                   if (item.diagram) {
                     const snippet = DIAGRAM_SNIPPETS[item.diagram];
@@ -96,6 +97,7 @@ export function Toolbar({
       
       <button
         title="Insert Table"
+        aria-label="Insert Table"
         onClick={() => onInsert("\n| Col 1 | Col 2 |\n|-------|-------|\n| Cell  | Cell  |\n")}
         className="p-1.5 rounded-lg hover:bg-surface border border-border text-text-3 hover:text-blue transition-all"
       >
@@ -106,6 +108,7 @@ export function Toolbar({
 
       <button
         title={scrollSync ? "Disable Scroll Sync" : "Enable Scroll Sync"}
+        aria-label={scrollSync ? "Disable Scroll Sync" : "Enable Scroll Sync"}
         onClick={onToggleScrollSync}
         className={`p-1.5 rounded-lg border transition-all ${scrollSync ? 'bg-blue/10 border-blue/20 text-blue' : 'bg-transparent border-transparent text-text-4 hover:border-border hover:bg-surface'}`}
       >
@@ -115,6 +118,7 @@ export function Toolbar({
       <div className="ml-auto flex gap-1">
         <button
           title="Load Sample"
+          aria-label="Load Sample Markdown"
           onClick={onLoadSample}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue/5 text-blue text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue/10 transition-all border border-blue/10"
         >
@@ -123,6 +127,7 @@ export function Toolbar({
         </button>
         <button
           title="Clear All"
+          aria-label="Clear All Content"
           onClick={onClear}
           className="p-1.5 rounded-lg hover:bg-error/5 text-text-4 hover:text-error transition-all"
         >

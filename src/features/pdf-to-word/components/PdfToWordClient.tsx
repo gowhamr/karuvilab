@@ -57,21 +57,16 @@ export default function PdfToWordClient() {
   const downloadDocx = async () => {
     if (!text) return;
     startProcessing("short");
+    setStage("Preparing to generate DOCX...");
     try {
-      const { Document, Packer, Paragraph, TextRun } = await import("docx");
-      const sections = text.split("\n\n--- Page Break ---\n\n").map(pageContent => ({
-        properties: {},
-        children: pageContent.split("\n").map(line => 
-          new Paragraph({
-            children: [new TextRun({ text: line, size: 24 })],
-            spacing: { after: 200 }
-          })
-        ),
-      }));
-
-      const doc = new Document({ sections });
-      const blob = await Packer.toBlob(doc);
+      const docxBytes = await workerOrchestrator.dispatch<Uint8Array>(
+        "generateDocxFromText",
+        [text],
+        [],
+        (p: any) => setStage(p.message || "Generating...")
+      );
       
+      const blob = new Blob([docxBytes as any], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
       const url = createUrl(blob);
       const a = document.createElement("a");
       a.href = url;

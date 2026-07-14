@@ -6,6 +6,7 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
 import { workerManager } from "@/src/workers/manager";
 import { useProgress } from "@/src/contexts/ProgressContext";
+import { PdfPagePreview } from "@/components/ui/PdfPagePreview";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -244,8 +245,13 @@ export default function WatermarkPdfClient() {
         {/* Preview */}
         <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
           <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Preview</h2>
-          <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl overflow-hidden aspect-[3/4] flex items-center justify-center relative">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl overflow-hidden flex items-center justify-center relative min-h-[400px]">
+            {file ? (
+              <PdfPagePreview file={file} pageIndex={1} width={600} className="w-full h-full object-contain opacity-60" />
+            ) : (
+              <div className="text-text-4 text-xs z-0 absolute">Upload a PDF to see preview</div>
+            )}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
               {watermarkType === "text" ? (
                 <span
                   style={{
@@ -278,7 +284,6 @@ export default function WatermarkPdfClient() {
                 )
               )}
             </div>
-            <div className="text-text-4 text-xs">Page preview</div>
           </div>
         </div>
       </div>

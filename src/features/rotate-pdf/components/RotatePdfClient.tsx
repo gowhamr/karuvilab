@@ -6,6 +6,7 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { workerManager } from "@/src/workers/manager";
 import { useProgress } from "@/src/contexts/ProgressContext";
+import { PdfPagePreview } from "@/components/ui/PdfPagePreview";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -131,21 +132,21 @@ export default function RotatePdfClient() {
           pageCount > 0 && (
             <div className="space-y-4">
               <label className="text-sm font-bold text-text-2">Per-page rotation</label>
-              <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar p-2">
                 {Array.from({ length: pageCount }, (_, i) => (
-                  <div key={i} className="flex items-center gap-4 bg-bg border border-border rounded-xl px-5 py-3">
-                    <label htmlFor={`rotate-page-${i}`} className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 w-20 flex-shrink-0">Page {i + 1}</label>
-                    <select
-                      id={`rotate-page-${i}`}
-                      className="flex-1 px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all cursor-pointer"
-                      value={pageAngles[i] || 90}
-                      onChange={e => { const a = [...pageAngles]; a[i] = Number(e.target.value); setPageAngles(a); }}
-                    >
-                      <option value={90}>90° CW</option>
-                      <option value={180}>180°</option>
-                      <option value={270}>270° CW</option>
-                      <option value={-90}>−90° (CCW)</option>
-                    </select>
+                  <div 
+                    key={i} 
+                    className="flex flex-col items-center gap-3 bg-bg border border-border rounded-2xl p-4 cursor-pointer hover:border-blue transition-colors group"
+                    onClick={() => { const a = [...pageAngles]; a[i] = ((a[i] || 90) + 90) % 360; setPageAngles(a); }}
+                    title="Click to rotate 90° clockwise"
+                  >
+                    <div className="relative w-full aspect-[1/1.4] bg-surface flex items-center justify-center overflow-hidden rounded-xl border border-border/50 group-hover:shadow-md transition-shadow">
+                       {file && <PdfPagePreview file={file} pageIndex={i + 1} width={120} rotation={pageAngles[i] || 90} className="max-w-full max-h-full object-contain" />}
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 group-hover:text-blue transition-colors">Page {i + 1}</span>
+                      <span className="text-[10px] font-medium text-text-4">{pageAngles[i] || 90}°</span>
+                    </div>
                   </div>
                 ))}
               </div>

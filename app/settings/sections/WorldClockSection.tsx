@@ -19,6 +19,7 @@ export const WorldClockSection = memo(function WorldClockSection() {
       >
         <SettingSelect 
           value={settings.primaryLabel}
+          ariaLabel="Primary Display Label"
           onChange={(val) => updateSettings({ primaryLabel: val as 'city' | 'country' | 'custom' })}
           options={[
             { label: 'City (Default)', value: 'city' },

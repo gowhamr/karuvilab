@@ -229,7 +229,7 @@ html.preload *:after {
   --danger:          #EF4444;
   --divider:         rgba(15, 23, 42, 0.08);
   --text-primary:    #0F172A;
-  --text-secondary:  #475569;
+  --text-secondary:  #334155;
   --bg:              #FFFFFF;
   --surface:         #FFFFFF;
   --surface-elevated:#F8FAFC;
@@ -275,7 +275,7 @@ html.preload *:after {
 
   /* Contrast Overrides for Light Mode */
   --kv-text:             #0F172A;
-  --kv-text-muted:       #475569;
+  --kv-text-muted:       #334155;
   --kv-chip-border:      #CBD5E1;
   --kv-trust-text:       #475569;
 }
@@ -298,7 +298,7 @@ html.preload *:after {
   --danger-spec:     #FF5C8A;
   --divider:         rgba(255, 255, 255, 0.08);
   --text-primary:    #FFFFFF;
-  --text-secondary:  #AAB3C5;
+  --text-secondary:  #CBD5E1;
   --bg:              #070B14;
   --surface:         #101626;
   --surface-elevated:#171F33;
@@ -333,7 +333,7 @@ html.preload *:after {
 
   /* Contrast Overrides for Dark Mode */
   --kv-text:             #FFFFFF;
-  --kv-text-muted:       #AAB3C5;
+  --kv-text-muted:       #CBD5E1;
   --kv-chip-border:      rgba(255, 255, 255, 0.10);
   --kv-trust-text:       #AAB3C5;
 }

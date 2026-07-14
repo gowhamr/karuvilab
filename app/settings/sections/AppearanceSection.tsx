@@ -27,6 +27,7 @@ export const AppearanceSection = memo(function AppearanceSection() {
       >
         <SettingSelect 
           value={appearance.theme}
+          ariaLabel="Theme Selection"
           onChange={handleThemeChange}
           options={[
             { label: 'Light', value: 'light' },

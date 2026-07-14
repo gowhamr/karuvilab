@@ -70,13 +70,15 @@ interface SettingSwitchProps {
   checked: boolean;
   onChange: (val: boolean) => void;
   disabled?: boolean;
+  ariaLabel?: string;
 }
 
-export const SettingSwitch = memo(function SettingSwitch({ checked, onChange, disabled }: SettingSwitchProps) {
+export const SettingSwitch = memo(function SettingSwitch({ checked, onChange, disabled, ariaLabel }: SettingSwitchProps) {
   return (
     <button
       role="switch"
       aria-checked={checked}
+      aria-label={ariaLabel}
       onClick={() => onChange(!checked)}
       disabled={disabled}
       className={`
@@ -100,11 +102,12 @@ interface SettingSelectProps {
   options: { label: string; value: string }[];
   value: string;
   onChange: (val: any) => void;
+  ariaLabel?: string;
 }
 
-export const SettingSelect = memo(function SettingSelect({ options, value, onChange }: SettingSelectProps) {
+export const SettingSelect = memo(function SettingSelect({ options, value, onChange, ariaLabel }: SettingSelectProps) {
   return (
-    <div className="flex p-1.5 bg-surface border border-border/80 rounded-2xl shadow-inner relative" role="radiogroup">
+    <div className="flex p-1.5 bg-surface border border-border/80 rounded-2xl shadow-inner relative" role="radiogroup" aria-label={ariaLabel}>
       {options.map((opt, i) => {
         const isActive = value === opt.value;
         const isLast = i === options.length - 1;

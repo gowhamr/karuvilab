@@ -1892,6 +1892,36 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "json-to-ts",
+    "name": "JSON to TypeScript",
+    "desc": "Generate TypeScript interfaces from JSON",
+    "href": "developer-tools/json-to-ts/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "json",
+      "typescript",
+      "ts",
+      "interface",
+      "types",
+      "generator",
+      "converter"
+    ],
+    "input": "json",
+    "output": "code",
+    "related": [
+      "json-formatter",
+      "base64"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "jwt-decoder",
     "name": "JWT Decoder",
     "desc": "Inspect JSON Web Tokens",
@@ -2452,6 +2482,32 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "pdf-to-image",
+    "name": "PDF to Image",
+    "desc": "Convert PDF pages to JPG or PNG images",
+    "href": "pdf-tools/pdf-to-image/",
+    "category": "pdf",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "image",
+      "convert",
+      "jpg",
+      "png",
+      "extract"
+    ],
+    "input": "pdf",
+    "output": "image",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false

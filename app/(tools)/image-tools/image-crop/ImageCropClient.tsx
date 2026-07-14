@@ -41,6 +41,16 @@ export default function ImageCropClient() {
   const [outputFormat, setOutputFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/jpeg');
   const imgRef = useRef<HTMLImageElement>(null);
 
+  const updateCrop = (field: 'x'|'y'|'width'|'height', valStr: string) => {
+    if (!completedCrop || !imgRef.current) return;
+    const val = parseInt(valStr, 10);
+    if (isNaN(val)) return;
+    
+    const newCrop: Crop = { ...completedCrop, [field]: val, unit: 'px' as const };
+    setCrop(newCrop);
+    setCompletedCrop({ ...completedCrop, [field]: val, unit: 'px' as const });
+  };
+
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
   const handleFile = (file: File) => {
@@ -161,18 +171,13 @@ export default function ImageCropClient() {
           {/* Image preview with crop overlay */}
           {originalUrl && origW > 0 && (
             <div className="bg-surface border border-border rounded-2xl overflow-hidden p-4 flex justify-center items-center">
-              {(() => {
-                const cropProps: any = {
-                  crop,
-                  onChange: (c: PixelCrop) => setCrop(c),
-                  onComplete: (c: PixelCrop) => setCompletedCrop(c),
-                  className: "max-w-full"
-                };
-                if (aspect !== undefined) {
-                  cropProps.aspect = aspect;
-                }
-                return (
-                  <ReactCrop {...cropProps}>
+                  <ReactCrop 
+                    crop={crop}
+                    onChange={(c: PixelCrop) => setCrop(c)}
+                    onComplete={(c: PixelCrop) => setCompletedCrop(c)}
+                    className="max-w-full"
+                    {...(aspect !== undefined ? { aspect } : {})}
+                  >
                     <img 
                       ref={imgRef} 
                       src={originalUrl} 
@@ -180,8 +185,6 @@ export default function ImageCropClient() {
                       className="max-w-full h-auto max-h-[60vh] object-contain rounded-lg"
                     />
                   </ReactCrop>
-                );
-              })()}
             </div>
           )}
 
@@ -224,19 +227,19 @@ export default function ImageCropClient() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">X (left)</label>
-                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.x) : 0} disabled />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.x) : 0} onChange={(e) => updateCrop('x', e.target.value)} disabled={!completedCrop} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">Y (top)</label>
-                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.y) : 0} disabled />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.y) : 0} onChange={(e) => updateCrop('y', e.target.value)} disabled={!completedCrop} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">Width</label>
-                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.width) : 0} disabled />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.width) : 0} onChange={(e) => updateCrop('width', e.target.value)} disabled={!completedCrop} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-text-3">Height</label>
-                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.height) : 0} disabled />
+                  <input type="number" className={inputClass} value={completedCrop ? Math.round(completedCrop.height) : 0} onChange={(e) => updateCrop('height', e.target.value)} disabled={!completedCrop} />
                 </div>
               </div>
 

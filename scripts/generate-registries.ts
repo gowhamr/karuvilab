@@ -57,10 +57,9 @@ export const CORE_TOOLS: ToolEntry[] = ${JSON.stringify(coreTools, null, 2)};
   fs.writeFileSync(outputPath, content);
   
   // Generate llms.txt for AI agents
-  const llmsContent = `# KaruviLab - AI Agent Guidance
+  const llmsContent = `# KaruviLab
 
-KaruviLab is a privacy-first, zero-server-upload collection of local browser tools.
-This document provides instructions and metadata for AI Agents navigating the site.
+> KaruviLab is a privacy-first, zero-server-upload collection of local browser tools. This document provides instructions and metadata for AI Agents navigating the site.
 
 ## Navigation & Architecture
 - The site uses Next.js with React 19.
@@ -69,9 +68,7 @@ This document provides instructions and metadata for AI Agents navigating the si
 
 ## Available Tools
 
-${coreTools.map(t => `- **${t.name}**: ${t.desc}
-  - URL: /${t.href}
-  - Category: ${t.category}`).join('\n\n')}
+${coreTools.map(t => `- [${t.name}](https://karuvilab.com/${t.href}): ${t.desc}`).join('\n')}
 `;
 
   const llmsPath = path.resolve(process.cwd(), 'public/llms.txt');

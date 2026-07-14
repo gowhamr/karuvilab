@@ -47,7 +47,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
               <span class="w-1.5 h-1.5 rounded-full bg-blue animate-pulse"></span>
               Mermaid Diagram
             </span>
-            <button class="mmd-copy p-1 hover:bg-surface rounded text-text-muted hover:text-text-2 transition-colors cursor-pointer" title="Copy Diagram Source">
+            <button class="mmd-copy p-1 hover:bg-surface rounded text-text-muted hover:text-text-2 transition-colors cursor-pointer" title="Copy Diagram Source" aria-label="Copy Diagram Source">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             </button>
           </div>
@@ -88,6 +88,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
       const btn = document.createElement('button');
       btn.className = 'copy-code-btn absolute right-2 top-2 p-1.5 bg-surface/80 backdrop-blur-sm border border-border rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:text-blue hover:scale-105';
       btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+      btn.setAttribute('aria-label', 'Copy code snippet');
       btn.onclick = (e) => {
         e.stopPropagation();
         const code = (pre.querySelector('code') as HTMLElement)?.innerText || '';

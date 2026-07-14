@@ -20,6 +20,7 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
       >
         <SettingSwitch
           checked={!!accessibility.reduceMotion}
+          ariaLabel="Reduce Motion"
           onChange={(val) => updateAccessibility({ reduceMotion: val })}
         />
       </SettingRow>
@@ -33,6 +34,7 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
       >
         <SettingSelect
           value={String(accessibility.fontScaling)}
+          ariaLabel="Text Scaling"
           onChange={(val) => updateAccessibility({ fontScaling: parseFloat(val) })}
           options={[
             { label: "90%", value: "0.9" },
@@ -52,6 +54,7 @@ export const AccessibilitySection = memo(function AccessibilitySection() {
       >
         <SettingSwitch
           checked={accessibility.highContrast}
+          ariaLabel="High Contrast Borders"
           onChange={(val) => updateAccessibility({ highContrast: val })}
         />
       </SettingRow>

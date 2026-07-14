@@ -362,6 +362,11 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<string>;
 
+  generateDocxFromText(
+    text: string,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   // Numeral Tasks
   convertNumeral(
     input: string,

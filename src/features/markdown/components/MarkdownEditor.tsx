@@ -351,6 +351,7 @@ export function MarkdownEditor() {
             onClick={() => setShowFind(!showFind)}
             className={`p-2 rounded-xl border transition-all ${showFind ? 'bg-blue text-white border-blue' : 'bg-surface border-border text-text-3 hover:border-blue hover:text-blue'}`}
             title="Find & Replace"
+            aria-label="Find and Replace"
           >
             <Search className="w-4 h-4" />
           </button>
@@ -471,6 +472,7 @@ export function MarkdownEditor() {
                       setFileName("");
                       setUploadMd("");
                     }}
+                    aria-label="Close"
                     className="p-2 hover:bg-surface rounded-xl text-text-4 transition-all shrink-0 ml-2"
                   >
                     <X className="w-5 h-5" />

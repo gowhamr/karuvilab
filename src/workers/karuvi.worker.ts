@@ -188,7 +188,7 @@ const api: WorkerAPI = {
       page.setRotation(degrees((current + angle) % 360));
     });
     const outBytes = await doc.save();
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
   async watermarkPdf(
@@ -262,7 +262,7 @@ const api: WorkerAPI = {
     }
 
     const outBytes = await doc.save();
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
   async convertImagesToPdf(images: Array<{ buffer: ArrayBuffer, mime: string }>, pageSize: "a4" | "letter" | "fit", onProgress: any) {
@@ -289,7 +289,7 @@ const api: WorkerAPI = {
     
     if (onProgress) onProgress({ percent: 100, message: "Saving PDF..." });
     const bytes = await pdf.save();
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(bytes, [bytes.buffer]);
   },
 
   async lockPdf(file: ArrayBuffer, userPassword: string, ownerPassword?: string, onProgress?: any) {
@@ -307,7 +307,7 @@ const api: WorkerAPI = {
         annotating: false,
       },
     } as any);
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
   
   async unlockPdf(file: ArrayBuffer, password: string, onProgress?: any) {
@@ -316,7 +316,7 @@ const api: WorkerAPI = {
     const doc = await PDFDocument.load(file, { password } as any);
     if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
     const outBytes = await doc.save();
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
   async addPageNumbersToPdf(
@@ -362,7 +362,7 @@ const api: WorkerAPI = {
 
     if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
     const outBytes = await doc.save();
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
   // PDF Tasks (with memory optimization)
@@ -1022,7 +1022,7 @@ const api: WorkerAPI = {
     }
 
     const pdfBytes = await pdfDoc.save();
-    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
+    return Comlink.transfer(pdfBytes, [pdfBytes.buffer]);
   },
 
   async extractImagesFromPdf(file, onProgress) {
@@ -1132,6 +1132,31 @@ const api: WorkerAPI = {
     }
 
     return allText.join("\n\n--- Page Break ---\n\n");
+  },
+
+  async generateDocxFromText(text: string, onProgress?: ProgressCallback) {
+    if (onProgress) onProgress({ percent: 10, message: "Loading docx library..." });
+    const { Document, Packer, Paragraph, TextRun } = await import("docx");
+    
+    if (onProgress) onProgress({ percent: 30, message: "Parsing text sections..." });
+    const sections = text.split("\n\n--- Page Break ---\n\n").map(pageContent => ({
+      properties: {},
+      children: pageContent.split("\n").map(line => 
+        new Paragraph({
+          children: [new TextRun({ text: line, size: 24 })],
+          spacing: { after: 200 }
+        })
+      ),
+    }));
+
+    if (onProgress) onProgress({ percent: 60, message: "Generating DOCX document..." });
+    const doc = new Document({ sections });
+    const blob = await Packer.toBlob(doc);
+    
+    if (onProgress) onProgress({ percent: 90, message: "Transferring binary..." });
+    const buf = await blob.arrayBuffer();
+    const outBytes = new Uint8Array(buf);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
   // Numeral Tasks

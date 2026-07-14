@@ -9,7 +9,8 @@ import { useToast } from '@/components/ui/Toast';
 interface LinkEntry {
   id: string;
   url: string;
-  description: string;
+  title: string;
+  notes: string;
 }
 
 export default function ToolClient() {
@@ -20,7 +21,7 @@ export default function ToolClient() {
   const { toast } = useToast();
 
   const addLink = useCallback(() => {
-    setLinks(prev => [...prev, { id: crypto.randomUUID(), url: '', description: '' }]);
+    setLinks(prev => [...prev, { id: crypto.randomUUID(), url: '', title: '', notes: '' }]);
   }, []);
 
   const removeLink = useCallback((id: string) => {
@@ -34,7 +35,10 @@ export default function ToolClient() {
   const generatedContent = useMemo(() => {
     let content = '';
     if (title) content += `# ${title}\n\n`;
-    if (description) content += `> ${description}\n\n`;
+    if (description) {
+      const blockquote = description.split('\n').map(line => `> ${line}`).join('\n');
+      content += `${blockquote}\n\n`;
+    }
     if (instructions) {
       content += `## Instructions\n\n${instructions}\n\n`;
     }
@@ -42,7 +46,9 @@ export default function ToolClient() {
       content += `## Important URLs\n\n`;
       links.forEach(link => {
         if (link.url) {
-          content += `- [${link.description || link.url}](${link.url})\n`;
+          const title = link.title || link.url;
+          const notesStr = link.notes ? `: ${link.notes}` : '';
+          content += `- [${title}](${link.url})${notesStr}\n`;
         }
       });
       content += '\n';
@@ -147,10 +153,18 @@ export default function ToolClient() {
                     />
                     <input
                       type="text"
-                      value={link.description}
-                      onChange={e => updateLink(link.id, 'description', e.target.value)}
-                      placeholder="API Documentation (optional)"
-                      aria-label="Link Description"
+                      value={link.title}
+                      onChange={e => updateLink(link.id, 'title', e.target.value)}
+                      placeholder="Link Title (e.g. API Docs)"
+                      aria-label="Link Title"
+                      className="w-full h-9 px-3 bg-bg border border-border rounded-md text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue"
+                    />
+                    <input
+                      type="text"
+                      value={link.notes}
+                      onChange={e => updateLink(link.id, 'notes', e.target.value)}
+                      placeholder="Optional notes about this link..."
+                      aria-label="Link Notes"
                       className="w-full h-9 px-3 bg-bg border border-border rounded-md text-sm text-text focus:outline-none focus:ring-2 focus:ring-blue"
                     />
                   </div>

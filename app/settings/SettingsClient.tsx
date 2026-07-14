@@ -141,7 +141,7 @@ export default function SettingsClient() {
             </div>
           </div>
           
-          <div className="space-y-8 lg:max-h-[calc(100vh-250px)] lg:overflow-y-auto no-scrollbar px-1" role="tablist">
+          <nav className="space-y-8 lg:max-h-[calc(100vh-250px)] lg:overflow-y-auto no-scrollbar px-1" aria-label="Settings Categories">
             {Object.entries(groupedItems).map(([group, items]) => (
               <div key={group} className="space-y-2">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-4">{group}</h2>
@@ -153,8 +153,7 @@ export default function SettingsClient() {
                     return (
                       <button
                         key={item.id}
-                        role="tab"
-                        aria-selected={isActive}
+                        aria-current={isActive ? 'page' : undefined}
                         onClick={() => setActiveSection(item.id)}
                         className={`
                           w-full group flex items-center gap-3 p-3 rounded-2xl transition-all text-left relative
@@ -200,7 +199,7 @@ export default function SettingsClient() {
                 <p className="text-xs text-text-4 opacity-60">Try searching for theme, cache, or privacy.</p>
               </div>
             )}
-          </div>
+          </nav>
         </div>
 
         <div className="hidden lg:block p-6 bg-gradient-to-br from-blue/5 to-transparent border border-blue/10 rounded-3xl space-y-4">
