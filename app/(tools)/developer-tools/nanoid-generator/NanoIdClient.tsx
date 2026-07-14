@@ -53,7 +53,7 @@ export default function NanoIdClient() {
       {/* Config Panel */}
       <div className="p-5 rounded-xl bg-surface-2 border border-border grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-text-muted">ID Length (Characters):</label>
+          <label htmlFor="nanoid-size-input" className="text-xs font-semibold text-text-muted">ID Length (Characters):</label>
           <input
             id="nanoid-size-input"
             type="number"
@@ -66,7 +66,7 @@ export default function NanoIdClient() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-text-muted">Quantity:</label>
+          <label htmlFor="nanoid-count-input" className="text-xs font-semibold text-text-muted">Quantity:</label>
           <input
             id="nanoid-count-input"
             type="number"
@@ -79,7 +79,7 @@ export default function NanoIdClient() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-text-muted">Alphabet Preset:</label>
+          <label htmlFor="nanoid-preset-select" className="text-xs font-semibold text-text-muted">Alphabet Preset:</label>
           <select
             id="nanoid-preset-select"
             value={alphabetPreset}

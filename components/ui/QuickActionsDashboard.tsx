@@ -129,7 +129,7 @@ export function QuickActionsDashboard({
       <section aria-label="Smart Quick Actions">
         <div className="flex items-center gap-2 mb-3 px-1">
           <Zap className="w-3.5 h-3.5 text-primary" />
-          <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h3>
+          <h2 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h2>
           {pasteNotice && <span className="text-caption font-bold text-danger ml-auto animate-pulse">{pasteNotice}</span>}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">

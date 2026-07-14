@@ -21,7 +21,7 @@ interface FocusModeToolbarProps {
   onWrapToggle?: (() => void) | undefined;
 }
 
-export function FocusModeToolbar({
+export const FocusModeToolbar = React.memo(function FocusModeToolbar({
   toolId,
   toolName,
   wordCount,
@@ -255,4 +255,4 @@ export function FocusModeToolbar({
       )}
     </AnimatePresence>
   );
-}
+});

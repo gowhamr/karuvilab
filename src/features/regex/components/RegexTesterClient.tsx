@@ -26,6 +26,8 @@ export default function RegexTesterClient() {
   const [testString, setTestString] = useState("");
   const [fontSize, setFontSize] = useState(14);
   const [wordWrap, setWordWrap] = useState(true);
+  const [replaceStr, setReplaceStr] = useState("");
+  const [mode, setMode] = useState<"match" | "replace">("match");
 
   // Regex Library state
   const [librarySearch, setLibrarySearch] = useState("");
@@ -120,6 +122,16 @@ export default function RegexTesterClient() {
     }
   }, [pattern, flagString, testString, flags.g]);
 
+  const replaceOutput = useMemo(() => {
+    if (!pattern || !testString) return null;
+    try {
+      const re = new RegExp(pattern, flagString);
+      return testString.replace(re, replaceStr);
+    } catch {
+      return null;
+    }
+  }, [pattern, flagString, testString, replaceStr]);
+
   const highlighted = useMemo(() => {
     if (!result || result.error || result.matches.length === 0) return null;
     try {
@@ -150,11 +162,34 @@ export default function RegexTesterClient() {
     <div className="w-full">
       <div className="space-y-6 w-full">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
+        {/* Mode Toggle */}
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-bold text-text-2">Regex Tester</h2>
+          <div className="flex rounded-xl border border-border overflow-hidden">
+            <button
+              onClick={() => setMode("match")}
+              aria-pressed={mode === "match"}
+              className={`px-3 py-1.5 text-xs font-bold transition-colors ${mode === "match" ? "bg-blue text-white" : "bg-bg text-text-3 hover:bg-surface"}`}
+            >
+              Match
+            </button>
+            <button
+              onClick={() => setMode("replace")}
+              aria-pressed={mode === "replace"}
+              className={`px-3 py-1.5 text-xs font-bold transition-colors ${mode === "replace" ? "bg-blue text-white" : "bg-bg text-text-3 hover:bg-surface"}`}
+            >
+              Replace
+            </button>
+          </div>
+        </div>
+
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Pattern</label>
+          <label htmlFor="regex-pattern" className="text-sm font-bold text-text-2">Pattern</label>
           <div className="flex items-center bg-bg border border-border rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue transition-all">
             <span className="px-3 text-text-4 font-mono text-lg select-none">/</span>
             <input
+              id="regex-pattern"
+              aria-label="Regular expression pattern"
               className="flex-1 py-3 bg-transparent font-mono text-sm outline-none text-text"
               placeholder="[a-z]+"
               value={pattern}
@@ -181,8 +216,10 @@ export default function RegexTesterClient() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Test String</label>
+          <label htmlFor="regex-test-string" className="text-sm font-bold text-text-2">Test String</label>
           <textarea
+            id="regex-test-string"
+            aria-label="Test string to match against"
             className={`w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono focus:ring-2 focus:ring-blue outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
             style={{ fontSize: `${fontSize}px` }}
             rows={6}
@@ -191,6 +228,26 @@ export default function RegexTesterClient() {
             onChange={e => setTestString(e.target.value)}
           />
         </div>
+
+        {mode === "replace" && (
+          <div className="space-y-2">
+            <label htmlFor="regex-replace" className="text-sm font-bold text-text-2">Replacement</label>
+            <input
+              id="regex-replace"
+              aria-label="Replacement string (supports $1, $2 capture group references)"
+              className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all"
+              placeholder="Replacement (e.g. $1, <b>$2</b>)…"
+              value={replaceStr}
+              onChange={e => setReplaceStr(e.target.value)}
+            />
+            {replaceOutput !== null && (
+              <div className="mt-3 space-y-1">
+                <p className="text-xs font-bold text-text-4 uppercase tracking-widest">Result</p>
+                <pre className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text whitespace-pre-wrap break-words max-h-48 overflow-auto custom-scrollbar">{replaceOutput}</pre>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {result?.error && (
@@ -276,6 +333,7 @@ export default function RegexTesterClient() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 pointer-events-none" />
             <input
               type="text"
+              aria-label="Search regex library by label, pattern, or description"
               placeholder="Search by label, pattern, description..."
               className="w-full pl-9 pr-8 py-2 bg-bg border border-border rounded-xl text-xs text-text focus:ring-2 focus:ring-blue focus:border-blue outline-none transition-all placeholder:text-text-4"
               value={librarySearch}
@@ -284,6 +342,7 @@ export default function RegexTesterClient() {
             {librarySearch && (
               <button
                 onClick={() => setLibrarySearch("")}
+                aria-label="Clear library search"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-4 hover:text-text cursor-pointer font-bold"
               >
                 ✕

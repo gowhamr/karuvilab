@@ -83,10 +83,11 @@ export default function GratuityCalculatorClient() {
           
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Last Drawn Salary (Basic + DA)</label>
+              <label htmlFor="last-salary" className="text-xs font-bold text-text-3 block">Last Drawn Salary (Basic + DA)</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
                 <input
+                  id="last-salary"
                   type="number"
                   value={lastSalary || ''}
                   onChange={(e) => setLastSalary(Number(e.target.value))}
@@ -97,8 +98,9 @@ export default function GratuityCalculatorClient() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-3">
-                <label className="text-xs font-bold text-text-3 block">Years of Service</label>
+                <label htmlFor="years-service" className="text-xs font-bold text-text-3 block">Years of Service</label>
                 <input
+                  id="years-service"
                   type="number"
                   value={years || ''}
                   onChange={(e) => setYears(Number(e.target.value))}
@@ -106,8 +108,9 @@ export default function GratuityCalculatorClient() {
                 />
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-bold text-text-3 block">Additional Months</label>
+                <label htmlFor="additional-months" className="text-xs font-bold text-text-3 block">Additional Months</label>
                 <input
+                  id="additional-months"
                   type="number"
                   value={months || ''}
                   onChange={(e) => setMonths(Math.min(11, Number(e.target.value)))}
@@ -117,7 +120,7 @@ export default function GratuityCalculatorClient() {
             </div>
 
             <div className="space-y-3 pt-2 border-t border-border/50">
-              <label className="text-xs font-bold text-text-3 block flex items-center gap-2">
+              <label id="coverage-label" className="text-xs font-bold text-text-3 block flex items-center gap-2">
                 Gratuity Act 1972 Coverage
                 <div className="group relative">
                   <Info className="w-3.5 h-3.5 text-text-4 cursor-pointer" />
@@ -126,7 +129,7 @@ export default function GratuityCalculatorClient() {
                   </div>
                 </div>
               </label>
-              <div className="flex bg-bg border border-border rounded-2xl p-1">
+              <div role="group" aria-labelledby="coverage-label" className="flex bg-bg border border-border rounded-2xl p-1">
                 <button
                   onClick={() => setType('covered')}
                   className={cn(

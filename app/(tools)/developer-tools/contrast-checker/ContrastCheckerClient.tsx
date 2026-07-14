@@ -70,17 +70,19 @@ export default function ContrastCheckerClient() {
 
           <div className="space-y-6 relative">
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Foreground (Text) Color</label>
+              <label htmlFor="contrast-fg-text" className="text-xs font-bold text-text-3 block">Foreground (Text) Color</label>
               <div className="flex gap-4">
                 <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-border">
                   <input
                     type="color"
                     value={fg}
                     onChange={(e) => setFg(e.target.value)}
+                    aria-label="Foreground color picker"
                     className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer"
                   />
                 </div>
                 <input
+                  id="contrast-fg-text"
                   type="text"
                   value={fg.toUpperCase()}
                   onChange={(e) => setFg(e.target.value)}
@@ -100,17 +102,19 @@ export default function ContrastCheckerClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Background Color</label>
+              <label htmlFor="contrast-bg-text" className="text-xs font-bold text-text-3 block">Background Color</label>
               <div className="flex gap-4">
                 <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-border">
                   <input
                     type="color"
                     value={bg}
                     onChange={(e) => setBg(e.target.value)}
+                    aria-label="Background color picker"
                     className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer"
                   />
                 </div>
                 <input
+                  id="contrast-bg-text"
                   type="text"
                   value={bg.toUpperCase()}
                   onChange={(e) => setBg(e.target.value)}

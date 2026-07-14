@@ -111,6 +111,7 @@ export default function RootLayout({
             })();`,
           }}
         />
+        <link rel="llms-txt" href="/llms.txt" />
       </head>
       <body className={`${inter.className} antialiased bg-bg text-text min-h-screen selection:bg-blue/20 selection:text-blue`}>
         <a 

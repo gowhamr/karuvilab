@@ -57,8 +57,9 @@ export default function SplitCopyClient() {
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Input Text</label>
+          <label htmlFor="split-input" className="text-sm font-bold text-text-2">Input Text</label>
           <textarea
+            id="split-input"
             className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
             rows={6}
             placeholder="Paste your long text here…"
@@ -69,8 +70,8 @@ export default function SplitCopyClient() {
         </div>
 
         <div className="space-y-3">
-          <label className="text-sm font-bold text-text-2">Split Method</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+          <label id="split-method-label" className="text-sm font-bold text-text-2">Split Method</label>
+          <div role="group" aria-labelledby="split-method-label" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
             {([
               ["equal", "Equal Parts"],
               ["chars", "By Char Count"],
@@ -89,8 +90,9 @@ export default function SplitCopyClient() {
 
           {method === "equal" && (
             <div className="flex items-center gap-3">
-              <label className="text-sm text-text-3 min-w-max">Number of parts:</label>
+              <label htmlFor="split-parts" className="text-sm text-text-3 min-w-max">Number of parts:</label>
               <input
+                id="split-parts"
                 type="number"
                 min={2}
                 max={100}
@@ -102,8 +104,9 @@ export default function SplitCopyClient() {
           )}
           {method === "chars" && (
             <div className="flex items-center gap-3">
-              <label className="text-sm text-text-3 min-w-max">Characters per chunk:</label>
+              <label htmlFor="split-chars" className="text-sm text-text-3 min-w-max">Characters per chunk:</label>
               <input
+                id="split-chars"
                 type="number"
                 min={1}
                 className="w-28 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
@@ -114,8 +117,9 @@ export default function SplitCopyClient() {
           )}
           {method === "delimiter" && (
             <div className="flex items-center gap-3">
-              <label className="text-sm text-text-3 min-w-max">Delimiter:</label>
+              <label htmlFor="split-delim" className="text-sm text-text-3 min-w-max">Delimiter:</label>
               <input
+                id="split-delim"
                 type="text"
                 className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
                 placeholder="\n\n or , or any string"
@@ -126,8 +130,9 @@ export default function SplitCopyClient() {
           )}
           {method === "custom" && (
             <div className="flex items-center gap-3">
-              <label className="text-sm text-text-3 min-w-max">Lines per chunk:</label>
+              <label htmlFor="split-lines" className="text-sm text-text-3 min-w-max">Lines per chunk:</label>
               <input
+                id="split-lines"
                 type="number"
                 min={1}
                 className="w-24 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"

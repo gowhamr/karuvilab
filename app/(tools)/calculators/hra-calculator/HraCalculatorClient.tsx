@@ -106,10 +106,11 @@ export default function HraCalculatorClient() {
           
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Basic Salary (Monthly)</label>
+              <label htmlFor="basic-salary" className="text-xs font-bold text-text-3 block">Basic Salary (Monthly)</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
                 <input
+                  id="basic-salary"
                   type="number"
                   value={basicSalary || ''}
                   onChange={(e) => setBasicSalary(Number(e.target.value))}
@@ -120,10 +121,11 @@ export default function HraCalculatorClient() {
 
             <div className="space-y-3">
               <div className="flex justify-between">
-                <label className="text-xs font-bold text-text-3 block">Dearness Allowance (DA)</label>
+                <label htmlFor="da-percent" className="text-xs font-bold text-text-3 block">Dearness Allowance (DA)</label>
                 <span className="text-xs font-bold text-text-4">{daPercent}%</span>
               </div>
               <input
+                id="da-percent"
                 type="range"
                 min={0}
                 max={100}
@@ -135,10 +137,11 @@ export default function HraCalculatorClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">HRA Received from Employer</label>
+              <label htmlFor="hra-received" className="text-xs font-bold text-text-3 block">HRA Received from Employer</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
                 <input
+                  id="hra-received"
                   type="number"
                   value={hraReceived || ''}
                   onChange={(e) => setHraReceived(Number(e.target.value))}
@@ -148,10 +151,11 @@ export default function HraCalculatorClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Actual Rent Paid (Monthly)</label>
+              <label htmlFor="rent-paid" className="text-xs font-bold text-text-3 block">Actual Rent Paid (Monthly)</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
                 <input
+                  id="rent-paid"
                   type="number"
                   value={rentPaid || ''}
                   onChange={(e) => setRentPaid(Number(e.target.value))}
@@ -161,8 +165,8 @@ export default function HraCalculatorClient() {
             </div>
 
             <div className="space-y-3 pt-2 border-t border-border/50">
-              <label className="text-xs font-bold text-text-3 block">City Type</label>
-              <div className="flex bg-bg border border-border rounded-2xl p-1">
+              <label id="city-type-label" className="text-xs font-bold text-text-3 block">City Type</label>
+              <div role="group" aria-labelledby="city-type-label" className="flex bg-bg border border-border rounded-2xl p-1">
                 <button
                   onClick={() => setCity('metro')}
                   className={cn(

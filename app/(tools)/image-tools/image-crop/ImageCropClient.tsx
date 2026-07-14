@@ -3,7 +3,9 @@ import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
-import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
+import dynamic from "next/dynamic";
+import type { Crop, PixelCrop } from "react-image-crop";
+const ReactCrop = dynamic(() => import("react-image-crop"), { ssr: false });
 import "react-image-crop/dist/ReactCrop.css";
 
 import { DropZone } from "@/components/ui/DropZone";
@@ -36,6 +38,7 @@ export default function ImageCropClient() {
   const [aspect, setAspect] = useState<number | undefined>(undefined);
   const [preset, setPreset] = useState("Free");
   const [croppedUrl, setCroppedUrl] = useState<string | null>(null);
+  const [outputFormat, setOutputFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/jpeg');
   const imgRef = useRef<HTMLImageElement>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
@@ -124,14 +127,15 @@ export default function ImageCropClient() {
         if (croppedUrl) revokeUrl(croppedUrl);
         setCroppedUrl(createUrl(blob));
       }
-    }, "image/jpeg", 0.92);
+    }, outputFormat, outputFormat === 'image/png' ? undefined : 0.92);
   };
 
   const download = () => {
     if (!croppedUrl) return;
+    const ext = outputFormat === 'image/jpeg' ? 'jpg' : outputFormat === 'image/png' ? 'png' : 'webp';
     const a = document.createElement("a");
     a.href = croppedUrl;
-    a.download = `${fileName}-cropped.jpg`;
+    a.download = `${fileName}-cropped.${ext}`;
     a.click();
   };
 
@@ -183,17 +187,31 @@ export default function ImageCropClient() {
 
           {/* Preset buttons */}
           {origW > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {PRESETS.map(p => (
-                <button
-                  key={p.label}
-                  onClick={() => applyPreset(p.label)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${preset === p.label ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
+            <>
+              <div className="flex flex-wrap gap-2">
+                {PRESETS.map(p => (
+                  <button
+                    key={p.label}
+                    onClick={() => applyPreset(p.label)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${preset === p.label ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className="text-xs text-text-4 self-center font-bold uppercase tracking-widest">Output:</span>
+                {(['image/jpeg', 'image/png', 'image/webp'] as const).map(fmt => (
+                  <button
+                    key={fmt}
+                    onClick={() => setOutputFormat(fmt)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${outputFormat === fmt ? "bg-blue text-white" : "bg-bg border border-border text-text-3 hover:border-blue hover:text-blue"}`}
+                  >
+                    {fmt === 'image/jpeg' ? 'JPEG' : fmt === 'image/png' ? 'PNG' : 'WebP'}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
 

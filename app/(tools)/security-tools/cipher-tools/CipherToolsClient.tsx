@@ -171,20 +171,20 @@ export default function CipherToolsClient() {
             <AnimatePresence mode="popLayout">
               {activeCipher === 'caesar' && (
                 <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-4 bg-bg border border-border px-6 py-3 rounded-2xl w-full md:w-80 shadow-premium">
-                  <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 w-20 shrink-0 text-micro">Shift: {caesarShift}</label>
-                  <input type="range" min={1} max={25} value={caesarShift} onChange={e => setCaesarShift(Number(e.target.value))} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue outline-none" />
+                  <label htmlFor="caesar-shift" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 w-20 shrink-0 text-micro">Shift: {caesarShift}</label>
+                  <input id="caesar-shift" type="range" min={1} max={25} value={caesarShift} onChange={e => setCaesarShift(Number(e.target.value))} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue outline-none" />
                 </m.div>
               )}
               {activeCipher === 'vigenere' && (
                 <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-3 bg-bg border border-border px-4 py-2 rounded-2xl w-full md:w-80 shadow-premium">
-                  <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 shrink-0 text-micro">Key:</label>
-                  <input type="text" value={vigenereKey} onChange={e => setVigenereKey(e.target.value.toUpperCase())} className="w-full bg-surface border border-border rounded-xl px-3 py-1.5 font-mono text-xs text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="KEYWORD" />
+                  <label htmlFor="vigenere-key" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 shrink-0 text-micro">Key:</label>
+                  <input id="vigenere-key" type="text" value={vigenereKey} onChange={e => setVigenereKey(e.target.value.toUpperCase())} className="w-full bg-surface border border-border rounded-xl px-3 py-1.5 font-mono text-xs text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="KEYWORD" />
                 </m.div>
               )}
               {activeCipher === 'xor' && (
                 <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-3 bg-bg border border-border px-4 py-2 rounded-2xl w-full md:w-80 shadow-premium">
-                  <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 shrink-0 text-micro">XOR Key:</label>
-                  <input type="text" value={xorKey} onChange={e => setXorKey(e.target.value)} className="w-full bg-surface border border-border rounded-xl px-3 py-1.5 font-mono text-xs text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="Secret Key" />
+                  <label htmlFor="xor-key" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 shrink-0 text-micro">XOR Key:</label>
+                  <input id="xor-key" type="text" value={xorKey} onChange={e => setXorKey(e.target.value)} className="w-full bg-surface border border-border rounded-xl px-3 py-1.5 font-mono text-xs text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="Secret Key" />
                 </m.div>
               )}
               {activeCipher === 'morse' && isEncode && (

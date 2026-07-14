@@ -23,7 +23,7 @@ import { FindBar } from "./FindBar";
 import { MarkdownPreview } from "./MarkdownPreview";
 import { SAMPLE_MARKDOWN } from "../constants";
 
-import { Document, Packer, Paragraph, TextRun } from "docx";
+
 
 import { CATEGORIES } from "@/src/tool-registry";
 
@@ -288,6 +288,7 @@ export function MarkdownEditor() {
       }
     } else if (format === "word") {
       try {
+        const { Document, Packer, Paragraph, TextRun } = await import("docx");
         const sections = [
           {
             properties: {},

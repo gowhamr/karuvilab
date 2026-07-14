@@ -10,7 +10,6 @@ import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { logger } from "@/src/lib/logger";
 import { useProgress } from "@/src/contexts/ProgressContext";
 
-import { Document, Packer, Paragraph, TextRun } from "docx";
 
 export default function PdfToWordClient() {
   const { toast } = useToast();
@@ -59,6 +58,7 @@ export default function PdfToWordClient() {
     if (!text) return;
     startProcessing("short");
     try {
+      const { Document, Packer, Paragraph, TextRun } = await import("docx");
       const sections = text.split("\n\n--- Page Break ---\n\n").map(pageContent => ({
         properties: {},
         children: pageContent.split("\n").map(line => 

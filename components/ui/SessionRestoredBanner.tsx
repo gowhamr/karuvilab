@@ -27,6 +27,8 @@ export function SessionRestoredBanner({ isVisible, onClear, onDismiss }: Session
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
+          role="status"
+          aria-live="polite"
           className="fixed top-20 left-1/2 -translate-x-1/2 z-toast bg-surface border border-blue/30 text-text p-4 rounded-2xl shadow-2xl flex items-center gap-4"
         >
           <p className="text-sm font-bold">Previous session restored.</p>

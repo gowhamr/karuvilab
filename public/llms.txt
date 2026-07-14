@@ -1,0 +1,679 @@
+# KaruviLab - AI Agent Guidance
+
+KaruviLab is a privacy-first, zero-server-upload collection of local browser tools.
+This document provides instructions and metadata for AI Agents navigating the site.
+
+## Navigation & Architecture
+- The site uses Next.js with React 19.
+- Tools execute locally in the browser using WebAssembly and Web Workers. No files are uploaded to servers.
+- The UI follows WCAG 2.2 AA accessibility standards.
+
+## Available Tools
+
+- **Aes Encrypt Decrypt**: Encrypt and decrypt text or files using AES, entirely in your browser.
+  - URL: /security-tools/aes-encrypt-decrypt/
+  - Category: security
+
+- **Age Calculator**: Calculate age in years, months, and days
+  - URL: /calculators/age-calculator/
+  - Category: calculators
+
+- **Audio Converter**: Convert audio files between formats like MP3 and WAV locally for compatibility.
+  - URL: /media-tools/audio-converter/
+  - Category: media
+
+- **Banking Tools**: Advanced financial data parsers for EMV, SWIFT, and core banking logs
+  - URL: /developer-tools/banking-tools/
+  - Category: developer
+
+- **Barcode & QR Scanner**: Scan barcodes and QR codes using camera
+  - URL: /utilities/barcode-scanner/
+  - Category: utilities
+
+- **Base64 Encode/Decode**: Encode or decode Base64 strings
+  - URL: /developer-tools/base64/
+  - Category: developer
+
+- **Base64url Converter**: Encode or decode text to URL-safe Base64 format to safely transmit data.
+  - URL: /security-tools/base64url-converter/
+  - Category: security
+
+- **Background Remover**: Remove image backgrounds locally
+  - URL: /image-tools/bg-remover/
+  - Category: image
+
+- **Bmi Calculator**: Calculate your Body Mass Index (BMI) and health category to track fitness goals.
+  - URL: /calculators/bmi-calculator/
+  - Category: calculators
+
+- **Box Shadow Generator**: Design CSS box shadows visually and copy clean CSS snippets for layouts.
+  - URL: /developer-tools/box-shadow-generator/
+  - Category: developer
+
+- **Bulk Image Resize**: Resize many images at once
+  - URL: /image-tools/bulk-resizer/
+  - Category: image
+
+- **CAGR Calculator**: Compound Annual Growth Rate
+  - URL: /calculators/cagr-calculator/
+  - Category: calculators
+
+- **Calculator**: Unified calculator with seamless standard and scientific modes
+  - URL: /calculators/calculator/
+  - Category: calculators
+
+- **Calendar**: Professional, local-first calendar with Tamil mode support.
+  - URL: /productivity/calendar/
+  - Category: productivity
+
+- **Card Masker**: Mask card numbers automatically to securely display and store sensitive financial info.
+  - URL: /security-tools/card-masker/
+  - Category: security
+
+- **Chart & Graph Generator**: Create beautiful charts from your data
+  - URL: /productivity/chart-generator/
+  - Category: productivity
+
+- **Cipher Tools**: Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.
+  - URL: /security-tools/cipher-tools/
+  - Category: security
+
+- **Code Minifier**: Minify CSS, JS, and HTML
+  - URL: /developer-tools/code-minifier/
+  - Category: developer
+
+- **Color Converter**: Convert color formats (HEX, RGB, HSL) to style web applications.
+  - URL: /developer-tools/color-converter/
+  - Category: developer
+
+- **Color Match**: Pick the exact color swatch under time pressure to test your visual accuracy.
+  - URL: /break-time-tools/color-match/
+  - Category: break-time
+
+- **Color Palette Extractor**: Extract dominant color palettes from any image to design themes.
+  - URL: /image-tools/color-palette-extractor/
+  - Category: image
+
+- **Command Cheat Sheet**: Look up development and system commands instantly to speed up your workflow.
+  - URL: /developer-tools/command-cheat-sheet/
+  - Category: developer
+
+- **Compound Interest Calculator**: Calculate compounded growth on your investment.
+  - URL: /calculators/compound-interest/
+  - Category: calculators
+
+- **Compress PDF**: Reduce PDF file size
+  - URL: /pdf-tools/compress-pdf/
+  - Category: pdf
+
+- **Compress**: Bundle files and folders into optimized ZIP archives to save storage space.
+  - URL: /image-tools/compress/
+  - Category: image
+
+- **Contrast Checker**: Verify background and foreground contrast to meet WCAG accessibility standards.
+  - URL: /developer-tools/contrast-checker/
+  - Category: developer
+
+- **Core Banking Parser**: Parse core banking trace logs into JSON
+  - URL: /banking-tools/core-banking-parser/
+  - Category: banking
+
+- **Countdown Timer**: Set timers for upcoming milestones or deadlines to keep track of tasks.
+  - URL: /productivity/countdown-timer/
+  - Category: productivity
+
+- **Crontab Editor**: Build crontab expressions visually and translate them to plain English.
+  - URL: /developer-tools/crontab-editor/
+  - Category: developer
+
+- **Csp Builder**: Construct secure Content Security Policy headers to protect sites from XSS.
+  - URL: /security-tools/csp-builder/
+  - Category: security
+
+- **Csr Generator**: Generate CSR requests and private keys locally to secure web servers.
+  - URL: /security-tools/csr-generator/
+  - Category: security
+
+- **Csv To Json**: Convert tabular CSV file content into structured JSON objects.
+  - URL: /developer-tools/csv-to-json/
+  - Category: developer
+
+- **Currency Converter**: Convert between world currencies
+  - URL: /calculators/currency-converter/
+  - Category: calculators
+
+- **Data Calculator**: Units, transfer time, cost, & hashes
+  - URL: /calculators/data-calculator/
+  - Category: calculators
+
+- **Date Calculator**: Add, subtract, or diff dates
+  - URL: /calculators/date-calculator/
+  - Category: calculators
+
+- **Diff Checker**: Compare two text snippets
+  - URL: /developer-tools/diff-checker/
+  - Category: developer
+
+- **Directory Manifest**: Generate recursive folder maps of local directories to document structure.
+  - URL: /security-tools/directory-manifest/
+  - Category: security
+
+- **Discount Calculator**: Find sale price and savings
+  - URL: /calculators/discount-calculator/
+  - Category: calculators
+
+- **Ecdh Key Exchange**: Generate shared cryptographic keys using ECDH protocols.
+  - URL: /security-tools/ecdh-key-exchange/
+  - Category: security
+
+- **Ecdsa Sign**: Sign and verify payload strings using secure ECDSA certificates.
+  - URL: /security-tools/ecdsa-sign/
+  - Category: security
+
+- **EMI Calculator**: Loan EMI, interest, and amortization
+  - URL: /calculators/emi-calculator/
+  - Category: calculators
+
+- **Emv Tlv Tree**: Inspect and parse EMV TLV payment packets for bank transaction analysis.
+  - URL: /banking-tools/emv-tlv-tree/
+  - Category: banking
+
+- **Extract Images**: Pull images out of a PDF
+  - URL: /pdf-tools/extract-images/
+  - Category: pdf
+
+- **Fake Data Generator**: Generate realistic fake data for testing
+  - URL: /developer-tools/fake-data-generator/
+  - Category: developer
+
+- **Fixed Deposit (FD)**: FD maturity amount and interest earned
+  - URL: /calculators/fd-calculator/
+  - Category: calculators
+
+- **File Viewer & Diff**: Local text editor and diff checker
+  - URL: /file-tools/file-viewer-diff/
+  - Category: developer
+
+- **Financial Freedom Calculator**: Calculate your path to FIRE and plan your retirement.
+  - URL: /calculators/financial-freedom-calculator/
+  - Category: calculators
+
+- **Code Formatter**: Auto-format code in many languages
+  - URL: /developer-tools/format/
+  - Category: developer
+
+- **2048**: Slide and merge tiles to reach 2048. Addictive puzzle game — fully offline.
+  - URL: /break-time-tools/game-2048/
+  - Category: break-time
+
+- **Gif Creator**: Convert videos or image frames into optimized, loopable animated GIF files.
+  - URL: /media-tools/gif-creator/
+  - Category: media
+
+- **Glassmorphism Generator**: Generate CSS code for modern frosted-glass card designs.
+  - URL: /developer-tools/glassmorphism-generator/
+  - Category: developer
+
+- **Gradient Generator**: Design linear and radial CSS gradients visually for backgrounds.
+  - URL: /developer-tools/gradient-generator/
+  - Category: developer
+
+- **Grammar Checker**: Spot common writing errors
+  - URL: /utilities/grammar-checker/
+  - Category: utilities
+
+- **Gratuity Calculator**: Estimate standard gratuity benefits based on salary and tenure.
+  - URL: /calculators/gratuity-calculator/
+  - Category: calculators
+
+- **GST Calculator**: Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.
+  - URL: /calculators/gst-calculator/
+  - Category: calculators
+
+- **Hash Generator**: MD5, SHA-1/256/512 hashes
+  - URL: /security-tools/hash-generator/
+  - Category: security
+
+- **Hash Map Visualizer**: Visualize collision resolution strategies in hash map indexes.
+  - URL: /developer-tools/hash-map-visualizer/
+  - Category: developer
+
+- **Hkdf Generator**: Derive cryptographically strong keys from raw input using HKDF.
+  - URL: /security-tools/hkdf-generator/
+  - Category: security
+
+- **Hmac Generator**: Calculate keyed-hash message authentication codes (HMAC) to verify integrity.
+  - URL: /security-tools/hmac-generator/
+  - Category: security
+
+- **Hra Calculator**: Calculate your House Rent Allowance tax exemptions.
+  - URL: /calculators/hra-calculator/
+  - Category: calculators
+
+- **HTML Entities**: Convert characters to HTML entities
+  - URL: /security-tools/html-entities/
+  - Category: security
+
+- **HTML Online Viewer**: Professional live HTML/CSS/JS editor and sandboxed preview
+  - URL: /developer-tools/html-viewer/
+  - Category: developer
+
+- **Iban Validator**: Check the validity and checksums of IBAN bank account numbers.
+  - URL: /security-tools/iban-validator/
+  - Category: security
+
+- **Image to Base64**: Encode images as Base64 data URIs
+  - URL: /image-tools/image-base64/
+  - Category: image
+
+- **Image Compressor**: Reduce image file size
+  - URL: /image-tools/image-compressor/
+  - Category: image
+
+- **Image Converter**: Convert between JPG, PNG, WebP, AVIF, and BMP
+  - URL: /image-tools/image-converter/
+  - Category: image
+
+- **Image Crop**: Crop images to ratio or freeform
+  - URL: /image-tools/image-crop/
+  - Category: image
+
+- **Image Resizer**: Resize images to exact dimensions
+  - URL: /image-tools/image-resizer/
+  - Category: image
+
+- **Image Seo**: Optimize image file names and alt attributes to rank higher on search engines.
+  - URL: /seo-tools/image-seo/
+  - Category: seo
+
+- **Image to PDF**: Convert images into a single PDF
+  - URL: /pdf-tools/image-to-pdf/
+  - Category: pdf
+
+- **Income Tax**: Calculate annual income tax estimates and select the best tax regime.
+  - URL: /calculators/income-tax/
+  - Category: calculators
+
+- **Inflation Calculator**: Purchasing power over time
+  - URL: /calculators/inflation-calculator/
+  - Category: calculators
+
+- **Speed Tester**: Measure your internet connection speed
+  - URL: /utilities/internet-speed-test/
+  - Category: utilities
+
+- **Invoice Generator**: Build professional custom invoices and download them as PDFs.
+  - URL: /calculators/invoice-generator/
+  - Category: calculators
+
+- **Iso8583 Bitmap Decoder**: Parse and visualize ISO 8583 payment card transaction bitmaps.
+  - URL: /security-tools/iso8583-bitmap-decoder/
+  - Category: security
+
+- **Iso8583 Message Parser**: Decode raw financial transaction strings into human-readable messages.
+  - URL: /security-tools/iso8583-message-parser/
+  - Category: security
+
+- **JSON ↔ CSV**: Convert between JSON and CSV
+  - URL: /developer-tools/json-csv/
+  - Category: developer
+
+- **JSON Formatter**: Format and validate JSON
+  - URL: /developer-tools/json-formatter/
+  - Category: developer
+
+- **JWT Decoder**: Inspect JSON Web Tokens
+  - URL: /security-tools/jwt-decoder/
+  - Category: security
+
+- **Lock / Unlock PDF**: Add or remove PDF passwords
+  - URL: /pdf-tools/lock-unlock/
+  - Category: pdf
+
+- **Log Analyzer**: Analyze and filter server and application access log files.
+  - URL: /developer-tools/log-analyzer/
+  - Category: developer
+
+- **Lorem Ipsum**: Generate custom dummy placeholder text for layouts and copy.
+  - URL: /developer-tools/lorem-ipsum/
+  - Category: developer
+
+- **Luhn Validator**: Check identification card numbers using the Luhn checksum algorithm.
+  - URL: /developer-tools/luhn-validator/
+  - Category: developer
+
+- **Lumpsum Calculator**: Future value of one-time investment
+  - URL: /calculators/lumpsum-calculator/
+  - Category: calculators
+
+- **Markdown Editor**: Professional Markdown editor with live GitHub-style preview, Mermaid diagrams, and high-performance export options.
+  - URL: /utilities/markdown/
+  - Category: utilities
+
+- **Memory Match**: Flip cards and match pairs. A classic memory-training game with best-score tracking.
+  - URL: /break-time-tools/memory-match/
+  - Category: break-time
+
+- **Merge PDF**: Combine multiple PDFs into one
+  - URL: /pdf-tools/merge-pdf/
+  - Category: pdf
+
+- **Meta Tags**: Generate and preview HTML meta tags to optimize website social sharing.
+  - URL: /seo-tools/meta-tags/
+  - Category: seo
+
+- **Mic & Camera Tester**: Test your microphone and camera
+  - URL: /utilities/mic-camera-tester/
+  - Category: utilities
+
+- **Minesweeper**: Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.
+  - URL: /break-time-tools/minesweeper/
+  - Category: break-time
+
+- **Mutual Fund Returns**: Calculate absolute and annualized returns
+  - URL: /calculators/mutual-fund-returns/
+  - Category: calculators
+
+- **Nanoid Generator**: Generate secure, URL-friendly unique string IDs using NanoID.
+  - URL: /developer-tools/nanoid-generator/
+  - Category: developer
+
+- **Notes**: Write and save markdown notes locally in your browser.
+  - URL: /productivity/notes/
+  - Category: productivity
+
+- **Nps Calculator**: Calculate National Pension Scheme (NPS) maturity amounts.
+  - URL: /calculators/nps-calculator/
+  - Category: calculators
+
+- **Numeral & Encoding Converter**: Universal encoding converter. Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text. Auto-detect format and convert to all others instantly. Supports UTF-8, UTF-16, UTF-32, Base64, URL encoding, HTML entities, JavaScript/Python/CSS escapes, Morse code, ROT13, JWT decode, and more. 100% local — nothing leaves your browser.
+  - URL: /calculators/numeral-converter/
+  - Category: calculators
+
+- **Oauth Token Decoder**: Inspect and decode OAuth 2.0 access and refresh token payloads.
+  - URL: /security-tools/oauth-token-decoder/
+  - Category: security
+
+- **Og Preview**: Preview Open Graph card layouts for social media platforms.
+  - URL: /seo-tools/og-preview/
+  - Category: seo
+
+- **Page Numbering**: Add page numbers to PDF
+  - URL: /pdf-tools/page-numbering/
+  - Category: pdf
+
+- **Password Generator**: Strong, random passwords
+  - URL: /security-tools/password-generator/
+  - Category: security
+
+- **Pbkdf2 Generator**: Derive cryptographic keys using PBKDF2 password hashing.
+  - URL: /security-tools/pbkdf2-generator/
+  - Category: security
+
+- **PDF to Word**: Convert PDF text to editable Word
+  - URL: /pdf-tools/pdf-to-word/
+  - Category: pdf
+
+- **Pem Viewer**: Inspect and parse PEM certificate and private key files.
+  - URL: /security-tools/pem-viewer/
+  - Category: security
+
+- **Percentage Calculator**: Find percentages and ratios
+  - URL: /calculators/percentage-calculator/
+  - Category: calculators
+
+- **Phone Mockup Generator**: Wrap screenshots in realistic device frames
+  - URL: /image-tools/phone-mockup-generator/
+  - Category: image
+
+- **Pomodoro Timer**: Boost your focus and productivity using the Pomodoro technique.
+  - URL: /productivity/pomodoro-timer/
+  - Category: productivity
+
+- **PPF Calculator**: Public Provident Fund maturity & interest
+  - URL: /calculators/ppf-calculator/
+  - Category: calculators
+
+- **Private Key Checker**: Validate private key structures and format compatibility.
+  - URL: /security-tools/private-key-checker/
+  - Category: security
+
+- **Public Key Inspector**: Inspect and display properties of public keys.
+  - URL: /security-tools/public-key-inspector/
+  - Category: security
+
+- **QR Code Generator**: Make QR codes for URLs, text, Wi-Fi
+  - URL: /utilities/qrcode/
+  - Category: utilities
+
+- **Recurring Deposit (RD)**: RD maturity and interest calculation
+  - URL: /calculators/rd-calculator/
+  - Category: calculators
+
+- **Reaction Time Test**: Test your reflexes and measure your reaction speed in milliseconds.
+  - URL: /break-time-tools/reaction-time/
+  - Category: break-time
+
+- **Regex Tester**: Test regular expressions live
+  - URL: /developer-tools/regex/
+  - Category: developer
+
+- **Retirement Planner**: Corpus needed for your retirement
+  - URL: /calculators/retirement-calculator/
+  - Category: calculators
+
+- **Robots Txt**: Generate and validate robots.txt configurations for SEO crawlers.
+  - URL: /seo-tools/robots-txt/
+  - Category: seo
+
+- **Rotate PDF**: Rotate one or all pages
+  - URL: /pdf-tools/rotate-pdf/
+  - Category: pdf
+
+- **Rsa Encrypt Decrypt**: Encrypt or decrypt payloads using secure RSA key pairs.
+  - URL: /security-tools/rsa-encrypt-decrypt/
+  - Category: security
+
+- **Rsa Key Generator**: Generate public and private RSA key pairs locally for authentication.
+  - URL: /security-tools/rsa-key-generator/
+  - Category: security
+
+- **Rsa Sign Verify**: Sign messages or verify signatures using RSA keys.
+  - URL: /security-tools/rsa-sign-verify/
+  - Category: security
+
+- **Safe-to-Spend**: Daily budget planner
+  - URL: /calculators/safe-to-spend/
+  - Category: calculators
+
+- **Salary Calculator**: Indian take-home salary breakdown
+  - URL: /calculators/salary-calculator/
+  - Category: calculators
+
+- **Saml Decoder**: Decode and format SAML assertion payloads for identity analysis.
+  - URL: /security-tools/saml-decoder/
+  - Category: security
+
+- **Seo Title**: Optimize SEO title tags to maximize search engine click-through rates.
+  - URL: /seo-tools/seo-title/
+  - Category: seo
+
+- **Seo Tools**: Inspect and optimize website SEO meta tags and preview search snippets.
+  - URL: /developer-tools/seo-tools/
+  - Category: developer
+
+- **SIP Calculator**: Project mutual-fund SIP returns
+  - URL: /calculators/sip-calculator/
+  - Category: calculators
+
+- **Sitemap Generator**: Generate XML sitemaps to index website pages.
+  - URL: /seo-tools/sitemap-generator/
+  - Category: seo
+
+- **Slug Generator**: Convert text into URL-friendly slug strings.
+  - URL: /seo-tools/slug-generator/
+  - Category: seo
+
+- **Smart Unit Converter**: Natural-language unit conversion
+  - URL: /calculators/smart-converter/
+  - Category: calculators
+
+- **Snake Game**: Play the classic retro Snake game. Eat food, grow longer, and set new high scores entirely in your browser.
+  - URL: /break-time-tools/snake-game/
+  - Category: break-time
+
+- **Split & Copy**: Break long text into chunks
+  - URL: /utilities/split-copy/
+  - Category: utilities
+
+- **Split PDF**: Extract pages from a PDF
+  - URL: /pdf-tools/split-pdf/
+  - Category: pdf
+
+- **Sql Formatter**: Beautify and format complex SQL queries to improve readability.
+  - URL: /developer-tools/sql-formatter/
+  - Category: developer
+
+- **Stock Average**: Weighted average buy price for stocks
+  - URL: /calculators/stock-average-calculator/
+  - Category: calculators
+
+- **Stopwatch**: Track elapsed time with lap support for productivity logging.
+  - URL: /productivity/stopwatch/
+  - Category: productivity
+
+- **Sudoku**: Classic 9x9 Sudoku logical number placement puzzle with multiple difficulty modes, hints, and local best times.
+  - URL: /break-time-tools/sudoku/
+  - Category: break-time
+
+- **Swift Mt Mx**: Parse and inspect SWIFT MT and MX banking message structures.
+  - URL: /banking-tools/swift-mt-mx/
+  - Category: banking
+
+- **SWP Calculator**: Systematic Withdrawal Plan planning
+  - URL: /calculators/swp-calculator/
+  - Category: calculators
+
+- **Task Reminder**: Lightweight private to-do list
+  - URL: /utilities/task-reminder/
+  - Category: utilities
+
+- **Tds Calculator**: Calculate Tax Deducted at Source (TDS) percentages.
+  - URL: /calculators/tds-calculator/
+  - Category: calculators
+
+- **Text Case Converter**: Convert text between UPPERCASE, lowercase, and sentence case styles.
+  - URL: /productivity/text-case-converter/
+  - Category: productivity
+
+- **Text Sorter & Deduplicator**: Sort and remove duplicates from text
+  - URL: /productivity/text-sorter-deduper/
+  - Category: productivity
+
+- **Text Utility**: Clean, case convert, count words
+  - URL: /utilities/text-utility/
+  - Category: utilities
+
+- **Tic-Tac-Toe**: Classic 2-player Tic-Tac-Toe right in your browser. No downloads, no sign-in.
+  - URL: /break-time-tools/tic-tac-toe/
+  - Category: break-time
+
+- **Time Calculator**: Add or subtract hours and minutes
+  - URL: /calculators/time-calculator/
+  - Category: calculators
+
+- **Time Zone Converter**: Compare and convert time between multiple global time zones. Real-time offsets and DST support.
+  - URL: /productivity/timezone-converter/
+  - Category: productivity
+
+- **Tlv Parser**: Parse and visualize EMV TLV hex streams into clear tree structures.
+  - URL: /security-tools/tlv-parser/
+  - Category: security
+
+- **Track 2 Parser**: Decode magnetic stripe Track 2 data for payment card testing.
+  - URL: /banking-tools/track-2-parser/
+  - Category: banking
+
+- **Typing Speed Test**: Test and improve your typing WPM
+  - URL: /productivity/typing-speed-test/
+  - Category: productivity
+
+- **Unit Converter**: Length, weight, volume, and more
+  - URL: /calculators/unit-converter/
+  - Category: calculators
+
+- **Unix Timestamp**: Convert between epoch timestamps and human-readable dates.
+  - URL: /developer-tools/unix-timestamp/
+  - Category: developer
+
+- **URL Cleaner**: Strip tracking parameters
+  - URL: /utilities/url-cleaner/
+  - Category: utilities
+
+- **URL Encoder**: Percent-encode and decode URLs
+  - URL: /developer-tools/url-encoder/
+  - Category: developer
+
+- **UTC ↔ IST**: Convert between UTC and IST
+  - URL: /calculators/utc-ist-converter/
+  - Category: calculators
+
+- **Uuid Generator**: Generate secure v4 UUIDs for database and entity keys.
+  - URL: /developer-tools/uuid-generator/
+  - Category: developer
+
+- **File Validator**: Validate file size and type
+  - URL: /utilities/validate/
+  - Category: utilities
+
+- **Video Metadata Viewer**: Extract and inspect resolution, codec, and duration metadata from video files.
+  - URL: /media-tools/video-metadata-viewer/
+  - Category: media
+
+- **Video Trim**: Trim and cut MP4 video clips directly in your browser.
+  - URL: /media-tools/video-trim/
+  - Category: media
+
+- **Watermark PDF**: Add text or image watermark
+  - URL: /pdf-tools/watermark-pdf/
+  - Category: pdf
+
+- **WiFi QR Code Generator**: Generate QR code to connect to WiFi
+  - URL: /productivity/wifi-qr-code/
+  - Category: productivity
+
+- **Word Counter**: Count characters, words, sentences, and reading times for any text.
+  - URL: /productivity/word-counter/
+  - Category: productivity
+
+- **Word Guess**: A word guessing puzzle game. Find the secret 5-letter word in 6 tries using visual feedback.
+  - URL: /break-time-tools/word-guess/
+  - Category: break-time
+
+- **Word To Pdf**: Convert Word documents (DOCX) into standard PDF files locally.
+  - URL: /pdf-tools/word-to-pdf/
+  - Category: pdf
+
+- **Work Hours**: Timesheet and overtime tracker
+  - URL: /calculators/work-hours/
+  - Category: calculators
+
+- **World Clock**: Track time across multiple cities with business hour indicators. Ideal for global teams.
+  - URL: /calculators/world-clock/
+  - Category: calculators
+
+- **X509 Viewer**: Inspect and validate X.509 security certificates and expiry details.
+  - URL: /security-tools/x509-viewer/
+  - Category: security
+
+- **Xml Formatter**: Format and prettify nested XML documents to inspect data tags.
+  - URL: /developer-tools/xml-formatter/
+  - Category: developer
+
+- **Yaml Json Converter**: Convert between YAML formatting and JSON objects.
+  - URL: /developer-tools/yaml-json-converter/
+  - Category: developer
+
+- **Yaml Validator**: Verify and validate YAML syntax correctness.
+  - URL: /developer-tools/yaml-validator/
+  - Category: developer

@@ -109,6 +109,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
             <div className="relative">
               <input
                 type="number"
+                aria-label="Image Width"
                 placeholder="Width"
                 value={settings.resizeWidth || ''}
                 onChange={(e) => update({ resizeWidth: e.target.value ? Number(e.target.value) : null })}
@@ -119,6 +120,7 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
             <div className="relative">
               <input
                 type="number"
+                aria-label="Image Height"
                 placeholder="Height"
                 value={settings.resizeHeight || ''}
                 onChange={(e) => update({ resizeHeight: e.target.value ? Number(e.target.value) : null })}

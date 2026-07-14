@@ -96,8 +96,8 @@ export default function HmacGeneratorClient() {
           
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Algorithm</label>
-              <div className="flex gap-2 bg-bg border border-border p-1 rounded-2xl">
+              <label id="hmac-alg-label" className="text-xs font-bold text-text-3 block">Algorithm</label>
+              <div role="group" aria-labelledby="hmac-alg-label" className="flex gap-2 bg-bg border border-border p-1 rounded-2xl">
                 {(['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'] as HMACAlgorithm[]).map(alg => (
                   <button
                     key={alg}
@@ -114,11 +114,12 @@ export default function HmacGeneratorClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block flex justify-between">
+              <label htmlFor="hmac-secret-key" className="text-xs font-bold text-text-3 block flex justify-between">
                 Secret Key
                 <span className="text-xs text-text-4">{key.length} chars</span>
               </label>
               <input
+                id="hmac-secret-key"
                 type="text"
                 value={key}
                 onChange={(e) => setKey(e.target.value)}
@@ -128,11 +129,12 @@ export default function HmacGeneratorClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block flex justify-between">
+              <label htmlFor="hmac-message" className="text-xs font-bold text-text-3 block flex justify-between">
                 Message Data
                 <span className="text-xs text-text-4">{message.length} chars</span>
               </label>
               <textarea
+                id="hmac-message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Paste payload or message here..."
@@ -146,8 +148,9 @@ export default function HmacGeneratorClient() {
                 animate={{ opacity: 1, height: 'auto' }}
                 className="space-y-3 pt-4 border-t border-border/50"
               >
-                <label className="text-xs font-bold text-text-3 block">Expected HMAC Signature</label>
+                <label htmlFor="hmac-expected" className="text-xs font-bold text-text-3 block">Expected HMAC Signature</label>
                 <input
+                  id="hmac-expected"
                   type="text"
                   value={expectedHmac}
                   onChange={(e) => setExpectedHmac(e.target.value.trim())}

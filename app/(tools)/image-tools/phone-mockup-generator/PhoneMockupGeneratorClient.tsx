@@ -327,8 +327,8 @@ export default function PhoneMockupGeneratorClient() {
 
             {/* Device selector */}
             <div className="space-y-3">
-              <label className="text-sm font-bold text-text-2">Select Device</label>
-              <div className="grid grid-cols-1 gap-2">
+              <label id="device-select-label" className="text-sm font-bold text-text-2">Select Device</label>
+              <div role="group" aria-labelledby="device-select-label" className="grid grid-cols-1 gap-2">
                 {DEVICES.map(dev => (
                   <button
                     key={dev.id}
@@ -348,8 +348,8 @@ export default function PhoneMockupGeneratorClient() {
 
             {/* Color scheme */}
             <div className="space-y-3">
-              <label className="text-sm font-bold text-text-2">Device Color</label>
-              <div className="flex gap-2">
+              <label id="device-color-label" className="text-sm font-bold text-text-2">Device Color</label>
+              <div role="group" aria-labelledby="device-color-label" className="flex gap-2">
                 <button
                   id="device-color-dark"
                   onClick={() => setColorScheme("dark")}
@@ -377,8 +377,8 @@ export default function PhoneMockupGeneratorClient() {
 
             {/* Background color */}
             <div className="space-y-3">
-              <label className="text-sm font-bold text-text-2">Background Color</label>
-              <div className="flex flex-wrap gap-2">
+              <label id="bg-color-label" className="text-sm font-bold text-text-2">Background Color</label>
+              <div role="group" aria-labelledby="bg-color-label" className="flex flex-wrap gap-2">
                 {["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#FFFFFF", "#000000"].map(c => (
                   <button
                     key={c}

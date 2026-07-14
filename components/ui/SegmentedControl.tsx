@@ -23,7 +23,7 @@ interface SegmentedControlProps<T> {
 /**
  * A unified, accessible segmented control (tabs) for tool modes and settings.
  */
-export function SegmentedControl<T extends string | number>(props: SegmentedControlProps<T>) {
+export const SegmentedControl = React.memo(function SegmentedControl<T extends string | number>(props: SegmentedControlProps<T>) {
   const { 
     options, 
     activeId, 
@@ -83,4 +83,4 @@ export function SegmentedControl<T extends string | number>(props: SegmentedCont
       })}
     </div>
   );
-}
+}) as <T extends string | number>(props: SegmentedControlProps<T>) => React.ReactElement;

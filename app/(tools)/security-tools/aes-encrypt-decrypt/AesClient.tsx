@@ -122,7 +122,7 @@ export default function AesClient() {
       {/* Config Row — Mode + Key Size */}
       <div className="p-4 rounded-xl bg-surface-2 border border-border grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
         <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">AES Mode</label>
+          <label htmlFor="aes-mode-select" className="text-xs font-semibold text-text-muted block mb-1">AES Mode</label>
           <select
             id="aes-mode-select"
             value={mode}
@@ -135,7 +135,7 @@ export default function AesClient() {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">Key Size</label>
+          <label htmlFor="aes-keysize-select" className="text-xs font-semibold text-text-muted block mb-1">Key Size</label>
           <select
             id="aes-keysize-select"
             value={keySize}
@@ -178,7 +178,7 @@ export default function AesClient() {
 
         {keyMode === "passphrase" ? (
           <div>
-            <label className="text-xs font-semibold text-text-muted block mb-1">Passphrase</label>
+            <label htmlFor="aes-password-input" className="text-xs font-semibold text-text-muted block mb-1">Passphrase</label>
             <input
               id="aes-password-input"
               type="password"
@@ -192,7 +192,7 @@ export default function AesClient() {
           <div className="space-y-3">
             <div className="flex gap-2 items-end">
               <div className="flex-1">
-                <label className="text-xs font-semibold text-text-muted block mb-1">
+                <label htmlFor="aes-rawkey-input" className="text-xs font-semibold text-text-muted block mb-1">
                   Raw AES Key ({keyBits / 8} bytes = {keyBits / 4} hex chars or {Math.ceil(keyBits / 6)} base64 chars)
                 </label>
                 <input

@@ -141,7 +141,7 @@ export default function SettingsClient() {
             </div>
           </div>
           
-          <nav className="space-y-8 lg:max-h-[calc(100vh-250px)] lg:overflow-y-auto no-scrollbar px-1" role="tablist">
+          <div className="space-y-8 lg:max-h-[calc(100vh-250px)] lg:overflow-y-auto no-scrollbar px-1" role="tablist">
             {Object.entries(groupedItems).map(([group, items]) => (
               <div key={group} className="space-y-2">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-4">{group}</h2>
@@ -200,7 +200,7 @@ export default function SettingsClient() {
                 <p className="text-xs text-text-4 opacity-60">Try searching for theme, cache, or privacy.</p>
               </div>
             )}
-          </nav>
+          </div>
         </div>
 
         <div className="hidden lg:block p-6 bg-gradient-to-br from-blue/5 to-transparent border border-blue/10 rounded-3xl space-y-4">

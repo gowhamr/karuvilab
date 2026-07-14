@@ -67,8 +67,9 @@ export default function URLCleanerClient() {
   return (
     <div className="space-y-6">
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <label className="text-sm font-bold text-text-2">Paste URL</label>
+        <label htmlFor="url-cleaner-input" className="text-sm font-bold text-text-2">Paste URL</label>
         <input
+          id="url-cleaner-input"
           type="text"
           className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-sm"
           placeholder="https://example.com/page?utm_source=newsletter&utm_medium=email&fbclid=abc123"
@@ -98,7 +99,7 @@ export default function URLCleanerClient() {
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-text-4 uppercase tracking-wider">Original URL</label>
+                <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider">Original URL</h3>
                 <CopyButton text={input} label="Copy Original" />
               </div>
               <div className="font-mono text-xs text-text-3 break-all bg-bg border border-border rounded-xl p-3">
@@ -108,7 +109,7 @@ export default function URLCleanerClient() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-text-4 uppercase tracking-wider">Cleaned URL</label>
+                <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider">Cleaned URL</h3>
                 <CopyButton text={cleaned} label="Copy Cleaned" />
               </div>
               <div className="font-mono text-sm text-text break-all bg-bg border border-border rounded-xl p-3">

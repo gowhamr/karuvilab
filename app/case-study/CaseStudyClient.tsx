@@ -955,8 +955,7 @@ export default function CaseStudyClient() {
   ];
 
   return (
-    <main
-      id="main-content"
+    <div
       className="min-h-screen"
       style={{ background: '#0A0F1E', fontFamily: 'var(--font-inter)' }}
     >
@@ -1167,6 +1166,6 @@ export default function CaseStudyClient() {
           </p>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }

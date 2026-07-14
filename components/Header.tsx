@@ -20,6 +20,7 @@ import { OfflineSyncIndicator } from "./system/OfflineSyncIndicator";
 export function Header() {
   const { isFullscreen } = useFullscreenContext();
   const setIsSidebarOpen = useSearchStore(state => state.setIsSidebarOpen);
+  const isMobileSidebarOpen = useSearchStore(state => state.isSidebarOpen);
   const desktopSidebarOpen = useSettingsStore(s => s.appearance.desktopSidebarOpen !== false);
   const toggleDesktopSidebar = useSettingsStore(s => s.toggleDesktopSidebar);
   const setDraftDrawerOpen = useDraftStore(s => s.setIsOpen);
@@ -28,6 +29,14 @@ export function Header() {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const themeToggleRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname() || "";
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const resizeHandler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", resizeHandler, { passive: true });
+    return () => window.removeEventListener("resize", resizeHandler);
+  }, []);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -48,7 +57,7 @@ export function Header() {
         <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
           <button
             onClick={() => {
-              if (window.innerWidth < 768) {
+              if (isMobile) {
                 setIsSidebarOpen(true);
               } else {
                 toggleDesktopSidebar();
@@ -59,8 +68,8 @@ export function Header() {
               desktopSidebarOpen ? "md:hidden" : "flex"
             )}
             aria-label="Toggle sidebar menu"
-            aria-expanded={desktopSidebarOpen}
-            aria-controls="desktop-sidebar"
+            aria-expanded={isMobile ? isMobileSidebarOpen : desktopSidebarOpen}
+            aria-controls={isMobile ? "mobile-sidebar" : "desktop-sidebar"}
           >
             <Menu className="w-6 h-6" aria-hidden="true" />
           </button>

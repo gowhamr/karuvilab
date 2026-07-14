@@ -30,6 +30,7 @@ export function SearchBar({ variant = "header", className }: SearchBarProps) {
       <button 
         onClick={() => setIsPaletteOpen(true)}
         aria-label="Search tools"
+        aria-haspopup="dialog"
         className={cn(
           "group flex items-center justify-between gap-3 bg-mat-raised shadow-mat-shine border border-mat-border transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50",
           isHero 

@@ -172,7 +172,7 @@ export default function CsrClient() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-text-muted block mb-1">Common Name (CN) *</label>
+            <label htmlFor="csr-cn-input" className="text-xs font-semibold text-text-muted block mb-1">Common Name (CN) *</label>
             <input
               id="csr-cn-input"
               type="text"
@@ -184,7 +184,7 @@ export default function CsrClient() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-text-muted block mb-1">Organization (O)</label>
+            <label htmlFor="csr-org-input" className="text-xs font-semibold text-text-muted block mb-1">Organization (O)</label>
             <input
               id="csr-org-input"
               type="text"
@@ -196,7 +196,7 @@ export default function CsrClient() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-text-muted block mb-1">Organizational Unit (OU)</label>
+            <label htmlFor="csr-ou-input" className="text-xs font-semibold text-text-muted block mb-1">Organizational Unit (OU)</label>
             <input
               id="csr-ou-input"
               type="text"
@@ -208,7 +208,7 @@ export default function CsrClient() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-text-muted block mb-1">Country Code (C)</label>
+            <label htmlFor="csr-c-input" className="text-xs font-semibold text-text-muted block mb-1">Country Code (C)</label>
             <input
               id="csr-c-input"
               type="text"
@@ -222,7 +222,7 @@ export default function CsrClient() {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">RSA Key Length</label>
+          <label htmlFor="csr-keysize-select" className="text-xs font-semibold text-text-muted block mb-1">RSA Key Length</label>
           <select
             id="csr-keysize-select"
             value={keySize}

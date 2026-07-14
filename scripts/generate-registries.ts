@@ -55,6 +55,28 @@ export const CORE_TOOLS: ToolEntry[] = ${JSON.stringify(coreTools, null, 2)};
 
   const outputPath = path.resolve(process.cwd(), 'src/registry/core-registry.ts');
   fs.writeFileSync(outputPath, content);
+  
+  // Generate llms.txt for AI agents
+  const llmsContent = `# KaruviLab - AI Agent Guidance
+
+KaruviLab is a privacy-first, zero-server-upload collection of local browser tools.
+This document provides instructions and metadata for AI Agents navigating the site.
+
+## Navigation & Architecture
+- The site uses Next.js with React 19.
+- Tools execute locally in the browser using WebAssembly and Web Workers. No files are uploaded to servers.
+- The UI follows WCAG 2.2 AA accessibility standards.
+
+## Available Tools
+
+${coreTools.map(t => `- **${t.name}**: ${t.desc}
+  - URL: /${t.href}
+  - Category: ${t.category}`).join('\n\n')}
+`;
+
+  const llmsPath = path.resolve(process.cwd(), 'public/llms.txt');
+  fs.writeFileSync(llmsPath, llmsContent);
+
   console.log(`✅ Core registry compiled successfully with ${coreTools.length} tools.`);
 }
 

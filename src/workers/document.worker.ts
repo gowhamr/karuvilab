@@ -24,7 +24,7 @@ const api = {
       page.setRotation(degrees((current + angle) % 360));
     });
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async watermarkPdf(
@@ -98,7 +98,7 @@ const api = {
     }
 
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async mergePdfs(files: (Blob | ArrayBuffer)[], onProgress: any) {
@@ -111,6 +111,7 @@ const api = {
     const total = files.length;
     
     for (let i = 0; i < total; i++) {
+      await new Promise(r => setTimeout(r, 0));
       const file = files[i]!;
       if (onProgress) onProgress({ percent: (i / total) * 80, message: `Merging PDF ${i + 1}/${total}` });
       
@@ -124,7 +125,7 @@ const api = {
     if (onProgress) onProgress({ percent: 90, message: "Saving merged PDF..." });
     const result = await merged.save();
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return result;
+    const _arr = new Uint8Array(result); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   
@@ -139,6 +140,7 @@ const api = {
     let imgIndex = 0;
 
     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      await new Promise(r => setTimeout(r, 0));
       if (onProgress) {
         onProgress({ percent: (pageNum / pdf.numPages) * 100, message: `Scanning page ${pageNum} of ${pdf.numPages}…` });
       }
@@ -204,6 +206,7 @@ const api = {
     const allText: string[] = [];
 
     for (let i = 1; i <= pdf.numPages; i++) {
+      await new Promise(r => setTimeout(r, 0));
       if (onProgress) {
         onProgress({ percent: (i / pdf.numPages) * 100, message: `Extracting page ${i} of ${pdf.numPages}…` });
       }
@@ -257,6 +260,7 @@ const api = {
     const lines = text.split("\n");
 
     for (let k = 0; k < lines.length; k++) {
+      if (k % 50 === 0) await new Promise(r => setTimeout(r, 0));
       const line = lines[k]!;
       if (onProgress) {
         onProgress({ percent: (k / lines.length) * 100, message: `Writing page...` });
@@ -297,7 +301,7 @@ const api = {
     }
 
     const pdfBytes = await pdfDoc.save();
-    return new Uint8Array(pdfBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async createDocx(text: string, onProgress: any) {
@@ -325,6 +329,7 @@ const api = {
     const PAGE_SIZES: Record<string, [number, number]> = { a4: [595.28, 841.89], letter: [612, 792] };
 
     for (let i = 0; i < images.length; i++) {
+      await new Promise(r => setTimeout(r, 0));
       if (onProgress) onProgress({ percent: (i / images.length) * 100, message: `Processing image ${i + 1}/${images.length}...` });
       const item = images[i];
       if (!item) continue;
@@ -343,7 +348,7 @@ const api = {
     
     if (onProgress) onProgress({ percent: 100, message: "Saving PDF..." });
     const bytes = await pdf.save();
-    return new Uint8Array(bytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async lockPdf(file: ArrayBuffer, userPassword: string, ownerPassword?: string, onProgress?: any) {
@@ -361,7 +366,7 @@ const api = {
         annotating: false,
       },
     } as any);
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
   
   async unlockPdf(file: ArrayBuffer, password: string, onProgress?: any) {
@@ -370,7 +375,7 @@ const api = {
     const doc = await PDFDocument.load(file, { password } as any);
     if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async addPageNumbersToPdf(
@@ -399,6 +404,7 @@ const api = {
     const margin = 20;
 
     for (let i = 0; i < pages.length; i++) {
+      if (i % 10 === 0) await new Promise(r => setTimeout(r, 0));
       if (onProgress && i % 10 === 0) onProgress({ percent: 10 + (i / pages.length) * 80, message: `Adding page number ${i + 1}/${pages.length}...` });
       const page = pages[i];
       if (!page) continue;
@@ -416,7 +422,7 @@ const api = {
 
     if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   }
 };
 

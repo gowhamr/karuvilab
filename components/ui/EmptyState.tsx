@@ -240,7 +240,7 @@ export function EmptyState({
             <ShieldCheck className="w-5 h-5" aria-hidden="true" />
           </div>
           <div className="text-left">
-            <h4 className="text-sm font-black tracking-tight text-text leading-snug">{trust.title}</h4>
+            <h3 className="text-sm font-black tracking-tight text-text leading-snug">{trust.title}</h3>
             <p className="text-xs font-bold text-text-4">{trust.desc}</p>
           </div>
         </div>

@@ -1,11 +1,12 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { useDraftStore } from '@/src/store/useDraftStore';
 import { useShallow } from 'zustand/react/shallow';
 import { X, Copy, Trash2, Send, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
+import { useFocusTrap } from '@/src/lib/a11y/useFocusTrap';
 
 export function DraftDrawer() {
   const { isOpen, setIsOpen, drafts, removeDraft, clearDrafts } = useDraftStore(
@@ -18,6 +19,8 @@ export function DraftDrawer() {
     }))
   );
   const { toast } = useToast();
+  const drawerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(drawerRef, isOpen);
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
@@ -42,10 +45,14 @@ export function DraftDrawer() {
             onClick={() => setIsOpen(false)}
           />
           <m.div
+            ref={drawerRef}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Drafts and Scratchpad"
             className="fixed top-0 right-0 bottom-0 w-full md:w-[400px] z-modal bg-bg border-l border-border shadow-2xl flex flex-col"
           >
             <div className="flex items-center justify-between p-4 border-b border-border">

@@ -5,6 +5,7 @@ import { m, AnimatePresence } from 'framer-motion';
 import { X, Download, QrCode } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { logger } from '@/src/lib/logger';
+import { useFocusTrap } from '@/src/lib/a11y/useFocusTrap';
 
 interface QRModalProps {
   url: string;
@@ -28,6 +29,8 @@ const SPRING = { type: 'spring' as const, stiffness: 300, damping: 30 };
 
 export function QRModal({ url, isOpen, onClose }: QRModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, isOpen);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
@@ -129,6 +132,10 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
           
           {/* NOTE: z-modal shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
           <m.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="QR Code"
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}

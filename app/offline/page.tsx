@@ -8,7 +8,7 @@ import { m, MotionConfig } from "framer-motion";
 export default function OfflinePage() {
   return (
     <MotionConfig reducedMotion="user">
-    <main className="min-h-tool-viewport-lg flex flex-col items-center justify-center p-6 text-center space-y-8">
+    <div className="min-h-tool-viewport-lg flex flex-col items-center justify-center p-6 text-center space-y-8">
       <m.div 
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -54,7 +54,7 @@ export default function OfflinePage() {
           <p className="text-xs text-text-3 font-medium">Your data never leaves your device, connection or no connection.</p>
         </div>
       </div>
-    </main>
+    </div>
     </MotionConfig>
   );
 }

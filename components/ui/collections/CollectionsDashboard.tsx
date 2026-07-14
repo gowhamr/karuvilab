@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/Toast";
 import { blobManager } from "@/src/lib/blob-manager";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { cn } from "@/src/lib/utils";
+import { useFocusTrap } from "@/src/lib/a11y/useFocusTrap";
 
 const PRESET_COLORS = [
   "#4F46E5", // Indigo
@@ -43,6 +44,8 @@ export function CollectionsDashboard() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, showCreateModal);
 
   // Form State
   const [colName, setColName] = useState("");
@@ -329,7 +332,13 @@ export function CollectionsDashboard() {
       {/* ── Create / Edit Modal ── */}
       {showCreateModal && (
         <div className="fixed inset-0 z-modal bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-surface-2 border border-border rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+          <div 
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={editId ? "Edit Collection" : "Create Collection"}
+            className="w-full max-w-2xl bg-surface-2 border border-border rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+          >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-border/80 shrink-0">
               <div className="flex items-center gap-3">

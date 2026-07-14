@@ -7,6 +7,7 @@ import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
 import { useSettingsStore } from '@/src/store/settings/store';
 import { FocusModeToolbar } from './FocusModeToolbar';
 import { useFocusModeControls } from '@/src/contexts/FocusModeControlsContext';
+import { useFocusTrap } from '@/src/lib/a11y/useFocusTrap';
 
 interface FocusModeWrapperProps {
   toolId: string;
@@ -31,6 +32,9 @@ export function FocusModeWrapper({
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  // Keyboard navigation / Focus Trap
+  useFocusTrap(overlayRef, isThisToolFullscreen);
 
   // Register tool when wrapper mounts so global key listeners know the active tool
   useEffect(() => {

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { Search, X, Globe, Plus } from 'lucide-react';
 import { getAllTimezones, COMMON_CITIES } from '@/src/lib/timezone-data';
 import { useWorldClockStore } from '@/src/features/world-clock/store';
+import { useFocusTrap } from '@/src/lib/a11y/useFocusTrap';
 
 interface TimezoneSearchModalProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ interface TimezoneSearchModalProps {
 export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.memo(({ isOpen, onClose }) => {
   const [search, setSearch] = useState('');
   const addClock = useWorldClockStore(state => state.addClock);
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, isOpen);
 
   const allZones = useMemo(() => getAllTimezones(), []);
 
@@ -62,6 +65,10 @@ export const TimezoneSearchModal: React.FC<TimezoneSearchModalProps> = React.mem
           {/* Modal Container */}
           <div className="fixed inset-0 z-modal flex items-start justify-center p-4 sm:p-16 pointer-events-none">
             <m.div
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Add Timezone"
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -50, opacity: 0 }}

@@ -29,7 +29,8 @@ export default function CompressPdfClient() {
       
       const outBytes = await workerManager.compressPdf(
         bytes,
-        (progress) => updateItem(toolId, item.id, { message: progress.message || "Processing...", progress: progress.percent })
+        (progress) => updateItem(toolId, item.id, { message: progress.message || "Processing...", progress: progress.percent }),
+        item.abortController?.signal
       );
       const blob = new Blob([outBytes as any], { type: "application/pdf" });
       

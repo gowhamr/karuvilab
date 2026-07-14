@@ -245,10 +245,11 @@ export default function IncomeTaxClient() {
             </h3>
             
             <div className="space-y-4">
-              <label className="text-xs font-bold text-text-4 block">Annual Gross Salary</label>
+              <label htmlFor="gross-salary" className="text-xs font-bold text-text-4 block">Annual Gross Salary</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
                 <input
+                  id="gross-salary"
                   type="number"
                   value={grossSalary || ''}
                   onChange={(e) => setGrossSalary(Number(e.target.value))}
@@ -258,8 +259,8 @@ export default function IncomeTaxClient() {
             </div>
 
             <div className="space-y-4">
-              <label className="text-xs font-bold text-text-4 block">Age Group</label>
-              <div className="grid grid-cols-3 gap-2 bg-bg border border-border p-1 rounded-2xl">
+              <label id="age-group-label" className="text-xs font-bold text-text-4 block">Age Group</label>
+              <div role="group" aria-labelledby="age-group-label" className="grid grid-cols-3 gap-2 bg-bg border border-border p-1 rounded-2xl">
                 {(['below60', '60to80', 'above80'] as AgeGroup[]).map(a => (
                   <button
                     key={a}
@@ -300,10 +301,11 @@ export default function IncomeTaxClient() {
                     { label: 'Other Deductions', val: otherDed, set: setOtherDed },
                   ].map((field, i) => (
                     <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <label className="text-xs font-bold text-text-3 flex-1">{field.label}</label>
+                      <label htmlFor={`deduction-${i}`} className="text-xs font-bold text-text-3 flex-1">{field.label}</label>
                       <div className="relative w-full sm:w-40 shrink-0">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-text-4 text-xs">₹</span>
                         <input
+                          id={`deduction-${i}`}
                           type="number"
                           value={field.val || ''}
                           onChange={(e) => field.set(Number(e.target.value))}

@@ -56,8 +56,9 @@ export default function URLEncoderClient() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-text-2">Input</label>
+          <label htmlFor="url-encoder-input" className="text-sm font-bold text-text-2">Input</label>
           <textarea
+            id="url-encoder-input"
             className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
             rows={4}
             placeholder={tab === "encode" ? "Enter text or URL to encode…" : "Enter encoded URL to decode…"}

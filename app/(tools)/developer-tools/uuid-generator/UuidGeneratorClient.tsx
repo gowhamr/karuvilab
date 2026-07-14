@@ -156,9 +156,10 @@ export default function UuidGeneratorClient() {
         {version === 'v5' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-bg/50 p-4 rounded-2xl border border-border/50">
             <div>
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Namespace</label>
-              <select 
-                value={v5Namespace} 
+              <label htmlFor="uuid-v5-namespace" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Namespace</label>
+              <select
+                id="uuid-v5-namespace"
+                value={v5Namespace}
                 onChange={(e) => setV5Namespace(e.target.value)}
                 className="w-full bg-surface border border-border rounded-xl p-3 text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none"
               >
@@ -169,10 +170,11 @@ export default function UuidGeneratorClient() {
               </select>
             </div>
             <div>
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Name String</label>
-              <input 
-                type="text" 
-                value={v5Name} 
+              <label htmlFor="uuid-v5-name" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Name String</label>
+              <input
+                id="uuid-v5-name"
+                type="text"
+                value={v5Name}
                 onChange={(e) => { setV5Name(e.target.value); handleGenerate(); }}
                 placeholder="e.g., example.com"
                 className="w-full bg-surface border border-border rounded-xl p-3 text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none"

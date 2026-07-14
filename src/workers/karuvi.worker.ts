@@ -188,7 +188,7 @@ const api: WorkerAPI = {
       page.setRotation(degrees((current + angle) % 360));
     });
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async watermarkPdf(
@@ -262,7 +262,7 @@ const api: WorkerAPI = {
     }
 
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async convertImagesToPdf(images: Array<{ buffer: ArrayBuffer, mime: string }>, pageSize: "a4" | "letter" | "fit", onProgress: any) {
@@ -289,7 +289,7 @@ const api: WorkerAPI = {
     
     if (onProgress) onProgress({ percent: 100, message: "Saving PDF..." });
     const bytes = await pdf.save();
-    return new Uint8Array(bytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async lockPdf(file: ArrayBuffer, userPassword: string, ownerPassword?: string, onProgress?: any) {
@@ -307,7 +307,7 @@ const api: WorkerAPI = {
         annotating: false,
       },
     } as any);
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
   
   async unlockPdf(file: ArrayBuffer, password: string, onProgress?: any) {
@@ -316,7 +316,7 @@ const api: WorkerAPI = {
     const doc = await PDFDocument.load(file, { password } as any);
     if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async addPageNumbersToPdf(
@@ -362,7 +362,7 @@ const api: WorkerAPI = {
 
     if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
     const outBytes = await doc.save();
-    return new Uint8Array(outBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   // PDF Tasks (with memory optimization)
@@ -392,7 +392,7 @@ const api: WorkerAPI = {
     if (onProgress) onProgress({ percent: 90, message: "Saving merged PDF..." });
     const result = await merged.save();
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return result;
+    const _arr = new Uint8Array(result); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async compressPdf(file: ArrayBuffer, onProgress?: ProgressCallback): Promise<Uint8Array> {
@@ -404,7 +404,7 @@ const api: WorkerAPI = {
     const outBytes = await doc.save({ useObjectStreams: true });
     
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return outBytes;
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
   async splitPdf(file: ArrayBuffer, splitAll: boolean, rangesStr: string, onProgress?: ProgressCallback): Promise<{ data: Uint8Array; ext: string; count: number }> {
@@ -449,7 +449,7 @@ const api: WorkerAPI = {
       if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
       const outBytes = await newDoc.save();
       if (onProgress) onProgress({ percent: 100, message: "Done!" });
-      return { data: outBytes, ext: "pdf", count: 1 };
+      return { data: Comlink.transfer(outBytes, [outBytes.buffer]), ext: "pdf", count: 1 };
     }
 
     // Multiple groups -> zip them up
@@ -458,6 +458,10 @@ const api: WorkerAPI = {
 
     for (let g = 0; g < groups.length; g++) {
       if (onProgress) onProgress({ percent: 10 + (g / groups.length) * 80, message: `Processing part ${g + 1}/${groups.length}...` });
+      
+      // Yield to event loop to allow abort signals and progress updates to process
+      await new Promise(r => setTimeout(r, 0));
+      
       const newDoc = await PDFDocument.create();
       const pages = await newDoc.copyPages(srcDoc, groups[g]!);
       pages.forEach((p: any) => newDoc.addPage(p));
@@ -475,7 +479,7 @@ const api: WorkerAPI = {
     });
 
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
-    return { data: zipData, ext: "zip", count: groups.length };
+    return { data: Comlink.transfer(zipData, [zipData.buffer]), ext: "zip", count: groups.length };
   },
 
   // Image Tasks (Standard)
@@ -873,7 +877,7 @@ const api: WorkerAPI = {
   },
 
   // Math Tasks
-  async evaluateMath(expr: string) {
+  async evaluateMath(expr: string): Promise<number> {
     // Injected helpers for eval
      
     const factorial = (n: number): number => {
@@ -930,7 +934,7 @@ const api: WorkerAPI = {
       result.set(new Uint8Array(buf), offset);
       offset += buf.length;
     }
-    return result;
+    const _arr = new Uint8Array(result); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async createGif(frames, width, height, delay, onProgress) {
@@ -1018,7 +1022,7 @@ const api: WorkerAPI = {
     }
 
     const pdfBytes = await pdfDoc.save();
-    return new Uint8Array(pdfBytes);
+    const _arr = new Uint8Array(); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
   async extractImagesFromPdf(file, onProgress) {

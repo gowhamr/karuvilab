@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { m, useMotionValue, useTransform, animate, PanInfo, useDragControls, AnimatePresence } from "framer-motion";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { cn } from "@/src/lib/utils";
+import { useFocusTrap } from "@/src/lib/a11y/useFocusTrap";
 
 const SIDEBAR_WIDTH = 280;
 
@@ -17,6 +18,8 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
   const dragControls = useDragControls();
   const sidebarRef = useRef<HTMLElement>(null);
   
+  useFocusTrap(sidebarRef as React.RefObject<HTMLElement>, isOpen);
+
   // High-performance motion values (stable across renders)
   const x = useMotionValue(-SIDEBAR_WIDTH);
   const backdropOpacity = useTransform(x, [-SIDEBAR_WIDTH, 0], [0, 1]);
@@ -26,12 +29,6 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
     if (isOpen) {
       animate(x, 0, { type: "spring", damping: 30, stiffness: 300, mass: 0.8 });
       document.body.style.overflow = "hidden";
-      
-      const timer = setTimeout(() => {
-        const focusable = sidebarRef.current?.querySelector('button, [href], input');
-        if (focusable) (focusable as HTMLElement).focus();
-      }, 100);
-      return () => clearTimeout(timer);
     } else {
       animate(x, -SIDEBAR_WIDTH, { type: "spring", damping: 35, stiffness: 350, mass: 0.8 });
       document.body.style.overflow = "";
@@ -100,6 +97,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         inert={!isOpen ? '' : undefined}
         tabIndex={-1}
         aria-label="Navigation Sidebar"
+        id="mobile-sidebar"
         className={cn(
           "absolute top-0 left-0 bottom-0 w-sidebar bg-surface border-r border-border shadow-2xl z-modal rounded-tr-2xl rounded-br-none flex flex-col touch-none overflow-hidden outline-none pointer-events-auto",
           "will-change-transform"

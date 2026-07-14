@@ -96,6 +96,7 @@ export function CurrencySelect({ label, value, onChange, options, popularCodes }
           <input
             autoFocus
             type="text"
+            aria-label="Search currencies"
             placeholder="Search currencies..."
             className="w-full pl-11 pr-4 py-3 bg-surface border border-border rounded-xl text-sm font-bold focus:ring-2 focus:ring-blue outline-none transition-all"
             value={search}

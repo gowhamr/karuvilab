@@ -105,7 +105,7 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
               !expanded && i >= visibleCount ? "hidden" : "block"
             )}
           >
-            <h3 className="font-bold text-text">{item.question}</h3>
+            <h4 className="font-bold text-text">{item.question}</h4>
             <div 
               className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: item.answer }}
@@ -287,7 +287,7 @@ export function ClientToolShell({ title, description, category, children, toolId
       )}
 
       {!isEmbed && related.length > 0 && (
-        <div className="flex border-b border-divider gap-6">
+        <div className="flex border-b border-divider gap-6" role="tablist" aria-label="Tool views">
           <button
             onClick={() => setActiveTab('tool')}
             className={cn(
@@ -298,6 +298,8 @@ export function ClientToolShell({ title, description, category, children, toolId
             )}
             role="tab"
             aria-selected={activeTab === 'tool'}
+            aria-controls="tabpanel-tool"
+            id="tab-tool"
           >
             Tool
           </button>
@@ -311,6 +313,8 @@ export function ClientToolShell({ title, description, category, children, toolId
             )}
             role="tab"
             aria-selected={activeTab === 'related'}
+            aria-controls="tabpanel-related"
+            id="tab-related"
           >
             Related Tools ({related.length})
           </button>
@@ -319,7 +323,7 @@ export function ClientToolShell({ title, description, category, children, toolId
 
       <div className="space-y-10">
         {activeTab === 'tool' ? (
-          <>
+          <div role="tabpanel" id="tabpanel-tool" aria-labelledby="tab-tool">
             <section className="mb-12" aria-live="polite" aria-atomic="false">
               <ErrorBoundary>
                 <FocusModeWrapper toolId={finalToolId} toolName={title}>
@@ -350,7 +354,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                     <div className="space-y-10">
                       {finalParsedContent.howTo && finalParsedContent.howTo.length > 0 && (
                         <div className="space-y-4">
-                          <h2 className="text-xl font-black text-text tracking-tight">How to use</h2>
+                          <h3 className="text-xl font-black text-text tracking-tight">How to use</h3>
                           <div className="space-y-3">
                             {finalParsedContent.howTo.map((step, i) => (
                               <li key={i} className="flex gap-4 group">
@@ -376,14 +380,14 @@ export function ClientToolShell({ title, description, category, children, toolId
 
                       {finalParsedContent.faq && finalParsedContent.faq.length > 0 && (
                         <div className="space-y-4">
-                          <h2 className="text-xl font-black text-text tracking-tight">Frequently Asked Questions</h2>
+                          <h3 className="text-xl font-black text-text tracking-tight">Frequently Asked Questions</h3>
                           <FAQList faq={finalParsedContent.faq} />
                         </div>
                       )}
 
                       {finalParsedContent.detailedDescription && (
                         <div className="space-y-4">
-                          <h2 className="text-xl font-black text-text tracking-tight">About this tool</h2>
+                          <h3 className="text-xl font-black text-text tracking-tight">About this tool</h3>
                           <div 
                             className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: finalParsedContent.detailedDescription }}
@@ -470,10 +474,10 @@ export function ClientToolShell({ title, description, category, children, toolId
                 )}
               </>
             )}
-          </>
+          </div>
         ) : (
           related.length > 0 && (
-            <section className="space-y-6 pt-2" aria-live="polite">
+            <section className="space-y-6 pt-2" aria-live="polite" role="tabpanel" id="tabpanel-related" aria-labelledby="tab-related">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-black text-text-primary">Related Tools in {category?.label}</h2>
                 <Link href="/all-tools" className="text-xs font-bold uppercase tracking-widest text-blue hover:underline">

@@ -8,6 +8,7 @@ import { ALL_TOOLS, ToolEntry } from "@/src/tool-registry";
 import { useWorkflowStore, WorkflowItem } from "@/src/store/useWorkflowStore";
 import { formatBytes } from "@/src/utils";
 import { cn } from "@/src/lib/utils";
+import { useFocusTrap } from "@/src/lib/a11y/useFocusTrap";
 
 // Extension to Tool ID Mapping
 const COMPATIBLE_TOOLS_MAPPING: Record<string, string[]> = {
@@ -55,6 +56,9 @@ export function GlobalDragDrop() {
   const [showModal, setShowModal] = useState(false);
   const [recentUploads, setRecentUploads] = useState<RecentUpload[]>([]);
   const [previews, setPreviews] = useState<Record<string, string>>({});
+  
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, showModal);
   
   const router = useRouter();
   const dragCounter = useRef(0);
@@ -254,6 +258,10 @@ export function GlobalDragDrop() {
         {showModal && selectedFiles.length > 0 && (
           <div className="fixed inset-0 z-modal bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
             <m.div
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="File Action Suggestions"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}

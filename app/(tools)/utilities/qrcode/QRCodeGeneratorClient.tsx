@@ -196,8 +196,9 @@ export default function QRCodeGeneratorClient() {
 
         {template === "text" && (
           <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-            <label className="text-sm font-bold text-text-2">URL or Text</label>
+            <label htmlFor="qr-input" className="text-sm font-bold text-text-2">URL or Text</label>
             <textarea
+              id="qr-input"
               rows={3}
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
               placeholder="https://example.com or any text…"
@@ -210,8 +211,9 @@ export default function QRCodeGeneratorClient() {
         {template === "upi" && (
           <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-text-2">UPI ID (VPA) <span className="text-red-500">*</span></label>
+              <label htmlFor="qr-upi" className="text-sm font-bold text-text-2">UPI ID (VPA) <span className="text-red-500">*</span></label>
               <input
+                id="qr-upi"
                 type="text"
                 className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
                 placeholder="merchant@upi"
@@ -221,8 +223,9 @@ export default function QRCodeGeneratorClient() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Payee Name <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label htmlFor="qr-payee" className="text-sm font-bold text-text-2">Payee Name <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
                 <input
+                  id="qr-payee"
                   type="text"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
                   placeholder="Business Name"
@@ -231,8 +234,9 @@ export default function QRCodeGeneratorClient() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Amount (₹) <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label htmlFor="qr-amount" className="text-sm font-bold text-text-2">Amount (₹) <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
                 <input
+                  id="qr-amount"
                   type="number"
                   min="0"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"

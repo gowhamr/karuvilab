@@ -184,10 +184,11 @@ export default function HashGeneratorClient() {
               >
                 <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Enter Text Content</label>
+                    <label htmlFor="hash-text-input" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Enter Text Content</label>
                     <span className="text-xs font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
                   </div>
                   <textarea
+                    id="hash-text-input"
                     className="w-full px-5 py-4 bg-bg border border-border rounded-2xl font-mono text-sm focus:ring-4 focus:ring-blue/5 focus:border-blue outline-none transition-all resize-none min-h-52"
                     placeholder="Type or paste content here..."
                     value={text}

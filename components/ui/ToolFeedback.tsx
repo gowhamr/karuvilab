@@ -170,7 +170,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
               )}
             </m.div>
             <div className="space-y-1">
-              <h4 className="font-bold text-sm text-text">Thank you!</h4>
+              <h3 className="font-bold text-sm text-text">Thank you!</h3>
               <p className="text-xs text-text-3">
                 {vote === 'up' 
                   ? "We're glad this tool was helpful!" 

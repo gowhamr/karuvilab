@@ -286,11 +286,12 @@ export default function HomeClient() {
 
   const renderCategoriesSection = (isFirstTime = false) => {
     return (
-      <section className="space-y-6">
+      <section aria-labelledby="categories-heading" className="space-y-6">
         <SectionHeader
           title={isFirstTime ? "Browse by Category" : "Popular Categories"}
           subtitle="Find specialized toolsets for your tasks"
           icon={LayoutGrid}
+          headingId="categories-heading"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {CATEGORIES.map(cat => {
@@ -346,11 +347,12 @@ export default function HomeClient() {
 
   const renderDiscoverySection = () => {
     return (
-      <section className="space-y-6">
+      <section aria-labelledby="discovery-heading" className="space-y-6">
         <SectionHeader
           title="Discover Something New"
           subtitle="Interactive ways to find your next tool"
           icon={Sparkles}
+          headingId="discovery-heading"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Surprise Me Card */}
@@ -454,11 +456,12 @@ export default function HomeClient() {
   const renderPersonalSection = () => {
     if (hydrated && favoriteIds.length > 0) {
       return (
-        <section className="space-y-6">
+        <section aria-labelledby="personal-heading-fav" className="space-y-6">
           <SectionHeader
             title="Continue where you left off"
             subtitle="Your favorited tools for quick access"
             icon={Heart}
+            headingId="personal-heading-fav"
           />
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
             {favoriteTools.map(tool => (
@@ -471,11 +474,12 @@ export default function HomeClient() {
       );
     }
     return (
-      <section className="space-y-6">
+      <section aria-labelledby="personal-heading-rec" className="space-y-6">
         <SectionHeader
           title="Recommended for You"
           subtitle="Hand-picked local tools to get you started"
           icon={Sparkles}
+          headingId="personal-heading-rec"
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
           {recommendedTools.map(tool => (
@@ -515,6 +519,85 @@ export default function HomeClient() {
 
         <HomeHero isReturning={isReturning} />
 
+        {/* ── Sticky category chip bar ── */}
+        <div
+          className={cn(
+            "sticky top-15 md:top-18 z-sidebar w-full py-2 bg-bg/95 backdrop-blur-sm border-b border-border transition-opacity",
+            isSidebarOpen && "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
+          )}
+        >
+          <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center gap-2">
+            <div className="flex-1 min-w-0">
+              <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => setShowSmartFilters(!showSmartFilters)}
+                aria-label="Toggle smart filters"
+                aria-expanded={showSmartFilters}
+                aria-controls="smart-filters-panel"
+                className={cn(
+                  "min-h-9 min-w-9 px-2 flex items-center justify-center gap-1 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
+                  activeFilters.length > 0 ? "border-brand-primary/50 text-brand-primary bg-brand-primary/5" : "border-border/80 text-text-3"
+                )}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                {activeFilters.length > 0 && <span className="bg-brand-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{activeFilters.length}</span>}
+              </button>
+
+              {isFiltering && (
+                <button
+                  onClick={handleClearFilters}
+                  aria-label="Clear active filter"
+                  title="Clear filters"
+                  className="min-h-9 min-w-9 flex items-center justify-center text-blue hover:text-blue-600 hover:bg-blue/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue border border-transparent hover:border-blue/20"
+                >
+                  <FilterX className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Smart Filters Panel ── */}
+        <AnimatePresence>
+          {showSmartFilters && (
+            <m.div
+              id="smart-filters-panel"
+              initial={{ opacity: 0, scaleY: 0 }}
+              animate={{ opacity: 1, scaleY: 1 }}
+              exit={{ opacity: 0, scaleY: 0 }}
+              style={{ transformOrigin: 'top' }}
+              transition={{ duration: 0.2 }}
+              className="w-full bg-surface-2/40 border-b border-border/80 overflow-hidden"
+            >
+              <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 space-y-3">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Smart Categories & Filtering</span>
+                <div className="flex flex-wrap gap-2">
+                  {SMART_CATEGORIES.map(cat => {
+                    const isSelected = activeFilters.includes(cat.id);
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => toggleSmartFilter(cat.id)}
+                        className={cn(
+                          "px-3 py-2.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 select-none active:scale-95 min-h-11 outline-none focus-visible:ring-2 focus-visible:ring-blue/40",
+                          isSelected 
+                            ? "bg-brand-primary border-brand-primary text-white shadow-md shadow-brand-primary/10" 
+                            : "bg-surface border-border text-text-3 hover:text-text hover:border-text-4/30"
+                        )}
+                      >
+                        <span>{cat.emoji}</span>
+                        <span>{cat.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+
         {/* ── Main Tab Navigation ── */}
         <div id="tools-tabs-nav" className="max-w-7xl mx-auto px-4 md:px-8 pt-4 flex items-end justify-between border-b border-border/80 gap-x-2">
           <div className="flex gap-2 md:gap-6 shrink">
@@ -544,87 +627,10 @@ export default function HomeClient() {
               )}
             </button>
           </div>
-
-          {activeTab === "tools" && (
-            <div className="flex items-center gap-2 shrink-0 pb-2">
-              <button
-                onClick={() => setShowSmartFilters(!showSmartFilters)}
-                aria-label="Toggle filters"
-                className={cn(
-                  "min-h-9 min-w-9 px-2 flex items-center justify-center gap-1 text-xs font-bold hover:bg-surface border rounded-lg transition-colors uppercase tracking-widest",
-                  activeFilters.length > 0 ? "border-brand-primary/50 text-brand-primary bg-brand-primary/5" : "border-border/80 text-text-3"
-                )}
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-                {activeFilters.length > 0 && <span className="bg-brand-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{activeFilters.length}</span>}
-              </button>
-
-              {isFiltering && (
-                <button
-                  onClick={handleClearFilters}
-                  aria-label="Clear active filter"
-                  title="Clear filters"
-                  className="min-h-9 min-w-9 flex items-center justify-center text-blue hover:text-blue-600 hover:bg-blue/10 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue border border-transparent hover:border-blue/20"
-                >
-                  <FilterX className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          )}
         </div>
 
         {activeTab === "tools" ? (
           <>
-            {/* ── Sticky category chip bar ── */}
-            <div
-              className={cn(
-                "sticky top-15 md:top-18 z-sidebar w-full py-2 bg-bg/95 backdrop-blur-sm border-b border-border transition-opacity",
-                isSidebarOpen && "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
-              )}
-            >
-              <div className="max-w-7xl mx-auto px-4 md:px-8">
-                <CategoryChips activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-              </div>
-            </div>
-
-            {/* ── Smart Filters Panel ── */}
-            <AnimatePresence>
-              {showSmartFilters && (
-                <m.div
-                  initial={{ opacity: 0, scaleY: 0 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  exit={{ opacity: 0, scaleY: 0 }}
-                  style={{ transformOrigin: 'top' }}
-                  transition={{ duration: 0.2 }}
-                  className="w-full bg-surface-2/40 border-b border-border/80 overflow-hidden"
-                >
-                  <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 space-y-3">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Smart Categories & Filtering</span>
-                    <div className="flex flex-wrap gap-2">
-                      {SMART_CATEGORIES.map(cat => {
-                        const isSelected = activeFilters.includes(cat.id);
-                        return (
-                          <button
-                            key={cat.id}
-                            onClick={() => toggleSmartFilter(cat.id)}
-                            className={cn(
-                              "px-3 py-2.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 select-none active:scale-95 min-h-11 outline-none focus-visible:ring-2 focus-visible:ring-blue/40",
-                              isSelected 
-                                ? "bg-brand-primary border-brand-primary text-white shadow-md shadow-brand-primary/10" 
-                                : "bg-surface border-border text-text-3 hover:text-text hover:border-text-4/30"
-                            )}
-                          >
-                            <span>{cat.emoji}</span>
-                            <span>{cat.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </m.div>
-              )}
-            </AnimatePresence>
-
             {/* ── Main content ── */}
             <div
               id="tool-grid-panel"

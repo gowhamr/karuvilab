@@ -44,7 +44,7 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
   const todayTip = TIPS[new Date().getDay() % TIPS.length];
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="popLayout" initial={false}>
       {isReturning ? (
         <m.section
           key="returning-hero"

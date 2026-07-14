@@ -162,12 +162,14 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              aria-label="Search events"
               placeholder="Search title, description, location, or tag..."
               className="w-full h-12 pl-12 pr-12 bg-bg border border-border rounded-2xl text-sm font-bold focus:border-blue outline-none transition-all placeholder:text-text-4 text-text"
             />
             {query && (
               <button 
                 onClick={() => setQuery("")}
+                aria-label="Clear search"
                 className="p-1 hover:bg-surface-2 rounded-lg text-text-4 absolute right-4 top-1/2 -translate-y-1/2"
               >
                 <X className="w-4 h-4" />

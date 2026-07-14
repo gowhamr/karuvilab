@@ -7,7 +7,7 @@ import { useDraftStore } from '@/src/store/useDraftStore';
 import { useSearchStore } from '@/src/store/useSearchStore';
 import { useToast } from '@/components/ui/Toast';
 
-export function GlobalSelectionToolbar() {
+export const GlobalSelectionToolbar = React.memo(function GlobalSelectionToolbar() {
   const [selection, setSelection] = useState<{ text: string; x: number; y: number } | null>(null);
   const addDraft = useDraftStore(s => s.addDraft);
   const setIsPaletteOpen = useSearchStore(s => s.setIsPaletteOpen);
@@ -122,4 +122,4 @@ export function GlobalSelectionToolbar() {
       </m.div>
     </AnimatePresence>
   );
-}
+});

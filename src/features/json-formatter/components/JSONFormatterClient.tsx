@@ -5,7 +5,7 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { usePersistentState } from "@/src/lib/hooks";
-import { Code, Network, Info, FileJson, Layers, Sparkles, ChevronRight, ChevronDown } from "lucide-react";
+import { Code, Network, Info, FileJson, Layers, Sparkles, ChevronRight, ChevronDown, ArrowRightLeft, Braces } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { workerManager } from "@/src/workers/manager";
 import { StatusBadge } from "@/components/system/StatusBadge";
@@ -18,6 +18,67 @@ import { useWorkflowIntegration } from "@/src/lib/workflow-hook";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 
 type Indent = 2 | 4 | "tab";
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function sortKeysDeep(val: unknown): unknown {
+  if (Array.isArray(val)) return val.map(sortKeysDeep);
+  if (val !== null && typeof val === "object") {
+    return Object.fromEntries(
+      Object.keys(val as Record<string, unknown>)
+        .sort()
+        .map(k => [k, sortKeysDeep((val as Record<string, unknown>)[k])])
+    );
+  }
+  return val;
+}
+
+function jsonToTs(val: unknown, depth = 0): string {
+  const indent = "  ".repeat(depth);
+  const innerIndent = "  ".repeat(depth + 1);
+  if (val === null) return "null";
+  if (Array.isArray(val)) {
+    if (val.length === 0) return "never[]";
+    const itemType = jsonToTs(val[0], depth);
+    return `Array<${itemType}>`;
+  }
+  if (typeof val === "object") {
+    const entries = Object.entries(val as Record<string, unknown>);
+    if (entries.length === 0) return "Record<string, never>";
+    const lines = entries.map(([k, v]) => `${innerIndent}${/^[a-zA-Z_$][\w$]*$/.test(k) ? k : JSON.stringify(k)}: ${jsonToTs(v, depth + 1)};`);
+    return `{\n${lines.join("\n")}\n${indent}}`;
+  }
+  if (typeof val === "string") return "string";
+  if (typeof val === "number") return "number";
+  if (typeof val === "boolean") return "boolean";
+  return "unknown";
+}
+
+function jsonToYaml(val: unknown, depth = 0): string {
+  const indent = "  ".repeat(depth);
+  if (val === null) return "null";
+  if (typeof val === "boolean" || typeof val === "number") return String(val);
+  if (typeof val === "string") {
+    if (val.includes("\n") || val.includes(":") || val.startsWith("{") || val.startsWith("[")) {
+      return `|\n${val.split("\n").map(l => `${indent}  ${l}`).join("\n")}`;
+    }
+    return val;
+  }
+  if (Array.isArray(val)) {
+    if (val.length === 0) return "[]";
+    return val.map(item => `\n${indent}- ${jsonToYaml(item, depth + 1)}`).join("");
+  }
+  if (typeof val === "object") {
+    const entries = Object.entries(val as Record<string, unknown>);
+    if (entries.length === 0) return "{}";
+    return entries.map(([k, v]) => {
+      const valStr = jsonToYaml(v, depth + 1);
+      const isBlock = typeof v === "object" && v !== null;
+      return `\n${indent}${k}:${isBlock ? valStr : ` ${valStr}`}`;
+    }).join("");
+  }
+  return String(val);
+}
 
 interface TreeNodeProps {
   value: unknown;
@@ -143,13 +204,14 @@ export default function JSONFormatterClient() {
     mode: "beautify" as "beautify" | "minify",
     input: "",
     indent: 2 as Indent,
-    view: "raw" as "raw" | "tree"
+    view: "raw" as "raw" | "tree" | "typescript" | "yaml",
+    sortKeys: false,
   });
 
   const [fontSize, setFontSize] = useState(13);
   const [wordWrap, setWordWrap] = useState(false);
 
-  const { mode, input, indent, view } = state;
+  const { mode, input, indent, view, sortKeys } = state;
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<{ output: string; error: any; parsed: any }>({ 
     output: "", error: null, parsed: null 
@@ -159,7 +221,8 @@ export default function JSONFormatterClient() {
   const setMode = useCallback((m: "beautify" | "minify") => setState(prev => ({ ...prev, mode: m, view: "raw" })), [setState]);
   const setInput = useCallback((i: string) => setState(prev => ({ ...prev, input: i })), [setState]);
   const setIndent = useCallback((v: Indent) => setState(prev => ({ ...prev, indent: v })), [setState]);
-  const setView = useCallback((v: "raw" | "tree") => setState(prev => ({ ...prev, view: v })), [setState]);
+  const setView = useCallback((v: "raw" | "tree" | "typescript" | "yaml") => setState(prev => ({ ...prev, view: v })), [setState]);
+  const setSortKeys = useCallback((v: boolean) => setState(prev => ({ ...prev, sortKeys: v })), [setState]);
 
   const { suggestedText } = useWorkflowIntegration("json-formatter");
   useEffect(() => {
@@ -189,6 +252,8 @@ export default function JSONFormatterClient() {
           let out = "";
           if (mode === "minify") {
             out = JSON.stringify(obj);
+            setResult({ output: out, error: null, parsed: obj });
+            recordConversion("jsonFormatter");
           } else {
             const spaces = indent === "tab" ? "\t" : indent;
             out = JSON.stringify(obj, null, spaces);
@@ -236,15 +301,39 @@ export default function JSONFormatterClient() {
     return () => abortController.abort();
   }, [input, mode, indent, recordConversion]);
 
-  const { output, error, parsed } = result;
+  // Derived: TypeScript interface and YAML outputs
+  const tsOutput = useMemo(() => {
+    if (!result.parsed) return "";
+    const sorted = sortKeys ? sortKeysDeep(result.parsed) : result.parsed;
+    return `interface Root ${jsonToTs(sorted, 0)}`;
+  }, [result.parsed, sortKeys]);
+
+  const yamlOutput = useMemo(() => {
+    if (!result.parsed) return "";
+    const sorted = sortKeys ? sortKeysDeep(result.parsed) : result.parsed;
+    return jsonToYaml(sorted).trim();
+  }, [result.parsed, sortKeys]);
+
+  // The output shown to the user (raw view — also respects sortKeys)
+  const displayOutput = useMemo(() => {
+    if (!result.parsed || !result.output) return result.output;
+    if (!sortKeys) return result.output;
+    const sorted = sortKeysDeep(result.parsed);
+    const spaces = indent === "tab" ? "\t" : indent;
+    return mode === "minify" ? JSON.stringify(sorted) : JSON.stringify(sorted, null, spaces);
+  }, [result, sortKeys, indent, mode]);
+
+  const activeOutput = view === "typescript" ? tsOutput : view === "yaml" ? yamlOutput : displayOutput;
 
   useFocusModeIntegration({
-    charCount: output.length,
-    lineCount: output ? output.split('\n').length : 0,
+    charCount: displayOutput.length,
+    lineCount: displayOutput ? displayOutput.split('\n').length : 0,
     language: "json",
     onFontSizeChange: setFontSize,
     onWrapToggle: () => setWordWrap(v => !v)
   });
+
+  const { error, parsed } = result;
 
   if (!isLoaded) return <div className="animate-pulse h-full bg-surface/50 rounded-4xl border border-border" />;
 
@@ -314,6 +403,23 @@ export default function JSONFormatterClient() {
                 </div>
               </div>
             )}
+            {/* Sort Keys */}
+            <div className="space-y-2">
+              <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Transform</p>
+              <button
+                onClick={() => setSortKeys(!sortKeys)}
+                aria-pressed={sortKeys}
+                className={cn(
+                  "w-full flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs font-bold transition-all",
+                  sortKeys ? "bg-blue/10 border-blue text-blue" : "bg-bg border-border text-text-2 hover:border-blue/30"
+                )}
+              >
+                Sort Keys A–Z
+                <span className={cn("w-8 h-4 rounded-full transition-colors relative", sortKeys ? "bg-blue" : "bg-border")}>
+                  <span className={cn("absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform", sortKeys ? "left-[18px]" : "left-0.5")} />
+                </span>
+              </button>
+            </div>
             <div className="p-4 bg-blue/5 border border-blue/10 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-blue">
                 <Info className="w-3 h-3" />
@@ -334,7 +440,7 @@ export default function JSONFormatterClient() {
               <Code className="w-4 h-4" />
               Output
             </h2>
-            <StatusBadge status={isProcessing ? "processing" : error ? "error" : output ? "complete" : "idle"} />
+            <StatusBadge status={isProcessing ? "processing" : error ? "error" : result.output ? "complete" : "idle"} />
             <PrivacyBadge message="Local processing" className="hidden sm:inline-flex" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -342,19 +448,21 @@ export default function JSONFormatterClient() {
               aria-label="Output View"
               options={[
                 { id: "raw", label: "Raw", icon: <FileJson className="w-3 h-3" /> },
-                { id: "tree", label: "Tree", icon: <Network className="w-3 h-3" /> }
+                { id: "tree", label: "Tree", icon: <Network className="w-3 h-3" /> },
+                { id: "typescript", label: "TS", icon: <Braces className="w-3 h-3" /> },
+                { id: "yaml", label: "YAML", icon: <ArrowRightLeft className="w-3 h-3" /> },
               ]}
               activeId={view}
               onChange={setView}
               disabled={isProcessing}
             />
             <div className="w-px h-6 bg-border hidden sm:block" />
-            <CopyButton text={output} disabled={isProcessing || !output} />
+            <CopyButton text={activeOutput} disabled={isProcessing || !activeOutput} />
           </div>
         </div>
 
         <div className="bg-surface border border-border rounded-4xl p-2 shadow-sm min-h-96 relative">
-          {(!output && !isProcessing && !error) ? (
+          {(!displayOutput && !isProcessing && !error) ? (
             <EmptyState 
               toolId="jsonFormatter"
               icon={Code}
@@ -382,17 +490,26 @@ export default function JSONFormatterClient() {
             <div className="p-4 sm:p-6 w-full overflow-hidden">
               <div className="w-full px-4 sm:px-6 py-4 bg-bg border border-border rounded-2xl overflow-x-auto overflow-y-auto max-h-[50vh] custom-scrollbar">
                 <div className="min-w-max">
-                  <TreeNode value={parsed} depth={0} maxAutoExpandDepth={10} />
+                  <TreeNode value={sortKeys ? sortKeysDeep(parsed) : parsed} depth={0} maxAutoExpandDepth={10} />
                 </div>
               </div>
             </div>
+          ) : (view === "typescript" || view === "yaml") && parsed !== null ? (
+            <textarea
+              readOnly
+              aria-label={view === "typescript" ? "TypeScript interface output" : "YAML output"}
+              className={`w-full min-h-96 p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar whitespace-pre overflow-x-auto`}
+              style={{ fontSize: `${fontSize}px` }}
+              value={activeOutput}
+              placeholder="Results will appear here..."
+            />
           ) : (
             <textarea
               readOnly
               aria-label="Formatted JSON output"
               className={`w-full min-h-96 p-6 sm:p-8 bg-transparent font-mono text-text-2 resize-none outline-none custom-scrollbar ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
               style={{ fontSize: `${fontSize}px` }}
-              value={output}
+              value={displayOutput}
               placeholder="Results will appear here..."
             />
           )}
