@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { FileDown, Copy, Plus, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
+import { useObjectUrlManager } from '@/src/lib/hooks';
 
 interface LinkEntry {
   id: string;
@@ -19,6 +20,7 @@ export default function ToolClient() {
   const [instructions, setInstructions] = useState('');
   const [links, setLinks] = useState<LinkEntry[]>([]);
   const { toast } = useToast();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const addLink = useCallback(() => {
     setLinks(prev => [...prev, { id: crypto.randomUUID(), url: '', title: '', notes: '' }]);
@@ -69,14 +71,14 @@ export default function ToolClient() {
   const handleDownload = useCallback(() => {
     if (!generatedContent) return;
     const blob = new Blob([generatedContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const url = createUrl(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'llms.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    revokeUrl(url);
     toast("Downloaded llms.txt", "success");
   }, [generatedContent, toast]);
 

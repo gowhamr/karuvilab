@@ -23,11 +23,18 @@ interface VideoMeta {
 
 export default function VideoMetadataViewerClient() {
   const { toast } = useToast();
-  const { createUrl } = useObjectUrlManager();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [meta, setMeta] = useState<VideoMeta | null>(null);
   const [status, setStatus] = useState<"idle" | "processing" | "complete" | "error">("idle");
   const [error, setError] = useState<{ code: string; title: string; description: string } | null>(null);
+  const videoUrlRef = React.useRef<string | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (videoUrlRef.current) revokeUrl(videoUrlRef.current);
+    };
+  }, [revokeUrl]);
 
   const handleFileSelect = async (f: File) => {
     if (!f.type.startsWith("video/")) {
@@ -43,8 +50,11 @@ export default function VideoMetadataViewerClient() {
     setStatus("processing");
     setError(null);
 
+    if (videoUrlRef.current) revokeUrl(videoUrlRef.current);
+
     try {
       const url = createUrl(f);
+      videoUrlRef.current = url;
       const video = document.createElement("video");
       video.src = url;
       
@@ -67,7 +77,9 @@ export default function VideoMetadataViewerClient() {
 
       setStatus("complete");
     } catch (err: any) {
-      console.error(err);
+      import('@/src/lib/logger').then(({ logger }) => {
+        logger.error("Analysis Failed", { error: err, toolId: "video-metadata-viewer" });
+      });
       setError({
         code: "PROCESSING_FAILED",
         title: "Analysis Failed",
@@ -75,6 +87,12 @@ export default function VideoMetadataViewerClient() {
       });
       setStatus("error");
     }
+  };
+
+  const handleClear = () => {
+    if (videoUrlRef.current) revokeUrl(videoUrlRef.current);
+    videoUrlRef.current = null;
+    setFile(null);
   };
 
   const copyAsJson = () => {
@@ -117,7 +135,7 @@ export default function VideoMetadataViewerClient() {
                 <Copy size={14} /> Copy JSON
               </button>
               <button 
-                onClick={() => setFile(null)}
+                onClick={handleClear}
                 className="flex items-center gap-2 px-6 py-3 bg-bg border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:text-error transition-all"
               >
                 Clear

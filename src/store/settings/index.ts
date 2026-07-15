@@ -10,6 +10,9 @@ export const initialSettings = {
     fontScaling: 1.0,
     highContrast: false,
     reduceMotion: false,
+    keyboardShortcutsOverlay: false,
+    focusMode: false,
+    readAloud: false,
   } as AccessibilitySettings,
   privacy: {
     localOnly: true,

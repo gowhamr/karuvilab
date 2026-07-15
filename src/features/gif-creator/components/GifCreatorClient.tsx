@@ -9,6 +9,8 @@ import { Images, Play, Download, Trash2, Settings, Plus, Loader2, Image as Image
 import { m, AnimatePresence, Reorder } from "framer-motion";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
+import { logger } from "@/src/lib/logger";
+import { useRef, useEffect } from "react";
 
 interface Frame {
   id: string;
@@ -25,6 +27,15 @@ export default function GifCreatorClient() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{ url: string; size: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      frames.forEach(f => revokeUrl(f.url));
+      if (result?.url) revokeUrl(result.url);
+      if (abortControllerRef.current) abortControllerRef.current.abort();
+    };
+  }, [frames, result, revokeUrl]);
 
   const handleFiles = (f: FileList | File[]) => {
     const newFiles = Array.from(f);
@@ -55,6 +66,12 @@ export default function GifCreatorClient() {
     setProgress(5);
     setError(null);
 
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     try {
       // 1. Determine dimensions from first frame
       const firstFrame = frames[0]!;
@@ -74,6 +91,7 @@ export default function GifCreatorClient() {
 
       // 2. Extract pixel data for all frames
       for (let i = 0; i < frames.length; i++) {
+        if (signal.aborted) throw new Error("Aborted");
         const frame = frames[i]!;
         const img = new Image();
         img.src = frame.url;
@@ -87,6 +105,9 @@ export default function GifCreatorClient() {
         // Important: Transferable ownership requires copying or using the same buffer carefully
         frameBuffers.push(data.buffer);
         setProgress(10 + (i / frames.length) * 30);
+        
+        // Yield to main thread (P-06 long task prevention)
+        await new Promise(r => setTimeout(r, 0));
       }
 
       // 3. Send to Worker
@@ -95,7 +116,8 @@ export default function GifCreatorClient() {
         width,
         height,
         delay,
-        (p) => setProgress(40 + p.percent * 0.6)
+        (p) => setProgress(40 + p.percent * 0.6),
+        signal
       );
 
       const blob = new Blob([gifBytes.buffer as ArrayBuffer], { type: "image/gif" });
@@ -107,9 +129,11 @@ export default function GifCreatorClient() {
       });
       setStatus("complete");
       setProgress(100);
+      abortControllerRef.current = null;
 
     } catch (err: any) {
-      console.error("[GifCreator] Encoding failed:", err);
+      if (err.message === "Aborted") return;
+      logger.error("GIF Encoding failed", { error: err, toolId: "gif-creator", action: "handleCreate" });
       setError(err.message || "An error occurred while generating the GIF.");
       setStatus("error");
     }

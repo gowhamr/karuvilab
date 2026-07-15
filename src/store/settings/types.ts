@@ -10,6 +10,9 @@ export interface AccessibilitySettings {
   fontScaling: number; // 1.0 = 100%
   highContrast: boolean;
   reduceMotion?: boolean;
+  keyboardShortcutsOverlay?: boolean;
+  focusMode?: boolean;
+  readAloud?: boolean;
 }
 
 export interface PrivacySettings {

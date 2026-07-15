@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { idbStorage } from './idb-storage';
+import { idbStorage } from '@/src/store/idb-storage';
 
 export type EditorSettings = {
   wordWrap: boolean;
@@ -79,6 +79,9 @@ export const useFileViewerStore = create<FileViewerState>()(
       version: 1,
       name: 'kv-file-viewer-storage',
       storage: createJSONStorage(() => idbStorage),
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as FileViewerState;
+      },
       partialize: (state) => ({ settings: state.settings }), // Only persist settings
     }
   )

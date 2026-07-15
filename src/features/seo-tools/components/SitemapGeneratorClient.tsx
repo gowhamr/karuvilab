@@ -42,6 +42,8 @@ export default function SitemapGeneratorClient() {
   ]);
   const [bulkInput, setBulkInput] = useState("");
   const [activeTab, setActiveTab] = useState<'editor' | 'import'>('editor');
+  const [bulkPriority, setBulkPriority] = useState("0.8");
+  const [bulkChangeFreq, setBulkChangeFreq] = useState("weekly");
 
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const { toast } = useToast();
@@ -72,8 +74,8 @@ export default function SitemapGeneratorClient() {
       id: Math.random().toString(36).substr(2, 9),
       url: line.startsWith('/') ? line : '/' + line,
       lastmod: getToday(),
-      changefreq: "weekly",
-      priority: "0.8"
+      changefreq: bulkChangeFreq,
+      priority: bulkPriority
     }));
     setEntries(prev => [...prev, ...newEntries]);
     setBulkInput("");
@@ -283,6 +285,22 @@ export default function SitemapGeneratorClient() {
                         Existing entries will be preserved.
                       </p>
                     </div>
+                    
+                    <div className="flex gap-4 mb-4">
+                      <div className="flex-1 space-y-2">
+                        <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Default Priority</label>
+                        <select value={bulkPriority} onChange={e => setBulkPriority(e.target.value)} className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:border-blue outline-none text-xs font-bold">
+                          {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
+                        </select>
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Default Frequency</label>
+                        <select value={bulkChangeFreq} onChange={e => setBulkChangeFreq(e.target.value)} className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:border-blue outline-none text-xs font-bold uppercase">
+                          {CHANGEFREQS.map(f => <option key={f} value={f}>{f}</option>)}
+                        </select>
+                      </div>
+                    </div>
+
                     <textarea 
                       value={bulkInput}
                       onChange={(e) => setBulkInput(e.target.value)}

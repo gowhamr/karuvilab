@@ -937,6 +937,51 @@ const api: WorkerAPI = {
     const _arr = new Uint8Array(result); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
+  async encodeWav(channels, sampleRate, onProgress) {
+    if (onProgress) onProgress({ percent: 10, message: "Initializing WAV encoding..." });
+    const numOfChan = channels.length;
+    const length = channels[0]!.length * numOfChan * 2 + 44;
+    const buffer = new ArrayBuffer(length);
+    const view = new DataView(buffer);
+    let offset = 0;
+    let pos = 0;
+
+    const setUint16 = (data: number) => { view.setUint16(pos, data, true); pos += 2; };
+    const setUint32 = (data: number) => { view.setUint32(pos, data, true); pos += 4; };
+
+    setUint32(0x46464952); // "RIFF"
+    setUint32(length - 8); // file length - 8
+    setUint32(0x45564157); // "WAVE"
+    setUint32(0x20746d66); // "fmt " chunk
+    setUint32(16); // length = 16
+    setUint16(1); // PCM (uncompressed)
+    setUint16(numOfChan);
+    setUint32(sampleRate);
+    setUint32(sampleRate * 2 * numOfChan); // avg. bytes/sec
+    setUint16(numOfChan * 2); // block-align
+    setUint16(16); // 16-bit
+    setUint32(0x61746164); // "data" - chunk
+    setUint32(length - pos - 4); // chunk length
+
+    if (onProgress) onProgress({ percent: 30, message: "Encoding channels..." });
+    const totalSamples = channels[0]!.length;
+
+    while(pos < length) {
+        if (onProgress && offset % 100000 === 0) onProgress({ percent: 30 + (offset / totalSamples) * 70, message: "Encoding..." });
+        for(let i=0; i<numOfChan; i++) {
+            let sample = Math.max(-1, Math.min(1, channels[i]![offset] || 0));
+            sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF);
+            view.setInt16(pos, sample, true);
+            pos += 2;
+        }
+        offset++;
+    }
+
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    const outBytes = new Uint8Array(buffer);
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
+  },
+
   async createGif(frames, width, height, delay, onProgress) {
     const { GIFEncoder, quantize, applyPalette } = (await import('gifenc')) as any;
     const gif = new GIFEncoder();

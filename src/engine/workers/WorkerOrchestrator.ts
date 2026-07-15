@@ -90,6 +90,7 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   computeDiff: 'heavy',
   createZip: 'heavy',
   encodeMp3: 'heavy',
+  encodeWav: 'heavy',
   extractRawTextFromDocx: 'heavy',
   convertDocxToPdf: 'heavy',
   generateDocxFromText: 'heavy'

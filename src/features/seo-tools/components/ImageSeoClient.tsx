@@ -17,8 +17,17 @@ import { BatchQueue } from "@/components/ui/BatchQueue";
 import { useBatchStore } from "@/src/store/useBatchStore";
 import { ToolShell } from "@/components/ui/ToolShell";
 
-const EMPTY_ARRAY: any[] = [];
 const toolId = "image-seo";
+
+function Thumbnail({ file }: { file: File }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    const u = blobManager.create(file);
+    setUrl(u);
+    return () => { blobManager.revoke(u); };
+  }, [file]);
+  return url ? <img src={url} alt="" className="w-full h-full object-cover" /> : null;
+}
 
 function toSlug(s: string): string {
   return s
@@ -55,7 +64,7 @@ export default function ImageSeoClient() {
   // Analyzer tab
   const [analyzeText, setAnalyzeText] = useState("");
 
-  const items = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
+  const items = useBatchStore(state => state.items[toolId] || []);
   const addItems = useBatchStore(state => state.addItems);
   const isProcessing = false; // We process instantly for renaming
 
@@ -311,10 +320,7 @@ export default function ImageSeoClient() {
                 isProcessing={isProcessing}
                 onProcess={async () => {}}
                 onDownload={(item) => downloadFile(item.file, toSlug(item.file.name.split('.')[0] || "file") + "." + item.file.name.split('.').pop())}
-                renderThumbnail={(item) => {
-                  const url = blobManager.create(item.file);
-                  return <img src={url} alt="" className="w-full h-full object-cover" />;
-                }}
+                renderThumbnail={(item) => <Thumbnail file={item.file} />}
               />
             </div>
             

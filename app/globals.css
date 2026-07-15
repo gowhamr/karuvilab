@@ -442,3 +442,46 @@ body.sidebar-open {
     background: var(--text-4);
   }
 }
+
+/* Accessibility Settings */
+.focus-mode aside, .focus-mode footer {
+  opacity: 0.2;
+  filter: grayscale(100%);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.focus-mode aside:hover, .focus-mode footer:hover {
+  opacity: 1;
+  filter: none;
+}
+.focus-mode header {
+  opacity: 0.6;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.focus-mode header:hover {
+  opacity: 1;
+}
+
+.show-shortcuts button[aria-keyshortcuts]::after,
+.show-shortcuts a[aria-keyshortcuts]::after,
+.show-shortcuts [data-shortcut]::after {
+  content: attr(aria-keyshortcuts) attr(data-shortcut);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: var(--color-blue);
+  color: white;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 4px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-transform: uppercase;
+}
+
+.show-shortcuts button[aria-keyshortcuts],
+.show-shortcuts a[aria-keyshortcuts],
+.show-shortcuts [data-shortcut] {
+  position: relative;
+}

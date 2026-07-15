@@ -2,7 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { useFileViewerStore } from '@/src/store/useFileViewerStore';
+import { useFileViewerStore } from '@/src/features/file-viewer-diff/store';
 import { FileText, Files, ShieldCheck, Database } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { ToolSkeleton } from '@/components/ui/ToolSkeleton';

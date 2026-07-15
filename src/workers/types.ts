@@ -320,7 +320,11 @@ export interface WorkerAPI {
     sampleRate: number,
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
-
+  encodeWav(
+    channels: Float32Array[],
+    sampleRate: number,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
   createGif(
     frames: ArrayBuffer[],
     width: number,

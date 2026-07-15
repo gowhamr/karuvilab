@@ -82,6 +82,7 @@ export default function RootLayout({
                 var s = JSON.parse(localStorage.getItem('karuvi-settings') || '{}');
                 var state = s.state || {};
                 var app = state.appearance || {};
+                var acc = state.accessibility || {};
                 
                 var t = app.theme || 'system';
                 var r = t;
@@ -90,11 +91,19 @@ export default function RootLayout({
                 }
                 document.documentElement.setAttribute('data-theme', r);
                 
-                var f = app.fontSize || '1.0';
+                var f = acc.fontScaling || app.fontSize || '1.0';
                 document.documentElement.setAttribute('data-font-size', f);
 
-                if (app.highContrast === true) {
+                if (acc.highContrast === true || app.highContrast === true) {
                   document.documentElement.classList.add('high-contrast');
+                }
+                
+                if (acc.focusMode === true) {
+                  document.documentElement.classList.add('focus-mode');
+                }
+                
+                if (acc.keyboardShortcutsOverlay === true) {
+                  document.documentElement.classList.add('show-shortcuts');
                 }
 
                 // Remove preload class after a frame to enable transitions

@@ -10,6 +10,7 @@ import RobotsTxtBuilderClient from './components/RobotsTxtBuilderClient';
 import SeoTitleTesterClient from './components/SeoTitleTesterClient';
 import SitemapGeneratorClient from './components/SitemapGeneratorClient';
 import SlugGeneratorClient from './components/SlugGeneratorClient';
+import LlmsTxtGeneratorClient from '@/app/(tools)/seo-tools/llms-txt-generator/ToolClient';
 
 const tabs = [
   { id: 'meta-tags', label: 'Meta Tags' },
@@ -19,6 +20,7 @@ const tabs = [
   { id: 'slug', label: 'Slug Generator' },
   { id: 'og-preview', label: 'OG Preview' },
   { id: 'seo-title', label: 'SERP Tester' },
+  { id: 'llms-txt', label: 'LLMs.txt' },
 ];
 
 export default function SeoToolsClient() {
@@ -66,6 +68,7 @@ export default function SeoToolsClient() {
           {activeTab === 'slug' && <SlugGeneratorClient />}
           {activeTab === 'og-preview' && <OgPreviewClient />}
           {activeTab === 'seo-title' && <SeoTitleTesterClient />}
+          {activeTab === 'llms-txt' && <LlmsTxtGeneratorClient />}
         </m.div>
       </AnimatePresence>
     </div>

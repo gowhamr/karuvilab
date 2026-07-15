@@ -73,11 +73,13 @@ const settingsIdbStorage = {
       // Remove legacy split IndexedDB key
       await idbStorage.removeItem('karuvi-settings-privacy');
 
-      // Keep only appearance mirrored in localStorage for server-side theme-init
       try {
-        if (mergedState.state.appearance) {
+        if (mergedState.state.appearance || mergedState.state.accessibility) {
           localStorage.setItem('karuvi-settings', JSON.stringify({
-            state: { appearance: mergedState.state.appearance },
+            state: { 
+              appearance: mergedState.state.appearance,
+              accessibility: mergedState.state.accessibility
+            },
             version: mergedState.version,
           }));
         } else {
@@ -105,6 +107,7 @@ const settingsIdbStorage = {
       const mirrorValue = JSON.stringify({
         state: {
           appearance: obj.state.appearance,
+          accessibility: obj.state.accessibility,
         },
         version: obj.version,
       });

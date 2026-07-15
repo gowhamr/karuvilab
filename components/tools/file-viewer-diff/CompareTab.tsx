@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
-import { useFileViewerStore } from '@/src/store/useFileViewerStore';
+import { useFileViewerStore } from '@/src/features/file-viewer-diff/store';
 import { readFileAsText, detectLanguage, isBinaryFile, EXTENSION_TO_LANG } from '@/src/lib/file-utils';
 import { workerManager } from '@/src/workers/manager';
 import { DropZone } from '@/components/ui/DropZone';

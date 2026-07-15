@@ -253,6 +253,16 @@ class WorkerManager {
     return workerOrchestrator.run("encodeMp3", [left, right, sampleRate], transfer, onProgress, abortSignal, true, 3);
   }
 
+  async encodeWav(
+    channels: Float32Array[],
+    sampleRate: number,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    const transfers = channels.map(c => c.buffer);
+    return workerOrchestrator.run("encodeWav", [channels, sampleRate], transfers, onProgress, abortSignal, true, 3);
+  }
+
   async createGif(
     frames: ArrayBuffer[],
     width: number,

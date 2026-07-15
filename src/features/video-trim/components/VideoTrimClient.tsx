@@ -13,6 +13,8 @@ import { m, AnimatePresence } from "framer-motion";
 
 export default function VideoTrimClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
@@ -24,6 +26,15 @@ export default function VideoTrimClient() {
   
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  useEffect(() => {
+    return () => {
+      if (videoUrl) revokeUrl(videoUrl);
+      if (result?.url) revokeUrl(result.url);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (abortControllerRef.current) abortControllerRef.current.abort();
+    };
+  }, [videoUrl, result, revokeUrl]);
+
   const handleFileSelect = (f: File) => {
     if (!f.type.startsWith("video/")) {
       setError({
@@ -34,6 +45,14 @@ export default function VideoTrimClient() {
       return;
     }
     
+    if (videoUrl) revokeUrl(videoUrl);
+    if (result?.url) revokeUrl(result.url);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+
     setFile(f);
     const url = createUrl(f);
     setVideoUrl(url);
@@ -51,6 +70,10 @@ export default function VideoTrimClient() {
   const handleTrim = async () => {
     if (!file || !videoRef.current) return;
     
+    if (abortControllerRef.current) abortControllerRef.current.abort();
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     setStatus("processing");
     setProgress(10);
 
@@ -91,20 +114,30 @@ export default function VideoTrimClient() {
       
       // Progress simulation
       const startTime = Date.now();
-      const interval = setInterval(() => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(() => {
+        if (signal.aborted) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          recorder.stop();
+          return;
+        }
+
         const elapsed = Date.now() - startTime;
         const p = Math.min(10 + (elapsed / durationToRecord) * 80, 90);
         setProgress(p);
         
         if (elapsed >= durationToRecord) {
-          clearInterval(interval);
+          if (intervalRef.current) clearInterval(intervalRef.current);
           recorder.stop();
           videoRef.current?.pause();
         }
       }, 100);
 
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      if (err.message === "Aborted") return;
+      import('@/src/lib/logger').then(({ logger }) => {
+        logger.error("Trim Failed", { error: err, toolId: "video-trim" });
+      });
       setError({
         code: "PROCESSING_FAILED",
         title: "Trim Failed",
@@ -174,6 +207,7 @@ export default function VideoTrimClient() {
                   value={range}
                   max={duration || 100}
                   step={0.1}
+                  disabled={status === "processing"}
                   onValueChange={setRange}
                 >
                   <Slider.Track className="bg-bg relative grow rounded-full h-1.5 border border-border">

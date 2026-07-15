@@ -10,11 +10,13 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
 import { Music, Download, Settings, Loader2 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
+import { logger } from "@/src/lib/logger";
+import { useEffect, useRef } from "react";
 
 type Format = "mp3" | "wav" | "aac" | "opus";
 
 export default function AudioConverterClient() {
-  const { createUrl } = useObjectUrlManager();
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [targetFormat, setTargetFormat] = useState<Format>("mp3");
@@ -22,6 +24,15 @@ export default function AudioConverterClient() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{ url: string; size: number; name: string } | null>(null);
   const [error, setError] = useState<{ code: string; title: string; description: string } | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioUrl) revokeUrl(audioUrl);
+      if (result?.url) revokeUrl(result.url);
+      if (abortControllerRef.current) abortControllerRef.current.abort();
+    };
+  }, [audioUrl, result, revokeUrl]);
 
   const handleFileSelect = (f: File) => {
     if (!f.type.startsWith("audio/")) {
@@ -32,6 +43,13 @@ export default function AudioConverterClient() {
       });
       return;
     }
+    if (audioUrl) revokeUrl(audioUrl);
+    if (result?.url) revokeUrl(result.url);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    
     setFile(f);
     setAudioUrl(createUrl(f));
     setStatus("idle");
@@ -39,63 +57,22 @@ export default function AudioConverterClient() {
     setError(null);
   };
 
-  const convertToWav = (audioBuffer: AudioBuffer): Blob => {
-    const numOfChan = audioBuffer.numberOfChannels;
-    const length = audioBuffer.length * numOfChan * 2 + 44;
-    const buffer = new ArrayBuffer(length);
-    const view = new DataView(buffer);
-    const channels = [];
-    let offset = 0;
-    let pos = 0;
-
-    const setUint16 = (data: number) => {
-        view.setUint16(pos, data, true);
-        pos += 2;
-    };
-
-    const setUint32 = (data: number) => {
-        view.setUint32(pos, data, true);
-        pos += 4;
-    };
-
-    setUint32(0x46464952);                         
-    setUint32(length - 8);                         
-    setUint32(0x45564157);                         
-    setUint32(0x20746d66);                         
-    setUint32(16);                                 
-    setUint16(1);                                  
-    setUint16(numOfChan);
-    setUint32(audioBuffer.sampleRate);
-    setUint32(audioBuffer.sampleRate * 2 * numOfChan); 
-    setUint16(numOfChan * 2);                      
-    setUint16(16);                                 
-    setUint32(0x61746164);                         
-    setUint32(length - pos - 4);                   
-
-    for(let i=0; i<numOfChan; i++)
-        channels.push(audioBuffer.getChannelData(i));
-
-    while(pos < length) {
-        for(let i=0; i<numOfChan; i++) {             
-            let sample = Math.max(-1, Math.min(1, channels[i]![offset] || 0)); 
-            sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF);      
-            view.setInt16(pos, sample, true);          
-            pos += 2;
-        }
-        offset++;                                     
-    }
-
-    return new Blob([buffer], {type: "audio/wav"});
-  };
-
   const handleConvert = async () => {
     if (!file) return;
+    
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     setStatus("processing");
     setProgress(5);
 
     try {
       const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
       const arrayBuffer = await file.arrayBuffer();
+      if (signal.aborted) throw new Error("Aborted");
       setProgress(20);
       
       const decodedAudio = await audioCtx.decodeAudioData(arrayBuffer);
@@ -105,7 +82,18 @@ export default function AudioConverterClient() {
       let resultBlob: Blob;
 
       if (targetFormat === "wav") {
-        resultBlob = convertToWav(decodedAudio);
+        const channels: Float32Array[] = [];
+        for (let i = 0; i < decodedAudio.numberOfChannels; i++) {
+          channels.push(decodedAudio.getChannelData(i));
+        }
+        
+        const wavBytes = await workerManager.encodeWav(
+          channels,
+          decodedAudio.sampleRate,
+          (p) => setProgress(40 + p.percent * 0.6),
+          signal
+        );
+        resultBlob = new Blob([wavBytes.buffer as ArrayBuffer], { type: "audio/wav" });
       } else if (targetFormat === "mp3") {
         const left = decodedAudio.getChannelData(0);
         const right = decodedAudio.numberOfChannels > 1 ? decodedAudio.getChannelData(1) : null;
@@ -121,12 +109,14 @@ export default function AudioConverterClient() {
 
         const leftInt = convertBuffer(left);
         const rightInt = right ? convertBuffer(right) : null;
+        if (signal.aborted) throw new Error("Aborted");
 
         const mp3Bytes = await workerManager.encodeMp3(
           leftInt,
           rightInt,
           decodedAudio.sampleRate,
-          (p) => setProgress(40 + p.percent * 0.6)
+          (p) => setProgress(40 + p.percent * 0.6),
+          signal
         );
         resultBlob = new Blob([mp3Bytes.buffer as ArrayBuffer], { type: "audio/mp3" });
       } else {
@@ -142,8 +132,11 @@ export default function AudioConverterClient() {
       setStatus("complete");
       setProgress(100);
 
+      abortControllerRef.current = null;
+
     } catch (err: any) {
-      console.error(err);
+      if (err.message === "Aborted") return;
+      logger.error("Audio conversion failed", { error: err, toolId: "audio-converter", action: "handleConvert" });
       setError({
         code: "PROCESSING_FAILED",
         title: "Conversion Failed",
