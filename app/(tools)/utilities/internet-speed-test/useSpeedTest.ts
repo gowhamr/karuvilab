@@ -112,11 +112,8 @@ export function useSpeedTest() {
           }
         }
       } catch (e) {
-        for(let i=0; i<=100; i+=10) {
-          if (abortController.current?.signal.aborted) return;
-          setDownload(35 + Math.random() * 10 + (i * 0.1));
-          setProgress(i);
-          await new Promise(r => setTimeout(r, 100));
+        if (!abortController.current?.signal.aborted) {
+          throw new Error("Download test failed. Network issue or CORS restriction.");
         }
       }
     };
@@ -141,13 +138,8 @@ export function useSpeedTest() {
         setUpload(speedMbps);
         setProgress(100);
       } catch (e) {
-        // Fallback: estimate based on download speed if CORS blocks upload
-        const estimated = download * 0.25;
-        for (let i = 0; i <= 100; i += 20) {
-          if (abortController.current?.signal.aborted) return;
-          setUpload(estimated * (i / 100));
-          setProgress(i);
-          await new Promise(r => setTimeout(r, 100));
+        if (!abortController.current?.signal.aborted) {
+          throw new Error("Upload test failed. Network issue or CORS restriction.");
         }
       }
     };

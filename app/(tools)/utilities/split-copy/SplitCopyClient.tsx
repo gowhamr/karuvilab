@@ -21,7 +21,8 @@ function splitText(text: string, method: SplitMethod, parts: number, chars: numb
       return chunks;
     }
     case "delimiter": {
-      const escaped = delimiter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const parsedDelimiter = delimiter.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+      const escaped = parsedDelimiter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       return text.split(new RegExp(escaped)).filter(s => s.trim() !== "");
     }
     case "custom": {

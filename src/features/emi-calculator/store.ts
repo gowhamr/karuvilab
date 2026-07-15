@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { EmiInputs, AffordabilityInputs } from '../../lib/emi-calculations';
-import { getDB } from '../../lib/db';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { idbStorage } from '@/src/store/idb-storage';
+import { EmiInputs, AffordabilityInputs } from '@/src/lib/emi-calculations';
 
 export interface SavedScenario {
   id: string;
@@ -56,9 +57,11 @@ const DEFAULT_AFFORDABILITY: AffordabilityInputs = {
   monthlyExpenses: 40000
 };
 
-export const useEmiStore = create<EmiState>((set, get) => ({
-  inputs: DEFAULT_INPUTS,
-  affordability: DEFAULT_AFFORDABILITY,
+export const useEmiStore = create<EmiState>()(
+  persist(
+    (set, get) => ({
+      inputs: DEFAULT_INPUTS,
+      affordability: DEFAULT_AFFORDABILITY,
   
   showPrepayment: false,
   showAffordability: false,
@@ -87,9 +90,6 @@ export const useEmiStore = create<EmiState>((set, get) => ({
   }),
 
   saveScenario: async (name) => {
-    const db = await getDB();
-    if (!db) return;
-    
     const id = Math.random().toString(36).substring(7);
     const scenario: SavedScenario = {
       id,
@@ -98,15 +98,11 @@ export const useEmiStore = create<EmiState>((set, get) => ({
       timestamp: Date.now()
     };
     
-    await db.put('emiScenarios', scenario);
-    await get().fetchSavedScenarios();
+    set((state) => ({ savedScenarios: [...state.savedScenarios, scenario].sort((a, b) => b.timestamp - a.timestamp) }));
   },
 
   loadScenario: async (id) => {
-    const db = await getDB();
-    if (!db) return;
-    
-    const scenario = await db.get('emiScenarios', id);
+    const scenario = get().savedScenarios.find(s => s.id === id);
     if (scenario) {
       const { affordability, ...inputs } = scenario.config;
       set({ 
@@ -117,17 +113,11 @@ export const useEmiStore = create<EmiState>((set, get) => ({
   },
 
   deleteScenario: async (id) => {
-    const db = await getDB();
-    if (!db) return;
-    await db.delete('emiScenarios', id);
-    await get().fetchSavedScenarios();
+    set((state) => ({ savedScenarios: state.savedScenarios.filter(s => s.id !== id) }));
   },
 
   fetchSavedScenarios: async () => {
-    const db = await getDB();
-    if (!db) return;
-    const scenarios = await db.getAll('emiScenarios');
-    set({ savedScenarios: scenarios.sort((a, b) => b.timestamp - a.timestamp) });
+    // Handled automatically by Zustand persist
   },
 
   addToComparison: () => {
@@ -148,4 +138,12 @@ export const useEmiStore = create<EmiState>((set, get) => ({
   })),
 
   clearComparison: () => set({ comparisonList: [] })
-}));
+    }),
+    {
+      name: 'kv-emi-calculator',
+      version: 1,
+      storage: createJSONStorage(() => idbStorage),
+      partialize: (state) => ({ savedScenarios: state.savedScenarios })
+    }
+  )
+);

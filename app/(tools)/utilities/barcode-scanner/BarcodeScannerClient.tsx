@@ -351,9 +351,14 @@ export default function BarcodeScannerClient() {
   );
 }
 
+let globalAudioCtx: AudioContext | null = null;
 function beep() {
   try {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    if (!globalAudioCtx) {
+      globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    const ctx = globalAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);

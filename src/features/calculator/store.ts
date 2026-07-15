@@ -150,6 +150,7 @@ export const useCalculatorStore = create<CalculatorStore>()(
     }),
     {
       name: 'kv-calculator',
+      version: 1,
       storage: createJSONStorage(() => idbStorage),
       partialize: (state) => ({
         history: state.history,

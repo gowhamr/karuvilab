@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useDeferredValue, useMemo } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { ToolResultArea } from '@/components/ui/ToolResultArea';
+import { AlertCircle } from 'lucide-react';
 
 export const MT_TAG_DICTIONARY: Record<string, string> = {
   "20": "Transaction Reference Number",
@@ -201,37 +202,44 @@ export function parseSwiftMX(xmlStr: string): any {
 
 export default function ToolClient() {
   const [input, setInput] = useState('{1:F01BANKBEBBAXXX2222123456}{2:I100BANKBEBBXXXXN}{4:\n:20:REF123456\n:32A:260711USD15000,00\n:50K:JOHN DOE\n:59:JANE DOE\n-}');
-  const [output, setOutput] = useState('');
+  const deferredInput = useDeferredValue(input);
   
-  const parseSwift = (data: string) => {
+  const { output, error } = useMemo(() => {
     try {
-      if (!data.trim()) return '';
-      const isXml = data.trim().startsWith('<');
-      const parsed = isXml ? parseSwiftMX(data) : parseSwiftMT(data);
-      return JSON.stringify(parsed, null, 2);
+      if (!deferredInput.trim()) return { output: '', error: null };
+      const isXml = deferredInput.trim().startsWith('<');
+      const parsed = isXml ? parseSwiftMX(deferredInput) : parseSwiftMT(deferredInput);
+      return { output: JSON.stringify(parsed, null, 2), error: null };
     } catch (err: any) {
-      return `Failed to parse SWIFT message: ${err.message}`;
+      return { output: '', error: err.message || 'Failed to parse SWIFT message' };
     }
-  };
-
-  const handleInput = (val: string) => {
-    setInput(val);
-    setOutput(parseSwift(val));
-  };
+  }, [deferredInput]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <ToolInput 
         value={input} 
-        onChange={handleInput} 
+        onChange={setInput} 
         placeholder="Paste SWIFT MT (e.g. {1:F01...}) or MX (XML) message here" 
         label="SWIFT Message"
       />
-      <ToolResultArea 
-        value={output} 
-        label="Parsed Message"
-        language="json"
-      />
+      <div className="flex flex-col gap-2 h-full min-h-[400px]">
+        {error ? (
+          <div className="p-4 bg-error/10 text-error rounded-xl border border-error/20 flex items-start gap-3">
+             <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+             <div>
+               <p className="font-bold">Parsing Error</p>
+               <p className="text-sm mt-1">{error}</p>
+             </div>
+          </div>
+        ) : (
+          <ToolResultArea 
+            value={output} 
+            label="Parsed Message"
+            language="json"
+          />
+        )}
+      </div>
     </div>
   );
 }
