@@ -77,6 +77,15 @@ export default function PomodoroTimerClient() {
   }, []);
 
   useEffect(() => {
+    if (isActive) {
+      document.title = `${formatTime(timeLeft)} - ${mode === 'focus' ? 'Focus' : 'Break'} | KaruviLab`;
+    } else {
+      document.title = 'Pomodoro Timer - KaruviLab';
+    }
+    return () => { document.title = 'Pomodoro Timer - KaruviLab'; };
+  }, [timeLeft, isActive, mode]);
+
+  useEffect(() => {
     const savedState = loadState<{ focus: number; break: number; longBreak: number }>('pomodoro-timer');
     if (savedState) {
       setDurations(savedState);

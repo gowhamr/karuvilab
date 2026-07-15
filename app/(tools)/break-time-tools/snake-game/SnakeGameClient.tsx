@@ -24,7 +24,7 @@ const UNLOCKED_THEMES_KEY = "karuvi.breaktime.snake.unlocked";
 const ACTIVE_THEME_KEY = "karuvi.breaktime.snake.theme";
 
 type ThemeID = "default" | "neon" | "retro" | "nature";
-type PowerUpType = "speed" | "shrink" | "invincible" | "magnet";
+type PowerUpType = "speed" | "shrink" | "invincible" | "magnet" | "fire" | "ice";
 type PowerUp = { x: number; y: number; type: PowerUpType };
 
 const THEMES: Record<ThemeID, {
@@ -178,7 +178,7 @@ export default function SnakeGameClient() {
 
   const generatePowerUp = useCallback((currentSnake: Position[], currentFood: Position): PowerUp | null => {
     if (Math.random() > 0.15) return null; // 15% chance to spawn when eaten
-    const types: PowerUpType[] = ["speed", "shrink", "invincible", "magnet"];
+    const types: PowerUpType[] = ["speed", "shrink", "invincible", "magnet", "fire", "ice"];
     const type = types[Math.floor(Math.random() * types.length)];
     if (!type) return null;
     let newPos: Position;
@@ -325,11 +325,13 @@ export default function SnakeGameClient() {
     }
 
     const moveSnake = () => {
+      // MUST NOT mutate refs inside setSnake (React StrictMode double-invokes state updaters)
+      const currentDir = inputQueueRef.current.length > 0 ? inputQueueRef.current.shift()! : directionRef.current;
+      directionRef.current = currentDir;
+      setDirection(currentDir);
+
       setSnake(prevSnake => {
         const head = { ...prevSnake[0]! };
-        const currentDir = inputQueueRef.current.length > 0 ? inputQueueRef.current.shift()! : directionRef.current;
-        directionRef.current = currentDir;
-        setDirection(currentDir);
 
         switch (currentDir) {
           case "UP": head.y -= 1; break;
@@ -339,6 +341,8 @@ export default function SnakeGameClient() {
         }
         
         const isInvincible = activePowerUp?.type === "invincible";
+        const isFire = activePowerUp?.type === "fire";
+        const isIce = activePowerUp?.type === "ice";
         
         // Magnet effect
         if (activePowerUp?.type === "magnet") {
@@ -397,37 +401,62 @@ export default function SnakeGameClient() {
         // --- Boss Logic Start ---
         const bossSnake = bossSnakeRef.current;
         let playerHitBoss = false;
+        let bossKilled = false;
 
         if (bossMode && bossSnake.length > 0) {
-          bossTickRef.current = !bossTickRef.current;
-          if (bossTickRef.current) {
-            const headOfBoss = bossSnake[0];
-            if (headOfBoss) {
-              const bossHead = { x: headOfBoss.x, y: headOfBoss.y };
-              const dx = head.x - bossHead.x;
-              const dy = head.y - bossHead.y;
-              
-              if (Math.abs(dx) > Math.abs(dy)) bossHead.x += dx > 0 ? 1 : -1;
-              else bossHead.y += dy > 0 ? 1 : -1;
-              
-              bossHead.x = Math.max(0, Math.min(CELL_COUNT - 1, bossHead.x));
-              bossHead.y = Math.max(0, Math.min(CELL_COUNT - 1, bossHead.y));
+          if (isIce) {
+             // Boss is frozen, skip movement!
+          } else {
+             bossTickRef.current = !bossTickRef.current;
+             if (bossTickRef.current) {
+               const headOfBoss = bossSnake[0];
+               if (headOfBoss) {
+                 const bossHead = { x: headOfBoss.x, y: headOfBoss.y };
+                 
+                 // Refined hunting logic: A* or direct chase with obstacle avoidance
+                 const dx = head.x - bossHead.x;
+                 const dy = head.y - bossHead.y;
+                 
+                 if (Math.abs(dx) > Math.abs(dy)) {
+                    bossHead.x += dx > 0 ? 1 : -1;
+                 } else if (dy !== 0) {
+                    bossHead.y += dy > 0 ? 1 : -1;
+                 }
+                 
+                 bossHead.x = Math.max(0, Math.min(CELL_COUNT - 1, bossHead.x));
+                 bossHead.y = Math.max(0, Math.min(CELL_COUNT - 1, bossHead.y));
 
-              bossSnake.unshift(bossHead);
-              
-              if (bossSnake.length > 3 + Math.floor(score / 15)) {
-                bossSnake.pop();
-              }
-            }
+                 bossSnake.unshift(bossHead);
+                 
+                 if (bossSnake.length > 3 + Math.floor(score / 15)) {
+                   bossSnake.pop();
+                 }
+               }
+             }
           }
           
           if (bossSnake.some(b => b.x === head.x && b.y === head.y)) playerHitBoss = true;
           
           const bh = bossSnake[0];
           if (bh && prevSnake.some(s => s.x === bh.x && s.y === bh.y)) playerHitBoss = true;
+
+          // If fire is active, touching the boss burns it and we get bonus points!
+          if (playerHitBoss && isFire) {
+             playerHitBoss = false;
+             bossKilled = true;
+             // Respawn boss elsewhere
+             bossSnakeRef.current = [
+               { x: Math.floor(Math.random() * CELL_COUNT), y: Math.floor(Math.random() * CELL_COUNT) }
+             ];
+             const floatId = Date.now();
+             setFloatingScores(prev => [...prev, { id: floatId, x: bossSnake[0]!.x, y: bossSnake[0]!.y, val: 50 }]);
+             setScore(s => { const next = s + 50; updateBest(next); return next; });
+             addCoins(50);
+             triggerHaptic('golden');
+          }
         }
         
-        if (playerHitBoss && !isInvincible) {
+        if (playerHitBoss && !isInvincible && !isFire) {
           triggerHaptic('death');
           setGameState("GAMEOVER");
           updateBest(score);
@@ -603,6 +632,8 @@ export default function SnakeGameClient() {
       if (boardPowerUp.type === "shrink") icon = "📉";
       if (boardPowerUp.type === "invincible") icon = "🛡️";
       if (boardPowerUp.type === "magnet") icon = "🧲";
+      if (boardPowerUp.type === "fire") icon = "🔥";
+      if (boardPowerUp.type === "ice") icon = "❄️";
       
       ctx.shadowColor = "#FFFFFF";
       ctx.shadowBlur = 8;
@@ -618,13 +649,23 @@ export default function SnakeGameClient() {
 
       let fill = isHead ? theme.head : theme.body;
       if (activePowerUp?.type === "invincible") fill = index % 2 === 0 ? "#FFD700" : "#FFFFFF";
+      else if (activePowerUp?.type === "fire") fill = index % 2 === 0 ? "#EF4444" : "#F97316"; // Red/Orange
+      else if (activePowerUp?.type === "ice") fill = index % 2 === 0 ? "#38BDF8" : "#BAE6FD"; // Blue/Light Blue
+      
       ctx.fillStyle = fill;
 
       // Rounded rectangles for segments
-      const radius = isHead ? 6 : 4;
+      const radius = isHead ? 6 : (activePowerUp?.type === 'fire' ? 2 : 4);
+      
+      if (activePowerUp?.type === 'fire' || activePowerUp?.type === 'ice') {
+         ctx.shadowColor = fill;
+         ctx.shadowBlur = 8;
+      }
+      
       ctx.beginPath();
       ctx.roundRect(x + 1, y + 1, GRID_SIZE - 2, GRID_SIZE - 2, radius);
       ctx.fill();
+      ctx.shadowBlur = 0;
 
       // Draw eyes on the head
       if (isHead) {
@@ -663,10 +704,15 @@ export default function SnakeGameClient() {
     if (bossMode) {
       bossSnakeRef.current.forEach((segment, index) => {
         const isHead = index === 0;
-        ctx.fillStyle = isHead ? "#EF4444" : "#F87171"; // Red
+        ctx.fillStyle = activePowerUp?.type === 'ice' ? "#7DD3FC" : (isHead ? "#EF4444" : "#F87171"); // Frozen or Red
+        if (activePowerUp?.type === 'ice') {
+           ctx.shadowColor = "#38BDF8";
+           ctx.shadowBlur = 10;
+        }
         ctx.beginPath();
         ctx.roundRect(segment.x * GRID_SIZE + 1, segment.y * GRID_SIZE + 1, GRID_SIZE - 2, GRID_SIZE - 2, isHead ? 6 : 4);
         ctx.fill();
+        ctx.shadowBlur = 0;
         
         if (isHead) {
           ctx.font = `${GRID_SIZE - 4}px sans-serif`;
@@ -727,9 +773,13 @@ export default function SnakeGameClient() {
 
         <div className="flex gap-2">
           {activePowerUp && (
-            <div className="rounded-xl bg-primary/20 border border-primary/50 px-4 py-2 text-center min-w-[70px] flex items-center justify-center animate-pulse" title="Power-up Active!">
+            <div className={`rounded-xl px-4 py-2 text-center min-w-[70px] flex items-center justify-center animate-pulse border ${
+               activePowerUp.type === 'fire' ? 'bg-rose-500/20 border-rose-500/50' : 
+               activePowerUp.type === 'ice' ? 'bg-sky-500/20 border-sky-500/50' : 
+               'bg-primary/20 border-primary/50'
+            }`} title="Power-up Active!">
               <span className="text-xl">
-                {activePowerUp.type === "speed" ? "⚡" : activePowerUp.type === "shrink" ? "📉" : activePowerUp.type === "invincible" ? "🛡️" : "🧲"}
+                {activePowerUp.type === "speed" ? "⚡" : activePowerUp.type === "shrink" ? "📉" : activePowerUp.type === "invincible" ? "🛡️" : activePowerUp.type === "magnet" ? "🧲" : activePowerUp.type === "fire" ? "🔥" : "❄️"}
               </span>
             </div>
           )}

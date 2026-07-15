@@ -162,6 +162,15 @@ export default function CountdownTimerClient() {
     return settings.showMilliseconds ? `${base}.${pad(ms)}` : base;
   }, [remainingTime, totalInputMs, isRunning, isPaused, isFinished, settings.showMilliseconds]);
 
+  useEffect(() => {
+    if (isRunning || isPaused || isFinished) {
+      document.title = `${displayString} - Timer | KaruviLab`;
+    } else {
+      document.title = 'Countdown Timer - KaruviLab';
+    }
+    return () => { document.title = 'Countdown Timer - KaruviLab'; };
+  }, [displayString, isRunning, isPaused, isFinished]);
+
   const textSize = isDashboard ? {
     small: 'text-4xl md:text-6xl',
     medium: 'text-6xl md:text-8xl',

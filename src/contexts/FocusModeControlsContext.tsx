@@ -48,23 +48,16 @@ export function useFocusModeIntegration(controls: Partial<FocusModeControls>) {
     controlsRef.current = controls;
   });
   
-  // Create a stable JSON string of primitive values to use as dependency
-  const deps = JSON.stringify({
-    wordCount: controls.wordCount,
-    charCount: controls.charCount,
-    lineCount: controls.lineCount,
-    language: controls.language
-  });
+  const { wordCount, charCount, lineCount, language } = controls;
   
   useEffect(() => {
     setControls({
-      wordCount: controls.wordCount,
-      charCount: controls.charCount,
-      lineCount: controls.lineCount,
-      language: controls.language,
+      wordCount,
+      charCount,
+      lineCount,
+      language,
       onFontSizeChange: (size) => controlsRef.current.onFontSizeChange?.(size),
       onWrapToggle: () => controlsRef.current.onWrapToggle?.()
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deps]); // Only update when primitive values actually change
+  }, [wordCount, charCount, lineCount, language, setControls]);
 }

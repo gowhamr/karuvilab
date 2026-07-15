@@ -60,7 +60,7 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
             autoFocus
             className={cn(
               "w-32 bg-surface border rounded-lg px-2 py-1 text-sm font-black text-text text-right focus:outline-none focus:ring-1",
-              error ? "border-error/50 focus:ring-error" : "border-blue/50 focus:ring-blue"
+              error ? "border-error/50 focus:ring-error" : "border-border hover:border-blue/50 focus:border-blue/50 focus:ring-blue"
             )}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -68,18 +68,26 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
             onKeyDown={handleKeyDown}
           />
         ) : (
-          <button 
-            type="button"
-            onClick={() => { setInputValue(String(value)); setIsEditing(true); }}
-            className={cn(
-              "text-sm font-black transition-colors px-2 py-1 rounded hover:bg-surface-2 cursor-text border border-transparent hover:border-border -mr-2", 
-              error ? "text-error hover:text-error" : "text-text hover:text-blue"
-            )}
-            title="Click to type exact amount"
-            aria-label={`Edit ${label}`}
-          >
-            {display}
-          </button>
+          <div className="flex items-center gap-2">
+            <input
+              id={id}
+              type="text"
+              inputMode="decimal"
+              className={cn(
+                "w-28 bg-surface border rounded-lg px-2 py-1 text-sm font-black text-text text-right focus:outline-none focus:ring-1 hover:bg-surface-2 transition-colors",
+                error ? "border-error/50 focus:ring-error" : "border-border hover:border-blue/50 focus:border-blue/50 focus:ring-blue"
+              )}
+              value={isEditing ? inputValue : display}
+              onFocus={() => {
+                setInputValue(String(value));
+                setIsEditing(true);
+              }}
+              onChange={(e) => setInputValue(e.target.value)}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              aria-label={`Edit ${label}`}
+            />
+          </div>
         )}
       </div>
 

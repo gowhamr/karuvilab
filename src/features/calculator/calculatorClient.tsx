@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useCallback, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { CalculatorDisplay } from './components/CalculatorDisplay';
 import { StandardKeypad } from './components/StandardKeypad';
 import { ScientificKeypad } from './components/ScientificKeypad';
@@ -10,7 +11,17 @@ import { History, Maximize2, Minimize2 } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 
 export default function CalculatorClient() {
-  const { mode, setMode, toggleHistory, append, calculate, deleteLast, clear } = useCalculatorStore();
+  const { mode, setMode, toggleHistory, append, calculate, deleteLast, clear } = useCalculatorStore(
+    useShallow(s => ({
+      mode: s.mode,
+      setMode: s.setMode,
+      toggleHistory: s.toggleHistory,
+      append: s.append,
+      calculate: s.calculate,
+      deleteLast: s.deleteLast,
+      clear: s.clear
+    }))
+  );
   const [isLandscape, setIsLandscape] = useState(false);
 
   // Responsive mode switching
