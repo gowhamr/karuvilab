@@ -81,11 +81,5 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
-// Apply basePath if on GitHub Pages
-const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true';
-const basePath = isGithubPages ? '/karuvilab' : '';
-
-if (isGithubPages) {
-  metadata.manifest = `${basePath}${metadata.manifest}`;
-}
+// basePath is automatically applied by Next.js to metadata properties like manifest
 
