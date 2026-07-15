@@ -423,6 +423,7 @@ body.sidebar-open {
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-shake { animation: none; }
+  .shimmer-wrapper::after { animation: none; background-image: none; opacity: 0.1; background-color: currentColor; }
 }
 
 /* Custom Scrollbar for non-mobile */
