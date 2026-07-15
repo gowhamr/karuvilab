@@ -58,6 +58,7 @@ export default function PomodoroTimerClient() {
   const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const targetEndTimeRef = useRef<number | null>(null);
   const totalDuration = (mode === 'focus' ? focusDuration : breakDuration) * 60;
 
   // STATS-001: Track current cycle
@@ -104,19 +105,20 @@ export default function PomodoroTimerClient() {
     const nextMode = mode === 'focus' ? 'break' : 'focus';
     setMode(nextMode);
     setTimeLeft((nextMode === 'focus' ? focusDuration : breakDuration) * 60);
+    targetEndTimeRef.current = null;
     setIsActive(false);
   }, [mode, focusDuration, breakDuration, addSession, totalDuration]);
 
   useEffect(() => {
-    if (isActive) {
+    if (isActive && targetEndTimeRef.current) {
       intervalRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            handleTimerEnd();
-            return 0;
-          }
-          return prev - 1;
-        });
+        const remaining = Math.ceil((targetEndTimeRef.current! - Date.now()) / 1000);
+        if (remaining <= 0) {
+          setTimeLeft(0);
+          handleTimerEnd();
+        } else {
+          setTimeLeft(remaining);
+        }
       }, 1000);
     } else {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -126,15 +128,25 @@ export default function PomodoroTimerClient() {
     };
   }, [isActive, handleTimerEnd]);
 
-  const toggleTimer = () => setIsActive(!isActive);
+  const toggleTimer = () => {
+    if (!isActive) {
+      targetEndTimeRef.current = Date.now() + timeLeft * 1000;
+      setIsActive(true);
+    } else {
+      targetEndTimeRef.current = null;
+      setIsActive(false);
+    }
+  };
 
   const resetTimer = () => {
     setIsActive(false);
+    targetEndTimeRef.current = null;
     setTimeLeft((mode === 'focus' ? focusDuration : breakDuration) * 60);
   };
 
   const switchMode = (newMode: 'focus' | 'break') => {
     setIsActive(false);
+    targetEndTimeRef.current = null;
     setMode(newMode);
   };
   
