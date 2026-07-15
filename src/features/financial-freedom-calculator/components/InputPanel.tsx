@@ -4,7 +4,102 @@ import { useFinancialFreedomStore } from '../store';
 import { SliderField } from '@/components/ui/SliderField';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import { ToolInput } from '@/components/ui/ToolInput';
-import { formatCurrency } from '@/src/lib/utils';
+import { formatCurrency, cn } from '@/src/lib/utils';
+import { useState } from 'react';
+import * as Slider from '@radix-ui/react-slider';
+
+function HybridSliderField({ 
+  label, id, min, max, step = 1, value, onChange, format, error, showChips
+}: {
+  label: string; id: string; min: number; max: number; step?: number; 
+  value: number; onChange: (v: number) => void; format?: (v: number) => string; 
+  error?: boolean; showChips?: boolean;
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(String(value));
+
+  const handleBlur = () => {
+    setIsEditing(false);
+    const parsed = parseInt(inputValue.replace(/,/g, ''), 10);
+    if (!isNaN(parsed)) {
+       onChange(Math.max(min, Math.min(max, parsed)));
+    } else {
+       setInputValue(String(value));
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleBlur();
+    if (e.key === 'Escape') {
+       setIsEditing(false);
+       setInputValue(String(value));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <label htmlFor={id} className={cn("text-sm font-bold", error ? "text-error" : "text-text-2")}>{label}</label>
+        {isEditing ? (
+          <input
+            id={id}
+            type="number"
+            autoFocus
+            className="w-32 bg-surface border border-blue/50 rounded-lg px-2 py-1 text-sm font-black text-text text-right focus:outline-none focus:ring-1 focus:ring-blue"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <button 
+            onClick={() => { setInputValue(String(value)); setIsEditing(true); }}
+            className={cn("text-sm font-black hover:text-blue transition-colors px-2 py-1 rounded hover:bg-surface-2 cursor-text border border-transparent hover:border-border", error ? "text-error" : "text-text")}
+            title="Click to type exact amount"
+            aria-label={`Edit ${label}`}
+          >
+            {format ? format(value) : value}
+          </button>
+        )}
+      </div>
+
+      <Slider.Root
+        className="relative flex items-center select-none touch-none w-full h-11"
+        value={[value]}
+        onValueChange={(v) => onChange(v[0]!)}
+        max={max}
+        min={min}
+        step={step}
+      >
+        <Slider.Track className={cn("relative grow rounded-full h-2", error ? "bg-error/20" : "bg-blue/20")}>
+          <Slider.Range className={cn("absolute rounded-full h-full", error ? "bg-error" : "bg-brand-primary")} />
+        </Slider.Track>
+        <Slider.Thumb
+          className={cn(
+            "block w-6 h-6 bg-text border rounded-full shadow-md cursor-pointer hover:scale-110 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base focus:outline-none transition-all active:scale-95",
+            error ? "border-error focus-visible:ring-error" : "border-brand-primary focus-visible:ring-brand-primary"
+          )}
+          aria-label={label}
+        />
+      </Slider.Root>
+
+      <div className="flex justify-between text-xs text-text-4 font-black uppercase tracking-widest-sm" aria-hidden="true">
+        <span>{format ? format(min) : min}</span>
+        <span>{format ? format(max) : max}</span>
+      </div>
+
+      {showChips && (
+        <div className="flex flex-wrap gap-2 pt-1">
+          <button onClick={() => onChange(Math.max(min, value - 100000))} className="px-2.5 py-1 text-[10px] font-bold text-text-4 bg-surface border border-border hover:bg-surface-2 rounded-md transition-colors uppercase tracking-wider">-1L</button>
+          <button onClick={() => onChange(Math.min(max, value + 100000))} className="px-2.5 py-1 text-[10px] font-bold text-blue bg-blue/10 hover:bg-blue/20 rounded-md transition-colors uppercase tracking-wider">+1L</button>
+          <button onClick={() => onChange(Math.min(max, value + 500000))} className="px-2.5 py-1 text-[10px] font-bold text-blue bg-blue/10 hover:bg-blue/20 rounded-md transition-colors uppercase tracking-wider">+5L</button>
+          <button onClick={() => onChange(Math.min(max, value + 1000000))} className="px-2.5 py-1 text-[10px] font-bold text-blue bg-blue/10 hover:bg-blue/20 rounded-md transition-colors uppercase tracking-wider">+10L</button>
+          <button onClick={() => onChange(Math.min(max, value + 10000000))} className="px-2.5 py-1 text-[10px] font-bold text-blue bg-blue/10 hover:bg-blue/20 rounded-md transition-colors uppercase tracking-wider">+1Cr</button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function InputPanel() {
   const inputs = useFinancialFreedomStore(state => state.inputs);
@@ -35,7 +130,7 @@ export function InputPanel() {
             format={(v) => `${v} years`}
           />
           
-          <SliderField
+          <HybridSliderField
             id="currentSavings"
             label="Current Savings"
             min={0}
@@ -44,9 +139,10 @@ export function InputPanel() {
             value={inputs.currentSavings}
             onChange={(v) => setInputs({ currentSavings: v })}
             format={formatCurrency}
+            showChips
           />
           
-          <SliderField
+          <HybridSliderField
             id="monthlyIncome"
             label="Monthly Income (Post-tax)"
             min={0}
@@ -58,7 +154,7 @@ export function InputPanel() {
           />
           
           <div className={inputs.monthlyExpenses > inputs.monthlyIncome ? "p-4 rounded-xl border-2 border-error bg-error/5 space-y-3" : "space-y-1"}>
-            <SliderField
+            <HybridSliderField
               id="monthlyExpenses"
               label="Monthly Expenses"
               min={0}
