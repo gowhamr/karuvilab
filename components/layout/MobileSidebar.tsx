@@ -80,8 +80,8 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
       </AnimatePresence>
 
       {/* outline-none: receives programmatic focus only */}
-      <m.aside
-        ref={sidebarRef}
+      <m.div
+        ref={sidebarRef as any}
         onKeyDown={handleKeyDown}
         drag="x"
         dragControls={dragControls}
@@ -91,8 +91,8 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         onDragEnd={handleDragEnd}
         style={{ x, contain: 'layout style' }}
         role="dialog"
-        aria-modal={isOpen}
-        aria-hidden={!isOpen}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-hidden={!isOpen ? "true" : undefined}
         // @ts-expect-error – inert is a valid HTML attribute but not yet in React's types
         inert={!isOpen ? '' : undefined}
         tabIndex={-1}
@@ -107,7 +107,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         <div className="flex-1 flex flex-col h-full overflow-hidden bg-surface">
            {children}
         </div>
-      </m.aside>
+      </m.div>
     </div>
   );
 }

@@ -23,12 +23,6 @@ export function ToolSkeleton() {
         <SkeletonBlock className="h-full w-full rounded-4xl" />
       </div>
 
-      {/* Bottom Features */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-        {[1, 2, 3].map((i) => (
-          <SkeletonBlock key={i} className="h-32 w-full rounded-2xl sm:rounded-4xl" />
-        ))}
-      </div>
     </div>
   );
 }

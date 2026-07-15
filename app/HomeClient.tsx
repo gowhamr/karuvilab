@@ -683,7 +683,7 @@ export default function HomeClient() {
                   /* ── DEFAULT STATE ── */
                   <m.div
                     key="default-content"
-                    initial={{ opacity: 0 }}
+                    initial={false}
                     animate={{ opacity: 1 }}
                     className="space-y-10 md:space-y-12"
                   >
@@ -720,7 +720,7 @@ export default function HomeClient() {
                             headingId="popular-heading"
                           />
                           <m.div
-                            initial={{ opacity: 0, y: 16 }}
+                            initial={false}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-60px" }}
                             transition={{ duration: 0.4 }}
@@ -761,7 +761,7 @@ export default function HomeClient() {
                             headingId="popular-heading"
                           />
                           <m.div
-                            initial={{ opacity: 0, y: 16 }}
+                            initial={false}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-60px" }}
                             transition={{ duration: 0.4 }}
@@ -777,7 +777,7 @@ export default function HomeClient() {
 
                         {/* Inline promo / View All banner */}
                         <m.div
-                          initial={{ opacity: 0, y: 16 }}
+                          initial={false}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ type: "spring", stiffness: 260, damping: 24 }}

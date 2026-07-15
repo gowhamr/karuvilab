@@ -156,7 +156,6 @@ export function PWARegistration() {
         ref={bannerRef}
         tabIndex={-1}
         role="dialog"
-        aria-modal="false"
         aria-label="Install KaruviLab PWA"
         initial={{ opacity: 0, y: -50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

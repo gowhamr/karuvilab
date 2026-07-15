@@ -221,7 +221,7 @@ export function ClientToolShell({ title, description, category, children, toolId
 
   return (
     <m.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
         isEmbed ? "w-full max-w-none px-2 py-4" : fullWidth ? "w-full max-w-none px-4 md:px-8" : "max-w-6xl px-4",
