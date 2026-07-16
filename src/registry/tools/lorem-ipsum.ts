@@ -6,6 +6,7 @@ export const loremIpsum: ToolEntry = {
   "desc": "Generate custom dummy placeholder text for layouts and copy.",
   "href": "developer-tools/lorem-ipsum/",
   "category": "developer",
+  "subCategory": "Generators",
   "icon": null,
   "color": null,
   "featured": false,

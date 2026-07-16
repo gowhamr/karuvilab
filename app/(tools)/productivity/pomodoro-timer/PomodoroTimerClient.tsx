@@ -82,7 +82,6 @@ export default function PomodoroTimerClient() {
     } else {
       document.title = 'Pomodoro Timer - KaruviLab';
     }
-    return () => { document.title = 'Pomodoro Timer - KaruviLab'; };
   }, [timeLeft, isActive, mode]);
 
   useEffect(() => {

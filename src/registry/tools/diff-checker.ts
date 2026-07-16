@@ -6,6 +6,7 @@ export const diffChecker: ToolEntry = {
   "desc": "Compare two text snippets",
   "href": "developer-tools/diff-checker/",
   "category": "developer",
+  "subCategory": "Validators & Checkers",
   "keywords": [
     "diff",
     "compare",

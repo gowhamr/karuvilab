@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { ToolResultArea } from '@/components/ui/ToolResultArea';
+import { parseIso8583 } from '@/src/lib/iso8583/parser';
 
 export default function CoreBankingParserClient() {
   const [input, setInput] = useState('');
@@ -11,24 +12,48 @@ export default function CoreBankingParserClient() {
   const parseCoreBankingLog = (data: string) => {
     try {
       if (!data.trim()) return '';
-      // Mock parser for core banking trace logs
-      const parsed = {
-        message: "Parsed Core Banking Log (Mock Data)",
-        rawLength: data.length,
-        iso8583: {
-          mti: "0200",
-          bitmap: "F238800128E08000",
-          fields: [
-            { id: 2, name: "PAN", value: "XXXXXXXXXXXX1234" },
-            { id: 3, name: "Processing Code", value: "000000" },
-            { id: 4, name: "Amount, Transaction", value: "000000001000" }
-          ]
-        }
-      };
       
-      return JSON.stringify(parsed, null, 2);
-    } catch {
-      return 'Failed to parse core banking log';
+      const trimmed = data.trim();
+      
+      // XML Validation
+      if (trimmed.startsWith('<')) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(trimmed, "application/xml");
+        const parseError = doc.getElementsByTagName("parsererror");
+        if (parseError.length > 0) {
+          return JSON.stringify({
+            status: "Error",
+            message: "Invalid XML",
+            details: parseError[0]?.textContent || "Syntax error"
+          }, null, 2);
+        }
+        
+        return JSON.stringify({
+          status: "Success",
+          type: "XML Document",
+          rootElement: doc.documentElement.nodeName,
+          message: "Valid XML mapped successfully."
+        }, null, 2);
+      }
+      
+      // ISO 8583 Parsing
+      try {
+        const isoParsed = parseIso8583(trimmed);
+        return JSON.stringify({
+          status: "Success",
+          type: "ISO 8583",
+          data: isoParsed
+        }, null, 2);
+      } catch (isoErr: any) {
+        return JSON.stringify({
+          status: "Error",
+          message: "Failed to parse as ISO 8583",
+          details: isoErr.message || String(isoErr)
+        }, null, 2);
+      }
+      
+    } catch (err: any) {
+      return JSON.stringify({ status: 'Error', message: err.message }, null, 2);
     }
   };
 

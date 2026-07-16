@@ -6,6 +6,7 @@ export const sqlFormatter: ToolEntry = {
   "desc": "Beautify and format complex SQL queries to improve readability.",
   "href": "developer-tools/sql-formatter/",
   "category": "developer",
+  "subCategory": "Formatters & Minifiers",
   "icon": null,
   "color": null,
   "featured": false,

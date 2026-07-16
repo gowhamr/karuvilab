@@ -6,6 +6,7 @@ export const yamlValidator: ToolEntry = {
   "desc": "Verify and validate YAML syntax correctness.",
   "href": "developer-tools/yaml-validator/",
   "category": "developer",
+  "subCategory": "Validators & Checkers",
   "icon": null,
   "color": null,
   "featured": false,

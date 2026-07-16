@@ -6,6 +6,7 @@ export const commandCheatSheet: ToolEntry = {
   "desc": "Look up development and system commands instantly to speed up your workflow.",
   "href": "developer-tools/command-cheat-sheet/",
   "category": "developer",
+  "subCategory": "Generators",
   "icon": null,
   "color": null,
   "featured": false,

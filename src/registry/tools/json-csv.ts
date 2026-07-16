@@ -6,6 +6,7 @@ export const jsonCsv: ToolEntry = {
   "desc": "Convert between JSON and CSV",
   "href": "developer-tools/json-csv/",
   "category": "developer",
+  "subCategory": "Converters",
   "input": ["json", "csv"],
   "output": ["json", "csv"],
   "keywords": [

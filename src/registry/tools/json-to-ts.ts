@@ -6,6 +6,7 @@ export const jsonToTs: ToolEntry = {
   desc: "Generate TypeScript interfaces from JSON",
   href: "developer-tools/json-to-ts/",
   category: "developer",
+  "subCategory": "Converters",
   input: "json",
   output: "code",
   keywords: ["json", "typescript", "ts", "interface", "types", "generator", "converter"],

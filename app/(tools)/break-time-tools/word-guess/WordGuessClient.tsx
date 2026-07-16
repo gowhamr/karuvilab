@@ -369,7 +369,7 @@ export default function WordGuessClient() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-surface/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 z-30"
+            className="fixed inset-0 bg-surface/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 z-modal"
           >
             <m.div
               initial={{ scale: 0.9, y: 20 }}

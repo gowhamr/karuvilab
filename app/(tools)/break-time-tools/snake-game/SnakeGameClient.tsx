@@ -887,7 +887,7 @@ export default function SnakeGameClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/90 backdrop-blur-xs flex flex-col items-center justify-center gap-4 text-center p-6"
+              className="absolute inset-0 z-content bg-surface/90 backdrop-blur-xs flex flex-col items-center justify-center gap-4 text-center p-6"
             >
               <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-3xl animate-bounce">
                 🐍
@@ -912,7 +912,7 @@ export default function SnakeGameClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/85 backdrop-blur-xs flex flex-col items-center justify-center gap-3"
+              className="absolute inset-0 z-content bg-surface/85 backdrop-blur-xs flex flex-col items-center justify-center gap-3"
             >
               <Pause className="w-10 h-10 text-primary animate-pulse" />
               <h3 className="text-xl font-bold text-text">Game Paused</h3>
@@ -925,7 +925,7 @@ export default function SnakeGameClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/95 backdrop-blur-sm flex flex-col items-center justify-center gap-4 text-center z-10"
+              className="absolute inset-0 z-content bg-surface/95 backdrop-blur-sm flex flex-col items-center justify-center gap-4 text-center"
               role="alert"
               aria-live="assertive"
             >
@@ -953,7 +953,7 @@ export default function SnakeGameClient() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute inset-0 bg-surface/95 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20"
+              className="absolute inset-0 z-above bg-surface/95 backdrop-blur-sm flex flex-col items-center justify-center p-4"
             >
               <div className="w-full max-w-sm bg-bg border border-border rounded-2xl p-5 shadow-xl flex flex-col gap-4 max-h-full overflow-y-auto">
                 <div className="flex items-center justify-between">

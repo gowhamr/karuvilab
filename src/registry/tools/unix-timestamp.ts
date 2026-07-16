@@ -6,6 +6,7 @@ export const unixTimestamp: ToolEntry = {
   "desc": "Convert between epoch timestamps and human-readable dates.",
   "href": "developer-tools/unix-timestamp/",
   "category": "developer",
+  "subCategory": "Converters",
   "icon": null,
   "color": null,
   "featured": false,

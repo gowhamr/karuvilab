@@ -168,7 +168,6 @@ export default function CountdownTimerClient() {
     } else {
       document.title = 'Countdown Timer - KaruviLab';
     }
-    return () => { document.title = 'Countdown Timer - KaruviLab'; };
   }, [displayString, isRunning, isPaused, isFinished]);
 
   const textSize = isDashboard ? {

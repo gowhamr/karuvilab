@@ -6,6 +6,7 @@ export const urlEncoder: ToolEntry = {
   "desc": "Percent-encode and decode URLs",
   "href": "developer-tools/url-encoder/",
   "category": "developer",
+  "subCategory": "Converters",
   "keywords": [
     "url",
     "encode",

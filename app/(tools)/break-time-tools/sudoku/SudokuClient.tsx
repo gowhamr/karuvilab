@@ -456,7 +456,7 @@ export default function SudokuClient() {
                     ${isClue ? "bg-surface-elevated/20 text-text font-black" : "text-primary"}
                     ${isRelated(r, c) ? "bg-primary/5" : ""}
                     ${isSameValue(r, c) ? "bg-primary/15" : ""}
-                    ${isSelected ? "bg-primary/20 ring-2 ring-primary inset-0 z-10 scale-[1.01]" : ""}
+                    ${isSelected ? "bg-primary/20 ring-2 ring-primary inset-0 z-content scale-[1.01]" : ""}
                     ${hasError ? "bg-danger/15 text-danger font-bold" : ""}
                     focus-visible:bg-primary/10
                   `}
@@ -492,7 +492,7 @@ export default function SudokuClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-20 text-center"
+              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-above text-center"
               role="alert"
               aria-live="assertive"
             >

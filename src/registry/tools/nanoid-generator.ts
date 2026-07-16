@@ -6,6 +6,7 @@ export const nanoidGenerator: ToolEntry = {
   "desc": "Generate secure, URL-friendly unique string IDs using NanoID.",
   "href": "developer-tools/nanoid-generator/",
   "category": "developer",
+  "subCategory": "Generators",
   "icon": null,
   "color": null,
   "featured": false,

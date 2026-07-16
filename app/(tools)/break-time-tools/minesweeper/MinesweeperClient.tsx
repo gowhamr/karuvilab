@@ -449,7 +449,7 @@ export default function MinesweeperClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-10 text-center"
+              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-content text-center"
               role="alert"
               aria-live="assertive"
             >
@@ -479,7 +479,7 @@ export default function MinesweeperClient() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-10 text-center"
+              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-content text-center"
               role="alert"
               aria-live="assertive"
             >

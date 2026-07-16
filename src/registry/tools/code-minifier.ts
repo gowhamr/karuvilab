@@ -6,6 +6,7 @@ export const codeMinifier: ToolEntry = {
   "desc": "Minify CSS, JS, and HTML",
   "href": "developer-tools/code-minifier/",
   "category": "developer",
+  "subCategory": "Formatters & Minifiers",
   "keywords": [
     "minify",
     "css",

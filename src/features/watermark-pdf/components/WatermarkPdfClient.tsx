@@ -249,9 +249,9 @@ export default function WatermarkPdfClient() {
             {file ? (
               <PdfPagePreview file={file} pageIndex={1} width={600} className="w-full h-full object-contain opacity-60" />
             ) : (
-              <div className="text-text-4 text-xs z-0 absolute">Upload a PDF to see preview</div>
+              <div className="text-text-4 text-xs z-base absolute">Upload a PDF to see preview</div>
             )}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-content">
               {watermarkType === "text" ? (
                 <span
                   style={{

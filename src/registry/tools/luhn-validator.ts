@@ -6,6 +6,7 @@ export const luhnValidator: ToolEntry = {
   "desc": "Check identification card numbers using the Luhn checksum algorithm.",
   "href": "developer-tools/luhn-validator/",
   "category": "developer",
+  "subCategory": "Validators & Checkers",
   "icon": null,
   "color": null,
   "featured": false,

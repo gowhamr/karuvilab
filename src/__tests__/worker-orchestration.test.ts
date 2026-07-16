@@ -77,7 +77,7 @@ describe("WorkerOrchestrator Governance", () => {
         // Simulate a crash during the call by triggering onerror
         setTimeout(() => {
           if (mockWorker.onerror) {
-            mockWorker.onerror(new ErrorEvent("error", { message: "Simulated worker crash" }));
+            mockWorker.onerror({ type: "error", message: "Simulated worker crash" } as any);
           }
           if (rejectFirstCall) {
             rejectFirstCall(new Error("Worker terminated"));

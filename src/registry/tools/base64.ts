@@ -6,6 +6,7 @@ export const base64: ToolEntry = {
   "desc": "Encode or decode Base64 strings",
   "href": "developer-tools/base64/",
   "category": "developer",
+  "subCategory": "Converters",
   "keywords": [
     "base64",
     "encode",

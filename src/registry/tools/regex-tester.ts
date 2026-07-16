@@ -6,6 +6,7 @@ export const regexTester: ToolEntry = {
   "desc": "Test regular expressions live",
   "href": "developer-tools/regex/",
   "category": "developer",
+  "subCategory": "Other",
   "keywords": [
     "regex",
     "regexp",
