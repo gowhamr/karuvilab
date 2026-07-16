@@ -29,7 +29,7 @@
     "@types/wicg-file-system-access": "^2023.10.7",
     "@typescript-eslint/eslint-plugin": "8.63.1-alpha.11",
     "@typescript-eslint/parser": "8.63.1-alpha.11",
-    "@vitest/ui": "^1.6.1",
+    "@vitest/ui": "^4.1.10",
     "esbuild": "^0.25.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
