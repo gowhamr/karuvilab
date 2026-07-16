@@ -20,5 +20,5 @@ export const yamlJsonConverter: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-"requiresNetwork": false
+  "requiresNetwork": false
 };

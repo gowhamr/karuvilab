@@ -20,5 +20,5 @@ export const seoTools: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-"requiresNetwork": false
+  "requiresNetwork": false
 };

@@ -95,7 +95,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Analyzers & Viewers",
     "requiresNetwork": false
   },
   {
@@ -237,7 +237,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -455,7 +455,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Converters",
     "requiresNetwork": false
   },
   {
@@ -528,7 +528,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -625,7 +625,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Validators & Checkers",
     "requiresNetwork": false
   },
   {
@@ -691,7 +691,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -757,7 +757,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Converters",
     "requiresNetwork": false
   },
   {
@@ -1239,7 +1239,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -1261,7 +1261,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -1380,7 +1380,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Analyzers & Viewers",
     "requiresNetwork": false
   },
   {
@@ -1989,7 +1989,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Analyzers & Viewers",
     "requiresNetwork": false
   },
   {
@@ -2011,7 +2011,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -2033,7 +2033,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Validators & Checkers",
     "requiresNetwork": false
   },
   {
@@ -2272,7 +2272,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -3046,7 +3046,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO & Marketing",
     "requiresNetwork": false
   },
   {
@@ -3241,7 +3241,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Formatters & Minifiers",
     "requiresNetwork": false
   },
   {
@@ -3686,7 +3686,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Converters",
     "requiresNetwork": false
   },
   {
@@ -3780,7 +3780,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Generators",
     "requiresNetwork": false
   },
   {
@@ -4068,7 +4068,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Formatters & Minifiers",
     "requiresNetwork": false
   },
   {
@@ -4090,7 +4090,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Converters",
     "requiresNetwork": false
   },
   {
@@ -4112,7 +4112,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Validators & Checkers",
     "requiresNetwork": false
   }
 ];
