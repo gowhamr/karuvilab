@@ -20,6 +20,5 @@ export const logAnalyzer: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
-  "requiresNetwork": false
+"requiresNetwork": false
 };

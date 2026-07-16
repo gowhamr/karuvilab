@@ -20,6 +20,5 @@ export const gradientGenerator: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
-  "requiresNetwork": false
+"requiresNetwork": false
 };
