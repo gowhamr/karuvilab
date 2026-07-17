@@ -28,6 +28,7 @@
     "@tailwindcss/postcss": "^4.2.4",
     "@tybys/wasm-util": "0.10.3",
     "@types/html2pdf.js": "^0.10.0",
+    "@types/marked": "^5.0.2",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -38,12 +39,12 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "picomatch": "4.0.2",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.2.4",
     "typescript": "6.0.3",
     "typescript-eslint": "8.63.1-alpha.11",
-    "vitest": "^4.1.10",
-    "@types/marked": "^5.0.2"
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
