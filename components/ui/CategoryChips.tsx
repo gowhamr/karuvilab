@@ -89,8 +89,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           {!activeCategory && (
             <m.div 
               layoutId="active-cat"
-              className="absolute inset-0 bg-blue rounded-full z-behind"
-              style={{ boxShadow: `0 4px 12px -2px rgba(79, 70, 229, 0.25)` }}
+              className="absolute inset-0 bg-blue rounded-full z-behind shadow-md shadow-blue/20"
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
@@ -124,10 +123,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             {activeCategory === cat.id && (
               <m.div 
                 layoutId="active-cat"
-                className="absolute inset-0 rounded-full z-behind"
+                className="absolute inset-0 rounded-full z-behind shadow-md shadow-black/10"
                 style={{ 
-                  backgroundColor: cat.color,
-                  boxShadow: `0 4px 12px -2px ${cat.color}25`
+                  backgroundColor: cat.color
                 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />

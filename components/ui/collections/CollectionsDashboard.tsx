@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useCollectionStore, ToolCollection } from "@/src/store/useCollectionStore";
 import { ALL_TOOLS, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
@@ -36,7 +37,15 @@ export function CollectionsDashboard() {
     togglePinCollection,
     reorderCollections,
     importCollections
-  } = useCollectionStore();
+  } = useCollectionStore(useShallow(s => ({
+    collections: s.collections,
+    createCollection: s.createCollection,
+    deleteCollection: s.deleteCollection,
+    updateCollection: s.updateCollection,
+    togglePinCollection: s.togglePinCollection,
+    reorderCollections: s.reorderCollections,
+    importCollections: s.importCollections
+  })));
 
   const favorites = useFavoriteStore(state => state.favorites);
   const { toast } = useToast();

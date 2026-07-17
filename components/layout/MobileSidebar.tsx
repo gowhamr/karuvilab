@@ -93,8 +93,7 @@ export function MobileSidebar({ children }: MobileSidebarProps) {
         role="dialog"
         aria-modal={isOpen ? "true" : undefined}
         aria-hidden={!isOpen ? "true" : undefined}
-        // @ts-expect-error – inert is a valid HTML attribute but not yet in React's types
-        inert={!isOpen ? '' : undefined}
+        inert={!isOpen ? true : undefined}
         tabIndex={-1}
         aria-label="Navigation Sidebar"
         id="mobile-sidebar"

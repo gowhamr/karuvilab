@@ -8,7 +8,7 @@ const SkeletonBlock = ({ className }: { className?: string }) => (
 );
 
 export interface ToolSkeletonProps {
-  variant?: "default" | "dashboard" | "single-card" | "table";
+  variant?: "default" | "dashboard" | "single-card" | "table" | "calculator";
   delayMs?: number;
 }
 
@@ -50,6 +50,23 @@ export function ToolSkeleton({
       <div className="space-y-4">
         <SkeletonBlock className="h-16 w-full rounded-2xl" />
         <SkeletonBlock className="h-96 w-full rounded-3xl" />
+      </div>
+    );
+  } else if (variant === "calculator") {
+    content = (
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="lg:col-span-4 lg:col-start-1 space-y-6">
+          <SkeletonBlock className="h-[600px] w-full rounded-4xl" />
+        </div>
+        <div className="lg:col-span-8 lg:col-start-5 space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <SkeletonBlock className="h-32 w-full rounded-2xl" />
+            <SkeletonBlock className="h-32 w-full rounded-2xl" />
+            <SkeletonBlock className="h-32 w-full rounded-2xl" />
+            <SkeletonBlock className="h-32 w-full rounded-2xl" />
+          </div>
+          <SkeletonBlock className="h-96 w-full rounded-4xl" />
+        </div>
       </div>
     );
   } else {

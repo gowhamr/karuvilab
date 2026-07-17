@@ -5,10 +5,14 @@ import { MetricCard } from '@/components/ui/MetricCard';
 import { Target, Clock, TrendingUp, AlertTriangle, Coins } from 'lucide-react';
 import { formatCurrency } from '@/src/lib/utils';
 import { m, AnimatePresence } from 'framer-motion';
+import { useDeferredValue } from 'react';
 
 export function ResultsPanel() {
-  const results = useFinancialFreedomStore(state => state.results);
-  const inputs = useFinancialFreedomStore(state => state.inputs);
+  const rawResults = useFinancialFreedomStore(state => state.results);
+  const rawInputs = useFinancialFreedomStore(state => state.inputs);
+  
+  const results = useDeferredValue(rawResults);
+  const inputs = useDeferredValue(rawInputs);
 
   const {
     requiredCorpus,

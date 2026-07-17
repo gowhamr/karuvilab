@@ -22,13 +22,13 @@ export const HistoryPanel = () => {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       className="absolute right-0 top-0 bottom-0 w-80 bg-surface-2 border-l border-border shadow-2xl z-above flex flex-col"
     >
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <h3 className="font-bold text-text">History</h3>
-        <div className="flex items-center gap-2">
-          <button onClick={clearHistory} className="p-2 text-text-4 hover:text-danger rounded-xl hover:bg-danger/10">
+      <div className="p-4 border-b border-border flex justify-between items-center bg-surface sticky top-0 z-content">
+        <h3 className="font-bold text-text-2 tracking-widest text-xs uppercase">History</h3>
+        <div className="flex gap-2">
+          <button onClick={clearHistory} className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-colors" title="Clear History" aria-label="Clear History">
             <Trash2 className="w-4 h-4" />
           </button>
-          <button onClick={toggleHistory} className="p-2 text-text-4 hover:text-text rounded-xl hover:bg-surface">
+          <button onClick={toggleHistory} className="p-2 text-text-4 hover:text-text-2 hover:bg-surface-elevated rounded-xl transition-colors md:hidden" aria-label="Close History">
             <X className="w-4 h-4" />
           </button>
         </div>

@@ -4,6 +4,7 @@ import { EngineLoader } from "@/components/system/EngineLoader";
 import { DropZone } from "@/components/ui/DropZone";
 import { Loader2, Download, Settings2 } from "lucide-react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useRef } from "react";
 
 interface ExtractedImage { url: string; width: number; height: number; page: number; }
 
@@ -16,6 +17,17 @@ export default function PdfToImageClient() {
   const [error, setError] = useState("");
   const [format, setFormat] = useState<"jpeg" | "png">("jpeg");
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const cancelProcess = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setProcessing(false);
+      setProgress("");
+      setError("Operation cancelled by user.");
+    }
+  }, []);
 
   const checkLib = useCallback(() => {
     return true; 
@@ -29,6 +41,10 @@ export default function PdfToImageClient() {
     
     images.forEach(img => revokeUrl(img.url));
     setImages([]);
+
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+    const { signal } = abortController;
 
     try {
       const pdfjsLib = await import("pdfjs-dist");
@@ -45,6 +61,7 @@ export default function PdfToImageClient() {
       const extracted: ExtractedImage[] = [];
 
       for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+        if (signal.aborted) throw new Error("Cancelled");
         setProgress(`Rendering page ${pageNum} of ${totalPages}...`);
         setProgressPercent((pageNum / totalPages) * 100);
         
@@ -80,11 +97,12 @@ export default function PdfToImageClient() {
       if (extracted.length === 0) setError("Failed to convert any pages.");
     } catch (e: any) {
       console.error("PDF to Image conversion error:", e);
-      setError(e?.message || "Failed to convert PDF pages.");
+      setError(e?.message === "Cancelled" ? "Conversion cancelled." : (e?.message || "Failed to convert PDF pages."));
       setProgress("");
       setProgressPercent(0);
     }
     setProcessing(false);
+    abortControllerRef.current = null;
   };
 
   const downloadAll = async () => {
@@ -101,11 +119,16 @@ export default function PdfToImageClient() {
     setProgress("Preparing ZIP file...");
     setProcessing(true);
     
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+    const { signal } = abortController;
+    
     try {
       const files: Record<string, Uint8Array> = {};
       for (let i = 0; i < images.length; i++) {
+        if (signal.aborted) throw new Error("Cancelled");
         const img = images[i]!;
-        const res = await fetch(img.url);
+        const res = await fetch(img.url, { signal });
         const buf = await res.arrayBuffer();
         files[`page-${img.page}.${format}`] = new Uint8Array(buf);
       }
@@ -126,13 +149,16 @@ export default function PdfToImageClient() {
       a.download = `converted-pages.zip`;
       a.click();
       
-    } catch (e) {
+    } catch (e: any) {
       console.error("ZIP creation error:", e);
-      setError("Failed to create ZIP file.");
+      if (e.name !== "AbortError" && e.message !== "Cancelled") {
+        setError("Failed to create ZIP file.");
+      }
     }
     
     setProgress("");
     setProcessing(false);
+    abortControllerRef.current = null;
   };
 
   return (
@@ -195,13 +221,24 @@ export default function PdfToImageClient() {
           </div>
         )}
 
-        <button
-          onClick={convert}
-          disabled={!file || processing}
-          className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
-        >
-          {processing ? "Converting…" : "Convert to Images"}
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={convert}
+            disabled={!file || processing}
+            className="flex-1 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
+          >
+            {processing ? "Converting…" : "Convert to Images"}
+          </button>
+          
+          {processing && (
+            <button
+              onClick={cancelProcess}
+              className="px-8 py-4 bg-red-500/10 text-red-500 border border-red-500/20 font-black uppercase tracking-widest rounded-2xl hover:bg-red-500/20 active:scale-95 transition-all"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
 
         {images.length > 0 && (
           <div className="bg-surface border border-border p-5 rounded-4xl shadow-sm space-y-4">

@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
-import { logger } from "@/src/lib/logger";
 
 /**
  * KaruviLab Root Error Boundary

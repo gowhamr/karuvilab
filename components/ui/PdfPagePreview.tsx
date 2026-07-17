@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { blobManager } from "@/src/lib/blob-manager";
 
 interface PdfPagePreviewProps {
   file: File | Blob | ArrayBuffer;
@@ -36,7 +37,7 @@ export function PdfPagePreview({ file, pageIndex, width = 150, rotation = 0, cla
         if (file instanceof ArrayBuffer) {
           docParams = { data: file };
         } else {
-          objectUrl = URL.createObjectURL(file as Blob);
+          objectUrl = blobManager.create(file as Blob);
           docParams = { url: objectUrl };
         }
 
@@ -78,7 +79,7 @@ export function PdfPagePreview({ file, pageIndex, width = 150, rotation = 0, cla
 
     return () => {
       active = false;
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      if (objectUrl) blobManager.revoke(objectUrl);
       if (loadingTask) {
         try {
           loadingTask.destroy();

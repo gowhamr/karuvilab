@@ -221,13 +221,13 @@ class WorkerOrchestrator {
         poolObj.queue.unshift(task); // Re-queue at the front
         import('../../store/useRecoveryStore').then(({ useRecoveryStore }) => {
           useRecoveryStore.getState().showBanner('worker_crash', 'Worker recovered automatically. Retrying task...');
-        });
+        }).catch(() => {});
         this.processQueue(poolType);
       } else {
         task.reject(new Error("Task failed due to a worker crash."));
         import('../../store/useRecoveryStore').then(({ useRecoveryStore }) => {
           useRecoveryStore.getState().showBanner('worker_crash', 'Task failed due to a worker crash.');
-        });
+        }).catch(() => {});
       }
     }
   }

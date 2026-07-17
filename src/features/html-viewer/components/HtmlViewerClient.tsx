@@ -144,6 +144,7 @@ export default function HtmlViewerClient() {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin && event.origin !== "null") return;
+      if (iframeRef.current && event.source !== iframeRef.current.contentWindow) return;
       if (event.data.source === "karuvi-sandbox") {
         const { type, payload } = event.data;
         setLogs(prev => [...prev, { 
@@ -177,7 +178,7 @@ export default function HtmlViewerClient() {
             const originalWarn = console.warn;
             const originalInfo = console.info;
             const sendToParent = (type, args) => {
-              window.parent.postMessage({ source: 'karuvi-sandbox', type, payload: Array.from(args) }, '*');
+              window.parent.postMessage({ source: 'karuvi-sandbox', type, payload: Array.from(args) }, '${typeof window !== "undefined" ? window.location.origin : "*"}');
             };
             console.log = (...args) => { sendToParent('log', args); originalLog(...args); };
             console.error = (...args) => { sendToParent('error', args); originalError(...args); };

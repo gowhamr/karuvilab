@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useDeferredValue } from 'react';
 import { useFinancialFreedomStore } from '../store';
 import { formatCurrency, getThemeColor } from '@/src/lib/utils';
 
 export function ProjectionChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const projections = useFinancialFreedomStore(state => state.results.projections);
-  const retirementAge = useFinancialFreedomStore(state => state.inputs.retirementAge);
+  const rawProjections = useFinancialFreedomStore(state => state.results.projections);
+  const rawRetirementAge = useFinancialFreedomStore(state => state.inputs.retirementAge);
+  
+  const projections = useDeferredValue(rawProjections);
+  const retirementAge = useDeferredValue(rawRetirementAge);
 
   useEffect(() => {
     const canvas = canvasRef.current;

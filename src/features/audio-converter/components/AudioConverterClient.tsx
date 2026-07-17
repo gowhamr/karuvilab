@@ -216,8 +216,8 @@ export default function AudioConverterClient() {
             {status === "processing" && (
               <div className="w-full bg-surface-2 rounded-full h-1.5 overflow-hidden mt-2">
                 <div 
-                  className="bg-blue h-1.5 rounded-full transition-all duration-300" 
-                  style={{ width: `${progress}%` }} 
+                  className="bg-blue h-1.5 rounded-full transition-transform duration-300 origin-left" 
+                  style={{ transform: `scaleX(${progress / 100})` }} 
                 />
               </div>
             )}

@@ -9,6 +9,7 @@ import { useWorkflowStore, WorkflowItem } from "@/src/store/useWorkflowStore";
 import { formatBytes } from "@/src/utils";
 import { cn } from "@/src/lib/utils";
 import { useFocusTrap } from "@/src/lib/a11y/useFocusTrap";
+import { blobManager } from "@/src/lib/blob-manager";
 
 // Extension to Tool ID Mapping
 const COMPATIBLE_TOOLS_MAPPING: Record<string, string[]> = {
@@ -75,7 +76,7 @@ export function GlobalDragDrop() {
   useEffect(() => {
     return () => {
       // Cleanup object URLs to avoid memory leaks
-      Object.values(previews).forEach(url => URL.revokeObjectURL(url));
+      Object.values(previews).forEach(url => blobManager.revoke(url));
     };
   }, [previews]);
 
@@ -87,7 +88,7 @@ export function GlobalDragDrop() {
     const newPreviews: Record<string, string> = {};
     files.forEach(file => {
       if (file.type.startsWith("image/")) {
-        newPreviews[file.name] = URL.createObjectURL(file);
+        newPreviews[file.name] = blobManager.create(file);
       }
     });
     setPreviews(newPreviews);

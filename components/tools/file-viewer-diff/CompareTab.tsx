@@ -117,13 +117,13 @@ export function CompareTab() {
                     {LANG_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
                   </select>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
-                    <button onClick={handleBeautifyA} title="Beautify" className="p-2 hover:bg-blue/5 text-blue rounded-lg">
+                    <button onClick={handleBeautifyA} aria-label="Beautify File A" title="Beautify" className="p-2 text-text-4 hover:text-blue hover:bg-blue/5 rounded-xl transition-colors active:scale-95">
                       <Sparkles className="w-4 h-4" />
                     </button>
                   )}
-                  <button onClick={() => setFileA(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
+                  <button onClick={() => setFileA(null)} aria-label="Clear File A" className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-colors active:scale-95">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

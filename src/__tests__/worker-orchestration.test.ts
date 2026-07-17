@@ -32,7 +32,7 @@ describe("WorkerOrchestrator Governance", () => {
     };
 
     // Stub global Worker
-    vi.stubGlobal("Worker", vi.fn(() => mockWorker));
+    vi.stubGlobal("Worker", vi.fn(function() { return mockWorker; }));
 
     mockApi = {
       compressImage: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
