@@ -315,8 +315,8 @@ export interface WorkerAPI {
 
   // Media Tasks
   encodeMp3(
-    left: Int16Array,
-    right: Int16Array,
+    left: Float32Array,
+    right: Float32Array | null,
     sampleRate: number,
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
@@ -380,4 +380,28 @@ export interface WorkerAPI {
   ): Promise<{ value: string; error: string }>;
 
   detectNumeralFormat(input: string): Promise<{ format: string; confidence: string }>;
+
+  // Grammar Tasks
+  checkGrammar(
+    text: string,
+    ignoredWords: string[],
+    tone: string,
+    onProgress?: ProgressCallback
+  ): Promise<{
+    errors: Array<{
+      id: string;
+      message: string;
+      replacements: string[];
+      offset: number;
+      length: number;
+      type: 'spelling' | 'grammar' | 'style' | 'readability';
+    }>;
+    stats: {
+      words: number;
+      characters: number;
+      sentences: number;
+      readabilityScore: number;
+      readingTimeMs: number;
+    };
+  }>;
 }

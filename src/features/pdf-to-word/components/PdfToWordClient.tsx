@@ -72,7 +72,7 @@ export default function PdfToWordClient() {
       a.href = url;
       a.download = (file?.name.replace(/\.pdf$/i, "") || "converted") + ".docx";
       a.click();
-      revokeUrl(url);
+      // KL-06: Let useObjectUrlManager handle the cleanup on unmount to prevent 0-byte downloads
       toast("Word document downloaded!");
     } catch (err) {
       logger.error("DOCX Generation error:", { error: err });

@@ -4,6 +4,11 @@ export interface SystemInfo {
   screenSize: string;
   timestamp: string;
   userAgent: string;
+  language?: string;
+  timezone?: string;
+  theme?: string;
+  device?: string;
+  appVersion?: string;
 }
 
 export function getSystemInfo(): SystemInfo {
@@ -37,11 +42,20 @@ export function getSystemInfo(): SystemInfo {
   else if (ua.indexOf("Android") > -1) os = "Android";
   else if (ua.indexOf("iPhone") > -1) os = "iOS";
 
+  // Device detection
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const device = isMobile ? 'Mobile/Tablet' : 'Desktop';
+
   return {
     browser,
     os,
     screenSize: `${window.innerWidth}x${window.innerHeight}`,
     timestamp: new Date().toISOString(),
-    userAgent: ua
+    userAgent: ua,
+    language: navigator.language || 'Unknown',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown',
+    theme: document.documentElement.getAttribute('data-theme') || 'Unknown',
+    device,
+    appVersion: '3.1.0' // Matches KaruviLab version
   };
 }

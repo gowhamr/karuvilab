@@ -20,11 +20,9 @@ export async function createZip(files: Record<string, Blob>): Promise<Blob> {
 /**
  * Downloads a Blob as a file.
  */
-export function downloadBlob(blob: Blob, filename: string) {
-  const url = blobManager.create(blob);
+export function downloadBlob(url: string, filename: string) {
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   a.click();
-  setTimeout(() => blobManager.revoke(url), 100);
 }

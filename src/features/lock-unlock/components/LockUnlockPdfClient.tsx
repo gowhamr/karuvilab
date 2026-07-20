@@ -59,7 +59,7 @@ export default function LockUnlockPdfClient() {
         a.click();
         
         useWorkflowStore.getState().syncToolOutput("lock-unlock", [{ blob, name, type: "pdf" }]);
-        setTimeout(() => revokeUrl(url), 100);
+        // KL-06: Let useObjectUrlManager handle cleanup
         setSuccess("PDF locked successfully and downloaded.");
       } else {
         if (!unlockPassword) { setError("Please enter the PDF password."); setProcessing(false); return; }
@@ -78,7 +78,7 @@ export default function LockUnlockPdfClient() {
         a.click();
         
         useWorkflowStore.getState().syncToolOutput("lock-unlock", [{ blob, name, type: "pdf" }]);
-        setTimeout(() => revokeUrl(url), 100);
+        // KL-06: Let useObjectUrlManager handle cleanup
         setSuccess("PDF unlocked successfully and downloaded.");
       }
     } catch (e: any) {

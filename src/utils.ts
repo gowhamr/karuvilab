@@ -61,14 +61,13 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-export function downloadBlob(blob: Blob, filename: string): void {
-  const url = blobManager.create(blob);
+export function downloadBlob(url: string, filename: string): void {
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
-  setTimeout(() => { document.body.removeChild(a); blobManager.revoke(url); }, 1000);
+  document.body.removeChild(a);
 }
 
 export function drawResized(img: HTMLImageElement, maxW: number | null, maxH: number | null): HTMLCanvasElement {

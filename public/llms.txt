@@ -61,7 +61,7 @@
 - [Gif Creator](https://karuvilab.com/media-tools/gif-creator/): Convert videos or image frames into optimized, loopable animated GIF files.
 - [Glassmorphism Generator](https://karuvilab.com/developer-tools/glassmorphism-generator/): Generate CSS code for modern frosted-glass card designs.
 - [Gradient Generator](https://karuvilab.com/developer-tools/gradient-generator/): Design linear and radial CSS gradients visually for backgrounds.
-- [Grammar Checker](https://karuvilab.com/utilities/grammar-checker/): Spot common writing errors
+- [Grammar & Spell Checker](https://karuvilab.com/text/grammar-checker/): 100% private, client-side grammar, spell, and readability checker for your text.
 - [Gratuity Calculator](https://karuvilab.com/calculators/gratuity-calculator/): Estimate standard gratuity benefits based on salary and tenure.
 - [GST Calculator](https://karuvilab.com/calculators/gst-calculator/): Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.
 - [Hash Generator](https://karuvilab.com/security-tools/hash-generator/): MD5, SHA-1/256/512 hashes

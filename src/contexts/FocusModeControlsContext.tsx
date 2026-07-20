@@ -24,12 +24,20 @@ const FocusModeControlsContext = createContext<FocusModeControlsContextType>({
 export function FocusModeControlsProvider({ children }: { children: ReactNode }) {
   const [controls, setControlsState] = useState<FocusModeControls>({});
   
-  const setControls = (newControls: Partial<FocusModeControls>) => {
-    setControlsState(prev => ({ ...prev, ...newControls }));
-  };
+  const setControls = React.useCallback((newControls: Partial<FocusModeControls>) => {
+    setControlsState(prev => {
+      const hasChanges = Object.keys(newControls).some(
+        key => newControls[key as keyof FocusModeControls] !== prev[key as keyof FocusModeControls]
+      );
+      if (!hasChanges) return prev;
+      return { ...prev, ...newControls };
+    });
+  }, []);
+
+  const contextValue = React.useMemo(() => ({ controls, setControls }), [controls, setControls]);
 
   return (
-    <FocusModeControlsContext.Provider value={{ controls, setControls }}>
+    <FocusModeControlsContext.Provider value={contextValue}>
       {children}
     </FocusModeControlsContext.Provider>
   );

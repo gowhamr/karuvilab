@@ -55,8 +55,7 @@ export function exportToCSV(filename: string, headers: string[], rows: any[][]) 
     ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
   ].join('\n');
   
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = blobManager.create(blob);
+  const url = `data:text/csv;charset=utf-8,${encodeURIComponent(csvContent)}`;
   const link = document.createElement("a");
   link.setAttribute("href", url);
   link.setAttribute("download", filename);
@@ -64,5 +63,4 @@ export function exportToCSV(filename: string, headers: string[], rows: any[][]) 
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  setTimeout(() => blobManager.revoke(url), 1000);
 }

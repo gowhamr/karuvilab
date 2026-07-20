@@ -97,23 +97,11 @@ export default function AudioConverterClient() {
       } else if (targetFormat === "mp3") {
         const left = decodedAudio.getChannelData(0);
         const right = decodedAudio.numberOfChannels > 1 ? decodedAudio.getChannelData(1) : null;
-        
-        const convertBuffer = (buffer: Float32Array) => {
-          const int16 = new Int16Array(buffer.length);
-          for (let i = 0; i < buffer.length; i++) {
-            const s = Math.max(-1, Math.min(1, buffer[i]!));
-            int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-          }
-          return int16;
-        };
-
-        const leftInt = convertBuffer(left);
-        const rightInt = right ? convertBuffer(right) : null;
         if (signal.aborted) throw new Error("Aborted");
 
         const mp3Bytes = await workerManager.encodeMp3(
-          leftInt,
-          rightInt,
+          left,
+          right,
           decodedAudio.sampleRate,
           (p) => setProgress(40 + p.percent * 0.6),
           signal

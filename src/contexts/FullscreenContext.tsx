@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
   useEffect,
+  useMemo,
   ReactNode
 } from 'react';
 
@@ -146,22 +147,36 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
     return () => { document.body.style.overflow = ''; };
   }, []);
 
+  const contextValue = useMemo(() => ({
+    displayMode,
+    isFullscreen, 
+    activeToolId, 
+    currentToolId, 
+    registerTool, 
+    unregisterTool, 
+    enterFocus,
+    enterDashboard,
+    enter: enterFocus, // Legacy mapping
+    exit, 
+    toggleFocus,
+    toggleDashboard,
+    toggle: toggleFocus // Legacy mapping
+  }), [
+    displayMode,
+    isFullscreen,
+    activeToolId,
+    currentToolId,
+    registerTool,
+    unregisterTool,
+    enterFocus,
+    enterDashboard,
+    exit,
+    toggleFocus,
+    toggleDashboard
+  ]);
+
   return (
-    <FullscreenContext.Provider value={{
-      displayMode,
-      isFullscreen, 
-      activeToolId, 
-      currentToolId, 
-      registerTool, 
-      unregisterTool, 
-      enterFocus,
-      enterDashboard,
-      enter: enterFocus, // Legacy mapping
-      exit, 
-      toggleFocus,
-      toggleDashboard,
-      toggle: toggleFocus // Legacy mapping
-    }}>
+    <FullscreenContext.Provider value={contextValue}>
       {children}
     </FullscreenContext.Provider>
   );

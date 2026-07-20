@@ -107,7 +107,11 @@ export default function GifCreatorClient() {
         setProgress(10 + (i / frames.length) * 30);
         
         // Yield to main thread (P-06 long task prevention)
-        await new Promise(r => setTimeout(r, 0));
+        if ('scheduler' in window && 'yield' in (window.scheduler as any)) {
+          await (window.scheduler as any).yield();
+        } else {
+          await new Promise(r => setTimeout(r, 0));
+        }
       }
 
       // 3. Send to Worker

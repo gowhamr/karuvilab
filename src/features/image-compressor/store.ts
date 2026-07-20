@@ -214,7 +214,8 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
       // FIX-3: Async ZIP generation via Worker
       const zipBlob = await createZip(files);
       set({ zipProgress: 100 });
-      downloadBlob(zipBlob, `karuvilab-images-${Date.now()}.zip`);
+      const url = blobManager.create(zipBlob);
+      downloadBlob(url, `karuvilab-images-${Date.now()}.zip`);
     } catch (err) {
       console.error("ZIP failed:", err);
     } finally {

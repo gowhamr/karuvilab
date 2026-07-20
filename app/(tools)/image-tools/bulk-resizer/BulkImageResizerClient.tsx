@@ -120,12 +120,13 @@ export default function BulkImageResizerClient() {
     });
 
     const zipBlob = await createZip(files);
-    downloadBlob(zipBlob, `resized-images-${Date.now()}.zip`);
+    const url = createUrl(zipBlob);
+    downloadBlob(url, `resized-images-${Date.now()}.zip`);
   };
 
   const downloadOne = (item: BatchItem) => {
     if (item.result) {
-      downloadBlob(item.result.blob, item.result.name);
+      downloadBlob(item.result.url, item.result.name);
     }
   };
 

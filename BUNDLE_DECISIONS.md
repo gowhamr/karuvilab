@@ -71,3 +71,29 @@ This file tracks every new dependency added to the project, its impact on bundle
   - `html5-qrcode` (~180KB gzip) — too large, also includes camera management we already handle natively
   - Rolling our own Reed-Solomon decoder — significant implementation risk, maintenance burden
 - **Justification:** `jsqr` is the smallest viable pure-JS QR decoder (no WASM, no native code). It is dynamically imported only when `BarcodeDetector` is unsupported, so Chrome/Edge users pay zero bundle cost. Covers the primary fallback use-case (QR codes) on Firefox/Safari/iOS. Users are shown a clear notice when running in fallback mode explaining the QR-only limitation.
+
+### 2026-07-19
+- **Library:** `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/pm`
+- **Impact:** ~50KB gzipped
+- **Purpose:** Headless rich-text editor for grammar checking overlays
+- **Alternatives:** Draft.js (deprecated), Quill (not headless)
+- **Justification:** Required for grammar squiggly lines, inline tooltips, and contenteditable support without writing a risky custom DOM manager from scratch.
+
+- **Library:** `nspell`, `dictionary-en`
+- **Impact:** ~1.2MB gzipped (Dynamic Import in Web Worker strictly required)
+- **Purpose:** Client-side offline spell checking
+- **Alternatives:** Typo.js (less maintained, bigger dictionary format)
+- **Justification:** Needed for offline spell checking in grammar tool without server API.
+
+- **Library:** `compromise`
+- **Impact:** ~250KB gzipped (Dynamic Import in Web Worker strictly required)
+- **Purpose:** Client-side natural language processing (POS tagging)
+- **Alternatives:** natural (too heavy), spaCy (Python/Server only)
+- **Justification:** The only viable offline NLP library fast enough for browser workers.
+
+- **Library:** `syllable`
+- **Impact:** ~2KB gzipped
+- **Purpose:** Syllable counting for readability scores
+- **Alternatives:** Custom regex (error-prone for English)
+- **Justification:** Lightweight reliable syllable counter.
+

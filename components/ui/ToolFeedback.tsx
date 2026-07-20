@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ThumbsUp, ThumbsDown, Send, Check } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
+import { Turnstile } from './Turnstile';
 
 interface ToolFeedbackProps {
   toolId: string;
@@ -18,6 +19,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   useEffect(() => {
     Promise.resolve().then(() => {
@@ -58,6 +60,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
               userAgent: navigator.userAgent,
               timestamp: new Date().toISOString(),
             }),
+            turnstileToken,
           }),
         });
 
@@ -106,6 +109,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
             userAgent: navigator.userAgent,
             timestamp: new Date().toISOString(),
           }),
+          turnstileToken,
         }),
       });
 
@@ -144,6 +148,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
 
   return (
     <div className="bg-mat-surface border border-mat-border shadow-mat-shine rounded-2xl p-5 space-y-4">
+      {mounted && <Turnstile onSuccess={setTurnstileToken} invisible />}
       <AnimatePresence mode="wait">
         {submitted ? (
           <m.div

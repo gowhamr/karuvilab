@@ -86,7 +86,7 @@ export default function SplitPdfClient() {
       a.click();
       
       // Revoke after a longer delay (5s) for larger zips to start downloading
-      setTimeout(() => revokeUrl(url), 5000);
+      // KL-06: Let useObjectUrlManager handle cleanup
       
     } catch (e: any) {
       if (e.message === "Task cancelled") {

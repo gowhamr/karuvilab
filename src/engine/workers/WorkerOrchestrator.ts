@@ -64,6 +64,7 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   calculateEmiSchedule: 'compute',
   convertNumeral: 'compute',
   detectNumeralFormat: 'compute',
+  checkGrammar: 'compute',
 
   // Media Pool (heavy file manipulation, image/PDF processing)
   getPdfPageCount: 'media',

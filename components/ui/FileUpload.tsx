@@ -53,6 +53,7 @@ export function FileUpload({ onFileSelect, className }: FileUploadProps) {
             onClick={(e) => {
               e.stopPropagation();
               setFileName(null);
+              onFileSelect(null as any);
             }}
             className="p-1 hover:bg-bg rounded-full text-text-4"
           >

@@ -8,6 +8,7 @@ import { useSupportStore, FeedbackType } from "@/src/store/useSupportStore";
 import { getSystemInfo, SystemInfo } from "@/src/lib/support-utils";
 import { cn } from "@/src/lib/utils";
 import { FileUpload } from "./FileUpload";
+import { Turnstile } from "./Turnstile";
 import { supportsBlur } from "@/src/lib/deviceCapability";
 
 const FEEDBACK_OPTIONS: { value: FeedbackType; label: string; icon: React.ElementType }[] = [
@@ -34,6 +35,7 @@ export function FeedbackModal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [sysInfo, setSysInfo] = useState<SystemInfo | null>(null);
   const [blurEnabled, setBlurEnabled] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   useEffect(() => {
     if (isOpen) {
@@ -45,16 +47,43 @@ export function FeedbackModal() {
         setFromEmail("");
         setScreenshot(null);
         setErrorMessage("");
+        setTurnstileToken("");
       });
     }
   }, [isOpen]);
 
+  const toBase64 = (file: File): Promise<string> => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const resultString = reader.result as string | null;
+      resolve((resultString || '').split(',')[1] || '');
+    };
+    reader.onerror = error => reject(error);
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (description.length > 2000) {
+      setErrorMessage("Description must be less than 2000 characters.");
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage("");
     
     try {
+      let attachment = undefined;
+      if (screenshot) {
+        if (screenshot.size > 2 * 1024 * 1024) {
+          throw new Error("Screenshot must be less than 2MB");
+        }
+        attachment = {
+          filename: screenshot.name,
+          content: await toBase64(screenshot),
+        };
+      }
+
       const response = await fetch('/api/send-feedback', {
         method: 'POST',
         headers: {
@@ -65,6 +94,8 @@ export function FeedbackModal() {
           message: description,
           category: type,
           diagnosticInfo: JSON.stringify(sysInfo),
+          turnstileToken,
+          attachment,
         }),
       });
 
@@ -185,10 +216,16 @@ export function FeedbackModal() {
 
                   {/* Description */}
                   <div className="space-y-2">
-                    <label htmlFor="feedback-description" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Description</label>
+                    <div className="flex justify-between ml-1 items-end">
+                      <label htmlFor="feedback-description" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Description</label>
+                      <span className={cn("text-tiny font-bold uppercase tracking-widest-sm", description.length > 2000 ? "text-red-500" : "text-text-4")}>
+                        {description.length} / 2000
+                      </span>
+                    </div>
                     <textarea 
                       id="feedback-description"
                       required
+                      maxLength={2000}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="What happened? Any steps to reproduce?"
@@ -239,10 +276,13 @@ export function FeedbackModal() {
                     </div>
                   )}
 
+                  {/* Turnstile Bot Protection */}
+                  <Turnstile onSuccess={setTurnstileToken} />
+
                   {/* Submit */}
                   <div className="space-y-3">
                     <button 
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !turnstileToken}
                       type="submit"
                       className="w-full h-16 bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-102 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                      aria-label="Send">

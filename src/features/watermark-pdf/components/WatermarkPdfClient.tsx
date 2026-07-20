@@ -81,7 +81,7 @@ export default function WatermarkPdfClient() {
       a.href = url;
       a.download = file.name.replace(/\.pdf$/i, "") + "-watermarked.pdf";
       a.click();
-      setTimeout(() => revokeUrl(url), 100);
+      // KL-06: Let useObjectUrlManager handle cleanup
     } catch (e: any) {
       if (e.message === "Task cancelled") {
         setError("Watermark cancelled.");

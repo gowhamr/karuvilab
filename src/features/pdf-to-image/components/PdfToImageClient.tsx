@@ -4,6 +4,8 @@ import { EngineLoader } from "@/components/system/EngineLoader";
 import { DropZone } from "@/components/ui/DropZone";
 import { Loader2, Download, Settings2 } from "lucide-react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { logger } from "@/src/lib/logger";
+import { workerManager } from "@/src/workers/manager";
 import { useRef } from "react";
 
 interface ExtractedImage { url: string; width: number; height: number; page: number; }
@@ -133,14 +135,8 @@ export default function PdfToImageClient() {
         files[`page-${img.page}.${format}`] = new Uint8Array(buf);
       }
       
-      const fflate = await import("fflate");
-      
-      const zipData = await new Promise<Uint8Array>((resolve, reject) => {
-        fflate.zip(files, (err, data) => {
-          if (err) reject(err);
-          else resolve(data);
-        });
-      });
+      const transferList = Object.values(files).map(v => v.buffer);
+      const zipData = await workerManager.runZip(files, undefined, signal);
       
       const blob = new Blob([zipData as any], { type: "application/zip" });
       const url = createUrl(blob);

@@ -915,9 +915,21 @@ const api: WorkerAPI = {
     const mp3Data: any[] = [];
     const sampleBlockSize = 1152;
     
-    for (let i = 0; i < left.length; i += sampleBlockSize) {
-      const leftChunk = left.subarray(i, i + sampleBlockSize);
-      const rightChunk = right ? right.subarray(i, i + sampleBlockSize) : leftChunk;
+    const convertBuffer = (buffer: Float32Array) => {
+      const int16 = new Int16Array(buffer.length);
+      for (let i = 0; i < buffer.length; i++) {
+        const s = Math.max(-1, Math.min(1, buffer[i]!));
+        int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+      }
+      return int16;
+    };
+    
+    const leftInt = convertBuffer(left);
+    const rightInt = right ? convertBuffer(right) : null;
+
+    for (let i = 0; i < leftInt.length; i += sampleBlockSize) {
+      const leftChunk = leftInt.subarray(i, i + sampleBlockSize);
+      const rightChunk = rightInt ? rightInt.subarray(i, i + sampleBlockSize) : leftChunk;
       const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
       if (mp3buf.length > 0) mp3Data.push(mp3buf);
       if (onProgress) onProgress({ percent: (i / left.length) * 100 });
@@ -1220,6 +1232,12 @@ const api: WorkerAPI = {
   async detectNumeralFormat(input: string) {
     const { detectFormat } = await import("../features/numeral-converter/utils/conversion-helpers");
     return detectFormat(input);
+  },
+
+  async checkGrammar(text: string, ignoredWords: string[], tone: string, onProgress?: any) {
+    if (onProgress) onProgress({ percent: 10, message: "Loading dictionaries..." });
+    const { runGrammarCheck } = await import("../features/grammar-checker/utils/engine");
+    return runGrammarCheck(text, ignoredWords, tone, onProgress);
   }
 };
 

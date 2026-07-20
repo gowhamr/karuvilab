@@ -68,12 +68,13 @@ export function useUrlState<T extends ParamSchema>(
   const [state, setStateInternal] = useState<T>(() => parseFromUrl());
 
   const buildUrl = useCallback((s: T): string => {
+    const currentDefaults = JSON.parse(defaultsStr) as T;
     const params = new URLSearchParams();
     let hasNonDefault = false;
     for (const key in s) {
       const paramKey = prefix ? `${prefix}_${key}` : key;
       const val = s[key];
-      const def = defaults[key];
+      const def = currentDefaults[key];
       if (val === def || val === null || val === undefined) continue;
       hasNonDefault = true;
       if (typeof val === 'boolean') {
@@ -86,7 +87,7 @@ export function useUrlState<T extends ParamSchema>(
     }
     if (!hasNonDefault) return pathname;
     return `${pathname}?${params.toString()}`;
-  }, [defaults, prefix, encode, pathname]);
+  }, [defaultsStr, prefix, encode, pathname]);
 
   const setState = useCallback((updates: Partial<T>) => {
     setStateInternal(prev => {
@@ -108,10 +109,10 @@ export function useUrlState<T extends ParamSchema>(
 
   const resetState = useCallback(() => {
     clearTimeout(debounceRef.current);
-    setStateInternal({ ...defaults } as T);
+    setStateInternal(JSON.parse(defaultsStr) as T);
     router.replace(pathname, { scroll: false });
     setIsSynced(true);
-  }, [router, pathname, defaults]);
+  }, [router, pathname, defaultsStr]);
 
   useEffect(() => {
     return () => clearTimeout(debounceRef.current);

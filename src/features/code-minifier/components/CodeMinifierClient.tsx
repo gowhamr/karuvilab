@@ -5,6 +5,7 @@ import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatc
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { createZip, downloadBlob } from "@/src/lib/zip";
 import { DropZone } from "@/components/ui/DropZone";
+import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useRecoveryStore } from "@/src/store/useRecoveryStore";
 import { Layers, Code, FileCode, Zap, Type, FileText } from "lucide-react";
@@ -25,6 +26,7 @@ export default function CodeMinifierClient() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [fontSize, setFontSize] = useState(14);
   const [wordWrap, setWordWrap] = useState(false);
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   
   // Text mode state
   const [textInput, setTextInput] = useState("");
@@ -86,12 +88,14 @@ export default function CodeMinifierClient() {
     });
 
     const zipBlob = await createZip(files);
-    downloadBlob(zipBlob, `minified-code-${Date.now()}.zip`);
+    const url = createUrl(zipBlob);
+    downloadBlob(url, `minified-code-${Date.now()}.zip`);
   };
 
   const downloadOne = (item: BatchItem) => {
     if (item.result) {
-      downloadBlob(item.result.blob, item.result.name);
+      const url = createUrl(item.result.blob);
+      downloadBlob(url, item.result.name);
     }
   };
 

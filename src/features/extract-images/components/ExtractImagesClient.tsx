@@ -10,7 +10,7 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
-interface ExtractedImage { url: string; width: number; height: number; page: number; index: number; }
+interface ExtractedImage { url: string; width: number; height: number; page: number; index: number; blob: Blob; }
 
 export default function ExtractImagesClient() {
   const [file, setFile] = useState<File | null>(null);
@@ -19,6 +19,7 @@ export default function ExtractImagesClient() {
   const [progress, setProgress] = useState("");
   const [progressPercent, setProgressPercent] = useState(0);
   const [error, setError] = useState("");
+  const [isZipping, setIsZipping] = useState(false);
   const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const checkLib = useCallback(() => {
@@ -64,7 +65,8 @@ export default function ExtractImagesClient() {
           width: item.width,
           height: item.height,
           page: item.page,
-          index: item.index
+          index: item.index,
+          blob
         };
       });
 
@@ -81,13 +83,35 @@ export default function ExtractImagesClient() {
     setProcessing(false);
   };
 
-  const downloadAll = () => {
-    images.forEach((img, i) => {
+  const downloadAll = async () => {
+    setIsZipping(true);
+    try {
+      const zipData: Record<string, Uint8Array> = {};
+      const transferList: ArrayBuffer[] = [];
+      for (const img of images) {
+        const buffer = await img.blob.arrayBuffer();
+        zipData[`extracted-page${img.page}-img${img.index + 1}.png`] = new Uint8Array(buffer);
+        transferList.push(buffer);
+      }
+      
+      const zipBytes = await workerOrchestrator.dispatch<Uint8Array>(
+        "createZip",
+        [zipData],
+        transferList
+      );
+      
+      const zipBlob = new Blob([zipBytes as unknown as BlobPart], { type: "application/zip" });
+      const url = createUrl(zipBlob);
       const a = document.createElement("a");
-      a.href = img.url;
-      a.download = `extracted-page${img.page}-img${img.index + 1}.png`;
+      a.href = url;
+      a.download = `karuvilab-extracted-images-${Date.now()}.zip`;
       a.click();
-    });
+    } catch (e: any) {
+      console.error("Failed to create ZIP:", e);
+      setError("Failed to create ZIP archive.");
+    } finally {
+      setIsZipping(false);
+    }
   };
 
   return (
@@ -142,9 +166,11 @@ export default function ExtractImagesClient() {
               <h2 className="font-black text-text-2 text-xs uppercase tracking-widest-lg">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
               <button 
                 onClick={downloadAll} 
-                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-tiny font-bold uppercase tracking-widest-sm rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10"
+                disabled={isZipping}
+                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-tiny font-bold uppercase tracking-widest-sm rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10 disabled:opacity-50"
               >
-                <Download className="w-3.5 h-3.5" /> Download All
+                {isZipping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                {isZipping ? "Zipping..." : "Download All"}
               </button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

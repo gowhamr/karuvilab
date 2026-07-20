@@ -63,7 +63,7 @@ export default function WordToPdfClient() {
     a.href = url;
     a.download = result.name;
     a.click();
-    revokeUrl(url);
+    // KL-06: Let useObjectUrlManager handle the cleanup on unmount to prevent 0-byte downloads
   };
 
   return (

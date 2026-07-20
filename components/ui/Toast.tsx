@@ -49,8 +49,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const contextValue = React.useMemo(() => ({ toast }), [toast]);
+
   return (
-    <ToastContext.Provider value={{ toast }}>
+    <ToastContext.Provider value={contextValue}>
       <Toaster
         closeButton
         richColors
