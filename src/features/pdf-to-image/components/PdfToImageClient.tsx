@@ -50,7 +50,7 @@ export default function PdfToImageClient() {
 
     try {
       const pdfjsLib = await import("pdfjs-dist");
-      const workerUrl = 'https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs';
+      const workerUrl = typeof window !== 'undefined' ? window.location.origin + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs';
       if (pdfjsLib.GlobalWorkerOptions) {
         pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
       } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {

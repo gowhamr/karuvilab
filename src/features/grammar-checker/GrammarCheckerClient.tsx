@@ -150,6 +150,26 @@ export default function GrammarCheckerClient() {
     setText(editor.getText());
   };
 
+  const applyAllFixes = () => {
+    if (!editor || errors.length === 0) return;
+    
+    const fixableErrors = [...errors]
+      .filter(err => err.replacements && err.replacements.length > 0)
+      .sort((a, b) => b.offset - a.offset);
+
+    if (fixableErrors.length === 0) return;
+
+    let chain = editor.chain().focus();
+    fixableErrors.forEach(err => {
+      chain = chain
+        .deleteRange({ from: err.offset + 1, to: err.offset + err.length + 1 })
+        .insertContent(err.replacements[0]);
+    });
+    
+    chain.run();
+    setText(editor.getText());
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -193,7 +213,17 @@ export default function GrammarCheckerClient() {
 
       {errors.length > 0 && (
         <div className="bg-surface border border-border rounded-2xl p-6">
-          <h3 className="text-lg font-bold text-text mb-4">Suggestions ({errors.length})</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-text">Suggestions ({errors.length})</h3>
+            {errors.some(err => err.replacements && err.replacements.length > 0) && (
+              <button 
+                onClick={applyAllFixes}
+                className="text-sm font-medium bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary/90 transition-colors active:scale-95"
+              >
+                Auto Fix All
+              </button>
+            )}
+          </div>
           <div className="space-y-3">
             {errors.map((err, i) => (
               <div key={i} className="p-3 bg-surface-2 rounded-lg border border-border">

@@ -54,9 +54,6 @@ const settingsIdbStorage = {
           historyEnabled: true,
         };
       }
-      if (mergedState.state.adsConsent === undefined) {
-        mergedState.state.adsConsent = false;
-      }
       if (!mergedState.state.focusMode) {
         mergedState.state.focusMode = {
           autoHideToolbar: false,

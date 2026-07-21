@@ -61,6 +61,29 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
     );
   }
 
+  if (item.originalDropped) {
+    return (
+      <div className="space-y-4">
+        <div className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-4xl overflow-hidden flex items-center justify-center">
+          <img src={item.compressedUrl} alt="Compressed" className="max-h-full object-contain" />
+          <div className="absolute top-4 right-4 px-3 py-1 bg-blue/90 text-white text-xs font-black uppercase rounded-full shadow-sm">
+            Compressed • {formatSize(item.compressedSize || 0)}
+          </div>
+          <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-white text-xs font-black uppercase rounded-full">
+            Privacy Mode: Original Cleared
+          </div>
+        </div>
+        <button 
+          onClick={download}
+          className="w-full flex items-center justify-center gap-2 py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-102 active:scale-98 transition-all shadow-lg shadow-blue/20"
+        >
+          <Download size={18} />
+          Download Compressed
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div 
@@ -73,7 +96,7 @@ export const ComparisonView: React.FC<{ item: ImageItem }> = ({ item }) => {
         aria-valuenow={Math.round(sliderPos)}
         aria-valuetext={`${Math.round(sliderPos)}% original visible`}
         onKeyDown={onKeyDown}
-        className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-4xl overflow-hidden cursor-col-resize select-none outline-none focus:ring-4 focus:ring-blue/20 transition-all group"
+        className="relative aspect-[4/3] sm:aspect-video bg-bg border border-border rounded-4xl overflow-hidden cursor-col-resize select-none touch-none outline-none focus:ring-4 focus:ring-blue/20 transition-all group"
         onMouseMove={onMouseMove}
         onTouchMove={onTouchMove}
       >

@@ -67,6 +67,7 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   checkGrammar: 'compute',
 
   // Media Pool (heavy file manipulation, image/PDF processing)
+  exportPdfEditor: 'media',
   getPdfPageCount: 'media',
   rotatePdf: 'media',
   watermarkPdf: 'media',

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "predev": "npx tsx scripts/generate-registries.ts",
+    "predev": "node scripts/generate-registries.js",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
@@ -17,7 +17,7 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "postinstall": "node scripts/check-ts-version.js && node scripts/sync-workers.js",
-    "prebuild": "npx tsx scripts/generate-registries.ts && node scripts/sync-workers.js"
+    "prebuild": "node scripts/generate-registries.js && node scripts/sync-workers.js"
   },
   "devDependencies": {
     "@emnapi/core": "1.10.0",

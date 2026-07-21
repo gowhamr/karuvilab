@@ -110,6 +110,7 @@
 - [Page Numbering](https://karuvilab.com/pdf-tools/page-numbering/): Add page numbers to PDF
 - [Password Generator](https://karuvilab.com/security-tools/password-generator/): Strong, random passwords
 - [Pbkdf2 Generator](https://karuvilab.com/security-tools/pbkdf2-generator/): Derive cryptographic keys using PBKDF2 password hashing.
+- [PDF Editor](https://karuvilab.com/pdf-tools/pdf-editor/): View and annotate PDF documents
 - [PDF to Image](https://karuvilab.com/pdf-tools/pdf-to-image/): Convert PDF pages to JPG or PNG images
 - [PDF to Word](https://karuvilab.com/pdf-tools/pdf-to-word/): Convert PDF text to editable Word
 - [Pem Viewer](https://karuvilab.com/security-tools/pem-viewer/): Inspect and parse PEM certificate and private key files.

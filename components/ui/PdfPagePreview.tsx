@@ -28,7 +28,7 @@ export function PdfPagePreview({ file, pageIndex, width = 150, rotation = 0, cla
         if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
           const initWorkerSrc = () => {
             try { return '/pdf.worker.min.mjs'; }
-            catch { return 'https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs'; }
+            catch { return 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs'; }
           };
           pdfjsLib.GlobalWorkerOptions.workerSrc = initWorkerSrc();
         }

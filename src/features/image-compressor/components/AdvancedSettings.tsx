@@ -93,6 +93,36 @@ export const AdvancedSettings: React.FC<{ itemId?: string | undefined }> = ({ it
           </div>
         </div>
 
+        {/* Lossless Toggle */}
+        {settings.format === 'image/png' && (
+          <div className="flex items-center justify-between p-4 bg-surface-2 border border-border rounded-xl">
+            <div className="space-y-1">
+              <h4 className="text-sm font-bold text-text">Lossless Compression</h4>
+              <p className="text-tiny text-text-4 font-medium">Maximize quality, larger file size</p>
+            </div>
+            <button
+              onClick={() => update({ lossless: !settings.lossless })}
+              className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.lossless ? 'bg-blue' : 'bg-surface border border-border'}`}
+            >
+              <div className={`w-4 h-4 rounded-full bg-white transition-transform ${settings.lossless ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+        )}
+
+        {/* Strict Privacy Mode Toggle */}
+        <div className="flex items-center justify-between p-4 bg-red-500/5 border border-red-500/10 rounded-xl">
+          <div className="space-y-1">
+            <h4 className="text-sm font-bold text-red-500">Strict Privacy Mode</h4>
+            <p className="text-tiny text-text-4 font-medium pr-4">Clear original from memory instantly after compression. Disables comparison view.</p>
+          </div>
+          <button
+            onClick={() => update({ strictPrivacyMode: !settings.strictPrivacyMode })}
+            className={`w-12 h-6 rounded-full p-1 transition-colors shrink-0 ${settings.strictPrivacyMode ? 'bg-red-500' : 'bg-surface border border-border'}`}
+          >
+            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${settings.strictPrivacyMode ? 'translate-x-6' : 'translate-x-0'}`} />
+          </button>
+        </div>
+
         {/* Resize Controls */}
         <div className="space-y-3 pt-2 border-t border-border/50">
           <div className="flex items-center justify-between">

@@ -172,6 +172,13 @@ export interface WorkerAPI {
   ): Promise<{ hex: string; base64: string }>;
 
   // PDF Tasks
+  exportPdfEditor(
+    file: ArrayBuffer,
+    pagesState: any[],
+    annotations: any[],
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
   getPdfPageCount(file: ArrayBuffer): Promise<number>;
 
   rotatePdf(
@@ -205,6 +212,7 @@ export interface WorkerAPI {
 
   compressPdf(
     file: ArrayBuffer,
+    level: 'low' | 'medium' | 'high',
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 

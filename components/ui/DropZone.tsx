@@ -160,6 +160,8 @@ export function DropZone({
           onChange={(e) => {
             if (e.target.files && e.target.files.length > 0) {
               handleFiles(e.target.files);
+              // Reset input value so re-selecting the same file triggers onChange again
+              e.target.value = "";
             }
           }}
         />

@@ -26,7 +26,6 @@ export interface SettingsState {
   appearance: AppearanceSettings;
   accessibility: AccessibilitySettings;
   privacy: PrivacySettings;
-  adsConsent: boolean;
   focusMode: {
     autoHideToolbar: boolean;
     defaultFontSize: number;

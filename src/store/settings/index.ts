@@ -20,7 +20,6 @@ export const initialSettings = {
     telemetryEnabled: false,
     historyEnabled: true,
   } as PrivacySettings,
-  adsConsent: false,
   focusMode: {
     autoHideToolbar: false,
     defaultFontSize: 14,

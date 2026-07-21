@@ -82,23 +82,32 @@ export const SingleMode: React.FC = () => {
             
             <AdvancedSettings itemId={activeItem ? activeItem.id : undefined} />
 
-            <button
-              onClick={() => activeItem && compressItem(activeItem.id)}
-              disabled={!activeItem || activeItem.status === 'processing'}
-              className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-102 active:scale-98 transition-all shadow-lg shadow-blue/20 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
-            >
-              {activeItem?.status === 'processing' ? (
-                <>
-                  <Loader2 className="animate-spin" size={18} />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Zap size={18} />
-                  Compress Now
-                </>
-              )}
-            </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={() => useImageCompressStore.getState().clearFiles()}
+                className="w-full py-4 bg-surface border border-border text-red-500 font-bold uppercase tracking-widest rounded-2xl hover:border-red-500/50 hover:bg-red-500/5 active:scale-98 transition-all flex items-center justify-center gap-2"
+              >
+                Clear Image
+              </button>
+
+              <button
+                onClick={() => activeItem && compressItem(activeItem.id)}
+                disabled={!activeItem || activeItem.status === 'processing'}
+                className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:scale-102 active:scale-98 transition-all shadow-lg shadow-blue/20 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+              >
+                {activeItem?.status === 'processing' ? (
+                  <>
+                    <Loader2 className="animate-spin" size={18} />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Zap size={18} />
+                    Compress Now
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

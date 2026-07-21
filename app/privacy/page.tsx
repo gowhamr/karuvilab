@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | KaruviLab",
-  description: "Learn how KaruviLab protects your data. Discover our local-first, zero-upload processing philosophy and how we comply with GDPR, CCPA, and AdSense requirements.",
+  description: "Learn how KaruviLab protects your data. Discover our local-first, zero-upload processing philosophy and how we comply with GDPR and CCPA privacy standards.",
 };
 
 export default function PrivacyPolicy() {
@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
 
       <section className="space-y-4 text-text-2 leading-relaxed">
         <h2 className="text-2xl font-black text-text">3. Information We Collect</h2>
-        <p>While your tool data remains entirely on your device, we do collect limited, non-personally identifiable information to keep the website functional and secure:</p>
+        <p>While your tool data remains entirely on your device, we collect limited, non-personally identifiable information to keep the website functional and secure:</p>
         <ul className="list-disc pl-6 space-y-2">
           <li><strong>Technical Data:</strong> Browser type, operating system, network status, and general device information.</li>
           <li><strong>Analytics Data:</strong> Aggregated, anonymized data regarding page views, tool usage frequency, and error reports to help us improve performance.</li>
@@ -44,45 +44,42 @@ export default function PrivacyPolicy() {
       </section>
 
       <section className="space-y-4 text-text-2 leading-relaxed">
-        <h2 className="text-2xl font-black text-text">4. Cookies and Advertising (Google AdSense)</h2>
-        <p>KaruviLab uses cookies to enhance your experience, monitor website performance, and serve advertisements. We partner with third-party advertising networks, including Google AdSense, to display ads.</p>
+        <h2 className="text-2xl font-black text-text">4. Browser Storage and Local Data Scope</h2>
+        <p>KaruviLab operates as an ad-free, local-first platform. We do not use third-party advertising cookies, do not track your browsing history across external websites, and do not serve advertisements.</p>
         <ul className="list-disc pl-6 space-y-2">
-          <li><strong>Google AdSense:</strong> Third-party vendors, including Google, use cookies to serve ads based on your prior visits to our website or other websites.</li>
-          <li><strong>Personalized Ads:</strong> Google's use of advertising cookies enables it and its partners to serve ads based on your internet browsing history.</li>
-          <li><strong>Opt-Out:</strong> You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-blue hover:underline">Google Ads Settings</a> or <a href="https://optout.networkadvertising.org" target="_blank" rel="noopener noreferrer" className="text-blue hover:underline">www.aboutads.info</a>.</li>
+          <li><strong>Zero Advertising Trackers:</strong> We do not partner with advertising networks or deploy third-party advertising cookies.</li>
+          <li><strong>No Data Selling or Sharing:</strong> Your file content, tool inputs, and usage behaviors are never monetized, rented, or shared with third parties.</li>
+          <li><strong>Local Storage Scope:</strong> We use your browser's native LocalStorage and IndexedDB strictly on your device to store your app settings (theme, font scaling), starred favorites, saved tool states (such as Notes drafts, calculator scenarios, custom templates, and color palettes), and game high scores. All stored data physically remains on your device.</li>
         </ul>
       </section>
 
       <section className="space-y-4 text-text-2 leading-relaxed">
-        <h2 className="text-2xl font-black text-text">5. Third-Party Services</h2>
-        <p>To provide a robust platform, we utilize a few trusted third-party services:</p>
+        <h2 className="text-2xl font-black text-text">5. Third-Party Infrastructure Services</h2>
+        <p>To deliver a fast, reliable, and secure platform, we utilize essential infrastructure providers:</p>
         <ul className="list-disc pl-6 space-y-2">
-          <li><strong>Vercel Analytics:</strong> Used for tracking page load speeds and core web vitals anonymously.</li>
-          <li><strong>Cloudflare / Vercel:</strong> Used for hosting and content delivery network (CDN) routing.</li>
-          <li><strong>Google AdSense:</strong> Used for serving relevant advertisements.</li>
+          <li><strong>Vercel Speed Insights & Analytics:</strong> Used strictly for measuring aggregate performance and Core Web Vitals anonymously, without collecting personally identifiable information.</li>
+          <li><strong>Vercel / Cloudflare:</strong> Used for global hosting, static asset delivery, and DDoS mitigation.</li>
         </ul>
-        <p>These services operate under their respective privacy policies and are bound by stringent data protection laws.</p>
+        <p>These infrastructure providers operate under strict security standards and do not have access to your client-side processed files or tool data.</p>
       </section>
 
       <section className="space-y-4 text-text-2 leading-relaxed">
-        <h2 className="text-2xl font-black text-text">6. Data Retention and Local Storage</h2>
+        <h2 className="text-2xl font-black text-text">6. Data Retention and Local Storage Controls</h2>
         <p>
-          KaruviLab utilizes your browser's LocalStorage and IndexedDB to save your settings (e.g., dark mode preferences) 
-          and preserve the state of tools (e.g., your saved EMI calculator scenarios). 
-          <strong>This data never leaves your device.</strong> You can delete it at any time by utilizing the "Factory Reset App" 
-          feature in the KaruviLab Settings menu, or by clearing your browser cache. Emails sent to support are retained only as long as necessary to resolve the inquiry.
+          KaruviLab utilizes your browser's LocalStorage and IndexedDB to save your settings, tool drafts, calculator scenarios, and local history. 
+          <strong>This data never leaves your device.</strong> You can manage or delete your local data at any time using the <strong>"Clear All Tool Data"</strong> control (to wipe tool drafts, history, and cached scenarios while retaining app settings) or the <strong>"Factory Reset App"</strong> control (to perform a complete wipe of all local storage, settings, favorites, and cached assets) in the KaruviLab Settings menu under Data Management, or by clearing your browser cache. Emails sent to support are retained only as long as necessary to resolve the inquiry.
         </p>
       </section>
 
       <section className="space-y-4 text-text-2 leading-relaxed">
-        <h2 className="text-2xl font-black text-text">7. Your User Rights (GDPR & CCPA Compliance)</h2>
-        <p>Depending on your region, you have the following rights regarding any data we may possess:</p>
+        <h2 className="text-2xl font-black text-text">7. Your Privacy Rights (GDPR & CCPA Compliance)</h2>
+        <p>Under global data protection laws (including GDPR and CCPA), KaruviLab enforces privacy by design. Because we do not collect personal profiles, harvest file data, or share data with ad brokers, your privacy rights are natively respected:</p>
         <ul className="list-disc pl-6 space-y-2">
-          <li><strong>Right to Access & Portability:</strong> You may request a record of any personal data we hold about you.</li>
-          <li><strong>Right to Erasure (Right to be Forgotten):</strong> You may request that we delete your contact emails or any server-side logs containing your IP address.</li>
-          <li><strong>Right to Restrict Processing:</strong> You may decline advertising cookies via our cookie consent banner.</li>
+          <li><strong>No Personal Data Sale or Sharing:</strong> KaruviLab does not "sell" or "share" personal information or browsing history under CCPA/CPRA definitions.</li>
+          <li><strong>Right to Erasure & Data Control:</strong> You maintain 100% ownership of all local data. You can erase all saved tool settings, drafts, and local history at any time using "Clear All Tool Data" or "Factory Reset App" in Settings, or by clearing browser storage.</li>
+          <li><strong>Right to Access:</strong> You may request information regarding any support communications or non-identifiable technical logs by contacting our privacy team.</li>
         </ul>
-        <p>Because core tool data is never transmitted to us, you already maintain complete ownership and control over your files and inputs. To exercise any regional rights regarding analytics or contact data, please email us.</p>
+        <p>Because core tool data never leaves your device, you already maintain complete ownership and control over your files and inputs.</p>
       </section>
 
       <section className="space-y-4 text-text-2 leading-relaxed">

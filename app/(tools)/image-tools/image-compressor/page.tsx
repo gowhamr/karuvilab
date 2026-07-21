@@ -18,7 +18,7 @@ export default function ImageCompressorPage() {
       category={cat}
       toolId={toolId}
       content={{
-        detailedDescription: "Professional-grade image optimization suite. Lossless compression, batch processing, and format conversion — all 100% private in your browser. All image processing happens entirely within your browser using Web Workers and OffscreenCanvas. No image data is ever uploaded to our servers. Your privacy is 100% guaranteed as everything stays local to your device.",
+        detailedDescription: "Professional-grade image optimization suite. Lossless compression, batch processing, and format conversion — all 100% private in your browser. All image processing happens entirely within your browser using Web Workers and OffscreenCanvas. No image data is ever uploaded to our servers. Zero-Disk Architecture ensures images are processed exclusively in browser memory and never uploaded. References are cleared immediately on removal, though JavaScript cannot guarantee instant physical memory erasure — full clearing depends on the browser's garbage collector.",
         useCases: [
           "Optimizing website assets for faster load times",
           "Reducing attachment sizes for emails and messaging",
@@ -36,7 +36,7 @@ export default function ImageCompressorPage() {
         faq: [
           {
             question: "How does your image compressor protect my privacy?",
-            answer: "All image processing happens entirely within your browser using Web Workers and OffscreenCanvas. No image data is ever uploaded to our servers. Your privacy is 100% guaranteed as everything stays local to your device."
+            answer: "We use a Zero-Disk Architecture: Images are processed exclusively in browser memory and never uploaded. References are cleared immediately on removal, though JavaScript cannot guarantee instant physical memory erasure — full clearing depends on the browser's garbage collector."
           },
           {
             question: "What’s the difference between lossy and lossless compression?",

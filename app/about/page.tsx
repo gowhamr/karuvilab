@@ -73,8 +73,7 @@ export default function AboutUs() {
       <section className="space-y-4 text-text-2 leading-relaxed">
         <h2 className="text-2xl font-black text-text">Commitment to Transparency</h2>
         <p>
-          We are committed to operating transparently. We monetize the platform through non-intrusive advertisements (Google AdSense) 
-          to keep the tools 100% free for everyone, without resorting to data harvesting.
+          We are committed to operating transparently. KaruviLab is completely ad-free and free for everyone. We do not engage in data harvesting, user tracking, or document collection.
         </p>
         <p>
           Welcome to the future of web utilities. Fast, free, and fiercely private.

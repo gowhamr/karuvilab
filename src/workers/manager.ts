@@ -70,6 +70,16 @@ class WorkerManager {
     return workerOrchestrator.run("getPdfPageCount", [file]);
   }
 
+  async exportPdfEditor(
+    file: ArrayBuffer,
+    pagesState: any[],
+    annotations: any[],
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("exportPdfEditor", [file, pagesState, annotations], [file], onProgress, abortSignal, true, 2);
+  }
+
   async rotatePdf(
     file: ArrayBuffer,
     rotateAll: boolean,
@@ -113,10 +123,11 @@ class WorkerManager {
 
   async compressPdf(
     file: ArrayBuffer,
+    level: 'low' | 'medium' | 'high' = 'medium',
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("compressPdf", [file], [file], onProgress, abortSignal, true, 2);
+    return workerOrchestrator.run("compressPdf", [file, level], [file], onProgress, abortSignal, true, 2);
   }
 
   async splitPdf(

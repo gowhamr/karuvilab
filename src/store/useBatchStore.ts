@@ -28,6 +28,7 @@ export const EMPTY_BATCH_ITEMS: BatchItem[] = [];
 
 interface BatchState {
   items: Record<string, BatchItem[]>; // toolId -> items
+  _processingLocks: Record<string, boolean>; // toolId -> is locked
   addItems: (toolId: string, files: File[]) => void;
   removeItem: (toolId: string, itemId: string) => void;
   clearItems: (toolId: string) => void;
@@ -41,9 +42,21 @@ interface BatchState {
 
 export const useBatchStore = create<BatchState>((set, get) => ({
   items: {},
+  _processingLocks: {},
 
   addItems: (toolId, files) => {
-    const newItems: BatchItem[] = files.map(file => ({
+    const existingItems = get().items[toolId] || [];
+    
+    // Deduplicate: skip files that already exist in the queue (same name + size)
+    const dedupedFiles = files.filter(file => {
+      return !existingItems.some(
+        existing => existing.file.name === file.name && existing.file.size === file.size
+      );
+    });
+
+    if (dedupedFiles.length === 0) return;
+
+    const newItems: BatchItem[] = dedupedFiles.map(file => ({
       id: Math.random().toString(36).substring(7),
       file,
       status: 'pending',
@@ -124,11 +137,20 @@ export const useBatchStore = create<BatchState>((set, get) => ({
   },
 
   startProcessing: async (toolId, processor) => {
+    // Prevent double-execution: if already processing, return immediately
+    if (get()._processingLocks[toolId]) return;
+
     const items = get().items[toolId] || [];
     const pendingItems = items.filter(i => i.status === 'pending' || i.status === 'failed');
 
     if (pendingItems.length === 0) return;
 
+    // Acquire processing lock
+    set(state => ({
+      _processingLocks: { ...state._processingLocks, [toolId]: true },
+    }));
+
+    try {
     const { limitConcurrency } = await import('../lib/concurrency');
     const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const concurrency = isMobile ? 2 : 3;
@@ -184,6 +206,12 @@ export const useBatchStore = create<BatchState>((set, get) => ({
       }));
       
       useWorkflowStore.getState().syncToolOutput(toolId, workflowItems);
+    }
+    } finally {
+      // Always release processing lock
+      set(state => ({
+        _processingLocks: { ...state._processingLocks, [toolId]: false },
+      }));
     }
   },
 }));

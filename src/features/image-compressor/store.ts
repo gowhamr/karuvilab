@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: ImageSettings = {
   resizeHeight: null,
   maintainAspectRatio: true,
   lossless: false,
+  strictPrivacyMode: false,
 };
 
 export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
@@ -70,7 +71,17 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
     }
 
     set((state) => {
-      let combined = ui.activeTab === 'single' ? newItems.slice(-1) : [...state.items, ...newItems];
+      let combined: ImageItem[] = [];
+      if (ui.activeTab === 'single') {
+        // Revoke old items
+        state.items.forEach(item => {
+          if (item.previewUrl) blobManager.revoke(item.previewUrl);
+          if (item.compressedUrl) blobManager.revoke(item.compressedUrl);
+        });
+        combined = newItems.slice(-1);
+      } else {
+        combined = [...state.items, ...newItems];
+      }
       
       // Max active previews: 10
       // If we have more than 10, revoke the older previewUrls
@@ -161,17 +172,31 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
 
     if (result.success && result.data) {
       set((state) => ({
-        items: state.items.map((i) =>
-          i.id === id ? { 
-            ...i, 
-            status: 'completed', 
-            compressedBlob: result.data!.blob, 
-            compressedUrl: result.data!.url, 
-            compressedSize: result.data!.blob.size,
-            progress: 100,
-            error: undefined // Clear error
-          } : i
-        ),
+        items: state.items.map((i) => {
+          if (i.id === id) {
+            let nextItem = { 
+              ...i, 
+              status: 'completed' as const, 
+              compressedBlob: result.data!.blob, 
+              compressedUrl: result.data!.url, 
+              compressedSize: result.data!.blob.size,
+              progress: 100,
+              error: undefined 
+            };
+            
+            // Phase 2: Aggressive Cleanup for Strict Privacy Mode
+            if (nextItem.settings.strictPrivacyMode) {
+              if (nextItem.previewUrl) blobManager.revoke(nextItem.previewUrl);
+              nextItem.previewUrl = '';
+              nextItem.originalDropped = true;
+              // Nullify file reference to allow garbage collection of the original blob, but keep name and type
+              nextItem.file = new File([], nextItem.file.name, { type: nextItem.file.type });
+            }
+            
+            return nextItem;
+          }
+          return i;
+        }),
       }));
     } else {
       set((state) => ({
@@ -207,7 +232,18 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
       const files: Record<string, Blob> = {};
       completed.forEach(item => {
         const ext = item.settings.format.split('/')[1];
-        const name = item.file.name.replace(/\.[^.]+$/, '') + `_compressed.${ext}`;
+        let name = item.file.name.replace(/\.[^.]+$/, '') + `_compressed.${ext}`;
+        
+        // Handle name collisions
+        if (files[name]) {
+          let counter = 1;
+          const baseName = item.file.name.replace(/\.[^.]+$/, '');
+          while (files[`${baseName}_compressed(${counter}).${ext}`]) {
+            counter++;
+          }
+          name = `${baseName}_compressed(${counter}).${ext}`;
+        }
+        
         files[name] = item.compressedBlob!;
       });
 

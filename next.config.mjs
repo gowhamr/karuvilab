@@ -19,11 +19,11 @@ const nextConfig = {
     async headers() {
       const cspHeader = `
         default-src 'self';
-        script-src 'self' 'unsafe-eval' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com;
+        script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com;
         style-src 'self' 'unsafe-inline';
-        img-src 'self' data: blob: https://pagead2.googlesyndication.com;
+        img-src 'self' data: blob:;
         worker-src 'self' blob: https://unpkg.com;
-        connect-src 'self' https://pagead2.googlesyndication.com https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev;
+        connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev;
         object-src 'none';
         frame-ancestors 'self';
         base-uri 'self';

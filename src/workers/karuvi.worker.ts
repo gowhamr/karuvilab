@@ -166,6 +166,136 @@ const api: WorkerAPI = {
     return result;
   },
 
+  async exportPdfEditor(file: ArrayBuffer, pagesState: any[], annotations: any[], onProgress?: any) {
+    const { PDFDocument, rgb, degrees, StandardFonts } = await import("pdf-lib");
+    if (onProgress) onProgress({ percent: 10, message: "Loading original PDF..." });
+    const srcDoc = await PDFDocument.load(file);
+    const newDoc = await PDFDocument.create();
+
+    if (onProgress) onProgress({ percent: 30, message: "Structuring pages..." });
+    const originalIndices = pagesState.map(p => p.originalIndex - 1);
+    const copiedPages = await newDoc.copyPages(srcDoc, originalIndices);
+    
+    copiedPages.forEach((page, i) => {
+      const state = pagesState[i];
+      if (state.rotation) {
+        page.setRotation(degrees((page.getRotation().angle + state.rotation) % 360));
+      }
+      newDoc.addPage(page);
+    });
+
+    if (onProgress) onProgress({ percent: 60, message: "Applying annotations..." });
+    const hexToRgb = (hex: string) => {
+      const r = parseInt(hex.slice(1, 3), 16) / 255;
+      const g = parseInt(hex.slice(3, 5), 16) / 255;
+      const b = parseInt(hex.slice(5, 7), 16) / 255;
+      return { r, g, b };
+    };
+
+    const embeddedImages: Record<string, any> = {};
+
+    for (const ann of annotations) {
+      const newPageIndex = pagesState.findIndex(p => p.originalIndex === ann.pageIndex);
+      if (newPageIndex === -1) continue;
+
+      const page = newDoc.getPage(newPageIndex);
+      const { width: origW, height: origH } = page.getSize();
+      const pageRotation = page.getRotation().angle % 360;
+
+      const VW = (pageRotation === 90 || pageRotation === 270) ? origH : origW;
+      const VH = (pageRotation === 90 || pageRotation === 270) ? origW : origH;
+
+      const px = (ann.x / 100) * VW;
+      const py = (ann.y / 100) * VH;
+      
+      const getOriginalCoords = (vx: number, vy: number) => {
+        if (pageRotation === 0) return { x: vx, y: origH - vy };
+        if (pageRotation === 90) return { x: origW - vy, y: vx };
+        if (pageRotation === 180) return { x: origW - vx, y: vy };
+        if (pageRotation === 270) return { x: vy, y: origH - vx };
+        return { x: vx, y: origH - vy };
+      };
+
+      if (ann.type === 'blackout') {
+        const pw = (ann.width / 100) * VW;
+        const ph = (ann.height / 100) * VH;
+        const pt = getOriginalCoords(px, py + ph);
+        page.drawRectangle({
+          x: pt.x, y: pt.y,
+          width: pw, height: ph,
+          color: rgb(0, 0, 0),
+          rotate: degrees(360 - pageRotation)
+        });
+      } else if (ann.type === 'image') {
+        const pw = (ann.width / 100) * VW;
+        const ph = (ann.height / 100) * VH;
+        const pt = getOriginalCoords(px, py + ph);
+        
+        let img = embeddedImages[ann.dataUrl];
+        if (!img) {
+          const res = await fetch(ann.dataUrl);
+          const buf = await res.arrayBuffer();
+          if (ann.dataUrl.includes('image/png')) img = await newDoc.embedPng(buf);
+          else img = await newDoc.embedJpg(buf);
+          embeddedImages[ann.dataUrl] = img;
+        }
+
+        page.drawImage(img, {
+          x: pt.x, y: pt.y,
+          width: pw, height: ph,
+          rotate: degrees(360 - pageRotation)
+        });
+      } else if (ann.type === 'shape') {
+        const pw = (ann.width / 100) * VW;
+        const ph = (ann.height / 100) * VH;
+        const pt = getOriginalCoords(px, py + ph);
+        const { r, g, b } = hexToRgb(ann.color || '#000000');
+        
+        const opts: any = {
+          x: pt.x, y: pt.y, width: pw, height: ph, rotate: degrees(360 - pageRotation),
+          borderWidth: ann.strokeWidth || 0,
+          borderColor: rgb(r, g, b)
+        };
+        if (ann.fill && ann.fill !== 'transparent') {
+          const fillCol = hexToRgb(ann.fill);
+          opts.color = rgb(fillCol.r, fillCol.g, fillCol.b);
+        }
+        page.drawRectangle(opts);
+      } else if (ann.type === 'text') {
+        const font = await newDoc.embedFont(StandardFonts.Helvetica);
+        const fontSize = 16;
+        const pt = getOriginalCoords(px, py + fontSize);
+        const { r, g, b } = hexToRgb(ann.color || '#000000');
+        page.drawText(ann.content || '', {
+          x: pt.x, y: pt.y,
+          font, size: fontSize, color: rgb(r, g, b),
+          rotate: degrees(360 - pageRotation)
+        });
+      } else if (ann.type === 'draw') {
+        const { r, g, b } = hexToRgb(ann.color || '#EF4444');
+        if (ann.points && ann.points.length > 1) {
+          for (let i = 1; i < ann.points.length; i++) {
+            const p1 = ann.points[i-1];
+            const p2 = ann.points[i];
+            const px1 = (p1.x / 100) * VW, py1 = (p1.y / 100) * VH;
+            const px2 = (p2.x / 100) * VW, py2 = (p2.y / 100) * VH;
+            const pt1 = getOriginalCoords(px1, py1);
+            const pt2 = getOriginalCoords(px2, py2);
+            page.drawLine({
+              start: pt1, end: pt2,
+              thickness: ann.strokeWidth || 3,
+              color: rgb(r, g, b)
+            });
+          }
+        }
+      }
+    }
+
+    if (onProgress) onProgress({ percent: 90, message: "Saving flattened PDF..." });
+    const outBytes = await newDoc.save();
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
+  },
+
   async getPdfPageCount(file: any) {
     const { PDFDocument } = await import("pdf-lib");
     const doc = await PDFDocument.load(file);
@@ -395,13 +525,63 @@ const api: WorkerAPI = {
     const _arr = new Uint8Array(result); return Comlink.transfer(_arr, [_arr.buffer]);
   },
 
-  async compressPdf(file: ArrayBuffer, onProgress?: ProgressCallback): Promise<Uint8Array> {
+  async compressPdf(file: ArrayBuffer, level: 'low' | 'medium' | 'high' = 'medium', onProgress?: ProgressCallback): Promise<Uint8Array> {
     if (onProgress) onProgress({ percent: 10, message: "Loading PDF..." });
     const { PDFDocument } = await import("pdf-lib");
-    const doc = await PDFDocument.load(file, { updateMetadata: false });
+
+    const loadOptions: any = {};
+
+    // For 'high' compression, strip metadata
+    if (level === 'high') {
+      loadOptions.updateMetadata = false;
+    }
+
+    const doc = await PDFDocument.load(file, loadOptions);
     
-    if (onProgress) onProgress({ percent: 50, message: "Optimizing structure..." });
-    const outBytes = await doc.save({ useObjectStreams: true });
+    if (onProgress) onProgress({ percent: 30, message: "Analyzing structure..." });
+
+    // For medium and high: strip metadata fields
+    if (level === 'medium' || level === 'high') {
+      doc.setTitle('');
+      doc.setAuthor('');
+      doc.setSubject('');
+      doc.setKeywords([]);
+      doc.setCreator('');
+      doc.setProducer('');
+    }
+
+    if (onProgress) onProgress({ percent: 50, message: `Optimizing (${level} compression)...` });
+
+    // For high compression: attempt to remove unused objects by re-serializing
+    // pdf-lib's save with useObjectStreams packs cross-ref and object data more efficiently
+    const saveOptions: any = {};
+    
+    if (level === 'medium' || level === 'high') {
+      saveOptions.useObjectStreams = true;
+    }
+
+    // For high compression: re-encode through a copy to strip orphaned objects
+    if (level === 'high') {
+      if (onProgress) onProgress({ percent: 60, message: "Deep optimization — removing orphaned objects..." });
+      const intermediateBytes = await doc.save(saveOptions);
+      
+      // Re-load and re-save to strip any orphaned references
+      const doc2 = await PDFDocument.load(intermediateBytes, { updateMetadata: false });
+      doc2.setTitle('');
+      doc2.setAuthor('');
+      doc2.setSubject('');
+      doc2.setKeywords([]);
+      doc2.setCreator('');
+      doc2.setProducer('');
+      
+      if (onProgress) onProgress({ percent: 80, message: "Saving optimized PDF..." });
+      const outBytes = await doc2.save({ useObjectStreams: true });
+      if (onProgress) onProgress({ percent: 100, message: "Done!" });
+      return Comlink.transfer(outBytes, [outBytes.buffer]);
+    }
+
+    if (onProgress) onProgress({ percent: 80, message: "Saving optimized PDF..." });
+    const outBytes = await doc.save(saveOptions);
     
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return Comlink.transfer(outBytes, [outBytes.buffer]);
@@ -1084,7 +1264,7 @@ const api: WorkerAPI = {
 
   async extractImagesFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
-    const workerUrl = 'https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs';
+    const workerUrl = typeof location !== 'undefined' ? location.origin + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs';
     if (pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
     } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
@@ -1154,7 +1334,7 @@ const api: WorkerAPI = {
 
   async extractTextFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
-    const workerUrl = 'https://unpkg.com/pdfjs-dist@5.4.149/build/pdf.worker.min.mjs';
+    const workerUrl = typeof location !== 'undefined' ? location.origin + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs';
     if (pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
     } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {

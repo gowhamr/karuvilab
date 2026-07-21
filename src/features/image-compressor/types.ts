@@ -11,6 +11,7 @@ export interface ImageSettings {
   resizeHeight: number | null;
   maintainAspectRatio: boolean;
   lossless: boolean;
+  strictPrivacyMode: boolean;
 }
 
 export type ItemStatus = 'idle' | 'processing' | 'completed' | 'error';
@@ -28,6 +29,7 @@ export interface ImageItem {
   settings: ImageSettings;
   error?: string | undefined;
   dimensions?: { width: number; height: number } | undefined;
+  originalDropped?: boolean;
 }
 
 export interface UIState {

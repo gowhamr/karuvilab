@@ -1,6 +1,5 @@
 // @ts-ignore
 import nspell from 'nspell';
-const dictionaryEn = require('dictionary-en');
 import nlp from 'compromise';
 import { syllable } from 'syllable';
 
@@ -9,13 +8,18 @@ let spellchecker: nspell | null = null;
 async function loadSpellchecker() {
   if (spellchecker) return spellchecker;
   
-  return new Promise<nspell>((resolve, reject) => {
-    dictionaryEn((err: any, dict: any) => {
-      if (err) return reject(err);
-      spellchecker = nspell(dict.aff, dict.dic);
-      resolve(spellchecker);
-    });
-  });
+  const affRes = await fetch('/lib/dictionary/en.aff');
+  const dicRes = await fetch('/lib/dictionary/en.dic');
+  
+  if (!affRes.ok || !dicRes.ok) {
+    throw new Error('Failed to load spellchecker dictionaries');
+  }
+
+  const aff = await affRes.text();
+  const dic = await dicRes.text();
+  
+  spellchecker = nspell(aff, dic);
+  return spellchecker;
 }
 
 export async function runGrammarCheck(text: string, ignoredWords: string[] = [], tone: string = 'standard', onProgress?: any) {
