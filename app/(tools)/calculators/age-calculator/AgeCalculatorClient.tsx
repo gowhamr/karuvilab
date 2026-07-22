@@ -1,43 +1,32 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { ToolInput } from "@/components/ui/ToolInput";
+import { HybridDateInput } from "@/components/ui/HybridDateInput";
 import { useUrlState } from "@/src/hooks/useUrlState";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
 
+function todayISO(): string {
+  return new Date().toISOString().split('T')[0]!;
+}
+
 export default function AgeCalculatorClient() {
   const { state, setState, shareUrl, hasParams } = useUrlState({
-    defaults: { dob: '1995-01-01', ref: '' },
+    defaults: { dob: '1995-01-01', ref: todayISO() },
     debounceMs: 400,
   });
 
   const dob = state.dob as string;
+  const asOf = (state.ref as string) || todayISO();
   const [isQrOpen, setIsQrOpen] = useState(false);
-  const didInit = useRef(false);
 
   const setDob = useCallback((v: string) => setState({ dob: v }), [setState]);
   const setAsOf = useCallback((v: string) => setState({ ref: v }), [setState]);
 
-  // When ref is empty, use today's date — runs once on mount using a ref guard
-  const refEmpty = !(state.ref as string);
-  useEffect(() => {
-    if (didInit.current) return;
-    if (refEmpty) {
-      didInit.current = true;
-      setState({ ref: new Date().toISOString().split('T')[0]! });
-    } else {
-      didInit.current = true;
-    }
-  }, [refEmpty, setState]);
-
-  // asOf is the ref param or empty string (will be set by above effect)
-  const asOf = (state.ref as string) || '';
-
   const result = useMemo(() => {
-    if (!asOf) return null;
+    if (!asOf || !dob) return null;
 
     const d1 = new Date(dob);
     const d2 = new Date(asOf);
@@ -80,17 +69,21 @@ export default function AgeCalculatorClient() {
 
       <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ToolInput
+          <HybridDateInput
             label="Date of Birth"
-            type="date"
             value={dob}
             onChange={setDob}
+            max={asOf}
+            description="DD / MM / YYYY"
+            id="age-calc-dob"
           />
-          <ToolInput
+          <HybridDateInput
             label="Calculate As Of"
-            type="date"
             value={asOf}
             onChange={setAsOf}
+            max={todayISO()}
+            description="DD / MM / YYYY"
+            id="age-calc-asof"
           />
         </div>
       </div>
