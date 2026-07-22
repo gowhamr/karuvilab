@@ -5,7 +5,8 @@ export const metaTags: ToolEntry = {
   "name": "Meta Tags",
   "desc": "Generate and preview HTML meta tags to optimize website social sharing.",
   "href": "seo-tools/meta-tags/",
-  "category": "seo",
+  "category": "developer",
+  "subCategory": "SEO Tools",
   "icon": null,
   "color": null,
   "featured": false,
@@ -19,6 +20,5 @@ export const metaTags: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
   "requiresNetwork": false
 };

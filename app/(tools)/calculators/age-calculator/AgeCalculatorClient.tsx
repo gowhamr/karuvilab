@@ -79,7 +79,7 @@ export default function AgeCalculatorClient() {
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
 
       <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ToolInput
             label="Date of Birth"
             type="date"
@@ -104,18 +104,20 @@ export default function AgeCalculatorClient() {
               onQrClick={() => setIsQrOpen(true)}
             />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <MetricCard 
-              label="Exact Age" 
-              value={`${result.years} yr ${result.months} mo ${result.days} d`} 
-              accent 
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-3">
+              <MetricCard 
+                label="Exact Age" 
+                value={`${result.years} Years, ${result.months} Months, ${result.days} Days`} 
+                accent 
+              />
+            </div>
             <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
-            <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
             <MetricCard 
               label="Total Weeks" 
               value={result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} 
             />
+            <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
           </div>
         </>
       )}

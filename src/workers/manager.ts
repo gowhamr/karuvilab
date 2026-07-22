@@ -186,13 +186,14 @@ class WorkerManager {
   }
 
   async compressImage(
-    file: ArrayBuffer, 
-    format: "image/jpeg" | "image/png" | "image/webp" | "image/avif" | "image/bmp",
+    file: ArrayBuffer,
+    mimeType: string,
+    format: string,
     quality: number,
-    onProgress?: ProgressCallback,
+    onProgress?: (p: any) => void,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("compressImage", [file, format, quality], [file], onProgress, abortSignal, true, 2);
+    return workerOrchestrator.run("compressImage", [file, mimeType, format, quality], [file], onProgress, abortSignal, true, 2);
   }
 
   async resizeImage(

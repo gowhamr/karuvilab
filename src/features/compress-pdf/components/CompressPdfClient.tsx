@@ -92,6 +92,15 @@ export default function CompressPdfClient() {
     <div className="space-y-8">
       <PrivacyBadge message="Local processing – No files uploaded to servers" />
 
+      <DropZone
+        onFilesSelected={handleFiles}
+        accept=".pdf,application/pdf"
+        multiple
+        title="Drop PDF files here"
+        description="Supports multiple PDFs up to 100MB"
+        icon={<div className="text-4xl">📄</div>}
+      />
+
       {/* Compression Level Selector */}
       <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">
         <div className="space-y-1">
@@ -152,15 +161,6 @@ export default function CompressPdfClient() {
         <strong>Note:</strong> Browser-based PDF compression re-encodes the PDF structure. Results vary — PDFs with large embedded images may not compress significantly without image re-encoding.
       </div>
 
-      <DropZone
-        onFilesSelected={handleFiles}
-        accept=".pdf,application/pdf"
-        multiple
-        title="Drop PDF files here"
-        description="Supports multiple PDFs up to 100MB"
-        icon={<div className="text-4xl">📄</div>}
-      />
-
       <BatchQueue 
         toolId={toolId}
         isProcessing={isProcessing}
@@ -175,11 +175,11 @@ export default function CompressPdfClient() {
           </div>
           <h3 className="text-xl font-black text-text tracking-tight mb-2">Waiting for PDFs</h3>
           <p className="text-sm text-text-4 font-medium max-w-md">
-            Drop one or more PDF files above to begin compression. Select your desired compression level first.
+            Drop one or more PDF files above, then select your desired compression level.
           </p>
           <div className="flex flex-wrap gap-2 mt-6 text-xs font-bold text-text-4 uppercase tracking-widest">
-            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">1. Choose level</span>
-            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">2. Drop PDFs</span>
+            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">1. Drop PDFs</span>
+            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">2. Choose level</span>
             <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">3. Execute</span>
             <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">4. Download</span>
           </div>

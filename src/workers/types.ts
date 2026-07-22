@@ -257,8 +257,9 @@ export interface WorkerAPI {
 
   // Image Tasks (Standard)
   compressImage(
-    file: ArrayBuffer, 
-    format: "image/jpeg" | "image/png" | "image/webp" | "image/avif" | "image/bmp",
+    file: ArrayBuffer,
+    mimeType: string,
+    format: string,
     quality: number,
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
@@ -282,8 +283,9 @@ export interface WorkerAPI {
   // Image Tasks (Specialized Batch)
   compressImageBatch(
     file: ArrayBuffer,
+    mimeType: string,
     settings: CompressionSettings,
-    onProgress?: ProgressCallback
+    onProgress?: (p: any) => void
   ): Promise<Uint8Array>;
 
   extractColorPalette(

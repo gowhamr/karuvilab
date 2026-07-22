@@ -5,7 +5,8 @@ export const robotsTxt: ToolEntry = {
   "name": "Robots Txt",
   "desc": "Generate and validate robots.txt configurations for SEO crawlers.",
   "href": "seo-tools/robots-txt/",
-  "category": "seo",
+  "category": "developer",
+  "subCategory": "SEO Tools",
   "icon": null,
   "color": null,
   "featured": false,
@@ -19,6 +20,5 @@ export const robotsTxt: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
   "requiresNetwork": false
 };

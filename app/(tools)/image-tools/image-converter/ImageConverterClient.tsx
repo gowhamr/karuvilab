@@ -41,6 +41,7 @@ export default function ImageConverterClient() {
       // I'll stick to compressImage but with the current settings.
       const resultBytes = await workerManager.compressImage(
         buffer,
+        item.file.type,
         targetFmt,
         quality,
         (p) => {

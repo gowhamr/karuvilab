@@ -4,11 +4,12 @@ import { workerOrchestrator } from "../engine/workers/WorkerOrchestrator";
 class BatchCoordinator {
   enqueue(
     file: ArrayBuffer,
+    mimeType: string,
     settings: CompressionSettings,
     onProgress?: (p: TaskProgress) => void,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("compressImageBatch", [file, settings], [file], onProgress, abortSignal);
+    return workerOrchestrator.run("compressImageBatch", [file, mimeType, settings], [file], onProgress, abortSignal);
   }
 
   terminateAll() {

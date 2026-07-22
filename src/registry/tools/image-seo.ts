@@ -5,7 +5,8 @@ export const imageSeo: ToolEntry = {
   "name": "Image Seo",
   "desc": "Optimize image file names and alt attributes to rank higher on search engines.",
   "href": "seo-tools/image-seo/",
-  "category": "seo",
+  "category": "developer",
+  "subCategory": "SEO Tools",
   "icon": null,
   "color": null,
   "featured": false,
@@ -19,6 +20,5 @@ export const imageSeo: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
   "requiresNetwork": false
 };

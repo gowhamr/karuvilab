@@ -32,10 +32,10 @@ const api = {
   
   // PDF Tasks (with memory optimization)
   // Image Tasks (Standard)
-  async compressImage(file: ArrayBuffer, format: any, quality: any, onProgress: any) {
+  async compressImage(file: ArrayBuffer, mimeType: string, format: any, quality: any, onProgress: any) {
     let imgBitmap: ImageBitmap | null = null;
     try {
-      const blob = new Blob([file]);
+      const blob = new Blob([file], { type: mimeType });
       imgBitmap = await createImageBitmap(blob);
       
       const width = Math.max(1, imgBitmap.width);
@@ -175,11 +175,12 @@ const api = {
     }
   },
 
-  async compressImageBatch(file: ArrayBuffer, settings: CompressionSettings, onProgress: any) {
+  // Image Tasks (Batch specialized)
+  async compressImageBatch(file: ArrayBuffer, mimeType: string, settings: CompressionSettings, onProgress: any) {
     let imgBitmap: ImageBitmap | null = null;
     try {
       if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
-      const blob = new Blob([file]);
+      const blob = new Blob([file], { type: mimeType });
       
       try {
         imgBitmap = await createImageBitmap(blob);

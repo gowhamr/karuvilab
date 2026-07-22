@@ -185,7 +185,7 @@ export default function WatermarkPdfClient() {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {watermarkType === "text" && (
                 <div className="space-y-1">
                   <label htmlFor={colorId} className="text-sm font-medium">Color</label>

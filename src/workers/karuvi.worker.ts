@@ -663,10 +663,10 @@ const api: WorkerAPI = {
   },
 
   // Image Tasks (Standard)
-  async compressImage(file: ArrayBuffer, format, quality, onProgress) {
+  async compressImage(file: ArrayBuffer, mimeType: string, format, quality, onProgress) {
     let imgBitmap: ImageBitmap | null = null;
     try {
-      const blob = new Blob([file]);
+      const blob = new Blob([file], { type: mimeType });
       imgBitmap = await createImageBitmap(blob);
       
       const width = Math.max(1, imgBitmap.width);
@@ -780,11 +780,11 @@ const api: WorkerAPI = {
   },
 
   // Image Tasks (Batch specialized)
-  async compressImageBatch(file: ArrayBuffer, settings: CompressionSettings, onProgress) {
+  async compressImageBatch(file: ArrayBuffer, mimeType: string, settings: CompressionSettings, onProgress) {
     let imgBitmap: ImageBitmap | null = null;
     try {
       if (onProgress) onProgress({ percent: 10, message: "Decoding image..." });
-      const blob = new Blob([file]);
+      const blob = new Blob([file], { type: mimeType });
       
       // Wrap createImageBitmap in try/catch (IMG-RUNTIME-005)
       try {
@@ -1216,7 +1216,25 @@ const api: WorkerAPI = {
     const margin = 50;
     const maxWidth = width - margin * 2;
     let y = height - margin;
-    const lines = text.split("\n");
+    const uniqueChars = [...new Set(text)].join('');
+    const supportedChars = new Set<string>();
+    for (const char of uniqueChars) {
+      try {
+        timesRomanFont.widthOfTextAtSize(char, 12);
+        supportedChars.add(char);
+      } catch (e) {
+        // ignore
+      }
+    }
+    
+    let cleanText = "";
+    for (const char of text) {
+      if (supportedChars.has(char) || char === '\n' || char === '\r') {
+        cleanText += char;
+      }
+    }
+
+    const lines = cleanText.split("\n");
 
     for (let k = 0; k < lines.length; k++) {
       const line = lines[k]!;
@@ -1329,7 +1347,8 @@ const api: WorkerAPI = {
         }
       }
     }
-    return extracted;
+    const transferList = extracted.map(item => item.arrayBuffer);
+    return Comlink.transfer(extracted, transferList);
   },
 
   async extractTextFromPdf(file, onProgress) {

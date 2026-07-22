@@ -5,7 +5,8 @@ export const emvTlvTree: ToolEntry = {
   "name": "Emv Tlv Tree",
   "desc": "Inspect and parse EMV TLV payment packets for bank transaction analysis.",
   "href": "banking-tools/emv-tlv-tree/",
-  "category": "banking",
+  "category": "developer",
+  "subCategory": "Banking Tools",
   "icon": null,
   "color": null,
   "featured": false,
@@ -19,6 +20,5 @@ export const emvTlvTree: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
   "requiresNetwork": false
 };

@@ -633,7 +633,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Core Banking Parser",
     "desc": "Parse core banking trace logs into JSON",
     "href": "banking-tools/core-banking-parser/",
-    "category": "banking",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -647,7 +647,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Banking Tools",
     "requiresNetwork": false
   },
   {
@@ -988,7 +988,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Emv Tlv Tree",
     "desc": "Inspect and parse EMV TLV payment packets for bank transaction analysis.",
     "href": "banking-tools/emv-tlv-tree/",
-    "category": "banking",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -1002,7 +1002,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Banking Tools",
     "requiresNetwork": false
   },
   {
@@ -1656,7 +1656,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Image Seo",
     "desc": "Optimize image file names and alt attributes to rank higher on search engines.",
     "href": "seo-tools/image-seo/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -1670,7 +1670,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -2161,7 +2161,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Meta Tags",
     "desc": "Generate and preview HTML meta tags to optimize website social sharing.",
     "href": "seo-tools/meta-tags/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -2175,7 +2175,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -2402,7 +2402,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Og Preview",
     "desc": "Preview Open Graph card layouts for social media platforms.",
     "href": "seo-tools/og-preview/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -2416,7 +2416,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -2859,7 +2859,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Robots Txt",
     "desc": "Generate and validate robots.txt configurations for SEO crawlers.",
     "href": "seo-tools/robots-txt/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -2873,7 +2873,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -3041,7 +3041,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Seo Title",
     "desc": "Optimize SEO title tags to maximize search engine click-through rates.",
     "href": "seo-tools/seo-title/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -3055,7 +3055,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -3112,7 +3112,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Sitemap Generator",
     "desc": "Generate XML sitemaps to index website pages.",
     "href": "seo-tools/sitemap-generator/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -3126,7 +3126,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -3134,7 +3134,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Slug Generator",
     "desc": "Convert text into URL-friendly slug strings.",
     "href": "seo-tools/slug-generator/",
-    "category": "seo",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -3148,7 +3148,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "SEO Tools",
     "requiresNetwork": false
   },
   {
@@ -3357,7 +3357,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Swift Mt Mx",
     "desc": "Parse and inspect SWIFT MT and MX banking message structures.",
     "href": "banking-tools/swift-mt-mx/",
-    "category": "banking",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -3371,7 +3371,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Banking Tools",
     "requiresNetwork": false
   },
   {
@@ -3630,7 +3630,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "name": "Track 2 Parser",
     "desc": "Decode magnetic stripe Track 2 data for payment card testing.",
     "href": "banking-tools/track-2-parser/",
-    "category": "banking",
+    "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
@@ -3644,7 +3644,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Banking Tools",
     "requiresNetwork": false
   },
   {

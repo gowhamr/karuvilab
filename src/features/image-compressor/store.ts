@@ -157,6 +157,7 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
       const buffer = await item.file.arrayBuffer();
       const resultBytes = await batchCoordinator.enqueue(
         buffer,
+        item.file.type,
         item.settings,
         (p) => {
           set((state) => ({

@@ -69,7 +69,7 @@ const processor: ToolProcessor<ImageCompressorOptions> = {
       // Dispatch to worker
       const uint8Array = await workerOrchestrator.dispatch(
         "compressImage",
-        [arrayBuffer, formatToUse, options.quality],
+        [arrayBuffer, file.type, formatToUse, options.quality],
         [arrayBuffer], // Transferable
         (p: any) => onProgress(20 + p.percent * 0.8), // Scale progress 20-100%
         signal,

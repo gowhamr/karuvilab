@@ -5,7 +5,8 @@ export const sitemapGenerator: ToolEntry = {
   "name": "Sitemap Generator",
   "desc": "Generate XML sitemaps to index website pages.",
   "href": "seo-tools/sitemap-generator/",
-  "category": "seo",
+  "category": "developer",
+  "subCategory": "SEO Tools",
   "icon": null,
   "color": null,
   "featured": false,
@@ -19,6 +20,5 @@ export const sitemapGenerator: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
   "requiresNetwork": false
 };

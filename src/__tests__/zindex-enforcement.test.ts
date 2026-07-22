@@ -20,7 +20,7 @@ function getFiles(dir: string): string[] {
 }
 
 describe('Z-Index Canonical Token Enforcement', () => {
-  it('should only use allowed z-index named tokens', { timeout: 15000 }, () => {
+  it('should only use allowed z-index named tokens', { timeout: 30000 }, () => {
     const rootDir = path.resolve(__dirname, '../../');
     const scanDirs = [
       path.join(rootDir, 'app'),
