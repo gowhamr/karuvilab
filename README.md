@@ -4,4 +4,4 @@
 </div>
 
 # Tools
-The tools index now aggregates to 189 tools.
+The tools index now aggregates to 193 tools.

@@ -1,6 +1,6 @@
 # KaruviLab Developer Guide
 
-The tools index now aggregates to 189 tools.
+The tools index now aggregates to 193 tools.
 
 ## Coding Standards
 Follow rules defined in `GEMINI.md`. TypeScript 6.0.3 is strictly pinned.

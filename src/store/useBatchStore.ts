@@ -38,6 +38,7 @@ interface BatchState {
   cancelItem: (toolId: string, itemId: string) => void;
   cancelAll: (toolId: string) => void;
   isProcessing: (toolId: string) => boolean;
+  reprocessItem: (toolId: string, itemId: string, replaceOriginal?: boolean) => void;
 }
 
 export const useBatchStore = create<BatchState>((set, get) => ({
@@ -134,6 +135,41 @@ export const useBatchStore = create<BatchState>((set, get) => ({
 
   isProcessing: (toolId) => {
     return (get().items[toolId] || []).some(i => i.status === 'processing');
+  },
+
+  reprocessItem: (toolId, itemId, replaceOriginal = false) => {
+    const items = get().items[toolId] || [];
+    const sourceItem = items.find(i => i.id === itemId);
+    
+    if (!sourceItem || sourceItem.status !== 'completed' || !sourceItem.result) return;
+
+    // 1. Convert the result blob back into a File
+    const newFile = new File([sourceItem.result.blob], sourceItem.result.name, { 
+      type: sourceItem.result.blob.type || sourceItem.file.type
+    });
+
+    // 2. Create a fresh pending item
+    const newItem: BatchItem = {
+      id: Math.random().toString(36).substring(7),
+      file: newFile,
+      status: 'pending',
+      progress: 0,
+    };
+
+    set(state => {
+      let newItems = [...(state.items[toolId] || [])];
+      
+      if (replaceOriginal) {
+        // Option A: Replace the completed item with the new pending one
+        const index = newItems.findIndex(i => i.id === itemId);
+        newItems[index] = newItem;
+      } else {
+        // Option B: Append it to the queue, keeping the history
+        newItems.push(newItem);
+      }
+
+      return { items: { ...state.items, [toolId]: newItems } };
+    });
   },
 
   startProcessing: async (toolId, processor) => {

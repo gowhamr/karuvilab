@@ -4,7 +4,7 @@ export const ogPreview: ToolEntry = {
   "id": "og-preview",
   "name": "Og Preview",
   "desc": "Preview Open Graph card layouts for social media platforms.",
-  "href": "seo-tools/og-preview/",
+  "href": "developer-tools/og-preview/",
   "category": "developer",
   "subCategory": "SEO Tools",
   "icon": null,

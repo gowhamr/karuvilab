@@ -1,5 +1,5 @@
 # KaruviLab (KV) Complete Tool Reference
-> **Generation Note**: Auto-generated from single source of truth. **Total Tools**: 189
+> **Generation Note**: Auto-generated from single source of truth. **Total Tools**: 193
 
 
 Welcome to the comprehensive, evidence-based technical reference guide for the KaruviLab platform. KaruviLab (KV) is an elite, browser-native suite of local-first utilities designed for maximal performance, absolute privacy, and offline capability.
@@ -48,6 +48,7 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Color Match](#color-match)
 - [Color Palette Extractor](#color-palette-extractor)
 - [Command Cheat Sheet](#command-cheat-sheet)
+- [Compare PDFs](#pdf-compare)
 - [Compound Interest Calculator](#compound-interest)
 - [Compress](#compress)
 - [Compress PDF](#compress-pdf)
@@ -139,6 +140,8 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Page Size Converter](#page-size-converter)
 - [Password Generator](#password-generator)
 - [Pbkdf2 Generator](#pbkdf2-generator)
+- [PDF Attachments](#pdf-attachments)
+- [PDF Bookmarks](#pdf-bookmarks)
 - [PDF Editor](#pdf-editor)
 - [PDF to Image](#pdf-to-image)
 - [PDF to Word](#pdf-to-word)
@@ -147,6 +150,7 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Phone Mockup Generator](#phone-mockup-generator)
 - [Pomodoro Timer](#pomodoro-timer)
 - [PPF Calculator](#ppf-calculator)
+- [Preview PDF](#pdf-preview)
 - [Private Key Checker](#private-key-checker)
 - [Public Key Inspector](#public-key-inspector)
 - [QR Code Generator](#qrcode)
@@ -346,6 +350,7 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Video Trim](#video-trim)
 
 ### PDF Tools
+- [Compare PDFs](#pdf-compare)
 - [Compress PDF](#compress-pdf)
 - [Convert to A4](#convert-to-a4)
 - [Convert to Legal](#convert-to-legal)
@@ -366,9 +371,12 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Organize PDF](#organize-pdf)
 - [Page Numbering](#page-numbering)
 - [Page Size Converter](#page-size-converter)
+- [PDF Attachments](#pdf-attachments)
+- [PDF Bookmarks](#pdf-bookmarks)
 - [PDF Editor](#pdf-editor)
 - [PDF to Image](#pdf-to-image)
 - [PDF to Word](#pdf-to-word)
+- [Preview PDF](#pdf-preview)
 - [Remove PDF Metadata](#remove-metadata)
 - [Remove PDF Pages](#remove-pages)
 - [Reorder PDF Pages](#reorder-pages)
@@ -435,6 +443,8 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - `//pdf-tools/edit-metadata` → [Edit PDF Metadata](#edit-metadata)
 - `//pdf-tools/margin-adjustment` → [Margin Adjustment](#margin-adjustment)
 - `//pdf-tools/page-size-converter` → [Page Size Converter](#page-size-converter)
+- `//pdf-tools/pdf-attachments` → [PDF Attachments](#pdf-attachments)
+- `//pdf-tools/pdf-bookmarks` → [PDF Bookmarks](#pdf-bookmarks)
 - `//pdf-tools/remove-metadata` → [Remove PDF Metadata](#remove-metadata)
 - `//pdf-tools/split-pdf` → [Split PDF](#split-pdf)
 - `/banking-tools/core-banking-parser` → [Core Banking Parser](#core-banking-parser)
@@ -504,15 +514,22 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - `/developer-tools/gradient-generator` → [Gradient Generator](#gradient-generator)
 - `/developer-tools/hash-map-visualizer` → [Hash Map Visualizer](#hash-map-visualizer)
 - `/developer-tools/html-viewer` → [HTML Online Viewer](#html-viewer)
+- `/developer-tools/image-seo` → [Image Seo](#image-seo)
 - `/developer-tools/json-csv` → [JSON ↔ CSV](#json-csv)
 - `/developer-tools/json-formatter` → [JSON Formatter](#json-formatter)
 - `/developer-tools/json-to-ts` → [JSON to TypeScript](#json-to-ts)
 - `/developer-tools/log-analyzer` → [Log Analyzer](#log-analyzer)
 - `/developer-tools/lorem-ipsum` → [Lorem Ipsum](#lorem-ipsum)
 - `/developer-tools/luhn-validator` → [Luhn Validator](#luhn-validator)
+- `/developer-tools/meta-tags` → [Meta Tags](#meta-tags)
 - `/developer-tools/nanoid-generator` → [Nanoid Generator](#nanoid-generator)
+- `/developer-tools/og-preview` → [Og Preview](#og-preview)
 - `/developer-tools/regex` → [Regex Tester](#regex-tester)
+- `/developer-tools/robots-txt` → [Robots Txt](#robots-txt)
+- `/developer-tools/seo-title` → [Seo Title](#seo-title)
 - `/developer-tools/seo-tools` → [Seo Tools](#seo-tools)
+- `/developer-tools/sitemap-generator` → [Sitemap Generator](#sitemap-generator)
+- `/developer-tools/slug-generator` → [Slug Generator](#slug-generator)
 - `/developer-tools/sql-formatter` → [Sql Formatter](#sql-formatter)
 - `/developer-tools/unix-timestamp` → [Unix Timestamp](#unix-timestamp)
 - `/developer-tools/url-encoder` → [URL Encoder](#url-encoder)
@@ -548,7 +565,9 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - `/pdf-tools/odd-pages-extractor` → [Odd Pages Extractor](#odd-pages-extractor)
 - `/pdf-tools/organize-pdf` → [Organize PDF](#organize-pdf)
 - `/pdf-tools/page-numbering` → [Page Numbering](#page-numbering)
+- `/pdf-tools/pdf-compare` → [Compare PDFs](#pdf-compare)
 - `/pdf-tools/pdf-editor` → [PDF Editor](#pdf-editor)
+- `/pdf-tools/pdf-preview` → [Preview PDF](#pdf-preview)
 - `/pdf-tools/pdf-to-image` → [PDF to Image](#pdf-to-image)
 - `/pdf-tools/pdf-to-word` → [PDF to Word](#pdf-to-word)
 - `/pdf-tools/remove-pages` → [Remove PDF Pages](#remove-pages)
@@ -599,13 +618,6 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - `/security-tools/saml-decoder` → [Saml Decoder](#saml-decoder)
 - `/security-tools/tlv-parser` → [Tlv Parser](#tlv-parser)
 - `/security-tools/x509-viewer` → [X509 Viewer](#x509-viewer)
-- `/seo-tools/image-seo` → [Image Seo](#image-seo)
-- `/seo-tools/meta-tags` → [Meta Tags](#meta-tags)
-- `/seo-tools/og-preview` → [Og Preview](#og-preview)
-- `/seo-tools/robots-txt` → [Robots Txt](#robots-txt)
-- `/seo-tools/seo-title` → [Seo Title](#seo-title)
-- `/seo-tools/sitemap-generator` → [Sitemap Generator](#sitemap-generator)
-- `/seo-tools/slug-generator` → [Slug Generator](#slug-generator)
 - `/text/grammar-checker` → [Grammar & Spell Checker](#grammar-checker)
 - `/utilities/barcode-scanner` → [Barcode & QR Scanner](#barcode-scanner)
 - `/utilities/internet-speed-test` → [Speed Tester](#internet-speed-test)
@@ -7680,7 +7692,7 @@ Select a tab (HTML, CSS, or JS) to start writing code. The preview pane updates 
 - **ID:** `image-seo`
 - **Name:** Image Seo
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/image-seo`
+- **Route:** `/developer-tools/image-seo`
 
 #### Purpose
 > 
@@ -7704,8 +7716,8 @@ Optimizing your images for search engines (SEO) is one of the most overlooked as
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/image-seo/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/image-seo/ImageSeoClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/image-seo/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/image-seo/ImageSeoClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -7757,9 +7769,9 @@ Optimizing your images for search engines (SEO) is one of the most overlooked as
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/image-seo/page.tsx`
-  - `app/(tools)/seo-tools/image-seo/ImageSeoClient.tsx`
-  - `app/(tools)/seo-tools/image-seo/ImageSeoClientWrapper.tsx`
+  - `app/(tools)/developer-tools/image-seo/page.tsx`
+  - `app/(tools)/developer-tools/image-seo/ImageSeoClient.tsx`
+  - `app/(tools)/developer-tools/image-seo/ImageSeoClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -8310,7 +8322,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
 - **ID:** `meta-tags`
 - **Name:** Meta Tags
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/meta-tags`
+- **Route:** `/developer-tools/meta-tags`
 
 #### Purpose
 > Generate complete HTML meta tag markup for a web page including title, description, Open Graph, Twitter Card, and basic SEO tags.
@@ -8333,8 +8345,8 @@ Fill in the page title, description, URL, and optional image URL. Select the con
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/meta-tags/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/meta-tags/MetaTagsClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/meta-tags/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/meta-tags/MetaTagsClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -8386,9 +8398,9 @@ Fill in the page title, description, URL, and optional image URL. Select the con
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/meta-tags/page.tsx`
-  - `app/(tools)/seo-tools/meta-tags/MetaTagsClient.tsx`
-  - `app/(tools)/seo-tools/meta-tags/MetaTagsClientWrapper.tsx`
+  - `app/(tools)/developer-tools/meta-tags/page.tsx`
+  - `app/(tools)/developer-tools/meta-tags/MetaTagsClient.tsx`
+  - `app/(tools)/developer-tools/meta-tags/MetaTagsClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -8488,7 +8500,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
 - **ID:** `og-preview`
 - **Name:** Og Preview
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/og-preview`
+- **Route:** `/developer-tools/og-preview`
 
 #### Purpose
 > Simulate how a URL's Open Graph (og:) meta tags will appear when shared on Facebook, Twitter, LinkedIn, and WhatsApp.
@@ -8511,8 +8523,8 @@ Enter the URL of the page you want to preview, or paste your og: meta tags direc
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/og-preview/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/og-preview/OgPreviewClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/og-preview/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/og-preview/OgPreviewClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -8564,9 +8576,9 @@ Enter the URL of the page you want to preview, or paste your og: meta tags direc
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/og-preview/page.tsx`
-  - `app/(tools)/seo-tools/og-preview/OgPreviewClient.tsx`
-  - `app/(tools)/seo-tools/og-preview/OgPreviewClientWrapper.tsx`
+  - `app/(tools)/developer-tools/og-preview/page.tsx`
+  - `app/(tools)/developer-tools/og-preview/OgPreviewClient.tsx`
+  - `app/(tools)/developer-tools/og-preview/OgPreviewClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -8668,7 +8680,7 @@ Enter your regular expression in the pattern field. Type or paste the sample tex
 - **ID:** `robots-txt`
 - **Name:** Robots Txt
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/robots-txt`
+- **Route:** `/developer-tools/robots-txt`
 
 #### Purpose
 > Generate a valid `robots.
@@ -8691,8 +8703,8 @@ Add user agent rules using the form (choose 'All' or a specific bot). Add disall
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/robots-txt/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/robots-txt/RobotsTxtClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/robots-txt/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/robots-txt/RobotsTxtClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -8744,9 +8756,9 @@ Add user agent rules using the form (choose 'All' or a specific bot). Add disall
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/robots-txt/page.tsx`
-  - `app/(tools)/seo-tools/robots-txt/RobotsTxtClient.tsx`
-  - `app/(tools)/seo-tools/robots-txt/RobotsTxtClientWrapper.tsx`
+  - `app/(tools)/developer-tools/robots-txt/page.tsx`
+  - `app/(tools)/developer-tools/robots-txt/RobotsTxtClient.tsx`
+  - `app/(tools)/developer-tools/robots-txt/RobotsTxtClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -8758,7 +8770,7 @@ Add user agent rules using the form (choose 'All' or a specific bot). Add disall
 - **ID:** `seo-title`
 - **Name:** Seo Title
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/seo-title`
+- **Route:** `/developer-tools/seo-title`
 
 #### Purpose
 > Preview how your page title and meta description will appear in Google Search results with a pixel-accurate SERP snippet simulator.
@@ -8781,8 +8793,8 @@ Type your page title in the title field. Type your meta description in the descr
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/seo-title/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/seo-title/SeoTitleClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/seo-title/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/seo-title/SeoTitleClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -8834,9 +8846,9 @@ Type your page title in the title field. Type your meta description in the descr
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/seo-title/page.tsx`
-  - `app/(tools)/seo-tools/seo-title/SeoTitleClient.tsx`
-  - `app/(tools)/seo-tools/seo-title/SeoTitleClientWrapper.tsx`
+  - `app/(tools)/developer-tools/seo-title/page.tsx`
+  - `app/(tools)/developer-tools/seo-title/SeoTitleClient.tsx`
+  - `app/(tools)/developer-tools/seo-title/SeoTitleClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -8943,7 +8955,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
 - **ID:** `sitemap-generator`
 - **Name:** Sitemap Generator
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/sitemap-generator`
+- **Route:** `/developer-tools/sitemap-generator`
 
 #### Purpose
 > Build a standards-compliant XML sitemap by entering your URLs along with priority, change frequency, and last modification date.
@@ -8966,8 +8978,8 @@ Enter your website's base URL. Add URLs one by one using the form, or paste a li
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/sitemap-generator/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/sitemap-generator/SitemapClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/sitemap-generator/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/sitemap-generator/SitemapClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -9019,9 +9031,9 @@ Enter your website's base URL. Add URLs one by one using the form, or paste a li
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/sitemap-generator/page.tsx`
-  - `app/(tools)/seo-tools/sitemap-generator/SitemapClient.tsx`
-  - `app/(tools)/seo-tools/sitemap-generator/SitemapClientWrapper.tsx`
+  - `app/(tools)/developer-tools/sitemap-generator/page.tsx`
+  - `app/(tools)/developer-tools/sitemap-generator/SitemapClient.tsx`
+  - `app/(tools)/developer-tools/sitemap-generator/SitemapClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -9033,7 +9045,7 @@ Enter your website's base URL. Add URLs one by one using the form, or paste a li
 - **ID:** `slug-generator`
 - **Name:** Slug Generator
 - **Category:** Developer Tools
-- **Route:** `/seo-tools/slug-generator`
+- **Route:** `/developer-tools/slug-generator`
 
 #### Purpose
 > Convert any page title or phrase into a clean, SEO-friendly URL slug.
@@ -9056,8 +9068,8 @@ Type or paste your page title into the input field. The slug is generated instan
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/seo-tools/slug-generator/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/slug-generator/SlugClient.tsx`
+- **Page File:** `app/(tools)/developer-tools/slug-generator/page.tsx`
+- **Client Component:** `app/(tools)/developer-tools/slug-generator/SlugClient.tsx`
 - **Feature Directory:** `Not Present in Repository`
 - **Worker File:** `Not Present in Repository`
 - **Zustand Store:** `Not Present in Repository`
@@ -9109,9 +9121,9 @@ Type or paste your page title into the input field. The slug is generated instan
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/slug-generator/page.tsx`
-  - `app/(tools)/seo-tools/slug-generator/SlugClient.tsx`
-  - `app/(tools)/seo-tools/slug-generator/SlugClientWrapper.tsx`
+  - `app/(tools)/developer-tools/slug-generator/page.tsx`
+  - `app/(tools)/developer-tools/slug-generator/SlugClient.tsx`
+  - `app/(tools)/developer-tools/slug-generator/SlugClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -11190,6 +11202,98 @@ Select or drop your video file (MP4, WebM, or MOV). Use the timeline sliders to 
 
 ## Category: PDF Tools
 
+### <a id="pdf-compare"></a>Compare PDFs
+
+#### Identity
+- **ID:** `pdf-compare`
+- **Name:** Compare PDFs
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/pdf-compare`
+
+#### Purpose
+> Highlight textual and visual differences between two PDF files.
+
+#### Features
+- Support for compare
+- Support for pdf
+- Support for diff
+- Support for difference
+- Support for compare pdf
+- Support for pdf diff
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `DropZone`, `PrivacyBadge`, `CopyButton`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Shared Internal Modules** | `pdf-compareClientWrapper`, `seo`, `hooks`, `formatError`, `utils` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/pdf-compare/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/pdf-compare`
+- **Worker File:** `src/workers/manager`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/pdf-compare.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | Yes (HeavyWorker) |
+| **Concurrency Limit** | 1 |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Worker Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Medium
+- **CPU Intensive:** Yes
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** Yes
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Medium
+- **Worker-Based:** Yes
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Worker
+
+#### Relations & Enhancements
+- **Related Tools:** `diff-checker`, `merge-pdf`, `pdf-editor`
+- **Shared Components Used:** `ToolShell`, `DropZone`, `PrivacyBadge`, `CopyButton`, `ToolSkeleton`
+- **Shared Workers Used:** `manager`
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-02 (Worker Concurrency), KL-05 (AbortSignal Propagation), KL-10 (WorkerOrchestrator entry)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/pdf-compare/page.tsx`
+  - `src/features/pdf-compare/components/PdfCompareClient.tsx`
+  - `src/features/pdf-compare/pdf-compareClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
 ### <a id="compress-pdf"></a>Compress PDF
 
 #### Identity
@@ -12988,6 +13092,186 @@ Launches an interactive client view within the ToolShell. Users provide direct i
 
 ---
 
+### <a id="pdf-attachments"></a>PDF Attachments
+
+#### Identity
+- **ID:** `pdf-attachments`
+- **Name:** PDF Attachments
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/pdf-attachments`
+
+#### Purpose
+> Extract embedded files and attachments from PDFs
+
+#### Features
+- Support for pdf
+- Support for attachments
+- Support for extract
+- Support for embedded
+- Support for files
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `DropZone`, `PrivacyBadge`, `ToolSkeleton` |
+| **Processing Packages** | `react`, `lucide-react`, `next` |
+| **Shared Internal Modules** | `tool-registry`, `hooks`, `formatError`, `WorkerOrchestrator` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/pdf-attachments`
+- **Worker File:** `src/workers/manager, src/workers/WorkerOrchestrator, src/workers/karuvi.worker.ts`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/pdf-attachments.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | Yes (HeavyWorker) |
+| **Concurrency Limit** | 1 |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Worker Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Medium
+- **CPU Intensive:** Yes
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Medium
+- **Worker-Based:** Yes
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Worker
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `DropZone`, `PrivacyBadge`, `ToolSkeleton`
+- **Shared Workers Used:** `manager`, `WorkerOrchestrator`, `karuvi.worker.ts`
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-02 (Worker Concurrency), KL-05 (AbortSignal Propagation), KL-10 (WorkerOrchestrator entry)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/pdf-attachments/components/PdfAttachmentsClient.tsx`
+  - `src/features/pdf-attachments/pdf-attachmentsClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="pdf-bookmarks"></a>PDF Bookmarks
+
+#### Identity
+- **ID:** `pdf-bookmarks`
+- **Name:** PDF Bookmarks
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/pdf-bookmarks`
+
+#### Purpose
+> View and export PDF bookmarks (outline)
+
+#### Features
+- Support for pdf
+- Support for bookmarks
+- Support for outline
+- Support for toc
+- Support for table of contents
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `DropZone`, `PrivacyBadge`, `EngineLoader`, `ToolSkeleton` |
+| **Processing Packages** | `react`, `lucide-react`, `next` |
+| **Shared Internal Modules** | `tool-registry`, `hooks`, `formatError`, `EngineLoader` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/pdf-bookmarks`
+- **Worker File:** `src/workers/manager`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/pdf-bookmarks.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | Yes (HeavyWorker) |
+| **Concurrency Limit** | 1 |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | Yes |
+| **Threading Model** | Worker Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Medium
+- **CPU Intensive:** Yes
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Medium
+- **Worker-Based:** Yes
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Worker
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `DropZone`, `PrivacyBadge`, `EngineLoader`, `ToolSkeleton`
+- **Shared Workers Used:** `manager`
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-02 (Worker Concurrency), KL-05 (AbortSignal Propagation), KL-10 (WorkerOrchestrator entry)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/pdf-bookmarks/components/PdfBookmarksClient.tsx`
+  - `src/features/pdf-bookmarks/pdf-bookmarksClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
 ### <a id="pdf-editor"></a>PDF Editor
 
 #### Identity
@@ -13265,6 +13549,97 @@ Select the PDF file you wish to convert by clicking the 'Upload PDF' button or d
   - `app/(tools)/pdf-tools/pdf-to-word/layout.tsx`
   - `src/features/pdf-to-word/components/PdfToWordClient.tsx`
   - `src/features/pdf-to-word/index.ts`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="pdf-preview"></a>Preview PDF
+
+#### Identity
+- **ID:** `pdf-preview`
+- **Name:** Preview PDF
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/pdf-preview`
+
+#### Purpose
+> A native, fast, offline PDF viewer with search and zoom capabilities.
+
+#### Features
+- Support for preview
+- Support for pdf
+- Support for viewer
+- Support for read pdf
+- Support for pdf viewer
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `DropZone`, `PrivacyBadge`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Shared Internal Modules** | `pdf-previewClientWrapper`, `seo`, `hooks`, `formatError` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/pdf-preview/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/pdf-preview`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/pdf-preview.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Medium
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Medium
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** `pdf-editor`, `pdf-bookmarks`, `pdf-attachments`
+- **Shared Components Used:** `ToolShell`, `DropZone`, `PrivacyBadge`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/pdf-preview/page.tsx`
+  - `src/features/pdf-preview/components/PdfPreviewClient.tsx`
+  - `src/features/pdf-preview/pdf-previewClientWrapper.tsx`
 - **Confidence Level:** 100%
 - **Verification Source:** Repository scan (2026-07-23)
 
@@ -17806,10 +18181,10 @@ This map displays which tools import specific shared UI or system components.
 | `BatchQueue` | `bulk-resizer`, `code-minifier`, `compress-pdf`, `extract-images`, `image-converter`, `seo-tools`, `watermark-pdf` |
 | `CalculatorActionBar` | `compound-interest`, `gst-calculator`, `lumpsum-calculator`, `mutual-fund-returns`, `sip-calculator` |
 | `Checkbox` | `calendar`, `fake-data-generator`, `image-resizer`, `password-generator`, `rotate-pdf`, `seo-tools`, `split-pdf`, `wifi-qr-code` |
-| `CopyButton` | `aes-encrypt-decrypt`, `base64url-converter`, `box-shadow-generator`, `cagr-calculator`, `card-masker`, `cipher-tools`, `code-minifier`, `color-converter`, `color-palette-extractor`, `command-cheat-sheet`, `contrast-checker`, `csp-builder`, `csr-generator`, `csv-to-json`, `date-calculator`, `diff-checker`, `directory-manifest`, `discount-calculator`, `ecdh-key-exchange`, `ecdsa-sign`, `fd-calculator`, `format`, `glassmorphism-generator`, `gradient-generator`, `hash-generator`, `hkdf-generator`, `hmac-generator`, `html-entities`, `iban-validator`, `image-base64`, `inflation-calculator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `markdown`, `nanoid-generator`, `numeral-converter`, `oauth-token-decoder`, `password-generator`, `pbkdf2-generator`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `rd-calculator`, `retirement-calculator`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-tools`, `sip-calculator`, `split-copy`, `sql-formatter`, `stock-average-calculator`, `swp-calculator`, `text-case-converter`, `text-utility`, `time-calculator`, `timezone-converter`, `tlv-parser`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `work-hours`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
-| `DropZone` | `barcode-scanner`, `base64`, `bg-remover`, `bulk-resizer`, `code-minifier`, `color-palette-extractor`, `compress-pdf`, `extract-images`, `gif-creator`, `hash-generator`, `html-viewer`, `image-converter`, `image-crop`, `image-resizer`, `image-to-pdf`, `invoice-generator`, `markdown`, `merge-pdf`, `pdf-editor`, `pdf-to-image`, `phone-mockup-generator`, `split-pdf`, `watermark-pdf`, `word-counter`, `word-to-pdf` |
+| `CopyButton` | `aes-encrypt-decrypt`, `base64url-converter`, `box-shadow-generator`, `cagr-calculator`, `card-masker`, `cipher-tools`, `code-minifier`, `color-converter`, `color-palette-extractor`, `command-cheat-sheet`, `contrast-checker`, `csp-builder`, `csr-generator`, `csv-to-json`, `date-calculator`, `diff-checker`, `directory-manifest`, `discount-calculator`, `ecdh-key-exchange`, `ecdsa-sign`, `fd-calculator`, `format`, `glassmorphism-generator`, `gradient-generator`, `hash-generator`, `hkdf-generator`, `hmac-generator`, `html-entities`, `iban-validator`, `image-base64`, `inflation-calculator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `markdown`, `nanoid-generator`, `numeral-converter`, `oauth-token-decoder`, `password-generator`, `pbkdf2-generator`, `pdf-compare`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `rd-calculator`, `retirement-calculator`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-tools`, `sip-calculator`, `split-copy`, `sql-formatter`, `stock-average-calculator`, `swp-calculator`, `text-case-converter`, `text-utility`, `time-calculator`, `timezone-converter`, `tlv-parser`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `work-hours`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
+| `DropZone` | `barcode-scanner`, `base64`, `bg-remover`, `bulk-resizer`, `code-minifier`, `color-palette-extractor`, `compress-pdf`, `extract-images`, `gif-creator`, `hash-generator`, `html-viewer`, `image-converter`, `image-crop`, `image-resizer`, `image-to-pdf`, `invoice-generator`, `markdown`, `merge-pdf`, `pdf-attachments`, `pdf-bookmarks`, `pdf-compare`, `pdf-editor`, `pdf-preview`, `pdf-to-image`, `phone-mockup-generator`, `split-pdf`, `watermark-pdf`, `word-counter`, `word-to-pdf` |
 | `EmptyState` | `bg-remover`, `json-formatter` |
-| `EngineLoader` | `html-viewer`, `markdown`, `pdf-to-image`, `pdf-to-word` |
+| `EngineLoader` | `html-viewer`, `markdown`, `pdf-bookmarks`, `pdf-to-image`, `pdf-to-word` |
 | `HybridDateInput` | `age-calculator` |
 | `LiveFilterBar` | `command-cheat-sheet` |
 | `MediaDropZone` | `audio-converter`, `video-metadata-viewer`, `video-trim` |
@@ -17818,7 +18193,7 @@ This map displays which tools import specific shared UI or system components.
 | `MediaStatusBadge` | `audio-converter`, `video-metadata-viewer`, `video-trim` |
 | `MetricCard` | `age-calculator`, `audio-converter`, `bmi-calculator`, `cagr-calculator`, `compound-interest`, `currency-converter`, `date-calculator`, `discount-calculator`, `fd-calculator`, `financial-freedom-calculator`, `gif-creator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hra-calculator`, `income-tax`, `inflation-calculator`, `lumpsum-calculator`, `mutual-fund-returns`, `nps-calculator`, `numeral-converter`, `ppf-calculator`, `rd-calculator`, `retirement-calculator`, `safe-to-spend`, `salary-calculator`, `sip-calculator`, `stock-average-calculator`, `swp-calculator`, `tds-calculator`, `time-calculator`, `video-metadata-viewer`, `video-trim`, `word-counter`, `work-hours` |
 | `PdfPagePreview` | `rotate-pdf` |
-| `PrivacyBadge` | `bg-remover`, `code-minifier`, `compress-pdf`, `extract-images`, `internet-speed-test`, `json-formatter`, `split-pdf`, `watermark-pdf` |
+| `PrivacyBadge` | `bg-remover`, `code-minifier`, `compress-pdf`, `extract-images`, `internet-speed-test`, `json-formatter`, `pdf-attachments`, `pdf-bookmarks`, `pdf-compare`, `pdf-preview`, `split-pdf`, `watermark-pdf` |
 | `QRCodeLoader` | `qrcode`, `wifi-qr-code` |
 | `QRModal` | `age-calculator`, `bmi-calculator`, `cagr-calculator`, `color-converter`, `crontab-editor`, `hra-calculator`, `income-tax`, `nps-calculator`, `sip-calculator`, `unix-timestamp` |
 | `SegmentedControl` | `cipher-tools`, `code-minifier`, `fake-data-generator`, `html-viewer`, `json-formatter`, `markdown` |
@@ -17830,8 +18205,8 @@ This map displays which tools import specific shared UI or system components.
 | `Toast` | `barcode-scanner`, `calendar`, `chart-generator`, `image-converter`, `internet-speed-test`, `invoice-generator`, `lumpsum-calculator`, `markdown`, `mutual-fund-returns`, `notes`, `numeral-converter`, `pdf-to-word`, `seo-tools`, `sip-calculator`, `task-reminder`, `text-sorter-deduper`, `video-metadata-viewer`, `word-counter`, `word-to-pdf`, `work-hours`, `world-clock` |
 | `ToolInput` | `banking-tools`, `base64`, `cagr-calculator`, `calendar`, `code-minifier`, `core-banking-parser`, `currency-converter`, `date-calculator`, `discount-calculator`, `emv-tlv-tree`, `fake-data-generator`, `financial-freedom-calculator`, `gst-calculator`, `hash-map-visualizer`, `image-resizer`, `invoice-generator`, `json-formatter`, `seo-tools`, `sip-calculator`, `split-pdf`, `stock-average-calculator`, `swift-mt-mx`, `task-reminder`, `text-case-converter`, `text-sorter-deduper`, `timezone-converter`, `track-2-parser`, `wifi-qr-code`, `word-counter` |
 | `ToolResultArea` | `banking-tools`, `barcode-scanner`, `base64`, `core-banking-parser`, `emv-tlv-tree`, `fake-data-generator`, `financial-freedom-calculator`, `swift-mt-mx`, `text-sorter-deduper`, `track-2-parser` |
-| `ToolShell` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `compress`, `contrast-checker`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `data-calculator`, `date-calculator`, `delete-blank-pages`, `diff-checker`, `directory-manifest`, `discount-calculator`, `duplicate-pages`, `ecdh-key-exchange`, `ecdsa-sign`, `emi-calculator`, `emv-tlv-tree`, `even-pages-extractor`, `extract-images`, `extract-pages`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-compress`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `move-pages`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `odd-pages-extractor`, `og-preview`, `organize-pdf`, `page-numbering`, `password-generator`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-image`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `remove-pages`, `reorder-pages`, `retirement-calculator`, `reverse-pages`, `robots-txt`, `rotate-pdf`, `rotate-selected-pages`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `split-pdf`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
-| `ToolSkeleton` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `contrast-checker`, `convert-to-a4`, `convert-to-legal`, `convert-to-letter`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `crop-pdf`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `date-calculator`, `delete-blank-pages`, `diff-checker`, `directory-manifest`, `discount-calculator`, `duplicate-pages`, `ecdh-key-exchange`, `ecdsa-sign`, `edit-metadata`, `emv-tlv-tree`, `even-pages-extractor`, `extract-images`, `extract-pages`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `margin-adjustment`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `move-pages`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `odd-pages-extractor`, `og-preview`, `organize-pdf`, `page-numbering`, `page-size-converter`, `password-generator`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-image`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `remove-metadata`, `remove-pages`, `reorder-pages`, `retirement-calculator`, `reverse-pages`, `robots-txt`, `rotate-pdf`, `rotate-selected-pages`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
+| `ToolShell` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `compress`, `contrast-checker`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `data-calculator`, `date-calculator`, `delete-blank-pages`, `diff-checker`, `directory-manifest`, `discount-calculator`, `duplicate-pages`, `ecdh-key-exchange`, `ecdsa-sign`, `emi-calculator`, `emv-tlv-tree`, `even-pages-extractor`, `extract-images`, `extract-pages`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-compress`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `move-pages`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `odd-pages-extractor`, `og-preview`, `organize-pdf`, `page-numbering`, `password-generator`, `pbkdf2-generator`, `pdf-compare`, `pdf-editor`, `pdf-preview`, `pdf-to-image`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `remove-pages`, `reorder-pages`, `retirement-calculator`, `reverse-pages`, `robots-txt`, `rotate-pdf`, `rotate-selected-pages`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `split-pdf`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
+| `ToolSkeleton` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `contrast-checker`, `convert-to-a4`, `convert-to-legal`, `convert-to-letter`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `crop-pdf`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `date-calculator`, `delete-blank-pages`, `diff-checker`, `directory-manifest`, `discount-calculator`, `duplicate-pages`, `ecdh-key-exchange`, `ecdsa-sign`, `edit-metadata`, `emv-tlv-tree`, `even-pages-extractor`, `extract-images`, `extract-pages`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `margin-adjustment`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `move-pages`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `odd-pages-extractor`, `og-preview`, `organize-pdf`, `page-numbering`, `page-size-converter`, `password-generator`, `pbkdf2-generator`, `pdf-attachments`, `pdf-bookmarks`, `pdf-compare`, `pdf-editor`, `pdf-preview`, `pdf-to-image`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `remove-metadata`, `remove-pages`, `reorder-pages`, `retirement-calculator`, `reverse-pages`, `robots-txt`, `rotate-pdf`, `rotate-selected-pages`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
 | `WorkflowSuggestions` | `compress-pdf`, `extract-images`, `fake-data-generator`, `json-csv`, `json-formatter`, `merge-pdf`, `watermark-pdf` |
 
 ### Shared Workers Map
@@ -17839,9 +18214,9 @@ This map displays which tools execute background tasks using shared worker files
 
 | Shared Worker | Tools Utilizing It |
 | --- | --- |
-| `WorkerOrchestrator` | `aes-encrypt-decrypt`, `color-palette-extractor`, `extract-images`, `numeral-converter`, `pdf-to-word`, `word-counter`, `word-to-pdf`, `yaml-validator` |
-| `karuvi.worker.ts` | `aes-encrypt-decrypt`, `color-palette-extractor`, `extract-images`, `numeral-converter`, `pdf-to-word`, `word-counter`, `word-to-pdf`, `yaml-validator` |
-| `manager` | `audio-converter`, `bg-remover`, `bulk-resizer`, `code-minifier`, `compress-pdf`, `csr-generator`, `directory-manifest`, `ecdh-key-exchange`, `ecdsa-sign`, `gif-creator`, `grammar-checker`, `hash-generator`, `hkdf-generator`, `image-converter`, `image-resizer`, `json-formatter`, `merge-pdf`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-image`, `private-key-checker`, `public-key-inspector`, `rotate-pdf`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `split-pdf`, `watermark-pdf`, `x509-viewer` |
+| `WorkerOrchestrator` | `aes-encrypt-decrypt`, `color-palette-extractor`, `extract-images`, `numeral-converter`, `pdf-attachments`, `pdf-to-word`, `word-counter`, `word-to-pdf`, `yaml-validator` |
+| `karuvi.worker.ts` | `aes-encrypt-decrypt`, `color-palette-extractor`, `extract-images`, `numeral-converter`, `pdf-attachments`, `pdf-to-word`, `word-counter`, `word-to-pdf`, `yaml-validator` |
+| `manager` | `audio-converter`, `bg-remover`, `bulk-resizer`, `code-minifier`, `compress-pdf`, `csr-generator`, `directory-manifest`, `ecdh-key-exchange`, `ecdsa-sign`, `gif-creator`, `grammar-checker`, `hash-generator`, `hkdf-generator`, `image-converter`, `image-resizer`, `json-formatter`, `merge-pdf`, `pbkdf2-generator`, `pdf-attachments`, `pdf-bookmarks`, `pdf-compare`, `pdf-editor`, `pdf-to-image`, `private-key-checker`, `public-key-inspector`, `rotate-pdf`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `split-pdf`, `watermark-pdf`, `x509-viewer` |
 | `types` | `bulk-resizer`, `directory-manifest`, `hash-generator`, `merge-pdf`, `split-pdf` |
 
 ### Shared Stores Map

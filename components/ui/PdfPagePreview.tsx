@@ -25,12 +25,12 @@ export function PdfPagePreview({ file, pageIndex, width = 150, rotation = 0, cla
         setLoading(true);
         const pdfjsLib = await import("pdfjs-dist");
         
-        if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-          const initWorkerSrc = () => {
-            try { return '/pdf.worker.min.mjs'; }
-            catch { return 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs'; }
-          };
-          pdfjsLib.GlobalWorkerOptions.workerSrc = initWorkerSrc();
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+        const workerUrl = typeof window !== 'undefined' ? window.location.origin + basePath + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
+        if (pdfjsLib.GlobalWorkerOptions && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+        } else if ((pdfjsLib as any).default?.GlobalWorkerOptions && !(pdfjsLib as any).default.GlobalWorkerOptions.workerSrc) {
+          (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
         }
 
         let docParams;

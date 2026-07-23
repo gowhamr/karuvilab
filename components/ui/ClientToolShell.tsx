@@ -17,7 +17,7 @@ import { ProgressProvider } from '@/src/contexts/ProgressContext';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
 import { m } from 'framer-motion';
-import { ToolFeedback } from './ToolFeedback';
+
 import { useIntelligenceStore } from '@/src/store/useIntelligenceStore';
 
 import { ToolCard } from '@/components/ToolCard';
@@ -340,10 +340,6 @@ export function ClientToolShell({ title, description, category, children, toolId
             {!isEmbed && (
               <>
                 <div className="max-w-4xl mx-auto space-y-8">
-                  <div className="pt-4 pb-8">
-                    <ToolFeedback toolId={finalToolId} toolName={title} />
-                  </div>
-
                   <ToolInfoSection 
                     toolId={finalToolId} 
                     id="learn-more" 

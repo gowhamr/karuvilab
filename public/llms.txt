@@ -86,7 +86,7 @@
 - [Image Converter](https://karuvilab.com/image-tools/image-converter/): Convert between JPG, PNG, WebP, AVIF, and BMP
 - [Image Crop](https://karuvilab.com/image-tools/image-crop/): Crop images to ratio or freeform
 - [Image Resizer](https://karuvilab.com/image-tools/image-resizer/): Resize images to exact dimensions
-- [Image Seo](https://karuvilab.com/seo-tools/image-seo/): Optimize image file names and alt attributes to rank higher on search engines.
+- [Image Seo](https://karuvilab.com/developer-tools/image-seo/): Optimize image file names and alt attributes to rank higher on search engines.
 - [Image to PDF](https://karuvilab.com/pdf-tools/image-to-pdf/): Convert images into a single PDF
 - [Income Tax](https://karuvilab.com/calculators/income-tax/): Calculate annual income tax estimates and select the best tax regime.
 - [Inflation Calculator](https://karuvilab.com/calculators/inflation-calculator/): Purchasing power over time
@@ -107,7 +107,7 @@
 - [Markdown Editor](https://karuvilab.com/utilities/markdown/): Professional Markdown editor with live GitHub-style preview, Mermaid diagrams, and high-performance export options.
 - [Memory Match](https://karuvilab.com/break-time-tools/memory-match/): Flip cards and match pairs. A classic memory-training game with best-score tracking.
 - [Merge PDF](https://karuvilab.com/pdf-tools/merge-pdf/): Combine multiple PDFs into one
-- [Meta Tags](https://karuvilab.com/seo-tools/meta-tags/): Generate and preview HTML meta tags to optimize website social sharing.
+- [Meta Tags](https://karuvilab.com/developer-tools/meta-tags/): Generate and preview HTML meta tags to optimize website social sharing.
 - [Mic & Camera Tester](https://karuvilab.com/utilities/mic-camera-tester/): Test your microphone and camera
 - [Minesweeper](https://karuvilab.com/break-time-tools/minesweeper/): Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.
 - [Move PDF Pages](https://karuvilab.com/pdf-tools/move-pages/): Drag and drop to move pages around in your PDF document.
@@ -118,7 +118,7 @@
 - [Numeral & Encoding Converter](https://karuvilab.com/calculators/numeral-converter/): Universal encoding converter. Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text. Auto-detect format and convert to all others instantly. Supports UTF-8, UTF-16, UTF-32, Base64, URL encoding, HTML entities, JavaScript/Python/CSS escapes, Morse code, ROT13, JWT decode, and more. 100% local — nothing leaves your browser.
 - [Oauth Token Decoder](https://karuvilab.com/security-tools/oauth-token-decoder/): Inspect and decode OAuth 2.0 access and refresh token payloads.
 - [Odd Pages Extractor](https://karuvilab.com/pdf-tools/odd-pages-extractor/): Extract only the odd-numbered pages from a PDF document.
-- [Og Preview](https://karuvilab.com/seo-tools/og-preview/): Preview Open Graph card layouts for social media platforms.
+- [Og Preview](https://karuvilab.com/developer-tools/og-preview/): Preview Open Graph card layouts for social media platforms.
 - [Organize PDF](https://karuvilab.com/pdf-tools/organize-pdf/): Sort, reorder, and organize pages in your PDF document visually.
 - [Page Numbering](https://karuvilab.com/pdf-tools/page-numbering/): Add page numbers to PDF
 - [Page Size Converter](https://karuvilab.com//pdf-tools/page-size-converter): Convert PDF pages to a specific size
@@ -147,7 +147,7 @@
 - [Reorder PDF Pages](https://karuvilab.com/pdf-tools/reorder-pages/): Easily reorder the pages of your PDF document.
 - [Retirement Planner](https://karuvilab.com/calculators/retirement-calculator/): Corpus needed for your retirement
 - [Reverse PDF Pages](https://karuvilab.com/pdf-tools/reverse-pages/): Reverse the order of pages in a PDF document instantly.
-- [Robots Txt](https://karuvilab.com/seo-tools/robots-txt/): Generate and validate robots.txt configurations for SEO crawlers.
+- [Robots Txt](https://karuvilab.com/developer-tools/robots-txt/): Generate and validate robots.txt configurations for SEO crawlers.
 - [Rotate PDF](https://karuvilab.com/pdf-tools/rotate-pdf/): Rotate one or all pages
 - [Rotate Selected Pages](https://karuvilab.com/pdf-tools/rotate-selected-pages/): Rotate specific pages in your PDF without rotating the whole document.
 - [Rsa Encrypt Decrypt](https://karuvilab.com/security-tools/rsa-encrypt-decrypt/): Encrypt or decrypt payloads using secure RSA key pairs.
@@ -156,11 +156,11 @@
 - [Safe-to-Spend](https://karuvilab.com/calculators/safe-to-spend/): Daily budget planner
 - [Salary Calculator](https://karuvilab.com/calculators/salary-calculator/): Indian take-home salary breakdown
 - [Saml Decoder](https://karuvilab.com/security-tools/saml-decoder/): Decode and format SAML assertion payloads for identity analysis.
-- [Seo Title](https://karuvilab.com/seo-tools/seo-title/): Optimize SEO title tags to maximize search engine click-through rates.
+- [Seo Title](https://karuvilab.com/developer-tools/seo-title/): Optimize SEO title tags to maximize search engine click-through rates.
 - [Seo Tools](https://karuvilab.com/developer-tools/seo-tools/): Inspect and optimize website SEO meta tags and preview search snippets.
 - [SIP Calculator](https://karuvilab.com/calculators/sip-calculator/): Project mutual-fund SIP returns
-- [Sitemap Generator](https://karuvilab.com/seo-tools/sitemap-generator/): Generate XML sitemaps to index website pages.
-- [Slug Generator](https://karuvilab.com/seo-tools/slug-generator/): Convert text into URL-friendly slug strings.
+- [Sitemap Generator](https://karuvilab.com/developer-tools/sitemap-generator/): Generate XML sitemaps to index website pages.
+- [Slug Generator](https://karuvilab.com/developer-tools/slug-generator/): Convert text into URL-friendly slug strings.
 - [Smart Unit Converter](https://karuvilab.com/calculators/smart-converter/): Natural-language unit conversion
 - [Snake Game](https://karuvilab.com/break-time-tools/snake-game/): Play the classic retro Snake game. Eat food, grow longer, and set new high scores entirely in your browser.
 - [Split & Copy](https://karuvilab.com/utilities/split-copy/): Break long text into chunks

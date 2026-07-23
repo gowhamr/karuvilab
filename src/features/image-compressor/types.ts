@@ -59,4 +59,5 @@ export interface ImageCompressStore {
   compressItem: (id: string) => Promise<void>;
   compressAll: () => Promise<void>;
   downloadBatch: () => Promise<void>;
+  reprocessItem: (id: string, replaceOriginal?: boolean) => void;
 }

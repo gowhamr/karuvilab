@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { useImageCompressStore } from '../store';
 import { formatSize, getReduction } from '../utils';
-import { X, CheckCircle2, AlertCircle, Download, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { X, CheckCircle2, AlertCircle, Download, RefreshCw, Image as ImageIcon, RotateCcw } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 
 const ImageQueueItemComponent = memo(({ item, removeFile, compressItem }: any) => {
@@ -88,16 +88,26 @@ const ImageQueueItemComponent = memo(({ item, removeFile, compressItem }: any) =
       </div>
 
       {/* Action */}
-      <div className="relative z-content">
+      <div className="relative z-content flex items-center gap-2">
         {item.status === 'completed' ? (
-          <a 
-            href={item.compressedUrl!} 
-            download={`compressed-${item.file.name}`}
-            aria-label="Download individual image"
-            className="w-10 h-10 rounded-xl bg-blue/10 text-blue flex items-center justify-center hover:bg-blue hover:text-white transition-all shadow-sm"
-          >
-            <Download size={16} aria-hidden="true" />
-          </a>
+          <>
+            <button
+              onClick={() => useImageCompressStore.getState().reprocessItem(item.id)}
+              aria-label="Reprocess image"
+              title="Use output as new input"
+              className="w-10 h-10 rounded-xl bg-surface border border-border text-text flex items-center justify-center hover:bg-blue hover:text-white hover:border-blue transition-all shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <RotateCcw size={16} aria-hidden="true" />
+            </button>
+            <a 
+              href={item.compressedUrl!} 
+              download={`compressed-${item.file.name}`}
+              aria-label="Download individual image"
+              className="w-10 h-10 rounded-xl bg-blue/10 text-blue flex items-center justify-center hover:bg-blue hover:text-white transition-all shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-blue"
+            >
+              <Download size={16} aria-hidden="true" />
+            </a>
+          </>
         ) : (
           <button
             onClick={() => compressItem(item.id)}

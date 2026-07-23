@@ -12,7 +12,8 @@ import {
   Download, 
   X,
   Clock,
-  Inbox
+  Inbox,
+  RotateCcw
 } from 'lucide-react';
 import { BatchItem, useBatchStore } from '@/src/store/useBatchStore';
 import { StatusBadge } from '@/components/system/StatusBadge';
@@ -112,13 +113,24 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
       {/* Context Actions (Fades in on hover) */}
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
         {item.status === 'completed' && (
-          <button 
-            onClick={() => onDownload(item)}
-            className="p-2 text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue"
-            aria-label={`Download ${item.file.name}`}
-          >
-            <Download className="w-4 h-4" />
-          </button>
+          <>
+            <button 
+              onClick={() => useBatchStore.getState().reprocessItem(toolId, item.id)}
+              className="p-2 text-text hover:text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue transition-colors"
+              aria-label={`Reprocess ${item.file.name}`}
+              title="Use output as new input"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => onDownload(item)}
+              className="p-2 text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue transition-colors"
+              aria-label={`Download ${item.file.name}`}
+              title="Download"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          </>
         )}
         {(item.status === 'processing' || item.status === 'pending') && (
           <button 

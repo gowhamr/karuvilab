@@ -1,6 +1,6 @@
 # KaruviLab Architecture Guide
 
-The tools index now aggregates to 189 tools.
+The tools index now aggregates to 193 tools.
 
 ## Project Architecture
 KaruviLab is a Next.js (App Router) application prioritizing client-side execution for privacy.

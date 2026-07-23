@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { 
   MoreVertical, Flag, Lightbulb, Shield, 
-  RotateCcw, ChevronRight, Share2, HelpCircle
+  RotateCcw, ChevronRight, Share2, HelpCircle, MessageSquare
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useSupportStore } from "@/src/store/useSupportStore";
@@ -103,6 +103,11 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
       label: "Suggest Feature", 
       icon: Lightbulb, 
       onClick: () => openFeedback("feature", { toolId, toolName }) 
+    },
+    { 
+      label: "Give Feedback", 
+      icon: MessageSquare, 
+      onClick: () => openFeedback("other", { toolId, toolName }) 
     },
     { 
       label: "Privacy Info", 

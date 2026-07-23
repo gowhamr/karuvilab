@@ -258,5 +258,48 @@ export const useImageCompressStore = create<ImageCompressStore>((set, get) => ({
     } finally {
       set({ isProcessing: false, zipProgress: 0 });
     }
+  },
+
+  reprocessItem: (id, replaceOriginal = false) => {
+    const { items, globalSettings } = get();
+    const sourceItem = items.find(i => i.id === id);
+    if (!sourceItem || sourceItem.status !== 'completed' || !sourceItem.compressedBlob) return;
+
+    // Create a new File from the compressed blob
+    const ext = sourceItem.settings.format.split('/')[1] || 'webp';
+    const newName = sourceItem.file.name.replace(/\.[^.]+$/, '') + `_reprocessed.${ext}`;
+    const newFile = new File([sourceItem.compressedBlob], newName, { 
+      type: sourceItem.compressedBlob.type || sourceItem.settings.format
+    });
+
+    const previewUrl = blobManager.create(newFile);
+
+    const newItem: ImageItem = {
+      id: Math.random().toString(36).substring(7),
+      file: newFile,
+      previewUrl,
+      status: 'idle',
+      progress: 0,
+      originalSize: newFile.size,
+      compressedSize: null,
+      compressedUrl: null,
+      compressedBlob: null,
+      settings: { ...globalSettings },
+      dimensions: sourceItem.dimensions, // Pass along dimensions if we don't want to recompute instantly
+    };
+
+    set((state) => {
+      const newItems = [...state.items];
+      if (replaceOriginal) {
+        const index = newItems.findIndex(i => i.id === id);
+        // Revoke the old item URLs
+        if (sourceItem.previewUrl) blobManager.revoke(sourceItem.previewUrl);
+        if (sourceItem.compressedUrl) blobManager.revoke(sourceItem.compressedUrl);
+        newItems[index] = newItem;
+      } else {
+        newItems.push(newItem);
+      }
+      return { items: newItems };
+    });
   }
 }));

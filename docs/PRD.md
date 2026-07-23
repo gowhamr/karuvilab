@@ -1,6 +1,6 @@
 # KaruviLab Product Requirements Document (PRD)
 
-The tools index now aggregates to 189 tools.
+The tools index now aggregates to 193 tools.
 
 ## Executive Summary
 KaruviLab is the world's fastest, most private browser-native productivity platform.
