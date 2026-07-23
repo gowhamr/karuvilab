@@ -6,6 +6,7 @@ export const extractImages: ToolEntry = {
   "desc": "Pull images out of a PDF",
   "href": "pdf-tools/extract-images/",
   "category": "pdf",
+  "subCategory": "Convert & Export",
   "input": "pdf",
   "output": "image",
   "keywords": [

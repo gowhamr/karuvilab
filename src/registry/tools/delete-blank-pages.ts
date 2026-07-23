@@ -4,6 +4,7 @@ export const deleteBlankPagesTool = {
   desc: 'Automatically detect and remove blank pages from your PDF document.',
   href: 'pdf-tools/delete-blank-pages/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '📄',
   color: '#B91C1C',
   status: 'new',

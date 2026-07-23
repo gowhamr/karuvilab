@@ -4,6 +4,7 @@ export const extractPagesTool = {
   desc: 'Extract specific pages or page ranges from a PDF into a new document.',
   href: 'pdf-tools/extract-pages/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '📥',
   color: '#B91C1C',
   status: 'new',

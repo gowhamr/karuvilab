@@ -6,6 +6,7 @@ export const pdfCompare: ToolEntry = {
   desc: 'Highlight textual and visual differences between two PDF files.',
   href: 'pdf-tools/pdf-compare/',
   category: 'pdf',
+  subCategory: 'View & Compare',
   input: 'pdf',
   output: 'none',
   keywords: ['compare', 'pdf', 'diff', 'difference', 'compare pdf', 'pdf diff'],

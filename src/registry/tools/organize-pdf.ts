@@ -4,6 +4,7 @@ export const organizePdfTool = {
   desc: 'Sort, reorder, and organize pages in your PDF document visually.',
   href: 'pdf-tools/organize-pdf/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '🗂️',
   color: '#B91C1C',
   status: 'new',

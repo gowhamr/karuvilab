@@ -6,6 +6,7 @@ export const watermarkPdf: ToolEntry = {
   "desc": "Add text or image watermark",
   "href": "pdf-tools/watermark-pdf/",
   "category": "pdf",
+  "subCategory": "Security & Metadata",
   "input": "pdf",
   "output": "pdf",
   "keywords": [

@@ -6,6 +6,7 @@ export const mergePdf: ToolEntry = {
   "desc": "Combine multiple PDFs into one",
   "href": "pdf-tools/merge-pdf/",
   "category": "pdf",
+  "subCategory": "Organize & Edit",
   "input": "pdf",
   "output": "pdf",
   "keywords": [

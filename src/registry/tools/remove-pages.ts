@@ -4,6 +4,7 @@ export const removePagesTool = {
   desc: 'Easily delete and remove unwanted pages from any PDF document offline.',
   href: 'pdf-tools/remove-pages/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '🗑️',
   color: '#B91C1C',
   status: 'new',

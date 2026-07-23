@@ -6,6 +6,7 @@ export const compressPdf: ToolEntry = {
   "desc": "Reduce PDF file size",
   "href": "pdf-tools/compress-pdf/",
   "category": "pdf",
+  "subCategory": "Optimize & Format",
   "input": "pdf",
   "output": "pdf",
   "keywords": [

@@ -6,6 +6,7 @@ export const splitPdf: ToolEntry = {
   "desc": "Extract pages from a PDF",
   "href": "/pdf-tools/split-pdf",
   "category": "pdf",
+  "subCategory": "Organize & Edit",
   "input": "pdf",
   "output": "pdf",
   "status": "new",

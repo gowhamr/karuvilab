@@ -6,6 +6,7 @@ export const rotatePdf: ToolEntry = {
   "desc": "Rotate one or all pages",
   "href": "pdf-tools/rotate-pdf/",
   "category": "pdf",
+  "subCategory": "Organize & Edit",
   "input": "pdf",
   "output": "pdf",
   "keywords": [

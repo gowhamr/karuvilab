@@ -4,6 +4,7 @@ export const reversePagesTool = {
   desc: 'Reverse the order of pages in a PDF document instantly.',
   href: 'pdf-tools/reverse-pages/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '🔄',
   color: '#B91C1C',
   status: 'new',

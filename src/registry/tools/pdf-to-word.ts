@@ -6,6 +6,7 @@ export const pdfToWord: ToolEntry = {
   "desc": "Convert PDF text to editable Word",
   "href": "pdf-tools/pdf-to-word/",
   "category": "pdf",
+  "subCategory": "Convert & Export",
   "input": "pdf",
   "output": "text",
   "keywords": [

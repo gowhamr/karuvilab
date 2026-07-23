@@ -4,6 +4,7 @@ export const rotateSelectedPagesTool = {
   desc: 'Rotate specific pages in your PDF without rotating the whole document.',
   href: 'pdf-tools/rotate-selected-pages/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '⤵️',
   color: '#B91C1C',
   status: 'new',

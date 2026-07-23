@@ -6,6 +6,7 @@ export const pdfPreview: ToolEntry = {
   desc: 'A native, fast, offline PDF viewer with search and zoom capabilities.',
   href: 'pdf-tools/pdf-preview/',
   category: 'pdf',
+  subCategory: 'View & Compare',
   input: 'pdf',
   output: 'none',
   keywords: ['preview', 'pdf', 'viewer', 'read pdf', 'pdf viewer'],

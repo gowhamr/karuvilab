@@ -6,6 +6,7 @@ export const imageToPdf: ToolEntry = {
   "desc": "Convert images into a single PDF",
   "href": "pdf-tools/image-to-pdf/",
   "category": "pdf",
+  "subCategory": "Convert & Export",
   "input": "image",
   "output": "pdf",
   "keywords": [

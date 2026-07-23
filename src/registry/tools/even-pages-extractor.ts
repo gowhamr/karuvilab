@@ -4,6 +4,7 @@ export const evenPagesExtractorTool = {
   desc: 'Extract only the even-numbered pages from a PDF document.',
   href: 'pdf-tools/even-pages-extractor/',
   category: 'pdf',
+  subCategory: 'Organize & Edit',
   icon: '🔢',
   color: '#B91C1C',
   status: 'new',

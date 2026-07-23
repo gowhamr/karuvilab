@@ -581,7 +581,7 @@ export const CORE_TOOLS: ToolEntry[] = [
       "lock-unlock-pdf",
       "watermark-pdf"
     ],
-    "subCategory": null,
+    "subCategory": "Optimize & Format",
     "requiresNetwork": false
   },
   {
@@ -649,7 +649,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -673,7 +673,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -697,7 +697,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -787,7 +787,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Optimize & Format",
     "requiresNetwork": false
   },
   {
@@ -957,7 +957,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -1049,7 +1049,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -1118,7 +1118,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Security & Metadata",
     "requiresNetwork": false
   },
   {
@@ -1192,7 +1192,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -1215,7 +1215,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "image",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -1238,7 +1238,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -1908,7 +1908,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "image",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -2185,7 +2185,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Security & Metadata",
     "requiresNetwork": false
   },
   {
@@ -2299,7 +2299,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Optimize & Format",
     "requiresNetwork": false
   },
   {
@@ -2390,7 +2390,7 @@ export const CORE_TOOLS: ToolEntry[] = [
       "compress-pdf",
       "page-numbering"
     ],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -2490,7 +2490,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -2677,7 +2677,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -2722,7 +2722,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -2769,7 +2769,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -2843,7 +2843,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "any-file",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Security & Metadata",
     "requiresNetwork": false
   },
   {
@@ -2868,7 +2868,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "json",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Security & Metadata",
     "requiresNetwork": false
   },
   {
@@ -2898,7 +2898,7 @@ export const CORE_TOOLS: ToolEntry[] = [
       "merge-pdf",
       "pdf-editor"
     ],
-    "subCategory": null,
+    "subCategory": "View & Compare",
     "requiresNetwork": false
   },
   {
@@ -2924,7 +2924,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "View & Compare",
     "requiresNetwork": false
   },
   {
@@ -2953,7 +2953,7 @@ export const CORE_TOOLS: ToolEntry[] = [
       "pdf-bookmarks",
       "pdf-attachments"
     ],
-    "subCategory": null,
+    "subCategory": "View & Compare",
     "requiresNetwork": false
   },
   {
@@ -2979,7 +2979,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "image",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -3003,7 +3003,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "text",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Convert & Export",
     "requiresNetwork": false
   },
   {
@@ -3291,7 +3291,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
-    "subCategory": null,
+    "subCategory": "Security & Metadata",
     "requiresNetwork": false
   },
   {
@@ -3314,7 +3314,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -3337,7 +3337,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -3385,7 +3385,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -3431,7 +3431,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -3454,7 +3454,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -3807,7 +3807,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Organize & Edit",
     "requiresNetwork": false
   },
   {
@@ -4459,7 +4459,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
-    "subCategory": null,
+    "subCategory": "Security & Metadata",
     "requiresNetwork": false
   },
   {

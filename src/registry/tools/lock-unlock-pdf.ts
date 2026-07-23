@@ -6,6 +6,7 @@ export const lockUnlockPdf: ToolEntry = {
   "desc": "Add or remove PDF passwords",
   "href": "pdf-tools/lock-unlock/",
   "category": "pdf",
+  "subCategory": "Security & Metadata",
   "input": "pdf",
   "output": "pdf",
   "keywords": [
