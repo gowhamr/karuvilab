@@ -665,18 +665,36 @@ export default function HomeClient() {
                         </div>
                       </div>
                     ) : (
-                      <m.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-80 content-start"
-                      >
-                        {filteredTools.map(tool => (
-                          <div key={tool.id} className="flex flex-col h-full">
-                            <ToolCard tool={tool} compact />
-                          </div>
+                      <div className="space-y-12">
+                        {Object.entries(
+                          filteredTools.reduce((acc, tool) => {
+                            const sub = tool.subCategory || 'Other';
+                            if (!acc[sub]) acc[sub] = [];
+                            acc[sub].push(tool);
+                            return acc;
+                          }, {} as Record<string, typeof filteredTools>)
+                        ).map(([groupName, groupTools]) => (
+                          <m.section
+                            key={groupName}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="space-y-6"
+                          >
+                            <h2 className="text-xl font-black uppercase tracking-widest text-blue flex items-center gap-3">
+                              <span className="w-8 h-px bg-blue/20" />
+                              {groupName}
+                            </h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-20 content-start">
+                              {groupTools.map(tool => (
+                                <div key={tool.id} className="flex flex-col h-full">
+                                  <ToolCard tool={tool} compact />
+                                </div>
+                              ))}
+                            </div>
+                          </m.section>
                         ))}
-                      </m.div>
+                      </div>
                     )}
                   </m.section>
                 ) : (

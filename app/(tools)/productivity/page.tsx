@@ -16,8 +16,14 @@ export const metadata: Metadata = {
 export default function ProductivityPage() {
   const cat = CATEGORIES.find(c => c.id === "productivity")!;
   const tools = ALL_TOOLS.filter(t => t.category === "productivity");
+  const groups = tools.reduce((acc, tool) => {
+    const sub = tool.subCategory || 'Other';
+    if (!acc[sub]) acc[sub] = [];
+    acc[sub].push(tool);
+    return acc;
+  }, {} as Record<string, typeof tools>);
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-12">
       <StructuredData category={cat} />
       <div className="space-y-2">
         <Breadcrumbs category={cat} />
