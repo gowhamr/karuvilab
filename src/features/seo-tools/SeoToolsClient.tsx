@@ -10,7 +10,7 @@ import RobotsTxtBuilderClient from './components/RobotsTxtBuilderClient';
 import SeoTitleTesterClient from './components/SeoTitleTesterClient';
 import SitemapGeneratorClient from './components/SitemapGeneratorClient';
 import SlugGeneratorClient from './components/SlugGeneratorClient';
-import LlmsTxtGeneratorClient from '@/app/(tools)/seo-tools/llms-txt-generator/ToolClient';
+import LlmsTxtGeneratorClient from '@/app/(tools)/developer-tools/llms-txt-generator/ToolClient';
 
 const tabs = [
   { id: 'meta-tags', label: 'Meta Tags' },

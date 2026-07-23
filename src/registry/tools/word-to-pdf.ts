@@ -20,6 +20,5 @@ export const wordToPdf: ToolEntry = {
   "input": null,
   "output": null,
   "related": [],
-  "subCategory": null,
   "requiresNetwork": false
 };
