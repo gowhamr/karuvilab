@@ -13,7 +13,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "aes encrypt decrypt",
       "security"
@@ -61,7 +61,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "audio converter",
       "media"
@@ -83,7 +83,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "banking tools",
       "iso 8583",
@@ -161,7 +161,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "base64url converter",
       "security"
@@ -207,7 +207,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "bmi calculator",
       "calculators"
@@ -229,7 +229,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "box shadow generator",
       "developer"
@@ -353,7 +353,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "card masker",
       "security"
@@ -401,7 +401,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "cipher tools",
       "security"
@@ -447,7 +447,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "color converter",
       "developer"
@@ -498,7 +498,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "color palette extractor",
       "image"
@@ -520,7 +520,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "command cheat sheet",
       "developer"
@@ -595,7 +595,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "compress",
       "image"
@@ -617,7 +617,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "contrast checker",
       "developer"
@@ -626,6 +626,78 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Validators & Checkers",
+    "requiresNetwork": false
+  },
+  {
+    "id": "convert-to-a4",
+    "name": "Convert to A4",
+    "desc": "Standardize PDF pages to A4 size",
+    "href": "/pdf-tools/convert-to-a4",
+    "category": "pdf",
+    "icon": "FileText",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "a4",
+      "resize",
+      "layout"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "convert-to-legal",
+    "name": "Convert to Legal",
+    "desc": "Standardize PDF pages to US Legal size",
+    "href": "/pdf-tools/convert-to-legal",
+    "category": "pdf",
+    "icon": "FileText",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "legal",
+      "resize",
+      "layout"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "convert-to-letter",
+    "name": "Convert to Letter",
+    "desc": "Standardize PDF pages to US Letter size",
+    "href": "/pdf-tools/convert-to-letter",
+    "category": "pdf",
+    "icon": "FileText",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "letter",
+      "resize",
+      "layout"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -639,7 +711,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "finacle tools",
       "banking"
@@ -661,7 +733,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "countdown timer",
       "productivity"
@@ -683,7 +755,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "crontab editor",
       "developer"
@@ -692,6 +764,30 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Generators",
+    "requiresNetwork": false
+  },
+  {
+    "id": "crop-pdf",
+    "name": "Crop PDF",
+    "desc": "Crop PDF pages to a specific area",
+    "href": "/pdf-tools/crop-pdf",
+    "category": "pdf",
+    "icon": "Crop",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "crop",
+      "edit",
+      "layout"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -705,7 +801,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "csp builder",
       "security"
@@ -727,7 +823,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "csr generator",
       "security"
@@ -749,7 +845,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "csv to json",
       "developer"
@@ -842,6 +938,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "delete-blank-pages",
+    "name": "Delete Blank Pages",
+    "desc": "Automatically detect and remove blank pages from your PDF document.",
+    "href": "pdf-tools/delete-blank-pages/",
+    "category": "pdf",
+    "icon": "📄",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "delete blank pages",
+      "remove empty pages",
+      "clean pdf"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "diff-checker",
     "name": "Diff Checker",
     "desc": "Compare two text snippets",
@@ -875,7 +994,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "directory manifest",
       "security"
@@ -911,6 +1030,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "duplicate-pages",
+    "name": "Duplicate PDF Pages",
+    "desc": "Duplicate and copy specific pages in a PDF document offline.",
+    "href": "pdf-tools/duplicate-pages/",
+    "category": "pdf",
+    "icon": "📑",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "duplicate pdf pages",
+      "copy pages",
+      "clone pages"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "ecdh-key-exchange",
     "name": "Ecdh Key Exchange",
     "desc": "Generate shared cryptographic keys using ECDH protocols.",
@@ -921,7 +1063,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "ecdh key exchange",
       "security"
@@ -943,10 +1085,35 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "ecdsa sign",
       "security"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "edit-metadata",
+    "name": "Edit PDF Metadata",
+    "desc": "View and edit PDF properties like Title, Author, and Subject",
+    "href": "/pdf-tools/edit-metadata",
+    "category": "pdf",
+    "icon": "FileEdit",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "metadata",
+      "properties",
+      "author",
+      "title"
     ],
     "input": null,
     "output": null,
@@ -994,7 +1161,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "emv tlv tree",
       "banking"
@@ -1003,6 +1170,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Banking Tools",
+    "requiresNetwork": false
+  },
+  {
+    "id": "even-pages-extractor",
+    "name": "Even Pages Extractor",
+    "desc": "Extract only the even-numbered pages from a PDF document.",
+    "href": "pdf-tools/even-pages-extractor/",
+    "category": "pdf",
+    "icon": "🔢",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "extract even pages",
+      "even pages only",
+      "pdf even pages"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -1024,6 +1214,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "pdf",
     "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "extract-pages",
+    "name": "Extract PDF Pages",
+    "desc": "Extract specific pages or page ranges from a PDF into a new document.",
+    "href": "pdf-tools/extract-pages/",
+    "category": "pdf",
+    "icon": "📥",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "extract pdf pages",
+      "split pdf pages",
+      "save pages"
+    ],
+    "input": "pdf",
+    "output": "pdf",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -1209,7 +1422,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "gif creator",
       "media"
@@ -1231,7 +1444,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "glassmorphism generator",
       "developer"
@@ -1253,7 +1466,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "gradient generator",
       "developer"
@@ -1303,7 +1516,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "gratuity calculator",
       "calculators"
@@ -1377,7 +1590,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "hash map visualizer",
       "developer"
@@ -1399,7 +1612,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "hkdf generator",
       "security"
@@ -1421,7 +1634,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "hmac generator",
       "security"
@@ -1443,7 +1656,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "hra calculator",
       "calculators"
@@ -1519,7 +1732,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "iban validator",
       "security"
@@ -1662,7 +1875,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "image seo",
       "seo"
@@ -1709,7 +1922,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "income tax",
       "calculators"
@@ -1781,7 +1994,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "invoice generator",
       "calculators"
@@ -1803,7 +2016,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "iso8583 bitmap decoder",
       "security"
@@ -1825,7 +2038,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "iso8583 message parser",
       "security"
@@ -1986,7 +2199,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "log analyzer",
       "developer"
@@ -2008,7 +2221,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "lorem ipsum",
       "developer"
@@ -2030,7 +2243,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "luhn validator",
       "developer"
@@ -2063,6 +2276,30 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Financial",
+    "requiresNetwork": false
+  },
+  {
+    "id": "margin-adjustment",
+    "name": "Margin Adjustment",
+    "desc": "Adjust margins of PDF pages",
+    "href": "/pdf-tools/margin-adjustment",
+    "category": "pdf",
+    "icon": "Maximize",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "margin",
+      "padding",
+      "layout"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2167,7 +2404,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "meta tags",
       "seo"
@@ -2234,6 +2471,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "move-pages",
+    "name": "Move PDF Pages",
+    "desc": "Drag and drop to move pages around in your PDF document.",
+    "href": "pdf-tools/move-pages/",
+    "category": "pdf",
+    "icon": "↕️",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "move pdf pages",
+      "shift pages",
+      "pdf order"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "mutual-fund-returns",
     "name": "Mutual Fund Returns",
     "desc": "Calculate absolute and annualized returns",
@@ -2269,7 +2529,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "nanoid generator",
       "developer"
@@ -2291,7 +2551,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "notes",
       "productivity"
@@ -2313,7 +2573,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "nps calculator",
       "calculators"
@@ -2386,13 +2646,36 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "oauth token decoder",
       "security"
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "odd-pages-extractor",
+    "name": "Odd Pages Extractor",
+    "desc": "Extract only the odd-numbered pages from a PDF document.",
+    "href": "pdf-tools/odd-pages-extractor/",
+    "category": "pdf",
+    "icon": "🔢",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "extract odd pages",
+      "odd pages only",
+      "pdf odd pages"
+    ],
+    "input": "pdf",
+    "output": "pdf",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2408,7 +2691,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "og preview",
       "seo"
@@ -2417,6 +2700,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "SEO Tools",
+    "requiresNetwork": false
+  },
+  {
+    "id": "organize-pdf",
+    "name": "Organize PDF",
+    "desc": "Sort, reorder, and organize pages in your PDF document visually.",
+    "href": "pdf-tools/organize-pdf/",
+    "category": "pdf",
+    "icon": "🗂️",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "organize pdf",
+      "rearrange pages",
+      "sort pdf"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -2438,6 +2744,30 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "pdf",
     "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "page-size-converter",
+    "name": "Page Size Converter",
+    "desc": "Convert PDF pages to a specific size",
+    "href": "/pdf-tools/page-size-converter",
+    "category": "pdf",
+    "icon": "Maximize",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "resize",
+      "scale",
+      "layout"
+    ],
+    "input": null,
+    "output": null,
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -2480,7 +2810,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "pbkdf2 generator",
       "security"
@@ -2488,6 +2818,86 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": null,
     "output": null,
     "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "pdf-attachments",
+    "name": "PDF Attachments",
+    "desc": "Extract embedded files and attachments from PDFs",
+    "href": "/pdf-tools/pdf-attachments",
+    "category": "pdf",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "attachments",
+      "extract",
+      "embedded",
+      "files"
+    ],
+    "input": "pdf",
+    "output": "any-file",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "pdf-bookmarks",
+    "name": "PDF Bookmarks",
+    "desc": "View and export PDF bookmarks (outline)",
+    "href": "/pdf-tools/pdf-bookmarks",
+    "category": "pdf",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "bookmarks",
+      "outline",
+      "toc",
+      "table of contents"
+    ],
+    "input": "pdf",
+    "output": "json",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "pdf-compare",
+    "name": "Compare PDFs",
+    "desc": "Highlight textual and visual differences between two PDF files.",
+    "href": "pdf-tools/pdf-compare/",
+    "category": "pdf",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "compare",
+      "pdf",
+      "diff",
+      "difference",
+      "compare pdf",
+      "pdf diff"
+    ],
+    "input": "pdf",
+    "output": "none",
+    "related": [
+      "diff-checker",
+      "merge-pdf",
+      "pdf-editor"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -2514,6 +2924,35 @@ export const CORE_TOOLS: ToolEntry[] = [
     "input": "pdf",
     "output": "pdf",
     "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "pdf-preview",
+    "name": "Preview PDF",
+    "desc": "A native, fast, offline PDF viewer with search and zoom capabilities.",
+    "href": "pdf-tools/pdf-preview/",
+    "category": "pdf",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "preview",
+      "pdf",
+      "viewer",
+      "read pdf",
+      "pdf viewer"
+    ],
+    "input": "pdf",
+    "output": "none",
+    "related": [
+      "pdf-editor",
+      "pdf-bookmarks",
+      "pdf-attachments"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -2578,7 +3017,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "pem viewer",
       "security"
@@ -2649,7 +3088,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "pomodoro timer",
       "productivity"
@@ -2696,7 +3135,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "private key checker",
       "security"
@@ -2718,7 +3157,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "public key inspector",
       "security"
@@ -2830,6 +3269,78 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "remove-metadata",
+    "name": "Remove PDF Metadata",
+    "desc": "Clear all metadata and properties from a PDF document",
+    "href": "/pdf-tools/remove-metadata",
+    "category": "pdf",
+    "icon": "Eraser",
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "pdf",
+      "metadata",
+      "properties",
+      "remove",
+      "clear",
+      "privacy"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "remove-pages",
+    "name": "Remove PDF Pages",
+    "desc": "Easily delete and remove unwanted pages from any PDF document offline.",
+    "href": "pdf-tools/remove-pages/",
+    "category": "pdf",
+    "icon": "🗑️",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "remove pdf pages",
+      "delete pdf pages",
+      "extract"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "reorder-pages",
+    "name": "Reorder PDF Pages",
+    "desc": "Easily reorder the pages of your PDF document.",
+    "href": "pdf-tools/reorder-pages/",
+    "category": "pdf",
+    "icon": "🔃",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "reorder pdf pages",
+      "change page order",
+      "move pages"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "retirement-calculator",
     "name": "Retirement Planner",
     "desc": "Corpus needed for your retirement",
@@ -2855,6 +3366,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "reverse-pages",
+    "name": "Reverse PDF Pages",
+    "desc": "Reverse the order of pages in a PDF document instantly.",
+    "href": "pdf-tools/reverse-pages/",
+    "category": "pdf",
+    "icon": "🔄",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "reverse pdf",
+      "reverse page order",
+      "flip pages"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "robots-txt",
     "name": "Robots Txt",
     "desc": "Generate and validate robots.txt configurations for SEO crawlers.",
@@ -2865,7 +3399,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "robots txt",
       "seo"
@@ -2901,6 +3435,29 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "rotate-selected-pages",
+    "name": "Rotate Selected Pages",
+    "desc": "Rotate specific pages in your PDF without rotating the whole document.",
+    "href": "pdf-tools/rotate-selected-pages/",
+    "category": "pdf",
+    "icon": "⤵️",
+    "color": "#B91C1C",
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "rotate specific pages",
+      "rotate pdf pages",
+      "pdf page rotation"
+    ],
+    "input": "pdf",
+    "output": "pdf",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "rsa-encrypt-decrypt",
     "name": "Rsa Encrypt Decrypt",
     "desc": "Encrypt or decrypt payloads using secure RSA key pairs.",
@@ -2911,7 +3468,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "rsa encrypt decrypt",
       "security"
@@ -2933,7 +3490,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "rsa key generator",
       "security"
@@ -2955,7 +3512,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "rsa sign verify",
       "security"
@@ -3025,7 +3582,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "saml decoder",
       "security"
@@ -3047,7 +3604,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "seo title",
       "seo"
@@ -3069,7 +3626,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "seo tools",
       "developer"
@@ -3118,7 +3675,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "sitemap generator",
       "seo"
@@ -3140,7 +3697,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "slug generator",
       "seo"
@@ -3233,13 +3790,13 @@ export const CORE_TOOLS: ToolEntry[] = [
     "id": "split-pdf",
     "name": "Split PDF",
     "desc": "Extract pages from a PDF",
-    "href": "pdf-tools/split-pdf/",
+    "href": "/pdf-tools/split-pdf",
     "category": "pdf",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
-    "status": "stable",
+    "status": "new",
     "lastAdded": null,
     "keywords": [
       "pdf",
@@ -3264,7 +3821,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "sql formatter",
       "developer"
@@ -3311,7 +3868,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "stopwatch",
       "productivity"
@@ -3363,7 +3920,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "swift mt mx",
       "banking"
@@ -3434,7 +3991,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "tds calculator",
       "calculators"
@@ -3456,7 +4013,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "text case converter",
       "productivity"
@@ -3614,7 +4171,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "tlv parser",
       "security"
@@ -3636,7 +4193,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "track 2 parser",
       "banking"
@@ -3709,7 +4266,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "unix timestamp",
       "developer"
@@ -3803,7 +4360,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "uuid generator",
       "developer"
@@ -3849,7 +4406,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "video metadata viewer",
       "media"
@@ -3871,7 +4428,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "video trim",
       "media"
@@ -3942,7 +4499,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "word counter",
       "productivity"
@@ -3996,7 +4553,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "word to pdf",
       "pdf"
@@ -4069,7 +4626,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "x509 viewer",
       "security"
@@ -4091,7 +4648,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "xml formatter",
       "developer"
@@ -4113,7 +4670,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "yaml json converter",
       "developer"
@@ -4135,7 +4692,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-21",
+    "lastAdded": "2026-07-23",
     "keywords": [
       "yaml validator",
       "developer"

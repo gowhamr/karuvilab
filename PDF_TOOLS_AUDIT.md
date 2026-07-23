@@ -1,8 +1,10 @@
-# KaruviLab — Phase 2: Architecture & React Quality Audit
+# KaruviLab — Phase 2: PDF Tools Architecture & Quality Audit
 
 **Version:** 1.0.0 | **Focus:** PDF Tools (Batch 1)
 
-This document represents Phase 2 of the multi-dimensional auditing process, strictly scoring tools based on enterprise engineering quality, adherence to KaruviLab Elite Engineering Manifesto constraints, React component correctness, and performance budgets.
+*Note: For the broader compliance status of other heavy operation tools (Image, NLP), see [HEAVY_OPS_COMPLIANCE_CHECKLIST.md](HEAVY_OPS_COMPLIANCE_CHECKLIST.md).*
+
+This document represents a deep, rigorous Phase 2 auditing process specifically for PDF Tools. It strictly scores tools based on enterprise engineering quality, adherence to KaruviLab Elite Engineering Manifesto constraints, specific race conditions, React component correctness, and performance budgets.
 
 ---
 

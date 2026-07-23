@@ -16,18 +16,20 @@ const appDir = path.resolve(process.cwd(), 'app/(tools)', category, toolId);
 // 1. Create feature directory
 fs.mkdirSync(featuresDir, { recursive: true });
 
+const pascalToolId = toolId.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+
 const clientWrapperContent = `"use client";
 
 import dynamic from 'next/dynamic';
 import { ToolSkeleton } from "@/components/ui/ToolSkeleton";
 
-const ${toolId}Client = dynamic(
+const ${pascalToolId}Client = dynamic(
   () => import('./${toolId}Client'),
   { ssr: false, loading: () => <ToolSkeleton /> }
 );
 
-export default function ${toolId}ClientWrapper() {
-  return <${toolId}Client />;
+export default function ${pascalToolId}ClientWrapper() {
+  return <${pascalToolId}Client />;
 }
 `;
 
@@ -36,7 +38,7 @@ const clientContent = `"use client";
 import { useState } from 'react';
 import { MetricCard } from '@/components/ui/MetricCard';
 
-export default function ${toolId}Client() {
+export default function ${pascalToolId}Client() {
   return (
     <div className="space-y-6">
       <div className="bg-surface border border-border rounded-2xl p-6">
@@ -56,7 +58,7 @@ fs.mkdirSync(appDir, { recursive: true });
 
 const pageContent = `import type { Metadata } from 'next';
 import { ToolShell } from '@/components/ui/ToolShell';
-import ${toolId}ClientWrapper from '@/src/features/${toolId}/${toolId}ClientWrapper';
+import ${pascalToolId}ClientWrapper from '@/src/features/${toolId}/${toolId}ClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,7 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Page() {
   return (
     <ToolShell toolId="${toolId}" title="${toolId}">
-      <${toolId}ClientWrapper />
+      <${pascalToolId}ClientWrapper />
     </ToolShell>
   );
 }

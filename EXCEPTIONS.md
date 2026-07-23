@@ -17,6 +17,7 @@ All entries reviewed and approved via PR.
 | E-007 | P-15 Hardcoded colors   | Sidebar favorites Heart color   | Single red Heart icon               | Permanent       | ACTIVE   |
 | E-008 | KL-Security / CSP       | 'unsafe-eval' added to CSP      | Only used in strictly validated math worker context | Permanent | ACTIVE |
 | E-009 | P-13 TypeScript Excellence | Explicit any usage in workers   | Allowed only in workers/tests for serialization/mocks | Permanent | ACTIVE |
+| E-010 | P-04/PERF-01 Main-thread Ops | pdfjs-dist requires HTMLCanvasElement | Virtualization, DPR capping, destroy-on-leave | Permanent | ACTIVE |
 
 ---
 
@@ -104,3 +105,9 @@ All entries reviewed and approved via PR.
 - **Resolution Date:** Permanent architectural exception.
 - **Status:** ACTIVE
 
+### E-010
+- **Rule:** P-04 / PERF-01 (Main-thread heavy computation)
+- **Reason:** pdfjs-dist's page.render() requires HTMLCanvasElement, which is unavailable in a Web Worker.
+- **Mitigation:** Virtualization: current + 1 adjacent page only, DPR capping by device tier, destroy-on-leave canvas lifecycle.
+- **Resolution Date:** Permanent architectural exception.
+- **Status:** ACTIVE

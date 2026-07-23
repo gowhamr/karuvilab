@@ -9,6 +9,7 @@ import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
 import { useProgress } from "@/src/contexts/ProgressContext";
 import { DropZone } from "@/components/ui/DropZone";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -108,6 +109,7 @@ export default function SplitPdfClient() {
 
   return (
     <div className="space-y-6">
+      <PrivacyBadge message="Processed entirely in your browser" />
       <div
         className="bg-surface border-2 border-dashed border-border rounded-4xl p-10 text-center cursor-pointer hover:border-blue transition-colors group"
         onClick={() => fileRef.current?.click()}

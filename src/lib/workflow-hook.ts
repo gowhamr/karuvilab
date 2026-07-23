@@ -9,6 +9,7 @@ const EMPTY_ARRAY: any[] = [];
 
 export function useWorkflowIntegration(toolId: string) {
   const activeItems = useWorkflowStore(state => state.activeItems);
+  const sourceToolId = useWorkflowStore(state => state.sourceToolId);
   const addItems = useBatchStore(state => state.addItems);
   const currentItems = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
   
@@ -16,6 +17,9 @@ export function useWorkflowIntegration(toolId: string) {
   const loadedRef = useRef<string | null>(null);
 
   useEffect(() => {
+    // Prevent tool from feeding its own output back as input
+    if (sourceToolId === toolId) return;
+
     // Only run once per toolId + activeItems fingerprint
     const fingerprint = `${toolId}-${activeItems.length}-${activeItems.map(i => i.name).join(',')}`;
     if (loadedRef.current === fingerprint) return;

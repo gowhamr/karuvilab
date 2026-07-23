@@ -1,12 +1,15 @@
 # KaruviLab Architecture Guide
 
+The tools index now aggregates to 189 tools.
+
 ## Project Architecture
 KaruviLab is a Next.js (App Router) application prioritizing client-side execution for privacy.
 
 ## Folder Structure
 - `app/(tools)/`: Tool-specific routes.
-- `src/registry/`: Centralized tool metadata and discovery.
+- `src/registry/`: Centralized tool metadata and discovery (single source of truth for 19 explicitly defined categories).
 - `components/ui/`: Shared atomic UI.
+- `src/features/`: Contains isolated client logic (e.g., Advanced PDF Editor).
 
 ## SSR Strategy
 - Server Components handle metadata and ToolShell loading.

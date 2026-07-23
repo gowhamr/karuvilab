@@ -53,18 +53,7 @@ export const HelpSection = memo(function HelpSection() {
       </section>
 
       {/* --- External Resources --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6">
-        <a 
-          href="https://github.com/gowhamr/karuvilab" 
-          target="_blank" 
-          className="flex items-center justify-between p-6 bg-surface border border-border rounded-2xl group hover:border-blue transition-all"
-        >
-          <div className="space-y-1">
-            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 group-hover:text-blue">Open Source</p>
-            <p className="text-xs font-medium text-text-4">View source on GitHub</p>
-          </div>
-          <ExternalLink className="w-4 h-4 text-text-4 group-hover:text-blue" />
-        </a>
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 pt-6">
         <Link 
           href="/contact" 
           className="flex items-center justify-between p-6 bg-surface border border-border rounded-2xl group hover:border-blue transition-all"

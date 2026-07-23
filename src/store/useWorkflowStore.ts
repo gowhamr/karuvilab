@@ -11,6 +11,7 @@ export interface WorkflowItem {
 interface WorkflowState {
   chain: string[]; // toolIds
   activeItems: WorkflowItem[];
+  sourceToolId: string | null;
   
   // Actions
   addToChain: (toolId: string) => void;
@@ -29,6 +30,7 @@ const EMPTY_SUGGESTIONS: ToolEntry[] = [];
 export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   chain: [],
   activeItems: [],
+  sourceToolId: null,
   suggestions: [],
 
   addToChain: (toolId) => {
@@ -40,7 +42,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   },
 
   setActiveItems: (items) => {
-    set({ activeItems: items });
+    set({ activeItems: items, sourceToolId: null });
     get().updateSuggestions();
   },
 
@@ -51,14 +53,15 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         : [...state.chain, toolId];
       return { 
         chain: nextChain,
-        activeItems: items 
+        activeItems: items,
+        sourceToolId: toolId
       };
     });
     get().updateSuggestions();
   },
 
   clearWorkflow: () => {
-    set({ chain: [], activeItems: [], suggestions: [] });
+    set({ chain: [], activeItems: [], sourceToolId: null, suggestions: [] });
   },
 
   updateSuggestions: () => {

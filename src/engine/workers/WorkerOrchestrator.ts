@@ -75,6 +75,10 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   lockPdf: 'media',
   unlockPdf: 'media',
   addPageNumbersToPdf: 'media',
+  getPdfMetadata: 'media',
+  setPdfMetadata: 'media',
+  getPdfBookmarks: 'media',
+  extractPdfAttachments: 'media',
   mergePdfs: 'media',
   compressPdf: 'media',
   splitPdf: 'media',
@@ -95,7 +99,8 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   encodeWav: 'heavy',
   extractRawTextFromDocx: 'heavy',
   convertDocxToPdf: 'heavy',
-  generateDocxFromText: 'heavy'
+  generateDocxFromText: 'heavy',
+  adjustPdfLayout: 'media'
 };
 
 interface WorkerPool {

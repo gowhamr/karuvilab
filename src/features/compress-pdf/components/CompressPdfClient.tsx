@@ -1,12 +1,11 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
 import { BatchQueue } from "@/components/ui/BatchQueue";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { formatError } from "@/src/lib/formatError";
-import { FileText } from "lucide-react";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
 import { workerManager } from "@/src/workers/manager";
@@ -25,6 +24,8 @@ export default function CompressPdfClient() {
   const { createUrl } = useObjectUrlManager();
   const [isProcessing, setIsProcessing] = useState(false);
   const [compressionLevel, setCompressionLevel] = useState<CompressionLevel>('medium');
+  // Ref-based guard to prevent double-click race condition (survives React batching)
+  const processingRef = useRef(false);
 
   const addItems = useBatchStore(state => state.addItems);
   const startProcessing = useBatchStore(state => state.startProcessing);
@@ -67,12 +68,15 @@ export default function CompressPdfClient() {
   useWorkflowInput(handleFiles);
 
   const processAll = useCallback(async () => {
-    if (isProcessing) return; // Guard against double-click
+    // Double-click guard: use ref to survive React state batching
+    if (processingRef.current || isProcessing) return;
+    processingRef.current = true;
     setIsProcessing(true);
     try {
       await startProcessing(toolId, compressSingle);
     } finally {
       setIsProcessing(false);
+      processingRef.current = false;
     }
   }, [isProcessing, startProcessing, compressSingle]);
 
@@ -85,9 +89,6 @@ export default function CompressPdfClient() {
     }
   }, []);
 
-  const hasItems = items.length > 0;
-  const hasPendingItems = items.some(i => i.status === 'pending' || i.status === 'failed');
-
   return (
     <div className="space-y-8">
       <PrivacyBadge message="Local processing – No files uploaded to servers" />
@@ -96,7 +97,12 @@ export default function CompressPdfClient() {
         onFilesSelected={handleFiles}
         accept=".pdf,application/pdf"
         multiple
-        title="Drop PDF files here"
+        title={
+          <>
+            <span className="hidden sm:inline">Drop PDF files here or click to add</span>
+            <span className="sm:hidden">Select PDF files</span>
+          </>
+        }
         description="Supports multiple PDFs up to 100MB"
         icon={<div className="text-4xl">📄</div>}
       />
@@ -166,25 +172,8 @@ export default function CompressPdfClient() {
         isProcessing={isProcessing}
         onProcess={processAll}
         onDownload={downloadOne}
+        processLabel="Compress All"
       />
-
-      {!hasItems && (
-        <div className="flex flex-col items-center p-8 text-center bg-surface border-2 border-dashed border-border rounded-3xl">
-          <div className="w-16 h-16 mb-6 text-blue bg-blue/5 rounded-2xl flex items-center justify-center">
-            <FileText className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-black text-text tracking-tight mb-2">Waiting for PDFs</h3>
-          <p className="text-sm text-text-4 font-medium max-w-md">
-            Drop one or more PDF files above, then select your desired compression level.
-          </p>
-          <div className="flex flex-wrap gap-2 mt-6 text-xs font-bold text-text-4 uppercase tracking-widest">
-            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">1. Drop PDFs</span>
-            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">2. Choose level</span>
-            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">3. Execute</span>
-            <span className="px-3 py-1 bg-surface-2 border border-border rounded-lg">4. Download</span>
-          </div>
-        </div>
-      )}
       
       <WorkflowSuggestions />
     </div>

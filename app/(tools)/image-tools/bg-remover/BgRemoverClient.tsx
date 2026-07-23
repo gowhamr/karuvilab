@@ -69,8 +69,11 @@ export default function BgRemoverClient() {
 
   return (
     <div className="space-y-6">
-      <div className="p-4 bg-blue/10 border border-blue/30 rounded-2xl text-sm space-y-1">
-        <p className="font-semibold">Simple Mode (Color Threshold)</p>
+      <div className="p-4 bg-blue/10 border border-blue/30 rounded-2xl text-sm space-y-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <p className="font-semibold">Simple Mode (Color Threshold)</p>
+          <PrivacyBadge />
+        </div>
         <p className="text-text-3">This tool uses canvas pixel color matching to remove backgrounds. Select the background color and adjust tolerance. For complex/gradient backgrounds, AI-powered removal (requires <code className="text-xs bg-bg px-1 rounded">@imgly/background-removal</code>) is not included in offline mode.</p>
       </div>
 

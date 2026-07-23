@@ -1,43 +1,32 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { EngineLoader } from "@/components/system/EngineLoader";
-import { DropZone } from "@/components/ui/DropZone";
-import { Loader2, AlertCircle, FileText, Download } from "lucide-react";
-import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useBatchStore, BatchItem, EMPTY_BATCH_ITEMS } from "@/src/store/useBatchStore";
+import { BatchQueue } from "@/components/ui/BatchQueue";
+import { DropZone } from "@/components/ui/DropZone";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { formatError } from "@/src/lib/formatError";
+import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
+import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
+import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 
-const cat = CATEGORIES.find(c => c.id === "pdf")!;
-
-interface ExtractedImage { url: string; width: number; height: number; page: number; index: number; blob: Blob; }
+const toolId = "extract-images";
 
 export default function ExtractImagesClient() {
-  const [file, setFile] = useState<File | null>(null);
-  const [processing, setProcessing] = useState(false);
-  const [images, setImages] = useState<ExtractedImage[]>([]);
-  const [progress, setProgress] = useState("");
-  const [progressPercent, setProgressPercent] = useState(0);
-  const [error, setError] = useState("");
-  const [isZipping, setIsZipping] = useState(false);
-  const { createUrl, revokeUrl } = useObjectUrlManager();
+  const { createUrl } = useObjectUrlManager();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const processingRef = useRef(false);
 
-  const checkLib = useCallback(() => {
-    return true; // Library is running in the worker, so it's always ready
-  }, []);
+  const addItems = useBatchStore(state => state.addItems);
+  const startProcessing = useBatchStore(state => state.startProcessing);
+  const updateItem = useBatchStore(state => state.updateItem);
+  const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
 
-  const extract = async () => {
-    if (!file) { setError("Please select a PDF file."); return; }
-    setProcessing(true);
-    setError("");
-    setProgressPercent(0);
-    
-    // Revoke any previous image URLs to avoid memory leaks
-    images.forEach(img => revokeUrl(img.url));
-    setImages([]);
-
+  const processSingle = useCallback(async (item: BatchItem): Promise<any> => {
     try {
-      const bytes = await file.arrayBuffer();
+      updateItem(toolId, item.id, { message: "Loading PDF..." });
+      const bytes = await item.file.arrayBuffer();
       
       const results = await workerOrchestrator.dispatch<Array<{
         arrayBuffer: ArrayBuffer;
@@ -50,48 +39,21 @@ export default function ExtractImagesClient() {
         [bytes],
         [bytes],
         (p: any) => {
-          setProgress(p.message || `Processing page...`);
-          if (typeof p.percent === "number") {
-            setProgressPercent(p.percent);
-          }
+          updateItem(toolId, item.id, { message: p.message || "Extracting images...", progress: p.percent });
         }
       );
 
-      const extracted = results.map(item => {
-        const blob = new Blob([item.arrayBuffer], { type: "image/png" });
-        const url = createUrl(blob);
-        return {
-          url,
-          width: item.width,
-          height: item.height,
-          page: item.page,
-          index: item.index,
-          blob
-        };
-      });
+      if (results.length === 0) {
+        throw new Error("No extractable images found in this PDF.");
+      }
 
-      setImages(extracted);
-      setProgress("");
-      setProgressPercent(0);
-      if (extracted.length === 0) setError("No extractable images found in this PDF.");
-    } catch (e: any) {
-      console.error("Image extraction error:", e);
-      setError(e?.message || "Failed to extract images.");
-      setProgress("");
-      setProgressPercent(0);
-    }
-    setProcessing(false);
-  };
+      updateItem(toolId, item.id, { message: "Zipping images...", progress: 95 });
 
-  const downloadAll = async () => {
-    setIsZipping(true);
-    try {
       const zipData: Record<string, Uint8Array> = {};
       const transferList: ArrayBuffer[] = [];
-      for (const img of images) {
-        const buffer = await img.blob.arrayBuffer();
-        zipData[`extracted-page${img.page}-img${img.index + 1}.png`] = new Uint8Array(buffer);
-        transferList.push(buffer);
+      for (const img of results) {
+        zipData[`extracted-page${img.page}-img${img.index + 1}.png`] = new Uint8Array(img.arrayBuffer);
+        transferList.push(img.arrayBuffer);
       }
       
       const zipBytes = await workerOrchestrator.dispatch<Uint8Array>(
@@ -100,101 +62,81 @@ export default function ExtractImagesClient() {
         transferList
       );
       
-      const zipBlob = new Blob([zipBytes as unknown as BlobPart], { type: "application/zip" });
-      const url = createUrl(zipBlob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `karuvilab-extracted-images-${Date.now()}.zip`;
-      a.click();
+      const blob = new Blob([zipBytes as unknown as BlobPart], { type: "application/zip" });
+      const name = item.file.name.replace(/\.pdf$/i, "") + "-extracted-images.zip";
+      const url = createUrl(blob);
+
+      return {
+        name,
+        originalSize: item.file.size,
+        compressedSize: blob.size,
+        url,
+        blob,
+      };
     } catch (e: any) {
-      console.error("Failed to create ZIP:", e);
-      setError("Failed to create ZIP archive.");
-    } finally {
-      setIsZipping(false);
+      throw new Error(formatError(e));
     }
-  };
+  }, [createUrl, updateItem]);
+
+  const handleFiles = useCallback((files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    addItems(toolId, Array.from(files));
+  }, [addItems]);
+
+  useWorkflowInput(handleFiles);
+
+  const processAll = useCallback(async () => {
+    if (processingRef.current || isProcessing) return;
+    processingRef.current = true;
+    setIsProcessing(true);
+    try {
+      await startProcessing(toolId, processSingle);
+    } finally {
+      setIsProcessing(false);
+      processingRef.current = false;
+    }
+  }, [isProcessing, startProcessing, processSingle]);
+
+  const downloadOne = useCallback((item: BatchItem) => {
+    if (item.result) {
+      const a = document.createElement("a");
+      a.href = item.result.url;
+      a.download = item.result.name;
+      a.click();
+    }
+  }, []);
 
   return (
     <div className="space-y-8">
-      <EngineLoader
-        checkInit={checkLib}
-        loadingMessage="Preparing PDF extraction engine..."
-        errorMessage="Failed to load PDF extraction engine."
-      >
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl text-sm text-yellow-700 dark:text-yellow-400">
-          <strong>Note:</strong> Extracts raster images (JPEG, PNG) embedded in the PDF. Vector graphics and text-based content cannot be extracted as images.
-        </div>
+      <PrivacyBadge message="Local processing – No files uploaded to servers" />
 
-        <DropZone
-          onFilesSelected={(files) => {
-            const f = files instanceof FileList ? files[0] : files[0];
-            if (f) { setFile(f); setImages([]); }
-          }}
-          accept=".pdf,application/pdf"
-          title={file ? file.name : "Drop a PDF here or click to select"}
-          description={file ? `${(file.size / 1024).toFixed(0)} KB` : "Supports standard PDF files"}
-          icon={<div className="text-4xl">{file ? "📄" : "🖼️"}</div>}
-        />
+      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl text-sm text-yellow-700 dark:text-yellow-400 font-medium">
+        <strong>Note:</strong> Extracts raster images (JPEG, PNG) embedded in the PDFs. Vector graphics and text-based content cannot be extracted as images. Output is provided as a ZIP file containing all images per PDF.
+      </div>
 
-        {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm font-bold">{error}</div>}
-        {progress && (
-          <div className="p-4 bg-surface border border-border rounded-xl space-y-3">
-            <div className="text-sm text-text-3 flex items-center gap-2 font-bold uppercase tracking-widest">
-              <Loader2 className="w-4 h-4 animate-spin text-blue" />
-              {progress}
-            </div>
-            <div className="w-full bg-surface-2 rounded-full h-1.5 overflow-hidden">
-              <div 
-                className="bg-blue h-1.5 rounded-full transition-all duration-300" 
-                style={{ width: `${progressPercent}%` }} 
-              />
-            </div>
-          </div>
-        )}
+      <DropZone
+        onFilesSelected={handleFiles}
+        accept=".pdf,application/pdf"
+        multiple
+        title={
+          <>
+            <span className="hidden sm:inline">Drop PDF files here or click to add</span>
+            <span className="sm:hidden">Select PDF files</span>
+          </>
+        }
+        description="Supports multiple PDFs"
+        icon={<div className="text-4xl">🖼️</div>}
+      />
 
-        <button
-          onClick={extract}
-          disabled={!file || processing}
-          className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
-        >
-          {processing ? "Extracting…" : "Extract Images"}
-        </button>
-
-        {images.length > 0 && (
-          <div className="bg-surface border border-border p-5 rounded-4xl shadow-sm space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-black text-text-2 text-xs uppercase tracking-widest-lg">{images.length} image{images.length !== 1 ? "s" : ""} found</h2>
-              <button 
-                onClick={downloadAll} 
-                disabled={isZipping}
-                className="flex items-center gap-2 px-4 py-2 bg-blue text-white text-tiny font-bold uppercase tracking-widest-sm rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue/10 disabled:opacity-50"
-              >
-                {isZipping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
-                {isZipping ? "Zipping..." : "Download All"}
-              </button>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {images.map((img, i) => (
-                <div key={i} className="bg-bg border border-border rounded-2xl overflow-hidden group">
-                  <div className="aspect-square bg-white flex items-center justify-center p-2">
-                    <img src={img.url} alt={`Extracted image ${i + 1}`} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />
-                  </div>
-                  <div className="p-3 bg-surface border-t border-border space-y-2">
-                    <p className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Page {img.page} · {img.width}×{img.height}px</p>
-                    <a 
-                      href={img.url} 
-                      download={`extracted-p${img.page}-${i + 1}.png`} 
-                      className="inline-flex items-center gap-1.5 text-tiny font-black text-blue uppercase tracking-widest hover:underline"
-                    >
-                      <Download size={10} /> Download
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </EngineLoader>
+      <BatchQueue 
+        toolId={toolId}
+        isProcessing={isProcessing}
+        onProcess={processAll}
+        onDownload={downloadOne}
+        processLabel="Extract Images All"
+      />
+      
+      <WorkflowSuggestions />
     </div>
   );
 }

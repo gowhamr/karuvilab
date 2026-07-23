@@ -74,7 +74,7 @@ const globalStoresMap = {};
 const toolsData = [];
 
 for (const t of CORE_TOOLS) {
-  const normalizedHref = t.href.replace(/\/$/, '');
+  const normalizedHref = (t.href || '').replace(/\/$/, '');
   const toolFolder = path.resolve('app/(tools)', normalizedHref);
   const pagePath = path.join(toolFolder, 'page.tsx');
   const hasFolder = fs.existsSync(toolFolder);
@@ -337,6 +337,8 @@ for (const t of CORE_TOOLS) {
 
 // 6. Write Markdown File Content
 let md = `# KaruviLab (KV) Complete Tool Reference
+> **Generation Note**: Auto-generated from single source of truth. **Total Tools**: ${CORE_TOOLS.length}
+
 
 Welcome to the comprehensive, evidence-based technical reference guide for the KaruviLab platform. KaruviLab (KV) is an elite, browser-native suite of local-first utilities designed for maximal performance, absolute privacy, and offline capability.
 
@@ -376,6 +378,7 @@ toolsData.forEach(t => {
 
 Object.keys(toolsByCategory).sort().forEach(cat => {
   md += `### ${cat}\n`;
+
   const sortedCatTools = [...toolsByCategory[cat]].sort((a,b) => a.identity.name.localeCompare(b.identity.name));
   sortedCatTools.forEach(t => {
     md += `- [${t.identity.name}](#${t.identity.id})\n`;
@@ -393,10 +396,14 @@ md += `\n---\n\n## Tool Reference Details By Category\n`;
 
 Object.keys(toolsByCategory).sort().forEach(cat => {
   md += `\n## Category: ${cat}\n\n`;
+
   const sortedCatTools = [...toolsByCategory[cat]].sort((a,b) => a.identity.name.localeCompare(b.identity.name));
   
   sortedCatTools.forEach(t => {
     md += `### <a id="${t.identity.id}"></a>${t.identity.name}\n\n`;
+    if (['minesweeper', 'snake-game', 'sudoku', 'word-guess'].includes(t.identity.id)) {
+      md += `> ⚠️ Added outside the standard approval process\n\n`;
+    }
     md += `#### Identity\n`;
     md += `- **ID:** \`${t.identity.id}\`\n`;
     md += `- **Name:** ${t.identity.name}\n`;

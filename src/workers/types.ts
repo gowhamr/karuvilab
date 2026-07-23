@@ -255,6 +255,48 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  adjustPdfLayout(
+    file: ArrayBuffer,
+    options: {
+      action: 'crop' | 'resize' | 'margin';
+      pages: number[] | 'all';
+      // For crop
+      cropBox?: { x: number; y: number; width: number; height: number }; // Percentage 0-100 or Points? Let's use points or percentages. Let's pass points.
+      // For resize
+      targetSize?: [number, number]; // [width, height]
+      scaleToFit?: boolean;
+      // For margin
+      margins?: { top: number; right: number; bottom: number; left: number };
+    },
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  getPdfMetadata(file: ArrayBuffer): Promise<Record<string, string | Date | undefined>>;
+  
+  setPdfMetadata(
+    file: ArrayBuffer,
+    metadata: {
+      title?: string | null;
+      author?: string | null;
+      subject?: string | null;
+      keywords?: string[] | null;
+      producer?: string | null;
+      creator?: string | null;
+      clearAll?: boolean;
+    },
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  getPdfBookmarks(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<any[]>;
+
+  extractPdfAttachments(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback
+  ): Promise<Array<{ filename: string; content: Uint8Array }>>;
+
   // Image Tasks (Standard)
   compressImage(
     file: ArrayBuffer,

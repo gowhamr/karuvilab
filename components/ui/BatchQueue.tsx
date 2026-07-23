@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef, memo } from 'react';
+import React, { useMemo, useEffect, memo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { 
   File, 
@@ -10,9 +10,7 @@ import {
   CircleCheckBig as CheckCircle2, 
   CircleAlert as AlertCircle, 
   Download, 
-  Archive, 
   X,
-  RefreshCw,
   Clock,
   Inbox
 } from 'lucide-react';
@@ -21,7 +19,7 @@ import { StatusBadge } from '@/components/system/StatusBadge';
 import { cn } from '@/src/lib/utils';
 import { useContextualActionBar } from '@/src/store/useContextualActionBar';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { WorkflowSuggestions } from '@/components/ui/WorkflowSuggestions';
+
 
 interface BatchQueueProps {
   toolId: string;
@@ -29,6 +27,7 @@ interface BatchQueueProps {
   onDownloadAll?: (() => void) | undefined;
   onProcess: () => Promise<void>;
   isProcessing: boolean;
+  processLabel?: string;
   renderThumbnail?: ((item: BatchItem) => React.ReactNode) | undefined;
 }
 
@@ -143,7 +142,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
   );
 });
 
-export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isProcessing, renderThumbnail }: BatchQueueProps) {
+export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isProcessing, processLabel = 'Execute All', renderThumbnail }: BatchQueueProps) {
   const items = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
   const removeItem = useBatchStore(state => state.removeItem);
   const clearItems = useBatchStore(state => state.clearItems);
@@ -195,7 +194,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     } else {
       setBarConfig({
         type: "idle",
-        label: "Execute All",
+        label: processLabel,
         onClick: onProcess,
       });
     }
@@ -273,7 +272,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                   disabled={isProcessing || stats.pending + stats.failed === 0}
                   className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-blue text-white font-black rounded-xl hover:shadow-md hover:shadow-blue/10 active:scale-95 transition-all text-xs uppercase tracking-widest disabled:opacity-30 outline-none focus-visible:ring-2 focus-visible:ring-blue"
                 >
-                  <Play className="w-3.5 h-3.5 fill-current" /> Execute All
+                  <Play className="w-3.5 h-3.5 fill-current" /> {processLabel}
                 </button>
                 {onDownloadAll && stats.completed > 0 && (
                   <button 
@@ -320,11 +319,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
         </AnimatePresence>
       </div>
 
-      {stats.completed > 0 && !isProcessing && (
-        <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <WorkflowSuggestions />
-        </m.div>
-      )}
+
 
       <style jsx global>{`
         .custom-scrollbar-thin::-webkit-scrollbar {

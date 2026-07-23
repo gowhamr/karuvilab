@@ -1,4 +1,6 @@
 # KaruviLab (KV) Complete Tool Reference
+> **Generation Note**: Auto-generated from single source of truth. **Total Tools**: 189
+
 
 Welcome to the comprehensive, evidence-based technical reference guide for the KaruviLab platform. KaruviLab (KV) is an elite, browser-native suite of local-first utilities designed for maximal performance, absolute privacy, and offline capability.
 
@@ -50,23 +52,32 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Compress](#compress)
 - [Compress PDF](#compress-pdf)
 - [Contrast Checker](#contrast-checker)
+- [Convert to A4](#convert-to-a4)
+- [Convert to Legal](#convert-to-legal)
+- [Convert to Letter](#convert-to-letter)
 - [Core Banking Parser](#core-banking-parser)
 - [Countdown Timer](#countdown-timer)
 - [Crontab Editor](#crontab-editor)
+- [Crop PDF](#crop-pdf)
 - [Csp Builder](#csp-builder)
 - [Csr Generator](#csr-generator)
 - [Csv To Json](#csv-to-json)
 - [Currency Converter](#currency-converter)
 - [Data Calculator](#data-calculator)
 - [Date Calculator](#date-calculator)
+- [Delete Blank Pages](#delete-blank-pages)
 - [Diff Checker](#diff-checker)
 - [Directory Manifest](#directory-manifest)
 - [Discount Calculator](#discount-calculator)
+- [Duplicate PDF Pages](#duplicate-pages)
 - [Ecdh Key Exchange](#ecdh-key-exchange)
 - [Ecdsa Sign](#ecdsa-sign)
+- [Edit PDF Metadata](#edit-metadata)
 - [EMI Calculator](#emi-calculator)
 - [Emv Tlv Tree](#emv-tlv-tree)
+- [Even Pages Extractor](#even-pages-extractor)
 - [Extract Images](#extract-images)
+- [Extract PDF Pages](#extract-pages)
 - [Fake Data Generator](#fake-data-generator)
 - [File Validator](#validate)
 - [File Viewer & Diff](#file-viewer-diff)
@@ -107,20 +118,25 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Lorem Ipsum](#lorem-ipsum)
 - [Luhn Validator](#luhn-validator)
 - [Lumpsum Calculator](#lumpsum-calculator)
+- [Margin Adjustment](#margin-adjustment)
 - [Markdown Editor](#markdown)
 - [Memory Match](#memory-match)
 - [Merge PDF](#merge-pdf)
 - [Meta Tags](#meta-tags)
 - [Mic & Camera Tester](#mic-camera-tester)
 - [Minesweeper](#minesweeper)
+- [Move PDF Pages](#move-pages)
 - [Mutual Fund Returns](#mutual-fund-returns)
 - [Nanoid Generator](#nanoid-generator)
 - [Notes](#notes)
 - [Nps Calculator](#nps-calculator)
 - [Numeral & Encoding Converter](#numeral-converter)
 - [Oauth Token Decoder](#oauth-token-decoder)
+- [Odd Pages Extractor](#odd-pages-extractor)
 - [Og Preview](#og-preview)
+- [Organize PDF](#organize-pdf)
 - [Page Numbering](#page-numbering)
+- [Page Size Converter](#page-size-converter)
 - [Password Generator](#password-generator)
 - [Pbkdf2 Generator](#pbkdf2-generator)
 - [PDF Editor](#pdf-editor)
@@ -137,9 +153,14 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Reaction Time Test](#reaction-time)
 - [Recurring Deposit (RD)](#rd-calculator)
 - [Regex Tester](#regex-tester)
+- [Remove PDF Metadata](#remove-metadata)
+- [Remove PDF Pages](#remove-pages)
+- [Reorder PDF Pages](#reorder-pages)
 - [Retirement Planner](#retirement-calculator)
+- [Reverse PDF Pages](#reverse-pages)
 - [Robots Txt](#robots-txt)
 - [Rotate PDF](#rotate-pdf)
+- [Rotate Selected Pages](#rotate-selected-pages)
 - [Rsa Encrypt Decrypt](#rsa-encrypt-decrypt)
 - [Rsa Key Generator](#rsa-key-generator)
 - [Rsa Sign Verify](#rsa-sign-verify)
@@ -196,12 +217,6 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 ---
 
 ## Category Index
-### Banking Tools
-- [Core Banking Parser](#core-banking-parser)
-- [Emv Tlv Tree](#emv-tlv-tree)
-- [Swift Mt Mx](#swift-mt-mx)
-- [Track 2 Parser](#track-2-parser)
-
 ### Break Time
 - [2048](#game-2048)
 - [Color Match](#color-match)
@@ -275,25 +290,36 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Color Converter](#color-converter)
 - [Command Cheat Sheet](#command-cheat-sheet)
 - [Contrast Checker](#contrast-checker)
+- [Core Banking Parser](#core-banking-parser)
 - [Crontab Editor](#crontab-editor)
 - [Csv To Json](#csv-to-json)
 - [Diff Checker](#diff-checker)
+- [Emv Tlv Tree](#emv-tlv-tree)
 - [Fake Data Generator](#fake-data-generator)
 - [File Viewer & Diff](#file-viewer-diff)
 - [Glassmorphism Generator](#glassmorphism-generator)
 - [Gradient Generator](#gradient-generator)
 - [Hash Map Visualizer](#hash-map-visualizer)
 - [HTML Online Viewer](#html-viewer)
+- [Image Seo](#image-seo)
 - [JSON ↔ CSV](#json-csv)
 - [JSON Formatter](#json-formatter)
 - [JSON to TypeScript](#json-to-ts)
 - [Log Analyzer](#log-analyzer)
 - [Lorem Ipsum](#lorem-ipsum)
 - [Luhn Validator](#luhn-validator)
+- [Meta Tags](#meta-tags)
 - [Nanoid Generator](#nanoid-generator)
+- [Og Preview](#og-preview)
 - [Regex Tester](#regex-tester)
+- [Robots Txt](#robots-txt)
+- [Seo Title](#seo-title)
 - [Seo Tools](#seo-tools)
+- [Sitemap Generator](#sitemap-generator)
+- [Slug Generator](#slug-generator)
 - [Sql Formatter](#sql-formatter)
+- [Swift Mt Mx](#swift-mt-mx)
+- [Track 2 Parser](#track-2-parser)
 - [Unix Timestamp](#unix-timestamp)
 - [URL Encoder](#url-encoder)
 - [Uuid Generator](#uuid-generator)
@@ -321,15 +347,34 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 
 ### PDF Tools
 - [Compress PDF](#compress-pdf)
+- [Convert to A4](#convert-to-a4)
+- [Convert to Legal](#convert-to-legal)
+- [Convert to Letter](#convert-to-letter)
+- [Crop PDF](#crop-pdf)
+- [Delete Blank Pages](#delete-blank-pages)
+- [Duplicate PDF Pages](#duplicate-pages)
+- [Edit PDF Metadata](#edit-metadata)
+- [Even Pages Extractor](#even-pages-extractor)
 - [Extract Images](#extract-images)
+- [Extract PDF Pages](#extract-pages)
 - [Image to PDF](#image-to-pdf)
 - [Lock / Unlock PDF](#lock-unlock-pdf)
+- [Margin Adjustment](#margin-adjustment)
 - [Merge PDF](#merge-pdf)
+- [Move PDF Pages](#move-pages)
+- [Odd Pages Extractor](#odd-pages-extractor)
+- [Organize PDF](#organize-pdf)
 - [Page Numbering](#page-numbering)
+- [Page Size Converter](#page-size-converter)
 - [PDF Editor](#pdf-editor)
 - [PDF to Image](#pdf-to-image)
 - [PDF to Word](#pdf-to-word)
+- [Remove PDF Metadata](#remove-metadata)
+- [Remove PDF Pages](#remove-pages)
+- [Reorder PDF Pages](#reorder-pages)
+- [Reverse PDF Pages](#reverse-pages)
 - [Rotate PDF](#rotate-pdf)
+- [Rotate Selected Pages](#rotate-selected-pages)
 - [Split PDF](#split-pdf)
 - [Watermark PDF](#watermark-pdf)
 - [Word To Pdf](#word-to-pdf)
@@ -347,15 +392,6 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - [Typing Speed Test](#typing-speed-test)
 - [WiFi QR Code Generator](#wifi-qr-code)
 - [Word Counter](#word-counter)
-
-### SEO Tools
-- [Image Seo](#image-seo)
-- [Meta Tags](#meta-tags)
-- [Og Preview](#og-preview)
-- [Robots Txt](#robots-txt)
-- [Seo Title](#seo-title)
-- [Sitemap Generator](#sitemap-generator)
-- [Slug Generator](#slug-generator)
 
 ### Security
 - [Aes Encrypt Decrypt](#aes-encrypt-decrypt)
@@ -392,6 +428,15 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 ---
 
 ## Route Index
+- `//pdf-tools/convert-to-a4` → [Convert to A4](#convert-to-a4)
+- `//pdf-tools/convert-to-legal` → [Convert to Legal](#convert-to-legal)
+- `//pdf-tools/convert-to-letter` → [Convert to Letter](#convert-to-letter)
+- `//pdf-tools/crop-pdf` → [Crop PDF](#crop-pdf)
+- `//pdf-tools/edit-metadata` → [Edit PDF Metadata](#edit-metadata)
+- `//pdf-tools/margin-adjustment` → [Margin Adjustment](#margin-adjustment)
+- `//pdf-tools/page-size-converter` → [Page Size Converter](#page-size-converter)
+- `//pdf-tools/remove-metadata` → [Remove PDF Metadata](#remove-metadata)
+- `//pdf-tools/split-pdf` → [Split PDF](#split-pdf)
 - `/banking-tools/core-banking-parser` → [Core Banking Parser](#core-banking-parser)
 - `/banking-tools/emv-tlv-tree` → [Emv Tlv Tree](#emv-tlv-tree)
 - `/banking-tools/swift-mt-mx` → [Swift Mt Mx](#swift-mt-mx)
@@ -491,16 +536,26 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 - `/media-tools/video-metadata-viewer` → [Video Metadata Viewer](#video-metadata-viewer)
 - `/media-tools/video-trim` → [Video Trim](#video-trim)
 - `/pdf-tools/compress-pdf` → [Compress PDF](#compress-pdf)
+- `/pdf-tools/delete-blank-pages` → [Delete Blank Pages](#delete-blank-pages)
+- `/pdf-tools/duplicate-pages` → [Duplicate PDF Pages](#duplicate-pages)
+- `/pdf-tools/even-pages-extractor` → [Even Pages Extractor](#even-pages-extractor)
 - `/pdf-tools/extract-images` → [Extract Images](#extract-images)
+- `/pdf-tools/extract-pages` → [Extract PDF Pages](#extract-pages)
 - `/pdf-tools/image-to-pdf` → [Image to PDF](#image-to-pdf)
 - `/pdf-tools/lock-unlock` → [Lock / Unlock PDF](#lock-unlock-pdf)
 - `/pdf-tools/merge-pdf` → [Merge PDF](#merge-pdf)
+- `/pdf-tools/move-pages` → [Move PDF Pages](#move-pages)
+- `/pdf-tools/odd-pages-extractor` → [Odd Pages Extractor](#odd-pages-extractor)
+- `/pdf-tools/organize-pdf` → [Organize PDF](#organize-pdf)
 - `/pdf-tools/page-numbering` → [Page Numbering](#page-numbering)
 - `/pdf-tools/pdf-editor` → [PDF Editor](#pdf-editor)
 - `/pdf-tools/pdf-to-image` → [PDF to Image](#pdf-to-image)
 - `/pdf-tools/pdf-to-word` → [PDF to Word](#pdf-to-word)
+- `/pdf-tools/remove-pages` → [Remove PDF Pages](#remove-pages)
+- `/pdf-tools/reorder-pages` → [Reorder PDF Pages](#reorder-pages)
+- `/pdf-tools/reverse-pages` → [Reverse PDF Pages](#reverse-pages)
 - `/pdf-tools/rotate-pdf` → [Rotate PDF](#rotate-pdf)
-- `/pdf-tools/split-pdf` → [Split PDF](#split-pdf)
+- `/pdf-tools/rotate-selected-pages` → [Rotate Selected Pages](#rotate-selected-pages)
 - `/pdf-tools/watermark-pdf` → [Watermark PDF](#watermark-pdf)
 - `/pdf-tools/word-to-pdf` → [Word To Pdf](#word-to-pdf)
 - `/productivity/calendar` → [Calendar](#calendar)
@@ -566,361 +621,6 @@ KaruviLab is built on a zero-upload server-less philosophy. Key architectural te
 ---
 
 ## Tool Reference Details By Category
-
-## Category: Banking Tools
-
-### <a id="core-banking-parser"></a>Core Banking Parser
-
-#### Identity
-- **ID:** `core-banking-parser`
-- **Name:** Core Banking Parser
-- **Category:** Banking Tools
-- **Route:** `/banking-tools/core-banking-parser`
-
-#### Purpose
-> Parse core banking trace logs into JSON
-
-#### Features
-- Support for finacle tools
-- Support for banking
-
-#### Functionality
-Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
-| **Processing Packages** | `next`, `react`, `lucide-react` |
-| **Shared Internal Modules** | `tool-registry`, `core-banking-parser`, `seo`, `parser` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/banking-tools/core-banking-parser/page.tsx`
-- **Client Component:** `app/(tools)/banking-tools/core-banking-parser/ToolClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `Not Present in Repository`
-- **Registry File:** `src/registry/tools/core-banking-parser.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Medium
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** Yes
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Medium
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** None
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/banking-tools/core-banking-parser/page.tsx`
-  - `app/(tools)/banking-tools/core-banking-parser/ToolClient.tsx`
-  - `app/(tools)/banking-tools/core-banking-parser/ToolClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="emv-tlv-tree"></a>Emv Tlv Tree
-
-#### Identity
-- **ID:** `emv-tlv-tree`
-- **Name:** Emv Tlv Tree
-- **Category:** Banking Tools
-- **Route:** `/banking-tools/emv-tlv-tree`
-
-#### Purpose
-> Inspect and parse EMV TLV payment packets for bank transaction analysis.
-
-#### Features
-- Support for emv tlv tree
-- Support for banking
-
-#### Functionality
-Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
-| **Processing Packages** | `next`, `react` |
-| **Shared Internal Modules** | `tool-registry`, `emv-tlv-tree`, `seo`, `tlv` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/banking-tools/emv-tlv-tree/page.tsx`
-- **Client Component:** `app/(tools)/banking-tools/emv-tlv-tree/ToolClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `Not Present in Repository`
-- **Registry File:** `src/registry/tools/emv-tlv-tree.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** Yes
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** None
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/banking-tools/emv-tlv-tree/page.tsx`
-  - `app/(tools)/banking-tools/emv-tlv-tree/ToolClient.tsx`
-  - `app/(tools)/banking-tools/emv-tlv-tree/ToolClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="swift-mt-mx"></a>Swift Mt Mx
-
-#### Identity
-- **ID:** `swift-mt-mx`
-- **Name:** Swift Mt Mx
-- **Category:** Banking Tools
-- **Route:** `/banking-tools/swift-mt-mx`
-
-#### Purpose
-> Parse and inspect SWIFT MT and MX banking message structures.
-
-#### Features
-- Support for swift mt mx
-- Support for banking
-
-#### Functionality
-Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
-| **Processing Packages** | `next`, `react`, `lucide-react` |
-| **Shared Internal Modules** | `tool-registry`, `swift-mt-mx`, `seo` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/banking-tools/swift-mt-mx/page.tsx`
-- **Client Component:** `app/(tools)/banking-tools/swift-mt-mx/ToolClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `Not Present in Repository`
-- **Registry File:** `src/registry/tools/swift-mt-mx.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Medium
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** Yes
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Medium
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** None
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/banking-tools/swift-mt-mx/page.tsx`
-  - `app/(tools)/banking-tools/swift-mt-mx/ToolClient.tsx`
-  - `app/(tools)/banking-tools/swift-mt-mx/ToolClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="track-2-parser"></a>Track 2 Parser
-
-#### Identity
-- **ID:** `track-2-parser`
-- **Name:** Track 2 Parser
-- **Category:** Banking Tools
-- **Route:** `/banking-tools/track-2-parser`
-
-#### Purpose
-> Decode magnetic stripe Track 2 data for payment card testing.
-
-#### Features
-- Support for track 2 parser
-- Support for banking
-
-#### Functionality
-Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
-| **Processing Packages** | `next`, `react` |
-| **Shared Internal Modules** | `tool-registry`, `track-2-parser`, `seo` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/banking-tools/track-2-parser/page.tsx`
-- **Client Component:** `app/(tools)/banking-tools/track-2-parser/ToolClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `Not Present in Repository`
-- **Registry File:** `src/registry/tools/track-2-parser.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** Yes
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** None
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/banking-tools/track-2-parser/page.tsx`
-  - `app/(tools)/banking-tools/track-2-parser/ToolClient.tsx`
-  - `app/(tools)/banking-tools/track-2-parser/ToolClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
 
 ## Category: Break Time
 
@@ -1013,7 +713,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/game-2048/Game2048Client.tsx`
   - `app/(tools)/break-time-tools/game-2048/Game2048ClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -1105,7 +805,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/color-match/ColorMatchClient.tsx`
   - `app/(tools)/break-time-tools/color-match/ColorMatchClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -1198,11 +898,13 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/memory-match/MemoryMatchClient.tsx`
   - `app/(tools)/break-time-tools/memory-match/MemoryMatchClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
 ### <a id="minesweeper"></a>Minesweeper
+
+> ⚠️ Added outside the standard approval process
 
 #### Identity
 - **ID:** `minesweeper`
@@ -1290,7 +992,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/minesweeper/MinesweeperClient.tsx`
   - `app/(tools)/break-time-tools/minesweeper/MinesweeperClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -1382,11 +1084,13 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/reaction-time/ReactionTimeClient.tsx`
   - `app/(tools)/break-time-tools/reaction-time/ReactionTimeClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
 ### <a id="snake-game"></a>Snake Game
+
+> ⚠️ Added outside the standard approval process
 
 #### Identity
 - **ID:** `snake-game`
@@ -1475,11 +1179,13 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/snake-game/SnakeGameClient.tsx`
   - `app/(tools)/break-time-tools/snake-game/SnakeGameClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
 ### <a id="sudoku"></a>Sudoku
+
+> ⚠️ Added outside the standard approval process
 
 #### Identity
 - **ID:** `sudoku`
@@ -1567,7 +1273,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/sudoku/SudokuClient.tsx`
   - `app/(tools)/break-time-tools/sudoku/SudokuClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -1659,11 +1365,13 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/tic-tac-toe/TicTacToeClient.tsx`
   - `app/(tools)/break-time-tools/tic-tac-toe/TicTacToeClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
 ### <a id="word-guess"></a>Word Guess
+
+> ⚠️ Added outside the standard approval process
 
 #### Identity
 - **ID:** `word-guess`
@@ -1753,7 +1461,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/break-time-tools/word-guess/WordGuessClient.tsx`
   - `app/(tools)/break-time-tools/word-guess/WordGuessClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -1784,7 +1492,7 @@ Set Date of Birth: Click the birth date field to open the calendar and select yo
 #### Libraries & Dependencies
 | Dependency Type | Verified Imports |
 | --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `MetricCard`, `ToolInput`, `ShareButton`, `SharedResultBanner`, `QRModal`, `ToolSkeleton` |
+| **Radix UI / UI Components** | `ToolShell`, `MetricCard`, `HybridDateInput`, `ShareButton`, `SharedResultBanner`, `QRModal`, `ToolSkeleton` |
 | **Processing Packages** | `next`, `react` |
 | **Shared Internal Modules** | `tool-registry`, `seo`, `useUrlState` |
 | **Peer Dependencies** | None |
@@ -1835,7 +1543,7 @@ Set Date of Birth: Click the birth date field to open the calendar and select yo
 
 #### Relations & Enhancements
 - **Related Tools:** `date-calculator`, `time-calculator`
-- **Shared Components Used:** `ToolShell`, `MetricCard`, `ToolInput`, `ShareButton`, `SharedResultBanner`, `QRModal`, `ToolSkeleton`
+- **Shared Components Used:** `ToolShell`, `MetricCard`, `HybridDateInput`, `ShareButton`, `SharedResultBanner`, `QRModal`, `ToolSkeleton`
 - **Shared Workers Used:** None
 - **Shared Stores Used:** None
 - **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Age is off by one day, Resolve issues relating to: Future birth date error
@@ -1847,7 +1555,7 @@ Set Date of Birth: Click the birth date field to open the calendar and select yo
   - `app/(tools)/calculators/age-calculator/AgeCalculatorClient.tsx`
   - `app/(tools)/calculators/age-calculator/AgeCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -1939,7 +1647,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `src/features/bmi-calculator/types/index.ts`
   - `src/features/bmi-calculator/utils/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2028,7 +1736,7 @@ Enter the initial investment value. Enter the final (current) investment value. 
   - `app/(tools)/calculators/cagr-calculator/CAGRCalculatorClient.tsx`
   - `app/(tools)/calculators/cagr-calculator/CAGRCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2127,7 +1835,7 @@ Enter an expression using the on-screen keypad or your physical keyboard. On mob
   - `src/features/calculator/engine/parser.ts`
   - `src/features/calculator/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2218,7 +1926,7 @@ Enter the principal (initial investment). Enter the annual interest rate. Enter 
   - `app/(tools)/calculators/compound-interest/CompoundInterestClientWrapper.tsx`
   - `app/(tools)/calculators/compound-interest/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2317,7 +2025,7 @@ Select Base: Choose the currency you currently have from the first dropdown menu
   - `src/features/currency-converter/store.ts`
   - `src/features/currency-converter/types.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2407,7 +2115,7 @@ Switch between the four tabs: Unit Converter, Transfer Time, Storage Cost, or Ch
   - `app/(tools)/calculators/data-calculator/DataCalculatorWrapper.tsx`
   - `src/features/data-calculator/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2498,7 +2206,7 @@ To find a future or past date: enter the start date, select an operation (add/su
   - `app/(tools)/calculators/date-calculator/DateCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/date-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2589,7 +2297,7 @@ Select the calculation mode: 'Final Price', 'Discount %', or 'Original Price'. E
   - `app/(tools)/calculators/discount-calculator/DiscountCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/discount-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2682,7 +2390,7 @@ An **EMI (Equated Monthly Installment)** is the fixed amount you pay every month
   - `app/(tools)/calculators/emi-calculator/layout.tsx`
   - `src/features/emi-calculator/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2781,7 +2489,7 @@ The **Financial Freedom Calculator** (often associated with the FIRE movement—
   - `src/features/financial-freedom-calculator/types.ts`
   - `src/features/financial-freedom-calculator/utils.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2870,7 +2578,7 @@ Enter the FD principal amount. Enter the annual interest rate. Select the tenure
   - `app/(tools)/calculators/fd-calculator/FDCalculatorClient.tsx`
   - `app/(tools)/calculators/fd-calculator/FDCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -2958,7 +2666,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/calculators/gratuity-calculator/GratuityCalculatorClient.tsx`
   - `app/(tools)/calculators/gratuity-calculator/GratuityCalculatorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3054,7 +2762,7 @@ Enter Amount: Type the numerical value you want to calculate in the 'Amount' fie
   - `app/(tools)/calculators/gst-calculator/GSTCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/gst-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3142,7 +2850,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/calculators/hra-calculator/HraCalculatorClient.tsx`
   - `app/(tools)/calculators/hra-calculator/HraCalculatorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3230,7 +2938,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/calculators/income-tax/IncomeTaxClient.tsx`
   - `app/(tools)/calculators/income-tax/IncomeTaxWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3319,7 +3027,7 @@ Enter the amount of money. Enter the average annual inflation rate. Enter the ti
   - `app/(tools)/calculators/inflation-calculator/InflationCalculatorClient.tsx`
   - `app/(tools)/calculators/inflation-calculator/InflationCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3413,7 +3121,7 @@ Step 1: Choose a visual style (Modern, Professional, or Classic) and upload your
   - `src/features/invoice-generator/types/index.ts`
   - `src/features/invoice-generator/utils/pdf-generator.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3502,7 +3210,7 @@ Enter the one-time investment amount. Enter the expected annual interest/return 
   - `app/(tools)/calculators/lumpsum-calculator/LumpsumCalculatorClient.tsx`
   - `app/(tools)/calculators/lumpsum-calculator/LumpsumCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3591,7 +3299,7 @@ Enter the initial investment amount or monthly SIP. Set the expected annual retu
   - `app/(tools)/calculators/mutual-fund-returns/MutualFundReturnsClient.tsx`
   - `app/(tools)/calculators/mutual-fund-returns/MutualFundReturnsClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3679,7 +3387,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/calculators/nps-calculator/NpsCalculatorClient.tsx`
   - `app/(tools)/calculators/nps-calculator/NpsCalculatorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3782,7 +3490,7 @@ Choose your mode from the tabs: 'Smart Converter' for auto-detection, 'Single Nu
   - `src/features/numeral-converter/utils/conversion-helpers.ts`
   - `src/features/numeral-converter/utils/morse-map.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3873,7 +3581,7 @@ Select the type of calculation from the tabs. Enter the required values in the i
   - `app/(tools)/calculators/percentage-calculator/PercentageCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/percentage-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -3962,7 +3670,7 @@ Enter your annual investment amount (Max ₹1.5 Lakh). The current PPF interest 
   - `app/(tools)/calculators/ppf-calculator/PPFCalculatorClient.tsx`
   - `app/(tools)/calculators/ppf-calculator/PPFCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4051,7 +3759,7 @@ Enter your monthly deposit amount. Enter the annual interest rate. Enter the dep
   - `app/(tools)/calculators/rd-calculator/RDCalculatorClient.tsx`
   - `app/(tools)/calculators/rd-calculator/RDCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4140,7 +3848,7 @@ Enter your current age and planned retirement age. Enter your current monthly ex
   - `app/(tools)/calculators/retirement-calculator/RetirementCalculatorClient.tsx`
   - `app/(tools)/calculators/retirement-calculator/RetirementCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4231,7 +3939,7 @@ Enter your monthly after-tax income. List your fixed expenses like rent, bills, 
   - `app/(tools)/calculators/safe-to-spend/SafeToSpendClientWrapper.tsx`
   - `app/(tools)/calculators/safe-to-spend/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4322,7 +4030,7 @@ Enter your annual CTC in the input field. Optionally enter your city type (metro
   - `app/(tools)/calculators/salary-calculator/SalaryCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/salary-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4414,7 +4122,7 @@ Monthly Investment: Enter the amount you plan to invest every month. Return Rate
   - `app/(tools)/calculators/sip-calculator/SIPCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/sip-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4505,7 +4213,7 @@ Type your conversion request in plain English (e.g., '5kg to lbs'). The tool par
   - `app/(tools)/calculators/smart-converter/SmartConverterClientWrapper.tsx`
   - `app/(tools)/calculators/smart-converter/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4594,7 +4302,7 @@ Add multiple 'Buy' entries with quantity and price per share. The tool calculate
   - `app/(tools)/calculators/stock-average-calculator/StockAverageCalculatorClient.tsx`
   - `app/(tools)/calculators/stock-average-calculator/StockAverageCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4683,7 +4391,7 @@ Enter the total initial investment (corpus). Enter the monthly withdrawal amount
   - `app/(tools)/calculators/swp-calculator/SWPCalculatorClient.tsx`
   - `app/(tools)/calculators/swp-calculator/SWPCalculatorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4771,7 +4479,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/calculators/tds-calculator/TdsCalculatorClient.tsx`
   - `app/(tools)/calculators/tds-calculator/TdsCalculatorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4862,7 +4570,7 @@ Select a calculation mode: 'Time Difference' or 'Add/Subtract Time'. Enter the s
   - `app/(tools)/calculators/time-calculator/TimeCalculatorClientWrapper.tsx`
   - `app/(tools)/calculators/time-calculator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -4953,7 +4661,7 @@ Select the unit category (e.g., Length, Weight, Temperature). Enter the value to
   - `app/(tools)/calculators/unit-converter/UnitConverterClientWrapper.tsx`
   - `app/(tools)/calculators/unit-converter/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5044,7 +4752,7 @@ Enter a time in the UTC field to see the equivalent IST time. Alternatively, ent
   - `app/(tools)/calculators/utc-ist-converter/UtcIstConverterClientWrapper.tsx`
   - `app/(tools)/calculators/utc-ist-converter/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5136,7 +4844,7 @@ Enter your work start time and end time. Specify any break duration in minutes (
   - `app/(tools)/calculators/work-hours/layout.tsx`
   - `src/features/work-hours/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5230,7 +4938,7 @@ Search for a city or country in the search bar. Click 'Add' to include the locat
   - `app/(tools)/calculators/world-clock/utils.ts`
   - `src/features/world-clock/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5323,7 +5031,7 @@ Click the 'Start Camera' button to allow the tool access to your device's webcam
   - `app/(tools)/utilities/barcode-scanner/BarcodeScannerClient.tsx`
   - `app/(tools)/utilities/barcode-scanner/BarcodeScannerClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5414,7 +5122,7 @@ Select a validation profile (e.g., 'Passport Seva', 'PAN Card', or 'Custom'). Up
   - `app/(tools)/utilities/validate/FileValidatorClientWrapper.tsx`
   - `app/(tools)/utilities/validate/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5506,7 +5214,7 @@ Paste or type your text into the editor. Click 'Check Grammar' to run the analys
   - `src/features/grammar-checker/store.ts`
   - `src/features/grammar-checker/utils/engine.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5605,7 +5313,7 @@ Start Typing: Enter your text in the left editor pane using standard Markdown sy
   - `src/features/markdown/components/Toolbar.tsx`
   - `src/features/markdown/constants.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5696,7 +5404,7 @@ Upload or enter the required data for Mic & Camera Tester. Configure any availab
   - `app/(tools)/utilities/mic-camera-tester/MicCameraTesterClient.tsx`
   - `app/(tools)/utilities/mic-camera-tester/MicCameraTesterClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5787,7 +5495,7 @@ Enter Data: Choose the content type (URL, Text, or Wi-Fi) and enter the informat
   - `app/(tools)/utilities/qrcode/QRCodeGeneratorClient.tsx`
   - `app/(tools)/utilities/qrcode/QRCodeGeneratorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5884,7 +5592,7 @@ Click the 'Start Test' button to begin the measurement process. The tool will fi
   - `src/features/internet-speed-test/components/PulseRing.tsx`
   - `src/features/internet-speed-test/types/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -5975,7 +5683,7 @@ Paste your long text into the input field. Set the chunk size (number of charact
   - `app/(tools)/utilities/split-copy/SplitCopyClientWrapper.tsx`
   - `app/(tools)/utilities/split-copy/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6066,7 +5774,7 @@ Type a task description in the input field and press Enter or click 'Add'. Optio
   - `app/(tools)/utilities/task-reminder/TaskReminderClientWrapper.tsx`
   - `app/(tools)/utilities/task-reminder/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6157,7 +5865,7 @@ Paste your text into the input area. Choose a transformation from the toolbar (e
   - `app/(tools)/utilities/text-utility/TextUtilityClientWrapper.tsx`
   - `app/(tools)/utilities/text-utility/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6248,7 +5956,7 @@ Paste the full URL (including query parameters) into the input field. The cleane
   - `app/(tools)/utilities/url-cleaner/URLCleanerClientWrapper.tsx`
   - `app/(tools)/utilities/url-cleaner/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6347,7 +6055,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `src/features/banking-tools/components/SwiftMtMxClient.tsx`
   - `src/features/banking-tools/components/Track2ParserClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6374,9 +6082,9 @@ Select 'Encode' or 'Decode' mode using the toggle. Paste your input text into th
 #### Libraries & Dependencies
 | Dependency Type | Verified Imports |
 | --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
-| **Processing Packages** | `next`, `react` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `utils`, `types`, `logger` |
+| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `DropZone`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `utils`, `hooks`, `types`, `logger` |
 | **Peer Dependencies** | None |
 
 #### File Structure
@@ -6402,7 +6110,7 @@ Select 'Encode' or 'Decode' mode using the toggle. Paste your input text into th
 | **IndexedDB** | No |
 
 #### Performance Characteristics
-- **Memory Profile:** Light
+- **Memory Profile:** Medium
 - **CPU Intensive:** No
 - **Lazy Loaded (ssr:false):** Yes
 - **Code Splitting Boundaries:** Yes
@@ -6416,7 +6124,7 @@ Select 'Encode' or 'Decode' mode using the toggle. Paste your input text into th
 - **Hardware/Device Permissions:** None
 
 #### Metrics
-- **Bundle Impact:** Small
+- **Bundle Impact:** Medium
 - **Worker-Based:** No
 - **Offline-First:** Yes
 - **IndexedDB Persistence:** No
@@ -6425,7 +6133,7 @@ Select 'Encode' or 'Decode' mode using the toggle. Paste your input text into th
 
 #### Relations & Enhancements
 - **Related Tools:** `url-encoder`, `hash-generator`, `jwt-decoder`
-- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
+- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `DropZone`, `ToolSkeleton`
 - **Shared Workers Used:** None
 - **Shared Stores Used:** None
 - **Known Tech Debt / Future Enhancements:** Resolve issues relating to: 'Invalid Base64' error when decoding, Resolve issues relating to: Output has unexpected line breaks, Resolve issues relating to: URL-safe decode fails on standard Base64
@@ -6438,7 +6146,7 @@ Select 'Encode' or 'Decode' mode using the toggle. Paste your input text into th
   - `app/(tools)/developer-tools/base64/Base64ClientWrapper.tsx`
   - `src/features/base64/processor.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6526,7 +6234,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/box-shadow-generator/BoxShadowGeneratorClient.tsx`
   - `app/(tools)/developer-tools/box-shadow-generator/BoxShadowGeneratorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6618,7 +6326,7 @@ Select the language from the format tabs (JSON, HTML, CSS, SQL, Markdown). Paste
   - `src/features/format/components/CodeFormatterClient.tsx`
   - `src/features/format/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6710,7 +6418,7 @@ Select the language tab: CSS, JavaScript, or HTML. Paste your source code into t
   - `src/features/code-minifier/components/CodeMinifierClient.tsx`
   - `src/features/code-minifier/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6798,7 +6506,7 @@ Select a color using the built-in color picker. Or, type a color value into any 
   - `app/(tools)/developer-tools/color-converter/ColorConverterClient.tsx`
   - `app/(tools)/developer-tools/color-converter/ColorConverterClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6885,7 +6593,7 @@ Step 1 Step 2 Step 3 Step 4
   - `app/(tools)/developer-tools/command-cheat-sheet/ClientWrapper.tsx`
   - `src/features/command-cheat-sheet/index.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -6973,7 +6681,95 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/contrast-checker/ContrastCheckerClient.tsx`
   - `app/(tools)/developer-tools/contrast-checker/ContrastCheckerWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="core-banking-parser"></a>Core Banking Parser
+
+#### Identity
+- **ID:** `core-banking-parser`
+- **Name:** Core Banking Parser
+- **Category:** Developer Tools
+- **Route:** `/banking-tools/core-banking-parser`
+
+#### Purpose
+> Parse core banking trace logs into JSON
+
+#### Features
+- Support for finacle tools
+- Support for banking
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Shared Internal Modules** | `tool-registry`, `core-banking-parser`, `seo`, `parser` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/banking-tools/core-banking-parser/page.tsx`
+- **Client Component:** `app/(tools)/banking-tools/core-banking-parser/ToolClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/core-banking-parser.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Medium
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** Yes
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Medium
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/banking-tools/core-banking-parser/page.tsx`
+  - `app/(tools)/banking-tools/core-banking-parser/ToolClient.tsx`
+  - `app/(tools)/banking-tools/core-banking-parser/ToolClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7066,7 +6862,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `src/features/crontab-editor/types/index.ts`
   - `src/features/crontab-editor/utils/cron-parser.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7154,7 +6950,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/csv-to-json/CsvToJsonClient.tsx`
   - `app/(tools)/developer-tools/csv-to-json/CsvToJsonWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7246,7 +7042,95 @@ Paste the original text into the left panel ('Before'). Paste the updated text i
   - `src/features/diff-checker/components/DiffCheckerClient.tsx`
   - `src/features/diff-checker/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="emv-tlv-tree"></a>Emv Tlv Tree
+
+#### Identity
+- **ID:** `emv-tlv-tree`
+- **Name:** Emv Tlv Tree
+- **Category:** Developer Tools
+- **Route:** `/banking-tools/emv-tlv-tree`
+
+#### Purpose
+> Inspect and parse EMV TLV payment packets for bank transaction analysis.
+
+#### Features
+- Support for emv tlv tree
+- Support for banking
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react` |
+| **Shared Internal Modules** | `tool-registry`, `emv-tlv-tree`, `seo`, `tlv` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/banking-tools/emv-tlv-tree/page.tsx`
+- **Client Component:** `app/(tools)/banking-tools/emv-tlv-tree/ToolClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/emv-tlv-tree.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** Yes
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/banking-tools/emv-tlv-tree/page.tsx`
+  - `app/(tools)/banking-tools/emv-tlv-tree/ToolClient.tsx`
+  - `app/(tools)/banking-tools/emv-tlv-tree/ToolClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7338,7 +7222,7 @@ Upload or enter the required data for Fake Data Generator. Configure any availab
   - `app/(tools)/developer-tools/fake-data-generator/FakeDataGeneratorClient.tsx`
   - `app/(tools)/developer-tools/fake-data-generator/FakeDataGeneratorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7429,7 +7313,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/file-tools/file-viewer-diff/FileViewerDiffClientWrapper.tsx`
   - `src/features/file-viewer-diff/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7517,7 +7401,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/glassmorphism-generator/GlassmorphismGeneratorClient.tsx`
   - `app/(tools)/developer-tools/glassmorphism-generator/GlassmorphismGeneratorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7605,7 +7489,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/gradient-generator/GradientGeneratorClient.tsx`
   - `app/(tools)/developer-tools/gradient-generator/GradientGeneratorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7692,7 +7576,7 @@ Step 1 Step 2 Step 3 Step 4
   - `app/(tools)/developer-tools/hash-map-visualizer/ClientWrapper.tsx`
   - `src/features/hash-map-visualizer/index.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7786,7 +7670,98 @@ Select a tab (HTML, CSS, or JS) to start writing code. The preview pane updates 
   - `src/features/html-viewer/components/HtmlViewerClient.tsx`
   - `src/features/html-viewer/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="image-seo"></a>Image Seo
+
+#### Identity
+- **ID:** `image-seo`
+- **Name:** Image Seo
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/image-seo`
+
+#### Purpose
+> 
+Optimizing your images for search engines (SEO) is one of the most overlooked aspects of digital marketing and website performance.
+
+#### Features
+- E-commerce SEO: Optimizing product catalogs for Google Image search to drive organic traffic.
+- Blogger Workflow: Quickly renaming raw camera uploads into descriptive, SEO-friendly assets for WordPress or Next.js.
+- Accessibility Audits: Using the SEO Analyzer to refine alt text for compliance with WCAG standards.
+- Developer Productivity: Batch renaming assets for code projects using consistent, slugified naming patterns.
+
+#### Functionality
+**Step 1:** Upload your image or select multiple files for batch processing using the 'Select Files' button. **Step 2:** Provide a brief context or description of what is happening in the image. **Step 3:** Click 'Generate SEO Plan' to create a natural language alt text string and a clean, hyphenated filename slug. **Step 4:** For individual files, download the optimized version instantly. For batch tasks, use the 'Batch Renamer' tab to process entire folders with consistent naming conventions. **Step 5:** Use the 'SEO Analyzer' to verify the health of your existing alt tags against character count and keyword density benchmarks.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `ImageSeoClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/image-seo/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/image-seo/ImageSeoClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/image-seo.ts`
+- **Registry File:** `src/registry/tools/image-seo.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Using 'image of' or 'picture of' in alt text, Resolve issues relating to: Keyword Stuffing
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/image-seo/page.tsx`
+  - `app/(tools)/seo-tools/image-seo/ImageSeoClient.tsx`
+  - `app/(tools)/seo-tools/image-seo/ImageSeoClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7878,7 +7853,7 @@ Select the conversion direction: 'JSON → CSV' or 'CSV → JSON'. Paste your JS
   - `src/features/json-csv/components/JSONCSVConverterClient.tsx`
   - `src/features/json-csv/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -7971,7 +7946,7 @@ Input: Paste your raw JSON payload into the main editor area. Beautify: Click th
   - `src/features/json-formatter/components/JSONFormatterClient.tsx`
   - `src/features/json-formatter/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8061,7 +8036,7 @@ Input JSON: Paste your raw JSON data in the left panel. View Interfaces: The gen
   - `src/features/json-to-ts/JsonToTsClient.tsx`
   - `src/features/json-to-ts/JsonToTsClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8149,7 +8124,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/log-analyzer/LogAnalyzerClient.tsx`
   - `app/(tools)/developer-tools/log-analyzer/LogAnalyzerClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8237,7 +8212,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/lorem-ipsum/LoremIpsumClient.tsx`
   - `app/(tools)/developer-tools/lorem-ipsum/LoremIpsumWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8325,7 +8300,97 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/luhn-validator/LuhnClient.tsx`
   - `app/(tools)/developer-tools/luhn-validator/LuhnClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="meta-tags"></a>Meta Tags
+
+#### Identity
+- **ID:** `meta-tags`
+- **Name:** Meta Tags
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/meta-tags`
+
+#### Purpose
+> Generate complete HTML meta tag markup for a web page including title, description, Open Graph, Twitter Card, and basic SEO tags.
+
+#### Features
+- Adding Open Graph tags to a new landing page
+- Generating Twitter Card markup for article pages
+- Creating consistent meta tags across a site
+- Auditing what meta tags a page currently has before adding more
+
+#### Functionality
+Fill in the page title, description, URL, and optional image URL. Select the content type (website, article, product). Preview the search snippet and social media card previews. Click 'Copy HTML' to copy all meta tags ready to paste.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `MetaTagsGeneratorClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/meta-tags/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/meta-tags/MetaTagsClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/meta-tags.ts`
+- **Registry File:** `src/registry/tools/meta-tags.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: og:image not showing on social media, Resolve issues relating to: Title is truncated in search results
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/meta-tags/page.tsx`
+  - `app/(tools)/seo-tools/meta-tags/MetaTagsClient.tsx`
+  - `app/(tools)/seo-tools/meta-tags/MetaTagsClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8413,7 +8478,97 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/nanoid-generator/NanoIdClient.tsx`
   - `app/(tools)/developer-tools/nanoid-generator/NanoIdClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="og-preview"></a>Og Preview
+
+#### Identity
+- **ID:** `og-preview`
+- **Name:** Og Preview
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/og-preview`
+
+#### Purpose
+> Simulate how a URL's Open Graph (og:) meta tags will appear when shared on Facebook, Twitter, LinkedIn, and WhatsApp.
+
+#### Features
+- Previewing a blog post's share card before publishing
+- Testing Open Graph tags for a product page
+- Verifying that og:image loads correctly at the correct aspect ratio
+- Comparing card appearance across different platforms
+
+#### Functionality
+Enter the URL of the page you want to preview, or paste your og: meta tags directly. Select the platform tab (Facebook, Twitter, LinkedIn, WhatsApp). The rendered preview card is displayed. Adjust your meta tags based on the preview and regenerate.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `OgPreviewClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/og-preview/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/og-preview/OgPreviewClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/og-preview.ts`
+- **Registry File:** `src/registry/tools/og-preview.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Preview shows no image, Resolve issues relating to: Old image or description still shows
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/og-preview/page.tsx`
+  - `app/(tools)/seo-tools/og-preview/OgPreviewClient.tsx`
+  - `app/(tools)/seo-tools/og-preview/OgPreviewClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8503,7 +8658,187 @@ Enter your regular expression in the pattern field. Type or paste the sample tex
   - `app/(tools)/developer-tools/regex/RegexTesterClientWrapper.tsx`
   - `app/(tools)/developer-tools/regex/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="robots-txt"></a>Robots Txt
+
+#### Identity
+- **ID:** `robots-txt`
+- **Name:** Robots Txt
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/robots-txt`
+
+#### Purpose
+> Generate a valid `robots.
+
+#### Features
+- Blocking search engines from indexing an admin panel
+- Preventing crawlers from accessing test or staging directories
+- Adding a sitemap reference to robots.txt
+- Setting a crawl delay for a resource-constrained server
+
+#### Functionality
+Add user agent rules using the form (choose 'All' or a specific bot). Add disallow and allow paths for each user agent. Optionally set a crawl delay and sitemap URL. Click 'Generate' to preview the `robots.txt` content. Download the file and upload it to your website's root directory.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `RobotsTxtBuilderClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/robots-txt/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/robots-txt/RobotsTxtClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/robots-txt.ts`
+- **Registry File:** `src/registry/tools/robots-txt.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Robots.txt is blocking the entire site, Resolve issues relating to: File is not being respected by a crawler
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/robots-txt/page.tsx`
+  - `app/(tools)/seo-tools/robots-txt/RobotsTxtClient.tsx`
+  - `app/(tools)/seo-tools/robots-txt/RobotsTxtClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="seo-title"></a>Seo Title
+
+#### Identity
+- **ID:** `seo-title`
+- **Name:** Seo Title
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/seo-title`
+
+#### Purpose
+> Preview how your page title and meta description will appear in Google Search results with a pixel-accurate SERP snippet simulator.
+
+#### Features
+- Optimising a page title to fit within Google's display limit
+- Writing a compelling meta description to improve click-through rate
+- Reviewing titles across a site before a content audit
+- Training a content team on SERP best practices
+
+#### Functionality
+Type your page title in the title field. Type your meta description in the description field. The SERP preview updates in real time below. Adjust the text until the preview shows no truncation. Copy the title and description for use in your CMS.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `SeoTitleTesterClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/seo-title/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/seo-title/SeoTitleClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/seo-title.ts`
+- **Registry File:** `src/registry/tools/seo-title.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Title appears truncated in the preview, Resolve issues relating to: Description is being rewritten by Google
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/seo-title/page.tsx`
+  - `app/(tools)/seo-tools/seo-title/SeoTitleClient.tsx`
+  - `app/(tools)/seo-tools/seo-title/SeoTitleClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8598,7 +8933,187 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `src/features/seo-tools/components/SitemapGeneratorClient.tsx`
   - `src/features/seo-tools/components/SlugGeneratorClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="sitemap-generator"></a>Sitemap Generator
+
+#### Identity
+- **ID:** `sitemap-generator`
+- **Name:** Sitemap Generator
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/sitemap-generator`
+
+#### Purpose
+> Build a standards-compliant XML sitemap by entering your URLs along with priority, change frequency, and last modification date.
+
+#### Features
+- Creating a sitemap for a new website before launch
+- Regenerating a sitemap after adding new pages
+- Submitting additional URLs to Google Search Console
+- Building a sitemap for a static site that has no CMS plugin
+
+#### Functionality
+Enter your website's base URL. Add URLs one by one using the form, or paste a list of URLs. For each URL, set the priority (0.1 to 1.0) and change frequency. Click 'Generate Sitemap' to produce the XML. Download `sitemap.xml` and upload it to your website's root directory.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `SitemapGeneratorClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/sitemap-generator/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/sitemap-generator/SitemapClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/sitemap-generator.ts`
+- **Registry File:** `src/registry/tools/sitemap-generator.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Google rejects the sitemap with 'Could not fetch', Resolve issues relating to: URLs with query strings are not indexing
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/sitemap-generator/page.tsx`
+  - `app/(tools)/seo-tools/sitemap-generator/SitemapClient.tsx`
+  - `app/(tools)/seo-tools/sitemap-generator/SitemapClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="slug-generator"></a>Slug Generator
+
+#### Identity
+- **ID:** `slug-generator`
+- **Name:** Slug Generator
+- **Category:** Developer Tools
+- **Route:** `/seo-tools/slug-generator`
+
+#### Purpose
+> Convert any page title or phrase into a clean, SEO-friendly URL slug.
+
+#### Features
+- Generating a URL slug for a new blog post
+- Creating consistent URL patterns for a product catalogue
+- Converting user-submitted titles to safe URL components
+- Batch-generating slugs for an imported content library
+
+#### Functionality
+Type or paste your page title into the input field. The slug is generated instantly below. Toggle 'Remove stop words' to strip common words (the, a, an, in, etc.) for a shorter slug. Copy the slug and use it in your CMS or URL structure.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `SlugGeneratorClient` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/seo-tools/slug-generator/page.tsx`
+- **Client Component:** `app/(tools)/seo-tools/slug-generator/SlugClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `src/content/tools/slug-generator.ts`
+- **Registry File:** `src/registry/tools/slug-generator.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Slug contains consecutive hyphens, Resolve issues relating to: Slug starts or ends with a hyphen
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/seo-tools/slug-generator/page.tsx`
+  - `app/(tools)/seo-tools/slug-generator/SlugClient.tsx`
+  - `app/(tools)/seo-tools/slug-generator/SlugClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8686,7 +9201,183 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/sql-formatter/SqlFormatterClient.tsx`
   - `app/(tools)/developer-tools/sql-formatter/SqlFormatterClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="swift-mt-mx"></a>Swift Mt Mx
+
+#### Identity
+- **ID:** `swift-mt-mx`
+- **Name:** Swift Mt Mx
+- **Category:** Developer Tools
+- **Route:** `/banking-tools/swift-mt-mx`
+
+#### Purpose
+> Parse and inspect SWIFT MT and MX banking message structures.
+
+#### Features
+- Support for swift mt mx
+- Support for banking
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Shared Internal Modules** | `tool-registry`, `swift-mt-mx`, `seo` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/banking-tools/swift-mt-mx/page.tsx`
+- **Client Component:** `app/(tools)/banking-tools/swift-mt-mx/ToolClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/swift-mt-mx.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Medium
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** Yes
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Medium
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/banking-tools/swift-mt-mx/page.tsx`
+  - `app/(tools)/banking-tools/swift-mt-mx/ToolClient.tsx`
+  - `app/(tools)/banking-tools/swift-mt-mx/ToolClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="track-2-parser"></a>Track 2 Parser
+
+#### Identity
+- **ID:** `track-2-parser`
+- **Name:** Track 2 Parser
+- **Category:** Developer Tools
+- **Route:** `/banking-tools/track-2-parser`
+
+#### Purpose
+> Decode magnetic stripe Track 2 data for payment card testing.
+
+#### Features
+- Support for track 2 parser
+- Support for banking
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton` |
+| **Processing Packages** | `next`, `react` |
+| **Shared Internal Modules** | `tool-registry`, `track-2-parser`, `seo` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/banking-tools/track-2-parser/page.tsx`
+- **Client Component:** `app/(tools)/banking-tools/track-2-parser/ToolClient.tsx`
+- **Feature Directory:** `Not Present in Repository`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/track-2-parser.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** Yes
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolInput`, `ToolResultArea`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/banking-tools/track-2-parser/page.tsx`
+  - `app/(tools)/banking-tools/track-2-parser/ToolClient.tsx`
+  - `app/(tools)/banking-tools/track-2-parser/ToolClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8774,7 +9465,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/unix-timestamp/UnixTimestampClient.tsx`
   - `app/(tools)/developer-tools/unix-timestamp/UnixTimestampWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8865,7 +9556,7 @@ Choose 'Encode' or 'Decode' mode. Paste your URL or query string into the input 
   - `app/(tools)/developer-tools/url-encoder/URLEncoderClientWrapper.tsx`
   - `app/(tools)/developer-tools/url-encoder/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -8953,7 +9644,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/uuid-generator/UuidGeneratorClient.tsx`
   - `app/(tools)/developer-tools/uuid-generator/UuidGeneratorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9041,7 +9732,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/xml-formatter/XmlFormatterClient.tsx`
   - `app/(tools)/developer-tools/xml-formatter/XmlFormatterWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9129,7 +9820,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/developer-tools/yaml-json-converter/YamlJsonClient.tsx`
   - `app/(tools)/developer-tools/yaml-json-converter/YamlJsonClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9219,7 +9910,7 @@ Paste or type your YAML configuration data directly into the input editor. Wait 
   - `app/(tools)/developer-tools/yaml-validator/YamlClientWrapper.tsx`
   - `app/(tools)/developer-tools/yaml-validator/YamlValidatorClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9314,7 +10005,7 @@ Upload Image: Select or drag a photo into the tool area. Click Subject: Click on
   - `app/(tools)/image-tools/bg-remover/BgRemoverClientWrapper.tsx`
   - `app/(tools)/image-tools/bg-remover/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9405,7 +10096,7 @@ Drag and drop multiple images or click 'Select Files'. Set your target dimension
   - `app/(tools)/image-tools/bulk-resizer/BulkImageResizerClientWrapper.tsx`
   - `app/(tools)/image-tools/bulk-resizer/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9493,7 +10184,7 @@ Upload or enter the required data for Color Palette Extractor. Configure any ava
   - `app/(tools)/image-tools/color-palette-extractor/ColorPaletteExtractorClient.tsx`
   - `app/(tools)/image-tools/color-palette-extractor/ColorPaletteExtractorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9580,7 +10271,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/image-tools/compress/page.tsx`
   - `app/(tools)/image-tools/compress/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9670,7 +10361,7 @@ Select the image you want to optimize by dragging it into the upload zone or usi
   - `app/(tools)/image-tools/image-compressor/page.tsx`
   - `app/(tools)/image-tools/image-compressor/ImageCompressorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9764,7 +10455,7 @@ Upload an image by clicking or dragging it into the tool. Select the target form
   - `src/features/image-converter/types.ts`
   - `src/features/image-converter/utils/zip-utils.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9855,7 +10546,7 @@ Upload an image using the file picker. Drag the crop handles to define the crop 
   - `app/(tools)/image-tools/image-crop/ImageCropClientWrapper.tsx`
   - `app/(tools)/image-tools/image-crop/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -9946,7 +10637,7 @@ Upload your image using the file picker or drag-and-drop. Enter the desired widt
   - `app/(tools)/image-tools/image-resizer/ImageResizerClientWrapper.tsx`
   - `app/(tools)/image-tools/image-resizer/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10037,7 +10728,7 @@ Upload an image file using the file picker. The Base64 data URI is generated and
   - `app/(tools)/image-tools/image-base64/ImageBase64ClientWrapper.tsx`
   - `app/(tools)/image-tools/image-base64/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10129,7 +10820,7 @@ Upload or enter the required data for Phone Mockup Generator. Configure any avai
   - `app/(tools)/image-tools/phone-mockup-generator/PhoneMockupGeneratorClient.tsx`
   - `app/(tools)/image-tools/phone-mockup-generator/PhoneMockupGeneratorClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10222,7 +10913,7 @@ Upload your source audio file. Select the desired output format (MP3 or WAV). Cl
   - `app/(tools)/media-tools/audio-converter/AudioConverterClientWrapper.tsx`
   - `src/features/audio-converter/components/AudioConverterClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10312,7 +11003,7 @@ Upload the images you want to use as frames. Drag and drop frames to reorder the
   - `app/(tools)/media-tools/gif-creator/GifCreatorClientWrapper.tsx`
   - `src/features/gif-creator/components/GifCreatorClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10402,7 +11093,7 @@ Select or drop your video file. Wait a moment while the browser analyzes the fil
   - `app/(tools)/media-tools/video-metadata-viewer/VideoMetadataViewerClientWrapper.tsx`
   - `src/features/video-metadata-viewer/components/VideoMetadataViewerClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10492,7 +11183,7 @@ Select or drop your video file (MP4, WebM, or MOV). Use the timeline sliders to 
   - `app/(tools)/media-tools/video-trim/VideoTrimClientWrapper.tsx`
   - `src/features/video-trim/components/VideoTrimClient.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10524,7 +11215,7 @@ Upload: Click the 'Upload PDF' button to select your document. Configure: Choose
 | Dependency Type | Verified Imports |
 | --- | --- |
 | **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `BatchQueue`, `DropZone`, `PrivacyBadge`, `WorkflowSuggestions` |
-| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Processing Packages** | `next`, `react` |
 | **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `formatError`, `useWorkflowInput` |
 | **Peer Dependencies** | None |
 
@@ -10551,7 +11242,7 @@ Upload: Click the 'Upload PDF' button to select your document. Configure: Choose
 | **IndexedDB** | No |
 
 #### Performance Characteristics
-- **Memory Profile:** Medium
+- **Memory Profile:** Light
 - **CPU Intensive:** Yes
 - **Lazy Loaded (ssr:false):** Yes
 - **Code Splitting Boundaries:** Yes
@@ -10565,7 +11256,7 @@ Upload: Click the 'Upload PDF' button to select your document. Configure: Choose
 - **Hardware/Device Permissions:** None
 
 #### Metrics
-- **Bundle Impact:** Medium
+- **Bundle Impact:** Small
 - **Worker-Based:** Yes
 - **Offline-First:** Yes
 - **IndexedDB Persistence:** No
@@ -10588,7 +11279,720 @@ Upload: Click the 'Upload PDF' button to select your document. Configure: Choose
   - `src/features/compress-pdf/components/CompressPdfClient.tsx`
   - `src/features/compress-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="convert-to-a4"></a>Convert to A4
+
+#### Identity
+- **ID:** `convert-to-a4`
+- **Name:** Convert to A4
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/convert-to-a4`
+
+#### Purpose
+> Standardize PDF pages to A4 size
+
+#### Features
+- Support for pdf
+- Support for a4
+- Support for resize
+- Support for layout
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `PdfLayoutEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/convert-to-a4`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/convert-to-a4.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/convert-to-a4/convert-to-a4Client.tsx`
+  - `src/features/convert-to-a4/convert-to-a4ClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="convert-to-legal"></a>Convert to Legal
+
+#### Identity
+- **ID:** `convert-to-legal`
+- **Name:** Convert to Legal
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/convert-to-legal`
+
+#### Purpose
+> Standardize PDF pages to US Legal size
+
+#### Features
+- Support for pdf
+- Support for legal
+- Support for resize
+- Support for layout
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `PdfLayoutEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/convert-to-legal`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/convert-to-legal.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/convert-to-legal/convert-to-legalClient.tsx`
+  - `src/features/convert-to-legal/convert-to-legalClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="convert-to-letter"></a>Convert to Letter
+
+#### Identity
+- **ID:** `convert-to-letter`
+- **Name:** Convert to Letter
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/convert-to-letter`
+
+#### Purpose
+> Standardize PDF pages to US Letter size
+
+#### Features
+- Support for pdf
+- Support for letter
+- Support for resize
+- Support for layout
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `PdfLayoutEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/convert-to-letter`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/convert-to-letter.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/convert-to-letter/convert-to-letterClient.tsx`
+  - `src/features/convert-to-letter/convert-to-letterClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="crop-pdf"></a>Crop PDF
+
+#### Identity
+- **ID:** `crop-pdf`
+- **Name:** Crop PDF
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/crop-pdf`
+
+#### Purpose
+> Crop PDF pages to a specific area
+
+#### Features
+- Support for pdf
+- Support for crop
+- Support for edit
+- Support for layout
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `PdfLayoutEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/crop-pdf`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/crop-pdf.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/crop-pdf/crop-pdfClient.tsx`
+  - `src/features/crop-pdf/crop-pdfClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="delete-blank-pages"></a>Delete Blank Pages
+
+#### Identity
+- **ID:** `delete-blank-pages`
+- **Name:** Delete Blank Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/delete-blank-pages`
+
+#### Purpose
+> Automatically detect and remove blank pages from your PDF document.
+
+#### Features
+- Support for delete blank pages
+- Support for remove empty pages
+- Support for clean pdf
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `delete-blank-pagesClientWrapper`, `seo`, `PdfOrganizer` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/delete-blank-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/delete-blank-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/delete-blank-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/delete-blank-pages/page.tsx`
+  - `src/features/delete-blank-pages/delete-blank-pagesClient.tsx`
+  - `src/features/delete-blank-pages/delete-blank-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="duplicate-pages"></a>Duplicate PDF Pages
+
+#### Identity
+- **ID:** `duplicate-pages`
+- **Name:** Duplicate PDF Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/duplicate-pages`
+
+#### Purpose
+> Duplicate and copy specific pages in a PDF document offline.
+
+#### Features
+- Support for duplicate pdf pages
+- Support for copy pages
+- Support for clone pages
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `duplicate-pagesClientWrapper`, `seo`, `BasicPdfEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/duplicate-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/duplicate-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/duplicate-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/duplicate-pages/page.tsx`
+  - `src/features/duplicate-pages/duplicate-pagesClient.tsx`
+  - `src/features/duplicate-pages/duplicate-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="edit-metadata"></a>Edit PDF Metadata
+
+#### Identity
+- **ID:** `edit-metadata`
+- **Name:** Edit PDF Metadata
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/edit-metadata`
+
+#### Purpose
+> View and edit PDF properties like Title, Author, and Subject
+
+#### Features
+- Support for pdf
+- Support for metadata
+- Support for properties
+- Support for author
+- Support for title
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `MetadataEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/edit-metadata`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/edit-metadata.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/edit-metadata/edit-metadataClient.tsx`
+  - `src/features/edit-metadata/edit-metadataClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="even-pages-extractor"></a>Even Pages Extractor
+
+#### Identity
+- **ID:** `even-pages-extractor`
+- **Name:** Even Pages Extractor
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/even-pages-extractor`
+
+#### Purpose
+> Extract only the even-numbered pages from a PDF document.
+
+#### Features
+- Support for extract even pages
+- Support for even pages only
+- Support for pdf even pages
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `even-pages-extractorClientWrapper`, `seo`, `BasicPdfEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/even-pages-extractor/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/even-pages-extractor`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/even-pages-extractor.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/even-pages-extractor/page.tsx`
+  - `src/features/even-pages-extractor/even-pages-extractorClient.tsx`
+  - `src/features/even-pages-extractor/even-pages-extractorClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10615,9 +12019,9 @@ Select and upload the PDF or document file containing the embedded images you wi
 #### Libraries & Dependencies
 | Dependency Type | Verified Imports |
 | --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `EngineLoader`, `DropZone` |
-| **Processing Packages** | `next`, `react`, `lucide-react` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `EngineLoader`, `WorkerOrchestrator` |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `BatchQueue`, `DropZone`, `PrivacyBadge`, `WorkflowSuggestions` |
+| **Processing Packages** | `next`, `react` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `formatError`, `useWorkflowInput`, `WorkerOrchestrator` |
 | **Peer Dependencies** | None |
 
 #### File Structure
@@ -10637,13 +12041,13 @@ Select and upload the PDF or document file containing the embedded images you wi
 | **Offline Capability** | Yes |
 | **Manifest Exceptions** | None |
 | **Sample Asset Bundled** | Yes |
-| **Engine Loader Usage** | Yes |
+| **Engine Loader Usage** | No |
 | **Threading Model** | Worker Thread |
 | **WebAssembly (WASM)** | No |
 | **IndexedDB** | No |
 
 #### Performance Characteristics
-- **Memory Profile:** Medium
+- **Memory Profile:** Light
 - **CPU Intensive:** Yes
 - **Lazy Loaded (ssr:false):** Yes
 - **Code Splitting Boundaries:** Yes
@@ -10657,7 +12061,7 @@ Select and upload the PDF or document file containing the embedded images you wi
 - **Hardware/Device Permissions:** None
 
 #### Metrics
-- **Bundle Impact:** Medium
+- **Bundle Impact:** Small
 - **Worker-Based:** Yes
 - **Offline-First:** Yes
 - **IndexedDB Persistence:** No
@@ -10666,9 +12070,9 @@ Select and upload the PDF or document file containing the embedded images you wi
 
 #### Relations & Enhancements
 - **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`, `EngineLoader`, `DropZone`
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`, `BatchQueue`, `DropZone`, `PrivacyBadge`, `WorkflowSuggestions`
 - **Shared Workers Used:** `WorkerOrchestrator`, `karuvi.worker.ts`
-- **Shared Stores Used:** None
+- **Shared Stores Used:** `useBatchStore`
 - **Known Tech Debt / Future Enhancements:** Resolve issues relating to: No images found in document, Resolve issues relating to: Browser runs out of memory
 - **Manifest Safety Rules Enforced:** KL-02 (Worker Concurrency), KL-05 (AbortSignal Propagation), KL-10 (WorkerOrchestrator entry)
 
@@ -10680,7 +12084,96 @@ Select and upload the PDF or document file containing the embedded images you wi
   - `src/features/extract-images/components/ExtractImagesClient.tsx`
   - `src/features/extract-images/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="extract-pages"></a>Extract PDF Pages
+
+#### Identity
+- **ID:** `extract-pages`
+- **Name:** Extract PDF Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/extract-pages`
+
+#### Purpose
+> Extract specific pages or page ranges from a PDF into a new document.
+
+#### Features
+- Support for extract pdf pages
+- Support for split pdf pages
+- Support for save pages
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `extract-pagesClientWrapper`, `seo`, `BasicPdfEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/extract-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/extract-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/extract-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/extract-pages/page.tsx`
+  - `src/features/extract-pages/extract-pagesClient.tsx`
+  - `src/features/extract-pages/extract-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10772,7 +12265,7 @@ Upload one or more images using the file picker. Drag images to reorder them as 
   - `src/features/image-to-pdf/components/ImageToPdfClient.tsx`
   - `src/features/image-to-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10862,7 +12355,96 @@ Upload the PDF document you wish to either lock with a password or unlock. Selec
   - `app/(tools)/pdf-tools/lock-unlock/LockUnlockPdfClientWrapper.tsx`
   - `app/(tools)/pdf-tools/lock-unlock/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="margin-adjustment"></a>Margin Adjustment
+
+#### Identity
+- **ID:** `margin-adjustment`
+- **Name:** Margin Adjustment
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/margin-adjustment`
+
+#### Purpose
+> Adjust margins of PDF pages
+
+#### Features
+- Support for pdf
+- Support for margin
+- Support for padding
+- Support for layout
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `PdfLayoutEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/margin-adjustment`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/margin-adjustment.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/margin-adjustment/margin-adjustmentClient.tsx`
+  - `src/features/margin-adjustment/margin-adjustmentClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -10954,7 +12536,274 @@ Upload two or more PDF files using the file picker or drag-and-drop. Drag the fi
   - `src/features/merge-pdf/components/MergePdfClient.tsx`
   - `src/features/merge-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="move-pages"></a>Move PDF Pages
+
+#### Identity
+- **ID:** `move-pages`
+- **Name:** Move PDF Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/move-pages`
+
+#### Purpose
+> Drag and drop to move pages around in your PDF document.
+
+#### Features
+- Support for move pdf pages
+- Support for shift pages
+- Support for pdf order
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `move-pagesClientWrapper`, `seo`, `PdfOrganizer` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/move-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/move-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/move-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/move-pages/page.tsx`
+  - `src/features/move-pages/move-pagesClient.tsx`
+  - `src/features/move-pages/move-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="odd-pages-extractor"></a>Odd Pages Extractor
+
+#### Identity
+- **ID:** `odd-pages-extractor`
+- **Name:** Odd Pages Extractor
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/odd-pages-extractor`
+
+#### Purpose
+> Extract only the odd-numbered pages from a PDF document.
+
+#### Features
+- Support for extract odd pages
+- Support for odd pages only
+- Support for pdf odd pages
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `odd-pages-extractorClientWrapper`, `seo`, `BasicPdfEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/odd-pages-extractor/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/odd-pages-extractor`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/odd-pages-extractor.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/odd-pages-extractor/page.tsx`
+  - `src/features/odd-pages-extractor/odd-pages-extractorClient.tsx`
+  - `src/features/odd-pages-extractor/odd-pages-extractorClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="organize-pdf"></a>Organize PDF
+
+#### Identity
+- **ID:** `organize-pdf`
+- **Name:** Organize PDF
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/organize-pdf`
+
+#### Purpose
+> Sort, reorder, and organize pages in your PDF document visually.
+
+#### Features
+- Support for organize pdf
+- Support for rearrange pages
+- Support for sort pdf
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `organize-pdfClientWrapper`, `seo`, `PdfOrganizer` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/organize-pdf/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/organize-pdf`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/organize-pdf.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | Yes |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/organize-pdf/page.tsx`
+  - `src/features/organize-pdf/organize-pdfClient.tsx`
+  - `src/features/organize-pdf/organize-pdfClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11046,7 +12895,96 @@ Upload the PDF document that requires page numbering. Configure the numbering se
   - `src/features/page-numbering/components/PageNumberingClient.tsx`
   - `src/features/page-numbering/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="page-size-converter"></a>Page Size Converter
+
+#### Identity
+- **ID:** `page-size-converter`
+- **Name:** Page Size Converter
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/page-size-converter`
+
+#### Purpose
+> Convert PDF pages to a specific size
+
+#### Features
+- Support for pdf
+- Support for resize
+- Support for scale
+- Support for layout
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `PdfLayoutEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/page-size-converter`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/page-size-converter.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/page-size-converter/page-size-converterClient.tsx`
+  - `src/features/page-size-converter/page-size-converterClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11146,7 +13084,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `src/features/pdf-editor/store.ts`
   - `src/features/pdf-editor/utils/device.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11171,14 +13109,14 @@ Select and upload the PDF you wish to convert. Choose your desired output format
 #### Libraries & Dependencies
 | Dependency Type | Verified Imports |
 | --- | --- |
-| **Radix UI / UI Components** | `EngineLoader`, `DropZone` |
-| **Processing Packages** | `react`, `lucide-react` |
-| **Shared Internal Modules** | `hooks`, `logger`, `EngineLoader` |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `EngineLoader`, `DropZone` |
+| **Processing Packages** | `next`, `react`, `lucide-react` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `logger`, `EngineLoader` |
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `Not Present in Repository`
-- **Client Component:** `Not Present in Repository`
+- **Page File:** `app/(tools)/pdf-tools/pdf-to-image/page.tsx`
+- **Client Component:** `app/(tools)/pdf-tools/pdf-to-image/PdfToImageClientWrapper.tsx`
 - **Feature Directory:** `src/features/pdf-to-image`
 - **Worker File:** `src/workers/manager`
 - **Zustand Store:** `Not Present in Repository`
@@ -11222,7 +13160,7 @@ Select and upload the PDF you wish to convert. Choose your desired output format
 
 #### Relations & Enhancements
 - **Related Tools:** None
-- **Shared Components Used:** `EngineLoader`, `DropZone`
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`, `EngineLoader`, `DropZone`
 - **Shared Workers Used:** `manager`
 - **Shared Stores Used:** None
 - **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Browser runs out of memory
@@ -11230,9 +13168,12 @@ Select and upload the PDF you wish to convert. Choose your desired output format
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/pdf-to-image/page.tsx`
+  - `app/(tools)/pdf-tools/pdf-to-image/PdfToImageClientWrapper.tsx`
   - `src/features/pdf-to-image/components/PdfToImageClient.tsx`
+  - `src/features/pdf-to-image/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11325,7 +13266,365 @@ Select the PDF file you wish to convert by clicking the 'Upload PDF' button or d
   - `src/features/pdf-to-word/components/PdfToWordClient.tsx`
   - `src/features/pdf-to-word/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="remove-metadata"></a>Remove PDF Metadata
+
+#### Identity
+- **ID:** `remove-metadata`
+- **Name:** Remove PDF Metadata
+- **Category:** PDF Tools
+- **Route:** `//pdf-tools/remove-metadata`
+
+#### Purpose
+> Clear all metadata and properties from a PDF document
+
+#### Features
+- Support for pdf
+- Support for metadata
+- Support for properties
+- Support for remove
+- Support for clear
+- Support for privacy
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `MetadataEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/remove-metadata`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/remove-metadata.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `src/features/remove-metadata/remove-metadataClient.tsx`
+  - `src/features/remove-metadata/remove-metadataClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="remove-pages"></a>Remove PDF Pages
+
+#### Identity
+- **ID:** `remove-pages`
+- **Name:** Remove PDF Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/remove-pages`
+
+#### Purpose
+> Easily delete and remove unwanted pages from any PDF document offline.
+
+#### Features
+- Support for remove pdf pages
+- Support for delete pdf pages
+- Support for extract
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `remove-pagesClientWrapper`, `seo`, `BasicPdfEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/remove-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/remove-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/remove-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/remove-pages/page.tsx`
+  - `src/features/remove-pages/remove-pagesClient.tsx`
+  - `src/features/remove-pages/remove-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="reorder-pages"></a>Reorder PDF Pages
+
+#### Identity
+- **ID:** `reorder-pages`
+- **Name:** Reorder PDF Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/reorder-pages`
+
+#### Purpose
+> Easily reorder the pages of your PDF document.
+
+#### Features
+- Support for reorder pdf pages
+- Support for change page order
+- Support for move pages
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `reorder-pagesClientWrapper`, `seo`, `PdfOrganizer` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/reorder-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/reorder-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/reorder-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/reorder-pages/page.tsx`
+  - `src/features/reorder-pages/reorder-pagesClient.tsx`
+  - `src/features/reorder-pages/reorder-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="reverse-pages"></a>Reverse PDF Pages
+
+#### Identity
+- **ID:** `reverse-pages`
+- **Name:** Reverse PDF Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/reverse-pages`
+
+#### Purpose
+> Reverse the order of pages in a PDF document instantly.
+
+#### Features
+- Support for reverse pdf
+- Support for reverse page order
+- Support for flip pages
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `reverse-pagesClientWrapper`, `seo`, `BasicPdfEditor` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/reverse-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/reverse-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/reverse-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/reverse-pages/page.tsx`
+  - `src/features/reverse-pages/reverse-pagesClient.tsx`
+  - `src/features/reverse-pages/reverse-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11417,7 +13716,96 @@ Upload the PDF document that contains pages needing rotation. Select whether you
   - `src/features/rotate-pdf/components/RotatePdfClient.tsx`
   - `src/features/rotate-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
+
+---
+
+### <a id="rotate-selected-pages"></a>Rotate Selected Pages
+
+#### Identity
+- **ID:** `rotate-selected-pages`
+- **Name:** Rotate Selected Pages
+- **Category:** PDF Tools
+- **Route:** `/pdf-tools/rotate-selected-pages`
+
+#### Purpose
+> Rotate specific pages in your PDF without rotating the whole document.
+
+#### Features
+- Support for rotate specific pages
+- Support for rotate pdf pages
+- Support for pdf page rotation
+
+#### Functionality
+Launches an interactive client view within the ToolShell. Users provide direct inputs or drag-and-drop source files, which are processed entirely inside the browser. Results can be copied or downloaded instantly.
+
+#### Libraries & Dependencies
+| Dependency Type | Verified Imports |
+| --- | --- |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
+| **Processing Packages** | `next` |
+| **Shared Internal Modules** | `rotate-selected-pagesClientWrapper`, `seo`, `PdfOrganizer` |
+| **Peer Dependencies** | None |
+
+#### File Structure
+- **Page File:** `app/(tools)/pdf-tools/rotate-selected-pages/page.tsx`
+- **Client Component:** `Not Present in Repository`
+- **Feature Directory:** `src/features/rotate-selected-pages`
+- **Worker File:** `Not Present in Repository`
+- **Zustand Store:** `Not Present in Repository`
+- **Content File:** `Not Present in Repository`
+- **Registry File:** `src/registry/tools/rotate-selected-pages.ts`
+
+#### Architecture Notes
+| Parameter | Value |
+| --- | --- |
+| **Worker Thread Pool Usage** | No (None) |
+| **Concurrency Limit** | Not Applicable |
+| **Offline Capability** | Yes |
+| **Manifest Exceptions** | None |
+| **Sample Asset Bundled** | No |
+| **Engine Loader Usage** | No |
+| **Threading Model** | Main Thread |
+| **WebAssembly (WASM)** | No |
+| **IndexedDB** | No |
+
+#### Performance Characteristics
+- **Memory Profile:** Light
+- **CPU Intensive:** No
+- **Lazy Loaded (ssr:false):** Yes
+- **Code Splitting Boundaries:** Yes
+
+#### Security Review
+- **Input Validation:** No
+- **XSS Protection:** Yes (React escaping)
+- **Sanitization:** No
+- **File Upload Limits:** Not Present in Repository
+- **Network Access Required:** No
+- **Hardware/Device Permissions:** None
+
+#### Metrics
+- **Bundle Impact:** Small
+- **Worker-Based:** No
+- **Offline-First:** Yes
+- **IndexedDB Persistence:** No
+- **WebAssembly Processing:** No
+- **Engine Architecture:** Native
+
+#### Relations & Enhancements
+- **Related Tools:** None
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
+- **Shared Workers Used:** None
+- **Shared Stores Used:** None
+- **Known Tech Debt / Future Enhancements:** None
+- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
+
+#### Verification & Traceability
+- **Evidence Files Scanned:**
+  - `app/(tools)/pdf-tools/rotate-selected-pages/page.tsx`
+  - `src/features/rotate-selected-pages/rotate-selected-pagesClient.tsx`
+  - `src/features/rotate-selected-pages/rotate-selected-pagesClientWrapper.tsx`
+- **Confidence Level:** 100%
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11427,7 +13815,7 @@ Upload the PDF document that contains pages needing rotation. Select whether you
 - **ID:** `split-pdf`
 - **Name:** Split PDF
 - **Category:** PDF Tools
-- **Route:** `/pdf-tools/split-pdf`
+- **Route:** `//pdf-tools/split-pdf`
 
 #### Purpose
 > Extract specific pages or page ranges from a PDF to create new, smaller documents.
@@ -11444,14 +13832,14 @@ Upload your PDF file. Enter the pages or page ranges to extract (e.g., `1-3, 5, 
 #### Libraries & Dependencies
 | Dependency Type | Verified Imports |
 | --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `Checkbox`, `ToolInput`, `DropZone` |
-| **Processing Packages** | `next`, `react` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `ProgressContext` |
+| **Radix UI / UI Components** | `ToolShell`, `Checkbox`, `ToolInput`, `DropZone`, `PrivacyBadge` |
+| **Processing Packages** | `react` |
+| **Shared Internal Modules** | `tool-registry`, `hooks`, `ProgressContext` |
 | **Peer Dependencies** | None |
 
 #### File Structure
-- **Page File:** `app/(tools)/pdf-tools/split-pdf/page.tsx`
-- **Client Component:** `app/(tools)/pdf-tools/split-pdf/SplitPdfClientWrapper.tsx`
+- **Page File:** `Not Present in Repository`
+- **Client Component:** `Not Present in Repository`
 - **Feature Directory:** `src/features/split-pdf`
 - **Worker File:** `src/workers/manager, src/workers/types`
 - **Zustand Store:** `Not Present in Repository`
@@ -11495,7 +13883,7 @@ Upload your PDF file. Enter the pages or page ranges to extract (e.g., `1-3, 5, 
 
 #### Relations & Enhancements
 - **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`, `Checkbox`, `ToolInput`, `DropZone`
+- **Shared Components Used:** `ToolShell`, `Checkbox`, `ToolInput`, `DropZone`, `PrivacyBadge`
 - **Shared Workers Used:** `manager`, `types`
 - **Shared Stores Used:** None
 - **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Entered page number is out of range, Resolve issues relating to: Downloaded ZIP is empty
@@ -11503,13 +13891,10 @@ Upload your PDF file. Enter the pages or page ranges to extract (e.g., `1-3, 5, 
 
 #### Verification & Traceability
 - **Evidence Files Scanned:**
-  - `app/(tools)/pdf-tools/split-pdf/page.tsx`
-  - `app/(tools)/pdf-tools/split-pdf/SplitPdfClientWrapper.tsx`
-  - `app/(tools)/pdf-tools/split-pdf/layout.tsx`
   - `src/features/split-pdf/components/SplitPdfClient.tsx`
   - `src/features/split-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11536,9 +13921,9 @@ Upload the PDF document you wish to protect with a watermark. Enter the text you
 #### Libraries & Dependencies
 | Dependency Type | Verified Imports |
 | --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `SliderField`, `PdfPagePreview` |
+| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton`, `BatchQueue`, `DropZone`, `PrivacyBadge`, `SliderField`, `WorkflowSuggestions` |
 | **Processing Packages** | `next`, `react` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `ProgressContext` |
+| **Shared Internal Modules** | `tool-registry`, `seo`, `hooks`, `formatError`, `useWorkflowInput` |
 | **Peer Dependencies** | None |
 
 #### File Structure
@@ -11587,9 +13972,9 @@ Upload the PDF document you wish to protect with a watermark. Enter the text you
 
 #### Relations & Enhancements
 - **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`, `SliderField`, `PdfPagePreview`
+- **Shared Components Used:** `ToolShell`, `ToolSkeleton`, `BatchQueue`, `DropZone`, `PrivacyBadge`, `SliderField`, `WorkflowSuggestions`
 - **Shared Workers Used:** `manager`
-- **Shared Stores Used:** None
+- **Shared Stores Used:** `useBatchStore`
 - **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Watermark Too Dark, Resolve issues relating to: Encrypted PDF Error
 - **Manifest Safety Rules Enforced:** KL-02 (Worker Concurrency), KL-05 (AbortSignal Propagation), KL-10 (WorkerOrchestrator entry)
 
@@ -11601,7 +13986,7 @@ Upload the PDF document you wish to protect with a watermark. Enter the text you
   - `src/features/watermark-pdf/components/WatermarkPdfClient.tsx`
   - `src/features/watermark-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11690,7 +14075,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `src/features/word-to-pdf/components/WordToPdfClient.tsx`
   - `src/features/word-to-pdf/index.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11807,7 +14192,7 @@ Navigate to the Calendar tool interface from the main dashboard. Select the targ
   - `src/features/calendar/utils.ts`
   - `src/features/calendar/world-events-db.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11901,7 +14286,7 @@ Input Your Data: Use the sidebar to add data points with labels and numerical va
   - `app/(tools)/productivity/chart-generator/ChartPreview.tsx`
   - `app/(tools)/productivity/chart-generator/types.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -11990,7 +14375,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/productivity/countdown-timer/CountdownTimerClientWrapper.tsx`
   - `src/features/countdown-timer/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12099,7 +14484,7 @@ Click the floating '+' button to create a new note. To encrypt a note, open it, 
   - `src/features/notes/types.ts`
   - `src/features/notes/utils.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12193,7 +14578,7 @@ Choose Your Mode: Select 'Focus' for deep work or 'Break' for relaxation. Start 
   - `app/(tools)/productivity/pomodoro-timer/PomodoroTimerClient.tsx`
   - `src/features/pomodoro-timer/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12282,7 +14667,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/productivity/stopwatch/StopwatchClientWrapper.tsx`
   - `src/features/stopwatch/store.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12372,7 +14757,7 @@ Paste or type the text you wish to format directly into the designated input are
   - `app/(tools)/productivity/text-case-converter/TextCaseConverterClient.tsx`
   - `app/(tools)/productivity/text-case-converter/TextCaseConverterClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12463,7 +14848,7 @@ Upload or enter the required data for Text Sorter & Deduper. Configure any avail
   - `app/(tools)/productivity/text-sorter-deduper/TextSorterDeduperClient.tsx`
   - `app/(tools)/productivity/text-sorter-deduper/TextSorterDeduperClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12558,7 +14943,7 @@ Select your 'Base Time' by choosing a date and time from the picker. This is usu
   - `app/(tools)/productivity/timezone-converter/TimeZoneConverterClient.tsx`
   - `app/(tools)/productivity/timezone-converter/TimeZoneConverterClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12649,7 +15034,7 @@ Upload or enter the required data for Typing Speed Test. Configure any available
   - `app/(tools)/productivity/typing-speed-test/TypingSpeedTestClient.tsx`
   - `app/(tools)/productivity/typing-speed-test/TypingSpeedTestClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12741,7 +15126,7 @@ Upload or enter the required data for WiFi QR Code. Configure any available sett
   - `app/(tools)/productivity/wifi-qr-code/WifiQrCodeClient.tsx`
   - `app/(tools)/productivity/wifi-qr-code/WifiQrCodeClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -12830,641 +15215,7 @@ Input Text: Type or paste your content into the large text area. Monitor Stats: 
   - `app/(tools)/productivity/word-counter/WordCounterClient.tsx`
   - `app/(tools)/productivity/word-counter/WordCounterClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-
-## Category: SEO Tools
-
-### <a id="image-seo"></a>Image Seo
-
-#### Identity
-- **ID:** `image-seo`
-- **Name:** Image Seo
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/image-seo`
-
-#### Purpose
-> 
-Optimizing your images for search engines (SEO) is one of the most overlooked aspects of digital marketing and website performance.
-
-#### Features
-- E-commerce SEO: Optimizing product catalogs for Google Image search to drive organic traffic.
-- Blogger Workflow: Quickly renaming raw camera uploads into descriptive, SEO-friendly assets for WordPress or Next.js.
-- Accessibility Audits: Using the SEO Analyzer to refine alt text for compliance with WCAG standards.
-- Developer Productivity: Batch renaming assets for code projects using consistent, slugified naming patterns.
-
-#### Functionality
-**Step 1:** Upload your image or select multiple files for batch processing using the 'Select Files' button. **Step 2:** Provide a brief context or description of what is happening in the image. **Step 3:** Click 'Generate SEO Plan' to create a natural language alt text string and a clean, hyphenated filename slug. **Step 4:** For individual files, download the optimized version instantly. For batch tasks, use the 'Batch Renamer' tab to process entire folders with consistent naming conventions. **Step 5:** Use the 'SEO Analyzer' to verify the health of your existing alt tags against character count and keyword density benchmarks.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `ImageSeoClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/image-seo/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/image-seo/ImageSeoClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/image-seo.ts`
-- **Registry File:** `src/registry/tools/image-seo.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | Yes |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Using 'image of' or 'picture of' in alt text, Resolve issues relating to: Keyword Stuffing
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/image-seo/page.tsx`
-  - `app/(tools)/seo-tools/image-seo/ImageSeoClient.tsx`
-  - `app/(tools)/seo-tools/image-seo/ImageSeoClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="meta-tags"></a>Meta Tags
-
-#### Identity
-- **ID:** `meta-tags`
-- **Name:** Meta Tags
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/meta-tags`
-
-#### Purpose
-> Generate complete HTML meta tag markup for a web page including title, description, Open Graph, Twitter Card, and basic SEO tags.
-
-#### Features
-- Adding Open Graph tags to a new landing page
-- Generating Twitter Card markup for article pages
-- Creating consistent meta tags across a site
-- Auditing what meta tags a page currently has before adding more
-
-#### Functionality
-Fill in the page title, description, URL, and optional image URL. Select the content type (website, article, product). Preview the search snippet and social media card previews. Click 'Copy HTML' to copy all meta tags ready to paste.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `MetaTagsGeneratorClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/meta-tags/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/meta-tags/MetaTagsClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/meta-tags.ts`
-- **Registry File:** `src/registry/tools/meta-tags.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: og:image not showing on social media, Resolve issues relating to: Title is truncated in search results
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/meta-tags/page.tsx`
-  - `app/(tools)/seo-tools/meta-tags/MetaTagsClient.tsx`
-  - `app/(tools)/seo-tools/meta-tags/MetaTagsClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="og-preview"></a>Og Preview
-
-#### Identity
-- **ID:** `og-preview`
-- **Name:** Og Preview
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/og-preview`
-
-#### Purpose
-> Simulate how a URL's Open Graph (og:) meta tags will appear when shared on Facebook, Twitter, LinkedIn, and WhatsApp.
-
-#### Features
-- Previewing a blog post's share card before publishing
-- Testing Open Graph tags for a product page
-- Verifying that og:image loads correctly at the correct aspect ratio
-- Comparing card appearance across different platforms
-
-#### Functionality
-Enter the URL of the page you want to preview, or paste your og: meta tags directly. Select the platform tab (Facebook, Twitter, LinkedIn, WhatsApp). The rendered preview card is displayed. Adjust your meta tags based on the preview and regenerate.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `OgPreviewClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/og-preview/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/og-preview/OgPreviewClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/og-preview.ts`
-- **Registry File:** `src/registry/tools/og-preview.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Preview shows no image, Resolve issues relating to: Old image or description still shows
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/og-preview/page.tsx`
-  - `app/(tools)/seo-tools/og-preview/OgPreviewClient.tsx`
-  - `app/(tools)/seo-tools/og-preview/OgPreviewClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="robots-txt"></a>Robots Txt
-
-#### Identity
-- **ID:** `robots-txt`
-- **Name:** Robots Txt
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/robots-txt`
-
-#### Purpose
-> Generate a valid `robots.
-
-#### Features
-- Blocking search engines from indexing an admin panel
-- Preventing crawlers from accessing test or staging directories
-- Adding a sitemap reference to robots.txt
-- Setting a crawl delay for a resource-constrained server
-
-#### Functionality
-Add user agent rules using the form (choose 'All' or a specific bot). Add disallow and allow paths for each user agent. Optionally set a crawl delay and sitemap URL. Click 'Generate' to preview the `robots.txt` content. Download the file and upload it to your website's root directory.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `RobotsTxtBuilderClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/robots-txt/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/robots-txt/RobotsTxtClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/robots-txt.ts`
-- **Registry File:** `src/registry/tools/robots-txt.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Robots.txt is blocking the entire site, Resolve issues relating to: File is not being respected by a crawler
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/robots-txt/page.tsx`
-  - `app/(tools)/seo-tools/robots-txt/RobotsTxtClient.tsx`
-  - `app/(tools)/seo-tools/robots-txt/RobotsTxtClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="seo-title"></a>Seo Title
-
-#### Identity
-- **ID:** `seo-title`
-- **Name:** Seo Title
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/seo-title`
-
-#### Purpose
-> Preview how your page title and meta description will appear in Google Search results with a pixel-accurate SERP snippet simulator.
-
-#### Features
-- Optimising a page title to fit within Google's display limit
-- Writing a compelling meta description to improve click-through rate
-- Reviewing titles across a site before a content audit
-- Training a content team on SERP best practices
-
-#### Functionality
-Type your page title in the title field. Type your meta description in the description field. The SERP preview updates in real time below. Adjust the text until the preview shows no truncation. Copy the title and description for use in your CMS.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `SeoTitleTesterClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/seo-title/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/seo-title/SeoTitleClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/seo-title.ts`
-- **Registry File:** `src/registry/tools/seo-title.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Title appears truncated in the preview, Resolve issues relating to: Description is being rewritten by Google
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/seo-title/page.tsx`
-  - `app/(tools)/seo-tools/seo-title/SeoTitleClient.tsx`
-  - `app/(tools)/seo-tools/seo-title/SeoTitleClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="sitemap-generator"></a>Sitemap Generator
-
-#### Identity
-- **ID:** `sitemap-generator`
-- **Name:** Sitemap Generator
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/sitemap-generator`
-
-#### Purpose
-> Build a standards-compliant XML sitemap by entering your URLs along with priority, change frequency, and last modification date.
-
-#### Features
-- Creating a sitemap for a new website before launch
-- Regenerating a sitemap after adding new pages
-- Submitting additional URLs to Google Search Console
-- Building a sitemap for a static site that has no CMS plugin
-
-#### Functionality
-Enter your website's base URL. Add URLs one by one using the form, or paste a list of URLs. For each URL, set the priority (0.1 to 1.0) and change frequency. Click 'Generate Sitemap' to produce the XML. Download `sitemap.xml` and upload it to your website's root directory.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `SitemapGeneratorClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/sitemap-generator/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/sitemap-generator/SitemapClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/sitemap-generator.ts`
-- **Registry File:** `src/registry/tools/sitemap-generator.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Google rejects the sitemap with 'Could not fetch', Resolve issues relating to: URLs with query strings are not indexing
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/sitemap-generator/page.tsx`
-  - `app/(tools)/seo-tools/sitemap-generator/SitemapClient.tsx`
-  - `app/(tools)/seo-tools/sitemap-generator/SitemapClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
-
----
-
-### <a id="slug-generator"></a>Slug Generator
-
-#### Identity
-- **ID:** `slug-generator`
-- **Name:** Slug Generator
-- **Category:** SEO Tools
-- **Route:** `/seo-tools/slug-generator`
-
-#### Purpose
-> Convert any page title or phrase into a clean, SEO-friendly URL slug.
-
-#### Features
-- Generating a URL slug for a new blog post
-- Creating consistent URL patterns for a product catalogue
-- Converting user-submitted titles to safe URL components
-- Batch-generating slugs for an imported content library
-
-#### Functionality
-Type or paste your page title into the input field. The slug is generated instantly below. Toggle 'Remove stop words' to strip common words (the, a, an, in, etc.) for a shorter slug. Copy the slug and use it in your CMS or URL structure.
-
-#### Libraries & Dependencies
-| Dependency Type | Verified Imports |
-| --- | --- |
-| **Radix UI / UI Components** | `ToolShell`, `ToolSkeleton` |
-| **Processing Packages** | `next` |
-| **Shared Internal Modules** | `tool-registry`, `seo`, `SlugGeneratorClient` |
-| **Peer Dependencies** | None |
-
-#### File Structure
-- **Page File:** `app/(tools)/seo-tools/slug-generator/page.tsx`
-- **Client Component:** `app/(tools)/seo-tools/slug-generator/SlugClient.tsx`
-- **Feature Directory:** `Not Present in Repository`
-- **Worker File:** `Not Present in Repository`
-- **Zustand Store:** `Not Present in Repository`
-- **Content File:** `src/content/tools/slug-generator.ts`
-- **Registry File:** `src/registry/tools/slug-generator.ts`
-
-#### Architecture Notes
-| Parameter | Value |
-| --- | --- |
-| **Worker Thread Pool Usage** | No (None) |
-| **Concurrency Limit** | Not Applicable |
-| **Offline Capability** | Yes |
-| **Manifest Exceptions** | None |
-| **Sample Asset Bundled** | No |
-| **Engine Loader Usage** | No |
-| **Threading Model** | Main Thread |
-| **WebAssembly (WASM)** | No |
-| **IndexedDB** | No |
-
-#### Performance Characteristics
-- **Memory Profile:** Light
-- **CPU Intensive:** No
-- **Lazy Loaded (ssr:false):** Yes
-- **Code Splitting Boundaries:** Yes
-
-#### Security Review
-- **Input Validation:** No
-- **XSS Protection:** Yes (React escaping)
-- **Sanitization:** No
-- **File Upload Limits:** Not Present in Repository
-- **Network Access Required:** No
-- **Hardware/Device Permissions:** None
-
-#### Metrics
-- **Bundle Impact:** Small
-- **Worker-Based:** No
-- **Offline-First:** Yes
-- **IndexedDB Persistence:** No
-- **WebAssembly Processing:** No
-- **Engine Architecture:** Native
-
-#### Relations & Enhancements
-- **Related Tools:** None
-- **Shared Components Used:** `ToolShell`, `ToolSkeleton`
-- **Shared Workers Used:** None
-- **Shared Stores Used:** None
-- **Known Tech Debt / Future Enhancements:** Resolve issues relating to: Slug contains consecutive hyphens, Resolve issues relating to: Slug starts or ends with a hyphen
-- **Manifest Safety Rules Enforced:** KL-07 (ssr:false Dynamic Imports)
-
-#### Verification & Traceability
-- **Evidence Files Scanned:**
-  - `app/(tools)/seo-tools/slug-generator/page.tsx`
-  - `app/(tools)/seo-tools/slug-generator/SlugClient.tsx`
-  - `app/(tools)/seo-tools/slug-generator/SlugClientWrapper.tsx`
-- **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -13555,7 +15306,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/aes-encrypt-decrypt/AesClient.tsx`
   - `app/(tools)/security-tools/aes-encrypt-decrypt/AesClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -13643,7 +15394,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/base64url-converter/Base64UrlClient.tsx`
   - `app/(tools)/security-tools/base64url-converter/Base64UrlClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -13731,7 +15482,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/card-masker/CardMaskerClient.tsx`
   - `app/(tools)/security-tools/card-masker/CardMaskerClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -13820,7 +15571,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/cipher-tools/CipherToolsWrapper.tsx`
   - `app/(tools)/security-tools/cipher-tools/useCiphers.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -13908,7 +15659,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/csp-builder/CspBuilderClient.tsx`
   - `app/(tools)/security-tools/csp-builder/CspBuilderWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -13996,7 +15747,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/csr-generator/CsrClient.tsx`
   - `app/(tools)/security-tools/csr-generator/CsrClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14084,7 +15835,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/directory-manifest/DirectoryManifestClient.tsx`
   - `app/(tools)/security-tools/directory-manifest/DirectoryManifestClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14172,7 +15923,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/ecdh-key-exchange/EcdhClient.tsx`
   - `app/(tools)/security-tools/ecdh-key-exchange/EcdhClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14260,7 +16011,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/ecdsa-sign/EcdsaClient.tsx`
   - `app/(tools)/security-tools/ecdsa-sign/EcdsaClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14352,7 +16103,7 @@ A **Hash Generator** creates a unique digital fingerprint (hash value) from any 
   - `app/(tools)/security-tools/hash-generator/HashGeneratorClientWrapper.tsx`
   - `app/(tools)/security-tools/hash-generator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14440,7 +16191,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/hkdf-generator/HkdfClient.tsx`
   - `app/(tools)/security-tools/hkdf-generator/HkdfClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14528,7 +16279,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/hmac-generator/HmacGeneratorClient.tsx`
   - `app/(tools)/security-tools/hmac-generator/HmacGeneratorWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14619,7 +16370,7 @@ Select 'Encode' to escape HTML characters or 'Decode' to unescape entities. Past
   - `app/(tools)/security-tools/html-entities/HTMLEntitiesClientWrapper.tsx`
   - `app/(tools)/security-tools/html-entities/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14707,7 +16458,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/iban-validator/IbanClient.tsx`
   - `app/(tools)/security-tools/iban-validator/IbanClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14795,7 +16546,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/iso8583-bitmap-decoder/ISO8583BitmapClient.tsx`
   - `app/(tools)/security-tools/iso8583-bitmap-decoder/ISO8583BitmapClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14883,7 +16634,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/iso8583-message-parser/ISO8583ParserClient.tsx`
   - `app/(tools)/security-tools/iso8583-message-parser/ISO8583ParserClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -14979,7 +16730,7 @@ Paste the full JWT string (three dot-separated parts) into the input field. The 
   - `app/(tools)/security-tools/jwt-decoder/layout.tsx`
   - `app/(tools)/security-tools/jwt-decoder/utils.ts`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15067,7 +16818,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/oauth-token-decoder/OAuthClient.tsx`
   - `app/(tools)/security-tools/oauth-token-decoder/OAuthClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15159,7 +16910,7 @@ Set Length: Use the slider or input field to choose how long you want your passw
   - `app/(tools)/security-tools/password-generator/PasswordGeneratorClientWrapper.tsx`
   - `app/(tools)/security-tools/password-generator/layout.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15247,7 +16998,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/pbkdf2-generator/Pbkdf2Client.tsx`
   - `app/(tools)/security-tools/pbkdf2-generator/Pbkdf2ClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15335,7 +17086,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/pem-viewer/PemViewerClient.tsx`
   - `app/(tools)/security-tools/pem-viewer/PemViewerClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15423,7 +17174,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/private-key-checker/PrivateKeyClient.tsx`
   - `app/(tools)/security-tools/private-key-checker/PrivateKeyClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15511,7 +17262,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/public-key-inspector/PublicKeyClient.tsx`
   - `app/(tools)/security-tools/public-key-inspector/PublicKeyClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15599,7 +17350,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/rsa-encrypt-decrypt/RsaCryptClient.tsx`
   - `app/(tools)/security-tools/rsa-encrypt-decrypt/RsaCryptClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15687,7 +17438,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/rsa-key-generator/RsaKeyGenClient.tsx`
   - `app/(tools)/security-tools/rsa-key-generator/RsaKeyGenClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15775,7 +17526,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/rsa-sign-verify/RsaSignClient.tsx`
   - `app/(tools)/security-tools/rsa-sign-verify/RsaSignClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15863,7 +17614,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/saml-decoder/SamlClient.tsx`
   - `app/(tools)/security-tools/saml-decoder/SamlClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -15951,7 +17702,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/tlv-parser/TlvParserClient.tsx`
   - `app/(tools)/security-tools/tlv-parser/TlvParserClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -16039,7 +17790,7 @@ Launches an interactive client view within the ToolShell. Users provide direct i
   - `app/(tools)/security-tools/x509-viewer/X509Client.tsx`
   - `app/(tools)/security-tools/x509-viewer/X509ClientWrapper.tsx`
 - **Confidence Level:** 100%
-- **Verification Source:** Repository scan (2026-07-21)
+- **Verification Source:** Repository scan (2026-07-23)
 
 ---
 
@@ -16052,21 +17803,22 @@ This map displays which tools import specific shared UI or system components.
 | Shared Component | Tools Utilizing It |
 | --- | --- |
 | `Accordion` | `financial-freedom-calculator`, `image-converter`, `retirement-calculator`, `sip-calculator` |
-| `BatchQueue` | `bulk-resizer`, `code-minifier`, `compress-pdf`, `image-converter`, `seo-tools` |
+| `BatchQueue` | `bulk-resizer`, `code-minifier`, `compress-pdf`, `extract-images`, `image-converter`, `seo-tools`, `watermark-pdf` |
 | `CalculatorActionBar` | `compound-interest`, `gst-calculator`, `lumpsum-calculator`, `mutual-fund-returns`, `sip-calculator` |
 | `Checkbox` | `calendar`, `fake-data-generator`, `image-resizer`, `password-generator`, `rotate-pdf`, `seo-tools`, `split-pdf`, `wifi-qr-code` |
 | `CopyButton` | `aes-encrypt-decrypt`, `base64url-converter`, `box-shadow-generator`, `cagr-calculator`, `card-masker`, `cipher-tools`, `code-minifier`, `color-converter`, `color-palette-extractor`, `command-cheat-sheet`, `contrast-checker`, `csp-builder`, `csr-generator`, `csv-to-json`, `date-calculator`, `diff-checker`, `directory-manifest`, `discount-calculator`, `ecdh-key-exchange`, `ecdsa-sign`, `fd-calculator`, `format`, `glassmorphism-generator`, `gradient-generator`, `hash-generator`, `hkdf-generator`, `hmac-generator`, `html-entities`, `iban-validator`, `image-base64`, `inflation-calculator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `markdown`, `nanoid-generator`, `numeral-converter`, `oauth-token-decoder`, `password-generator`, `pbkdf2-generator`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `rd-calculator`, `retirement-calculator`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-tools`, `sip-calculator`, `split-copy`, `sql-formatter`, `stock-average-calculator`, `swp-calculator`, `text-case-converter`, `text-utility`, `time-calculator`, `timezone-converter`, `tlv-parser`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `work-hours`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
-| `DropZone` | `barcode-scanner`, `bg-remover`, `bulk-resizer`, `code-minifier`, `color-palette-extractor`, `compress-pdf`, `extract-images`, `gif-creator`, `hash-generator`, `html-viewer`, `image-converter`, `image-crop`, `image-resizer`, `image-to-pdf`, `invoice-generator`, `markdown`, `merge-pdf`, `pdf-editor`, `pdf-to-image`, `phone-mockup-generator`, `split-pdf`, `word-counter`, `word-to-pdf` |
+| `DropZone` | `barcode-scanner`, `base64`, `bg-remover`, `bulk-resizer`, `code-minifier`, `color-palette-extractor`, `compress-pdf`, `extract-images`, `gif-creator`, `hash-generator`, `html-viewer`, `image-converter`, `image-crop`, `image-resizer`, `image-to-pdf`, `invoice-generator`, `markdown`, `merge-pdf`, `pdf-editor`, `pdf-to-image`, `phone-mockup-generator`, `split-pdf`, `watermark-pdf`, `word-counter`, `word-to-pdf` |
 | `EmptyState` | `bg-remover`, `json-formatter` |
-| `EngineLoader` | `extract-images`, `html-viewer`, `markdown`, `pdf-to-image`, `pdf-to-word` |
+| `EngineLoader` | `html-viewer`, `markdown`, `pdf-to-image`, `pdf-to-word` |
+| `HybridDateInput` | `age-calculator` |
 | `LiveFilterBar` | `command-cheat-sheet` |
 | `MediaDropZone` | `audio-converter`, `video-metadata-viewer`, `video-trim` |
 | `MediaErrorBanner` | `audio-converter`, `gif-creator`, `video-metadata-viewer`, `video-trim` |
 | `MediaPreviewPlayer` | `audio-converter` |
 | `MediaStatusBadge` | `audio-converter`, `video-metadata-viewer`, `video-trim` |
 | `MetricCard` | `age-calculator`, `audio-converter`, `bmi-calculator`, `cagr-calculator`, `compound-interest`, `currency-converter`, `date-calculator`, `discount-calculator`, `fd-calculator`, `financial-freedom-calculator`, `gif-creator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hra-calculator`, `income-tax`, `inflation-calculator`, `lumpsum-calculator`, `mutual-fund-returns`, `nps-calculator`, `numeral-converter`, `ppf-calculator`, `rd-calculator`, `retirement-calculator`, `safe-to-spend`, `salary-calculator`, `sip-calculator`, `stock-average-calculator`, `swp-calculator`, `tds-calculator`, `time-calculator`, `video-metadata-viewer`, `video-trim`, `word-counter`, `work-hours` |
-| `PdfPagePreview` | `rotate-pdf`, `watermark-pdf` |
-| `PrivacyBadge` | `bg-remover`, `code-minifier`, `compress-pdf`, `internet-speed-test`, `json-formatter` |
+| `PdfPagePreview` | `rotate-pdf` |
+| `PrivacyBadge` | `bg-remover`, `code-minifier`, `compress-pdf`, `extract-images`, `internet-speed-test`, `json-formatter`, `split-pdf`, `watermark-pdf` |
 | `QRCodeLoader` | `qrcode`, `wifi-qr-code` |
 | `QRModal` | `age-calculator`, `bmi-calculator`, `cagr-calculator`, `color-converter`, `crontab-editor`, `hra-calculator`, `income-tax`, `nps-calculator`, `sip-calculator`, `unix-timestamp` |
 | `SegmentedControl` | `cipher-tools`, `code-minifier`, `fake-data-generator`, `html-viewer`, `json-formatter`, `markdown` |
@@ -16076,11 +17828,11 @@ This map displays which tools import specific shared UI or system components.
 | `SliderField` | `bg-remover`, `compound-interest`, `discount-calculator`, `fd-calculator`, `financial-freedom-calculator`, `image-converter`, `inflation-calculator`, `lumpsum-calculator`, `mutual-fund-returns`, `page-numbering`, `password-generator`, `pomodoro-timer`, `ppf-calculator`, `qrcode`, `rd-calculator`, `retirement-calculator`, `safe-to-spend`, `sip-calculator`, `swp-calculator`, `watermark-pdf` |
 | `StatusBadge` | `bg-remover`, `code-minifier`, `internet-speed-test`, `invoice-generator`, `json-formatter` |
 | `Toast` | `barcode-scanner`, `calendar`, `chart-generator`, `image-converter`, `internet-speed-test`, `invoice-generator`, `lumpsum-calculator`, `markdown`, `mutual-fund-returns`, `notes`, `numeral-converter`, `pdf-to-word`, `seo-tools`, `sip-calculator`, `task-reminder`, `text-sorter-deduper`, `video-metadata-viewer`, `word-counter`, `word-to-pdf`, `work-hours`, `world-clock` |
-| `ToolInput` | `age-calculator`, `banking-tools`, `base64`, `cagr-calculator`, `calendar`, `code-minifier`, `core-banking-parser`, `currency-converter`, `date-calculator`, `discount-calculator`, `emv-tlv-tree`, `fake-data-generator`, `financial-freedom-calculator`, `gst-calculator`, `hash-map-visualizer`, `image-resizer`, `invoice-generator`, `json-formatter`, `seo-tools`, `sip-calculator`, `split-pdf`, `stock-average-calculator`, `swift-mt-mx`, `task-reminder`, `text-case-converter`, `text-sorter-deduper`, `timezone-converter`, `track-2-parser`, `wifi-qr-code`, `word-counter` |
+| `ToolInput` | `banking-tools`, `base64`, `cagr-calculator`, `calendar`, `code-minifier`, `core-banking-parser`, `currency-converter`, `date-calculator`, `discount-calculator`, `emv-tlv-tree`, `fake-data-generator`, `financial-freedom-calculator`, `gst-calculator`, `hash-map-visualizer`, `image-resizer`, `invoice-generator`, `json-formatter`, `seo-tools`, `sip-calculator`, `split-pdf`, `stock-average-calculator`, `swift-mt-mx`, `task-reminder`, `text-case-converter`, `text-sorter-deduper`, `timezone-converter`, `track-2-parser`, `wifi-qr-code`, `word-counter` |
 | `ToolResultArea` | `banking-tools`, `barcode-scanner`, `base64`, `core-banking-parser`, `emv-tlv-tree`, `fake-data-generator`, `financial-freedom-calculator`, `swift-mt-mx`, `text-sorter-deduper`, `track-2-parser` |
-| `ToolShell` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `compress`, `contrast-checker`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `data-calculator`, `date-calculator`, `diff-checker`, `directory-manifest`, `discount-calculator`, `ecdh-key-exchange`, `ecdsa-sign`, `emi-calculator`, `emv-tlv-tree`, `extract-images`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-compress`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `og-preview`, `page-numbering`, `password-generator`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `retirement-calculator`, `robots-txt`, `rotate-pdf`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `split-pdf`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
-| `ToolSkeleton` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `contrast-checker`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `date-calculator`, `diff-checker`, `directory-manifest`, `discount-calculator`, `ecdh-key-exchange`, `ecdsa-sign`, `emv-tlv-tree`, `extract-images`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `og-preview`, `page-numbering`, `password-generator`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `retirement-calculator`, `robots-txt`, `rotate-pdf`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `split-pdf`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
-| `WorkflowSuggestions` | `compress-pdf`, `fake-data-generator`, `json-csv`, `json-formatter`, `merge-pdf` |
+| `ToolShell` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `compress`, `contrast-checker`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `data-calculator`, `date-calculator`, `delete-blank-pages`, `diff-checker`, `directory-manifest`, `discount-calculator`, `duplicate-pages`, `ecdh-key-exchange`, `ecdsa-sign`, `emi-calculator`, `emv-tlv-tree`, `even-pages-extractor`, `extract-images`, `extract-pages`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-compress`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `move-pages`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `odd-pages-extractor`, `og-preview`, `organize-pdf`, `page-numbering`, `password-generator`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-image`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `remove-pages`, `reorder-pages`, `retirement-calculator`, `reverse-pages`, `robots-txt`, `rotate-pdf`, `rotate-selected-pages`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `split-pdf`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
+| `ToolSkeleton` | `aes-encrypt-decrypt`, `age-calculator`, `audio-converter`, `banking-tools`, `barcode-scanner`, `base64`, `base64url-converter`, `bg-remover`, `bmi-calculator`, `box-shadow-generator`, `bulk-resizer`, `cagr-calculator`, `calculator`, `calendar`, `card-masker`, `chart-generator`, `cipher-tools`, `code-minifier`, `color-converter`, `color-match`, `color-palette-extractor`, `command-cheat-sheet`, `compound-interest`, `compress-pdf`, `contrast-checker`, `convert-to-a4`, `convert-to-legal`, `convert-to-letter`, `core-banking-parser`, `countdown-timer`, `crontab-editor`, `crop-pdf`, `csp-builder`, `csr-generator`, `csv-to-json`, `currency-converter`, `date-calculator`, `delete-blank-pages`, `diff-checker`, `directory-manifest`, `discount-calculator`, `duplicate-pages`, `ecdh-key-exchange`, `ecdsa-sign`, `edit-metadata`, `emv-tlv-tree`, `even-pages-extractor`, `extract-images`, `extract-pages`, `fake-data-generator`, `fd-calculator`, `file-viewer-diff`, `financial-freedom-calculator`, `format`, `game-2048`, `gif-creator`, `glassmorphism-generator`, `gradient-generator`, `grammar-checker`, `gratuity-calculator`, `gst-calculator`, `hash-generator`, `hash-map-visualizer`, `hkdf-generator`, `hmac-generator`, `hra-calculator`, `html-entities`, `html-viewer`, `iban-validator`, `image-base64`, `image-converter`, `image-crop`, `image-resizer`, `image-seo`, `image-to-pdf`, `income-tax`, `inflation-calculator`, `internet-speed-test`, `invoice-generator`, `iso8583-bitmap-decoder`, `iso8583-message-parser`, `json-csv`, `json-formatter`, `json-to-ts`, `jwt-decoder`, `lock-unlock-pdf`, `log-analyzer`, `lorem-ipsum`, `luhn-validator`, `lumpsum-calculator`, `margin-adjustment`, `markdown`, `memory-match`, `merge-pdf`, `meta-tags`, `mic-camera-tester`, `minesweeper`, `move-pages`, `mutual-fund-returns`, `nanoid-generator`, `notes`, `nps-calculator`, `numeral-converter`, `oauth-token-decoder`, `odd-pages-extractor`, `og-preview`, `organize-pdf`, `page-numbering`, `page-size-converter`, `password-generator`, `pbkdf2-generator`, `pdf-editor`, `pdf-to-image`, `pdf-to-word`, `pem-viewer`, `percentage-calculator`, `phone-mockup-generator`, `pomodoro-timer`, `ppf-calculator`, `private-key-checker`, `public-key-inspector`, `qrcode`, `rd-calculator`, `reaction-time`, `regex-tester`, `remove-metadata`, `remove-pages`, `reorder-pages`, `retirement-calculator`, `reverse-pages`, `robots-txt`, `rotate-pdf`, `rotate-selected-pages`, `rsa-encrypt-decrypt`, `rsa-key-generator`, `rsa-sign-verify`, `safe-to-spend`, `salary-calculator`, `saml-decoder`, `seo-title`, `seo-tools`, `sip-calculator`, `sitemap-generator`, `slug-generator`, `smart-converter`, `snake-game`, `split-copy`, `sql-formatter`, `stock-average-calculator`, `stopwatch`, `sudoku`, `swift-mt-mx`, `swp-calculator`, `task-reminder`, `tds-calculator`, `text-case-converter`, `text-sorter-deduper`, `text-utility`, `tic-tac-toe`, `time-calculator`, `timezone-converter`, `tlv-parser`, `track-2-parser`, `typing-speed-test`, `unit-converter`, `unix-timestamp`, `url-cleaner`, `url-encoder`, `utc-ist-converter`, `uuid-generator`, `validate`, `video-metadata-viewer`, `video-trim`, `watermark-pdf`, `wifi-qr-code`, `word-counter`, `word-guess`, `word-to-pdf`, `work-hours`, `world-clock`, `x509-viewer`, `xml-formatter`, `yaml-json-converter`, `yaml-validator` |
+| `WorkflowSuggestions` | `compress-pdf`, `extract-images`, `fake-data-generator`, `json-csv`, `json-formatter`, `merge-pdf`, `watermark-pdf` |
 
 ### Shared Workers Map
 This map displays which tools execute background tasks using shared worker files.
@@ -16097,7 +17849,7 @@ This map displays which tools utilize shared global stores (e.g. Zustand stores)
 
 | Shared Store | Tools Utilizing It |
 | --- | --- |
-| `useBatchStore` | `bulk-resizer`, `code-minifier`, `compress-pdf`, `image-converter`, `seo-tools` |
+| `useBatchStore` | `bulk-resizer`, `code-minifier`, `compress-pdf`, `extract-images`, `image-converter`, `seo-tools`, `watermark-pdf` |
 | `useColorStore` | `color-converter` |
 | `useRecoveryStore` | `code-minifier` |
 | `useSessionStore` | `pomodoro-timer` |

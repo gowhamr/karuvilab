@@ -262,19 +262,19 @@ export default function Base64Client() {
           {/* File Result Section */}
           {fileResult && (
             <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-success/10 rounded-2xl flex items-center justify-center">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 sm:gap-4">
+                <div className="flex items-center gap-4 w-full sm:w-auto min-w-0">
+                  <div className="w-12 h-12 shrink-0 bg-success/10 rounded-2xl flex items-center justify-center">
                     <FileCode className="w-6 h-6 text-success" />
                   </div>
-                  <div>
-                    <h3 className="font-black text-text uppercase tracking-widest text-sm">Processing Complete</h3>
-                    <p className="text-xs font-bold text-text-4 uppercase tracking-tighter">{fileResult.name}</p>
+                  <div className="min-w-0">
+                    <h3 className="font-black text-text uppercase tracking-widest text-sm truncate">Processing Complete</h3>
+                    <p className="text-xs font-bold text-text-4 uppercase tracking-tighter truncate">{fileResult.name}</p>
                   </div>
                 </div>
                 <button
                   onClick={handleFileDownload}
-                  className="flex items-center gap-2 px-6 py-3 bg-success text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:opacity-90 transition-all shadow-lg shadow-success/20"
+                  className="flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 bg-success text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:opacity-90 transition-all shadow-lg shadow-success/20 shrink-0"
                 >
                   <Download className="w-4 h-4" /> Download
                 </button>

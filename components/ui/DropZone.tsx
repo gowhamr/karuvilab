@@ -9,8 +9,8 @@ interface DropZoneProps {
   onFilesSelected: (files: FileList | File[]) => void;
   accept?: string;
   multiple?: boolean;
-  title?: string;
-  description?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
   className?: string;
   icon?: React.ReactNode;
   maxSize?: number; // in bytes
@@ -29,7 +29,7 @@ export function DropZone({
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const errorId = `dropzone-error-${title.toLowerCase().replace(/\s+/g, "-")}`;
+  const errorId = `dropzone-error-${typeof title === 'string' ? title.toLowerCase().replace(/\s+/g, "-") : "upload"}`;
 
   const handleFiles = useCallback(
     (files: FileList | File[]) => {
@@ -62,6 +62,7 @@ export function DropZone({
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       handleFiles(e.dataTransfer.files);
@@ -99,7 +100,7 @@ export function DropZone({
             onClick();
           }
         }}
-        aria-label={`${title}. ${description}`}
+        aria-label={`${typeof title === 'string' ? title : "Upload file"}. ${typeof description === 'string' ? description : ""}`}
         data-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
         aria-dropeffect="copy"

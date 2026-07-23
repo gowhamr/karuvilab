@@ -393,7 +393,7 @@ Every tool page must have:
 
 ### 11.5 Sitemap & Crawling
 - Dynamic sitemap (`app/sitemap.ts`) must include all tool pages
-- Priority values: `1.0` homepage, `0.9` category hubs, `0.8` tool pages
+- Priority values: `1.0` homepage, `0.9` category hubs, `0.8` tool pages, `0.5` break-time tools
 - `robots.txt` must allow all crawlers and reference sitemap index
 - No `noindex` on public tool pages
 
@@ -767,3 +767,10 @@ These CSS properties **create a new stacking context**, which means child `z-ind
 ---
 
 *This manifesto evolves with the platform. Every architectural decision that prevents a production failure must be added here with its KL/PERF rule number. Version this document — increment the version header on every material change.*
+
+## 21. Break-Time Category Standards
+- **Purpose**: Low-priority mini-games to provide a break. They are not part of the core feature set.
+- **Rules**:
+  - Must remain strictly client-side.
+  - Priority in sitemap is 0.5.
+  - No retention guarantees (pending review).

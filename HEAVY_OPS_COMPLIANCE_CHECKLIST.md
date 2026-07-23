@@ -1,7 +1,9 @@
-# KaruviLab Engineering Audit Report: PASS/FAIL Status
+# KaruviLab Heavy Operations Compliance Checklist
 
 **Date:** 2026-07-20
 **Scope:** `HEAVY_OPERATIONS_INVENTORY.md` tools against GEMINI.md core rules (P-04, PERF-01, PERF-06, KL-05)
+
+*Note: The PDF tools in this list received a rigorous, granular, code-level deep audit detailing specific race conditions, React component correctness, and specific bug patterns (see [PDF_TOOLS_AUDIT.md](PDF_TOOLS_AUDIT.md)). The Image and NLP/Text tools were marked PASS based on a broad, high-level GEMINI.md rule compliance check only, and have not yet received an equivalent deep architectural audit.*
 
 ## Summary
 The codebase has undergone a deep architectural migration. All heavy compute tasks have been offloaded from the main UI thread to dedicated Web Workers managed by the `WorkerOrchestrator`.

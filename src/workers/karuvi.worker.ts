@@ -495,6 +495,228 @@ const api: WorkerAPI = {
     return Comlink.transfer(outBytes, [outBytes.buffer]);
   },
 
+  async adjustPdfLayout(
+    file: ArrayBuffer,
+    options: {
+      action: 'crop' | 'resize' | 'margin';
+      pages: number[] | 'all';
+      cropBox?: { x: number; y: number; width: number; height: number };
+      targetSize?: [number, number];
+      scaleToFit?: boolean;
+      margins?: { top: number; right: number; bottom: number; left: number };
+    },
+    onProgress?: any
+  ) {
+    const { PDFDocument } = await import("pdf-lib");
+    if (onProgress) onProgress({ percent: 10, message: "Loading PDF..." });
+    const doc = await PDFDocument.load(file);
+    const pages = doc.getPages();
+    const pageCount = pages.length;
+
+    const targetPages = options.pages === 'all' 
+      ? Array.from({ length: pageCount }, (_, i) => i)
+      : options.pages;
+
+    if (options.action === 'crop' && options.cropBox) {
+      for (let i = 0; i < targetPages.length; i++) {
+        const pIdx = targetPages[i]!;
+        if (onProgress && i % 5 === 0) onProgress({ percent: 10 + (i / targetPages.length) * 80, message: `Cropping page ${i + 1}/${targetPages.length}...` });
+        const page = pages[pIdx];
+        if (!page) continue;
+        
+        // cropBox expected in points
+        page.setCropBox(options.cropBox.x, options.cropBox.y, options.cropBox.width, options.cropBox.height);
+      }
+    } else if ((options.action === 'resize' && options.targetSize) || (options.action === 'margin' && options.margins)) {
+      if (onProgress) onProgress({ percent: 20, message: "Rebuilding pages..." });
+      
+      const newDoc = await PDFDocument.create();
+      
+      for (let i = 0; i < pageCount; i++) {
+        if (onProgress && i % 5 === 0) onProgress({ percent: 20 + (i / pageCount) * 70, message: `Processing page ${i + 1}/${pageCount}...` });
+        
+        if (!targetPages.includes(i)) {
+          // Copy page as is if not in targetPages
+          const [copiedPage] = await newDoc.copyPages(doc, [i]);
+          newDoc.addPage(copiedPage!);
+          continue;
+        }
+
+        const oldPage = pages[i]!;
+        const { width: oldW, height: oldH } = oldPage.getSize();
+        
+        // Embed the page
+        const [embeddedPage] = await newDoc.embedPdf(file, [i]);
+        
+        if (options.action === 'resize' && options.targetSize) {
+          const [newW, newH] = options.targetSize;
+          const newPage = newDoc.addPage([newW, newH]);
+          
+          if (options.scaleToFit) {
+            const scale = Math.min(newW / oldW, newH / oldH);
+            const scaledW = oldW * scale;
+            const scaledH = oldH * scale;
+            newPage.drawPage(embeddedPage!, {
+              x: (newW - scaledW) / 2,
+              y: (newH - scaledH) / 2,
+              width: scaledW,
+              height: scaledH,
+            });
+          } else {
+            // Center without scaling
+            newPage.drawPage(embeddedPage!, {
+              x: (newW - oldW) / 2,
+              y: (newH - oldH) / 2,
+              width: oldW,
+              height: oldH,
+            });
+          }
+        } else if (options.action === 'margin' && options.margins) {
+          const { top, right, bottom, left } = options.margins;
+          const newW = oldW + left + right;
+          const newH = oldH + top + bottom;
+          const newPage = newDoc.addPage([newW, newH]);
+          
+          newPage.drawPage(embeddedPage!, {
+            x: left,
+            y: bottom,
+            width: oldW,
+            height: oldH,
+          });
+        }
+      }
+      
+      if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
+      const outBytes = await newDoc.save();
+      return Comlink.transfer(outBytes, [outBytes.buffer]);
+    }
+
+    if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
+    const outBytes = await doc.save();
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
+  },
+
+  async getPdfMetadata(file: ArrayBuffer) {
+    const { PDFDocument } = await import("pdf-lib");
+    const doc = await PDFDocument.load(file);
+    return {
+      title: doc.getTitle(),
+      author: doc.getAuthor(),
+      subject: doc.getSubject(),
+      keywords: doc.getKeywords(),
+      producer: doc.getProducer(),
+      creator: doc.getCreator(),
+      creationDate: doc.getCreationDate(),
+      modificationDate: doc.getModificationDate(),
+    };
+  },
+
+  async setPdfMetadata(
+    file: ArrayBuffer,
+    metadata: {
+      title?: string | null;
+      author?: string | null;
+      subject?: string | null;
+      keywords?: string[] | null;
+      producer?: string | null;
+      creator?: string | null;
+      clearAll?: boolean;
+    },
+    onProgress?: any
+  ) {
+    const { PDFDocument } = await import("pdf-lib");
+    if (onProgress) onProgress({ percent: 10, message: "Loading PDF..." });
+    const doc = await PDFDocument.load(file);
+    
+    if (onProgress) onProgress({ percent: 50, message: "Updating metadata..." });
+    if (metadata.clearAll) {
+      doc.setTitle('');
+      doc.setAuthor('');
+      doc.setSubject('');
+      doc.setKeywords([]);
+      doc.setProducer('');
+      doc.setCreator('');
+    } else {
+      if (metadata.title !== undefined) doc.setTitle(metadata.title || '');
+      if (metadata.author !== undefined) doc.setAuthor(metadata.author || '');
+      if (metadata.subject !== undefined) doc.setSubject(metadata.subject || '');
+      if (metadata.keywords !== undefined) doc.setKeywords(metadata.keywords || []);
+      if (metadata.producer !== undefined) doc.setProducer(metadata.producer || '');
+      if (metadata.creator !== undefined) doc.setCreator(metadata.creator || '');
+    }
+
+    // Always update modification date when editing metadata
+    doc.setModificationDate(new Date());
+
+    if (onProgress) onProgress({ percent: 90, message: "Saving PDF..." });
+    const outBytes = await doc.save();
+    return Comlink.transfer(outBytes, [outBytes.buffer]);
+  },
+
+  async getPdfBookmarks(file: ArrayBuffer, onProgress?: any) {
+    if (onProgress) onProgress({ percent: 20, message: "Loading PDF..." });
+    const pdfjsLib = await import("pdfjs-dist");
+    const workerUrl = typeof location !== 'undefined' ? location.origin + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs';
+    if (pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+      (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
+    }
+
+    const pdf = await pdfjsLib.getDocument({ data: file }).promise;
+    
+    if (onProgress) onProgress({ percent: 70, message: "Extracting bookmarks..." });
+    const outline = await pdf.getOutline();
+    
+    // Convert outline into a simple array of nodes
+    const serializeOutline = (nodes: any[] | null): any[] => {
+      if (!nodes) return [];
+      return nodes.map(node => ({
+        title: node.title,
+        bold: node.bold,
+        italic: node.italic,
+        color: node.color,
+        items: serializeOutline(node.items)
+      }));
+    };
+
+    const result = serializeOutline(outline);
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return result;
+  },
+
+  async extractPdfAttachments(file: ArrayBuffer, onProgress?: any) {
+    if (onProgress) onProgress({ percent: 20, message: "Loading PDF..." });
+    const pdfjsLib = await import("pdfjs-dist");
+    const workerUrl = typeof location !== 'undefined' ? location.origin + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs';
+    if (pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+      (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
+    }
+
+    const pdf = await pdfjsLib.getDocument({ data: file }).promise;
+    
+    if (onProgress) onProgress({ percent: 70, message: "Extracting attachments..." });
+    const attachmentsDict = await pdf.getAttachments();
+    
+    const results: Array<{ filename: string; content: Uint8Array }> = [];
+    if (attachmentsDict) {
+      for (const key of Object.keys(attachmentsDict)) {
+        const attachment = attachmentsDict[key];
+        if (attachment && attachment.content) {
+          results.push({
+            filename: attachment.filename || key,
+            content: attachment.content
+          });
+        }
+      }
+    }
+    
+    if (onProgress) onProgress({ percent: 100, message: "Done!" });
+    return results;
+  },
+
   // PDF Tasks (with memory optimization)
   async mergePdfs(files: (Blob | ArrayBuffer)[], onProgress) {
     const totalSize = files.reduce((acc, f) => acc + (f instanceof ArrayBuffer ? f.byteLength : f.size), 0);

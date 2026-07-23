@@ -185,6 +185,52 @@ class WorkerManager {
     return workerOrchestrator.run("addPageNumbersToPdf", [file, options], [file], onProgress, abortSignal, true, 2);
   }
 
+  async adjustPdfLayout(
+    file: ArrayBuffer,
+    options: any,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("adjustPdfLayout", [file, options], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async getPdfMetadata(file: ArrayBuffer, abortSignal?: AbortSignal): Promise<Record<string, string | Date | undefined>> {
+    return workerOrchestrator.run("getPdfMetadata", [file], [file], undefined, abortSignal, true, 2);
+  }
+
+  async setPdfMetadata(
+    file: ArrayBuffer,
+    metadata: any,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("setPdfMetadata", [file, metadata], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async getPdfBookmarks(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<any[]> {
+    return workerOrchestrator.run("getPdfBookmarks", [file], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async extractPdfAttachments(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Array<{ filename: string; content: Uint8Array }>> {
+    return workerOrchestrator.run("extractPdfAttachments", [file], [file], onProgress, abortSignal, true, 2);
+  }
+
+  async extractTextFromPdf(
+    file: ArrayBuffer,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<string> {
+    return workerOrchestrator.run("extractTextFromPdf", [file], [file], onProgress, abortSignal, true, 2);
+  }
+
   async compressImage(
     file: ArrayBuffer,
     mimeType: string,
