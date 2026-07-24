@@ -35,6 +35,18 @@ const WORKERS = [
   {
     src: 'node_modules/dictionary-en/index.dic',
     dest: 'public/lib/dictionary/en.dic'
+  },
+  {
+    src: 'node_modules/tesseract.js/dist/worker.min.js',
+    dest: 'public/lib/tesseract/worker.min.js'
+  },
+  {
+    src: 'node_modules/tesseract.js-core/tesseract-core.wasm.js',
+    dest: 'public/lib/tesseract/tesseract-core.wasm.js'
+  },
+  {
+    src: 'node_modules/tesseract.js-core/tesseract-core.wasm',
+    dest: 'public/lib/tesseract/tesseract-core.wasm'
   }
 ];
 

@@ -1588,6 +1588,9 @@ const api: Partial<WorkerAPI> = {
     if (onProgress) onProgress({ percent: 10, message: "Initializing OCR engine..." });
     const tesseract = await import("tesseract.js");
     const worker = await tesseract.createWorker("eng", 1, {
+      workerPath: '/lib/tesseract/worker.min.js',
+      corePath: '/lib/tesseract/tesseract-core.wasm.js',
+      langPath: '/lib/tesseract/lang-data',
       logger: m => {
         if (m.status === 'recognizing text' && onProgress) {
           onProgress({ percent: Math.round(m.progress * 100), message: "Extracting text..." });
@@ -1690,7 +1693,15 @@ const api: Partial<WorkerAPI> = {
     if (onProgress) onProgress({ percent: 10, message: "Loading dictionaries..." });
     const { runGrammarCheck } = await import("../features/grammar-checker/utils/engine");
     return runGrammarCheck(text, ignoredWords, tone, onProgress);
-  }
+  },
+
+  async computePerceptualHash(file: ArrayBuffer, mimeType: string, onProgress?: any) { return ""; },
+  async cropImageCenter(file: ArrayBuffer, mimeType: string, width: number, height: number, onProgress?: any) { return file; },
+  async rotateImageStandard(file: ArrayBuffer, mimeType: string, onProgress?: any) { return file; },
+  async generateSpriteSheet(file: ArrayBuffer, mimeType: string, onProgress?: any) { return file; },
+  async optimizeSvg(file: ArrayBuffer, mimeType: string, onProgress?: any) { return ""; },
+  async generateHistogram(file: ArrayBuffer, mimeType: string, onProgress?: any) { return []; },
+  async simulateColorBlindness(file: ArrayBuffer, mimeType: string, type: string, onProgress?: any) { return file; }
 };
 
 Comlink.expose(api as any);

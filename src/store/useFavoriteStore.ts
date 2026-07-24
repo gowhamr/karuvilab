@@ -22,8 +22,11 @@ export const useFavoriteStore = create<FavoriteState>()(
       },
     }),
     {
-      version: 1,
       name: 'karuvi-favorites',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
     }
   )

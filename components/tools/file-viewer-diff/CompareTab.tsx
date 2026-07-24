@@ -150,11 +150,11 @@ export function CompareTab() {
                 </div>
                 <div className="flex items-center gap-2">
                   {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileB.language.toLowerCase()) && (
-                    <button onClick={handleBeautifyB} title="Beautify" className="p-2 hover:bg-blue/5 text-blue rounded-lg">
+                    <button onClick={handleBeautifyB} aria-label="Beautify File B" title="Beautify" className="p-2 hover:bg-blue/5 text-blue rounded-lg">
                       <Sparkles className="w-4 h-4" />
                     </button>
                   )}
-                  <button onClick={() => setFileB(null)} className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
+                  <button onClick={() => setFileB(null)} aria-label="Clear File B" className="p-2 hover:bg-red-500/5 text-red-500 rounded-lg">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

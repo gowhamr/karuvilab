@@ -55,6 +55,10 @@ export const useAnalyticsStore = create<AnalyticsState>()(
     }),
     {
       name: 'kv-analytics-storage',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
     }
   )

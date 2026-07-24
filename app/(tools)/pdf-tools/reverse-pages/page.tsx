@@ -1,15 +1,22 @@
 import type { Metadata } from 'next';
 import { ToolShell } from '@/components/ui/ToolShell';
-import ReversePagesClientWrapper from '@/src/features/reverse-pages/reverse-pagesClientWrapper';
+import ReversePagesClientWrapper from './ReversePagesClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { CATEGORIES } from '@/src/tool-registry';
 
-export async function generateMetadata(): Promise<Metadata> {
-  return generateToolMetadata("reverse-pages");
-}
+const toolId = 'reverse-pages';
+const cat = CATEGORIES.find(c => c.id === 'pdf');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
   return (
-    <ToolShell toolId="reverse-pages" title="reverse-pages">
+    <ToolShell 
+      title="Reverse PDF Pages"
+      description="Reverse the order of pages in your PDF."
+      category={cat}
+      toolId={toolId}
+    >
       <ReversePagesClientWrapper />
     </ToolShell>
   );

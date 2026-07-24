@@ -36,6 +36,7 @@ export const useCollectionStore = create<CollectionState>()(
         {
           id: "dev-col",
           name: "Developer Tools",
+
           description: "Essential utilities for formatting and debugging code.",
           toolIds: ["json-formatter", "base64", "jwt-decoder", "uuid-generator", "regex"],
           icon: "💻",
@@ -46,6 +47,7 @@ export const useCollectionStore = create<CollectionState>()(
         {
           id: "image-col",
           name: "Image Editing",
+
           description: "Crop, resize, and remove backgrounds completely offline.",
           toolIds: ["bg-remover", "image-resizer", "compress", "image-crop", "image-converter"],
           icon: "🖼",
@@ -128,8 +130,11 @@ export const useCollectionStore = create<CollectionState>()(
     }),
     {
       name: "kv-tool-collections",
-      storage: createJSONStorage(() => idbStorage),
-      version: 1
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
+      storage: createJSONStorage(() => idbStorage)
     }
   )
 );

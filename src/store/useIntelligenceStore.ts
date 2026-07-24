@@ -61,6 +61,9 @@ export const useIntelligenceStore = create<IntelligenceState>()(
     }),
     {
       name: 'kv-intelligence-model',
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
       version: 1,
     }

@@ -469,4 +469,16 @@ export interface WorkerAPI {
       readingTimeMs: number;
     };
   }>;
+  applyImageFilter(file: ArrayBuffer, mimeType: string, filter: string, intensity: number, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  computePerceptualHash(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<string>;
+  rotateImageStandard(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  generateSpriteSheet(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  optimizeSvg(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<string>;
+  generateHistogram(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<number[]>;
+  simulateColorBlindness(file: ArrayBuffer, mimeType: string, type: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  watermarkImage(file: ArrayBuffer, mimeType: string, options: any, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  parseMarkdown(text: string): Promise<string>;
+  processBase64File(file: ArrayBuffer, mimeType: string, action: string, onProgress?: ProgressCallback): Promise<string | ArrayBuffer>;
+  removeImageMetadata(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  cropImageCenter(file: ArrayBuffer, mimeType: string, width: number, height: number, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
 }

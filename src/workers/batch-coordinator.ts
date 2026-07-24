@@ -9,7 +9,7 @@ class BatchCoordinator {
     onProgress?: (p: TaskProgress) => void,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
-    return workerOrchestrator.run("compressImageBatch", [file, mimeType, settings], [file], onProgress, abortSignal);
+    return workerOrchestrator.dispatch("compressImageBatch", [file, mimeType, settings], [file], onProgress, abortSignal);
   }
 
   terminateAll() {

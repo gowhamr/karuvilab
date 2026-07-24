@@ -34,6 +34,6 @@ describe('Image Filters via Worker', () => {
   it('should return a Uint8Array representing the processed image', async () => {
     const result = await workerManager.applyImageFilter(dummyBuffer, mimeType, 'sepia', 100);
     expect(result).toBeInstanceOf(Uint8Array);
-    expect(result.length).toBeGreaterThan(0);
+    expect(result.byteLength).toBeGreaterThan(0);
   });
 });

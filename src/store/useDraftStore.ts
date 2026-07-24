@@ -42,6 +42,10 @@ export const useDraftStore = create<DraftStore>()(
     }),
     {
       name: 'kv-drafts',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
       partialize: (state) => ({ drafts: state.drafts } as DraftStore)
     }

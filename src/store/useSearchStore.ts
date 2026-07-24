@@ -62,8 +62,11 @@ export const useSearchStore = create<SearchState>()(
       }))
     }),
     {
-      version: 1,
       name: 'kv-search-storage',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
       // Only persist the search engine state, not the UI state
       partialize: (state) => ({

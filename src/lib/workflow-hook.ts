@@ -8,67 +8,22 @@ import { findToolById, DataType } from '../tool-registry';
 const EMPTY_ARRAY: any[] = [];
 
 export function useWorkflowIntegration(toolId: string) {
-  const activeItems = useWorkflowStore(state => state.activeItems);
-  const sourceToolId = useWorkflowStore(state => state.sourceToolId);
-  const addItems = useBatchStore(state => state.addItems);
-  const currentItems = useBatchStore(state => state.items[toolId] || EMPTY_ARRAY);
+  // We expose activeItems for UI components that might want to display the current chain output,
+  // but we NO LONGER auto-feed files from it. Files are explicitly pushed to useBatchStore 
+  // via routeToTarget in useWorkflowStore.
+  const activeItems = useWorkflowStore(state => state.activeItems); 
+  const pendingTextMap = useWorkflowStore(state => state.pendingText);
+  const consumePendingText = useWorkflowStore(state => state.consumePendingText);
   
   const [suggestedText, setSuggestedText] = useState<string | null>(null);
-  const loadedRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // Prevent tool from feeding its own output back as input
-    if (sourceToolId === toolId) return;
-
-    // Only run once per toolId + activeItems fingerprint
-    const fingerprint = `${toolId}-${activeItems.length}-${activeItems.map(i => i.name).join(',')}`;
-    if (loadedRef.current === fingerprint) return;
-    if (activeItems.length === 0) {
-      loadedRef.current = fingerprint;
-      return;
+    const text = pendingTextMap[toolId];
+    if (text) {
+      setSuggestedText(text);
+      consumePendingText(toolId);
     }
-
-
-    const tool = findToolById(toolId);
-    if (!tool || !tool.input) return;
-
-    const inputTypes = Array.isArray(tool.input) ? tool.input : [tool.input];
-    
-    // 1. Handle File-based items
-    const compatibleFiles = activeItems.filter(item => 
-      item.blob && (inputTypes.includes(item.type) || inputTypes.includes('any-file'))
-    );
-
-    if (compatibleFiles.length > 0) {
-      const alreadyLoaded = compatibleFiles.every(ci => 
-        currentItems.some(cf => 
-          cf.file.name === ci.name && 
-          Math.abs(cf.file.size - (ci.blob?.size || 0)) < 2 // Allow 1-2 byte difference just in case
-        )
-      );
-
-      if (!alreadyLoaded) {
-        const files = compatibleFiles
-          .filter(ci => ci.blob)
-          .map(ci => new File([ci.blob!], ci.name, { type: ci.blob!.type }));
-        
-        addItems(toolId, files);
-        loadedRef.current = fingerprint;
-      }
-    }
-
-    // 2. Handle Text-based items
-    const compatibleText = activeItems.find(item => 
-      item.text && (inputTypes.includes(item.type) || (item.type === 'text' && inputTypes.includes('text')))
-    );
-
-    if (compatibleText) {
-      Promise.resolve().then(() => {
-        setSuggestedText(compatibleText.text!);
-      });
-      loadedRef.current = fingerprint;
-    }
-  }, [toolId, activeItems, addItems, currentItems]);
+  }, [toolId, pendingTextMap, consumePendingText]);
 
   return { activeItems, suggestedText };
 }

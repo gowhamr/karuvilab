@@ -21,8 +21,11 @@ export const useColorStore = create<ColorState>()(
       clearHistory: () => set({ history: [] }),
     }),
     {
-      version: 1,
       name: 'karuvilab-color-history',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
     }
   )

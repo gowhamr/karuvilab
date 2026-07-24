@@ -28,6 +28,9 @@ export function WorkflowSuggestions() {
           >
             <Link 
               href={`/${tool.href}`}
+              onClick={() => {
+                useWorkflowStore.getState().routeToTarget(tool.id);
+              }}
               className="group block bg-surface border border-border p-5 rounded-2xl hover:border-blue transition-all hover:shadow-md hover:shadow-blue/5 relative overflow-hidden h-full"
             >
               <div 

@@ -32,8 +32,11 @@ export const useSessionStore = create<SessionState>()(
       },
     }),
     {
-      version: 1,
       name: 'karuvilab-user-sessions',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
     }
   )

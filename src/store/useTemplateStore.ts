@@ -50,6 +50,10 @@ export const useTemplateStore = create<TemplateStore>()(
     }),
     {
       name: 'kv-tool-templates',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage)
     }
   )

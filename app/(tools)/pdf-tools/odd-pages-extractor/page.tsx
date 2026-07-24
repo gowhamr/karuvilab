@@ -1,15 +1,22 @@
 import type { Metadata } from 'next';
 import { ToolShell } from '@/components/ui/ToolShell';
-import OddPagesExtractorClientWrapper from '@/src/features/odd-pages-extractor/odd-pages-extractorClientWrapper';
+import OddPagesExtractorClientWrapper from './OddPagesExtractorClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { CATEGORIES } from '@/src/tool-registry';
 
-export async function generateMetadata(): Promise<Metadata> {
-  return generateToolMetadata("odd-pages-extractor");
-}
+const toolId = 'odd-pages-extractor';
+const cat = CATEGORIES.find(c => c.id === 'pdf');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
   return (
-    <ToolShell toolId="odd-pages-extractor" title="odd-pages-extractor">
+    <ToolShell 
+      title="Extract Odd Pages"
+      description="Automatically extract all odd pages from a PDF."
+      category={cat}
+      toolId={toolId}
+    >
       <OddPagesExtractorClientWrapper />
     </ToolShell>
   );

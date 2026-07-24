@@ -26,8 +26,11 @@ export const usePWAStore = create<PWAState>()(
       setForceShowPrompt: (val) => set({ forceShowPrompt: val }),
     }),
     {
-      version: 1,
       name: 'kv-pwa-storage',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        return persistedState as any;
+      },
       storage: createJSONStorage(() => idbStorage),
       onRehydrateStorage: (state) => {
         return () => {

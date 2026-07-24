@@ -1,15 +1,22 @@
 import type { Metadata } from 'next';
 import { ToolShell } from '@/components/ui/ToolShell';
-import RotateSelectedPagesClientWrapper from '@/src/features/rotate-selected-pages/rotate-selected-pagesClientWrapper';
+import RotateSelectedPagesClientWrapper from './RotateSelectedPagesClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { CATEGORIES } from '@/src/tool-registry';
 
-export async function generateMetadata(): Promise<Metadata> {
-  return generateToolMetadata("rotate-selected-pages");
-}
+const toolId = 'rotate-selected-pages';
+const cat = CATEGORIES.find(c => c.id === 'pdf');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
   return (
-    <ToolShell toolId="rotate-selected-pages" title="rotate-selected-pages">
+    <ToolShell 
+      title="Rotate Specific Pages"
+      description="Rotate only the pages you select."
+      category={cat}
+      toolId={toolId}
+    >
       <RotateSelectedPagesClientWrapper />
     </ToolShell>
   );

@@ -208,9 +208,8 @@ export function GlobalDragDrop() {
       type: getWorkflowType(file)
     }));
 
-    // 2. Set active items in the store
-    useWorkflowStore.getState().setActiveItems(items);
-    useWorkflowStore.getState().addToChain(tool.id);
+    // 2. Route directly to the selected tool (will push items to batch store / text map)
+    useWorkflowStore.getState().routeToTarget(tool.id, items);
 
     // 3. Navigate
     router.push("/" + tool.href);

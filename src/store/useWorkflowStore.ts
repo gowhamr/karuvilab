@@ -12,6 +12,7 @@ interface WorkflowState {
   chain: string[]; // toolIds
   activeItems: WorkflowItem[];
   sourceToolId: string | null;
+  suggestions: ToolEntry[];
   
   // Actions
   addToChain: (toolId: string) => void;
@@ -22,7 +23,10 @@ interface WorkflowState {
   // Helpers
   getSuggestions: () => ToolEntry[];
   updateSuggestions: () => void;
-  suggestions: ToolEntry[];
+  // Explicit Routing
+  pendingText: Record<string, string>;
+  routeToTarget: (targetToolId: string, items?: WorkflowItem[]) => void;
+  consumePendingText: (toolId: string) => void;
 }
 
 const EMPTY_SUGGESTIONS: ToolEntry[] = [];
@@ -32,6 +36,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   activeItems: [],
   sourceToolId: null,
   suggestions: [],
+  pendingText: {},
 
   addToChain: (toolId) => {
     set(state => {
@@ -58,6 +63,61 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
       };
     });
     get().updateSuggestions();
+  },
+
+  routeToTarget: (targetToolId, overrideItems) => {
+    const state = get();
+    const itemsToRoute = overrideItems || state.activeItems;
+    if (itemsToRoute.length === 0) return;
+
+    const tool = findToolById(targetToolId);
+    if (!tool || !tool.input) return;
+
+    const inputTypes = Array.isArray(tool.input) ? tool.input : [tool.input];
+
+    // 1. Handle File-based items
+    const compatibleFiles = itemsToRoute.filter(item => 
+      item.blob && (inputTypes.includes(item.type) || inputTypes.includes('any-file'))
+    );
+
+    if (compatibleFiles.length > 0) {
+      const files = compatibleFiles
+        .filter(ci => ci.blob)
+        .map(ci => new File([ci.blob!], ci.name, { type: ci.blob!.type }));
+      
+      // Explicitly push to target tool's queue
+      import('./useBatchStore').then(({ useBatchStore }) => {
+        useBatchStore.getState().addItems(targetToolId, files);
+      });
+    }
+
+    // 2. Handle Text-based items
+    const compatibleText = itemsToRoute.find(item => 
+      item.text && (inputTypes.includes(item.type) || (item.type === 'text' && inputTypes.includes('text')))
+    );
+
+    if (compatibleText && compatibleText.text) {
+      set(s => ({
+        pendingText: { ...s.pendingText, [targetToolId]: compatibleText.text! }
+      }));
+    }
+
+    // Update activeItems if we are explicitly routing new items
+    if (overrideItems) {
+      set({ activeItems: overrideItems, sourceToolId: null });
+    }
+
+    // Update chain
+    get().addToChain(targetToolId);
+  },
+
+  consumePendingText: (toolId) => {
+    set(s => {
+      if (!s.pendingText[toolId]) return s;
+      const next = { ...s.pendingText };
+      delete next[toolId];
+      return { pendingText: next };
+    });
   },
 
   clearWorkflow: () => {
