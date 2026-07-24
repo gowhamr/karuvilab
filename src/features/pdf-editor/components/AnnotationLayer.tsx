@@ -119,6 +119,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   const updateAnnotation = useEditorStore(state => state.updateAnnotation);
   const deleteAnnotation = useEditorStore(state => state.deleteAnnotation);
   const activeTool = useEditorStore(state => state.activeTool);
+  const [isDragging, setIsDragging] = useState(false);
 
   const isSelectMode = activeTool === 'select';
 
@@ -127,10 +128,53 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     deleteAnnotation(annotation.id);
   };
 
+  const handlePointerDown = (e: React.PointerEvent<HTMLElement>) => {
+    if (!isSelectMode) return;
+    e.stopPropagation();
+    const target = e.currentTarget;
+    const parent = target.parentElement;
+    if (!parent) return;
+
+    target.setPointerCapture(e.pointerId);
+    setIsDragging(true);
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startAnnX = annotation.x;
+    const startAnnY = annotation.y;
+    const initialPoints = annotation.type === 'draw' ? [...annotation.points] : [];
+    const rect = parent.getBoundingClientRect();
+
+    const onMove = (ev: PointerEvent) => {
+      const dx = ((ev.clientX - startX) / rect.width) * 100;
+      const dy = ((ev.clientY - startY) / rect.height) * 100;
+      if (annotation.type === 'draw') {
+        updateAnnotation(annotation.id, {
+          points: initialPoints.map(p => ({ x: p.x + dx, y: p.y + dy }))
+        });
+      } else {
+        updateAnnotation(annotation.id, { x: startAnnX + dx, y: startAnnY + dy });
+      }
+    };
+
+    const onUp = (ev: PointerEvent) => {
+      setIsDragging(false);
+      target.releasePointerCapture(ev.pointerId);
+      target.removeEventListener('pointermove', onMove);
+      target.removeEventListener('pointerup', onUp);
+      target.removeEventListener('pointercancel', onUp);
+    };
+
+    target.addEventListener('pointermove', onMove);
+    target.addEventListener('pointerup', onUp);
+    target.addEventListener('pointercancel', onUp);
+  };
+
   if (annotation.type === 'text') {
     return (
       <div 
-        className={`absolute pointer-events-auto ${isSelectMode ? 'group cursor-text' : ''}`}
+        onPointerDown={handlePointerDown}
+        className={`absolute pointer-events-auto ${isSelectMode ? 'group cursor-move' : ''}`}
         style={{
           left: `${annotation.x}%`,
           top: `${annotation.y}%`,
@@ -165,6 +209,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     const isCircle = annotation.shapeType === 'circle';
     return (
       <div
+        onPointerDown={handlePointerDown}
         className={`absolute pointer-events-auto group ${isSelectMode ? 'cursor-move' : ''}`}
         style={{
           left: `${annotation.x}%`,
@@ -200,7 +245,8 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     
     return (
       <svg
-        className={`absolute overflow-visible pointer-events-none ${isSelectMode ? 'group pointer-events-auto' : ''}`}
+        onPointerDown={handlePointerDown}
+        className={`absolute overflow-visible pointer-events-none ${isSelectMode ? 'group pointer-events-auto cursor-move' : ''}`}
         style={{
           left: `${minX}%`,
           top: `${minY}%`,
@@ -232,6 +278,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   if (annotation.type === 'blackout') {
     return (
       <div
+        onPointerDown={handlePointerDown}
         className={`absolute pointer-events-auto group ${isSelectMode ? 'cursor-move' : ''}`}
         style={{
           left: `${annotation.x}%`,
@@ -257,6 +304,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   if (annotation.type === 'image') {
     return (
       <div
+        onPointerDown={handlePointerDown}
         className={`absolute pointer-events-auto group ${isSelectMode ? 'cursor-move' : ''}`}
         style={{
           left: `${annotation.x}%`,
