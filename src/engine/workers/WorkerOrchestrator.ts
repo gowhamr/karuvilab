@@ -38,7 +38,7 @@ function getPayloadSize(arg: unknown): number {
 
 type PoolType = 'compute' | 'media' | 'heavy';
 
-const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
+const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   // Compute Pool (fast, low-memory mathematical/text parsing tasks)
   generateHashes: 'compute',
   generateFileHash: 'compute',
@@ -100,7 +100,19 @@ const METHOD_TO_POOL: Record<keyof WorkerAPI, PoolType> = {
   extractRawTextFromDocx: 'heavy',
   convertDocxToPdf: 'heavy',
   generateDocxFromText: 'heavy',
-  adjustPdfLayout: 'media'
+  adjustPdfLayout: 'media',
+  applyImageFilter: 'media',
+  removeImageMetadata: 'media',
+  computePerceptualHash: 'compute',
+  watermarkImage: 'media',
+  cropImageCenter: 'media',
+  rotateImageStandard: 'media',
+  generateSpriteSheet: 'media',
+  optimizeSvg: 'compute',
+  generateHistogram: 'compute',
+  simulateColorBlindness: 'media',
+  ocrExtract: 'heavy',
+
 };
 
 interface WorkerPool {
@@ -168,6 +180,11 @@ class WorkerOrchestrator {
       } else {
         this.maxWorkers = isMobile ? 2 : Math.min(cores, 3); // Lower limit to 3 instead of 4
       }
+
+      window.addEventListener('beforeunload', () => {
+        this.terminateAll();
+      });
+
       this.initialized = true;
     } catch (e) {
       console.error("[WorkerOrchestrator] Init error:", e);
@@ -295,6 +312,8 @@ class WorkerOrchestrator {
     const onAbort = (reason = "Task aborted") => {
       if (isFinished) return;
       workerEntry.worker.terminate();
+      // Remove task from activeTasks before calling handleWorkerCrash so we don't trigger retries or error banners for intentional aborts
+      poolObj.activeTasks.delete(workerEntry.worker);
       this.handleWorkerCrash(workerEntry.worker, poolType);
       if (reason === "Task timed out") {
         task.reject(new Error("TIMEOUT"));

@@ -229,6 +229,19 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  convertAudio(
+    file: ArrayBuffer,
+    mimeType: string,
+    targetFormat: string,
+    onProgress?: ProgressCallback
+  ): Promise<Uint8Array>;
+
+  ocrExtract(
+    file: ArrayBuffer,
+    mimeType: string,
+    onProgress?: ProgressCallback
+  ): Promise<string>;
+
   lockPdf(
     file: ArrayBuffer,
     userPassword: string,

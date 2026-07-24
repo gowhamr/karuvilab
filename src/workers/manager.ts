@@ -150,6 +150,25 @@ class WorkerManager {
     return workerOrchestrator.run("convertImagesToPdf", [images, pageSize], buffers, onProgress, abortSignal, true, 2);
   }
 
+  async convertAudio(
+    file: ArrayBuffer,
+    mimeType: string,
+    targetFormat: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Uint8Array> {
+    return workerOrchestrator.run("convertAudio", [file, mimeType, targetFormat], [file], onProgress, abortSignal);
+  }
+
+  async ocrExtract(
+    file: ArrayBuffer,
+    mimeType: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<string> {
+    return workerOrchestrator.run("ocrExtract", [file, mimeType], [file], onProgress, abortSignal, true, 5);
+  }
+
   async lockPdf(
     file: ArrayBuffer,
     userPassword: string,

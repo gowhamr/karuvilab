@@ -91,7 +91,7 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
   return await cryptoProvider.subtle.sign("HMAC", cryptoKey, data as any);
 }
 
-const api: WorkerAPI = {
+const api: Partial<WorkerAPI> = {
   // Security Worker Methods Stubs (handled by crypto.worker.ts)
   directoryHashManifest: async () => [],
   aesEncrypt: async () => '',
@@ -1584,6 +1584,26 @@ const api: WorkerAPI = {
     return Comlink.transfer(extracted, transferList);
   },
 
+  async ocrExtract(file, mimeType, onProgress) {
+    if (onProgress) onProgress({ percent: 10, message: "Initializing OCR engine..." });
+    const tesseract = await import("tesseract.js");
+    const worker = await tesseract.createWorker("eng", 1, {
+      logger: m => {
+        if (m.status === 'recognizing text' && onProgress) {
+          onProgress({ percent: Math.round(m.progress * 100), message: "Extracting text..." });
+        }
+      }
+    });
+    
+    try {
+      const blob = new Blob([file], { type: mimeType });
+      const ret = await worker.recognize(blob);
+      return ret.data.text;
+    } finally {
+      await worker.terminate();
+    }
+  },
+
   async extractTextFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
     const workerUrl = typeof location !== 'undefined' ? location.origin + (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
@@ -1673,5 +1693,5 @@ const api: WorkerAPI = {
   }
 };
 
-Comlink.expose(api);
+Comlink.expose(api as any);
 export type UnifiedWorkerAPI = typeof api;
