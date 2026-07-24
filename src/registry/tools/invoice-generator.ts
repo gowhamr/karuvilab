@@ -4,7 +4,7 @@ export const invoiceGenerator: ToolEntry = {
   "id": "invoice-generator",
   "name": "Invoice Generator",
   "desc": "Build professional custom invoices and download them as PDFs.",
-  "href": "calculators/invoice-generator/",
+  "href": "/calculators/invoice-generator/",
   "category": "calculators",
   "icon": null,
   "color": null,

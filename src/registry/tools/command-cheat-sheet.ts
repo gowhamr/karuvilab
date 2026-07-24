@@ -4,7 +4,7 @@ export const commandCheatSheet: ToolEntry = {
   "id": "command-cheat-sheet",
   "name": "Command Cheat Sheet",
   "desc": "Look up development and system commands instantly to speed up your workflow.",
-  "href": "developer-tools/command-cheat-sheet/",
+  "href": "/developer-tools/command-cheat-sheet/",
   "category": "developer",
   "subCategory": "Generators",
   "icon": null,

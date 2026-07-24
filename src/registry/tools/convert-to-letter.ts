@@ -6,7 +6,7 @@ export const convertToLetter: ToolEntry = {
   desc: "Standardize PDF pages to US Letter size",
   category: "pdf",
   subCategory: 'Convert & Export',
-  href: "/pdf-tools/convert-to-letter",
+  href: "/pdf-tools/convert-to-letter/",
   icon: "FileText",
   keywords: ["pdf", "letter", "resize", "layout"],
   status: "new"

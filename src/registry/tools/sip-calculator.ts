@@ -4,7 +4,7 @@ export const sipCalculator: ToolEntry = {
   "id": "sip-calculator",
   "name": "SIP Calculator",
   "desc": "Project mutual-fund SIP returns",
-  "href": "calculators/sip-calculator/",
+  "href": "/calculators/sip-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

@@ -4,7 +4,7 @@ export const rsaEncryptDecrypt: ToolEntry = {
   "id": "rsa-encrypt-decrypt",
   "name": "Rsa Encrypt Decrypt",
   "desc": "Encrypt or decrypt payloads using secure RSA key pairs.",
-  "href": "security-tools/rsa-encrypt-decrypt/",
+  "href": "/security-tools/rsa-encrypt-decrypt/",
   "category": "security",
   "icon": null,
   "color": null,

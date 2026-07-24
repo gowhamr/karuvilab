@@ -4,7 +4,7 @@ export const chartGenerator: ToolEntry = {
   "id": "chart-generator",
   "name": "Chart & Graph Generator",
   "desc": "Create beautiful charts from your data",
-  "href": "productivity/chart-generator/",
+  "href": "/productivity/chart-generator/",
   "category": "productivity",
   "keywords": [
     "chart",

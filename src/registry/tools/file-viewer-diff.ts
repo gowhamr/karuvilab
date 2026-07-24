@@ -4,7 +4,7 @@ export const fileViewerDiff: ToolEntry = {
   "id": "file-viewer-diff",
   "name": "File Viewer & Diff",
   "desc": "Local text editor and diff checker",
-  "href": "file-tools/file-viewer-diff/",
+  "href": "/file-tools/file-viewer-diff/",
   "category": "developer",
   "subCategory": "Other",
   "input": [

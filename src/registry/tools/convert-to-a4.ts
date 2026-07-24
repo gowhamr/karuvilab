@@ -6,7 +6,7 @@ export const convertToA4: ToolEntry = {
   desc: "Standardize PDF pages to A4 size",
   category: "pdf",
   subCategory: 'Convert & Export',
-  href: "/pdf-tools/convert-to-a4",
+  href: "/pdf-tools/convert-to-a4/",
   icon: "FileText",
   keywords: ["pdf", "a4", "resize", "layout"],
   status: "new"

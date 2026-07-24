@@ -4,7 +4,7 @@ export const safeToSpend: ToolEntry = {
   "id": "safe-to-spend",
   "name": "Safe-to-Spend",
   "desc": "Daily budget planner",
-  "href": "calculators/safe-to-spend/",
+  "href": "/calculators/safe-to-spend/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

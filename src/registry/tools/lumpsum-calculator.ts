@@ -4,7 +4,7 @@ export const lumpsumCalculator: ToolEntry = {
   "id": "lumpsum-calculator",
   "name": "Lumpsum Calculator",
   "desc": "Future value of one-time investment",
-  "href": "calculators/lumpsum-calculator/",
+  "href": "/calculators/lumpsum-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

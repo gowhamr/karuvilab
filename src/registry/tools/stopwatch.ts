@@ -4,7 +4,7 @@ export const stopwatch: ToolEntry = {
   "id": "stopwatch",
   "name": "Stopwatch",
   "desc": "Track elapsed time with lap support for productivity logging.",
-  "href": "productivity/stopwatch/",
+  "href": "/productivity/stopwatch/",
   "category": "productivity",
   "icon": null,
   "color": null,

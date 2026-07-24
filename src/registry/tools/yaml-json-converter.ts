@@ -4,7 +4,7 @@ export const yamlJsonConverter: ToolEntry = {
   "id": "yaml-json-converter",
   "name": "Yaml Json Converter",
   "desc": "Convert between YAML formatting and JSON objects.",
-  "href": "developer-tools/yaml-json-converter/",
+  "href": "/developer-tools/yaml-json-converter/",
   "category": "developer",
   "subCategory": "Converters",
   "icon": null,

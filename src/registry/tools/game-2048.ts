@@ -4,7 +4,7 @@ export const game2048: ToolEntry = {
   id: 'game-2048',
   name: '2048',
   desc: 'Slide and merge tiles to reach 2048. Addictive puzzle game — fully offline.',
-  href: 'break-time-tools/game-2048/',
+  href: '/break-time-tools/game-2048/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

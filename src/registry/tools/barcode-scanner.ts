@@ -4,7 +4,7 @@ export const barcodeScanner: ToolEntry = {
   "id": "barcode-scanner",
   "name": "Barcode & QR Scanner",
   "desc": "Scan barcodes and QR codes using camera",
-  "href": "utilities/barcode-scanner/",
+  "href": "/utilities/barcode-scanner/",
   "category": "utilities",
   "keywords": [
     "barcode",

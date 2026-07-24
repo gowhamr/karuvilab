@@ -4,7 +4,7 @@ export const currencyConverter: ToolEntry = {
   "id": "currency-converter",
   "name": "Currency Converter",
   "desc": "Convert between world currencies",
-  "href": "calculators/currency-converter/",
+  "href": "/calculators/currency-converter/",
   "category": "calculators",
   "subCategory": "Math & Units",
   "keywords": [

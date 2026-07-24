@@ -4,7 +4,7 @@ export const logAnalyzer: ToolEntry = {
   "id": "log-analyzer",
   "name": "Log Analyzer",
   "desc": "Analyze and filter server and application access log files.",
-  "href": "developer-tools/log-analyzer/",
+  "href": "/developer-tools/log-analyzer/",
   "category": "developer",
   "subCategory": "Analyzers & Viewers",
   "icon": null,

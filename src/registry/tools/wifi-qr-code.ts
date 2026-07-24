@@ -4,7 +4,7 @@ export const wifiQrCode: ToolEntry = {
   "id": "wifi-qr-code",
   "name": "WiFi QR Code Generator",
   "desc": "Generate QR code to connect to WiFi",
-  "href": "productivity/wifi-qr-code/",
+  "href": "/productivity/wifi-qr-code/",
   "category": "productivity",
   "keywords": [
     "wifi",

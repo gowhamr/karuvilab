@@ -4,7 +4,7 @@ export const markdown: ToolEntry = {
   "id": "markdown",
   "name": "Markdown Editor",
   "desc": "Professional Markdown editor with live GitHub-style preview, Mermaid diagrams, and high-performance export options.",
-  "href": "utilities/markdown/",
+  "href": "/utilities/markdown/",
   "category": "utilities",
   "keywords": [
     "markdown",

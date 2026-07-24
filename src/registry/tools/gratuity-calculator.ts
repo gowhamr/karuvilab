@@ -4,7 +4,7 @@ export const gratuityCalculator: ToolEntry = {
   "id": "gratuity-calculator",
   "name": "Gratuity Calculator",
   "desc": "Estimate standard gratuity benefits based on salary and tenure.",
-  "href": "calculators/gratuity-calculator/",
+  "href": "/calculators/gratuity-calculator/",
   "category": "calculators",
   "icon": null,
   "color": null,

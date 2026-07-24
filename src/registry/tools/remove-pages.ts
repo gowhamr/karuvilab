@@ -2,7 +2,7 @@ export const removePagesTool = {
   id: 'remove-pages',
   name: 'Remove PDF Pages',
   desc: 'Easily delete and remove unwanted pages from any PDF document offline.',
-  href: 'pdf-tools/remove-pages/',
+  href: '/pdf-tools/remove-pages/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '🗑️',

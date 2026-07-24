@@ -4,7 +4,7 @@ export const xmlFormatter: ToolEntry = {
   "id": "xml-formatter",
   "name": "Xml Formatter",
   "desc": "Format and prettify nested XML documents to inspect data tags.",
-  "href": "developer-tools/xml-formatter/",
+  "href": "/developer-tools/xml-formatter/",
   "category": "developer",
   "subCategory": "Formatters & Minifiers",
   "icon": null,

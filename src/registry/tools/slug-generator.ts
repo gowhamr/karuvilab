@@ -4,7 +4,7 @@ export const slugGenerator: ToolEntry = {
   "id": "slug-generator",
   "name": "Slug Generator",
   "desc": "Convert text into URL-friendly slug strings.",
-  "href": "developer-tools/slug-generator/",
+  "href": "/developer-tools/slug-generator/",
   "category": "developer",
   "subCategory": "SEO Tools",
   "icon": null,

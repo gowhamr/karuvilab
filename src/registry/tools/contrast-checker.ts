@@ -4,7 +4,7 @@ export const contrastChecker: ToolEntry = {
   "id": "contrast-checker",
   "name": "Contrast Checker",
   "desc": "Verify background and foreground contrast to meet WCAG accessibility standards.",
-  "href": "developer-tools/contrast-checker/",
+  "href": "/developer-tools/contrast-checker/",
   "category": "developer",
   "subCategory": "Validators & Checkers",
   "icon": null,

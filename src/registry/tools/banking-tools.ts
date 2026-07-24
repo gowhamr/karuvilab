@@ -4,7 +4,7 @@ export const bankingTools: ToolEntry = {
   "id": "banking-tools",
   "name": "Banking Tools",
   "desc": "Advanced financial data parsers for EMV, SWIFT, and core banking logs",
-  "href": "developer-tools/banking-tools/",
+  "href": "/developer-tools/banking-tools/",
   "category": "developer",
   "subCategory": "Analyzers & Viewers",
   "icon": null,

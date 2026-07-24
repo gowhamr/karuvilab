@@ -4,7 +4,7 @@ export const financialFreedomCalculator: ToolEntry = {
   "id": "financial-freedom-calculator",
   "name": "Financial Freedom Calculator",
   "desc": "Calculate your path to FIRE and plan your retirement.",
-  "href": "calculators/financial-freedom-calculator/",
+  "href": "/calculators/financial-freedom-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

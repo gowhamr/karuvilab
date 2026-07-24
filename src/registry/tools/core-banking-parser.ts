@@ -4,7 +4,7 @@ export const coreBankingParser: ToolEntry = {
   "id": "core-banking-parser",
   "name": "Core Banking Parser",
   "desc": "Parse core banking trace logs into JSON",
-  "href": "developer-tools/core-banking-parser/",
+  "href": "/developer-tools/core-banking-parser/",
   "category": "developer",
   "subCategory": "Banking Tools",
   "icon": null,

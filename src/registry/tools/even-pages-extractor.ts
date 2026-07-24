@@ -2,7 +2,7 @@ export const evenPagesExtractorTool = {
   id: 'even-pages-extractor',
   name: 'Even Pages Extractor',
   desc: 'Extract only the even-numbered pages from a PDF document.',
-  href: 'pdf-tools/even-pages-extractor/',
+  href: '/pdf-tools/even-pages-extractor/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '🔢',

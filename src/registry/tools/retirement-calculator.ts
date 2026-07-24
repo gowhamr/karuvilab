@@ -4,7 +4,7 @@ export const retirementCalculator: ToolEntry = {
   "id": "retirement-calculator",
   "name": "Retirement Planner",
   "desc": "Corpus needed for your retirement",
-  "href": "calculators/retirement-calculator/",
+  "href": "/calculators/retirement-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

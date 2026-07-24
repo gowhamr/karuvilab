@@ -4,7 +4,7 @@ export const tiffConverter: ToolEntry = {
   "id": "tiff-converter",
   "name": "TIFF Converter",
   "desc": "Convert to and from the professional TIFF image format",
-  "href": "image-tools/tiff-converter/",
+  "href": "/image-tools/tiff-converter/",
   "category": "image",
   "input": "image",
   "output": "image",

@@ -4,7 +4,7 @@ export const phoneMockupGenerator: ToolEntry = {
   "id": "phone-mockup-generator",
   "name": "Phone Mockup Generator",
   "desc": "Wrap screenshots in realistic device frames",
-  "href": "image-tools/phone-mockup-generator/",
+  "href": "/image-tools/phone-mockup-generator/",
   "category": "image",
   "keywords": [
     "mockup",

@@ -4,7 +4,7 @@ export const uuidGenerator: ToolEntry = {
   "id": "uuid-generator",
   "name": "Uuid Generator",
   "desc": "Generate secure v4 UUIDs for database and entity keys.",
-  "href": "developer-tools/uuid-generator/",
+  "href": "/developer-tools/uuid-generator/",
   "category": "developer",
   "subCategory": "Generators",
   "icon": null,

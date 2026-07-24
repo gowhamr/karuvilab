@@ -4,7 +4,7 @@ export const videoTrim: ToolEntry = {
   "id": "video-trim",
   "name": "Video Trim",
   "desc": "Trim and cut MP4 video clips directly in your browser.",
-  "href": "media-tools/video-trim/",
+  "href": "/media-tools/video-trim/",
   "category": "media",
   "icon": null,
   "color": null,

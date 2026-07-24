@@ -4,7 +4,7 @@ export const privateKeyChecker: ToolEntry = {
   "id": "private-key-checker",
   "name": "Private Key Checker",
   "desc": "Validate private key structures and format compatibility.",
-  "href": "security-tools/private-key-checker/",
+  "href": "/security-tools/private-key-checker/",
   "category": "security",
   "icon": null,
   "color": null,

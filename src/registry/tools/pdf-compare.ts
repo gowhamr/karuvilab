@@ -4,7 +4,7 @@ export const pdfCompare: ToolEntry = {
   id: 'pdf-compare',
   name: 'Compare PDFs',
   desc: 'Highlight textual and visual differences between two PDF files.',
-  href: 'pdf-tools/pdf-compare/',
+  href: '/pdf-tools/pdf-compare/',
   category: 'pdf',
   subCategory: 'View & Compare',
   input: 'pdf',

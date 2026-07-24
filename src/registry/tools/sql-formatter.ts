@@ -4,7 +4,7 @@ export const sqlFormatter: ToolEntry = {
   "id": "sql-formatter",
   "name": "Sql Formatter",
   "desc": "Beautify and format complex SQL queries to improve readability.",
-  "href": "developer-tools/sql-formatter/",
+  "href": "/developer-tools/sql-formatter/",
   "category": "developer",
   "subCategory": "Formatters & Minifiers",
   "icon": null,

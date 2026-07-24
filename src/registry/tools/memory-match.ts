@@ -4,7 +4,7 @@ export const memoryMatch: ToolEntry = {
   id: 'memory-match',
   name: 'Memory Match',
   desc: 'Flip cards and match pairs. A classic memory-training game with best-score tracking.',
-  href: 'break-time-tools/memory-match/',
+  href: '/break-time-tools/memory-match/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

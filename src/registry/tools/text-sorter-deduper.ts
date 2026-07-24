@@ -4,7 +4,7 @@ export const textSorterDeduper: ToolEntry = {
   "id": "text-sorter-deduper",
   "name": "Text Sorter & Deduplicator",
   "desc": "Sort and remove duplicates from text",
-  "href": "productivity/text-sorter-deduper/",
+  "href": "/productivity/text-sorter-deduper/",
   "category": "productivity",
   "keywords": [
     "sort",

@@ -4,7 +4,7 @@ export const timeCalculator: ToolEntry = {
   "id": "time-calculator",
   "name": "Time Calculator",
   "desc": "Add or subtract hours and minutes",
-  "href": "calculators/time-calculator/",
+  "href": "/calculators/time-calculator/",
   "category": "calculators",
   "subCategory": "Date & Time",
   "keywords": [

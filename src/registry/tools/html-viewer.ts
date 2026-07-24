@@ -4,7 +4,7 @@ export const htmlViewer: ToolEntry = {
   "id": "html-viewer",
   "name": "HTML Online Viewer",
   "desc": "Professional live HTML/CSS/JS editor and sandboxed preview",
-  "href": "developer-tools/html-viewer/",
+  "href": "/developer-tools/html-viewer/",
   "category": "developer",
   "subCategory": "Analyzers & Viewers",
   "keywords": [

@@ -2,7 +2,7 @@ export const movePagesTool = {
   id: 'move-pages',
   name: 'Move PDF Pages',
   desc: 'Drag and drop to move pages around in your PDF document.',
-  href: 'pdf-tools/move-pages/',
+  href: '/pdf-tools/move-pages/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '↕️',

@@ -4,7 +4,7 @@ export const pdfEditor: ToolEntry = {
   id: "pdf-editor",
   name: "PDF Editor",
   desc: "View and annotate PDF documents",
-  href: "pdf-tools/pdf-editor/",
+  href: "/pdf-tools/pdf-editor/",
   category: "pdf",
   subCategory: 'View & Compare',
   input: "pdf",

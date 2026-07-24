@@ -2,7 +2,7 @@ export const organizePdfTool = {
   id: 'organize-pdf',
   name: 'Organize PDF',
   desc: 'Sort, reorder, and organize pages in your PDF document visually.',
-  href: 'pdf-tools/organize-pdf/',
+  href: '/pdf-tools/organize-pdf/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '🗂️',

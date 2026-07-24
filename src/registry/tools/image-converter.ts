@@ -4,7 +4,7 @@ export const imageConverter: ToolEntry = {
   "id": "image-converter",
   "name": "Image Converter",
   "desc": "Convert between JPG, PNG, WebP, AVIF, and BMP",
-  "href": "image-tools/image-converter/",
+  "href": "/image-tools/image-converter/",
   "category": "image",
   "input": "image",
   "output": "image",

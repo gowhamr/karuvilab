@@ -4,7 +4,7 @@ export const tlvParser: ToolEntry = {
   "id": "tlv-parser",
   "name": "Tlv Parser",
   "desc": "Parse and visualize EMV TLV hex streams into clear tree structures.",
-  "href": "security-tools/tlv-parser/",
+  "href": "/security-tools/tlv-parser/",
   "category": "security",
   "icon": null,
   "color": null,

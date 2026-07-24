@@ -4,7 +4,7 @@ export const jsonFormatter: ToolEntry = {
   "id": "json-formatter",
   "name": "JSON Formatter",
   "desc": "Format and validate JSON",
-  "href": "developer-tools/json-formatter/",
+  "href": "/developer-tools/json-formatter/",
   "category": "developer",
   "subCategory": "Formatters & Minifiers",
   "input": "json",

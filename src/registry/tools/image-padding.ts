@@ -4,7 +4,7 @@ export const imagePadding: ToolEntry = {
   "id": "image-padding",
   "name": "Image Padding",
   "desc": "Add uniform or per-side padding around your images",
-  "href": "image-tools/image-padding/",
+  "href": "/image-tools/image-padding/",
   "category": "image",
   "input": "image",
   "output": "image",

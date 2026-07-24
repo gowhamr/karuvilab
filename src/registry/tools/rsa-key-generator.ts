@@ -4,7 +4,7 @@ export const rsaKeyGenerator: ToolEntry = {
   "id": "rsa-key-generator",
   "name": "Rsa Key Generator",
   "desc": "Generate public and private RSA key pairs locally for authentication.",
-  "href": "security-tools/rsa-key-generator/",
+  "href": "/security-tools/rsa-key-generator/",
   "category": "security",
   "icon": null,
   "color": null,

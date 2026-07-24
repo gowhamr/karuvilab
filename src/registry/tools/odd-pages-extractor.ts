@@ -2,7 +2,7 @@ export const oddPagesExtractorTool = {
   id: 'odd-pages-extractor',
   name: 'Odd Pages Extractor',
   desc: 'Extract only the odd-numbered pages from a PDF document.',
-  href: 'pdf-tools/odd-pages-extractor/',
+  href: '/pdf-tools/odd-pages-extractor/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '🔢',

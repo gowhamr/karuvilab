@@ -4,7 +4,7 @@ export const npsCalculator: ToolEntry = {
   "id": "nps-calculator",
   "name": "Nps Calculator",
   "desc": "Calculate National Pension Scheme (NPS) maturity amounts.",
-  "href": "calculators/nps-calculator/",
+  "href": "/calculators/nps-calculator/",
   "category": "calculators",
   "icon": null,
   "color": null,

@@ -4,7 +4,7 @@ export const countdownTimer: ToolEntry = {
   "id": "countdown-timer",
   "name": "Countdown Timer",
   "desc": "Set timers for upcoming milestones or deadlines to keep track of tasks.",
-  "href": "productivity/countdown-timer/",
+  "href": "/productivity/countdown-timer/",
   "category": "productivity",
   "icon": null,
   "color": null,

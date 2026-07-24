@@ -4,7 +4,7 @@ export const hashGenerator: ToolEntry = {
   "id": "hash-generator",
   "name": "Hash Generator",
   "desc": "MD5, SHA-1/256/512 hashes",
-  "href": "security-tools/hash-generator/",
+  "href": "/security-tools/hash-generator/",
   "category": "security",
   "keywords": [
     "hash",

@@ -4,7 +4,7 @@ export const svgConverter: ToolEntry = {
   "id": "svg-converter",
   "name": "SVG to PNG",
   "desc": "Rasterize vector SVG files to transparent PNGs",
-  "href": "image-tools/svg-converter/",
+  "href": "/image-tools/svg-converter/",
   "category": "image",
   "input": "image",
   "output": "image",

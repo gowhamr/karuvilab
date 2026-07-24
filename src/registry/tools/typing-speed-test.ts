@@ -4,7 +4,7 @@ export const typingSpeedTest: ToolEntry = {
   "id": "typing-speed-test",
   "name": "Typing Speed Test",
   "desc": "Test and improve your typing WPM",
-  "href": "productivity/typing-speed-test/",
+  "href": "/productivity/typing-speed-test/",
   "category": "productivity",
   "keywords": [
     "typing test",

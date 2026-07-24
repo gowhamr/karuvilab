@@ -4,7 +4,7 @@ export const dataCalculator: ToolEntry = {
   "id": "data-calculator",
   "name": "Data Calculator",
   "desc": "Units, transfer time, cost, & hashes",
-  "href": "calculators/data-calculator/",
+  "href": "/calculators/data-calculator/",
   "category": "calculators",
   "subCategory": "Math & Units",
   "keywords": [

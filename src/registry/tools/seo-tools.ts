@@ -4,7 +4,7 @@ export const seoTools: ToolEntry = {
   "id": "seo-tools",
   "name": "Seo Tools",
   "desc": "Inspect and optimize website SEO meta tags and preview search snippets.",
-  "href": "developer-tools/seo-tools/",
+  "href": "/developer-tools/seo-tools/",
   "category": "developer",
   "subCategory": "SEO & Marketing",
   "icon": null,

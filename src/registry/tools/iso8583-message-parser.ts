@@ -4,7 +4,7 @@ export const iso8583MessageParser: ToolEntry = {
   "id": "iso8583-message-parser",
   "name": "Iso8583 Message Parser",
   "desc": "Decode raw financial transaction strings into human-readable messages.",
-  "href": "security-tools/iso8583-message-parser/",
+  "href": "/security-tools/iso8583-message-parser/",
   "category": "security",
   "icon": null,
   "color": null,

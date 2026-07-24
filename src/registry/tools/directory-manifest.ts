@@ -4,7 +4,7 @@ export const directoryManifest: ToolEntry = {
   "id": "directory-manifest",
   "name": "Directory Manifest",
   "desc": "Generate recursive folder maps of local directories to document structure.",
-  "href": "security-tools/directory-manifest/",
+  "href": "/security-tools/directory-manifest/",
   "category": "security",
   "icon": null,
   "color": null,

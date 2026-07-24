@@ -4,7 +4,7 @@ export const hashMapVisualizer: ToolEntry = {
   "id": "hash-map-visualizer",
   "name": "Hash Map Visualizer",
   "desc": "Visualize collision resolution strategies in hash map indexes.",
-  "href": "developer-tools/hash-map-visualizer/",
+  "href": "/developer-tools/hash-map-visualizer/",
   "category": "developer",
   "subCategory": "Analyzers & Viewers",
   "icon": null,

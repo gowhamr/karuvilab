@@ -4,7 +4,7 @@ export const reactionTime: ToolEntry = {
   id: 'reaction-time',
   name: 'Reaction Time Test',
   desc: 'Test your reflexes and measure your reaction speed in milliseconds.',
-  href: 'break-time-tools/reaction-time/',
+  href: '/break-time-tools/reaction-time/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

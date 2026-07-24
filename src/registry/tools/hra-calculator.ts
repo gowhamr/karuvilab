@@ -4,7 +4,7 @@ export const hraCalculator: ToolEntry = {
   "id": "hra-calculator",
   "name": "Hra Calculator",
   "desc": "Calculate your House Rent Allowance tax exemptions.",
-  "href": "calculators/hra-calculator/",
+  "href": "/calculators/hra-calculator/",
   "category": "calculators",
   "icon": null,
   "color": null,

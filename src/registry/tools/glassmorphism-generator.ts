@@ -4,7 +4,7 @@ export const glassmorphismGenerator: ToolEntry = {
   "id": "glassmorphism-generator",
   "name": "Glassmorphism Generator",
   "desc": "Generate CSS code for modern frosted-glass card designs.",
-  "href": "developer-tools/glassmorphism-generator/",
+  "href": "/developer-tools/glassmorphism-generator/",
   "category": "developer",
   "subCategory": "Generators",
   "icon": null,

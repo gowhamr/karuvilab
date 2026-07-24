@@ -4,7 +4,7 @@ export const samlDecoder: ToolEntry = {
   "id": "saml-decoder",
   "name": "Saml Decoder",
   "desc": "Decode and format SAML assertion payloads for identity analysis.",
-  "href": "security-tools/saml-decoder/",
+  "href": "/security-tools/saml-decoder/",
   "category": "security",
   "icon": null,
   "color": null,

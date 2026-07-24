@@ -4,7 +4,7 @@ export const wordCounter: ToolEntry = {
   "id": "word-counter",
   "name": "Word Counter",
   "desc": "Count characters, words, sentences, and reading times for any text.",
-  "href": "productivity/word-counter/",
+  "href": "/productivity/word-counter/",
   "category": "productivity",
   "icon": null,
   "color": null,

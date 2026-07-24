@@ -4,7 +4,7 @@ export const validate: ToolEntry = {
   "id": "validate",
   "name": "File Validator",
   "desc": "Validate file size and type",
-  "href": "utilities/validate/",
+  "href": "/utilities/validate/",
   "category": "utilities",
   "keywords": [
     "validate",

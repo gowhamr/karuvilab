@@ -4,7 +4,7 @@ export const x509Viewer: ToolEntry = {
   "id": "x509-viewer",
   "name": "X509 Viewer",
   "desc": "Inspect and validate X.509 security certificates and expiry details.",
-  "href": "security-tools/x509-viewer/",
+  "href": "/security-tools/x509-viewer/",
   "category": "security",
   "icon": null,
   "color": null,

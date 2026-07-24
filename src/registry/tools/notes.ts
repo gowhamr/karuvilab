@@ -4,7 +4,7 @@ export const notes: ToolEntry = {
   "id": "notes",
   "name": "Notes",
   "desc": "Write and save markdown notes locally in your browser.",
-  "href": "productivity/notes/",
+  "href": "/productivity/notes/",
   "category": "productivity",
   "icon": null,
   "color": null,

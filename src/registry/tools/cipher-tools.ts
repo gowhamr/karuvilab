@@ -4,7 +4,7 @@ export const cipherTools: ToolEntry = {
   "id": "cipher-tools",
   "name": "Cipher Tools",
   "desc": "Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.",
-  "href": "security-tools/cipher-tools/",
+  "href": "/security-tools/cipher-tools/",
   "category": "security",
   "icon": null,
   "color": null,

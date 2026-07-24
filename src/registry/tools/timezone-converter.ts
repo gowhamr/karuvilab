@@ -4,7 +4,7 @@ export const timezoneConverter: ToolEntry = {
   "id": "timezone-converter",
   "name": "Time Zone Converter",
   "desc": "Compare and convert time between multiple global time zones. Real-time offsets and DST support.",
-  "href": "productivity/timezone-converter/",
+  "href": "/productivity/timezone-converter/",
   "category": "productivity",
   "keywords": [
     "timezone",

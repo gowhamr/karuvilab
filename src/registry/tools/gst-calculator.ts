@@ -4,7 +4,7 @@ export const gstCalculator: ToolEntry = {
   "id": "gst-calculator",
   "name": "GST Calculator",
   "desc": "Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.",
-  "href": "calculators/gst-calculator/",
+  "href": "/calculators/gst-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

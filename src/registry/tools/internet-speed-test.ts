@@ -4,7 +4,7 @@ export const internetSpeedTest: ToolEntry = {
   "id": "internet-speed-test",
   "name": "Speed Tester",
   "desc": "Measure your internet connection speed",
-  "href": "utilities/internet-speed-test/",
+  "href": "/utilities/internet-speed-test/",
   "category": "utilities",
   "keywords": [
     "speed",

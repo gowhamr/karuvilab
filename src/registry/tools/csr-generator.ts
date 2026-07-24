@@ -4,7 +4,7 @@ export const csrGenerator: ToolEntry = {
   "id": "csr-generator",
   "name": "Csr Generator",
   "desc": "Generate CSR requests and private keys locally to secure web servers.",
-  "href": "security-tools/csr-generator/",
+  "href": "/security-tools/csr-generator/",
   "category": "security",
   "icon": null,
   "color": null,

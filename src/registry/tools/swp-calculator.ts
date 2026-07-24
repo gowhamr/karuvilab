@@ -4,7 +4,7 @@ export const swpCalculator: ToolEntry = {
   "id": "swp-calculator",
   "name": "SWP Calculator",
   "desc": "Systematic Withdrawal Plan planning",
-  "href": "calculators/swp-calculator/",
+  "href": "/calculators/swp-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

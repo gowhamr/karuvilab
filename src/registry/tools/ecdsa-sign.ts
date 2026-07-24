@@ -4,7 +4,7 @@ export const ecdsaSign: ToolEntry = {
   "id": "ecdsa-sign",
   "name": "Ecdsa Sign",
   "desc": "Sign and verify payload strings using secure ECDSA certificates.",
-  "href": "security-tools/ecdsa-sign/",
+  "href": "/security-tools/ecdsa-sign/",
   "category": "security",
   "icon": null,
   "color": null,

@@ -6,7 +6,7 @@ export const convertToLegal: ToolEntry = {
   desc: "Standardize PDF pages to US Legal size",
   category: "pdf",
   subCategory: 'Convert & Export',
-  href: "/pdf-tools/convert-to-legal",
+  href: "/pdf-tools/convert-to-legal/",
   icon: "FileText",
   keywords: ["pdf", "legal", "resize", "layout"],
   status: "new"

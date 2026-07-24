@@ -4,7 +4,7 @@ export const colorPaletteExtractor: ToolEntry = {
   "id": "color-palette-extractor",
   "name": "Color Palette Extractor",
   "desc": "Extract dominant color palettes from any image to design themes.",
-  "href": "image-tools/color-palette-extractor/",
+  "href": "/image-tools/color-palette-extractor/",
   "category": "image",
   "icon": null,
   "color": null,

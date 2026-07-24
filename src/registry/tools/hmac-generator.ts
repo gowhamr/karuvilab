@@ -4,7 +4,7 @@ export const hmacGenerator: ToolEntry = {
   "id": "hmac-generator",
   "name": "Hmac Generator",
   "desc": "Calculate keyed-hash message authentication codes (HMAC) to verify integrity.",
-  "href": "security-tools/hmac-generator/",
+  "href": "/security-tools/hmac-generator/",
   "category": "security",
   "icon": null,
   "color": null,

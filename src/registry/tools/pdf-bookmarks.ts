@@ -6,7 +6,7 @@ export const pdfBookmarks: ToolEntry = {
   desc: "View and export PDF bookmarks (outline)",
   category: "pdf",
   subCategory: 'Security & Metadata',
-  href: "/pdf-tools/pdf-bookmarks",
+  href: "/pdf-tools/pdf-bookmarks/",
   input: "pdf",
   output: "json",
   status: "new",

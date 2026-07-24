@@ -4,7 +4,7 @@ export const rsaSignVerify: ToolEntry = {
   "id": "rsa-sign-verify",
   "name": "Rsa Sign Verify",
   "desc": "Sign messages or verify signatures using RSA keys.",
-  "href": "security-tools/rsa-sign-verify/",
+  "href": "/security-tools/rsa-sign-verify/",
   "category": "security",
   "icon": null,
   "color": null,

@@ -4,7 +4,7 @@ export const minesweeper: ToolEntry = {
   id: 'minesweeper',
   name: 'Minesweeper',
   desc: 'Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.',
-  href: 'break-time-tools/minesweeper/',
+  href: '/break-time-tools/minesweeper/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

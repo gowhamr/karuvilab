@@ -4,7 +4,7 @@ export const dateCalculator: ToolEntry = {
   "id": "date-calculator",
   "name": "Date Calculator",
   "desc": "Add, subtract, or diff dates",
-  "href": "calculators/date-calculator/",
+  "href": "/calculators/date-calculator/",
   "category": "calculators",
   "subCategory": "Date & Time",
   "keywords": [

@@ -4,7 +4,7 @@ export const csvToJson: ToolEntry = {
   "id": "csv-to-json",
   "name": "Csv To Json",
   "desc": "Convert tabular CSV file content into structured JSON objects.",
-  "href": "developer-tools/csv-to-json/",
+  "href": "/developer-tools/csv-to-json/",
   "category": "developer",
   "subCategory": "Converters",
   "icon": null,

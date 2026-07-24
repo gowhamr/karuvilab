@@ -4,7 +4,7 @@ export const inflationCalculator: ToolEntry = {
   "id": "inflation-calculator",
   "name": "Inflation Calculator",
   "desc": "Purchasing power over time",
-  "href": "calculators/inflation-calculator/",
+  "href": "/calculators/inflation-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

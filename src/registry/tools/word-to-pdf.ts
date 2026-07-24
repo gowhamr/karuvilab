@@ -4,7 +4,7 @@ export const wordToPdf: ToolEntry = {
   "id": "word-to-pdf",
   "name": "Word To Pdf",
   "desc": "Convert Word documents (DOCX) into standard PDF files locally.",
-  "href": "pdf-tools/word-to-pdf/",
+  "href": "/pdf-tools/word-to-pdf/",
   "category": "pdf",
   "subCategory": "Convert & Export",
   "icon": null,

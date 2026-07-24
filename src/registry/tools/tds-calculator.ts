@@ -4,7 +4,7 @@ export const tdsCalculator: ToolEntry = {
   "id": "tds-calculator",
   "name": "Tds Calculator",
   "desc": "Calculate Tax Deducted at Source (TDS) percentages.",
-  "href": "calculators/tds-calculator/",
+  "href": "/calculators/tds-calculator/",
   "category": "calculators",
   "icon": null,
   "color": null,

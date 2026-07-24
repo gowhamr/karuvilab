@@ -4,7 +4,7 @@ export const gradientGenerator: ToolEntry = {
   "id": "gradient-generator",
   "name": "Gradient Generator",
   "desc": "Design linear and radial CSS gradients visually for backgrounds.",
-  "href": "developer-tools/gradient-generator/",
+  "href": "/developer-tools/gradient-generator/",
   "category": "developer",
   "subCategory": "Generators",
   "icon": null,

@@ -4,7 +4,7 @@ export const cardMasker: ToolEntry = {
   "id": "card-masker",
   "name": "Card Masker",
   "desc": "Mask card numbers automatically to securely display and store sensitive financial info.",
-  "href": "security-tools/card-masker/",
+  "href": "/security-tools/card-masker/",
   "category": "security",
   "icon": null,
   "color": null,

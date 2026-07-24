@@ -4,7 +4,7 @@ export const hkdfGenerator: ToolEntry = {
   "id": "hkdf-generator",
   "name": "Hkdf Generator",
   "desc": "Derive cryptographically strong keys from raw input using HKDF.",
-  "href": "security-tools/hkdf-generator/",
+  "href": "/security-tools/hkdf-generator/",
   "category": "security",
   "icon": null,
   "color": null,

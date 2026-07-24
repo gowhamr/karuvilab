@@ -4,7 +4,7 @@ export const videoMetadataViewer: ToolEntry = {
   "id": "video-metadata-viewer",
   "name": "Video Metadata Viewer",
   "desc": "Extract and inspect resolution, codec, and duration metadata from video files.",
-  "href": "media-tools/video-metadata-viewer/",
+  "href": "/media-tools/video-metadata-viewer/",
   "category": "media",
   "icon": null,
   "color": null,

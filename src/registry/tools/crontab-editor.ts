@@ -4,7 +4,7 @@ export const crontabEditor: ToolEntry = {
   "id": "crontab-editor",
   "name": "Crontab Editor",
   "desc": "Build crontab expressions visually and translate them to plain English.",
-  "href": "developer-tools/crontab-editor/",
+  "href": "/developer-tools/crontab-editor/",
   "category": "developer",
   "subCategory": "Generators",
   "icon": null,

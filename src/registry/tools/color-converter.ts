@@ -4,7 +4,7 @@ export const colorConverter: ToolEntry = {
   "id": "color-converter",
   "name": "Color Converter",
   "desc": "Convert color formats (HEX, RGB, HSL) to style web applications.",
-  "href": "developer-tools/color-converter/",
+  "href": "/developer-tools/color-converter/",
   "category": "developer",
   "subCategory": "Converters",
   "icon": null,

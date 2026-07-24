@@ -2,7 +2,7 @@ export const duplicatePagesTool = {
   id: 'duplicate-pages',
   name: 'Duplicate PDF Pages',
   desc: 'Duplicate and copy specific pages in a PDF document offline.',
-  href: 'pdf-tools/duplicate-pages/',
+  href: '/pdf-tools/duplicate-pages/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '📑',

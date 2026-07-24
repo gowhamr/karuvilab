@@ -4,7 +4,7 @@ export const rdCalculator: ToolEntry = {
   "id": "rd-calculator",
   "name": "Recurring Deposit (RD)",
   "desc": "RD maturity and interest calculation",
-  "href": "calculators/rd-calculator/",
+  "href": "/calculators/rd-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

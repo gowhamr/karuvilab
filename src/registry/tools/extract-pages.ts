@@ -2,7 +2,7 @@ export const extractPagesTool = {
   id: 'extract-pages',
   name: 'Extract PDF Pages',
   desc: 'Extract specific pages or page ranges from a PDF into a new document.',
-  href: 'pdf-tools/extract-pages/',
+  href: '/pdf-tools/extract-pages/',
   category: 'pdf',
   subCategory: 'Organize & Edit',
   icon: '📥',

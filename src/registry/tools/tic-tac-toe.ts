@@ -4,7 +4,7 @@ export const ticTacToe: ToolEntry = {
   id: 'tic-tac-toe',
   name: 'Tic-Tac-Toe',
   desc: 'Classic 2-player Tic-Tac-Toe right in your browser. No downloads, no sign-in.',
-  href: 'break-time-tools/tic-tac-toe/',
+  href: '/break-time-tools/tic-tac-toe/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

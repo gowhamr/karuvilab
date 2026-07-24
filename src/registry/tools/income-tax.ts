@@ -4,7 +4,7 @@ export const incomeTax: ToolEntry = {
   "id": "income-tax",
   "name": "Income Tax",
   "desc": "Calculate annual income tax estimates and select the best tax regime.",
-  "href": "calculators/income-tax/",
+  "href": "/calculators/income-tax/",
   "category": "calculators",
   "icon": null,
   "color": null,

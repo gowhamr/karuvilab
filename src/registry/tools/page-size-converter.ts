@@ -6,7 +6,7 @@ export const pageSizeConverter: ToolEntry = {
   desc: "Convert PDF pages to a specific size",
   category: "pdf",
   subCategory: 'Convert & Export',
-  href: "/pdf-tools/page-size-converter",
+  href: "/pdf-tools/page-size-converter/",
   icon: "Maximize",
   keywords: ["pdf", "resize", "scale", "layout"],
   status: "new"

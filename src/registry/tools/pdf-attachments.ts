@@ -6,7 +6,7 @@ export const pdfAttachments: ToolEntry = {
   desc: "Extract embedded files and attachments from PDFs",
   category: "pdf",
   subCategory: 'Security & Metadata',
-  href: "/pdf-tools/pdf-attachments",
+  href: "/pdf-tools/pdf-attachments/",
   input: "pdf",
   output: "any-file",
   status: "new",

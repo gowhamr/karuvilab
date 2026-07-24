@@ -4,7 +4,7 @@ export const gifCreator: ToolEntry = {
   "id": "gif-creator",
   "name": "Gif Creator",
   "desc": "Convert videos or image frames into optimized, loopable animated GIF files.",
-  "href": "media-tools/gif-creator/",
+  "href": "/media-tools/gif-creator/",
   "category": "media",
   "icon": null,
   "color": null,

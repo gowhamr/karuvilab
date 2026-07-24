@@ -4,7 +4,7 @@ export const ageCalculator: ToolEntry = {
   "id": "age-calculator",
   "name": "Age Calculator",
   "desc": "Calculate age in years, months, and days",
-  "href": "calculators/age-calculator/",
+  "href": "/calculators/age-calculator/",
   "category": "calculators",
   "subCategory": "Date & Time",
   "keywords": [

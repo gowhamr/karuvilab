@@ -4,7 +4,7 @@ export const smartConverter: ToolEntry = {
   "id": "smart-converter",
   "name": "Smart Unit Converter",
   "desc": "Natural-language unit conversion",
-  "href": "calculators/smart-converter/",
+  "href": "/calculators/smart-converter/",
   "category": "calculators",
   "subCategory": "Math & Units",
   "keywords": [

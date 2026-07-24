@@ -4,7 +4,7 @@ export const compoundInterest: ToolEntry = {
   "id": "compound-interest",
   "name": "Compound Interest Calculator",
   "desc": "Calculate compounded growth on your investment.",
-  "href": "calculators/compound-interest/",
+  "href": "/calculators/compound-interest/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

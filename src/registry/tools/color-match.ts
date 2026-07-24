@@ -4,7 +4,7 @@ export const colorMatch: ToolEntry = {
   id: 'color-match',
   name: 'Color Match',
   desc: 'Pick the exact color swatch under time pressure to test your visual accuracy.',
-  href: 'break-time-tools/color-match/',
+  href: '/break-time-tools/color-match/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

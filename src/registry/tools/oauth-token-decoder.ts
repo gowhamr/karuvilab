@@ -4,7 +4,7 @@ export const oauthTokenDecoder: ToolEntry = {
   "id": "oauth-token-decoder",
   "name": "Oauth Token Decoder",
   "desc": "Inspect and decode OAuth 2.0 access and refresh token payloads.",
-  "href": "security-tools/oauth-token-decoder/",
+  "href": "/security-tools/oauth-token-decoder/",
   "category": "security",
   "icon": null,
   "color": null,

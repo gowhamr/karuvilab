@@ -4,7 +4,7 @@ export const sudoku: ToolEntry = {
   id: 'sudoku',
   name: 'Sudoku',
   desc: 'Classic 9x9 Sudoku logical number placement puzzle with multiple difficulty modes, hints, and local best times.',
-  href: 'break-time-tools/sudoku/',
+  href: '/break-time-tools/sudoku/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

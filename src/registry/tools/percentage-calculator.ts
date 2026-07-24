@@ -4,7 +4,7 @@ export const percentageCalculator: ToolEntry = {
   "id": "percentage-calculator",
   "name": "Percentage Calculator",
   "desc": "Find percentages and ratios",
-  "href": "calculators/percentage-calculator/",
+  "href": "/calculators/percentage-calculator/",
   "category": "calculators",
   "subCategory": "Math & Units",
   "keywords": [

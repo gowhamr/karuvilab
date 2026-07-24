@@ -4,7 +4,7 @@ export const emiCalculator: ToolEntry = {
   "id": "emi-calculator",
   "name": "EMI Calculator",
   "desc": "Loan EMI, interest, and amortization",
-  "href": "calculators/emi-calculator/",
+  "href": "/calculators/emi-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

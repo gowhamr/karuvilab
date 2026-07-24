@@ -4,7 +4,7 @@ export const bmpConverter: ToolEntry = {
   "id": "bmp-converter",
   "name": "BMP Converter",
   "desc": "Convert images to the uncompressed BMP format",
-  "href": "image-tools/bmp-converter/",
+  "href": "/image-tools/bmp-converter/",
   "category": "image",
   "input": "image",
   "output": "image",

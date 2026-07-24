@@ -4,7 +4,7 @@ export const passwordGenerator: ToolEntry = {
   "id": "password-generator",
   "name": "Password Generator",
   "desc": "Strong, random passwords",
-  "href": "security-tools/password-generator/",
+  "href": "/security-tools/password-generator/",
   "category": "security",
   "keywords": [
     "password",

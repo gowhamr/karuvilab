@@ -4,7 +4,7 @@ export const snakeGame: ToolEntry = {
   id: 'snake-game',
   name: 'Snake Game',
   desc: 'Play the classic retro Snake game. Eat food, grow longer, and set new high scores entirely in your browser.',
-  href: 'break-time-tools/snake-game/',
+  href: '/break-time-tools/snake-game/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

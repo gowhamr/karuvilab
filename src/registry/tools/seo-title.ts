@@ -4,7 +4,7 @@ export const seoTitle: ToolEntry = {
   "id": "seo-title",
   "name": "Seo Title",
   "desc": "Optimize SEO title tags to maximize search engine click-through rates.",
-  "href": "developer-tools/seo-title/",
+  "href": "/developer-tools/seo-title/",
   "category": "developer",
   "subCategory": "SEO Tools",
   "icon": null,

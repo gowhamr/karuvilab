@@ -4,7 +4,7 @@ export const swiftMtMx: ToolEntry = {
   "id": "swift-mt-mx",
   "name": "Swift Mt Mx",
   "desc": "Parse and inspect SWIFT MT and MX banking message structures.",
-  "href": "developer-tools/swift-mt-mx/",
+  "href": "/developer-tools/swift-mt-mx/",
   "category": "developer",
   "subCategory": "Banking Tools",
   "icon": null,

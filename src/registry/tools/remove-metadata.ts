@@ -6,7 +6,7 @@ export const removeMetadata: ToolEntry = {
   desc: "Clear all metadata and properties from a PDF document",
   category: "pdf",
   subCategory: 'Security & Metadata',
-  href: "/pdf-tools/remove-metadata",
+  href: "/pdf-tools/remove-metadata/",
   icon: "Eraser",
   keywords: ["pdf", "metadata", "properties", "remove", "clear", "privacy"],
   status: "new"

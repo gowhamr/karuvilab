@@ -4,7 +4,7 @@ export const track2Parser: ToolEntry = {
   "id": "track-2-parser",
   "name": "Track 2 Parser",
   "desc": "Decode magnetic stripe Track 2 data for payment card testing.",
-  "href": "developer-tools/track-2-parser/",
+  "href": "/developer-tools/track-2-parser/",
   "category": "developer",
   "subCategory": "Banking Tools",
   "icon": null,

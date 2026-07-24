@@ -4,7 +4,7 @@ export const salaryCalculator: ToolEntry = {
   "id": "salary-calculator",
   "name": "Salary Calculator",
   "desc": "Indian take-home salary breakdown",
-  "href": "calculators/salary-calculator/",
+  "href": "/calculators/salary-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

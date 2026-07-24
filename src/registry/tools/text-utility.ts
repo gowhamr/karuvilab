@@ -4,7 +4,7 @@ export const textUtility: ToolEntry = {
   "id": "text-utility",
   "name": "Text Utility",
   "desc": "Clean, case convert, count words",
-  "href": "utilities/text-utility/",
+  "href": "/utilities/text-utility/",
   "category": "utilities",
   "keywords": [
     "text",

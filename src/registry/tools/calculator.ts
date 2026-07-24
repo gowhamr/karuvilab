@@ -4,7 +4,7 @@ export const calculator: ToolEntry = {
   id: "calculator",
   name: "Calculator",
   desc: "Unified calculator with seamless standard and scientific modes",
-  href: "calculators/calculator/",
+  href: "/calculators/calculator/",
   category: "calculators",
   icon: null,
   color: null,

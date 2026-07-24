@@ -4,7 +4,7 @@ export const wordGuess: ToolEntry = {
   id: 'word-guess',
   name: 'Word Guess',
   desc: 'A word guessing puzzle game. Find the secret 5-letter word in 6 tries using visual feedback.',
-  href: 'break-time-tools/word-guess/',
+  href: '/break-time-tools/word-guess/',
   category: 'break-time',
   icon: null,
   color: '#8B5CF6',

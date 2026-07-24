@@ -4,7 +4,7 @@ export const stockAverageCalculator: ToolEntry = {
   "id": "stock-average-calculator",
   "name": "Stock Average",
   "desc": "Weighted average buy price for stocks",
-  "href": "calculators/stock-average-calculator/",
+  "href": "/calculators/stock-average-calculator/",
   "category": "calculators",
   "subCategory": "Financial",
   "keywords": [

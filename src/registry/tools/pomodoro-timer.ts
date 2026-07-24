@@ -4,7 +4,7 @@ export const pomodoroTimer: ToolEntry = {
   "id": "pomodoro-timer",
   "name": "Pomodoro Timer",
   "desc": "Boost your focus and productivity using the Pomodoro technique.",
-  "href": "productivity/pomodoro-timer/",
+  "href": "/productivity/pomodoro-timer/",
   "category": "productivity",
   "icon": null,
   "color": null,

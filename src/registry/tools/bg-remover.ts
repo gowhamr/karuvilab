@@ -4,7 +4,7 @@ export const bgRemover: ToolEntry = {
   "id": "bg-remover",
   "name": "Background Remover",
   "desc": "Remove image backgrounds locally",
-  "href": "image-tools/bg-remover/",
+  "href": "/image-tools/bg-remover/",
   "category": "image",
   "input": "image",
   "output": "image",

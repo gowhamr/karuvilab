@@ -4,7 +4,7 @@ export const numeralConverter: ToolEntry = {
   "id": "numeral-converter",
   "name": "Numeral & Encoding Converter",
   "desc": "Universal encoding converter. Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text. Auto-detect format and convert to all others instantly. Supports UTF-8, UTF-16, UTF-32, Base64, URL encoding, HTML entities, JavaScript/Python/CSS escapes, Morse code, ROT13, JWT decode, and more. 100% local — nothing leaves your browser.",
-  "href": "calculators/numeral-converter/",
+  "href": "/calculators/numeral-converter/",
   "category": "calculators",
   "subCategory": "Math & Units",
   "keywords": [
