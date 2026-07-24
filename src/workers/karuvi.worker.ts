@@ -743,7 +743,7 @@ const api: Partial<WorkerAPI> = {
       if (onProgress) onProgress({ percent: (i / total) * 80, message: `Merging PDF ${i + 1}/${total}` });
       
       const bytes = file instanceof ArrayBuffer ? file : await file.arrayBuffer();
-      const doc = await PDFDocument.load(bytes);
+      let doc = await PDFDocument.load(bytes);
       const pages = await merged.copyPages(doc, doc.getPageIndices());
       pages.forEach(p => merged.addPage(p));
       
