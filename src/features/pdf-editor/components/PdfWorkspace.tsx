@@ -25,6 +25,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
   
   const displayIndex = activePages.findIndex(p => p.id === currentPageId) + 1;
   const numActivePages = activePages.length;
+  const activeTool = useEditorStore(s => s.activeTool);
 
   const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -214,7 +215,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
                       useEditorStore.getState().setActiveTool(tool.id as any);
                     }
                   }}
-                  className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${useEditorStore((s) => s.activeTool) === tool.id ? 'bg-blue text-white' : 'text-text-4 hover:bg-surface-2'}`}
+                  className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${activeTool === tool.id ? 'bg-blue text-white' : 'text-text-4 hover:bg-surface-2'}`}
                   title={tool.label}
                 >
                   <Icon className="w-4 h-4" />
@@ -250,7 +251,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
           </div>
         </div>
 
-        {useEditorStore((s) => s.activeTool) === 'blackout' && (
+        {activeTool === 'blackout' && (
           <div className="bg-orange-500/10 border-b border-orange-500/20 px-4 py-2 text-xs text-orange-600 dark:text-orange-400 font-medium flex items-center justify-center gap-2 z-content relative">
             <span>⚠️</span>
             <span>
