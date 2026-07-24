@@ -131,7 +131,6 @@ export default function AspectRatioConverterClient() {
       );
 
       const url = createUrl(blob);
-      if (resultUrl) revokeUrl(resultUrl);
 
       const origW = originalImg.naturalWidth;
       const origH = originalImg.naturalHeight;
@@ -161,13 +160,13 @@ export default function AspectRatioConverterClient() {
 
       setResultDimensions({ width: resW, height: resH });
       setResultBlob(blob);
-      setResultUrl(url);
+      setResultUrl(prev => { if (prev) revokeUrl(prev); return url; });
     } catch (err) {
       setError(formatError(err));
     } finally {
       setIsProcessing(false);
     }
-  }, [originalImg, file, selectedPreset, mode, bgColor, format, createUrl, resultUrl, revokeUrl, setIsProcessing]);
+  }, [originalImg, file, selectedPreset, mode, bgColor, format, createUrl, revokeUrl, setIsProcessing]);
 
   // Re-process when parameters change
   useEffect(() => {
