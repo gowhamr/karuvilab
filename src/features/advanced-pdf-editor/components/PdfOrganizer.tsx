@@ -92,7 +92,7 @@ function SortablePageItem({
       <div className="absolute inset-0 pointer-events-none p-2 flex flex-col z-20">
         <div className="flex justify-between items-start">
           <span className="text-[10px] font-black px-2 py-0.5 rounded-full backdrop-blur-md bg-surface-2/80 text-text-4 shadow-sm">
-            {page.originalIndex + 1}
+            {page.originalIndex}
           </span>
           {isSelected && mode === 'rotate' && (
             <div className="bg-blue text-white rounded-full p-0.5 shadow-sm">
@@ -104,7 +104,7 @@ function SortablePageItem({
       
       <div className="w-full h-full flex items-center justify-center opacity-90 overflow-hidden relative">
         <div style={{ transform: `rotate(${page.rotation}deg)`, transition: 'transform 0.3s' }}>
-          <PdfPagePreview file={file} pageIndex={page.originalIndex + 1} width={150} />
+          <PdfPagePreview file={file} pageIndex={page.originalIndex} width={150} />
         </div>
       </div>
       
@@ -159,8 +159,8 @@ export function PdfOrganizer({ mode, toolId, title, description, actionLabel }: 
       const count = await workerManager.getPdfPageCount(buffer);
       
       const newPages = Array.from({ length: count }).map((_, i) => ({
-        id: `page-${i}`,
-        originalIndex: i,
+        id: `page-${i + 1}`,
+        originalIndex: i + 1,
         rotation: 0,
         isDeleted: false
       }));

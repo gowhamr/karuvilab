@@ -111,7 +111,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
       </div>
 
       {/* Context Actions (Fades in on hover) */}
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+      <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-all duration-200">
         {item.status === 'completed' && (
           <>
             <button 
