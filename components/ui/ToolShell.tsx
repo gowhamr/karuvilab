@@ -1,4 +1,4 @@
-import { ALL_TOOLS, CategoryEntry } from '@/src/tool-registry';
+import { ALL_TOOLS, CATEGORIES, CategoryEntry } from '@/src/tool-registry';
 import { StructuredData } from '@/src/lib/seo';
 import { ClientToolShell, ClientToolShellProps } from './ClientToolShell';
 import { marked } from 'marked';
@@ -69,9 +69,9 @@ export async function ToolShell({ title, description, category, children, toolId
     <>
       <StructuredData tool={currentTool} category={category} content={mergedContent} />
       <ClientToolShell 
-        title={title}
-        description={description}
-        category={category}
+        title={currentTool?.name || title}
+        description={currentTool?.desc || description}
+        category={category || (currentTool?.category ? CATEGORIES.find(c => c.id === currentTool.category) : undefined)}
         toolId={toolId}
         content={mergedContent}
         parsedContent={parsedContent}
