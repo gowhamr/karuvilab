@@ -7,7 +7,8 @@ interface AnnotationLayerProps {
 }
 
 export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
-  const annotations = useEditorStore(state => state.annotations.filter(a => a.pageIndex === pageIndex));
+  const allAnnotations = useEditorStore(state => state.annotations);
+  const annotations = allAnnotations.filter(a => a.pageIndex === pageIndex);
   const activeTool = useEditorStore(state => state.activeTool);
   const addAnnotation = useEditorStore(state => state.addAnnotation);
   const updateAnnotation = useEditorStore(state => state.updateAnnotation);
