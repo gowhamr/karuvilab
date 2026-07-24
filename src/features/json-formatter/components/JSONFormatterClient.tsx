@@ -274,7 +274,12 @@ export default function JSONFormatterClient() {
       } else {
         setIsProcessing(true);
         try {
-          const res = await workerManager.processJson(input, mode, indent, abortController.signal);
+          const res = (await workerManager.processJson(
+            input,
+            mode,
+            indent,
+            abortController.signal
+          )) as { output: string; parsed: any; error: any };
           if (!abortController.signal.aborted) {
             if (res.error) {
               const msg = res.error.message;

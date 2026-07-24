@@ -69,7 +69,8 @@ const nextConfig = {
         { source: "/tools/pdf/compress/:path*",           destination: "/pdf-tools/compress-pdf/",           permanent: true },
         { source: "/tools/pdf/merge/:path*",              destination: "/pdf-tools/merge-pdf/",              permanent: true },
         { source: "/tools/pdf/split/:path*",              destination: "/pdf-tools/split-pdf/",              permanent: true },
-        { source: "/tools/pdf/imgtopdf/:path*",           destination: "/pdf-tools/image-to-pdf/",           permanent: true }
+        { source: "/tools/pdf/imgtopdf/:path*",           destination: "/pdf-tools/image-to-pdf/",           permanent: true },
+        { source: "/tools/background-remover/:path*",     destination: "/image-tools/bg-remover/",           permanent: true }
       ];
     }
   }),

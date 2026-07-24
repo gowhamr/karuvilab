@@ -51,7 +51,15 @@ export function MarkdownEditor() {
   const uploadPreviewRef = useRef<HTMLDivElement>(null);
 
   const activeMd = mode === "editor" ? md : uploadMd;
-  const html = useMemo(() => MarkdownService.parse(activeMd), [activeMd]);
+  const [html, setHtml] = useState("");
+  
+  useEffect(() => {
+    let active = true;
+    MarkdownService.parse(activeMd).then(res => {
+      if (active) setHtml(res);
+    });
+    return () => { active = false; };
+  }, [activeMd]);
   const stats = useMemo(() => MarkdownService.getStats(activeMd), [activeMd]);
 
   useFocusModeIntegration({

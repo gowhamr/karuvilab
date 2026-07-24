@@ -62,7 +62,7 @@ export default function CookiePolicy() {
       <section className="space-y-4 text-text-2 leading-relaxed">
         <h2 className="text-2xl font-black text-text">5. Contact</h2>
         <p>If you have any questions regarding our use of browser storage, please contact us at:</p>
-        <p><strong>Email:</strong> <a href="mailto:support@karuvilab.com" className="text-blue hover:underline">support@karuvilab.com</a></p>
+        <p><strong>Email:</strong> <a href="mailto:KaruviLab@proton.me" className="text-blue hover:underline">KaruviLab@proton.me</a></p>
       </section>
     </div>
   );

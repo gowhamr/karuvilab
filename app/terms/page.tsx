@@ -99,7 +99,7 @@ export default function TermsOfService() {
       <section className="space-y-4 text-text-2 leading-relaxed">
         <h2 className="text-2xl font-black text-text">10. Contact Details</h2>
         <p>For questions or concerns regarding these Terms of Service, please reach out to us at:</p>
-        <p><strong>Email:</strong> <a href="mailto:support@karuvilab.com" className="text-blue hover:underline">support@karuvilab.com</a></p>
+        <p><strong>Email:</strong> <a href="mailto:KaruviLab@proton.me" className="text-blue hover:underline">KaruviLab@proton.me</a></p>
       </section>
     </div>
   );

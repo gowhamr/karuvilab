@@ -91,6 +91,7 @@ export default function PdfAttachmentsClient() {
       a.href = url;
       a.download = `${file?.name.replace(/\.pdf$/i, "")}-attachments.zip`;
       a.click();
+      revokeUrl(url);
     } catch (e: any) {
       console.error("Failed to create ZIP:", e);
       setError("Failed to create ZIP archive.");

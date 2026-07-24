@@ -9,20 +9,27 @@
 
 ## Available Tools
 
+- [Advanced Rotate](https://karuvilab.com/image-tools/advanced-rotate/): Rotate images to any angle with precise degree control
 - [Aes Encrypt Decrypt](https://karuvilab.com/security-tools/aes-encrypt-decrypt/): Encrypt and decrypt text or files using AES, entirely in your browser.
 - [Age Calculator](https://karuvilab.com/calculators/age-calculator/): Calculate age in years, months, and days
+- [Aspect Ratio Converter](https://karuvilab.com/image-tools/aspect-ratio-converter/): Convert images to standard aspect ratios like 1:1, 16:9, 4:3
 - [Audio Converter](https://karuvilab.com/media-tools/audio-converter/): Convert audio files between formats like MP3 and WAV locally for compatibility.
+- [AVIF Converter](https://karuvilab.com/image-tools/avif-converter/): Convert images to the next-gen AVIF format for maximum compression
 - [Banking Tools](https://karuvilab.com/developer-tools/banking-tools/): Advanced financial data parsers for EMV, SWIFT, and core banking logs
 - [Barcode & QR Scanner](https://karuvilab.com/utilities/barcode-scanner/): Scan barcodes and QR codes using camera
 - [Base64 Encode/Decode](https://karuvilab.com/developer-tools/base64/): Encode or decode Base64 strings
 - [Base64url Converter](https://karuvilab.com/security-tools/base64url-converter/): Encode or decode text to URL-safe Base64 format to safely transmit data.
+- [Batch Image Converter](https://karuvilab.com/image-tools/batch-image-converter/): Convert multiple images between formats in one batch operation
 - [Background Remover](https://karuvilab.com/image-tools/bg-remover/): Remove image backgrounds locally
 - [Bmi Calculator](https://karuvilab.com/calculators/bmi-calculator/): Calculate your Body Mass Index (BMI) and health category to track fitness goals.
+- [BMP Converter](https://karuvilab.com/image-tools/bmp-converter/): Convert images to the uncompressed BMP format
+- [Border Generator](https://karuvilab.com/image-tools/border-generator/): Add decorative borders to your images with custom styles
 - [Box Shadow Generator](https://karuvilab.com/developer-tools/box-shadow-generator/): Design CSS box shadows visually and copy clean CSS snippets for layouts.
 - [Bulk Image Resize](https://karuvilab.com/image-tools/bulk-resizer/): Resize many images at once
 - [CAGR Calculator](https://karuvilab.com/calculators/cagr-calculator/): Compound Annual Growth Rate
 - [Calculator](https://karuvilab.com/calculators/calculator/): Unified calculator with seamless standard and scientific modes
 - [Calendar](https://karuvilab.com/productivity/calendar/): Professional, local-first calendar with Tamil mode support.
+- [Canvas Resize](https://karuvilab.com/image-tools/canvas-resize/): Resize the canvas workspace around your image without scaling
 - [Card Masker](https://karuvilab.com/security-tools/card-masker/): Mask card numbers automatically to securely display and store sensitive financial info.
 - [Chart & Graph Generator](https://karuvilab.com/productivity/chart-generator/): Create beautiful charts from your data
 - [Cipher Tools](https://karuvilab.com/security-tools/cipher-tools/): Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.
@@ -38,7 +45,7 @@
 - [Convert to A4](https://karuvilab.com//pdf-tools/convert-to-a4): Standardize PDF pages to A4 size
 - [Convert to Legal](https://karuvilab.com//pdf-tools/convert-to-legal): Standardize PDF pages to US Legal size
 - [Convert to Letter](https://karuvilab.com//pdf-tools/convert-to-letter): Standardize PDF pages to US Letter size
-- [Core Banking Parser](https://karuvilab.com/banking-tools/core-banking-parser/): Parse core banking trace logs into JSON
+- [Core Banking Parser](https://karuvilab.com/developer-tools/core-banking-parser/): Parse core banking trace logs into JSON
 - [Countdown Timer](https://karuvilab.com/productivity/countdown-timer/): Set timers for upcoming milestones or deadlines to keep track of tasks.
 - [Crontab Editor](https://karuvilab.com/developer-tools/crontab-editor/): Build crontab expressions visually and translate them to plain English.
 - [Crop PDF](https://karuvilab.com//pdf-tools/crop-pdf): Crop PDF pages to a specific area
@@ -57,7 +64,7 @@
 - [Ecdsa Sign](https://karuvilab.com/security-tools/ecdsa-sign/): Sign and verify payload strings using secure ECDSA certificates.
 - [Edit PDF Metadata](https://karuvilab.com//pdf-tools/edit-metadata): View and edit PDF properties like Title, Author, and Subject
 - [EMI Calculator](https://karuvilab.com/calculators/emi-calculator/): Loan EMI, interest, and amortization
-- [Emv Tlv Tree](https://karuvilab.com/banking-tools/emv-tlv-tree/): Inspect and parse EMV TLV payment packets for bank transaction analysis.
+- [Emv Tlv Tree](https://karuvilab.com/developer-tools/emv-tlv-tree/): Inspect and parse EMV TLV payment packets for bank transaction analysis.
 - [Even Pages Extractor](https://karuvilab.com/pdf-tools/even-pages-extractor/): Extract only the even-numbered pages from a PDF document.
 - [Extract Images](https://karuvilab.com/pdf-tools/extract-images/): Pull images out of a PDF
 - [Extract PDF Pages](https://karuvilab.com/pdf-tools/extract-pages/): Extract specific pages or page ranges from a PDF into a new document.
@@ -68,6 +75,7 @@
 - [Code Formatter](https://karuvilab.com/developer-tools/format/): Auto-format code in many languages
 - [2048](https://karuvilab.com/break-time-tools/game-2048/): Slide and merge tiles to reach 2048. Addictive puzzle game — fully offline.
 - [Gif Creator](https://karuvilab.com/media-tools/gif-creator/): Convert videos or image frames into optimized, loopable animated GIF files.
+- [GIF Frame Extractor](https://karuvilab.com/image-tools/gif-extractor/): Extract individual frames from animated GIFs
 - [Glassmorphism Generator](https://karuvilab.com/developer-tools/glassmorphism-generator/): Generate CSS code for modern frosted-glass card designs.
 - [Gradient Generator](https://karuvilab.com/developer-tools/gradient-generator/): Design linear and radial CSS gradients visually for backgrounds.
 - [Grammar & Spell Checker](https://karuvilab.com/text/grammar-checker/): 100% private, client-side grammar, spell, and readability checker for your text.
@@ -75,16 +83,21 @@
 - [GST Calculator](https://karuvilab.com/calculators/gst-calculator/): Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.
 - [Hash Generator](https://karuvilab.com/security-tools/hash-generator/): MD5, SHA-1/256/512 hashes
 - [Hash Map Visualizer](https://karuvilab.com/developer-tools/hash-map-visualizer/): Visualize collision resolution strategies in hash map indexes.
+- [HEIC to JPG](https://karuvilab.com/image-tools/heic-converter/): Convert Apple HEIC photos to standard JPEG locally in your browser
 - [Hkdf Generator](https://karuvilab.com/security-tools/hkdf-generator/): Derive cryptographically strong keys from raw input using HKDF.
 - [Hmac Generator](https://karuvilab.com/security-tools/hmac-generator/): Calculate keyed-hash message authentication codes (HMAC) to verify integrity.
 - [Hra Calculator](https://karuvilab.com/calculators/hra-calculator/): Calculate your House Rent Allowance tax exemptions.
 - [HTML Entities](https://karuvilab.com/security-tools/html-entities/): Convert characters to HTML entities
 - [HTML Online Viewer](https://karuvilab.com/developer-tools/html-viewer/): Professional live HTML/CSS/JS editor and sandboxed preview
 - [Iban Validator](https://karuvilab.com/security-tools/iban-validator/): Check the validity and checksums of IBAN bank account numbers.
+- [ICO Generator](https://karuvilab.com/image-tools/ico-generator/): Create Windows .ico icon files from standard images
 - [Image to Base64](https://karuvilab.com/image-tools/image-base64/): Encode images as Base64 data URIs
 - [Image Compressor](https://karuvilab.com/image-tools/image-compressor/): Reduce image file size
 - [Image Converter](https://karuvilab.com/image-tools/image-converter/): Convert between JPG, PNG, WebP, AVIF, and BMP
 - [Image Crop](https://karuvilab.com/image-tools/image-crop/): Crop images to ratio or freeform
+- [Image Flip](https://karuvilab.com/image-tools/image-flip/): Flip images horizontally, vertically, or both directions instantly
+- [Image Mirror](https://karuvilab.com/image-tools/image-mirror/): Mirror images with a horizontal reflection
+- [Image Padding](https://karuvilab.com/image-tools/image-padding/): Add uniform or per-side padding around your images
 - [Image Resizer](https://karuvilab.com/image-tools/image-resizer/): Resize images to exact dimensions
 - [Image Seo](https://karuvilab.com/developer-tools/image-seo/): Optimize image file names and alt attributes to rank higher on search engines.
 - [Image to PDF](https://karuvilab.com/pdf-tools/image-to-pdf/): Convert images into a single PDF
@@ -169,7 +182,8 @@
 - [Stock Average](https://karuvilab.com/calculators/stock-average-calculator/): Weighted average buy price for stocks
 - [Stopwatch](https://karuvilab.com/productivity/stopwatch/): Track elapsed time with lap support for productivity logging.
 - [Sudoku](https://karuvilab.com/break-time-tools/sudoku/): Classic 9x9 Sudoku logical number placement puzzle with multiple difficulty modes, hints, and local best times.
-- [Swift Mt Mx](https://karuvilab.com/banking-tools/swift-mt-mx/): Parse and inspect SWIFT MT and MX banking message structures.
+- [SVG to PNG](https://karuvilab.com/image-tools/svg-converter/): Rasterize vector SVG files to transparent PNGs
+- [Swift Mt Mx](https://karuvilab.com/developer-tools/swift-mt-mx/): Parse and inspect SWIFT MT and MX banking message structures.
 - [SWP Calculator](https://karuvilab.com/calculators/swp-calculator/): Systematic Withdrawal Plan planning
 - [Task Reminder](https://karuvilab.com/utilities/task-reminder/): Lightweight private to-do list
 - [Tds Calculator](https://karuvilab.com/calculators/tds-calculator/): Calculate Tax Deducted at Source (TDS) percentages.
@@ -177,10 +191,11 @@
 - [Text Sorter & Deduplicator](https://karuvilab.com/productivity/text-sorter-deduper/): Sort and remove duplicates from text
 - [Text Utility](https://karuvilab.com/utilities/text-utility/): Clean, case convert, count words
 - [Tic-Tac-Toe](https://karuvilab.com/break-time-tools/tic-tac-toe/): Classic 2-player Tic-Tac-Toe right in your browser. No downloads, no sign-in.
+- [TIFF Converter](https://karuvilab.com/image-tools/tiff-converter/): Convert to and from the professional TIFF image format
 - [Time Calculator](https://karuvilab.com/calculators/time-calculator/): Add or subtract hours and minutes
 - [Time Zone Converter](https://karuvilab.com/productivity/timezone-converter/): Compare and convert time between multiple global time zones. Real-time offsets and DST support.
 - [Tlv Parser](https://karuvilab.com/security-tools/tlv-parser/): Parse and visualize EMV TLV hex streams into clear tree structures.
-- [Track 2 Parser](https://karuvilab.com/banking-tools/track-2-parser/): Decode magnetic stripe Track 2 data for payment card testing.
+- [Track 2 Parser](https://karuvilab.com/developer-tools/track-2-parser/): Decode magnetic stripe Track 2 data for payment card testing.
 - [Typing Speed Test](https://karuvilab.com/productivity/typing-speed-test/): Test and improve your typing WPM
 - [Unit Converter](https://karuvilab.com/calculators/unit-converter/): Length, weight, volume, and more
 - [Unix Timestamp](https://karuvilab.com/developer-tools/unix-timestamp/): Convert between epoch timestamps and human-readable dates.
@@ -192,6 +207,7 @@
 - [Video Metadata Viewer](https://karuvilab.com/media-tools/video-metadata-viewer/): Extract and inspect resolution, codec, and duration metadata from video files.
 - [Video Trim](https://karuvilab.com/media-tools/video-trim/): Trim and cut MP4 video clips directly in your browser.
 - [Watermark PDF](https://karuvilab.com/pdf-tools/watermark-pdf/): Add text or image watermark
+- [WebP Converter](https://karuvilab.com/image-tools/webp-converter/): Convert any image to the highly optimized WebP format
 - [WiFi QR Code Generator](https://karuvilab.com/productivity/wifi-qr-code/): Generate QR code to connect to WiFi
 - [Word Counter](https://karuvilab.com/productivity/word-counter/): Count characters, words, sentences, and reading times for any text.
 - [Word Guess](https://karuvilab.com/break-time-tools/word-guess/): A word guessing puzzle game. Find the secret 5-letter word in 6 tries using visual feedback.

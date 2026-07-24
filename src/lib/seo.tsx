@@ -14,7 +14,7 @@ export function generateToolMetadata(toolId: string): Metadata {
 
   const title = `${tool.name} – KV`;
   const description = tool.desc;
-  const url = `${BASE_URL}/${tool.href.replace(/\/$/, "")}/`;
+  const url = `${BASE_URL}/${tool.href.replace(/^\/+|\/+$/g, "")}/`;
 
   return {
     title,
@@ -194,7 +194,7 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
       "@type": tool.schemaType || "WebApplication",
       "name": tool.name,
       "description": detailedDesc,
-      "url": `${BASE_URL}/${tool.href}`,
+      "url": `${BASE_URL}/${tool.href.replace(/^[\\/]+|[\\/]+$/g, "")}`,
       "applicationCategory": getApplicationCategory(category?.id),
       "operatingSystem": "Any",
       "softwareVersion": "1.0.0",

@@ -86,7 +86,7 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
       }
 
       const outBytes = await workerManager.adjustPdfLayout(
-        fileBuffer,
+        fileBuffer.slice(0),
         options,
         (p: any) => {
           setStage(p.message || "Processing...");

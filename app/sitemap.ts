@@ -30,7 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // 2. Category Hubs
   const categoryPages: MetadataRoute.Sitemap = CATEGORIES.map(cat => ({
-    url: `${BASE_URL}/${cat.href.replace(/\/$/, '')}/`,
+    url: `${BASE_URL}/${cat.href.replace(/^\/+|\/+$/g, '')}/`,
     lastModified: new Date(),
     changeFrequency: 'monthly',
     priority: 0.9,
@@ -39,7 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 3. Individual Tools
   const toolPages: MetadataRoute.Sitemap = ALL_TOOLS
     .map(tool => ({
-    url: `${BASE_URL}/${tool.href.replace(/\/$/, '')}/`,
+    url: `${BASE_URL}/${tool.href.replace(/^\/+|\/+$/g, '')}/`,
     lastModified: tool.lastUpdated ? new Date(tool.lastUpdated) : new Date(),
     changeFrequency: 'monthly',
     priority: tool.priority || 0.8,

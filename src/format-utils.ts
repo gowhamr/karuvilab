@@ -166,3 +166,51 @@ export function jsonToCsv(arr: Record<string, unknown>[]): string {
   }
   return csvRows.join('\n');
 }
+
+export async function encodeIco(canvas: HTMLCanvasElement): Promise<Blob> {
+  const size = canvas.width; // Should ideally be square and <= 256
+  const blob = await new Promise<Blob>((res, rej) => canvas.toBlob(b => b ? res(b) : rej(), 'image/png'));
+  const pngBuffer = await blob.arrayBuffer();
+  
+  const header = new ArrayBuffer(22);
+  const view = new DataView(header);
+  view.setUint16(0, 0, true);
+  view.setUint16(2, 1, true);
+  view.setUint16(4, 1, true);
+  
+  view.setUint8(6, size >= 256 ? 0 : size);
+  view.setUint8(7, size >= 256 ? 0 : size);
+  view.setUint8(8, 0);
+  view.setUint8(9, 0);
+  view.setUint16(10, 1, true);
+  view.setUint16(12, 32, true);
+  view.setUint32(14, pngBuffer.byteLength, true);
+  view.setUint32(18, 22, true);
+  
+  return new Blob([header, pngBuffer], { type: 'image/x-icon' });
+}
+
+export async function extractGifFrames(file: File): Promise<Blob[]> {
+  if (typeof (window as any).ImageDecoder === 'undefined') {
+    throw new Error('GIF Frame extraction is not supported natively in this browser. Please use a Chromium-based browser (Chrome, Edge).');
+  }
+  const decoder = new (window as any).ImageDecoder({ type: 'image/gif', data: file.stream() });
+  await decoder.tracks.ready;
+  const track = decoder.tracks.selectedTrack;
+  const frameCount = track.frameCount;
+  const blobs: Blob[] = [];
+  
+  for (let i = 0; i < frameCount; i++) {
+    const result = await decoder.decode({ frameIndex: i });
+    const image = result.image;
+    const canvas = document.createElement('canvas');
+    canvas.width = image.displayWidth;
+    canvas.height = image.displayHeight;
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.drawImage(image, 0, 0);
+    const blob = await new Promise<Blob>((res) => canvas.toBlob((b) => res(b!), 'image/png'));
+    blobs.push(blob);
+    image.close();
+  }
+  return blobs;
+}

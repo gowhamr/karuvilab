@@ -21,7 +21,7 @@ export default function ContactUs() {
           Have a question about how to use a specific tool? Or perhaps you have feedback on how we can improve the UI?
         </p>
         <p>
-          <strong>Email:</strong> <a href="mailto:support@karuvilab.com" className="text-blue font-bold hover:underline">support@karuvilab.com</a>
+          <strong>Email:</strong> <a href="mailto:KaruviLab@proton.me" className="text-blue font-bold hover:underline">KaruviLab@proton.me</a>
         </p>
       </section>
 
@@ -38,7 +38,7 @@ export default function ContactUs() {
           <li>A brief description of what happened vs. what you expected to happen.</li>
         </ul>
         <p>
-          <strong>Report Bugs To:</strong> <a href="mailto:support@karuvilab.com" className="text-blue font-bold hover:underline">support@karuvilab.com</a>
+          <strong>Report Bugs To:</strong> <a href="mailto:KaruviLab@proton.me" className="text-blue font-bold hover:underline">KaruviLab@proton.me</a>
         </p>
       </section>
 
@@ -48,7 +48,7 @@ export default function ContactUs() {
           For advertising inquiries, API integrations, or platform partnerships, please reach out to our management team.
         </p>
         <p>
-          <strong>Business Email:</strong> <a href="mailto:support@karuvilab.com" className="text-blue font-bold hover:underline">support@karuvilab.com</a>
+          <strong>Business Email:</strong> <a href="mailto:KaruviLab@proton.me" className="text-blue font-bold hover:underline">KaruviLab@proton.me</a>
         </p>
       </section>
 

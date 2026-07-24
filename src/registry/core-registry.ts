@@ -3,6 +3,32 @@ import { ToolEntry } from './types';
 
 export const CORE_TOOLS: ToolEntry[] = [
   {
+    "id": "advanced-rotate",
+    "name": "Advanced Rotate",
+    "desc": "Rotate images to any angle with precise degree control",
+    "href": "image-tools/advanced-rotate/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "rotate",
+      "angle",
+      "degrees",
+      "transform",
+      "straighten"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "aes-encrypt-decrypt",
     "name": "Aes Encrypt Decrypt",
     "desc": "Encrypt and decrypt text or files using AES, entirely in your browser.",
@@ -13,7 +39,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "aes encrypt decrypt",
       "security"
@@ -51,6 +77,37 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "aspect-ratio-converter",
+    "name": "Aspect Ratio Converter",
+    "desc": "Convert images to standard aspect ratios like 1:1, 16:9, 4:3",
+    "href": "image-tools/aspect-ratio-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "aspect",
+      "ratio",
+      "resize",
+      "crop",
+      "pad",
+      "16:9",
+      "4:3",
+      "1:1",
+      "instagram",
+      "youtube"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "audio-converter",
     "name": "Audio Converter",
     "desc": "Convert audio files between formats like MP3 and WAV locally for compatibility.",
@@ -61,13 +118,39 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "audio converter",
       "media"
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "avif-converter",
+    "name": "AVIF Converter",
+    "desc": "Convert images to the next-gen AVIF format for maximum compression",
+    "href": "image-tools/avif-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "convert",
+      "avif",
+      "next-gen",
+      "compress",
+      "optimization"
+    ],
+    "input": "image",
+    "output": "image",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -83,7 +166,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "banking tools",
       "iso 8583",
@@ -161,13 +244,42 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "base64url converter",
       "security"
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "batch-image-converter",
+    "name": "Batch Image Converter",
+    "desc": "Convert multiple images between formats in one batch operation",
+    "href": "image-tools/batch-image-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "batch",
+      "convert",
+      "bulk",
+      "format",
+      "jpg",
+      "png",
+      "webp",
+      "mass"
+    ],
+    "input": "image",
+    "output": "image",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -207,13 +319,65 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "bmi calculator",
       "calculators"
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "bmp-converter",
+    "name": "BMP Converter",
+    "desc": "Convert images to the uncompressed BMP format",
+    "href": "image-tools/bmp-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "bmp",
+      "bitmap",
+      "windows",
+      "convert",
+      "uncompressed"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "border-generator",
+    "name": "Border Generator",
+    "desc": "Add decorative borders to your images with custom styles",
+    "href": "image-tools/border-generator/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "border",
+      "frame",
+      "decoration",
+      "solid",
+      "dashed",
+      "rounded"
+    ],
+    "input": "image",
+    "output": "image",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -229,7 +393,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "box shadow generator",
       "developer"
@@ -343,6 +507,32 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "canvas-resize",
+    "name": "Canvas Resize",
+    "desc": "Resize the canvas workspace around your image without scaling",
+    "href": "image-tools/canvas-resize/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "canvas",
+      "resize",
+      "workspace",
+      "extend",
+      "shrink"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "card-masker",
     "name": "Card Masker",
     "desc": "Mask card numbers automatically to securely display and store sensitive financial info.",
@@ -353,7 +543,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "card masker",
       "security"
@@ -401,7 +591,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "cipher tools",
       "security"
@@ -447,7 +637,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "color converter",
       "developer"
@@ -498,7 +688,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "color palette extractor",
       "image"
@@ -520,7 +710,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "command cheat sheet",
       "developer"
@@ -595,7 +785,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "compress",
       "image"
@@ -617,7 +807,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "contrast checker",
       "developer"
@@ -704,14 +894,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "id": "core-banking-parser",
     "name": "Core Banking Parser",
     "desc": "Parse core banking trace logs into JSON",
-    "href": "banking-tools/core-banking-parser/",
+    "href": "developer-tools/core-banking-parser/",
     "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "finacle tools",
       "banking"
@@ -733,7 +923,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "countdown timer",
       "productivity"
@@ -755,7 +945,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "crontab editor",
       "developer"
@@ -801,7 +991,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "csp builder",
       "security"
@@ -823,7 +1013,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "csr generator",
       "security"
@@ -845,7 +1035,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "csv to json",
       "developer"
@@ -994,7 +1184,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "directory manifest",
       "security"
@@ -1063,7 +1253,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "ecdh key exchange",
       "security"
@@ -1085,7 +1275,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "ecdsa sign",
       "security"
@@ -1154,14 +1344,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "id": "emv-tlv-tree",
     "name": "Emv Tlv Tree",
     "desc": "Inspect and parse EMV TLV payment packets for bank transaction analysis.",
-    "href": "banking-tools/emv-tlv-tree/",
+    "href": "developer-tools/emv-tlv-tree/",
     "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "emv tlv tree",
       "banking"
@@ -1422,13 +1612,38 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "gif creator",
       "media"
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "gif-extractor",
+    "name": "GIF Frame Extractor",
+    "desc": "Extract individual frames from animated GIFs",
+    "href": "image-tools/gif-extractor/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "gif",
+      "extract",
+      "frames",
+      "animation",
+      "split"
+    ],
+    "input": "image",
+    "output": "image",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -1444,7 +1659,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "glassmorphism generator",
       "developer"
@@ -1466,7 +1681,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "gradient generator",
       "developer"
@@ -1516,7 +1731,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "gratuity calculator",
       "calculators"
@@ -1590,7 +1805,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "hash map visualizer",
       "developer"
@@ -1599,6 +1814,37 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Analyzers & Viewers",
+    "requiresNetwork": false
+  },
+  {
+    "id": "heic-converter",
+    "name": "HEIC to JPG",
+    "desc": "Convert Apple HEIC photos to standard JPEG locally in your browser",
+    "href": "image-tools/heic-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "heic",
+      "heif",
+      "jpg",
+      "jpeg",
+      "convert",
+      "apple",
+      "iphone",
+      "photo",
+      "image",
+      "browser",
+      "converter"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -1612,7 +1858,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "hkdf generator",
       "security"
@@ -1634,7 +1880,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "hmac generator",
       "security"
@@ -1656,7 +1902,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "hra calculator",
       "calculators"
@@ -1732,13 +1978,39 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "iban validator",
       "security"
     ],
     "input": null,
     "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "ico-generator",
+    "name": "ICO Generator",
+    "desc": "Create Windows .ico icon files from standard images",
+    "href": "image-tools/ico-generator/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "ico",
+      "icon",
+      "favicon",
+      "windows",
+      "convert",
+      "generator"
+    ],
+    "input": "image",
+    "output": "image",
     "related": [],
     "subCategory": null,
     "requiresNetwork": false
@@ -1842,6 +2114,84 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "image-flip",
+    "name": "Image Flip",
+    "desc": "Flip images horizontally, vertically, or both directions instantly",
+    "href": "image-tools/image-flip/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "flip",
+      "horizontal",
+      "vertical",
+      "mirror",
+      "transform"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "image-mirror",
+    "name": "Image Mirror",
+    "desc": "Mirror images with a horizontal reflection",
+    "href": "image-tools/image-mirror/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "mirror",
+      "reflection",
+      "horizontal",
+      "flip",
+      "symmetry"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
+    "id": "image-padding",
+    "name": "Image Padding",
+    "desc": "Add uniform or per-side padding around your images",
+    "href": "image-tools/image-padding/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "padding",
+      "margin",
+      "space",
+      "border",
+      "whitespace"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "image-resizer",
     "name": "Image Resizer",
     "desc": "Resize images to exact dimensions",
@@ -1875,7 +2225,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "image seo",
       "seo"
@@ -1922,7 +2272,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "income tax",
       "calculators"
@@ -1994,7 +2344,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "invoice generator",
       "calculators"
@@ -2016,7 +2366,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "iso8583 bitmap decoder",
       "security"
@@ -2038,7 +2388,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "iso8583 message parser",
       "security"
@@ -2199,7 +2549,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "log analyzer",
       "developer"
@@ -2221,7 +2571,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "lorem ipsum",
       "developer"
@@ -2243,7 +2593,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "luhn validator",
       "developer"
@@ -2404,7 +2754,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "meta tags",
       "seo"
@@ -2529,7 +2879,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "nanoid generator",
       "developer"
@@ -2551,7 +2901,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "notes",
       "productivity"
@@ -2573,7 +2923,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "nps calculator",
       "calculators"
@@ -2646,7 +2996,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "oauth token decoder",
       "security"
@@ -2691,7 +3041,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "og preview",
       "seo"
@@ -2810,7 +3160,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "pbkdf2 generator",
       "security"
@@ -3017,7 +3367,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "pem viewer",
       "security"
@@ -3088,7 +3438,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "pomodoro timer",
       "productivity"
@@ -3135,7 +3485,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "private key checker",
       "security"
@@ -3157,7 +3507,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "public key inspector",
       "security"
@@ -3399,7 +3749,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "robots txt",
       "seo"
@@ -3468,7 +3818,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "rsa encrypt decrypt",
       "security"
@@ -3490,7 +3840,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "rsa key generator",
       "security"
@@ -3512,7 +3862,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "rsa sign verify",
       "security"
@@ -3582,7 +3932,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "saml decoder",
       "security"
@@ -3604,7 +3954,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "seo title",
       "seo"
@@ -3626,7 +3976,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "seo tools",
       "developer"
@@ -3675,7 +4025,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "sitemap generator",
       "seo"
@@ -3697,7 +4047,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "slug generator",
       "seo"
@@ -3821,7 +4171,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "sql formatter",
       "developer"
@@ -3868,7 +4218,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "stopwatch",
       "productivity"
@@ -3910,17 +4260,43 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "svg-converter",
+    "name": "SVG to PNG",
+    "desc": "Rasterize vector SVG files to transparent PNGs",
+    "href": "image-tools/svg-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "svg",
+      "png",
+      "convert",
+      "vector",
+      "raster",
+      "transparent"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "swift-mt-mx",
     "name": "Swift Mt Mx",
     "desc": "Parse and inspect SWIFT MT and MX banking message structures.",
-    "href": "banking-tools/swift-mt-mx/",
+    "href": "developer-tools/swift-mt-mx/",
     "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "swift mt mx",
       "banking"
@@ -3991,7 +4367,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "tds calculator",
       "calculators"
@@ -4013,7 +4389,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "text case converter",
       "productivity"
@@ -4103,6 +4479,32 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "tiff-converter",
+    "name": "TIFF Converter",
+    "desc": "Convert to and from the professional TIFF image format",
+    "href": "image-tools/tiff-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "tiff",
+      "tif",
+      "convert",
+      "photo",
+      "professional",
+      "lossless"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "time-calculator",
     "name": "Time Calculator",
     "desc": "Add or subtract hours and minutes",
@@ -4171,7 +4573,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "tlv parser",
       "security"
@@ -4186,14 +4588,14 @@ export const CORE_TOOLS: ToolEntry[] = [
     "id": "track-2-parser",
     "name": "Track 2 Parser",
     "desc": "Decode magnetic stripe Track 2 data for payment card testing.",
-    "href": "banking-tools/track-2-parser/",
+    "href": "developer-tools/track-2-parser/",
     "category": "developer",
     "icon": null,
     "color": null,
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "track 2 parser",
       "banking"
@@ -4266,7 +4668,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "unix timestamp",
       "developer"
@@ -4360,7 +4762,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "uuid generator",
       "developer"
@@ -4406,7 +4808,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "video metadata viewer",
       "media"
@@ -4428,7 +4830,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "video trim",
       "media"
@@ -4460,6 +4862,31 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": "pdf",
     "related": [],
     "subCategory": "Security & Metadata",
+    "requiresNetwork": false
+  },
+  {
+    "id": "webp-converter",
+    "name": "WebP Converter",
+    "desc": "Convert any image to the highly optimized WebP format",
+    "href": "image-tools/webp-converter/",
+    "category": "image",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "stable",
+    "lastAdded": null,
+    "keywords": [
+      "image",
+      "convert",
+      "webp",
+      "optimization",
+      "compress"
+    ],
+    "input": "image",
+    "output": "image",
+    "related": [],
+    "subCategory": null,
     "requiresNetwork": false
   },
   {
@@ -4499,7 +4926,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "word counter",
       "productivity"
@@ -4553,7 +4980,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "word to pdf",
       "pdf"
@@ -4626,7 +5053,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "x509 viewer",
       "security"
@@ -4648,7 +5075,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "xml formatter",
       "developer"
@@ -4670,7 +5097,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "yaml json converter",
       "developer"
@@ -4692,7 +5119,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-23",
+    "lastAdded": "2026-07-24",
     "keywords": [
       "yaml validator",
       "developer"

@@ -46,14 +46,13 @@ export class MarkdownService {
       .replace(/'/g, "&#039;");
   }
 
-  public static parse(md: string): string {
+  public static async parse(md: string): Promise<string> {
     try {
-      const renderer = this.getRenderer();
-      const rawHtml = marked.parse(md, { renderer, gfm: true, breaks: true }) as string;
+      const { workerManager } = await import('@/src/workers/manager');
+      const rawHtml = await workerManager.parseMarkdown(md);
       return sanitizeHtml(rawHtml);
     } catch (e) {
       logger.error('Markdown parse error', { error: e });
-      // Escape the error message before embedding in HTML to prevent XSS (P-06)
       const safeMsg = this.escapeHtml((e as Error).message || 'Unknown error');
       return `<p class="text-error">Parse error: ${safeMsg}</p>`;
     }

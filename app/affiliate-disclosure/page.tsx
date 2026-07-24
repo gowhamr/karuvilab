@@ -53,7 +53,7 @@ export default function AffiliateDisclosure() {
           If you have any questions regarding our affiliate relationships or how we fund the platform, 
           please feel free to reach out.
         </p>
-        <p><strong>Email:</strong> <a href="mailto:support@karuvilab.com" className="text-blue hover:underline">support@karuvilab.com</a></p>
+        <p><strong>Email:</strong> <a href="mailto:KaruviLab@proton.me" className="text-blue hover:underline">KaruviLab@proton.me</a></p>
       </section>
     </div>
   );

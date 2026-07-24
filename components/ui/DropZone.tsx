@@ -6,11 +6,13 @@ import { cn } from "@/src/lib/utils";
 import { m, AnimatePresence } from "framer-motion";
 
 interface DropZoneProps {
-  onFilesSelected: (files: FileList | File[]) => void;
+  onFilesSelected?: (files: File[]) => void;
+  onFilesDrop?: (files: File[]) => void;
   accept?: string;
   multiple?: boolean;
   title?: React.ReactNode;
   description?: React.ReactNode;
+  subtitle?: React.ReactNode;
   className?: string;
   icon?: React.ReactNode;
   maxSize?: number; // in bytes
@@ -18,14 +20,18 @@ interface DropZoneProps {
 
 export function DropZone({
   onFilesSelected,
+  onFilesDrop,
   accept,
   multiple = false,
   title = "Drop files here",
   description = "or click to upload",
+  subtitle,
   className,
   icon,
   maxSize,
 }: DropZoneProps) {
+  const finalOnFilesSelected = onFilesSelected || onFilesDrop || (() => {});
+  const finalDescription = subtitle || description;
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,9 +51,9 @@ export function DropZone({
         }
       }
 
-      onFilesSelected(files);
+      finalOnFilesSelected(fileArray);
     },
-    [onFilesSelected, maxSize]
+    [finalOnFilesSelected, maxSize]
   );
 
   const onDragOver = (e: React.DragEvent) => {
@@ -100,7 +106,7 @@ export function DropZone({
             onClick();
           }
         }}
-        aria-label={`${typeof title === 'string' ? title : "Upload file"}. ${typeof description === 'string' ? description : ""}`}
+        aria-label={`${typeof title === 'string' ? title : "Upload file"}. ${typeof finalDescription === 'string' ? finalDescription : ""}`}
         data-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
         aria-dropeffect="copy"
@@ -127,7 +133,7 @@ export function DropZone({
             {title}
           </p>
           <p className="text-sm text-text-4 font-medium italic opacity-70">
-            {description}
+            {finalDescription}
           </p>
         </div>
 
