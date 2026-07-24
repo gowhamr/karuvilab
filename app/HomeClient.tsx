@@ -278,7 +278,7 @@ export default function HomeClient() {
     const randomIndex = Math.floor(Math.random() * ALL_TOOLS.length);
     const tool = ALL_TOOLS[randomIndex];
     if (tool) {
-      router.push(`/${tool.href}`);
+      router.push(tool.href);
     }
   }, [router]);
 
@@ -300,7 +300,7 @@ export default function HomeClient() {
             return (
               <Link 
                 key={cat.id} 
-                href={`/${cat.href}`} 
+                href={cat.href} 
                 className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-card min-h-11"
               >
                 <Card 
@@ -387,7 +387,7 @@ export default function HomeClient() {
                 {recentlyAddedTools.map(tool => (
                   <Link 
                     key={tool.id} 
-                    href={`/${tool.href}`}
+                    href={tool.href}
                     className="flex items-center justify-between text-xs text-text-secondary hover:text-primary transition-colors py-1 min-h-11 sm:min-h-0"
                   >
                     <span className="font-semibold truncate max-w-[130px]">{tool.name}</span>
@@ -414,7 +414,7 @@ export default function HomeClient() {
                 {localMostUsedTools.map(tool => (
                   <Link 
                     key={tool.id} 
-                    href={`/${tool.href}`}
+                    href={tool.href}
                     className="flex items-center justify-between text-xs text-text-secondary hover:text-primary transition-colors py-1 min-h-11 sm:min-h-0"
                   >
                     <span className="font-semibold truncate max-w-[140px]">{tool.name}</span>

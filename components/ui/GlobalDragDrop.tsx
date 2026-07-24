@@ -212,7 +212,7 @@ export function GlobalDragDrop() {
     useWorkflowStore.getState().routeToTarget(tool.id, items);
 
     // 3. Navigate
-    router.push("/" + tool.href);
+    router.push(tool.href);
     
     // 4. Reset state
     setShowModal(false);

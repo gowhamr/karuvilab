@@ -454,7 +454,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                       {suggestions.map(tool => (
                         <Link
                           key={tool.id}
-                          href={`/${tool.href}`}
+                          href={tool.href}
                           className="flex items-center gap-4 p-4 bg-surface-elevated border border-border shadow-sm rounded-2xl hover:border-blue/50 hover:bg-blue/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
                         >
                           <div className="w-10 h-10 rounded-xl bg-surface flex items-center justify-center shrink-0">

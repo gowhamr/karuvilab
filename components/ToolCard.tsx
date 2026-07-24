@@ -36,7 +36,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
   return (
     <div className="relative group w-full h-full">
       <Link
-        href={`/${tool.href}`}
+        href={tool.href}
         aria-label={tool.name}
         className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-card"
       >

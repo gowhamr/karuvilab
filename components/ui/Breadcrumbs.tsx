@@ -16,7 +16,7 @@ export function Breadcrumbs({ category, title }: BreadcrumbsProps) {
       {category && (
         <>
           <span aria-hidden="true">/</span>
-          <Link href={`/${category.href}`} className="hover:text-blue transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-sm">{category.label}</Link>
+          <Link href={category.href} className="hover:text-blue transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-sm">{category.label}</Link>
         </>
       )}
     </nav>

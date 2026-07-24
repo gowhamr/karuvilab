@@ -27,7 +27,7 @@ export function WorkflowSuggestions() {
             transition={{ delay: idx * 0.1 }}
           >
             <Link 
-              href={`/${tool.href}`}
+              href={tool.href}
               onClick={() => {
                 useWorkflowStore.getState().routeToTarget(tool.id);
               }}

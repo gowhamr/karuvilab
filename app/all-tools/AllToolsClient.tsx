@@ -177,7 +177,7 @@ export default function AllToolsClient() {
       ) : (
         <div className="space-y-2 max-w-4xl mx-auto">
           {sortedTools.map(tool => (
-            <Link key={tool.id} href={`/${tool.href}`}>
+            <Link key={tool.id} href={tool.href}>
               <Card variant="interactive" padding="sm" className="flex items-center justify-between gap-4 mb-2 group">
                 <div className="flex items-center gap-3.5 min-w-0">
                   <div className="w-10 h-10 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">

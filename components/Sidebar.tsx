@@ -175,8 +175,8 @@ const CategoriesList = memo(function CategoriesList({
       {CATEGORIES.map((cat) => (
         <SidebarItem
           key={cat.id}
-          href={`/${cat.href}`}
-          isActive={pathname.startsWith(`/${cat.href.replace(/\/$/, "")}`)}
+          href={cat.href}
+          isActive={pathname.startsWith(cat.href.replace(/\/$/, ""))}
           onClick={setIsOpen}
           label={cat.label}
           color={cat.color}
@@ -294,8 +294,8 @@ const SidebarContent = memo(function SidebarContent({
               {visibleFavorites.map(tool => (
                 <SidebarItem
                   key={tool.id}
-                  href={`/${tool.href}`}
-                  isActive={pathname === `/${tool.href}` || pathname.startsWith(`/${tool.href}/`)}
+                  href={tool.href}
+                  isActive={pathname === tool.href || pathname.startsWith(`${tool.href}/`.replace(/\/\//g, '/'))}
                   onClick={setIsOpen}
                   label={tool.name}
                   toolId={tool.id}
@@ -331,8 +331,8 @@ const SidebarContent = memo(function SidebarContent({
               {recent.map(tool => (
                 <SidebarItem
                   key={tool.id}
-                  href={`/${tool.href}`}
-                  isActive={pathname === `/${tool.href}` || pathname.startsWith(`/${tool.href}/`)}
+                  href={tool.href}
+                  isActive={pathname === tool.href || pathname.startsWith(`${tool.href}/`.replace(/\/\//g, '/'))}
                   onClick={setIsOpen}
                   label={tool.name}
                   toolId={tool.id}

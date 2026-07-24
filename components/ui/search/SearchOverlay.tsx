@@ -101,7 +101,7 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
         
         const tool = ALL_TOOLS.find((t: any) => t.id === toolId || t.href.includes(toolId));
         if (tool) {
-           router.push(`/${tool.href}`);
+           router.push(tool.href);
            onClose();
         }
       }, 500);
@@ -136,7 +136,7 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
     if (tool) {
       if (query.trim()) addRecentQuery(query);
       incrementToolVisit(toolId);
-      router.push(`/${tool.href}`);
+      router.push(tool.href);
       onClose();
     }
   };

@@ -44,7 +44,7 @@ export function QuickActionsDashboard({
       if (suggestion) {
         const tool = ALL_TOOLS.find(t => t.id === suggestion.toolId || t.href.includes(suggestion.toolId));
         if (tool) {
-          router.push(`/${tool.href}`);
+          router.push(tool.href);
           return;
         }
       }
@@ -101,7 +101,7 @@ export function QuickActionsDashboard({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
           {starterTools.map(tool => (
-            <Link key={tool.id} href={`/${tool.href}`} passHref legacyBehavior>
+            <Link key={tool.id} href={tool.href} passHref legacyBehavior>
               <Card
                 variant="interactive"
                 padding="sm"
