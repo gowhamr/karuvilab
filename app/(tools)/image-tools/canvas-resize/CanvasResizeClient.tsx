@@ -99,7 +99,7 @@ export default function CanvasResizeClient() {
     setError(null);
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    
     img.onload = () => {
       imageRef.current = img;
       setOrigW(img.naturalWidth);

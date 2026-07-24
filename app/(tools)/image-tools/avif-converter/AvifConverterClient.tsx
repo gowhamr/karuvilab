@@ -81,11 +81,11 @@ export default function AvifConverterClient() {
         setIsFallback(fallback);
         setResultBlob(blob);
 
-        if (resultUrl) {
-          revokeUrl(resultUrl);
-        }
         const newUrl = createUrl(blob);
-        setResultUrl(newUrl);
+        setResultUrl(prev => {
+          if (prev) revokeUrl(prev);
+          return newUrl;
+        });
       } catch (err: unknown) {
         console.error("AVIF conversion error:", err);
         setError(formatError(err));
@@ -93,7 +93,7 @@ export default function AvifConverterClient() {
         setIsProcessing(false);
       }
     },
-    [createUrl, revokeUrl, resultUrl, setIsProcessing]
+    [createUrl, revokeUrl, setIsProcessing]
   );
 
   // Handle image upload via DropZone
@@ -106,14 +106,10 @@ export default function AvifConverterClient() {
       setIsProcessing(true);
 
       try {
-        if (originalUrl) revokeUrl(originalUrl);
-        if (resultUrl) revokeUrl(resultUrl);
-
-        const origUrl = createUrl(selectedFile);
-        setOriginalUrl(origUrl);
+        setOriginalUrl(prev => { if (prev) revokeUrl(prev); return createUrl(selectedFile); });
         setFile(selectedFile);
         setResultBlob(null);
-        setResultUrl(null);
+        setResultUrl(prev => { if (prev) revokeUrl(prev); return null; });
         setIsFallback(false);
 
         // Load image using loadAny from format-utils
@@ -132,7 +128,7 @@ export default function AvifConverterClient() {
         setIsProcessing(false);
       }
     },
-    [createUrl, revokeUrl, originalUrl, resultUrl, quality, processAvifConversion, setIsProcessing]
+    [createUrl, revokeUrl, quality, processAvifConversion, setIsProcessing]
   );
 
   // Debounced re-conversion on quality changes when an image source exists

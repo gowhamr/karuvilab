@@ -95,7 +95,7 @@ export default function AdvancedRotateClient() {
     setError(null);
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    
     img.onload = () => {
       setImageElement(img);
       setOrigWidth(img.naturalWidth);

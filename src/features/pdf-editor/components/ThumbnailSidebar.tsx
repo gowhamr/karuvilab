@@ -115,7 +115,7 @@ function ThumbnailItem({ pdfDoc, page, isActive, onClick, scrollContainer }: Thu
     <div 
       ref={setNodeRef}
       style={style}
-      className={`relative w-[120px] mb-4 cursor-pointer transition-all border-2 rounded-xl bg-bg group ${isActive ? "border-blue shadow-md" : "border-transparent hover:border-border"} ${isDragging ? "opacity-50" : ""}`}
+      className={`relative w-[120px] shrink-0 sm:mb-4 cursor-pointer transition-all border-2 rounded-xl bg-bg group ${isActive ? "border-blue shadow-md" : "border-transparent hover:border-border"} ${isDragging ? "opacity-50" : ""}`}
       onClick={onClick}
     >
       <div 
@@ -178,12 +178,12 @@ export default function ThumbnailSidebar({ pdfDoc, currentPageId, onSelectPage }
   };
 
   return (
-    <div className="w-40 border-r border-border bg-surface-2 flex flex-col h-full z-sidebar select-none">
-      <div className="p-4 border-b border-border bg-bg shadow-sm z-content flex items-center justify-between">
+    <div className="w-full sm:w-40 h-32 sm:h-full border-b sm:border-b-0 sm:border-r border-border bg-surface-2 flex flex-col sm:flex-col z-sidebar select-none shrink-0">
+      <div className="p-2 sm:p-4 border-b border-border bg-bg shadow-sm z-content flex items-center justify-between">
         <h3 className="font-bold text-xs text-text-2 uppercase tracking-wider text-center">Pages</h3>
         <span className="text-[10px] font-bold text-text-4 bg-surface px-1.5 py-0.5 rounded-md">{activePages.length}</span>
       </div>
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 custom-scrollbar flex flex-col items-center">
+      <div ref={scrollRef} className="flex-1 overflow-x-auto sm:overflow-x-hidden overflow-y-hidden sm:overflow-y-auto p-2 sm:p-4 custom-scrollbar flex flex-row sm:flex-col items-center gap-4 sm:gap-0">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={activePages.map(p => p.id)} strategy={verticalListSortingStrategy}>
             {activePages.map((page) => (

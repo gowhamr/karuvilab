@@ -178,24 +178,24 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
   }
 
   return (
-    <div className="flex h-[calc(100vh-140px)] min-h-[600px] border border-border rounded-4xl overflow-hidden bg-bg shadow-sm">
+    <div className="flex flex-col sm:flex-row h-[calc(100vh-140px)] min-h-[600px] border border-border rounded-4xl overflow-hidden bg-bg shadow-sm">
       <ThumbnailSidebar 
         pdfDoc={pdfDoc}
         currentPageId={currentPageId} 
         onSelectPage={setCurrentPageId}
       />
       
-      <div className="flex-1 bg-surface-2 relative flex flex-col">
+      <div className="flex-1 bg-surface-2 relative flex flex-col min-w-0">
         {/* Top toolbar */}
-        <div className="h-14 border-b border-border bg-surface flex items-center justify-between px-4 z-content relative">
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-bold text-text-2 truncate max-w-[200px] sm:max-w-[300px]">{file.name}</span>
-            <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-4 uppercase tracking-widest">
+        <div className="border-b border-border bg-surface flex flex-col sm:flex-row items-center justify-between p-2 sm:px-4 sm:h-14 z-content relative gap-2 sm:gap-0">
+          <div className="flex items-center justify-between w-full sm:w-auto gap-2 sm:gap-4">
+            <span className="text-sm font-bold text-text-2 truncate max-w-[150px] sm:max-w-[300px]">{file.name}</span>
+            <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-4 uppercase tracking-widest shrink-0">
               Page {displayIndex} / {numActivePages}
             </span>
           </div>
           
-          <div className="flex items-center gap-2 bg-bg p-1 rounded-xl border border-border">
+          <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 bg-bg p-1 rounded-xl border border-border w-full sm:w-auto">
             {[
               { id: 'select', icon: MousePointer2, label: 'Select' },
               { id: 'text', icon: Type, label: 'Text' },
@@ -232,11 +232,11 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
             className="hidden" 
           />
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2 w-full sm:w-auto">
             <button 
               onClick={handleExport}
               disabled={progressState.isProcessing}
-              className="flex items-center gap-2 px-4 py-2 bg-blue text-white rounded-xl text-sm font-bold shadow-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:scale-100"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-blue text-white rounded-xl text-sm font-bold shadow-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:scale-100"
             >
               <Download className="w-4 h-4" />
               <span>{progressState.isProcessing ? "Exporting..." : "Export"}</span>

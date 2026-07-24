@@ -102,7 +102,7 @@ export default function AspectRatioConverterClient() {
     setOriginalUrl(url);
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    
     img.onload = () => {
       setOriginalImg(img);
       setOrigDimensions({ width: img.naturalWidth, height: img.naturalHeight });

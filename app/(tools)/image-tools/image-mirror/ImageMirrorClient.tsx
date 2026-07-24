@@ -82,7 +82,7 @@ export default function ImageMirrorClient() {
       setMirroredUrl(null);
 
       const img = new Image();
-      img.crossOrigin = "anonymous";
+      
       img.onload = () => {
         imgRef.current = img;
         setDimensions({ width: img.naturalWidth, height: img.naturalHeight });

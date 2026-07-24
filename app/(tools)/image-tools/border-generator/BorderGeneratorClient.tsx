@@ -82,7 +82,7 @@ export default function BorderGeneratorClient() {
     setOriginalUrl(url);
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    
     img.onload = () => {
       setImageElement(img);
       setOrigDimensions({ width: img.naturalWidth, height: img.naturalHeight });

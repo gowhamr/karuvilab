@@ -83,7 +83,7 @@ export default function ImagePaddingClient() {
     setError(null);
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    
     img.onload = () => {
       setOrigW(img.naturalWidth);
       setOrigH(img.naturalHeight);
@@ -110,7 +110,7 @@ export default function ImagePaddingClient() {
 
     try {
       const img = new Image();
-      img.crossOrigin = "anonymous";
+      
       await new Promise<void>((resolve, reject) => {
         img.onload = () => resolve();
         img.onerror = () => reject(new Error("Failed to load source image into canvas"));

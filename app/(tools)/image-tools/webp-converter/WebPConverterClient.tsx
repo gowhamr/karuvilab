@@ -238,12 +238,12 @@ export default function WebPConverterClient() {
 
             {/* Quality Slider & Presets */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <label className="text-sm font-medium text-text-1 flex items-center gap-2">
                   <Sliders className="w-4 h-4 text-blue-500" />
                   WebP Quality: <span className="text-blue-500 font-bold">{quality}%</span>
                 </label>
-                <div className="flex items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-1.5">
                   {QUALITY_PRESETS.map((preset) => (
                     <button
                       key={preset.value}
