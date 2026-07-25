@@ -152,6 +152,7 @@
 - [PPF Calculator](https://karuvilab.com//calculators/ppf-calculator/): Public Provident Fund maturity & interest
 - [Private Key Checker](https://karuvilab.com//security-tools/private-key-checker/): Validate private key structures and format compatibility.
 - [Public Key Inspector](https://karuvilab.com//security-tools/public-key-inspector/): Inspect and display properties of public keys.
+- [QA Workbench](https://karuvilab.com//developer-tools/qa-workbench/): Unified testing suite for developers: API requests, Regex, Text Diff, JSON formatting, and Mock Data.
 - [QR Code Generator](https://karuvilab.com//utilities/qrcode/): Make QR codes for URLs, text, Wi-Fi
 - [Recurring Deposit (RD)](https://karuvilab.com//calculators/rd-calculator/): RD maturity and interest calculation
 - [Reaction Time Test](https://karuvilab.com//break-time-tools/reaction-time/): Test your reflexes and measure your reaction speed in milliseconds.

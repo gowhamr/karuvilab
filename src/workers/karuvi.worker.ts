@@ -503,6 +503,7 @@ const api: Partial<WorkerAPI> = {
       cropBox?: { x: number; y: number; width: number; height: number };
       targetSize?: [number, number];
       scaleToFit?: boolean;
+      orientation?: 'portrait' | 'landscape' | 'auto';
       margins?: { top: number; right: number; bottom: number; left: number };
     },
     onProgress?: any
@@ -549,7 +550,20 @@ const api: Partial<WorkerAPI> = {
         const [embeddedPage] = await newDoc.embedPdf(file, [i]);
         
         if (options.action === 'resize' && options.targetSize) {
-          const [newW, newH] = options.targetSize;
+          let [newW, newH] = options.targetSize;
+          
+          if (options.orientation === 'landscape') {
+            if (newW < newH) [newW, newH] = [newH, newW];
+          } else if (options.orientation === 'portrait') {
+            if (newW > newH) [newW, newH] = [newH, newW];
+          } else if (options.orientation === 'auto' || !options.orientation) {
+            const isOldLandscape = oldW > oldH;
+            const isNewLandscape = newW > newH;
+            if (isOldLandscape !== isNewLandscape) {
+              [newW, newH] = [newH, newW];
+            }
+          }
+
           const newPage = newDoc.addPage([newW, newH]);
           
           if (options.scaleToFit) {

@@ -14,7 +14,7 @@ export interface ToolSkeletonProps {
 
 export function ToolSkeleton({ 
   variant = "default",
-  delayMs = 150 
+  delayMs = 0 
 }: ToolSkeletonProps) {
   const [show, setShow] = useState(delayMs === 0);
 

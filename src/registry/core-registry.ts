@@ -3547,6 +3547,34 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "qa-workbench",
+    "name": "QA Workbench",
+    "desc": "Unified testing suite for developers: API requests, Regex, Text Diff, JSON formatting, and Mock Data.",
+    "href": "/developer-tools/qa-workbench/",
+    "category": "developer",
+    "icon": null,
+    "color": null,
+    "featured": true,
+    "popular": false,
+    "status": "beta",
+    "lastAdded": "2026-07-25",
+    "keywords": [
+      "qa",
+      "workbench",
+      "testing",
+      "regex",
+      "diff",
+      "json",
+      "mock data",
+      "api tester"
+    ],
+    "input": "text",
+    "output": "text",
+    "related": [],
+    "subCategory": "Developer",
+    "requiresNetwork": false
+  },
+  {
     "id": "qrcode",
     "name": "QR Code Generator",
     "desc": "Make QR codes for URLs, text, Wi-Fi",

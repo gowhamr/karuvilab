@@ -132,7 +132,7 @@ export function DropZone({
           <p className="font-bold text-lg text-text-2 group-hover:text-blue transition-colors">
             {title}
           </p>
-          <p className="text-sm text-text-4 font-medium italic opacity-70">
+          <p className="text-sm text-text-4 font-medium italic">
             {finalDescription}
           </p>
         </div>

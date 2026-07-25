@@ -53,7 +53,7 @@ export function KVLogo({
           alt="KaruviLab Logo"
           width={pixelSize}
           height={pixelSize}
-          className="object-contain"
+          className="object-contain w-full h-full"
           priority={loading === "eager"}
         />
         
