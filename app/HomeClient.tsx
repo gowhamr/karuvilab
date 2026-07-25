@@ -252,36 +252,6 @@ export default function HomeClient() {
     return counts;
   }, []);
 
-  const recentlyAddedTools = useMemo(() => {
-    return [...ALL_TOOLS]
-      .filter(t => t.lastAdded)
-      .sort((a, b) => new Date(b.lastAdded!).getTime() - new Date(a.lastAdded!).getTime())
-      .slice(0, 3);
-  }, []);
-
-  const localMostUsedTools = useMemo(() => {
-    const sorted = Object.entries(popularToolsMap)
-      .filter(([, count]) => count > 0)
-      .sort((a, b) => b[1] - a[1])
-      .map(([id]) => ALL_TOOLS.find(t => t.id === id))
-      .filter(Boolean) as ToolEntry[];
-      
-    if (sorted.length > 0) return sorted.slice(0, 3);
-    return ALL_TOOLS.filter(t => t.popular).slice(0, 3);
-  }, [popularToolsMap]);
-
-  const recommendedTools = useMemo(() => {
-    return ALL_TOOLS.filter(t => CURATED_SUGGESTIONS.includes(t.id));
-  }, []);
-
-  const handleSurpriseMe = useCallback(() => {
-    const randomIndex = Math.floor(Math.random() * ALL_TOOLS.length);
-    const tool = ALL_TOOLS[randomIndex];
-    if (tool) {
-      router.push(tool.href);
-    }
-  }, [router]);
-
   const isReturning = hydrated && (recentTools.length > 0 || favoriteTools.length > 0);
 
   const renderCategoriesSection = (isFirstTime = false) => {
@@ -345,113 +315,7 @@ export default function HomeClient() {
     );
   };
 
-  const renderDiscoverySection = () => {
-    return (
-      <section aria-labelledby="discovery-heading" className="space-y-6">
-        <SectionHeader
-          title="Discover Something New"
-          subtitle="Interactive ways to find your next tool"
-          icon={Sparkles}
-          headingId="discovery-heading"
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Surprise Me Card */}
-          <Card variant="glass" padding="md" className="flex flex-col justify-between min-h-[185px] h-full">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-lg" aria-hidden="true">🎲</span>
-                <h3 className="text-body font-black text-text-primary">Surprise Me</h3>
-              </div>
-              <p className="text-caption text-text-secondary leading-relaxed">
-                Can't decide? Let us pick a random privacy-first tool for you to explore.
-              </p>
-            </div>
-            <Button 
-              variant="primary" 
-              size="sm" 
-              className="w-full mt-4 cursor-pointer min-h-11 flex items-center justify-center"
-              onClick={handleSurpriseMe}
-            >
-              Roll the Dice
-            </Button>
-          </Card>
 
-          {/* Recently Added Card */}
-          <Card variant="default" padding="md" className="flex flex-col justify-between min-h-[185px] h-full">
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2">
-                <span className="text-lg" aria-hidden="true">🆕</span>
-                <h3 className="text-body font-black text-text-primary">Recently Added</h3>
-              </div>
-              <div className="space-y-1.5 flex-1 mt-1">
-                {recentlyAddedTools.map(tool => (
-                  <Link 
-                    key={tool.id} 
-                    href={tool.href}
-                    className="flex items-center justify-between text-xs text-text-secondary hover:text-primary transition-colors py-1 min-h-11 sm:min-h-0"
-                  >
-                    <span className="font-semibold truncate max-w-[130px]">{tool.name}</span>
-                    <span className="text-[10px] text-text-muted">{tool.lastAdded}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <Link href="/all-tools?sort=newest" passHref legacyBehavior>
-              <Button variant="ghost" size="sm" className="w-full mt-4 text-[11px] h-[44px] min-h-11 px-3 font-bold uppercase tracking-wider cursor-pointer flex items-center justify-center">
-                View New Releases
-              </Button>
-            </Link>
-          </Card>
-
-          {/* Most Used Card */}
-          <Card variant="default" padding="md" className="flex flex-col justify-between min-h-[185px] h-full">
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2">
-                <span className="text-lg" aria-hidden="true">⭐</span>
-                <h3 className="text-body font-black text-text-primary">Most Used</h3>
-              </div>
-              <div className="space-y-1.5 flex-1 mt-1">
-                {localMostUsedTools.map(tool => (
-                  <Link 
-                    key={tool.id} 
-                    href={tool.href}
-                    className="flex items-center justify-between text-xs text-text-secondary hover:text-primary transition-colors py-1 min-h-11 sm:min-h-0"
-                  >
-                    <span className="font-semibold truncate max-w-[140px]">{tool.name}</span>
-                    <Badge variant="neutral" size="sm" className="bg-surface-elevated/40 text-[9px] py-0 px-1.5 border-0">
-                      {hydrated && popularToolsMap[tool.id] ? `${popularToolsMap[tool.id]} visits` : 'Popular'}
-                    </Badge>
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <Link href="/all-tools?sort=popular" passHref legacyBehavior>
-              <Button variant="ghost" size="sm" className="w-full mt-4 text-[11px] h-[44px] min-h-11 px-3 font-bold uppercase tracking-wider cursor-pointer flex items-center justify-center">
-                View Popular
-              </Button>
-            </Link>
-          </Card>
-
-          {/* Trending Tools Card - Deferred */}
-          <Card variant="default" padding="md" className="flex flex-col justify-between min-h-[185px] h-full opacity-75 border-dashed border-border/80">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-text-secondary">
-                <span className="text-lg opacity-60" aria-hidden="true">🔥</span>
-                <h3 className="text-body font-black text-text-secondary">Trending Tools</h3>
-              </div>
-              <p className="text-[10px] text-text-muted leading-relaxed">
-                <span className="font-bold text-text-secondary block mb-0.5">Status: Deferred</span>
-                Local-first architecture operates without server tracking. Global trending metrics are omitted by design to protect your absolute privacy.
-              </p>
-            </div>
-            <div className="text-[9px] font-bold text-text-muted uppercase tracking-widest text-center mt-3">
-              Privacy Protected
-            </div>
-          </Card>
-        </div>
-      </section>
-    );
-  };
 
   const renderPersonalSection = () => {
     if (hydrated && favoriteIds.length > 0) {
@@ -755,8 +619,7 @@ export default function HomeClient() {
                         {/* Popular Categories */}
                         {renderCategoriesSection(false)}
 
-                        {/* Discover Something New */}
-                        {renderDiscoverySection()}
+
 
                         {/* Personal Section */}
                         {renderPersonalSection()}
@@ -818,8 +681,7 @@ export default function HomeClient() {
                           </Link>
                         </m.div>
 
-                        {/* Discover Something New */}
-                        {renderDiscoverySection()}
+
 
                         {/* Footer Transition */}
                         {renderFooterTransition()}

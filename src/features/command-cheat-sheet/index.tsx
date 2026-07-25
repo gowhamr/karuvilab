@@ -17,11 +17,12 @@ const COMMANDS: Command[] = [
   { category: 'Git', cmd: 'git init', desc: 'Initialize a new local repository' },
   { category: 'Git', cmd: 'git clone <url>', desc: 'Clone a repository from a URL' },
   { category: 'Git', cmd: 'git add .', desc: 'Add all current changes to the staging area' },
-  { category: 'Git', cmd: 'git commit -m "<message>"', desc: 'Commit staged changes with a message' },
+  { category: 'Git', cmd: 'git commit -m "<msg>"', desc: 'Commit staged changes with a message' },
   { category: 'Git', cmd: 'git push origin <branch>', desc: 'Push local commits to a remote branch' },
   { category: 'Git', cmd: 'git pull', desc: 'Fetch and merge changes from remote' },
   { category: 'Git', cmd: 'git stash', desc: 'Stash changes in a dirty working directory' },
   { category: 'Git', cmd: 'git log --oneline', desc: 'View commit history in one line' },
+  { category: 'Git', cmd: 'git rebase -i HEAD~N', desc: 'Interactively rebase the last N commits' },
 
   // Linux
   { category: 'Linux', cmd: 'ls -la', desc: 'List all files with details and hidden files' },
@@ -43,6 +44,35 @@ const COMMANDS: Command[] = [
   { category: 'Windows', cmd: 'sfc /scannow', desc: 'Scan and repair system files' },
   { category: 'Windows', cmd: 'gpupdate /force', desc: 'Force update of Group Policy settings' },
   { category: 'Windows', cmd: 'dir /ah', desc: 'List all files including hidden ones' },
+
+  // Node / npm
+  { category: 'Node/npm', cmd: 'npm init -y', desc: 'Initialize a new package.json' },
+  { category: 'Node/npm', cmd: 'npm install <pkg>', desc: 'Install a package' },
+  { category: 'Node/npm', cmd: 'npm i -D <pkg>', desc: 'Install a package as a dev dependency' },
+  { category: 'Node/npm', cmd: 'npx <pkg>', desc: 'Execute a package binary' },
+  { category: 'Node/npm', cmd: 'npm run <script>', desc: 'Run a script from package.json' },
+  { category: 'Node/npm', cmd: 'npm cache clean --force', desc: 'Clear the npm cache completely' },
+
+  // Network / cURL
+  { category: 'Network', cmd: 'curl -O <url>', desc: 'Download a file and save it with its original name' },
+  { category: 'Network', cmd: 'curl -I <url>', desc: 'Fetch only the HTTP headers' },
+  { category: 'Network', cmd: 'curl -X POST -d \'<data>\' <url>', desc: 'Send a POST request with data' },
+  { category: 'Network', cmd: 'ping <host>', desc: 'Test reachability of a host' },
+  { category: 'Network', cmd: 'traceroute <host>', desc: 'Trace the network path to a host' },
+
+  // Kubernetes
+  { category: 'Kubernetes', cmd: 'kubectl get pods', desc: 'List all pods in the current namespace' },
+  { category: 'Kubernetes', cmd: 'kubectl logs <pod>', desc: 'Print the logs for a container in a pod' },
+  { category: 'Kubernetes', cmd: 'kubectl apply -f <file.yaml>', desc: 'Apply a configuration to a resource' },
+  { category: 'Kubernetes', cmd: 'kubectl describe pod <pod>', desc: 'Show detailed information about a pod' },
+  { category: 'Kubernetes', cmd: 'kubectl port-forward <pod> <local>:<remote>', desc: 'Forward local port to a pod' },
+
+  // Python
+  { category: 'Python', cmd: 'python -m venv venv', desc: 'Create a virtual environment' },
+  { category: 'Python', cmd: 'source venv/bin/activate', desc: 'Activate virtual environment (Linux/Mac)' },
+  { category: 'Python', cmd: 'venv\\Scripts\\activate', desc: 'Activate virtual environment (Windows)' },
+  { category: 'Python', cmd: 'pip install -r reqs.txt', desc: 'Install packages from a requirements file' },
+  { category: 'Python', cmd: 'pip freeze > reqs.txt', desc: 'Save installed packages to a requirements file' },
 
   // SSH
   { category: 'SSH', cmd: 'ssh <user>@<host>', desc: 'Connect to a remote machine via SSH' },
@@ -168,34 +198,38 @@ export default function CommandCheatSheet() {
         </div>
       </div>
 
-      <div className="grid gap-4">
+      <div>
         <AnimatePresence mode="popLayout">
           {filteredCommands.length > 0 ? (
-            filteredCommands.map((command, i) => (
-              <m.div
-                key={command.cmd}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ delay: i * 0.02 }}
-                className="group bg-surface/50 border border-border rounded-xl p-4 hover:border-blue/50 transition-all flex items-center justify-between"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-blue">
-                      {command.category}
-                    </span>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 items-stretch">
+              {filteredCommands.map((command, i) => (
+                <m.div
+                  key={command.cmd}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: Math.min(i, 20) * 0.02 }}
+                  className="group bg-surface/50 border border-border rounded-xl p-4 hover:border-blue/50 transition-all flex flex-col justify-between gap-4 h-full"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-md bg-blue/10 text-[10px] font-bold uppercase tracking-wider text-blue">
+                        {command.category}
+                      </span>
+                    </div>
+                    <code className="text-[15px] sm:text-base font-mono text-text block group-hover:text-blue transition-colors break-words">
+                      {command.cmd}
+                    </code>
                   </div>
-                  <code className="text-lg font-mono text-text block group-hover:text-blue transition-colors">
-                    {command.cmd}
-                  </code>
-                  <p className="text-sm text-text-4">
-                    {command.desc}
-                  </p>
-                </div>
-                <CopyButton text={command.cmd} className="flex-shrink-0" />
-              </m.div>
-            ))
+                  <div className="flex items-end justify-between gap-3 mt-auto pt-2 border-t border-border/50">
+                    <p className="text-sm text-text-4 leading-snug">
+                      {command.desc}
+                    </p>
+                    <CopyButton text={command.cmd} className="flex-shrink-0" />
+                  </div>
+                </m.div>
+              ))}
+            </div>
           ) : (
             <m.div 
               initial={{ opacity: 0 }}
@@ -214,3 +248,4 @@ export default function CommandCheatSheet() {
     </div>
   );
 }
+
