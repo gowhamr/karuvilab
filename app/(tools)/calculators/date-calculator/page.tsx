@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolInfoSection } from "@/components/ui/ToolInfoSection";
 import { generateToolMetadata } from "@/src/lib/seo";
 import DateCalculatorClientWrapper from "./DateCalculatorClientWrapper";
 
@@ -43,6 +44,36 @@ export default function DateCalculator() {
       }}
     >
       <DateCalculatorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-date-math"
+          title="How it Works: The Epoch Timestamp"
+          preview="Learn how computers store dates internally as a single, massive number."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When a computer looks at the date "October 4th, 2026", it doesn't see words or calendar pages. It sees a single integer: <code>1791110400000</code>.
+            </p>
+            <h3>The Unix Epoch</h3>
+            <p>
+              To make date math fast and uniform, the computer science industry agreed on a standard called the <strong>Unix Epoch</strong>. Every date is stored simply as the number of milliseconds that have passed since Midnight on January 1st, 1970 (UTC).
+            </p>
+            <p>
+              Because every date is just a number, finding the exact number of days between two dates becomes incredibly easy for a CPU:
+            </p>
+            <ol>
+              <li>Convert Date A to milliseconds (e.g., <code>1500000000000</code>).</li>
+              <li>Convert Date B to milliseconds (e.g., <code>1600000000000</code>).</li>
+              <li>Subtract A from B (<code>100000000000</code>).</li>
+              <li>Divide the result by the number of milliseconds in a day (<code>1000 * 60 * 60 * 24 = 86400000</code>).</li>
+            </ol>
+            <p>
+              This absolute time approach inherently bypasses all the complex rules of leap years and varying month lengths, giving you a perfect answer every time.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }
