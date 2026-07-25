@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
@@ -13,10 +14,27 @@ interface ToolInfoSectionProps {
   children: React.ReactNode;
 }
 
-export function ToolInfoSection({ id, title, preview, isOpen = false, onToggle, children }: ToolInfoSectionProps) {
+export function ToolInfoSection({ id, title, preview, isOpen: controlledIsOpen, onToggle, children }: ToolInfoSectionProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(controlledIsOpen || false);
+  
+  const isControlled = controlledIsOpen !== undefined && onToggle !== undefined;
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  useEffect(() => {
+    if (controlledIsOpen !== undefined) {
+      setInternalIsOpen(controlledIsOpen);
+    }
+  }, [controlledIsOpen]);
+
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
-    onToggle?.(!isOpen);
+    const newState = !isOpen;
+    
+    if (isControlled) {
+      onToggle?.(newState);
+    } else {
+      setInternalIsOpen(newState);
+    }
   };
 
   return (
