@@ -42,9 +42,6 @@
 - [Compress PDF](https://karuvilab.com//pdf-tools/compress-pdf/): Reduce PDF file size
 - [Compress](https://karuvilab.com//image-tools/compress/): Bundle files and folders into optimized ZIP archives to save storage space.
 - [Contrast Checker](https://karuvilab.com//developer-tools/contrast-checker/): Verify background and foreground contrast to meet WCAG accessibility standards.
-- [Convert to A4](https://karuvilab.com//pdf-tools/convert-to-a4/): Standardize PDF pages to A4 size
-- [Convert to Legal](https://karuvilab.com//pdf-tools/convert-to-legal/): Standardize PDF pages to US Legal size
-- [Convert to Letter](https://karuvilab.com//pdf-tools/convert-to-letter/): Standardize PDF pages to US Letter size
 - [Core Banking Parser](https://karuvilab.com//developer-tools/core-banking-parser/): Parse core banking trace logs into JSON
 - [Countdown Timer](https://karuvilab.com//productivity/countdown-timer/): Set timers for upcoming milestones or deadlines to keep track of tasks.
 - [Crontab Editor](https://karuvilab.com//developer-tools/crontab-editor/): Build crontab expressions visually and translate them to plain English.
