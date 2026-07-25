@@ -87,7 +87,10 @@ export default function TdsCalculatorClient() {
                 <input
                   type="number"
                   value={amount || ''}
-                  onChange={(e) => setAmount(Number(e.target.value))}
+                  onChange={(e) => {
+                    const num = Number(e.target.value);
+                    if (num >= 0 && num <= 1000000000000) setAmount(num);
+                  }}
                   className="w-full bg-bg border border-border rounded-2xl py-4 pl-10 pr-4 font-mono text-xl text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all"
                 />
               </div>

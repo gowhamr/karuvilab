@@ -177,8 +177,13 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
                     <label className="block text-xs font-bold text-text-3 uppercase tracking-wider mb-2">{side} (pt)</label>
                     <input 
                       type="number" 
+                      min="0"
+                      max="1000"
                       value={margins[side]}
-                      onChange={(e) => setMargins(m => ({ ...m, [side]: Number(e.target.value) }))}
+                      onChange={(e) => {
+                        const val = Math.max(0, Math.min(1000, Number(e.target.value) || 0));
+                        setMargins(m => ({ ...m, [side]: val }));
+                      }}
                       className="w-full bg-surface-2 border border-border rounded-xl px-4 py-2 text-text font-medium focus:border-blue outline-none transition-colors"
                     />
                   </div>
@@ -193,8 +198,13 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
                     <label className="block text-xs font-bold text-text-3 uppercase tracking-wider mb-2">{prop} (pt)</label>
                     <input 
                       type="number" 
+                      min="0"
+                      max="10000"
                       value={cropBox[prop]}
-                      onChange={(e) => setCropBox(c => ({ ...c, [prop]: Number(e.target.value) }))}
+                      onChange={(e) => {
+                        const val = Math.max(0, Math.min(10000, Number(e.target.value) || 0));
+                        setCropBox(c => ({ ...c, [prop]: val }));
+                      }}
                       className="w-full bg-surface-2 border border-border rounded-xl px-4 py-2 text-text font-medium focus:border-blue outline-none transition-colors"
                     />
                   </div>

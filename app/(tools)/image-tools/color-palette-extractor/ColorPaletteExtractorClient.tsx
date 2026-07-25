@@ -81,8 +81,8 @@ export default function ColorPaletteExtractorClient() {
              </div>
             {palette.length > 0 && (
               <m.div className="flex flex-wrap gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                {palette.map((color) => (
-                  <div key={color} className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-border">
+                {palette.map((color, idx) => (
+                  <div key={`${color}-${idx}`} className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-border">
                     <div
                       className="w-10 h-10 rounded-md border border-border"
                       style={{ backgroundColor: color }}

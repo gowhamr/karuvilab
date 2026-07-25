@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useToast } from "@/components/ui/Toast";
 
 const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
@@ -78,6 +79,7 @@ function countStats(text: string) {
 }
 
 export default function TextUtilityClient() {
+  const { toast } = useToast();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [lastOp, setLastOp] = useState("");
@@ -113,7 +115,14 @@ export default function TextUtilityClient() {
           rows={7}
           placeholder="Type or paste your text here…"
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={e => {
+            if (e.target.value.length > 500000) {
+              toast("Text exceeds 500KB limit", "error");
+              setInput(e.target.value.slice(0, 500000));
+            } else {
+              setInput(e.target.value);
+            }
+          }}
         />
       </div>
 

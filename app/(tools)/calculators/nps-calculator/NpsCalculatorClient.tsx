@@ -95,7 +95,10 @@ export default function NpsCalculatorClient() {
                 <input
                   type="number"
                   value={monthlyInv || ''}
-                  onChange={(e) => setMonthlyInv(Number(e.target.value))}
+                  onChange={(e) => {
+                    const num = Number(e.target.value);
+                    if (num >= 0 && num <= 1000000000000) setMonthlyInv(num);
+                  }}
                   className="w-full bg-bg border border-border rounded-2xl py-3.5 pl-10 pr-4 font-mono text-lg text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all"
                 />
               </div>

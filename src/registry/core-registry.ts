@@ -3570,7 +3570,12 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": "text",
     "output": "text",
-    "related": [],
+    "related": [
+      "regex-tester",
+      "json-formatter",
+      "text-diff",
+      "fake-data-generator"
+    ],
     "subCategory": "Developer",
     "requiresNetwork": false
   },

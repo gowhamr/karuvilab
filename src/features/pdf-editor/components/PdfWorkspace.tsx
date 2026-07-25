@@ -17,6 +17,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [currentPageId, setCurrentPageId] = useState("1");
+  const [showThumbnails, setShowThumbnails] = useState(false);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   
   const initPages = useEditorStore(s => s.initPages);
@@ -183,6 +184,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
         pdfDoc={pdfDoc}
         currentPageId={currentPageId} 
         onSelectPage={setCurrentPageId}
+        className={showThumbnails ? 'flex' : 'hidden sm:flex'}
       />
       
       <div className="flex-1 bg-surface-2 relative flex flex-col min-w-0">
@@ -190,9 +192,17 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
         <div className="border-b border-border bg-surface flex flex-col sm:flex-row items-center justify-between p-2 sm:px-4 sm:h-14 z-content relative gap-2 sm:gap-0">
           <div className="flex items-center justify-between w-full sm:w-auto gap-2 sm:gap-4">
             <span className="text-sm font-bold text-text-2 truncate max-w-[150px] sm:max-w-[300px]">{file.name}</span>
-            <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-4 uppercase tracking-widest shrink-0">
-              Page {displayIndex} / {numActivePages}
-            </span>
+            <div className="flex gap-2 items-center shrink-0">
+              <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-4 uppercase tracking-widest shrink-0">
+                Page {displayIndex} / {numActivePages}
+              </span>
+              <button 
+                onClick={() => setShowThumbnails(!showThumbnails)}
+                className="sm:hidden px-2 py-1 bg-blue/10 text-blue border border-blue/20 rounded-md text-xs font-bold uppercase tracking-widest"
+              >
+                {showThumbnails ? 'Hide' : 'Pages'}
+              </button>
+            </div>
           </div>
           
           <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 bg-bg p-1 rounded-xl border border-border w-full sm:w-auto">

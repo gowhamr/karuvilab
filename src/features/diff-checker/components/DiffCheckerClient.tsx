@@ -3,6 +3,7 @@ import { useState, useMemo, useRef, useCallback } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Upload, AlignJustify, Columns, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { useToast } from "@/components/ui/Toast";
 
 type DiffLine = { type: "added" | "removed" | "equal"; text: string; lineA?: number; lineB?: number };
 
@@ -100,6 +101,16 @@ function CharDiffLine({ text, type, otherText }: { text: string; type: "added" |
 function DropArea({ id, label, value, onChange }: { id: string; label: string; value: string; onChange: (v: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
+  const { toast } = useToast();
+
+  const handleChange = useCallback((v: string) => {
+    if (v.length > 500000) {
+      toast("Text exceeds maximum 500KB limit for diffing", "error");
+      onChange(v.slice(0, 500000));
+    } else {
+      onChange(v);
+    }
+  }, [onChange, toast]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -107,9 +118,9 @@ function DropArea({ id, label, value, onChange }: { id: string; label: string; v
     const file = e.dataTransfer.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = ev => onChange(ev.target?.result as string ?? "");
+    reader.onload = ev => handleChange(ev.target?.result as string ?? "");
     reader.readAsText(file);
-  }, [onChange]);
+  }, [handleChange]);
 
   return (
     <div
@@ -132,7 +143,7 @@ function DropArea({ id, label, value, onChange }: { id: string; label: string; v
           const file = e.target.files?.[0];
           if (!file) return;
           const reader = new FileReader();
-          reader.onload = ev => onChange(ev.target?.result as string ?? "");
+          reader.onload = ev => handleChange(ev.target?.result as string ?? "");
           reader.readAsText(file);
         }} />
       </div>
@@ -146,7 +157,7 @@ function DropArea({ id, label, value, onChange }: { id: string; label: string; v
         rows={12}
         placeholder={dragging ? "Drop to load file..." : `Paste ${label.toLowerCase()} text or drop a file…`}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => handleChange(e.target.value)}
       />
     </div>
   );

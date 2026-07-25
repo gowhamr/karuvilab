@@ -152,9 +152,10 @@ interface ThumbnailSidebarProps {
   pdfDoc: any;
   currentPageId: string;
   onSelectPage: (id: string) => void;
+  className?: string;
 }
 
-export default function ThumbnailSidebar({ pdfDoc, currentPageId, onSelectPage }: ThumbnailSidebarProps) {
+export default function ThumbnailSidebar({ pdfDoc, currentPageId, onSelectPage, className = '' }: ThumbnailSidebarProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollEl, setScrollEl] = useState<HTMLElement | null>(null);
   const pages = useEditorStore(s => s.pages);
@@ -178,7 +179,7 @@ export default function ThumbnailSidebar({ pdfDoc, currentPageId, onSelectPage }
   };
 
   return (
-    <div className="w-full sm:w-40 h-32 sm:h-full border-b sm:border-b-0 sm:border-r border-border bg-surface-2 flex flex-col sm:flex-col z-sidebar select-none shrink-0">
+    <div className={`w-full sm:w-40 h-32 sm:h-full border-b sm:border-b-0 sm:border-r border-border bg-surface-2 flex flex-col sm:flex-col z-sidebar select-none shrink-0 ${className}`}>
       <div className="p-2 sm:p-4 border-b border-border bg-bg shadow-sm z-content flex items-center justify-between">
         <h3 className="font-bold text-xs text-text-2 uppercase tracking-wider text-center">Pages</h3>
         <span className="text-[10px] font-bold text-text-4 bg-surface px-1.5 py-0.5 rounded-md">{activePages.length}</span>

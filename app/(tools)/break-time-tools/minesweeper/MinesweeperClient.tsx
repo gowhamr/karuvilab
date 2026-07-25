@@ -88,6 +88,7 @@ export default function MinesweeperClient() {
   const [board, setBoard] = useState<Cell[][]>([]);
   const [minesGenerated, setMinesGenerated] = useState(false);
   const [gameState, setGameState] = useState<"idle" | "playing" | "won" | "lost">("idle");
+  const [isProcessing, setIsProcessing] = useState(false);
   const [flagMode, setFlagMode] = useState(false); // Mobile flag placement toggle
   const [flagsPlaced, setFlagsPlaced] = useState(0);
 
@@ -183,11 +184,20 @@ export default function MinesweeperClient() {
   // (moved outside component to avoid react-hooks/purity lint on Math.random)
 
   // Reveal flood fill
-  const revealCell = (r: number, c: number, currentBoard: Cell[][]) => {
+  const revealCell = async (r: number, c: number, currentBoard: Cell[][]) => {
     const stack: [number, number][] = [[r, c]];
     const updated = currentBoard.map(row => row.map(cell => ({ ...cell })));
+    let iterations = 0;
 
     while (stack.length > 0) {
+      if (++iterations % 50 === 0) {
+        // Yield to main thread to prevent UI freezing
+        if (typeof (globalThis as any).scheduler !== 'undefined' && (globalThis as any).scheduler.yield) {
+          await (globalThis as any).scheduler.yield();
+        } else {
+          await new Promise(res => setTimeout(res, 0));
+        }
+      }
       const [currR, currC] = stack.pop()!;
       const cell = updated[currR]![currC]!;
       if (cell.isRevealed || cell.isFlagged) continue;
@@ -214,8 +224,8 @@ export default function MinesweeperClient() {
   };
 
   // Click handler
-  const handleCellClick = (r: number, c: number) => {
-    if (gameState === "won" || gameState === "lost") return;
+  const handleCellClick = async (r: number, c: number) => {
+    if (gameState === "won" || gameState === "lost" || isProcessing) return;
     const cell = board[r]![c]!;
     if (cell.isRevealed) return;
 
@@ -252,7 +262,9 @@ export default function MinesweeperClient() {
     }
 
     // Reveal cells
-    const revealedBoard = revealCell(r, c, activeBoard);
+    setIsProcessing(true);
+    const revealedBoard = await revealCell(r, c, activeBoard);
+    setIsProcessing(false);
 
     // Check win condition
     let revealedCount = 0;

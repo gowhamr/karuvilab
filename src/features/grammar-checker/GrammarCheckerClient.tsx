@@ -7,6 +7,7 @@ import { Decoration, DecorationSet } from '@tiptap/pm/view';
 import { workerManager } from '@/src/workers/manager';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { useGrammarStore } from './store';
+import { useToast } from '@/components/ui/Toast';
 
 const GrammarPluginKey = new PluginKey('grammarChecker');
 
@@ -40,6 +41,7 @@ const GrammarDecorations = Extension.create({
 });
 
 export default function GrammarCheckerClient() {
+  const { toast } = useToast();
   const [text, setText] = useState('');
   const [errors, setErrors] = useState<any[]>([]);
   const [stats, setStats] = useState({ words: 0, characters: 0, sentences: 0, readabilityScore: 0, readingTimeMs: 0 });
@@ -81,6 +83,12 @@ export default function GrammarCheckerClient() {
       abortController.current.abort();
     }
     abortController.current = new AbortController();
+
+    if (currentText.length > 500000) {
+      toast("Text exceeds 500KB limit for grammar checking", "error");
+      setIsProcessing(false);
+      return;
+    }
 
     setIsProcessing(true);
     try {

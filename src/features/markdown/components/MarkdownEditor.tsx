@@ -169,6 +169,10 @@ export function MarkdownEditor() {
       toast("Only .md files are supported", "error");
       return;
     }
+    if (file.size > 1000000) {
+      toast("File size exceeds 1MB limit", "error");
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -427,7 +431,15 @@ export function MarkdownEditor() {
                 <textarea
                   ref={textareaRef}
                   value={md}
-                  onChange={(e) => setMd(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val.length > 1000000) {
+                      toast("Text exceeds 1MB limit", "error");
+                      setMd(val.slice(0, 1000000));
+                    } else {
+                      setMd(val);
+                    }
+                  }}
                   placeholder="# Start typing your markdown here..."
                   className={`flex-1 p-4 md:p-6 bg-transparent outline-none resize-none font-mono text-text-2 leading-relaxed h-full overflow-y-auto ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
                   style={{ fontSize: `${fontSize}px` }}
