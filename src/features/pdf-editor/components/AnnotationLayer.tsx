@@ -128,7 +128,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     deleteAnnotation(annotation.id);
   };
 
-  const handlePointerDown = (e: React.PointerEvent<HTMLElement>) => {
+  const handlePointerDown = (e: React.PointerEvent<Element>) => {
     if (!isSelectMode) return;
     e.stopPropagation();
     const target = e.currentTarget;

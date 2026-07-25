@@ -252,6 +252,10 @@ export default function HomeClient() {
     return counts;
   }, []);
 
+  const recommendedTools = useMemo(() => {
+    return ALL_TOOLS.filter(t => CURATED_SUGGESTIONS.includes(t.id));
+  }, []);
+
   const isReturning = hydrated && (recentTools.length > 0 || favoriteTools.length > 0);
 
   const renderCategoriesSection = (isFirstTime = false) => {

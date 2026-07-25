@@ -37,12 +37,13 @@ export default function TimeZoneConverterClient() {
   
   const [isSearchingSource, setIsSearchingSource] = useState(false);
   const [isSearchingTarget, setIsSearchingTarget] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [sourceSearch, setSourceSearch] = useState("");
+  const [targetSearch, setTargetSearch] = useState("");
 
   const allZones = useMemo(() => getAllTimezones(), []);
 
-  const filteredZones = useMemo(() => {
-    const q = searchTerm.toLowerCase().trim();
+  const filteredSourceZones = useMemo(() => {
+    const q = sourceSearch.toLowerCase().trim();
     if (!q) return COMMON_CITIES;
     return allZones
       .filter(z => 
@@ -51,7 +52,19 @@ export default function TimeZoneConverterClient() {
         z.tz.toLowerCase().replace(/_/g, ' ').includes(q)
       )
       .slice(0, 10);
-  }, [searchTerm, allZones]);
+  }, [sourceSearch, allZones]);
+
+  const filteredTargetZones = useMemo(() => {
+    const q = targetSearch.toLowerCase().trim();
+    if (!q) return COMMON_CITIES;
+    return allZones
+      .filter(z => 
+        z.city.toLowerCase().includes(q) || 
+        z.country?.toLowerCase().includes(q) || 
+        z.tz.toLowerCase().replace(/_/g, ' ').includes(q)
+      )
+      .slice(0, 10);
+  }, [targetSearch, allZones]);
 
   const handleSetNow = () => {
     const now = new Date();
@@ -64,7 +77,7 @@ export default function TimeZoneConverterClient() {
       setTargetTZs([...targetTZs, tz]);
     }
     setIsSearchingTarget(false);
-    setSearchTerm("");
+    setTargetSearch("");
   };
 
   const removeTargetTZ = (tz: string) => {
@@ -123,18 +136,26 @@ export default function TimeZoneConverterClient() {
     
     return targetTZs.map(tz => {
       try {
-        const targetFormatter = new Intl.DateTimeFormat('en-GB', {
-          timeZone: tz,
-          dateStyle: 'medium',
-          timeStyle: 'short',
-        });
+        const targetDateFmt = new Intl.DateTimeFormat(undefined, { timeZone: tz, dateStyle: 'medium' });
+        const targetTimeFmt = new Intl.DateTimeFormat(undefined, { timeZone: tz, timeStyle: 'short' });
         
         const targetOffset = getOffsetMinutes(baseUTC, tz);
         const diffMinutes = targetOffset - baseOffset;
-        const diffHours = diffMinutes / 60;
         
-        const offsetLabel = diffHours === 0 ? "Same time" : 
-                            diffHours > 0 ? `+${diffHours}h` : `${diffHours}h`;
+        let offsetLabel = "Same time";
+        if (diffMinutes !== 0) {
+          const sign = diffMinutes > 0 ? "+" : "-";
+          const absMin = Math.abs(diffMinutes);
+          const hrs = Math.floor(absMin / 60);
+          const mins = Math.floor(absMin % 60);
+          if (mins === 0) {
+            offsetLabel = `${sign}${hrs}h`;
+          } else if (hrs === 0) {
+            offsetLabel = `${sign}${mins}m`;
+          } else {
+            offsetLabel = `${sign}${hrs}h ${mins}m`;
+          }
+        }
 
         // Relative Day
         const baseDayStr = baseUTC.toLocaleString('en-US', { timeZone: sourceTZ, day: 'numeric' });
@@ -152,8 +173,9 @@ export default function TimeZoneConverterClient() {
         if (dayDiff >= 0.5) relativeDay = "Next Day";
         else if (dayDiff <= -0.5) relativeDay = "Previous Day";
 
-        const formatted = targetFormatter.format(baseUTC);
-        const [datePart, timePart] = formatted.split(', ');
+        const datePart = targetDateFmt.format(baseUTC);
+        const timePart = targetTimeFmt.format(baseUTC);
+        const formatted = `${datePart}, ${timePart}`;
 
         return { 
           tz, 
@@ -218,20 +240,20 @@ export default function TimeZoneConverterClient() {
                               type="text"
                               placeholder="Search timezone..."
                               className="w-full pl-9 pr-4 py-2 bg-transparent outline-none text-sm font-medium"
-                              value={searchTerm}
-                              onChange={(e) => setSearchTerm(e.target.value)}
+                              value={sourceSearch}
+                              onChange={(e) => setSourceSearch(e.target.value)}
                               autoFocus
                             />
                           </div>
                         </div>
                         <div className="max-h-60 overflow-y-auto p-2 space-y-1">
-                          {filteredZones.map(zone => (
+                          {filteredSourceZones.map(zone => (
                             <button
                               key={zone.tz}
                               onClick={() => {
                                 setSourceTZ(zone.tz);
                                 setIsSearchingSource(false);
-                                setSearchTerm("");
+                                setSourceSearch("");
                               }}
                               className="w-full text-left px-3 py-2 rounded-lg hover:bg-blue/10 text-sm flex justify-between items-center group"
                             >
@@ -282,9 +304,9 @@ export default function TimeZoneConverterClient() {
                       type="text"
                       placeholder="Type to search city..."
                       className="w-full pl-11 pr-4 py-3 bg-bg border border-border rounded-xl outline-none focus:ring-4 focus:ring-blue/10 focus:border-blue text-text font-medium"
-                      value={searchTerm}
+                      value={targetSearch}
                       onChange={(e) => {
-                        setSearchTerm(e.target.value);
+                        setTargetSearch(e.target.value);
                         setIsSearchingTarget(true);
                       }}
                       onFocus={() => setIsSearchingTarget(true)}
@@ -292,7 +314,7 @@ export default function TimeZoneConverterClient() {
                   </div>
 
                   <AnimatePresence>
-                    {isSearchingTarget && searchTerm && (
+                    {isSearchingTarget && targetSearch && (
                       <m.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -300,7 +322,7 @@ export default function TimeZoneConverterClient() {
                         className="absolute top-full left-0 right-0 z-dropdown mt-2 bg-surface border border-border rounded-2xl shadow-xl overflow-hidden"
                       >
                         <div className="max-h-60 overflow-y-auto p-2 space-y-1">
-                          {filteredZones.map(zone => (
+                          {filteredTargetZones.map(zone => (
                             <button
                               key={zone.tz}
                               onClick={() => addTargetTZ(zone.tz)}
@@ -410,7 +432,7 @@ export default function TimeZoneConverterClient() {
         {targetTZs.length < 6 && (
            <button
            onClick={() => {
-             setSearchTerm("");
+             setTargetSearch("");
              setIsSearchingTarget(true);
              window.scrollTo({ top: 0, behavior: 'smooth' });
            }}
@@ -437,7 +459,8 @@ export default function TimeZoneConverterClient() {
             onClick={() => {
               setIsSearchingSource(false);
               setIsSearchingTarget(false);
-              setSearchTerm("");
+              setSourceSearch("");
+              setTargetSearch("");
             }}
             className="fixed inset-0 z-backdrop bg-black/20 backdrop-blur-[2px] md:hidden"
           />
