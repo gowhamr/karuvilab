@@ -39,6 +39,7 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
   const [cropBox, setCropBox] = useState({ x: 36, y: 36, width: 500, height: 700 });
   const [targetSize, setTargetSize] = useState<string>('a4');
   const [scaleToFit, setScaleToFit] = useState(true);
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape' | 'auto'>('auto');
 
   const handleFiles = async (files: FileList | File[]) => {
     const f = files[0];
@@ -78,6 +79,7 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
       } else {
         options.action = 'resize';
         options.scaleToFit = scaleToFit;
+        options.orientation = orientation;
         
         if (mode === 'a4') options.targetSize = PAGE_SIZES.a4;
         else if (mode === 'letter') options.targetSize = PAGE_SIZES.letter;
@@ -188,40 +190,54 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
               </div>
             )}
 
-            {mode === 'resize' && (
+            {(mode === 'resize' || mode === 'a4' || mode === 'letter' || mode === 'legal') && (
               <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-text-3 uppercase tracking-wider mb-2">Target Size</label>
-                  <select 
-                    value={targetSize}
-                    onChange={(e) => setTargetSize(e.target.value)}
-                    className="w-full bg-surface-2 border border-border rounded-xl px-4 py-3 text-text font-medium focus:border-blue outline-none transition-colors appearance-none"
-                  >
-                    <option value="a4">A4 (210 × 297 mm)</option>
-                    <option value="letter">US Letter (8.5 × 11 in)</option>
-                    <option value="legal">US Legal (8.5 × 14 in)</option>
-                  </select>
-                </div>
-                <label className="flex items-center gap-3 p-4 border border-border rounded-xl bg-surface-2 cursor-pointer hover:border-blue/50 transition-colors">
-                  <input 
-                    type="checkbox" 
-                    checked={scaleToFit}
-                    onChange={(e) => setScaleToFit(e.target.checked)}
-                    className="w-5 h-5 rounded bg-surface border-border text-blue focus:ring-blue focus:ring-offset-surface"
-                  />
+                {mode === 'resize' && (
                   <div>
-                    <p className="text-sm font-bold text-text">Scale to Fit</p>
-                    <p className="text-xs font-medium text-text-4">Scale page content to fit the new dimensions</p>
+                    <label className="block text-xs font-bold text-text-3 uppercase tracking-wider mb-2">Target Size</label>
+                    <select 
+                      value={targetSize}
+                      onChange={(e) => setTargetSize(e.target.value)}
+                      className="w-full bg-surface-2 border border-border rounded-xl px-4 py-3 text-text font-medium focus:border-blue outline-none transition-colors appearance-none"
+                    >
+                      <option value="a4">A4 (210 × 297 mm)</option>
+                      <option value="letter">US Letter (8.5 × 11 in)</option>
+                      <option value="legal">US Legal (8.5 × 14 in)</option>
+                    </select>
                   </div>
-                </label>
+                )}
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-text-3 uppercase tracking-wider mb-2">Orientation</label>
+                    <select 
+                      value={orientation}
+                      onChange={(e) => setOrientation(e.target.value as any)}
+                      className="w-full bg-surface-2 border border-border rounded-xl px-4 py-3 text-text font-medium focus:border-blue outline-none transition-colors appearance-none"
+                    >
+                      <option value="auto">Auto (Match Original)</option>
+                      <option value="portrait">Portrait</option>
+                      <option value="landscape">Landscape</option>
+                    </select>
+                  </div>
+                  
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-3 p-3 border border-border rounded-xl bg-surface-2 cursor-pointer hover:border-blue/50 transition-colors w-full h-[46px]">
+                      <input 
+                        type="checkbox" 
+                        checked={scaleToFit}
+                        onChange={(e) => setScaleToFit(e.target.checked)}
+                        className="w-5 h-5 rounded bg-surface border-border text-blue focus:ring-blue focus:ring-offset-surface"
+                      />
+                      <div>
+                        <p className="text-sm font-bold text-text">Scale to Fit</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
               </div>
             )}
-            
-            {(mode === 'a4' || mode === 'letter' || mode === 'legal') && (
-              <p className="text-sm font-medium text-text-3">
-                This will standardize all pages in the document to {mode.toUpperCase()} size. Content will be scaled proportionally.
-              </p>
-            )}
+
           </div>
 
           {error && (
