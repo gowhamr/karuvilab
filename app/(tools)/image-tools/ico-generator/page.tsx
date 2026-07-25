@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import IcoGeneratorClientWrapper from './IcoGeneratorClientWrapper';
 
@@ -22,6 +23,28 @@ export default function Page() {
       }}
 >
       <IcoGeneratorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-ico"
+          title="How it Works: Multi-Image Containers"
+          preview="Learn why an ICO file isn't just a single image."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              Unlike a standard PNG or JPEG, an <code>.ico</code> file is a <strong>Container Format</strong>. It doesn't hold just one image; it can hold dozens of the exact same image at different resolutions.
+            </p>
+            <h3>The Directory Header</h3>
+            <p>
+              When this tool generates an ICO file, it first creates an "Icon Directory" header. This header acts like a table of contents, telling the operating system: "Hey, inside this file, there is a 16x16 version, a 32x32 version, and a 256x256 version."
+            </p>
+            <h3>Embedded PNGs</h3>
+            <p>
+              Historically, the images inside the ICO file had to be encoded as raw Bitmaps (BMP). However, since Windows Vista, you are allowed to simply embed standard, compressed PNG files inside the ICO container. Our tool takes your original image, resizes it using an HTML5 Canvas into your chosen resolutions, encodes them as PNGs, and packages them all into a single binary file.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import SvgConverterClientWrapper from './SvgConverterClientWrapper';
 
@@ -22,6 +23,27 @@ export default function Page() {
       }}
 >
       <SvgConverterClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-raster"
+          title="How it Works: Vector vs Raster"
+          preview="Learn how math equations are turned into physical pixels."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              An SVG (Scalable Vector Graphic) is fundamentally different from a JPG or PNG. A JPG is a literal grid of pixels. An SVG is a text file containing math equations.
+            </p>
+            <h3>Rasterization</h3>
+            <p>
+              For example, an SVG might say <code>&lt;circle cx="50" cy="50" r="40" fill="red" /&gt;</code>. Because it's math, it can be drawn at the size of a postage stamp or the size of a billboard with perfect sharpness. But to save it as a PNG, we must <strong>Rasterize</strong> it (turn the math back into a grid of pixels).
+            </p>
+            <p>
+              To do this in the browser securely, this tool reads your SVG text file, encodes it into a Data URI, and loads it into a virtual <code>&lt;img&gt;</code> tag in memory. We then draw that virtual image onto a physical HTML5 Canvas at your requested resolution, forcing the browser's rendering engine to calculate and freeze the math into hard pixels.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

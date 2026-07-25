@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import TiffConverterClientWrapper from './TiffConverterClientWrapper';
 
@@ -26,6 +27,27 @@ export default function Page() {
       }}
 >
       <TiffConverterClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-lzw"
+          title="How it Works: LZW Lossless Compression"
+          preview="Learn the math behind how TIFFs compress files without losing data."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              Unlike JPEGs which throw away visual data to save space (Lossy), TIFF files are usually compressed using <strong>LZW (Lempel-Ziv-Welch)</strong> compression, which is completely Lossless.
+            </p>
+            <h3>The Dictionary Algorithm</h3>
+            <p>
+              Imagine an image with a solid blue sky. Instead of writing "Blue, Blue, Blue, Blue, Blue" a thousand times, the LZW algorithm creates a dictionary. It assigns a short code (like <code>#1</code>) to the pattern "Blue, Blue", and then an even shorter code for larger patterns.
+            </p>
+            <p>
+              When this tool decodes your TIFF, it reads these shorthand dictionary codes, rebuilds the original dictionary in your browser's memory, and perfectly reconstructs every single original pixel of the image, exactly as it was scanned or photographed.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

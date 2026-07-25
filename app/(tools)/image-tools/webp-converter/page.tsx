@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import WebPConverterClientWrapper from './WebPConverterClientWrapper';
 
@@ -22,6 +23,27 @@ export default function Page() {
       }}
 >
       <WebPConverterClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-vp8"
+          title="How it Works: Derived from WebM Video"
+          preview="Learn the history of WebP and how it's connected to YouTube."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              Just like AVIF is a single frame of an AV1 video, <strong>WebP</strong> is actually a single frame of a <strong>VP8 video</strong>.
+            </p>
+            <h3>The VP8 Codec</h3>
+            <p>
+              Google acquired the VP8 video codec and open-sourced it to create WebM (the video format used heavily by YouTube). Engineers realized that the algorithm used to compress a "Keyframe" (a standalone video frame) in VP8 was actually significantly better at compressing static images than the ancient JPEG standard.
+            </p>
+            <p>
+              WebP uses a technique called <strong>Block Prediction</strong>. It divides the image into macroblocks (usually 16x16 pixels). Before storing the pixels for a block, it looks at the blocks immediately above and to the left of it, and tries to mathematically predict what the current block should look like. Because it only has to save the <em>difference</em> between the prediction and the actual pixels, WebP files end up being roughly 30% smaller than JPEGs of the exact same quality.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

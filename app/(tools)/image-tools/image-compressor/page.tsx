@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 
 import ImageCompressorClientWrapper from './ImageCompressorClientWrapper';
@@ -55,6 +56,28 @@ export default function ImageCompressorPage() {
       }}
     >
       <ImageCompressorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-compression"
+          title="How it Works: Lossy vs Lossless Encoding"
+          preview="Learn how algorithms throw away data your eyes can't see."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              An uncompressed 4K image contains over 8 million pixels. Storing the exact RGB value for every single pixel takes about 25 Megabytes of data. Compression reduces this footprint.
+            </p>
+            <h3>Lossy Compression (JPEG / WebP)</h3>
+            <p>
+              Lossy algorithms exploit human biology. The human eye is much more sensitive to changes in brightness (luma) than color (chroma). Algorithms like JPEG use <strong>Chroma Subsampling</strong> to average out the color of neighboring pixels, effectively throwing away data you wouldn't notice anyway. It then uses the <strong>Discrete Cosine Transform (DCT)</strong> to group pixels into 8x8 frequency blocks.
+            </p>
+            <h3>Lossless Compression (PNG)</h3>
+            <p>
+              Lossless compression never throws away visual data. Instead, it uses mathematical techniques (like <strong>Deflate</strong> or <strong>LZ77</strong>) to find repeating patterns. If a completely white background has 1,000 identical white pixels in a row, the algorithm just writes <em>"repeat white 1,000 times"</em> instead of saving 1,000 individual pixels.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

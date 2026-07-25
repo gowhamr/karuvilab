@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import ImageMirrorClientWrapper from './ImageMirrorClientWrapper';
 
@@ -26,6 +27,32 @@ export default function Page() {
       }}
 >
       <ImageMirrorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-mirror"
+          title="How it Works: Duplicating Canvas Space"
+          preview="Learn how mirroring differs from flipping."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              While "Flipping" an image just reverses it, "Mirroring" involves keeping the original image and attaching a reversed copy to it. This means the resulting image has to be exactly <strong>twice as large</strong> along the mirrored axis.
+            </p>
+            <h3>Double Canvas Rendering</h3>
+            <p>
+              If you upload a 1000px wide image and select "Mirror Right", the tool creates a new HTML5 Canvas that is exactly 2000px wide. 
+            </p>
+            <ul>
+              <li>First, it uses <code>drawImage()</code> to paint the original image on the left side (from pixel 0 to 1000).</li>
+              <li>Then, it applies a <code>scale(-1, 1)</code> transformation to flip the context horizontally.</li>
+              <li>Finally, it uses <code>drawImage()</code> again to paint the image on the right side (from pixel 1000 to 2000), effectively drawing it backwards.</li>
+            </ul>
+            <p>
+              This creates a perfectly symmetrical reflection with no loss of original pixel data.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import ClientWrapper from './ClientWrapper';
 
@@ -29,6 +30,28 @@ export default function Page() {
       }}
     >
       <ClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-alpha"
+          title="How it Works: Global Alpha Compositing"
+          preview="Learn how browsers calculate transparency when overlapping images."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When applying a watermark, you usually want it to be slightly see-through (e.g., 50% opacity) so it doesn't completely destroy the underlying image. But how does the computer calculate "see-through"?
+            </p>
+            <h3>Alpha Blending Math</h3>
+            <p>
+              Every pixel has Red, Green, Blue, and Alpha (transparency) values. When you use the HTML5 Canvas <code>globalAlpha = 0.5</code> property and draw a watermark over a photo, the browser executes the standard Alpha Blending formula for every single overlapping pixel:
+            </p>
+            <pre><code>Final_Color = (Watermark_Color * 0.5) + (Photo_Color * (1.0 - 0.5))</code></pre>
+            <p>
+              It mathematically averages the overlapping colors in real-time. Because doing this on a 20-megapixel photo requires millions of calculations, we execute this off the main thread using an <code>OffscreenCanvas</code> inside a Web Worker.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

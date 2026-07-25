@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import AdvancedRotateClientWrapper from './AdvancedRotateClientWrapper';
 
@@ -26,6 +27,31 @@ export default function Page() {
       }}
 >
       <AdvancedRotateClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-trigonometry"
+          title="How it Works: Trigonometry and Bounding Boxes"
+          preview="Learn the math behind rotating a square and why it gets bigger."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When you rotate a 1000x1000 pixel image by 45 degrees, the resulting image is no longer 1000x1000. Why? Because the corners of the square stick out, expanding the overall physical bounding box.
+            </p>
+            <h3>Calculating the New Canvas</h3>
+            <p>
+              To ensure no corners get cut off, the browser has to calculate the new bounding box using trigonometry. The formula uses sine and cosine of the angle:
+            </p>
+            <ul>
+              <li><code>New Width = (Width * |cos(θ)|) + (Height * |sin(θ)|)</code></li>
+              <li><code>New Height = (Width * |sin(θ)|) + (Height * |cos(θ)|)</code></li>
+            </ul>
+            <p>
+              At 45 degrees, a 1000x1000 image actually requires a 1414x1414 pixel canvas to hold it! Our tool dynamically recalculates this math on the fly, resizes the underlying HTML5 Canvas, and translates the origin to the center before drawing.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

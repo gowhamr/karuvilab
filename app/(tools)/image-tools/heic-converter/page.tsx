@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import HeicConverterClientWrapper from './HeicConverterClientWrapper';
 
@@ -26,6 +27,28 @@ export default function Page() {
       }}
 >
       <HeicConverterClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-hevc"
+          title="How it Works: The HEVC Video Codec"
+          preview="Learn why Windows and Android struggle to open your iPhone photos."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When you take a photo on an iPhone, Apple doesn't save it as a JPEG. To save space, they use <strong>HEIC</strong> (High Efficiency Image Container). Similar to AVIF, an HEIC image is actually just a single still frame encoded using a video codec called <strong>HEVC (H.265)</strong>.
+            </p>
+            <h3>Patents and Licensing</h3>
+            <p>
+              Why don't all browsers just support HEIC natively? <strong>Patents</strong>. The HEVC algorithm is heavily patented by multiple corporations. If Google added native HEIC support to Chrome, or Mozilla to Firefox, they would have to pay millions in licensing fees. Apple pays these fees, which is why HEIC works flawlessly on Macs and iPhones, but fails on Windows or the open web.
+            </p>
+            <h3>WebAssembly Decoding</h3>
+            <p>
+              To bypass this limitation without uploading your private photos to a server, this tool uses a compiled <strong>WebAssembly (WASM)</strong> decoder. We run the complex C++ decompression algorithm directly inside your browser's secure sandbox. It mathematically decodes the proprietary HEVC video frame back into raw RGB pixels, which we then easily re-encode into an open, royalty-free format like JPEG or PNG.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

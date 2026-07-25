@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 import BorderGeneratorClientWrapper from './BorderGeneratorClientWrapper';
 
@@ -26,6 +27,27 @@ export default function Page() {
       }}
 >
       <BorderGeneratorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-stroke"
+          title="How it Works: Canvas Stroke vs Padding"
+          preview="Learn the difference between drawing a border inside vs outside an image."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When applying a border, graphic software must make a decision: do we draw the border over the edges of the image (Inset), or do we expand the image to make room for it (Outset)?
+            </p>
+            <h3>Outset Canvas Math</h3>
+            <p>
+              This tool uses an <strong>Outset</strong> model. If you have a 1000x1000 pixel image and request a 50px border, the tool physically expands the underlying HTML5 Canvas to 1100x1100 pixels. It draws the solid border color across the entire new canvas, and then paints your original image exactly in the center.
+            </p>
+            <p>
+              By expanding the canvas (rather than using the Canvas API's native <code>strokeRect</code> function over the image), we ensure that absolutely zero pixels of your original photograph are covered up by the border.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }
