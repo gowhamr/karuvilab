@@ -64,6 +64,40 @@ export default function AllToolsClient() {
     });
   }, [filteredTools, sortBy, favorites]);
 
+  // Group tools based on active category
+  const groupedTools = useMemo(() => {
+    const groups: { title: string; tools: ToolEntry[] }[] = [];
+    
+    if (activeCategory === "all") {
+      CATEGORIES.forEach(cat => {
+        const toolsInCat = sortedTools.filter(t => t.category === cat.id);
+        if (toolsInCat.length > 0) {
+          groups.push({ title: cat.label, tools: toolsInCat });
+        }
+      });
+      // Handle any tools that somehow don't match known categories
+      const unknownTools = sortedTools.filter(t => !CATEGORIES.some(c => c.id === t.category));
+      if (unknownTools.length > 0) {
+        groups.push({ title: "Other", tools: unknownTools });
+      }
+    } else {
+      const subCatMap: Record<string, ToolEntry[]> = {};
+      sortedTools.forEach(tool => {
+        const sub = tool.subCategory || 'Other';
+        if (!subCatMap[sub]) subCatMap[sub] = [];
+        subCatMap[sub].push(tool);
+      });
+      
+      Object.keys(subCatMap).sort().forEach(sub => {
+        const toolsForSub = subCatMap[sub];
+        if (toolsForSub) {
+          groups.push({ title: sub, tools: toolsForSub });
+        }
+      });
+    }
+    return groups;
+  }, [sortedTools, activeCategory]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 pb-20 md:pb-12 space-y-8">
       {/* ── Header ── */}
@@ -168,50 +202,62 @@ export default function AllToolsClient() {
             Try resetting your search query or choosing a different category.
           </p>
         </Card>
-      ) : viewMode === "grid" ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
-          {sortedTools.map(tool => (
-            <ToolCard key={tool.id} tool={tool} compact />
-          ))}
-        </div>
       ) : (
-        <div className="space-y-2 max-w-4xl mx-auto">
-          {sortedTools.map(tool => (
-            <Link key={tool.id} href={tool.href}>
-              <Card variant="interactive" padding="sm" className="flex items-center justify-between gap-4 mb-2 group">
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-10 h-10 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
-                    <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors truncate">
-                        {tool.name}
-                      </h4>
-                      {isNewTool(tool) && (
-                        <Badge variant="primary" size="sm" className="text-[9px]">
-                          New
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-caption text-text-secondary truncate max-w-xl hidden sm:block">
-                      {tool.desc}
-                    </p>
-                  </div>
+        <div className="space-y-12">
+          {groupedTools.map(group => (
+            <section key={group.title} className="space-y-6">
+              <h2 className="text-xl font-black uppercase tracking-widest text-primary flex items-center gap-3">
+                <span className="w-8 h-px bg-primary/20" />
+                {group.title}
+              </h2>
+              {viewMode === "grid" ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {group.tools.map(tool => (
+                    <ToolCard key={tool.id} tool={tool} compact />
+                  ))}
                 </div>
+              ) : (
+                <div className="space-y-2 max-w-4xl">
+                  {group.tools.map(tool => (
+                    <Link key={tool.id} href={tool.href}>
+                      <Card variant="interactive" padding="sm" className="flex items-center justify-between gap-4 mb-2 group">
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <div className="w-10 h-10 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
+                            <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                                {tool.name}
+                              </h4>
+                              {isNewTool(tool) && (
+                                <Badge variant="primary" size="sm" className="text-[9px]">
+                                  New
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-caption text-text-secondary truncate max-w-xl hidden sm:block">
+                              {tool.desc}
+                            </p>
+                          </div>
+                        </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <Badge variant="neutral" size="sm" className="text-[10px]">
-                    {tool.category}
-                  </Badge>
-                  {!tool.requiresNetwork && (
-                    <Badge variant="success" size="sm" className="text-[10px] hidden sm:inline-flex">
-                      Offline
-                    </Badge>
-                  )}
+                        <div className="flex items-center gap-2 shrink-0">
+                          <Badge variant="neutral" size="sm" className="text-[10px]">
+                            {tool.category}
+                          </Badge>
+                          {!tool.requiresNetwork && (
+                            <Badge variant="success" size="sm" className="text-[10px] hidden sm:inline-flex">
+                              Offline
+                            </Badge>
+                          )}
+                        </div>
+                      </Card>
+                    </Link>
+                  ))}
                 </div>
-              </Card>
-            </Link>
+              )}
+            </section>
           ))}
         </div>
       )}
