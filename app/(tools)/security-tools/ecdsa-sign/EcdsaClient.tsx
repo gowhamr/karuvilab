@@ -36,6 +36,14 @@ export default function EcdsaClient() {
       setError("Message and Private Key PEM required");
       return;
     }
+    if (message.length > 5 * 1024 * 1024) {
+      setError("Input message is too large. Maximum size is 5MB.");
+      return;
+    }
+    if (privateKeyPem.length > 1 * 1024 * 1024) {
+      setError("Key PEM is too large. Maximum size is 1MB.");
+      return;
+    }
     setIsProcessing(true);
     setError(null);
     try {
@@ -51,6 +59,18 @@ export default function EcdsaClient() {
   const handleVerify = useCallback(async () => {
     if (!message.trim() || !signatureB64.trim() || !publicKeyPem.trim()) {
       setError("Message, Signature, and Public Key required for verification");
+      return;
+    }
+    if (message.length > 5 * 1024 * 1024) {
+      setError("Input message is too large. Maximum size is 5MB.");
+      return;
+    }
+    if (publicKeyPem.length > 1 * 1024 * 1024) {
+      setError("Key PEM is too large. Maximum size is 1MB.");
+      return;
+    }
+    if (signatureB64.length > 1 * 1024 * 1024) {
+      setError("Signature is too large. Maximum size is 1MB.");
       return;
     }
     setIsProcessing(true);

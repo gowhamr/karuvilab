@@ -43,6 +43,10 @@ export default function AesClient() {
       setError("Please enter text to process");
       return;
     }
+    if (inputText.length > 5 * 1024 * 1024) {
+      setError("Input text is too large. Maximum size is 5MB.");
+      return;
+    }
 
     const credential = keyMode === "passphrase" ? password : rawKey;
     if (!credential.trim()) {

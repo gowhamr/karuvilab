@@ -19,6 +19,14 @@ export default function RsaCryptClient() {
       setError("Text and Key PEM are required");
       return;
     }
+    if (text.length > 5 * 1024 * 1024) {
+      setError("Input text is too large. Maximum size is 5MB.");
+      return;
+    }
+    if (keyPem.length > 1 * 1024 * 1024) {
+      setError("Key PEM is too large. Maximum size is 1MB.");
+      return;
+    }
     setIsProcessing(true);
     setError(null);
     setResult("");

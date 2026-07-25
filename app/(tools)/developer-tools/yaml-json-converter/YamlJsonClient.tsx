@@ -25,6 +25,12 @@ settings:
       setOutputText("");
       return;
     }
+    
+    if (inputText.length > 5 * 1024 * 1024) {
+      setError("Input text exceeds 5MB limit");
+      setOutputText("");
+      return;
+    }
 
     try {
       if (direction === "yaml2json") {

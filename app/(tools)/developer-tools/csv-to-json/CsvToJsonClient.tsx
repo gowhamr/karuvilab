@@ -6,6 +6,7 @@ import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { blobManager } from '@/src/lib/blob-manager';
+import { useToast } from '@/components/ui/Toast';
 
 type ConversionMode = 'csv-to-json' | 'json-to-csv';
 type Delimiter = ',' | ';' | '\\t' | '|' | 'auto';
@@ -140,6 +141,7 @@ function jsonToCSV(jsonStr: string, options: CSVParseOptions): string {
 }
 
 export default function CsvToJsonClient() {
+  const { toast } = useToast();
   const [mode, setMode] = useState<ConversionMode>('csv-to-json');
   const [input, setInput] = useState<string>('');
   const [options, setOptions] = useState<CSVParseOptions>({
@@ -225,7 +227,13 @@ export default function CsvToJsonClient() {
             </div>
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 5 * 1024 * 1024) {
+                  toast("Input text exceeds 5MB limit", "error");
+                } else {
+                  setInput(e.target.value);
+                }
+              }}
               placeholder={mode === 'csv-to-json' ? "id,name,age\\n1,John,30\\n2,Jane,25" : "[\\n  { \"id\": 1, \"name\": \"John\", \"age\": 30 }\\n]"}
               className="w-full h-96 bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
             />

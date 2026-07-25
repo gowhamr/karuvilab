@@ -43,6 +43,7 @@ export default function Base64Client() {
   // Text Logic
   const { output, error } = useMemo(() => {
     if (inputType !== "text" || !input) return { output: "", error: "" };
+    if (input.length > 5 * 1024 * 1024) return { output: "", error: "Input text exceeds 5MB limit" };
     if (tab === "encode") {
       try {
         return { output: toBase64(input, urlSafe), error: "" };
@@ -211,7 +212,14 @@ export default function Base64Client() {
             <DropZone
               onFilesSelected={(files) => {
                 const f = files instanceof FileList ? files[0] : files[0];
-                if (f) { setFile(f); setFileResult(null); setFileError(""); }
+                if (f) { 
+                  if (f.size > 10 * 1024 * 1024) {
+                    setFileError("File exceeds 10MB limit");
+                    setFile(null);
+                  } else {
+                    setFile(f); setFileResult(null); setFileError(""); 
+                  }
+                }
               }}
               accept={tab === "encode" ? "*" : ".txt,.b64,text/plain"}
               title={file ? file.name : (tab === "encode" ? "Drop a file to encode" : "Drop a Base64 text file to decode")}

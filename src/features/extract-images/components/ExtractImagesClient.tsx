@@ -10,10 +10,12 @@ import { formatError } from "@/src/lib/formatError";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
+import { useToast } from "@/components/ui/Toast";
 
 const toolId = "extract-images";
 
 export default function ExtractImagesClient() {
+  const { toast } = useToast();
   const { createUrl } = useObjectUrlManager();
   const [isProcessing, setIsProcessing] = useState(false);
   const processingRef = useRef(false);
@@ -80,8 +82,15 @@ export default function ExtractImagesClient() {
 
   const handleFiles = useCallback((files: FileList | File[]) => {
     if (!files || files.length === 0) return;
-    addItems(toolId, Array.from(files));
-  }, [addItems]);
+    const filesArray = Array.from(files);
+    const validFiles = filesArray.filter(f => f.size <= 100 * 1024 * 1024);
+    if (validFiles.length < filesArray.length) {
+      toast("Some files were skipped. Maximum size is 100MB.", "error");
+    }
+    if (validFiles.length > 0) {
+      addItems(toolId, validFiles);
+    }
+  }, [addItems, toast]);
 
   useWorkflowInput(handleFiles);
 

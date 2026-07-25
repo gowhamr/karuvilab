@@ -11,6 +11,7 @@ import { workerManager } from "@/src/workers/manager";
 import { formatError } from "@/src/lib/formatError";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
+import { useToast } from "@/components/ui/Toast";
 
 const toolId = "watermark-pdf";
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
@@ -85,10 +86,27 @@ export default function WatermarkPdfClient() {
     }
   }, [watermarkType, watermarkImage, watermarkText, opacity, fontSize, color, angle, scale, createUrl, updateItem]);
 
+  const { toast } = useToast();
+
   const handleFiles = useCallback((files: FileList | File[]) => {
     if (!files || files.length === 0) return;
-    addItems(toolId, Array.from(files));
-  }, [addItems]);
+    const MAX_FILE_SIZE = 100 * 1024 * 1024;
+    const validFiles: File[] = [];
+
+    Array.from(files).forEach(file => {
+      if (file.type !== "application/pdf" && !file.name.endsWith(".pdf")) {
+        toast(`Invalid file type: ${file.name}. Only PDFs are allowed.`, "error");
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        toast(`File too large: ${file.name}. Maximum size is 100MB.`, "error");
+        return;
+      }
+      validFiles.push(file);
+    });
+
+    if (validFiles.length > 0) addItems(toolId, validFiles);
+  }, [addItems, toast]);
 
   useWorkflowInput(handleFiles);
 
@@ -173,10 +191,16 @@ export default function WatermarkPdfClient() {
               onDrop={e => {
                 e.preventDefault();
                 const f = e.dataTransfer.files?.[0];
-                if (f && (f.type === "image/png" || f.type === "image/jpeg")) {
+                if (f && (f.type === "image/png" || f.type === "image/jpeg" || f.name.endsWith(".png") || f.name.endsWith(".jpg"))) {
+                  if (f.size > 5 * 1024 * 1024) {
+                    toast("Image too large. Maximum size is 5MB.", "error");
+                    return;
+                  }
                   if (watermarkImageUrl) revokeUrl(watermarkImageUrl);
                   setWatermarkImage(f);
                   setWatermarkImageUrl(createUrl(f));
+                } else {
+                  toast("Only PNG and JPG images are supported.", "error");
                 }
               }}
             >
@@ -193,6 +217,10 @@ export default function WatermarkPdfClient() {
                 onChange={e => {
                   const f = e.target.files?.[0];
                   if (f) {
+                    if (f.size > 5 * 1024 * 1024) {
+                      toast("Image too large. Maximum size is 5MB.", "error");
+                      return;
+                    }
                     if (watermarkImageUrl) revokeUrl(watermarkImageUrl);
                     setWatermarkImage(f);
                     setWatermarkImageUrl(createUrl(f));

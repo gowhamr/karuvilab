@@ -32,19 +32,32 @@ export default function ImageWatermarkClient() {
 
   const handleFiles = useCallback((selected: FileList | File[]) => {
     const f = Array.from(selected).filter(file => file.type.startsWith('image/'));
+    const validF = f.filter(file => file.size <= 25 * 1024 * 1024);
+    
     if (f.length === 0) {
       setErrorMsg('Please upload valid image files.');
       return;
     }
-    setErrorMsg(null);
-    setFiles(f);
-    results.forEach(r => revokeUrl(r.url));
-    setResults([]);
+    if (validF.length < f.length) {
+      setErrorMsg('Some files were skipped. Maximum size is 25MB.');
+    } else {
+      setErrorMsg(null);
+    }
+    
+    if (validF.length > 0) {
+      setFiles(validF);
+      results.forEach(r => revokeUrl(r.url));
+      setResults([]);
+    }
   }, [revokeUrl, results]);
 
   const handleWmFile = useCallback((selected: FileList | File[]) => {
     const f = Array.from(selected)[0];
     if (f && f.type.startsWith('image/')) {
+      if (f.size > 10 * 1024 * 1024) {
+        setErrorMsg("Watermark image must be under 10MB");
+        return;
+      }
       setWmFile(f);
     }
   }, []);

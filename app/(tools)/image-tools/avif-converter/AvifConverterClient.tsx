@@ -69,8 +69,19 @@ export default function AvifConverterClient() {
 
         const qualityFraction = Math.max(0.01, Math.min(1.0, q / 100));
 
-        const blob = await new Promise<Blob | null>((resolve) => {
-          canvas.toBlob((b) => resolve(b), "image/avif", qualityFraction);
+        const blob = await new Promise<Blob | null>((resolve, reject) => {
+          const timer = setTimeout(() => {
+            reject(new Error("AVIF conversion timed out. Your browser may not support native AVIF encoding."));
+          }, 15000);
+          try {
+            canvas.toBlob((b) => {
+              clearTimeout(timer);
+              resolve(b);
+            }, "image/avif", qualityFraction);
+          } catch (e) {
+            clearTimeout(timer);
+            reject(e);
+          }
         });
 
         if (!blob) {

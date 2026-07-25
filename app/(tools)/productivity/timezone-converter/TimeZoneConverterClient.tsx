@@ -19,6 +19,7 @@ import {
 import { m, AnimatePresence } from "framer-motion";
 import { getAllTimezones, COMMON_CITIES } from "@/src/lib/timezone-data";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { SliderField } from "@/components/ui/SliderField";
 
 interface TimezoneInfo {
   city: string;
@@ -39,6 +40,23 @@ export default function TimeZoneConverterClient() {
   const [isSearchingTarget, setIsSearchingTarget] = useState(false);
   const [sourceSearch, setSourceSearch] = useState("");
   const [targetSearch, setTargetSearch] = useState("");
+
+  
+  const timeInMinutes = useMemo(() => {
+    if (!sourceDate) return 0;
+    const tPart = sourceDate.split('T')[1];
+    if (!tPart) return 0;
+    const [h, m] = tPart.split(':').map(Number);
+    return (h || 0) * 60 + (m || 0);
+  }, [sourceDate]);
+
+  const handleTimeScrub = (mins: number) => {
+    if (!sourceDate) return;
+    const dPart = sourceDate.split('T')[0];
+    const h = Math.floor(mins / 60).toString().padStart(2, '0');
+    const m = (mins % 60).toString().padStart(2, '0');
+    setSourceDate(`${dPart}T${h}:${m}`);
+  };
 
   const allZones = useMemo(() => getAllTimezones(), []);
 
@@ -205,12 +223,33 @@ export default function TimeZoneConverterClient() {
               </div>
               
               <div className="space-y-4">
+                
                 <ToolInput
                   label="Select Date & Time"
                   type={"datetime-local" as any}
                   value={sourceDate}
                   onChange={setSourceDate}
                 />
+                
+                <div className="pt-2">
+                  <SliderField
+                    id="time-scrubber"
+                    label="Scrub Time (Hours)"
+                    min={0}
+                    max={1439}
+                    step={15}
+                    value={timeInMinutes}
+                    onChange={handleTimeScrub}
+                    format={(v) => {
+                      const h = Math.floor(v / 60);
+                      const m = v % 60;
+                      const ampm = h >= 12 ? 'PM' : 'AM';
+                      const h12 = h % 12 || 12;
+                      return `${h12}:${m.toString().padStart(2, '0')} ${ampm}`;
+                    }}
+                  />
+                </div>
+
                 
                 <div className="space-y-2 relative">
                   <label className="text-sm font-bold text-text-2">Base Time Zone</label>

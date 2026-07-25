@@ -8,6 +8,7 @@ import { CopyButton } from '@/components/ui/CopyButton';
 import { blobManager } from '@/src/lib/blob-manager';
 import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
+import { useToast } from '@/components/ui/Toast';
 
 type XMLFormatMode = 'format' | 'minify' | 'validate';
 type XMLIndent = '2' | '4' | 'tab';
@@ -129,6 +130,7 @@ function processXML(xml: string, options: XMLFormatOptions): XMLResult {
 }
 
 export default function XmlFormatterClient() {
+  const { toast } = useToast();
   const [input, setInput] = useState<string>('');
   const [options, setOptions] = useState<XMLFormatOptions>({
     indent: '2',
@@ -218,7 +220,13 @@ export default function XmlFormatterClient() {
             </div>
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 5 * 1024 * 1024) {
+                  toast("Input text exceeds 5MB limit", "error");
+                } else {
+                  setInput(e.target.value);
+                }
+              }}
               placeholder="<root>\n  <item>Data</item>\n</root>"
               className={`w-full h-full bg-bg border border-border rounded-2xl p-4 font-mono text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
               style={{ fontSize: `${fontSize}px` }}

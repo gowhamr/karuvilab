@@ -2,29 +2,96 @@ import { ToolContent } from '../../registry/types';
 
 export const sipCalculator: ToolContent = {
   detailedDescription: `
-<p>The SIP (Systematic Investment Plan) Calculator is a powerful wealth-planning tool designed to help you estimate the future value of your mutual fund investments. SIPs are one of the most effective ways to build a large corpus over time by investing small, regular amounts. This calculator provides the clarity you need to set realistic financial goals and understand the impact of long-term compounding.</p>
+# KaruviLab Elite Learning Hub: Systematic Investment Plans (SIP) & Compounding
 
-<p>By inputting your monthly investment amount, expected annual return rate, and the duration of your investment, you can instantly see how much your wealth could grow. The tool also visualizes the total amount invested versus the estimated capital gains, giving you a clear picture of how much 'extra' money you are earning through disciplined investing and market growth.</p>
+Welcome to the engineering guide to SIPs. This handbook explains the exponential mathematics of compound interest and the psychological superpower of Dollar-Cost Averaging.
 
-<p>One of the core benefits of using KaruviLab's SIP Calculator is privacy. Planning your financial future is a private matter. Because our tool runs entirely in your browser, your investment amounts, goals, and return expectations are never uploaded or shared. It is a secure environment for sensitive financial simulations, available whenever you need it, even without an internet connection.</p>
+---
+
+## 1. Prerequisites: The "Market Timing" Fallacy
+
+Human psychology is terrible at investing. When the stock market is booming, humans feel safe and buy at the peak. When the market crashes, humans panic and sell at the absolute bottom. 
+Trying to guess exactly when the market is at its lowest point is mathematically proven to fail for 99% of professional fund managers.
+
+**The Solution:** The Systematic Investment Plan (SIP).
+Instead of investing $12,000 once a year, you automate the system to invest exactly $1,000 on the 1st of every single month, regardless of whether the market is booming or crashing.
+
+---
+
+## 2. Core Concepts: Dollar/Rupee Cost Averaging
+
+A SIP fundamentally changes the math of a market crash.
+- If the market is **up**, your $1,000 buys 10 shares ($100 each).
+- If the market **crashes by 50%**, your $1,000 automatically buys 20 shares ($50 each).
+
+You are mathematically forcing yourself to buy *more* assets when they are cheap, and *fewer* assets when they are expensive. Over 10 years, this smooths out volatility and lowers your average cost per share, completely removing the emotional panic of market crashes.
+
+---
+
+## 3. Mathematical Foundations: The Future Value of an Annuity
+
+A SIP is technically an "Annuity Due" (regular payments making compound interest).
+
+**The Formula:**
+$$ FV = P \\times \\frac{(1 + r)^n - 1}{r} \\times (1 + r) $$
+
+- **FV:** Future Value of your portfolio
+- **P:** Monthly SIP Amount
+- **r:** Expected Monthly Return Rate (Annual % / 12 / 100)
+- **n:** Total number of months
+
+Because $n$ is an exponent, the graph of a SIP looks like a hockey stick. For the first 10 years, it looks like a straight line of slow growth. In years 20 to 30, the line explodes upward vertically.
+
+**The Rule of 72:** To estimate compounding in your head, divide 72 by the annual interest rate. That is how many years it takes for your money to double. (e.g., at 12% returns, your portfolio doubles every 6 years).
+
+---
+
+## 4. The Inflation Threat (Real vs Nominal Returns)
+
+If a SIP calculator says you will have $5 Million in 30 years, you feel rich. But this is the **Nominal Value**. 
+
+Due to Inflation, $5 Million in 2055 will not buy the same amount of goods as $5 Million today.
+If the stock market returns 12% a year, but inflation is 6% a year, your **Real Rate of Return** is only ~6%. 
+
+*Professional Advice:* Always use an inflation-adjusted calculator, or subtract the inflation rate from your expected return rate before running the math, so you know the true purchasing power of your future wealth.
+
+---
+
+## 5. Production Workflows
+
+- **Robo-Advisors:** Platforms like Wealthfront or Zerodha built their entire business models around automating SIPs. Backend Node.js schedulers automatically trigger direct-debit API calls to your bank on the 1st of every month, converting your fiat into index funds without human intervention.
+- **Index Funds:** SIPs are almost exclusively paired with broad-market Index Funds (like the S&P 500 or Nifty 50), ensuring the math relies on the macroeconomic growth of human civilization rather than gambling on a single company.
+
+---
+
+## 6. Interactive Quiz
+
+**Beginner:**
+1. Should you stop your SIP when the stock market crashes? *(Answer: No! A crash is mathematically the best time for a SIP, because your fixed monthly payment automatically buys twice as many shares when prices drop).*
+
+**Intermediate:**
+2. What is Dollar-Cost Averaging? *(Answer: The strategy of investing a fixed amount of money at regular intervals, which mathematically lowers the average cost of your shares over time and removes emotional market-timing).*
+
+**Advanced:**
+3. Why does the compounding curve look like a hockey stick? *(Answer: Because it is an exponential mathematical function. In the later decades, your generated interest starts generating its own interest, causing the portfolio value to explode vertically).*
+
+---
+*End of Elite Learning Hub Content.*
 `,
   howTo: [
-    "<strong>Monthly Investment:</strong> Enter the amount you plan to invest every month.",
-    "<strong>Return Rate:</strong> Input the expected annual rate of return (e.g., 12 for 12%).",
-    "<strong>Investment Period:</strong> Set the number of years you intend to stay invested.",
-    "<strong>Calculate:</strong> Click 'Calculate' to see the projected maturity value and total gains.",
-    "<strong>Adjust Goals:</strong> Modify the values to see how increasing your SIP or tenure impacts the final corpus.",
+    "**Step 1:** Enter your Monthly Investment amount.",
+    "**Step 2:** Enter your Expected Annual Return (Historical index funds average 10-12%).",
+    "**Step 3:** Enter your Time Period (in years).",
+    "**Step 4:** The tool calculates the massive difference between your invested amount and your final wealth (the magic of compounding)."
   ],
   faq: [
-    { question: "What is an SIP?", answer: "SIP is a method of investing a fixed amount regularly in mutual funds, benefiting from Rupee Cost Averaging." },
-    { question: "Are these returns guaranteed?", answer: "No, mutual fund investments are subject to market risks. This calculator provides estimates based on your input rate." },
-    { question: "Does it account for inflation?", answer: "This is a basic growth calculator. To account for inflation, you may want to use a higher return rate or adjust your final expectations." },
-    { question: "Can I use it for one-time investments?", answer: "For one-time investments, we recommend using our Lumpsum Calculator instead." },
-    { question: "Is my financial data private?", answer: "Absolutely. All calculations happen locally on your device; KaruviLab never sees your data." }
+    {
+      question: "Are these returns guaranteed?",
+      answer: "No. The stock market is volatile in the short term. However, over a 15-20 year horizon, broad-market index funds have historically trended upward to match the expected average returns."
+    }
   ],
-  examples: [
-    { label: "Wealth Builder", input: "Monthly: 5000, Rate: 12%, Tenure: 20 yrs", output: "Invested: 12L, Gains: 37.9L, Total: 49.9L", description: "Demonstrating the massive power of compounding over two decades." },
-    { label: "Short Term Goal", input: "Monthly: 10000, Rate: 10%, Tenure: 5 yrs", output: "Invested: 6L, Gains: 1.7L, Total: 7.7L", description: "Planning for a down payment or major purchase in 5 years." },
-    { label: "Retirement Plan", input: "Monthly: 20000, Rate: 15%, Tenure: 25 yrs", output: "Invested: 60L, Gains: 5.9Cr, Total: 6.5Cr", description: "High-growth scenario showing significant wealth creation over a long career." }
-  ]
+  useCases: [],
+  examples: [],
+  commonErrors: [],
+  alternatives: ["Lumpsum Calculator", "CAGR Calculator"]
 };

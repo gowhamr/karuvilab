@@ -7,6 +7,7 @@ import { ImageQueue } from './ImageQueue';
 import { AdvancedSettings } from './AdvancedSettings';
 import { Loader2, Download, Trash2, Zap, AlertTriangle, Image as ImageIcon } from 'lucide-react';
 import { getDeviceCapabilities, isLargeBatch } from '@/src/utils';
+import { useToast } from '@/components/ui/Toast';
 
 export const BatchMode: React.FC = () => {
   const items = useImageCompressStore(state => state.items);
@@ -17,11 +18,18 @@ export const BatchMode: React.FC = () => {
   const isProcessing = useImageCompressStore(state => state.isProcessing);
   const zipProgress = useImageCompressStore(state => state.zipProgress);
   const [dragState, setDragState] = useState<'idle' | 'hover' | 'over' | 'rejected'>('idle');
+  const { toast } = useToast();
 
   const handleFiles = React.useCallback((files: File[]) => {
-    addFiles(files);
+    const validFiles = files.filter(f => f.size <= 25 * 1024 * 1024);
+    if (validFiles.length < files.length) {
+      toast("Some files were skipped. Maximum size is 25MB.", "error");
+    }
+    if (validFiles.length > 0) {
+      addFiles(validFiles);
+    }
     setDragState('idle');
-  }, [addFiles]);
+  }, [addFiles, toast]);
 
   const { isMobile } = getDeviceCapabilities();
   const showLargeBatchWarning = React.useMemo(() => 

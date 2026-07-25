@@ -11,6 +11,7 @@ export default function Track2ParserClient() {
   const parseTrack2 = (data: string) => {
     try {
       if (!data.trim()) return '';
+      if (data.length > 10 * 1024) return 'Error: Input is too large. Max size is 10KB.';
       // Simple parse logic for [PAN]=[YYMM][ServiceCode][DiscretionaryData]
       let pan = '', separator = '', yymm = '', serviceCode = '', discretionary = '';
       

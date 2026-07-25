@@ -1,68 +1,108 @@
 import { ToolContent } from '../../registry/types';
 
 export const regexTester: ToolContent = {
-  detailedDescription:
-    "Test regular expressions against sample text in real time with live match highlighting. Supports all JavaScript regex flags (`g`, `i`, `m`, `s`, `u`), named capture groups, and displays each match's index and captured groups. No data leaves your browser.",
+  detailedDescription: `
+# KaruviLab Elite Learning Hub: Regex Engineering & ReDoS Attacks
+
+Welcome to the engineering guide to Regular Expressions (Regex). This handbook explores the mathematical power of pattern matching, and the catastrophic performance flaw that can freeze an enterprise server for years.
+
+---
+
+## 1. Prerequisites: The Language of Patterns
+
+Regex is a sequence of characters that defines a search pattern. Instead of writing 50 lines of \`if/else\` statements to check if a string is a valid email address, you can write a single line of Regex.
+
+**Core Mechanics:**
+- **Character Classes:** \`[a-z]\` matches any lowercase letter. \`\\d\` matches any number.
+- **Quantifiers:** \`+\` means "1 or more". \`*\` means "0 or more". \`{2,4}\` means "between 2 and 4 times".
+- **Anchors:** \`^\` forces the match to start at the beginning of the string. \`$\` forces it to end at the string's conclusion.
+- **Groups:** \`(cat|dog)\` matches either "cat" or "dog" and captures the result for later use.
+
+---
+
+## 2. Threat Model: The ReDoS Catastrophe
+
+Regular Expressions look simple, but under the hood, they are executed by complex mathematical engines (Finite Automata). Most programming languages (JavaScript, Python, Java) use an **NFA (Nondeterministic Finite Automaton)** engine.
+
+NFA engines evaluate patterns using **Backtracking**. If the engine goes down a path that fails, it steps back and tries another path.
+
+### The Attack (Catastrophic Backtracking)
+Imagine a developer writes this Regex to validate an email:
+\`^([a-zA-Z0-9]+\\s?)+$\`
+
+A hacker submits this payload:
+\`aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaX\`
+
+**What happens?**
+The regex engine matches the first \`a\`. The \`+\` operator tells it to keep matching \`a\`s. It gets to the end and sees the \`X\`. The match fails.
+The engine then **backtracks**. It tries grouping the \`a\`s differently (maybe 2 at a time, maybe 3 at a time). 
+Because of the nested \`+\` operators, the number of possible combinations the engine must check is $2^N$ (where N is the length of the string).
+
+For a 40-character string, the engine must check $2^{40}$ (1 Trillion) combinations. 
+**The Node.js server instantly freezes at 100% CPU.** It will literally take 5 years to finish calculating that the string doesn't match. The hacker has achieved a **Regular Expression Denial of Service (ReDoS)** attack using just 40 characters.
+
+**The Fix:** Never use nested quantifiers like \`(a+)+\`. Cloudflare famously experienced a massive global outage in 2019 because a single poorly written Regex in their WAF caused catastrophic backtracking across their entire network.
+
+---
+
+## 3. Engineering Challenge: Greedy vs Lazy Matching
+
+Another massive trap for junior developers is "Greediness".
+
+Imagine you have this HTML: \`<div>Hello</div><div>World</div>\`
+You want to extract the content inside the first div. You write the regex: \`<div>(.*)</div>\`
+
+**The Bug:** The \`*\` quantifier is **Greedy**. It matches as much text as mathematically possible. It will match the very first \`<div>\`, skip right past the first \`</div>\`, and keep going until the very last \`</div>\` in the document. Your result is \`Hello</div><div>World\`.
+
+**The Fix:** You must make the quantifier **Lazy** by appending a \`?\`. 
+The regex \`<div>(.*?)</div>\` tells the engine to stop matching at the very *first* instance of the closing tag.
+
+---
+
+## 4. Production Workflows
+
+- **Data Sanitization:** Backend APIs use strict Regex to strip dangerous characters from usernames and passwords before passing them to the database.
+- **Log Parsing:** Site Reliability Engineers (SREs) write massive Regex patterns in Kibana or Splunk to instantly extract specific IP addresses and error codes from millions of raw text logs.
+
+---
+
+## 5. Standards & References
+- **PCRE (Perl Compatible Regular Expressions):** The industry standard syntax that almost all modern programming languages emulate.
+
+---
+
+## 6. Interactive Quiz
+
+**Beginner:**
+1. What does the regex \`^\\d{4}$\` match? *(Answer: It strictly matches exactly four numbers, nothing more, nothing less. Useful for PIN codes).*
+
+**Intermediate:**
+2. What is the difference between a Greedy and Lazy quantifier? *(Answer: A Greedy quantifier matches as much text as possible. A Lazy quantifier (using '?') stops at the very first valid match).*
+
+**Advanced:**
+3. What is a ReDoS attack, and why does it crash servers? *(Answer: Regular Expression Denial of Service. It occurs when a hacker submits a carefully crafted string to a poorly written Regex containing nested quantifiers. The regex engine experiences "catastrophic backtracking", requiring trillions of calculations and freezing the CPU).*
+
+---
+*End of Elite Learning Hub Content.*
+`,
   howTo: [
-    "Enter your regular expression in the pattern field.",
-    "Type or paste the sample text in the test area.",
-    "All matches are highlighted immediately as you type.",
-    "Review the match list below showing each match's value, index, and groups.",
-    "Toggle flags (`g`, `i`, `m`, etc.) using the flag buttons.",
+    "**Step 1:** Enter your Regular Expression in the top field.",
+    "**Step 2:** Select the global flags (e.g., 'g' for Global, 'i' for Case Insensitive).",
+    "**Step 3:** Paste your target text in the main body.",
+    "**Step 4:** The tool will execute the Regex engine in real-time, highlighting all matches and explicitly identifying individual Capture Groups."
   ],
   faq: [
     {
-      question: "Which regex flavor does this use?",
-      answer:
-        "JavaScript's built-in `RegExp` engine. Most common patterns are compatible, but features like lookbehinds require a modern browser (Chrome 62+, Firefox 78+).",
+      question: "Are there differences in Regex across languages?",
+      answer: "Yes. While PCRE is the standard, JavaScript's regex engine differs slightly from Python or Java. This tool uses the native JavaScript engine, so behavior perfectly matches JS execution."
     },
     {
-      question: "Why does my regex match nothing?",
-      answer:
-        "Check that special characters (`.`, `*`, `+`, `?`, `(`, `)`) are escaped with a backslash if you want them treated literally.",
-    },
-    {
-      question: "What are flags and when do I use them?",
-      answer:
-        "`g` finds all matches (not just the first), `i` ignores case, `m` makes `^` and `$` match line boundaries, `s` makes `.` match newlines.",
-    },
-    {
-      question: "Can I use named capture groups?",
-      answer:
-        "Yes. Use `(?<name>...)` syntax. Named groups are displayed alongside numeric groups in the match list.",
-    },
+      question: "Will testing a bad regex crash my browser?",
+      answer: "Yes. If you write a regex capable of catastrophic backtracking and provide a long string, it will freeze your current browser tab just like it would freeze a Node.js server."
+    }
   ],
-  useCases: [
-    "Building and testing an email validation regex",
-    "Extracting dates or phone numbers from a block of text",
-    "Debugging a complex search-and-replace pattern",
-    "Learning regex syntax interactively",
-  ],
-  examples: [
-    {
-      label: "Match email addresses",
-      input: "Contact us at hello@karuvilab.com or support@example.org",
-      output: "Matches: hello@karuvilab.com, support@example.org",
-    },
-    {
-      label: "Extract digits",
-      input: "Order #4521 ships in 3 days",
-      output: "Matches: 4521, 3",
-    },
-  ],
-  commonErrors: [
-    {
-      error: "Regex throws 'Invalid regular expression'",
-      fix: "Check for unmatched parentheses, brackets, or unescaped special characters in the pattern.",
-    },
-    {
-      error: "Pattern only matches once even with the global flag",
-      fix: "Ensure the `g` flag is enabled. Without it, `RegExp.exec` and `String.match` return only the first match.",
-    },
-    {
-      error: "Catastrophic backtracking causes the browser to hang",
-      fix: "Simplify nested quantifiers (e.g., `(a+)+`). These can cause exponential time complexity on certain inputs.",
-    },
-  ],
-  alternatives: ["regex101.com", "regexr.com", "RegExBuddy"],
+  useCases: [],
+  examples: [],
+  commonErrors: [],
+  alternatives: ["XML Formatter", "JSON Formatter"]
 };

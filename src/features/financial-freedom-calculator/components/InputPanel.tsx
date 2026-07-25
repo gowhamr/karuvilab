@@ -157,7 +157,9 @@ export function InputPanel() {
               label="One-Time Windfalls (₹)"
               placeholder="e.g., 500000, 100000"
               value={inputs.oneTimeWindfalls}
-              onChange={(val) => setInputs({ oneTimeWindfalls: val })}
+              onChange={(val) => {
+                if (val.length <= 1000) setInputs({ oneTimeWindfalls: val });
+              }}
               description="Comma-separated amounts expected to be added to savings."
             />
           </AccordionContent>

@@ -67,8 +67,20 @@ export default function HmacGeneratorClient() {
       setOutput('');
       return;
     }
-    const result = await generateHMAC(message, key, algorithm, encoding);
-    setOutput(result);
+    if (message.length > 5 * 1024 * 1024) {
+      setOutput('Error: Message is too large. Maximum size is 5MB.');
+      return;
+    }
+    if (key.length > 1 * 1024 * 1024) {
+      setOutput('Error: Key is too large. Maximum size is 1MB.');
+      return;
+    }
+    try {
+      const result = await generateHMAC(message, key, algorithm, encoding);
+      setOutput(result);
+    } catch (e: any) {
+      setOutput(`Error: ${e.message}`);
+    }
   }, [message, key, algorithm, encoding]);
 
   useEffect(() => {

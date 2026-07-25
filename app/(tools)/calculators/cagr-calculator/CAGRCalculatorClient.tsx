@@ -50,21 +50,30 @@ const CAGRCalculatorClient = memo(function CAGRCalculatorClient() {
           label="Initial Investment (BV)"
           type="number"
           value={initial}
-          onChange={(v) => setInitial(v)}
+          onChange={(v) => {
+            const num = Number(v);
+            if (num >= 0 && num <= 1000000000000) setInitial(v);
+          }}
           placeholder="e.g. 10000"
         />
         <ToolInput
           label="Final Value (EV)"
           type="number"
           value={final}
-          onChange={(v) => setFinal(v)}
+          onChange={(v) => {
+            const num = Number(v);
+            if (num >= 0 && num <= 1000000000000) setFinal(v);
+          }}
           placeholder="e.g. 25000"
         />
         <ToolInput
           label="Duration (Years)"
           type="number"
           value={years}
-          onChange={(v) => setYears(v)}
+          onChange={(v) => {
+            const num = Number(v);
+            if (num >= 0 && num <= 1000) setYears(v);
+          }}
           placeholder="e.g. 5"
         />
       </div>

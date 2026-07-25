@@ -245,6 +245,12 @@ export default function JSONFormatterClient() {
     const abortController = new AbortController();
 
     const run = async () => {
+      if (input.length > 5 * 1024 * 1024) {
+        setResult({ output: "", error: { message: "Input text exceeds 5MB limit" }, parsed: null });
+        setIsProcessing(false);
+        return;
+      }
+      
       if (input.length < 500 * 1024) {
         setIsProcessing(false);
         try {

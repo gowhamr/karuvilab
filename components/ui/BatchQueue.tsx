@@ -52,7 +52,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
       className={cn(
-        "group bg-surface-2 border rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 transition-all relative",
+        "group bg-surface-2 border rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 transition-all relative overflow-hidden",
         item.status === 'completed' ? "border-green-500/10" : "border-border hover:border-blue/30",
         item.status === 'failed' ? "border-red-500/30 border-l-4 border-l-red-500" : ""
       )}
@@ -113,7 +113,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
       </div>
 
       {/* Context Actions (Fades in on hover) */}
-      <div className="flex items-center justify-end gap-1 mt-1 sm:mt-0 w-full sm:w-auto opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-all duration-200 border-t sm:border-none border-border pt-2 sm:pt-0">
+      <div className="flex items-center justify-end gap-1 mt-1 sm:mt-0 w-full sm:w-auto shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-all duration-200 border-t sm:border-none border-border pt-2 sm:pt-0">
         {item.status === 'completed' && (
           <>
             <button 

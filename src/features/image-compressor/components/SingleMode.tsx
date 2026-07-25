@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { AdvancedSettings } from './AdvancedSettings';
 import { ComparisonView } from './ComparisonView';
 import { Loader2, AlertCircle, RefreshCw, Zap, Image as ImageIcon } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 export const SingleMode: React.FC = () => {
   const items = useImageCompressStore(state => state.items);
@@ -17,9 +18,17 @@ export const SingleMode: React.FC = () => {
     items && items.length > 0 ? items[0] : undefined
   , [items]);
 
+  const { toast } = useToast();
+
   const handleFiles = React.useCallback((files: File[]) => {
     try {
-      if (addFiles) addFiles(files);
+      const validFiles = files.filter(f => f.size <= 25 * 1024 * 1024);
+      if (validFiles.length < files.length) {
+        toast("Some files were skipped. Maximum size is 25MB.", "error");
+      }
+      if (validFiles.length > 0) {
+        if (addFiles) addFiles(validFiles);
+      }
       setDragState('idle');
     } catch (err) {
       console.error("Failed to add files:", err);

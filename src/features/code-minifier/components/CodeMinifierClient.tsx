@@ -12,6 +12,7 @@ import { Layers, Code, FileCode, Zap, Type, FileText } from "lucide-react";
 import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { ToolInput } from "@/components/ui/ToolInput";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { useToast } from "@/components/ui/Toast";
 import { StatusBadge } from "@/components/system/StatusBadge";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 
@@ -27,6 +28,7 @@ export default function CodeMinifierClient() {
   const [fontSize, setFontSize] = useState(14);
   const [wordWrap, setWordWrap] = useState(false);
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const { toast } = useToast();
   
   // Text mode state
   const [textInput, setTextInput] = useState("");
@@ -69,7 +71,14 @@ export default function CodeMinifierClient() {
 
   const handleFiles = (files: FileList | File[]) => {
     if (!files || files.length === 0) return;
-    addItems(toolId, Array.from(files));
+    const filesArray = Array.from(files);
+    const validFiles = filesArray.filter(f => f.size <= 10 * 1024 * 1024);
+    if (validFiles.length < filesArray.length) {
+      toast("Some files were skipped. Maximum size is 10MB.", "error");
+    }
+    if (validFiles.length > 0) {
+      addItems(toolId, validFiles);
+    }
   };
 
   const processAll = async () => {
@@ -107,6 +116,12 @@ export default function CodeMinifierClient() {
         setTextOutput("");
         setTextError("");
       });
+      return;
+    }
+    
+    if (textInput.length > 5 * 1024 * 1024) {
+      setTextError("Input text exceeds 5MB limit");
+      setTextOutput("");
       return;
     }
 

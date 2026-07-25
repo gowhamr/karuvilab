@@ -8,15 +8,18 @@ import { SecurityInsights } from "./components/SecurityInsights";
 import { DeveloperAnalysis } from "./components/DeveloperAnalysis";
 import { JwtPartsView } from "./components/JwtPartsView";
 import { ApiSnippets } from "./components/ApiSnippets";
+import { useToast } from "@/components/ui/Toast";
 
 export default function JWTDecoderClient() {
   const [token, setToken] = useState("");
   const deferredToken = useDeferredValue(token);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const decoded = useMemo<DecodedJWT | { error: string } | null>(() => {
     const raw = deferredToken.trim();
     if (!raw) return null;
+    if (raw.length > 5 * 1024 * 1024) return { error: "JWT is too large. Maximum size is 5MB." };
     const parts = raw.split(".");
     if (parts.length !== 3) return { error: "Invalid JWT format: expected exactly 3 parts separated by dots (Header.Payload.Signature)." };
     
@@ -68,6 +71,10 @@ export default function JWTDecoderClient() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast("File is too large. Maximum size is 5MB.", "error");
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (evt) => {
       if (evt.target?.result) setToken(String(evt.target.result));
@@ -84,6 +91,10 @@ export default function JWTDecoderClient() {
           e.preventDefault();
           const file = e.dataTransfer.files?.[0];
           if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+              toast("File is too large. Maximum size is 5MB.", "error");
+              return;
+            }
             const reader = new FileReader();
             reader.onload = (evt) => {
               if (evt.target?.result) setToken(String(evt.target.result));

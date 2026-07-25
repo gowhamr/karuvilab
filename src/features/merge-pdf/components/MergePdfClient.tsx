@@ -7,6 +7,7 @@ import { TaskProgress } from "@/src/workers/types";
 import { useProgress } from "@/src/contexts/ProgressContext";
 
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useToast } from "@/components/ui/Toast";
 
 import { DropZone } from "@/components/ui/DropZone";
 
@@ -123,9 +124,28 @@ export default function MergePdfClient() {
     }
   };
 
+  const { toast } = useToast();
+
   const addFiles = (fl: FileList | File[] | null) => {
     if (!fl) return;
-    setFiles(prev => [...prev, ...Array.from(fl).map(f => ({ id: crypto.randomUUID(), name: f.name, file: f }))]);
+    const MAX_FILE_SIZE = 100 * 1024 * 1024;
+    const validFiles: PdfFile[] = [];
+    
+    Array.from(fl).forEach(f => {
+      if (f.type !== "application/pdf" && !f.name.endsWith(".pdf")) {
+        toast(`Invalid file type: ${f.name}. Only PDFs are allowed.`, "error");
+        return;
+      }
+      if (f.size > MAX_FILE_SIZE) {
+        toast(`File too large: ${f.name}. Maximum size is 100MB.`, "error");
+        return;
+      }
+      validFiles.push({ id: crypto.randomUUID(), name: f.name, file: f });
+    });
+
+    if (validFiles.length > 0) {
+      setFiles(prev => [...prev, ...validFiles]);
+    }
   };
 
   useWorkflowInput(addFiles);

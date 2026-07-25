@@ -28,7 +28,7 @@ export function ApiTester() {
       const res = await fetch(url, {
         method,
         headers: parsedHeaders,
-        body: ["GET", "HEAD"].includes(method) ? undefined : body || undefined
+        ...((["GET", "HEAD"].includes(method) || !body) ? {} : { body })
       });
       const endTime = performance.now();
       

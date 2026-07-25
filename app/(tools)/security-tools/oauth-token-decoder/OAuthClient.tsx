@@ -4,8 +4,10 @@ import { useState, useCallback } from "react";
 import { parseJwt, JwtParsed } from "@/src/lib/security/tokens";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Key, Clock, ShieldCheck, AlertCircle } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 export default function OAuthClient() {
+  const { toast } = useToast();
   const [tokenInput, setTokenInput] = useState("");
   const [parsed, setParsed] = useState<JwtParsed | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +37,13 @@ export default function OAuthClient() {
           rows={5}
           placeholder="eyJhY2Nlc3NfdG9rZW4iOi... or eyJhbGciOiJSUzI1Ni..."
           value={tokenInput}
-          onChange={(e) => setTokenInput(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length > 1 * 1024 * 1024) {
+              toast("Input token exceeds 1MB limit", "error");
+            } else {
+              setTokenInput(e.target.value);
+            }
+          }}
           className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
         />
       </div>

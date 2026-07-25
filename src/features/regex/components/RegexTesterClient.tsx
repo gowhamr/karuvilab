@@ -13,6 +13,7 @@ import {
   Info 
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
+import { useToast } from "@/components/ui/Toast";
 
 interface Match {
   value: string;
@@ -21,6 +22,7 @@ interface Match {
 }
 
 export default function RegexTesterClient() {
+  const { toast } = useToast();
   const [pattern, setPattern] = useState("");
   const [flags, setFlags] = useState({ g: true, i: false, m: false, s: false, u: false });
   const [testString, setTestString] = useState("");
@@ -225,7 +227,13 @@ export default function RegexTesterClient() {
             rows={6}
             placeholder="Enter your test string here…"
             value={testString}
-            onChange={e => setTestString(e.target.value)}
+            onChange={e => {
+              if (e.target.value.length > 5 * 1024 * 1024) {
+                toast("Input text exceeds 5MB limit", "error");
+              } else {
+                setTestString(e.target.value);
+              }
+            }}
           />
         </div>
 

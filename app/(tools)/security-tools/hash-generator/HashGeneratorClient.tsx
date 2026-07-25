@@ -8,6 +8,7 @@ import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
 import { DropZone } from "@/components/ui/DropZone";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useToast } from "@/components/ui/Toast";
 import { 
   Hash, 
   FileCode, 
@@ -57,9 +58,16 @@ export default function HashGeneratorClient() {
     );
   };
 
+  const { toast } = useToast();
+
   const generateHashes = useCallback(async () => {
     if ((mode === "text" && !text) || (mode === "file" && !file)) {
       setHashes({});
+      return;
+    }
+
+    if (mode === "text" && text.length > 5 * 1024 * 1024) {
+      toast("Text input is too large. Maximum size is 5MB.", "error");
       return;
     }
 
@@ -143,7 +151,12 @@ export default function HashGeneratorClient() {
 
   const handleFiles = (files: File[] | FileList) => {
     const f = files instanceof FileList ? files[0] : files[0];
-    if (f) setFile(f);
+    if (!f) return;
+    if (f.size > 100 * 1024 * 1024) {
+      toast(`File too large: ${f.name}. Maximum size is 100MB.`, "error");
+      return;
+    }
+    setFile(f);
   };
 
   return (

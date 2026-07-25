@@ -206,6 +206,9 @@ export default function SwiftMtMxClient() {
   const parseSwift = (data: string) => {
     try {
       if (!data.trim()) return '';
+      if (data.length > 500 * 1024) {
+        return 'Failed to parse SWIFT message: Input is too large. Max size is 500KB.';
+      }
       const isXml = data.trim().startsWith('<');
       const parsed = isXml ? parseSwiftMX(data) : parseSwiftMT(data);
       return JSON.stringify(parsed, null, 2);

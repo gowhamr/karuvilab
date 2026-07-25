@@ -8,6 +8,7 @@ import { ToolInput } from "@/components/ui/ToolInput";
 import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
 import { useProgress } from "@/src/contexts/ProgressContext";
+import { useToast } from "@/components/ui/Toast";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 
@@ -43,10 +44,21 @@ export default function SplitPdfClient() {
   const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
   const [error, setError] = useState("");
   const [abortController, setAbortController] = useState<AbortController | null>(null);
+  const { toast } = useToast();
 
   const loadFile = async (files: FileList | File[]) => {
     const f = files[0];
     if (!f) return;
+    
+    if (f.type !== "application/pdf" && !f.name.endsWith(".pdf")) {
+      toast(`Invalid file type: ${f.name}. Only PDFs are allowed.`, "error");
+      return;
+    }
+    if (f.size > 100 * 1024 * 1024) {
+      toast(`File too large: ${f.name}. Maximum size is 100MB.`, "error");
+      return;
+    }
+
     setFile(f);
     setError("");
     try {

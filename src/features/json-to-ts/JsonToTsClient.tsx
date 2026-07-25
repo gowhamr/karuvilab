@@ -4,6 +4,7 @@ import { useState, useMemo, useDeferredValue } from 'react';
 import Editor from '@monaco-editor/react';
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Code, FileJson } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 function generateTsInterfaces(json: string, rootName: string = 'RootObject'): string {
   if (!json.trim()) return '';
@@ -78,6 +79,7 @@ function generateTsInterfaces(json: string, rootName: string = 'RootObject'): st
 }
 
 export default function JsonToTsClient() {
+  const { toast } = useToast();
   const [input, setInput] = useState<string>('{\n  "name": "KaruviLab",\n  "version": 1,\n  "features": ["local", "private"]\n}');
   const deferredInput = useDeferredValue(input);
 
@@ -101,7 +103,13 @@ export default function JsonToTsClient() {
               language="json"
               theme="vs-dark"
               value={input}
-              onChange={(val) => setInput(val || '')}
+              onChange={(val) => {
+                if (val && val.length > 5 * 1024 * 1024) {
+                  toast("Input text exceeds 5MB limit", "error");
+                } else {
+                  setInput(val || '');
+                }
+              }}
               options={{
                 minimap: { enabled: false },
                 fontSize: 14,

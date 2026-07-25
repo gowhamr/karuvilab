@@ -30,14 +30,20 @@ export function EmiInputs() {
           label="Loan Amount"
           type="number"
           value={String(inputs.loanAmount)}
-          onChange={(val) => setInputs({ loanAmount: Number(val) })}
+          onChange={(val) => {
+            const num = Number(val);
+            if (num >= 0 && num <= 1000000000000) setInputs({ loanAmount: num });
+          }}
           description="Total principal amount"
         />
         <ToolInput
           label="Interest Rate (%)"
           type="number"
           value={String(inputs.interestRate)}
-          onChange={(val) => setInputs({ interestRate: Number(val) })}
+          onChange={(val) => {
+            const num = Number(val);
+            if (num >= 0 && num <= 100) setInputs({ interestRate: num });
+          }}
           description="Annual interest percentage"
         />
         <SliderField

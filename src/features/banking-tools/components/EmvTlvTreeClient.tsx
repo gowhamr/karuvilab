@@ -11,6 +11,7 @@ export default function EmvTlvTreeClient() {
   const parseTlv = (hexData: string) => {
     try {
       if (!hexData.trim()) return '';
+      if (hexData.length > 100 * 1024) return 'Error: Input is too large. Max size is 100KB.';
       const hex = hexData.replace(/[\s\r\n]/g, '').toUpperCase();
       if (!/^[0-9A-F]+$/.test(hex)) return 'Invalid hex string';
       

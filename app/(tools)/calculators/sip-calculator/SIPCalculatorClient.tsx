@@ -240,7 +240,10 @@ Generated via KaruviLab`;
           type="number"
           placeholder="0"
           value={String(lumpsum || "")}
-          onChange={(v) => setLumpsum(Math.max(0, Number(v)))}
+          onChange={(v) => {
+            const num = Number(v);
+            if (num >= 0 && num <= 1000000000000) setLumpsum(num);
+          }}
           description={formatINR(lumpsum)}
         />
       </div>

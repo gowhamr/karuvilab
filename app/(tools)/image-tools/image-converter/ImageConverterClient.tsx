@@ -72,8 +72,15 @@ export default function ImageConverterClient() {
 
   const handleFiles = useCallback((files: FileList | File[]) => {
     if (!files || files.length === 0) return;
-    addItems(toolId, Array.from(files));
-  }, [addItems]);
+    const filesArray = Array.from(files);
+    const validFiles = filesArray.filter(f => f.size <= 25 * 1024 * 1024);
+    if (validFiles.length < filesArray.length) {
+      toast("Some files were skipped. Maximum size is 25MB.", "error");
+    }
+    if (validFiles.length > 0) {
+      addItems(toolId, validFiles);
+    }
+  }, [addItems, toast]);
 
   const processAll = useCallback(async () => {
     setIsProcessing(true);

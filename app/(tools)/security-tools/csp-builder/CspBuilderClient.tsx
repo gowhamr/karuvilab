@@ -5,6 +5,7 @@ import { Shield, Copy, AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Tras
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { useToast } from '@/components/ui/Toast';
 
 type CSPDirective = 
   | 'default-src' 
@@ -88,6 +89,7 @@ function buildCSPString(config: CSPConfig): string {
 }
 
 export default function CspBuilderClient() {
+  const { toast } = useToast();
   const [config, setConfig] = useState<CSPConfig>(DEFAULT_CONFIG);
   const [customInputs, setCustomInputs] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'header' | 'meta' | 'nginx' | 'apache'>('header');
@@ -242,7 +244,13 @@ export default function CspBuilderClient() {
           <input 
             type="text"
             value={importValue}
-            onChange={(e) => setImportValue(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > 5 * 1024 * 1024) {
+                toast("CSP string exceeds 5MB limit", "error");
+              } else {
+                setImportValue(e.target.value);
+              }
+            }}
             placeholder="Paste your CSP header or meta tag here..."
             className="flex-1 bg-bg border border-border rounded-xl px-4 py-3 text-xs font-mono text-text focus:border-blue outline-none shadow-inner"
           />

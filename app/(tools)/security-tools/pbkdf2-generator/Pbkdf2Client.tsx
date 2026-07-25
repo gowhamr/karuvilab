@@ -22,6 +22,18 @@ export default function Pbkdf2Client() {
       setError("Password / Input Secret is required");
       return;
     }
+    if (password.length > 1 * 1024 * 1024) {
+      setError("Password is too large. Maximum size is 1MB.");
+      return;
+    }
+    if (salt.length > 1 * 1024 * 1024) {
+      setError("Salt is too large. Maximum size is 1MB.");
+      return;
+    }
+    if (iterations < 1 || iterations > 10000000) {
+      setError("Iterations must be between 1 and 10,000,000.");
+      return;
+    }
     setIsProcessing(true);
     setError(null);
 

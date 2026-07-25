@@ -4,6 +4,7 @@ import { useState, useRef, useId } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useToast } from "@/components/ui/Toast";
 
 import { DropZone } from "@/components/ui/DropZone";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
@@ -19,9 +20,24 @@ export default function LockUnlockPdfClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [file, setFile] = useState<File | null>(null);
 
-  useWorkflowInput((files) => {
-    if (files && files[0]) setFile(files[0]);
-  });
+  const { toast } = useToast();
+  
+  const handleFile = (files: FileList | File[] | null) => {
+    const f = files instanceof FileList ? files[0] : files?.[0];
+    if (!f) return;
+    
+    if (f.type !== "application/pdf" && !f.name.endsWith(".pdf")) {
+      toast(`Invalid file type: ${f.name}. Only PDFs are allowed.`, "error");
+      return;
+    }
+    if (f.size > 100 * 1024 * 1024) {
+      toast(`File too large: ${f.name}. Maximum size is 100MB.`, "error");
+      return;
+    }
+    setFile(f);
+  };
+
+  useWorkflowInput(handleFile);
   const [mode, setMode] = useState<"lock" | "unlock">("lock");
   const [password, setPassword] = useState("");
   const [ownerPassword, setOwnerPassword] = useState("");
@@ -29,6 +45,7 @@ export default function LockUnlockPdfClient() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
 
   const inputClass = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all";
 
@@ -37,6 +54,8 @@ export default function LockUnlockPdfClient() {
     setProcessing(true);
     setError("");
     setSuccess("");
+    const controller = new AbortController();
+    setAbortController(controller);
     try {
       const { workerManager } = await import("@/src/workers/manager");
       const bytes = await file.arrayBuffer();
@@ -47,7 +66,9 @@ export default function LockUnlockPdfClient() {
         const outBytes = await workerManager.lockPdf(
           bytes,
           password,
-          ownerPassword || password
+          ownerPassword || password,
+          undefined,
+          controller.signal
         );
         
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
@@ -66,7 +87,9 @@ export default function LockUnlockPdfClient() {
         
         const outBytes = await workerManager.unlockPdf(
           bytes,
-          unlockPassword
+          unlockPassword,
+          undefined,
+          controller.signal
         );
         
         const blob = new Blob([outBytes as any], { type: "application/pdf" });
@@ -82,13 +105,17 @@ export default function LockUnlockPdfClient() {
         setSuccess("PDF unlocked successfully and downloaded.");
       }
     } catch (e: any) {
-      if (e?.message?.includes("password") || e?.message?.includes("Password")) {
+      if (e?.message === "Task cancelled" || e?.name === "AbortError") {
+        setError("Operation cancelled.");
+      } else if (e?.message?.includes("password") || e?.message?.includes("Password")) {
         setError("Incorrect password. Please check and try again.");
       } else {
         setError(e?.message || "Failed to process PDF.");
       }
+    } finally {
+      setProcessing(false);
+      setAbortController(null);
     }
-    setProcessing(false);
   };
 
   return (
@@ -102,10 +129,7 @@ export default function LockUnlockPdfClient() {
       </div>
 
       <DropZone
-        onFilesSelected={(files) => {
-          const f = files instanceof FileList ? files[0] : files[0];
-          if (f) setFile(f);
-        }}
+        onFilesSelected={handleFile}
         accept=".pdf,application/pdf"
         title={file ? file.name : "Drop a PDF here or click to select"}
         description={file ? `${(file.size / 1024).toFixed(0)} KB` : "Supports standard PDF files"}
@@ -137,13 +161,23 @@ export default function LockUnlockPdfClient() {
       {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl text-red-600 text-sm">{error}</div>}
       {success && <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl text-green-700 text-sm">{success}</div>}
 
-      <button
-        onClick={process}
-        disabled={!file || processing}
-        className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-      >
-        {processing ? "Processing…" : mode === "lock" ? "Lock PDF" : "Unlock PDF"}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={process}
+          disabled={!file || processing}
+          className="flex-1 py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 shadow-lg shadow-blue/20"
+        >
+          {processing ? "Processing…" : mode === "lock" ? "Lock PDF" : "Unlock PDF"}
+        </button>
+        {processing && (
+          <button
+            onClick={() => abortController?.abort()}
+            className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
 
       <WorkflowSuggestions />
     </div>

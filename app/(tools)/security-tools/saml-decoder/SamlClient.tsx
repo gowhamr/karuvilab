@@ -4,8 +4,10 @@ import { useState, useCallback } from "react";
 import { parseSaml, SamlParsed } from "@/src/lib/security/tokens";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ShieldCheck, FileCode, AlertCircle, CheckCircle2 } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 export default function SamlClient() {
+  const { toast } = useToast();
   const [input, setInput] = useState("");
   const [parsed, setParsed] = useState<SamlParsed | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +37,13 @@ export default function SamlClient() {
           rows={5}
           placeholder="PHNhbWxwOkF1dGhuUmVxdWVzdCB4bWxuczpzYW1scD0..."
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length > 1 * 1024 * 1024) {
+              toast("Input text exceeds 1MB limit", "error");
+            } else {
+              setInput(e.target.value);
+            }
+          }}
           className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
         />
       </div>

@@ -9,6 +9,9 @@ import { formatError } from "@/src/lib/formatError";
 import { WorkflowSuggestions } from "@/components/ui/WorkflowSuggestions";
 import { useWorkflowInput } from "@/src/lib/hooks/useWorkflowInput";
 import { workerManager } from "@/src/workers/manager";
+import { useToast } from "@/components/ui/Toast";
+
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 const toolId = "compress-pdf";
 
@@ -31,6 +34,7 @@ export default function CompressPdfClient() {
   const startProcessing = useBatchStore(state => state.startProcessing);
   const updateItem = useBatchStore(state => state.updateItem);
   const items = useBatchStore(state => state.items[toolId] || EMPTY_BATCH_ITEMS);
+  const { toast } = useToast();
 
   const compressSingle = useCallback(async (item: BatchItem): Promise<any> => {
     try {
@@ -62,8 +66,26 @@ export default function CompressPdfClient() {
 
   const handleFiles = useCallback((files: FileList | File[]) => {
     if (!files || files.length === 0) return;
-    addItems(toolId, Array.from(files));
-  }, [addItems]);
+    
+    const validFiles: File[] = [];
+    const fileArray = Array.from(files);
+
+    for (const file of fileArray) {
+      if (file.type !== "application/pdf") {
+        toast(`Invalid file type: ${file.name}. Only PDFs are allowed.`, "error");
+        continue;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        toast(`File too large: ${file.name}. Maximum size is 100MB.`, "error");
+        continue;
+      }
+      validFiles.push(file);
+    }
+
+    if (validFiles.length > 0) {
+      addItems(toolId, validFiles);
+    }
+  }, [addItems, toast]);
 
   useWorkflowInput(handleFiles);
 

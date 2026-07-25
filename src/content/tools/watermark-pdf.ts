@@ -1,70 +1,112 @@
 import { ToolContent } from '../../registry/types';
 
-export const watermarkPdfContent: ToolContent = {
-  detailedDescription: "<p>The <strong>Watermark PDF</strong> tool is a powerful document protection utility that allows you to overlay custom text onto your PDFs entirely within your browser. Driven by KaruviLab's unwavering commitment to <strong>Zero-Server-Upload</strong> and <strong>Privacy-First</strong> standards, this tool guarantees that your intellectual property, legal drafts, and proprietary designs are never uploaded to the cloud. You can confidently watermark highly confidential files knowing that no third party will ever have access to your data.</p><p>By utilizing advanced <strong>Local-First Execution</strong>, our engine renders and stamps your watermarks in real-time. Whether you are adding a subtle 'CONFIDENTIAL' stamp diagonally across a financial report or a 'DRAFT' label on a manuscript, the entire visual processing happens locally on your device's hardware. This means no waiting for file uploads or dealing with queued server processing, resulting in an exceptionally fast, seamless user experience.</p><p>Moreover, the Watermark PDF tool is designed for complete <strong>Offline Resilience</strong>. Once the application has loaded, you can safely disconnect your device from the internet and continue watermarking your documents. This air-gapped capability ensures that you maintain full productivity and absolute data security, even when working in remote locations or strictly controlled corporate environments.</p>",
+export const watermarkPdf: ToolContent = {
+  detailedDescription: `
+# KaruviLab Elite Learning Hub: PDF Watermarking & The Graphics State
+
+Welcome to the engineering guide to PDF Watermarking. Stamping a "CONFIDENTIAL" overlay onto a document introduces fascinating challenges in PDF Z-indexing, opacity, and graphic object manipulation.
+
+---
+
+## 1. Prerequisites: Layers in a PDF
+
+In Photoshop, you have explicit "Layers". In a PDF, there are no true layers in the traditional sense. 
+Instead, a PDF page is a continuous stream of drawing instructions executed from top to bottom.
+
+\`\`\`text
+1. Draw background image.
+2. Draw paragraph 1 text.
+3. Draw table lines.
+4. Draw paragraph 2 text.
+\`\`\`
+
+If you want a watermark to appear *behind* the text but *in front* of the background, you must mathematically inject the watermark drawing instructions exactly between step 1 and step 2.
+
+---
+
+## 2. The Graphics State Architecture (ExtGState)
+
+Drawing a semi-transparent "CONFIDENTIAL" stamp diagonally across a page requires modifying the **Extended Graphics State (ExtGState)**.
+
+### Opacity (Alpha Blending)
+Unlike CSS where you can just type \`opacity: 0.5\`, PDF requires you to define a specific dictionary object containing the \`ca\` (Stroke Opacity) and \`CA\` (Fill Opacity) values, and then apply that dictionary to the graphics stream before drawing the text.
+
+### Affine Transformations (Rotation)
+To make the text diagonal, the engine must apply a transformation matrix. Instead of saying "Rotate 45 degrees", the PDF standard requires a 6-value mathematical matrix: \`[cos(θ) sin(θ) -sin(θ) cos(θ) Tx Ty]\`. The browser engine calculates this matrix to translate the text to the center of the page and rotate it.
+
+---
+
+## 3. Threat Model: The "Removable Watermark" Flaw
+
+| Threat | Defended By | Explanation |
+|--------|-------------|-------------|
+| **Document Leaks** | ⚠️ Psychological | A watermark deters casual leaks by identifying the source (e.g., "Assigned to John Doe"). |
+| **Watermark Removal** | 🚨 Vulnerable | **A standard PDF watermark is incredibly easy to remove.** Because a PDF is just a list of objects, a hacker can open the file in Adobe Illustrator or a specialized PDF editor, select the "CONFIDENTIAL" text object, and press Delete. |
+
+### The Ultimate Mitigation: Rasterization (Flattening)
+If you require absolute security where the watermark cannot be deleted, you must **Flatten** or **Rasterize** the PDF. This means converting the entire vector PDF into a single flat JPEG image. The text, the background, and the watermark are permanently fused into a single layer of pixels. 
+*(Note: Flattening ruins the ability to search or highlight text).*
+
+---
+
+## 4. Browser Internals: Drawing the Watermark
+
+When you use KaruviLab to apply a watermark:
+1. \`pdf-lib\` loads the binary tree into RAM.
+2. It generates a new Font Object and embeds it in the file.
+3. It iterates over the \`Pages\` array.
+4. For each page, it calculates the center coordinates \`(width/2, height/2)\`.
+5. It injects a new graphics stream at the end of the page's content stream (drawing it *on top* of everything else), applying the rotation matrix and the ExtGState opacity dictionary.
+6. The modified ArrayBuffer is exported.
+
+---
+
+## 5. Production Workflows
+
+- **Legal Discovery (Bates Stamping):** Law firms use specialized watermark tools to automatically stamp sequential numbers (e.g., \`DEFENDANT-0001\`) on the bottom right corner of thousands of evidence pages.
+- **Corporate Compliance:** Automated backend systems dynamically generate watermarks containing the downloader's email address and timestamp across confidential memos to track the source of any potential leaks.
+
+---
+
+## 6. Standards & References
+- **ISO 32000-1 (Section 8.4):** Graphic State — Details the mathematics of the transformation matrix.
+- **ISO 32000-1 (Section 11):** Transparency — Details alpha blending and ExtGState dictionaries.
+
+---
+
+## 7. Interactive Quiz
+
+**Beginner:**
+1. Does adding a watermark permanently lock the PDF? *(Answer: No. It simply adds a new text or image object to the page).*
+
+**Intermediate:**
+2. Why is it so easy for a hacker to remove a standard PDF watermark? *(Answer: Because PDFs are vector documents made of distinct objects. A hacker can easily select the watermark object in an editor and delete it).*
+
+**Advanced:**
+3. How do you permanently fuse a watermark to a document so it cannot be selected or deleted? *(Answer: By Rasterizing or Flattening the PDF, which converts the entire vector document into a single, flat pixel image).*
+
+---
+*End of Elite Learning Hub Content.*
+`,
   howTo: [
-    "Upload the PDF document you wish to protect with a watermark.",
-    "Enter the text you want to use for the watermark (e.g., 'CONFIDENTIAL' or 'DRAFT').",
-    "Adjust the formatting options, including font size, color, opacity, and rotation angle.",
-    "Click the action button to apply the watermark locally to all pages in the document.",
-    "Preview the result and download the watermarked PDF directly to your device."
-  ],
-  examples: [
-    {
-      label: "Mark a Document as Confidential",
-      description: "Overlays a large, semi-transparent 'CONFIDENTIAL' watermark diagonally across every page.",
-      input: "An unwatermarked corporate strategy PDF.",
-      output: "The PDF with a red, 45-degree angled 'CONFIDENTIAL' watermark on all pages."
-    },
-    {
-      label: "Stamp an Academic Draft",
-      description: "Applies a subtle 'DRAFT' watermark to an ongoing research paper to prevent premature distribution.",
-      input: "A 30-page research manuscript in PDF format.",
-      output: "The manuscript with a gray, centered 'DRAFT' stamp."
-    },
-    {
-      label: "Add Copyright Protection",
-      description: "Places a copyright notice at the bottom of a creative portfolio.",
-      input: "A PDF portfolio of graphic designs.",
-      output: "The PDF with a small, opaque '© 2024 Jane Doe' watermark at the bottom of every page."
-    }
+    "**Step 1:** Upload your target PDF.",
+    "**Step 2:** Enter the Text for your watermark (e.g., 'CONFIDENTIAL' or 'DRAFT').",
+    "**Step 3:** Adjust the Opacity (transparency), Font Size, and Rotation angle.",
+    "**Step 4:** Click 'Apply Watermark'. The engine will instantly inject the text across all pages.",
+    "**Step 5:** Download the watermarked file."
   ],
   faq: [
     {
-      question: "Are my documents uploaded to a server when I apply a watermark?",
-      answer: "No. We utilize a strict Zero-Server-Upload design. Your files are processed entirely on your device, ensuring maximum privacy."
+      question: "Can someone remove the watermark I add here?",
+      answer: "Yes. Unless you convert the PDF to an image (flattening), any watermark added to a standard PDF is just a text object that can be deleted using advanced PDF editing software."
     },
     {
-      question: "Can I use the Watermark PDF tool offline?",
-      answer: "Yes, the tool features complete Offline Resilience. You can use it without an internet connection once the page is fully loaded."
-    },
-    {
-      question: "Can I customize the color and transparency of the watermark?",
-      answer: "Absolutely. The tool provides granular controls for text color, font size, rotation angle, and opacity to ensure the watermark fits your specific needs."
-    },
-    {
-      question: "Will the watermark cover up important text in my document?",
-      answer: "By default, you can adjust the opacity to make the watermark semi-transparent, allowing the underlying text and images to remain readable."
-    },
-    {
-      question: "Is there a limit to how many pages I can watermark at once?",
-      answer: "Because processing happens locally, the limit is based on your device's memory. It can easily handle large, multi-page documents instantly."
+      question: "Why doesn't the watermark appear behind my images?",
+      answer: "In a PDF, new elements are drawn on top of older elements. If your PDF consists of a massive scanned image covering the whole page, placing a watermark 'behind' it would make it completely invisible."
     }
   ],
-  useCases: [
-    "Legal professionals applying a 'CONFIDENTIAL' watermark to sensitive case files before sharing them with opposing counsel.",
-    "Authors and writers stamping 'DRAFT' on unfinished manuscripts to ensure beta readers do not mistake them for final versions.",
-    "Graphic designers adding a copyright notice to PDF portfolios to deter unauthorized use of their creative work.",
-    "Corporate executives marking internal memos as 'INTERNAL USE ONLY' to prevent accidental leaks by employees."
-  ],
-  commonErrors: [
-    {
-      error: "Watermark Too Dark",
-      fix: "If the watermark is obscuring the underlying document text, adjust the opacity slider to a lower percentage (e.g., 20% or 30%) to make it more transparent."
-    },
-    {
-      error: "Encrypted PDF Error",
-      fix: "The tool cannot apply a watermark to a password-protected or encrypted PDF. Please use the Unlock PDF tool first to remove the restrictions."
-    }
-  ]
+  useCases: [],
+  examples: [],
+  commonErrors: [],
+  alternatives: ["PDF Editor", "Lock / Unlock PDF"]
 };

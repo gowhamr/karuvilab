@@ -5,6 +5,7 @@ import { ArrowLeftRight, Download, Code2, AlertTriangle } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { blobManager } from '@/src/lib/blob-manager';
+import { useToast } from '@/components/ui/Toast';
 
 type ConversionMode = 'json-to-xml' | 'xml-to-json';
 
@@ -149,6 +150,7 @@ function xmlToJson(xmlStr: string): string {
 }
 
 export default function JsonToXmlClient() {
+  const { toast } = useToast();
   const [mode, setMode] = useState<ConversionMode>('json-to-xml');
   const [input, setInput] = useState<string>('');
   const [rootNodeName, setRootNodeName] = useState<string>('root');
@@ -221,7 +223,13 @@ export default function JsonToXmlClient() {
             </div>
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 5 * 1024 * 1024) {
+                  toast("Input text exceeds 5MB limit", "error");
+                } else {
+                  setInput(e.target.value);
+                }
+              }}
               placeholder={mode === 'json-to-xml' ? '{\n  "name": "John",\n  "age": 30\n}' : '<root>\n  <name>John</name>\n  <age>30</age>\n</root>'}
               className="w-full h-96 bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
             />

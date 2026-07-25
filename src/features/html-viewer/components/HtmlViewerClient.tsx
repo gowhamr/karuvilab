@@ -12,6 +12,7 @@ import { useSearchParams } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { useToast } from "@/components/ui/Toast";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import DOMPurify from "isomorphic-dompurify";
@@ -51,6 +52,7 @@ export default function HtmlViewerClient() {
   const cdnInputId = useId();
   const searchParams = useSearchParams();
   const { createUrl, revokeUrl } = useObjectUrlManager();
+  const { toast } = useToast();
   
   // State
   const [html, setHtml] = useState(DEFAULT_CODE.html);
@@ -252,6 +254,10 @@ export default function HtmlViewerClient() {
   const handleFiles = (files: FileList | File[]) => {
     const file = files instanceof FileList ? files[0] : files[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast("File exceeds 5MB limit.", "error");
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;

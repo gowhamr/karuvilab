@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Code2, Wand2 } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 export function formatSql(sql: string, uppercaseKeywords: boolean = true, indentSpaces: number = 2): string {
   if (!sql.trim()) return "";
@@ -52,6 +53,7 @@ export function formatSql(sql: string, uppercaseKeywords: boolean = true, indent
 }
 
 export default function SqlFormatterClient() {
+  const { toast } = useToast();
   const [inputSql, setInputSql] = useState("select u.id, u.name, count(o.id) as total_orders from users u left join orders o on u.id = o.user_id where u.status = 'active' and u.created_at >= '2026-01-01' group by u.id, u.name having count(o.id) > 5 order by total_orders desc limit 10");
   const [uppercaseKeywords, setUppercaseKeywords] = useState(true);
   const [indentSpaces, setIndentSpaces] = useState(2);
@@ -110,7 +112,13 @@ export default function SqlFormatterClient() {
             id="sql-raw-input"
             rows={12}
             value={inputSql}
-            onChange={(e) => setInputSql(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > 5 * 1024 * 1024) {
+                toast("Input text exceeds 5MB limit", "error");
+              } else {
+                setInputSql(e.target.value);
+              }
+            }}
             className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
           />
         </div>

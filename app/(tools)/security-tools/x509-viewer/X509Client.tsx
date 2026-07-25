@@ -5,8 +5,10 @@ import { parseX509Certificate, parseBinaryInput, X509CertificateInfo, bytesToHex
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ShieldCheck, Calendar, Key, AlertCircle, CheckCircle2 } from "lucide-react";
 import { workerManager } from "@/src/workers/manager";
+import { useToast } from "@/components/ui/Toast";
 
 export default function X509Client() {
+  const { toast } = useToast();
   const [input, setInput] = useState("");
   const [certInfo, setCertInfo] = useState<X509CertificateInfo | null>(null);
   const [fingerprintSha256, setFingerprintSha256] = useState("");
@@ -45,7 +47,13 @@ export default function X509Client() {
           rows={6}
           placeholder="-----BEGIN CERTIFICATE-----\nMIIDdC..."
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length > 1 * 1024 * 1024) {
+              toast("Input exceeds 1MB limit", "error");
+            } else {
+              setInput(e.target.value);
+            }
+          }}
           className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
         />
       </div>

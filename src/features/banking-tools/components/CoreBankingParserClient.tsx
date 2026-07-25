@@ -12,8 +12,14 @@ export default function CoreBankingParserClient() {
   const parseCoreBankingLog = (data: string) => {
     try {
       if (!data.trim()) return '';
-      
       const trimmed = data.trim();
+      if (trimmed.length > 100 * 1024) {
+        return JSON.stringify({
+          status: "Error",
+          message: "Input is too large",
+          details: "Maximum allowed size is 100KB"
+        }, null, 2);
+      }
       
       // XML Validation
       if (trimmed.startsWith('<')) {

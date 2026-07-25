@@ -20,9 +20,23 @@ export default function RsaSignClient() {
       setError("Message and Key PEM are required");
       return;
     }
-    if (mode === 'verify' && !signatureB64.trim()) {
-      setError("Signature Base64 is required for verification");
+    if (text.length > 5 * 1024 * 1024) {
+      setError("Input message is too large. Maximum size is 5MB.");
       return;
+    }
+    if (keyPem.length > 1 * 1024 * 1024) {
+      setError("Key PEM is too large. Maximum size is 1MB.");
+      return;
+    }
+    if (mode === 'verify') {
+      if (!signatureB64.trim()) {
+        setError("Signature Base64 is required for verification");
+        return;
+      }
+      if (signatureB64.length > 1 * 1024 * 1024) {
+        setError("Signature is too large. Maximum size is 1MB.");
+        return;
+      }
     }
 
     setIsProcessing(true);

@@ -7,6 +7,7 @@ import { useObjectUrlManager } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
 import { formatError } from "@/src/lib/formatError";
 import { useProgress } from "@/src/contexts/ProgressContext";
+import { useToast } from "@/components/ui/Toast";
 import { File, Settings2 } from "lucide-react";
 
 export type PdfLayoutMode = 'crop' | 'resize' | 'a4' | 'letter' | 'legal' | 'margin';
@@ -40,10 +41,21 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
   const [targetSize, setTargetSize] = useState<string>('a4');
   const [scaleToFit, setScaleToFit] = useState(true);
   const [orientation, setOrientation] = useState<'portrait' | 'landscape' | 'auto'>('auto');
+  const { toast } = useToast();
 
   const handleFiles = async (files: FileList | File[]) => {
     const f = files[0];
     if (!f) return;
+    
+    if (f.type !== "application/pdf" && !f.name.endsWith(".pdf")) {
+      toast(`Invalid file type: ${f.name}. Only PDFs are allowed.`, "error");
+      return;
+    }
+    if (f.size > 100 * 1024 * 1024) {
+      toast(`File too large: ${f.name}. Maximum size is 100MB.`, "error");
+      return;
+    }
+
     setFile(f);
     setError("");
     
@@ -246,13 +258,23 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
             </div>
           )}
 
-          <button
-            onClick={processPdf}
-            disabled={progressState.isProcessing}
-            className="w-full py-4 bg-blue text-white font-black rounded-xl hover:scale-101 active:scale-98 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
-          >
-            {progressState.isProcessing ? "Processing..." : actionLabel}
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={processPdf}
+              disabled={progressState.isProcessing}
+              className="flex-1 py-4 bg-blue text-white font-black rounded-xl hover:scale-101 active:scale-98 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20"
+            >
+              {progressState.isProcessing ? "Processing..." : actionLabel}
+            </button>
+            {progressState.isProcessing && (
+              <button
+                onClick={() => abortControllerRef.current?.abort()}
+                className="px-6 py-4 bg-red-500/10 text-red-500 font-bold rounded-xl hover:bg-red-500/20 transition-all"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

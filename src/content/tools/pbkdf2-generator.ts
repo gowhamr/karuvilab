@@ -37,7 +37,7 @@ Our tool allows you to simulate and generate these derived keys completely local
   commonErrors: [
     {
       error: "Browser hangs or freezes",
-      answer: "If you set the iteration count excessively high (e.g., 10,000,000) on a slow device, the browser's JavaScript engine may struggle to complete the math. Try sticking to the recommended 100k - 600k range."
+      fix: "If you set the iteration count excessively high (e.g., 10,000,000) on a slow device, the browser's JavaScript engine may struggle to complete the math. Try sticking to the recommended 100k - 600k range."
     }
   ],
   alternatives: ["Hash Generator", "AES Encrypt / Decrypt"]
