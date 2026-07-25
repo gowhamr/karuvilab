@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolInfoSection } from "@/components/ui/ToolInfoSection";
 import { generateToolMetadata } from "@/src/lib/seo";
 import EmiCalculatorClientWrapper from "./EmiCalculatorClientWrapper";
 
@@ -96,6 +97,34 @@ export default function EmiCalculator() {
       }}
     >
       <EmiCalculatorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-amortization"
+          title="How it Works: The Reducing Balance Method"
+          preview="Learn why banks take most of their interest in the first few years of your loan."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When you take out a 20-year home loan, you might notice something shocking: for the first few years, your monthly payment barely reduces your principal at all. Almost the entire payment goes toward interest. Why?
+            </p>
+            <h3>The Mathematics of EMI</h3>
+            <p>
+              Banks use a formula called <strong>Equated Monthly Installment (EMI)</strong> based on a "Reducing Balance." This ensures your monthly payment amount never changes, even as the underlying math shifts radically.
+            </p>
+            <p>
+              <code>EMI = [P x R x (1+R)^N] / [(1+R)^N - 1]</code>
+            </p>
+            <p>
+              Every month, the bank calculates interest strictly on the <em>remaining principal</em>. In Month 1, your principal is at its maximum, so the interest charge is massive. Because your total EMI is fixed, very little money is left over to pay down the actual principal.
+            </p>
+            <h3>The Prepayment Hack</h3>
+            <p>
+              Understanding this reveals a powerful financial hack. If you make a lump sum prepayment in Year 1, 100% of that money goes directly to the principal. By lowering the principal early, the bank's interest calculation for every subsequent month is permanently lowered, saving you massive amounts of money and cutting years off your loan tenure.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

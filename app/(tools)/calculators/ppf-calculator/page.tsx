@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 
 import PPFCalculatorClientWrapper from './PPFCalculatorClientWrapper';
@@ -33,6 +34,34 @@ export default function Page() {
       }}
     >
       <PPFCalculatorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-ppf-rule"
+          title="How it Works: The April 5th Rule"
+          preview="Learn the secret timing rule of PPF that can cost you thousands of rupees in lost interest if you ignore it."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              The Public Provident Fund (PPF) is famous for its "EEE" tax status—exempt on investment, exempt on interest, and exempt on maturity. But its interest calculation method hides a massive trap for uninformed investors.
+            </p>
+            <h3>The 5th of the Month Rule</h3>
+            <p>
+              Unlike a savings account which calculates interest based on your daily balance, PPF calculates interest based on the <strong>minimum balance in your account between the 5th and the last day of the month</strong>.
+            </p>
+            <p>
+              This means if you deposit ₹1.5 Lakhs on the 6th of April, that money earns <strong>zero interest</strong> for the entire month of April! The government treats your balance as if the deposit never happened until May.
+            </p>
+            <h3>How to Maximize PPF Returns</h3>
+            <p>
+              Because interest is compounded annually (credited at the end of the financial year), the absolute best mathematical way to invest in PPF is to deposit your entire yearly amount (up to ₹1.5 Lakhs) <strong>between April 1st and April 5th</strong>.
+            </p>
+            <p>
+              By doing this, your entire deposit earns interest for all 12 months of the year. Over a 15-year period, this simple timing trick results in lakhs of extra rupees compared to someone who deposits their money in March at the end of the financial year.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }
