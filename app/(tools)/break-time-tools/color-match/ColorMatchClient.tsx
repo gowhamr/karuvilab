@@ -225,7 +225,7 @@ export default function ColorMatchClient() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="rounded-card border border-divider bg-surface p-8 text-center space-y-5"
+            className="rounded-card border border-divider bg-surface p-4 sm:p-8 text-center space-y-5"
           >
             <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto text-3xl">
               🎨
@@ -310,7 +310,7 @@ export default function ColorMatchClient() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="rounded-card border border-divider bg-surface p-8 text-center space-y-5"
+            className="rounded-card border border-divider bg-surface p-4 sm:p-8 text-center space-y-5"
           >
             <div className="w-16 h-16 rounded-full bg-danger/10 text-danger flex items-center justify-center mx-auto">
               <ShieldAlert className="w-8 h-8" />

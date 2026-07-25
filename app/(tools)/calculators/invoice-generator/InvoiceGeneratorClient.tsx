@@ -137,7 +137,7 @@ export default function InvoiceGeneratorClient() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-8 space-y-8">
-          <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-8">
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-4 flex-1">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
@@ -200,7 +200,7 @@ export default function InvoiceGeneratorClient() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
+             <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-6">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    From (Your Details)
@@ -219,7 +219,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
              </div>
 
-             <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
+             <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-6">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    Bill To (Client)

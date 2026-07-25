@@ -195,7 +195,7 @@ export default function HashGeneratorClient() {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-4"
               >
-                <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
+                <div className="bg-surface border border-border p-4 sm:p-6 rounded-4xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
                     <label htmlFor="hash-text-input" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Enter Text Content</label>
                     <span className="text-xs font-mono font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-md">{text.length} chars</span>
@@ -259,7 +259,7 @@ export default function HashGeneratorClient() {
 
         {/* Settings Area */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-8">
+          <div className="bg-surface border border-border p-4 sm:p-6 rounded-4xl shadow-sm space-y-8">
             <div className="flex items-center gap-2 mb-2">
               <Settings2 size={18} className="text-blue" aria-hidden="true" />
               <h2 className="text-sm font-black uppercase tracking-widest text-text">Options</h2>

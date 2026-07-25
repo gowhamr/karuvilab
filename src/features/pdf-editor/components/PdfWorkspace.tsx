@@ -152,7 +152,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
 
   if (error) {
     return (
-      <div className="p-8 text-center bg-red-500/10 rounded-2xl border border-red-500/20">
+      <div className="p-4 sm:p-8 text-center bg-red-500/10 rounded-2xl border border-red-500/20">
         <p className="text-red-500 font-bold mb-4">{error}</p>
         <button onClick={onClear} className="px-6 py-3 bg-bg rounded-xl border border-border text-sm font-bold text-text-2 hover:bg-surface-2 transition-colors">Back</button>
       </div>

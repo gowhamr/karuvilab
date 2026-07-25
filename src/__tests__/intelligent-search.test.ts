@@ -14,7 +14,7 @@ describe("KaruviLab Intelligent Search QA Specification Audit", () => {
       { input: "rsa", expectedIds: ["rsa-key-generator", "rsa-encrypt-decrypt"] },
       { input: "qr", expectedIds: ["qrcode", "wifi-qr-code"] },
       { input: "iban", expectedIds: ["iban-validator"] },
-      { input: "bitmap", expectedIds: ["iso8583-bitmap-decoder"] },
+      { input: "bitmap", expectedIds: ["iso8583-bitmap-decoder", "bmp-converter"] },
       { input: "tlv", expectedIds: ["tlv-parser"] },
       { input: "regex", expectedIds: ["regex-tester"] },
       { input: "yaml", expectedIds: ["yaml-json-converter", "yaml-validator"] },

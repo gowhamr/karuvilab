@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const siteConfig = {
   name: "KaruviLab",
   fullName: "KaruviLab",
-  description: "KaruviLab — The world's fastest, most private browser-side toolkit. No uploads. No tracking. 100% local-first tools for developers, designers, and daily tasks.",
+  description: "KaruviLab — Every Tool Teaches. A privacy-first platform that empowers you to learn technology through practical tools. 100% local, no uploads, completely free.",
   url: "https://karuvilab.com",
   ogImage: "https://karuvilab.com/og-image.png",
   links: {
@@ -15,7 +15,7 @@ const siteConfig = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.name + " — Fast, Private Browser Tools",
+    default: siteConfig.name + " — Every Tool Teaches",
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: siteConfig.name + " — Fast, Private Browser Tools",
+    title: siteConfig.name + " — Every Tool Teaches",
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name + " — Fast, Private Browser Tools",
+    title: siteConfig.name + " — Every Tool Teaches",
     description: siteConfig.description,
     images: [siteConfig.ogImage],
     creator: "@karuvilab",

@@ -89,7 +89,7 @@ function SortablePageItem({
       {...listeners}
       onClick={() => mode === 'rotate' && onToggleSelect(page.id)}
     >
-      <div className="absolute inset-0 pointer-events-none p-2 flex flex-col z-20">
+      <div className="absolute inset-0 pointer-events-none p-2 flex flex-col z-above">
         <div className="flex justify-between items-start">
           <span className="text-[10px] font-black px-2 py-0.5 rounded-full backdrop-blur-md bg-surface-2/80 text-text-4 shadow-sm">
             {page.originalIndex}
@@ -110,7 +110,7 @@ function SortablePageItem({
       
       {/* Overlay Actions */}
       {(mode === 'organize' || mode === 'reorder' || mode === 'move') && !isDragging && (
-        <div className="absolute inset-0 bg-surface/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-30">
+        <div className="absolute inset-0 bg-surface/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-sidebar">
           <button 
             onPointerDown={(e) => { e.stopPropagation(); onRotate(page.id); }}
             className="p-2 bg-surface rounded-full shadow-md hover:text-blue hover:scale-110 transition-transform pointer-events-auto"

@@ -819,10 +819,8 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "convert-to-a4",
     "name": "Convert to A4",
     "desc": "Standardize PDF pages to A4 size",
-    "href": "/pdf-tools/convert-to-a4/",
     "category": "pdf",
     "icon": "FileText",
     "color": null,
@@ -843,10 +841,8 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "convert-to-legal",
     "name": "Convert to Legal",
     "desc": "Standardize PDF pages to US Legal size",
-    "href": "/pdf-tools/convert-to-legal/",
     "category": "pdf",
     "icon": "FileText",
     "color": null,
@@ -867,10 +863,8 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
-    "id": "convert-to-letter",
     "name": "Convert to Letter",
     "desc": "Standardize PDF pages to US Letter size",
-    "href": "/pdf-tools/convert-to-letter/",
     "category": "pdf",
     "icon": "FileText",
     "color": null,

@@ -166,11 +166,11 @@ export default function FakeDataGeneratorClient() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Sidebar Configuration */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-8 shadow-sm space-y-8">
+        <div className="lg:col-span-4 space-y-4 sm:space-y-6">
+          <div className="bg-surface border border-border rounded-3xl sm:rounded-4xl p-4 sm:p-8 shadow-sm space-y-6 sm:space-y-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold flex items-center gap-3">
-                <RefreshCw className={cn("w-6 h-6 text-blue", isGenerating && "animate-spin")} />
+              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-3">
+                <RefreshCw className={cn("w-5 h-5 sm:w-6 sm:h-6 text-blue", isGenerating && "animate-spin")} />
                 Configure Generator
               </h2>
             </div>
@@ -222,17 +222,17 @@ export default function FakeDataGeneratorClient() {
 
         {/* Main Selection Area */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
+          <div className="bg-surface border border-border rounded-3xl sm:rounded-4xl p-4 sm:p-8 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
               <div>
-                <h2 className="text-xl font-bold text-text">Select Data Fields</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-text">Select Data Fields</h2>
                 <p className="text-xs text-text-4 font-bold uppercase tracking-wider mt-1">
                   {selectedFields.length} fields selected
                 </p>
               </div>
               <div className="flex gap-2">
-                <button onClick={selectAll} className="px-4 py-2 text-xs font-black text-blue hover:bg-blue/5 rounded-xl transition-all">Select All</button>
-                <button onClick={deselectAll} className="px-4 py-2 text-xs font-black text-text-4 hover:bg-black/5 rounded-xl transition-all">Clear All</button>
+                <button onClick={selectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-blue hover:bg-blue/5 bg-blue/5 sm:bg-transparent rounded-xl transition-all">Select All</button>
+                <button onClick={deselectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-text-4 hover:bg-black/5 bg-black/5 sm:bg-transparent rounded-xl transition-all">Clear All</button>
               </div>
             </div>
 

@@ -207,7 +207,7 @@ export default function BmiCalculatorClient() {
               onQrClick={() => setIsQrOpen(true)}
             />
           </div>
-          <div className="bg-surface border border-border rounded-6xl p-8 flex flex-col items-center justify-center shadow-sm relative overflow-hidden">
+          <div className="bg-surface border border-border rounded-4xl sm:rounded-6xl p-4 sm:p-8 flex flex-col items-center justify-center shadow-sm relative overflow-hidden">
              <div className={cn("absolute -top-24 -left-24 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700", result.threshold.bgColor)} />
              <BmiGauge bmi={result.bmi} threshold={result.threshold} />
              <p className="text-sm text-text-3 font-medium text-center max-w-md mt-4">

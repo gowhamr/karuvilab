@@ -38,7 +38,7 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
   // Settings states
   const [margins, setMargins] = useState({ top: 36, right: 36, bottom: 36, left: 36 });
   const [cropBox, setCropBox] = useState({ x: 36, y: 36, width: 500, height: 700 });
-  const [targetSize, setTargetSize] = useState<string>('a4');
+  const [targetSize, setTargetSize] = useState<string>('legal');
   const [scaleToFit, setScaleToFit] = useState(true);
   const [orientation, setOrientation] = useState<'portrait' | 'landscape' | 'auto'>('auto');
   const { toast } = useToast();

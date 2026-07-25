@@ -38,7 +38,7 @@ export const SegmentedControl = React.memo(function SegmentedControl<T extends s
 
   return (
     <div
-      role="tablist"
+      role="radiogroup"
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledby}
       className={cn(
@@ -52,10 +52,9 @@ export const SegmentedControl = React.memo(function SegmentedControl<T extends s
         return (
           <button
             key={String(option.id)}
-            role="tab"
+            role="radio"
             id={`tab-${option.id}`}
-            aria-selected={isActive}
-            aria-controls={`panel-${option.id}`}
+            aria-checked={isActive}
             tabIndex={isActive ? 0 : -1}
             disabled={disabled}
             onClick={() => !disabled && onChange(option.id)}

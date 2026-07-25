@@ -81,7 +81,7 @@ Generated via KaruviLab`;
   return (
     <div className="space-y-8">
       {/* Input Section */}
-      <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8">
+      <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
             <ToolInput
@@ -194,7 +194,7 @@ Generated via KaruviLab`;
           <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3">Tax Breakdown</h2>
           <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Local Currency (INR)</span>
         </div>
-        <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div className="p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
           <dl className="space-y-4">
             {!isInterstate ? (
               <>

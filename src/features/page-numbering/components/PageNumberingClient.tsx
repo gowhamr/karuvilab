@@ -86,7 +86,7 @@ export default function PageNumberingClient() {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
           <div
-            className="bg-surface border-2 border-dashed border-border rounded-2xl p-8 text-center cursor-pointer hover:border-blue transition-colors"
+            className="bg-surface border-2 border-dashed border-border rounded-2xl p-4 sm:p-8 text-center cursor-pointer hover:border-blue transition-colors"
             onClick={() => fileRef.current?.click()}
             onDragOver={e => e.preventDefault()}
             onDrop={e => { e.preventDefault(); handleFileChange(e.dataTransfer.files?.[0]); }}

@@ -419,7 +419,7 @@ export function Sidebar() {
             className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-lg"
             aria-label="KaruviLab home"
           >
-            <KVLogo withText size="sm" loading="lazy" />
+            <KVLogo withText size="sm" loading="eager" />
           </Link>
           <button
             className={cn(
@@ -456,7 +456,7 @@ export function Sidebar() {
               className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue rounded-lg"
               aria-label="KaruviLab home"
             >
-              <KVLogo withText size="md" loading="lazy" />
+              <KVLogo withText size="md" loading="eager" />
             </Link>
             <button
               className={cn(

@@ -273,7 +273,7 @@ export default function PasswordGeneratorClient() {
         <div className="space-y-6 lg:sticky lg:top-8">
           <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2">Security Audit</h2>
           
-          <div className="bg-surface border border-border rounded-4xl p-6 space-y-6 shadow-sm">
+          <div className="bg-surface border border-border rounded-4xl p-4 sm:p-6 space-y-6 shadow-sm">
              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-emerald-600">
                 <ShieldCheck className="w-3.5 h-3.5" />

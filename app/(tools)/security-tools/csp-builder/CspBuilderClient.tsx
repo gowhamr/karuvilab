@@ -236,7 +236,7 @@ export default function CspBuilderClient() {
       </div>
 
       {/* Import Section */}
-      <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
+      <div className="bg-surface border border-border rounded-4xl p-4 sm:p-6 shadow-sm space-y-4">
         <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
            Import & Analyze Existing Policy
         </h3>

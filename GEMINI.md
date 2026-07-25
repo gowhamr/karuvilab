@@ -38,16 +38,37 @@ The following patterns are **NEVER** allowed under any circumstances:
 ## 1. Project Identity & Philosophy
 
 - **Name:** KaruviLab (KV)
-- **Vision:** The world's fastest, most private browser-native productivity platform.
-- **Non-Negotiable Pillars:**
+- **Tagline:** KaruviLab — Every Tool Teaches.
+- **Vision:** Empowering people to learn technology through practical tools.
+- **Mission:** Build high-quality browser tools that solve real problems while teaching the knowledge behind them.
+- **Philosophy:** KaruviLab is an offline-first platform where every tool not only solves a problem but also teaches the technology behind it. Users should understand how, why, and when to use a technology—not just click a button and download a result.
+
+- **Non-Negotiable Pillars / Principles:**
 
 | Pillar | Meaning |
 |--------|---------|
-| **Zero-Server-Upload** | All data stays on the user's device. No file ever leaves the browser. |
-| **Privacy-First** | No telemetry, no tracking, no cloud storage, no analytics beacons. |
-| **Local-First Execution** | Web Workers, WebAssembly, Web Crypto — compute locally. |
-| **Offline Resilience** | Fully functional without internet via Service Workers + IndexedDB. |
-| **Enterprise UX** | Raycast/Linear-tier — keyboard-first, motion-rich but subtle, zero friction. |
+| **Learn while using** | Every tool teaches its concepts. Expose the "why" and "how". |
+| **Privacy-First** | Your data stays in your browser. No telemetry, no tracking, no server uploads. |
+| **Fast & Offline** | Works locally without uploading files (Web Workers, IndexedDB, WASM). |
+| **Built for Engineers & Learners** | Practical tools with real-world knowledge. Raycast/Linear-tier UX. |
+| **Free for Everyone** | Simple, accessible, and useful. |
+
+### Curriculum & Content Boundaries
+
+**What users will learn:**
+- Engineering concepts
+- Algorithms
+- Security
+- Standards
+- Performance
+- Browser APIs
+- Best practices
+- Failure cases
+- Real-world public use cases
+- Interactive quizzes
+
+**What KaruviLab will never publish:**
+- Proprietary or banking product internals
 
 ---
 
@@ -438,6 +459,7 @@ Every tool page must have:
 - Bottom nav must respect safe-area insets: `pb-[env(safe-area-inset-bottom)]`
 - FAB placed `bottom-24` on mobile to avoid overlap
 - No horizontal overflow at 320px — test on every new tool
+- **Responsive Padding Rule**: Never use static large paddings (e.g., `p-6`, `p-8`, `p-12`) on structural or layout wrappers. Always use fluid responsive spacing (`p-4 sm:p-6`, `p-4 sm:p-8`) to prevent layout crushing, horizontal scrolling, and CLS on narrow mobile viewports.
 
 ### 12.7 Privacy Transparency
 - File-processing tools must display `<PrivacyBadge>`: "Processed entirely in your browser"
@@ -643,15 +665,50 @@ SEO
 
 ---
 
-## 24. Current Priorities
+## 24. Strategic Roadmap
 
-| Priority | Item | Status |
-|----------|------|--------|
-| P1 | SEO indexing fix (sitemap, structured data) | 🔴 Active |
-| P2 | Sidebar performance optimization | 🔴 Active |
-| P3 | Phase-1 everyday tools (Word Counter, Text Case Converter, PDF to Word) | 🟡 In Progress |
-| P4 | Hybrid UI polish & micro-interactions rollout | 🟡 In Progress |
-| P5 | Offline PWA audit completion | ⚪ Planned |
+> **North Star:** KaruviLab helps engineers understand technology—not just use it. Every tool is private, offline-first, technically accurate, and teaches the concepts, standards, architecture, security, and real-world engineering behind it.
+
+### Phase 1 — Freeze Features (Complete the Foundation)
+**Priority: 🔴 ACTIVE**
+- **NO NEW TOOLS.** Focus exclusively on making every existing tool excellent.
+- Every tool must be the *best browser-native implementation available*.
+- Mandatory completion for every existing tool before moving to Phase 2:
+  - Reliable implementation
+  - Offline-first & Worker support
+  - Mobile optimization & Accessibility
+  - Error handling & Failure Cases
+  - Learn More section & FAQ
+  - Best Practices, Standards/RFC references, and Examples
+
+### Phase 2 — Engineering Learning System (Highest Priority)
+**Priority: 🟡 NEXT**
+- This differentiates KaruviLab. Every tool must have a structured learning path:
+  - `Tool → Learn → How it Works → Algorithm → Architecture → Browser APIs → Security → Performance → Real-world Usage → Standards → Failure Cases → Quiz → Further Reading`
+
+### Phase 3 — Browser Engineering Excellence
+- Make KaruviLab known for technical quality. People should inspect any tool to learn how modern browser engineering works:
+  - Web Workers, Worker pools, WASM (only where justified), IndexedDB, Service Worker, Background processing, Lazy loading, Bundle/Memory/Mobile optimization.
+
+### Phase 4 — Domain Knowledge (The Biggest Opportunity)
+- Focus on domains where very few utility websites have deep expertise. Priority:
+  1. **Banking Engineering:** ISO 8583, EMV, TLV, SWIFT, Payment systems
+  2. **Cryptography:** RSA, ECC, JWT, OAuth, TLS, X.509
+  3. **PDF Engineering:** PDF internals, Digital signatures, PDF/A, Compression, Object model
+  4. **Image Engineering:** JPEG, PNG, WebP, AVIF, EXIF, Color spaces
+
+### Phase 5 — Quality Before Quantity
+- Create an internal checklist (Functionality, UI/UX, Accessibility, Worker/Offline support, Learn section, Failure cases, Quiz, Standards, References, Examples).
+- **Rule:** If one of these is missing, the tool stays in "Work in Progress."
+
+### Phase 6 — Community Trust
+- Add: Changelog, Version history, "Last verified" date, Browser compatibility, Source references (RFCs), Educational articles, Engineering blogs.
+
+### What NOT to do
+- ❌ Chasing 500 tools.
+- ❌ Adding AI to every feature.
+- ❌ Adding dependencies without a clear need.
+- ❌ Copying competitors feature-for-feature.
 
 ---
 

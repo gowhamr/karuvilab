@@ -302,7 +302,7 @@ export default function ImageMirrorClient() {
 
                 <div className="relative bg-bg border border-border rounded-2xl p-4 min-h-[300px] flex items-center justify-center overflow-hidden">
                   {isProcessing && (
-                    <div className="absolute inset-0 bg-surface/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-10">
+                    <div className="absolute inset-0 bg-surface/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-content">
                       <Loader2 className="w-8 h-8 text-blue animate-spin" />
                       <span className="text-xs font-bold text-text-3">Reflecting Image...</span>
                     </div>

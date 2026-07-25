@@ -186,7 +186,7 @@ export default function ImageConverterClient() {
         </div>
 
         <div className="lg:col-span-2 hidden lg:block sticky top-8">
-          <div className="bg-blue/5 border border-blue/10 rounded-4xl p-8 space-y-6">
+          <div className="bg-blue/5 border border-blue/10 rounded-4xl p-4 sm:p-8 space-y-6">
             <h2 className="font-black text-sm uppercase tracking-widest text-blue">Platform Hardening</h2>
             <ul className="space-y-4">
               {[

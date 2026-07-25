@@ -135,7 +135,7 @@ export default function BulkImageResizerClient() {
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Sidebar Settings */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-surface border border-border p-8 rounded-3xl shadow-sm space-y-8 sticky top-24">
+          <div className="bg-surface border border-border p-4 sm:p-8 rounded-3xl shadow-sm space-y-8 sticky top-24">
             <div className="space-y-2">
               <h2 className="text-xl font-black italic">Settings</h2>
               <div className="h-1 w-12 bg-blue rounded-full" />

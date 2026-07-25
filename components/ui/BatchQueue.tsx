@@ -93,10 +93,10 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[10px] sm:text-xs font-medium text-text-4 uppercase tracking-widest">
-            <span className="truncate">{formatBytes(item.file.size)}</span>
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[10px] sm:text-xs font-medium text-text-4 uppercase tracking-widest min-w-0">
+            <span className="truncate flex-shrink">{formatBytes(item.file.size)}</span>
             {item.status === 'completed' && item.result && (
-              <span className="text-green-500 font-black truncate">
+              <span className="text-green-500 font-black truncate flex-shrink">
                 → {formatBytes(item.result.compressedSize)} <span className="hidden sm:inline">({Math.round((1 - item.result.compressedSize / item.file.size) * 100)}% Small)</span>
               </span>
             )}
@@ -284,21 +284,21 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
                 <button 
                   onClick={onProcess}
                   disabled={isProcessing || stats.pending + stats.failed === 0}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-blue text-white font-black rounded-xl hover:shadow-md hover:shadow-blue/10 active:scale-95 transition-all text-xs uppercase tracking-widest disabled:opacity-30 outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-8 py-3 bg-blue text-white font-black rounded-xl hover:shadow-md hover:shadow-blue/10 active:scale-95 transition-all text-xs uppercase tracking-widest disabled:opacity-30 outline-none focus-visible:ring-2 focus-visible:ring-blue min-w-0"
                 >
                   <Play className="w-3.5 h-3.5 fill-current" /> {processLabel}
                 </button>
                 {onDownloadAll && stats.completed > 0 && (
                   <button 
                     onClick={onDownloadAll}
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-bg border border-border text-text font-black rounded-xl hover:border-blue transition-all text-xs uppercase tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-6 py-3 bg-bg border border-border text-text font-black rounded-xl hover:border-blue transition-all text-xs uppercase tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-blue min-w-0"
                   >
-                    <Download className="w-3.5 h-3.5" /> Bundle .ZIP
+                    <Download className="w-3.5 h-3.5 shrink-0" /> <span className="truncate">Bundle .ZIP</span>
                   </button>
                 )}
                 <button 
                   onClick={() => clearItems(toolId)}
-                  className="p-3 text-text-4 hover:text-red-500 transition-colors outline-none rounded-xl hover:bg-red-500/5"
+                  className="p-3 text-text-4 hover:text-red-500 transition-colors outline-none rounded-xl hover:bg-red-500/5 shrink-0"
                   aria-label="Clear Queue"
                 >
                   <Trash2 className="w-5 h-5" />
@@ -307,9 +307,9 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
             ) : (
               <button 
                 onClick={() => cancelAll(toolId)}
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-red-500/10 text-red-500 font-black rounded-xl hover:bg-red-500/20 transition-all text-xs uppercase tracking-widest border border-red-500/20 outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-8 py-3 bg-red-500/10 text-red-500 font-black rounded-xl hover:bg-red-500/20 transition-all text-xs uppercase tracking-widest border border-red-500/20 outline-none focus-visible:ring-2 focus-visible:ring-red-500 min-w-0"
               >
-                <XCircle className="w-3.5 h-3.5" /> Halt Processing
+                <XCircle className="w-3.5 h-3.5 shrink-0" /> <span className="truncate">Halt Processing</span>
               </button>
             )}
           </div>

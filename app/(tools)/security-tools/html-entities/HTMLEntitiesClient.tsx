@@ -61,7 +61,7 @@ export default function HTMLEntitiesClient() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
+      <div className="bg-surface border border-border p-4 sm:p-6 rounded-2xl shadow-sm space-y-5">
         <div className="flex gap-2">
           {(["encode", "decode"] as const).map(t => (
             <button
@@ -100,7 +100,7 @@ export default function HTMLEntitiesClient() {
         )}
       </div>
 
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
+      <div className="bg-surface border border-border p-4 sm:p-6 rounded-2xl shadow-sm space-y-4">
         <h2 className="text-sm font-bold text-text-2">Common HTML Entities Reference</h2>
         <div className="overflow-auto rounded-xl border border-border">
           <table className="w-full text-sm">

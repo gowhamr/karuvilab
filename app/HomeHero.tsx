@@ -103,20 +103,20 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
       {/* ── Tag pill ── */}
       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue/5 border border-blue/15 text-xs font-bold uppercase tracking-widest text-blue shadow-sm mb-4">
         <Sparkles className="w-3 h-3" aria-hidden="true" />
-        <span>Privacy-First Toolkit</span>
+        <span>Every Tool Teaches</span>
       </div>
 
       {/* ── Headline ── */}
       <h1 className="font-black tracking-tighter text-text mx-auto text-balance transition-all duration-500 text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-xl mb-4 font-poppins">
-        Build faster with KaruviLab.{" "}
+        Tools that help you understand,{" "}
         <span className="bg-gradient-to-r from-primary via-indigo-500 to-purple-500 bg-clip-text text-transparent">
-          Privacy you can trust.
+          not just use.
         </span>
       </h1>
 
       {/* ── Sub-copy ── */}
       <p className="text-sm sm:text-base text-text-secondary max-w-xl mx-auto leading-relaxed font-medium mb-5">
-        Browser-native productivity tools running locally. Secure, lightning-fast, and completely free.
+        Empowering you to learn technology through practical tools. Browser-native, completely private, and free for everyone.
       </p>
 
       <div className="flex items-center justify-center gap-3 flex-wrap mb-6">

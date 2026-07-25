@@ -619,7 +619,7 @@ export default function GifExtractorClient() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4"
+            className="fixed inset-0 z-dropdown bg-black/80 backdrop-blur-xs flex items-center justify-center p-4"
             onClick={() => setActiveModalIndex(null)}
           >
             <m.div
@@ -690,7 +690,7 @@ export default function GifExtractorClient() {
                   onClick={() =>
                     setActiveModalIndex(activeModalIndex > 0 ? activeModalIndex - 1 : frames.length - 1)
                   }
-                  className="absolute left-4 p-3 rounded-full bg-surface/90 border border-border shadow-md text-foreground hover:bg-surface transition-all z-10"
+                  className="absolute left-4 p-3 rounded-full bg-surface/90 border border-border shadow-md text-foreground hover:bg-surface transition-all z-content"
                   title="Previous Frame (Left Arrow)"
                 >
                   <ChevronLeft className="w-6 h-6" />
@@ -708,7 +708,7 @@ export default function GifExtractorClient() {
                   onClick={() =>
                     setActiveModalIndex(activeModalIndex < frames.length - 1 ? activeModalIndex + 1 : 0)
                   }
-                  className="absolute right-4 p-3 rounded-full bg-surface/90 border border-border shadow-md text-foreground hover:bg-surface transition-all z-10"
+                  className="absolute right-4 p-3 rounded-full bg-surface/90 border border-border shadow-md text-foreground hover:bg-surface transition-all z-content"
                   title="Next Frame (Right Arrow)"
                 >
                   <ChevronRight className="w-6 h-6" />

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ALL_TOOLS, CategoryEntry } from '@/src/tool-registry';
-import { Check, ArrowUpRight, ChevronRight, FileText, PlaySquare, Image as ImageIcon, Wrench, Share2 } from 'lucide-react';
+import { Check, ArrowUpRight, ChevronRight, FileText, Share2 } from 'lucide-react';
 import { ToolIcon } from '@/components/ui/Icons';
 import { ErrorBoundary } from './ErrorBoundary';
 import { FavoriteButton } from './FavoriteButton';
@@ -351,7 +351,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                     <div className="space-y-10">
                       {finalParsedContent.howTo && finalParsedContent.howTo.length > 0 && (
                         <div className="space-y-4">
-                          <h3 className="text-xl font-black text-text tracking-tight">How to use</h3>
+                          <h2 className="text-xl font-black text-text tracking-tight">How to use</h2>
                           <div className="space-y-3">
                             {finalParsedContent.howTo.map((step, i) => (
                               <li key={i} className="flex gap-4 group">
@@ -370,21 +370,21 @@ export function ClientToolShell({ title, description, category, children, toolId
 
                       {content.useCases && content.useCases.length > 0 && (
                         <section>
-                          <h3 className="text-lg font-bold text-text mb-4">Tips & Use Cases</h3>
+                          <h2 className="text-lg font-bold text-text mb-4">Tips & Use Cases</h2>
                           <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />
                         </section>
                       )}
 
                       {finalParsedContent.faq && finalParsedContent.faq.length > 0 && (
                         <div className="space-y-4">
-                          <h3 className="text-xl font-black text-text tracking-tight">Frequently Asked Questions</h3>
+                          <h2 className="text-xl font-black text-text tracking-tight">Frequently Asked Questions</h2>
                           <FAQList faq={finalParsedContent.faq} />
                         </div>
                       )}
 
                       {finalParsedContent.detailedDescription && (
                         <div className="space-y-4">
-                          <h3 className="text-xl font-black text-text tracking-tight">About this tool</h3>
+                          <h2 className="text-xl font-black text-text tracking-tight">About this tool</h2>
                           <div 
                             className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(finalParsedContent.detailedDescription) }}
@@ -393,45 +393,15 @@ export function ClientToolShell({ title, description, category, children, toolId
                       )}
 
                       <section>
-                        <h3 className="text-lg font-bold text-text mb-4">Documentation & Help</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <Link href="/help#documentation" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
+                        <h2 className="text-lg font-bold text-text mb-4">Documentation & Help</h2>
+                        <div className="grid grid-cols-1 gap-4">
+                          <Link href="/help" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
                             <div className="w-8 h-8 rounded-lg bg-blue/10 flex items-center justify-center shrink-0">
                               <FileText className="w-4 h-4 text-blue group-hover:scale-110 transition-transform" />
                             </div>
                             <div>
-                              <h4 className="font-bold text-sm text-text">Documentation</h4>
-                              <p className="text-xs text-text-4">Read the full manual</p>
-                            </div>
-                          </Link>
-                          
-                          <Link href="/help#tutorials" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-primary transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                              <PlaySquare className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-sm text-text">Tutorials</h4>
-                              <p className="text-xs text-text-4">Step-by-step guides</p>
-                            </div>
-                          </Link>
-
-                          <Link href="/help#examples" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-success transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success">
-                            <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
-                              <ImageIcon className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-sm text-text">Examples</h4>
-                              <p className="text-xs text-text-4">See it in action</p>
-                            </div>
-                          </Link>
-
-                          <Link href="/help#troubleshooting" className="flex items-center gap-3 p-4 bg-surface-elevated border border-border rounded-xl hover:border-error transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error">
-                            <div className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center shrink-0">
-                              <Wrench className="w-4 h-4 text-error group-hover:scale-110 transition-transform" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-sm text-text">Troubleshooting</h4>
-                              <p className="text-xs text-text-4">Fix common issues</p>
+                              <h3 className="font-bold text-sm text-text">Documentation & Help</h3>
+                              <p className="text-xs text-text-4">Read the full manual and troubleshooting guides</p>
                             </div>
                           </Link>
                         </div>

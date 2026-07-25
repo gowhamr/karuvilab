@@ -234,7 +234,7 @@ export default function ColorConverterClient() {
            
            <div className="pt-4">
               <div 
-                className="w-full p-8 rounded-4xl flex items-center justify-center transition-all duration-500 border border-white/5 shadow-2xl"
+                className="w-full p-4 sm:p-8 rounded-4xl flex items-center justify-center transition-all duration-500 border border-white/5 shadow-2xl"
                 style={{ backgroundColor: hex }}
               >
                  <span className={cn(

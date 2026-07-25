@@ -160,20 +160,19 @@ export default function IcoGeneratorClient() {
 
         const icoBlob = await encodeIco(canvas);
 
-        if (resultUrl) {
-          revokeUrl(resultUrl);
-        }
-
         const newUrl = createUrl(icoBlob);
         setResultBlob(icoBlob);
-        setResultUrl(newUrl);
+        setResultUrl((prev) => {
+          if (prev) revokeUrl(prev);
+          return newUrl;
+        });
       } catch (err) {
         setError(`ICO generation failed: ${formatError(err)}`);
       } finally {
         setIsGenerating(false);
       }
     },
-    [createUrl, revokeUrl, resultUrl, setIsGenerating]
+    [createUrl, revokeUrl, setIsGenerating]
   );
 
   // Trigger ICO generation whenever loaded image or settings change
@@ -211,20 +210,7 @@ export default function IcoGeneratorClient() {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
-      {/* Top Header / Privacy Badge */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/40">
-        <div>
-          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-blue-500" />
-            Windows ICO Generator
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Convert standard images into ICO icon files instantly in your browser.
-          </p>
-        </div>
-        <PrivacyBadge />
-      </div>
-
+      {/* Privacy Badge moved to top right corner conceptually or just rendered inline if needed, but since it's global let's just place it nicely if we want, or remove it since ToolShell handles it. We'll leave it out since ToolShell is the main header. */}
       {/* Main Container */}
       {!file ? (
         <m.div

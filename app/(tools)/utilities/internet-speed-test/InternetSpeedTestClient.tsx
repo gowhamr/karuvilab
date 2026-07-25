@@ -71,7 +71,7 @@ export default function InternetSpeedTestClient() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-12 pb-24">
-      <div className="bg-surface border border-border p-8 md:p-12 rounded-6xl shadow-sm space-y-12 relative overflow-hidden">
+      <div className="bg-surface border border-border p-4 sm:p-8 md:p-12 rounded-4xl sm:rounded-6xl shadow-sm space-y-12 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue via-indigo-500 to-purple-500 opacity-20" />
         
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -143,7 +143,7 @@ export default function InternetSpeedTestClient() {
       </div>
 
       {results.length > 0 && (
-        <div className="bg-surface border border-border rounded-6xl p-8 space-y-8">
+        <div className="bg-surface border border-border rounded-4xl sm:rounded-6xl p-4 sm:p-8 space-y-8">
            <h2 className="text-xl font-black tracking-tight flex items-center gap-3"><History className="w-5 h-5 text-text-4" /> Recent Diagnostic History</h2>
            <div className="overflow-x-auto">
               <table className="w-full text-left">

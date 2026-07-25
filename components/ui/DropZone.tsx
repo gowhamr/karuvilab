@@ -121,7 +121,7 @@ export function DropZone({
           }}
           className={cn(
             "mb-4 rounded-2xl p-4 transition-all duration-300",
-            isDragging ? "bg-blue text-white shadow-md shadow-blue/10" : "bg-bg text-text-4 group-hover:text-blue group-hover:bg-blue/5"
+            isDragging ? "bg-blue text-white shadow-md shadow-blue/10" : "bg-bg text-text-3 group-hover:text-blue group-hover:bg-blue/5"
           )}
           aria-hidden="true"
         >
@@ -132,7 +132,7 @@ export function DropZone({
           <p className="font-bold text-lg text-text-2 group-hover:text-blue transition-colors">
             {title}
           </p>
-          <p className="text-sm text-text-4 font-medium italic">
+          <p className="text-sm text-text-3 font-medium italic">
             {finalDescription}
           </p>
         </div>

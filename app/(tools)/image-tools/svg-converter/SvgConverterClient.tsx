@@ -559,7 +559,7 @@ export default function SvgConverterClient() {
               {/* Live Preview Display */}
               <div className="relative min-h-[320px] max-h-[520px] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-border p-4 flex items-center justify-center overflow-hidden">
                 {isProcessing && (
-                  <div className="absolute inset-0 bg-surface/70 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-10">
+                  <div className="absolute inset-0 bg-surface/70 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-content">
                     <Loader2 className="w-8 h-8 text-blue animate-spin" />
                     <span className="text-xs font-bold text-text-3">Rasterizing Vector...</span>
                   </div>

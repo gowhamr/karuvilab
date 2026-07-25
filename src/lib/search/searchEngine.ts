@@ -58,7 +58,7 @@ function levenshtein(a: string, b: string): number {
   return matrix[b.length]?.[a.length] ?? 0;
 }
 
-export function searchTools(query: string, maxResults: number = 8): SearchResult[] {
+export function searchTools(query: string, maxResults: number = 30): SearchResult[] {
   if (!query || query.trim().length === 0) return [];
 
   const index = buildSearchIndex();

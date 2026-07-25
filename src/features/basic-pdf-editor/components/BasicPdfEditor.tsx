@@ -234,13 +234,13 @@ export function BasicPdfEditor({ mode, toolId, title, description, actionLabel }
                     <div className="absolute inset-0 pointer-events-none p-2 flex flex-col">
                       <div className="flex justify-between items-start">
                         <span className={cn(
-                          "text-[10px] font-black px-2 py-0.5 rounded-full backdrop-blur-md shadow-sm z-10",
+                          "text-[10px] font-black px-2 py-0.5 rounded-full backdrop-blur-md shadow-sm z-content",
                           isSelected ? "bg-blue text-white" : "bg-surface-2/80 text-text-4"
                         )}>
                           {pageNum}
                         </span>
                         {isSelected && mode !== 'reverse' && (
-                          <div className="bg-blue text-white rounded-full p-0.5 shadow-sm z-10">
+                          <div className="bg-blue text-white rounded-full p-0.5 shadow-sm z-content">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                           </div>
                         )}

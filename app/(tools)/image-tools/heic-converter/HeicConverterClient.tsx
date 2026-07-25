@@ -640,7 +640,7 @@ export default function HeicConverterClient() {
       {/* Fullscreen Lightbox Modal */}
       {isFullscreen && activeItem && activeItem.jpegUrl && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-dropdown bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
           onClick={() => setIsFullscreen(false)}
         >
           <div className="relative max-w-full max-h-full">

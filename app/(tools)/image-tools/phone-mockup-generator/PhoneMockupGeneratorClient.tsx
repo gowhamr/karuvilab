@@ -319,7 +319,7 @@ export default function PhoneMockupGeneratorClient() {
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1 space-y-6 p-8 bg-surface border border-border rounded-4xl">
+          <div className="lg:col-span-1 space-y-6 p-4 sm:p-8 bg-surface border border-border rounded-4xl">
             <h2 className="text-lg font-bold flex items-center gap-2">
               <Smartphone className="w-5 h-5 text-blue" aria-hidden="true" />
               Customization
@@ -416,7 +416,7 @@ export default function PhoneMockupGeneratorClient() {
             </div>
           </div>
 
-          <div className="lg:col-span-2 flex items-center justify-center p-8 bg-bg border border-border rounded-4xl overflow-hidden">
+          <div className="lg:col-span-2 flex items-center justify-center p-4 sm:p-8 bg-bg border border-border rounded-4xl overflow-hidden">
             <canvas ref={canvasRef} className="max-w-full h-auto rounded-2xl shadow-2xl" />
           </div>
         </div>

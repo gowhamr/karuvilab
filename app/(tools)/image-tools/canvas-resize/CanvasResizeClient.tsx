@@ -542,10 +542,10 @@ export default function CanvasResizeClient() {
                       exit={{ opacity: 0 }}
                       src={resultUrl}
                       alt="Canvas Preview"
-                      className="relative z-10 max-h-[420px] w-auto max-w-full object-contain rounded-lg shadow-md border border-border/50"
+                      className="relative z-content max-h-[420px] w-auto max-w-full object-contain rounded-lg shadow-md border border-border/50"
                     />
                   ) : (
-                    <div className="relative z-10 text-center text-text-4 space-y-2">
+                    <div className="relative z-content text-center text-text-4 space-y-2">
                       <Sparkles className="w-8 h-8 mx-auto text-text-4/50 animate-pulse" />
                       <p className="text-xs font-bold uppercase tracking-wider">
                         Generating preview…

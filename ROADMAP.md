@@ -1,56 +1,63 @@
-# KaruviLab Roadmap & Vision
+# KaruviLab Roadmap & Vision (10-Phase Master Plan)
 
 > **North Star:** KaruviLab helps engineers understand technology—not just use it. Every tool is private, offline-first, technically accurate, and teaches the concepts, standards, architecture, security, and real-world engineering behind it.
 
-## Phase 1 — Freeze Features (Complete the Foundation)
-**Goal:** Every existing tool should be the best browser-native implementation available.
-**Do not add any new tools until Phase 1 and 2 are complete.**
+## Phase 1 — Feature Freeze & Baseline Audit
+**Goal:** Freeze all new feature development.
+- Audit all existing tools against the core GEMINI rules (Offline-first, Worker support, Mobile optimization, Error handling, Accessibility).
+- Ensure no tool blocks the main thread.
+- Establish the baseline required before a tool can graduate to ELS status.
 
-For every existing tool, ensure:
-- [ ] Reliable implementation
-- [ ] Offline-first
-- [ ] Worker support (no main-thread blocking)
-- [ ] Mobile optimization
-- [ ] Error handling
-- [ ] Accessibility
-- [ ] Learn More section
-- [ ] Failure Cases
-- [ ] Best Practices
-- [ ] Standards/RFC references
-- [ ] FAQ
-- [ ] Examples
+## Phase 2 — The ELS Foundation (Patient Zero)
+**Goal:** Prove the Engineering Learning System (ELS).
+- Select one existing tool (e.g., JSON Formatter) to serve as "Patient Zero".
+- Build reusable UI components for the Learning Hub (`<LearningHub>`, `<InteractiveQuiz>`, `<ArchitectureDiagram>`).
+- Write complete ELS content for the tool (Algorithm, Browser APIs, Security, Performance, Standards, Failure Cases).
+- Achieve a 100% Quality Score on this single tool.
 
-## Phase 2 — Engineering Learning System (Highest Priority)
-Every tool must become an educational resource using the ELS framework (see `ELS_v1.0_Framework_Spec.md`).
-The content flow for each tool should be:
-Tool -> Learn -> How it Works -> Algorithm -> Architecture -> Browser APIs -> Security -> Performance -> Real-world Usage -> Standards -> Failure Cases -> Quiz -> Further Reading
+## Phase 3 — Core Engineering Excellence Rollout
+**Goal:** Ensure foundational technologies are robust and standardized across the app.
+- Standardize the `WorkerOrchestrator` across all heavy ops.
+- Audit memory usage and implement `AbortSignal` for all async tasks.
+- Implement IndexedDB (`idb`) caching consistently.
+- Perfect lazy loading boundaries for heavy dependencies.
 
-## Phase 3 — Browser Engineering Excellence
-Make KaruviLab known for technical quality.
-Examples:
-- Web Workers & Worker pools
-- WASM (only where justified)
-- IndexedDB
-- Service Worker & Background processing
-- Lazy loading & Bundle optimization
-- Memory & Mobile optimization
+## Phase 4 — ELS Rollout: Batch 1 (Developer & Utilities)
+**Goal:** Apply the Phase 2 standard to our most used developer tools.
+- Upgrade tools like Regex Tester, Diff Checker, Code Minifier, and Markdown Editor to full ELS standard.
+- Ensure 100% functionality and complete educational content.
 
-## Phase 4 — Domain Knowledge (Biggest Opportunity)
-Focus on deep expertise domains where few utility sites excel.
-Priority order:
-1. **Banking Engineering** (ISO 8583, EMV, TLV, SWIFT, Payment systems)
-2. **Cryptography** (RSA, ECC, JWT, OAuth, TLS, X.509)
-3. **PDF Engineering** (PDF internals, Digital signatures, PDF/A, Compression, Object model)
-4. **Image Engineering** (JPEG, PNG, WebP, AVIF, EXIF, Color spaces)
+## Phase 5 — Domain Deep Dive: Cryptography & Security
+**Goal:** Build unparalleled practical learning for security engineering.
+- Upgrade/implement JWT, RSA, TLS, OAuth, and X.509 tools.
+- Educational focus: FIPS standards, threat models, bit-length choices, common vulnerabilities.
 
-## Phase 5 — Quality Before Quantity
-A tool is not complete until it scores 100% on: Functionality, UI/UX, Mobile support, Accessibility, Worker support, Offline support, Learn section, Failure cases, Quiz, Standards, References, Examples. If one is missing, it stays in "Work in Progress."
+## Phase 6 — Domain Deep Dive: Banking Engineering
+**Goal:** Demystify enterprise financial systems.
+- Upgrade/implement ISO 8583, EMV TLV, and SWIFT tools.
+- Educational focus: Parsing binary formats, financial message routing, legacy banking architecture.
 
-## Phase 6 — Community Trust
-Over time, add: Changelog, Version history, "Last verified" date, Browser compatibility, Source references (RFCs, standards, official documentation), Educational articles, Engineering blogs.
+## Phase 7 — Domain Deep Dive: PDF & Image Engineering
+**Goal:** Teach the internals of complex binary formats.
+- Upgrade PDF manipulation and Image processing tools.
+- Educational focus: Object models, WebAssembly integration, Color Spaces (EXIF), compression algorithms.
 
-## What NOT to do
-- ❌ Chasing 500 tools.
-- ❌ Adding AI to every feature.
-- ❌ Adding dependencies without a clear need.
-- ❌ Copying competitors feature-for-feature.
+## Phase 8 — Accessibility & Mobile Finalization
+**Goal:** Flawless UX on every device.
+- Full WCAG 2.2 AA audit of the entire ELS framework.
+- Keyboard navigation and screen reader testing on complex interactive elements and diagrams.
+
+## Phase 9 — Community & Trust Building
+**Goal:** Build credibility and transparency.
+- Introduce dynamic Changelogs and version history per tool.
+- Add "Last Verified" timestamps.
+- Explicitly cite RFCs, standards, and official documentation in the UI.
+
+## Phase 10 — Production Readiness & Launch
+**Goal:** Prepare for large-scale engineering adoption.
+- Final bundle optimization.
+- Global performance profiling.
+- Release marketing focused on the unique ELS value proposition.
+
+---
+**Rule:** A tool is not complete until it scores 100% on: Functionality, UI/UX, Mobile support, Accessibility, Worker support, Offline support, Learn section, Failure cases, Quiz, Standards, References, Examples. If one is missing, it stays in "Work in Progress."

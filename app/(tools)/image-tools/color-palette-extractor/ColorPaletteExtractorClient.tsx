@@ -4,12 +4,14 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { workerOrchestrator } from '@/src/engine/workers/WorkerOrchestrator';
 import { DropZone } from '@/components/ui/DropZone';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { SliderField } from '@/components/ui/SliderField';
 import { useObjectUrlManager } from '@/src/lib/hooks';
 import { Image as ImageIcon, Loader, Palette } from 'lucide-react';
 import { m } from 'framer-motion';
 
 export default function ColorPaletteExtractorClient() {
   const [palette, setPalette] = useState<string[]>([]);
+  const [numColors, setNumColors] = useState(6);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +43,7 @@ export default function ColorPaletteExtractorClient() {
       const buffer = await file.arrayBuffer();
       const colors = await workerOrchestrator.run<string[]>(
         'extractColorPalette',
-        [buffer, 5],
+        [buffer, numColors],
         [buffer],
         (p) => setProgress(p),
         abortController.signal
@@ -53,11 +55,25 @@ export default function ColorPaletteExtractorClient() {
     } finally {
       setIsLoading(false);
     }
-  }, [imageUrl, createUrl, revokeUrl]);
+  }, [imageUrl, createUrl, revokeUrl, numColors]);
 
   return (
     <div className="space-y-8">
-      <DropZone onFilesSelected={(files) => handleFile(files[0])} accept="image/*" />
+      <div className="space-y-6">
+        <DropZone onFilesSelected={(files) => handleFile(files[0])} accept="image/*" />
+        
+        <div className="max-w-md mx-auto">
+          <SliderField
+            id="num-colors"
+            label="Max Colors"
+            value={numColors}
+            onChange={setNumColors}
+            min={2}
+            max={15}
+            step={1}
+          />
+        </div>
+      </div>
 
       {isLoading && (
         <div className="text-center">

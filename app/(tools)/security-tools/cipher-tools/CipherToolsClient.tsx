@@ -209,19 +209,19 @@ export default function CipherToolsClient() {
               <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue">{isEncode ? 'Plaintext' : 'Ciphertext'}</h3>
               <button onClick={() => setInput('')} className="text-tiny font-bold uppercase tracking-widest-sm text-error hover:underline">Clear</button>
             </div>
-            <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder="Enter text..." className="w-full h-64 bg-bg border border-border rounded-3xl p-6 font-mono text-sm text-text focus:ring-4 focus:ring-blue/10 outline-none transition-all resize-none" />
+            <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder="Enter text..." className="w-full h-64 bg-bg border border-border rounded-3xl p-4 sm:p-6 font-mono text-sm text-text focus:ring-4 focus:ring-blue/10 outline-none transition-all resize-none" />
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-content hidden lg:block">
             <button onClick={swap} className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-md shadow-blue/10 transition-all border border-border" aria-label="Arrow Left Right"><ArrowLeftRight className="w-4 h-4" /></button>
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between min-h-5"><h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">{isEncode ? 'Ciphertext' : 'Plaintext'}</h3><CopyButton text={output} /></div>
-            <textarea readOnly value={output} placeholder="Output..." className="w-full h-64 bg-mat-base border border-mat-border rounded-3xl p-6 font-mono text-sm text-text-2 outline-none resize-none" />
+            <textarea readOnly value={output} placeholder="Output..." className="w-full h-64 bg-mat-base border border-mat-border rounded-3xl p-4 sm:p-6 font-mono text-sm text-text-2 outline-none resize-none" />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-border/60">
-          <div className="md:col-span-2 bg-bg border border-border rounded-2xl p-5 md:p-6 space-y-4">
+          <div className="md:col-span-2 bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4">
             <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Frequency Analysis</h4>
             <div className="flex items-end justify-between gap-1 h-32 pt-2 border-b border-border">
               {Array.from({ length: 26 }).map((_, i) => {
@@ -240,7 +240,7 @@ export default function CipherToolsClient() {
               })}
             </div>
           </div>
-          <div className="bg-bg border border-border rounded-2xl p-5 md:p-6 space-y-4">
+          <div className="bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-2 text-blue"><Info className="w-4 h-4" /><h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text">Insight</h4></div>
             <div className="space-y-3 text-xs leading-relaxed text-text-2 font-medium">
               <div><p className="text-tiny font-black uppercase tracking-widest text-text-4 mb-0.5">Algorithm</p><p className="font-bold text-text">{activeMeta.name}</p></div>

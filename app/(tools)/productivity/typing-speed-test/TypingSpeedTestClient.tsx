@@ -304,7 +304,7 @@ export default function TypingSpeedTestClient() {
 
       {/* ── Text Display + Hidden Textarea ── */}
       <div
-        className={`relative p-8 bg-surface border rounded-4xl space-y-2 overflow-hidden cursor-text transition-colors duration-300 ${status === 'finished' ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border'}`}
+        className={`relative p-4 sm:p-8 bg-surface border rounded-4xl space-y-2 overflow-hidden cursor-text transition-colors duration-300 ${status === 'finished' ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border'}`}
         onClick={() => inputRef.current?.focus()}
       >
         {status === "idle" && (
@@ -338,7 +338,7 @@ export default function TypingSpeedTestClient() {
             <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-center gap-4 pt-6 border-t border-border mt-6 relative z-10"
+              className="flex items-center justify-center gap-4 pt-6 border-t border-border mt-6 relative z-content"
             >
               <button
                 onClick={reset}

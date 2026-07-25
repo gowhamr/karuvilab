@@ -252,87 +252,155 @@ const api = {
       const blob = new Blob([file]);
       imgBitmap = await createImageBitmap(blob);
 
-      const MAX_WIDTH = 100;
-      const scale = Math.min(MAX_WIDTH / imgBitmap.width, 1);
-      const width = Math.round(imgBitmap.width * scale);
-      const height = Math.round(imgBitmap.height * scale);
+      // We need a decent amount of pixels for better color representation
+      const MAX_WIDTH = 200; 
+      const scale = Math.min(MAX_WIDTH / Math.max(1, imgBitmap.width), 1);
+      const width = Math.max(1, Math.round(imgBitmap.width * scale));
+      const height = Math.max(1, Math.round(imgBitmap.height * scale));
 
+      if (typeof OffscreenCanvas === 'undefined') {
+        throw new Error("OffscreenCanvas not supported");
+      }
+      
       const canvas = new OffscreenCanvas(width, height);
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
       if (!ctx) throw new Error("Could not get 2D context");
       
+      ctx.imageSmoothingEnabled = true;
       ctx.drawImage(imgBitmap, 0, 0, width, height);
       const imageData = ctx.getImageData(0, 0, width, height).data;
 
       if (onProgress) onProgress({ percent: 30, message: "Sampling pixels..." });
       const pixels: [number, number, number][] = [];
       for (let i = 0; i < imageData.length; i += 4) {
+        // Only include pixels that aren't fully transparent
         if (imageData[i+3]! > 128) {
           pixels.push([imageData[i]!, imageData[i+1]!, imageData[i+2]!]);
         }
       }
 
       if (pixels.length === 0) return [];
-
-      if (onProgress) onProgress({ percent: 50, message: "Clustering colors (k-means)..." });
       
+      // Ensure k does not exceed the number of unique pixels
+      k = Math.min(k, pixels.length);
+
+      if (onProgress) onProgress({ percent: 50, message: "Clustering colors (K-Means++)..." });
+      
+      // K-Means++ Initialization
       let centroids: [number, number, number][] = [];
-      for(let i=0; i<k; i++) {
-        centroids.push(pixels[Math.floor(Math.random() * pixels.length)]!);
+      centroids.push(pixels[Math.floor(Math.random() * pixels.length)]!);
+      
+      for(let i=1; i<k; i++) {
+        let max_dist = -1;
+        let best_pixel = pixels[0]!;
+        for(let p=0; p<Math.min(pixels.length, 10000); p+=Math.max(1, Math.floor(pixels.length/2000))) { // sample subset for speed
+          const px = pixels[p]!;
+          let min_c_dist = Infinity;
+          for(let c=0; c<centroids.length; c++) {
+            const dist = (px[0]-centroids[c]![0])**2 + (px[1]-centroids[c]![1])**2 + (px[2]-centroids[c]![2])**2;
+            if (dist < min_c_dist) min_c_dist = dist;
+          }
+          if (min_c_dist > max_dist) {
+            max_dist = min_c_dist;
+            best_pixel = px;
+          }
+        }
+        centroids.push(best_pixel);
       }
 
-      const assignments = new Array(pixels.length);
-      const MAX_ITERATIONS = 10;
+      const assignments = new Int32Array(pixels.length);
+      const MAX_ITERATIONS = 20;
 
       for (let iter = 0; iter < MAX_ITERATIONS; iter++) {
+        let changed = false;
+        
         for (let i = 0; i < pixels.length; i++) {
           let min_dist = Infinity;
           let best_centroid = 0;
           for (let j = 0; j < k; j++) {
-            const dist = Math.sqrt(
+            const dist = 
               (pixels[i]![0] - centroids[j]![0]) ** 2 +
               (pixels[i]![1] - centroids[j]![1]) ** 2 +
-              (pixels[i]![2] - centroids[j]![2]) ** 2
-            );
+              (pixels[i]![2] - centroids[j]![2]) ** 2;
+            
             if (dist < min_dist) {
               min_dist = dist;
               best_centroid = j;
             }
           }
-          assignments[i] = best_centroid;
+          if (assignments[i] !== best_centroid) {
+            changed = true;
+            assignments[i] = best_centroid;
+          }
         }
 
-        const new_centroids: [number, number, number][] = new Array(k).fill(0).map(() => [0, 0, 0]);
-        const counts = new Array(k).fill(0);
+        if (!changed && iter > 0) break; // converged
+
+        const new_centroids: [number, number, number][] = Array.from({length: k}, () => [0, 0, 0]);
+        const counts = new Int32Array(k);
+        
         for (let i = 0; i < pixels.length; i++) {
           const centroid_index = assignments[i]!;
           new_centroids[centroid_index]![0] += pixels[i]![0];
           new_centroids[centroid_index]![1] += pixels[i]![1];
           new_centroids[centroid_index]![2] += pixels[i]![2];
-          counts[centroid_index]++;
+          counts[centroid_index]!++;
         }
 
         for (let i = 0; i < k; i++) {
-          if (counts[i] > 0) {
-            new_centroids[i]![0] /= counts[i];
-            new_centroids[i]![1] /= counts[i];
-            new_centroids[i]![2] /= counts[i];
+          if (counts[i]! > 0) {
+            new_centroids[i]![0] /= counts[i]!;
+            new_centroids[i]![1] /= counts[i]!;
+            new_centroids[i]![2] /= counts[i]!;
           } else {
              new_centroids[i] = pixels[Math.floor(Math.random() * pixels.length)]!;
           }
         }
         centroids = new_centroids;
+        if (onProgress) onProgress({ percent: 50 + (iter / MAX_ITERATIONS) * 40, message: `Optimizing palette (iter ${iter+1})...` });
       }
       
-      if (onProgress) onProgress({ percent: 90, message: "Finalizing palette..." });
+      if (onProgress) onProgress({ percent: 95, message: "Finalizing palette..." });
       
-      return centroids.map(c => {
-        const r = Math.round(c[0]).toString(16).padStart(2, '0');
-        const g = Math.round(c[1]).toString(16).padStart(2, '0');
-        const b = Math.round(c[2]).toString(16).padStart(2, '0');
-        return `#${r}${g}${b}`;
-      });
+      // Sort centroids by frequency (most dominant first)
+      const finalCounts = new Int32Array(k);
+      for (let i = 0; i < pixels.length; i++) finalCounts[assignments[i]!]!++;
+      
+      const sortedCentroids = centroids.map((c, i) => ({ c, count: finalCounts[i]! }))
+        .sort((a, b) => b.count - a.count)
+        .map(x => x.c);
+      
+      // Deduplicate similar colors
+      const uniqueColors: string[] = [];
+      const threshold = 15; // minimum distance to be considered unique
+      
+      for (let i = 0; i < sortedCentroids.length; i++) {
+        let isUnique = true;
+        for(let j = 0; j < uniqueColors.length; j++) {
+           const uR = parseInt(uniqueColors[j]!.substring(1, 3), 16);
+           const uG = parseInt(uniqueColors[j]!.substring(3, 5), 16);
+           const uB = parseInt(uniqueColors[j]!.substring(5, 7), 16);
+           
+           const dist = Math.sqrt(
+              (sortedCentroids[i]![0] - uR) ** 2 +
+              (sortedCentroids[i]![1] - uG) ** 2 +
+              (sortedCentroids[i]![2] - uB) ** 2
+           );
+           if (dist < threshold) {
+             isUnique = false;
+             break;
+           }
+        }
+        if (isUnique) {
+          const r = Math.round(sortedCentroids[i]![0]).toString(16).padStart(2, '0');
+          const g = Math.round(sortedCentroids[i]![1]).toString(16).padStart(2, '0');
+          const b = Math.round(sortedCentroids[i]![2]).toString(16).padStart(2, '0');
+          uniqueColors.push(`#${r}${g}${b}`);
+        }
+      }
 
+      if (onProgress) onProgress({ percent: 100, message: "Done!" });
+      return uniqueColors;
     } catch (err: any) {
       throw new Error(`Color extraction failed: ${err.message || 'Unknown error'}`);
     } finally {

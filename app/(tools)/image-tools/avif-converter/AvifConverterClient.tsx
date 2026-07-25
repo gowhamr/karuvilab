@@ -191,20 +191,6 @@ export default function AvifConverterClient() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      {/* Header & Badges */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-surface border border-border p-6 rounded-3xl">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-blue" />
-            <h2 className="text-xl font-black text-text">AVIF Format Converter</h2>
-          </div>
-          <p className="text-xs text-text-4 font-medium">
-            Encode images to next-gen AVIF for up to 50% smaller file sizes than WebP & JPEG.
-          </p>
-        </div>
-        <PrivacyBadge message="100% Client-Side Encoding" />
-      </div>
-
       {/* Main Container */}
       {!file ? (
         <div className="space-y-6">

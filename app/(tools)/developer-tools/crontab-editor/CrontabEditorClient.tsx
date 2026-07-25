@@ -239,7 +239,7 @@ export default function CrontabEditorClient() {
             </m.div>
           ))}
           {localExpression === '@reboot' && (
-            <div className="col-span-full bg-blue/5 border border-blue/20 p-8 rounded-4xl text-center shadow-inner">
+            <div className="col-span-full bg-blue/5 border border-blue/20 p-4 sm:p-8 rounded-4xl text-center shadow-inner">
               <Zap className="w-8 h-8 text-blue mx-auto mb-3 opacity-50" />
               <p className="text-blue font-black uppercase tracking-widest-2xl text-sm">Special Shortcut: @reboot</p>
               <p className="text-text-4 text-xs font-bold mt-2 uppercase tracking-widest">Triggers once during system bootstrap</p>
@@ -325,7 +325,7 @@ export default function CrontabEditorClient() {
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-10 border-t border-mat-border bg-mat-base/20">
+                <div className="p-4 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-10 border-t border-mat-border bg-mat-base/20">
                   <div className="space-y-4">
                     <h4 className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-blue border-b border-blue/10 pb-2">Special Characters</h4>
                     <ul className="space-y-3 text-xs font-bold text-text-3">

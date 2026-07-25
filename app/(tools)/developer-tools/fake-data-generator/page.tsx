@@ -111,7 +111,7 @@ export default function FakeDataGeneratorPage() {
                 a: "No. This data is entirely fictional and intended for testing, development, and demonstration purposes only."
               }
             ].map((faq, i) => (
-              <div key={i} className="bg-surface border border-border rounded-3xl p-8 space-y-3">
+              <div key={i} className="bg-surface border border-border rounded-3xl p-4 sm:p-8 space-y-3">
                 <h4 className="font-bold text-text leading-tight">{faq.q}</h4>
                 <p className="text-sm text-text-3 leading-relaxed">{faq.a}</p>
               </div>
@@ -120,7 +120,7 @@ export default function FakeDataGeneratorPage() {
         </div>
 
         <div className="mt-20 p-12 bg-surface border border-border rounded-6xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+          <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10 group-hover:opacity-20 transition-opacity">
             <ShieldCheck className="w-32 h-32 text-blue" />
           </div>
           <div className="relative z-content space-y-6 max-w-3xl">

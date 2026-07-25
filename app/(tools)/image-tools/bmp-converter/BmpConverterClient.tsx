@@ -373,7 +373,7 @@ export default function BmpConverterClient() {
               {/* Preview Box */}
               <div className="relative flex-1 min-h-[260px] max-h-[380px] rounded-xl overflow-hidden border border-border bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] flex items-center justify-center p-4">
                 {isProcessing && (
-                  <div className="absolute inset-0 bg-surface/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-2">
+                  <div className="absolute inset-0 bg-surface/80 backdrop-blur-sm z-content flex flex-col items-center justify-center gap-2">
                     <RefreshCw className="w-7 h-7 text-blue-500 animate-spin" />
                     <span className="text-xs font-medium text-text-2">Encoding BMP pixels...</span>
                   </div>
