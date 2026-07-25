@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 
 import MarkdownEditorWrapper from '@/src/features/markdown/MarkdownEditorWrapper';
@@ -54,6 +55,34 @@ export default function Page() {
       }}
     >
       <MarkdownEditorWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-markdown"
+          title="How it Works: Markdown and Security"
+          preview="Learn why writing Markdown can expose you to Cross-Site Scripting (XSS) attacks."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              Markdown is a lightweight markup language created by John Gruber in 2004. Its purpose is to be easy to read in plain text format, while also being easily convertible into HTML for web publishing.
+            </p>
+            <h3>How Parsing Works</h3>
+            <p>
+              A parser reads your text line by line. When it sees a line starting with <code># Hello</code>, it recognizes the <code>#</code> syntax and replaces that entire line with <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>.
+            </p>
+            <h3>The XSS Vulnerability</h3>
+            <p>
+              By design, Markdown allows you to use raw HTML within the document. If you type <code>&lt;button&gt;Click me&lt;/button&gt;</code>, the parser leaves it alone and it renders as a real button.
+            </p>
+            <p>
+              This is incredibly dangerous in modern web apps. If you paste an infected Markdown file into an editor, and that file contains <code>&lt;script&gt;stealCookies()&lt;/script&gt;</code>, the parser will blindly output that script into the browser's DOM, executing malicious code instantly.
+            </p>
+            <p>
+              <strong>The Solution:</strong> KaruviLab forces all rendered HTML through <code>DOMPurify</code>. Before the preview is shown to you, the purifier analyzes the HTML tree, strips out all <code>&lt;script&gt;</code>, <code>&lt;iframe&gt;</code>, and <code>onclick=</code> attributes, and only permits safe display tags (like headings, bold, and images).
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

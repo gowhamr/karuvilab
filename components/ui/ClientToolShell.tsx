@@ -339,10 +339,10 @@ export function ClientToolShell({ title, description, category, children, toolId
 
             {!isEmbed && (
               <>
-                {((finalParsedContent.howTo && finalParsedContent.howTo.length > 0) || 
-                  (content.useCases && content.useCases.length > 0) || 
-                  (finalParsedContent.faq && finalParsedContent.faq.length > 0) || 
-                  !!finalParsedContent.detailedDescription) && (
+                {((finalParsedContent?.howTo && finalParsedContent.howTo.length > 0) || 
+                  (content?.useCases && content.useCases.length > 0) || 
+                  (finalParsedContent?.faq && finalParsedContent.faq.length > 0) || 
+                  !!finalParsedContent?.detailedDescription) && (
                 <div className="max-w-4xl mx-auto space-y-8">
                   <ToolInfoSection 
                     toolId={finalToolId} 
@@ -372,7 +372,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                         </div>
                       )}
 
-                      {content.useCases && content.useCases.length > 0 && (
+                      {content?.useCases && content.useCases.length > 0 && (
                         <section>
                           <h2 className="text-lg font-bold text-text mb-4">Tips & Use Cases</h2>
                           <UseCasesList useCases={content.useCases} visibleExamples={visibleExamples} />

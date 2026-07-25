@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 
 import AgeCalculatorClientWrapper from './AgeCalculatorClientWrapper';
@@ -44,6 +45,36 @@ export default function Page() {
       }}
     >
       <AgeCalculatorClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-date-math"
+          title="How it Works: Date Math & Leap Years"
+          preview="Learn why calculating months and days between two dates is deceptively complicated."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              Calculating age seems like simple subtraction. But if you were born on January 31st, and today is March 1st, are you 1 month old? How many days are left over?
+            </p>
+            <h3>The Problem with "Months"</h3>
+            <p>
+              Unlike seconds or minutes, a "month" is not a fixed unit of time. It can be 28, 29, 30, or 31 days long. Therefore, <code>Date(A) - Date(B)</code> only gives you an absolute number of milliseconds, which you cannot perfectly divide into months.
+            </p>
+            <h3>The Algorithm</h3>
+            <p>
+              To get an exact "Years, Months, Days" breakdown, developers have to use calendar-aware math instead of absolute timestamps:
+            </p>
+            <ol>
+              <li><strong>Calculate Years:</strong> Subtract birth year from current year. (Adjust down by 1 if the current month/day is before the birth month/day).</li>
+              <li><strong>Calculate Months:</strong> Subtract birth month from current month. (If negative, add 12 and borrow a year).</li>
+              <li><strong>Calculate Days:</strong> Subtract birth day from current day. If negative, borrow 1 month, and add the <em>exact number of days in the previous month</em> to the day total.</li>
+            </ol>
+            <p>
+              Step 3 is where most custom scripts fail, because the "number of days in the previous month" changes if that month was February during a leap year (years divisible by 4, but not 100, unless also divisible by 400). This tool uses robust libraries (like <code>date-fns</code>) that handle these Gregorian calendar quirks perfectly.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }

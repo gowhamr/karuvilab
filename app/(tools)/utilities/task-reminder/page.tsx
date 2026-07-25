@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
 
 import TaskReminderClientWrapper from './TaskReminderClientWrapper';
@@ -44,6 +45,35 @@ export default function Page() {
       }}
     >
       <TaskReminderClientWrapper />
+
+      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
+        <ToolInfoSection
+          id="learn-localstorage"
+          title="How it Works: Web Storage API"
+          preview="Learn how websites save your preferences without requiring a database."
+        >
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p>
+              When you close this tab and come back tomorrow, your tasks will still be here. But since you haven't logged in, and we don't have a database, where is the data saved?
+            </p>
+            <h3>Cookies vs LocalStorage</h3>
+            <p>
+              Before HTML5, websites had to use <strong>Cookies</strong> to save state (like keeping you logged in). Cookies are sent to the server with <em>every single HTTP request</em>. Saving a giant list of tasks in a cookie would waste a massive amount of network bandwidth.
+            </p>
+            <p>
+              Modern browsers provide the <strong>Web Storage API</strong> (specifically <code>window.localStorage</code>). This is a simple Key-Value store that lives on your hard drive. 
+            </p>
+            <ul>
+              <li>It can store up to 5MB of data per domain (vs 4KB for cookies).</li>
+              <li>It is <strong>never</strong> sent to the server during network requests.</li>
+              <li>It persists until you explicitly clear your browser data.</li>
+            </ul>
+            <p>
+              Because this tool uses LocalStorage, your data is completely offline and private. However, it also means your tasks will not sync to your phone, as the data never leaves the physical device you are typing on.
+            </p>
+          </div>
+        </ToolInfoSection>
+      </div>
     </ToolShell>
   );
 }
