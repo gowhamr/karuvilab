@@ -145,7 +145,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     const initialPoints = annotation.type === 'draw' ? [...annotation.points] : [];
     const rect = parent.getBoundingClientRect();
 
-    const onMove = (ev: PointerEvent) => {
+    const onMove = (ev: any) => {
       const dx = ((ev.clientX - startX) / rect.width) * 100;
       const dy = ((ev.clientY - startY) / rect.height) * 100;
       if (annotation.type === 'draw') {
@@ -157,7 +157,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
       }
     };
 
-    const onUp = (ev: PointerEvent) => {
+    const onUp = (ev: any) => {
       setIsDragging(false);
       target.releasePointerCapture(ev.pointerId);
       target.removeEventListener('pointermove', onMove);

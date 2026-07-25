@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { ToolShell } from "@/components/ui/ToolShell";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { DropZone } from "@/components/ui/DropZone";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
@@ -10,7 +9,6 @@ import { m, AnimatePresence, Reorder } from "framer-motion";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
 import { logger } from "@/src/lib/logger";
-import { useRef, useEffect } from "react";
 
 interface Frame {
   id: string;
@@ -144,11 +142,7 @@ export default function GifCreatorClient() {
   };
 
   return (
-    <ToolShell
-      title="GIF Creator"
-      description="Turn your images into high-quality animated GIFs directly in your browser."
-    >
-      <div className="space-y-8">
+    <div className="space-y-8">
         {frames.length === 0 ? (
           <DropZone
             accept="image/*"
@@ -316,6 +310,5 @@ export default function GifCreatorClient() {
           </m.div>
         )}
       </div>
-    </ToolShell>
   );
 }

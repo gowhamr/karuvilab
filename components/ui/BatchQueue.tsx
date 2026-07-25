@@ -52,71 +52,73 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
       className={cn(
-        "group bg-surface-2 border rounded-xl p-4 flex items-center gap-4 transition-all relative",
+        "group bg-surface-2 border rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 transition-all relative",
         item.status === 'completed' ? "border-green-500/10" : "border-border hover:border-blue/30",
         item.status === 'failed' ? "border-red-500/30 border-l-4 border-l-red-500" : ""
       )}
     >
-      <div className="w-14 h-14 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-bg border border-border shadow-inner overflow-hidden">
-        {renderThumbnail ? renderThumbnail(item) : (
-          <File className={cn("w-6 h-6", 
-            item.status === 'completed' ? "text-green-500" : 
-            item.status === 'failed' ? "text-red-500" : "text-text-4"
-          )} />
-        )}
-      </div>
-
-      <div className="flex-1 min-w-0 space-y-2">
-        <div className="flex items-center justify-between gap-4">
-          <p className="font-bold truncate text-sm text-text tracking-tight">{item.file.name}</p>
-          <StatusBadge status={item.status as any} />
+      <div className="flex items-start sm:items-center gap-3 sm:gap-4 w-full flex-1 min-w-0">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-bg border border-border shadow-inner overflow-hidden">
+          {renderThumbnail ? renderThumbnail(item) : (
+            <File className={cn("w-5 h-5 sm:w-6 sm:h-6", 
+              item.status === 'completed' ? "text-green-500" : 
+              item.status === 'failed' ? "text-red-500" : "text-text-4"
+            )} />
+          )}
         </div>
-        
-        {/* Progress Bar (E-002) */}
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-1.5 bg-bg rounded-full overflow-hidden shadow-inner">
-            <m.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
-              className={cn(
-                "h-full transition-all duration-300",
-                item.status === 'completed' ? "bg-green-500" :
-                item.status === 'failed' ? "bg-red-500" :
-                "bg-blue"
-              )}
-              style={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
-            />
+
+        <div className="flex-1 min-w-0 space-y-1.5 sm:space-y-2">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <p className="font-bold truncate text-xs sm:text-sm text-text tracking-tight">{item.file.name}</p>
+            <StatusBadge status={item.status as any} />
           </div>
-          <span className="text-xs font-black font-mono text-text-4 w-10 text-right">
-            {item.status === 'completed' ? '100%' : `${Math.round(item.progress)}%`}
-          </span>
-        </div>
+          
+          {/* Progress Bar (E-002) */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex-1 h-1.5 bg-bg rounded-full overflow-hidden shadow-inner">
+              <m.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
+                className={cn(
+                  "h-full transition-all duration-300",
+                  item.status === 'completed' ? "bg-green-500" :
+                  item.status === 'failed' ? "bg-red-500" :
+                  "bg-blue"
+                )}
+                style={{ width: `${item.progress || (item.status === 'completed' ? 100 : 0)}%` }}
+              />
+            </div>
+            <span className="text-[10px] sm:text-xs font-black font-mono text-text-4 w-8 sm:w-10 text-right">
+              {item.status === 'completed' ? '100%' : `${Math.round(item.progress)}%`}
+            </span>
+          </div>
 
-        <div className="flex items-center justify-between text-xs font-medium text-text-4 uppercase tracking-widest">
-           <span>{formatBytes(item.file.size)}</span>
-           {item.status === 'completed' && item.result && (
-             <span className="text-green-500 font-black">
-               → {formatBytes(item.result.compressedSize)} ({Math.round((1 - item.result.compressedSize / item.file.size) * 100)}% Small)
-             </span>
-           )}
-           {item.status === 'failed' && (
-             <button 
-               onClick={() => useBatchStore.getState().updateItem(toolId, item.id, { status: 'pending', progress: 0, error: undefined })}
-               className="text-blue font-black hover:underline underline-offset-4"
-             >
-               Retry
-             </button>
-           )}
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[10px] sm:text-xs font-medium text-text-4 uppercase tracking-widest">
+            <span className="truncate">{formatBytes(item.file.size)}</span>
+            {item.status === 'completed' && item.result && (
+              <span className="text-green-500 font-black truncate">
+                → {formatBytes(item.result.compressedSize)} <span className="hidden sm:inline">({Math.round((1 - item.result.compressedSize / item.file.size) * 100)}% Small)</span>
+              </span>
+            )}
+            {item.status === 'failed' && (
+              <button 
+                onClick={() => useBatchStore.getState().updateItem(toolId, item.id, { status: 'pending', progress: 0, error: undefined })}
+                className="text-blue font-black hover:underline underline-offset-4"
+              >
+                Retry
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Context Actions (Fades in on hover) */}
-      <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-all duration-200">
+      <div className="flex items-center justify-end gap-1 mt-1 sm:mt-0 w-full sm:w-auto opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-all duration-200 border-t sm:border-none border-border pt-2 sm:pt-0">
         {item.status === 'completed' && (
           <>
             <button 
               onClick={() => useBatchStore.getState().reprocessItem(toolId, item.id)}
-              className="p-2 text-text hover:text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue transition-colors"
+              className="flex-1 sm:flex-none p-2 sm:p-2 flex items-center justify-center text-text hover:text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue transition-colors bg-surface sm:bg-transparent border sm:border-none border-border"
               aria-label={`Reprocess ${item.file.name}`}
               title="Use output as new input"
             >
@@ -124,7 +126,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
             </button>
             <button 
               onClick={() => onDownload(item)}
-              className="p-2 text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue transition-colors"
+              className="flex-1 sm:flex-none p-2 sm:p-2 flex items-center justify-center text-blue hover:bg-blue/10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue transition-colors bg-blue/5 sm:bg-transparent border sm:border-none border-blue/20"
               aria-label={`Download ${item.file.name}`}
               title="Download"
             >
@@ -135,7 +137,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
         {(item.status === 'processing' || item.status === 'pending') && (
           <button 
             onClick={() => cancelItem(toolId, item.id)}
-            className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+            className="flex-1 sm:flex-none p-2 sm:p-2 flex items-center justify-center text-text-4 hover:text-red-500 hover:bg-red-500/5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-red-500 bg-surface sm:bg-transparent border sm:border-none border-border"
             aria-label={`Cancel ${item.file.name}`}
           >
             <X className="w-4 h-4" />
@@ -144,7 +146,7 @@ const BatchQueueItemComponent = memo(({ item, toolId, renderThumbnail, onDownloa
         <button 
           onClick={() => removeItem(toolId, item.id)}
           disabled={item.status === 'processing'}
-          className="p-2 text-text-4 hover:text-red-500 hover:bg-red-500/5 rounded-lg disabled:opacity-10 transition-colors"
+          className="flex-1 sm:flex-none p-2 sm:p-2 flex items-center justify-center text-text-4 hover:text-red-500 hover:bg-red-500/5 rounded-lg disabled:opacity-10 transition-colors bg-surface sm:bg-transparent border sm:border-none border-border"
           aria-label="Remove item"
         >
           <Trash2 className="w-4 h-4" />
