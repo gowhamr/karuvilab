@@ -131,6 +131,11 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<{ publicKeyPem: string; privateKeyPem: string }>;
 
+  ecdhGenerateKeyPair(
+    curve?: 'P-256' | 'P-384' | 'P-521',
+    onProgress?: ProgressCallback
+  ): Promise<{ publicKeyPem: string; privateKeyPem: string }>;
+
   ecdsaSign(
     plaintext: string,
     privateKeyPem: string,

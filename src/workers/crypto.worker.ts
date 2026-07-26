@@ -457,6 +457,16 @@ const api = {
     };
   },
 
+  async ecdhGenerateKeyPair(curve: 'P-256' | 'P-384' | 'P-521' = 'P-256', onProgress?: any) {
+    const keyPair = await self.crypto.subtle.generateKey({ name: "ECDH", namedCurve: curve }, true, ["deriveBits", "deriveKey"]);
+    const pubDer = await self.crypto.subtle.exportKey("spki", keyPair.publicKey);
+    const privDer = await self.crypto.subtle.exportKey("pkcs8", keyPair.privateKey);
+    return {
+      publicKeyPem: derToPem(pubDer, "PUBLIC KEY"),
+      privateKeyPem: derToPem(privDer, "PRIVATE KEY"),
+    };
+  },
+
   async ecdsaSign(plaintext: string, privateKeyPem: string, curve: 'P-256' | 'P-384' | 'P-521' = 'P-256', onProgress?: any) {
     const hashAlgo = curve === 'P-256' ? 'SHA-256' : curve === 'P-384' ? 'SHA-384' : 'SHA-512';
     const der = pemToDer(privateKeyPem);

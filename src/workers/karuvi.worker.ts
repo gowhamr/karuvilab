@@ -102,6 +102,7 @@ const api: Partial<WorkerAPI> = {
   rsaSign: async () => '',
   rsaVerify: async () => true,
   ecdsaGenerateKeyPair: async () => ({ publicKeyPem: '', privateKeyPem: '' }),
+  ecdhGenerateKeyPair: async () => ({ publicKeyPem: '', privateKeyPem: '' }),
   ecdsaSign: async () => '',
   ecdsaVerify: async () => true,
   ecdhDeriveSecret: async () => '',

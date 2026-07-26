@@ -53,6 +53,7 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   rsaSign: 'compute',
   rsaVerify: 'compute',
   ecdsaGenerateKeyPair: 'compute',
+  ecdhGenerateKeyPair: 'compute',
   ecdsaSign: 'compute',
   ecdsaVerify: 'compute',
   ecdhDeriveSecret: 'compute',
