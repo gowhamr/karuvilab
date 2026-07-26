@@ -266,6 +266,21 @@ export function ClientToolShell({ title, description, category, children, toolId
                     {description}
                   </p>
                 )}
+                {(currentTool?.version || currentTool?.lastVerified) && (
+                  <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-text-4 font-mono">
+                    {currentTool.version && (
+                      <span className="flex items-center gap-1">
+                        <span className="opacity-60">v</span>{currentTool.version}
+                      </span>
+                    )}
+                    {currentTool.version && currentTool.lastVerified && <span className="opacity-30">•</span>}
+                    {currentTool.lastVerified && (
+                      <span className="flex items-center gap-1">
+                        <span className="opacity-60">Verified:</span> {currentTool.lastVerified}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -393,6 +408,27 @@ export function ClientToolShell({ title, description, category, children, toolId
                             className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(finalParsedContent.detailedDescription) }}
                           />
+                        </div>
+                      )}
+
+                      {currentTool?.changelog && currentTool.changelog.length > 0 && (
+                        <div className="space-y-4">
+                          <h2 className="text-xl font-black text-text tracking-tight">Version History & Changelog</h2>
+                          <div className="space-y-4 border-l-2 border-border pl-4">
+                            {currentTool.changelog.map((log, idx) => (
+                              <div key={idx} className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-bold text-sm text-text">v{log.version}</span>
+                                  <span className="text-xs text-text-4">{log.date}</span>
+                                </div>
+                                <ul className="list-disc pl-4 space-y-1 text-sm text-text-3">
+                                  {log.changes.map((change, cIdx) => (
+                                    <li key={cIdx}>{change}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
 

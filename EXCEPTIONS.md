@@ -18,6 +18,8 @@ All entries reviewed and approved via PR.
 | E-008 | KL-Security / CSP       | 'unsafe-eval' added to CSP      | Only used in strictly validated math worker context | Permanent | ACTIVE |
 | E-009 | P-13 TypeScript Excellence | Explicit any usage in workers   | Allowed only in workers/tests for serialization/mocks | Permanent | ACTIVE |
 | E-010 | P-04/PERF-01 Main-thread Ops | pdfjs-dist requires HTMLCanvasElement | Virtualization, DPR capping, destroy-on-leave | Permanent | ACTIVE |
+| E-011 | GEMINI §13 / CSP style-src | 'unsafe-inline' in style-src  | Required by Framer Motion — inline style injection cannot be CSP-hashed | Permanent | ACTIVE |
+| E-012 | P-14 console.log in production | console.log/error in public/sw.js | SW context — structured logger unavailable; prefixed with descriptive labels | Permanent | ACTIVE |
 
 ---
 
@@ -110,4 +112,18 @@ All entries reviewed and approved via PR.
 - **Reason:** pdfjs-dist's page.render() requires HTMLCanvasElement, which is unavailable in a Web Worker.
 - **Mitigation:** Virtualization: current + 1 adjacent page only, DPR capping by device tier, destroy-on-leave canvas lifecycle.
 - **Resolution Date:** Permanent architectural exception.
+- **Status:** ACTIVE
+
+### E-011
+- **Rule:** GEMINI.md §13 (Security Standards) — CSP `style-src 'unsafe-inline'`
+- **Reason:** Framer Motion v12+ injects inline `style` attributes directly onto DOM elements for its hardware-accelerated animation system. These cannot be expressed as static CSS classes and cannot be pre-hashed for a `style-src` CSP nonce/hash policy. Removing `'unsafe-inline'` from `style-src` would break all Framer Motion animations site-wide.
+- **Mitigation:** The risk of `style-src 'unsafe-inline'` is lower than `script-src 'unsafe-inline'` (CSS injection cannot directly execute code). All user-provided HTML is sanitized via `DOMPurify.sanitize()` (E-009 / KL-09), reducing stored XSS surface. This exception is limited strictly to `style-src` only — `script-src` does not allow `'unsafe-inline'`.
+- **Resolution Date:** Permanent — until Framer Motion provides a nonce-compatible API.
+- **Status:** ACTIVE
+
+### E-012
+- **Rule:** P-14 (No `console.log` in production code)
+- **Reason:** `public/sw.js` is a standalone browser Service Worker file. The project's structured logger (`src/lib/logger.ts`) is a React/Next.js module that imports Node-compatible dependencies and cannot be `importScripts`'d or bundled into the SW context without a dedicated build pipeline.
+- **Mitigation:** All `console.log` calls in `sw.js` are prefixed with `[SW]`-style context labels and contain only operational status strings (no user data). A future improvement would bundle a lightweight logger shim specifically for the SW.
+- **Resolution Date:** Permanent until a separate SW build pipeline is established.
 - **Status:** ACTIVE

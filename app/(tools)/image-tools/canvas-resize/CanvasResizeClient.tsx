@@ -278,7 +278,7 @@ export default function CanvasResizeClient() {
                     Canvas Dimensions
                   </h2>
                 </div>
-                <span className="text-xs font-semibold text-text-4">
+                <span className="text-xs font-semibold text-text-muted">
                   Original: {origW} × {origH} px
                 </span>
               </div>
@@ -371,7 +371,7 @@ export default function CanvasResizeClient() {
                   {ANCHOR_GRID.find((a) => a.id === anchor)?.label}
                 </span>
               </div>
-              <p className="text-xs text-text-4">
+              <p className="text-xs text-text-muted">
                 Select where to pin your original image within the resized canvas workspace.
               </p>
 
@@ -545,8 +545,8 @@ export default function CanvasResizeClient() {
                       className="relative z-content max-h-[420px] w-auto max-w-full object-contain rounded-lg shadow-md border border-border/50"
                     />
                   ) : (
-                    <div className="relative z-content text-center text-text-4 space-y-2">
-                      <Sparkles className="w-8 h-8 mx-auto text-text-4/50 animate-pulse" />
+                    <div className="relative z-content text-center text-text-muted space-y-2">
+                      <Sparkles className="w-8 h-8 mx-auto text-text-muted/50 animate-pulse" />
                       <p className="text-xs font-bold uppercase tracking-wider">
                         Generating preview…
                       </p>

@@ -79,7 +79,7 @@ export default function DiscountCalculatorClient() {
           </div>
           <div>
             <h2 className="text-sm font-black uppercase tracking-widest text-text">Reverse Calculator</h2>
-            <p className="text-xs font-bold text-text-4 uppercase">Find % off to reach target</p>
+            <p className="text-xs font-bold text-text-muted uppercase">Find % off to reach target</p>
           </div>
         </div>
 
@@ -93,7 +93,7 @@ export default function DiscountCalculatorClient() {
         />
 
         <div className="p-6 bg-bg rounded-2xl border border-border flex items-center justify-between shadow-inner">
-          <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Required discount</span>
+          <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Required discount</span>
           <span className="text-3xl font-black text-blue tabular-nums">
             {reverse.pctOff > 0
               ? fmt(reverse.pctOff) + "%"

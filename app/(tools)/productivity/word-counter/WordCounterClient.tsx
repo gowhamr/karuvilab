@@ -87,7 +87,7 @@ export default function WordCounterClient() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-3 space-y-4">
-          <label htmlFor="word-counter-input" className="text-sm font-black uppercase tracking-widest text-text-4">Input Text</label>
+          <label htmlFor="word-counter-input" className="text-sm font-black uppercase tracking-widest text-text-muted">Input Text</label>
           <ToolInput
             id="word-counter-input"
             value={text}
@@ -97,7 +97,7 @@ export default function WordCounterClient() {
           />
         </div>
         <div className="space-y-4">
-          <label className="text-sm font-black uppercase tracking-widest text-text-4">Upload File</label>
+          <label className="text-sm font-black uppercase tracking-widest text-text-muted">Upload File</label>
           <DropZone
             onFilesSelected={handleFiles}
             accept=".txt,.docx"

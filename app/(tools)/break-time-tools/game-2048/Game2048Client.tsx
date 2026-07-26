@@ -263,7 +263,7 @@ export default function Game2048Client() {
         <div className="flex gap-2">
           {[{ label: "Score", val: score }, { label: "Best", val: best }].map(({ label, val }) => (
             <div key={label} className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[80px]">
-              <div className="text-xs font-bold text-text-4 uppercase tracking-widest">{label}</div>
+              <div className="text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
               <div className="text-xl font-black text-text">{val}</div>
             </div>
           ))}
@@ -367,7 +367,7 @@ export default function Game2048Client() {
           <ChevronRight className="w-5 h-5 mx-auto" />
         </m.button>
       </div>
-      <p className="text-center text-xs text-text-4">Use keyboard arrow keys or swipe. Undo: Ctrl+Z</p>
+      <p className="text-center text-xs text-text-muted">Use keyboard arrow keys or swipe. Undo: Ctrl+Z</p>
     </div>
   );
 }

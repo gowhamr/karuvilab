@@ -159,7 +159,7 @@ export default function StopwatchClient() {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content sideOffset={8} align="end" className="w-80 bg-surface border border-border shadow-2xl rounded-2xl p-4 z-popover animate-in fade-in zoom-in-95">
-          <h3 className="font-bold text-sm uppercase tracking-widest text-text-4 mb-4">Settings</h3>
+          <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted mb-4">Settings</h3>
           
           <div className="space-y-4">
             {isDashboard && (
@@ -186,7 +186,7 @@ export default function StopwatchClient() {
                     <button 
                       key={size}
                       onClick={() => updateSettings({ clockSize: size as "small" | "medium" | "large" | "huge" })}
-                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-2 text-text-4 hover:text-text")}
+                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-2 text-text-muted hover:text-text")}
                     >
                       {size}
                     </button>
@@ -214,7 +214,7 @@ export default function StopwatchClient() {
   const renderLapsList = () => (
     <div className={cn("w-full max-w-2xl mx-auto flex-1 overflow-auto mt-12", isDashboard ? "max-h-[40vh]" : "max-h-[500px]")}>
       {laps.length === 0 ? (
-        <div className="text-center text-text-4 opacity-50 py-8 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+        <div className="text-center text-text-muted opacity-50 py-8 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
           <Flag className="w-4 h-4" /> No laps recorded
         </div>
       ) : (
@@ -234,7 +234,7 @@ export default function StopwatchClient() {
                   isSlowest ? "text-error border-error/30 bg-error/5" : ""
                 )}
               >
-                <span className={cn("font-bold", isFastest ? "text-success" : isSlowest ? "text-error" : "text-text-4")}>
+                <span className={cn("font-bold", isFastest ? "text-success" : isSlowest ? "text-error" : "text-text-muted")}>
                   Lap {String(lapNum).padStart(2, '0')}
                 </span>
                 
@@ -243,7 +243,7 @@ export default function StopwatchClient() {
                   {formatTime(lap.lapTime, settings.showMilliseconds)}
                 </span>
                 
-                <span className="font-mono font-medium text-text-4 tabular-nums w-32 text-right">
+                <span className="font-mono font-medium text-text-muted tabular-nums w-32 text-right">
                   {formatTime(lap.totalTime, settings.showMilliseconds)}
                 </span>
               </div>

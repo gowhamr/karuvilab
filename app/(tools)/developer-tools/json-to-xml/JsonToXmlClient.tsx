@@ -190,7 +190,7 @@ export default function JsonToXmlClient() {
               onClick={() => setMode('json-to-xml')}
               className={cn(
                 "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'json-to-xml' ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-3"
+                mode === 'json-to-xml' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
               )}
             >
               JSON to XML
@@ -199,7 +199,7 @@ export default function JsonToXmlClient() {
               onClick={() => setMode('xml-to-json')}
               className={cn(
                 "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'xml-to-json' ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-3"
+                mode === 'xml-to-json' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
               )}
             >
               XML to JSON
@@ -211,7 +211,7 @@ export default function JsonToXmlClient() {
           {/* Input Area */}
           <div className="space-y-4">
             <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
                 Input {mode === 'json-to-xml' ? 'JSON' : 'XML'}
               </label>
               <button 
@@ -238,14 +238,14 @@ export default function JsonToXmlClient() {
           {/* Output Area */}
           <div className="space-y-4">
             <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
                 Output {mode === 'json-to-xml' ? 'XML' : 'JSON'}
               </label>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleDownload}
                   disabled={!output || output.startsWith('Error:')}
-                  className="p-1.5 text-text-4 hover:text-blue transition-colors disabled:opacity-50"
+                  className="p-1.5 text-text-muted hover:text-blue transition-colors disabled:opacity-50"
                   title="Download File"
                 >
                   <Download className="w-4 h-4" />
@@ -267,7 +267,7 @@ export default function JsonToXmlClient() {
         {/* Options Panel */}
         {mode === 'json-to-xml' && (
           <div className="bg-bg border border-border rounded-3xl p-6 space-y-6">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Options</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Options</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-3">

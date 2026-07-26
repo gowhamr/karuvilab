@@ -137,7 +137,7 @@ export default function MetaTagsGeneratorClient() {
               label="OG Image URL"
               value={ogImage}
               onChange={setOgImage}
-              placeholder="https://example.com/og-image.jpg"
+              placeholder="https://example.com/og-image.webp"
             />
 
             <div className="grid grid-cols-2 gap-4">

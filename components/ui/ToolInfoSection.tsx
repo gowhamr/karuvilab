@@ -26,24 +26,22 @@ export function ToolInfoSection({ id, title, preview, isOpen: controlledIsOpen, 
     }
   }, [controlledIsOpen]);
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const newState = !isOpen;
-    
-    if (isControlled) {
-      onToggle?.(newState);
-    } else {
-      setInternalIsOpen(newState);
-    }
-  };
+
 
   return (
     <details 
-      open={isOpen} 
+      open={isOpen}
+      onToggle={(e) => {
+        const newState = (e.target as HTMLDetailsElement).open;
+        if (isControlled) {
+          onToggle?.(newState);
+        } else {
+          setInternalIsOpen(newState);
+        }
+      }}
       className="group bg-surface border border-border shadow-sm rounded-2xl md:rounded-3xl overflow-hidden transition-all duration-300"
     >
       <summary 
-        onClick={handleToggle}
         className="flex flex-col p-5 md:p-6 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-blue/50 select-none list-none [&::-webkit-details-marker]:hidden"
       >
         <div className="flex items-center justify-between">

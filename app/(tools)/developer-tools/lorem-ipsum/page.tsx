@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 import LoremIpsumWrapper from './LoremIpsumWrapper';
 
@@ -21,26 +22,52 @@ export default function Page() {
     >
       <LoremIpsumWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-lorem"
-          title="How it Works: The Purpose of Placeholder Text"
-          preview="Learn why designers have used scrambled Latin since the 1500s."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. It comes from Cicero's "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil).
-            </p>
-            <h3>Visual Design vs Content</h3>
-            <p>
-              When a designer is building a layout, they need text to test fonts, line heights, and spacing. If they use real English text (like "Welcome to our website..."), reviewers inevitably get distracted reading the content and arguing about the copywriting instead of evaluating the visual design.
-            </p>
-            <p>
-              If they use "asdf asdf asdf", the word lengths are unnatural, ruining the visual distribution of letters. Lorem Ipsum provides the perfect balance: a normal distribution of letters and word lengths that looks exactly like real language, but is completely unreadable, forcing the brain to focus entirely on the typography.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="The Engineering of Placeholder Text">
+        
+        <LearningSection type="architecture" title="Visual Design vs Content">
+          <p>When a UI engineer or designer is building a layout, they need text to test fonts, line heights, and padding.</p>
+          <p className="mt-2">If they use real English text (like "Welcome to our new application..."), stakeholders and reviewers inevitably get distracted reading the content. They start arguing about the copywriting instead of evaluating the structural CSS layout.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The Problem with 'asdf'">
+          <p>If the designer just mashes their keyboard and uses "asdf asdf asdf" as a placeholder, the layout tests fail. The word lengths are unnatural, the letter distribution is skewed to the home row, and the visual weight (color density) of the paragraph is ruined.</p>
+          <p className="mt-2"><strong>Lorem Ipsum</strong> solves this. It provides a normal, organic distribution of letters and word lengths that looks exactly like real language to the human eye, but is completely unreadable. This forces the reviewer's brain to bypass the content and focus entirely on the typography.</p>
+        </LearningSection>
+
+        <LearningSection type="standards" title="Historical Origins">
+          <p>Lorem Ipsum is not randomly generated nonsense. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
+          <p className="mt-2">It originates from Cicero's <em>"de Finibus Bonorum et Malorum"</em> (The Extremes of Good and Evil). In the 1500s, an unknown printer took a galley of type and scrambled it to make a type specimen book, cementing it as the industry standard for centuries before the invention of the web.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why do designers use unreadable Latin text instead of real English text when testing layouts?",
+                options: [
+                  "Because Latin fonts are cheaper to license.",
+                  "Because it forces stakeholders to evaluate the visual layout without getting distracted by arguing over the meaning of the words.",
+                  "Because Latin takes up less disk space than English.",
+                  "Because it renders faster in CSS."
+                ],
+                correctIndex: 1,
+                explanation: "Lorem Ipsum acts as a psychological trick. By stripping away meaning, it forces the brain to look at the text purely as graphical shapes and spacing."
+              },
+              {
+                question: "Why is 'Lorem Ipsum' better than just typing random letters like 'asdfasdf'?",
+                options: [
+                  "It has a natural distribution of vowels, consonants, and word lengths, giving the paragraph realistic visual weight.",
+                  "It complies with international SEO standards.",
+                  "It allows the browser to cache the text faster.",
+                  "Random letters trigger spam filters."
+                ],
+                correctIndex: 0,
+                explanation: "Typography relies heavily on letter shapes (ascenders and descenders) and organic word lengths. 'asdf' creates a blocky, unrealistic visual texture that does not test the font accurately."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { getCanonicalUrl } from "./canonical";
 
 const BASE_URL = "https://karuvilab.com";
-const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
+const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.webp`;
 
 export interface SiteConfig {
   name: string;

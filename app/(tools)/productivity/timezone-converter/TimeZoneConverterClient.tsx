@@ -106,6 +106,31 @@ export default function TimeZoneConverterClient() {
     setTargetTZs([]);
   };
 
+const formatCache = new Map<string, Intl.DateTimeFormat>();
+const getFormatter = (tz: string, type: 'date' | 'time' | 'full') => {
+  const key = `${tz}-${type}`;
+  if (!formatCache.has(key)) {
+    formatCache.set(key, new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      ...(type === 'date' ? { dateStyle: 'medium' } : type === 'time' ? { timeStyle: 'short' } : { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })
+    }));
+  }
+  return formatCache.get(key)!;
+};
+
+const getOffsetMinutes = (date: Date, timeZone: string) => {
+  try {
+    const fmt = getFormatter(timeZone, 'full');
+    const parts = fmt.formatToParts(date);
+    const getPart = (type: string) => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+    const tzDate = new Date(Date.UTC(
+      getPart('year'), getPart('month') - 1, getPart('day'),
+      getPart('hour'), getPart('minute'), getPart('second')
+    ));
+    return (tzDate.getTime() - date.getTime()) / 60000;
+  } catch { return 0; }
+};
+
   const conversions = useMemo(() => {
     if (!sourceDate) return [];
     
@@ -122,14 +147,15 @@ export default function TimeZoneConverterClient() {
     // 1. Calculate the actual UTC timestamp for the given "Wall Time" in "Source TZ"
     const getActualUTC = () => {
       try {
-        // Create a UTC date with the wall time components
         const wallTimeAsUTC = new Date(Date.UTC(year, month - 1, day, hour, minute));
-        // Find what time it would be in the sourceTZ if the UTC time was our wall time
-        const tzString = wallTimeAsUTC.toLocaleString('en-US', { timeZone: sourceTZ });
-        const tzDate = new Date(tzString);
-        // The difference is the offset
+        const fmt = getFormatter(sourceTZ, 'full');
+        const parts = fmt.formatToParts(wallTimeAsUTC);
+        const getPart = (type: string) => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+        const tzDate = new Date(Date.UTC(
+          getPart('year'), getPart('month') - 1, getPart('day'),
+          getPart('hour'), getPart('minute'), getPart('second')
+        ));
         const offset = tzDate.getTime() - wallTimeAsUTC.getTime();
-        // Adjust the wall time to get the real UTC timestamp
         return new Date(wallTimeAsUTC.getTime() - offset);
       } catch (e) {
         return new Date(NaN);
@@ -139,24 +165,11 @@ export default function TimeZoneConverterClient() {
     const baseUTC = getActualUTC();
     if (isNaN(baseUTC.getTime())) return [];
 
-    // Helper for offsets
-    const getOffsetMinutes = (date: Date, timeZone: string) => {
-      try {
-        const tzString = date.toLocaleString('en-US', { timeZone });
-        const tzDate = new Date(tzString);
-        const utcString = date.toLocaleString('en-US', { timeZone: 'UTC' });
-        const utcDate = new Date(utcString);
-        return (tzDate.getTime() - utcDate.getTime()) / 60000;
-      } catch { return 0; }
-    };
-
     const baseOffset = getOffsetMinutes(baseUTC, sourceTZ);
+    const baseDateOnly = new Date(getFormatter(sourceTZ, 'full').format(baseUTC).split(',')[0] || '');
     
     return targetTZs.map(tz => {
       try {
-        const targetDateFmt = new Intl.DateTimeFormat(undefined, { timeZone: tz, dateStyle: 'medium' });
-        const targetTimeFmt = new Intl.DateTimeFormat(undefined, { timeZone: tz, timeStyle: 'short' });
-        
         const targetOffset = getOffsetMinutes(baseUTC, tz);
         const diffMinutes = targetOffset - baseOffset;
         
@@ -175,24 +188,15 @@ export default function TimeZoneConverterClient() {
           }
         }
 
-        // Relative Day
-        const baseDayStr = baseUTC.toLocaleString('en-US', { timeZone: sourceTZ, day: 'numeric' });
-        const targetDayStr = baseUTC.toLocaleString('en-US', { timeZone: tz, day: 'numeric' });
-        const baseDay = parseInt(baseDayStr);
-        const targetDay = parseInt(targetDayStr);
+        const targetDateOnly = new Date(getFormatter(tz, 'full').format(baseUTC).split(',')[0] || '');
+        const dayDiff = (targetDateOnly.getTime() - baseDateOnly.getTime()) / (1000 * 60 * 60 * 24);
         
         let relativeDay = "";
-        // Simple comparison of day number might fail at month boundaries.
-        // Better: Compare full dates
-        const baseDateOnly = new Date(baseUTC.toLocaleString('en-US', { timeZone: sourceTZ, year: 'numeric', month: 'numeric', day: 'numeric' }));
-        const targetDateOnly = new Date(baseUTC.toLocaleString('en-US', { timeZone: tz, year: 'numeric', month: 'numeric', day: 'numeric' }));
-        
-        const dayDiff = (targetDateOnly.getTime() - baseDateOnly.getTime()) / (1000 * 60 * 60 * 24);
         if (dayDiff >= 0.5) relativeDay = "Next Day";
         else if (dayDiff <= -0.5) relativeDay = "Previous Day";
 
-        const datePart = targetDateFmt.format(baseUTC);
-        const timePart = targetTimeFmt.format(baseUTC);
+        const datePart = getFormatter(tz, 'date').format(baseUTC);
+        const timePart = getFormatter(tz, 'time').format(baseUTC);
         const formatted = `${datePart}, ${timePart}`;
 
         return { 
@@ -258,10 +262,10 @@ export default function TimeZoneConverterClient() {
                     className="w-full flex items-center justify-between px-4 py-3 bg-bg border border-border rounded-xl text-left hover:border-blue transition-all group"
                   >
                     <div className="flex items-center gap-3">
-                      <Globe className="w-4 h-4 text-text-4 group-hover:text-blue" />
+                      <Globe className="w-4 h-4 text-text-muted group-hover:text-blue" />
                       <span className="font-medium text-text">{sourceTZ}</span>
                     </div>
-                    <ChevronDown className={`w-4 h-4 text-text-4 transition-transform ${isSearchingSource ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-4 h-4 text-text-muted transition-transform ${isSearchingSource ? 'rotate-180' : ''}`} />
                   </button>
 
                   <AnimatePresence>
@@ -274,7 +278,7 @@ export default function TimeZoneConverterClient() {
                       >
                         <div className="p-3 border-b border-border bg-bg/50">
                           <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                             <input
                               type="text"
                               placeholder="Search timezone..."
@@ -297,7 +301,7 @@ export default function TimeZoneConverterClient() {
                               className="w-full text-left px-3 py-2 rounded-lg hover:bg-blue/10 text-sm flex justify-between items-center group"
                             >
                               <span className="font-bold text-text group-hover:text-blue">{zone.city}</span>
-                              <span className="text-xs text-text-4">{zone.tz}</span>
+                              <span className="text-xs text-text-muted">{zone.tz}</span>
                             </button>
                           ))}
                         </div>
@@ -336,7 +340,7 @@ export default function TimeZoneConverterClient() {
                 <div className="space-y-2 relative">
                   <label className="text-sm font-bold text-text-2">Add Time Zone</label>
                   <div className="relative">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-text-4">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
                       <Search className="w-4 h-4" />
                     </div>
                     <input
@@ -369,9 +373,9 @@ export default function TimeZoneConverterClient() {
                             >
                               <div>
                                 <p className="font-bold text-text group-hover:text-blue">{zone.city}</p>
-                                <p className="text-xs text-text-4">{zone.country}</p>
+                                <p className="text-xs text-text-muted">{zone.country}</p>
                               </div>
-                              <Plus className="w-4 h-4 text-text-4 group-hover:text-blue" />
+                              <Plus className="w-4 h-4 text-text-muted group-hover:text-blue" />
                             </button>
                           ))}
                         </div>
@@ -385,7 +389,7 @@ export default function TimeZoneConverterClient() {
         </div>
 
         {/* Info Bar */}
-        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-xs font-bold text-text-4 uppercase tracking-widest-lg">
+        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-widest-lg">
           <div className="flex items-center gap-2">
             <Info className="w-3 h-3" />
             Comparing {targetTZs.length} zones to {sourceTZ}
@@ -418,7 +422,7 @@ export default function TimeZoneConverterClient() {
                         {conv.tz.split('/').pop()?.replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <div className="text-xs text-text-4 font-bold truncate max-w-40">
+                    <div className="text-xs text-text-muted font-bold truncate max-w-40">
                       {conv.tz}
                     </div>
                   </div>
@@ -426,11 +430,11 @@ export default function TimeZoneConverterClient() {
                   <div className="flex gap-1">
                     <CopyButton 
                       text={conv.full} 
-                      className="p-2 text-text-4 hover:text-blue hover:bg-blue/10 rounded-lg transition-all"
+                      className="p-2 text-text-muted hover:text-blue hover:bg-blue/10 rounded-lg transition-all"
                     />
                     <button
                       onClick={() => removeTargetTZ(conv.tz)}
-                      className="p-2 text-text-4 hover:text-error hover:bg-error/10 rounded-lg transition-all"
+                      className="p-2 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -456,7 +460,7 @@ export default function TimeZoneConverterClient() {
 
                 <div className="pt-4 border-t border-border flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-black text-text-4 uppercase tracking-wider">Offset:</span>
+                    <span className="text-xs font-black text-text-muted uppercase tracking-wider">Offset:</span>
                     <span className={`text-xs font-bold ${conv.offsetLabel.startsWith('+') ? 'text-success' : conv.offsetLabel.startsWith('-') ? 'text-error' : 'text-blue'}`}>
                       {conv.offsetLabel}
                     </span>
@@ -482,7 +486,7 @@ export default function TimeZoneConverterClient() {
            </div>
            <div className="text-center">
              <p className="font-bold text-text">Add another zone</p>
-             <p className="text-xs text-text-4">Compare more cities</p>
+             <p className="text-xs text-text-muted">Compare more cities</p>
            </div>
          </button>
         )}

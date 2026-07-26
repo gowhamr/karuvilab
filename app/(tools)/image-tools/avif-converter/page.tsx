@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import AvifConverterClientWrapper from './AvifConverterClientWrapper';
 
 const toolId = 'avif-converter';
@@ -17,37 +18,55 @@ export default function Page() {
       description="Convert images to the next-gen AVIF format for maximum compression"
       category={cat}
       toolId={toolId}
-
-      content={{
-        detailedDescription: "Convert your standard images to AVIF, the next-generation image format offering unparalleled compression. Run AVIF encoding entirely in your browser securely and offline for maximum privacy and performance.",
-        useCases: ["Creating next-generation web assets","Achieving maximum image compression","Preparing ultra-lightweight portfolio images","Upgrading older WebP/JPEG libraries","Testing AVIF browser compatibility"],
-        howTo: ["Select the image you wish to convert.","Adjust the compression quality setting.","Wait for the browser-based encoder to process the file.","Compare the original and new file sizes.","Download your AVIF image."],
-        faq: [{"question":"What is AVIF?","answer":"AVIF is an image format derived from the AV1 video codec, offering significantly better compression than WebP and JPEG."},{"question":"Why does AVIF take longer to convert?","answer":"AVIF encoding is highly complex and requires more CPU power, but the resulting file sizes are incredibly small."},{"question":"Are my files uploaded?","answer":"Never. KaruviLab operates on a strict Zero-Server-Upload policy."},{"question":"Do all browsers support AVIF?","answer":"Most modern browsers (Chrome, Firefox, Safari) support AVIF, but older versions might not."},{"question":"Is transparency supported?","answer":"Yes, AVIF fully supports alpha channels (transparency)."}],
-        relatedTools: ["webp-converter","image-compressor","image-converter"]
-      }}
->
+    >
       <AvifConverterClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-av1"
-          title="How it Works: Deriving from Video Codecs"
-          preview="Learn why the best modern image formats actually come from video."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              AVIF (AV1 Image File Format) isn't just an image format—it's actually a single frame of an <strong>AV1 Video</strong>. 
-            </p>
-            <h3>Video Compression Magic</h3>
-            <p>
-              Streaming companies (like Netflix and YouTube) spend billions of dollars researching how to compress video to save bandwidth. They developed the open-source AV1 video codec. Engineers realized that if this codec is incredibly good at compressing a continuous stream of moving pictures, it would be even better at compressing just <em>one</em> picture.
-            </p>
-            <p>
-              AVIF uses advanced video-encoding techniques like <em>intra-frame prediction</em>. It divides the image into blocks and mathematically predicts what colors should exist in one block based on the blocks around it. This mathematical prediction allows it to throw away up to 50% more data than JPEG without any noticeable loss in visual quality.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding the AVIF Format">
+        
+        <LearningSection type="architecture" title="Images from Video Codecs">
+          <p>AVIF (AV1 Image File Format) isn't just an image format—it is actually a single frame of an <strong>AV1 Video</strong> wrapped in an image container.</p>
+          <p className="mt-2">Streaming companies (like Netflix and Google) spent billions researching how to compress video to save bandwidth, resulting in the open-source AV1 video codec. Engineers realized that if a codec is incredibly good at compressing a continuous stream of moving pictures, it would be even better at compressing just <em>one</em> picture.</p>
+        </LearningSection>
+        
+        <LearningSection type="algorithm" title="Intra-Frame Prediction">
+          <p>AVIF uses advanced video-encoding techniques like <em>intra-frame prediction</em>. It divides the image into distinct blocks and mathematically predicts what colors should exist in one block based on the pixels in the blocks around it.</p>
+          <p className="mt-2">This spatial mathematical prediction allows AVIF encoders to throw away up to 50% more data than a standard JPEG encoder without causing any noticeable loss in visual quality to the human eye.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="Encoding Overhead">
+          <p>Because AVIF relies on complex matrix math and prediction models, encoding an AVIF image is highly CPU intensive. It takes significantly longer to save an AVIF than a JPEG.</p>
+          <p className="mt-2">This tool uses a WebAssembly port of the AV1 encoder running inside a background Web Worker, allowing your computer's CPU to churn through the math without freezing your browser interface.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "What technology is the AVIF image format based on?",
+                options: [
+                  "The ZIP compression algorithm.",
+                  "A single frame of the AV1 video codec.",
+                  "Adobe's proprietary PDF structure.",
+                  "A modified version of the GIF format."
+                ],
+                correctIndex: 1,
+                explanation: "AVIF leverages the massive engineering investments put into video compression (AV1) by applying those exact algorithms to single still frames."
+              },
+              {
+                question: "Why might a website choose to serve AVIF images despite them taking longer to generate?",
+                options: [
+                  "Because AVIF requires no CPU power to decode.",
+                  "Because AVIF files are significantly smaller than JPEGs (often 50% smaller), dramatically speeding up website loading times for users.",
+                  "Because AVIF is an older, more compatible format.",
+                  "Because AVIF is the only format that supports color."
+                ],
+                correctIndex: 1,
+                explanation: "The heavy CPU cost of generating the AVIF is paid once on the developer's computer, but the benefit of a tiny file size is enjoyed thousands of times by the website's visitors."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

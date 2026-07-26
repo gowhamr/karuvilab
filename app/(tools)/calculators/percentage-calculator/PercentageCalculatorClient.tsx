@@ -12,7 +12,7 @@ const fmt = (n: number) =>
 function ResultBox({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-surface border border-border rounded-xl p-4">
-      <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</div>
+      <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</div>
       <div className="text-2xl font-black text-blue">{value}</div>
     </div>
   );
@@ -145,7 +145,7 @@ export default function PercentageCalculatorClient() {
         {r3 !== null && (
           <>
             <div className="bg-surface border border-border rounded-xl p-4">
-              <div className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">
+              <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
                 {r3 >= 0 ? "Increase" : "Decrease"}
               </div>
               <div

@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import BatchImageConverterClientWrapper from './BatchImageConverterClientWrapper';
 
 const toolId = 'batch-image-converter';
@@ -17,37 +18,59 @@ export default function Page() {
       description="Convert multiple images between formats in one batch operation"
       category={cat}
       toolId={toolId}
-
-      content={{
-        detailedDescription: "Convert hundreds of images simultaneously without uploading them to a server. Our offline Batch Image Converter uses Web Workers to process massive queues in parallel, ensuring extreme speed and total privacy.",
-        useCases: ["Converting camera RAWs or HEICs to JPEG","Batch exporting WebP for web performance","Standardizing asset formats for developers","Compressing a large photo gallery offline","Preparing bulk images for ML training"],
-        howTo: ["Drag and drop multiple images or a folder.","Select the target output format (e.g., JPEG, WebP).","Adjust quality and optimization settings.","Click 'Start Batch'.","Download all converted images as a single ZIP file."],
-        faq: [{"question":"Is there a limit to how many images I can convert?","answer":"There is no hard limit, but it depends on your device's memory. We recommend batches of up to 500 images at a time for optimal stability."},{"question":"Are my files uploaded for processing?","answer":"Never. The conversion happens entirely locally in your browser using secure Web Workers."},{"question":"Will this slow down my computer?","answer":"We use background threads (Workers) to process images, keeping your browser responsive, but CPU usage will increase during conversion."},{"question":"Can I maintain the original folder structure?","answer":"The ZIP output will contain flattened files, but we are adding structure preservation in a future update."},{"question":"Does it support WebP and AVIF?","answer":"Yes, WebP is fully supported. AVIF support depends on your specific browser capabilities."}],
-        relatedTools: ["bulk-resizer","image-compressor","image-converter"]
-      }}
->
+    >
       <BatchImageConverterClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-workers"
-          title="How it Works: Multi-threading with Web Workers"
-          preview="Learn how your browser can process 100 images at once without freezing."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              By default, JavaScript is <strong>single-threaded</strong>. It can only do one thing at a time. If it tries to decode and encode 100 images on the main thread, your entire browser tab will freeze, and you won't even be able to click a button or scroll the page.
-            </p>
-            <h3>Concurrency and Orchestration</h3>
-            <p>
-              To solve this, this tool spawns a pool of <strong>Web Workers</strong>. Think of Workers as invisible background tabs. Our <code>WorkerOrchestrator</code> looks at how many CPU cores your device has (using <code>navigator.hardwareConcurrency</code>) and spawns exactly that many workers.
-            </p>
-            <p>
-              It then takes your batch of 100 images and distributes them across the CPU cores. If you have an 8-core machine, it processes 8 images simultaneously in the background while leaving the main thread perfectly smooth so the UI can update the progress bar at 60 frames per second.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Multi-threaded Processing">
+        
+        <LearningSection type="architecture" title="The Single-Thread Problem">
+          <p>By default, JavaScript running in a web browser is <strong>single-threaded</strong>. It can only do one thing at a time.</p>
+          <p className="mt-2">If an application tries to decode, resize, and re-encode 100 images on that single main thread, the entire browser tab will freeze. You wouldn't be able to click a button, scroll the page, or even see a progress bar update until all 100 images finished processing.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="Concurrency via Web Workers">
+          <p>To solve this, this tool utilizes the browser's <code>Web Worker</code> API. Think of Workers as invisible background tabs.</p>
+          <p className="mt-2">Our internal <code>WorkerOrchestrator</code> queries your device to see how many CPU cores it has (using <code>navigator.hardwareConcurrency</code>). If your machine has 8 cores, the orchestrator spawns 8 separate Web Workers.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="Parallel Orchestration">
+          <p>When you drop 100 images into the batch, the orchestrator distributes them across your available CPU cores. It processes 8 images simultaneously in the background.</p>
+          <p className="mt-2">Because the heavy computational math is happening on background threads, the main UI thread is left completely free. This guarantees that your browser remains perfectly responsive, and the progress bar animates at a smooth 60 frames per second, even under heavy load.</p>
+        </LearningSection>
+
+        <LearningSection type="security" title="Zero Upload Infrastructure">
+          <p>Traditional batch converters require you to upload hundreds of megabytes of photos to a cloud server, wait in a queue, and download a ZIP file. By using Web Workers, we bring the server infrastructure directly to your CPU. Processing is faster, bandwidth usage is zero, and your private files never leave your machine.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "What happens if you try to process 100 heavy images on JavaScript's main thread?",
+                options: [
+                  "The browser optimizes them automatically.",
+                  "The UI completely freezes until the job is done because the single thread is blocked.",
+                  "The images are sent to a cloud server.",
+                  "The browser throws an Out of Memory error immediately."
+                ],
+                correctIndex: 1,
+                explanation: "JavaScript's main thread handles both UI updates and script execution. If heavy math blocks the thread, the UI cannot update."
+              },
+              {
+                question: "How does the WorkerOrchestrator know how many background threads to spawn?",
+                options: [
+                  "It always spawns exactly 4 threads.",
+                  "It uses the navigator.hardwareConcurrency API to match your device's physical CPU cores.",
+                  "It asks the user via a popup.",
+                  "It counts the number of images and spawns a thread for each one."
+                ],
+                correctIndex: 1,
+                explanation: "By matching the thread count to the hardware's core count, the app maximizes throughput without causing thread-switching overhead."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

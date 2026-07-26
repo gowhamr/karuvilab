@@ -178,7 +178,7 @@ export default function BorderGeneratorClient() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-black tracking-tight text-text">Decorative Border Generator</h2>
-          <p className="text-sm text-text-4">Add custom borders, colors, styles, and rounded frames locally.</p>
+          <p className="text-sm text-text-muted">Add custom borders, colors, styles, and rounded frames locally.</p>
         </div>
         <PrivacyBadge />
       </div>
@@ -355,7 +355,7 @@ export default function BorderGeneratorClient() {
                     className="max-h-[440px] max-w-full object-contain drop-shadow-md rounded-lg"
                   />
                 ) : (
-                  <div className="text-center text-text-4 text-xs font-bold uppercase tracking-wider space-y-2">
+                  <div className="text-center text-text-muted text-xs font-bold uppercase tracking-wider space-y-2">
                     <ImageIcon className="w-8 h-8 mx-auto opacity-40 animate-pulse" />
                     <p>Generating preview...</p>
                   </div>
@@ -366,16 +366,16 @@ export default function BorderGeneratorClient() {
               {finalDimensions && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 bg-bg border border-border rounded-2xl text-xs font-medium">
                   <div>
-                    <span className="text-text-4 block uppercase text-[10px] font-bold tracking-wider">Original</span>
+                    <span className="text-text-muted block uppercase text-[10px] font-bold tracking-wider">Original</span>
                     <span className="text-text font-bold">{origDimensions?.width} × {origDimensions?.height} px</span>
                   </div>
                   <div>
-                    <span className="text-text-4 block uppercase text-[10px] font-bold tracking-wider">Output Size</span>
+                    <span className="text-text-muted block uppercase text-[10px] font-bold tracking-wider">Output Size</span>
                     <span className="text-text font-bold">{finalDimensions.width} × {finalDimensions.height} px</span>
                   </div>
                   {resultBlob && (
                     <div className="col-span-2 sm:col-span-1">
-                      <span className="text-text-4 block uppercase text-[10px] font-bold tracking-wider">File Size</span>
+                      <span className="text-text-muted block uppercase text-[10px] font-bold tracking-wider">File Size</span>
                       <span className="text-text font-bold">{formatFileSize(resultBlob.size)}</span>
                     </div>
                   )}

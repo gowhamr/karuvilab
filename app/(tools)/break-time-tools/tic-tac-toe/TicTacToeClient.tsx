@@ -274,7 +274,7 @@ export default function TicTacToeClient() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   aiDifficulty === diff
                     ? "bg-primary/20 text-primary border border-primary/30"
-                    : "bg-surface border border-border text-text-4 hover:text-text-2 hover:border-primary/30"
+                    : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-primary/30"
                 }`}
               >
                 {diff}
@@ -307,7 +307,7 @@ export default function TicTacToeClient() {
             >
               <Trophy className="w-4 h-4 text-primary" aria-hidden="true" />
               <span className="text-2xl font-black text-text">{count}</span>
-              <span className="text-xs font-bold text-text-4 uppercase tracking-widest text-center">
+              <span className="text-xs font-bold text-text-muted uppercase tracking-widest text-center">
                 {label}
               </span>
             </div>

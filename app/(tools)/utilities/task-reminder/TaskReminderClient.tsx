@@ -39,6 +39,7 @@ export default function TaskReminderClient() {
   const [newDue, setNewDue] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const [mounted, setMounted] = useState(false);
+  const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,8 +47,13 @@ export default function TaskReminderClient() {
     setTasks(loaded);
     setMounted(true);
     
-    if ("Notification" in window && Notification.permission === "default") {
-      Notification.requestPermission();
+    if ("Notification" in window) {
+      setNotificationStatus(Notification.permission);
+      if (Notification.permission === "default") {
+        Notification.requestPermission().then(setNotificationStatus);
+      }
+    } else {
+      setNotificationStatus('unsupported');
     }
     
     const overdueCount = loaded.filter(t => isOverdue(t)).length;
@@ -151,14 +157,14 @@ export default function TaskReminderClient() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 rounded-lg text-xs font-black capitalize transition-all ${filter === f ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text-2"}`}
+                className={`px-4 py-1.5 rounded-lg text-xs font-black capitalize transition-all ${filter === f ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text-2"}`}
               >
                 {f}
               </button>
             ))}
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs font-black text-text-4 uppercase tracking-widest">{activeCount} Pending</span>
+            <span className="text-xs font-black text-text-muted uppercase tracking-widest">{activeCount} Pending</span>
             {tasks.some(t => t.done) && (
               <button onClick={clearCompleted} className="text-xs font-black text-red-500 uppercase tracking-widest hover:underline">
                 Clear Done
@@ -170,7 +176,7 @@ export default function TaskReminderClient() {
         {filtered.length === 0 ? (
           <div className="py-16 text-center space-y-3">
             <div className="text-4xl opacity-20 grayscale">📝</div>
-            <p className="text-text-4 text-sm font-medium">
+            <p className="text-text-muted text-sm font-medium">
               {filter === "all" ? "Your task list is empty." :
                filter === "active" ? "No active tasks found." :
                "No completed tasks found."}
@@ -193,13 +199,13 @@ export default function TaskReminderClient() {
                     )}
                   </button>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-bold text-sm leading-snug ${task.done ? "line-through text-text-4" : "text-text"}`}>{task.text}</p>
+                    <p className={`font-bold text-sm leading-snug ${task.done ? "line-through text-text-muted" : "text-text"}`}>{task.text}</p>
                     {task.dueDate && (
                       <div className="flex items-center gap-2 mt-1.5">
-                        <div className={`text-xs font-black px-2 py-0.5 rounded-md uppercase tracking-tighter ${overdue ? "bg-red-500 text-white shadow-lg shadow-red-500/20" : "bg-bg border border-border text-text-4"}`}>
+                        <div className={`text-xs font-black px-2 py-0.5 rounded-md uppercase tracking-tighter ${overdue ? "bg-red-500 text-white shadow-lg shadow-red-500/20" : "bg-bg border border-border text-text-muted"}`}>
                           {overdue ? "Overdue" : "Due"}
                         </div>
-                        <span className={`text-xs font-medium ${overdue ? "text-red-500" : "text-text-4"}`}>
+                        <span className={`text-xs font-medium ${overdue ? "text-red-500" : "text-text-muted"}`}>
                           {new Date(task.dueDate + "T00:00:00").toLocaleDateString(undefined, { dateStyle: 'medium' })}
                         </span>
                       </div>
@@ -207,7 +213,7 @@ export default function TaskReminderClient() {
                   </div>
                   <button
                     onClick={() => deleteTask(task.id)}
-                    className="p-1.5 text-text-4 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 lg:opacity-100"
+                    className="p-1.5 text-text-muted hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 lg:opacity-100"
                     aria-label="Delete task"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,9 +227,15 @@ export default function TaskReminderClient() {
         )}
       </div>
 
-      <p className="text-xs text-text-4 text-center font-black uppercase tracking-widest-lg">
+      <p className="text-xs text-text-muted text-center font-black uppercase tracking-widest-lg">
         Data secured on your device via LocalStorage
       </p>
+
+      {notificationStatus === 'denied' && (
+        <p className="text-xs text-error font-bold uppercase tracking-widest text-center max-w-sm mx-auto mt-4">
+          ⚠️ Web Notifications are blocked. You will not receive background alerts for overdue tasks.
+        </p>
+      )}
     </div>
   );
 }

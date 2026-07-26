@@ -50,7 +50,7 @@ export default function ToolError({
 
       {error.digest && (
         <div className="px-4 py-2 bg-bg border border-border rounded-lg inline-block">
-          <code className="text-xs font-mono text-text-4 uppercase tracking-widest">
+          <code className="text-xs font-mono text-text-muted uppercase tracking-widest">
             ID: {error.digest}
           </code>
         </div>

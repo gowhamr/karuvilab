@@ -235,7 +235,7 @@ export default function TypingSpeedTestClient() {
 
   const renderText = useCallback(() => {
     return targetText.split("").map((char, index) => {
-      let cls = "text-text-4";
+      let cls = "text-text-muted";
       if (index < input.length) {
         cls = input[index] === char
           ? "text-emerald-500"
@@ -292,9 +292,9 @@ export default function TypingSpeedTestClient() {
           >
             <Icon className="w-5 h-5 text-[#8B5CF6]" aria-hidden="true" />
             <div className="text-3xl font-black text-text">{val}{suffix}</div>
-            <div className="text-xs font-bold text-text-4 uppercase tracking-widest">{label}</div>
+            <div className="text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
             {best !== null && (
-              <div className={`text-[10px] font-bold ${isNew ? "text-emerald-500" : "text-text-4"}`}>
+              <div className={`text-[10px] font-bold ${isNew ? "text-emerald-500" : "text-text-muted"}`}>
                 {isNew ? "🏆 New best!" : `Best: ${best}${suffix}`}
               </div>
             )}
@@ -354,7 +354,7 @@ export default function TypingSpeedTestClient() {
       {/* ── Bottom bar / Progress ── */}
       {status !== "finished" && (
         <div className="flex justify-between items-center px-1">
-          <p className="text-sm text-text-4 font-medium">
+          <p className="text-sm text-text-muted font-medium">
             {status === "idle"
               ? "Start typing to begin the timer."
               : `${input.length} / ${targetText.length} characters`}
@@ -384,7 +384,7 @@ export default function TypingSpeedTestClient() {
                 </div>
                 <div>
                   <h3 className="font-bold text-text text-sm uppercase tracking-wider">Performance Summary</h3>
-                  <p className="text-xs text-text-4 font-medium">Your skill assessment</p>
+                  <p className="text-xs text-text-muted font-medium">Your skill assessment</p>
                 </div>
               </div>
               
@@ -394,7 +394,7 @@ export default function TypingSpeedTestClient() {
               </div>
               
               <div className="space-y-2 pt-2">
-                <span className="text-xs font-bold text-text-4 uppercase tracking-wider">Improvement Tip</span>
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Improvement Tip</span>
                 <p className="text-sm text-text-2 leading-relaxed bg-bg p-4 rounded-2xl border border-border/50">
                   {getImprovementTip(stats.wpm, stats.accuracy)}
                 </p>
@@ -409,17 +409,17 @@ export default function TypingSpeedTestClient() {
                 </div>
                 <div>
                   <h3 className="font-bold text-text text-sm uppercase tracking-wider">Analysis & History</h3>
-                  <p className="text-xs text-text-4 font-medium">Mistakes and tracking</p>
+                  <p className="text-xs text-text-muted font-medium">Mistakes and tracking</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-bg p-4 rounded-2xl border border-border/50 flex flex-col justify-center gap-1">
-                  <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Mistakes Made</span>
+                  <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Mistakes Made</span>
                   <span className="text-2xl font-black text-text">{mistakesCount}</span>
                 </div>
                 <div className="bg-bg p-4 rounded-2xl border border-border/50 flex flex-col justify-center gap-1">
-                  <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Recent Avg WPM</span>
+                  <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Recent Avg WPM</span>
                   <span className="text-2xl font-black text-text">{history.length > 0 ? avgWpm : stats.wpm}</span>
                 </div>
               </div>
@@ -428,7 +428,7 @@ export default function TypingSpeedTestClient() {
                 <div className="pt-3">
                    <div className="flex items-center gap-2 mb-3">
                      <AlertTriangle className="w-3.5 h-3.5 text-orange-400" />
-                     <span className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Trouble Keys</span>
+                     <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Trouble Keys</span>
                    </div>
                    <div className="flex gap-2 flex-wrap">
                      {topMissed.map(([char, count]) => (
@@ -436,7 +436,7 @@ export default function TypingSpeedTestClient() {
                          <span className="font-mono font-bold text-rose-400">
                            {char === ' ' ? 'Space' : char}
                          </span>
-                         <span className="text-text-4 text-xs font-bold">×{count}</span>
+                         <span className="text-text-muted text-xs font-bold">×{count}</span>
                        </div>
                      ))}
                    </div>

@@ -128,7 +128,7 @@ export default function GradientGeneratorClient() {
                   onClick={() => setConfig({ ...config, type: t })}
                   className={cn(
                     "flex-1 px-4 py-2.5 rounded-xl text-xs font-bold transition-all capitalize",
-                    config.type === t ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text"
+                    config.type === t ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text"
                   )}
                 >
                   {t}
@@ -143,7 +143,7 @@ export default function GradientGeneratorClient() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5" /> Adjustments
             </h3>
             
@@ -151,7 +151,7 @@ export default function GradientGeneratorClient() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <label className="text-xs font-bold text-text-3">Angle</label>
-                  <span className="text-xs font-bold text-text-4">{config.angle}°</span>
+                  <span className="text-xs font-bold text-text-muted">{config.angle}°</span>
                 </div>
                 <input
                   type="range"
@@ -180,7 +180,7 @@ export default function GradientGeneratorClient() {
 
           <div className="space-y-4 border-t border-border/50 pt-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
                 <Palette className="w-3.5 h-3.5" /> Color Stops ({config.colorStops.length}/8)
               </h3>
               <button 
@@ -209,7 +209,7 @@ export default function GradientGeneratorClient() {
                   <div className="flex-1 space-y-2">
                     <div className="flex justify-between">
                       <label htmlFor={`${baseId}-stop-pos-${stop.id}`} className="text-xs font-mono font-bold text-text">{stop.color.toUpperCase()}</label>
-                      <span className="text-xs font-bold text-text-4">{stop.position}%</span>
+                      <span className="text-xs font-bold text-text-muted">{stop.position}%</span>
                     </div>
                     <input
                       id={`${baseId}-stop-pos-${stop.id}`}
@@ -225,7 +225,7 @@ export default function GradientGeneratorClient() {
                   <button
                     onClick={() => removeStop(stop.id)}
                     disabled={config.colorStops.length <= 2}
-                    className="p-2 text-text-4 hover:text-red-500 disabled:opacity-20 transition-colors shrink-0"
+                    className="p-2 text-text-muted hover:text-red-500 disabled:opacity-20 transition-colors shrink-0"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -239,13 +239,13 @@ export default function GradientGeneratorClient() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
              <div className="flex items-center justify-between">
-                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Export Code</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Code</h3>
                 <CopyButton text={outputTab === 'css' ? `background: ${cssValue};` : tailwindValue} />
              </div>
 
              <div className="flex bg-bg border border-border p-1 rounded-xl">
-                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-4")}>CSS</button>
-                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-4")}>Tailwind</button>
+                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>CSS</button>
+                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Tailwind</button>
              </div>
 
              <textarea
@@ -256,7 +256,7 @@ export default function GradientGeneratorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
-             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Preset Gallery</h3>
+             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Preset Gallery</h3>
              <div className="grid grid-cols-4 gap-3">
                {PRESETS.map((p, i) => (
                  <button

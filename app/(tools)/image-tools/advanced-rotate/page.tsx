@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import AdvancedRotateClientWrapper from './AdvancedRotateClientWrapper';
 
 const toolId = 'advanced-rotate';
@@ -17,41 +18,63 @@ export default function Page() {
       description="Rotate images to any angle with precise degree control"
       category={cat}
       toolId={toolId}
-
-      content={{
-        detailedDescription: "Rotate your images by precise degrees, not just 90-degree increments. Our Advanced Rotate tool recalculates the canvas bounds to ensure no corners are clipped, executing seamlessly in your browser.",
-        useCases: ["Leveling crooked horizons in photos","Creating angled graphic design assets","Fixing skewed scanned documents","Designing dynamic tilted UI elements","Applying micro-rotations to artwork"],
-        howTo: ["Upload the image you want to rotate.","Use the slider or input box to set the exact degree of rotation.","Choose a background color for the newly exposed corners.","Preview the expanded bounding box.","Download the correctly oriented image."],
-        faq: [{"question":"Will the corners of my image get cut off?","answer":"No, the tool automatically expands the canvas (bounding box) to fit the rotated image perfectly."},{"question":"Can I just do a standard 90-degree rotate?","answer":"Yes, we have quick buttons for exactly 90, 180, and 270 degrees."},{"question":"Does the tool upload my data?","answer":"No, everything runs offline in your browser. Total privacy is guaranteed."},{"question":"Can the exposed corners be transparent?","answer":"Yes, just select transparent as the background and export as PNG or WebP."},{"question":"Will it reduce image quality?","answer":"Sub-pixel rotation requires re-interpolation of pixels, which might introduce very minor softening, but we use high-quality algorithms."}],
-        relatedTools: ["image-flip","canvas-resize","image-crop"]
-      }}
->
+    >
       <AdvancedRotateClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-trigonometry"
-          title="How it Works: Trigonometry and Bounding Boxes"
-          preview="Learn the math behind rotating a square and why it gets bigger."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              When you rotate a 1000x1000 pixel image by 45 degrees, the resulting image is no longer 1000x1000. Why? Because the corners of the square stick out, expanding the overall physical bounding box.
-            </p>
-            <h3>Calculating the New Canvas</h3>
-            <p>
-              To ensure no corners get cut off, the browser has to calculate the new bounding box using trigonometry. The formula uses sine and cosine of the angle:
-            </p>
-            <ul>
-              <li><code>New Width = (Width * |cos(θ)|) + (Height * |sin(θ)|)</code></li>
-              <li><code>New Height = (Width * |sin(θ)|) + (Height * |cos(θ)|)</code></li>
-            </ul>
-            <p>
-              At 45 degrees, a 1000x1000 image actually requires a 1414x1414 pixel canvas to hold it! Our tool dynamically recalculates this math on the fly, resizes the underlying HTML5 Canvas, and translates the origin to the center before drawing.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Bounding Boxes and Trigonometry">
+        
+        <LearningSection type="architecture" title="Why 45 Degrees Makes the Image Bigger">
+          <p>When you rotate a 1000x1000 pixel image by 45 degrees, the resulting image is no longer 1000x1000. Because the corners of the square stick out diagonally, the overall physical bounding box expands.</p>
+          <p className="mt-2">If the canvas didn't expand, the corners of your rotated image would be permanently cut off (clipped) by the original bounds.</p>
+        </LearningSection>
+        
+        <LearningSection type="algorithm" title="Calculating the New Canvas">
+          <p>To ensure no corners are clipped, the browser calculates the new bounding box using sine and cosine trigonometry.</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><code>New Width = (Width * |cos(θ)|) + (Height * |sin(θ)|)</code></li>
+            <li><code>New Height = (Width * |sin(θ)|) + (Height * |cos(θ)|)</code></li>
+          </ul>
+          <p className="mt-2">At 45 degrees, a 1000x1000 image actually requires a 1414x1414 pixel canvas to hold it! Our tool dynamically recalculates this math on the fly, resizes the underlying HTML5 Canvas, and translates the drawing origin to the center before rendering the image.</p>
+        </LearningSection>
+
+        <LearningSection type="api" title="Sub-pixel Interpolation">
+          <p>Unlike a 90-degree rotation where pixels are just transposed, rotating an image by an arbitrary angle (like 12.5 degrees) means the original square pixels no longer map 1:1 to the monitor's square pixels.</p>
+          <p className="mt-2">The browser's graphics engine uses anti-aliasing interpolation (like bilinear or bicubic filtering) to blend the colors of neighboring pixels. This prevents the image from looking jagged (stair-stepped) along sharp edges, though it can introduce very minor softening.</p>
+        </LearningSection>
+
+        <LearningSection type="security" title="Client-Side Processing">
+          <p>Advanced image manipulation normally requires uploading your photo to a cloud server running ImageMagick or Photoshop. This tool performs the complex trigonometry and interpolation entirely offline using your device's GPU and HTML5 Canvas API, ensuring total privacy.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "If you rotate a 100x100 square image by 45 degrees without clipping, what happens to the dimensions of the final exported image file?",
+                options: [
+                  "It stays exactly 100x100.",
+                  "It becomes 141x141 to accommodate the corners.",
+                  "It becomes smaller (70x70) because the corners are cropped.",
+                  "The file size doubles but the dimensions remain the same."
+                ],
+                correctIndex: 1,
+                explanation: "The bounding box expands to fit the diagonal width of the square (which is roughly 141 pixels for a 100x100 square) so no pixels are lost."
+              },
+              {
+                question: "Why might an image look very slightly softer after being rotated by 15 degrees?",
+                options: [
+                  "Because the browser applies a blur filter to hide the background.",
+                  "Because sub-pixel interpolation is required to map the rotated pixels onto the straight grid of your screen.",
+                  "Because it compresses the file to JPEG.",
+                  "Because the image loses color depth."
+                ],
+                correctIndex: 1,
+                explanation: "Rotating off-axis forces the rendering engine to average adjacent pixels to prevent jagged edges, resulting in a microscopic softening effect."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

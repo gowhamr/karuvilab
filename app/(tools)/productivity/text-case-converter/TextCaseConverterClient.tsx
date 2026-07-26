@@ -70,7 +70,7 @@ export default function TextCaseConverterClient() {
   return (
     <div className="space-y-8">
       <div className="space-y-4">
-        <label className="text-sm font-black uppercase tracking-widest text-text-4">Input Text</label>
+        <label className="text-sm font-black uppercase tracking-widest text-text-muted">Input Text</label>
         <ToolInput
           value={input}
           onChange={setInput}
@@ -80,7 +80,7 @@ export default function TextCaseConverterClient() {
       </div>
 
       <div className="space-y-4">
-        <label className="text-sm font-black uppercase tracking-widest text-text-4">Choose Case</label>
+        <label className="text-sm font-black uppercase tracking-widest text-text-muted">Choose Case</label>
         <ToggleGroup.Root
           type="single"
           value={activeCase}
@@ -95,7 +95,7 @@ export default function TextCaseConverterClient() {
                 "px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm border transition-all",
                 activeCase === opt.value
                   ? "bg-blue border-blue text-white shadow-md shadow-blue/10"
-                  : "bg-surface border-border text-text-4 hover:border-blue/30 hover:text-blue"
+                  : "bg-surface border-border text-text-muted hover:border-blue/30 hover:text-blue"
               )}
             >
               {opt.label}
@@ -106,11 +106,11 @@ export default function TextCaseConverterClient() {
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-black uppercase tracking-widest text-text-4">Output</label>
+          <label className="text-sm font-black uppercase tracking-widest text-text-muted">Output</label>
           <CopyButton text={output} label="Copy Result" />
         </div>
         <div className="min-h-40 p-6 bg-surface border border-border rounded-2xl text-text whitespace-pre-wrap break-words font-medium">
-          {output || <span className="text-text-4 italic">The converted text will appear here...</span>}
+          {output || <span className="text-text-muted italic">The converted text will appear here...</span>}
         </div>
       </div>
     </div>

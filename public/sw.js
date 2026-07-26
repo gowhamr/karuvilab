@@ -17,9 +17,9 @@ if (typeof workbox !== 'undefined') {
 
   // Cache names
   const CACHE_NAMES = {
-    static: 'karuvilab-static-1785018483890',
-    images: 'karuvilab-images-1785018483890',
-    pages: 'karuvilab-pages-1785018483890',
+    static: 'karuvilab-static-1785071153317',
+    images: 'karuvilab-images-1785071153317',
+    pages: 'karuvilab-pages-1785071153317',
     googleFonts: 'google-fonts',
   };
 
@@ -47,10 +47,17 @@ if (typeof workbox !== 'undefined') {
   );
 
   // 3. Cache Next.js Static Assets (_next/static)
+  // ExpirationPlugin bounds growth: max 200 entries, 30-day TTL (GEMINI §15)
   registerRoute(
     ({ url }) => url.pathname.includes('/_next/static/'),
     new CacheFirst({
       cacheName: CACHE_NAMES.static,
+      plugins: [
+        new ExpirationPlugin({
+          maxEntries: 200,
+          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+        }),
+      ],
     })
   );
 

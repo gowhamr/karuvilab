@@ -107,6 +107,16 @@ export default function CountdownTimerClient() {
     };
   });
 
+  const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationStatus(Notification.permission);
+    } else {
+      setNotificationStatus('unsupported');
+    }
+  }, []);
+
   useEffect(() => {
     if (isRunning && !isPaused) {
       requestRef.current = requestAnimationFrame(animateRef.current);
@@ -116,10 +126,11 @@ export default function CountdownTimerClient() {
     };
   }, [isRunning, isPaused]);
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (totalInputMs <= 0) return;
     if ("Notification" in window && Notification.permission === "default") {
-      Notification.requestPermission();
+      const permission = await Notification.requestPermission();
+      setNotificationStatus(permission);
     }
     const now = performance.now();
     setTargetTime(now + (remainingTime > 0 ? remainingTime : totalInputMs));
@@ -195,21 +206,21 @@ export default function CountdownTimerClient() {
   const renderInputScreen = () => (
     <div className={cn("flex flex-col items-center justify-center gap-6", isDashboard ? "scale-125 md:scale-150" : "")}>
       <div className="flex flex-col items-center gap-2 mb-2">
-        <p className="text-sm font-bold text-text-4 uppercase tracking-widest">Custom Timer</p>
+        <p className="text-sm font-bold text-text-muted uppercase tracking-widest">Custom Timer</p>
         <div className="flex items-center gap-4 text-5xl md:text-7xl font-mono font-black">
           <div className="flex flex-col items-center gap-2">
             <input type="text" value={inputH} onChange={handleInputChange(setInputH)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-            <span className="text-xs md:text-sm font-bold text-text-4 uppercase tracking-widest">Hours</span>
+            <span className="text-xs md:text-sm font-bold text-text-muted uppercase tracking-widest">Hours</span>
           </div>
           <span className="mb-6 md:mb-8">:</span>
           <div className="flex flex-col items-center gap-2">
             <input type="text" value={inputM} onChange={handleInputChange(setInputM)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-            <span className="text-xs md:text-sm font-bold text-text-4 uppercase tracking-widest">Mins</span>
+            <span className="text-xs md:text-sm font-bold text-text-muted uppercase tracking-widest">Mins</span>
           </div>
           <span className="mb-6 md:mb-8">:</span>
           <div className="flex flex-col items-center gap-2">
             <input type="text" value={inputS} onChange={handleInputChange(setInputS)} onFocus={(e) => e.target.select()} className="w-20 md:w-24 text-center bg-transparent border-b-4 border-border focus:border-blue outline-none transition-colors py-2" placeholder="00" />
-            <span className="text-xs md:text-sm font-bold text-text-4 uppercase tracking-widest">Secs</span>
+            <span className="text-xs md:text-sm font-bold text-text-muted uppercase tracking-widest">Secs</span>
           </div>
         </div>
       </div>
@@ -301,7 +312,7 @@ export default function CountdownTimerClient() {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content sideOffset={8} align="end" className="w-80 bg-surface border border-border shadow-2xl rounded-2xl p-4 z-popover animate-in fade-in zoom-in-95">
-          <h3 className="font-bold text-sm uppercase tracking-widest text-text-4 mb-4">Settings</h3>
+          <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted mb-4">Settings</h3>
           
           <div className="space-y-4">
             {isDashboard && (
@@ -328,7 +339,7 @@ export default function CountdownTimerClient() {
                     <button 
                       key={size}
                       onClick={() => updateSettings({ clockSize: size as "small" | "medium" | "large" | "huge" })}
-                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-elevated text-text-4 hover:text-text")}
+                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-elevated text-text-muted hover:text-text")}
                     >
                       {size}
                     </button>
@@ -407,6 +418,12 @@ export default function CountdownTimerClient() {
           </>
         )}
       </div>
+      
+      {notificationStatus === 'denied' && (
+        <p className="text-xs text-error font-bold uppercase tracking-widest text-center max-w-sm mt-4">
+          ⚠️ Web Notifications are blocked. You will only hear an audio alert when the timer finishes.
+        </p>
+      )}
     </div>
   );
 }

@@ -82,7 +82,7 @@ export default function TimeCalculatorClient() {
             <div className="space-y-3">
               {rows.map((row, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <label className="text-sm font-bold text-text-4 w-8 text-right shrink-0">
+                  <label className="text-sm font-bold text-text-muted w-8 text-right shrink-0">
                     {i + 1}.
                   </label>
                   <input
@@ -94,7 +94,7 @@ export default function TimeCalculatorClient() {
                   {rows.length > 1 && (
                     <button
                       onClick={() => removeRow(i)}
-                      className="px-3 py-3 rounded-xl border border-border hover:border-error hover:text-error transition-colors text-text-4"
+                      className="px-3 py-3 rounded-xl border border-border hover:border-error hover:text-error transition-colors text-text-muted"
                     >
                       ✕
                     </button>

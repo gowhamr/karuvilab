@@ -236,7 +236,7 @@ export default function PomodoroTimerClient() {
             <Trophy size={20} />
           </div>
           <div>
-            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Today's Focus</p>
+            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Today's Focus</p>
             <p className="text-sm font-black text-text">{dailyCompleted} Sessions</p>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function PomodoroTimerClient() {
             <Sparkles size={20} />
           </div>
           <div>
-            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Current Streak</p>
+            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Current Streak</p>
             <p className="text-sm font-black text-text">{dailyCompleted % 4} / 4 Pomos</p>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function PomodoroTimerClient() {
             onClick={() => switchMode(mType)}
             className={cn(
               "relative px-8 py-3 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm-lg transition-all outline-none",
-              mode === mType ? "text-white" : "text-text-4 hover:text-text"
+              mode === mType ? "text-white" : "text-text-muted hover:text-text"
             )}
           >
             {mode === mType && (
@@ -330,7 +330,7 @@ export default function PomodoroTimerClient() {
             >
               {formatTime(timeLeft)}
             </m.p>
-            <p className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-text-4 mt-2">
+            <p className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-text-muted mt-2">
               {isActive ? 'Keep Going' : 'Ready?'}
             </p>
           </div>
@@ -371,7 +371,7 @@ export default function PomodoroTimerClient() {
       
       {/* Footer Info */}
       <div className="flex flex-col items-center gap-4">
-        {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && (
+        {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && notificationStatus !== 'denied' && (
           <button 
             onClick={requestNotificationPermission}
             className="flex items-center gap-2 px-6 py-3 bg-blue/5 border border-blue/10 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm text-blue hover:bg-blue/10 transition-all"
@@ -380,9 +380,15 @@ export default function PomodoroTimerClient() {
           </button>
         )}
         
+        {notificationStatus === 'denied' && (
+          <p className="text-xs text-error font-bold uppercase tracking-widest text-center max-w-sm">
+            ⚠️ Web Notifications are blocked. You will only hear an audio alert when the timer finishes.
+          </p>
+        )}
+        
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface/30 border border-border/50">
           <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-success animate-pulse" : "bg-text-4")} />
-          <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
+          <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
             {isActive ? 'Session in progress' : 'Timer Paused'}
           </span>
         </div>

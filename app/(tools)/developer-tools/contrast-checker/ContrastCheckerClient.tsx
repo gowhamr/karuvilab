@@ -126,7 +126,7 @@ export default function ContrastCheckerClient() {
 
           <div className="pt-6 border-t border-border/50">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Contrast Ratio</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Contrast Ratio</span>
               <span className={cn(
                 "px-3 py-1 rounded-lg text-tiny font-bold uppercase tracking-widest-sm",
                 result.level === 'aaa' ? "bg-success/10 text-success" :
@@ -178,7 +178,7 @@ export default function ContrastCheckerClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">WCAG Compliance</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">WCAG Compliance</h3>
             
             <div className="grid grid-cols-2 gap-4">
               {[
@@ -191,7 +191,7 @@ export default function ContrastCheckerClient() {
                 <div key={i} className="bg-bg border border-border p-4 rounded-2xl flex items-center justify-between">
                   <div>
                     <span className="text-xs font-bold text-text-3 block">{item.label}</span>
-                    <span className="text-tiny font-medium text-text-4 uppercase tracking-widest">Req: {item.req}</span>
+                    <span className="text-tiny font-medium text-text-muted uppercase tracking-widest">Req: {item.req}</span>
                   </div>
                   {item.pass ? (
                     <div className="w-6 h-6 rounded-full bg-success/10 flex items-center justify-center"><Check className="w-3 h-3 text-success" /></div>

@@ -83,7 +83,7 @@ export default function TdsCalculatorClient() {
             <div className="space-y-3">
               <label className="text-xs font-bold text-text-3 block">Payment Amount</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   type="number"
                   value={amount || ''}
@@ -103,7 +103,7 @@ export default function TdsCalculatorClient() {
                   onClick={() => setIsCompany(false)}
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
-                    !isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                    !isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                   )}
                 >
                   <User className="w-4 h-4" /> Individual / HUF
@@ -112,7 +112,7 @@ export default function TdsCalculatorClient() {
                   onClick={() => setIsCompany(true)}
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
-                    isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                    isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                   )}
                 >
                   <Building className="w-4 h-4" /> Company / Firm
@@ -130,7 +130,7 @@ export default function TdsCalculatorClient() {
                 />
                 <div>
                   <span className="text-sm font-bold text-text group-hover:text-blue transition-colors block">Valid PAN Provided</span>
-                  <span className="text-xs text-text-4 font-medium">Uncheck if payee has not submitted PAN (Sec 206AA).</span>
+                  <span className="text-xs text-text-muted font-medium">Uncheck if payee has not submitted PAN (Sec 206AA).</span>
                 </div>
               </label>
             </div>
@@ -177,7 +177,7 @@ export default function TdsCalculatorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
-            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
               <Info className="w-3 h-3" /> Section Details: {activeSection.code.split('_')[0]}
             </h4>
             
@@ -196,7 +196,7 @@ export default function TdsCalculatorClient() {
               </div>
             </div>
             
-            <p className="text-xs font-medium text-text-4 leading-relaxed text-center italic mt-4">
+            <p className="text-xs font-medium text-text-muted leading-relaxed text-center italic mt-4">
               Note: Surcharge and Health & Education Cess (4%) are generally not applicable on payments made to residents (except Salary u/s 192). This calculator assumes a resident payee.
             </p>
           </div>

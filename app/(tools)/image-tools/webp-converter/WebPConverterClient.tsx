@@ -365,7 +365,7 @@ export default function WebPConverterClient() {
                     className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
                   />
                 ) : (
-                  <div className="text-center text-text-4">
+                  <div className="text-center text-text-muted">
                     <ImageIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p className="text-xs">WebP Preview will appear here</p>
                   </div>

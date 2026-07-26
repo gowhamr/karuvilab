@@ -149,7 +149,7 @@ export default function LoremIpsumClient() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Unit</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Unit</label>
               <div className="flex bg-bg border border-border rounded-xl p-1">
                 {(['words', 'sentences', 'paragraphs'] as LoremUnit[]).map(u => (
                   <button
@@ -157,7 +157,7 @@ export default function LoremIpsumClient() {
                     onClick={() => setOptions({ ...options, unit: u })}
                     className={cn(
                       "flex-1 py-2 rounded-lg text-xs font-bold transition-all capitalize",
-                      options.unit === u ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-3"
+                      options.unit === u ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
                     )}
                   >
                     {u}
@@ -167,7 +167,7 @@ export default function LoremIpsumClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Count</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Count</label>
               <div className="flex items-center gap-4">
                 <input
                   type="range"
@@ -189,7 +189,7 @@ export default function LoremIpsumClient() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Variant</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Variant</label>
               <div className="grid grid-cols-2 gap-2">
                 {(['classic', 'tech', 'hipster', 'random'] as LoremVariant[]).map(v => (
                   <button
@@ -197,7 +197,7 @@ export default function LoremIpsumClient() {
                     onClick={() => setOptions({ ...options, variant: v })}
                     className={cn(
                       "px-4 py-2.5 rounded-xl text-xs font-bold transition-all capitalize border",
-                      options.variant === v ? "bg-blue/10 border-blue text-blue" : "bg-bg border-border text-text-4 hover:text-text hover:border-blue/50"
+                      options.variant === v ? "bg-blue/10 border-blue text-blue" : "bg-bg border-border text-text-muted hover:text-text hover:border-blue/50"
                     )}
                   >
                     {v}
@@ -232,7 +232,7 @@ export default function LoremIpsumClient() {
 
             {options.unit === 'paragraphs' && (
               <div className="space-y-4">
-                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Sentences per Paragraph</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Sentences per Paragraph</label>
                 <div className="flex items-center gap-4">
                   <input
                     type="number"
@@ -243,7 +243,7 @@ export default function LoremIpsumClient() {
                     className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
                     placeholder="Min"
                   />
-                  <span className="text-text-4 font-bold">to</span>
+                  <span className="text-text-muted font-bold">to</span>
                   <input
                     type="number"
                     min={1}
@@ -262,7 +262,7 @@ export default function LoremIpsumClient() {
 
       <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">
+          <div className="flex items-center gap-4 text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
             <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" /> {paragraphCount} Paragraphs</span>
             <span className="flex items-center gap-1.5"><AlignLeft className="w-3.5 h-3.5" /> {sentenceCount} Sentences</span>
             <span className="flex items-center gap-1.5"><TextIcon className="w-3.5 h-3.5" /> {wordCount} Words</span>

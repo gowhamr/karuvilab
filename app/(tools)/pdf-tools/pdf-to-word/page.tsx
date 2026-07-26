@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 import PdfToWordClientWrapper from './PdfToWordClientWrapper';
 
@@ -21,41 +22,52 @@ export default function Page() {
     >
       <PdfToWordClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-reconstruction"
-          title="How it Works: Text Flow Reconstruction"
-          preview="Why converting PDF to Word is incredibly difficult for a computer."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              A PDF does not understand the concept of a "paragraph" or a "sentence." A PDF is just a list of instructions telling a printer where to drop ink. For example, it says: <em>"Draw the letter <strong>H</strong> at coordinate (100, 500), then draw <strong>e</strong> at (110, 500)"</em>.
-            </p>
-            <h3>Heuristic Grouping</h3>
-            <p>
-              To convert this back into a fluid Word document (OOXML), our extraction engine has to use spatial heuristics. It looks at the coordinates of every single character on the page and guesses which ones are close enough together to form a "word." It then looks at the vertical spacing between words to guess what constitutes a "line," and grouping lines to form a "paragraph."
-            </p>
-            <p>
-              This complex reverse-engineering is why PDF-to-Word conversions are rarely 100% perfect, especially if the document has complex column layouts or tables.
-            </p>
-          </div>
-        </ToolInfoSection>
+      <LearningHub title="Understanding Document Reconstruction">
+        
+        <LearningSection type="architecture" title="Missing Paragraphs">
+          <p>A PDF does not understand the concept of a "paragraph" or a "sentence." A PDF is just a list of absolute visual instructions telling a printer where to drop ink.</p>
+          <p className="mt-2">For example, it simply says: <em>"Draw the letter <strong>H</strong> at coordinate (100, 500), then draw <strong>e</strong> at (110, 500)"</em>. The fact that those letters form the word "Hello" in a paragraph is completely unknown to the PDF structure itself.</p>
+        </LearningSection>
+        
+        <LearningSection type="algorithm" title="Heuristic Grouping">
+          <p>To convert this layout back into a fluid Word document (OOXML format), our extraction engine has to perform complex spatial heuristics.</p>
+          <p className="mt-2">It looks at the exact coordinates of every single character on the page and guesses which ones are close enough together horizontally to form a "word." It then looks at the vertical spacing between words to guess what constitutes a "line," and finally groups lines to form a "paragraph." This reverse-engineering is why PDF-to-Word conversions are rarely 100% perfect, especially with complex multi-column layouts.</p>
+        </LearningSection>
 
-        <ToolInfoSection
-          id="learn-ocr"
-          title="Limitations: Scanned Documents (OCR)"
-          preview="Why scanned PDFs convert into a single massive image."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              If you scan a piece of paper using a physical scanner, the resulting PDF does not contain text characters. It only contains a single large photograph (an XObject) of the paper.
-            </p>
-            <p>
-              Because this tool runs entirely offline in your browser for privacy, it currently does not include a heavy <strong>Optical Character Recognition (OCR)</strong> engine (which uses machine learning to "read" images). If you try to convert a scanned PDF, the resulting Word document will just contain that single large image.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+        <LearningSection type="api" title="Scanned Documents & OCR">
+          <p>If you scan a piece of physical paper, the resulting PDF does not contain text characters at all. It only contains a single large photograph (an <code>Image XObject</code>) of the paper.</p>
+          <p className="mt-2">Because this tool runs entirely offline in your browser for absolute privacy, it does not include a heavy <strong>Optical Character Recognition (OCR)</strong> machine learning engine. Therefore, if you convert a scanned PDF, the resulting Word document will simply contain that single large image, rather than editable text.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why is converting a PDF to a Word document so complex for a computer?",
+                options: [
+                  "Because Microsoft Word uses a proprietary format that is illegal to generate.",
+                  "Because PDFs don't store logical structure (like paragraphs); they only store absolute X/Y coordinates for characters.",
+                  "Because PDFs are always encrypted.",
+                  "Because Word documents cannot display images."
+                ],
+                correctIndex: 1,
+                explanation: "PDFs are a finalized visual layout format. Reconstructing logical flow (paragraphs) requires guessing based on character coordinates."
+              },
+              {
+                question: "What happens if you use this offline tool to convert a PDF that was created by a physical paper scanner?",
+                options: [
+                  "It will perfectly transcribe the text.",
+                  "It will fail and crash.",
+                  "The Word document will contain a single large image of the scanned page, because this tool does not use OCR.",
+                  "It will convert the image into a spreadsheet."
+                ],
+                correctIndex: 2,
+                explanation: "Scanned PDFs contain photographs, not text characters. Extracting text from photographs requires Optical Character Recognition (OCR)."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

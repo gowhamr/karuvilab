@@ -87,7 +87,7 @@ export default function SafeToSpendClient() {
             style={{ width: `${Math.min(100, utilizationPct)}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs text-text-4">
+        <div className="flex justify-between text-xs text-text-muted">
           <span>₹0</span>
           <span>{inr(inc)}</span>
         </div>

@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import BmpConverterClientWrapper from './BmpConverterClientWrapper';
 
 const toolId = 'bmp-converter';
@@ -12,38 +13,54 @@ export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
   return (
-    <ToolShell title="BMP Converter" description="Convert images to the uncompressed BMP format" category={cat} toolId={toolId}
-
-      content={{
-        detailedDescription: "Convert legacy BMP (Bitmap) images to modern formats, or generate strict BMP files for specialized applications. Perform lossless conversions entirely offline with total data privacy.",
-        useCases: ["Converting old Windows bitmaps for the web","Generating BMPs for embedded systems","Reducing file sizes of uncompressed BMPs","Standardizing legacy assets","Offline secure format conversion"],
-        howTo: ["Upload your image.","Select BMP as the output format if generating one, or select PNG/JPEG if converting from BMP.","Preview the image.","Download the converted file securely.","No server upload required."],
-        faq: [{"question":"Why use BMP today?","answer":"BMP is largely obsolete for the web, but it is still required by certain legacy desktop software, industrial systems, and embedded microcontrollers."},{"question":"Is BMP lossless?","answer":"Yes, standard BMP files are uncompressed and lossless, which is why they have very large file sizes."},{"question":"Can I add transparency to BMP?","answer":"Standard 24-bit BMP does not support transparency. Alpha channels require 32-bit BMP, which isn't universally supported."},{"question":"Are my files uploaded?","answer":"Never. All parsing and encoding happens locally in your browser."},{"question":"Can I convert BMP to WebP?","answer":"Yes, simply select WebP as the output format to vastly reduce the file size."}],
-        relatedTools: ["tiff-converter","ico-generator","webp-converter"]
-      }}
->
+    <ToolShell title="BMP Converter" description="Convert images to the uncompressed BMP format" category={cat} toolId={toolId}>
       <BmpConverterClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-bmp"
-          title="How it Works: The Raw Bitmap"
-          preview="Learn why BMP files are so incredibly massive compared to JPGs."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              The BMP (Windows Bitmap) format is one of the oldest and simplest image formats ever created. Unlike modern formats that use complex math to compress data, a BMP file is essentially just a giant, uncompressed array of raw pixels.
-            </p>
-            <h3>File Structure</h3>
-            <p>
-              A BMP file starts with a small 54-byte header (which tells the computer the width, height, and color depth). Immediately after the header, it simply lists the exact Blue, Green, and Red byte values for every single pixel, usually scanning from the bottom-left of the image to the top-right.
-            </p>
-            <p>
-              Because there is absolutely no compression (like Deflate in PNG, or DCT in JPEG), a 1080p BMP image will always be exactly 6.2 Megabytes (1920 * 1080 * 3 bytes), even if the entire image is just a solid white square. While terrible for the internet, this raw simplicity makes it the perfect format for embedded microcontrollers that don't have the CPU power to decompress complex files.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding the Raw Bitmap Format">
+        
+        <LearningSection type="architecture" title="The Simplest Image Format">
+          <p>The BMP (Windows Bitmap) format is one of the oldest and simplest image formats ever created. Unlike modern formats (JPEG, PNG, WebP) that use complex math and dictionaries to compress data, a BMP file is essentially just a giant, uncompressed array of raw pixels.</p>
+        </LearningSection>
+        
+        <LearningSection type="algorithm" title="File Structure">
+          <p>A BMP file starts with a small 54-byte header. This header tells the computer the exact width, height, and color depth of the image.</p>
+          <p className="mt-2">Immediately after the header, the file simply lists the exact Blue, Green, and Red byte values for every single pixel, usually scanning from the bottom-left of the image to the top-right.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="The Size Tradeoff">
+          <p>Because there is absolutely no compression (like Deflate in PNG, or DCT in JPEG), a 1080p BMP image will always be exactly 6.2 Megabytes (1920 x 1080 x 3 bytes), even if the entire image is just a solid white square.</p>
+          <p className="mt-2">While this makes BMP terrible for internet bandwidth, its raw simplicity makes it the perfect format for embedded microcontrollers and legacy industrial systems that lack the CPU power to decompress complex modern formats.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why does a 1080p BMP image of a solid white square have the exact same file size as a 1080p BMP image of a complex photograph?",
+                options: [
+                  "Because BMP has a strict file size limit.",
+                  "Because BMP uses no compression, meaning it writes a hardcoded RGB value to the disk for every single pixel regardless of patterns.",
+                  "Because the computer forces a 6MB cache.",
+                  "Because BMP compresses everything equally."
+                ],
+                correctIndex: 1,
+                explanation: "Uncompressed bitmaps store the explicit color of every pixel in a grid, meaning file size is purely determined by Width × Height × Color Depth, ignoring visual complexity."
+              },
+              {
+                question: "Why might an engineer still use the BMP format today?",
+                options: [
+                  "Because it is the best format for modern web design.",
+                  "Because it allows for the highest quality compression.",
+                  "Because simple embedded microchips (like Arduino displays) lack the CPU power to decode compressed files like JPEGs.",
+                  "Because it is required by Apple devices."
+                ],
+                correctIndex: 2,
+                explanation: "Decoding a JPEG requires complex mathematical transforms. Reading a BMP only requires copying raw bytes directly into the display's memory buffer."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

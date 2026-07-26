@@ -106,9 +106,9 @@ export default function HTMLEntitiesClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-bg">
-                <th className="text-left px-4 py-2 font-bold text-text-4">Entity</th>
-                <th className="text-left px-4 py-2 font-bold text-text-4">Char</th>
-                <th className="text-left px-4 py-2 font-bold text-text-4">Description</th>
+                <th className="text-left px-4 py-2 font-bold text-text-muted">Entity</th>
+                <th className="text-left px-4 py-2 font-bold text-text-muted">Char</th>
+                <th className="text-left px-4 py-2 font-bold text-text-muted">Description</th>
               </tr>
             </thead>
             <tbody>

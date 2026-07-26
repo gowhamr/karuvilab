@@ -118,7 +118,7 @@ export default function BgRemoverClient() {
                   onChange={e => setBgColor(e.target.value)}
                 />
               </div>
-              <p className="text-xs text-text-4">Click the color swatch to pick, or type a hex value. Common: #ffffff (white), #000000 (black).</p>
+              <p className="text-xs text-text-muted">Click the color swatch to pick, or type a hex value. Common: #ffffff (white), #000000 (black).</p>
             </div>
 
             <SliderField
@@ -129,7 +129,7 @@ export default function BgRemoverClient() {
               value={tolerance}
               onChange={setTolerance}
             />
-            <p className="text-xs text-text-4 -mt-2">Higher tolerance removes more colors. Start at 40 for solid backgrounds.</p>
+            <p className="text-xs text-text-muted -mt-2">Higher tolerance removes more colors. Start at 40 for solid backgrounds.</p>
 
             <button
               onClick={removeBackground}

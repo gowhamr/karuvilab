@@ -118,9 +118,9 @@ const SWPCalculatorClient = memo(function SWPCalculatorClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-bg/50 border-b border-border">
-                <th className="px-4 py-3 text-left font-black uppercase text-xs tracking-wider text-text-4">Year</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Total Withdrawn</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Remaining Balance</th>
+                <th className="px-4 py-3 text-left font-black uppercase text-xs tracking-wider text-text-muted">Year</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Total Withdrawn</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Remaining Balance</th>
               </tr>
             </thead>
             <tbody>

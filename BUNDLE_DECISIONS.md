@@ -16,12 +16,7 @@ This file tracks every new dependency added to the project, its impact on bundle
 
 | 2026-07-10 | `react-image-crop` | ~3.8 KB | Interactive image crop UI | Custom canvas logic | Lightweight, robust, and accessible UI component for dragging and resizing crops. |
 | 2026-07-10 | `jsqr` | ~30 KB | QR Code Scanner fallback | `zxing` (too heavy, WASM/worker heavy), `html5-qrcode` (heavy, requires specific UI logic) | The native `BarcodeDetector` API is not supported on Firefox, Safari, and iOS. `jsqr` provides a lightweight pure-JS fallback specifically for QR codes. It does not violate the >20KB feature growth limit significantly given its dynamic import. |
-### [Example Entry]
-- **Library:** `pdf-lib`
-- **Impact:** ~120KB gzipped (Dynamic Import required)
-- **Purpose:** Browser-side PDF modification
-- **Alternatives:** `jspdf` (smaller but less capable for modification), `pdfjs` (viewing only)
-- **Justification:** Required for core PDF tools functionality.
+
 
 ### 2026-06-18
 - **Library:** `qrcode@1.5.1`
@@ -97,3 +92,94 @@ This file tracks every new dependency added to the project, its impact on bundle
 - **Alternatives:** Custom regex (error-prone for English)
 - **Justification:** Lightweight reliable syllable counter.
 
+---
+
+### 2026-07-26 — Backfilled Missing Entries (Audit Remediation)
+
+- **Library:** `pdf-lib@1.17.1`
+- **Impact:** ~120KB gzipped (Dynamic Import)
+- **Purpose:** Browser-side PDF manipulation — merge, split, rotate, watermark, page numbering, lock/unlock, image-to-PDF (10+ tools)
+- **Alternatives:** `jspdf` (cannot modify existing PDFs), `pdfjs-dist` (viewing only)
+- **Justification:** Core PDF toolchain. Dynamically imported — not in initial bundle.
+
+---
+
+- **Library:** `decimal.js@10.6.0`
+- **Impact:** ~10KB gzipped
+- **Purpose:** Arbitrary-precision decimal arithmetic for financial calculators (EMI, SIP, GST, compound interest)
+- **Alternatives:** Native `Number` (unsafe beyond 15 significant digits), `big.js` (less full-featured), `bignumber.js` (~25KB gzip)
+- **Justification:** Financial tools require IEEE 754-safe math. Industry standard with minimal footprint.
+
+---
+
+- **Library:** `lz-string@1.5.0`
+- **Impact:** ~4KB gzipped
+- **Purpose:** LZW string compression for persisting large notes/markdown content in IndexedDB
+- **Alternatives:** `fflate` (binary only, not string-native), native `CompressionStream` (async — not suitable for IDB serialization)
+- **Justification:** Enables large document storage in IDB without size limit failures. Synchronous, no worker overhead needed.
+
+---
+
+- **Library:** `html2pdf.js@0.14.0`
+- **Impact:** ~50KB gzipped (Dynamic Import — Markdown Editor PDF export path only)
+- **Purpose:** Client-side HTML→PDF rendering for Markdown Editor export
+- **Alternatives:** `jspdf` alone (cannot render styled HTML), server-side rendering (violates P-09)
+- **Justification:** Only viable browser-only styled-HTML-to-PDF solution. Zero cost until feature is used.
+
+---
+
+- **Library:** `workbox-window@7.4.1`
+- **Impact:** ~8KB gzipped
+- **Purpose:** PWA client-side SW lifecycle coordination (SKIP_WAITING, update detection) — `components/PWARegistration.tsx`
+- **Alternatives:** Manual `navigator.serviceWorker` API (complex, error-prone)
+- **Justification:** Required for reliable offline-first PWA behavior.
+
+---
+
+- **Library:** `lamejs@1.2.1`
+- **Impact:** ~45KB gzipped (Dynamic Import in Web Worker — audio-converter only)
+- **Purpose:** Client-side MP3 encoding from PCM audio in a Web Worker
+- **Alternatives:** `ffmpeg.wasm` (~25MB, massive PERF-04 violation), Web Codecs API (no MP3 support in any browser)
+- **Justification:** Smallest viable pure-JS MP3 encoder. Dynamically imported in worker — zero cost unless audio-converter is used.
+
+---
+
+- **Library:** `isomorphic-dompurify@3.18.0`
+- **Impact:** ~20KB gzipped (server-side only via SSR boundary)
+- **Purpose:** DOMPurify wrapper for Node.js/SSR contexts in Server Components; `dompurify` alone throws in Node
+- **Alternatives:** `sanitize-html` (heavier), `dompurify` alone (browser-only — breaks SSR)
+- **Justification:** Required for KL-09 compliance across full SSR pipeline. Client uses `dompurify`, server uses `isomorphic-dompurify`.
+
+---
+
+- **Library:** `resend@6.12.3`
+- **Impact:** **Zero client bundle impact** — server-only (`app/api/contact/` + `app/api/send-feedback/` routes only)
+- **Purpose:** Transactional email for contact form and feedback submission
+- **Alternatives:** `nodemailer` (requires SMTP config), `sendgrid` (heavier SDK)
+- **Justification:** API routes only. Confirmed: no import in `src/`, `components/`, or `app/(tools)/`. No client leakage risk.
+
+---
+
+- **Library:** `@tiptap/extension-placeholder@3.28.0`
+- **Impact:** Included in existing `@tiptap/*` budget (~50KB total, approved 2026-07-19). Adds <2KB.
+- **Purpose:** Placeholder text in the Tiptap editor for grammar checker tool's input
+- **Alternatives:** Custom CSS `::before` (does not integrate with Tiptap state)
+- **Justification:** Part of the approved Tiptap extension system; negligible incremental size.
+
+---
+
+### Removal Record
+
+- **Library:** `@onlyrex/pulse@1.0.5` — **PENDING REVIEW** (logged 2026-07-26, TECH_DEBT.md TD-007)
+- **Finding:** Zero source import usage (confirmed by grep audit). Only presence: `node_modules/@onlyrex/pulse/postinstall.js`. May be an orphaned or transitively required package.
+- **Action:** Determine if required by any dependency. If not, remove and run `npm install`.
+
+---
+
+### 2026-07-26 — DevDependency Additions
+
+- **Library:** `@next/bundle-analyzer` (devDependency)
+- **Impact:** Zero production bundle impact — build-tool only, runs via `ANALYZE=true npm run analyze`
+- **Purpose:** Visual bundle size analysis to enforce PERF-04 (<20KB gzipped per feature). Generates interactive treemap of all JS chunks.
+- **Alternatives:** `webpack-bundle-analyzer` standalone (less integrated with Next.js chunk naming), manual size checks (insufficient)
+- **Justification:** Required for PERF-04 compliance on a codebase with several heavy dynamic dependencies (monaco-editor, mermaid, pdfjs, tesseract, nspell+dictionary). Without a visualizer, bundle growth cannot be caught before it ships.

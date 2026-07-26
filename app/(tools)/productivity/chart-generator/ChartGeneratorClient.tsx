@@ -225,7 +225,7 @@ export default function ChartGeneratorClient() {
               </div>
               <div>
                 <h3 className="font-bold text-sm">Visual Palettes</h3>
-                <p className="text-xs text-text-4">Apply curated color schemes for consistent brand aesthetics.</p>
+                <p className="text-xs text-text-muted">Apply curated color schemes for consistent brand aesthetics.</p>
               </div>
             </div>
             <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4">
@@ -234,7 +234,7 @@ export default function ChartGeneratorClient() {
               </div>
               <div>
                 <h3 className="font-bold text-sm">Vector Precision</h3>
-                <p className="text-xs text-text-4">Charts are rendered as high-fidelity SVGs for maximum crispness.</p>
+                <p className="text-xs text-text-muted">Charts are rendered as high-fidelity SVGs for maximum crispness.</p>
               </div>
             </div>
           </div>

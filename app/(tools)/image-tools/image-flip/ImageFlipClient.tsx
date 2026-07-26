@@ -162,7 +162,7 @@ export default function ImageFlipClient() {
             <FlipHorizontal className="w-5 h-5 text-blue" />
             Image Transformation & Mirroring
           </h2>
-          <p className="text-xs text-text-4 font-medium">
+          <p className="text-xs text-text-muted font-medium">
             Flip images horizontally, vertically, or both with full client-side privacy.
           </p>
         </div>
@@ -266,7 +266,7 @@ export default function ImageFlipClient() {
 
             {/* Actions Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border">
-              <div className="text-xs text-text-4 font-medium flex items-center gap-2">
+              <div className="text-xs text-text-muted font-medium flex items-center gap-2">
                 <FileImage className="w-4 h-4 text-text-3" />
                 <span>{file?.name}</span>
                 {dimensions && (
@@ -314,7 +314,7 @@ export default function ImageFlipClient() {
                 <span className="text-xs font-bold uppercase tracking-widest text-text-3">
                   Original
                 </span>
-                <span className="text-xs text-text-4 font-medium bg-bg px-2.5 py-1 rounded-full border border-border">
+                <span className="text-xs text-text-muted font-medium bg-bg px-2.5 py-1 rounded-full border border-border">
                   {formatFileSize(originalSize)}
                 </span>
               </div>
@@ -335,14 +335,14 @@ export default function ImageFlipClient() {
                   Flipped Result ({flipDirection})
                 </span>
                 {flippedSize > 0 && (
-                  <span className="text-xs text-text-4 font-medium bg-bg px-2.5 py-1 rounded-full border border-border">
+                  <span className="text-xs text-text-muted font-medium bg-bg px-2.5 py-1 rounded-full border border-border">
                     {formatFileSize(flippedSize)}
                   </span>
                 )}
               </div>
               <div className="flex-1 min-h-[240px] flex items-center justify-center bg-bg/50 border border-border/50 rounded-2xl p-4 overflow-hidden relative">
                 {isProcessing ? (
-                  <div className="flex flex-col items-center gap-3 text-text-4 text-xs font-medium py-12">
+                  <div className="flex flex-col items-center gap-3 text-text-muted text-xs font-medium py-12">
                     <Loader2 className="w-8 h-8 animate-spin text-blue" />
                     <span>Flipping image...</span>
                   </div>
@@ -353,7 +353,7 @@ export default function ImageFlipClient() {
                     className="max-h-[360px] w-auto max-w-full object-contain rounded-lg shadow-sm"
                   />
                 ) : (
-                  <div className="text-xs text-text-4 font-medium">No preview available</div>
+                  <div className="text-xs text-text-muted font-medium">No preview available</div>
                 )}
               </div>
             </div>

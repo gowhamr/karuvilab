@@ -101,14 +101,14 @@ export default function HraCalculatorClient() {
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Home className="w-3.5 h-3.5" /> Salary & Rent Details
             </h3>
-            <span className="text-xs font-bold text-text-4 uppercase bg-bg px-2 py-1 rounded-md">Monthly Values</span>
+            <span className="text-xs font-bold text-text-muted uppercase bg-bg px-2 py-1 rounded-md">Monthly Values</span>
           </div>
           
           <div className="space-y-6">
             <div className="space-y-3">
               <label htmlFor="basic-salary" className="text-xs font-bold text-text-3 block">Basic Salary (Monthly)</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   id="basic-salary"
                   type="number"
@@ -122,7 +122,7 @@ export default function HraCalculatorClient() {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <label htmlFor="da-percent" className="text-xs font-bold text-text-3 block">Dearness Allowance (DA)</label>
-                <span className="text-xs font-bold text-text-4">{daPercent}%</span>
+                <span className="text-xs font-bold text-text-muted">{daPercent}%</span>
               </div>
               <input
                 id="da-percent"
@@ -133,13 +133,13 @@ export default function HraCalculatorClient() {
                 onChange={(e) => setDaPercent(Number(e.target.value))}
                 className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue"
               />
-              <p className="text-xs text-text-4 font-medium">DA is typically for Govt employees. Keep 0 if NA.</p>
+              <p className="text-xs text-text-muted font-medium">DA is typically for Govt employees. Keep 0 if NA.</p>
             </div>
 
             <div className="space-y-3">
               <label htmlFor="hra-received" className="text-xs font-bold text-text-3 block">HRA Received from Employer</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   id="hra-received"
                   type="number"
@@ -153,7 +153,7 @@ export default function HraCalculatorClient() {
             <div className="space-y-3">
               <label htmlFor="rent-paid" className="text-xs font-bold text-text-3 block">Actual Rent Paid (Monthly)</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   id="rent-paid"
                   type="number"
@@ -171,21 +171,21 @@ export default function HraCalculatorClient() {
                   onClick={() => setCity('metro')}
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold transition-all",
-                    city === 'metro' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                    city === 'metro' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                   )}
                 >
                   Metro (50%)
-                  <span className="block text-tiny font-medium text-text-4 mt-0.5">Delhi, Mumbai, Chennai, Kolkata</span>
+                  <span className="block text-tiny font-medium text-text-muted mt-0.5">Delhi, Mumbai, Chennai, Kolkata</span>
                 </button>
                 <button
                   onClick={() => setCity('non-metro')}
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold transition-all",
-                    city === 'non-metro' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                    city === 'non-metro' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                   )}
                 >
                   Non-Metro (40%)
-                  <span className="block text-tiny font-medium text-text-4 mt-0.5">All other cities</span>
+                  <span className="block text-tiny font-medium text-text-muted mt-0.5">All other cities</span>
                 </button>
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function HraCalculatorClient() {
         {/* RIGHT COLUMN: Results */}
         <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Calculation Results</h3>
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Calculation Results</h3>
             <button
               onClick={() => setIsAnnual(!isAnnual)}
               className="text-xs font-bold uppercase tracking-widest text-blue hover:underline"
@@ -226,7 +226,7 @@ export default function HraCalculatorClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
               <Info className="w-3 h-3" /> The 3 Conditions (Sec 10(13A))
             </h4>
             

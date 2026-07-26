@@ -146,7 +146,7 @@ export default function InvoiceGeneratorClient() {
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <span id="label-visual-style" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Visual Style</span>
+                    <span id="label-visual-style" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Visual Style</span>
                     <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="label-visual-style">
                       {(["classic", "modern", "professional", "minimal"] as TemplateType[]).map(t => (
                         <button
@@ -154,7 +154,7 @@ export default function InvoiceGeneratorClient() {
                           onClick={() => setTemplate(t)}
                           role="radio"
                           aria-checked={template === t}
-                          className={`flex-1 min-w-20 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-4 hover:border-blue/30'}`}
+                          className={`flex-1 min-w-20 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-muted hover:border-blue/30'}`}
                         >
                           {t}
                         </button>
@@ -162,7 +162,7 @@ export default function InvoiceGeneratorClient() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="currency-symbol" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Currency Symbol</label>
+                    <label htmlFor="currency-symbol" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Currency Symbol</label>
                     <input 
                       id="currency-symbol"
                       value={currency} 
@@ -174,7 +174,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
               </div>
               <div className="w-full md:w-48">
-                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Company Logo</label>
+                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Company Logo</label>
                 {logo ? (
                   <div className="relative group aspect-square rounded-2xl border border-border overflow-hidden bg-bg">
                     <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />

@@ -36,7 +36,7 @@ export default function Page() {
 
         <LearningSection type="failures" title="The Payload Size Limit">
           <p>A common misconception is that RSA can encrypt files. <strong>RSA cannot encrypt data larger than its key size</strong> (minus padding overhead). For a 2048-bit key using OAEP with SHA-256, the maximum payload is just 190 bytes!</p>
-          <p className="mt-2 text-sm text-text-4"><em>Real-world usage:</em> Instead of encrypting the actual file with RSA, systems use <strong>Hybrid Encryption</strong>. They generate a random symmetric key (like AES-256), encrypt the large file rapidly with AES, and then use RSA to encrypt <em>only the AES key</em>.</p>
+          <p className="mt-2 text-sm text-text-muted"><em>Real-world usage:</em> Instead of encrypting the actual file with RSA, systems use <strong>Hybrid Encryption</strong>. They generate a random symmetric key (like AES-256), encrypt the large file rapidly with AES, and then use RSA to encrypt <em>only the AES key</em>.</p>
         </LearningSection>
 
         <LearningSection type="api" title="Web Crypto implementation">

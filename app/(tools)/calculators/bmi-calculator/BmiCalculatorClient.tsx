@@ -103,7 +103,7 @@ export default function BmiCalculatorClient() {
               <User className="w-3.5 h-3.5" />
               Height
             </h3>
-            <span className="text-xs font-bold text-text-4">
+            <span className="text-xs font-bold text-text-muted">
               {unit === 'metric' ? `${heightCm} cm` : `${heightFt} ft ${heightIn} in`}
             </span>
           </div>
@@ -117,7 +117,7 @@ export default function BmiCalculatorClient() {
                   onChange={(e) => setHeightCm(Number(e.target.value))}
                   className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
                 />
-                <span className="text-text-4 font-bold">cm</span>
+                <span className="text-text-muted font-bold">cm</span>
               </div>
             ) : (
               <div className="flex gap-4">
@@ -128,7 +128,7 @@ export default function BmiCalculatorClient() {
                     onChange={(e) => setHeightFt(Number(e.target.value))}
                     className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
                   />
-                  <span className="text-text-4 font-bold">ft</span>
+                  <span className="text-text-muted font-bold">ft</span>
                 </div>
                 <div className="flex-1 flex items-center gap-3">
                   <input
@@ -137,7 +137,7 @@ export default function BmiCalculatorClient() {
                     onChange={(e) => setHeightIn(Number(e.target.value))}
                     className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
                   />
-                  <span className="text-text-4 font-bold">in</span>
+                  <span className="text-text-muted font-bold">in</span>
                 </div>
               </div>
             )}
@@ -166,7 +166,7 @@ export default function BmiCalculatorClient() {
               <Scale className="w-3.5 h-3.5" />
               Weight
             </h3>
-            <span className="text-xs font-bold text-text-4">
+            <span className="text-xs font-bold text-text-muted">
               {weight} {unit === 'metric' ? 'kg' : 'lbs'}
             </span>
           </div>
@@ -179,7 +179,7 @@ export default function BmiCalculatorClient() {
                 onChange={(e) => setWeight(Number(e.target.value))}
                 className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
               />
-              <span className="text-text-4 font-bold">{unit === 'metric' ? 'kg' : 'lbs'}</span>
+              <span className="text-text-muted font-bold">{unit === 'metric' ? 'kg' : 'lbs'}</span>
             </div>
 
             <input
@@ -268,15 +268,15 @@ export default function BmiCalculatorClient() {
           )}
 
           <div className="space-y-4">
-            <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2">BMI Categories (WHO Standards)</h2>
+            <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted px-2">BMI Categories (WHO Standards)</h2>
             <div className="bg-surface border border-border rounded-3xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-bg/50 border-b border-border">
-                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">Category</th>
-                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">BMI Range</th>
-                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-4">Asian BMI Range</th>
+                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Category</th>
+                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-muted">BMI Range</th>
+                      <th className="px-6 py-4 text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Asian BMI Range</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -301,7 +301,7 @@ export default function BmiCalculatorClient() {
                           <td className="px-6 py-4 text-xs font-mono font-bold text-text-2">
                             {t.min === 0 ? `< ${t.max}` : t.max === Infinity ? `> ${t.min}` : `${t.min} – ${t.max}`}
                           </td>
-                          <td className="px-6 py-4 text-xs font-bold text-text-4 uppercase italic">
+                          <td className="px-6 py-4 text-xs font-bold text-text-muted uppercase italic">
                             {asianEquivalent ? (
                               `${asianEquivalent.min === 0 ? `< ${asianEquivalent.max}` : asianEquivalent.max === Infinity ? `> ${asianEquivalent.min}` : `${asianEquivalent.min} – ${asianEquivalent.max}`}`
                             ) : '—'}
@@ -315,7 +315,7 @@ export default function BmiCalculatorClient() {
             </div>
           </div>
 
-          <p className="text-text-4 text-xs text-center uppercase tracking-widest-lg mt-8">
+          <p className="text-text-muted text-xs text-center uppercase tracking-widest-lg mt-8">
             🔒 Your height and weight are never stored or transmitted. All calculations happen locally in your browser.
           </p>
         </m.div>

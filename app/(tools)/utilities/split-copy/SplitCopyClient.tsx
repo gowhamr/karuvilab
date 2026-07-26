@@ -67,7 +67,7 @@ export default function SplitCopyClient() {
             value={input}
             onChange={e => setInput(e.target.value)}
           />
-          <p className="text-xs text-text-4">{input.length} characters</p>
+          <p className="text-xs text-text-muted">{input.length} characters</p>
         </div>
 
         <div className="space-y-3">
@@ -155,7 +155,7 @@ export default function SplitCopyClient() {
             {chunks.map((chunk, i) => (
               <div key={i} className="bg-surface border border-border p-4 rounded-xl space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-text-4 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
                     Chunk {i + 1} / {chunks.length} — {chunk.length} chars
                   </span>
                   <CopyButton text={chunk} />

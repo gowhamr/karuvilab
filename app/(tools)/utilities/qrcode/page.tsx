@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 import QRCodeGeneratorClientWrapper from './QRCodeGeneratorClientWrapper';
 
@@ -21,36 +22,57 @@ export default function Page() {
     >
       <QRCodeGeneratorClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-qrcode"
-          title="How it Works: Error Correction in QR Codes"
-          preview="Learn how a QR code can still be scanned even if part of it is ripped off or covered."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              Unlike standard barcodes that just hold a number, QR (Quick Response) codes are essentially 2D matrices that can store entire URLs or paragraphs of text. But their most magical feature is <strong>Error Correction</strong>.
-            </p>
-            <h3>Reed-Solomon Error Correction</h3>
-            <p>
-              When a QR code is generated, the underlying algorithm (Reed-Solomon) doesn't just encode your data; it adds mathematical backup data (parity). This means that if a physical QR code is scratched, dirty, or ripped, a scanner can use the surviving data points to mathematically reconstruct the missing parts.
-            </p>
-            <h3>Error Correction Levels</h3>
-            <p>
-              You can choose how much backup data to include, which determines how "dense" the QR code looks:
-            </p>
-            <ul>
-              <li><strong>Low (L)</strong>: Can restore ~7% of missing data. Best for small, clean screens.</li>
-              <li><strong>Medium (M)</strong>: Can restore ~15% of missing data. The standard default.</li>
-              <li><strong>Quartile (Q)</strong>: Can restore ~25% of missing data.</li>
-              <li><strong>High (H)</strong>: Can restore ~30% of missing data. Best for industrial environments where the code might get dirty.</li>
-            </ul>
-            <p>
-              Because of Error Correction Level H, marketers are able to place their logos smack in the middle of a QR code (obscuring the pixels there) while the code remains perfectly scannable.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding QR Codes and Error Correction">
+        
+        <LearningSection type="architecture" title="2D Matrices vs Barcodes">
+          <p>Unlike standard 1D barcodes that usually just hold a short string of numbers, QR (Quick Response) codes are essentially 2D matrices that can store entire URLs, paragraphs of text, or binary data up to a few kilobytes.</p>
+          <p className="mt-2">But their most powerful feature—and the reason they are so ubiquitous in the real world—is <strong>Error Correction</strong>.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="Reed-Solomon Error Correction">
+          <p>When a QR code is generated, the underlying algorithm (Reed-Solomon) doesn't just encode your data; it adds mathematical backup data (parity).</p>
+          <p className="mt-2">This means that if a physical QR code is scratched, printed poorly, or partially ripped, a scanner can use the surviving data points to mathematically reconstruct the missing parts.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="Error Correction Levels">
+          <p>You can configure how much backup data to include, which determines how "dense" (complex) the QR code looks:</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><strong>Low (L)</strong>: Restores ~7% of missing data. Creates a simpler code, best for small, clean screens.</li>
+            <li><strong>Medium (M)</strong>: Restores ~15% of missing data. The standard default for most generators.</li>
+            <li><strong>Quartile (Q)</strong>: Restores ~25% of missing data.</li>
+            <li><strong>High (H)</strong>: Restores ~30% of missing data. Creates a very dense code, best for industrial environments where the code might get dirty.</li>
+          </ul>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "How are marketers able to place their brand logo right in the middle of a QR code (obscuring the pixels there) without breaking the code?",
+                options: [
+                  "The scanner ignores the center of the code.",
+                  "They use Error Correction Level High (H), so the scanner mathematically reconstructs the data hidden beneath the logo.",
+                  "The logo is made of special transparent pixels.",
+                  "The QR code links to an AI that guesses the missing parts."
+                ],
+                correctIndex: 1,
+                explanation: "By utilizing 30% error correction, you can safely 'destroy' the middle 10% of the code by placing a logo over it, and scanners will still read it perfectly."
+              },
+              {
+                question: "Which algorithm provides the error correction capability for QR codes?",
+                options: [
+                  "RSA Encryption",
+                  "AES-256",
+                  "Reed-Solomon",
+                  "Brotli Compression"
+                ],
+                correctIndex: 2,
+                explanation: "The Reed-Solomon error correction algorithm is what allows 2D barcodes, CDs, and DVDs to recover from physical scratches and data loss."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

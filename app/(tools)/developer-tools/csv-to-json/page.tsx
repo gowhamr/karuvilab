@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 import CsvToJsonWrapper from './CsvToJsonWrapper';
 
@@ -21,29 +22,52 @@ export default function Page() {
     >
       <CsvToJsonWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-csv"
-          title="How it Works: The Escaping Problem"
-          preview="Learn why writing a reliable CSV parser is harder than it looks."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              CSV (Comma-Separated Values) seems like the simplest format in the world: just split strings by commas. However, naive <code>string.split(',')</code> fails immediately in the real world.
-            </p>
-            <h3>The Quoting Rule</h3>
-            <p>
-              What if a user's address is <code>"123 Main St, Apt 4"</code>? If you split by commas, you just broke one column into two. To fix this, CSV uses quotes. If a field contains a comma, the entire field must be wrapped in double quotes. 
-            </p>
-            <p>
-              But what if the field itself contains a quote? E.g. <code>"Bob \"The Builder\" Smith"</code>. In CSV, quotes are escaped by doubling them up: <code>"Bob ""The Builder"" Smith"</code>.
-            </p>
-            <p>
-              Because of this, reliable CSV parsers must use state machines (reading character by character) rather than simple regex, keeping track of whether they are currently "inside" a quoted string block or "outside" it when they encounter a comma or newline.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding CSV Parsing Algorithms">
+        
+        <LearningSection type="architecture" title="The Escaping Problem">
+          <p>CSV (Comma-Separated Values) seems like the simplest format in the world: just split strings by commas. However, a naive <code>string.split(',')</code> algorithm fails immediately in the real world.</p>
+          <p className="mt-2">What if a user's address is <code>"123 Main St, Apt 4"</code>? If you blindly split by commas, you just broke one column into two, corrupting the entire row's data mapping.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The Quoting Rule (RFC 4180)">
+          <p>To fix the comma problem, the CSV standard dictates that if a field contains a comma (or a newline), the entire field must be wrapped in double quotes: <code>"123 Main St, Apt 4"</code>.</p>
+          <p className="mt-2">But what if the field itself contains a quote? E.g., <code>Bob "The Builder" Smith</code>. In CSV, internal quotes are escaped by doubling them up: <code>"Bob ""The Builder"" Smith"</code>.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="State Machines vs Regex">
+          <p>Because of these recursive escaping rules, you cannot reliably parse CSV with Regular Expressions.</p>
+          <p className="mt-2">Robust CSV parsers (like the one powering this tool) use a <strong>State Machine</strong>. The parser iterates through the file character-by-character, keeping track of its current state (e.g., <code>isInsideQuotes = true</code>). When it sees a comma, it only splits the column if <code>isInsideQuotes</code> is false. This is computationally heavier than a regex split, but guarantees 100% data integrity.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why does a naive 'string.split(',')' approach fail when parsing real-world CSV files?",
+                options: [
+                  "Because CSV files use semicolons, not commas.",
+                  "Because real-world data often contains commas within the actual values (like addresses), which would falsely trigger a column split.",
+                  "Because the split function is too slow for large files.",
+                  "Because it deletes the header row."
+                ],
+                correctIndex: 1,
+                explanation: "Values like 'Smith, John' will be split into two separate columns 'Smith' and ' John', ruining the structure of the data."
+              },
+              {
+                question: "According to the CSV standard, how do you escape a double quote character inside a value?",
+                options: [
+                  "By using a backslash before the quote (\\\").",
+                  "By doubling the double quote (\"\").",
+                  "By wrapping the quote in single quotes ('\"').",
+                  "You cannot use double quotes in a CSV file."
+                ],
+                correctIndex: 1,
+                explanation: "Unlike JSON or C which use backslashes, CSV escapes double quotes by writing two double quotes in a row: \"He said \"\"Hello\"\"\"."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

@@ -52,8 +52,9 @@ Phone check: +1 555-555-5555 should not be masked.`);
   const [lastDigits, setLastDigits] = useState(4);
 
   const maskedOutput = useMemo(() => {
-    // Matches 13-19 digit candidate sequences separated by optional single space/hyphen
-    const candidateRegex = /\b\d(?:[\s-]?\d){12,18}\b/g;
+    // Matches 13-19 digit candidate sequences separated by any spaces/hyphens
+    // Lookaround ensures we don't grab a substring of a longer number.
+    const candidateRegex = /(?<!\d)\d(?:[\s-]*\d){12,18}(?!\d)/g;
     return inputText.replace(candidateRegex, (match) => {
       const cleanDigits = match.replace(/[\s-]/g, "");
       if (luhnCheck(cleanDigits)) {

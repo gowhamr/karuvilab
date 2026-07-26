@@ -85,11 +85,11 @@ export default function WorkHoursClient() {
             <Banknote className="w-5 h-5" />
           </div>
           <div>
-            <label className="text-xs font-bold text-text-4 uppercase tracking-widest block mb-1">
+            <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-1">
               Hourly Rate
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-4 font-bold text-sm">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted font-bold text-sm">$</span>
               <input 
                 type="number"
                 min="0"
@@ -105,7 +105,7 @@ export default function WorkHoursClient() {
 
         <button 
           onClick={handleClearAll}
-          className="flex items-center gap-2 px-3 py-2 text-xs font-bold uppercase tracking-widest text-text-4 hover:text-error hover:bg-error/10 border border-transparent hover:border-error/20 rounded-xl transition-all"
+          className="flex items-center gap-2 px-3 py-2 text-xs font-bold uppercase tracking-widest text-text-muted hover:text-error hover:bg-error/10 border border-transparent hover:border-error/20 rounded-xl transition-all"
         >
           <RefreshCcw className="w-4 h-4" />
           Clear All
@@ -117,12 +117,12 @@ export default function WorkHoursClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-bg border-b border-border">
-                <th className="px-4 py-4 text-left text-xs font-black text-text-4 uppercase tracking-widest whitespace-nowrap">Date</th>
-                <th className="px-4 py-4 text-left text-xs font-black text-text-4 uppercase tracking-widest whitespace-nowrap">Start</th>
-                <th className="px-4 py-4 text-left text-xs font-black text-text-4 uppercase tracking-widest whitespace-nowrap">End</th>
-                <th className="px-4 py-4 text-left text-xs font-black text-text-4 uppercase tracking-widest whitespace-nowrap">Break (min)</th>
-                <th className="px-4 py-4 text-right text-xs font-black text-text-4 uppercase tracking-widest whitespace-nowrap">Hours</th>
-                <th className="px-4 py-4 text-right text-xs font-black text-text-4 uppercase tracking-widest whitespace-nowrap">OT</th>
+                <th className="px-4 py-4 text-left text-xs font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Date</th>
+                <th className="px-4 py-4 text-left text-xs font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Start</th>
+                <th className="px-4 py-4 text-left text-xs font-black text-text-muted uppercase tracking-widest whitespace-nowrap">End</th>
+                <th className="px-4 py-4 text-left text-xs font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Break (min)</th>
+                <th className="px-4 py-4 text-right text-xs font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Hours</th>
+                <th className="px-4 py-4 text-right text-xs font-black text-text-muted uppercase tracking-widest whitespace-nowrap">OT</th>
                 <th className="px-3 py-4"></th>
               </tr>
             </thead>

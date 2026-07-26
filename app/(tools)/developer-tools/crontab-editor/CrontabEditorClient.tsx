@@ -190,7 +190,7 @@ export default function CrontabEditorClient() {
                 "px-5 py-2.5 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all whitespace-nowrap snap-start border",
                 localExpression === preset.expr
                   ? "bg-blue/10 border-blue/40 text-blue shadow-lg shadow-blue/5"
-                  : "bg-surface border-mat-border text-text-4 hover:border-blue/30 hover:text-blue"
+                  : "bg-surface border-mat-border text-text-muted hover:border-blue/30 hover:text-blue"
               )}
             >
               {preset.label}
@@ -219,10 +219,10 @@ export default function CrontabEditorClient() {
               )}
             >
               <div className="flex items-center justify-between">
-                <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 group-hover:text-blue transition-colors">
+                <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted group-hover:text-blue transition-colors">
                   {field.label}
                 </span>
-                <span className="text-tiny font-bold text-text-4 bg-mat-base px-2 py-0.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-tiny font-bold text-text-muted bg-mat-base px-2 py-0.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                   {field.min}-{field.max}
                 </span>
               </div>
@@ -242,7 +242,7 @@ export default function CrontabEditorClient() {
             <div className="col-span-full bg-blue/5 border border-blue/20 p-4 sm:p-8 rounded-4xl text-center shadow-inner">
               <Zap className="w-8 h-8 text-blue mx-auto mb-3 opacity-50" />
               <p className="text-blue font-black uppercase tracking-widest-2xl text-sm">Special Shortcut: @reboot</p>
-              <p className="text-text-4 text-xs font-bold mt-2 uppercase tracking-widest">Triggers once during system bootstrap</p>
+              <p className="text-text-muted text-xs font-bold mt-2 uppercase tracking-widest">Triggers once during system bootstrap</p>
             </div>
           )}
         </div>
@@ -270,7 +270,7 @@ export default function CrontabEditorClient() {
                 <div className="flex items-center gap-4">
                   <span className={cn(
                     "w-8 h-8 flex items-center justify-center rounded-xl text-xs font-black",
-                    i === 0 ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-mat-base text-text-4"
+                    i === 0 ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-mat-base text-text-muted"
                   )}>{i + 1}</span>
                   <div className="space-y-0.5">
                     <span className="text-sm font-black text-text group-hover:text-blue transition-colors block">
@@ -283,7 +283,7 @@ export default function CrontabEditorClient() {
                         hour12: true
                       })}
                     </span>
-                    <span className="text-xs font-bold text-text-4 uppercase tracking-widest">
+                    <span className="text-xs font-bold text-text-muted uppercase tracking-widest">
                       {date.getFullYear()}
                     </span>
                   </div>
@@ -309,10 +309,10 @@ export default function CrontabEditorClient() {
               </div>
               <div className="text-left">
                 <span className="font-black uppercase tracking-widest-lg text-xs block">Reference Cheatsheet</span>
-                <span className="text-xs font-bold text-text-4 uppercase">Master the cron syntax</span>
+                <span className="text-xs font-bold text-text-muted uppercase">Master the cron syntax</span>
               </div>
             </div>
-            <div className="w-8 h-8 rounded-lg bg-mat-base flex items-center justify-center text-text-4">
+            <div className="w-8 h-8 rounded-lg bg-mat-base flex items-center justify-center text-text-muted">
               {cheatsheetOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
           </button>
@@ -329,10 +329,10 @@ export default function CrontabEditorClient() {
                   <div className="space-y-4">
                     <h4 className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-blue border-b border-blue/10 pb-2">Special Characters</h4>
                     <ul className="space-y-3 text-xs font-bold text-text-3">
-                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">*</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-xs">Any value</span></li>
-                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">,</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-xs">Value list (1,3,5)</span></li>
-                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">-</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-xs">Range (1-5)</span></li>
-                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">/</code> <span className="text-text-4 font-medium uppercase tracking-tighter text-xs">Step values (*/5)</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">*</code> <span className="text-text-muted font-medium uppercase tracking-tighter text-xs">Any value</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">,</code> <span className="text-text-muted font-medium uppercase tracking-tighter text-xs">Value list (1,3,5)</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">-</code> <span className="text-text-muted font-medium uppercase tracking-tighter text-xs">Range (1-5)</span></li>
+                      <li className="flex justify-between items-center"><code className="bg-blue/10 text-blue px-2 py-0.5 rounded-lg font-mono">/</code> <span className="text-text-muted font-medium uppercase tracking-tighter text-xs">Step values (*/5)</span></li>
                     </ul>
                   </div>
                   
@@ -351,11 +351,11 @@ export default function CrontabEditorClient() {
                     <ul className="space-y-4">
                       <li className="group cursor-pointer" onClick={() => handleExpressionChange('*/5 * * * *')}>
                         <code className="text-text-2 font-mono text-xs block group-hover:text-blue transition-colors">*/5 * * * *</code>
-                        <span className="text-xs font-bold text-text-4 uppercase tracking-tighter">Every 5 minutes</span>
+                        <span className="text-xs font-bold text-text-muted uppercase tracking-tighter">Every 5 minutes</span>
                       </li>
                       <li className="group cursor-pointer" onClick={() => handleExpressionChange('0 0 * * 0')}>
                         <code className="text-text-2 font-mono text-xs block group-hover:text-blue transition-colors">0 0 * * 0</code>
-                        <span className="text-xs font-bold text-text-4 uppercase tracking-tighter">Weekly Sunday</span>
+                        <span className="text-xs font-bold text-text-muted uppercase tracking-tighter">Weekly Sunday</span>
                       </li>
                     </ul>
                   </div>

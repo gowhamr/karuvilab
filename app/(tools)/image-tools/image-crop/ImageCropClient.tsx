@@ -203,7 +203,7 @@ export default function ImageCropClient() {
                 ))}
               </div>
               <div className="flex flex-wrap gap-2 mt-3">
-                <span className="text-xs text-text-4 self-center font-bold uppercase tracking-widest">Output:</span>
+                <span className="text-xs text-text-muted self-center font-bold uppercase tracking-widest">Output:</span>
                 {(['image/jpeg', 'image/png', 'image/webp'] as const).map(fmt => (
                   <button
                     key={fmt}
@@ -222,7 +222,7 @@ export default function ImageCropClient() {
           {origW > 0 && (
             <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
               <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Crop Parameters</h2>
-              <p className="text-xs text-text-4">Original: {origW} × {origH}px</p>
+              <p className="text-xs text-text-muted">Original: {origW} × {origH}px</p>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -259,7 +259,7 @@ export default function ImageCropClient() {
                 </button>
               </>
             ) : (
-              <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-xl text-text-4 text-sm">
+              <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-xl text-text-muted text-sm">
                 Crop preview will appear here
               </div>
             )}

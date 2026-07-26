@@ -347,7 +347,7 @@ export default function HeicConverterClient() {
           </div>
           <div>
             <h2 className="text-base font-bold text-text">HEIC Photo Converter</h2>
-            <p className="text-xs text-text-4 font-medium">
+            <p className="text-xs text-text-muted font-medium">
               Directly converts iPhone & Apple photos to JPEG locally in your browser
             </p>
           </div>
@@ -376,17 +376,17 @@ export default function HeicConverterClient() {
             <div className="bg-surface/50 border border-border/60 p-3.5 rounded-xl text-center">
               <Sparkles className="w-4 h-4 text-blue mx-auto mb-1.5" />
               <div className="text-xs font-bold text-text">Zero Quality Loss</div>
-              <div className="text-[11px] text-text-4">Configurable JPEG output up to 100% quality</div>
+              <div className="text-[11px] text-text-muted">Configurable JPEG output up to 100% quality</div>
             </div>
             <div className="bg-surface/50 border border-border/60 p-3.5 rounded-xl text-center">
               <Layers className="w-4 h-4 text-blue mx-auto mb-1.5" />
               <div className="text-xs font-bold text-text">Batch Processing</div>
-              <div className="text-[11px] text-text-4">Convert multiple iPhone photos at once</div>
+              <div className="text-[11px] text-text-muted">Convert multiple iPhone photos at once</div>
             </div>
             <div className="bg-surface/50 border border-border/60 p-3.5 rounded-xl text-center">
               <ArrowRight className="w-4 h-4 text-blue mx-auto mb-1.5" />
               <div className="text-xs font-bold text-text">Instant Download</div>
-              <div className="text-[11px] text-text-4">Generates standard .jpg files instantly</div>
+              <div className="text-[11px] text-text-muted">Generates standard .jpg files instantly</div>
             </div>
           </div>
         </m.div>
@@ -463,7 +463,7 @@ export default function HeicConverterClient() {
                   <Maximize2 className="w-4 h-4" />
                 </button>
 
-                <div className="absolute bottom-4 left-4 right-4 bg-bg/80 backdrop-blur border border-border/50 p-2.5 rounded-xl flex items-center justify-between text-xs text-text-4 font-medium">
+                <div className="absolute bottom-4 left-4 right-4 bg-bg/80 backdrop-blur border border-border/50 p-2.5 rounded-xl flex items-center justify-between text-xs text-text-muted font-medium">
                   <div className="flex items-center gap-2 truncate">
                     <span className="font-bold text-text truncate">
                       {activeItem.originalName}
@@ -487,7 +487,7 @@ export default function HeicConverterClient() {
                   {/* Size Comparison Card */}
                   <div className="bg-bg border border-border p-4 rounded-xl space-y-3">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-text-4 font-medium">Original HEIC</span>
+                      <span className="text-text-muted font-medium">Original HEIC</span>
                       <span className="font-bold text-text">
                         {formatBytes(activeItem.originalSize)}
                       </span>
@@ -496,7 +496,7 @@ export default function HeicConverterClient() {
                     <div className="w-full bg-border h-px" />
 
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-text-4 font-medium">Converted JPEG</span>
+                      <span className="text-text-muted font-medium">Converted JPEG</span>
                       <span className="font-bold text-blue">
                         {formatBytes(activeItem.jpegSize)}
                       </span>
@@ -524,17 +524,17 @@ export default function HeicConverterClient() {
 
                   {/* Details List */}
                   <div className="space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-border/50 text-text-4 font-medium">
+                    <div className="flex justify-between py-1 border-b border-border/50 text-text-muted font-medium">
                       <span>Format</span>
                       <span className="text-text font-bold uppercase">JPEG (.jpg)</span>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-border/50 text-text-4 font-medium">
+                    <div className="flex justify-between py-1 border-b border-border/50 text-text-muted font-medium">
                       <span>Compression Quality</span>
                       <span className="text-text font-bold">
                         {Math.round(quality * 100)}%
                       </span>
                     </div>
-                    <div className="flex justify-between py-1 text-text-4 font-medium">
+                    <div className="flex justify-between py-1 text-text-muted font-medium">
                       <span>Output File</span>
                       <span className="text-blue font-bold truncate max-w-[160px]">
                         {getJpgFilename(activeItem.originalName)}
@@ -564,7 +564,7 @@ export default function HeicConverterClient() {
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5 text-text-4" />
+                        <Copy className="w-3.5 h-3.5 text-text-muted" />
                         Copy Image
                       </>
                     )}
@@ -579,7 +579,7 @@ export default function HeicConverterClient() {
             <div className="bg-surface border border-border p-4 rounded-2xl space-y-3">
               <div className="text-xs font-bold text-text flex items-center justify-between">
                 <span>All Uploaded Photos ({items.length})</span>
-                <span className="text-text-4 font-normal">
+                <span className="text-text-muted font-normal">
                   Click photo to select & preview
                 </span>
               </div>

@@ -156,7 +156,7 @@ export default function CipherToolsClient() {
         {(['caesar', 'rot13', 'rot47', 'atbash', 'vigenere', 'xor', 'morse'] as CipherType[]).map(c => (
           <button key={c} onClick={() => setActiveCipher(c)}
             className={cn("flex-shrink-0 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all snap-start outline-none",
-              activeCipher === c ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text hover:bg-bg")}>
+              activeCipher === c ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text hover:bg-bg")}>
             {c}
           </button>
         ))}
@@ -195,7 +195,7 @@ export default function CipherToolsClient() {
                   </button>
                   <div className="flex items-center gap-2.5">
                     <div className={cn("w-4 h-4 rounded-full transition-all duration-75", blinkState === 'off' && "bg-border/60 shadow-none", blinkState === 'dot' && "bg-yellow-400 shadow-lg scale-110", blinkState === 'dash' && "bg-yellow-400 shadow-xl scale-125 w-7 h-4 rounded-md")} />
-                    <span className="text-micro font-black uppercase tracking-widest text-text-4 w-12">{blinkState === 'off' ? 'Idle' : blinkState.toUpperCase()}</span>
+                    <span className="text-micro font-black uppercase tracking-widest text-text-muted w-12">{blinkState === 'off' ? 'Idle' : blinkState.toUpperCase()}</span>
                   </div>
                 </m.div>
               )}
@@ -215,7 +215,7 @@ export default function CipherToolsClient() {
             <button onClick={swap} className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-md shadow-blue/10 transition-all border border-border" aria-label="Arrow Left Right"><ArrowLeftRight className="w-4 h-4" /></button>
           </div>
           <div className="space-y-3">
-            <div className="flex items-center justify-between min-h-5"><h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">{isEncode ? 'Ciphertext' : 'Plaintext'}</h3><CopyButton text={output} /></div>
+            <div className="flex items-center justify-between min-h-5"><h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">{isEncode ? 'Ciphertext' : 'Plaintext'}</h3><CopyButton text={output} /></div>
             <textarea readOnly value={output} placeholder="Output..." className="w-full h-64 bg-mat-base border border-mat-border rounded-3xl p-4 sm:p-6 font-mono text-sm text-text-2 outline-none resize-none" />
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function CipherToolsClient() {
                       <div style={{ height: `${inPct}%` }} className="flex-1 bg-blue/40 rounded-t-sm" />
                       <div style={{ height: `${outPct}%` }} className="flex-1 bg-brand-primary/40 rounded-t-sm" />
                     </div>
-                    <span className="text-micro font-black text-text-4">{char}</span>
+                    <span className="text-micro font-black text-text-muted">{char}</span>
                   </div>
                 );
               })}
@@ -243,9 +243,9 @@ export default function CipherToolsClient() {
           <div className="bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-2 text-blue"><Info className="w-4 h-4" /><h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text">Insight</h4></div>
             <div className="space-y-3 text-xs leading-relaxed text-text-2 font-medium">
-              <div><p className="text-tiny font-black uppercase tracking-widest text-text-4 mb-0.5">Algorithm</p><p className="font-bold text-text">{activeMeta.name}</p></div>
-              <div><p className="text-tiny font-black uppercase tracking-widest text-text-4 mb-0.5">Security</p><p className="font-bold text-text-2">{activeMeta.security}</p></div>
-              <div><p className="text-tiny font-black uppercase tracking-widest text-text-4 mb-0.5">Summary</p><p className="text-text-3 text-xs leading-normal">{activeMeta.desc}</p></div>
+              <div><p className="text-tiny font-black uppercase tracking-widest text-text-muted mb-0.5">Algorithm</p><p className="font-bold text-text">{activeMeta.name}</p></div>
+              <div><p className="text-tiny font-black uppercase tracking-widest text-text-muted mb-0.5">Security</p><p className="font-bold text-text-2">{activeMeta.security}</p></div>
+              <div><p className="text-tiny font-black uppercase tracking-widest text-text-muted mb-0.5">Summary</p><p className="text-text-3 text-xs leading-normal">{activeMeta.desc}</p></div>
             </div>
           </div>
         </div>

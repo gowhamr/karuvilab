@@ -85,7 +85,7 @@ export default function GratuityCalculatorClient() {
             <div className="space-y-3">
               <label htmlFor="last-salary" className="text-xs font-bold text-text-3 block">Last Drawn Salary (Basic + DA)</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   id="last-salary"
                   type="number"
@@ -123,7 +123,7 @@ export default function GratuityCalculatorClient() {
               <label id="coverage-label" className="text-xs font-bold text-text-3 block flex items-center gap-2">
                 Gratuity Act 1972 Coverage
                 <div className="group relative">
-                  <Info className="w-3.5 h-3.5 text-text-4 cursor-pointer" />
+                  <Info className="w-3.5 h-3.5 text-text-muted cursor-pointer" />
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-surface border border-border shadow-xl rounded-xl text-xs text-text-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-content">
                     If your employer has 10 or more employees, they are typically covered under the Act.
                   </div>
@@ -134,7 +134,7 @@ export default function GratuityCalculatorClient() {
                   onClick={() => setType('covered')}
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold transition-all",
-                    type === 'covered' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                    type === 'covered' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                   )}
                 >
                   Covered
@@ -143,7 +143,7 @@ export default function GratuityCalculatorClient() {
                   onClick={() => setType('not-covered')}
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold transition-all",
-                    type === 'not-covered' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                    type === 'not-covered' ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                   )}
                 >
                   Not Covered
@@ -194,7 +194,7 @@ export default function GratuityCalculatorClient() {
             </div>
 
             <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
-              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
+              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
                 <Info className="w-3 h-3" /> Calculation Breakdown
               </h4>
               
@@ -205,7 +205,7 @@ export default function GratuityCalculatorClient() {
                 </div>
                 
                 <div className="p-4 bg-bg border border-border rounded-2xl space-y-2">
-                  <span className="text-xs text-text-4 block">Formula Applied:</span>
+                  <span className="text-xs text-text-muted block">Formula Applied:</span>
                   <div className="text-blue font-bold break-all">
                     {result.formula}
                   </div>

@@ -149,7 +149,7 @@ export default function SalaryCalculatorClient() {
       <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
         <div className="p-4 border-b border-border flex justify-between items-center">
           <h2 className="font-bold text-text-2">Tax Slab Breakdown</h2>
-          <span className="text-xs text-text-4">Taxable income: {inr(result.taxableIncome)}</span>
+          <span className="text-xs text-text-muted">Taxable income: {inr(result.taxableIncome)}</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -174,7 +174,7 @@ export default function SalaryCalculatorClient() {
       </div>
 
       <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between">
-        <span className="text-xs text-text-4">
+        <span className="text-xs text-text-muted">
           New regime FY 2024-25 · Rebate u/s 87A if income ≤ ₹7L · 4% health &amp; education cess
         </span>
         <CopyButton text={summary} label="Copy" />

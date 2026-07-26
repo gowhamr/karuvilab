@@ -69,7 +69,7 @@ export default function ChartControls({
       {/* Main Config */}
       <div className="p-6 bg-surface border border-border rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Chart Configuration</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Chart Configuration</h2>
           <div className="flex bg-bg p-1 rounded-xl border border-border">
             {(["bar", "line", "area", "pie", "doughnut"] as const).map((t) => (
               <button
@@ -77,7 +77,7 @@ export default function ChartControls({
                 onClick={() => setType(t)}
                 className={cn(
                   "p-2 rounded-lg transition-all",
-                  type === t ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text"
+                  type === t ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text"
                 )}
                 title={t.charAt(0).toUpperCase() + t.slice(1)}
               >
@@ -93,9 +93,9 @@ export default function ChartControls({
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Chart Title</label>
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted ml-1">Chart Title</label>
             <div className="relative group">
-              <Type className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-4 group-focus-within:text-blue transition-colors" />
+              <Type className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted group-focus-within:text-blue transition-colors" />
               <input
                 value={options.title}
                 onChange={(e) => setOptions({ ...options, title: e.target.value })}
@@ -110,7 +110,7 @@ export default function ChartControls({
               onClick={() => setOptions({ ...options, showValues: !options.showValues })}
               className={cn(
                 "flex flex-col items-center justify-center p-3 rounded-2xl border transition-all gap-1",
-                options.showValues ? "bg-blue/5 border-blue text-blue" : "bg-bg border-border text-text-4"
+                options.showValues ? "bg-blue/5 border-blue text-blue" : "bg-bg border-border text-text-muted"
               )}
             >
               <span className="text-xs font-black uppercase tracking-tighter">Show Values</span>
@@ -122,7 +122,7 @@ export default function ChartControls({
               onClick={() => setOptions({ ...options, showGrid: !options.showGrid })}
               className={cn(
                 "flex flex-col items-center justify-center p-3 rounded-2xl border transition-all gap-1",
-                options.showGrid ? "bg-blue/5 border-blue text-blue" : "bg-bg border-border text-text-4"
+                options.showGrid ? "bg-blue/5 border-blue text-blue" : "bg-bg border-border text-text-muted"
               )}
             >
               <span className="text-xs font-black uppercase tracking-tighter">Show Grid</span>
@@ -151,7 +151,7 @@ export default function ChartControls({
           )}
 
           <div className="space-y-3">
-            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1">Color Palette</label>
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted ml-1">Color Palette</label>
             <div className="flex flex-wrap gap-2">
               {PALETTES.map((p, i) => (
                 <button
@@ -175,7 +175,7 @@ export default function ChartControls({
       {/* Data Points */}
       <div className="p-6 bg-surface border border-border rounded-4xl shadow-sm space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Data Points</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Data Points</h2>
           <button 
             onClick={() => setShowImport(!showImport)}
             className="text-xs font-black text-blue hover:underline"
@@ -216,7 +216,7 @@ export default function ChartControls({
                         onClick={() => movePoint(i, 'up')}
                         disabled={i === 0}
                         aria-label="Move point up"
-                        className="p-1 rounded-lg text-text-4 hover:bg-blue/10 hover:text-blue disabled:opacity-30"
+                        className="p-1 rounded-lg text-text-muted hover:bg-blue/10 hover:text-blue disabled:opacity-30"
                       >
                         <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
@@ -224,14 +224,14 @@ export default function ChartControls({
                         onClick={() => movePoint(i, 'down')}
                         disabled={i === data.length - 1}
                         aria-label="Move point down"
-                        className="p-1 rounded-lg text-text-4 hover:bg-blue/10 hover:text-blue disabled:opacity-30"
+                        className="p-1 rounded-lg text-text-muted hover:bg-blue/10 hover:text-blue disabled:opacity-30"
                       >
                         <ArrowDown className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                       <button 
                         onClick={() => removePoint(p.id)}
                         aria-label="Remove point"
-                        className="p-1.5 rounded-lg text-text-4 hover:bg-error/10 hover:text-error transition-all active:scale-90"
+                        className="p-1.5 rounded-lg text-text-muted hover:bg-error/10 hover:text-error transition-all active:scale-90"
                       >
                         <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
@@ -254,7 +254,7 @@ export default function ChartControls({
                           placeholder="Label..."
                         />
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-black text-text-4 uppercase">Value:</span>
+                          <span className="text-xs font-black text-text-muted uppercase">Value:</span>
                           <input 
                             type="number"
                             value={p.value}

@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
-
+import { LearningHub, LearningSection } from "@/src/components/els/LearningHub";
+import { QuizWidget } from "@/src/components/els/QuizWidget";
 import LumpsumCalculatorClientWrapper from './LumpsumCalculatorClientWrapper';
 
 const toolId = 'lumpsum-calculator';
@@ -18,48 +18,60 @@ export default function Page() {
       description="Calculate the future value of a one-time investment with compounding."
       category={cat}
       toolId={toolId}
-      content={{
-        detailedDescription: "Calculate the future value of a one-time investment using the power of compounding. This tool is perfect for seeing how a single deposit grows over several years at a fixed interest rate. It's ideal for planning fixed deposits or one-time mutual fund investments.",
-        howTo: [
-          "Enter the one-time investment amount.",
-          "Enter the expected annual interest/return rate.",
-          "Enter the number of years you plan to stay invested.",
-          "The tool displays the total maturity value and total interest earned."
-        ],
-        faq: [
-          { question: "What formula is used for lumpsum calculations?", answer: "FV = PV × (1 + r)^n, where FV is future value, PV is principal, r is annual interest rate, and n is number of years." },
-          { question: "Is compounding annual?", answer: "Yes, this standard lumpsum calculator assumes annual compounding." }
-        ],
-        relatedTools: ["sip-calculator", "mutual-fund-returns", "compound-interest"]
-      }}
     >
       <LumpsumCalculatorClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-rule-72"
-          title="How it Works: The Rule of 72"
-          preview="Learn a famous mental math shortcut to calculate exactly how long it takes to double your money."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              While this calculator gives you exact, penny-perfect results using the exponential compounding formula <code>FV = P(1+r)^t</code>, there is a legendary mental math shortcut you can use when you're away from a computer.
-            </p>
-            <h3>The Rule of 72</h3>
-            <p>
-              If you want to know exactly how many years it will take to <strong>double</strong> a lumpsum investment, simply divide 72 by your expected interest rate.
-            </p>
-            <ul>
-              <li>If your mutual fund returns <strong>12%</strong>: <code>72 / 12 = 6 years</code> to double.</li>
-              <li>If your Fixed Deposit returns <strong>6%</strong>: <code>72 / 6 = 12 years</code> to double.</li>
-              <li>If your savings account returns <strong>4%</strong>: <code>72 / 4 = 18 years</code> to double.</li>
-            </ul>
-            <p>
-              This is a mathematically proven approximation derived from natural logarithms, specifically the Taylor Series expansion of <code>ln(1+r)</code>. Try entering those exact numbers into the calculator above and look at the chart at the expected year!
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Investment Math">
+        
+        <LearningSection type="architecture" title="The Exponential Curve">
+          <p>While a SIP (Systematic Investment Plan) requires you to add money every month, a Lumpsum investment relies entirely on the pure exponential curve of a single initial deposit.</p>
+          <p className="mt-2">This calculator uses the standard future value formula: <code>FV = P(1+r)^t</code> to show you exact, penny-perfect results over any time period.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The Rule of 72">
+          <p>While calculators are great, there is a legendary mental math shortcut you can use when you're away from a computer. It's called the <strong>Rule of 72</strong>.</p>
+          <p className="mt-2">If you want to know exactly how many years it will take to double a lumpsum investment, simply divide the number 72 by your expected annual interest rate.</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li>If your mutual fund returns <strong>12%</strong>: <code>72 / 12 = 6 years</code> to double.</li>
+            <li>If your Fixed Deposit returns <strong>6%</strong>: <code>72 / 6 = 12 years</code> to double.</li>
+            <li>If your savings account returns <strong>4%</strong>: <code>72 / 4 = 18 years</code> to double.</li>
+          </ul>
+        </LearningSection>
+
+        <LearningSection type="standards" title="Why 72?">
+          <p>This isn't just a random guess; it is a mathematically proven approximation derived from natural logarithms. Specifically, it comes from the Taylor Series expansion of <code>ln(1+r)</code>.</p>
+          <p className="mt-2">Try entering a 12% return into the calculator above and look at the chart at Year 6—you will see your initial investment has exactly doubled!</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "According to the Rule of 72, if you invest ₹1 Lakh in an index fund returning 9% annually, approximately how many years will it take to reach ₹2 Lakhs?",
+                options: [
+                  "9 years",
+                  "8 years",
+                  "7.2 years",
+                  "12 years"
+                ],
+                correctIndex: 1,
+                explanation: "72 divided by 9 equals exactly 8 years."
+              },
+              {
+                question: "Why does a lumpsum investment grow exponentially even if you never add another dollar to it?",
+                options: [
+                  "Because inflation pushes the value up.",
+                  "Because the interest you earn in Year 1 generates its own interest in Year 2, creating a snowball effect.",
+                  "Because banks increase the interest rate automatically over time.",
+                  "Because it uses Simple Interest."
+                ],
+                correctIndex: 1,
+                explanation: "This is the definition of compound interest. Earning interest on your previous interest causes the growth curve to bend upwards exponentially."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

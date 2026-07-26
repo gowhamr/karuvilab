@@ -6,7 +6,7 @@ export default function ToolLoading() {
       <div className="space-y-6">
         <div className="flex items-center gap-2">
           <div className="h-4 w-24 bg-surface border border-border rounded animate-pulse" />
-          <div className="h-4 w-4 text-text-4">/</div>
+          <div className="h-4 w-4 text-text-muted">/</div>
           <div className="h-4 w-32 bg-surface border border-border rounded animate-pulse" />
         </div>
         <div className="space-y-4">

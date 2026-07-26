@@ -273,7 +273,7 @@ export default function ImagePaddingClient() {
                 </div>
                 <div className="truncate">
                   <p className="text-sm font-bold text-text-primary truncate">{fileName}</p>
-                  <p className="text-xs text-text-4 font-medium">{origW} × {origH}px • {formatBytes(file?.size || 0)}</p>
+                  <p className="text-xs text-text-muted font-medium">{origW} × {origH}px • {formatBytes(file?.size || 0)}</p>
                 </div>
               </div>
               <button
@@ -406,7 +406,7 @@ export default function ImagePaddingClient() {
 
               {/* Quick Presets */}
               <div className="space-y-2 pt-1">
-                <span className="text-xs font-bold text-text-4 uppercase tracking-wider block">
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
                   Quick Presets
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -588,7 +588,7 @@ export default function ImagePaddingClient() {
                     className="max-h-[380px] w-auto max-w-full object-contain rounded-lg shadow-md"
                   />
                 ) : (
-                  <span className="text-xs text-text-4 font-bold uppercase tracking-widest">
+                  <span className="text-xs text-text-muted font-bold uppercase tracking-widest">
                     Padded preview will appear here
                   </span>
                 )}

@@ -1,3 +1,10 @@
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+const withAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: process.env.CI !== 'true',
+});
+
 const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
 const nextConfig = {
@@ -38,7 +45,12 @@ const nextConfig = {
             { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
             { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
             { key: "Permissions-Policy", value: "camera=(), geolocation=(), browsing-topics=()" },
-            { key: "Cross-Origin-Resource-Policy", value: "same-origin" }
+            { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+            // Spectre mitigation + SharedArrayBuffer isolation (matches vercel.json)
+            { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+            { key: "Cross-Origin-Embedder-Policy", value: "credentialless" },
+            // Defense-in-depth for legacy browsers
+            { key: "X-XSS-Protection", value: "1; mode=block" }
           ],
         },
       ];
@@ -101,4 +113,4 @@ if (isGithubPages) {
   nextConfig.output = 'export';
 }
 
-export default nextConfig;
+export default withAnalyzer(nextConfig);

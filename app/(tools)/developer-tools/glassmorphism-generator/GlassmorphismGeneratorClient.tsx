@@ -101,33 +101,33 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor={`${baseId}-blur`} className="text-xs font-bold uppercase tracking-widest text-text-4 flex justify-between">Blur Radius (backdrop-filter) <span>{config.blur}px</span></label>
+              <label htmlFor={`${baseId}-blur`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Blur Radius (backdrop-filter) <span>{config.blur}px</span></label>
               <input id={`${baseId}-blur`} type="range" min="0" max="40" value={config.blur} onChange={e => setConfig({ ...config, blur: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor={`${baseId}-transparency`} className="text-xs font-bold uppercase tracking-widest text-text-4 flex justify-between">Transparency <span>{config.transparency}%</span></label>
+              <label htmlFor={`${baseId}-transparency`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Transparency <span>{config.transparency}%</span></label>
               <input id={`${baseId}-transparency`} type="range" min="0" max="100" value={config.transparency} onChange={e => setConfig({ ...config, transparency: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label htmlFor={`${baseId}-border-width`} className="text-xs font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Width <span>{config.borderWidth}px</span></label>
+                <label htmlFor={`${baseId}-border-width`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Width <span>{config.borderWidth}px</span></label>
                 <input id={`${baseId}-border-width`} type="range" min="0" max="4" step="1" value={config.borderWidth} onChange={e => setConfig({ ...config, borderWidth: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
               <div className="space-y-2">
-                <label htmlFor={`${baseId}-border-opacity`} className="text-xs font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Opacity <span>{config.borderOpacity}%</span></label>
+                <label htmlFor={`${baseId}-border-opacity`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Opacity <span>{config.borderOpacity}%</span></label>
                 <input id={`${baseId}-border-opacity`} type="range" min="0" max="100" value={config.borderOpacity} onChange={e => setConfig({ ...config, borderOpacity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label htmlFor={`${baseId}-border-radius`} className="text-xs font-bold uppercase tracking-widest text-text-4 flex justify-between">Border Radius <span>{config.borderRadius}px</span></label>
+                <label htmlFor={`${baseId}-border-radius`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Radius <span>{config.borderRadius}px</span></label>
                 <input id={`${baseId}-border-radius`} type="range" min="0" max="64" value={config.borderRadius} onChange={e => setConfig({ ...config, borderRadius: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
               <div className="space-y-2">
-                <label htmlFor={`${baseId}-shadow-intensity`} className="text-xs font-bold uppercase tracking-widest text-text-4 flex justify-between">Shadow Intensity <span>{config.shadowIntensity}%</span></label>
+                <label htmlFor={`${baseId}-shadow-intensity`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Shadow Intensity <span>{config.shadowIntensity}%</span></label>
                 <input id={`${baseId}-shadow-intensity`} type="range" min="0" max="100" value={config.shadowIntensity} onChange={e => setConfig({ ...config, shadowIntensity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
             </div>
@@ -135,11 +135,11 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
             <div className="flex items-center gap-6 pt-4 border-t border-border/50">
                <div className="flex items-center gap-2">
                  <input type="color" value={config.tintColor} onChange={e => setConfig({ ...config, tintColor: e.target.value })} className="w-8 h-8 rounded cursor-pointer border border-border p-0" />
-                 <span className="text-xs font-bold uppercase tracking-widest text-text-4">Tint Color</span>
+                 <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Tint Color</span>
                </div>
                <div className="flex items-center gap-2">
                  <input type="color" value={config.textColor} onChange={e => setConfig({ ...config, textColor: e.target.value })} className="w-8 h-8 rounded cursor-pointer border border-border p-0" />
-                 <span className="text-xs font-bold uppercase tracking-widest text-text-4">Text Color</span>
+                 <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Text Color</span>
                </div>
             </div>
           </div>
@@ -149,13 +149,13 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
              <div className="flex items-center justify-between">
-                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Export Code</h3>
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Code</h3>
                 <CopyButton text={outputTab === 'css' ? cssValue : tailwindValue} />
              </div>
 
              <div className="flex bg-bg border border-border p-1 rounded-xl">
-                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-4")}>CSS</button>
-                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-4")}>Tailwind</button>
+                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>CSS</button>
+                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Tailwind</button>
              </div>
 
              <textarea
@@ -166,7 +166,7 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
-             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Presets</h3>
+             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Presets</h3>
              <div className="grid grid-cols-2 gap-3">
                {PRESETS.map((p, i) => (
                  <button

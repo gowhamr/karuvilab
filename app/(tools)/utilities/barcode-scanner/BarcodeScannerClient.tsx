@@ -276,7 +276,7 @@ export default function BarcodeScannerClient() {
                   />
                 </>
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-text-4 space-y-4">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-text-muted space-y-4">
                   <VideoOff className="w-16 h-16 opacity-20" />
                   <p className="text-sm font-medium">Camera is inactive</p>
                 </div>
@@ -328,7 +328,7 @@ export default function BarcodeScannerClient() {
           )}
           {format && (
             <div className="p-4 bg-surface border border-border rounded-2xl flex items-center justify-between">
-              <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Format</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Format</span>
               <span className="font-bold text-blue bg-blue/10 px-3 py-1 rounded-lg">{format.toUpperCase()}</span>
             </div>
           )}

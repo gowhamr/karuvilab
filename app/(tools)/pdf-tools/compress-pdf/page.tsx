@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 import CompressPdfClientWrapper from './CompressPdfClientWrapper';
 
@@ -21,61 +22,56 @@ export default function Page() {
     >
       <CompressPdfClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-compression"
-          title="How it Works: PDF Compression"
-          preview="Learn about Object Streams, FlateDecode, and why some PDFs don't compress well."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              Unlike images (JPEG/PNG) which are grids of pixels, a PDF is a complex database of objects (fonts, vectors, text, images, and metadata). Compressing a PDF requires parsing this database and rewriting it more efficiently.
-            </p>
-            <h3>1. Object Streams (PDF 1.5+)</h3>
-            <p>
-              Older PDFs store every object individually, which creates a lot of overhead. This tool upgrades the PDF structure to use <strong>Object Streams</strong>. This groups multiple objects together and compresses the entire group using the <code>FlateDecode</code> (zlib) algorithm.
-            </p>
-            <h3>2. Metadata & Orphan Removal</h3>
-            <p>
-              PDFs often contain invisible "orphan" objects—fonts that were embedded but are no longer used, or massive XML metadata payloads from tools like Adobe Illustrator. The "High" compression setting aggressively strips out Document Information dictionaries and unused objects.
-            </p>
-            <h3>Why didn't my PDF get smaller? (The "Image" Trap)</h3>
-            <p>
-              This tool performs <strong>structural compression</strong>, not image degradation. If your PDF is just a scanned document (a giant JPEG wrapped in a PDF), the structure is already minimal. To compress a scanned PDF further, you would need to lower the resolution or quality of the embedded image, which requires heavy image-processing algorithms not used here.
-            </p>
-          </div>
-        </ToolInfoSection>
+      <LearningHub title="Understanding PDF Compression">
+        
+        <LearningSection type="architecture" title="More Than Just Images">
+          <p>Unlike images (JPEG/PNG) which are grids of pixels, a PDF is a complex relational database of objects (fonts, vectors, text, images, and metadata). Compressing a PDF requires parsing this database and rewriting it more efficiently.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="Object Streams (PDF 1.5+)">
+          <p>Older PDFs store every object individually, which creates a lot of overhead. This tool upgrades the PDF structure to use <strong>Object Streams</strong>.</p>
+          <p className="mt-2">This feature groups multiple objects together and compresses the entire group using the <code>FlateDecode</code> (zlib) algorithm, significantly reducing the file size of vector and text-heavy documents.</p>
+        </LearningSection>
 
-        <ToolInfoSection
-          id="learn-architecture"
-          title="Architecture & Security"
-          preview="How we compress massive PDFs entirely in your browser."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              Parsing and re-encoding a 100MB PDF is extremely CPU-intensive. If we ran this on the main browser thread, the entire webpage would freeze.
-            </p>
-            <ul>
-              <li><strong>Web Workers (karuvi.worker.ts):</strong> We offload the PDF parsing to a background thread. Your UI stays silky smooth at 60fps, even while crunching gigabytes of data.</li>
-              <li><strong>Zero-Upload Privacy:</strong> Because everything happens in a Web Worker via WebAssembly and JavaScript, the PDF never leaves your device. It is mathematically impossible for us to see your data.</li>
-              <li><strong>Memory Management:</strong> We use <code>ArrayBuffer</code> transfers (zero-copy operations) to move the PDF between the main thread and the worker, preventing Out-Of-Memory (OOM) crashes on mobile devices.</li>
-            </ul>
-          </div>
-        </ToolInfoSection>
+        <LearningSection type="performance" title="Metadata & Orphan Removal">
+          <p>PDFs often contain invisible "orphan" objects—fonts that were embedded but are no longer used, or massive XML metadata payloads from creation tools like Adobe Illustrator.</p>
+          <p className="mt-2">The "High" compression setting aggressively traverses the document tree to strip out Document Information dictionaries and unreachable objects.</p>
+        </LearningSection>
 
-        <ToolInfoSection
-          id="standards"
-          title="Standards & References"
-          preview="The official specifications powering this tool."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <ul>
-              <li><strong>ISO 32000-1 (PDF 1.7):</strong> The core standard governing how PDF objects, cross-reference tables (XRef), and dictionaries are structured.</li>
-              <li><strong>RFC 1951:</strong> DEFLATE Compressed Data Format Specification. This is the underlying algorithm used by PDF's <code>FlateDecode</code> filter.</li>
-            </ul>
-          </div>
-        </ToolInfoSection>
-      </div>
+        <LearningSection type="security" title="The Scanned Document Trap">
+          <p>This tool performs <strong>structural compression</strong>, not image degradation. If your PDF is just a scanned document (a giant JPEG wrapped in a PDF envelope), the structure is already minimal.</p>
+          <p className="mt-2">To compress a scanned PDF further, you would need to lower the resolution or quality of the embedded image itself, which requires heavy raster image-processing algorithms that this structural tool does not attempt.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "What is an 'Object Stream' in the context of a PDF file?",
+                options: [
+                  "A streaming protocol for downloading PDFs over the network.",
+                  "A method of grouping multiple PDF objects together and compressing them as a single block.",
+                  "A video file embedded inside the PDF.",
+                  "A DRM mechanism to prevent unauthorized printing."
+                ],
+                correctIndex: 1,
+                explanation: "Introduced in PDF 1.5, Object Streams allow the FlateDecode algorithm to compress many objects at once, which is much more efficient than compressing them individually."
+              },
+              {
+                question: "Why might a 10MB PDF generated by a scanner not shrink significantly when using this tool?",
+                options: [
+                  "Because scanners use a proprietary encryption format.",
+                  "Because the PDF is already using Object Streams.",
+                  "Because the file is essentially a single large JPEG wrapped in a PDF, and this tool optimizes structure rather than degrading image quality.",
+                  "Because browser security prevents modifying scanned documents."
+                ],
+                correctIndex: 2,
+                explanation: "Structural compression is highly effective on text and vector PDFs with many objects, but cannot shrink a single embedded image without actively reducing its resolution."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

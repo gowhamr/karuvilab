@@ -52,6 +52,11 @@ export interface ToolEntry {
   lastAdded?: string | null | undefined;   // ISO format: YYYY-MM-DD
   requiresNetwork?: boolean | null | undefined;
   visibleExamples?: number | null | undefined;
+  
+  // Trust & Community
+  version?: string | null | undefined;
+  lastVerified?: string | null | undefined; // ISO format: YYYY-MM-DD
+  changelog?: { version: string; date: string; changes: string[] }[] | null | undefined;
 }
 export interface CategoryEntry {
   id: Category;

@@ -169,7 +169,7 @@ export default function MicCameraTesterClient() {
             />
             
             {(!stream || isInitializing) && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 text-text-4 bg-bg/50 backdrop-blur-sm">
+              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 text-text-muted bg-bg/50 backdrop-blur-sm">
                 {isInitializing ? (
                   <RefreshCw className="w-12 h-12 animate-spin text-blue" aria-hidden="true" />
                 ) : (
@@ -200,7 +200,7 @@ export default function MicCameraTesterClient() {
               {/* Device Selectors */}
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="video-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-2">Camera</label>
+                  <label htmlFor="video-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted ml-2">Camera</label>
                   <select 
                     id="video-select"
                     className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue outline-none"
@@ -216,7 +216,7 @@ export default function MicCameraTesterClient() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="audio-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-2">Microphone</label>
+                  <label htmlFor="audio-select" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted ml-2">Microphone</label>
                   <select 
                     id="audio-select"
                     className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue outline-none"
@@ -239,7 +239,7 @@ export default function MicCameraTesterClient() {
                     <Mic className="w-4 h-4 text-blue" aria-hidden="true" />
                     Input Level
                   </dt>
-                  <dd className="text-xs font-bold text-text-4 tabular-nums w-8 text-right">{Math.round(audioLevel)}%</dd>
+                  <dd className="text-xs font-bold text-text-muted tabular-nums w-8 text-right">{Math.round(audioLevel)}%</dd>
                 </dl>
                 <div className="h-3 bg-bg rounded-full overflow-hidden border border-border">
                   <m.div 

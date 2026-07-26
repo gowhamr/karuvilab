@@ -187,19 +187,19 @@ export default function PasswordGeneratorClient() {
                 {/* Strength Dashboard */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
-                    <div className="flex items-center gap-2 text-text-4">
+                    <div className="flex items-center gap-2 text-text-muted">
                       <Fingerprint className="w-3.5 h-3.5" />
                       <span className="text-tiny font-bold uppercase tracking-widest-sm">Entropy</span>
                     </div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-2xl font-black text-text">{Math.floor(strength?.entropy || 0)}</span>
-                      <span className="text-xs text-text-4 font-bold uppercase">bits</span>
+                      <span className="text-xs text-text-muted font-bold uppercase">bits</span>
                     </div>
                     <p className="text-xs text-text-3 font-medium">Measure of password randomness.</p>
                   </div>
 
                   <div className="bg-surface border border-border p-5 rounded-3xl space-y-3">
-                    <div className="flex items-center gap-2 text-text-4">
+                    <div className="flex items-center gap-2 text-text-muted">
                       <Clock className="w-3.5 h-3.5" />
                       <span className="text-tiny font-bold uppercase tracking-widest-sm">Crack Time</span>
                     </div>
@@ -213,7 +213,7 @@ export default function PasswordGeneratorClient() {
                     breachInfo.count === 0 ? "bg-success/5 border-success/20" :
                     breachInfo.count && breachInfo.count > 0 ? "bg-error/5 border-error/20" : "bg-surface border-border"
                   )}>
-                    <div className="flex items-center gap-2 text-text-4">
+                    <div className="flex items-center gap-2 text-text-muted">
                       <AlertTriangle className={cn("w-3.5 h-3.5", breachInfo.count ? "text-error" : "text-success")} />
                       <span className="text-tiny font-bold uppercase tracking-widest-sm">Breach Check</span>
                     </div>
@@ -254,7 +254,7 @@ export default function PasswordGeneratorClient() {
                             onClick={() => {
                               checkBreach(pw);
                             }}
-                            className="p-2 text-text-4 hover:text-blue transition-colors"
+                            className="p-2 text-text-muted hover:text-blue transition-colors"
                             title="Analyze this password"
                            >
                              <Info className="w-4 h-4" />
@@ -271,7 +271,7 @@ export default function PasswordGeneratorClient() {
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 px-2">Security Audit</h2>
+          <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted px-2">Security Audit</h2>
           
           <div className="bg-surface border border-border rounded-4xl p-4 sm:p-6 space-y-6 shadow-sm">
              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3">
@@ -286,14 +286,14 @@ export default function PasswordGeneratorClient() {
 
             {history.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
+                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
                   <History className="w-3.5 h-3.5" />
                   Recent History
                 </h3>
                 <div className="space-y-2 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
                   {history.map((pw, i) => (
                     <div key={i} className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-bg transition-colors group">
-                      <span className="font-mono text-xs text-text-4 break-all flex-1 truncate">{pw}</span>
+                      <span className="font-mono text-xs text-text-muted break-all flex-1 truncate">{pw}</span>
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                          <button 
                           onClick={() => checkBreach(pw)}

@@ -102,7 +102,7 @@ export default function TextUtilityClient() {
           { label: "Reading Time", value: `~${stats.readingTime}m` },
         ].map(({ label, value }) => (
           <div key={label} className="bg-surface border border-border p-4 rounded-xl">
-            <dt className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</dt>
+            <dt className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</dt>
             <dd className="text-xl font-black text-text">{value}</dd>
           </div>
         ))}
@@ -128,7 +128,7 @@ export default function TextUtilityClient() {
 
       {OPERATIONS.map(({ group, items }) => (
         <div key={group} className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-          <h2 className="text-xs font-bold text-text-4 uppercase tracking-wider">{group}</h2>
+          <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">{group}</h2>
           <div className="flex flex-wrap gap-2">
             {items.map(({ label, fn }) => (
               <button
@@ -148,10 +148,10 @@ export default function TextUtilityClient() {
           <div className="flex items-center justify-between">
             <div>
               <label className="text-sm font-bold text-text-2">Output</label>
-              {lastOp && <span className="ml-2 text-xs text-text-4">— {lastOp}</span>}
+              {lastOp && <span className="ml-2 text-xs text-text-muted">— {lastOp}</span>}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-text-4">{outputStats.chars} chars</span>
+              <span className="text-xs text-text-muted">{outputStats.chars} chars</span>
               <CopyButton text={output} />
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function TextUtilityClient() {
       )}
 
       <div className="bg-surface border border-border p-5 rounded-2xl">
-        <h2 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-3">Detailed Stats</h2>
+        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">Detailed Stats</h2>
         <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
           {[
             { label: "Words", value: stats.words },
@@ -183,7 +183,7 @@ export default function TextUtilityClient() {
             { label: "Reading Time", value: `~${stats.readingTime} min` },
           ].map(({ label, value }) => (
             <div key={label} className="bg-bg border border-border rounded-xl p-3">
-              <dt className="text-xs text-text-4 mb-0.5">{label}</dt>
+              <dt className="text-xs text-text-muted mb-0.5">{label}</dt>
               <dd className="font-bold text-text">{value}</dd>
             </div>
           ))}

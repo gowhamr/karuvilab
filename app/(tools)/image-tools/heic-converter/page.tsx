@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import HeicConverterClientWrapper from './HeicConverterClientWrapper';
 
 const toolId = 'heic-converter';
@@ -17,38 +18,55 @@ export default function Page() {
       description="Convert Apple HEIC photos to standard JPEG locally in your browser"
       category={cat}
       toolId={toolId}
-
-      content={{
-        detailedDescription: "Seamlessly convert Apple's HEIC photos to standard JPEG or PNG formats offline. Our tool decodes HEIC files directly in your browser, ensuring your private mobile photos never touch a remote server.",
-        useCases: ["Viewing iPhone photos on Windows","Uploading HEIC photos to websites that require JPEG","Converting HEIC backups securely offline","Extracting high-quality PNGs from HEIC","Standardizing family photo albums"],
-        howTo: ["Drag and drop your HEIC image into the tool.","Wait a moment for the local decoder to process the file.","Choose to export as either JPEG or PNG.","Adjust the output quality if using JPEG.","Click Download to save the converted photo."],
-        faq: [{"question":"Are my private iPhone photos uploaded?","answer":"No. The HEIC decoding happens securely inside your browser using WebAssembly."},{"question":"Why is HEIC not supported everywhere?","answer":"HEIC is a proprietary format based on the HEVC video codec, primarily used by Apple. Licensing restrictions prevent wide adoption."},{"question":"Can I convert Live Photos?","answer":"Currently, this tool extracts the primary still frame from the HEIC file, not the motion video."},{"question":"Does the quality degrade?","answer":"If you export as PNG, the extraction is lossless. Exporting as JPEG will apply standard compression."},{"question":"Is there a limit to file size?","answer":"Large HEIC files require browser memory. Extreme sizes may crash low-RAM devices, but typical 10MB iPhone photos work perfectly."}],
-        relatedTools: ["webp-converter","image-converter","batch-image-converter"]
-      }}
->
+    >
       <HeicConverterClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-hevc"
-          title="How it Works: The HEVC Video Codec"
-          preview="Learn why Windows and Android struggle to open your iPhone photos."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              When you take a photo on an iPhone, Apple doesn't save it as a JPEG. To save space, they use <strong>HEIC</strong> (High Efficiency Image Container). Similar to AVIF, an HEIC image is actually just a single still frame encoded using a video codec called <strong>HEVC (H.265)</strong>.
-            </p>
-            <h3>Patents and Licensing</h3>
-            <p>
-              Why don't all browsers just support HEIC natively? <strong>Patents</strong>. The HEVC algorithm is heavily patented by multiple corporations. If Google added native HEIC support to Chrome, or Mozilla to Firefox, they would have to pay millions in licensing fees. Apple pays these fees, which is why HEIC works flawlessly on Macs and iPhones, but fails on Windows or the open web.
-            </p>
-            <h3>WebAssembly Decoding</h3>
-            <p>
-              To bypass this limitation without uploading your private photos to a server, this tool uses a compiled <strong>WebAssembly (WASM)</strong> decoder. We run the complex C++ decompression algorithm directly inside your browser's secure sandbox. It mathematically decodes the proprietary HEVC video frame back into raw RGB pixels, which we then easily re-encode into an open, royalty-free format like JPEG or PNG.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Apple's HEIC Format">
+        
+        <LearningSection type="architecture" title="Not Just an Image">
+          <p>When you take a photo on an iPhone, Apple doesn't save it as a traditional JPEG. To save space, they use <strong>HEIC</strong> (High Efficiency Image Container).</p>
+          <p className="mt-2">Similar to the modern AVIF format, an HEIC image is actually just a single still frame encoded using a highly-efficient video codec called <strong>HEVC (H.265)</strong>.</p>
+        </LearningSection>
+        
+        <LearningSection type="algorithm" title="Patents and Licensing">
+          <p>Why don't all browsers just support HEIC natively? <strong>Patents</strong>.</p>
+          <p className="mt-2">The HEVC compression algorithm is heavily patented by multiple corporations. If Google added native HEIC support to Chrome, or Mozilla to Firefox, they would have to pay millions in licensing fees. Apple pays these fees, which is why HEIC works flawlessly on Macs and iPhones, but fails on Windows or the open web.</p>
+        </LearningSection>
+
+        <LearningSection type="api" title="WebAssembly Decoding">
+          <p>To bypass this limitation without uploading your private photos to a server, this tool uses a compiled <strong>WebAssembly (WASM)</strong> decoder.</p>
+          <p className="mt-2">We run a complex C++ decompression algorithm directly inside your browser's secure sandbox. It mathematically decodes the proprietary HEVC video frame back into raw RGB pixels, which we then easily re-encode into an open, royalty-free format like JPEG or PNG using standard browser APIs.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why does an HEIC file fail to open natively in Chrome or Firefox?",
+                options: [
+                  "Because it is too large for the browser to process.",
+                  "Because it relies on the patented HEVC (H.265) video codec, and browser vendors do not want to pay the expensive licensing fees to include the decoder.",
+                  "Because it is an older, obsolete format.",
+                  "Because Apple actively blocks browsers from reading it."
+                ],
+                correctIndex: 1,
+                explanation: "Format support is often dictated by legal and financial constraints, not just technical ones. Web browsers refuse to pay HEVC patent pools."
+              },
+              {
+                question: "How does this tool decode HEIC files if the browser natively refuses to?",
+                options: [
+                  "It sends the file to a cloud server to convert it.",
+                  "It downloads an executable virus to the user's computer.",
+                  "It uses WebAssembly (WASM) to run a custom C++ decoder directly inside the web page.",
+                  "It tricks the browser into thinking it is a PNG."
+                ],
+                correctIndex: 2,
+                explanation: "WebAssembly allows developers to compile complex C++ libraries (like libheif) and run them securely inside the browser, filling in the gaps of missing native APIs."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

@@ -156,7 +156,7 @@ export default function UuidGeneratorClient() {
         {version === 'v5' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-bg/50 p-4 rounded-2xl border border-border/50">
             <div>
-              <label htmlFor="uuid-v5-namespace" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Namespace</label>
+              <label htmlFor="uuid-v5-namespace" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Namespace</label>
               <select
                 id="uuid-v5-namespace"
                 value={v5Namespace}
@@ -170,7 +170,7 @@ export default function UuidGeneratorClient() {
               </select>
             </div>
             <div>
-              <label htmlFor="uuid-v5-name" className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-2">Name String</label>
+              <label htmlFor="uuid-v5-name" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Name String</label>
               <input
                 id="uuid-v5-name"
                 type="text"
@@ -206,7 +206,7 @@ export default function UuidGeneratorClient() {
                 onClick={() => setFormat(f)}
                 className={cn(
                   "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors",
-                  format === f ? "bg-blue/10 text-blue border border-blue/20" : "text-text-4 hover:bg-bg border border-transparent"
+                  format === f ? "bg-blue/10 text-blue border border-blue/20" : "text-text-muted hover:bg-bg border border-transparent"
                 )}
               >
                 {f.replace('-', ' ')}
@@ -226,7 +226,7 @@ export default function UuidGeneratorClient() {
         
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <div className="flex-1 w-full flex items-center gap-3 bg-bg border border-border rounded-xl p-2 px-4">
-            <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Count</span>
+            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Count</span>
             <input 
               type="number" 
               min={1} 
@@ -247,7 +247,7 @@ export default function UuidGeneratorClient() {
         {bulkList.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-text-4">Generated {bulkList.length} UUIDs</span>
+              <span className="text-xs font-bold text-text-muted">Generated {bulkList.length} UUIDs</span>
               <CopyButton text={bulkList.join('\n')} label="Copy All" />
             </div>
             <textarea 

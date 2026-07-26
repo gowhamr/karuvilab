@@ -91,7 +91,7 @@ export default function NpsCalculatorClient() {
             <div className="space-y-4">
               <label className="text-xs font-bold text-text-3 block">Monthly Investment</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   type="number"
                   value={monthlyInv || ''}
@@ -128,7 +128,7 @@ export default function NpsCalculatorClient() {
             <div className="space-y-3 border-t border-border/50 pt-6">
               <div className="flex justify-between">
                 <label className="text-xs font-bold text-text-3 block">Expected Return</label>
-                <span className="text-xs font-bold text-text-4">{returnRate}% p.a.</span>
+                <span className="text-xs font-bold text-text-muted">{returnRate}% p.a.</span>
               </div>
               <input
                 type="range"
@@ -148,7 +148,7 @@ export default function NpsCalculatorClient() {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <label className="text-xs font-bold text-text-3 block">Annuity Purchase (Min 40%)</label>
-                <span className="text-xs font-bold text-text-4">{annuityPercent}%</span>
+                <span className="text-xs font-bold text-text-muted">{annuityPercent}%</span>
               </div>
               <input
                 type="range"
@@ -162,7 +162,7 @@ export default function NpsCalculatorClient() {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <label className="text-xs font-bold text-text-3 block">Expected Annuity Rate</label>
-                <span className="text-xs font-bold text-text-4">{annuityRate}% p.a.</span>
+                <span className="text-xs font-bold text-text-muted">{annuityRate}% p.a.</span>
               </div>
               <input
                 type="range"
@@ -181,17 +181,17 @@ export default function NpsCalculatorClient() {
             <div className="absolute -top-32 -right-32 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700 bg-blue" />
             
             <div className="text-center border-b border-border/50 pb-8">
-              <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-2">Total Estimated Corpus</p>
+              <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-2">Total Estimated Corpus</p>
               <span className="text-4xl sm:text-5xl md:text-6xl font-black text-text tracking-tighter block">{formatCurrency(result.estimatedCorpus)}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-8 pt-4">
                <div>
-                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Total Invested</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-1">Total Invested</p>
                   <span className="text-xl font-bold text-text-2">{formatCurrency(result.totalInvested)}</span>
                </div>
                <div>
-                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Wealth Gained</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-1">Wealth Gained</p>
                   <span className="text-xl font-bold text-green-500">+{formatCurrency(result.estimatedCorpus - result.totalInvested)}</span>
                </div>
             </div>

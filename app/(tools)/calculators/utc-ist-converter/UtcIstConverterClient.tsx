@@ -98,12 +98,12 @@ export default function UtcIstConverterClient() {
       {/* Live clocks */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-xs font-bold text-text-4 uppercase tracking-wider">Current UTC</div>
+          <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Current UTC</div>
           <div className="text-2xl font-black font-mono text-text">{liveUtc.split("T")[1]}</div>
           <div className="text-sm text-text-3">{liveUtc.split("T")[0]}</div>
         </div>
         <div className="bg-surface border border-blue/30 p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-xs font-bold text-text-4 uppercase tracking-wider">Current IST (UTC+5:30)</div>
+          <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Current IST (UTC+5:30)</div>
           <div className="text-2xl font-black font-mono text-blue">{liveIst.split("T")[1]}</div>
           <div className="text-sm text-text-3">{liveIst.split("T")[0]}</div>
         </div>
@@ -121,7 +121,7 @@ export default function UtcIstConverterClient() {
               onChange={(e) => handleUtcChange(e.target.value)}
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
             />
-            <p className="text-xs text-text-4">{fmtDisplay(utcInput)}</p>
+            <p className="text-xs text-text-muted">{fmtDisplay(utcInput)}</p>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-bold text-text-2">IST Date & Time (UTC+5:30)</label>
@@ -131,7 +131,7 @@ export default function UtcIstConverterClient() {
               onChange={(e) => handleIstChange(e.target.value)}
               className="w-full px-4 py-3 bg-bg border border-blue/30 rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
             />
-            <p className="text-xs text-text-4">{fmtDisplay(istInput)}</p>
+            <p className="text-xs text-text-muted">{fmtDisplay(istInput)}</p>
           </div>
         </div>
         <button

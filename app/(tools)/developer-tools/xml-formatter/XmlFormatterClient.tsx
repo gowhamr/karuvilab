@@ -182,7 +182,7 @@ export default function XmlFormatterClient() {
                 onClick={() => setOptions({ ...options, mode: m })}
                 className={cn(
                   "px-4 py-2 rounded-lg text-xs font-bold transition-all capitalize",
-                  options.mode === m ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-3"
+                  options.mode === m ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
                 )}
               >
                 {m}
@@ -193,7 +193,7 @@ export default function XmlFormatterClient() {
 
         {options.mode === 'format' && (
           <div className="flex items-center gap-4 bg-bg border border-border rounded-2xl p-4">
-            <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Indentation</span>
+            <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Indentation</span>
             <div className="flex gap-2">
               {(['2', '4', 'tab'] as XMLIndent[]).map(ind => (
                 <button
@@ -201,7 +201,7 @@ export default function XmlFormatterClient() {
                   onClick={() => setOptions({ ...options, indent: ind })}
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors border",
-                    options.indent === ind ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-4 hover:text-text"
+                    options.indent === ind ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-muted hover:text-text"
                   )}
                 >
                   {ind === 'tab' ? 'Tab' : `${ind} Spaces`}
@@ -215,7 +215,7 @@ export default function XmlFormatterClient() {
           {/* Input Area */}
           <div className="space-y-3">
             <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Input XML</label>
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Input XML</label>
               <button onClick={() => setInput('')} className="text-xs font-bold text-red-500 hover:underline">Clear</button>
             </div>
             <textarea
@@ -237,12 +237,12 @@ export default function XmlFormatterClient() {
           {/* Output Area */}
           <div className="space-y-3">
             <div className="flex justify-between items-center px-2 min-h-6">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
                 {options.mode === 'validate' ? 'Validation Result' : 'Output'}
               </label>
               {options.mode !== 'validate' && result.valid && (
                 <div className="flex items-center gap-2">
-                  <button onClick={handleDownload} className="p-1.5 text-text-4 hover:text-blue transition-colors" title="Download">
+                  <button onClick={handleDownload} className="p-1.5 text-text-muted hover:text-blue transition-colors" title="Download">
                     <Download className="w-4 h-4" />
                   </button>
                   <CopyButton text={result.output} />
@@ -288,7 +288,7 @@ export default function XmlFormatterClient() {
                   </div>
                 </div>
               ) : (
-                 <div className="h-full flex items-center justify-center text-text-4 font-mono text-sm">
+                 <div className="h-full flex items-center justify-center text-text-muted font-mono text-sm">
                    Awaiting input...
                  </div>
               )}
@@ -300,22 +300,22 @@ export default function XmlFormatterClient() {
         {input && result.valid && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/50">
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-1">Elements</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Elements</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.elements}</span>
             </div>
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-1">Attributes</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Attributes</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.attributes}</span>
             </div>
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-1">Max Depth</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Max Depth</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.depth}</span>
             </div>
             <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block mb-1">Size {options.mode === 'minify' ? 'Reduction' : 'Change'}</span>
+              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Size {options.mode === 'minify' ? 'Reduction' : 'Change'}</span>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-mono font-black text-text">
-                  {(result.stats.size.output / 1024).toFixed(1)} <span className="text-sm font-bold text-text-4">KB</span>
+                  {(result.stats.size.output / 1024).toFixed(1)} <span className="text-sm font-bold text-text-muted">KB</span>
                 </span>
                 {options.mode === 'minify' && result.stats.size.original > 0 && (
                   <span className="text-xs font-bold text-green-500">

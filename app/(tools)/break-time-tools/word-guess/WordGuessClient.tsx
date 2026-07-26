@@ -231,7 +231,7 @@ export default function WordGuessClient() {
     if (targetWord.includes(char)) {
       return "bg-amber-500 text-white font-black text-2xl border-amber-600 shadow-md shadow-amber-500/10";
     }
-    return "bg-surface-elevated/40 border border-border/40 text-text-4 text-2xl font-bold opacity-60";
+    return "bg-surface-elevated/40 border border-border/40 text-text-muted text-2xl font-bold opacity-60";
   };
 
   const getKeyboardKeyClass = (key: string) => {
@@ -249,7 +249,7 @@ export default function WordGuessClient() {
       return `${base} bg-amber-500 text-white border border-amber-600 shadow-sm`;
     }
     if (state === "absent") {
-      return `${base} bg-surface-elevated/40 border border-border/20 text-text-4 opacity-50`;
+      return `${base} bg-surface-elevated/40 border border-border/20 text-text-muted opacity-50`;
     }
     return `${base} bg-surface border border-border text-text hover:border-primary/50 cursor-pointer`;
   };
@@ -308,7 +308,7 @@ export default function WordGuessClient() {
         <div className="flex gap-2">
           {[{ label: "Streak", val: stats.currentStreak }, { label: "Max Streak", val: stats.maxStreak }].map(({ label, val }) => (
             <div key={label} className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[80px]">
-              <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">{label}</div>
+              <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{label}</div>
               <div className="text-lg font-black text-text">{val}</div>
             </div>
           ))}
@@ -398,17 +398,17 @@ export default function WordGuessClient() {
               {/* Stats Box */}
               <div className="border border-border/80 rounded-2xl p-4 bg-surface-elevated/20 grid grid-cols-3 gap-2 text-center text-sm font-medium">
                 <div>
-                  <span className="text-text-4 block text-xs">Played</span>
+                  <span className="text-text-muted block text-xs">Played</span>
                   <span className="text-base font-black text-text">{stats.gamesPlayed}</span>
                 </div>
                 <div>
-                  <span className="text-text-4 block text-xs">Win Rate</span>
+                  <span className="text-text-muted block text-xs">Win Rate</span>
                   <span className="text-base font-black text-text">
                     {stats.gamesPlayed > 0 ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) : 0}%
                   </span>
                 </div>
                 <div>
-                  <span className="text-text-4 block text-xs">Streak</span>
+                  <span className="text-text-muted block text-xs">Streak</span>
                   <span className="text-base font-black text-text">{stats.currentStreak}</span>
                 </div>
               </div>

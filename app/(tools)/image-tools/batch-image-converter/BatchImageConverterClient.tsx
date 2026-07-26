@@ -140,7 +140,7 @@ export default function BatchImageConverterClient() {
       return <ThumbnailPreview file={item.file} />;
     }
 
-    return <ImageIcon className="w-6 h-6 text-text-4" />;
+    return <ImageIcon className="w-6 h-6 text-text-muted" />;
   }, []);
 
   const hasItems = items.length > 0;
@@ -157,7 +157,7 @@ export default function BatchImageConverterClient() {
                 <Sparkles className="w-6 h-6 text-blue" />
                 Batch Converter
               </h2>
-              <p className="text-text-4 text-xs font-medium leading-relaxed">
+              <p className="text-text-muted text-xs font-medium leading-relaxed">
                 Convert multiple images concurrently directly inside your browser.
               </p>
             </div>
@@ -187,7 +187,7 @@ export default function BatchImageConverterClient() {
                     <span className="text-base font-black tracking-tight">{fmt.label}</span>
                     <span className={cn(
                       "text-xs font-medium mt-0.5",
-                      targetFormat === fmt.value ? "text-white/80" : "text-text-4"
+                      targetFormat === fmt.value ? "text-white/80" : "text-text-muted"
                     )}>
                       {fmt.ext}
                     </span>
@@ -240,7 +240,7 @@ export default function BatchImageConverterClient() {
                   <div className="w-1.5 h-1.5 rounded-full bg-blue mt-1.5 shrink-0" />
                   <div>
                     <p className="font-bold text-text uppercase tracking-wider">{h.title}</p>
-                    <p className="text-text-4 font-medium leading-relaxed">{h.desc}</p>
+                    <p className="text-text-muted font-medium leading-relaxed">{h.desc}</p>
                   </div>
                 </li>
               ))}
@@ -286,7 +286,7 @@ export default function BatchImageConverterClient() {
             </div>
             <div className="space-y-1">
               <p className="font-black text-text uppercase tracking-widest text-xs">No images queued</p>
-              <p className="text-xs text-text-4 font-medium">Select target format above and drop your images to begin.</p>
+              <p className="text-xs text-text-muted font-medium">Select target format above and drop your images to begin.</p>
             </div>
           </m.div>
         )}
@@ -305,7 +305,7 @@ export default function BatchImageConverterClient() {
               <Loader2 className="w-10 h-10 text-blue animate-spin mx-auto" />
               <div className="space-y-2">
                 <h3 className="font-black text-lg text-text">Packaging ZIP Archive</h3>
-                <p className="text-xs text-text-4 font-medium leading-relaxed">
+                <p className="text-xs text-text-muted font-medium leading-relaxed">
                   Compressing all converted images into a downloadable archive...
                 </p>
               </div>
@@ -329,7 +329,7 @@ function ThumbnailPreview({ file }: { file: File }) {
     }
   }, [file, createUrl]);
 
-  if (error || !url) return <ImageIcon className="w-6 h-6 text-text-4" />;
+  if (error || !url) return <ImageIcon className="w-6 h-6 text-text-muted" />;
 
   return (
     <img 

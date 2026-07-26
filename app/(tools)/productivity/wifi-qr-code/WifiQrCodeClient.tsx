@@ -104,7 +104,7 @@ export default function WifiQrCodeClient() {
             <button
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-3 top-10 p-2 text-text-4 hover:text-text-2 transition-colors"
+              className="absolute right-3 top-10 p-2 text-text-muted hover:text-text-2 transition-colors"
             >
               {showPassword ? <EyeOff className="w-4 h-4" aria-hidden="true" /> : <Eye className="w-4 h-4" aria-hidden="true" />}
             </button>
@@ -144,7 +144,7 @@ export default function WifiQrCodeClient() {
                 {!isLibLoaded || !qrBlobUrl ? (
                   <div className="flex flex-col items-center gap-2">
                     <Loader2 className="w-8 h-8 animate-spin text-blue/30" />
-                    <span className="text-xs font-bold text-text-4">INITIALIZING...</span>
+                    <span className="text-xs font-bold text-text-muted">INITIALIZING...</span>
                   </div>
                 ) : (
                   <img src={qrBlobUrl} alt="WiFi QR Code" className="w-64 h-64" />
@@ -157,12 +157,12 @@ export default function WifiQrCodeClient() {
               >
                 <Download className="w-5 h-5" /> Download QR Code
               </button>
-              <p className="text-xs text-text-4 uppercase font-black tracking-widest text-center">
+              <p className="text-xs text-text-muted uppercase font-black tracking-widest text-center">
                 Scan with your phone's camera to connect
               </p>
             </>
           ) : (
-            <div className="text-center space-y-4 text-text-4">
+            <div className="text-center space-y-4 text-text-muted">
               <div className="w-20 h-20 bg-bg border border-border rounded-full flex items-center justify-center mx-auto">
                 <Wifi className="w-10 h-10 opacity-20" />
               </div>

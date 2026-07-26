@@ -71,7 +71,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
             {isLocal ? (
               <Star className="w-4 h-4 text-blue fill-current shrink-0 mt-0.5" />
             ) : (
-              t.isNight ? <Moon className="w-4 h-4 text-text-4 shrink-0 mt-0.5" /> : <Sun className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+              t.isNight ? <Moon className="w-4 h-4 text-text-muted shrink-0 mt-0.5" /> : <Sun className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
             )}
             {settings.primaryLabel === 'custom' ? (
               <input 
@@ -87,7 +87,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
             )}
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-xs text-text-4 font-bold uppercase tracking-wider">{subtitle}</p>
+            <p className="text-xs text-text-muted font-bold uppercase tracking-wider">{subtitle}</p>
             <span className="text-tiny font-bold uppercase tracking-widest-sm bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
               {t.relativeText}
             </span>
@@ -99,14 +99,14 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
             <div 
               {...attributes}
               {...listeners}
-              className="p-2 cursor-grab active:cursor-grabbing text-text-4 hover:text-text bg-surface-2 hover:bg-surface-2/80 rounded-xl touch-none flex items-center justify-center shadow-sm border border-transparent hover:border-border"
+              className="p-2 cursor-grab active:cursor-grabbing text-text-muted hover:text-text bg-surface-2 hover:bg-surface-2/80 rounded-xl touch-none flex items-center justify-center shadow-sm border border-transparent hover:border-border"
             >
               <GripVertical className="w-4 h-4 pointer-events-none" />
             </div>
           )}
           <button 
             onClick={() => removeClock(id)} 
-            className="p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-4 hover:text-error rounded-xl transition-all shadow-sm flex items-center justify-center" 
+            className="p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-muted hover:text-error rounded-xl transition-all shadow-sm flex items-center justify-center" 
             title="Remove clock"
           >
             <Trash2 className="w-4 h-4" />
@@ -119,7 +119,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
         <div className="font-mono flex flex-col items-center justify-center">
           <div className="flex items-baseline justify-center gap-1">
             <p className="text-5xl md:text-6xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
-            <p className="text-2xl font-bold text-text-4 tabular-nums">:{t.displaySeconds}</p>
+            <p className="text-2xl font-bold text-text-muted tabular-nums">:{t.displaySeconds}</p>
           </div>
           {settings.hourFormat === 12 && (
             <p className="text-base font-black text-blue mt-1">{t.ampm}</p>
@@ -132,10 +132,10 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
         {/* Business Hours Progress */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest">
-            <span className={biz.isOpen ? "text-success" : "text-text-4 opacity-70"}>
+            <span className={biz.isOpen ? "text-success" : "text-text-muted opacity-70"}>
               {biz.isOpen ? "Open" : "Closed"}
             </span>
-            <span className="text-text-4">{biz.text}</span>
+            <span className="text-text-muted">{biz.text}</span>
           </div>
           <div className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
             <div 
@@ -147,7 +147,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
 
         <div className="flex items-center justify-between text-xs pt-3 border-t border-border/50">
           <span className="text-text-3 font-bold uppercase tracking-wider">{t.date}</span>
-          <span className="text-text-4 font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
+          <span className="text-text-muted font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
         </div>
       </div>
     </div>

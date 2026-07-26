@@ -94,7 +94,7 @@ Generated via KaruviLab`;
 
             <div className="space-y-3" role="group" aria-labelledby={rateLabelId}>
               <div className="flex items-center justify-between">
-                <label id={rateLabelId} className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">GST Rate Slab</label>
+                <label id={rateLabelId} className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">GST Rate Slab</label>
                 <span className="text-xs font-bold text-blue bg-blue/5 px-2 py-0.5 rounded-full">{gstRate}% Selected</span>
               </div>
               <div className="grid grid-cols-5 gap-2">
@@ -118,7 +118,7 @@ Generated via KaruviLab`;
 
           <div className="space-y-6">
             <div className="space-y-3" role="group" aria-labelledby={modeLabelId}>
-              <label id={modeLabelId} className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Calculation Mode</label>
+              <label id={modeLabelId} className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Calculation Mode</label>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setMode("add")}
@@ -152,7 +152,7 @@ Generated via KaruviLab`;
                 </div>
                 <div>
                   <p className="text-tiny font-bold uppercase tracking-widest-sm">Interstate Sale</p>
-                  <p className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Use IGST instead of CGST/SGST</p>
+                  <p className="text-tiny font-bold text-text-muted uppercase tracking-tighter">Use IGST instead of CGST/SGST</p>
                 </div>
               </div>
               <button 
@@ -192,7 +192,7 @@ Generated via KaruviLab`;
       <div className="bg-surface border border-border rounded-4xl overflow-hidden">
         <div className="p-6 border-b border-border bg-bg/50 flex items-center justify-between">
           <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-3">Tax Breakdown</h2>
-          <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Local Currency (INR)</span>
+          <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Local Currency (INR)</span>
         </div>
         <div className="p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
           <dl className="space-y-4">
@@ -201,14 +201,14 @@ Generated via KaruviLab`;
                 <div className="flex justify-between items-center pb-4 border-b border-border/50">
                   <div>
                     <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">CGST</dt>
-                    <dd className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Central Tax ({gstRate/2}%)</dd>
+                    <dd className="text-tiny font-bold text-text-muted uppercase tracking-tighter">Central Tax ({gstRate/2}%)</dd>
                   </div>
                   <dd className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.cgst, 2)}</dd>
                 </div>
                 <div className="flex justify-between items-center">
                   <div>
                     <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">SGST</dt>
-                    <dd className="text-tiny font-bold text-text-4 uppercase tracking-tighter">State Tax ({gstRate/2}%)</dd>
+                    <dd className="text-tiny font-bold text-text-muted uppercase tracking-tighter">State Tax ({gstRate/2}%)</dd>
                   </div>
                   <dd className="font-mono text-lg font-black text-text">{formatINR(taxBreakdown.sgst, 2)}</dd>
                 </div>
@@ -217,7 +217,7 @@ Generated via KaruviLab`;
               <div className="flex justify-between items-center h-full">
                 <div>
                   <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">IGST</dt>
-                  <dd className="text-tiny font-bold text-text-4 uppercase tracking-tighter">Integrated Tax ({gstRate}%)</dd>
+                  <dd className="text-tiny font-bold text-text-muted uppercase tracking-tighter">Integrated Tax ({gstRate}%)</dd>
                 </div>
                 <dd className="font-mono text-2xl font-black text-blue">{formatINR(taxBreakdown.igst, 2)}</dd>
               </div>

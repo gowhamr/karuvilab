@@ -179,12 +179,12 @@ export default function SmartConverterClient() {
             <p className="text-red-400 font-medium">{result.error}</p>
           ) : (
             <div className="space-y-2">
-              <div className="text-xs font-bold text-text-4 uppercase tracking-wider">Result</div>
+              <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Result</div>
               <div className="flex items-baseline gap-3 flex-wrap">
                 <span className="text-xl text-text-3 font-medium">
                   {fmt(result.value)} {result.from}
                 </span>
-                <span className="text-text-4">=</span>
+                <span className="text-text-muted">=</span>
                 <span className="text-4xl font-black text-blue">
                   {fmt(result.result)} {result.to}
                 </span>

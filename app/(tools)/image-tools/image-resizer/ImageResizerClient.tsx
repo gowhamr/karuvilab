@@ -120,7 +120,7 @@ export default function ImageResizerClient() {
           />
 
           {origW > 0 && (
-            <p className="text-xs text-text-4 text-center">Original: {origW} × {origH}px</p>
+            <p className="text-xs text-text-muted text-center">Original: {origW} × {origH}px</p>
           )}
 
           {/* Options */}
@@ -174,7 +174,7 @@ export default function ImageResizerClient() {
           {resizedUrl ? (
             <>
               <img src={resizedUrl} alt="Resized" className="mx-auto max-h-64 rounded-xl object-contain border border-border" />
-              <div className="flex items-center justify-between text-xs font-bold text-text-4 uppercase tracking-wider">
+              <div className="flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-wider">
                 <span>{width} × {height}px</span>
                 <span>{resizedSize}</span>
               </div>
@@ -183,7 +183,7 @@ export default function ImageResizerClient() {
               </button>
             </>
           ) : (
-            <div className="flex items-center justify-center h-64 text-text-4 text-xs font-bold uppercase tracking-widest border-2 border-dashed border-border rounded-2xl">
+            <div className="flex items-center justify-center h-64 text-text-muted text-xs font-bold uppercase tracking-widest border-2 border-dashed border-border rounded-2xl">
               Resized image will appear here
             </div>
           )}

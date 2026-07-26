@@ -101,8 +101,8 @@ export default function HmacGeneratorClient() {
               <KeyRound className="w-3.5 h-3.5" /> Configuration
             </h3>
             <div className="flex bg-bg border border-border rounded-xl p-1">
-              <button onClick={() => setMode('generate')} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", mode === 'generate' ? "bg-surface text-text shadow-sm" : "text-text-4")}>Generate</button>
-              <button onClick={() => setMode('verify')} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", mode === 'verify' ? "bg-surface text-text shadow-sm" : "text-text-4")}>Verify</button>
+              <button onClick={() => setMode('generate')} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", mode === 'generate' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Generate</button>
+              <button onClick={() => setMode('verify')} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", mode === 'verify' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Verify</button>
             </div>
           </div>
           
@@ -116,7 +116,7 @@ export default function HmacGeneratorClient() {
                     onClick={() => setAlgorithm(alg)}
                     className={cn(
                       "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all",
-                      algorithm === alg ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-4 hover:text-text"
+                      algorithm === alg ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
                     )}
                   >
                     {alg}
@@ -128,7 +128,7 @@ export default function HmacGeneratorClient() {
             <div className="space-y-3">
               <label htmlFor="hmac-secret-key" className="text-xs font-bold text-text-3 block flex justify-between">
                 Secret Key
-                <span className="text-xs text-text-4">{key.length} chars</span>
+                <span className="text-xs text-text-muted">{key.length} chars</span>
               </label>
               <input
                 id="hmac-secret-key"
@@ -143,7 +143,7 @@ export default function HmacGeneratorClient() {
             <div className="space-y-3">
               <label htmlFor="hmac-message" className="text-xs font-bold text-text-3 block flex justify-between">
                 Message Data
-                <span className="text-xs text-text-4">{message.length} chars</span>
+                <span className="text-xs text-text-muted">{message.length} chars</span>
               </label>
               <textarea
                 id="hmac-message"
@@ -178,7 +178,7 @@ export default function HmacGeneratorClient() {
         <div className="space-y-6">
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
                 <FileCheck className="w-3 h-3" /> 
                 {mode === 'verify' ? 'Computed Signature' : 'Generated Signature'}
               </h3>
@@ -189,7 +189,7 @@ export default function HmacGeneratorClient() {
                     onClick={() => setEncoding(enc)}
                     className={cn(
                       "px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all",
-                      encoding === enc ? "bg-surface text-text shadow-sm" : "text-text-4"
+                      encoding === enc ? "bg-surface text-text shadow-sm" : "text-text-muted"
                     )}
                   >
                     {enc}
@@ -205,7 +205,7 @@ export default function HmacGeneratorClient() {
                 placeholder="Awaiting input..."
                 className={cn(
                   "w-full h-32 bg-bg border border-border rounded-2xl p-6 font-mono text-sm outline-none resize-none break-all transition-colors",
-                  output ? "text-text" : "text-text-4",
+                  output ? "text-text" : "text-text-muted",
                   isValid ? "border-green-500/50 bg-green-500/5 text-green-500" : isInvalid ? "border-red-500/50 bg-red-500/5 text-red-500" : ""
                 )}
               />

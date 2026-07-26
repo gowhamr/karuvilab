@@ -67,7 +67,7 @@ const ContrastBadge = ({ ratio, label }: { ratio: number, label: string }) => {
   const aaa = ratio >= 7;
   return (
     <div className="space-y-2">
-      <p className="text-xs font-black text-text-4 uppercase tracking-widest">{label}</p>
+      <p className="text-xs font-black text-text-muted uppercase tracking-widest">{label}</p>
       <div className="flex gap-2">
         <div className={cn(
           "px-2 py-0.5 rounded text-tiny font-black tracking-tighter border",
@@ -159,7 +159,7 @@ export default function ColorConverterClient() {
                        onClick={() => setActiveFormat(f)}
                        className={cn(
                          "px-4 py-1.5 rounded-lg text-xs font-black transition-all",
-                         activeFormat === f ? "bg-blue text-white shadow-sm" : "text-text-4 hover:text-text"
+                         activeFormat === f ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
                        )}
                      >
                        {f}
@@ -193,7 +193,7 @@ export default function ColorConverterClient() {
           </div>
 
           <div className="space-y-4">
-             <h4 className="text-xs font-black text-text-4 uppercase tracking-widest-lg flex items-center gap-2">
+             <h4 className="text-xs font-black text-text-muted uppercase tracking-widest-lg flex items-center gap-2">
                 <Sparkles className="w-3 h-3" /> Recent Palettes
              </h4>
              <div className="flex flex-wrap gap-3">
@@ -225,7 +225,7 @@ export default function ColorConverterClient() {
            ].map((row) => (
              <div key={row.label} className="group flex items-center justify-between p-4 bg-surface border border-border rounded-xl hover:border-blue/30 transition-all shadow-sm">
                 <div className="space-y-0.5">
-                   <span className="text-tiny font-black text-text-4 uppercase tracking-widest block">{row.label}</span>
+                   <span className="text-tiny font-black text-text-muted uppercase tracking-widest block">{row.label}</span>
                    <span className="font-mono text-sm font-bold text-text-2">{row.value}</span>
                 </div>
                 <CopyButton text={row.value} />

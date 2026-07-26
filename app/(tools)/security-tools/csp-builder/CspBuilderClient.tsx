@@ -237,7 +237,7 @@ export default function CspBuilderClient() {
 
       {/* Import Section */}
       <div className="bg-surface border border-border rounded-4xl p-4 sm:p-6 shadow-sm space-y-4">
-        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
            Import & Analyze Existing Policy
         </h3>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -294,7 +294,7 @@ export default function CspBuilderClient() {
                       <h4 className="text-xs font-black text-text uppercase tracking-widest">{dir}</h4>
                       <button 
                         onClick={() => removeDirective(dir)}
-                        className="p-1.5 text-text-4 hover:text-red-500 transition-colors"
+                        className="p-1.5 text-text-muted hover:text-red-500 transition-colors"
                         title="Remove directive"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -309,7 +309,7 @@ export default function CspBuilderClient() {
                           <button onClick={() => removeSource(dir, src)} className="p-0.5 opacity-0 group-hover:opacity-100 hover:bg-blue/10 rounded transition-all"><Trash2 className="w-2.5 h-2.5" /></button>
                         </span>
                       ))}
-                      {activeSources.length === 0 && <span className="text-xs text-text-4 italic py-1">No sources (fallback applies)</span>}
+                      {activeSources.length === 0 && <span className="text-xs text-text-muted italic py-1">No sources (fallback applies)</span>}
                     </div>
 
                     {/* Common Source Toggles */}
@@ -320,7 +320,7 @@ export default function CspBuilderClient() {
                           onClick={() => toggleSource(dir, src)}
                           className={cn(
                             "px-2.5 py-1.5 rounded-lg text-tiny font-mono font-bold transition-all border",
-                            activeSources.includes(src) ? "bg-blue text-white border-blue shadow-md shadow-blue/20" : "bg-transparent text-text-4 border-transparent hover:bg-surface/50"
+                            activeSources.includes(src) ? "bg-blue text-white border-blue shadow-md shadow-blue/20" : "bg-transparent text-text-muted border-transparent hover:bg-surface/50"
                           )}
                         >
                           {src}
@@ -368,7 +368,7 @@ export default function CspBuilderClient() {
           
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Export Policy</h3>
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Policy</h3>
               <div className="flex items-center gap-2">
                 <div className={cn(
                   "px-2 py-0.5 rounded-full text-tiny font-black uppercase",
@@ -391,7 +391,7 @@ export default function CspBuilderClient() {
                 <button
                   key={t}
                   onClick={() => setActiveTab(t)}
-                  className={cn("flex-1 py-2 rounded-lg text-tiny font-black uppercase tracking-widest transition-all", activeTab === t ? "bg-surface text-text shadow-sm" : "text-text-4")}
+                  className={cn("flex-1 py-2 rounded-lg text-tiny font-black uppercase tracking-widest transition-all", activeTab === t ? "bg-surface text-text shadow-sm" : "text-text-muted")}
                 >
                   {t}
                 </button>
@@ -413,7 +413,7 @@ export default function CspBuilderClient() {
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-4">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4 flex items-center gap-2">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
                Security Analysis
             </h3>
             {securityScore.warnings.length === 0 ? (

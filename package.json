@@ -7,11 +7,10 @@
     "dev": "next dev",
     "predev": "node scripts/generate-registries.mjs",
     "build": "next build --webpack",
+    "analyze": "ANALYZE=true next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "generate-tool": "node scripts/scaffold-tool.mjs",
-    "legacy:build": "node build.js",
-    "legacy:watch": "node build.js --watch",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
     "test:ui": "vitest --ui",
@@ -24,6 +23,7 @@
     "@emnapi/wasi-threads": "1.2.1",
     "@eslint/eslintrc": "^3.3.5",
     "@napi-rs/wasm-runtime": "1.1.6",
+    "@next/bundle-analyzer": "16.2.12",
     "@tailwindcss/postcss": "^4.2.4",
     "@tybys/wasm-util": "0.10.3",
     "@types/html2pdf.js": "^0.10.0",
@@ -50,7 +50,6 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@monaco-editor/react": "^4.7.0",
-    "@onlyrex/pulse": "^1.0.5",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
@@ -118,5 +117,9 @@
   "optionalDependencies": {
     "lightningcss-linux-arm64-gnu": "1.32.0",
     "lightningcss-linux-arm64-musl": "1.32.0"
-  }
+  },
+  "browserslist": [
+    "defaults and supports es6-module",
+    "maintained node versions"
+  ]
 }

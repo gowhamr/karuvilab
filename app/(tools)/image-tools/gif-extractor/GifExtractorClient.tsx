@@ -289,7 +289,7 @@ export default function GifExtractorClient() {
           </div>
           <div>
             <h2 className="text-base font-bold text-foreground">GIF Frame Extractor</h2>
-            <p className="text-xs text-text-4">Split animated GIFs into high-resolution PNG frames in browser</p>
+            <p className="text-xs text-text-muted">Split animated GIFs into high-resolution PNG frames in browser</p>
           </div>
         </div>
         <PrivacyBadge />
@@ -313,21 +313,21 @@ export default function GifExtractorClient() {
                 1
               </div>
               <h3 className="text-sm font-semibold text-foreground">Zero Upload</h3>
-              <p className="text-xs text-text-4">Your GIF stays on your device. Extraction happens inside your browser engine.</p>
+              <p className="text-xs text-text-muted">Your GIF stays on your device. Extraction happens inside your browser engine.</p>
             </div>
             <div className="p-4 rounded-2xl bg-surface border border-border space-y-2">
               <div className="w-8 h-8 rounded-lg bg-blue/10 text-blue flex items-center justify-center font-semibold text-sm">
                 2
               </div>
               <h3 className="text-sm font-semibold text-foreground">Full Resolution PNG</h3>
-              <p className="text-xs text-text-4">Frames are decoded pixel-perfect directly into lossless PNG files.</p>
+              <p className="text-xs text-text-muted">Frames are decoded pixel-perfect directly into lossless PNG files.</p>
             </div>
             <div className="p-4 rounded-2xl bg-surface border border-border space-y-2">
               <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center font-semibold text-sm">
                 3
               </div>
               <h3 className="text-sm font-semibold text-foreground">ZIP Archive Export</h3>
-              <p className="text-xs text-text-4">Download individual frames or export all frames bundled as a ZIP package.</p>
+              <p className="text-xs text-text-muted">Download individual frames or export all frames bundled as a ZIP package.</p>
             </div>
           </div>
         </div>
@@ -343,7 +343,7 @@ export default function GifExtractorClient() {
           />
           <div className="space-y-1">
             <h3 className="text-base font-bold text-foreground">Extracting Frames</h3>
-            <p className="text-xs text-text-4">{extractProgress}</p>
+            <p className="text-xs text-text-muted">{extractProgress}</p>
           </div>
         </div>
       )}
@@ -393,7 +393,7 @@ export default function GifExtractorClient() {
                 <h3 className="text-sm font-bold text-foreground truncate max-w-[280px]">
                   {file?.name}
                 </h3>
-                <div className="flex items-center gap-2 text-xs text-text-4 font-medium">
+                <div className="flex items-center gap-2 text-xs text-text-muted font-medium">
                   <span>{formatBytes(file?.size || 0)}</span>
                   <span>•</span>
                   <span className="text-blue font-bold">{totalFrameCount} Frames Total</span>
@@ -436,7 +436,7 @@ export default function GifExtractorClient() {
                 exit={{ opacity: 0, height: 0 }}
                 className="p-5 bg-surface rounded-3xl border border-border flex flex-col items-center gap-3 overflow-hidden"
               >
-                <div className="flex items-center justify-between w-full text-xs font-bold text-text-4">
+                <div className="flex items-center justify-between w-full text-xs font-bold text-text-muted">
                   <span>Original Animated GIF Preview</span>
                   <button
                     onClick={() => setShowOriginalPreview(false)}
@@ -467,14 +467,14 @@ export default function GifExtractorClient() {
                 {selectedIds.size === frames.length ? (
                   <CheckSquare className="w-4 h-4 text-blue" />
                 ) : (
-                  <Square className="w-4 h-4 text-text-4" />
+                  <Square className="w-4 h-4 text-text-muted" />
                 )}
                 <span>
                   {selectedIds.size === frames.length ? "Deselect All" : `Select All (${frames.length})`}
                 </span>
               </button>
 
-              <span className="text-xs text-text-4 font-semibold">
+              <span className="text-xs text-text-muted font-semibold">
                 {selectedIds.size} of {frames.length} selected
               </span>
             </div>
@@ -482,7 +482,7 @@ export default function GifExtractorClient() {
             <div className="flex items-center gap-3">
               {/* Grid Column Selector */}
               <div className="hidden sm:flex items-center gap-1 bg-bg p-1 rounded-xl border border-border">
-                <Grid className="w-3.5 h-3.5 text-text-4 ml-1.5" />
+                <Grid className="w-3.5 h-3.5 text-text-muted ml-1.5" />
                 {[2, 3, 4, 6].map((cols) => (
                   <button
                     key={cols}
@@ -490,7 +490,7 @@ export default function GifExtractorClient() {
                     className={`px-2 py-1 text-xs font-bold rounded-lg transition-colors ${
                       columnCount === cols
                         ? "bg-surface text-blue shadow-xs"
-                        : "text-text-4 hover:text-foreground"
+                        : "text-text-muted hover:text-foreground"
                     }`}
                   >
                     {cols} col
@@ -550,12 +550,12 @@ export default function GifExtractorClient() {
                       {isSelected ? (
                         <CheckSquare className="w-4 h-4 text-blue shrink-0" />
                       ) : (
-                        <Square className="w-4 h-4 text-text-4 shrink-0" />
+                        <Square className="w-4 h-4 text-text-muted shrink-0" />
                       )}
                       <span>Frame #{frame.id}</span>
                     </button>
 
-                    <span className="text-[11px] font-medium text-text-4">
+                    <span className="text-[11px] font-medium text-text-muted">
                       {frame.width > 0 ? `${frame.width}×${frame.height}` : ""}
                     </span>
                   </div>
@@ -582,7 +582,7 @@ export default function GifExtractorClient() {
 
                   {/* Card Footer Actions */}
                   <div className="flex items-center justify-between p-2.5 bg-surface border-t border-border/50 gap-2">
-                    <span className="text-[11px] text-text-4 font-mono pl-1">
+                    <span className="text-[11px] text-text-muted font-mono pl-1">
                       {frame.sizeFormatted}
                     </span>
 
@@ -590,7 +590,7 @@ export default function GifExtractorClient() {
                       <button
                         onClick={() => copyFrameToClipboard(frame)}
                         title="Copy image to clipboard"
-                        className="p-1.5 rounded-lg bg-bg hover:bg-surface-hover text-text-4 hover:text-foreground border border-border transition-colors"
+                        className="p-1.5 rounded-lg bg-bg hover:bg-surface-hover text-text-muted hover:text-foreground border border-border transition-colors"
                       >
                         {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                       </button>
@@ -639,7 +639,7 @@ export default function GifExtractorClient() {
                     <h3 className="text-sm font-bold text-foreground">
                       Frame {activeModalFrame.id} of {frames.length}
                     </h3>
-                    <p className="text-xs text-text-4 font-mono">
+                    <p className="text-xs text-text-muted font-mono">
                       {activeModalFrame.width}×{activeModalFrame.height} px • {activeModalFrame.sizeFormatted}
                     </p>
                   </div>
@@ -673,7 +673,7 @@ export default function GifExtractorClient() {
 
                   <button
                     onClick={() => setActiveModalIndex(null)}
-                    className="p-2 rounded-xl bg-bg hover:bg-surface-hover text-text-4 hover:text-foreground transition-colors"
+                    className="p-2 rounded-xl bg-bg hover:bg-surface-hover text-text-muted hover:text-foreground transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -716,7 +716,7 @@ export default function GifExtractorClient() {
               </div>
 
               {/* Modal Footer Navigation */}
-              <div className="flex items-center justify-between px-6 py-3 border-t border-border bg-bg/50 text-xs text-text-4">
+              <div className="flex items-center justify-between px-6 py-3 border-t border-border bg-bg/50 text-xs text-text-muted">
                 <span>Tip: Use Left & Right Arrow keys to navigate frames</span>
                 <span>
                   {activeModalIndex + 1} / {frames.length}

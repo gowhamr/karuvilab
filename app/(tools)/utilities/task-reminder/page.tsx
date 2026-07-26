@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 import TaskReminderClientWrapper from './TaskReminderClientWrapper';
 
@@ -18,62 +19,58 @@ export default function Page() {
       description="A simple local to-do list stored in your browser. No account required."
       category={cat}
       toolId={toolId}
-      content={{
-        detailedDescription: "Task Reminder is a privacy-first productivity tool designed for quick, ephemeral to-do lists. Unlike traditional task managers that require accounts and sync your data to a cloud, this tool operates entirely within your browser's local storage. This means your tasks never leave your device, ensuring total privacy. It's perfect for daily punch lists, temporary reminders, or managing focus during a single work session without the overhead of a complex project management system.",
-        howTo: [
-          "Type your task description in the 'What needs to be done?' field.",
-          "Optionally select a due date to track upcoming deadlines.",
-          "Click 'Add Task' or press Enter to save the task to your local list.",
-          "Use the status filters (All, Active, Completed) to organize your view.",
-          "Mark tasks as complete using the checkbox, or remove them entirely using the '×' button."
-        ],
-        faq: [
-          {
-            question: "Where is my data stored?",
-            answer: "Your tasks are stored in your browser's 'localStorage'. This is a private area on your hard drive managed by your browser."
-          },
-          {
-            question: "Will my tasks be available on my other devices?",
-            answer: "No. Since the data is stored locally on this specific browser and device, it does not sync across other computers or phones."
-          },
-          {
-            question: "Is there a limit to how many tasks I can add?",
-            answer: "The limit is based on your browser's local storage capacity (typically around 5MB), which is enough for thousands of simple text tasks."
-          }
-        ],
-        relatedTools: ["split-copy", "text-utility", "grammar-checker"]
-      }}
     >
       <TaskReminderClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-localstorage"
-          title="How it Works: Web Storage API"
-          preview="Learn how websites save your preferences without requiring a database."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              When you close this tab and come back tomorrow, your tasks will still be here. But since you haven't logged in, and we don't have a database, where is the data saved?
-            </p>
-            <h3>Cookies vs LocalStorage</h3>
-            <p>
-              Before HTML5, websites had to use <strong>Cookies</strong> to save state (like keeping you logged in). Cookies are sent to the server with <em>every single HTTP request</em>. Saving a giant list of tasks in a cookie would waste a massive amount of network bandwidth.
-            </p>
-            <p>
-              Modern browsers provide the <strong>Web Storage API</strong> (specifically <code>window.localStorage</code>). This is a simple Key-Value store that lives on your hard drive. 
-            </p>
-            <ul>
-              <li>It can store up to 5MB of data per domain (vs 4KB for cookies).</li>
-              <li>It is <strong>never</strong> sent to the server during network requests.</li>
-              <li>It persists until you explicitly clear your browser data.</li>
-            </ul>
-            <p>
-              Because this tool uses LocalStorage, your data is completely offline and private. However, it also means your tasks will not sync to your phone, as the data never leaves the physical device you are typing on.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding the Web Storage API">
+        
+        <LearningSection type="architecture" title="Cookies vs LocalStorage">
+          <p>When you close this tab and come back tomorrow, your tasks will still be here. But since you haven't logged in, and we don't have a backend database, where is the data saved?</p>
+          <p className="mt-2">Before HTML5, websites had to use <strong>Cookies</strong> to save state. But Cookies are sent to the server with <em>every single HTTP request</em>. Saving a giant list of tasks in a cookie would waste a massive amount of network bandwidth.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The window.localStorage API">
+          <p>Modern browsers provide the <strong>Web Storage API</strong> (specifically <code>window.localStorage</code>). This is a simple Key-Value store that lives securely on your hard drive.</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li>It can store up to 5MB of data per domain (vs only 4KB for cookies).</li>
+            <li>It is <strong>never</strong> sent to the server during network requests, ensuring total privacy.</li>
+            <li>It persists indefinitely until you explicitly clear your browser data.</li>
+          </ul>
+        </LearningSection>
+
+        <LearningSection type="security" title="The Sync Tradeoff">
+          <p>Because this tool uses LocalStorage, your data is completely offline and private. The tradeoff for this privacy is that your tasks will not sync to your phone or other computers, as the data literally never leaves the physical device you are typing on.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why would it be a bad idea to store a massive to-do list in a browser Cookie?",
+                options: [
+                  "Cookies are automatically deleted every 24 hours.",
+                  "Cookies are sent to the server with every single HTTP request, which would waste massive amounts of bandwidth.",
+                  "Cookies can only store numbers.",
+                  "Cookies require a high-speed internet connection."
+                ],
+                correctIndex: 1,
+                explanation: "Every time you fetch an image or a script from a domain, the browser attaches all cookies for that domain. Adding 4KB of task text to every request is terrible for performance."
+              },
+              {
+                question: "If you add 10 tasks on your laptop, will they appear on your phone?",
+                options: [
+                  "Yes, but only if you use Chrome on both devices.",
+                  "Yes, they sync automatically via Bluetooth.",
+                  "No. LocalStorage data is bound strictly to the physical device and browser where it was created.",
+                  "Only if you refresh the page."
+                ],
+                correctIndex: 2,
+                explanation: "LocalStorage is explicitly designed to not leave the device. Without an external database or Sync API, the data remains isolated on the local hard drive."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

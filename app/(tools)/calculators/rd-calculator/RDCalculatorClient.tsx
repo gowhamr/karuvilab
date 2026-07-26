@@ -103,10 +103,10 @@ const RDCalculatorClient = memo(function RDCalculatorClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-bg/50 border-b border-border">
-                <th className="px-4 py-3 text-left font-black uppercase text-xs tracking-wider text-text-4">Year</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Invested</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Interest</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Maturity</th>
+                <th className="px-4 py-3 text-left font-black uppercase text-xs tracking-wider text-text-muted">Year</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Invested</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Interest</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Maturity</th>
               </tr>
             </thead>
             <tbody>

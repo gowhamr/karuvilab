@@ -730,11 +730,11 @@ export default function SnakeGameClient() {
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           <div className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[70px]">
-            <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Score</div>
+            <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Score</div>
             <div className="text-xl font-black text-text">{score}</div>
           </div>
           <div className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[70px] hidden sm:block">
-            <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Best</div>
+            <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Best</div>
             <div className="text-xl font-black text-text-3">{best}</div>
           </div>
         </div>
@@ -784,7 +784,7 @@ export default function SnakeGameClient() {
             </div>
           )}
           <div className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[70px]">
-            <div className="text-[10px] font-bold text-text-4 uppercase tracking-widest">Length</div>
+            <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Length</div>
             <div className="text-xl font-black text-text">{snake.length}</div>
           </div>
         </div>
@@ -801,7 +801,7 @@ export default function SnakeGameClient() {
           className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 ${
             wrapAround
               ? "bg-blue/20 text-blue border border-blue/30"
-              : "bg-surface border border-border text-text-4 hover:text-text-2 hover:border-blue/50"
+              : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-blue/50"
           }`}
           title={wrapAround ? "Walls Wrap Around" : "Walls are Solid"}
         >
@@ -833,7 +833,7 @@ export default function SnakeGameClient() {
           className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50 ${
             bossMode
               ? "bg-rose-500/20 text-rose-500 border border-rose-500/30"
-              : "bg-surface border border-border text-text-4 hover:text-text-2 hover:border-rose-500/50"
+              : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-rose-500/50"
           }`}
           title={bossMode ? "Boss Mode Enabled" : "Enable Boss Mode"}
         >
@@ -854,7 +854,7 @@ export default function SnakeGameClient() {
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 ${
               speedMode === mode
                 ? "bg-primary/20 text-primary border border-primary/30"
-                : "bg-surface border border-border text-text-4 hover:text-text-2 hover:border-primary/50"
+                : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-primary/50"
             }`}
           >
             <Zap className="w-3 h-3" />
@@ -916,7 +916,7 @@ export default function SnakeGameClient() {
             >
               <Pause className="w-10 h-10 text-primary animate-pulse" />
               <h3 className="text-xl font-bold text-text">Game Paused</h3>
-              <p className="text-xs text-text-4">Press Space or Pause to resume</p>
+              <p className="text-xs text-text-muted">Press Space or Pause to resume</p>
             </m.div>
           )}
 
@@ -989,7 +989,7 @@ export default function SnakeGameClient() {
                           <button 
                             disabled={coins < theme.cost}
                             onClick={() => unlockTheme(id)} 
-                            className="text-xs font-bold text-white px-3 py-1.5 bg-amber-500 hover:bg-amber-600 disabled:bg-surface-2 disabled:text-text-4 rounded-lg transition-colors"
+                            className="text-xs font-bold text-white px-3 py-1.5 bg-amber-500 hover:bg-amber-600 disabled:bg-surface-2 disabled:text-text-muted rounded-lg transition-colors"
                           >
                             Unlock
                           </button>
@@ -1051,7 +1051,7 @@ export default function SnakeGameClient() {
         </m.button>
       </div>
 
-      <p className="text-center text-xs text-text-4">
+      <p className="text-center text-xs text-text-muted">
         Arrow keys or WASD to control. Space to Pause/Start. Swipe on mobile.
       </p>
     </div>

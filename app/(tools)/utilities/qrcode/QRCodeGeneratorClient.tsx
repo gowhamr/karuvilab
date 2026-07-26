@@ -223,7 +223,7 @@ export default function QRCodeGeneratorClient() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="qr-payee" className="text-sm font-bold text-text-2">Payee Name <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label htmlFor="qr-payee" className="text-sm font-bold text-text-2">Payee Name <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   id="qr-payee"
                   type="text"
@@ -234,7 +234,7 @@ export default function QRCodeGeneratorClient() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="qr-amount" className="text-sm font-bold text-text-2">Amount (₹) <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label htmlFor="qr-amount" className="text-sm font-bold text-text-2">Amount (₹) <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   id="qr-amount"
                   type="number"
@@ -309,7 +309,7 @@ export default function QRCodeGeneratorClient() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Last Name <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label className="text-sm font-bold text-text-2">Last Name <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -321,7 +321,7 @@ export default function QRCodeGeneratorClient() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Phone <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label className="text-sm font-bold text-text-2">Phone <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   type="tel"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -331,7 +331,7 @@ export default function QRCodeGeneratorClient() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Email <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label className="text-sm font-bold text-text-2">Email <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   type="email"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -343,7 +343,7 @@ export default function QRCodeGeneratorClient() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Company <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label className="text-sm font-bold text-text-2">Company <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -353,7 +353,7 @@ export default function QRCodeGeneratorClient() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-text-2">Website <span className="text-text-4 font-normal text-xs ml-1">(Optional)</span></label>
+                <label className="text-sm font-bold text-text-2">Website <span className="text-text-muted font-normal text-xs ml-1">(Optional)</span></label>
                 <input
                   type="url"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -398,7 +398,7 @@ export default function QRCodeGeneratorClient() {
       <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm flex flex-col items-center gap-6">
         <div className="bg-white border border-border rounded-2xl p-6 min-w-64 min-h-64 flex items-center justify-center shadow-inner relative overflow-hidden">
           {!getFinalString() ? (
-            <span className="text-sm font-medium text-text-4/60 text-center px-4 relative z-content">
+            <span className="text-sm font-medium text-text-muted/60 text-center px-4 relative z-content">
               Enter data above<br/>to generate QR code
             </span>
           ) : !isLibLoaded ? (
@@ -424,7 +424,7 @@ export default function QRCodeGeneratorClient() {
         >
           {downloading ? "Downloading…" : "Download PNG"}
         </button>
-        <p className="text-xs text-text-4 text-center font-medium">
+        <p className="text-xs text-text-muted text-center font-medium">
           Zero-Upload: QR codes are generated instantly in your browser.
         </p>
       </div>

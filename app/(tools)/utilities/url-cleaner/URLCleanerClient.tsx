@@ -86,20 +86,20 @@ export default function URLCleanerClient() {
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-surface border border-border p-4 rounded-xl text-center">
               <dd className="text-2xl font-black text-blue">{removed.length}</dd>
-              <dt className="text-xs text-text-4 mt-1">Parameters Removed</dt>
+              <dt className="text-xs text-text-muted mt-1">Parameters Removed</dt>
             </div>
             <div className="bg-surface border border-border p-4 rounded-xl text-center">
               <dd className="text-2xl font-black text-text">
                 {Math.round(((input.length - cleaned.length) / input.length) * 100)}%
               </dd>
-              <dt className="text-xs text-text-4 mt-1">URL Shorter</dt>
+              <dt className="text-xs text-text-muted mt-1">URL Shorter</dt>
             </div>
           </dl>
 
           <div className="bg-surface border border-border p-5 rounded-2xl space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider">Original URL</h3>
+                <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider">Original URL</h3>
                 <CopyButton text={input} label="Copy Original" />
               </div>
               <div className="font-mono text-xs text-text-3 break-all bg-bg border border-border rounded-xl p-3">
@@ -109,7 +109,7 @@ export default function URLCleanerClient() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider">Cleaned URL</h3>
+                <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider">Cleaned URL</h3>
                 <CopyButton text={cleaned} label="Copy Cleaned" />
               </div>
               <div className="font-mono text-sm text-text break-all bg-bg border border-border rounded-xl p-3">
@@ -146,7 +146,7 @@ export default function URLCleanerClient() {
           ].map(([cat, params]) => (
             <div key={cat} className="bg-bg border border-border rounded-xl p-3">
               <dt className="font-bold text-text mb-0.5">{cat}</dt>
-              <dd className="text-text-4">{params}</dd>
+              <dd className="text-text-muted">{params}</dd>
             </div>
           ))}
         </dl>

@@ -179,11 +179,11 @@ export default function FileValidatorClient() {
         />
         <div className="text-4xl mb-3">📁</div>
         <p className="text-text-2 font-medium">Drop a file here or <span className="text-blue">click to browse</span></p>
-        <p className="text-xs text-text-4 mt-1">Any file type — all processing is local</p>
+        <p className="text-xs text-text-muted mt-1">Any file type — all processing is local</p>
       </div>
 
       {loading && (
-        <div className="text-center py-6 text-text-4">Analyzing file…</div>
+        <div className="text-center py-6 text-text-muted">Analyzing file…</div>
       )}
 
       {fileInfo && !loading && (
@@ -198,7 +198,7 @@ export default function FileValidatorClient() {
                 { label: "Last Modified", value: new Date(fileInfo.lastModified).toLocaleString() },
               ].map(({ label, value }) => (
                 <div key={label} className="bg-bg border border-border rounded-xl p-3">
-                  <dt className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</dt>
+                  <dt className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</dt>
                   <dd className="font-mono text-text break-all text-xs">{value}</dd>
                 </div>
               ))}
@@ -210,11 +210,11 @@ export default function FileValidatorClient() {
               <h2 className="text-sm font-bold text-text-2 mb-3">Image Preview</h2>
               <dl className="grid grid-cols-2 gap-3">
                 <div className="bg-bg border border-border rounded-xl p-3 text-center">
-                  <dt className="text-xs font-bold text-text-4 mb-1">Width</dt>
+                  <dt className="text-xs font-bold text-text-muted mb-1">Width</dt>
                   <dd className="text-xl font-black text-text">{fileInfo.imageInfo.width}px</dd>
                 </div>
                 <div className="bg-bg border border-border rounded-xl p-3 text-center">
-                  <dt className="text-xs font-bold text-text-4 mb-1">Height</dt>
+                  <dt className="text-xs font-bold text-text-muted mb-1">Height</dt>
                   <dd className="text-xl font-black text-text">{fileInfo.imageInfo.height}px</dd>
                 </div>
               </dl>

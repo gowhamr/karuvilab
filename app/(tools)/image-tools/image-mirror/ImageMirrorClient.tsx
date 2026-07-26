@@ -147,7 +147,7 @@ export default function ImageMirrorClient() {
             <FlipHorizontal className="w-5 h-5 text-blue" />
             Horizontal Mirror Reflection
           </h2>
-          <p className="text-xs text-text-4 font-medium">
+          <p className="text-xs text-text-muted font-medium">
             Instantly flip images horizontally with pixel precision. 100% private.
           </p>
         </div>
@@ -258,11 +258,11 @@ export default function ImageMirrorClient() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-widest text-text-3 flex items-center gap-2">
-                    <FileImage className="w-4 h-4 text-text-4" />
+                    <FileImage className="w-4 h-4 text-text-muted" />
                     Original Image
                   </span>
                   {dimensions && (
-                    <span className="text-xs font-semibold text-text-4">
+                    <span className="text-xs font-semibold text-text-muted">
                       {dimensions.width} × {dimensions.height} px
                     </span>
                   )}
@@ -277,7 +277,7 @@ export default function ImageMirrorClient() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-text-4 pt-2 border-t border-border/50">
+              <div className="flex items-center justify-between text-xs text-text-muted pt-2 border-t border-border/50">
                 <span className="truncate max-w-[200px]" title={file?.name}>
                   {file?.name}
                 </span>
@@ -294,7 +294,7 @@ export default function ImageMirrorClient() {
                     Mirrored Preview
                   </span>
                   {dimensions && (
-                    <span className="text-xs font-semibold text-text-4">
+                    <span className="text-xs font-semibold text-text-muted">
                       {dimensions.width} × {dimensions.height} px
                     </span>
                   )}
@@ -315,14 +315,14 @@ export default function ImageMirrorClient() {
                       className="max-h-80 w-auto max-w-full object-contain rounded-lg"
                     />
                   ) : (
-                    <div className="text-text-4 text-xs font-semibold">
+                    <div className="text-text-muted text-xs font-semibold">
                       Generating mirror preview...
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-text-4 pt-2 border-t border-border/50">
+              <div className="flex items-center justify-between text-xs text-text-muted pt-2 border-t border-border/50">
                 <span>Reflected horizontally</span>
                 <span className="font-bold text-text-2">{formatFileSize(mirroredSize)}</span>
               </div>

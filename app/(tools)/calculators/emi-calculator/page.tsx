@@ -3,6 +3,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { ToolInfoSection } from "@/components/ui/ToolInfoSection";
 import { generateToolMetadata } from "@/src/lib/seo";
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import EmiCalculatorClientWrapper from "./EmiCalculatorClientWrapper";
 
 export const dynamic = 'force-static';
@@ -59,72 +61,56 @@ export default function EmiCalculator() {
       description="Professional loan planning suite with prepayment simulators, amortization schedules, and side-by-side comparisons."
       category={cat}
       toolId={toolId}
-      content={{
-        detailedDescription: "Our Advanced EMI Calculator is designed to give you total control over your financial planning. Unlike basic calculators, KaruviLab allows you to simulate real-world scenarios like interest rate fluctuations, recurring prepayments, and affordability assessments—all while keeping your data 100% private in your browser.",
-        useCases: [
-          "Home loan planning with prepayment simulation",
-          "Car loan comparison and budget assessment",
-          "Personal loan interest impact analysis",
-          "Floating rate stress testing for market fluctuations",
-          "Amortization schedule generation for tax planning"
-        ],
-        howTo: [
-          "Enter your primary loan amount and preferred interest rate.",
-          "Set the loan tenure (months or years).",
-          "Switch to 'Comparison' mode to evaluate different lenders side-by-side.",
-          "Use the 'Prepayment' tab to see how extra payments reduce your tenure.",
-          "Download the full amortization schedule as CSV or PDF."
-        ],
-        faq: [
-          {
-            question: "How does interest rate delta work?",
-            answer: "The Interest Rate Delta allows you to simulate what happens if the market interest rates go up or down. Since most home loans are floating rate, this helps you understand the impact on your monthly budget before it happens."
-          },
-          {
-            question: "Is my financial data shared?",
-            answer: "No. KaruviLab operates on a 'Zero-Upload' philosophy. All calculations, comparisons, and saved scenarios are stored locally in your browser's IndexedDB. We never see your data."
-          },
-          {
-            question: "What is the Moratorium period?",
-            answer: "A moratorium is a period during which you don't have to make repayments. However, interest usually continues to accrue and is added to your principal balance."
-          },
-          {
-            question: "Can I export my amortization schedule?",
-            answer: "Yes. You can download the full month-by-month breakdown as a CSV file or use the 'Print to PDF' feature for a professional report."
-          }
-        ],
-        relatedTools: ["sip-calculator", "compound-interest", "fd-calculator"]
-      }}
     >
       <EmiCalculatorClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-amortization"
-          title="How it Works: The Reducing Balance Method"
-          preview="Learn why banks take most of their interest in the first few years of your loan."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              When you take out a 20-year home loan, you might notice something shocking: for the first few years, your monthly payment barely reduces your principal at all. Almost the entire payment goes toward interest. Why?
-            </p>
-            <h3>The Mathematics of EMI</h3>
-            <p>
-              Banks use a formula called <strong>Equated Monthly Installment (EMI)</strong> based on a "Reducing Balance." This ensures your monthly payment amount never changes, even as the underlying math shifts radically.
-            </p>
-            <p>
-              <code>EMI = [P x R x (1+R)^N] / [(1+R)^N - 1]</code>
-            </p>
-            <p>
-              Every month, the bank calculates interest strictly on the <em>remaining principal</em>. In Month 1, your principal is at its maximum, so the interest charge is massive. Because your total EMI is fixed, very little money is left over to pay down the actual principal.
-            </p>
-            <h3>The Prepayment Hack</h3>
-            <p>
-              Understanding this reveals a powerful financial hack. If you make a lump sum prepayment in Year 1, 100% of that money goes directly to the principal. By lowering the principal early, the bank's interest calculation for every subsequent month is permanently lowered, saving you massive amounts of money and cutting years off your loan tenure.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Bank Loans & Amortization">
+        
+        <LearningSection type="architecture" title="The Illusion of Fixed Payments">
+          <p>When you take out a 20-year home loan, you might notice something shocking: for the first few years, your monthly payment barely reduces your principal at all. Almost the entire payment goes directly into the bank's pocket as interest.</p>
+          <p className="mt-2">Banks use a mathematical formula called <strong>Equated Monthly Installment (EMI)</strong> based on a "Reducing Balance." This ensures your monthly payment amount never changes, even as the underlying math between interest and principal shifts radically over time.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The Mathematics">
+          <p>The standard formula for calculating a fixed EMI is:</p>
+          <pre className="bg-surface-2 p-4 rounded-xl text-sm overflow-x-auto mt-2"><code>EMI = [P x R x (1+R)^N] / [(1+R)^N - 1]</code></pre>
+          <p className="mt-2">Every single month, the bank calculates interest strictly on the <em>remaining principal</em>. In Month 1, your principal is at its absolute maximum, so the interest charge is massive. Because your total EMI is capped, very little money is left over from that payment to pay down the actual principal.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="The Prepayment Hack">
+          <p>Understanding this math reveals a powerful financial hack. If you make a lump sum prepayment (an extra payment outside your EMI) in Year 1, <strong>100% of that money goes directly to the principal.</strong></p>
+          <p className="mt-2">By lowering the principal early, the bank's interest calculation for every subsequent month is permanently lowered. This forces a larger portion of your regular EMI to go toward the principal, creating a snowball effect that can save you massive amounts of money and cut years off your loan tenure.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "In the first year of a 20-year home loan, where does the majority of your monthly EMI payment go?",
+                options: [
+                  "Equally split between principal and interest.",
+                  "Mostly toward paying down the principal balance.",
+                  "Mostly toward paying the interest charges to the bank.",
+                  "Toward property taxes."
+                ],
+                correctIndex: 2,
+                explanation: "Because interest is calculated on the remaining balance (which is highest in Year 1), almost all of your early payments go toward interest."
+              },
+              {
+                question: "Why is making an extra 'prepayment' early in a loan so financially powerful?",
+                options: [
+                  "Because it forces the bank to lower your interest rate.",
+                  "Because 100% of a prepayment reduces the principal directly, which permanently lowers the interest calculated for every subsequent month.",
+                  "Because prepayments are tax deductible.",
+                  "It isn't powerful; banks penalize you for it."
+                ],
+                correctIndex: 1,
+                explanation: "Prepayments bypass the interest calculation. Lowering the principal early starves the bank of the large balance they need to charge high interest in the following months."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

@@ -91,7 +91,7 @@ export default function UnixTimestampClient() {
       <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
         <div>
           <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-blue mb-1">Live Epoch Clock</h2>
-          <p className="text-text-4 text-sm font-medium">Updates every second</p>
+          <p className="text-text-muted text-sm font-medium">Updates every second</p>
         </div>
         <div className="flex items-center gap-4 bg-bg border border-border px-6 py-4 rounded-2xl shadow-inner">
           <Clock className="w-5 h-5 text-blue animate-pulse" />
@@ -115,7 +115,7 @@ export default function UnixTimestampClient() {
               onClick={() => setMode('toHuman')}
               className={cn(
                 "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'toHuman' ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-3"
+                mode === 'toHuman' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
               )}
             >
               Epoch to Date
@@ -124,7 +124,7 @@ export default function UnixTimestampClient() {
               onClick={() => setMode('toUnix')}
               className={cn(
                 "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'toUnix' ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-3"
+                mode === 'toUnix' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
               )}
             >
               Date to Epoch
@@ -133,7 +133,7 @@ export default function UnixTimestampClient() {
         </div>
 
         <div className="space-y-4">
-          <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 block">
+          <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block">
             {mode === 'toHuman' ? 'Enter Timestamp (Seconds or Milliseconds)' : 'Enter Date and Time'}
           </label>
           
@@ -158,7 +158,7 @@ export default function UnixTimestampClient() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-border/50">
             
             <div className="bg-bg border border-border rounded-2xl p-5 space-y-1">
-              <span className="text-tiny font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Globe2 className="w-3 h-3"/> UTC / GMT</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-text-muted flex items-center gap-1.5"><Globe2 className="w-3 h-3"/> UTC / GMT</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-medium text-text">{parsedDate.toUTCString()}</span>
                 <CopyButton text={parsedDate.toUTCString()} />
@@ -166,7 +166,7 @@ export default function UnixTimestampClient() {
             </div>
 
             <div className="bg-bg border border-border rounded-2xl p-5 space-y-1">
-              <span className="text-tiny font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Calendar className="w-3 h-3"/> ISO 8601</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-text-muted flex items-center gap-1.5"><Calendar className="w-3 h-3"/> ISO 8601</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-medium text-text">{parsedDate.toISOString()}</span>
                 <CopyButton text={parsedDate.toISOString()} />
@@ -174,7 +174,7 @@ export default function UnixTimestampClient() {
             </div>
 
             <div className="bg-bg border border-border rounded-2xl p-5 space-y-1">
-              <span className="text-tiny font-black uppercase tracking-widest text-text-4 flex items-center gap-1.5"><Hash className="w-3 h-3"/> Unix Timestamp (Seconds)</span>
+              <span className="text-tiny font-black uppercase tracking-widest text-text-muted flex items-center gap-1.5"><Hash className="w-3 h-3"/> Unix Timestamp (Seconds)</span>
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-sm font-medium text-text">{Math.floor(parsedDate.getTime() / 1000)}</span>
                 <CopyButton text={Math.floor(parsedDate.getTime() / 1000).toString()} />

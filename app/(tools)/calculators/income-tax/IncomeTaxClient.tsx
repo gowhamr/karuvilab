@@ -210,7 +210,7 @@ export default function IncomeTaxClient() {
             onClick={() => setActiveRegime('new')}
             className={cn(
               "px-6 py-3 rounded-xl text-sm font-black transition-all",
-              activeRegime === 'new' ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-4 hover:text-text"
+              activeRegime === 'new' ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text"
             )}
           >
             New Regime
@@ -219,7 +219,7 @@ export default function IncomeTaxClient() {
             onClick={() => setActiveRegime('old')}
             className={cn(
               "px-6 py-3 rounded-xl text-sm font-black transition-all",
-              activeRegime === 'old' ? "bg-purple-500 text-white shadow-md shadow-purple-500/20" : "text-text-4 hover:text-text"
+              activeRegime === 'old' ? "bg-purple-500 text-white shadow-md shadow-purple-500/20" : "text-text-muted hover:text-text"
             )}
           >
             Old Regime
@@ -245,9 +245,9 @@ export default function IncomeTaxClient() {
             </h3>
             
             <div className="space-y-4">
-              <label htmlFor="gross-salary" className="text-xs font-bold text-text-4 block">Annual Gross Salary</label>
+              <label htmlFor="gross-salary" className="text-xs font-bold text-text-muted block">Annual Gross Salary</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-4">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
                 <input
                   id="gross-salary"
                   type="number"
@@ -259,7 +259,7 @@ export default function IncomeTaxClient() {
             </div>
 
             <div className="space-y-4">
-              <label id="age-group-label" className="text-xs font-bold text-text-4 block">Age Group</label>
+              <label id="age-group-label" className="text-xs font-bold text-text-muted block">Age Group</label>
               <div role="group" aria-labelledby="age-group-label" className="grid grid-cols-3 gap-2 bg-bg border border-border p-1 rounded-2xl">
                 {(['below60', '60to80', 'above80'] as AgeGroup[]).map(a => (
                   <button
@@ -267,7 +267,7 @@ export default function IncomeTaxClient() {
                     onClick={() => setAge(a)}
                     className={cn(
                       "py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all",
-                      age === a ? "bg-surface text-text shadow-sm" : "text-text-4 hover:text-text-2"
+                      age === a ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-2"
                     )}
                   >
                     {a === 'below60' ? '< 60' : a === '60to80' ? '60 - 80' : '> 80'}
@@ -303,7 +303,7 @@ export default function IncomeTaxClient() {
                     <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <label htmlFor={`deduction-${i}`} className="text-xs font-bold text-text-3 flex-1">{field.label}</label>
                       <div className="relative w-full sm:w-40 shrink-0">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-text-4 text-xs">₹</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-text-muted text-xs">₹</span>
                         <input
                           id={`deduction-${i}`}
                           type="number"
@@ -314,7 +314,7 @@ export default function IncomeTaxClient() {
                       </div>
                     </div>
                   ))}
-                  <p className="text-xs text-text-4 font-medium text-center pt-2 italic">Standard deduction of ₹50,000 is auto-applied.</p>
+                  <p className="text-xs text-text-muted font-medium text-center pt-2 italic">Standard deduction of ₹50,000 is auto-applied.</p>
                 </div>
               </m.div>
             )}
@@ -337,7 +337,7 @@ export default function IncomeTaxClient() {
 
         {/* RIGHT COLUMN: Results */}
         <div className="lg:col-span-7 space-y-6" aria-live="polite" role="region" aria-label="Tax Calculation Results">
-          <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-2">Tax Breakdown</h3>
+          <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted px-2">Tax Breakdown</h3>
           
           <div className="grid grid-cols-2 gap-4">
             <MetricCard label="Gross Income" value={formatCurrency(activeResult.grossIncome)} />
@@ -353,36 +353,36 @@ export default function IncomeTaxClient() {
             
             <div className="flex items-end justify-between border-b border-border/50 pb-6">
               <div>
-                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-2">Total Tax Payable</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-2">Total Tax Payable</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl sm:text-5xl font-black text-text tracking-tighter">{formatCurrency(activeResult.totalTax)}</span>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Effective Rate</p>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-1">Effective Rate</p>
                 <span className="text-xl font-black text-text-3">{activeResult.effectiveRate.toFixed(1)}%</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6 pt-2">
                <div>
-                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Monthly In-Hand</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-1">Monthly In-Hand</p>
                   <span className="text-2xl font-bold text-success">{formatCurrency(activeResult.inHandMonthly)}</span>
                </div>
                <div>
-                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 mb-1">Monthly Tax</p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-1">Monthly Tax</p>
                   <span className="text-xl font-bold text-error">{formatCurrency(activeResult.monthlyTax)}</span>
                </div>
             </div>
 
             {/* Slab Table */}
             <div className="pt-6 space-y-3">
-              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 flex items-center gap-2">
+              <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
                 <FileText className="w-3 h-3" /> Slab Breakdown
               </h4>
               <div className="bg-bg border border-border rounded-2xl overflow-hidden">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-mat-base border-b border-border text-tiny uppercase tracking-widest text-text-4 font-black">
+                  <thead className="bg-mat-base border-b border-border text-tiny uppercase tracking-widest text-text-muted font-black">
                     <tr>
                       <th className="px-4 py-3">Income Range</th>
                       <th className="px-4 py-3">Rate</th>
@@ -395,13 +395,13 @@ export default function IncomeTaxClient() {
                         <td className="px-4 py-3 text-text-3">
                           {b.slab.min / 100000}L - {b.slab.max === Infinity ? 'Above' : b.slab.max / 100000 + 'L'}
                         </td>
-                        <td className="px-4 py-3 text-text-4">{b.slab.rate}%</td>
+                        <td className="px-4 py-3 text-text-muted">{b.slab.rate}%</td>
                         <td className="px-4 py-3 text-right font-bold text-text">{formatCurrency(b.tax)}</td>
                       </tr>
                     ))}
                     {activeResult.cess > 0 && (
                       <tr className="bg-mat-base">
-                        <td className="px-4 py-3 text-text-4 font-sans font-bold" colSpan={2}>Health & Education Cess</td>
+                        <td className="px-4 py-3 text-text-muted font-sans font-bold" colSpan={2}>Health & Education Cess</td>
                         <td className="px-4 py-3 text-right font-bold text-text-3">{formatCurrency(activeResult.cess)}</td>
                       </tr>
                     )}

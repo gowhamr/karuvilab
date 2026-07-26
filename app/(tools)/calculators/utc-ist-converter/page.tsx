@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
 import { generateToolMetadata } from '@/src/lib/seo';
-
+import { LearningHub, LearningSection } from "@/src/components/els/LearningHub";
+import { QuizWidget } from "@/src/components/els/QuizWidget";
 import UtcIstConverterClientWrapper from './UtcIstConverterClientWrapper';
 
 const toolId = 'utc-ist-converter';
@@ -17,33 +18,60 @@ export default function Page() {
       description="Convert between UTC and Indian Standard Time (UTC+5:30). Times stay in sync."
       category={cat}
       toolId={toolId}
-      content={{
-        detailedDescription: "The UTC to IST Converter is an essential utility for professionals working in global environments, particularly those collaborating with teams in India. Indian Standard Time (IST) is consistently UTC+5:30, with no daylight saving time adjustments. This tool provides real-time clocks for both zones and a synchronized conversion interface, allowing you to quickly determine local times for meetings, server logs, or release schedules. It also includes a quick-reference guide for standard IST business hours and their UTC equivalents.",
-        howTo: [
-          "Observe the live clocks at the top for the current UTC and IST times.",
-          "To convert a specific time, enter it into either the UTC or IST input field.",
-          "The other field will automatically update to show the converted time in sync.",
-          "Use the 'Use Current Time' button to reset the converter to the present moment.",
-          "Refer to the bottom table for common business hour conversions (e.g., IST 9:00 AM = UTC 3:30 AM)."
-        ],
-        faq: [
-          {
-            question: "Does India use Daylight Saving Time?",
-            answer: "No, India does not observe Daylight Saving Time. The offset is always UTC+5:30 throughout the year."
-          },
-          {
-            question: "What is the difference between GMT and UTC?",
-            answer: "For most practical purposes, GMT (Greenwich Mean Time) and UTC (Coordinated Universal Time) are the same. This tool uses UTC as the precise standard."
-          },
-          {
-            question: "Can I use this for server log analysis?",
-            answer: "Yes, by entering the UTC timestamp from your logs into the converter, you can quickly find the corresponding local time in India."
-          }
-        ],
-        relatedTools: ["world-clock", "date-calculator", "time-calculator"]
-      }}
     >
       <UtcIstConverterClientWrapper />
+
+      <LearningHub title="Understanding Indian Standard Time">
+        
+        <LearningSection type="architecture" title="The 30-Minute Offset">
+          <p>Most countries have time zones offset from Coordinated Universal Time (UTC) by whole hours (e.g., UTC+1, UTC-4). India is one of the rare countries (along with Sri Lanka, Afghanistan, Iran, and parts of Australia) that uses a 30-minute offset: <strong>UTC+5:30</strong>.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The Geography of Time">
+          <p>The Earth rotates 360 degrees in 24 hours. This means every 15 degrees of longitude equals exactly 1 hour of time difference (360 / 24 = 15).</p>
+          <p className="mt-2">India is a massive country geographically. Its westernmost point (Gujarat) is at ~68°E longitude, and its easternmost point (Arunachal Pradesh) is at ~97°E.</p>
+          <ul className="list-disc pl-5 mt-2 space-y-2">
+            <li>68°E mathematically aligns with <strong>UTC+4:30</strong>.</li>
+            <li>97°E mathematically aligns with <strong>UTC+6:30</strong>.</li>
+          </ul>
+          <p className="mt-2">The difference in solar time between the east coast and west coast of India is almost exactly 2 hours!</p>
+        </LearningSection>
+
+        <LearningSection type="standards" title="The Historical Compromise">
+          <p>Before Independence, India actually had two time zones: Bombay Time and Calcutta Time. In 1906, the British government decided to unify the country under a single time zone for railway and administrative efficiency.</p>
+          <p className="mt-2">To make it as fair as possible, they picked the exact geographical center of the country: a longitude of <strong>82.5°E</strong>, which passes through Mirzapur in Uttar Pradesh.</p>
+          <p className="mt-2">If you divide 82.5 by 15 degrees-per-hour, you get exactly <strong>5.5 hours</strong>. Thus, Indian Standard Time was born as UTC+5:30.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why is Indian Standard Time offset by an unusual 5 hours and 30 minutes (UTC+5:30) instead of a round hour like UTC+5 or UTC+6?",
+                options: [
+                  "Because 5.5 hours is exactly halfway between the solar time of India's eastern and western borders (longitude 82.5°E).",
+                  "Because it aligns perfectly with London time.",
+                  "Because of a software bug in early computers.",
+                  "Because India observes Daylight Saving Time permanently."
+                ],
+                correctIndex: 0,
+                explanation: "UTC+5:30 is a deliberate geographical compromise to keep the entire massive country on a single, centralized time zone."
+              },
+              {
+                question: "Does India observe Daylight Saving Time (DST) where clocks change twice a year?",
+                options: [
+                  "Yes, in the Summer.",
+                  "Yes, in the Winter.",
+                  "No, IST is permanently UTC+5:30 all year round.",
+                  "Only in Northern states."
+                ],
+                correctIndex: 2,
+                explanation: "Unlike the US or Europe, India does not observe DST. The time offset is completely static."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

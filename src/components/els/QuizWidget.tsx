@@ -13,17 +13,36 @@ interface QuizOption {
   explanation: string;
 }
 
-interface QuizWidgetProps {
+interface LegacyQuizQuestion {
   question: string;
-  options: QuizOption[];
+  options: string[];
+  correctIndex: number;
+  explanation: string;
 }
 
-export function QuizWidget({ question, options }: QuizWidgetProps) {
+interface QuizWidgetProps {
+  question?: string;
+  options?: QuizOption[];
+  questions?: LegacyQuizQuestion[];
+}
+
+export function QuizWidget({ question, options, questions }: QuizWidgetProps) {
+  // Map legacy format to new format if needed
+  const activeQuestion = question || (questions && questions.length > 0 ? questions[0]!.question : "");
+  const activeOptions: QuizOption[] = options || (questions && questions.length > 0 ? questions[0]!.options.map((opt, i) => ({
+    id: String(i),
+    text: opt,
+    isCorrect: i === questions[0]!.correctIndex,
+    explanation: questions[0]!.explanation
+  })) : []);
+
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const selectedOption = options.find(o => o.id === selectedId);
+  const selectedOption = activeOptions.find(o => o.id === selectedId);
   const isCorrect = selectedOption?.isCorrect;
+
+  if (!activeQuestion) return null;
 
   return (
     <Card variant="interactive" padding="lg" className="border-border/50 bg-bg space-y-6">
@@ -33,12 +52,12 @@ export function QuizWidget({ question, options }: QuizWidgetProps) {
         </div>
         <div>
           <h4 className="text-sm font-bold uppercase tracking-widest text-text-3 mb-1">Concept Check</h4>
-          <p className="text-body font-medium text-text-primary">{question}</p>
+          <p className="text-body font-medium text-text-primary">{activeQuestion}</p>
         </div>
       </div>
 
       <div className="space-y-3">
-        {options.map(option => {
+        {activeOptions.map(option => {
           const isSelected = selectedId === option.id;
           const showSuccess = isSubmitted && isSelected && option.isCorrect;
           const showError = isSubmitted && isSelected && !option.isCorrect;
@@ -51,6 +70,7 @@ export function QuizWidget({ question, options }: QuizWidgetProps) {
                 if (!isSubmitted) setSelectedId(option.id);
               }}
               disabled={isSubmitted}
+              aria-pressed={isSelected}
               className={cn(
                 "w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between",
                 !isSubmitted && isSelected ? "border-blue bg-blue/5 shadow-sm" : "border-border/60 hover:border-blue/30 bg-surface",
@@ -61,8 +81,8 @@ export function QuizWidget({ question, options }: QuizWidgetProps) {
               )}
             >
               <span className="font-medium">{option.text}</span>
-              {showSuccess && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
-              {showError && <XCircle className="w-5 h-5 text-red-500" />}
+              {showSuccess && <CheckCircle2 className="w-5 h-5 text-emerald-500" aria-label="Correct Option" />}
+              {showError && <XCircle className="w-5 h-5 text-red-500" aria-label="Incorrect Option" />}
             </button>
           );
         })}
@@ -81,10 +101,14 @@ export function QuizWidget({ question, options }: QuizWidgetProps) {
       )}
 
       {isSubmitted && selectedOption && (
-        <div className={cn(
-          "p-4 rounded-xl border mt-4 animate-in fade-in slide-in-from-top-2",
-          isCorrect ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800" : "bg-blue/10 border-blue/20 text-blue-dark"
-        )}>
+        <div 
+          role="alert"
+          aria-live="polite"
+          className={cn(
+            "p-4 rounded-xl border mt-4 animate-in fade-in slide-in-from-top-2",
+            isCorrect ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800" : "bg-blue/10 border-blue/20 text-blue-dark"
+          )}
+        >
           <p className="font-bold mb-1">
             {isCorrect ? "Correct!" : "Not quite."}
           </p>

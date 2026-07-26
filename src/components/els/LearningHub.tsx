@@ -33,7 +33,7 @@ export function LearningHub({ title, description, children }: LearningHubProps) 
   );
 }
 
-export type LearningSectionType = 'architecture' | 'api' | 'security' | 'performance' | 'standards' | 'failures' | 'general';
+export type LearningSectionType = 'architecture' | 'api' | 'security' | 'performance' | 'standards' | 'failures' | 'general' | 'algorithm';
 
 interface LearningSectionProps {
   type?: LearningSectionType;
@@ -51,6 +51,7 @@ const SECTION_ICONS: Record<LearningSectionType, React.ElementType> = {
   standards: BookOpen,
   failures: AlertTriangle,
   general: BookOpen,
+  algorithm: Server,
 };
 
 export function LearningSection({ type = 'general', title, children, className, fullWidth }: LearningSectionProps) {

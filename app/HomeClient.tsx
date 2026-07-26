@@ -7,9 +7,12 @@ import { m, AnimatePresence, MotionConfig } from "framer-motion";
 import { ALL_TOOLS, CATEGORIES, getRecentTools, ToolEntry } from "@/src/tool-registry";
 import { ToolCard } from "@/components/ToolCard";
 import { HomeHero } from "./HomeHero";
-import { QuickActionsDashboard } from "@/components/ui/QuickActionsDashboard";
 import { CategoryChips } from "@/components/ui/CategoryChips";
-import { CollectionsDashboard } from "@/components/ui/collections/CollectionsDashboard";
+import dynamic from "next/dynamic";
+
+const QuickActionsDashboard = dynamic(() => import("@/components/ui/QuickActionsDashboard").then(mod => mod.QuickActionsDashboard), { ssr: false });
+const CollectionsDashboard = dynamic(() => import("@/components/ui/collections/CollectionsDashboard").then(mod => mod.CollectionsDashboard), { ssr: false });
+
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
 import { useIntelligenceStore } from "@/src/store/useIntelligenceStore";

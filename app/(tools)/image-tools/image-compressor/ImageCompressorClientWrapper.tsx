@@ -6,7 +6,7 @@ const ImageCompressorClient = dynamic(() => import('@/src/features/image-compres
   ssr: false,
   loading: () => (
     <div className="w-full aspect-video bg-surface border border-border rounded-4xl flex items-center justify-center animate-pulse">
-      <div className="text-text-4 font-black uppercase tracking-widest">Initializing Engine...</div>
+      <div className="text-text-muted font-black uppercase tracking-widest">Initializing Engine...</div>
     </div>
   ),
 });

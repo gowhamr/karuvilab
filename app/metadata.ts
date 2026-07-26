@@ -5,7 +5,7 @@ const siteConfig = {
   fullName: "KaruviLab",
   description: "KaruviLab — Every Tool Teaches. A privacy-first platform that empowers you to learn technology through practical tools. 100% local, no uploads, completely free.",
   url: "https://karuvilab.com",
-  ogImage: "https://karuvilab.com/og-image.png",
+  ogImage: "https://karuvilab.com/og-image.webp",
   links: {
     twitter: "https://twitter.com/karuvilab",
     github: "https://github.com/karuvilab",

@@ -271,7 +271,7 @@ export default function AspectRatioConverterClient() {
                       {hint && (
                         <span
                           className={`text-[10px] font-medium mt-0.5 truncate max-w-full ${
-                            isSelected ? "text-white/80" : "text-text-4"
+                            isSelected ? "text-white/80" : "text-text-muted"
                           }`}
                         >
                           {hint}
@@ -308,7 +308,7 @@ export default function AspectRatioConverterClient() {
                   </div>
                   <div>
                     <div className="font-bold text-sm text-text">Crop</div>
-                    <div className="text-xs text-text-4 mt-0.5">Center-crop to fit ratio</div>
+                    <div className="text-xs text-text-muted mt-0.5">Center-crop to fit ratio</div>
                   </div>
                 </button>
 
@@ -329,7 +329,7 @@ export default function AspectRatioConverterClient() {
                   </div>
                   <div>
                     <div className="font-bold text-sm text-text">Pad</div>
-                    <div className="text-xs text-text-4 mt-0.5">Add background to fit</div>
+                    <div className="text-xs text-text-muted mt-0.5">Add background to fit</div>
                   </div>
                 </button>
               </div>
@@ -473,20 +473,20 @@ export default function AspectRatioConverterClient() {
               {origDimensions && (
                 <div className="grid grid-cols-2 gap-3 p-3 bg-bg border border-border rounded-xl text-xs">
                   <div>
-                    <span className="text-text-4 font-medium block">Original Size</span>
+                    <span className="text-text-muted font-medium block">Original Size</span>
                     <span className="font-bold text-text text-sm">
                       {origDimensions.width} × {origDimensions.height} px
                     </span>
-                    {file && <span className="text-text-4 block mt-0.5">{formatBytes(file.size)}</span>}
+                    {file && <span className="text-text-muted block mt-0.5">{formatBytes(file.size)}</span>}
                   </div>
 
                   <div className="border-l border-border pl-3">
-                    <span className="text-text-4 font-medium block">Target Result ({selectedPreset.label})</span>
+                    <span className="text-text-muted font-medium block">Target Result ({selectedPreset.label})</span>
                     <span className="font-bold text-blue text-sm">
                       {resultDimensions ? `${resultDimensions.width} × ${resultDimensions.height} px` : "Calculating..."}
                     </span>
                     {resultBlob && (
-                      <span className="text-text-4 block mt-0.5">{formatBytes(resultBlob.size)}</span>
+                      <span className="text-text-muted block mt-0.5">{formatBytes(resultBlob.size)}</span>
                     )}
                   </div>
                 </div>
@@ -517,7 +517,7 @@ export default function AspectRatioConverterClient() {
                     className="max-h-[480px] w-auto h-auto object-contain rounded-lg opacity-60"
                   />
                 ) : (
-                  <div className="text-center text-text-4 py-12">
+                  <div className="text-center text-text-muted py-12">
                     <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-40" />
                     <p className="text-sm font-medium">Upload an image to start converting</p>
                   </div>

@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import ClientWrapper from './ClientWrapper';
 
 const toolId = 'image-watermark';
@@ -17,41 +18,57 @@ export default function Page() {
       description="Add text or image watermarks to multiple photos securely offline."
       category={cat}
       toolId={toolId}
-      content={{
-        detailedDescription: "Protect your intellectual property by applying customizable text or image watermarks directly in your browser. This tool handles batch processing effortlessly, letting you watermark hundreds of images instantly without waiting for slow server uploads.",
-        useCases: ["Protecting portfolio images", "Branding social media posts", "Watermarking e-commerce product photos", "Batch applying company logos", "Adding copyright notices"],
-        howTo: ["Upload one or more images into the secure drop zone.", "Select whether you want to apply a Text or Image watermark.", "Customize the font, size, opacity, position, and margins.", "Click 'Apply Watermark' to process them instantly via Web Workers.", "Download the watermarked images individually or as a batch."],
-        faq: [
-          { question: "Are my images uploaded to a server?", answer: "No, all watermarking is strictly processed locally on your device using WebAssembly and OffscreenCanvas." },
-          { question: "Can I watermark multiple images at once?", answer: "Yes, this tool fully supports batch processing." },
-          { question: "Can I use a custom logo?", answer: "Absolutely. Select the 'Image' mode and upload a transparent PNG of your logo." }
-        ],
-        relatedTools: ["batch-image-converter", "image-resizer", "image-crop"]
-      }}
     >
       <ClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-alpha"
-          title="How it Works: Global Alpha Compositing"
-          preview="Learn how browsers calculate transparency when overlapping images."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              When applying a watermark, you usually want it to be slightly see-through (e.g., 50% opacity) so it doesn't completely destroy the underlying image. But how does the computer calculate "see-through"?
-            </p>
-            <h3>Alpha Blending Math</h3>
-            <p>
-              Every pixel has Red, Green, Blue, and Alpha (transparency) values. When you use the HTML5 Canvas <code>globalAlpha = 0.5</code> property and draw a watermark over a photo, the browser executes the standard Alpha Blending formula for every single overlapping pixel:
-            </p>
-            <pre><code>Final_Color = (Watermark_Color * 0.5) + (Photo_Color * (1.0 - 0.5))</code></pre>
-            <p>
-              It mathematically averages the overlapping colors in real-time. Because doing this on a 20-megapixel photo requires millions of calculations, we execute this off the main thread using an <code>OffscreenCanvas</code> inside a Web Worker.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Alpha Blending and Compositing">
+        
+        <LearningSection type="architecture" title="Global Alpha Transparency">
+          <p>When applying a watermark, you usually want it to be slightly see-through (e.g., 50% opacity) so it protects the image without completely obliterating the underlying details.</p>
+          <p className="mt-2">But how does the computer actually calculate a "see-through" pixel?</p>
+        </LearningSection>
+        
+        <LearningSection type="algorithm" title="The Alpha Blending Formula">
+          <p>Every pixel in an image is represented by Red, Green, Blue, and Alpha (transparency) channels. When you instruct the HTML5 Canvas to use a <code>globalAlpha = 0.5</code> and draw a watermark text over a photo, the browser executes standard Alpha Blending.</p>
+          <p className="mt-2">For every single pixel where the watermark overlaps the photo, it runs this exact formula:</p>
+          <pre className="text-xs sm:text-sm mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded"><code>Final_Color = (Watermark_Color * 0.5) + (Photo_Color * (1.0 - 0.5))</code></pre>
+          <p className="mt-2">It is mathematically averaging the two colors based on the weight of the Alpha value.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="Batch Processing via Web Workers">
+          <p>Because running that blending formula on a 20-megapixel photo requires performing tens of millions of mathematical operations, processing an entire batch of 50 images would completely freeze the browser's UI thread.</p>
+          <p className="mt-2">To solve this, KaruviLab executes the watermarking using <code>OffscreenCanvas</code> instances spawned inside background Web Workers. This allows the heavy alpha blending math to run in parallel on your CPU's other cores, keeping the interface completely fluid.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "If a watermark is set to 25% opacity (Alpha 0.25), how much of the original photo's color is preserved in the overlapping pixels?",
+                options: [
+                  "25%",
+                  "50%",
+                  "75%",
+                  "0%"
+                ],
+                correctIndex: 2,
+                explanation: "The formula is (Watermark * 0.25) + (Photo * (1.0 - 0.25)). So the resulting pixel is 25% watermark and 75% original photo."
+              },
+              {
+                question: "Why does batch watermarking large photos sometimes cause browser freezing on poorly built websites?",
+                options: [
+                  "Because they use CSS instead of Canvas.",
+                  "Because they run millions of alpha blending calculations on the main UI thread.",
+                  "Because the internet connection is slow.",
+                  "Because they use JPGs instead of PNGs."
+                ],
+                correctIndex: 1,
+                explanation: "Heavy pixel math on the main UI thread blocks the browser from updating the screen. This must be offloaded to Web Workers."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

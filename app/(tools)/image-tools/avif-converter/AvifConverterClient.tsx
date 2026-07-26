@@ -209,7 +209,7 @@ export default function AvifConverterClient() {
                 ⚡
               </div>
               <h3 className="font-bold text-sm text-text">Next-Gen Compression</h3>
-              <p className="text-xs text-text-4 font-medium leading-relaxed">
+              <p className="text-xs text-text-muted font-medium leading-relaxed">
                 AVIF provides superior compression efficiency compared to PNG, JPEG, and even WebP.
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function AvifConverterClient() {
                 🛡️
               </div>
               <h3 className="font-bold text-sm text-text">Zero Server Upload</h3>
-              <p className="text-xs text-text-4 font-medium leading-relaxed">
+              <p className="text-xs text-text-muted font-medium leading-relaxed">
                 Your images are read and processed entirely in your browser memory for maximum privacy.
               </p>
             </div>
@@ -229,7 +229,7 @@ export default function AvifConverterClient() {
                 🎯
               </div>
               <h3 className="font-bold text-sm text-text">Quality Precision</h3>
-              <p className="text-xs text-text-4 font-medium leading-relaxed">
+              <p className="text-xs text-text-muted font-medium leading-relaxed">
                 Fine-tune quality settings to balance crystal-clear fidelity and file size reduction.
               </p>
             </div>
@@ -247,7 +247,7 @@ export default function AvifConverterClient() {
                 <p className="font-bold text-sm text-text truncate max-w-xs sm:max-w-md">
                   {file.name}
                 </p>
-                <div className="flex items-center gap-3 text-xs text-text-4 font-medium mt-0.5">
+                <div className="flex items-center gap-3 text-xs text-text-muted font-medium mt-0.5">
                   <span>{formatFileSize(file.size)}</span>
                   {dimensions && (
                     <>
@@ -290,7 +290,7 @@ export default function AvifConverterClient() {
               format={(v) => `${v}%`}
             />
 
-            <p className="text-xs text-text-4 font-medium flex items-center gap-1.5">
+            <p className="text-xs text-text-muted font-medium flex items-center gap-1.5">
               <Info className="w-3.5 h-3.5 text-blue shrink-0" />
               AVIF encoding is computationally intensive. Higher quality settings may take longer to process.
             </p>
@@ -334,7 +334,7 @@ export default function AvifConverterClient() {
             <div className="bg-surface border border-border p-5 rounded-3xl space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-text-4">
+                  <span className="text-xs font-black uppercase tracking-wider text-text-muted">
                     Original Image
                   </span>
                   <span className="text-xs font-bold px-2.5 py-1 bg-surface-2 rounded-lg text-text-3 border border-border">
@@ -353,7 +353,7 @@ export default function AvifConverterClient() {
                 </div>
               </div>
 
-              <div className="text-xs text-text-4 font-medium flex items-center justify-between pt-2">
+              <div className="text-xs text-text-muted font-medium flex items-center justify-between pt-2">
                 <span>Format: {file.type || "Image"}</span>
                 {dimensions && (
                   <span>
@@ -396,7 +396,7 @@ export default function AvifConverterClient() {
                       <Loader2 className="w-8 h-8 text-blue animate-spin" />
                       <div className="space-y-1">
                         <p className="font-bold text-sm text-text">Encoding to AVIF...</p>
-                        <p className="text-xs text-text-4 font-medium">
+                        <p className="text-xs text-text-muted font-medium">
                           Processing frame data in browser memory
                         </p>
                       </div>
@@ -408,7 +408,7 @@ export default function AvifConverterClient() {
                       className="max-h-72 w-full object-contain rounded-lg"
                     />
                   ) : (
-                    <div className="text-xs text-text-4 font-medium">
+                    <div className="text-xs text-text-muted font-medium">
                       No result generated yet.
                     </div>
                   )}

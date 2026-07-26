@@ -94,7 +94,7 @@ export default function URLEncoderClient() {
               { label: "Hash", value: parsed.hash || "(none)" },
             ].map(({ label, value }) => (
               <div key={label} className="bg-bg border border-border rounded-xl p-3">
-                <dt className="text-xs font-bold text-text-4 uppercase tracking-wider mb-1">{label}</dt>
+                <dt className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</dt>
                 <dd className="font-mono text-text break-all">{value}</dd>
               </div>
             ))}
@@ -102,13 +102,13 @@ export default function URLEncoderClient() {
 
           {parsed.params.length > 0 && (
             <div>
-              <h3 className="text-xs font-bold text-text-4 uppercase tracking-wider mb-2">Query Parameters</h3>
+              <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Query Parameters</h3>
               <div className="overflow-auto rounded-xl border border-border">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border bg-bg">
-                      <th className="text-left px-4 py-2 font-bold text-text-4">Parameter</th>
-                      <th className="text-left px-4 py-2 font-bold text-text-4">Value</th>
+                      <th className="text-left px-4 py-2 font-bold text-text-muted">Parameter</th>
+                      <th className="text-left px-4 py-2 font-bold text-text-muted">Value</th>
                     </tr>
                   </thead>
                   <tbody>

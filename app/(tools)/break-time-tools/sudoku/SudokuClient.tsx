@@ -400,7 +400,7 @@ export default function SudokuClient() {
               className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 difficulty === diff
                   ? "bg-primary/20 text-primary border border-primary/30"
-                  : "bg-surface border border-border text-text-4 hover:text-text-2 hover:border-primary/50"
+                  : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-primary/50"
               }`}
             >
               {diff}
@@ -471,7 +471,7 @@ export default function SudokuClient() {
                     </m.div>
                   ) : (
                     // Note cell
-                    <div className="grid grid-cols-3 gap-0.5 w-full h-full p-1 leading-none text-[8px] text-text-4 font-normal">
+                    <div className="grid grid-cols-3 gap-0.5 w-full h-full p-1 leading-none text-[8px] text-text-muted font-normal">
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                         <span key={num} className="flex items-center justify-center">
                           {cellNotes.includes(num) ? num : ""}
@@ -601,7 +601,7 @@ export default function SudokuClient() {
 
       {/* Best Score Info */}
       {currentBest !== null && (
-        <p className="text-center text-xs text-text-4 font-bold">
+        <p className="text-center text-xs text-text-muted font-bold">
           Best time ({difficulty}): <strong>{formatTime(currentBest)}</strong>
         </p>
       )}

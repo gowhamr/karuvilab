@@ -226,13 +226,13 @@ export default function FakeDataGeneratorClient() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
               <div>
                 <h2 className="text-lg sm:text-xl font-bold text-text">Select Data Fields</h2>
-                <p className="text-xs text-text-4 font-bold uppercase tracking-wider mt-1">
+                <p className="text-xs text-text-muted font-bold uppercase tracking-wider mt-1">
                   {selectedFields.length} fields selected
                 </p>
               </div>
               <div className="flex gap-2">
                 <button onClick={selectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-blue hover:bg-blue/5 bg-blue/5 sm:bg-transparent rounded-xl transition-all">Select All</button>
-                <button onClick={deselectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-text-4 hover:bg-black/5 bg-black/5 sm:bg-transparent rounded-xl transition-all">Clear All</button>
+                <button onClick={deselectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-text-muted hover:bg-black/5 bg-black/5 sm:bg-transparent rounded-xl transition-all">Clear All</button>
               </div>
             </div>
 

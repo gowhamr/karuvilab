@@ -80,7 +80,7 @@ export default function InternetSpeedTestClient() {
                 <Gauge className="w-4 h-4" />
                 Network Diagnostic
               </h2>
-              <p className="text-text-4 text-xs font-bold uppercase tracking-wider">
+              <p className="text-text-muted text-xs font-bold uppercase tracking-wider">
                 Precision bandwidth measurement • {clientInfo?.country_name || 'Global'}
               </p>
            </div>
@@ -144,11 +144,11 @@ export default function InternetSpeedTestClient() {
 
       {results.length > 0 && (
         <div className="bg-surface border border-border rounded-4xl sm:rounded-6xl p-4 sm:p-8 space-y-8">
-           <h2 className="text-xl font-black tracking-tight flex items-center gap-3"><History className="w-5 h-5 text-text-4" /> Recent Diagnostic History</h2>
+           <h2 className="text-xl font-black tracking-tight flex items-center gap-3"><History className="w-5 h-5 text-text-muted" /> Recent Diagnostic History</h2>
            <div className="overflow-x-auto">
               <table className="w-full text-left">
                  <thead>
-                    <tr className="text-micro font-black uppercase tracking-widest-lg text-text-4 border-b border-border">
+                    <tr className="text-micro font-black uppercase tracking-widest-lg text-text-muted border-b border-border">
                        <th className="py-4 px-4">Timestamp</th>
                        <th className="py-4 px-4">Download</th>
                        <th className="py-4 px-4">Upload</th>
@@ -176,9 +176,9 @@ export default function InternetSpeedTestClient() {
 function MetricSmall({ label, value, icon: Icon, color = "text-text-2" }: any) {
   return (
     <div className="flex flex-col items-center space-y-2 group">
-      <div className="w-10 h-10 rounded-xl bg-bg border border-border flex items-center justify-center text-text-4 group-hover:text-blue transition-colors"><Icon className="w-5 h-5" /></div>
+      <div className="w-10 h-10 rounded-xl bg-bg border border-border flex items-center justify-center text-text-muted group-hover:text-blue transition-colors"><Icon className="w-5 h-5" /></div>
       <div className="text-center">
-        <p className="text-micro font-black uppercase tracking-widest text-text-4">{label}</p>
+        <p className="text-micro font-black uppercase tracking-widest text-text-muted">{label}</p>
         <p className={cn("text-xl font-black tracking-tight", color)}>{value}</p>
       </div>
     </div>
@@ -195,14 +195,14 @@ function IntelligenceCard({ icon: Icon, title, requirement, current, isLatency, 
       status === 'yes' ? "border-success/20 shadow-lg shadow-success/5" : "border-border"
     )}>
       <div className="flex items-center justify-between relative z-content">
-         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500", status === 'yes' ? "bg-success/10 text-success scale-110" : "bg-bg text-text-4")}><Icon className="w-6 h-6" /></div>
+         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500", status === 'yes' ? "bg-success/10 text-success scale-110" : "bg-bg text-text-muted")}><Icon className="w-6 h-6" /></div>
          {status !== 'pending' && (
            <div className={cn("px-3 py-1.5 rounded-xl text-micro font-black uppercase tracking-widest flex items-center gap-2", status === 'yes' ? "bg-success text-white shadow-lg shadow-success/20" : "bg-error/10 text-error")}>
               {status === 'yes' ? <><CheckCircle2 className="w-3 h-3" /><span>Optimal</span></> : <><AlertTriangle className="w-3 h-3" /><span>Limited</span></>}
            </div>
          )}
       </div>
-      <div className="space-y-1 relative z-content"><h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3><p className="text-xs text-text-4 leading-relaxed font-medium">{desc}</p></div>
+      <div className="space-y-1 relative z-content"><h3 className="font-black text-sm tracking-tight text-text group-hover:text-blue transition-colors">{title}</h3><p className="text-xs text-text-muted leading-relaxed font-medium">{desc}</p></div>
       <div className="pt-2 flex items-center gap-3 relative z-content">
          <div className="h-1.5 flex-1 bg-bg rounded-full overflow-hidden">
             <m.div className={cn("h-full", status === 'yes' ? "bg-success" : "bg-text-4/30")} initial={{ width: 0 }} animate={{ width: status === 'yes' ? '100%' : status === 'no' ? '40%' : '0%' }} transition={{ duration: 1, ease: "easeOut" }} />

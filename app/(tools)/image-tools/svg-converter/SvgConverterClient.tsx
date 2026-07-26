@@ -379,7 +379,7 @@ export default function SvgConverterClient() {
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                     lockRatio
                       ? "bg-blue/10 text-blue border border-blue/20"
-                      : "bg-bg text-text-4 border border-border hover:text-text-3"
+                      : "bg-bg text-text-muted border border-border hover:text-text-3"
                   }`}
                   title={lockRatio ? "Aspect ratio locked" : "Aspect ratio unlocked"}
                 >
@@ -538,20 +538,20 @@ export default function SvgConverterClient() {
               {/* Info stats banner */}
               <div className="grid grid-cols-2 gap-3 p-3 bg-bg border border-border rounded-xl text-xs">
                 <div>
-                  <span className="text-text-4 font-medium block">Original SVG</span>
+                  <span className="text-text-muted font-medium block">Original SVG</span>
                   <span className="font-bold text-text text-sm">
                     {origWidth} × {origHeight} px
                   </span>
-                  {file && <span className="text-text-4 block mt-0.5">{formatBytes(file.size)}</span>}
+                  {file && <span className="text-text-muted block mt-0.5">{formatBytes(file.size)}</span>}
                 </div>
 
                 <div className="border-l border-border pl-3">
-                  <span className="text-text-4 font-medium block">Rasterized PNG</span>
+                  <span className="text-text-muted font-medium block">Rasterized PNG</span>
                   <span className="font-bold text-blue text-sm">
                     {targetWidth && targetHeight ? `${targetWidth} × ${targetHeight} px` : "Calculating..."}
                   </span>
                   {resultBlob && (
-                    <span className="text-text-4 block mt-0.5">{formatBytes(resultBlob.size)}</span>
+                    <span className="text-text-muted block mt-0.5">{formatBytes(resultBlob.size)}</span>
                   )}
                 </div>
               </div>
@@ -581,7 +581,7 @@ export default function SvgConverterClient() {
                     className="max-h-[480px] w-auto h-auto object-contain rounded-lg opacity-60"
                   />
                 ) : (
-                  <div className="text-center text-text-4 py-12">
+                  <div className="text-center text-text-muted py-12">
                     <FileCode className="w-12 h-12 mx-auto mb-2 opacity-40" />
                     <p className="text-sm font-medium">Upload an SVG file to start</p>
                   </div>

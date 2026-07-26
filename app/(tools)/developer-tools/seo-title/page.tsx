@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import { generateToolMetadata } from '@/src/lib/seo';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 import SeoTitleClientWrapper from './SeoTitleClientWrapper';
 
 const toolId = 'seo-title';
@@ -20,33 +21,56 @@ export default function Page() {
     >
       <SeoTitleClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-seo-title"
-          title="How it Works: Pixel Width vs Character Count"
-          preview="Learn why Google truncates your titles even if they are under 60 characters."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              When writing a <code>&lt;title&gt;</code> tag for SEO, the common advice is to keep it under 60 characters to prevent Google from truncating it in the search results with an ellipsis (<code>...</code>). However, this advice is technically incorrect.
-            </p>
-            <h3>Google doesn't count characters</h3>
-            <p>
-              Google Search results are rendered in a web browser using a proportional font (Arial, typically). In a proportional font, a narrow character like <code>i</code> or <code>l</code> takes up significantly less physical space than a wide character like <code>W</code> or <code>M</code>.
-            </p>
-            <p>
-              Google doesn't truncate based on characters; it truncates based on <strong>pixels</strong>. The maximum width for a desktop search result title is roughly 600 pixels.
-            </p>
-            <ul>
-              <li><code>WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW</code> (40 characters) will be truncated because it exceeds 600 pixels.</li>
-              <li><code>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</code> (60 characters) will not be truncated because it's only about 170 pixels wide.</li>
-            </ul>
-            <p>
-              This tool uses an invisible canvas and the Arial font to measure the exact pixel width of your string, simulating exactly how Google's rendering engine will calculate the bounds.
-            </p>
-          </div>
-        </ToolInfoSection>
-      </div>
+      <LearningHub title="Understanding Search Engine Results Pages (SERP)">
+        
+        <LearningSection type="architecture" title="The Character Count Myth">
+          <p>When writing a <code>&lt;title&gt;</code> tag for SEO, the most common advice you will find online is to "keep it under 60 characters" to prevent Google from truncating it with an ellipsis (<code>...</code>).</p>
+          <p className="mt-2">However, this advice is technically incorrect and heavily outdated.</p>
+        </LearningSection>
+        
+        <LearningSection type="standards" title="Google Counts Pixels, Not Characters">
+          <p>Google Search results are rendered in a web browser using a proportional font (typically Arial, 20px). In a proportional font, a narrow character like <code>i</code> or <code>l</code> takes up significantly less physical space on the screen than a wide character like <code>W</code> or <code>M</code>.</p>
+          <p className="mt-2">Google's rendering engine does not truncate based on a character limit; it truncates based on <strong>pixel width</strong>. The maximum width for a desktop search result title is roughly 600 pixels.</p>
+        </LearningSection>
+
+        <LearningSection type="performance" title="Measuring Pixel Bounds">
+          <p>Consider two titles of completely different lengths:</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><code>WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW</code> (40 characters) will be truncated because 40 'W's exceed 600 pixels.</li>
+            <li><code>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</code> (60 characters) will not be truncated because it is only about 170 pixels wide.</li>
+          </ul>
+          <p className="mt-2">This tool uses a hidden HTML5 Canvas to measure the exact pixel width of your string in the Arial font, simulating exactly how Google calculates the cutoff bound.</p>
+        </LearningSection>
+
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "Why might a 55-character SEO title get truncated by Google, while a different 62-character title does not?",
+                options: [
+                  "Google randomly truncates titles to test CTR.",
+                  "Google truncates based on physical pixel width (max ~600px), not character count. The 55-character title likely contained wider letters like 'W' and 'M'.",
+                  "Google penalizes titles that contain keywords.",
+                  "Google truncates based on word count, not character count."
+                ],
+                correctIndex: 1,
+                explanation: "In a proportional font like Arial, characters have different widths. A string with many wide characters will hit the 600-pixel limit much faster than a string with narrow characters."
+              },
+              {
+                question: "How does this tool accurately determine if your title will be truncated without asking Google?",
+                options: [
+                  "It uses a machine learning model trained on Google results.",
+                  "It just counts the characters and warns if it is over 60.",
+                  "It renders the text onto a hidden HTML Canvas using Arial 20px and measures the exact physical pixel width.",
+                  "It makes an API call to Google Search Console."
+                ],
+                correctIndex: 2,
+                explanation: "The HTML Canvas API allows us to render text in memory and measure exactly how many pixels wide it is, perfectly simulating a browser rendering the Google SERP."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

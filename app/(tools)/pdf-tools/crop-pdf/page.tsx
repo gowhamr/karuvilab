@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { ToolShell } from '@/components/ui/ToolShell';
-import { ToolInfoSection } from '@/components/ui/ToolInfoSection';
 import CropPdfClientWrapper from '@/src/features/crop-pdf/crop-pdfClientWrapper';
 import { generateToolMetadata } from '@/src/lib/seo';
 import { CATEGORIES } from '@/src/tool-registry';
+import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
+import { QuizWidget } from '@/src/components/els/QuizWidget';
 
 const toolId = "crop-pdf";
 const cat = CATEGORIES.find(c => c.id === 'pdf');
@@ -22,62 +23,57 @@ export default function Page() {
     >
       <CropPdfClientWrapper />
 
-      <div className="mt-16 space-y-6 max-w-4xl mx-auto w-full">
-        <ToolInfoSection
-          id="learn-cropping"
-          title="How it Works: The PDF Box Model"
-          preview="Learn why cropping a PDF doesn't actually delete the hidden content."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              Cropping a PDF works very differently from cropping a JPEG image. When you crop a JPEG, the cropped pixels are permanently deleted. When you crop a PDF, the content outside the crop area is <strong>not deleted</strong>—it is simply hidden from view.
-            </p>
-            <h3>The Five Page Boundaries</h3>
-            <p>Every PDF page defines its physical dimensions using five mathematical bounding boxes:</p>
-            <ul>
-              <li><strong>MediaBox:</strong> The physical medium (e.g., A4 paper size).</li>
-              <li><strong>CropBox:</strong> The visible region that PDF viewers are instructed to display or print. (This is what this tool modifies!)</li>
-              <li><strong>BleedBox:</strong> Used in professional printing to define the extra area needed to accommodate physical cutting.</li>
-              <li><strong>TrimBox:</strong> The final intended dimensions of the printed page after cutting.</li>
-              <li><strong>ArtBox:</strong> Defines the extent of the meaningful content (excluding margins).</li>
-            </ul>
-            <p>
-              When you use this tool to crop a PDF, we update the <code>CropBox</code> coordinates. The underlying text and images remain intact inside the file.
-            </p>
-          </div>
-        </ToolInfoSection>
+      <LearningHub title="Understanding the PDF Box Model">
+        
+        <LearningSection type="architecture" title="Not Like a JPEG">
+          <p>Cropping a PDF works very differently from cropping a JPEG image. When you crop a JPEG, the cropped pixels are permanently deleted. When you crop a PDF, the content outside the crop area is <strong>not deleted</strong>—it is simply hidden from view.</p>
+        </LearningSection>
+        
+        <LearningSection type="api" title="The Five Page Boundaries">
+          <p>Every PDF page defines its physical dimensions using five mathematical bounding boxes:</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><strong>MediaBox:</strong> The physical medium (e.g., A4 paper size).</li>
+            <li><strong>CropBox:</strong> The visible region that PDF viewers are instructed to display or print. (This is what this tool modifies!)</li>
+            <li><strong>BleedBox:</strong> Used in professional printing to define the extra area needed to accommodate physical cutting.</li>
+            <li><strong>TrimBox:</strong> The final intended dimensions of the printed page after cutting.</li>
+            <li><strong>ArtBox:</strong> Defines the extent of the meaningful content (excluding margins).</li>
+          </ul>
+        </LearningSection>
 
-        <ToolInfoSection
-          id="learn-security"
-          title="Privacy & Security Considerations"
-          preview="Why you shouldn't use cropping to redact sensitive information."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <p>
-              Because cropping only adjusts the <code>CropBox</code> (the viewing window), <strong>you must never use cropping to hide sensitive information.</strong> 
-            </p>
-            <p>
-              If you crop out a paragraph containing a password or a social security number, anyone can open the PDF in an editor, expand the CropBox, and read the "hidden" text. To securely remove sensitive text, you must use a true <strong>Redaction</strong> tool which physically deletes the object streams from the file.
-            </p>
-            <p>
-              However, regarding your general privacy: this tool processes everything entirely in your browser using WebAssembly. Your files are never uploaded to our servers, keeping them completely safe from interception.
-            </p>
-          </div>
-        </ToolInfoSection>
+        <LearningSection type="security" title="The Security Implication">
+          <p>Because cropping only adjusts the <code>CropBox</code> (the viewing window), <strong>you must never use cropping to hide sensitive information.</strong></p>
+          <p className="mt-2">If you crop out a paragraph containing a password or a social security number, anyone can open the PDF in a hex editor or specific software, expand the CropBox back to the MediaBox size, and read the "hidden" text. To securely remove sensitive text, you must use a true <strong>Redaction</strong> tool which physically deletes the object streams from the file.</p>
+        </LearningSection>
 
-        <ToolInfoSection
-          id="standards"
-          title="Standards & Browser APIs"
-          preview="References to ISO 32000-1."
-        >
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-            <ul>
-              <li><strong>ISO 32000-1 (Section 14.11.2):</strong> Defines the Page Boundaries (MediaBox, CropBox, BleedBox, TrimBox, ArtBox).</li>
-              <li><strong>Web Workers:</strong> We use background threads to parse the PDF structure without freezing the main browser thread.</li>
-            </ul>
-          </div>
-        </ToolInfoSection>
-      </div>
+        <LearningSection type="general" title="Check Your Knowledge" fullWidth>
+          <QuizWidget 
+            questions={[
+              {
+                question: "If you use a Crop tool to cut out a sensitive image from a PDF page, is the image permanently gone?",
+                options: [
+                  "Yes, the pixels are deleted.",
+                  "No, the image is still fully embedded in the file, only the visible window (CropBox) has been shrunk.",
+                  "Yes, but only if you save the file as PDF/A.",
+                  "No, but it is heavily encrypted."
+                ],
+                correctIndex: 1,
+                explanation: "Cropping a PDF is like putting a smaller picture frame over a large painting. The rest of the painting is still there behind the frame."
+              },
+              {
+                question: "Which PDF bounding box defines the physical size of the paper it is meant to be printed on?",
+                options: [
+                  "CropBox",
+                  "ArtBox",
+                  "MediaBox",
+                  "TrimBox"
+                ],
+                correctIndex: 2,
+                explanation: "The MediaBox is the largest box and defines the physical page medium."
+              }
+            ]}
+          />
+        </LearningSection>
+      </LearningHub>
     </ToolShell>
   );
 }

@@ -34,7 +34,7 @@ export function PomodoroSettings({ isOpen, onClose }: PomodoroSettingsProps) {
               </div>
               <button 
                 onClick={onClose} 
-                className="min-w-11 min-h-11 hover:bg-bg rounded-xl transition-colors text-text-4 flex items-center justify-center"
+                className="min-w-11 min-h-11 hover:bg-bg rounded-xl transition-colors text-text-muted flex items-center justify-center"
                 aria-label="Close settings"
               >
                 <X className="w-5 h-5" />

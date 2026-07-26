@@ -127,7 +127,7 @@ export default function WorldClockClient() {
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Content sideOffset={8} align="end" className="w-80 bg-surface border border-border shadow-2xl rounded-2xl p-4 z-popover animate-in fade-in zoom-in-95">
-                <h3 className="font-bold text-sm uppercase tracking-widest text-text-4 mb-4">Dashboard Settings</h3>
+                <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted mb-4">Dashboard Settings</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-text-3">Theme</label>
@@ -188,7 +188,7 @@ export default function WorldClockClient() {
                   <div className="w-1/3 flex justify-end">
                     {settings.showBusinessHours && (
                       <div className="flex flex-col items-end gap-1">
-                        <div className={cn("px-6 py-3 rounded-full text-lg font-black uppercase tracking-widest flex items-center gap-3 border", biz.isOpen ? "bg-success/10 text-success border-success/20" : "bg-text-4/10 text-text-4 border-text-4/20 opacity-60")}>
+                        <div className={cn("px-6 py-3 rounded-full text-lg font-black uppercase tracking-widest flex items-center gap-3 border", biz.isOpen ? "bg-success/10 text-success border-success/20" : "bg-text-4/10 text-text-muted border-text-4/20 opacity-60")}>
                           <div className={cn("w-3 h-3 rounded-full", biz.isOpen ? "bg-success animate-pulse" : "bg-text-4")} />
                           {biz.isOpen ? "Open" : "Closed"}
                         </div>
@@ -249,7 +249,7 @@ export default function WorldClockClient() {
 
          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto px-2 md:px-0 pb-1 md:pb-0 no-scrollbar">
            {/* Minimized Stats */}
-           <div className="hidden lg:flex items-center gap-4 px-4 text-text-4 text-xs font-bold uppercase tracking-widest border-r border-border mr-1">
+           <div className="hidden lg:flex items-center gap-4 px-4 text-text-muted text-xs font-bold uppercase tracking-widest border-r border-border mr-1">
              <span>{clocks.length} Zones</span>
              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-success animate-pulse" /> {openClocks} Open</span>
            </div>
@@ -302,7 +302,7 @@ export default function WorldClockClient() {
       </DndContext>
 
       {/* Enhanced Footer */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-4 font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl mt-8">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl mt-8">
         <div className="flex flex-wrap items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-success animate-pulse shadow-glow-success" />

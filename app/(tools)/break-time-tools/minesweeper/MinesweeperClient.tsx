@@ -332,7 +332,7 @@ export default function MinesweeperClient() {
               className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 difficulty === diff
                   ? "bg-primary/20 text-primary border border-primary/30"
-                  : "bg-surface border border-border text-text-4 hover:text-text-2 hover:border-primary/50"
+                  : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-primary/50"
               }`}
             >
               {diff}
@@ -516,7 +516,7 @@ export default function MinesweeperClient() {
       </div>
 
       {/* Instructions footer */}
-      <div className="flex flex-col items-center gap-1.5 text-center text-xs text-text-4 font-bold">
+      <div className="flex flex-col items-center gap-1.5 text-center text-xs text-text-muted font-bold">
         <p>Right-click or click Flag Mode to place flags. Double-click or click surrounding revealed numbers to check.</p>
         {currentBest !== null && (
           <p>

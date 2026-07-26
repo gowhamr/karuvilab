@@ -88,7 +88,7 @@ export function SpeedGauge({ value, max = 100, color = "#4F46E5", label = "Mbps"
           return (
             <div
               key={tick}
-              className="absolute font-black text-micro text-text-4/40 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute font-black text-micro text-text-muted/40 transform -translate-x-1/2 -translate-y-1/2"
               style={{ left: `${x}%`, top: `${y}%` }}
             >
               {Math.round((tick / 100) * max)}
@@ -101,7 +101,7 @@ export function SpeedGauge({ value, max = 100, color = "#4F46E5", label = "Mbps"
         <span className="text-5xl md:text-6xl font-black text-text tracking-tighter">
           {Math.round(value)}
         </span>
-        <span className="text-sm font-black text-text-4 uppercase tracking-widest-lg mt-1">
+        <span className="text-sm font-black text-text-muted uppercase tracking-widest-lg mt-1">
           {label}
         </span>
       </div>

@@ -207,7 +207,7 @@ export default function AdvancedRotateClient() {
                   <h3 className="font-bold text-text truncate max-w-[220px] sm:max-w-[280px]">
                     {fileName}
                   </h3>
-                  <p className="text-xs text-text-4">
+                  <p className="text-xs text-text-muted">
                     Original: {origWidth} × {origHeight}px ({fileSize})
                   </p>
                 </div>
@@ -412,7 +412,7 @@ export default function AdvancedRotateClient() {
                       Rendering...
                     </span>
                   ) : (
-                    <span className="text-xs font-bold text-text-4">
+                    <span className="text-xs font-bold text-text-muted">
                       {degrees}° Angle
                     </span>
                   )}
@@ -434,7 +434,7 @@ export default function AdvancedRotateClient() {
                         className="max-h-full max-w-full object-contain drop-shadow-md rounded transition-all duration-150"
                       />
                     ) : (
-                      <div className="flex flex-col items-center justify-center text-text-4 gap-2">
+                      <div className="flex flex-col items-center justify-center text-text-muted gap-2">
                         <RefreshCw className="w-6 h-6 animate-spin text-blue" />
                         <span className="text-xs font-bold">
                           Generating preview...
@@ -448,7 +448,7 @@ export default function AdvancedRotateClient() {
                 {resultWidth > 0 && (
                   <div className="grid grid-cols-2 gap-3 p-4 bg-bg border border-border rounded-xl text-xs">
                     <div>
-                      <span className="text-text-4 font-medium block">
+                      <span className="text-text-muted font-medium block">
                         New Canvas Dimensions
                       </span>
                       <span className="text-text font-bold">
@@ -456,7 +456,7 @@ export default function AdvancedRotateClient() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-text-4 font-medium block">
+                      <span className="text-text-muted font-medium block">
                         Estimated File Size
                       </span>
                       <span className="text-text font-bold">

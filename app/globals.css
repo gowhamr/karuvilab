@@ -249,7 +249,7 @@ html.preload *:after {
   --text-rgb:     15, 23, 42;
   --text-2:       #334155;
   --text-3:       #3F4E64;
-  --text-4:       #5E6C84;
+  --text-4:       #334155;
   --border:       #DDE4EE;
   --border-rgb:   221, 228, 238;
   --border-2:     #CBD5E1;
@@ -307,7 +307,7 @@ html.preload *:after {
   --text-rgb:    255, 255, 255;
   --text-2:      #AAB3C5;
   --text-3:      #8F9AAE;
-  --text-4:      #768297;
+  --text-4:      #CBD5E1;
 
   /* Material Dark Tokens Overrides */
   --kv-mat-base:          var(--bg);

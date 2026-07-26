@@ -145,7 +145,7 @@ export default function ImageConverterClient() {
       );
     }
 
-    return <ImageIcon className="w-6 h-6 text-text-4" />;
+    return <ImageIcon className="w-6 h-6 text-text-muted" />;
   }, []);
 
   const hasItems = items.length > 0;
@@ -161,7 +161,7 @@ export default function ImageConverterClient() {
               <Sparkles className="w-6 h-6 text-blue" />
               Configure & Upload
             </h2>
-            <p className="text-text-4 text-sm font-medium leading-relaxed max-w-md">
+            <p className="text-text-muted text-sm font-medium leading-relaxed max-w-md">
               Select your target format and drop your images below. Everything happens in your browser.
             </p>
           </div>
@@ -198,7 +198,7 @@ export default function ImageConverterClient() {
                   <div className="w-1.5 h-1.5 rounded-full bg-blue mt-1.5 shrink-0" />
                   <div>
                     <p className="font-black text-xs uppercase tracking-wider text-text">{h.title}</p>
-                    <p className="text-xs text-text-4 font-medium">{h.desc}</p>
+                    <p className="text-xs text-text-muted font-medium">{h.desc}</p>
                   </div>
                 </li>
               ))}
@@ -243,7 +243,7 @@ export default function ImageConverterClient() {
             </div>
             <div className="space-y-2">
               <p className="font-black text-text-3 uppercase tracking-widest-2xl text-sm">Waiting for your files</p>
-              <p className="text-xs text-text-4 font-medium">Drop images here or click 'Add images' above</p>
+              <p className="text-xs text-text-muted font-medium">Drop images here or click 'Add images' above</p>
             </div>
           </m.div>
         )}
@@ -262,7 +262,7 @@ export default function ImageConverterClient() {
               <Loader2 className="w-12 h-12 text-blue animate-spin mx-auto" />
               <div className="space-y-2">
                 <h2 className="font-black text-xl">Creating Archive</h2>
-                <p className="text-sm text-text-4 font-medium">Compressing your converted images into a single ZIP file...</p>
+                <p className="text-sm text-text-muted font-medium">Compressing your converted images into a single ZIP file...</p>
               </div>
             </div>
           </m.div>
@@ -283,7 +283,7 @@ function ThumbnailPreview({ file }: { file: File }) {
     // useObjectUrlManager handles revocation on unmount automatically
   }, [file, createUrl]);
 
-  if (error || !url) return <ImageIcon className="w-6 h-6 text-text-4" />;
+  if (error || !url) return <ImageIcon className="w-6 h-6 text-text-muted" />;
 
   return (
     <img 

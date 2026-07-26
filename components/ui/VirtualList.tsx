@@ -35,7 +35,7 @@ export function VirtualList<T>({
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrollTop(scrollParent.scrollTop);
+          setScrollTop(scrollParent === window ? window.scrollY : (scrollParent as HTMLElement).scrollTop);
           ticking = false;
         });
         ticking = true;
@@ -43,7 +43,7 @@ export function VirtualList<T>({
     };
 
     const handleResize = () => {
-      setContainerHeight(scrollParent.clientHeight);
+      setContainerHeight(scrollParent === window ? window.innerHeight : (scrollParent as HTMLElement).clientHeight);
     };
 
     scrollParent.addEventListener("scroll", handleScroll, { passive: true });
@@ -51,7 +51,7 @@ export function VirtualList<T>({
     
     handleResize();
     // Invoke immediately to initialize scrollTop
-    setScrollTop(scrollParent.scrollTop);
+    setScrollTop(scrollParent === window ? window.scrollY : (scrollParent as HTMLElement).scrollTop);
 
     return () => {
       scrollParent.removeEventListener("scroll", handleScroll);
@@ -97,13 +97,13 @@ export function VirtualList<T>({
   );
 }
 
-function getScrollParent(node: HTMLElement | null): HTMLElement | null {
-  if (!node) return null;
-  if (node.scrollHeight > node.clientHeight) {
-    const overflowY = window.getComputedStyle(node).overflowY;
-    if (overflowY === "auto" || overflowY === "scroll") {
-      return node;
-    }
+function getScrollParent(node: HTMLElement | null): HTMLElement | Window {
+  if (!node || node === document.body || node === document.documentElement) {
+    return window;
+  }
+  const overflowY = window.getComputedStyle(node).overflowY;
+  if (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") {
+    return node;
   }
   return getScrollParent(node.parentElement);
 }

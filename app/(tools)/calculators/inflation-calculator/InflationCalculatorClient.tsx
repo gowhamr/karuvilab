@@ -108,9 +108,9 @@ const InflationCalculatorClient = memo(function InflationCalculatorClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-bg/50 border-b border-border">
-                <th className="px-4 py-3 text-left font-black uppercase text-xs tracking-wider text-text-4">Year</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Future Cost</th>
-                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-4">Purchasing Power</th>
+                <th className="px-4 py-3 text-left font-black uppercase text-xs tracking-wider text-text-muted">Year</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Future Cost</th>
+                <th className="px-4 py-3 text-right font-black uppercase text-xs tracking-wider text-text-muted">Purchasing Power</th>
               </tr>
             </thead>
             <tbody>

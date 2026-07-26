@@ -263,7 +263,7 @@ export default function MemoryMatchClient() {
           <div key={label} className="rounded-2xl border border-border bg-surface p-3 flex flex-col items-center gap-1">
             {icon}
             <span className="text-xl font-black text-text">{val}</span>
-            <span className="text-xs font-bold text-text-4 uppercase tracking-widest">{label}</span>
+            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">{label}</span>
           </div>
         ))}
       </div>
@@ -315,7 +315,7 @@ export default function MemoryMatchClient() {
                   {card.emoji}
                 </m.span>
               ) : (
-                <Eye className="w-6 h-6 text-text-4" />
+                <Eye className="w-6 h-6 text-text-muted" />
               )}
             </m.div>
           </m.button>
@@ -324,7 +324,7 @@ export default function MemoryMatchClient() {
 
       {/* ── Controls ── */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-text-4 font-bold">
+        <p className="text-sm text-text-muted font-bold">
           Best ({difficulty}): {currentBest === EMPTY_BEST ? "–" : `${currentBest} moves`}
         </p>
         <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
