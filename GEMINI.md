@@ -826,11 +826,26 @@ These CSS properties **create a new stacking context**, which means child `z-ind
 
 ---
 
-*This manifesto evolves with the platform. Every architectural decision that prevents a production failure must be added here with its KL/PERF rule number. Version this document — increment the version header on every material change.*
+## 27. Deployment Strategy & Environments
 
-## 21. Break-Time Category Standards
+KaruviLab operates with a dual-environment deployment strategy to ensure stable production releases while maintaining a live testing ground.
+
+| Environment | Platform | Build Output | Purpose |
+|-------------|----------|--------------|---------|
+| **Production** | Vercel | Standard Next.js | The live, user-facing application. Utilizes standard Next.js building, allowing for server-side optimizations. |
+| **UAT / Staging** | GitHub Pages | `export` (SSG) | User Acceptance Testing. Acts as a staging environment to catch bugs. `next.config.mjs` automatically handles the `output: 'export'` switch and `basePath` mapping when `GITHUB_PAGES` is true. |
+
+> **Requirement:** Never hardcode `output: 'export'` in `next.config.mjs` outside of the `isGithubPages` conditional, as this will cripple the Vercel production build.
+
+---
+
+## 28. Break-Time Category Standards
 - **Purpose**: Low-priority mini-games to provide a break. They are not part of the core feature set.
 - **Rules**:
   - Must remain strictly client-side.
   - Priority in sitemap is 0.5.
   - No retention guarantees (pending review).
+
+---
+
+*This manifesto evolves with the platform. Every architectural decision that prevents a production failure must be added here with its KL/PERF rule number. Version this document — increment the version header on every material change.*
