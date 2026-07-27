@@ -239,7 +239,10 @@ const SupportLinks = memo(function SupportLinks({
           href={link.href}
           isActive={pathname === link.href}
           onClick={setIsOpen}
-          label={(t(link.key as any) as string) || link.label}
+          label={(() => {
+            const translated = t(link.key as any) as string;
+            return (!translated || translated === link.key) ? link.label : translated;
+          })()}
           icon={link.icon}
           compact
           isHoverable={isHoverable}

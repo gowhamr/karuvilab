@@ -221,23 +221,25 @@ export default function CipherToolsClient() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-border/60">
-          <div className="md:col-span-2 bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4">
+          <div className="md:col-span-2 bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4 overflow-hidden">
             <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Frequency Analysis</h4>
-            <div className="flex items-end justify-between gap-1 h-32 pt-2 border-b border-border">
-              {Array.from({ length: 26 }).map((_, i) => {
-                const char = String.fromCharCode(65 + i);
-                const inPct = (letterStats.inputCounts[i] / letterStats.inputMax) * 100;
-                const outPct = (letterStats.outputCounts[i] / letterStats.outputMax) * 100;
-                return (
-                  <div key={char} className="flex-1 flex flex-col items-center gap-1 group relative">
-                    <div className="w-full flex items-end gap-[1.5px] h-24">
-                      <div style={{ height: `${inPct}%` }} className="flex-1 bg-blue/40 rounded-t-sm" />
-                      <div style={{ height: `${outPct}%` }} className="flex-1 bg-brand-primary/40 rounded-t-sm" />
+            <div className="w-full overflow-x-auto no-scrollbar pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
+              <div className="flex items-end justify-between gap-1 md:gap-1.5 h-32 pt-2 border-b border-border min-w-[480px]">
+                {Array.from({ length: 26 }).map((_, i) => {
+                  const char = String.fromCharCode(65 + i);
+                  const inPct = (letterStats.inputCounts[i] / letterStats.inputMax) * 100;
+                  const outPct = (letterStats.outputCounts[i] / letterStats.outputMax) * 100;
+                  return (
+                    <div key={char} className="flex-1 flex flex-col items-center gap-1 group relative">
+                      <div className="w-full flex items-end gap-[1px] md:gap-[2px] h-24">
+                        <div style={{ height: `${inPct}%` }} className="flex-1 bg-blue/40 rounded-t-sm hover:bg-blue transition-colors" title={`Plaintext ${char}: ${letterStats.inputCounts[i]}`} />
+                        <div style={{ height: `${outPct}%` }} className="flex-1 bg-brand-primary/40 rounded-t-sm hover:bg-brand-primary transition-colors" title={`Ciphertext ${char}: ${letterStats.outputCounts[i]}`} />
+                      </div>
+                      <span className="text-micro font-black text-text-muted">{char}</span>
                     </div>
-                    <span className="text-micro font-black text-text-muted">{char}</span>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
           <div className="bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4">

@@ -137,10 +137,10 @@ export function OfflineSyncIndicator() {
             <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-1">
               <div className="flex items-center gap-1.5 text-blue">
                 <HardDrive className="w-4 h-4" />
-                <span className="text-tiny font-bold uppercase tracking-widest-sm">Current Tool</span>
+                <span className="text-tiny font-bold uppercase tracking-widest-sm">{currentTool ? "Current Tool" : "Current Page"}</span>
               </div>
               <p className="text-xs text-text-3">
-                {currentTool ? (requiresNetwork ? "Requires Network" : "Offline Capable") : "Dashboard"}
+                {currentTool ? (requiresNetwork ? "Requires Network" : "Offline Capable") : "Offline Capable"}
               </p>
             </div>
           </div>

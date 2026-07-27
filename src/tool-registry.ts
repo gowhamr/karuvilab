@@ -91,10 +91,10 @@ export function findToolById(id: string): ToolEntry | undefined {
 }
 
 export function findToolByPath(pathname: string): ToolEntry | undefined {
-  const norm = pathname.replace(/^\/+/, '').replace(/index\.html$/, '').replace(/\/+$/, '');
+  const norm = '/' + pathname.replace(/^\/+/, '').replace(/index\.html$/, '').replace(/\/+$/, '');
   return ALL_TOOLS.find(t => {
-    const h = t.href.replace(/\/+$/, '');
-    return norm === h || norm.endsWith('/' + h);
+    const h = '/' + t.href.replace(/^\/+/, '').replace(/\/+$/, '');
+    return norm === h || norm.endsWith(h);
   });
 }
 
