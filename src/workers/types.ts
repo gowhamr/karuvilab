@@ -486,4 +486,5 @@ export interface WorkerAPI {
   processBase64File(file: ArrayBuffer, mimeType: string, action: string, onProgress?: ProgressCallback): Promise<string | ArrayBuffer>;
   removeImageMetadata(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
   cropImageCenter(file: ArrayBuffer, mimeType: string, width: number, height: number, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
+  parseLogs(logText: string, onProgress?: ProgressCallback): Promise<any[]>;
 }

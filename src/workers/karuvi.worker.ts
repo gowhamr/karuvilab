@@ -1790,6 +1790,7 @@ const api: Partial<WorkerAPI> = {
 
         const ipMatch = line.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/);
         const timeMatch = line.match(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?/);
+        const exceptionMatch = line.match(/(NullPointerException|OutOfMemoryError|ORA-\d{4,5}|No data found|Connection reset by peer|TimeoutException|SQLException|IOException)/gi);
         
         let isJson = false;
         let jsonData = null;
@@ -1814,11 +1815,13 @@ const api: Partial<WorkerAPI> = {
           const kvRegex = /([a-zA-Z0-9_.-]+)=((?:"[^"]*")|(?:'[^']*')|(?:[^\s]+))/g;
           let kvMatch;
           while ((kvMatch = kvRegex.exec(line)) !== null) {
-            let val = kvMatch[2];
+            let val = kvMatch[2] || "";
             if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
               val = val.substring(1, val.length - 1);
             }
-            keyValues[kvMatch[1]] = val;
+            if (kvMatch[1]) {
+              keyValues[kvMatch[1]] = val;
+            }
           }
         }
 
@@ -1828,6 +1831,7 @@ const api: Partial<WorkerAPI> = {
           level,
           ip: ipMatch ? ipMatch[0] : undefined,
           timestamp: timeMatch ? timeMatch[0] : undefined,
+          exceptions: exceptionMatch ? Array.from(new Set(exceptionMatch)) : undefined,
           message: line,
           isJson,
           jsonData,

@@ -16,15 +16,18 @@ export interface LogEntry {
   isJson?: boolean;
   jsonData?: any;
   keyValues?: Record<string, string>;
+  exceptions?: string[];
 }
 
 export const SAMPLE_LOGS = `2026-07-05 08:00:12 [INFO] 192.168.1.10 - User authentication successful for user_id=402
 2026-07-05 08:01:45 [WARN] 192.168.1.15 - High CPU utilization detected: 88.5%
 2026-07-05 08:02:10 [ERROR] 10.0.0.45 - Database connection timeout after 5000ms on pool_id=primary
 {"level": "info", "timestamp": "2026-07-05T08:03:00Z", "ip": "192.168.1.10", "message": "GET /api/v1/health", "status": 200, "duration": 4}
-2026-07-05 08:04:12 [FATAL] 10.0.0.45 - Out of memory error: Java heap space terminated worker-3
+2026-07-05 08:04:12 [FATAL] 10.0.0.45 - OutOfMemoryError: Java heap space terminated worker-3
 {"level": "debug", "message": "Cache invalidated", "key": "user_session_9921", "ip": "127.0.0.1"}
-2026-07-05 08:06:22 [ERROR] 192.168.1.15 - Failed to parse ISO 8583 message payload error="invalid length"`;
+2026-07-05 08:06:22 [ERROR] 192.168.1.15 - Failed to parse ISO 8583 message payload error="invalid length"
+2026-07-05 08:07:05 [ERROR] 10.0.1.10 - Exception in thread "main" java.lang.NullPointerException
+2026-07-05 08:08:12 [WARN] 10.0.1.10 - Database query failed: ORA-01403: No data found`;
 
 export default function LogAnalyzerClient() {
   const { toast } = useToast();
@@ -232,6 +235,18 @@ export default function LogAnalyzerClient() {
                       <span key={i} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface border border-border text-[10px]">
                         <span className="text-text-muted">{k}=</span>
                         <span className="text-sky-300 font-semibold max-w-[200px] truncate" title={v}>{v}</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Exceptions */}
+                {entry.exceptions && entry.exceptions.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {entry.exceptions.map((exc, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold shadow-sm">
+                        <AlertTriangle className="w-3 h-3" />
+                        {exc}
                       </span>
                     ))}
                   </div>
