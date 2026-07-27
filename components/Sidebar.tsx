@@ -15,7 +15,7 @@ import { MobileSidebar } from "./layout/MobileSidebar";
 import {
   Home, Info, HelpCircle, Settings, Shield, FileWarning,
   X, Clock, Search, Command, LayoutGrid, Heart, LucideIcon,
-  ChevronRight, PanelLeftClose
+  ChevronRight, PanelLeftClose, Newspaper
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
@@ -25,6 +25,7 @@ import { useSettingsStore } from "@/src/store/settings/store";
 
 const SUPPORT_LINKS = [
   { href: "/about/",      label: "About",      icon: Info,        key: "common.about"      },
+  { href: "/blog/",       label: "Blog",       icon: Newspaper,   key: "common.blog"       },
   { href: "/help/",       label: "Help",        icon: HelpCircle,  key: "common.help"       },
   { href: "/settings/",   label: "Settings",    icon: Settings,    key: "common.settings"   },
   { href: "/privacy/",    label: "Privacy",     icon: Shield,      key: "common.privacy"    },

@@ -63,6 +63,7 @@ export function CollectionsDashboard() {
   const [colColor, setColColor] = useState("#4F46E5");
   const [selectedToolIds, setSelectedToolIds] = useState<string[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
+  const [toolSearchQuery, setToolSearchQuery] = useState("");
 
   // Search filter for collections
   const filteredCollections = useMemo(() => {
@@ -72,6 +73,16 @@ export function CollectionsDashboard() {
     );
   }, [collections, searchQuery]);
 
+  const filteredToolsForModal = useMemo(() => {
+    if (!toolSearchQuery.trim()) return ALL_TOOLS;
+    const q = toolSearchQuery.toLowerCase();
+    return ALL_TOOLS.filter(t => 
+      t.name.toLowerCase().includes(q) || 
+      t.desc.toLowerCase().includes(q) ||
+      t.id.toLowerCase().includes(q)
+    );
+  }, [toolSearchQuery]);
+
   const handleOpenCreate = () => {
     setColName("");
     setColDesc("");
@@ -79,6 +90,7 @@ export function CollectionsDashboard() {
     setColColor("#4F46E5");
     setSelectedToolIds([]);
     setEditId(null);
+    setToolSearchQuery("");
     setShowCreateModal(true);
   };
 
@@ -90,6 +102,7 @@ export function CollectionsDashboard() {
     setColColor(col.color);
     setSelectedToolIds(col.toolIds);
     setEditId(col.id);
+    setToolSearchQuery("");
     setShowCreateModal(true);
   };
 
@@ -436,29 +449,57 @@ export function CollectionsDashboard() {
 
               {/* Tools selector list */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Select Tools ({selectedToolIds.length})</label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-60 overflow-y-auto p-2 bg-surface rounded-2xl border border-border/80">
-                  {ALL_TOOLS.map(tool => {
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Select Tools ({selectedToolIds.length})</label>
+                  {selectedToolIds.length > 0 && (
+                    <button 
+                      onClick={() => setSelectedToolIds([])}
+                      className="text-[10px] font-bold uppercase tracking-widest text-brand-primary hover:underline transition-all"
+                    >
+                      Clear Selection
+                    </button>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-4" />
+                  <input
+                    type="text"
+                    placeholder="Search tools to add..."
+                    value={toolSearchQuery}
+                    onChange={e => setToolSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2.5 bg-surface border border-border focus:border-brand-primary rounded-xl text-xs text-text focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-60 overflow-y-auto p-2 bg-surface rounded-2xl border border-border/80 custom-scrollbar shadow-inner">
+                  {filteredToolsForModal.map(tool => {
                     const isSelected = selectedToolIds.includes(tool.id);
                     return (
                       <div
                         key={tool.id}
                         onClick={() => handleToggleToolSelection(tool.id)}
                         className={cn(
-                          "flex items-center gap-2.5 p-2 bg-surface hover:bg-hover border rounded-xl cursor-pointer select-none transition-all active:scale-98",
-                          isSelected ? "border-brand-primary/60 bg-brand-primary/5" : "border-border/50"
+                          "flex items-center gap-2.5 p-2.5 bg-surface hover:bg-hover border rounded-xl cursor-pointer select-none transition-all active:scale-98",
+                          isSelected ? "border-brand-primary/60 bg-brand-primary/5 shadow-sm" : "border-border/50"
                         )}
+                        title={tool.name}
                       >
                         <input
                           type="checkbox"
                           checked={isSelected}
-                          onChange={() => {}} // handled by parent onClick
+                          readOnly
                           className="rounded text-brand-primary focus:ring-brand-primary"
                         />
                         <span className="text-xs font-bold text-text truncate">{tool.name}</span>
                       </div>
                     );
                   })}
+                  {filteredToolsForModal.length === 0 && (
+                    <div className="col-span-full py-8 text-center text-xs text-text-muted">
+                      No tools found matching "{toolSearchQuery}"
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

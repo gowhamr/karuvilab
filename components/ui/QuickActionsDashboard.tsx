@@ -67,7 +67,7 @@ export function QuickActionsDashboard({
     } else if (ext === 'json') {
       router.push('/developer-tools/json-formatter');
     } else if (ext === 'csv') {
-      router.push('/developer-tools/csv-json-converter');
+      router.push('/developer-tools/csv-to-json');
     } else if (ext === 'xml') {
       router.push('/developer-tools/xml-formatter');
     } else if (ext === 'sql') {
@@ -80,7 +80,7 @@ export function QuickActionsDashboard({
   const isEmpty = !continueTool && recentTools.length === 0 && favoriteTools.length === 0;
 
   const starterTools = useMemo(() => {
-    const starterIds = ["merge-pdf", "json-formatter", "image-compress", "url-encoder"];
+    const starterIds = ["merge-pdf", "json-formatter", "compress", "url-encoder"];
     return ALL_TOOLS.filter(t => starterIds.includes(t.id));
   }, []);
 
@@ -105,14 +105,14 @@ export function QuickActionsDashboard({
               <Card
                 variant="interactive"
                 padding="sm"
-                className="flex flex-col items-center justify-center text-center gap-2 group focus-visible:ring-2 focus-visible:ring-primary"
+                className="flex flex-col items-center justify-center text-center gap-2 group min-h-[88px] focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0 transition-transform group-hover:scale-105">
                   <ToolIcon toolId={tool.id} category={tool.category} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-caption font-bold text-text-primary truncate max-w-[140px]">{tool.name}</p>
-                  <p className="text-tiny text-text-secondary truncate max-w-[140px] mt-0.5">{tool.desc}</p>
+                  <p className="text-sm font-bold text-text-primary truncate max-w-[140px]">{tool.name}</p>
+                  <p className="text-xs text-text-secondary truncate max-w-[140px] mt-0.5">{tool.desc}</p>
                 </div>
               </Card>
             </Link>
@@ -129,61 +129,61 @@ export function QuickActionsDashboard({
       <section aria-label="Smart Quick Actions">
         <div className="flex items-center gap-2 mb-3 px-1">
           <Zap className="w-3.5 h-3.5 text-primary" />
-          <h2 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h2>
-          {pasteNotice && <span className="text-caption font-bold text-danger ml-auto animate-pulse">{pasteNotice}</span>}
+          <h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h2>
+          {pasteNotice && <span className="text-sm font-bold text-danger ml-auto animate-pulse">{pasteNotice}</span>}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {continueTool ? (
             <Link
               href={continueTool.href}
-              className="flex items-center gap-2.5 p-3 rounded-md bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-text-primary shrink-0 shadow-sm">
                 <Play className="w-4 h-4 fill-current ml-0.5" />
               </div>
               <div className="min-w-0">
-                <p className="text-caption font-bold text-text-primary truncate">Resume</p>
-                <p className="text-tiny text-text-secondary truncate">{continueTool.name}</p>
+                <p className="text-sm font-bold text-text-primary truncate">Resume</p>
+                <p className="text-xs text-text-secondary truncate">{continueTool.name}</p>
               </div>
             </Link>
           ) : (
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
                 <Search className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-caption font-bold text-text-primary truncate">Search Tools</p>
-                <p className="text-tiny text-text-secondary truncate">Ctrl+K Palette</p>
+                <p className="text-sm font-bold text-text-primary truncate">Search Tools</p>
+                <p className="text-xs text-text-secondary truncate">Ctrl+K Palette</p>
               </div>
             </button>
           )}
 
           <button
             onClick={handlePasteDetect}
-            className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="w-8 h-8 rounded-md bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
               <Clipboard className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-caption font-bold text-text-primary truncate">Paste & Detect</p>
-              <p className="text-tiny text-text-secondary truncate">Auto tool match</p>
+              <p className="text-sm font-bold text-text-primary truncate">Paste & Detect</p>
+              <p className="text-xs text-text-secondary truncate">Auto tool match</p>
             </div>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
               <Upload className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-caption font-bold text-text-primary truncate">Upload File</p>
-              <p className="text-tiny text-text-secondary truncate">Auto route format</p>
+              <p className="text-sm font-bold text-text-primary truncate">Upload File</p>
+              <p className="text-xs text-text-secondary truncate">Auto route format</p>
             </div>
           </button>
           <input
@@ -196,14 +196,14 @@ export function QuickActionsDashboard({
 
           <button
             onClick={() => setIsPaletteOpen(true)}
-            className="flex items-center gap-2.5 p-3 rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="w-8 h-8 rounded-md bg-warning/10 flex items-center justify-center text-warning shrink-0">
               <Search className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-caption font-bold text-text-primary truncate">Command Bar</p>
-              <p className="text-tiny text-text-secondary truncate">Explore 150+ tools</p>
+              <p className="text-sm font-bold text-text-primary truncate">Command Bar</p>
+              <p className="text-xs text-text-secondary truncate">Explore 150+ tools</p>
             </div>
           </button>
         </div>
@@ -214,13 +214,13 @@ export function QuickActionsDashboard({
         <section aria-label="Continue Working">
           <div className="flex items-center gap-2 mb-3 px-1">
             <Play className="w-3.5 h-3.5 text-primary" />
-            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Continue Working</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Continue Working</h3>
           </div>
           <Link href={continueTool.href} passHref legacyBehavior>
             <Card
               variant="interactive"
               padding="md"
-              className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 focus-visible:ring-2 focus-visible:ring-primary"
+              className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 focus-visible:ring-2 focus-visible:ring-primary min-h-[64px]"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-bg border border-divider flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
@@ -230,7 +230,7 @@ export function QuickActionsDashboard({
                   <h4 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors">
                     {continueTool.name}
                   </h4>
-                  <p className="text-caption text-text-secondary mt-0.5">
+                  <p className="text-sm text-text-secondary mt-0.5">
                     Last active tool in your session
                   </p>
                 </div>
@@ -252,17 +252,17 @@ export function QuickActionsDashboard({
         <section aria-label="Favorites">
           <div className="flex items-center gap-2 mb-3 px-1">
             <Heart className="w-3.5 h-3.5 text-danger fill-current" />
-            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Favorites</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Favorites</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
             {favoriteTools.map(tool => (
               <Link
                 key={`fav-${tool.id}`}
                 href={tool.href}
-                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-md bg-bg border border-divider hover:border-primary/30 hover:bg-surface-elevated transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group flex items-center gap-2.5 min-w-[140px] min-h-[44px] px-3.5 py-3 rounded-md bg-bg border border-divider hover:border-primary/30 hover:bg-surface-elevated transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <ToolIcon category={tool.category} className="w-4 h-4 text-text-secondary group-hover:text-danger transition-colors" />
-                <span className="text-caption font-semibold text-text-primary truncate">{tool.name}</span>
+                <span className="text-sm font-semibold text-text-primary truncate">{tool.name}</span>
               </Link>
             ))}
           </div>
@@ -274,19 +274,19 @@ export function QuickActionsDashboard({
         <section aria-label="Recently Used">
           <div className="flex items-center gap-2 mb-3 px-1">
             <Clock className="w-3.5 h-3.5 text-text-secondary" />
-            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Recently Used</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Recently Used</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
             {recentTools.slice(0, 10).map(tool => (
               <Link
                 key={`rec-${tool.id}`}
                 href={tool.href}
-                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-md bg-bg border border-divider hover:border-primary/30 hover:bg-surface-elevated transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group flex items-center gap-2.5 min-w-[140px] min-h-[44px] px-3.5 py-3 rounded-md bg-bg border border-divider hover:border-primary/30 hover:bg-surface-elevated transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <div className="w-6 h-6 rounded-md bg-surface border border-divider flex items-center justify-center shrink-0 group-hover:border-primary/30 transition-colors">
                   <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-secondary group-hover:text-primary" />
                 </div>
-                <span className="text-caption font-medium text-text-secondary group-hover:text-text-primary truncate">{tool.name}</span>
+                <span className="text-sm font-medium text-text-secondary group-hover:text-text-primary truncate">{tool.name}</span>
               </Link>
             ))}
           </div>
@@ -298,19 +298,19 @@ export function QuickActionsDashboard({
         <section aria-label="Frequently Used">
           <div className="flex items-center gap-2 mb-3 px-1">
             <TrendingUp className="w-3.5 h-3.5 text-success" />
-            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Frequently Used</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Frequently Used</h3>
           </div>
           <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x">
             {frequentlyUsedTools.slice(0, 10).map(tool => (
               <Link
                 key={`freq-${tool.id}`}
                 href={tool.href}
-                className="group flex items-center gap-2.5 min-w-[140px] px-3.5 py-2.5 rounded-md bg-bg border border-divider hover:border-success/30 hover:bg-success/5 transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success"
+                className="group flex items-center gap-2.5 min-w-[140px] min-h-[44px] px-3.5 py-3 rounded-md bg-bg border border-divider hover:border-success/30 hover:bg-success/5 transition-all shrink-0 snap-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success"
               >
                 <div className="w-6 h-6 rounded-md bg-surface border border-divider flex items-center justify-center shrink-0 group-hover:border-success/30 transition-colors">
                   <ToolIcon category={tool.category} className="w-3.5 h-3.5 text-text-secondary group-hover:text-success" />
                 </div>
-                <span className="text-caption font-medium text-text-secondary group-hover:text-text-primary truncate">{tool.name}</span>
+                <span className="text-sm font-medium text-text-secondary group-hover:text-text-primary truncate">{tool.name}</span>
               </Link>
             ))}
           </div>
@@ -322,7 +322,7 @@ export function QuickActionsDashboard({
         <section aria-label="Suggested for You">
           <div className="flex items-center gap-2 mb-3 px-1">
             <Sparkles className="w-3.5 h-3.5 text-warning" />
-            <h3 className="text-caption font-bold uppercase tracking-widest text-text-secondary">Suggested for You</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Suggested for You</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {suggestedTools.map(tool => (
@@ -330,14 +330,14 @@ export function QuickActionsDashboard({
                 <Card
                   variant="interactive"
                   padding="sm"
-                  className="flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-primary"
+                  className="flex items-center gap-3 group min-h-[64px] focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   <div className="w-10 h-10 rounded-lg bg-surface border border-divider flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                     <ToolIcon category={tool.category} className="w-5 h-5 text-warning" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-caption font-bold text-text-primary truncate group-hover:text-warning transition-colors">{tool.name}</p>
-                    <p className="text-tiny text-text-secondary truncate">Based on recent workflow</p>
+                    <p className="text-sm font-bold text-text-primary truncate group-hover:text-warning transition-colors">{tool.name}</p>
+                    <p className="text-xs text-text-secondary truncate">Based on recent workflow</p>
                   </div>
                 </Card>
               </Link>

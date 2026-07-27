@@ -148,9 +148,11 @@ const api: Partial<WorkerAPI> = {
       const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
       return `<pre data-lang="${safeLang}"><code class="hljs${safeLang ? ' language-' + safeLang : ''}">${escapeHtml(safeCode)}</code></pre>`;
     };
+    
+    marked.use({ renderer, gfm: true, breaks: true });
 
     if (onProgress) onProgress({ percent: 50, message: "Parsing markdown..." });
-    const html = await Promise.resolve(marked.parse(text, { renderer, async: false, gfm: true, breaks: true }));
+    const html = await Promise.resolve(marked.parse(text, { async: false }));
     if (onProgress) onProgress({ percent: 100, message: "Done" });
     return html as string;
   },
@@ -1815,7 +1817,7 @@ const api: Partial<WorkerAPI> = {
           const kvRegex = /([a-zA-Z0-9_.-]+)=((?:"[^"]*")|(?:'[^']*')|(?:[^\s]+))/g;
           let kvMatch;
           while ((kvMatch = kvRegex.exec(line)) !== null) {
-            let val = kvMatch[2] || "";
+            let val: string = kvMatch[2] || "";
             if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
               val = val.substring(1, val.length - 1);
             }

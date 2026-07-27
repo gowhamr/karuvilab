@@ -54,15 +54,15 @@ export function detectContentToolSuggestion(input: string): DetectedToolSuggesti
 
   // 6b. EMV TLV / APDU Detection (e.g. 9F26, 9F27, 9F10 or APDU 00A40400)
   if (/^(9F[0-7][0-9A-F]|[5-9][0-9A-F]{3})[0-9A-Fa-f]{4,}/i.test(trimmed) || /^(00A40400|80A80000|00B2)/i.test(trimmed)) {
-    return { toolId: "emv-tlv-parser", confidence: 0.96, reason: "Pasted payload matches EMV TLV or APDU command structure" };
+    return { toolId: "emv-tlv-tree", confidence: 0.96, reason: "Pasted payload matches EMV TLV or APDU command structure" };
   }
 
   // 6c. SWIFT MT / MX Detection
   if (/^\{1:F01|\:20:|\:32A:|\:50K:/m.test(trimmed)) {
-    return { toolId: "swift-mt-viewer", confidence: 0.98, reason: "Pasted text matches SWIFT MT message block syntax" };
+    return { toolId: "swift-mt-mx", confidence: 0.98, reason: "Pasted text matches SWIFT MT message block syntax" };
   }
   if (trimmed.includes("pacs.008") || trimmed.includes("camt.053") || trimmed.includes("pain.001") || trimmed.includes("<AppHdr>")) {
-    return { toolId: "swift-mx-viewer", confidence: 0.98, reason: "Pasted XML matches SWIFT MX ISO 20022 message" };
+    return { toolId: "swift-mt-mx", confidence: 0.98, reason: "Pasted XML matches SWIFT MX ISO 20022 message" };
   }
 
   // 6d. IBAN Detection (Country code + 2 digits + up to 30 alphanumeric)
@@ -102,7 +102,7 @@ export function detectContentToolSuggestion(input: string): DetectedToolSuggesti
 
   // 11. Base64 String Detection
   if (trimmed.length > 20 && /^[A-Za-z0-9+/=]+$/.test(trimmed) && trimmed.length % 4 === 0) {
-    return { toolId: "base64-encoder", confidence: 0.88, reason: "Pasted string matches Base64 encoded structure" };
+    return { toolId: "base64", confidence: 0.88, reason: "Pasted string matches Base64 encoded structure" };
   }
 
   // 12. Hex String Detection

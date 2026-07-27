@@ -155,7 +155,7 @@ export default function WorkbenchClient() {
         {activeTab && (
           <div className={cn("flex-1 h-full border-r border-border transition-all", splitTab ? "w-1/2 hidden md:block" : "w-full")}>
             <iframe 
-              src={`/${activeTab.tool.href}?embed=true`} 
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/${activeTab.tool.href}?embed=true`} 
               className="w-full h-full border-none"
               title={activeTab.tool.name}
             />
@@ -165,7 +165,7 @@ export default function WorkbenchClient() {
         {splitTab && (
           <div className="flex-1 h-full w-full md:w-1/2">
             <iframe 
-              src={`/${splitTab.tool.href}?embed=true`} 
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/${splitTab.tool.href}?embed=true`} 
               className="w-full h-full border-none"
               title={splitTab.tool.name}
             />

@@ -7,7 +7,12 @@ let spellchecker: nspell | null = null;
 
 async function loadSpellchecker() {
   if (spellchecker) return spellchecker;
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  
+  let basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  if (typeof self !== 'undefined' && self.location && self.location.hostname.includes('github.io')) {
+    basePath = '/karuvilab';
+  }
+  
   const affRes = await fetch(`${basePath}/lib/dictionary/en.aff`);
   const dicRes = await fetch(`${basePath}/lib/dictionary/en.dic`);
   

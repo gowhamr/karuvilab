@@ -59,14 +59,14 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
               <h3 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors line-clamp-1">
                 {tool.name}
               </h3>
-              <p className="text-caption text-text-secondary line-clamp-2 leading-relaxed">
+              <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">
                 {tool.desc}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap mt-auto">
-            <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-[10px]">
+            <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-xs">
               {tool.category}
             </Badge>
 
@@ -78,7 +78,8 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
         <button
           onClick={handleFavClick}
           className={cn(
-            "absolute top-3 right-3 z-content p-1.5 rounded-full border transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-90",
+            "absolute top-3 right-3 z-content p-2 rounded-full border transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-90",
+            "before:absolute before:-inset-2 before:content-['']",
             isFavorite
               ? "bg-danger/10 border-danger/20 text-danger"
               : "bg-surface border-divider text-text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger/5"
@@ -86,7 +87,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
           aria-label={isFavorite ? `Remove ${tool.name} from favorites` : `Add ${tool.name} to favorites`}
           aria-pressed={isFavorite}
         >
-          <Heart className={cn("w-3.5 h-3.5", isFavorite && "fill-current")} aria-hidden="true" />
+          <Heart className={cn("w-4 h-4", isFavorite && "fill-current")} aria-hidden="true" />
         </button>
       )}
     </div>

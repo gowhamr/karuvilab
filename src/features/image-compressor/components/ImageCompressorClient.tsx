@@ -78,19 +78,19 @@ export default function ImageCompressorClient() {
       </div>
 
       {/* Trust & Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-border bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
         {[
-          { title: "Privacy First", desc: "No images are uploaded. All processing stays local.", icon: <ShieldCheck className="text-blue" /> },
-          { title: "Fast Engine", desc: "Worker-powered compression for peak performance.", icon: <Zap className="text-blue" /> },
-          { title: "Universal", desc: "Supports JPEG, PNG, WebP, and next-gen AVIF.", icon: <ImageIcon className="text-blue" /> },
+          { title: "Privacy First", desc: "No images are uploaded. All processing stays local.", icon: <ShieldCheck className="w-5 h-5 text-blue" /> },
+          { title: "Fast Engine", desc: "Worker-powered compression for peak performance.", icon: <Zap className="w-5 h-5 text-blue" /> },
+          { title: "Universal", desc: "Supports JPEG, PNG, WebP, and next-gen AVIF.", icon: <ImageIcon className="w-5 h-5 text-blue" /> },
         ].map((f, i) => (
-          <div key={i} className="p-8 bg-surface border border-border rounded-4xl space-y-4 hover:border-blue/30 transition-colors group">
-            <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <div key={i} className="flex-1 p-5 flex items-start gap-4 hover:bg-blue/5 transition-colors group">
+            <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               {f.icon}
             </div>
             <div>
-              <h3 className="text-sm font-black uppercase tracking-widest mb-1">{f.title}</h3>
-              <p className="text-xs font-bold text-text-3 uppercase leading-relaxed">{f.desc}</p>
+              <h3 className="text-sm font-bold tracking-wide mb-1">{f.title}</h3>
+              <p className="text-xs text-text-3 leading-relaxed">{f.desc}</p>
             </div>
           </div>
         ))}

@@ -8,7 +8,6 @@ import { workerManager } from "@/src/workers/manager";
 import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
 import { DropZone } from "@/components/ui/DropZone";
 import { StatusBadge } from "@/components/system/StatusBadge";
-import { EmptyState } from "@/components/system/EmptyState";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { formatError } from "@/src/lib/formatError";
 import { ImageIcon } from "lucide-react";
@@ -154,12 +153,15 @@ export default function BgRemoverClient() {
                 </button>
               </>
             ) : (
-              <EmptyState 
-                title="No Result Yet"
-                description="Upload an image and click 'Remove Background' to see the result here."
-                icon={<ImageIcon className="w-6 h-6" />}
-                workflow={["Upload an image", "Adjust color and tolerance", "Download transparent PNG"]}
-              />
+              <div className="flex flex-col items-center justify-center py-16 px-4 text-center border-2 border-dashed border-border rounded-xl bg-bg/50">
+                <div className="w-12 h-12 mb-4 text-blue bg-blue/10 rounded-xl flex items-center justify-center">
+                  <ImageIcon className="w-6 h-6" />
+                </div>
+                <h3 className="text-sm font-bold text-text-1 mb-1">No Result Yet</h3>
+                <p className="text-xs text-text-3 max-w-[250px]">
+                  Upload an image and click 'Remove Background' to see the result here.
+                </p>
+              </div>
             )}
           </div>
 

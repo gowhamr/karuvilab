@@ -13,9 +13,9 @@ const MAGIC_BYTES: { hex: string; mime: string; ext: string[] }[] = [
   { hex: "47494638", mime: "image/gif", ext: ["gif"] },
   { hex: "52494646", mime: "image/webp", ext: ["webp"] },
   { hex: "25504446", mime: "application/pdf", ext: ["pdf"] },
-  { hex: "504B0304", mime: "application/zip", ext: ["zip", "docx", "xlsx", "pptx", "odt"] },
+  { hex: "504B0304", mime: "application/zip", ext: ["zip", "docx", "xlsx", "pptx", "odt", "apk"] },
   { hex: "1F8B08", mime: "application/gzip", ext: ["gz", "tgz"] },
-  { hex: "D0CF11E0", mime: "application/msoffice", ext: ["doc", "xls", "ppt"] },
+  { hex: "D0CF11E0", mime: "application/msoffice", ext: ["doc", "xls", "ppt", "msi"] },
   { hex: "424D", mime: "image/bmp", ext: ["bmp"] },
   { hex: "49492A00", mime: "image/tiff", ext: ["tiff", "tif"] },
   { hex: "4D4D002A", mime: "image/tiff", ext: ["tiff", "tif"] },
@@ -25,7 +25,16 @@ const MAGIC_BYTES: { hex: string; mime: string; ext: string[] }[] = [
   { hex: "664C6143", mime: "audio/flac", ext: ["flac"] },
   { hex: "0000001866747970", mime: "video/mp4", ext: ["mp4", "m4v", "m4a"] },
   { hex: "0000002066747970", mime: "video/mp4", ext: ["mp4", "m4v", "m4a"] },
-  { hex: "52494646", mime: "audio/wav", ext: ["wav"] }, // Wait, RIFF is shared but good enough for now
+  { hex: "52494646", mime: "audio/wav", ext: ["wav", "avi"] }, // RIFF format
+  { hex: "3C3F786D6C", mime: "image/svg+xml", ext: ["svg"] },
+  { hex: "3C737667", mime: "image/svg+xml", ext: ["svg"] },
+  { hex: "7B22", mime: "application/json", ext: ["json"] },
+  { hex: "5B22", mime: "application/json", ext: ["json"] },
+  { hex: "1A45DFA3", mime: "video/webm", ext: ["webm", "mkv"] },
+  { hex: "4F676753", mime: "audio/ogg", ext: ["ogg", "oga", "ogv"] },
+  { hex: "4D5A", mime: "application/x-msdownload", ext: ["exe", "dll"] },
+  { hex: "7F454C46", mime: "application/x-executable", ext: ["elf", "bin"] },
+  { hex: "2321", mime: "text/x-shellscript", ext: ["sh", "bash"] },
 ];
 
 function bytesToHex(bytes: Uint8Array): string {
@@ -156,11 +165,14 @@ export default function FileValidatorClient() {
     }
 
     try {
-      const { workerManager } = await import("@/src/workers/manager");
-      // Use slice(0) to pass a copy to the worker, preventing detach issues if the buffer is needed elsewhere
-      const arrayBuf = await file.slice(0).arrayBuffer();
-      const hash = await workerManager.generateFileHash(arrayBuf, "SHA-256", "hex");
-      checks.push({ label: "SHA-256 Hash", status: "info", value: String(hash) });
+      if (file.size <= 50 * 1024 * 1024) { // Limit hash to 50MB to prevent OOM
+        const { workerManager } = await import("@/src/workers/manager");
+        const arrayBuf = await file.slice(0).arrayBuffer();
+        const hash = await workerManager.generateFileHash(arrayBuf, "SHA-256", "hex");
+        checks.push({ label: "SHA-256 Hash", status: "info", value: String(hash) });
+      } else {
+        checks.push({ label: "SHA-256 Hash", status: "info", value: "Skipped (file too large for browser memory)" });
+      }
     } catch {
       checks.push({ label: "SHA-256 Hash", status: "warning", value: "Failed to compute hash" });
     }
