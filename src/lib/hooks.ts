@@ -160,7 +160,8 @@ export function useNetworkQuality(): NetworkQuality {
         return;
       }
       try {
-        const res = await fetch('/favicon.ico?_t=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+        const res = await fetch(`${basePath}/manifest.json?_t=${Date.now()}`, { method: 'HEAD', cache: 'no-store' });
         updateQuality(res.ok);
       } catch (err) {
         updateQuality(false);
