@@ -1770,6 +1770,78 @@ const api: Partial<WorkerAPI> = {
     return runGrammarCheck(text, ignoredWords, tone, onProgress);
   },
 
+  async parseLogs(logText: string, onProgress?: any) {
+    if (onProgress) onProgress({ percent: 10, message: "Splitting lines..." });
+    const lines = logText.split("\n").filter((l: string) => l.trim().length > 0);
+    const parsedLogs = [];
+    
+    const chunkSize = 5000;
+    for (let i = 0; i < lines.length; i += chunkSize) {
+      if (onProgress) onProgress({ percent: 10 + Math.floor((i / lines.length) * 85), message: `Parsing logs ${i} / ${lines.length}...` });
+      const chunk = lines.slice(i, i + chunkSize);
+      
+      for (const line of chunk) {
+        let level = "UNKNOWN";
+        if (/ERROR/i.test(line)) level = "ERROR";
+        else if (/WARN/i.test(line)) level = "WARN";
+        else if (/FATAL/i.test(line)) level = "FATAL";
+        else if (/INFO/i.test(line)) level = "INFO";
+        else if (/DEBUG/i.test(line)) level = "DEBUG";
+
+        const ipMatch = line.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/);
+        const timeMatch = line.match(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?/);
+        
+        let isJson = false;
+        let jsonData = null;
+        let keyValues: Record<string, string> = {};
+
+        const trimmed = line.trim();
+        if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+          try {
+            jsonData = JSON.parse(trimmed);
+            isJson = true;
+            if (jsonData.level) {
+              const lvl = String(jsonData.level).toUpperCase();
+              if (["INFO", "WARN", "ERROR", "DEBUG", "FATAL"].includes(lvl)) {
+                level = lvl;
+              }
+            }
+          } catch (e) {
+          }
+        }
+
+        if (!isJson) {
+          const kvRegex = /([a-zA-Z0-9_.-]+)=((?:"[^"]*")|(?:'[^']*')|(?:[^\s]+))/g;
+          let kvMatch;
+          while ((kvMatch = kvRegex.exec(line)) !== null) {
+            let val = kvMatch[2];
+            if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+              val = val.substring(1, val.length - 1);
+            }
+            keyValues[kvMatch[1]] = val;
+          }
+        }
+
+        parsedLogs.push({
+          id: i + parsedLogs.length + 1,
+          raw: line,
+          level,
+          ip: ipMatch ? ipMatch[0] : undefined,
+          timestamp: timeMatch ? timeMatch[0] : undefined,
+          message: line,
+          isJson,
+          jsonData,
+          keyValues: Object.keys(keyValues).length > 0 ? keyValues : undefined
+        });
+      }
+      
+      await new Promise(r => setTimeout(r, 0));
+    }
+    
+    if (onProgress) onProgress({ percent: 100, message: "Done" });
+    return parsedLogs;
+  },
+
   async computePerceptualHash(file: ArrayBuffer, mimeType: string, onProgress?: any) { return ""; },
   async cropImageCenter(file: ArrayBuffer, mimeType: string, width: number, height: number, onProgress?: any) { return file; },
   async rotateImageStandard(file: ArrayBuffer, mimeType: string, onProgress?: any) { return file; },

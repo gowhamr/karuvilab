@@ -1,60 +1,89 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { FileSearch, Filter, AlertTriangle, Info, CheckCircle2, Search } from "lucide-react";
+import { FileSearch, Filter, AlertTriangle, Info, CheckCircle2, Search, Loader2 } from "lucide-react";
+import { workerManager } from "@/src/workers/manager";
+import { useToast } from "@/components/ui/Toast";
 
 export interface LogEntry {
   id: number;
   raw: string;
   level: "INFO" | "WARN" | "ERROR" | "DEBUG" | "FATAL" | "UNKNOWN";
-  ip?: string | undefined;
-  timestamp?: string | undefined;
+  ip?: string;
+  timestamp?: string;
   message: string;
+  isJson?: boolean;
+  jsonData?: any;
+  keyValues?: Record<string, string>;
 }
 
 export const SAMPLE_LOGS = `2026-07-05 08:00:12 [INFO] 192.168.1.10 - User authentication successful for user_id=402
 2026-07-05 08:01:45 [WARN] 192.168.1.15 - High CPU utilization detected: 88.5%
 2026-07-05 08:02:10 [ERROR] 10.0.0.45 - Database connection timeout after 5000ms on pool_id=primary
-2026-07-05 08:03:00 [INFO] 192.168.1.10 - GET /api/v1/health status=200 duration=4ms
+{"level": "info", "timestamp": "2026-07-05T08:03:00Z", "ip": "192.168.1.10", "message": "GET /api/v1/health", "status": 200, "duration": 4}
 2026-07-05 08:04:12 [FATAL] 10.0.0.45 - Out of memory error: Java heap space terminated worker-3
-2026-07-05 08:05:30 [DEBUG] 127.0.0.1 - Cache invalidated for key=user_session_9921
-2026-07-05 08:06:22 [ERROR] 192.168.1.15 - Failed to parse ISO 8583 message payload: invalid length`;
+{"level": "debug", "message": "Cache invalidated", "key": "user_session_9921", "ip": "127.0.0.1"}
+2026-07-05 08:06:22 [ERROR] 192.168.1.15 - Failed to parse ISO 8583 message payload error="invalid length"`;
 
 export default function LogAnalyzerClient() {
+  const { toast } = useToast();
   const [logText, setLogText] = useState(SAMPLE_LOGS);
   const [filterLevel, setFilterLevel] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [parsedLogs, setParsedLogs] = useState<LogEntry[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progressMsg, setProgressMsg] = useState("");
+  
+  const abortController = useRef<AbortController | null>(null);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const parsedLogs = useMemo<LogEntry[]>(() => {
-    const lines = logText.split("\n").filter((l) => l.trim().length > 0);
-    return lines.map((line, idx) => {
-      let level: LogEntry["level"] = "UNKNOWN";
-      if (/ERROR/i.test(line)) level = "ERROR";
-      else if (/WARN/i.test(line)) level = "WARN";
-      else if (/FATAL/i.test(line)) level = "FATAL";
-      else if (/INFO/i.test(line)) level = "INFO";
-      else if (/DEBUG/i.test(line)) level = "DEBUG";
+  const parseWorker = useCallback(async (text: string) => {
+    if (!text.trim()) {
+      setParsedLogs([]);
+      return;
+    }
 
-      const ipMatch = line.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/);
-      const timeMatch = line.match(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/);
+    if (abortController.current) abortController.current.abort();
+    abortController.current = new AbortController();
 
-      return {
-        id: idx + 1,
-        raw: line,
-        level,
-        ip: ipMatch ? ipMatch[0] : undefined,
-        timestamp: timeMatch ? timeMatch[0] : undefined,
-        message: line,
-      };
-    });
-  }, [logText]);
+    setIsProcessing(true);
+    setProgressMsg("Parsing logs...");
+    
+    try {
+      const result = await workerManager.parseLogs(
+        text,
+        (p) => setProgressMsg(p.message || "Parsing logs..."),
+        abortController.current.signal
+      );
+      setParsedLogs(result);
+    } catch (e: any) {
+      if (e.message !== "Task cancelled") {
+        toast("Failed to parse logs: " + e.message, "error");
+      }
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [toast]);
+
+  useEffect(() => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      parseWorker(logText);
+    }, 500);
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, [logText, parseWorker]);
 
   const filteredLogs = useMemo(() => {
     return parsedLogs.filter((entry) => {
       if (filterLevel !== "ALL" && entry.level !== filterLevel) return false;
       if (searchQuery.trim()) {
-        return entry.raw.toLowerCase().includes(searchQuery.toLowerCase());
+        const query = searchQuery.toLowerCase();
+        if (entry.raw.toLowerCase().includes(query)) return true;
+        if (entry.isJson && JSON.stringify(entry.jsonData).toLowerCase().includes(query)) return true;
+        return false;
       }
       return true;
     });
@@ -70,16 +99,25 @@ export default function LogAnalyzerClient() {
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Log Input */}
       <div className="space-y-2">
-        <label className="text-sm font-semibold text-text flex items-center gap-2">
-          <FileSearch className="w-4 h-4 text-sky-400" />
-          Paste Server / Application Log Stream:
-        </label>
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-semibold text-text flex items-center gap-2">
+            <FileSearch className="w-4 h-4 text-sky-400" />
+            Paste Server / Application Log Stream:
+          </label>
+          {isProcessing && (
+            <span className="text-xs text-primary flex items-center gap-1 font-medium animate-pulse">
+              <Loader2 className="w-3 h-3 animate-spin" />
+              {progressMsg}
+            </span>
+          )}
+        </div>
         <textarea
           id="log-raw-input"
           rows={6}
           value={logText}
           onChange={(e) => setLogText(e.target.value)}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
+          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+          placeholder="Paste millions of lines of logs here..."
         />
       </div>
 
@@ -114,10 +152,10 @@ export default function LogAnalyzerClient() {
           <input
             id="log-search-input"
             type="text"
-            placeholder="Search log messages, IPs, endpoints..."
+            placeholder="Search log messages, IPs, JSON keys..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs focus:outline-none"
+            className="w-full px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 
@@ -137,12 +175,17 @@ export default function LogAnalyzerClient() {
             <option value="FATAL">FATAL Only</option>
           </select>
 
-          <CopyButton text={filteredLogs.map((l) => l.raw).join("\n")} />
+          <CopyButton text={filteredLogs.map((l) => l.raw).join("\\n")} />
         </div>
       </div>
 
       {/* Log Feed */}
-      <div className="space-y-2 max-h-[450px] overflow-y-auto pr-1">
+      <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+        {filteredLogs.length === 0 && (
+          <div className="text-center py-10 text-text-muted text-sm border border-dashed border-border rounded-xl">
+            No logs matched your criteria.
+          </div>
+        )}
         {filteredLogs.map((entry) => {
           const levelColor =
             entry.level === "ERROR" || entry.level === "FATAL"
@@ -151,23 +194,61 @@ export default function LogAnalyzerClient() {
               ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
               : entry.level === "INFO"
               ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
-              : "text-sky-400 bg-sky-500/10 border-sky-500/20";
+              : entry.level === "DEBUG"
+              ? "text-sky-400 bg-sky-500/10 border-sky-500/20"
+              : "text-text-muted bg-surface-2 border-border";
 
           return (
             <div
               key={entry.id}
-              className="p-3 rounded-lg bg-surface-2 border border-border text-xs font-mono flex items-start gap-3 hover:border-text-muted transition"
+              className="p-3 rounded-xl bg-surface-2 border border-border text-xs font-mono flex flex-col md:flex-row items-start gap-3 hover:border-text-muted transition"
             >
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold border shrink-0 ${levelColor}`}>
-                {entry.level}
-              </span>
-              <div className="flex-1 space-y-1 overflow-hidden">
-                <p className="text-text break-all leading-relaxed">{entry.raw}</p>
+              <div className="flex gap-2 items-center md:flex-col md:items-start shrink-0">
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${levelColor}`}>
+                  {entry.level}
+                </span>
+                {entry.isJson && (
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold border text-primary bg-primary/10 border-primary/20">
+                    JSON
+                  </span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0 space-y-2 overflow-hidden w-full">
+                {/* Main Raw Line */}
+                <p className="text-text break-all leading-relaxed whitespace-pre-wrap">{entry.raw}</p>
+                
+                {/* Meta Extracted */}
                 {(entry.timestamp || entry.ip) && (
-                  <div className="flex gap-4 text-[11px] text-text-muted font-sans">
-                    {entry.timestamp && <span>Time: {entry.timestamp}</span>}
-                    {entry.ip && <span>IP: {entry.ip}</span>}
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-text-muted font-sans bg-bg p-1.5 rounded-lg border border-border/50 inline-flex">
+                    {entry.timestamp && <span><strong className="text-text-4 font-semibold">Time:</strong> {entry.timestamp}</span>}
+                    {entry.ip && <span><strong className="text-text-4 font-semibold">IP:</strong> {entry.ip}</span>}
                   </div>
+                )}
+
+                {/* Key Values */}
+                {entry.keyValues && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {Object.entries(entry.keyValues).map(([k, v], i) => (
+                      <span key={i} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface border border-border text-[10px]">
+                        <span className="text-text-muted">{k}=</span>
+                        <span className="text-sky-300 font-semibold max-w-[200px] truncate" title={v}>{v}</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
+                {/* JSON Data Prettified */}
+                {entry.isJson && entry.jsonData && (
+                  <details className="group mt-2">
+                    <summary className="text-[10px] text-blue hover:text-blue/80 cursor-pointer list-none select-none font-sans font-semibold inline-flex items-center gap-1 bg-blue/10 px-2 py-1 rounded-md transition-colors">
+                      View Structured Data
+                    </summary>
+                    <div className="mt-2 p-3 bg-[#0d1117] border border-border/50 rounded-lg overflow-x-auto">
+                      <pre className="text-[11px] text-emerald-300 leading-relaxed">
+                        {JSON.stringify(entry.jsonData, null, 2)}
+                      </pre>
+                    </div>
+                  </details>
                 )}
               </div>
             </div>

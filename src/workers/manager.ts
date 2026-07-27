@@ -410,6 +410,14 @@ class WorkerManager {
     return workerOrchestrator.dispatch("parseMarkdown", [text], undefined, undefined, abortSignal);
   }
 
+  async parseLogs(
+    logText: string,
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<any[]> {
+    return workerOrchestrator.dispatch("parseLogs", [logText], undefined, onProgress, abortSignal);
+  }
+
   terminateAll() {
     workerOrchestrator.terminateAll();
   }
