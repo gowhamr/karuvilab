@@ -93,7 +93,24 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
 
 const api: Partial<WorkerAPI> = {
   // Security Worker Methods Stubs (handled by crypto.worker.ts)
-  directoryHashManifest: async () => [],
+  directoryHashManifest: async (files: Array<{ path: string; buffer: ArrayBuffer }>, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress?: any) => {
+    const manifest: Array<{ path: string; size: number; hash: string }> = [];
+    for (let i = 0; i < files.length; i++) {
+      const item = files[i]!;
+      const bytes = new Uint8Array(item.buffer);
+      let hash = "";
+      if (algo === "MD5") {
+        const hexStr = md5(bytes);
+        hash = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g)!.map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
+      } else {
+        const buf = await sha(algo, bytes);
+        hash = encoding === "base64" ? bufToBase64(buf) : bufToHex(buf);
+      }
+      manifest.push({ path: item.path, size: item.buffer.byteLength, hash });
+      if (onProgress) onProgress({ percent: Math.round(((i + 1) / files.length) * 100), message: `Hashed ${item.path}` });
+    }
+    return manifest;
+  },
   aesEncrypt: async () => '',
   aesDecrypt: async () => '',
   generateRsaKeyPair: async () => ({ publicKeyPem: '', privateKeyPem: '' }),
@@ -110,6 +127,34 @@ const api: Partial<WorkerAPI> = {
   hkdfDerive: async () => ({ hex: '', base64: '' }),
 
   // Hash Tasks
+  async parseMarkdown(text: string, onProgress?: any) {
+    if (onProgress) onProgress({ percent: 10, message: "Loading parser..." });
+    const { marked } = await import("marked");
+    
+    const MERMAID_LANGS = new Set([
+      'mermaid', 'flowchart', 'flowcharttd', 'flowchartlr',
+      'sequencediagram', 'sequence', 'classdiagram', 'class', 'erdiagram', 'er',
+      'gantt', 'pie', 'gitgraph', 'git', 'mindmap', 'timeline', 'xychart', 'sankey'
+    ]);
+    
+    const renderer = new marked.Renderer();
+    renderer.code = ({ text: codeText, lang }: { text: string; lang?: string }) => {
+      const safeCode = String(codeText || '');
+      const rawLang = String(lang || '').trim();
+      const safeLang = rawLang.toLowerCase().replace(/\s+/g, '');
+      if (MERMAID_LANGS.has(safeLang) || safeLang.startsWith('mermaid')) {
+        return `<div class="mermaid-placeholder" data-src="${encodeURIComponent(safeCode)}" data-lang="${rawLang || 'mermaid'}"></div>`;
+      }
+      const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      return `<pre data-lang="${safeLang}"><code class="hljs${safeLang ? ' language-' + safeLang : ''}">${escapeHtml(safeCode)}</code></pre>`;
+    };
+
+    if (onProgress) onProgress({ percent: 50, message: "Parsing markdown..." });
+    const html = await Promise.resolve(marked.parse(text, { renderer, async: false, gfm: true, breaks: true }));
+    if (onProgress) onProgress({ percent: 100, message: "Done" });
+    return html as string;
+  },
+
   async generateHashes(text: string, algos: string[], encoding: 'hex' | 'base64' = 'hex', onProgress?: ProgressCallback) {
     if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
       throw new Error("Input text too large or invalid (max 10MB)");

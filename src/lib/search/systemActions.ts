@@ -13,7 +13,7 @@ export function getSystemActions(): SystemAction[] {
       icon: 'LayoutGrid',
       action: () => {
         if (typeof window !== 'undefined') {
-          window.location.href = '/workbench';
+          window.location.href = '/developer-tools/qa-workbench/';
         }
       }
     },

@@ -67,12 +67,14 @@ export const GlobalSelectionToolbar = React.memo(function GlobalSelectionToolbar
   const handleCopy = () => {
     navigator.clipboard.writeText(selection.text);
     toast("Copied to clipboard", "success");
+    window.getSelection()?.removeAllRanges();
     setSelection(null);
   };
 
   const handleSaveDraft = () => {
     addDraft(selection.text, 'selection');
     toast("Saved to Drafts", "success");
+    window.getSelection()?.removeAllRanges();
     setSelection(null);
   };
 
@@ -82,6 +84,7 @@ export const GlobalSelectionToolbar = React.memo(function GlobalSelectionToolbar
     // Pre-fill search with process command
     setSearchQuery(`> process ${selection.text.slice(0, 20)}...`);
     setIsPaletteOpen(true);
+    window.getSelection()?.removeAllRanges();
     setSelection(null);
   };
 
@@ -97,7 +100,8 @@ export const GlobalSelectionToolbar = React.memo(function GlobalSelectionToolbar
           left: selection.x,
           top: Math.max(10, selection.y - 40) // prevent going off top screen
         }}
-        onMouseDown={e => e.preventDefault()} // prevent selection loss on click
+        onMouseDown={e => { e.preventDefault(); e.stopPropagation(); }} // prevent selection loss on click
+        onMouseUp={e => e.stopPropagation()} // prevent document from re-triggering selection
       >
         <button
           onClick={handleCopy}

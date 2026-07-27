@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Sparkles, HelpCircle, Delete, CornerDownLeft } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { useToast } from "@/components/ui/Toast";
 
 // ─── Word Lists ──────────────────────────────────────────────────────────────
 
@@ -80,6 +81,7 @@ const SPRING_CONFIG = { type: "spring" as const, stiffness: 300, damping: 30 };
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function WordGuessClient() {
+  const { toast } = useToast();
   const [targetWord, setTargetWord] = useState("");
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState("");
@@ -135,6 +137,7 @@ export default function WordGuessClient() {
 
     if (char === "ENTER") {
       if (currentGuess.length < 5) {
+        toast("Not enough letters", "error");
         setInvalidWordShake(true);
         setTimeout(() => setInvalidWordShake(false), 500);
         return;
@@ -144,6 +147,7 @@ export default function WordGuessClient() {
       
       // Validation: Must be a word in our bank
       if (!WORD_BANK.includes(guessUpper)) {
+        toast("Not in word list", "error");
         setInvalidWordShake(true);
         setTimeout(() => setInvalidWordShake(false), 500);
         return;

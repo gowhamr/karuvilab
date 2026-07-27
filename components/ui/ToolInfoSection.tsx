@@ -34,7 +34,9 @@ export function ToolInfoSection({ id, title, preview, isOpen: controlledIsOpen, 
       onToggle={(e) => {
         const newState = (e.target as HTMLDetailsElement).open;
         if (isControlled) {
-          onToggle?.(newState);
+          if (newState !== controlledIsOpen) {
+            onToggle?.(newState);
+          }
         } else {
           setInternalIsOpen(newState);
         }

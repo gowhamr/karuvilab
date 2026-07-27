@@ -7,9 +7,9 @@ let spellchecker: nspell | null = null;
 
 async function loadSpellchecker() {
   if (spellchecker) return spellchecker;
-  
-  const affRes = await fetch('/lib/dictionary/en.aff');
-  const dicRes = await fetch('/lib/dictionary/en.dic');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const affRes = await fetch(`${basePath}/lib/dictionary/en.aff`);
+  const dicRes = await fetch(`${basePath}/lib/dictionary/en.dic`);
   
   if (!affRes.ok || !dicRes.ok) {
     throw new Error('Failed to load spellchecker dictionaries');
@@ -48,7 +48,7 @@ export async function runGrammarCheck(text: string, ignoredWords: string[] = [],
   
   // 1. Spelling
   // Use regex to find words and their exact offsets since compromise terms() offsets might not match raw string perfectly if there are special characters.
-  const wordRegex = /\\b[a-zA-Z']+\\b/g;
+  const wordRegex = /\b[a-zA-Z']+\b/g;
   let match;
   while ((match = wordRegex.exec(text)) !== null) {
     const word = match[0];
@@ -159,7 +159,7 @@ export async function runGrammarCheck(text: string, ignoredWords: string[] = [],
   }
 
   // 4. Repeated Words ("the the")
-  const duplicateRegex = /\\b(\\w+)\\s+\\1\\b/gi;
+  const duplicateRegex = /\b(\w+)\s+\1\b/gi;
   while ((match = duplicateRegex.exec(text)) !== null) {
     errors.push({
       id: `dup-${match.index}`,

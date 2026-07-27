@@ -17,7 +17,7 @@ export const MTI_DESCRIPTIONS: Record<string, string> = {
 };
 
 export default function ISO8583ParserClient() {
-  const [msgInput, setMsgInput] = useState("0200722464010880000016411111111111111111000000000010000007051200001234561200002606");
+  const [msgInput, setMsgInput] = useState("020072246401088000001641111111111111110000000000100000070512000012345612120026060000510612345612345678901212345678");
   const [mti, setMti] = useState("");
   const [mtiDesc, setMtiDesc] = useState("");
   const [bitmapHex, setBitmapHex] = useState("");

@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: siteConfig.fullName,
   },
-  manifest: "/manifest.json",
+  manifest: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/manifest.json`,
 };
 
 // basePath is automatically applied by Next.js to metadata properties like manifest

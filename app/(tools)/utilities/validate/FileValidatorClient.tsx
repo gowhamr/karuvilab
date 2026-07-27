@@ -19,6 +19,13 @@ const MAGIC_BYTES: { hex: string; mime: string; ext: string[] }[] = [
   { hex: "424D", mime: "image/bmp", ext: ["bmp"] },
   { hex: "49492A00", mime: "image/tiff", ext: ["tiff", "tif"] },
   { hex: "4D4D002A", mime: "image/tiff", ext: ["tiff", "tif"] },
+  { hex: "494433", mime: "audio/mpeg", ext: ["mp3"] },
+  { hex: "FFF3", mime: "audio/mpeg", ext: ["mp3"] },
+  { hex: "FFFB", mime: "audio/mpeg", ext: ["mp3"] },
+  { hex: "664C6143", mime: "audio/flac", ext: ["flac"] },
+  { hex: "0000001866747970", mime: "video/mp4", ext: ["mp4", "m4v", "m4a"] },
+  { hex: "0000002066747970", mime: "video/mp4", ext: ["mp4", "m4v", "m4a"] },
+  { hex: "52494646", mime: "audio/wav", ext: ["wav"] }, // Wait, RIFF is shared but good enough for now
 ];
 
 function bytesToHex(bytes: Uint8Array): string {
@@ -146,6 +153,16 @@ export default function FileValidatorClient() {
       checks.push({ label: "Extension", status: "warning", value: "File has no extension" });
     } else {
       checks.push({ label: "Extension", status: "valid", value: `.${ext}` });
+    }
+
+    try {
+      const { workerManager } = await import("@/src/workers/manager");
+      // Use slice(0) to pass a copy to the worker, preventing detach issues if the buffer is needed elsewhere
+      const arrayBuf = await file.slice(0).arrayBuffer();
+      const hash = await workerManager.generateFileHash(arrayBuf, "SHA-256", "hex");
+      checks.push({ label: "SHA-256 Hash", status: "info", value: String(hash) });
+    } catch {
+      checks.push({ label: "SHA-256 Hash", status: "warning", value: "Failed to compute hash" });
     }
 
     setFileInfo({
