@@ -258,6 +258,7 @@ export default function Page() {
 | **KL-08** | Every `ErrorBoundary` must expose a Retry action — never a dead end | Users get stuck with no recovery path |
 | **KL-09** | All user-provided HTML/Markdown rendered through `DOMPurify.sanitize()` | Stored XSS via file content |
 | **KL-10** | `WorkerOrchestrator` is the **only** entry point for spawning workers | Duplicate workers exhaust thread limits |
+| **KL-11** | No automatic config injection (`static_site_generator: next`) in GitHub Actions | The `configure-pages` action's AST parser crashes on complex `next.config.mjs` files |
 
 ### 6.1 Performance Manifesto (PERF-Series)
 
