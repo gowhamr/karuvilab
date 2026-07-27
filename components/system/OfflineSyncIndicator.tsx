@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { m, AnimatePresence } from 'framer-motion';
-import { Wifi, WifiOff, Shield } from 'lucide-react';
-import { useOnlineStatus } from '@/src/lib/hooks';
+import { Wifi, WifiOff, Shield, Activity, HardDrive, CheckCircle2 } from 'lucide-react';
+import { useNetworkQuality } from '@/src/lib/hooks';
 import { ALL_TOOLS, findToolByPath } from '@/src/tool-registry';
 import { usePathname } from 'next/navigation';
 
 export function OfflineSyncIndicator() {
-  const isOnline = useOnlineStatus();
+  const { isOnline, trueInternet, effectiveType, downlink, rtt } = useNetworkQuality();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
@@ -21,13 +21,19 @@ export function OfflineSyncIndicator() {
 
   const currentTool = findToolByPath(pathname);
   const requiresNetwork = currentTool?.requiresNetwork;
+  
+  const isFullyOnline = isOnline && trueInternet;
 
-  let status: 'online' | 'cached' | 'offline' = 'online';
-  if (mounted && !isOnline) {
-    if (requiresNetwork) {
-      status = 'offline';
-    } else {
-      status = 'cached';
+  let status: 'online' | 'degraded' | 'cached' | 'offline' = 'online';
+  if (mounted) {
+    if (isOnline && !trueInternet) {
+      status = 'degraded';
+    } else if (!isOnline) {
+      if (requiresNetwork) {
+        status = 'offline';
+      } else {
+        status = 'cached';
+      }
     }
   }
 
@@ -44,22 +50,29 @@ export function OfflineSyncIndicator() {
       dotColor: 'bg-success',
       label: 'Online',
       icon: Wifi,
-      title: 'Online — All Tools Available',
-      desc: 'You are connected to the network. All tools, real-time APIs, and integrations are fully operational.',
+      title: 'Online — Fully Operational',
+      desc: 'You have a stable internet connection. All tools and real-time APIs are ready.',
+    },
+    degraded: {
+      dotColor: 'bg-amber-500',
+      label: 'Limited',
+      icon: WifiOff,
+      title: 'Connected, but no Internet',
+      desc: 'Your device is connected to a network, but we cannot reach the internet. Only offline tools will work.',
     },
     cached: {
-      dotColor: 'bg-warn',
+      dotColor: 'bg-amber-500',
       label: 'Cached',
       icon: WifiOff,
-      title: 'Cached — Using Local Data',
-      desc: 'Operating offline with local data. All cached core utilities remain 100% functional, secure, and private on your device.',
+      title: 'Offline — Using Local Data',
+      desc: 'Operating offline. Core utilities remain fully functional and private on your device.',
     },
     offline: {
       dotColor: 'bg-error',
       label: 'Offline',
       icon: WifiOff,
-      title: 'Offline — Local Tools Only',
-      desc: 'No connection. Tools that require a live network connection are currently unavailable.',
+      title: 'Offline — Degraded Mode',
+      desc: 'No connection. The current tool requires a live network and is currently unavailable.',
     },
   };
 
@@ -79,8 +92,8 @@ export function OfflineSyncIndicator() {
             relative overflow-hidden group outline-none
             ${status === 'online' ? 'text-text hover:border-success/30' : 'text-amber-500 hover:border-warn/30'}
           `}
-          title={status === 'online' ? "Online — all tools ready" : "Offline — tools still work locally"}
-          aria-label={status === 'online' ? "Connection status: online" : "Connection status: offline"}
+          title={current.title}
+          aria-label={`Connection status: ${status}`}
         >
           <span className="relative flex h-2 w-2">
             {status !== 'online' && (
@@ -97,7 +110,7 @@ export function OfflineSyncIndicator() {
         <Popover.Content
           align="end"
           sideOffset={8}
-          className="z-modal w-80 bg-surface border border-border rounded-3xl shadow-2xl p-5 space-y-4 animate-in fade-in zoom-in-95 duration-200 outline-none"
+          className="z-modal w-[340px] bg-surface border border-border rounded-3xl shadow-2xl p-5 space-y-4 animate-in fade-in zoom-in-95 duration-200 outline-none"
         >
           {/* Header Status */}
           <div className="space-y-2">
@@ -111,51 +124,68 @@ export function OfflineSyncIndicator() {
 
           <div className="h-px bg-border/50" />
 
+          {/* Current Tool Context & Cache Status */}
+          <div className="grid grid-cols-2 gap-2">
+            <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-1">
+              <div className="flex items-center gap-1.5 text-success">
+                <CheckCircle2 className="w-4 h-4" />
+                <span className="text-tiny font-bold uppercase tracking-widest-sm">App Cache</span>
+              </div>
+              <p className="text-xs text-text-3">100% Ready for Offline</p>
+            </div>
+            
+            <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-1">
+              <div className="flex items-center gap-1.5 text-blue">
+                <HardDrive className="w-4 h-4" />
+                <span className="text-tiny font-bold uppercase tracking-widest-sm">Current Tool</span>
+              </div>
+              <p className="text-xs text-text-3">
+                {currentTool ? (requiresNetwork ? "Requires Network" : "Offline Capable") : "Dashboard"}
+              </p>
+            </div>
+          </div>
+
+          {/* Network Quality Metrics */}
+          {isFullyOnline && (effectiveType || downlink !== null || rtt !== null) && (
+            <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-2">
+               <div className="flex items-center gap-1.5 text-text-2">
+                <Activity className="w-4 h-4" />
+                <span className="text-tiny font-bold uppercase tracking-widest-sm">Network Quality</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {effectiveType && (
+                  <div>
+                    <div className="text-[10px] text-text-4 font-bold uppercase tracking-wider mb-0.5">Type</div>
+                    <div className="text-xs font-mono text-text">{effectiveType.toUpperCase()}</div>
+                  </div>
+                )}
+                {downlink !== null && (
+                  <div>
+                    <div className="text-[10px] text-text-4 font-bold uppercase tracking-wider mb-0.5">Speed</div>
+                    <div className="text-xs font-mono text-text">{downlink} Mbps</div>
+                  </div>
+                )}
+                {rtt !== null && (
+                  <div>
+                    <div className="text-[10px] text-text-4 font-bold uppercase tracking-wider mb-0.5">Latency</div>
+                    <div className="text-xs font-mono text-text">{rtt} ms</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Privacy Note */}
           <div className="flex items-start gap-3 p-3 bg-bg border border-border/50 rounded-2xl">
             <Shield className="w-4 h-4 text-success shrink-0 mt-0.5" />
             <div className="space-y-0.5">
               <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-2">100% Client-Side</h4>
               <p className="text-xs text-text-3 leading-normal">
-                KaruviLab processes all sensitive data in-browser. Your inputs are never transmitted to any external servers.
+                KaruviLab processes all sensitive data in-browser. Your inputs are never transmitted to external servers.
               </p>
             </div>
           </div>
 
-          {/* Network-dependent Tools List */}
-          <div className="space-y-2.5">
-            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">
-              Network Requirements
-            </h4>
-            <div className="space-y-1.5">
-              {networkTools.map(t => {
-                const isToolAvailable = isOnline;
-                return (
-                  <div
-                    key={t.id}
-                    className="flex items-center justify-between p-2 rounded-xl bg-bg/50 border border-border/40 text-xs"
-                  >
-                    <span className="font-bold text-text-2">{t.name}</span>
-                    <span
-                      className={`
-                        px-2 py-0.5 rounded-full text-tiny font-black uppercase tracking-wider border
-                        ${
-                          isToolAvailable
-                            ? 'bg-success/5 border-success/15 text-success'
-                            : 'bg-error/5 border-error/15 text-error'
-                        }
-                      `}
-                    >
-                      {isToolAvailable ? 'Available' : 'Offline'}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-            <p className="text-tiny text-text-4 leading-normal italic">
-              All other 100+ tools are offline-capable and serve directly from local cache storage.
-            </p>
-          </div>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

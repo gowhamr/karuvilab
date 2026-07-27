@@ -126,7 +126,7 @@ export function Header() {
 
           <button
             onClick={() => setDraftDrawerOpen(true)}
-            className="relative flex items-center justify-center min-w-11 min-h-11 rounded-xl text-text-3 hover:text-brand-primary hover:bg-brand-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+            className="relative hidden md:flex items-center justify-center min-w-11 min-h-11 rounded-xl text-text-3 hover:text-brand-primary hover:bg-brand-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
             aria-label={draftsCount > 0 ? `Open Drafts (${draftsCount} saved)` : "Open Drafts"}
           >
             <Save className="w-5 h-5" aria-hidden="true" />

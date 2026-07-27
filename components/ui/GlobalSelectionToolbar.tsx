@@ -79,10 +79,11 @@ export const GlobalSelectionToolbar = React.memo(function GlobalSelectionToolbar
   };
 
   const handleSendToTool = () => {
-    // Copy the text to clipboard just in case
+    // Copy the text to clipboard
     navigator.clipboard.writeText(selection.text);
-    // Pre-fill search with process command
-    setSearchQuery(`> process ${selection.text.slice(0, 20)}...`);
+    toast("Copied! Select a tool to paste into.", "success");
+    // Open the palette for them to pick a tool
+    setSearchQuery("");
     setIsPaletteOpen(true);
     window.getSelection()?.removeAllRanges();
     setSelection(null);

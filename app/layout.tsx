@@ -73,9 +73,8 @@ export default function RootLayout({
         <link rel="apple-touch-startup-image" href="/splashes/splash-1640x2360.png" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2)" />
         <link rel="apple-touch-startup-image" href="/splashes/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" />
         
-        <Script
+        <script
           id="theme-init"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){
               try {
@@ -106,12 +105,6 @@ export default function RootLayout({
                   document.documentElement.classList.add('show-shortcuts');
                 }
 
-                // Remove preload class after a frame to enable transitions
-                window.requestAnimationFrame(function() {
-                  setTimeout(function() {
-                    document.documentElement.classList.remove('preload');
-                  }, 10);
-                });
               } catch (e) {}
             })();`,
           }}

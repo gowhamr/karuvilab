@@ -32,6 +32,7 @@ The following patterns are **NEVER** allowed under any circumstances:
 | P-17 | Non-semantic HTML (e.g., `<div>` for buttons) | Use correct semantic HTML elements |
 | P-18 | Unversioned IndexedDB stores | All stores must define an explicit `version` |
 | P-19 | Raw numeric z-index Tailwind classes (`z-10`, `z-20`, `z-30`, `z-50`, etc.) | Use named tokens from `src/theme/zindex.ts` (`z-content`, `z-modal`, etc.) |
+| P-20 | Setting `X-Frame-Options` to `DENY` | Must use `SAMEORIGIN` to allow Workbench to frame local tools |
 
 ---
 
@@ -480,6 +481,7 @@ Every tool page must have:
 | IndexedDB | No sensitive personal data without encryption |
 | CSP | Content-Security-Policy headers must be configured in `next.config.ts` |
 | Subresource integrity | CDN fallback URLs must include `integrity` attribute where possible |
+| Security Headers | `X-Frame-Options` must be `SAMEORIGIN` (NEVER `DENY`) so the Workbench can frame local tools. |
 
 ---
 

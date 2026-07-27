@@ -122,6 +122,80 @@ export function useOnlineStatus() {
   return isOnline;
 }
 
+export interface NetworkQuality {
+  isOnline: boolean;
+  trueInternet: boolean;
+  effectiveType: string | null;
+  downlink: number | null;
+  rtt: number | null;
+}
+
+export function useNetworkQuality(): NetworkQuality {
+  const [quality, setQuality] = useState<NetworkQuality>({
+    isOnline: true,
+    trueInternet: true,
+    effectiveType: null,
+    downlink: null,
+    rtt: null
+  });
+
+  useEffect(() => {
+    let mounted = true;
+
+    const updateQuality = (trueInternetVal?: boolean) => {
+      if (!mounted) return;
+      const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+      setQuality(prev => ({
+        isOnline: navigator.onLine,
+        trueInternet: trueInternetVal !== undefined ? trueInternetVal : prev.trueInternet,
+        effectiveType: conn?.effectiveType || null,
+        downlink: conn?.downlink || null,
+        rtt: conn?.rtt || null
+      }));
+    };
+
+    const checkTrueInternet = async () => {
+      if (!navigator.onLine) {
+        updateQuality(false);
+        return;
+      }
+      try {
+        const res = await fetch('/favicon.ico?_t=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
+        updateQuality(res.ok);
+      } catch (err) {
+        updateQuality(false);
+      }
+    };
+
+    Promise.resolve().then(() => {
+      updateQuality();
+      checkTrueInternet();
+    });
+
+    const conn = (navigator as any).connection;
+    const handleChange = () => updateQuality();
+    if (conn) conn.addEventListener('change', handleChange);
+
+    const online = () => { updateQuality(); checkTrueInternet(); };
+    const offline = () => updateQuality(false);
+
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
+
+    const interval = setInterval(checkTrueInternet, 15000);
+
+    return () => {
+      mounted = false;
+      if (conn) conn.removeEventListener('change', handleChange);
+      window.removeEventListener('online', online);
+      window.removeEventListener('offline', offline);
+      clearInterval(interval);
+    };
+  }, []);
+
+  return quality;
+}
+
 export function usePerformanceSettings() {
   const [shouldBlur, setShouldBlur] = useState(true);
 

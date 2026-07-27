@@ -3,6 +3,7 @@
 import React, { useRef } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { useDraftStore } from '@/src/store/useDraftStore';
+import { useSearchStore } from '@/src/store/useSearchStore';
 import { useShallow } from 'zustand/react/shallow';
 import { X, Copy, Trash2, Send, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
@@ -29,8 +30,10 @@ export function DraftDrawer() {
 
   const handleSendToTool = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast("Copied to clipboard. Paste in any tool.", "success");
+    toast("Copied! Select a tool to paste into.", "success");
     setIsOpen(false);
+    useSearchStore.getState().setSearchQuery("");
+    useSearchStore.getState().setIsPaletteOpen(true);
   };
 
   return (

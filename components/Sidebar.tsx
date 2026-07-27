@@ -15,11 +15,12 @@ import { MobileSidebar } from "./layout/MobileSidebar";
 import {
   Home, Info, HelpCircle, Settings, Shield, FileWarning,
   X, Clock, Search, Command, LayoutGrid, Heart, LucideIcon,
-  ChevronRight, PanelLeftClose, Newspaper
+  ChevronRight, PanelLeftClose, Newspaper, Save
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useSettingsStore } from "@/src/store/settings/store";
+import { useDraftStore } from "@/src/store/useDraftStore";
 
 // ── Support links ─────────────────────────────────────────────────────────────
 
@@ -35,7 +36,7 @@ const SUPPORT_LINKS = [
 // ── Sidebar Nav Item ──────────────────────────────────────────────────────────
 
 interface SidebarItemProps {
-  href: string;
+  href?: string;
   isActive: boolean;
   onClick: () => void;
   icon?: LucideIcon;
@@ -53,22 +54,19 @@ const SidebarItem = memo(function SidebarItem({
   color, category, toolId, compact = false, isHoverable = true,
 }: SidebarItemProps) {
 
-  const content = (
-    <Link
-      href={href}
-      onClick={onClick}
-      aria-current={isActive ? "page" : undefined}
-      className={cn(
-        "group relative flex items-center gap-3 rounded-btn transition-all duration-150 outline-none",
-        "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
-        compact
-          ? "h-10 px-3 text-caption font-semibold"
-          : "h-11 px-3 text-body font-semibold",
-        isActive
-          ? "bg-primary/10 text-primary"
-          : "text-text-secondary hover:text-text-primary hover:bg-surface-elevated"
-      )}
-    >
+  const commonClasses = cn(
+    "group relative flex items-center gap-3 w-full text-left rounded-btn transition-all duration-150 outline-none",
+    "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+    compact
+      ? "h-10 px-3 text-caption font-semibold"
+      : "h-11 px-3 text-body font-semibold",
+    isActive
+      ? "bg-primary/10 text-primary"
+      : "text-text-secondary hover:text-text-primary hover:bg-surface-elevated"
+  );
+
+  const innerContent = (
+    <>
       {/* Active indicator bar */}
       {isActive && (
         <m.span
@@ -98,7 +96,26 @@ const SidebarItem = memo(function SidebarItem({
       </div>
 
       <span className="flex-1 truncate leading-none">{label}</span>
+    </>
+  );
+
+  const content = href ? (
+    <Link
+      href={href}
+      onClick={onClick}
+      aria-current={isActive ? "page" : undefined}
+      className={commonClasses}
+    >
+      {innerContent}
     </Link>
+  ) : (
+    <button
+      onClick={onClick}
+      aria-current={isActive ? "page" : undefined}
+      className={commonClasses}
+    >
+      {innerContent}
+    </button>
   );
 
   if (!isHoverable) return content;
@@ -158,7 +175,17 @@ const CoreLinks = memo(function CoreLinks({
         isActive={pathname === "/workbench"}
         onClick={setIsOpen}
         label="Workbench"
-        icon={LayoutGrid} // You can use AppWindow or LayoutGrid, I'll use LayoutGrid since AppWindow isn't imported here
+        icon={LayoutGrid}
+        isHoverable={isHoverable}
+      />
+      <SidebarItem
+        isActive={false}
+        onClick={() => {
+          setIsOpen();
+          useDraftStore.getState().setIsOpen(true);
+        }}
+        label="Drafts & Scratchpad"
+        icon={Save}
         isHoverable={isHoverable}
       />
     </>

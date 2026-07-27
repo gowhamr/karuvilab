@@ -47,6 +47,12 @@ function GlobalSettingsEffects() {
     if (accessibility.keyboardShortcutsOverlay) root.classList.add('show-shortcuts');
     else root.classList.remove('show-shortcuts');
     
+    // Prevent transition flash by removing preload after setting attributes
+    const timer = setTimeout(() => {
+      root.classList.remove('preload');
+    }, 50);
+    
+    return () => clearTimeout(timer);
   }, [isHydrated, theme, accessibility]);
 
   return null;
