@@ -10,11 +10,9 @@ export function TrustBadges({ className = "", requiresNetwork = false }: TrustBa
   const badges = [
     { icon: CloudOff, label: "No Uploads", color: "text-blue" },
     { icon: ShieldCheck, label: "Browser Processing", color: "text-success" },
-    requiresNetwork
-      ? { icon: Wifi, label: "Requires Network", color: "text-blue" }
-      : { icon: WifiOff, label: "Offline Capable", color: "text-warn" },
+    requiresNetwork ? { icon: Wifi, label: "Requires Network", color: "text-blue" } : null,
     { icon: UserMinus, label: "No Account Required", color: "text-text-4" },
-  ];
+  ].filter(Boolean) as { icon: any; label: string; color: string }[];
 
   return (
     <div className={`flex flex-wrap items-center gap-4 lg:gap-6 ${className}`}>

@@ -25,11 +25,11 @@ export function TrustSection({ className = "", requiresNetwork = false }: TrustS
       bg: "bg-success/5"
     },
     { 
-      icon: requiresNetwork ? Wifi : WifiOff, 
-      title: requiresNetwork ? "Network Required" : "Fully Offline Capable", 
+      icon: requiresNetwork ? Wifi : ShieldCheck, 
+      title: requiresNetwork ? "Network Required" : "Isolated Execution", 
       desc: requiresNetwork 
         ? "This tool requires a network connection for external API data." 
-        : "Once loaded, this tool works without any internet connection.",
+        : "Your data stays confined to this browser tab environment.",
       color: requiresNetwork ? "text-blue" : "text-warn",
       bg: requiresNetwork ? "bg-blue/5" : "bg-warn/5"
     },

@@ -131,7 +131,7 @@ export function OfflineSyncIndicator() {
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-tiny font-bold uppercase tracking-widest-sm">App Cache</span>
               </div>
-              <p className="text-xs text-text-3">100% Ready for Offline</p>
+              <p className="text-xs text-text-3">Assets Cached</p>
             </div>
             
             <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-1">
@@ -140,7 +140,7 @@ export function OfflineSyncIndicator() {
                 <span className="text-tiny font-bold uppercase tracking-widest-sm">{currentTool ? "Current Tool" : "Current Page"}</span>
               </div>
               <p className="text-xs text-text-3">
-                {currentTool ? (requiresNetwork ? "Requires Network" : "Offline Capable") : "Offline Capable"}
+                {currentTool ? (requiresNetwork ? "Requires Network" : "Browser Isolated") : "Browser Isolated"}
               </p>
             </div>
           </div>

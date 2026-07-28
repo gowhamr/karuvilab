@@ -21,7 +21,7 @@ import { cn } from "@/src/lib/utils";
 const TRUST_COPY: Record<"A" | "B" | "C", { title: string, desc: string }> = {
   A: { title: "Processing: 100% Local", desc: "No uploads. No account. No tracking." },
   B: { title: "Your files never leave this device", desc: "Privacy-first architecture. 100% secure." },
-  C: { title: "Zero server contact. Ever.", desc: "Sandbox-isolated. Fully offline capable." }
+  C: { title: "Zero server contact. Ever.", desc: "Sandbox-isolated and locally executed." }
 } as const;
 
 const TRUST_VARIANTS = ["A", "B", "C"] as const;
