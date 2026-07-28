@@ -4,13 +4,12 @@ import { useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
-import { Clock, Play, ChevronRight, Heart, Sparkles, Clipboard, Upload, Search, Zap, TrendingUp } from "lucide-react";
+import { Clock, Play, Heart, Sparkles, Clipboard, Upload, Zap, TrendingUp } from "lucide-react";
 import { detectContentToolSuggestion } from "@/src/lib/search/intelligentDetector";
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { ToolIcon } from "./Icons";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 
 interface QuickActionsProps {
   continueTool: ToolEntry | null | undefined;
@@ -59,11 +58,13 @@ export function QuickActionsDashboard({
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Reset so the same file can be re-selected
+    e.target.value = "";
     const ext = file.name.split('.').pop()?.toLowerCase();
     if (ext === 'pdf') {
-      router.push('/pdf-tools');
-    } else if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(ext || '')) {
-      router.push('/image-tools');
+      router.push('/pdf-tools/merge-pdf');
+    } else if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'svg', 'avif', 'heic'].includes(ext || '')) {
+      router.push('/image-tools/image-compressor');
     } else if (ext === 'json') {
       router.push('/developer-tools/json-formatter');
     } else if (ext === 'csv') {
@@ -72,12 +73,15 @@ export function QuickActionsDashboard({
       router.push('/developer-tools/xml-formatter');
     } else if (ext === 'sql') {
       router.push('/developer-tools/sql-formatter');
+    } else if (ext === 'yaml' || ext === 'yml') {
+      router.push('/developer-tools/yaml-json-converter');
     } else {
       router.push('/all-tools');
     }
   };
 
   const isEmpty = !continueTool && recentTools.length === 0 && favoriteTools.length === 0;
+
 
   const starterTools = useMemo(() => {
     const starterIds = ["merge-pdf", "json-formatter", "compress", "url-encoder"];
@@ -132,7 +136,8 @@ export function QuickActionsDashboard({
           <h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h2>
           {pasteNotice && <span className="text-sm font-bold text-danger ml-auto animate-pulse">{pasteNotice}</span>}
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5">
+          {/* Slot 1: Resume if session active, otherwise Paste & Detect */}
           {continueTool ? (
             <Link
               href={continueTool.href}
@@ -148,32 +153,20 @@ export function QuickActionsDashboard({
             </Link>
           ) : (
             <button
-              onClick={() => setIsPaletteOpen(true)}
+              onClick={handlePasteDetect}
               className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <Search className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-md bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                <Clipboard className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-text-primary truncate">Search Tools</p>
-                <p className="text-xs text-text-secondary truncate">Ctrl+K Palette</p>
+                <p className="text-sm font-bold text-text-primary truncate">Paste & Detect</p>
+                <p className="text-xs text-text-secondary truncate">Auto tool match</p>
               </div>
             </button>
           )}
 
-          <button
-            onClick={handlePasteDetect}
-            className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <div className="w-8 h-8 rounded-md bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-              <Clipboard className="w-4 h-4" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold text-text-primary truncate">Paste & Detect</p>
-              <p className="text-xs text-text-secondary truncate">Auto tool match</p>
-            </div>
-          </button>
-
+          {/* Slot 2: Upload File — always present */}
           <button
             onClick={() => fileInputRef.current?.click()}
             className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -183,7 +176,7 @@ export function QuickActionsDashboard({
             </div>
             <div className="min-w-0">
               <p className="text-sm font-bold text-text-primary truncate">Upload File</p>
-              <p className="text-xs text-text-secondary truncate">Auto route format</p>
+              <p className="text-xs text-text-secondary truncate">Jump to right tool</p>
             </div>
           </button>
           <input
@@ -193,21 +186,10 @@ export function QuickActionsDashboard({
             className="hidden"
             aria-label="Upload file for quick action"
           />
-
-          <button
-            onClick={() => setIsPaletteOpen(true)}
-            className="flex items-center gap-2.5 p-3 min-h-[56px] rounded-md bg-bg border border-divider hover:border-primary/30 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <div className="w-8 h-8 rounded-md bg-warning/10 flex items-center justify-center text-warning shrink-0">
-              <Search className="w-4 h-4" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold text-text-primary truncate">Command Bar</p>
-              <p className="text-xs text-text-secondary truncate">Explore 150+ tools</p>
-            </div>
-          </button>
         </div>
+
       </section>
+
 
       {/* ── Continue Working Detailed Card ── */}
       {continueTool && (
