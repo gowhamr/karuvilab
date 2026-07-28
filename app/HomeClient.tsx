@@ -363,26 +363,7 @@ export default function HomeClient() {
     );
   };
 
-  const renderFooterTransition = () => {
-    return (
-      <div className="relative pt-12 pb-4">
-        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-divider/60" />
-        </div>
-        <div className="relative flex justify-center">
-          <div className="px-4 bg-bg text-text-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-brand-primary/50" />
-            End of Toolkit
-            <div className="w-1.5 h-1.5 rounded-full bg-brand-primary/50" />
-          </div>
-        </div>
-        <div 
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-24 bg-gradient-to-t from-brand-primary/4 via-brand-primary/1 to-transparent blur-2xl pointer-events-none" 
-          style={{ contentVisibility: 'auto' }}
-        />
-      </div>
-    );
-  };
+
 
   return (
     <MotionConfig reducedMotion="user">
@@ -632,7 +613,7 @@ export default function HomeClient() {
                         {renderPersonalSection()}
 
                         {/* Footer Transition */}
-                        {renderFooterTransition()}
+
                       </>
                     ) : (
                       <>
@@ -691,7 +672,7 @@ export default function HomeClient() {
 
 
                         {/* Footer Transition */}
-                        {renderFooterTransition()}
+
                       </>
                     )}
                   </m.div>
