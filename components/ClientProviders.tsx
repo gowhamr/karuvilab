@@ -12,6 +12,7 @@ const SearchManager = dynamic(() => import("@/components/ui/search/SearchManager
 
 import { FullscreenProvider } from "@/src/contexts/FullscreenContext";
 import { FocusModeControlsProvider } from "@/src/contexts/FocusModeControlsContext";
+import { HtmlPrecacher } from "@/components/system/HtmlPrecacher";
 
 function StorageMonitor() {
   useStorageMonitor();
@@ -72,6 +73,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
               <GlobalSettingsEffects />
               <FeedbackModal />
               <SearchManager />
+              <HtmlPrecacher />
               {children}
             </FocusModeControlsProvider>
           </FullscreenProvider>

@@ -231,7 +231,7 @@ export default function UuidGeneratorClient() {
               type="number" 
               min={1} 
               max={1000} 
-              value={bulkCount} 
+              value={bulkCount || ''} 
               onChange={(e) => setBulkCount(Number(e.target.value))}
               className="bg-transparent border-none outline-none text-text font-mono font-bold w-full"
             />

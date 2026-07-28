@@ -72,7 +72,7 @@ export default function Pbkdf2Client() {
           <input
             id="pbkdf2-iterations-input"
             type="number"
-            value={iterations}
+            value={iterations || ''}
             onChange={(e) => setIterations(Number(e.target.value))}
             className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
           />

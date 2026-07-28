@@ -241,7 +241,7 @@ export default function QRCodeGeneratorClient() {
                   min="0"
                   className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
                   placeholder="Fixed amount"
-                  value={amount}
+                  value={amount || ''}
                   onChange={e => setAmount(e.target.value)}
                 />
               </div>

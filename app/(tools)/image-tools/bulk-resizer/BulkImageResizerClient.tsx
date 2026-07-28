@@ -148,7 +148,7 @@ export default function BulkImageResizerClient() {
                   id="bulk-target-width"
                   type="number"
                   className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold"
-                  value={targetW}
+                  value={targetW || ''}
                   onChange={e => setTargetW(e.target.value)}
                   placeholder="800"
                 />
@@ -159,7 +159,7 @@ export default function BulkImageResizerClient() {
                   id="bulk-target-height"
                   type="number"
                   className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold"
-                  value={targetH}
+                  value={targetH || ''}
                   onChange={e => setTargetH(e.target.value)}
                   placeholder="Auto"
                 />

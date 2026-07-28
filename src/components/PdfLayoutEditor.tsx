@@ -36,8 +36,8 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Settings states
-  const [margins, setMargins] = useState({ top: 36, right: 36, bottom: 36, left: 36 });
-  const [cropBox, setCropBox] = useState({ x: 36, y: 36, width: 500, height: 700 });
+  const [margins, setMargins] = useState({ top: "36", right: "36", bottom: "36", left: "36" });
+  const [cropBox, setCropBox] = useState({ x: "36", y: "36", width: "500", height: "700" });
   const [targetSize, setTargetSize] = useState<string>('legal');
   const [scaleToFit, setScaleToFit] = useState(true);
   const [orientation, setOrientation] = useState<'portrait' | 'landscape' | 'auto'>('auto');
@@ -84,10 +84,20 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
       
       if (mode === 'crop') {
         options.action = 'crop';
-        options.cropBox = cropBox;
+        options.cropBox = {
+          x: Number(cropBox.x) || 0,
+          y: Number(cropBox.y) || 0,
+          width: Number(cropBox.width) || 0,
+          height: Number(cropBox.height) || 0
+        };
       } else if (mode === 'margin') {
         options.action = 'margin';
-        options.margins = margins;
+        options.margins = {
+          top: Number(margins.top) || 0,
+          right: Number(margins.right) || 0,
+          bottom: Number(margins.bottom) || 0,
+          left: Number(margins.left) || 0
+        };
       } else {
         options.action = 'resize';
         options.scaleToFit = scaleToFit;
@@ -181,7 +191,9 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
                       max="1000"
                       value={margins[side]}
                       onChange={(e) => {
-                        const val = Math.max(0, Math.min(1000, Number(e.target.value) || 0));
+                        let val = e.target.value;
+                        if (val !== '' && Number(val) > 1000) val = "1000";
+                        if (val !== '' && Number(val) < 0) val = "0";
                         setMargins(m => ({ ...m, [side]: val }));
                       }}
                       className="w-full bg-surface-2 border border-border rounded-xl px-4 py-2 text-text font-medium focus:border-blue outline-none transition-colors"
@@ -202,7 +214,9 @@ export function PdfLayoutEditor({ mode, toolId, title, description, actionLabel 
                       max="10000"
                       value={cropBox[prop]}
                       onChange={(e) => {
-                        const val = Math.max(0, Math.min(10000, Number(e.target.value) || 0));
+                        let val = e.target.value;
+                        if (val !== '' && Number(val) > 10000) val = "10000";
+                        if (val !== '' && Number(val) < 0) val = "0";
                         setCropBox(c => ({ ...c, [prop]: val }));
                       }}
                       className="w-full bg-surface-2 border border-border rounded-xl px-4 py-2 text-text font-medium focus:border-blue outline-none transition-colors"

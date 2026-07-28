@@ -98,7 +98,7 @@ export default function SplitCopyClient() {
                 min={2}
                 max={100}
                 className="w-24 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                value={parts}
+                value={parts || ''}
                 onChange={e => setParts(Number(e.target.value))}
               />
             </div>
@@ -111,7 +111,7 @@ export default function SplitCopyClient() {
                 type="number"
                 min={1}
                 className="w-28 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                value={chars}
+                value={chars || ''}
                 onChange={e => setChars(Number(e.target.value))}
               />
             </div>
@@ -137,7 +137,7 @@ export default function SplitCopyClient() {
                 type="number"
                 min={1}
                 className="w-24 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                value={customLines}
+                value={customLines || ''}
                 onChange={e => setCustomLines(e.target.value)}
               />
             </div>

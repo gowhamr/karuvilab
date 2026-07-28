@@ -274,7 +274,7 @@ export default function WebPConverterClient() {
                   type="number"
                   min="1"
                   max="100"
-                  value={quality}
+                  value={quality || ''}
                   onChange={(e) => {
                     const val = Math.min(100, Math.max(1, Number(e.target.value)));
                     setQuality(val);

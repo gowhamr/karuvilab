@@ -88,7 +88,7 @@ export default function SalaryCalculatorClient() {
             type="number"
             min={0}
             placeholder="e.g. 1200000"
-            value={ctc}
+            value={ctc || ''}
             onChange={(e) => setCtc(e.target.value)}
             className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg font-bold"
           />

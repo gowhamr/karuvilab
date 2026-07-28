@@ -76,7 +76,7 @@ Phone check: +1 555-555-5555 should not be masked.`);
               type="number"
               min={0}
               max={8}
-              value={firstDigits}
+              value={firstDigits || ''}
               onChange={(e) => setFirstDigits(Number(e.target.value))}
               className="w-16 px-2 py-1 rounded bg-surface border border-border font-mono text-xs"
             />
@@ -89,7 +89,7 @@ Phone check: +1 555-555-5555 should not be masked.`);
               type="number"
               min={0}
               max={6}
-              value={lastDigits}
+              value={lastDigits || ''}
               onChange={(e) => setLastDigits(Number(e.target.value))}
               className="w-16 px-2 py-1 rounded bg-surface border border-border font-mono text-xs"
             />

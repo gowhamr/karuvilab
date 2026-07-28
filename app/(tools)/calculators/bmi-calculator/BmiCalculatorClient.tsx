@@ -113,7 +113,7 @@ export default function BmiCalculatorClient() {
               <div className="flex items-center gap-3">
                 <input
                   type="number"
-                  value={heightCm}
+                  value={heightCm || ''}
                   onChange={(e) => setHeightCm(Number(e.target.value))}
                   className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
                 />
@@ -124,7 +124,7 @@ export default function BmiCalculatorClient() {
                 <div className="flex-1 flex items-center gap-3">
                   <input
                     type="number"
-                    value={heightFt}
+                    value={heightFt || ''}
                     onChange={(e) => setHeightFt(Number(e.target.value))}
                     className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
                   />
@@ -133,7 +133,7 @@ export default function BmiCalculatorClient() {
                 <div className="flex-1 flex items-center gap-3">
                   <input
                     type="number"
-                    value={heightIn}
+                    value={heightIn || ''}
                     onChange={(e) => setHeightIn(Number(e.target.value))}
                     className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
                   />
@@ -175,7 +175,7 @@ export default function BmiCalculatorClient() {
             <div className="flex items-center gap-3">
               <input
                 type="number"
-                value={weight}
+                value={weight || ''}
                 onChange={(e) => setWeight(Number(e.target.value))}
                 className="bg-bg border border-border rounded-xl p-3 text-text font-mono text-lg text-center focus:ring-4 focus:ring-blue/10 focus:border-blue transition-all w-full"
               />

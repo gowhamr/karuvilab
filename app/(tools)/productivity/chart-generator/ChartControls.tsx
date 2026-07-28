@@ -257,7 +257,7 @@ export default function ChartControls({
                           <span className="text-xs font-black text-text-muted uppercase">Value:</span>
                           <input 
                             type="number"
-                            value={p.value}
+                            value={p.value || ''}
                             onChange={(e) => updatePoint(p.id, "value", Number(e.target.value))}
                             aria-label="Point value"
                             className="bg-transparent border-none outline-none font-mono text-xs text-blue w-20"

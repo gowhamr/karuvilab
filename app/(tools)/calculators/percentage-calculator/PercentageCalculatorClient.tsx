@@ -62,7 +62,7 @@ export default function PercentageCalculatorClient() {
           <span className="text-text-3 text-sm font-medium">What is</span>
           <input
             type="number"
-            value={m1x}
+            value={m1x || ''}
             onChange={(e) => setM1x(e.target.value)}
             className="w-24 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="X"
@@ -71,7 +71,7 @@ export default function PercentageCalculatorClient() {
           <span className="text-text-3 text-sm font-medium">% of</span>
           <input
             type="number"
-            value={m1y}
+            value={m1y || ''}
             onChange={(e) => setM1y(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="Y"
@@ -91,7 +91,7 @@ export default function PercentageCalculatorClient() {
         <div className="flex items-center gap-3 flex-wrap">
           <input
             type="number"
-            value={m2x}
+            value={m2x || ''}
             onChange={(e) => setM2x(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="X"
@@ -100,7 +100,7 @@ export default function PercentageCalculatorClient() {
           <span className="text-text-3 text-sm font-medium">is what % of</span>
           <input
             type="number"
-            value={m2y}
+            value={m2y || ''}
             onChange={(e) => setM2y(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="Y"
@@ -126,7 +126,7 @@ export default function PercentageCalculatorClient() {
           <span className="text-text-3 text-sm font-medium">From</span>
           <input
             type="number"
-            value={m3x}
+            value={m3x || ''}
             onChange={(e) => setM3x(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="From"
@@ -135,7 +135,7 @@ export default function PercentageCalculatorClient() {
           <span className="text-text-3 text-sm font-medium">to</span>
           <input
             type="number"
-            value={m3y}
+            value={m3y || ''}
             onChange={(e) => setM3y(e.target.value)}
             className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
             placeholder="To"

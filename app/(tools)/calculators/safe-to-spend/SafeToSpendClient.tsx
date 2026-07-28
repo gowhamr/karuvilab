@@ -53,7 +53,7 @@ export default function SafeToSpendClient() {
               id={id}
               type="number"
               min={0}
-              value={state}
+              value={state || ''}
               onChange={(e) => setState(e.target.value)}
               className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
             />

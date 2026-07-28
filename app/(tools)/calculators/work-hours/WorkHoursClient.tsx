@@ -94,7 +94,7 @@ export default function WorkHoursClient() {
                 type="number"
                 min="0"
                 step="0.01"
-                value={hourlyRate}
+                value={hourlyRate || ''}
                 onChange={(e) => setHourlyRate(e.target.value)}
                 placeholder="0.00"
                 className="w-32 pl-7 pr-3 py-1.5 bg-bg border border-border rounded-lg text-sm font-bold text-text focus:ring-2 focus:ring-blue outline-none transition-all"
@@ -165,7 +165,7 @@ export default function WorkHoursClient() {
                         type="number"
                         min={0}
                         max={480}
-                        value={row.breakMins}
+                        value={row.breakMins || ''}
                         onChange={(e) => updateRow(row.id, "breakMins", e.target.value)}
                         className="px-3 py-2 bg-bg border border-border rounded-xl text-sm focus:ring-2 focus:ring-blue outline-none w-24 transition-all"
                       />

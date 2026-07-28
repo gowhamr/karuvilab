@@ -59,7 +59,7 @@ export default function NanoIdClient() {
             type="number"
             min={5}
             max={128}
-            value={size}
+            value={size || ''}
             onChange={(e) => setSize(Number(e.target.value))}
             className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono"
           />
@@ -72,7 +72,7 @@ export default function NanoIdClient() {
             type="number"
             min={1}
             max={50}
-            value={count}
+            value={count || ''}
             onChange={(e) => setCount(Number(e.target.value))}
             className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono"
           />

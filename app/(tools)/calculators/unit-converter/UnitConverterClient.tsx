@@ -171,7 +171,7 @@ export default function UnitConverterClient() {
             </select>
             <input
               type="number"
-              value={value}
+              value={value || ''}
               onChange={(e) => setValue(e.target.value)}
               className="w-36 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-bold text-lg"
               placeholder="Value"

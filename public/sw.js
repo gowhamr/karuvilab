@@ -63,7 +63,7 @@ if (typeof workbox !== 'undefined') {
 
   // 4. Cache Tool Pages (Network-First for fresh content, fallback to cache)
   registerRoute(
-    ({ request }) => request.mode === 'navigate',
+    ({ request }) => request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html'),
     new NetworkFirst({
       cacheName: CACHE_NAMES.pages,
       networkTimeoutSeconds: 3,

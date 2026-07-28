@@ -181,7 +181,7 @@ export default function LoremIpsumClient() {
                   type="number"
                   min={1}
                   max={100}
-                  value={options.count}
+                  value={options.count || ''}
                   onChange={(e) => setOptions({ ...options, count: Number(e.target.value) })}
                   className="w-20 bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
                 />
@@ -238,7 +238,7 @@ export default function LoremIpsumClient() {
                     type="number"
                     min={1}
                     max={20}
-                    value={options.minSentences}
+                    value={options.minSentences || ''}
                     onChange={(e) => setOptions({ ...options, minSentences: Number(e.target.value) })}
                     className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
                     placeholder="Min"
@@ -248,7 +248,7 @@ export default function LoremIpsumClient() {
                     type="number"
                     min={1}
                     max={20}
-                    value={options.maxSentences}
+                    value={options.maxSentences || ''}
                     onChange={(e) => setOptions({ ...options, maxSentences: Number(e.target.value) })}
                     className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
                     placeholder="Max"

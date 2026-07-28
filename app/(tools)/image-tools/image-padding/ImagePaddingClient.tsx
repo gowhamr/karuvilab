@@ -346,7 +346,7 @@ export default function ImagePaddingClient() {
                     <input
                       type="number"
                       min={0}
-                      value={uniformValue}
+                      value={uniformValue || ''}
                       onChange={(e) => handleUniformChange(parseInt(e.target.value) || 0)}
                       className="w-full px-4 py-2.5 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
                       placeholder="40"
@@ -365,7 +365,7 @@ export default function ImagePaddingClient() {
                       <input
                         type="number"
                         min={0}
-                        value={paddingTop}
+                        value={paddingTop || ''}
                         onChange={(e) => setPaddingTop(Math.max(0, parseInt(e.target.value) || 0))}
                         className="w-full px-3 py-2.5 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
                       />
@@ -375,7 +375,7 @@ export default function ImagePaddingClient() {
                       <input
                         type="number"
                         min={0}
-                        value={paddingRight}
+                        value={paddingRight || ''}
                         onChange={(e) => setPaddingRight(Math.max(0, parseInt(e.target.value) || 0))}
                         className="w-full px-3 py-2.5 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
                       />
@@ -385,7 +385,7 @@ export default function ImagePaddingClient() {
                       <input
                         type="number"
                         min={0}
-                        value={paddingBottom}
+                        value={paddingBottom || ''}
                         onChange={(e) => setPaddingBottom(Math.max(0, parseInt(e.target.value) || 0))}
                         className="w-full px-3 py-2.5 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
                       />
@@ -395,7 +395,7 @@ export default function ImagePaddingClient() {
                       <input
                         type="number"
                         min={0}
-                        value={paddingLeft}
+                        value={paddingLeft || ''}
                         onChange={(e) => setPaddingLeft(Math.max(0, parseInt(e.target.value) || 0))}
                         className="w-full px-3 py-2.5 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
                       />

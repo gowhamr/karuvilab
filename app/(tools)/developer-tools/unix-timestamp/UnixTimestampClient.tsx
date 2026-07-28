@@ -140,7 +140,7 @@ export default function UnixTimestampClient() {
           {mode === 'toHuman' ? (
             <input 
               type="number" 
-              value={inputTs} 
+              value={inputTs || ''} 
               onChange={(e) => setInputTs(e.target.value)}
               className="w-full bg-bg border border-border rounded-xl p-4 font-mono text-xl text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all"
             />
