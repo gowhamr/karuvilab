@@ -10,8 +10,8 @@ import { useSettingsStore } from "@/src/store/settings/store";
 import { AriaLiveAnnouncer } from '@/src/lib/a11y/AriaLiveAnnouncer';
 import dynamic from 'next/dynamic';
 
-const DraftDrawer = dynamic(() => import('@/components/ui/DraftDrawer').then(mod => mod.DraftDrawer), { ssr: false });
-const GlobalSelectionToolbar = dynamic(() => import('@/components/ui/GlobalSelectionToolbar').then(mod => mod.GlobalSelectionToolbar), { ssr: false });
+
+
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const { isFullscreen } = useFullscreenContext();
@@ -59,8 +59,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <BottomNav />
       </div>
       <AriaLiveAnnouncer />
-      <DraftDrawer />
-      <GlobalSelectionToolbar />
+
+
     </div>
   );
 }

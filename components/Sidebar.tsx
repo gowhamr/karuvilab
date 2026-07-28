@@ -20,7 +20,7 @@ import {
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useSettingsStore } from "@/src/store/settings/store";
-import { useDraftStore } from "@/src/store/useDraftStore";
+
 
 // ── Support links ─────────────────────────────────────────────────────────────
 
@@ -178,16 +178,7 @@ const CoreLinks = memo(function CoreLinks({
         icon={LayoutGrid}
         isHoverable={isHoverable}
       />
-      <SidebarItem
-        isActive={false}
-        onClick={() => {
-          setIsOpen();
-          useDraftStore.getState().setIsOpen(true);
-        }}
-        label="Drafts & Scratchpad"
-        icon={Save}
-        isHoverable={isHoverable}
-      />
+
     </>
   );
 });
