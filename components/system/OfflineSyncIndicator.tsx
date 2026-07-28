@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { m, AnimatePresence } from 'framer-motion';
-import { Wifi, WifiOff, Shield, Activity, HardDrive, CheckCircle2 } from 'lucide-react';
+import { Wifi, WifiOff, Shield, Activity, HardDrive, Database } from 'lucide-react';
 import { useNetworkQuality } from '@/src/lib/hooks';
 import { ALL_TOOLS, findToolByPath } from '@/src/tool-registry';
 import { usePathname } from 'next/navigation';
@@ -12,10 +12,19 @@ export function OfflineSyncIndicator() {
   const { isOnline, trueInternet, effectiveType, downlink, rtt } = useNetworkQuality();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [storageUsage, setStorageUsage] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.resolve().then(() => {
       setMounted(true);
+      if (typeof navigator !== 'undefined' && navigator.storage && navigator.storage.estimate) {
+        navigator.storage.estimate().then(estimate => {
+          if (estimate.usage !== undefined) {
+            const mb = (estimate.usage / (1024 * 1024)).toFixed(1);
+            setStorageUsage(`${mb} MB used`);
+          }
+        }).catch(() => {});
+      }
     });
   }, []);
 
@@ -128,10 +137,10 @@ export function OfflineSyncIndicator() {
           <div className="grid grid-cols-2 gap-2">
             <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-1">
               <div className="flex items-center gap-1.5 text-success">
-                <CheckCircle2 className="w-4 h-4" />
-                <span className="text-tiny font-bold uppercase tracking-widest-sm">App Cache</span>
+                <Database className="w-4 h-4" />
+                <span className="text-tiny font-bold uppercase tracking-widest-sm">Local Storage</span>
               </div>
-              <p className="text-xs text-text-3">Assets Cached</p>
+              <p className="text-xs text-text-3">{storageUsage || "Measuring..."}</p>
             </div>
             
             <div className="p-3 bg-bg border border-border/50 rounded-xl space-y-1">
