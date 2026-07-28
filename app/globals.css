@@ -285,13 +285,13 @@ html.preload *:after {
   --error:        #FF5C8A;
   --warn:         #FFB020;
   color-scheme: dark;
-  --blue:        #4D8DFF;
-  --blue-dark:   #7C5CFF;
+  --blue:        #2563EB;
+  --blue-dark:   #6D4AFF;
   --blue-light:  rgba(124, 92, 255, 0.1);
   --blue-glow:   rgba(124, 92, 255, 0.15);
 
   /* Spec Brand Variables (Dark Mode) */
-  --primary:         #7C5CFF;
+  --primary:         #6D4AFF;
   --secondary:       #4D8DFF;
   --success-spec:    #28C76F;
   --warning-spec:    #FFB020;

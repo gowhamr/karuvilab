@@ -44,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
           // Variants
           variant === "primary" && [
-            "bg-primary text-text-primary shadow-lg shadow-primary/20",
+            "bg-primary text-white shadow-lg shadow-primary/20",
             "hover:bg-primary/90 hover:shadow-primary/30",
           ],
           variant === "secondary" && [

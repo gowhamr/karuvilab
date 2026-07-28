@@ -187,7 +187,7 @@ export function FocusModeWrapper({
             )}
 
             {/* Tool content — fills remaining height */}
-            <div className="flex-1 overflow-auto bg-bg p-4 md:p-6">
+            <div className={`flex-1 overflow-auto ${!isDashboard ? 'bg-bg p-4 md:p-6' : ''}`}>
               {children}
             </div>
           </m.div>

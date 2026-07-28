@@ -49,7 +49,7 @@ export function KVLogo({
         )}
       >
         <Image
-          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`}
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.webp`}
           alt="KaruviLab Logo"
           width={pixelSize}
           height={pixelSize}

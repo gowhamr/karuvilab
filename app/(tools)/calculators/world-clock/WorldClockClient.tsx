@@ -117,7 +117,7 @@ export default function WorldClockClient() {
     }[settings.clockSize] || 'text-4xl md:text-6xl';
 
     return (
-      <div className={cn("h-full w-full flex flex-col items-center justify-center font-mono relative", bgClasses)}>
+      <div className={cn("min-h-full w-full flex flex-col items-center p-6 md:p-12 font-mono relative", bgClasses)}>
         <div className="absolute top-6 right-6 z-modal">
           <Popover.Root>
             <Popover.Trigger asChild>
@@ -148,10 +148,10 @@ export default function WorldClockClient() {
           </Popover.Root>
         </div>
 
-        <div className="flex flex-col gap-12 w-full max-w-7xl px-8 relative z-content">
-          <div className="flex items-center justify-center gap-4 opacity-50 mb-4">
-            <Globe className="w-12 h-12" />
-            <h1 className="text-4xl md:text-5xl font-black tracking-widest-2xl uppercase">World Clock</h1>
+        <div className="flex flex-col gap-8 md:gap-12 w-full max-w-7xl relative z-content my-auto pt-16">
+          <div className="flex flex-wrap items-center justify-center gap-4 opacity-50 mb-4">
+            <Globe className="w-10 h-10 md:w-12 md:h-12" />
+            <h1 className="text-3xl md:text-5xl font-black tracking-widest uppercase text-center">World Clock</h1>
           </div>
           
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -164,28 +164,28 @@ export default function WorldClockClient() {
               if (settings.primaryLabel === 'custom') displayLabel = customLabel || city;
 
               return (
-                <div key={id} className="flex items-center justify-between py-6 px-10 bg-surface-2/10 backdrop-blur-md rounded-5xl border border-border/20 shadow-2xl">
-                  <div className="flex flex-col w-1/3">
+                <div key={id} className="flex flex-col md:flex-row items-center justify-between py-6 px-6 md:px-10 gap-6 md:gap-0 bg-surface-2/10 backdrop-blur-md rounded-4xl md:rounded-5xl border border-border/20 shadow-2xl">
+                  <div className="flex flex-col w-full md:w-1/3 text-center md:text-left">
                     <span className="text-3xl md:text-5xl font-bold truncate opacity-90">{displayLabel}</span>
                     <span className="text-sm font-bold opacity-50 uppercase tracking-widest mt-1">{t.relativeText}</span>
                   </div>
                   
-                  <div className="flex flex-col items-center w-1/3">
-                    <div className="flex items-baseline gap-4 justify-center">
+                  <div className="flex flex-col items-center w-full md:w-1/3">
+                    <div className="flex items-baseline gap-2 md:gap-4 justify-center">
                       <span className={cn("font-black tabular-nums tracking-tight", textSize)}>{t.displayTime}</span>
                       {settings.showSeconds && (
-                        <span className="text-2xl md:text-4xl font-bold opacity-50 tabular-nums">:{t.displaySeconds}</span>
+                        <span className="text-xl md:text-4xl font-bold opacity-50 tabular-nums">:{t.displaySeconds}</span>
                       )}
                       {settings.hourFormat === 12 && (
-                        <span className="text-2xl md:text-4xl font-black opacity-80 ml-2">{t.ampm}</span>
+                        <span className="text-xl md:text-4xl font-black opacity-80 ml-1 md:ml-2">{t.ampm}</span>
                       )}
                     </div>
                     {settings.showUtcOffset && (
-                      <span className="text-sm font-bold opacity-40 uppercase tracking-widest mt-1">{t.offset} • {t.date}</span>
+                      <span className="text-xs md:text-sm font-bold opacity-40 uppercase tracking-widest mt-1 text-center">{t.offset} • {t.date}</span>
                     )}
                   </div>
 
-                  <div className="w-1/3 flex justify-end">
+                  <div className="w-full md:w-1/3 flex justify-center md:justify-end">
                     {settings.showBusinessHours && (
                       <div className="flex flex-col items-end gap-1">
                         <div className={cn("px-6 py-3 rounded-full text-lg font-black uppercase tracking-widest flex items-center gap-3 border", biz.isOpen ? "bg-success/10 text-success border-success/20" : "bg-text-4/10 text-text-muted border-text-4/20 opacity-60")}>
