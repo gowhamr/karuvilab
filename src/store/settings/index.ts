@@ -5,6 +5,7 @@ export const initialSettings = {
   appearance: {
     theme: 'system',
     desktopSidebarOpen: true,
+    showQuickActions: false,
   } as AppearanceSettings,
   accessibility: {
     fontScaling: 1.0,

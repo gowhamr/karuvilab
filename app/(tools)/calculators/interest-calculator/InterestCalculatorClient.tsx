@@ -6,6 +6,11 @@ import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 
+// STD-06: module-level constants — stable references, no new function created on every render
+const FMT_INR     = (v: number) => formatINR(v);
+const FMT_PERCENT = (v: number) => formatPercent(v);
+const FMT_YEARS   = (v: number) => `${v} yr`;
+
 const DEFAULT_STATE = {
   principal: 100000,
   rate: 10,
@@ -52,7 +57,8 @@ export default function InterestCalculatorClient() {
     };
   }, [principal, rate, years]);
 
-  const summary = `Simple Interest Results
+  // STD-05: memoized — only rebuilds when result or inputs change
+  const summary = useMemo(() => `Simple Interest Results
 --------------------------
 Principal: ${formatINR(principal)}
 Rate: ${rate}% p.a.
@@ -60,9 +66,9 @@ Duration: ${years} years
 
 Final Amount: ${formatINR(result.finalAmount)}
 Total Interest: ${formatINR(result.interest)}
-Total Return: ${formatPercent(result.returnPct)}
+Total Return (Cumulative): ${formatPercent(result.returnPct)}
 
-Generated via KaruviLab`;
+Generated via KaruviLab`, [principal, rate, years, result]);
 
   return (
     <div className="space-y-8">
@@ -75,7 +81,7 @@ Generated via KaruviLab`;
           step={1000}
           value={principal}
           onChange={setPrincipal}
-          format={(v) => formatINR(v)}
+          format={FMT_INR}
         />
         <SliderField
           label="Annual Interest Rate"
@@ -85,7 +91,7 @@ Generated via KaruviLab`;
           step={0.5}
           value={rate}
           onChange={setRate}
-          format={(v) => formatPercent(v)}
+          format={FMT_PERCENT}
         />
         <SliderField
           label="Duration"
@@ -95,7 +101,7 @@ Generated via KaruviLab`;
           step={1}
           value={years}
           onChange={setYears}
-          format={(v) => v + " yr"}
+          format={FMT_YEARS}
         />
       </div>
 
@@ -109,8 +115,9 @@ Generated via KaruviLab`;
           label="Total Interest"
           value={formatINR(result.interest)}
         />
+        {/* BUG-04: renamed from "Total Return" — SI return equals rate*years, making it cumulative not annualised */}
         <MetricCard
-          label="Total Return"
+          label="Total Return (Cumulative)"
           value={formatPercent(result.returnPct)}
         />
       </div>

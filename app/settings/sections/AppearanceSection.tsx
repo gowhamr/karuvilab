@@ -2,8 +2,8 @@
 
 import { memo, useCallback } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
-import { SettingRow, SettingSelect } from "../components/SettingUI";
-import { Sun } from "lucide-react";
+import { SettingRow, SettingSelect, SettingSwitch } from "../components/SettingUI";
+import { Sun, Zap } from "lucide-react";
 
 export const AppearanceSection = memo(function AppearanceSection() {
   const appearance = useSettingsStore(state => state.appearance);
@@ -15,6 +15,10 @@ export const AppearanceSection = memo(function AppearanceSection() {
       ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
       : theme;
     document.documentElement.setAttribute("data-theme", resolved);
+  }, [updateAppearance]);
+
+  const handleQuickActionsToggle = useCallback((val: boolean) => {
+    updateAppearance({ showQuickActions: val });
   }, [updateAppearance]);
 
   return (
@@ -36,6 +40,20 @@ export const AppearanceSection = memo(function AppearanceSection() {
           ]}
         />
       </SettingRow>
+
+      <SettingRow
+        label="Smart Quick Actions"
+        description="Show Paste & Detect and Upload File shortcuts on the dashboard. Off by default — enable only if you find them useful."
+        icon={Zap}
+        helpText="Paste & Detect reads your clipboard and routes you to the best matching tool. Upload File detects file type and jumps directly to the right tool. Requires clipboard permission on first use."
+      >
+        <SettingSwitch
+          checked={appearance.showQuickActions ?? false}
+          onChange={handleQuickActionsToggle}
+          ariaLabel="Enable Smart Quick Actions on dashboard"
+        />
+      </SettingRow>
     </div>
   );
 });
+

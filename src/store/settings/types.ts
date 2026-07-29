@@ -4,6 +4,7 @@ export type OutputFormat = 'json' | 'text' | 'csv' | 'xml';
 export interface AppearanceSettings {
   theme: ThemeMode;
   desktopSidebarOpen?: boolean;
+  showQuickActions?: boolean; // default false — user opts in via Settings
 }
 
 export interface AccessibilitySettings {

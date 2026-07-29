@@ -6,8 +6,11 @@ import { useSearchStore } from "@/src/store/useSearchStore";
 import { SearchOverlay } from "./SearchOverlay";
 
 export function SearchManager() {
-  const isPaletteOpen = useSearchStore(state => state.isPaletteOpen);
+  const isPaletteOpen  = useSearchStore(state => state.isPaletteOpen);
   const setIsPaletteOpen = useSearchStore(state => state.setIsPaletteOpen);
+  // Read the prefilled query set by Paste & Detect (or any other caller)
+  const pendingQuery   = useSearchStore(state => state.searchQuery);
+  const setSearchQuery = useSearchStore(state => state.setSearchQuery);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -25,10 +28,17 @@ export function SearchManager() {
     return () => window.removeEventListener("keydown", handleGlobalKeyDown);
   }, [setIsPaletteOpen]);
 
+  const handleClose = () => {
+    setIsPaletteOpen(false);
+    // Clear pending query so next Ctrl+K open starts blank
+    setSearchQuery('');
+  };
+
   return (
     <SearchOverlay 
       isOpen={isPaletteOpen} 
-      onClose={() => setIsPaletteOpen(false)} 
+      onClose={handleClose}
+      initialQuery={pendingQuery}
     />
   );
 }

@@ -8,7 +8,8 @@ import InterestCalculatorClientWrapper from "./InterestCalculatorClientWrapper";
 
 export const metadata: Metadata = generateToolMetadata("interest-calculator");
 
-export default function page() {
+// BUG-05: PascalCase — React component naming convention
+export default function Page() {
   const cat = CATEGORIES.find(c => c.id === "calculators")!;
   
   return (

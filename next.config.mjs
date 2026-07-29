@@ -53,6 +53,18 @@ const nextConfig = {
             { key: "X-XSS-Protection", value: "1; mode=block" }
           ],
         },
+        {
+          // Workbench loads same-origin tool pages inside iframes.
+          // COEP: credentialless on the embedding page causes browsers to block
+          // iframes that themselves respond with COEP headers (COEP mismatch).
+          // Override to unsafe-none only for /workbench so iframes can load.
+          // X-Frame-Options stays SAMEORIGIN — Workbench itself can still be framed
+          // by same-origin contexts (Antigravity IDE etc). P-20 compliant.
+          source: "/workbench",
+          headers: [
+            { key: "Cross-Origin-Embedder-Policy", value: "unsafe-none" },
+          ],
+        },
       ];
     }
   }),

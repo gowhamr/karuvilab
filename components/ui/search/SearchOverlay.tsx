@@ -117,7 +117,9 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
     if (isOpen) {
       Promise.resolve().then(() => {
         setBlurEnabled(supportsBlur());
-        setQuery('');
+        // Seed from initialQuery (e.g. clipboard text from Paste & Detect)
+        // If no pending query, start blank as before
+        setQuery(initialQuery ?? '');
         setFocusedIndex(-1);
       });
       // Autofocus input
@@ -129,7 +131,7 @@ export function SearchOverlay({ isOpen, onClose, initialQuery = "" }: SearchOver
       const input = inputRef.current;
       if (input) input.blur();
     }
-  }, [isOpen]);
+  }, [isOpen, initialQuery]);
 
   const handleSelect = (toolId: string) => {
     const tool = ALL_TOOLS.find((t: any) => t.id === toolId);
