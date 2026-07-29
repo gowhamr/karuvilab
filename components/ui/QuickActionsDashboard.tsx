@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useRef, useCallback } from "react";
+import { useMemo, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ToolEntry, ALL_TOOLS } from "@/src/tool-registry";
@@ -33,18 +33,22 @@ export function QuickActionsDashboard({
   // Setting: show Quick Actions only when user opts in (default off)
   const showQuickActions = useSettingsStore(s => s.appearance.showQuickActions ?? false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [pasteNotice, setPasteNotice] = useState<string | null>(null);
 
   // BUG-01: wrapped in useCallback — stable reference, no subtree re-render on every parent render
   const handlePasteDetect = useCallback(async () => {
     try {
       const text = await navigator.clipboard.readText();
-      if (!text || !text.trim()) {
-        setPasteNotice("Clipboard is empty");
-        setTimeout(() => setPasteNotice(null), 3000);
+      const trimmed = text?.trim();
+
+      if (!trimmed) {
+        // Clipboard empty — open palette blank so user can type manually
+        setSearchQuery('');
+        setIsPaletteOpen(true);
         return;
       }
-      const suggestion = detectContentToolSuggestion(text);
+
+      // Has content — try to route directly to matching tool
+      const suggestion = detectContentToolSuggestion(trimmed);
       if (suggestion) {
         const tool = ALL_TOOLS.find(t => t.id === suggestion.toolId || t.href.includes(suggestion.toolId));
         if (tool) {
@@ -52,13 +56,16 @@ export function QuickActionsDashboard({
           return;
         }
       }
-      // Fallback: open search palette prefilled with clipboard text (STD-03: uses subscribed action)
-      setSearchQuery(text.slice(0, 40));
+
+      // No direct match — open search palette prefilled with clipboard text
+      setSearchQuery(trimmed.slice(0, 40));
       setIsPaletteOpen(true);
     } catch {
+      // Clipboard permission denied or unavailable — open palette blank
+      setSearchQuery('');
       setIsPaletteOpen(true);
     }
-  }, [router, setIsPaletteOpen, setSearchQuery, setPasteNotice]);
+  }, [router, setIsPaletteOpen, setSearchQuery]);
 
   // BUG-02 + BUG-06: useCallback for stable ref; MIME fallback so renamed/extensionless files still route
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +151,6 @@ export function QuickActionsDashboard({
           <div className="flex items-center gap-2 mb-3 px-1">
             <Zap className="w-3.5 h-3.5 text-primary" />
             <h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Smart Quick Actions</h2>
-            {pasteNotice && <span className="text-sm font-bold text-danger ml-auto animate-pulse" role="alert">{pasteNotice}</span>}
           </div>
           <div className="grid grid-cols-2 gap-2.5">
             {/* Slot 1: Resume if session active, otherwise Paste & Detect */}
