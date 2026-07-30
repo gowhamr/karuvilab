@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Copy, Loader2 } from "lucide-react";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 
 interface MarkdownPreviewProps {
   html: string;

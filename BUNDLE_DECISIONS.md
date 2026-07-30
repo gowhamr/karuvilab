@@ -144,11 +144,10 @@ This file tracks every new dependency added to the project, its impact on bundle
 
 ---
 
-- **Library:** `isomorphic-dompurify@3.18.0`
-- **Impact:** ~20KB gzipped (server-side only via SSR boundary)
-- **Purpose:** DOMPurify wrapper for Node.js/SSR contexts in Server Components; `dompurify` alone throws in Node
-- **Alternatives:** `sanitize-html` (heavier), `dompurify` alone (browser-only — breaks SSR)
-- **Justification:** Required for KL-09 compliance across full SSR pipeline. Client uses `dompurify`, server uses `isomorphic-dompurify`.
+- **Library:** `isomorphic-dompurify@3.18.0` [REMOVED / DEDUPLICATED]
+- **Impact:** 0 KB (removed from project)
+- **Status:** Removed in Phase 1 optimization. Replaced by unified `dompurify` library across browser & workers.
+
 
 ---
 

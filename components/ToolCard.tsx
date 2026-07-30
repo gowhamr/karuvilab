@@ -30,9 +30,14 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
   const isFavorite = hydrated && favorites.includes(tool.id);
 
   const handlePreload = useCallback(() => {
-    if (tool.href) {
-      router.prefetch(tool.href);
+    if (!tool.href) return;
+    if (typeof navigator !== "undefined" && "connection" in navigator) {
+      const conn = (navigator as any).connection;
+      if (conn?.saveData || conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g") {
+        return; // Skip prefetching on data saver mode or 2G networks
+      }
     }
+    router.prefetch(tool.href);
   }, [router, tool.href]);
 
   const handleFavClick = useCallback((e: React.MouseEvent) => {

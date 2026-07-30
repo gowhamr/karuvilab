@@ -20,6 +20,7 @@ export const initialSettings = {
     clearStorageOnExit: false,
     telemetryEnabled: false,
     historyEnabled: true,
+    developerMode: false,
   } as PrivacySettings,
   focusMode: {
     autoHideToolbar: false,

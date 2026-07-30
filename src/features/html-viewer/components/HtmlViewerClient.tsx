@@ -15,7 +15,7 @@ import { useDebounce } from "@/src/hooks/useDebounce";
 import { useToast } from "@/components/ui/Toast";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 import { DropZone } from "@/components/ui/DropZone";
 import { logger } from "@/src/lib/logger";
 

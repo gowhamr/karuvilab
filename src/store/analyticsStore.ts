@@ -8,6 +8,7 @@ interface EmptyStateMetrics {
   engagements: Record<string, number>;
   conversions: Record<string, number>;
   bounces:     Record<string, number>;
+  rumMetrics?: Record<string, { workerInitMs?: number; dynamicImportMs?: number; interactiveMs?: number }>;
 }
 
 interface AnalyticsState extends EmptyStateMetrics {
@@ -16,6 +17,7 @@ interface AnalyticsState extends EmptyStateMetrics {
   recordEngagement: (toolId: string) => void;
   recordConversion: (toolId: string) => void;
   recordBounce: (toolId: string) => void;
+  recordRumMetric: (toolId: string, metric: 'workerInitMs' | 'dynamicImportMs' | 'interactiveMs', durationMs: number) => void;
   
   // Reset for specific tool
   resetMetrics: (toolId: string) => void;
@@ -44,6 +46,14 @@ export const useAnalyticsStore = create<AnalyticsState>()(
       recordBounce: (toolId) => set((state) => ({
         bounces: { ...state.bounces, [toolId]: (state.bounces[toolId] || 0) + 1 }
       })),
+
+      recordRumMetric: (toolId, metric, durationMs) => set((state) => {
+        const rum = { ...(state.rumMetrics || {}) };
+        const toolRum = { ...(rum[toolId] || {}) };
+        toolRum[metric] = Math.round(durationMs);
+        rum[toolId] = toolRum;
+        return { rumMetrics: rum };
+      }),
 
       resetMetrics: (toolId) => set((state) => {
         const views = { ...state.views }; delete views[toolId];

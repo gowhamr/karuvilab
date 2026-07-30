@@ -21,6 +21,7 @@ export interface PrivacySettings {
   clearStorageOnExit: boolean;
   telemetryEnabled: boolean;
   historyEnabled: boolean;
+  developerMode?: boolean;
 }
 
 export interface SettingsState {

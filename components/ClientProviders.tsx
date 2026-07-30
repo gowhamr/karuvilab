@@ -9,6 +9,7 @@ import { useEffect } from "react";
 
 const FeedbackModal = dynamic(() => import("@/components/ui/FeedbackModal").then(mod => ({ default: mod.FeedbackModal })), { ssr: false });
 const SearchManager = dynamic(() => import("@/components/ui/search/SearchManager").then(mod => ({ default: mod.SearchManager })), { ssr: false });
+const DeveloperPanel = dynamic(() => import("@/components/system/DeveloperPanel").then(mod => ({ default: mod.DeveloperPanel })), { ssr: false });
 
 import { FullscreenProvider } from "@/src/contexts/FullscreenContext";
 import { FocusModeControlsProvider } from "@/src/contexts/FocusModeControlsContext";
@@ -73,6 +74,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
               <GlobalSettingsEffects />
               <FeedbackModal />
               <SearchManager />
+              <DeveloperPanel />
               <HtmlPrecacher />
               {children}
             </FocusModeControlsProvider>

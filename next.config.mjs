@@ -8,6 +8,18 @@ const withAnalyzer = withBundleAnalyzer({
 const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
 const nextConfig = {
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
+      'framer-motion',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-select',
+      '@radix-ui/react-slider',
+    ],
+  },
   basePath: (isGithubPages && !process.env.CUSTOM_DOMAIN) ? '/karuvilab' : '',
   env: {
     NEXT_PUBLIC_BASE_PATH: (isGithubPages && !process.env.CUSTOM_DOMAIN) ? '/karuvilab' : '',

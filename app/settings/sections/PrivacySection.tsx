@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { useSettingsStore } from "@/src/store/settings/store";
 import { SettingRow, SettingSwitch } from "../components/SettingUI";
-import { Shield, HardDrive, LineChart, History, Trash2, Download, Upload, Check, RefreshCcw, Loader2 } from "lucide-react";
+import { Shield, HardDrive, LineChart, History, Trash2, Download, Upload, Check, RefreshCcw, Loader2, Terminal, Gauge } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { performFactoryReset, clearToolData } from "@/src/lib/factory-reset";
@@ -15,6 +15,8 @@ import dynamic from "next/dynamic";
 
 export const PrivacySection = memo(function PrivacySection() {
   const resetAll = useSettingsStore(state => state.resetAll);
+  const developerMode = useSettingsStore(state => state.privacy.developerMode);
+  const updatePrivacy = useSettingsStore(state => state.updatePrivacy);
   const [isExporting, setIsExporting] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
@@ -100,6 +102,19 @@ export const PrivacySection = memo(function PrivacySection() {
           <Shield className="w-3.5 h-3.5" />
           <span className="text-tiny font-bold uppercase tracking-widest-sm">Always Active</span>
         </div>
+      </SettingRow>
+
+      {/* --- Performance Inspector HUD --- */}
+      <SettingRow
+        label="Performance Inspector"
+        description="Display real-time performance metrics (Worker Spawn, Dynamic Import times, V8 Heap Memory, Execution Waterfall, and Educational Concepts). Zero behavioral tracking."
+        icon={Gauge}
+        helpText="Designed for engineers and learners. Displays real-time Web Worker initialization times, dynamic import latency, V8 memory consumption, and interactive architectural lessons."
+      >
+        <SettingSwitch
+          checked={!!developerMode}
+          onChange={(val) => updatePrivacy({ developerMode: val })}
+        />
       </SettingRow>
 
       {/* --- Data Management Grid --- */}
