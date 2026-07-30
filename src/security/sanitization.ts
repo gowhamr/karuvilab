@@ -1,6 +1,24 @@
 // src/security/sanitization.ts
-import DOMPurify from "dompurify";
+import DOMPurifyModule from "dompurify";
 import { marked } from "marked";
+
+function getPurifyInstance() {
+  const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
+  if (typeof instance === 'function') {
+    if (typeof window !== 'undefined') {
+      return instance(window);
+    }
+    try {
+      const { JSDOM } = require('jsdom');
+      return instance(new JSDOM('').window);
+    } catch {
+      return instance;
+    }
+  }
+  return instance;
+}
+
+const DOMPurify = getPurifyInstance();
 
 /**
  * Sanitizes HTML strings using DOMPurify with a strict local-first setup.

@@ -1,21 +1,41 @@
-import DOMPurify from 'dompurify';
+import DOMPurifyModule from 'dompurify';
 import { marked } from 'marked';
+
+function getPurifyInstance() {
+  const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
+  if (typeof instance === 'function') {
+    if (typeof window !== 'undefined') {
+      return instance(window);
+    }
+    try {
+      const { JSDOM } = require('jsdom');
+      return instance(new JSDOM('').window);
+    } catch {
+      return instance;
+    }
+  }
+  return instance;
+}
+
+const DOMPurify = getPurifyInstance();
 
 /**
  * Sanitizes HTML to prevent XSS attacks.
  * Uses DOMPurify with strict defaults.
  */
-DOMPurify.addHook('afterSanitizeAttributes', function(node) {
-  if (node.tagName && node.tagName.toLowerCase() === 'a') {
-    const href = node.getAttribute('href');
-    if (href && href.trim().toLowerCase().startsWith('javascript:')) {
-      node.removeAttribute('href');
-    } else {
-      node.setAttribute('target', '_blank');
-      node.setAttribute('rel', 'noopener noreferrer');
+if (DOMPurify && typeof DOMPurify.addHook === 'function') {
+  DOMPurify.addHook('afterSanitizeAttributes', function(node: any) {
+    if (node.tagName && node.tagName.toLowerCase() === 'a') {
+      const href = node.getAttribute('href');
+      if (href && href.trim().toLowerCase().startsWith('javascript:')) {
+        node.removeAttribute('href');
+      } else {
+        node.setAttribute('target', '_blank');
+        node.setAttribute('rel', 'noopener noreferrer');
+      }
     }
-  }
-});
+  });
+}
 
 export function sanitizeHtml(html: string): string {
   return DOMPurify.sanitize(html, {
