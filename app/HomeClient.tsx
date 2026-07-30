@@ -171,8 +171,8 @@ export default function HomeClient() {
   const [showSmartFilters, setShowSmartFilters] = useState(false);
 
   useEffect(() => {
-    setRecentTools(getRecentTools().slice(0, 5));
-    setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)).slice(0, 5));
+    setRecentTools(getRecentTools().slice(0, 10));
+    setFavorites(ALL_TOOLS.filter(t => favoriteIds.includes(t.id)));
     setHydrated(true);
     recordView("homepage");
   }, [favoriteIds, recordView]);
@@ -333,9 +333,10 @@ export default function HomeClient() {
             subtitle="Your favorited tools for quick access"
             icon={Heart}
             headingId="personal-heading-fav"
+            href="/favorites"
           />
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-            {favoriteTools.map(tool => (
+            {favoriteTools.slice(0, 10).map(tool => (
               <div key={tool.id} className="flex flex-col h-full">
                 <ToolCard tool={tool} compact />
               </div>

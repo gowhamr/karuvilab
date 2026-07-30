@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
+import { Loader2 } from "lucide-react";
 
 const SkeletonBlock = ({ className }: { className?: string }) => (
   <div className={cn("shimmer-wrapper bg-surface border border-border rounded-2xl", className)} />
@@ -88,8 +89,17 @@ export function ToolSkeleton({
       aria-label="Loading tool content..."
       aria-busy="true"
       aria-live="polite"
-      className="w-full animate-in fade-in duration-500"
+      className="w-full space-y-6 animate-in fade-in duration-300"
     >
+      {/* Top Indeterminate Progress Banner */}
+      <div className="flex items-center justify-between px-2 py-1 bg-surface-2/40 border border-border/60 rounded-xl">
+        <div className="flex items-center gap-2 text-xs font-bold text-blue">
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <span>Loading tool module...</span>
+        </div>
+        <span className="text-[10px] font-mono text-text-4">KaruviLab Client Engine</span>
+      </div>
+
       {content}
     </div>
   );

@@ -97,9 +97,9 @@ export function useUrlState<T extends ParamSchema>(
       debounceRef.current = setTimeout(() => {
         const url = buildUrl(next);
         if (historyMode === 'replace') {
-          router.replace(url, { scroll: false });
+          window.history.replaceState(window.history.state, '', url);
         } else {
-          router.push(url, { scroll: false });
+          window.history.pushState(window.history.state, '', url);
         }
         setIsSynced(true);
       }, debounceMs);
@@ -110,7 +110,7 @@ export function useUrlState<T extends ParamSchema>(
   const resetState = useCallback(() => {
     clearTimeout(debounceRef.current);
     setStateInternal(JSON.parse(defaultsStr) as T);
-    router.replace(pathname, { scroll: false });
+    window.history.replaceState(window.history.state, '', pathname);
     setIsSynced(true);
   }, [router, pathname, defaultsStr]);
 

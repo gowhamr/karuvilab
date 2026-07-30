@@ -13,7 +13,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { logger } from "@/src/lib/logger";
 import { useEffect, useRef } from "react";
 
-type Format = "mp3" | "wav" | "aac" | "opus";
+type Format = "mp3" | "wav";
 
 export default function AudioConverterClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();

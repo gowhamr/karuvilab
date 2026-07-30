@@ -10,12 +10,15 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Heart } from "lucide-react";
 
+import { useRouter } from "next/navigation";
+
 interface ToolCardProps {
   tool: ToolEntry;
   compact?: boolean;
 }
 
 export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
+  const router = useRouter();
   const favorites = useFavoriteStore(state => state.favorites);
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
   const [hydrated, setHydrated] = useState(false);
@@ -26,6 +29,11 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
 
   const isFavorite = hydrated && favorites.includes(tool.id);
 
+  const handlePreload = useCallback(() => {
+    if (tool.href) {
+      router.prefetch(tool.href);
+    }
+  }, [router, tool.href]);
 
   const handleFavClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -38,13 +46,15 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
       <Link
         href={tool.href}
         aria-label={tool.name}
-        className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-card"
+        onMouseEnter={handlePreload}
+        onTouchStart={handlePreload}
+        className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-card transition-transform duration-150 active:scale-[0.98]"
       >
         <Card
           variant="interactive"
           padding={compact ? "sm" : "md"}
           className={cn(
-            "flex flex-col h-full gap-3 select-none justify-between",
+            "flex flex-col h-full gap-3 select-none justify-between transition-all duration-150 group-active:border-primary/40 group-active:bg-primary/5",
             compact ? "min-h-[105px]" : "min-h-[160px]"
           )}
         >

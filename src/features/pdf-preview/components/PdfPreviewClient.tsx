@@ -182,7 +182,7 @@ export default function PdfPreviewClient() {
             )}
           </div>
           
-          <div className="bg-[#e5e7eb] dark:bg-[#111827] w-full min-h-[60vh] max-h-[80vh] overflow-auto flex items-center justify-center p-6 relative">
+          <div className="bg-surface-2 w-full min-h-[60vh] max-h-[80vh] overflow-auto flex items-center justify-center p-6 relative">
             <canvas 
               ref={canvasRef} 
               className="bg-white shadow-xl max-w-none"

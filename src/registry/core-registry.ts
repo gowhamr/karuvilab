@@ -39,7 +39,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "aes encrypt decrypt",
       "security"
@@ -118,7 +118,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "audio converter",
       "media"
@@ -166,7 +166,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "banking tools",
       "iso 8583",
@@ -244,7 +244,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "base64url converter",
       "security"
@@ -319,7 +319,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "bmi calculator",
       "calculators"
@@ -393,7 +393,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "box shadow generator",
       "developer"
@@ -543,7 +543,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "card masker",
       "security"
@@ -591,7 +591,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "cipher tools",
       "security"
@@ -637,7 +637,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "color converter",
       "developer"
@@ -688,7 +688,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "color palette extractor",
       "image"
@@ -710,7 +710,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "command cheat sheet",
       "developer"
@@ -719,31 +719,6 @@ export const CORE_TOOLS: ToolEntry[] = [
     "output": null,
     "related": [],
     "subCategory": "Generators",
-    "requiresNetwork": false
-  },
-  {
-    "id": "interest-calculator",
-    "name": "Interest Calculator",
-    "desc": "Calculate simple interest on your principal investment.",
-    "href": "/calculators/interest-calculator/",
-    "category": "calculators",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "new",
-    "lastAdded": "2026-07-28",
-    "keywords": [
-      "simple interest",
-      "interest calculator",
-      "investment growth",
-      "savings calculator",
-      "loan interest"
-    ],
-    "input": null,
-    "output": null,
-    "related": ["compound-interest"],
-    "subCategory": "Financial",
     "requiresNetwork": false
   },
   {
@@ -766,7 +741,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     ],
     "input": null,
     "output": null,
-    "related": ["interest-calculator"],
+    "related": [],
     "subCategory": "Financial",
     "requiresNetwork": false
   },
@@ -810,7 +785,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "compress",
       "image"
@@ -832,7 +807,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "contrast checker",
       "developer"
@@ -854,7 +829,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "finacle tools",
       "banking"
@@ -876,7 +851,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "countdown timer",
       "productivity"
@@ -898,7 +873,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "crontab editor",
       "developer"
@@ -944,7 +919,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "csp builder",
       "security"
@@ -966,7 +941,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "csr generator",
       "security"
@@ -988,7 +963,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "csv to json",
       "developer"
@@ -1137,7 +1112,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "directory manifest",
       "security"
@@ -1206,7 +1181,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "ecdh key exchange",
       "security"
@@ -1228,7 +1203,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "ecdsa sign",
       "security"
@@ -1304,7 +1279,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "emv tlv tree",
       "banking"
@@ -1565,7 +1540,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "gif creator",
       "media"
@@ -1612,7 +1587,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "glassmorphism generator",
       "developer"
@@ -1634,7 +1609,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "gradient generator",
       "developer"
@@ -1684,7 +1659,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "gratuity calculator",
       "calculators"
@@ -1758,7 +1733,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "hash map visualizer",
       "developer"
@@ -1811,7 +1786,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "hkdf generator",
       "security"
@@ -1833,7 +1808,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "hmac generator",
       "security"
@@ -1855,7 +1830,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "hra calculator",
       "calculators"
@@ -1931,7 +1906,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "iban validator",
       "security"
@@ -2178,7 +2153,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "image seo",
       "seo"
@@ -2225,7 +2200,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "income tax",
       "calculators"
@@ -2297,7 +2272,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "invoice generator",
       "calculators"
@@ -2319,7 +2294,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "iso8583 bitmap decoder",
       "security"
@@ -2341,7 +2316,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "iso8583 message parser",
       "security"
@@ -2453,7 +2428,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "json to xml",
       "xml to json",
@@ -2530,7 +2505,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "log analyzer",
       "developer"
@@ -2552,7 +2527,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "lorem ipsum",
       "developer"
@@ -2574,7 +2549,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "luhn validator",
       "developer"
@@ -2735,7 +2710,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "meta tags",
       "seo"
@@ -2860,7 +2835,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "nanoid generator",
       "developer"
@@ -2882,7 +2857,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "notes",
       "productivity"
@@ -2904,7 +2879,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "nps calculator",
       "calculators"
@@ -2977,7 +2952,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "oauth token decoder",
       "security"
@@ -3022,7 +2997,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "og preview",
       "seo"
@@ -3141,7 +3116,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "pbkdf2 generator",
       "security"
@@ -3348,7 +3323,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "pem viewer",
       "security"
@@ -3419,7 +3394,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "pomodoro timer",
       "productivity"
@@ -3466,7 +3441,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "private key checker",
       "security"
@@ -3488,7 +3463,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "public key inspector",
       "security"
@@ -3763,7 +3738,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "robots txt",
       "seo"
@@ -3832,7 +3807,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "rsa encrypt decrypt",
       "security"
@@ -3854,7 +3829,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "rsa key generator",
       "security"
@@ -3876,7 +3851,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "rsa sign verify",
       "security"
@@ -3946,7 +3921,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "saml decoder",
       "security"
@@ -3968,7 +3943,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "seo title",
       "seo"
@@ -3990,7 +3965,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "seo tools",
       "developer"
@@ -4039,7 +4014,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "sitemap generator",
       "seo"
@@ -4061,7 +4036,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "slug generator",
       "seo"
@@ -4185,7 +4160,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "sql formatter",
       "developer"
@@ -4232,7 +4207,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "stopwatch",
       "productivity"
@@ -4310,7 +4285,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "swift mt mx",
       "banking"
@@ -4381,7 +4356,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "tds calculator",
       "calculators"
@@ -4403,7 +4378,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "text case converter",
       "productivity"
@@ -4587,7 +4562,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "tlv parser",
       "security"
@@ -4609,7 +4584,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "track 2 parser",
       "banking"
@@ -4682,7 +4657,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "unix timestamp",
       "developer"
@@ -4776,7 +4751,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "uuid generator",
       "developer"
@@ -4822,7 +4797,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "video metadata viewer",
       "media"
@@ -4844,7 +4819,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "video trim",
       "media"
@@ -4940,7 +4915,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "word counter",
       "productivity"
@@ -4994,7 +4969,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "word to pdf",
       "pdf"
@@ -5067,7 +5042,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "x509 viewer",
       "security"
@@ -5089,7 +5064,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "xml formatter",
       "developer"
@@ -5111,7 +5086,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "yaml json converter",
       "developer"
@@ -5133,7 +5108,7 @@ export const CORE_TOOLS: ToolEntry[] = [
     "featured": false,
     "popular": false,
     "status": "new",
-    "lastAdded": "2026-07-28",
+    "lastAdded": "2026-07-29",
     "keywords": [
       "yaml validator",
       "developer"

@@ -92,7 +92,7 @@ export default function PdfToWordClient() {
       >
         <>
           <div
-            className="bg-surface border-2 border-dashed border-border rounded-4xl p-12 text-center cursor-pointer hover:border-blue transition-all group"
+            className="bg-surface border-2 border-dashed border-border rounded-4xl p-6 sm:p-12 text-center cursor-pointer hover:border-blue transition-all group"
             onClick={() => fileRef.current?.click()}
             onDragOver={e => e.preventDefault()}
             onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) { setFile(f); setText(""); } }}
