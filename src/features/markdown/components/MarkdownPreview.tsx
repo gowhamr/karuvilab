@@ -135,7 +135,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
       <div className="flex-1 overflow-y-auto p-6 scroll-smooth markdown-body" ref={ref}>
         <div 
           ref={containerRef}
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
         />
         {!html.trim() && (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-50">

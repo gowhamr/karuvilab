@@ -24,7 +24,7 @@ import { ToolCard } from '@/components/ToolCard';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { toast } from 'sonner';
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 
 function stripHtmlAndTruncate(html: string | undefined, maxLength: number = 80): string {
   if (!html) return '';

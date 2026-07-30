@@ -1,5 +1,5 @@
 // src/security/sanitization.ts
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 import { marked } from "marked";
 
 /**

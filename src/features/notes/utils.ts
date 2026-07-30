@@ -2,7 +2,7 @@ import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
 
 export async function renderMarkdown(markdown: string): Promise<string> {
   const { marked } = await import("marked");
-  const DOMPurify = (await import("isomorphic-dompurify")).default;
+  const DOMPurify = (await import("dompurify")).default;
   
   const rawHtml = await marked.parse(markdown);
   return DOMPurify.sanitize(rawHtml);

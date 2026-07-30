@@ -144,10 +144,11 @@ This file tracks every new dependency added to the project, its impact on bundle
 
 ---
 
-- **Library:** `isomorphic-dompurify@3.18.0` [REMOVED / DEDUPLICATED]
-- **Impact:** 0 KB (removed from project)
-- **Status:** Removed in Phase 1 optimization. Replaced by unified `dompurify` library across browser & workers.
-
+- **Library:** `dompurify` (v3.4.12)
+- **Impact:** ~20KB gzipped (Unified client & worker dependency)
+- **Purpose:** Strict HTML sanitization to enforce KL-09 XSS protection across all markdown, rich text, and preview components.
+- **Alternatives:** `isomorphic-dompurify` (removed/deduplicated), `sanitize-html` (heavier bundle cost).
+- **Justification:** Single, actively maintained source of truth for HTML sanitization in KaruviLab. Enforces overrides in package.json to receive security patches automatically.
 
 ---
 

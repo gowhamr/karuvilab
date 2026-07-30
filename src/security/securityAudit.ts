@@ -24,7 +24,7 @@ const FORBIDDEN_PATTERNS = [
   {
     regex: /dangerouslySetInnerHTML/g,
     severity: "medium" as const,
-    description: "Use of dangerouslySetInnerHTML detected. Ensure isomorphic-dompurify wraps this node.",
+    description: "Use of dangerouslySetInnerHTML detected. Ensure dompurify wraps this node.",
   },
   {
     regex: /localStorage\.(getItem|setItem)/g,
