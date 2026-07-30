@@ -1,23 +1,17 @@
 import DOMPurifyModule from 'dompurify';
 import { marked } from 'marked';
 
-function getPurifyInstance() {
+function getDOMPurify() {
   const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
   if (typeof instance === 'function') {
     if (typeof window !== 'undefined') {
       return instance(window);
     }
-    try {
-      const { JSDOM } = require('jsdom');
-      return instance(new JSDOM('').window);
-    } catch {
-      return instance;
-    }
   }
   return instance;
 }
 
-const DOMPurify = getPurifyInstance();
+const DOMPurify = getDOMPurify();
 
 /**
  * Sanitizes HTML to prevent XSS attacks.
