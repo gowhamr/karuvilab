@@ -1,63 +1,65 @@
-# KaruviLab Roadmap & Vision (10-Phase Master Plan)
+# KaruviLab Roadmap & Vision
 
 > **North Star:** KaruviLab helps engineers understand technology—not just use it. Every tool is private, offline-first, technically accurate, and teaches the concepts, standards, architecture, security, and real-world engineering behind it.
 
-## Phase 1 — Feature Freeze & Baseline Audit
-**Goal:** Freeze all new feature development.
-- Audit all existing tools against the core GEMINI rules (Offline-first, Worker support, Mobile optimization, Error handling, Accessibility).
-- Ensure no tool blocks the main thread.
-- Establish the baseline required before a tool can graduate to ELS status.
+## Current Release (v2.2) — World-Class Tools
+*Focus entirely on user-facing improvements.*
 
-## Phase 2 — The ELS Foundation (Patient Zero)
-**Goal:** Prove the Engineering Learning System (ELS).
-- Select one existing tool (e.g., JSON Formatter) to serve as "Patient Zero".
-- Build reusable UI components for the Learning Hub (`<LearningHub>`, `<InteractiveQuiz>`, `<ArchitectureDiagram>`).
-- Write complete ELS content for the tool (Algorithm, Browser APIs, Security, Performance, Standards, Failure Cases).
-- Achieve a 100% Quality Score on this single tool.
+### Phase 1 (Highest Priority)
+Complete the PDF suite:
+- [ ] Remove Pages
+- [ ] Extract Pages
+- [ ] Organize Pages
+- [ ] Crop PDF
+- [ ] Metadata Editor
+- [ ] Reverse Pages
+- [ ] Delete Blank Pages
+- [ ] Page Size Converter
 
-## Phase 3 — Core Engineering Excellence Rollout
-**Goal:** Ensure foundational technologies are robust and standardized across the app.
-- Standardize the `WorkerOrchestrator` across all heavy ops.
-- Audit memory usage and implement `AbortSignal` for all async tasks.
-- Implement IndexedDB (`idb`) caching consistently.
-- Perfect lazy loading boundaries for heavy dependencies.
+### Phase 2
+ELS v2 for every tool:
+- [ ] What?
+- [ ] Why?
+- [ ] How?
+- [ ] Where?
+- [ ] When?
+- [ ] Problems
+- [ ] Standards
+- [ ] Security
+- [ ] Performance
+- [ ] Interactive Quiz
 
-## Phase 4 — ELS Rollout: Batch 1 (Developer & Utilities)
-**Goal:** Apply the Phase 2 standard to our most used developer tools.
-- Upgrade tools like Regex Tester, Diff Checker, Code Minifier, and Markdown Editor to full ELS standard.
-- Ensure 100% functionality and complete educational content.
+### Phase 3
+Tool workflow chaining:
+- [ ] "Open output in…" actions
+- [ ] Memory-based blob passing between compatible tools
+- [ ] No intermediate downloads
 
-## Phase 5 — Domain Deep Dive: Cryptography & Security
-**Goal:** Build unparalleled practical learning for security engineering.
-- Upgrade/implement JWT, RSA, TLS, OAuth, and X.509 tools.
-- Educational focus: FIPS standards, threat models, bit-length choices, common vulnerabilities.
-
-## Phase 6 — Domain Deep Dive: Banking Engineering
-**Goal:** Demystify enterprise financial systems.
-- Upgrade/implement ISO 8583, EMV TLV, and SWIFT tools.
-- Educational focus: Parsing binary formats, financial message routing, legacy banking architecture.
-
-## Phase 7 — Domain Deep Dive: PDF & Image Engineering
-**Goal:** Teach the internals of complex binary formats.
-- Upgrade PDF manipulation and Image processing tools.
-- Educational focus: Object models, WebAssembly integration, Color Spaces (EXIF), compression algorithms.
-
-## Phase 8 — Accessibility & Mobile Finalization
-**Goal:** Flawless UX on every device.
-- Full WCAG 2.2 AA audit of the entire ELS framework.
-- Keyboard navigation and screen reader testing on complex interactive elements and diagrams.
-
-## Phase 9 — Community & Trust Building
-**Goal:** Build credibility and transparency.
-- Introduce dynamic Changelogs and version history per tool.
-- Add "Last Verified" timestamps.
-- Explicitly cite RFCs, standards, and official documentation in the UI.
-
-## Phase 10 — Production Readiness & Launch
-**Goal:** Prepare for large-scale engineering adoption.
-- Final bundle optimization.
-- Global performance profiling.
-- Release marketing focused on the unique ELS value proposition.
+### Phase 4
+Tool quality checklist:
+- [ ] Performance budget
+- [ ] Accessibility
+- [ ] Mobile usability
+- [ ] Offline support
+- [ ] Large-file testing
+- [ ] Worker cancellation
+- [ ] Error recovery
+- [ ] Documentation complete
 
 ---
-**Rule:** A tool is not complete until it scores 100% on: Functionality, UI/UX, Mobile support, Accessibility, Worker support, Offline support, Learn section, Failure cases, Quiz, Standards, References, Examples. If one is missing, it stays in "Work in Progress."
+
+## Next Release (v2.3)
+*Approved but not started.*
+
+- Domain Deep Dive: Cryptography & Security (FIPS standards, threat models)
+- Domain Deep Dive: Banking Engineering (ISO 8583, EMV TLV, SWIFT)
+- Community & Trust Building (Dynamic Changelogs, Last Verified timestamps, RFC citations)
+
+---
+
+## Backlog
+*Ideas that are intentionally deferred.*
+
+- Comprehensive global performance profiling
+- Specialized Image Engineering Deep Dives (WebAssembly integration, EXIF parsing internals)
+- Release marketing focused on the unique ELS value proposition
