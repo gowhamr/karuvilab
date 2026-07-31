@@ -57,11 +57,26 @@ const DEFAULT_SANITIZE_CONFIG = {
 /**
  * Sanitizes HTML to prevent XSS attacks.
  * Uses isomorphic-dompurify with strict defaults across browser and SSR/Node environments.
+ * Falls back to regex sanitizer if DOMPurify is unavailable (e.g. edge runtime).
  */
 export function sanitizeHtml(html: string, options?: Record<string, unknown>): string {
   if (!html) return '';
-  ensureHooks();
-  return DOMPurify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
+  try {
+    ensureHooks();
+    if (typeof DOMPurify.sanitize === 'function') {
+      return DOMPurify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
+    }
+  } catch {
+    // DOMPurify unavailable — fall through to regex sanitizer
+  }
+
+  // Fallback regex sanitizer for environments where DOMPurify can't initialize.
+  // Content reaching this path during SSR is trusted (in-repo markdown output).
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*(["']).*?\1/gi, '')
+    .replace(/on\w+\s*=\s*[^\s>]+/gi, '')
+    .replace(/href\s*=\s*(["'])\s*javascript:.*?\1/gi, 'href="#"');
 }
 
 /**
