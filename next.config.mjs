@@ -8,7 +8,6 @@ const withAnalyzer = withBundleAnalyzer({
 const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
 const nextConfig = {
-  serverExternalPackages: ['isomorphic-dompurify'],
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -19,7 +18,7 @@ const nextConfig = {
       '@radix-ui/react-popover',
       '@radix-ui/react-select',
       '@radix-ui/react-slider',
-      'isomorphic-dompurify',
+      'dompurify',
     ],
   },
   basePath: (isGithubPages && !process.env.CUSTOM_DOMAIN) ? '/karuvilab' : '',

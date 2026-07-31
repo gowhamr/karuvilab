@@ -1,18 +1,25 @@
-import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
-// isomorphic-dompurify provides a ready-to-use instance in both
-// browser and Node/SSR environments — no manual factory needed.
+// DOMPurify is lazy-loaded only on the client (where window + DOM exist).
+// During SSR prerendering, a regex fallback sanitizes trusted in-repo content.
+// This avoids webpack bundling DOMPurify/jsdom for the server chunk.
 
+let _purifyInstance: { sanitize: (html: string, config?: Record<string, unknown>) => string; addHook?: (hook: string, cb: (node: Element) => void) => void } | null = null;
 let _hookInstalled = false;
 
-function ensureHooks(): void {
-  if (_hookInstalled) return;
-  _hookInstalled = true;
+function getClientPurify() {
+  if (typeof window === 'undefined') return null;
+  if (_purifyInstance) return _purifyInstance;
 
-  if (typeof DOMPurify.addHook === 'function') {
-    try {
-      DOMPurify.addHook('afterSanitizeAttributes', function (node: Element) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require('dompurify');
+    const DOMPurify = mod.default || mod;
+    _purifyInstance = typeof DOMPurify === 'function' ? DOMPurify(window) : DOMPurify;
+
+    if (_purifyInstance && !_hookInstalled && typeof _purifyInstance.addHook === 'function') {
+      _hookInstalled = true;
+      _purifyInstance.addHook('afterSanitizeAttributes', function (node: Element) {
         if (node.tagName && node.tagName.toLowerCase() === 'a') {
           const href = node.getAttribute('href');
           if (href && href.trim().toLowerCase().startsWith('javascript:')) {
@@ -23,18 +30,19 @@ function ensureHooks(): void {
           }
         }
       });
-    } catch {
-      // Hook not supported on fallback instance
     }
+  } catch {
+    _purifyInstance = null;
   }
+
+  return _purifyInstance;
 }
 
 /**
- * Returns the isomorphic DOMPurify instance (works in both browser and SSR).
+ * Returns the DOMPurify instance (client-only). Returns null on the server.
  */
 export function getDOMPurify() {
-  ensureHooks();
-  return DOMPurify;
+  return getClientPurify();
 }
 
 const DEFAULT_SANITIZE_CONFIG = {
@@ -55,28 +63,31 @@ const DEFAULT_SANITIZE_CONFIG = {
 };
 
 /**
- * Sanitizes HTML to prevent XSS attacks.
- * Uses isomorphic-dompurify with strict defaults across browser and SSR/Node environments.
- * Falls back to regex sanitizer if DOMPurify is unavailable (e.g. edge runtime).
+ * Regex-based sanitizer for SSR and fallback contexts.
+ * Content reaching this path during SSR is trusted (in-repo markdown output
+ * from marked.parse()). This strips dangerous patterns as defense-in-depth.
  */
-export function sanitizeHtml(html: string, options?: Record<string, unknown>): string {
-  if (!html) return '';
-  try {
-    ensureHooks();
-    if (typeof DOMPurify.sanitize === 'function') {
-      return DOMPurify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
-    }
-  } catch {
-    // DOMPurify unavailable — fall through to regex sanitizer
-  }
-
-  // Fallback regex sanitizer for environments where DOMPurify can't initialize.
-  // Content reaching this path during SSR is trusted (in-repo markdown output).
+function regexSanitize(html: string): string {
   return html
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/on\w+\s*=\s*(["']).*?\1/gi, '')
     .replace(/on\w+\s*=\s*[^\s>]+/gi, '')
     .replace(/href\s*=\s*(["'])\s*javascript:.*?\1/gi, 'href="#"');
+}
+
+/**
+ * Sanitizes HTML to prevent XSS attacks.
+ * Uses DOMPurify on the client, regex fallback on the server (SSR).
+ */
+export function sanitizeHtml(html: string, options?: Record<string, unknown>): string {
+  if (!html) return '';
+
+  const purify = getClientPurify();
+  if (purify && typeof purify.sanitize === 'function') {
+    return purify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
+  }
+
+  return regexSanitize(html);
 }
 
 /**
@@ -94,4 +105,3 @@ export function parseAndSanitizeMarkdownSync(md: string): string {
   const rawHtml = marked.parse(md, { async: false }) as string;
   return sanitizeHtml(rawHtml);
 }
-
