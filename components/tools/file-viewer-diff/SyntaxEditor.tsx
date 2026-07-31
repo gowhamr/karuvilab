@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { cn } from '@/src/lib/utils';
 import { highlightCode } from '@/src/lib/highlight';
 import { Info, Copy, Check } from 'lucide-react';
-import DOMPurify from 'dompurify';
+import { sanitizeHtml } from '@/src/lib/security';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface SyntaxEditorProps {
@@ -161,7 +161,7 @@ export function SyntaxEditor({
                 wordWrap ? "whitespace-pre-wrap break-all" : "whitespace-pre"
               )}
               style={{ fontSize: 'inherit', color: 'var(--kv-text)' }}
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(highlighted) + '\n' }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(highlighted) + '\n' }}
             />
           )}
           

@@ -24,7 +24,7 @@ import { ToolCard } from '@/components/ToolCard';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { toast } from 'sonner';
-import DOMPurify from 'dompurify';
+import { sanitizeHtml } from '@/src/lib/security';
 
 function stripHtmlAndTruncate(html: string | undefined, maxLength: number = 80): string {
   if (!html) return '';
@@ -109,7 +109,7 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
             <h4 className="font-bold text-text">{item.question}</h4>
             <div 
               className="text-text-3 text-sm leading-relaxed prose prose-sm prose-slate dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.answer) }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.answer) }}
             />
           </div>
         ))}
@@ -379,7 +379,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                                 </span>
                                 <div 
                                   className="text-text-2 text-sm leading-snug pt-0.5 prose prose-sm prose-slate dark:prose-invert max-w-none"
-                                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(step) }}
+                                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(step) }}
                                 />
                               </li>
                             ))}
@@ -406,7 +406,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                           <h2 className="text-xl font-black text-text tracking-tight">About this tool</h2>
                           <div 
                             className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
-                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(finalParsedContent.detailedDescription) }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalParsedContent.detailedDescription) }}
                           />
                         </div>
                       )}

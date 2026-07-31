@@ -1,51 +1,15 @@
 // src/security/sanitization.ts
-import DOMPurifyModule from "dompurify";
-import { marked } from "marked";
+import { 
+  sanitizeHtml, 
+  parseAndSanitizeMarkdown, 
+  parseAndSanitizeMarkdownSync 
+} from "@/src/lib/security";
 
-function getDOMPurify() {
-  const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
-  if (typeof instance === 'function') {
-    if (typeof window !== 'undefined') {
-      return instance(window);
-    }
-  }
-  return instance;
-}
-
-const DOMPurify = getDOMPurify();
-
-/**
- * Sanitizes HTML strings using DOMPurify with a strict local-first setup.
- */
-export function sanitizeHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      "h1", "h2", "h3", "h4", "h5", "h6", 
-      "blockquote", "p", "a", "ul", "ol", "li", "b", "i", "strong", "em", 
-      "strike", "code", "pre", "hr", "br", "div", "span", "img", "del"
-    ],
-    ALLOWED_ATTR: ["href", "src", "alt", "title", "className", "class", "target", "rel"],
-    ADD_ATTR: ["target", "rel"],
-    FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "base"],
-    FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover"],
-  }) as string;
-}
-
-/**
- * Parses markdown securely and returns sanitized HTML.
- */
-export async function parseAndSanitizeMarkdown(md: string): Promise<string> {
-  const rawHtml = await marked.parse(md);
-  return sanitizeHtml(rawHtml);
-}
-
-/**
- * Synchronous version of markdown sanitization.
- */
-export function parseAndSanitizeMarkdownSync(md: string): string {
-  const rawHtml = marked.parse(md, { async: false }) as string;
-  return sanitizeHtml(rawHtml);
-}
+export { 
+  sanitizeHtml, 
+  parseAndSanitizeMarkdown, 
+  parseAndSanitizeMarkdownSync 
+};
 
 /**
  * Prevents prototype pollution by stripping keys like __proto__, constructor, and prototype.

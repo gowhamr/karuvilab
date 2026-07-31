@@ -28,6 +28,18 @@ const config = [
       "react-hooks/set-state-in-effect": "off",
       "@next/next/no-img-element": "off"
     }
+  },
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    ignores: ["src/lib/security.ts"],
+    rules: {
+      "no-restricted-imports": ["error", {
+        "paths": [{
+          "name": "dompurify",
+          "message": "Never import DOMPurify directly in UI components. Always use sanitizeHtml() from '@/src/lib/security' (Rule P-21)."
+        }]
+      }]
+    }
   }
 ];
 

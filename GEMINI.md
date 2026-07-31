@@ -18,7 +18,7 @@ The following patterns are **NEVER** allowed under any circumstances:
 | P-03 | `// eslint-disable-next-line react-hooks/exhaustive-deps` | Fix the dependency array |
 | P-04 | Main-thread CPU work >5ms | Offload to Web Worker via `WorkerOrchestrator` |
 | P-05 | Non-abortable async operations | Every promise chain must accept `AbortSignal` |
-| P-06 | Raw HTML injection | Always wrap with `DOMPurify.sanitize()` |
+| P-06 | Raw HTML injection | Always wrap with `sanitizeHtml()` from `src/lib/security.ts` (never raw DOMPurify) |
 | P-07 | Inline styles bypassing Tailwind tokens | Use design token system in `src/theme/` |
 | P-08 | New dependencies without bundle justification | Add entry to `BUNDLE_DECISIONS.md` |
 | P-09 | Server-side processing for local tools | Browser-only execution always |
@@ -33,6 +33,7 @@ The following patterns are **NEVER** allowed under any circumstances:
 | P-18 | Unversioned IndexedDB stores | All stores must define an explicit `version` |
 | P-19 | Raw numeric z-index Tailwind classes (`z-10`, `z-20`, `z-30`, `z-50`, etc.) | Use named tokens from `src/theme/zindex.ts` (`z-content`, `z-modal`, etc.) |
 | P-20 | Setting `X-Frame-Options` to `DENY` | Must use `SAMEORIGIN` to allow Workbench to frame local tools |
+| P-21 | Direct import of security libs (DOMPurify, etc.) in UI | Always go through project abstraction layer (`src/lib/security.ts`) |
 
 ---
 
@@ -53,6 +54,26 @@ The following patterns are **NEVER** allowed under any circumstances:
 | **Fast & Offline** | Works locally without uploading files (Web Workers, IndexedDB, WASM). |
 | **Built for Engineers & Learners** | Practical tools with real-world knowledge. Raycast/Linear-tier UX. |
 | **Free for Everyone** | Simple, accessible, and useful. |
+
+### Platform Stability Policy
+
+Core platform components are feature-frozen after reaching maturity.
+
+**Examples:**
+- WorkerOrchestrator
+- Performance Inspector
+- Security Layer
+- Routing
+- Bundle Optimization
+
+**Changes are permitted only for:**
+- Bug fixes
+- Security vulnerabilities
+- Browser compatibility
+- Measured performance improvements
+- New platform capabilities with documented justification
+
+Avoid feature additions that increase maintenance without clear user value. This complements the philosophy of quality over quantity and helps keep the project focused.
 
 ### Curriculum & Content Boundaries
 
