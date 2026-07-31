@@ -16,6 +16,7 @@ This file tracks every new dependency added to the project, its impact on bundle
 
 | 2026-07-10 | `react-image-crop` | ~3.8 KB | Interactive image crop UI | Custom canvas logic | Lightweight, robust, and accessible UI component for dragging and resizing crops. |
 | 2026-07-10 | `jsqr` | ~30 KB | QR Code Scanner fallback | `zxing` (too heavy, WASM/worker heavy), `html5-qrcode` (heavy, requires specific UI logic) | The native `BarcodeDetector` API is not supported on Firefox, Safari, and iOS. `jsqr` provides a lightweight pure-JS fallback specifically for QR codes. It does not violate the >20KB feature growth limit significantly given its dynamic import. |
+| 2026-07-31 | `isomorphic-dompurify` | ~1.2 KB | SSR-safe DOMPurify wrapper | Manual factory with `globalThis` (broken during SSR prerendering) | Thin wrapper around existing `dompurify` dep. Uses `jsdom` on the server so `DOMPurify.sanitize()` works during Next.js static page generation. Without it, build crashes with `sanitize is not a function` on all tool pages. |
 
 
 ### 2026-06-18

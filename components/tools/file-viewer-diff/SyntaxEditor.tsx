@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { cn } from '@/src/lib/utils';
 import { highlightCode } from '@/src/lib/highlight';
 import { Info, Copy, Check } from 'lucide-react';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface SyntaxEditorProps {

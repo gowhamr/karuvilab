@@ -1,22 +1,18 @@
-import DOMPurifyModule from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 
-let _purifyInstance: any = null;
+// isomorphic-dompurify provides a ready-to-use instance in both
+// browser and Node/SSR environments — no manual factory needed.
 
-export function getDOMPurify(): any {
-  if (_purifyInstance) return _purifyInstance;
+let _hookInstalled = false;
 
-  if (typeof window !== 'undefined') {
-    const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
-    _purifyInstance = typeof instance === 'function' ? instance(window) : instance;
-  } else {
-    const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
-    _purifyInstance = typeof instance === 'function' ? instance(globalThis) : instance;
-  }
+function ensureHooks(): void {
+  if (_hookInstalled) return;
+  _hookInstalled = true;
 
-  if (_purifyInstance && typeof _purifyInstance.addHook === 'function') {
+  if (typeof DOMPurify.addHook === 'function') {
     try {
-      _purifyInstance.addHook('afterSanitizeAttributes', function (node: any) {
+      DOMPurify.addHook('afterSanitizeAttributes', function (node: Element) {
         if (node.tagName && node.tagName.toLowerCase() === 'a') {
           const href = node.getAttribute('href');
           if (href && href.trim().toLowerCase().startsWith('javascript:')) {
@@ -31,8 +27,14 @@ export function getDOMPurify(): any {
       // Hook not supported on fallback instance
     }
   }
+}
 
-  return _purifyInstance;
+/**
+ * Returns the isomorphic DOMPurify instance (works in both browser and SSR).
+ */
+export function getDOMPurify() {
+  ensureHooks();
+  return DOMPurify;
 }
 
 const DEFAULT_SANITIZE_CONFIG = {
@@ -54,22 +56,12 @@ const DEFAULT_SANITIZE_CONFIG = {
 
 /**
  * Sanitizes HTML to prevent XSS attacks.
- * Uses DOMPurify with strict defaults across browser and SSR/Node environments.
+ * Uses isomorphic-dompurify with strict defaults across browser and SSR/Node environments.
  */
-export function sanitizeHtml(html: string, options?: any): string {
+export function sanitizeHtml(html: string, options?: Record<string, unknown>): string {
   if (!html) return '';
-  const purify = getDOMPurify();
-  
-  if (purify && typeof purify.sanitize === 'function') {
-    return purify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
-  }
-
-  // Fallback regex sanitizer if DOMPurify instance unavailable
-  return html
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace(/on\w+\s*=\s*(["']).*?\1/gi, '')
-    .replace(/on\w+\s*=\s*[^\s>]+/gi, '')
-    .replace(/href\s*=\s*(["'])\s*javascript:.*?\1/gi, 'href="#"');
+  ensureHooks();
+  return DOMPurify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
 }
 
 /**
