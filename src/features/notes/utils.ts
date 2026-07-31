@@ -1,11 +1,10 @@
 import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
+import { sanitizeHtml } from "@/src/lib/security";
 
 export async function renderMarkdown(markdown: string): Promise<string> {
   const { marked } = await import("marked");
-  const DOMPurify = (await import("dompurify")).default;
-  
   const rawHtml = await marked.parse(markdown);
-  return DOMPurify.sanitize(rawHtml);
+  return sanitizeHtml(rawHtml);
 }
 
 export function generateId(): string {

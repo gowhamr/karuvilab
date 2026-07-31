@@ -10,14 +10,8 @@ export function getDOMPurify(): any {
     const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
     _purifyInstance = typeof instance === 'function' ? instance(window) : instance;
   } else {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const isoDOMPurify = require('isomorphic-dompurify');
-      _purifyInstance = isoDOMPurify.default || isoDOMPurify;
-    } catch {
-      const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
-      _purifyInstance = typeof instance === 'function' ? instance(globalThis) : instance;
-    }
+    const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
+    _purifyInstance = typeof instance === 'function' ? instance(globalThis) : instance;
   }
 
   if (_purifyInstance && typeof _purifyInstance.addHook === 'function') {

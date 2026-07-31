@@ -15,7 +15,7 @@ import { useDebounce } from "@/src/hooks/useDebounce";
 import { useToast } from "@/components/ui/Toast";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { EngineLoader } from "@/components/system/EngineLoader";
-import DOMPurify from "dompurify";
+import { sanitizeHtml } from "@/src/lib/security";
 import { DropZone } from "@/components/ui/DropZone";
 import { logger } from "@/src/lib/logger";
 
@@ -163,8 +163,8 @@ export default function HtmlViewerClient() {
   const getCompiledDoc = useCallback(() => {
     const cssLinks = cdns.filter(url => url.endsWith(".css")).map(url => `<link rel="stylesheet" href="${url}">`).join("\n");
     const jsLinks = cdns.filter(url => !url.endsWith(".css")).map(url => `<script src="${url}"></script>`).join("\n");
-    const sanitizedHtml = DOMPurify.sanitize(html);
-    const sanitizedCss = DOMPurify.sanitize(css); 
+    const sanitizedHtml = sanitizeHtml(html);
+    const sanitizedCss = sanitizeHtml(css); 
 
     return `
       <!DOCTYPE html>

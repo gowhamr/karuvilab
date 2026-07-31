@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Copy, Loader2 } from "lucide-react";
-import DOMPurify from "dompurify";
+import { sanitizeHtml } from "@/src/lib/security";
 
 interface MarkdownPreviewProps {
   html: string;
@@ -43,7 +43,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         
         const wrapper = document.createElement('div');
         wrapper.className = 'my-6 bg-surface border border-border rounded-xl overflow-hidden shadow-sm';
-        wrapper.innerHTML = DOMPurify.sanitize(`
+        wrapper.innerHTML = sanitizeHtml(`
           <div class="flex items-center justify-between px-3 py-2 bg-bg border-b border-border">
             <span class="text-xs font-black text-text-4 uppercase tracking-widest flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-blue animate-pulse"></span>
@@ -64,9 +64,9 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         if (copyBtn) {
           const handler = () => {
             navigator.clipboard.writeText(src);
-            copyBtn.innerHTML = DOMPurify.sanitize('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>', { ADD_TAGS: ['svg', 'polyline'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'points'] });
+            copyBtn.innerHTML = sanitizeHtml('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>', { ADD_TAGS: ['svg', 'polyline'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'points'] });
             setTimeout(() => {
-              copyBtn.innerHTML = DOMPurify.sanitize('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', { ADD_TAGS: ['svg', 'rect', 'path'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
+              copyBtn.innerHTML = sanitizeHtml('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', { ADD_TAGS: ['svg', 'rect', 'path'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
             }, 2000);
           };
           copyBtn.addEventListener('click', handler);
@@ -77,12 +77,12 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
           const { svg } = await mermaid.render(`${id}-svg`, src);
           const body = wrapper.querySelector(`#${id}`);
           // Sanitize SVG output from mermaid before injection (KL-09)
-          if (body) body.innerHTML = DOMPurify.sanitize(svg, { USE_PROFILES: { svg: true, svgFilters: true } });
+          if (body) body.innerHTML = sanitizeHtml(svg, { USE_PROFILES: { svg: true, svgFilters: true } });
         } catch (err) {
           const body = wrapper.querySelector(`#${id}`);
           // Sanitize error message to prevent XSS
-          const safeMessage = DOMPurify.sanitize(String((err as Error).message || 'Invalid syntax'));
-          if (body) body.innerHTML = DOMPurify.sanitize(`<div class="text-error text-xs p-4 bg-error/5 border border-error/10 rounded-lg">⚠ Mermaid Error: ${safeMessage}</div>`);
+          const safeMessage = sanitizeHtml(String((err as Error).message || 'Invalid syntax'));
+          if (body) body.innerHTML = sanitizeHtml(`<div class="text-error text-xs p-4 bg-error/5 border border-error/10 rounded-lg">⚠ Mermaid Error: ${safeMessage}</div>`);
         }
       });
     }
@@ -93,15 +93,15 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
       pre.className = (pre.className || '') + ' relative group';
       const btn = document.createElement('button');
       btn.className = 'copy-code-btn absolute right-2 top-2 p-1.5 bg-surface/80 backdrop-blur-sm border border-border rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:text-blue hover:scale-105';
-      btn.innerHTML = DOMPurify.sanitize('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', { ADD_TAGS: ['svg', 'rect', 'path'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
+      btn.innerHTML = sanitizeHtml('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', { ADD_TAGS: ['svg', 'rect', 'path'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
       btn.setAttribute('aria-label', 'Copy code snippet');
       const clickHandler = (e: MouseEvent) => {
         e.stopPropagation();
         const code = (pre.querySelector('code') as HTMLElement)?.innerText || '';
         navigator.clipboard.writeText(code);
-        btn.innerHTML = DOMPurify.sanitize('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>', { ADD_TAGS: ['svg', 'polyline'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'points'] });
+        btn.innerHTML = sanitizeHtml('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>', { ADD_TAGS: ['svg', 'polyline'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'points'] });
         setTimeout(() => {
-          btn.innerHTML = DOMPurify.sanitize('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', { ADD_TAGS: ['svg', 'rect', 'path'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
+          btn.innerHTML = sanitizeHtml('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', { ADD_TAGS: ['svg', 'rect', 'path'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
         }, 2000);
       };
       btn.addEventListener('click', clickHandler);
@@ -135,7 +135,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
       <div className="flex-1 overflow-y-auto p-6 scroll-smooth markdown-body" ref={ref}>
         <div 
           ref={containerRef}
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
         />
         {!html.trim() && (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-50">
