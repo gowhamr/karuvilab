@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import QRCode from "qrcode";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -31,10 +32,10 @@ export default function WifiQrCodeClient() {
   useEffect(() => {
     let active = true;
 
-    if (isLibLoaded && wifiData && (window as any).QRCode) {
+    if (wifiData) {
       const generateLocalQr = async () => {
         try {
-          const dataUrl = await (window as any).QRCode.toDataURL(wifiData, {
+          const dataUrl = await QRCode.toDataURL(wifiData, {
             width: 600,
             margin: 2,
             color: { dark: "#000000", light: "#ffffff" }

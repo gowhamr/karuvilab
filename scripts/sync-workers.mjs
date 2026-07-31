@@ -25,10 +25,6 @@ const WORKERS = [
     isDir: true
   },
   {
-    src: 'node_modules/qrcode/build/qrcode.js',
-    dest: 'public/lib/qrcode/qrcode.min.js'
-  },
-  {
     src: 'node_modules/dictionary-en/index.aff',
     dest: 'public/lib/dictionary/en.aff'
   },

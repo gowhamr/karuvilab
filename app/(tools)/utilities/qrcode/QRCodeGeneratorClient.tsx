@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import QRCode from "qrcode";
 import { useWorkflowStore } from "@/src/store/workflowStore";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
@@ -127,13 +128,13 @@ export default function QRCodeGeneratorClient() {
   useEffect(() => {
     const finalInput = getFinalString();
     
-    if (isLibLoaded && finalInput && (window as any).QRCode) {
+    if (finalInput) {
       const generateLocalQr = async () => {
         try {
-          const dataUrl = await (window as any).QRCode.toDataURL(finalInput, {
+          const dataUrl = await QRCode.toDataURL(finalInput, {
             width: size * 2,
             margin: 4,
-            errorCorrectionLevel: ecc,
+            errorCorrectionLevel: ecc as any,
             color: { dark: "#000000", light: "#ffffff" }
           });
           const res = await fetch(dataUrl);
