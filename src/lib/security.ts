@@ -1,47 +1,81 @@
 import DOMPurifyModule from 'dompurify';
 import { marked } from 'marked';
 
-function getDOMPurify() {
-  const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
-  if (typeof instance === 'function') {
-    if (typeof window !== 'undefined') {
-      return instance(window);
+let _purifyInstance: any = null;
+
+export function getDOMPurify(): any {
+  if (_purifyInstance) return _purifyInstance;
+
+  if (typeof window !== 'undefined') {
+    const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
+    _purifyInstance = typeof instance === 'function' ? instance(window) : instance;
+  } else {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const isoDOMPurify = require('isomorphic-dompurify');
+      _purifyInstance = isoDOMPurify.default || isoDOMPurify;
+    } catch {
+      const instance = (DOMPurifyModule as any).default || DOMPurifyModule;
+      _purifyInstance = typeof instance === 'function' ? instance(globalThis) : instance;
     }
   }
-  return instance;
+
+  if (_purifyInstance && typeof _purifyInstance.addHook === 'function') {
+    try {
+      _purifyInstance.addHook('afterSanitizeAttributes', function (node: any) {
+        if (node.tagName && node.tagName.toLowerCase() === 'a') {
+          const href = node.getAttribute('href');
+          if (href && href.trim().toLowerCase().startsWith('javascript:')) {
+            node.removeAttribute('href');
+          } else {
+            node.setAttribute('target', '_blank');
+            node.setAttribute('rel', 'noopener noreferrer');
+          }
+        }
+      });
+    } catch {
+      // Hook not supported on fallback instance
+    }
+  }
+
+  return _purifyInstance;
 }
 
-const DOMPurify = getDOMPurify();
+const DEFAULT_SANITIZE_CONFIG = {
+  ALLOWED_TAGS: [
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+    'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 
+    'strike', 'code', 'pre', 'hr', 'br', 'div', 'span', 'img', 'del',
+    'svg', 'path', 'rect', 'circle', 'line', 'polyline', 'polygon', 'g'
+  ],
+  ALLOWED_ATTR: [
+    'href', 'src', 'alt', 'title', 'class', 'className', 'target', 'rel',
+    'width', 'height', 'viewBox', 'fill', 'stroke', 'stroke-width',
+    'stroke-linecap', 'stroke-linejoin', 'points', 'd', 'rx', 'ry', 'cx', 'cy', 'r'
+  ],
+  ADD_ATTR: ['target', 'rel'],
+  FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'base'],
+  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseenter', 'onmouseleave'],
+};
 
 /**
  * Sanitizes HTML to prevent XSS attacks.
- * Uses DOMPurify with strict defaults.
+ * Uses DOMPurify with strict defaults across browser and SSR/Node environments.
  */
-if (DOMPurify && typeof DOMPurify.addHook === 'function') {
-  DOMPurify.addHook('afterSanitizeAttributes', function(node: any) {
-    if (node.tagName && node.tagName.toLowerCase() === 'a') {
-      const href = node.getAttribute('href');
-      if (href && href.trim().toLowerCase().startsWith('javascript:')) {
-        node.removeAttribute('href');
-      } else {
-        node.setAttribute('target', '_blank');
-        node.setAttribute('rel', 'noopener noreferrer');
-      }
-    }
-  });
-}
+export function sanitizeHtml(html: string, options?: any): string {
+  if (!html) return '';
+  const purify = getDOMPurify();
+  
+  if (purify && typeof purify.sanitize === 'function') {
+    return purify.sanitize(html, options || DEFAULT_SANITIZE_CONFIG);
+  }
 
-export function sanitizeHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
-      'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 
-      'strike', 'code', 'pre', 'hr', 'br', 'div', 'span', 'img', 'del'
-    ],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel'],
-    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'base'],
-    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
-  });
+  // Fallback regex sanitizer if DOMPurify instance unavailable
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*(["']).*?\1/gi, '')
+    .replace(/on\w+\s*=\s*[^\s>]+/gi, '')
+    .replace(/href\s*=\s*(["'])\s*javascript:.*?\1/gi, 'href="#"');
 }
 
 /**
@@ -53,9 +87,10 @@ export async function parseAndSanitizeMarkdown(md: string): Promise<string> {
 }
 
 /**
- * Synchronous version for use in useMemo if needed.
+ * Synchronous version of markdown sanitization.
  */
 export function parseAndSanitizeMarkdownSync(md: string): string {
   const rawHtml = marked.parse(md, { async: false }) as string;
   return sanitizeHtml(rawHtml);
 }
+
