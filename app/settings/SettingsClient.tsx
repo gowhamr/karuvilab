@@ -7,7 +7,7 @@ import {
   RefreshCw,
   ChevronRight, ArrowLeft,
   History as HistoryIcon, Search,
-  HelpCircle, Download
+  HelpCircle, Download, Terminal, Globe
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { useIsHydrated, useSettingsStore } from "@/src/store/settings/store";
@@ -25,8 +25,7 @@ const HistorySection = dynamic(() => import("./sections/HistorySection").then(m 
 const HelpSection = dynamic(() => import("./sections/HelpSection").then(m => m.HelpSection), { ssr: false, loading: () => <SectionSkeleton /> });
 const WorldClockSection = dynamic(() => import("./sections/WorldClockSection").then(m => m.WorldClockSection), { ssr: false, loading: () => <SectionSkeleton /> });
 const PWAInstallSection = dynamic(() => import("./sections/PWAInstallSection").then(m => m.PWAInstallSection), { ssr: false, loading: () => <SectionSkeleton /> });
-
-import { Globe } from "lucide-react";
+const DeveloperSection = dynamic(() => import("./sections/DeveloperSection").then(m => m.DeveloperSection), { ssr: false, loading: () => <SectionSkeleton /> });
 
 const MENU_ITEMS = [
   { id: 'appearance', label: 'Appearance', icon: Sun, desc: 'Themes & modes', group: 'Personalization' },
@@ -34,6 +33,7 @@ const MENU_ITEMS = [
   { id: 'world_clock', label: 'World Clock', icon: Globe, desc: 'Clock preferences', group: 'Tools' },
   { id: 'privacy', label: 'Data & Privacy', icon: Shield, desc: 'Storage, reset', group: 'Application' },
   { id: 'pwa', label: 'Install App', icon: Download, desc: 'Install as offline app', group: 'Application' },
+  { id: 'developer', label: 'Developer Mode', icon: Terminal, desc: 'Performance inspector, capabilities, RPC metrics', group: 'Advanced' },
   { id: 'history', label: 'Calc History', icon: HistoryIcon, desc: 'Saved calculations', group: 'History' },
   { id: 'help', label: 'Support & FAQ', icon: HelpCircle, desc: 'Security, help', group: 'Support' },
 ];
@@ -65,13 +65,16 @@ export default function SettingsClient() {
     estimateStorage();
   }, [isHydrated, activeSection]);
 
+  const developerMode = useSettingsStore(s => s.privacy.developerMode);
+
   const indicators = useMemo(() => ({
     appearance: theme.charAt(0).toUpperCase() + theme.slice(1),
     accessibility: "",
     privacy: storageUsage,
+    developer: developerMode ? "Active" : "Off",
     history: "",
     help: "v2.1"
-  }), [theme, storageUsage]);
+  }), [theme, storageUsage, developerMode]);
 
   const filteredItems = useMemo(() => {
     if (!searchQuery) return MENU_ITEMS;
@@ -268,6 +271,7 @@ export default function SettingsClient() {
                 {activeSection === 'world_clock' && <WorldClockSection />}
                 {activeSection === 'privacy' && <PrivacySection />}
                 {activeSection === 'pwa' && <PWAInstallSection />}
+                {activeSection === 'developer' && <DeveloperSection />}
                 {activeSection === 'history' && <HistorySection />}
                 {activeSection === 'help' && <HelpSection />}
               </div>
