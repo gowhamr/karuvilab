@@ -63,7 +63,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
         {...events}
         className="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 md:px-8 snap-x snap-mandatory scroll-smooth w-full relative z-content select-none"
       >
-        <m.button
+        <button
           role="tab"
           id="tab-all"
           aria-selected={!activeCategory}
@@ -77,10 +77,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
           }}
           onKeyDown={(e) => handleKeyDown(e, 0)}
           tabIndex={!activeCategory ? 0 : -1}
-          whileHover={{ scale: 1.05, y: -1 }}
-          whileTap={{ scale: 0.95 }}
           className={`
             relative flex-shrink-0 min-h-11 py-2 px-4 rounded-full text-tiny font-bold uppercase tracking-widest-sm transition-all snap-start flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+            hover:scale-105 hover:-translate-y-px active:scale-95
             ${!activeCategory 
               ? "text-white shadow-md shadow-blue/15" 
               : "text-text-muted hover:text-text hover:bg-mat-hover bg-mat-surface shadow-sm"}
@@ -94,9 +93,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             />
           )}
           <span className="relative z-base">All</span>
-        </m.button>
+        </button>
         {CATEGORIES.map((cat, index) => (
-          <m.button
+          <button
             key={cat.id}
             role="tab"
             id={`tab-${cat.id}`}
@@ -111,10 +110,9 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             }}
             onKeyDown={(e) => handleKeyDown(e, index + 1)}
             tabIndex={activeCategory === cat.id ? 0 : -1}
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.95 }}
             className={`
               relative flex-shrink-0 min-h-11 flex items-center gap-2.5 py-2 px-4 rounded-full text-tiny font-bold uppercase tracking-widest-sm transition-all snap-start outline-none focus-visible:ring-2 focus-visible:ring-blue/40
+              hover:scale-105 hover:-translate-y-px active:scale-95
               ${activeCategory === cat.id 
                 ? "text-white" 
                 : "text-text-muted hover:text-text hover:bg-mat-hover bg-mat-surface shadow-sm"}
@@ -132,7 +130,7 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
             )}
             <ToolIcon category={cat.id} className={`relative z-base w-3.5 h-3.5 ${activeCategory === cat.id ? "text-white" : "text-text-4 group-hover:text-text"}`} aria-hidden="true" />
             <span className="relative z-base whitespace-nowrap">{cat.label}</span>
-          </m.button>
+          </button>
         ))}
         {/* Large spacer for right gutter to ensure last item clears the fade and feels spacious */}
         <div className="w-12 md:w-32 shrink-0 pointer-events-none" aria-hidden="true" />

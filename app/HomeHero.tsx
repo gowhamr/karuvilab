@@ -107,7 +107,7 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
       </div>
 
       {/* ── Headline ── */}
-      <h1 className="font-black tracking-tighter text-text mx-auto text-balance transition-all duration-500 text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-xl mb-4 font-poppins">
+      <h1 className="font-black tracking-tighter text-text mx-auto text-balance text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-xl mb-4 font-poppins">
         Tools that help you understand,{" "}
         <span className="bg-gradient-to-r from-primary via-indigo-500 to-purple-500 bg-clip-text text-transparent">
           not just use.
