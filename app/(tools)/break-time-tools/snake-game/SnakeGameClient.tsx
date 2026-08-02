@@ -535,7 +535,7 @@ export default function SnakeGameClient() {
     return () => {
       if (gameIntervalRef.current) clearInterval(gameIntervalRef.current);
     };
-  }, [gameState, food, speedMode, score, generateFood, updateBest, wrapAround, addCoins, activePowerUp, boardPowerUp, generatePowerUp, portals]);
+  }, [gameState, food, speedMode, score, generateFood, updateBest, wrapAround, addCoins, activePowerUp, boardPowerUp, generatePowerUp, portals, bossMode]);
 
   // Clear expired power-up
   useEffect(() => {

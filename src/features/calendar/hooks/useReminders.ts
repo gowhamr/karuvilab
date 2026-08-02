@@ -40,5 +40,5 @@ export function useReminders() {
 
     const interval = setInterval(checkReminders, 30000); // Check every 30s
     return () => clearInterval(interval);
-  }, [events]);
+  }, [events, notifiedRef]);
 }

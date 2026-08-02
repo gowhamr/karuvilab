@@ -106,19 +106,19 @@ export default function TimeZoneConverterClient() {
     setTargetTZs([]);
   };
 
-const formatCache = new Map<string, Intl.DateTimeFormat>();
-const getFormatter = (tz: string, type: 'date' | 'time' | 'full') => {
+const formatCacheRef = useRef(new Map<string, Intl.DateTimeFormat>());
+const getFormatter = useCallback((tz: string, type: 'date' | 'time' | 'full') => {
   const key = `${tz}-${type}`;
-  if (!formatCache.has(key)) {
-    formatCache.set(key, new Intl.DateTimeFormat('en-US', {
+  if (!formatCacheRef.current.has(key)) {
+    formatCacheRef.current.set(key, new Intl.DateTimeFormat('en-US', {
       timeZone: tz,
       ...(type === 'date' ? { dateStyle: 'medium' } : type === 'time' ? { timeStyle: 'short' } : { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })
     }));
   }
-  return formatCache.get(key)!;
-};
+  return formatCacheRef.current.get(key)!;
+}, []);
 
-const getOffsetMinutes = (date: Date, timeZone: string) => {
+const getOffsetMinutes = useCallback((date: Date, timeZone: string) => {
   try {
     const fmt = getFormatter(timeZone, 'full');
     const parts = fmt.formatToParts(date);
@@ -128,8 +128,10 @@ const getOffsetMinutes = (date: Date, timeZone: string) => {
       getPart('hour'), getPart('minute'), getPart('second')
     ));
     return (tzDate.getTime() - date.getTime()) / 60000;
-  } catch { return 0; }
-};
+  } catch {
+    return 0;
+  }
+}, [getFormatter]);
 
   const conversions = useMemo(() => {
     if (!sourceDate) return [];
@@ -211,7 +213,7 @@ const getOffsetMinutes = (date: Date, timeZone: string) => {
         return { tz, date: "Error", time: "Invalid TZ", offsetLabel: "", relativeDay: "", full: "" };
       }
     });
-  }, [sourceDate, sourceTZ, targetTZs]);
+  }, [sourceDate, sourceTZ, targetTZs, getFormatter, getOffsetMinutes]);
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">

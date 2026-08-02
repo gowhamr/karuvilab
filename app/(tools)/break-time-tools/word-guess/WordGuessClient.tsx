@@ -187,7 +187,7 @@ export default function WordGuessClient() {
         setCurrentGuess(p => p + char.toUpperCase());
       }
     }
-  }, [currentGuess, guesses, gameState, targetWord, stats, saveStats]);
+  }, [currentGuess, guesses, gameState, targetWord, stats, saveStats, toast]);
 
   // Physical key listener
   useEffect(() => {

@@ -217,6 +217,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
       hideBar();
     };
   }, [
+    processLabel,
     items.length,
     isProcessing,
     overallProgress,

@@ -78,6 +78,7 @@ function ThumbnailItem({ pdfDoc, page, isActive, onClick, scrollContainer }: Thu
       }
     };
 
+    const canvasEl = canvasRef.current;
     render();
 
     return () => {
@@ -88,9 +89,9 @@ function ThumbnailItem({ pdfDoc, page, isActive, onClick, scrollContainer }: Thu
       if (pageRef) {
         try { pageRef.cleanup(); } catch (e) {}
       }
-      if (canvasRef.current) {
-        canvasRef.current.width = 0;
-        canvasRef.current.height = 0;
+      if (canvasEl) {
+        canvasEl.width = 0;
+        canvasEl.height = 0;
       }
     };
   }, [pdfDoc, page.originalIndex, page.rotation, isVisible]);

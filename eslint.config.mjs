@@ -1,4 +1,7 @@
 import reactHooks from "eslint-plugin-react-hooks";
+import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import nextPlugin from "@next/eslint-plugin-next";
 
 const config = [
   {
@@ -10,23 +13,27 @@ const config = [
       "node_modules/**",
       "next-env.d.ts",
       "dist/**",
-      "scripts/**",
-      "*.js",
-      "*.ts",
-      "*.cjs"
+      "scripts/**"
     ]
   },
   {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true
+        }
+      }
+    },
     plugins: {
-      "react-hooks": reactHooks
+      "react-hooks": reactHooks,
+      "@typescript-eslint": tsPlugin,
+      "@next/next": nextPlugin
     },
     rules: {
       "react-hooks/exhaustive-deps": "error",
-      "no-console": "off",
-      "jsx-a11y/control-has-associated-label": "off",
-      "react/no-unescaped-entities": "off",
-      "react-hooks/set-state-in-effect": "off",
-      "@next/next/no-img-element": "off"
+      "no-console": "off"
     }
   },
   {

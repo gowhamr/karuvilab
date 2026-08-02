@@ -30,7 +30,6 @@ export function DropZone({
   icon,
   maxSize,
 }: DropZoneProps) {
-  const finalOnFilesSelected = onFilesSelected || onFilesDrop || (() => {});
   const finalDescription = subtitle || description;
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,9 +50,10 @@ export function DropZone({
         }
       }
 
-      finalOnFilesSelected(fileArray);
+      const callback = onFilesSelected || onFilesDrop;
+      if (callback) callback(fileArray);
     },
-    [finalOnFilesSelected, maxSize]
+    [onFilesSelected, onFilesDrop, maxSize]
   );
 
   const onDragOver = (e: React.DragEvent) => {

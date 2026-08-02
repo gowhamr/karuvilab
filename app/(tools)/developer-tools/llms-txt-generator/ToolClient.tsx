@@ -80,7 +80,7 @@ export default function ToolClient() {
     document.body.removeChild(a);
     revokeUrl(url);
     toast("Downloaded llms.txt", "success");
-  }, [generatedContent, toast]);
+  }, [generatedContent, toast, createUrl, revokeUrl]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

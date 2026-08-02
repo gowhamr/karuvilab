@@ -222,12 +222,12 @@ export function DeveloperPanel() {
   if (!isHydrated || !developerMode) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-dropdown font-sans select-none animate-in fade-in duration-200">
+    <div className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom,0px))] lg:bottom-6 right-4 lg:right-6 z-dropdown font-sans select-none animate-in fade-in duration-200">
       {isOpen ? (
         <div 
           role="region" 
           aria-label="Performance Inspector Panel"
-          className="w-84 sm:w-96 bg-surface/95 backdrop-blur-md border border-blue/30 shadow-2xl rounded-3xl p-5 space-y-4 text-text"
+          className="max-w-[calc(100vw-2rem)] w-84 sm:w-96 bg-surface/95 backdrop-blur-md border border-blue/30 shadow-2xl rounded-3xl p-5 space-y-4 text-text"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/60 pb-3">

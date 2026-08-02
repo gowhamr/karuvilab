@@ -154,7 +154,7 @@ export default function AdvancedRotateClient() {
       active = false;
       clearTimeout(timer);
     };
-  }, [imageElement, degrees, bgColor, customColor, isCustomColor, format, quality]);
+  }, [imageElement, degrees, bgColor, customColor, isCustomColor, format, quality, createUrl, origHeight, origWidth, resultUrl, revokeUrl]);
 
   const handleResetFile = () => {
     if (originalUrl) revokeUrl(originalUrl);

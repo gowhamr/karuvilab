@@ -134,7 +134,7 @@ export default function GrammarCheckerClient() {
     } finally {
       setIsProcessing(false);
     }
-  }, [editor]);
+  }, [editor, ignoredWords, toast, tone]);
 
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);

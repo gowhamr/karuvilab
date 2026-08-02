@@ -34,7 +34,7 @@ export const SingleMode: React.FC = () => {
       console.error("Failed to add files:", err);
       setDragState('rejected');
     }
-  }, [addFiles]);
+  }, [addFiles, toast]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

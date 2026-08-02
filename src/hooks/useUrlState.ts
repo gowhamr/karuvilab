@@ -105,14 +105,14 @@ export function useUrlState<T extends ParamSchema>(
       }, debounceMs);
       return next;
     });
-  }, [router, debounceMs, historyMode, buildUrl]);
+  }, [debounceMs, historyMode, buildUrl]);
 
   const resetState = useCallback(() => {
     clearTimeout(debounceRef.current);
     setStateInternal(JSON.parse(defaultsStr) as T);
     window.history.replaceState(window.history.state, '', pathname);
     setIsSynced(true);
-  }, [router, pathname, defaultsStr]);
+  }, [pathname, defaultsStr]);
 
   useEffect(() => {
     return () => clearTimeout(debounceRef.current);

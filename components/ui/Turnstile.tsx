@@ -62,7 +62,7 @@ export function Turnstile({
         widgetIdRef.current = null;
       }
     };
-  }, [siteKey, onSuccess]);
+  }, [siteKey, onSuccess, invisible]);
 
   return <div ref={containerRef} className={invisible ? "hidden" : "my-3 flex justify-center"} />;
 }

@@ -155,7 +155,7 @@ export function useSpeedTest() {
         setStatus('error');
       }
     }
-  }, [download]);
+  }, []);
 
   const cancelTest = useCallback(() => {
     abortController.current?.abort();

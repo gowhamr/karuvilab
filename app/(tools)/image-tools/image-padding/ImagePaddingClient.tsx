@@ -171,6 +171,7 @@ export default function ImagePaddingClient() {
     }, 120);
     return () => clearTimeout(timer);
   }, [
+    processPadding,
     file,
     originalUrl,
     mode,
