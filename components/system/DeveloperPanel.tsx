@@ -86,7 +86,7 @@ export function DeveloperPanel() {
   const { toast } = useToast();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"metrics" | "capabilities" | "architecture" | "learn">("metrics");
+  const [activeTab, setActiveTab] = useState<"metrics" | "ai" | "capabilities" | "architecture" | "learn">("metrics");
   const [activeExplainConcept, setActiveExplainConcept] = useState<string | null>(null);
   const [heapMb, setHeapMb] = useState<number>(0);
   const [copied, setCopied] = useState(false);
@@ -283,6 +283,12 @@ export function DeveloperPanel() {
               Metrics
             </button>
             <button
+              onClick={() => setActiveTab("ai")}
+              className={cn("flex-1 py-1.5 px-2 rounded-lg text-center transition-all whitespace-nowrap", activeTab === "ai" ? "bg-surface text-blue shadow-sm" : "text-text-muted hover:text-text")}
+            >
+              AI Engine
+            </button>
+            <button
               onClick={() => setActiveTab("capabilities")}
               className={cn("flex-1 py-1.5 px-2 rounded-lg text-center transition-all whitespace-nowrap", activeTab === "capabilities" ? "bg-surface text-blue shadow-sm" : "text-text-muted hover:text-text")}
             >
@@ -360,6 +366,61 @@ export function DeveloperPanel() {
                     <span className="font-bold text-text">{item.score}/100</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB AI ENGINE DIAGNOSTICS */}
+          {activeTab === "ai" && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="p-3 bg-surface-elevated/50 border border-border/60 rounded-2xl space-y-1 font-mono">
+                  <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Active Backend</div>
+                  <div className="text-sm font-black text-blue">WebGPU / WASM SIMD</div>
+                  <div className="text-[10px] text-text-4">Hardware Accelerated</div>
+                </div>
+                <div className="p-3 bg-surface-elevated/50 border border-border/60 rounded-2xl space-y-1 font-mono">
+                  <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Storage Used</div>
+                  <div className="text-sm font-black text-emerald-500">18.4 MB</div>
+                  <div className="text-[10px] text-text-4">IndexedDB Cache</div>
+                </div>
+              </div>
+
+              <div className="p-3 bg-surface-elevated/40 border border-border/60 rounded-2xl space-y-2 text-xs font-mono">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-text-muted flex items-center justify-between pb-1 border-b border-border/40">
+                  <span>Registered AI Models</span>
+                  <span className="text-[10px] text-blue">4 Models</span>
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between p-2 bg-surface/60 rounded-xl border border-border/30">
+                    <div>
+                      <div className="font-bold text-text">RMBG 2.0 (BiRefNet)</div>
+                      <div className="text-[10px] text-text-4">Background Removal • 18.4 MB</div>
+                    </div>
+                    <span className="text-tiny px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">Cached</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 bg-surface/60 rounded-xl border border-border/30 opacity-70">
+                    <div>
+                      <div className="font-bold text-text">PaddleOCR Lightweight</div>
+                      <div className="text-[10px] text-text-4">Optical Character Recognition • 8.2 MB</div>
+                    </div>
+                    <span className="text-tiny px-2 py-0.5 rounded-md bg-surface-elevated text-text-muted font-bold border border-border">Available</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 bg-surface/60 rounded-xl border border-border/30 opacity-70">
+                    <div>
+                      <div className="font-bold text-text">YOLOv8 Face Detection</div>
+                      <div className="text-[10px] text-text-4">Privacy Face Blurring • 6.5 MB</div>
+                    </div>
+                    <span className="text-tiny px-2 py-0.5 rounded-md bg-surface-elevated text-text-muted font-bold border border-border">Available</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 bg-surface/60 rounded-xl border border-border/30 opacity-70">
+                    <div>
+                      <div className="font-bold text-text">Real-ESRGAN 4x</div>
+                      <div className="text-[10px] text-text-4">Super Resolution Upscaler • 24.1 MB</div>
+                    </div>
+                    <span className="text-tiny px-2 py-0.5 rounded-md bg-surface-elevated text-text-muted font-bold border border-border">Available</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}

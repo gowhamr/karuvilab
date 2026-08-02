@@ -36,7 +36,7 @@ function getPayloadSize(arg: unknown): number {
   return 0;
 }
 
-type PoolType = 'compute' | 'media' | 'heavy';
+type PoolType = 'compute' | 'media' | 'heavy' | 'ai';
 
 const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   // Compute Pool (fast, low-memory mathematical/text parsing tasks)
@@ -48,6 +48,16 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   aesEncrypt: 'compute',
   aesDecrypt: 'compute',
   generateRsaKeyPair: 'compute',
+  // ...
+  // AI Pool (In-Browser Neural Network ONNX Inference)
+  aiInitialize: 'ai',
+  aiLoadModel: 'ai',
+  aiRunInference: 'ai',
+  aiCancelTask: 'ai',
+  aiDisposeModel: 'ai',
+  aiDisposeAll: 'ai',
+  aiGetCapabilities: 'ai',
+  aiGetStatus: 'ai',
   rsaEncrypt: 'compute',
   rsaDecrypt: 'compute',
   rsaSign: 'compute',
@@ -127,7 +137,8 @@ class WorkerOrchestrator {
   private pools: Record<PoolType, WorkerPool> = {
     compute: { type: 'compute', workers: [], queue: [], activeTasks: new Map() },
     media: { type: 'media', workers: [], queue: [], activeTasks: new Map() },
-    heavy: { type: 'heavy', workers: [], queue: [], activeTasks: new Map() }
+    heavy: { type: 'heavy', workers: [], queue: [], activeTasks: new Map() },
+    ai: { type: 'ai', workers: [], queue: [], activeTasks: new Map() }
   };
 
   private maxWorkers = 3; // Enforce MAX_WORKERS = 3 as per performance priority guidelines
@@ -139,7 +150,8 @@ class WorkerOrchestrator {
     return [
       ...this.pools.compute.workers,
       ...this.pools.media.workers,
-      ...this.pools.heavy.workers
+      ...this.pools.heavy.workers,
+      ...this.pools.ai.workers
     ];
   }
 
@@ -148,6 +160,7 @@ class WorkerOrchestrator {
       this.pools.compute.workers = [];
       this.pools.media.workers = [];
       this.pools.heavy.workers = [];
+      this.pools.ai.workers = [];
     }
   }
 
@@ -155,7 +168,8 @@ class WorkerOrchestrator {
     return [
       ...this.pools.compute.queue,
       ...this.pools.media.queue,
-      ...this.pools.heavy.queue
+      ...this.pools.heavy.queue,
+      ...this.pools.ai.queue
     ];
   }
 
@@ -164,6 +178,7 @@ class WorkerOrchestrator {
       this.pools.compute.queue = [];
       this.pools.media.queue = [];
       this.pools.heavy.queue = [];
+      this.pools.ai.queue = [];
     }
   }
 
@@ -196,7 +211,8 @@ class WorkerOrchestrator {
     return (
       this.pools.compute.workers.length +
       this.pools.media.workers.length +
-      this.pools.heavy.workers.length
+      this.pools.heavy.workers.length +
+      this.pools.ai.workers.length
     );
   }
 

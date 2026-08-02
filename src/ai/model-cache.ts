@@ -75,3 +75,13 @@ export async function clearModelCache(modelId?: string): Promise<void> {
     console.warn('[AI ModelCache] Failed to clear model cache:', err);
   }
 }
+
+export async function getAllCachedModelIds(): Promise<string[]> {
+  try {
+    const db = await getDb();
+    const keys = await db.getAllKeys(STORE_NAME);
+    return keys.map(k => String(k));
+  } catch {
+    return [];
+  }
+}

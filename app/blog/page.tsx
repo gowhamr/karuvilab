@@ -48,14 +48,14 @@ export default function BlogPage() {
           <Link 
             key={article.slug} 
             href={`/blog/${article.slug}/`}
-            className="group flex flex-col p-6 bg-surface-2 border border-border rounded-3xl hover:border-kv-primary/50 hover:bg-surface transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1"
+            className="group flex flex-col p-6 bg-surface-2 border border-border rounded-3xl hover:border-primary/50 hover:bg-surface transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1"
           >
             <div className="flex items-center gap-3 text-sm text-text-muted mb-4">
               <time dateTime={article.isoDate}>{article.date}</time>
               <span className="w-1 h-1 rounded-full bg-border"></span>
               <span>{article.readingTime} min read</span>
             </div>
-            <h2 className="text-xl font-bold text-text group-hover:text-kv-primary transition-colors mb-3 line-clamp-3">
+            <h2 className="text-xl font-bold text-text group-hover:text-primary transition-colors mb-3 line-clamp-3">
               {article.title}
             </h2>
             <p className="text-text-muted line-clamp-3 text-sm leading-relaxed mt-auto">

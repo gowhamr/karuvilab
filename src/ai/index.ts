@@ -4,9 +4,13 @@
  */
 
 export * from './types';
+export * from './messages';
 export * from './errors';
 export * from './capabilities';
 export * from './registry';
 export * from './model-cache';
 export * from './model-loader';
+export * from './model-manager';
 export * from './runtime';
+export * from './sdk';
+export * from './pipeline';

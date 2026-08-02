@@ -487,4 +487,14 @@ export interface WorkerAPI {
   removeImageMetadata(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
   cropImageCenter(file: ArrayBuffer, mimeType: string, width: number, height: number, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
   parseLogs(logText: string, onProgress?: ProgressCallback): Promise<any[]>;
+
+  // AI Engine RPC Methods
+  aiInitialize(): Promise<any>;
+  aiLoadModel(manifest: any, onProgress?: ProgressCallback): Promise<boolean>;
+  aiRunInference(modelId: string, feeds: Record<string, unknown>, preferredBackend?: string): Promise<Record<string, unknown>>;
+  aiCancelTask(taskId: string): Promise<boolean>;
+  aiDisposeModel(modelId: string): Promise<boolean>;
+  aiDisposeAll(): Promise<void>;
+  aiGetCapabilities(): Promise<any>;
+  aiGetStatus(): Promise<any>;
 }

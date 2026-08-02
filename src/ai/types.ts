@@ -10,6 +10,7 @@ export interface ModelTensorConfig {
   height?: number;
   channels?: number;
   dataType?: 'float32' | 'uint8' | 'int32';
+  shape?: number[];
   [key: string]: unknown;
 }
 
@@ -18,10 +19,22 @@ export interface ModelManifest {
   name: string;
   version: string;
   file: string;
+  sha256?: string;
   sizeMB: number;
   backend: ModelBackend[];
   input: ModelTensorConfig;
   output: ModelTensorConfig;
+  category: 'segmentation' | 'ocr' | 'detection' | 'super-resolution' | 'captioning';
+
+  // Capability Metadata (Driven from Registry)
+  inputFormats: string[];
+  outputFormats: string[];
+  preferredBackend: ModelBackend;
+  supportsBatch: boolean;
+  supportsOffline: boolean;
+  estimatedMemoryMB: number;
+  estimatedInferenceMs: number;
+
   description?: string;
   license?: string;
 }
@@ -30,7 +43,7 @@ export interface ModelProgress {
   loadedBytes: number;
   totalBytes: number;
   percent: number;
-  stage: 'downloading' | 'caching' | 'loading-model' | 'inference';
+  stage: 'downloading' | 'verifying' | 'caching' | 'loading-model' | 'inference';
 }
 
 export interface InferenceOptions {
@@ -47,4 +60,24 @@ export interface CapabilitiesResult {
   threads: boolean;
   sharedArrayBuffer: boolean;
   recommendedBackend: ModelBackend;
+}
+
+export interface AiDiagnosticsMetrics {
+  activeBackend: ModelBackend;
+  modelLoadTimeMs: number;
+  lastInferenceTimeMs: number;
+  tensorSizeMB: number;
+  peakMemoryMB: number;
+  cacheHitCount: number;
+  cacheMissCount: number;
+  loadedModels: string[];
+}
+
+export interface AiRuntimeStatus {
+  loadedModels: string[];
+  activeTasksCount: number;
+  backend: ModelBackend;
+  memoryEstimateMB: number;
+  version: string;
+  diagnostics?: AiDiagnosticsMetrics;
 }

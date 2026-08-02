@@ -90,7 +90,7 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
       <article className="max-w-3xl mx-auto px-6 py-12 lg:py-20">
         <Link 
           href="/blog" 
-          className="inline-flex items-center text-sm font-medium text-text-muted hover:text-kv-primary transition-colors mb-8 group"
+          className="inline-flex items-center text-sm font-medium text-text-muted hover:text-primary transition-colors mb-8 group"
         >
           <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
           Back to Blog
@@ -108,7 +108,7 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
         </header>
 
         <div 
-          className="prose prose-invert prose-lg prose-blue max-w-none text-text-2 leading-relaxed prose-headings:text-text prose-a:text-kv-primary hover:prose-a:text-blue-400 prose-strong:text-text prose-code:text-kv-primary prose-code:bg-surface-2 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none"
+          className="prose prose-invert prose-lg prose-blue max-w-none text-text-2 leading-relaxed prose-headings:text-text prose-a:text-primary hover:prose-a:text-blue-400 prose-strong:text-text prose-code:text-primary prose-code:bg-surface-2 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none"
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }}
         />
         
@@ -119,7 +119,7 @@ export default async function BlogArticlePage({ params }: BlogArticleProps) {
             <h3 className="text-lg font-bold text-text">Enjoyed this article?</h3>
             <p className="text-text-muted text-sm mt-1">Explore our suite of privacy-first, offline-capable engineering tools.</p>
           </div>
-          <Link href="/" className="px-6 py-3 bg-kv-primary text-white rounded-full font-medium hover:bg-kv-primary/90 transition-colors shadow-md">
+          <Link href="/" className="px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors shadow-md">
             Explore Tools
           </Link>
         </div>

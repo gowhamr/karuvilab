@@ -32,6 +32,12 @@ export function OCRButton({ onResult }: OCRButtonProps) {
 
     try {
       const buffer = await file.arrayBuffer();
+      
+      // Load model & verify checksum via KaruviLab AI SDK
+      const { ai } = await import('@/src/ai/sdk');
+      await ai.loadModel('ocr-paddle', undefined, abortControllerRef.current.signal);
+
+      // Extract text via workerManager using registered OCR engine
       const text = await workerManager.ocrExtract(
         buffer, 
         file.type, 
