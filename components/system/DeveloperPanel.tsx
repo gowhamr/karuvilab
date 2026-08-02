@@ -101,6 +101,18 @@ export function DeveloperPanel() {
   }, []);
 
   useEffect(() => {
+    const handleToggle = () => setIsOpen(prev => !prev);
+    if (typeof window !== "undefined") {
+      window.addEventListener("toggle-developer-panel", handleToggle);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("toggle-developer-panel", handleToggle);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (!developerMode) return;
     updateMemoryUsage();
     const interval = setInterval(updateMemoryUsage, 2000);
@@ -219,16 +231,15 @@ export function DeveloperPanel() {
     }
   }, [indexData, heapMb, capabilities, toast]);
 
-  if (!isHydrated || !developerMode) return null;
+  if (!isHydrated || !developerMode || !isOpen) return null;
 
   return (
-    <div className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom,0px))] lg:bottom-6 right-4 lg:right-6 z-dropdown font-sans select-none animate-in fade-in duration-200">
-      {isOpen ? (
-        <div 
-          role="region" 
-          aria-label="Performance Inspector Panel"
-          className="max-w-[calc(100vw-2rem)] w-84 sm:w-96 bg-surface/95 backdrop-blur-md border border-blue/30 shadow-2xl rounded-3xl p-5 space-y-4 text-text"
-        >
+    <div className="fixed top-16 right-4 sm:right-6 lg:right-8 z-modal font-sans select-none animate-in fade-in zoom-in-95 duration-200">
+      <div 
+        role="region" 
+        aria-label="Performance Inspector Panel"
+        className="max-w-[calc(100vw-2rem)] w-84 sm:w-96 bg-surface/95 backdrop-blur-md border border-blue/30 shadow-2xl rounded-3xl p-5 space-y-4 text-text"
+      >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/60 pb-3">
             <div className="flex items-center gap-2">
@@ -518,19 +529,6 @@ export function DeveloperPanel() {
             <span>100% Offline • Feature Frozen v1.0</span>
           </div>
         </div>
-      ) : (
-        <button
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Performance Inspector v1.0"
-          className="flex items-center gap-2 px-3.5 py-2 bg-surface/95 backdrop-blur-md border border-blue/40 hover:border-blue shadow-lg rounded-full text-xs font-mono font-bold text-blue hover:bg-blue/10 transition-all active:scale-95 cursor-pointer"
-        >
-          <Gauge className="w-3.5 h-3.5 text-blue animate-pulse" />
-          <span>Performance Inspector</span>
-          <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full font-bold border", indexData.healthColor, "bg-emerald-500/10 border-emerald-500/20")}>
-            {indexData.healthLabel.split(" ")[1]} ({indexData.totalIndex})
-          </span>
-        </button>
-      )}
     </div>
   );
 }
