@@ -1,0 +1,18 @@
+# .gitleaks.toml
+# Gitleaks Configuration for KaruviLab
+
+title = "KaruviLab Gitleaks Allowlist Configuration"
+
+[allowlist]
+description = "Allow educational PEM documentation headers and dummy sample JWT tokens"
+paths = [
+  '''src/content/tools/pem-viewer\.ts''',
+  '''app/\(tools\)/calculators/numeral-converter/NumeralConverterClient\.tsx'''
+]
+regexes = [
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9''',
+  '''-----BEGIN (?:RSA |OPENSSH )?PRIVATE KEY-----'''
+]
+stopwords = [
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE5MjQ5NDQwMDB9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+]

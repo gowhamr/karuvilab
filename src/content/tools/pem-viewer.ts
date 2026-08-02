@@ -12,7 +12,7 @@ Welcome to the engineering guide on PEM formatting. This handbook demystifies th
 
 If you have ever configured an SSL server, set up an SSH key, or generated a CSR, you have dealt with a block of text that looks like this:
 \`\`\`text
------BEGIN PRIVATE KEY-----
+-----BEGIN PRIVATE KEY----- <!-- gitleaks:allow -->
 MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQ...
 -----END PRIVATE KEY-----
 \`\`\`
@@ -57,7 +57,7 @@ graph LR
 
 ### Scenario A: The "Invalid Key Format" AWS Error
 A DevOps engineer generates a key pair using \`ssh-keygen\` and tries to upload it to AWS EC2 or an old Java application. The server rejects it with "Invalid Key Format".
-**The Fix:** \`ssh-keygen\` often generates keys in a proprietary OpenSSH format (\`-----BEGIN OPENSSH PRIVATE KEY-----\`). The engineer must convert it to a standard PKCS#8 PEM format (\`-----BEGIN PRIVATE KEY-----\`) using OpenSSL before the older server will accept it.
+**The Fix:** \`ssh-keygen\` often generates keys in a proprietary OpenSSH format (\`-----BEGIN OPENSSH PRIVATE KEY-----\` <!-- gitleaks:allow -->). The engineer must convert it to a standard PKCS#8 PEM format (\`-----BEGIN PRIVATE KEY-----\`) using OpenSSL before the older server will accept it.
 
 ### Scenario B: NGINX Certificate Chains
 When configuring HTTPS on NGINX, you are required to provide a \`.crt\` or \`.pem\` file. Often, administrators only paste their Leaf Certificate. The browser throws a trust error. 
