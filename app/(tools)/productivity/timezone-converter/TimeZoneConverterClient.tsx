@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { 
   Plus, 
@@ -122,7 +122,7 @@ const getOffsetMinutes = useCallback((date: Date, timeZone: string) => {
   try {
     const fmt = getFormatter(timeZone, 'full');
     const parts = fmt.formatToParts(date);
-    const getPart = (type: string) => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+    const getPart = (type: string) => parseInt(parts.find((p: Intl.DateTimeFormatPart) => p.type === type)?.value || '0', 10);
     const tzDate = new Date(Date.UTC(
       getPart('year'), getPart('month') - 1, getPart('day'),
       getPart('hour'), getPart('minute'), getPart('second')
@@ -152,7 +152,7 @@ const getOffsetMinutes = useCallback((date: Date, timeZone: string) => {
         const wallTimeAsUTC = new Date(Date.UTC(year, month - 1, day, hour, minute));
         const fmt = getFormatter(sourceTZ, 'full');
         const parts = fmt.formatToParts(wallTimeAsUTC);
-        const getPart = (type: string) => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+        const getPart = (type: string) => parseInt(parts.find((p: Intl.DateTimeFormatPart) => p.type === type)?.value || '0', 10);
         const tzDate = new Date(Date.UTC(
           getPart('year'), getPart('month') - 1, getPart('day'),
           getPart('hour'), getPart('minute'), getPart('second')
