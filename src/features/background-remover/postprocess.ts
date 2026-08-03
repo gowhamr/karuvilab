@@ -1,6 +1,7 @@
 /**
- * KaruviLab (KV) AI Background Remover - Postprocessing
+ * KaruviLab (KV) AI Background Remover - Postprocessing & Alpha Matting
  * Converts raw output alpha mask tensor [1, 1, 1024, 1024] back to high-res transparent Canvas
+ * Supports adaptive thresholding, edge feathering, and mask inversion.
  */
 
 export interface PostprocessOptions {
@@ -8,48 +9,94 @@ export interface PostprocessOptions {
   maskWidth: number;
   maskHeight: number;
   originalImage: HTMLImageElement | ImageBitmap;
-  threshold?: number; // 0.0 to 1.0 threshold
+  threshold?: number; // 0.0 to 1.0 threshold (default 0.5)
+  feather?: number; // 0 to 10px edge smoothing
+  invert?: boolean; // Invert subject and background
 }
 
 export async function createTransparentCanvas(options: PostprocessOptions): Promise<HTMLCanvasElement> {
-  const { outputTensorData, maskWidth, maskHeight, originalImage, threshold = 0.5 } = options;
+  const {
+    outputTensorData,
+    maskWidth,
+    maskHeight,
+    originalImage,
+    threshold = 0.5,
+    feather = 2,
+    invert = false
+  } = options;
 
-  const origWidth = originalImage instanceof HTMLImageElement ? (originalImage.naturalWidth || originalImage.width) : originalImage.width;
-  const origHeight = originalImage instanceof HTMLImageElement ? (originalImage.naturalHeight || originalImage.height) : originalImage.height;
+  const origWidth = originalImage instanceof HTMLImageElement
+    ? (originalImage.naturalWidth || originalImage.width)
+    : originalImage.width;
+  const origHeight = originalImage instanceof HTMLImageElement
+    ? (originalImage.naturalHeight || originalImage.height)
+    : originalImage.height;
 
-  // 1. Create a 1024x1024 mask canvas from the raw float32 output tensor
+  // 1. Render raw Float32 probability tensor to 1024x1024 alpha mask canvas
   const maskCanvas = document.createElement('canvas');
   maskCanvas.width = maskWidth;
   maskCanvas.height = maskHeight;
-  const maskCtx = maskCanvas.getContext('2d');
+  const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
   if (!maskCtx) {
     throw new Error('Failed to create mask canvas context');
   }
 
   const maskImageData = maskCtx.createImageData(maskWidth, maskHeight);
   const maskPixels = maskImageData.data;
-
   const totalPixels = maskWidth * maskHeight;
+
+  const lowBound = Math.max(0, threshold - 0.15);
+  const highBound = Math.min(1, threshold + 0.15);
+
   for (let i = 0; i < totalPixels; i++) {
-    const rawVal = outputTensorData[i] ?? 0; // Float32 opacity probability
+    const rawVal = outputTensorData[i] ?? 0;
     
-    // Apply sigmoid activation if model output is unscaled logits, or thresholding
-    let alpha = rawVal;
+    // Apply sigmoid activation if model output is unscaled logits
+    let prob = rawVal;
     if (rawVal < 0 || rawVal > 1) {
-      alpha = 1 / (1 + Math.exp(-rawVal)); // Sigmoid
+      prob = 1 / (1 + Math.exp(-rawVal));
     }
 
-    const alphaByte = alpha >= threshold ? Math.round(alpha * 255) : 0;
+    if (invert) {
+      prob = 1.0 - prob;
+    }
 
-    maskPixels[i * 4] = 255;     // Red
-    maskPixels[i * 4 + 1] = 255; // Green
-    maskPixels[i * 4 + 2] = 255; // Blue
-    maskPixels[i * 4 + 3] = alphaByte; // Alpha
+    // Smooth step alpha interpolation for soft hair & boundary transition
+    let alpha = 0;
+    if (prob >= highBound) {
+      alpha = 1.0;
+    } else if (prob <= lowBound) {
+      alpha = 0.0;
+    } else {
+      const t = (prob - lowBound) / (highBound - lowBound);
+      alpha = t * t * (3 - 2 * t); // Smoothstep curve
+    }
+
+    const alphaByte = Math.round(alpha * 255);
+
+    maskPixels[i * 4] = 255;       // R
+    maskPixels[i * 4 + 1] = 255;   // G
+    maskPixels[i * 4 + 2] = 255;   // B
+    maskPixels[i * 4 + 3] = alphaByte; // A
   }
 
   maskCtx.putImageData(maskImageData, 0, 0);
 
-  // 2. Composite original high-res image with scaled alpha mask
+  // 2. Apply optional edge feathering via Canvas blur filter if requested
+  if (feather > 0) {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = maskWidth;
+    tempCanvas.height = maskHeight;
+    const tempCtx = tempCanvas.getContext('2d');
+    if (tempCtx) {
+      tempCtx.filter = `blur(${feather}px)`;
+      tempCtx.drawImage(maskCanvas, 0, 0);
+      maskCtx.clearRect(0, 0, maskWidth, maskHeight);
+      maskCtx.drawImage(tempCanvas, 0, 0);
+    }
+  }
+
+  // 3. Composite original high-res image with scaled alpha mask
   const resultCanvas = document.createElement('canvas');
   resultCanvas.width = origWidth;
   resultCanvas.height = origHeight;
@@ -58,10 +105,7 @@ export async function createTransparentCanvas(options: PostprocessOptions): Prom
     throw new Error('Failed to create result canvas context');
   }
 
-  // Draw original high-res image first
   resultCtx.drawImage(originalImage, 0, 0, origWidth, origHeight);
-
-  // Use destination-in composite operation to apply smoothed alpha mask
   resultCtx.globalCompositeOperation = 'destination-in';
   resultCtx.drawImage(maskCanvas, 0, 0, origWidth, origHeight);
   resultCtx.globalCompositeOperation = 'source-over';

@@ -1,0 +1,10 @@
+const dirty = "<p>Hello</p><script>alert(1)</script><img src='test' onerror='alert(1)'>";
+console.log("Start 1");
+const s1 = dirty.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+console.log("Start 2");
+const s2 = s1.replace(/on\w+\s*=\s*(["']).*?\1/gi, '');
+console.log("Start 3");
+const s3 = s2.replace(/on\w+\s*=\s*[^\s>]+/gi, '');
+console.log("Start 4");
+const s4 = s3.replace(/href\s*=\s*(["'])\s*javascript:.*?\1/gi, 'href="#"');
+console.log("End", s4);
