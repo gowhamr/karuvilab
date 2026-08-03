@@ -12,6 +12,7 @@
 - [Advanced Rotate](https://karuvilab.com//image-tools/advanced-rotate/): Rotate images to any angle with precise degree control
 - [Aes Encrypt Decrypt](https://karuvilab.com//security-tools/aes-encrypt-decrypt/): Encrypt and decrypt text or files using AES, entirely in your browser.
 - [Age Calculator](https://karuvilab.com//calculators/age-calculator/): Calculate age in years, months, and days
+- [AI Document Intelligence & PDF Cleanup](https://karuvilab.com//pdf-tools/ai-pdf-cleanup/): Clean up scanned PDFs, auto-deskew pages, denoise, and generate searchable PDFs using local AI
 - [Aspect Ratio Converter](https://karuvilab.com//image-tools/aspect-ratio-converter/): Convert images to standard aspect ratios like 1:1, 16:9, 4:3
 - [Audio Converter](https://karuvilab.com//media-tools/audio-converter/): Convert audio files between formats like MP3 and WAV locally for compatibility.
 - [AVIF Converter](https://karuvilab.com//image-tools/avif-converter/): Convert images to the next-gen AVIF format for maximum compression
@@ -65,6 +66,7 @@
 - [Even Pages Extractor](https://karuvilab.com//pdf-tools/even-pages-extractor/): Extract only the even-numbered pages from a PDF document.
 - [Extract Images](https://karuvilab.com//pdf-tools/extract-images/): Pull images out of a PDF
 - [Extract PDF Pages](https://karuvilab.com//pdf-tools/extract-pages/): Extract specific pages or page ranges from a PDF into a new document.
+- [AI Face Blur & Privacy Shield](https://karuvilab.com//image-tools/face-blur/): Automatically blur faces and PII objects in photos using local AI
 - [Fake Data Generator](https://karuvilab.com//developer-tools/fake-data-generator/): Generate realistic fake data for testing
 - [Fixed Deposit (FD)](https://karuvilab.com//calculators/fd-calculator/): FD maturity amount and interest earned
 - [File Viewer & Diff](https://karuvilab.com//file-tools/file-viewer-diff/): Local text editor and diff checker
@@ -181,6 +183,7 @@
 - [Stock Average](https://karuvilab.com//calculators/stock-average-calculator/): Weighted average buy price for stocks
 - [Stopwatch](https://karuvilab.com//productivity/stopwatch/): Track elapsed time with lap support for productivity logging.
 - [Sudoku](https://karuvilab.com//break-time-tools/sudoku/): Classic 9x9 Sudoku logical number placement puzzle with multiple difficulty modes, hints, and local best times.
+- [AI Image Upscaler](https://karuvilab.com//image-tools/super-resolution/): Upscale and enhance images 2x or 4x locally using Real-ESRGAN AI
 - [SVG to PNG](https://karuvilab.com//image-tools/svg-converter/): Rasterize vector SVG files to transparent PNGs
 - [Swift Mt Mx](https://karuvilab.com//developer-tools/swift-mt-mx/): Parse and inspect SWIFT MT and MX banking message structures.
 - [SWP Calculator](https://karuvilab.com//calculators/swp-calculator/): Systematic Withdrawal Plan planning

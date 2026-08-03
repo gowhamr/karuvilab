@@ -1,47 +1,23 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 import ToolClientWrapper from './ToolClientWrapper';
 
-export const metadata: Metadata = {
-  title: 'AI Face Blur & Privacy Shield – KV',
-  description: 'Automatically blur faces and PII objects in photos using local AI (YOLOv8). 100% private, offline-first, and zero server uploads.',
-  keywords: ['face blur', 'blur faces in photo', 'pii privacy shield', 'ai face detection', 'anonymize photo', 'local ai'],
-  alternates: {
-    canonical: 'https://karuvilab.com/image-tools/face-blur/'
-  },
-  openGraph: {
-    title: 'AI Face Blur & Privacy Shield – KV',
-    description: 'Automatically blur faces and PII objects in photos using local AI (YOLOv8). 100% private, offline-first, and zero server uploads.',
-    url: 'https://karuvilab.com/image-tools/face-blur/',
-    type: 'website'
-  }
-};
+const toolId = 'face-blur';
+const cat = CATEGORIES.find(c => c.id === 'image');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    'name': 'AI Face Blur & Privacy Shield',
-    'url': 'https://karuvilab.com/image-tools/face-blur/',
-    'description': 'Automatically blur faces and PII objects in photos using local AI (YOLOv8). 100% private, offline-first, and zero server uploads.',
-    'applicationCategory': 'MultimediaApplication',
-    'operatingSystem': 'Any',
-    'offers': {
-      '@type': 'Offer',
-      'price': '0',
-      'priceCurrency': 'USD'
-    }
-  };
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <ToolShell title="AI Face Blur & Privacy Shield">
-        <ToolClientWrapper />
-      </ToolShell>
-    </>
+    <ToolShell
+      title="AI Face Blur & Privacy Shield"
+      description="Automatically detect and blur faces in photos using local YOLOv8 AI object detection"
+      category={cat}
+      toolId={toolId}
+    >
+      <ToolClientWrapper />
+    </ToolShell>
   );
 }

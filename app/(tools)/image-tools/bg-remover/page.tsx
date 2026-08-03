@@ -1,47 +1,23 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { CATEGORIES } from '@/src/tool-registry';
 import { ToolShell } from '@/components/ui/ToolShell';
+import { generateToolMetadata } from '@/src/lib/seo';
 import ToolClientWrapper from './ToolClientWrapper';
 
-export const metadata: Metadata = {
-  title: 'AI Background Remover – KV',
-  description: 'Remove image backgrounds automatically in your browser using local AI (ONNX Runtime Web + WebAssembly). 100% private, offline-first, and free.',
-  keywords: ['background remover', 'ai background removal', 'remove image background', 'local ai', 'privacy image tool'],
-  alternates: {
-    canonical: 'https://karuvilab.com/image-tools/bg-remover/'
-  },
-  openGraph: {
-    title: 'AI Background Remover – KV',
-    description: 'Remove image backgrounds automatically in your browser using local AI (ONNX Runtime Web + WebAssembly). 100% private, offline-first, and free.',
-    url: 'https://karuvilab.com/image-tools/bg-remover/',
-    type: 'website'
-  }
-};
+const toolId = 'bg-remover';
+const cat = CATEGORIES.find(c => c.id === 'image');
+
+export const metadata: Metadata = generateToolMetadata(toolId);
 
 export default function Page() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    'name': 'AI Background Remover',
-    'url': 'https://karuvilab.com/image-tools/bg-remover/',
-    'description': 'Remove image backgrounds automatically in your browser using local AI (ONNX Runtime Web + WebAssembly). 100% private, offline-first, and free.',
-    'applicationCategory': 'MultimediaApplication',
-    'operatingSystem': 'Any',
-    'offers': {
-      '@type': 'Offer',
-      'price': '0',
-      'priceCurrency': 'USD'
-    }
-  };
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <ToolShell title="AI Background Remover">
-        <ToolClientWrapper />
-      </ToolShell>
-    </>
+    <ToolShell
+      title="AI Background Remover"
+      description="Remove image backgrounds automatically in your browser using local AI (RMBG 2.0 / BiRefNet)"
+      category={cat}
+      toolId={toolId}
+    >
+      <ToolClientWrapper />
+    </ToolShell>
   );
 }
