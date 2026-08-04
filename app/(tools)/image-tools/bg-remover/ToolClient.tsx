@@ -107,7 +107,7 @@ export default function ToolClient() {
 
       // Load SDK & run unified removeBackground API
       const { ai } = await import('@/src/ai/sdk');
-      const { blob, modelUsed, inferenceTimeMs } = await ai.removeBackground(file, {
+      const { blob, modelUsed, inferenceTimeMs, rawTensor } = await ai.removeBackground(file, {
         onProgress: (p) => {
           setProgress({ percent: 40 + Math.round(p.percent * 0.4), stage: `AI Engine: ${p.stage}` });
         },
@@ -115,6 +115,8 @@ export default function ToolClient() {
         refineHair: true,
         quality: 'auto'
       });
+
+      rawOutputTensorRef.current = rawTensor;
 
       setProgress({ percent: 90, stage: 'Compositing High-Res Transparent PNG' });
 
@@ -131,7 +133,7 @@ export default function ToolClient() {
       setIsProcessing(false);
       setProgress(null);
     }
-  }, [file, originalUrl, selectedBackend, threshold, feather, invert, createUrl, toast]);
+  }, [file, originalUrl, createUrl, toast]);
 
   // Re-render transparent canvas instantly when threshold/feather/invert controls change
   const applyControlChanges = useCallback(async () => {
@@ -314,7 +316,7 @@ export default function ToolClient() {
               <div className="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border">
                 <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Invert Selection</span>
                 <button
-                  onClick={() => { setInvert(!invert); applyControlChanges(); }}
+                  onClick={() => { setInvert(!invert); setTimeout(applyControlChanges, 0); }}
                   className={cn(
                     "p-1.5 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-bold font-mono",
                     invert ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-muted"
@@ -387,19 +389,18 @@ export default function ToolClient() {
                 />
 
                 {/* Original Image (Clipped by slider) */}
+                <img
+                  src={originalUrl}
+                  alt="Original Image"
+                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                />
+                
                 <div 
-                  className="absolute inset-y-0 left-0 overflow-hidden border-r-2 border-blue shadow-2xl"
-                  style={{ width: `${sliderPosition}%` }}
+                  className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
+                  style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
                 >
-                  <img
-                    src={originalUrl}
-                    alt="Original Image"
-                    className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none max-w-none"
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text">
-                    Original
-                  </div>
+                  Original
                 </div>
 
                 <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">

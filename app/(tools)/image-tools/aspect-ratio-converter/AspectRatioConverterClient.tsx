@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import {
-  convertAspectRatio,
   ASPECT_RATIO_PRESETS,
   OutputFormat,
   AspectRatioPreset,

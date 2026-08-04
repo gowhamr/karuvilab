@@ -114,6 +114,7 @@ export default function ToolClient() {
       const { ai } = await import('@/src/ai/sdk');
       const boxes = await ai.runYoloPipeline({
         model: YOLO_FACE_MANIFEST.id,
+        input: {},
         imageBitmap,
         confidenceThreshold: 0.45,
         abortSignal: abortControllerRef.current.signal,
@@ -162,6 +163,29 @@ export default function ToolClient() {
       processFaceBlur();
     }
   }, [file, originalUrl, resultUrl, isProcessing, error, processFaceBlur]);
+
+  const reRenderFaceBlur = useCallback(async () => {
+    if (!imageRef.current || detectedBoxes.length === 0 || !file) return;
+    try {
+      const blurredCanvas = await renderBlurredCanvas({
+        image: imageRef.current,
+        boxes: detectedBoxes,
+        style: blurStyle,
+        blurStrength
+      });
+
+      const resultBlob = await new Promise<Blob | null>((resolve) => {
+        blurredCanvas.toBlob((blob) => resolve(blob), file.type || 'image/png', 0.95);
+      });
+
+      if (resultBlob) {
+        if (resultUrl) revokeUrl(resultUrl);
+        setResultUrl(createUrl(resultBlob));
+      }
+    } catch (err) {
+      console.error('Re-render failed:', err);
+    }
+  }, [detectedBoxes, blurStyle, blurStrength, file, resultUrl, createUrl, revokeUrl]);
 
   const handleReset = () => {
     if (abortControllerRef.current) {
@@ -266,7 +290,7 @@ export default function ToolClient() {
               <label className="text-xs font-bold text-text-muted uppercase tracking-wider">Blur Mask Style</label>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => { setBlurStyle('pixelate'); if (resultUrl) processFaceBlur(); }}
+                  onClick={() => { setBlurStyle('pixelate'); setTimeout(() => { if (resultUrl) reRenderFaceBlur(); }, 0); }}
                   className={cn(
                     "flex-1 py-1.5 px-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
                     blurStyle === 'pixelate' ? "bg-blue text-white shadow-sm" : "bg-surface-elevated text-text-muted hover:text-text"
@@ -275,7 +299,7 @@ export default function ToolClient() {
                   Pixelated
                 </button>
                 <button
-                  onClick={() => { setBlurStyle('gaussian'); if (resultUrl) processFaceBlur(); }}
+                  onClick={() => { setBlurStyle('gaussian'); setTimeout(() => { if (resultUrl) reRenderFaceBlur(); }, 0); }}
                   className={cn(
                     "flex-1 py-1.5 px-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
                     blurStyle === 'gaussian' ? "bg-blue text-white shadow-sm" : "bg-surface-elevated text-text-muted hover:text-text"
@@ -297,7 +321,7 @@ export default function ToolClient() {
                 max="50"
                 value={blurStrength}
                 onChange={(e) => setBlurStrength(Number(e.target.value))}
-                onMouseUp={() => { if (resultUrl) processFaceBlur(); }}
+                onMouseUp={() => { if (resultUrl) reRenderFaceBlur(); }}
                 className="w-full cursor-pointer accent-blue"
               />
             </div>
@@ -351,19 +375,18 @@ export default function ToolClient() {
                 />
 
                 {/* Original Image (Clipped by slider) */}
+                <img
+                  src={originalUrl}
+                  alt="Original Photo"
+                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                />
+                
                 <div 
-                  className="absolute inset-y-0 left-0 overflow-hidden border-r-2 border-blue shadow-2xl"
-                  style={{ width: `${sliderPosition}%` }}
+                  className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
+                  style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
                 >
-                  <img
-                    src={originalUrl}
-                    alt="Original Photo"
-                    className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none max-w-none"
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text">
-                    Original
-                  </div>
+                  Original
                 </div>
 
                 <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">

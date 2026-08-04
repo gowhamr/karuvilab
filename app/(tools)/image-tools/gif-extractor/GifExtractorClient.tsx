@@ -446,7 +446,6 @@ export default function GifExtractorClient() {
                   </button>
                 </div>
                 <div className="p-3 rounded-2xl bg-bg border border-border" style={CHECKERBOARD_BG}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={gifUrl}
                     alt="Original GIF"
@@ -566,7 +565,6 @@ export default function GifExtractorClient() {
                     className="relative flex items-center justify-center p-3 h-48 cursor-pointer overflow-hidden group/thumb"
                     style={CHECKERBOARD_BG}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={frame.url}
                       alt={`Frame ${frame.id}`}
@@ -696,7 +694,6 @@ export default function GifExtractorClient() {
                   <ChevronLeft className="w-6 h-6" />
                 </button>
 
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeModalFrame.url}
                   alt={`Frame ${activeModalFrame.id}`}

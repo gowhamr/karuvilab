@@ -375,7 +375,6 @@ export default function IcoGeneratorClient() {
                     </div>
                     {originalUrl && (
                       <div className="w-full h-32 rounded-lg border border-border/60 bg-[linear-gradient(45deg,#f0f0f0_25%,transparent_25%),linear-gradient(-45deg,#f0f0f0_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f0f0f0_75%),linear-gradient(-45deg,transparent_75%,#f0f0f0_75%)] dark:bg-[linear-gradient(45deg,#222_25%,transparent_25%),linear-gradient(-45deg,#222_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#222_75%),linear-gradient(-45deg,transparent_75%,#222_75%)] bg-[length:12px_12px] flex items-center justify-center p-2 overflow-hidden">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={originalUrl}
                           alt="Original"
@@ -409,7 +408,6 @@ export default function IcoGeneratorClient() {
                         ) : resultUrl ? (
                           <div className="flex flex-col items-center gap-2">
                             {/* Actual pixel size view + zoomed view */}
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={resultUrl}
                               alt="Generated ICO Preview"

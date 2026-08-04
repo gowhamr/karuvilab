@@ -189,20 +189,25 @@ class KaruviAiSdk {
    * Execute full YOLO Detection pipeline in the worker
    */
   public async runYoloPipeline(
-    options: AiRunOptions & { imageBitmap: ImageBitmap; confidenceThreshold?: number }
+    options: Omit<AiRunOptions, 'input'> & { imageBitmap: ImageBitmap; confidenceThreshold?: number }
   ): Promise<any> {
     const startTime = performance.now();
     const manifest = getModelManifest(options.model);
     await modelManager.ensureModelAvailable(manifest, options.onProgress, options.abortSignal);
 
-    const { getAiWorker } = await import('../engine/workers/WorkerOrchestrator');
-    const worker = await getAiWorker();
+    const { workerOrchestrator } = await import('../engine/workers/WorkerOrchestrator');
     
-    const result = await worker.aiRunYoloPipeline(
-      options.model,
-      Comlink.transfer(options.imageBitmap, [options.imageBitmap]),
-      { confidenceThreshold: options.confidenceThreshold },
-      options.preferredBackend as string
+    const result = await workerOrchestrator.dispatch(
+      "aiRunYoloPipeline",
+      [
+        options.model,
+        options.imageBitmap,
+        { confidenceThreshold: options.confidenceThreshold },
+        options.preferredBackend as string
+      ],
+      [options.imageBitmap],
+      options.onProgress ? (p: any) => options.onProgress?.(p) : undefined,
+      options.abortSignal
     );
 
     const inferenceTime = performance.now() - startTime;
@@ -215,20 +220,25 @@ class KaruviAiSdk {
    * Execute full ESRGAN Super Resolution pipeline in the worker
    */
   public async runEsrganPipeline(
-    options: AiRunOptions & { imageBitmap: ImageBitmap; scale: number }
+    options: Omit<AiRunOptions, 'input'> & { imageBitmap: ImageBitmap; scale: number }
   ): Promise<{ bitmap: ImageBitmap; tensor: Float32Array }> {
     const startTime = performance.now();
     const manifest = getModelManifest(options.model);
     await modelManager.ensureModelAvailable(manifest, options.onProgress, options.abortSignal);
 
-    const { getAiWorker } = await import('../engine/workers/WorkerOrchestrator');
-    const worker = await getAiWorker();
+    const { workerOrchestrator } = await import('../engine/workers/WorkerOrchestrator');
     
-    const result = await worker.aiRunEsrganPipeline(
-      options.model,
-      Comlink.transfer(options.imageBitmap, [options.imageBitmap]),
-      { scale: options.scale },
-      options.preferredBackend as string
+    const result = await workerOrchestrator.dispatch(
+      "aiRunEsrganPipeline",
+      [
+        options.model,
+        options.imageBitmap,
+        { scale: options.scale },
+        options.preferredBackend as string
+      ],
+      [options.imageBitmap],
+      options.onProgress ? (p: any) => options.onProgress?.(p) : undefined,
+      options.abortSignal
     );
 
     const inferenceTime = performance.now() - startTime;
@@ -278,6 +288,7 @@ class KaruviAiSdk {
     blob: Blob;
     modelUsed: string;
     inferenceTimeMs: number;
+    rawTensor: Float32Array;
   }> {
     const startTime = performance.now();
 
@@ -357,7 +368,8 @@ class KaruviAiSdk {
       canvas: resultCanvas,
       blob,
       modelUsed: manifest.id,
-      inferenceTimeMs: Math.round(performance.now() - startTime)
+      inferenceTimeMs: Math.round(performance.now() - startTime),
+      rawTensor: processedTensor
     };
   }
 }

@@ -268,6 +268,22 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<any>;
 
+  aiRunYoloPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    options: { confidenceThreshold?: number },
+    preferredBackend?: string,
+    onProgress?: ProgressCallback
+  ): Promise<any>;
+
+  aiRunEsrganPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    options: { scale: number },
+    preferredBackend?: string,
+    onProgress?: ProgressCallback
+  ): Promise<{ bitmap: ImageBitmap; tensor: Float32Array }>;
+
   executeCanvasOperation(
     methodName: string,
     args: any[]

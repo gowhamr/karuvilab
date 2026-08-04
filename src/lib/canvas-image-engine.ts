@@ -78,7 +78,9 @@ function canvasToBlob(
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
   if (canvas instanceof OffscreenCanvas) {
-    return canvas.convertToBlob({ type: format, quality: format === 'image/png' ? undefined : quality });
+    const options: ImageEncodeOptions = { type: format };
+    if (format !== 'image/png') options.quality = quality;
+    return canvas.convertToBlob(options);
   }
 
   return new Promise((resolve, reject) => {

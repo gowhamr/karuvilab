@@ -106,6 +106,7 @@ export default function ToolClient() {
       const { ai } = await import('@/src/ai/sdk');
       const { bitmap: resultBitmap } = await ai.runEsrganPipeline({
         model: ESRGAN_MODEL_MANIFEST.id,
+        input: {},
         imageBitmap,
         scale,
         abortSignal: abortControllerRef.current.signal,
@@ -317,19 +318,18 @@ export default function ToolClient() {
                 />
 
                 {/* Original Image (Clipped by slider) */}
+                <img
+                  src={originalUrl}
+                  alt="Original Image"
+                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                />
+                
                 <div 
-                  className="absolute inset-y-0 left-0 overflow-hidden border-r-2 border-blue shadow-2xl"
-                  style={{ width: `${sliderPosition}%` }}
+                  className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
+                  style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
                 >
-                  <img
-                    src={originalUrl}
-                    alt="Original Image"
-                    className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none max-w-none"
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text">
-                    Original
-                  </div>
+                  Original
                 </div>
 
                 <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">

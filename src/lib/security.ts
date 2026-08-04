@@ -12,7 +12,6 @@ function getClientPurify() {
   if (_purifyInstance) return _purifyInstance;
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('dompurify');
     const DOMPurify = mod.default || mod;
     _purifyInstance = typeof DOMPurify === 'function' ? DOMPurify(window) : DOMPurify;

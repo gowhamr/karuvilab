@@ -263,8 +263,11 @@ class AiWorkerEngine {
       const feeds: Record<string, unknown> = { input: pre.tensorData };
       const out = await session.run(feeds);
       
-      const outputKey = Object.keys(out)[0];
-      const outputTensor = out[outputKey] as Float32Array;
+      const outputKey = Object.keys(out)[0] || 'output';
+      const outputVal = out[outputKey];
+      const outputTensor = (outputVal && typeof outputVal === 'object' && 'data' in outputVal)
+        ? (outputVal as any).data as Float32Array
+        : (outputVal as Float32Array || new Float32Array(0));
 
       const boxes = processDetectionOutputs(
         outputTensor, 
@@ -301,15 +304,18 @@ class AiWorkerEngine {
       const feeds: Record<string, unknown> = { input: pre.tensorData };
       const out = await session.run(feeds);
       
-      const outputKey = Object.keys(out)[0];
-      const outputTensor = out[outputKey] as Float32Array;
+      const outputKey = Object.keys(out)[0] || 'output';
+      const outputVal = out[outputKey];
+      const outputTensor = (outputVal && typeof outputVal === 'object' && 'data' in outputVal)
+        ? (outputVal as any).data as Float32Array
+        : (outputVal as Float32Array || new Float32Array(0));
 
       const resultBitmap = await createUpscaledCanvas({
         outputTensorData: outputTensor,
         targetWidth: pre.originalWidth * options.scale,
         targetHeight: pre.originalHeight * options.scale,
         originalImage: imageBitmap,
-        scale: options.scale
+        scale: (options.scale === 4 ? 4 : 2) as 2 | 4
       });
 
       return Comlink.transfer({ bitmap: resultBitmap, tensor: outputTensor }, [resultBitmap, outputTensor.buffer]);

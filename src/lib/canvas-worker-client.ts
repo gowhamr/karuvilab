@@ -3,7 +3,7 @@ import type { Anchor, BorderConfig, FlipDirection, OutputFormat, PaddingConfig }
 
 async function executeInWorker(methodName: string, args: any[], format: string): Promise<Blob> {
   const bytes = await workerManager.executeCanvasOperation(methodName, args);
-  return new Blob([bytes], { type: format });
+  return new Blob([bytes as BlobPart], { type: format });
 }
 
 export async function flipImage(img: HTMLImageElement, direction: FlipDirection, format: OutputFormat = 'image/png', quality: number = 0.92): Promise<Blob> {

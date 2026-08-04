@@ -140,6 +140,8 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   ocrExtract: 'media',
   aiRunRmbgPipeline: 'ai',
   aiRunOcrPipeline: 'ai',
+  aiRunYoloPipeline: 'ai',
+  aiRunEsrganPipeline: 'ai',
   executeCanvasOperation: 'media',
 };
 
