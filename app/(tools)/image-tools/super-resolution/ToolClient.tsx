@@ -106,7 +106,6 @@ export default function ToolClient() {
       const { ai } = await import('@/src/ai/sdk');
       const { bitmap: resultBitmap } = await ai.runEsrganPipeline({
         model: ESRGAN_MODEL_MANIFEST.id,
-        input: {},
         imageBitmap,
         scale,
         abortSignal: abortControllerRef.current.signal,

@@ -114,7 +114,6 @@ export default function ToolClient() {
       const { ai } = await import('@/src/ai/sdk');
       const boxes = await ai.runYoloPipeline({
         model: YOLO_FACE_MANIFEST.id,
-        input: {},
         imageBitmap,
         confidenceThreshold: 0.45,
         abortSignal: abortControllerRef.current.signal,

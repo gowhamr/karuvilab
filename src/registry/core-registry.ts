@@ -322,15 +322,25 @@ export const CORE_TOOLS: ToolEntry[] = [
     "popular": true,
     "status": "stable",
     "lastAdded": null,
+    "lastUpdated": "2026-08-04",
     "keywords": [
       "image",
       "background",
       "remove",
-      "transparent"
+      "transparent",
+      "in-browser background remover",
+      "offline background removal",
+      "rmbg 2.0",
+      "ai image background eraser"
     ],
     "input": "image",
     "output": "image",
-    "related": [],
+    "related": [
+      "image-resizer",
+      "image-compressor",
+      "image-converter",
+      "face-blur"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -1397,17 +1407,25 @@ export const CORE_TOOLS: ToolEntry[] = [
     "popular": true,
     "status": "stable",
     "lastAdded": null,
+    "lastUpdated": "2026-08-04",
     "keywords": [
       "face blur",
       "privacy",
       "anonymize",
       "yolo",
       "pii shield",
-      "blur photo"
+      "blur photo",
+      "offline face blur online",
+      "in-browser privacy face mask"
     ],
     "input": "image",
     "output": "image",
-    "related": [],
+    "related": [
+      "bg-remover",
+      "image-crop",
+      "image-watermark",
+      "super-resolution"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
@@ -4312,17 +4330,25 @@ export const CORE_TOOLS: ToolEntry[] = [
     "popular": true,
     "status": "stable",
     "lastAdded": null,
+    "lastUpdated": "2026-08-04",
     "keywords": [
       "image",
       "upscale",
       "super resolution",
       "realesrgan",
       "enhance",
-      "clarity"
+      "clarity",
+      "free real esrgan upscaler",
+      "in-browser 4k photo enhancer"
     ],
     "input": "image",
     "output": "image",
-    "related": [],
+    "related": [
+      "image-compressor",
+      "image-resizer",
+      "bg-remover",
+      "image-converter"
+    ],
     "subCategory": null,
     "requiresNetwork": false
   },
