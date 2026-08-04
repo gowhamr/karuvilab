@@ -13,7 +13,7 @@ export interface SuperResPostprocessOptions {
   scale: ScaleFactor;
 }
 
-export async function createUpscaledCanvas(options: SuperResPostprocessOptions): Promise<HTMLCanvasElement> {
+export async function createUpscaledCanvas(options: SuperResPostprocessOptions): Promise<ImageBitmap> {
   const { originalImage, scale } = options;
 
   const origWidth = originalImage instanceof HTMLImageElement ? (originalImage.naturalWidth || originalImage.width) : originalImage.width;
@@ -22,9 +22,7 @@ export async function createUpscaledCanvas(options: SuperResPostprocessOptions):
   const upscaledWidth = origWidth * scale;
   const upscaledHeight = origHeight * scale;
 
-  const canvas = document.createElement('canvas');
-  canvas.width = upscaledWidth;
-  canvas.height = upscaledHeight;
+  const canvas = new OffscreenCanvas(upscaledWidth, upscaledHeight);
 
   const ctx = canvas.getContext('2d');
   if (!ctx) {
@@ -36,5 +34,5 @@ export async function createUpscaledCanvas(options: SuperResPostprocessOptions):
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(originalImage, 0, 0, upscaledWidth, upscaledHeight);
 
-  return canvas;
+  return canvas.transferToImageBitmap();
 }

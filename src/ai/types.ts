@@ -37,6 +37,28 @@ export interface ModelManifest {
 
   description?: string;
   license?: string;
+
+  // Scalability & Quantization Metadata (50+ Model Scaling)
+  quantization?: 'int8' | 'fp16' | 'fp32';
+  chunked?: boolean;
+}
+
+export type ModelFamily = 'birefnet' | 'u2net' | 'modnet' | 'ben2' | 'inspyrenet' | 'ppmatting' | 'isnet' | 'yolo' | 'paddle';
+export type ModelTag = 'portrait' | 'object' | 'hair' | 'product' | 'mobile' | 'general' | 'ocr' | 'face';
+
+export interface ExtendedModelManifest extends ModelManifest {
+  family?: ModelFamily;
+  tags?: ModelTag[];
+  minimumRamMB?: number;
+  minimumWebGpuVramMB?: number;
+  supportsTiling?: boolean;
+  supportsGuidedFilter?: boolean;
+  qualityScore?: number; // 0 to 100
+  speedScore?: number;   // 0 to 100
+  quantizedVariants?: {
+    int8?: { file: string; sizeMB: number; sha256: string };
+    fp16?: { file: string; sizeMB: number; sha256: string };
+  };
 }
 
 export interface ModelProgress {

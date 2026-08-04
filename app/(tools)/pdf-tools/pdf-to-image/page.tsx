@@ -51,7 +51,7 @@ export default function Page() {
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>E-Commerce:</strong> Converting a multi-page PDF catalog into individual JPG thumbnails for faster web loading.</li>
             <li><strong>Social Media:</strong> Twitter and Instagram do not allow PDF uploads. To share a PDF flyer, it must first be rasterized to a PNG or JPG.</li>
-            <li><strong>OCR Pre-processing:</strong> Many Optical Character Recognition engines (like Tesseract) cannot read PDFs directly and require the PDF to be converted to a high-DPI image first.</li>
+            <li><strong>OCR Pre-processing:</strong> Many Optical Character Recognition engines (like PaddleOCR) cannot read PDFs directly and require the PDF to be converted to a high-DPI image first.</li>
           </ul>
         </LearningSection>
 

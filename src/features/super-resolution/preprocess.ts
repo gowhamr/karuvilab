@@ -26,9 +26,7 @@ export async function preprocessSuperResImage(
     origHeight = imageSource.height;
   }
 
-  const canvas = typeof OffscreenCanvas !== 'undefined'
-    ? new OffscreenCanvas(tileWidth, tileHeight)
-    : document.createElement('canvas');
+  const canvas = new OffscreenCanvas(tileWidth, tileHeight);
 
   canvas.width = tileWidth;
   canvas.height = tileHeight;
@@ -39,9 +37,7 @@ export async function preprocessSuperResImage(
   }
 
   if (imageSource instanceof ImageData) {
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = origWidth;
-    tempCanvas.height = origHeight;
+    const tempCanvas = new OffscreenCanvas(origWidth, origHeight);
     const tempCtx = tempCanvas.getContext('2d');
     tempCtx?.putImageData(imageSource, 0, 0);
     ctx.drawImage(tempCanvas, 0, 0, tileWidth, tileHeight);

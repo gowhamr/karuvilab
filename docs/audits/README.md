@@ -1,0 +1,14 @@
+# Documentation Audits
+
+This directory contains audits and checklists for the codebase and tools.
+
+## Contents
+- [ACCESSIBILITY.md](ACCESSIBILITY.md)
+- [CODE_AUDIT.md](CODE_AUDIT.md)
+- [HEAVY_OPERATIONS_INVENTORY.md](HEAVY_OPERATIONS_INVENTORY.md)
+- [HEAVY_OPS_COMPLIANCE_CHECKLIST.md](HEAVY_OPS_COMPLIANCE_CHECKLIST.md)
+- [PDF_TOOLS_AUDIT.md](PDF_TOOLS_AUDIT.md)
+- [SEO_AUDIT.md](SEO_AUDIT.md)
+- [TOOL_AUDIT.md](TOOL_AUDIT.md)
+- [TOOL_INVENTORY.md](TOOL_INVENTORY.md)
+- [UX_AUDIT.md](UX_AUDIT.md)

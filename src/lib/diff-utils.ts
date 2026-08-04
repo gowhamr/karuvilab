@@ -6,7 +6,7 @@ export async function computeDiff(
   textB: string, 
   onProgress?: (p: { percent: number }) => void
 ): Promise<DiffLine[]> {
-  return workerManager.computeDiff(textA, textB, onProgress);
+  return workerManager.computeDiff(textA, textB, false, onProgress as any);
 }
 
 export function generateDiffPatch(diff: DiffLine[]): string {

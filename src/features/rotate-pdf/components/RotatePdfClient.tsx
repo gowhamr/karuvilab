@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { DropZone } from "@/components/ui/DropZone";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { workerManager } from "@/src/workers/manager";
 import { useProgress } from "@/src/contexts/ProgressContext";
@@ -85,26 +86,13 @@ export default function RotatePdfClient() {
 
   return (
     <div className="space-y-6">
-      <div
-        className="bg-surface border-2 border-dashed border-border rounded-4xl p-10 text-center cursor-pointer hover:border-blue transition-colors group"
-        onClick={() => fileRef.current?.click()}
-        onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) loadFile(f); }}
-      >
-        {file ? (
-          <div className="space-y-1">
-            <p className="font-bold text-text-2">{file.name}</p>
-            <p className="text-xs font-bold text-text-4 uppercase tracking-wider">{pageCount > 0 ? `${pageCount} pages · ` : ""}{(file.size / 1024).toFixed(0)} KB</p>
-          </div>
-        ) : (
-          <>
-            <div className="text-4xl mb-4 transition-transform group-hover:scale-110">🔄</div>
-            <p className="font-bold text-text-2">Drop a PDF here or click to select</p>
-            <p className="text-xs font-bold text-text-4 uppercase tracking-widest mt-2">Maximum file size: 50MB</p>
-          </>
-        )}
-        <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) loadFile(f); }} />
-      </div>
+      <DropZone
+        onFilesSelected={(files) => { const f = files[0]; if (f) loadFile(f); }}
+        accept=".pdf,application/pdf"
+        multiple={false}
+        title={file ? file.name : "Select PDF File"}
+        subtitle={file ? `${pageCount > 0 ? `${pageCount} pages · ` : ""}${(file.size / 1024).toFixed(0)} KB` : "Drag and drop your PDF here"}
+      />
 
       <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
         <Checkbox

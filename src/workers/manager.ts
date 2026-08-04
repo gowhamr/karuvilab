@@ -117,8 +117,10 @@ class WorkerManager {
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<Uint8Array> {
+    // Extract ArrayBuffers as transferables to avoid expensive structured cloning
+    const transferables = files.filter((f): f is ArrayBuffer => f instanceof ArrayBuffer);
     // PDF merge is idempotent: safe to retry if worker crashes.
-    return workerOrchestrator.dispatch("mergePdfs", [files], undefined, onProgress, abortSignal, true, 2);
+    return workerOrchestrator.dispatch("mergePdfs", [files], transferables.length > 0 ? transferables : undefined, onProgress, abortSignal, true, 2);
   }
 
   async compressPdf(
@@ -167,6 +169,11 @@ class WorkerManager {
     abortSignal?: AbortSignal
   ): Promise<string> {
     return workerOrchestrator.dispatch("ocrExtract", [file, mimeType], [file], onProgress, abortSignal, true, 5);
+  }
+
+  async executeCanvasOperation(methodName: string, args: any[]): Promise<Uint8Array> {
+    const transferables = args.filter(a => a instanceof ImageBitmap || a instanceof ArrayBuffer);
+    return workerOrchestrator.dispatch("executeCanvasOperation", [methodName, args], transferables);
   }
 
   async lockPdf(
@@ -305,10 +312,11 @@ class WorkerManager {
   async computeDiff(
     textA: string,
     textB: string,
+    ignoreWs: boolean = false,
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<any[]> {
-    return workerOrchestrator.dispatch("computeDiff", [textA, textB], undefined, onProgress, abortSignal, true, 2);
+    return workerOrchestrator.dispatch("computeDiff", [textA, textB, ignoreWs], undefined, onProgress, abortSignal, true, 2);
   }
 
   async runZip(

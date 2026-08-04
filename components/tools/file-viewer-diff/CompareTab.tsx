@@ -78,7 +78,8 @@ export function CompareTab() {
       const result = await workerManager.computeDiff(
         fileA.content,
         fileB.content,
-        (p) => setProgress(p.percent)
+        false,
+        (p: any) => setProgress(p.percent)
       );
       setDiff(result);
     } catch (err) {

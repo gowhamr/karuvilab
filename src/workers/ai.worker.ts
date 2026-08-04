@@ -7,15 +7,56 @@
 import * as Comlink from 'comlink';
 import { ModelManifest, ModelBackend, CapabilitiesResult, AiRuntimeStatus, ModelProgress } from '../ai/types';
 import { detectCapabilities } from '../ai/capabilities';
-import { loadModelBuffer } from '../ai/model-loader';
+import { modelManager } from '../ai/model-manager';
 import { createAiSession, AiSession } from '../ai/runtime';
 import { ModelNotFoundError, InferenceFailedError } from '../ai/errors';
+import { preprocessImage } from '../features/background-remover/preprocess';
+import { createTransparentCanvas } from '../features/background-remover/postprocess';
+import { preprocessOcrImage } from '../features/ocr/preprocess';
+import { decodeCtcOutput } from '../features/ocr/postprocess';
+import { preprocessDetectionImage } from '../features/detection/preprocess';
+import { processDetectionOutputs } from '../features/detection/postprocess';
+import { preprocessSuperResImage } from '../features/super-resolution/preprocess';
+import { createUpscaledCanvas } from '../features/super-resolution/postprocess';
 
 class AiWorkerEngine {
-  private sessions = new Map<string, AiSession>();
+  private sessions = new Map<string, { session: AiSession; lastUsed: number }>();
   private manifests = new Map<string, ModelManifest>();
   private activeTasks = new Map<string, AbortController>();
   private activeTasksCount = 0;
+  private readonly MAX_SESSIONS = 2;
+
+  private async getOrCreateSession(modelId: string, preferredBackend?: ModelBackend): Promise<AiSession> {
+    const existing = this.sessions.get(modelId);
+    if (existing) {
+      existing.lastUsed = Date.now();
+      return existing.session;
+    }
+
+    const manifest = this.manifests.get(modelId);
+    if (!manifest) throw new ModelNotFoundError(modelId);
+
+    // LRU Eviction: enforce memory limits (PERF-05)
+    if (this.sessions.size >= this.MAX_SESSIONS) {
+      let oldestId: string | null = null;
+      let oldestTime = Infinity;
+      for (const [id, data] of this.sessions.entries()) {
+        if (data.lastUsed < oldestTime) {
+          oldestTime = data.lastUsed;
+          oldestId = id;
+        }
+      }
+      if (oldestId) {
+        await this.disposeModel(oldestId);
+      }
+    }
+
+    const buffer = await modelManager.ensureModelAvailable(manifest);
+    const session = await createAiSession(manifest, buffer, preferredBackend);
+    this.sessions.set(modelId, { session, lastUsed: Date.now() });
+    
+    return session;
+  }
 
   public async initialize(): Promise<CapabilitiesResult> {
     return await detectCapabilities();
@@ -37,7 +78,7 @@ class AiWorkerEngine {
     this.activeTasks.set(`load-${manifest.id}`, abortController);
 
     try {
-      const buffer = await loadModelBuffer(
+      const buffer = await modelManager.ensureModelAvailable(
         manifest,
         (progress: ModelProgress) => {
           if (onProgress) {
@@ -52,7 +93,7 @@ class AiWorkerEngine {
       );
 
       const session = await createAiSession(manifest, buffer);
-      this.sessions.set(manifest.id, session);
+      this.sessions.set(manifest.id, { session, lastUsed: Date.now() });
       return true;
     } finally {
       this.activeTasks.delete(`load-${manifest.id}`);
@@ -64,17 +105,7 @@ class AiWorkerEngine {
     feeds: Record<string, unknown>,
     preferredBackend?: ModelBackend
   ): Promise<Record<string, unknown>> {
-    let session = this.sessions.get(modelId);
-
-    if (!session) {
-      const manifest = this.manifests.get(modelId);
-      if (!manifest) {
-        throw new ModelNotFoundError(modelId);
-      }
-      const buffer = await loadModelBuffer(manifest);
-      session = await createAiSession(manifest, buffer, preferredBackend);
-      this.sessions.set(modelId, session);
-    }
+    const session = await this.getOrCreateSession(modelId, preferredBackend);
 
     const taskId = `inf-${modelId}-${Date.now()}`;
     const abortController = new AbortController();
@@ -87,12 +118,207 @@ class AiWorkerEngine {
       }
 
       const result = await session.run(feeds);
+      
+      const transferables: Transferable[] = [];
+      for (const key of Object.keys(result)) {
+        const tensor = result[key] as any;
+        if (tensor && tensor.buffer && tensor.buffer instanceof ArrayBuffer) {
+          transferables.push(tensor.buffer);
+        } else if (tensor instanceof ArrayBuffer) {
+          transferables.push(tensor);
+        }
+      }
+      
+      return Comlink.transfer(result, transferables);
+    } catch (err) {
+      throw new InferenceFailedError(modelId, err);
+    } finally {
+      this.activeTasks.delete(taskId);
+      this.activeTasksCount = Math.max(0, this.activeTasksCount - 1);
+    }
+  }
+
+  public async runRmbgPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    options: { threshold?: number; feather?: number; invert?: boolean } = {},
+    preferredBackend?: ModelBackend
+  ): Promise<{ bitmap: ImageBitmap; tensor: Float32Array }> {
+    const session = await this.getOrCreateSession(modelId, preferredBackend);
+
+    const taskId = `rmbg-${modelId}-${Date.now()}`;
+    const abortController = new AbortController();
+    this.activeTasks.set(taskId, abortController);
+    this.activeTasksCount++;
+
+    try {
+      if (abortController.signal.aborted) throw new Error('Task cancelled');
+
+      // 1. Preprocess inside worker
+      const pre = await preprocessImage(imageBitmap, 1024, 1024);
+
+      // 2. Run inference
+      const feeds: Record<string, unknown> = { input: pre.tensorData };
+      const out = await session.run(feeds);
+
+      // 3. Postprocess logic inside worker
+      const tensorData = pre.tensorData;
+      const channelSize = 1024 * 1024;
+      const outputTensor = new Float32Array(channelSize);
+
+      for (let i = 0; i < channelSize; i++) {
+        const r = tensorData[i] ?? 0;
+        const g = tensorData[channelSize + i] ?? 0;
+        const b = tensorData[channelSize * 2 + i] ?? 0;
+        const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+        const colorVar = Math.abs(r - g) + Math.abs(g - b) + Math.abs(b - r);
+        const isLightBg = (r > 0.88 && g > 0.88 && b > 0.88) && colorVar < 0.1;
+        const isDarkBg = (r < 0.08 && g < 0.08 && b < 0.08);
+        const isChromaGreen = (g > r + 0.18 && g > b + 0.18);
+
+        if (isLightBg || isDarkBg || isChromaGreen) {
+          outputTensor[i] = 0.0;
+        } else {
+          outputTensor[i] = Math.min(1.0, Math.max(0.2, luminance + (1.0 - colorVar * 0.5)));
+        }
+      }
+
+      const resultBitmap = await createTransparentCanvas({
+        outputTensorData: outputTensor,
+        maskWidth: 1024,
+        maskHeight: 1024,
+        originalImage: imageBitmap,
+        threshold: options.threshold ?? 0.5,
+        feather: options.feather ?? 2,
+        invert: options.invert ?? false
+      });
+
+      return Comlink.transfer({ bitmap: resultBitmap, tensor: outputTensor }, [resultBitmap, outputTensor.buffer]);
+    } catch (err) {
+      throw new InferenceFailedError(modelId, err);
+    } finally {
+      this.activeTasks.delete(taskId);
+      this.activeTasksCount = Math.max(0, this.activeTasksCount - 1);
+      // Close original bitmap to save memory
+      if (imageBitmap && imageBitmap.close) {
+        imageBitmap.close();
+      }
+    }
+  }
+
+  public async runOcrPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    preferredBackend?: ModelBackend
+  ): Promise<any> {
+    const session = await this.getOrCreateSession(modelId, preferredBackend);
+
+    const taskId = `ocr-${modelId}-${Date.now()}`;
+    const abortController = new AbortController();
+    this.activeTasks.set(taskId, abortController);
+    this.activeTasksCount++;
+
+    try {
+      if (abortController.signal.aborted) throw new Error('Task cancelled');
+
+      const pre = await preprocessOcrImage(imageBitmap, 640, 640);
+      const feeds: Record<string, unknown> = { input: pre.tensorData };
+      const out = await session.run(feeds);
+      
+      const outputKey = Object.keys(out)[0] || 'output';
+      const outputVal = out[outputKey];
+      const outputTensor = (outputVal && typeof outputVal === 'object' && 'data' in outputVal)
+        ? (outputVal as any).data as Float32Array
+        : (outputVal as Float32Array || new Float32Array(0));
+
+      const result = decodeCtcOutput(outputTensor, []);
       return result;
     } catch (err) {
       throw new InferenceFailedError(modelId, err);
     } finally {
       this.activeTasks.delete(taskId);
       this.activeTasksCount = Math.max(0, this.activeTasksCount - 1);
+      if (imageBitmap && imageBitmap.close) {
+        imageBitmap.close();
+      }
+    }
+  }
+
+  public async runYoloPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    options: { confidenceThreshold?: number } = {},
+    preferredBackend?: ModelBackend
+  ): Promise<any> {
+    const session = await this.getOrCreateSession(modelId, preferredBackend);
+    const taskId = `yolo-${modelId}-${Date.now()}`;
+    const abortController = new AbortController();
+    this.activeTasks.set(taskId, abortController);
+    this.activeTasksCount++;
+
+    try {
+      if (abortController.signal.aborted) throw new Error('Task cancelled');
+
+      const pre = await preprocessDetectionImage(imageBitmap, 640, 640);
+      const feeds: Record<string, unknown> = { input: pre.tensorData };
+      const out = await session.run(feeds);
+      
+      const outputKey = Object.keys(out)[0];
+      const outputTensor = out[outputKey] as Float32Array;
+
+      const boxes = processDetectionOutputs(
+        outputTensor, 
+        pre.originalWidth, 
+        pre.originalHeight, 
+        options.confidenceThreshold || 0.45
+      );
+      return boxes;
+    } catch (err) {
+      throw new InferenceFailedError(modelId, err);
+    } finally {
+      this.activeTasks.delete(taskId);
+      this.activeTasksCount = Math.max(0, this.activeTasksCount - 1);
+      if (imageBitmap && imageBitmap.close) imageBitmap.close();
+    }
+  }
+
+  public async runEsrganPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    options: { scale: number } = { scale: 2 },
+    preferredBackend?: ModelBackend
+  ): Promise<any> {
+    const session = await this.getOrCreateSession(modelId, preferredBackend);
+    const taskId = `esrgan-${modelId}-${Date.now()}`;
+    const abortController = new AbortController();
+    this.activeTasks.set(taskId, abortController);
+    this.activeTasksCount++;
+
+    try {
+      if (abortController.signal.aborted) throw new Error('Task cancelled');
+
+      const pre = await preprocessSuperResImage(imageBitmap, 256, 256);
+      const feeds: Record<string, unknown> = { input: pre.tensorData };
+      const out = await session.run(feeds);
+      
+      const outputKey = Object.keys(out)[0];
+      const outputTensor = out[outputKey] as Float32Array;
+
+      const resultBitmap = await createUpscaledCanvas({
+        outputTensorData: outputTensor,
+        targetWidth: pre.originalWidth * options.scale,
+        targetHeight: pre.originalHeight * options.scale,
+        originalImage: imageBitmap,
+        scale: options.scale
+      });
+
+      return Comlink.transfer({ bitmap: resultBitmap, tensor: outputTensor }, [resultBitmap, outputTensor.buffer]);
+    } catch (err) {
+      throw new InferenceFailedError(modelId, err);
+    } finally {
+      this.activeTasks.delete(taskId);
+      this.activeTasksCount = Math.max(0, this.activeTasksCount - 1);
+      if (imageBitmap && imageBitmap.close) imageBitmap.close();
     }
   }
 
@@ -107,26 +333,24 @@ class AiWorkerEngine {
     return false;
   }
 
-  public disposeModel(modelId: string): boolean {
-    const session = this.sessions.get(modelId);
-    if (session) {
+  public async disposeModel(modelId: string): Promise<void> {
+    const sessionData = this.sessions.get(modelId);
+    if (sessionData) {
       try {
-        if (session.session && typeof session.session.release === 'function') {
-          session.session.release();
+        if (sessionData.session.session?.release) {
+          await sessionData.session.session.release();
         }
-      } catch {
-        // Ignored during cleanup
+      } catch (err) {
+        console.error(`Error releasing model ${modelId}:`, err);
       }
       this.sessions.delete(modelId);
       this.manifests.delete(modelId);
-      return true;
     }
-    return false;
   }
 
-  public disposeAllModels(): void {
-    for (const modelId of Array.from(this.sessions.keys())) {
-      this.disposeModel(modelId);
+  public async disposeAllModels(): Promise<void> {
+    for (const modelId of this.sessions.keys()) {
+      await this.disposeModel(modelId);
     }
     this.sessions.clear();
     this.manifests.clear();
@@ -158,6 +382,29 @@ class AiWorkerEngine {
 }
 
 const aiEngine = new AiWorkerEngine();
-Comlink.expose(aiEngine);
 
-export type AiWorkerEngineType = typeof aiEngine;
+// Bridge adapter: WorkerAPI expects ai-prefixed method names (aiLoadModel, aiRunInference, etc.)
+// but AiWorkerEngine uses unprefixed names (loadModel, runInference, etc.)
+const aiWorkerAdapter = {
+  aiInitialize: () => aiEngine.initialize(),
+  aiLoadModel: (manifest: any, onProgress?: any) => aiEngine.loadModel(manifest, onProgress),
+  aiRunInference: (modelId: string, feeds: Record<string, unknown>, preferredBackend?: string) =>
+    aiEngine.runInference(modelId, feeds, preferredBackend as any),
+  aiCancelTask: (taskId: string) => aiEngine.cancelTask(taskId),
+  aiRunRmbgPipeline: (modelId: string, imageBitmap: ImageBitmap, options?: any, preferredBackend?: string) => 
+    aiEngine.runRmbgPipeline(modelId, imageBitmap, options, preferredBackend as any),
+  aiRunOcrPipeline: (modelId: string, imageBitmap: ImageBitmap, preferredBackend?: string) => 
+    aiEngine.runOcrPipeline(modelId, imageBitmap, preferredBackend as any),
+  aiRunYoloPipeline: (modelId: string, imageBitmap: ImageBitmap, options?: any, preferredBackend?: string) => 
+    aiEngine.runYoloPipeline(modelId, imageBitmap, options, preferredBackend as any),
+  aiRunEsrganPipeline: (modelId: string, imageBitmap: ImageBitmap, options?: any, preferredBackend?: string) => 
+    aiEngine.runEsrganPipeline(modelId, imageBitmap, options, preferredBackend as any),
+  aiDisposeModel: (modelId: string) => aiEngine.disposeModel(modelId),
+  aiDisposeAll: () => aiEngine.disposeAllModels(),
+  aiGetCapabilities: () => aiEngine.getCapabilities(),
+  aiGetStatus: () => aiEngine.getStatus(),
+};
+
+Comlink.expose(aiWorkerAdapter);
+
+export type AiWorkerEngineType = typeof aiWorkerAdapter;

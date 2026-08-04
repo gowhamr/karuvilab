@@ -1285,37 +1285,43 @@ const api: Partial<WorkerAPI> = {
     return { code: minified, error: null };
   },
 
-  async computeDiff(textA, textB, onProgress) {
+  async computeDiff(textA: string, textB: string, ignoreWs: boolean = false, onProgress?: any) {
+    const normalize = (s: string) => ignoreWs ? s.trim() : s;
     const linesA = textA.split(/\r?\n/);
     const linesB = textB.split(/\r?\n/);
-    const m = linesA.length, n = linesB.length;
+    const m = linesA.length;
+    const n = linesB.length;
     if (m * n > 10000000) {
       const result: DiffLine[] = [];
       linesA.forEach((l, i) => result.push({ type: 'removed', text: l, lineA: i + 1 }));
       linesB.forEach((l, i) => result.push({ type: 'added', text: l, lineB: i + 1 }));
       return result;
     }
-    const dp = Array.from({ length: m + 1 }, () => new Int32Array(n + 1));
-    for (let i = 1; i <= m; i++) {
-      for (let j = 1; j <= n; j++) {
-        if (linesA[i - 1] === linesB[j - 1]) dp[i]![j] = dp[i - 1]![j - 1]! + 1;
-        else dp[i]![j] = Math.max(dp[i - 1]![j]!, dp[i]![j - 1]!);
+    const dp: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    for (let i = m - 1; i >= 0; i--) {
+      for (let j = n - 1; j >= 0; j--) {
+        dp[i]![j] = normalize(linesA[i]!) === normalize(linesB[j]!)
+          ? dp[i + 1]![j + 1]! + 1
+          : Math.max(dp[i + 1]![j]!, dp[i]![j + 1]!);
       }
     }
+
     const result: DiffLine[] = [];
-    let i = m, j = n;
-    while (i > 0 || j > 0) {
-      if (i > 0 && j > 0 && linesA[i - 1] === linesB[j - 1]) {
-        result.unshift({ type: "equal", text: linesA[i - 1]!, lineA: i, lineB: j });
-        i--; j--;
-      } else if (j > 0 && (i === 0 || dp[i]![j - 1]! >= dp[i - 1]![j]!)) {
-        result.unshift({ type: "added", text: linesB[j - 1]!, lineB: j });
-        j--;
+    let i = 0, j = 0, lineA = 1, lineB = 1;
+    while (i < m && j < n) {
+      if (normalize(linesA[i]!) === normalize(linesB[j]!)) {
+        result.push({ type: "equal", text: linesA[i]!, lineA: lineA++, lineB: lineB++ });
+        i++; j++;
+      } else if (dp[i + 1]![j]! >= dp[i]![j + 1]!) {
+        result.push({ type: "removed", text: linesA[i]!, lineA: lineA++ });
+        i++;
       } else {
-        result.unshift({ type: "removed", text: linesA[i - 1]!, lineA: i });
-        i--;
+        result.push({ type: "added", text: linesB[j]!, lineB: lineB++ });
+        j++;
       }
     }
+    while (i < m) { result.push({ type: "removed", text: linesA[i++]!, lineA: lineA++ }); }
+    while (j < n) { result.push({ type: "added", text: linesB[j++]!, lineB: lineB++ }); }
     return result;
   },
 
@@ -1661,28 +1667,6 @@ const api: Partial<WorkerAPI> = {
     return Comlink.transfer(extracted, transferList);
   },
 
-  async ocrExtract(file, mimeType, onProgress) {
-    if (onProgress) onProgress({ percent: 10, message: "Initializing OCR engine..." });
-    const tesseract = await import("tesseract.js");
-    const worker = await tesseract.createWorker("eng", 1, {
-      workerPath: '/lib/tesseract/worker.min.js',
-      corePath: '/lib/tesseract/tesseract-core.wasm.js',
-      langPath: '/lib/tesseract/lang-data',
-      logger: m => {
-        if (m.status === 'recognizing text' && onProgress) {
-          onProgress({ percent: Math.round(m.progress * 100), message: "Extracting text..." });
-        }
-      }
-    });
-    
-    try {
-      const blob = new Blob([file], { type: mimeType });
-      const ret = await worker.recognize(blob);
-      return ret.data.text;
-    } finally {
-      await worker.terminate();
-    }
-  },
 
   async extractTextFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
@@ -1854,7 +1838,7 @@ const api: Partial<WorkerAPI> = {
   async generateSpriteSheet(file: ArrayBuffer, mimeType: string, onProgress?: any) { return file; },
   async optimizeSvg(file: ArrayBuffer, mimeType: string, onProgress?: any) { return ""; },
   async generateHistogram(file: ArrayBuffer, mimeType: string, onProgress?: any) { return []; },
-  async simulateColorBlindness(file: ArrayBuffer, mimeType: string, type: string, onProgress?: any) { return file; }
+  async simulateColorBlindness(fileOrData: any, mimeTypeOrType: string, typeOrProgress?: any, onProgress?: any) { return fileOrData; }
 };
 
 Comlink.expose(api as any);

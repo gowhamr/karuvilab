@@ -31,7 +31,17 @@ const api = {
 
   
   // PDF Tasks (with memory optimization)
-  // Image Tasks (Standard)
+  async executeCanvasOperation(methodName: string, args: any[]) {
+    const canvasEngine = await import('../lib/canvas-image-engine');
+    const fn = (canvasEngine as any)[methodName];
+    if (typeof fn !== 'function') throw new Error(`Unknown canvas operation: ${methodName}`);
+    
+    const resultBlob = await fn(...args);
+    const arrayBuffer = await resultBlob.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    return Comlink.transfer(bytes, [bytes.buffer]);
+  },
+
   async compressImage(file: ArrayBuffer, mimeType: string, format: any, quality: any, onProgress: any) {
     let imgBitmap: ImageBitmap | null = null;
     try {

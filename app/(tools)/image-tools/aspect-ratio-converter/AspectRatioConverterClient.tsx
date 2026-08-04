@@ -7,6 +7,7 @@ import {
   OutputFormat,
   AspectRatioPreset,
 } from "@/src/lib/canvas-image-engine";
+import { convertAspectRatio } from "@/src/lib/canvas-worker-client";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";

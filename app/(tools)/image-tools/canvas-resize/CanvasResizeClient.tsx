@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { resizeCanvas, Anchor, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { Anchor, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { resizeCanvas } from "@/src/lib/canvas-worker-client";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";

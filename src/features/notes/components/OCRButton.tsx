@@ -35,15 +35,15 @@ export function OCRButton({ onResult }: OCRButtonProps) {
       
       // Load model & verify checksum via KaruviLab AI SDK
       const { ai } = await import('@/src/ai/sdk');
-      await ai.loadModel('ocr-paddle', undefined, abortControllerRef.current.signal);
+      const imgBitmap = await createImageBitmap(file);
 
-      // Extract text via workerManager using registered OCR engine
-      const text = await workerManager.ocrExtract(
-        buffer, 
-        file.type, 
-        (p) => {}, 
-        abortControllerRef.current.signal
-      );
+      const result = await ai.runOcrPipeline({
+        model: 'ocr-paddle',
+        imageBitmap: imgBitmap,
+        abortSignal: abortControllerRef.current.signal
+      });
+
+      const text = result.fullText;
 
       if (text) {
         onResult(text);

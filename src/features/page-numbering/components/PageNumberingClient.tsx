@@ -5,6 +5,7 @@ import { CATEGORIES } from "@/src/tool-registry";
 import { ToolShell } from "@/components/ui/ToolShell";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { SliderField } from "@/components/ui/SliderField";
+import { DropZone } from "@/components/ui/DropZone";
 
 const cat = CATEGORIES.find(c => c.id === "pdf")!;
 
@@ -85,25 +86,13 @@ export default function PageNumberingClient() {
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
-          <div
-            className="bg-surface border-2 border-dashed border-border rounded-2xl p-4 sm:p-8 text-center cursor-pointer hover:border-blue transition-colors"
-            onClick={() => fileRef.current?.click()}
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => { e.preventDefault(); handleFileChange(e.dataTransfer.files?.[0]); }}
-          >
-            {file ? (
-              <div className="space-y-1">
-                <p className="font-semibold text-text-2">{file.name}</p>
-                <p className="text-sm text-text-3">{(file.size / 1024).toFixed(0)} KB</p>
-              </div>
-            ) : (
-              <>
-                <div className="text-4xl mb-2">📄</div>
-                <p className="font-semibold text-text-2">Drop a PDF here</p>
-              </>
-            )}
-            <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => handleFileChange(e.target.files?.[0])} />
-          </div>
+          <DropZone
+            onFilesSelected={(files) => handleFileChange(files[0])}
+            accept=".pdf,application/pdf"
+            multiple={false}
+            title={file ? file.name : "Select PDF File"}
+            subtitle={file ? `${(file.size / 1024).toFixed(0)} KB` : "Drag and drop your PDF here"}
+          />
 
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
             <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Settings</h2>

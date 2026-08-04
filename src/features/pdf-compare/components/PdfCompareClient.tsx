@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
@@ -41,37 +41,7 @@ function charDiff(a: string, b: string): { a: CharPart[]; b: CharPart[] } {
   return { a: partsA, b: partsB };
 }
 
-function computeDiff(a: string, b: string, ignoreWs: boolean): DiffLine[] {
-  const normalize = (s: string) => ignoreWs ? s.trim() : s;
-  const linesA = a.split("\n");
-  const linesB = b.split("\n");
-  const m = linesA.length;
-  const n = linesB.length;
-  const dp: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
-  for (let i = m - 1; i >= 0; i--)
-    for (let j = n - 1; j >= 0; j--)
-      dp[i]![j] = normalize(linesA[i]!) === normalize(linesB[j]!)
-        ? dp[i + 1]![j + 1]! + 1
-        : Math.max(dp[i + 1]![j]!, dp[i]![j + 1]!);
 
-  const result: DiffLine[] = [];
-  let i = 0, j = 0, lineA = 1, lineB = 1;
-  while (i < m && j < n) {
-    if (normalize(linesA[i]!) === normalize(linesB[j]!)) {
-      result.push({ type: "equal", text: linesA[i]!, lineA: lineA++, lineB: lineB++ });
-      i++; j++;
-    } else if (dp[i + 1]![j]! >= dp[i]![j + 1]!) {
-      result.push({ type: "removed", text: linesA[i]!, lineA: lineA++ });
-      i++;
-    } else {
-      result.push({ type: "added", text: linesB[j]!, lineB: lineB++ });
-      j++;
-    }
-  }
-  while (i < m) { result.push({ type: "removed", text: linesA[i++]!, lineA: lineA++ }); }
-  while (j < n) { result.push({ type: "added", text: linesB[j++]!, lineB: lineB++ }); }
-  return result;
-}
 
 function toUnifiedDiff(diff: DiffLine[]): string {
   return diff.map(l =>
@@ -114,6 +84,8 @@ export default function PdfCompareClient() {
   const [viewMode, setViewMode] = useState<"split" | "unified">("split");
   const [showEqual, setShowEqual] = useState(true);
   const [charLevel, setCharLevel] = useState(true);
+  
+  const [diff, setDiff] = useState<DiffLine[] | null>(null);
 
   const handleFilesA = useCallback(async (files: FileList | File[]) => {
     const f = files[0];
@@ -155,7 +127,37 @@ export default function PdfCompareClient() {
     }
   }, []);
 
-  const diff = useMemo(() => (textA || textB) ? computeDiff(textA, textB, ignoreWs) : null, [textA, textB, ignoreWs]);
+  useEffect(() => {
+    if (!textA && !textB) {
+      setDiff(null);
+      return;
+    }
+    const ac = new AbortController();
+    let isCancelled = false;
+    
+    const runDiff = async () => {
+      setIsProcessing(true);
+      setProgressText("Computing differences...");
+      try {
+        const result = await workerManager.computeDiff(textA, textB, ignoreWs, undefined, ac.signal);
+        if (!isCancelled) setDiff(result);
+      } catch (err: any) {
+        if (!isCancelled) setError(`Diff computation error: ${formatError(err)}`);
+      } finally {
+        if (!isCancelled) {
+          setIsProcessing(false);
+          setProgressText("");
+        }
+      }
+    };
+    
+    runDiff();
+    
+    return () => {
+      isCancelled = true;
+      ac.abort();
+    };
+  }, [textA, textB, ignoreWs]);
 
   const stats = useMemo(() => {
     if (!diff) return null;

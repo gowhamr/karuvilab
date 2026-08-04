@@ -241,11 +241,37 @@ export interface WorkerAPI {
     onProgress?: ProgressCallback
   ): Promise<Uint8Array>;
 
+  simulateColorBlindness(
+    imageData: ImageData,
+    type: string,
+    onProgress?: ProgressCallback
+  ): Promise<ImageData>;
+
   ocrExtract(
     file: ArrayBuffer,
     mimeType: string,
     onProgress?: ProgressCallback
   ): Promise<string>;
+
+  aiRunRmbgPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    options: { threshold?: number; feather?: number; invert?: boolean },
+    preferredBackend?: string,
+    onProgress?: ProgressCallback
+  ): Promise<{ bitmap: ImageBitmap; tensor: Float32Array }>;
+
+  aiRunOcrPipeline(
+    modelId: string,
+    imageBitmap: ImageBitmap,
+    preferredBackend?: string,
+    onProgress?: ProgressCallback
+  ): Promise<any>;
+
+  executeCanvasOperation(
+    methodName: string,
+    args: any[]
+  ): Promise<Uint8Array>;
 
   lockPdf(
     file: ArrayBuffer,
@@ -364,6 +390,7 @@ export interface WorkerAPI {
   computeDiff(
     textA: string,
     textB: string,
+    ignoreWs?: boolean,
     onProgress?: ProgressCallback
   ): Promise<DiffLine[]>;
 

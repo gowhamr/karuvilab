@@ -25,7 +25,6 @@ export async function createAiSession(
   // Dynamic import of onnxruntime-web inside worker/runtime context (Rule 6, PERF-04)
   let ort: any;
   try {
-    // @ts-expect-error Dynamic import in worker/runtime context
     ort = await import('onnxruntime-web');
   } catch {
     // Fallback stub if onnxruntime-web package is not yet installed in local environment

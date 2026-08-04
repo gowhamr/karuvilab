@@ -97,29 +97,32 @@ export default function ToolClient() {
       imageRef.current = img;
 
       setProgress({ percent: 25, stage: 'Preparing Tiling Tensors' });
-
-      // Preprocess image to tensor
-      const { tensorData } = await preprocessSuperResImage(img, 256, 256);
+      // Create ImageBitmap for zero-copy transfer
+      const imageBitmap = await createImageBitmap(img);
 
       setProgress({ percent: 45, stage: 'Loading Real-ESRGAN Model' });
 
-      // Load model via KaruviLab AI SDK
+      // Load SDK & run the full pipeline
       const { ai } = await import('@/src/ai/sdk');
-      await ai.loadModel(ESRGAN_MODEL_MANIFEST.id, (p) => {
-        setProgress({ percent: 45 + Math.round(p.percent * 0.3), stage: `Model Engine: ${p.stage}` });
-      }, abortControllerRef.current.signal);
+      const { bitmap: resultBitmap } = await ai.runEsrganPipeline({
+        model: ESRGAN_MODEL_MANIFEST.id,
+        imageBitmap,
+        scale,
+        abortSignal: abortControllerRef.current.signal,
+        onProgress: (p) => {
+          setProgress({ percent: 45 + Math.round(p.percent * 0.3), stage: `Model Engine: ${p.stage}` });
+        }
+      });
 
       setProgress({ percent: 80, stage: `Synthesizing ${scale}x Clarity Features` });
 
-      // Run inference simulation and assemble upscaled canvas
-      const outputTensor = new Float32Array(1024 * 1024 * 3);
-      const upscaledCanvas = await createUpscaledCanvas({
-        outputTensorData: outputTensor,
-        targetWidth: img.naturalWidth * scale,
-        targetHeight: img.naturalHeight * scale,
-        originalImage: img,
-        scale
-      });
+      // Convert returned ImageBitmap to Blob via Canvas
+      const upscaledCanvas = document.createElement('canvas');
+      upscaledCanvas.width = resultBitmap.width;
+      upscaledCanvas.height = resultBitmap.height;
+      const ctx = upscaledCanvas.getContext('2d');
+      ctx?.drawImage(resultBitmap, 0, 0);
+      resultBitmap.close();
 
       const resultBlob = await new Promise<Blob | null>((resolve) => {
         upscaledCanvas.toBlob((blob) => resolve(blob), file.type || 'image/png', 0.95);

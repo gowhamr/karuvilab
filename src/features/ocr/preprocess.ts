@@ -27,9 +27,7 @@ export async function preprocessOcrImage(
     origHeight = imageSource.height;
   }
 
-  const canvas = typeof OffscreenCanvas !== 'undefined'
-    ? new OffscreenCanvas(targetWidth, targetHeight)
-    : document.createElement('canvas');
+  const canvas = new OffscreenCanvas(targetWidth, targetHeight);
 
   canvas.width = targetWidth;
   canvas.height = targetHeight;
@@ -40,9 +38,7 @@ export async function preprocessOcrImage(
   }
 
   if (imageSource instanceof ImageData) {
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = origWidth;
-    tempCanvas.height = origHeight;
+    const tempCanvas = new OffscreenCanvas(origWidth, origHeight);
     const tempCtx = tempCanvas.getContext('2d');
     tempCtx?.putImageData(imageSource, 0, 0);
     ctx.drawImage(tempCanvas, 0, 0, targetWidth, targetHeight);

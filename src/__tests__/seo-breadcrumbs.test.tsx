@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import { StructuredData } from '../lib/seo';
 import { ToolEntry, CategoryEntry } from '../registry/types';
+import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
 
 // Mock Next.js Script component
 vi.mock('next/script', () => ({
@@ -91,5 +92,51 @@ describe('StructuredData Breadcrumb Validation', () => {
     const result = StructuredData({});
     const data = extractBreadcrumb(result);
     expect(data.itemListElement[0].item).toBe('https://karuvilab.com/');
+  });
+});
+
+describe('Breadcrumbs Component UI Rendering', () => {
+  const mockCategory: CategoryEntry = {
+    id: 'image',
+    label: 'Image Tools',
+    href: '/image-tools/',
+    emoji: '🖼️',
+    description: 'Image desc',
+    color: '#000'
+  };
+
+  it('renders Home, Category, and Tool Title when both category and title are provided', () => {
+    const el = Breadcrumbs({ category: mockCategory, title: 'AI Background Remover' });
+    
+    expect(el.props['aria-label']).toBe('Breadcrumb');
+    const children = React.Children.toArray(el.props.children);
+    
+    // First child: Home link
+    expect((children[0] as any).props.children).toBe('Home');
+    
+    // Second child: Category fragment (slash + Link)
+    const categoryChildren = React.Children.toArray((children[1] as any).props.children);
+    expect((categoryChildren[1] as any).props.children).toBe('Image Tools');
+    expect((categoryChildren[1] as any).props.href).toBe('/image-tools/');
+
+    // Third child: Title fragment (slash + span with aria-current="page")
+    const titleChildren = React.Children.toArray((children[2] as any).props.children);
+    expect((titleChildren[1] as any).props.children).toBe('AI Background Remover');
+    expect((titleChildren[1] as any).props['aria-current']).toBe('page');
+  });
+
+  it('renders Home and Category only when title is omitted', () => {
+    const el = Breadcrumbs({ category: mockCategory });
+    const children = React.Children.toArray(el.props.children);
+    expect(children).toHaveLength(2); // Home + Category
+  });
+
+  it('renders Home and Title when category is omitted (e.g. All Tools)', () => {
+    const el = Breadcrumbs({ title: 'All Tools' });
+    const children = React.Children.toArray(el.props.children);
+    
+    expect((children[0] as any).props.children).toBe('Home');
+    const titleChildren = React.Children.toArray((children[1] as any).props.children);
+    expect((titleChildren[1] as any).props.children).toBe('All Tools');
   });
 });

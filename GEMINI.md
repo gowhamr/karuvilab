@@ -7,6 +7,49 @@
 
 ---
 
+## Documentation Index
+
+### Core
+- [Architecture & Standards](docs/architecture/ARCHITECTURE.md)
+- [Product Requirements](docs/audits/PRD.md)
+- [Roadmap](docs/roadmap/ROADMAP.md)
+- [Changelog](docs/roadmap/CHANGELOG.md)
+- [Top 100 Action Plan](docs/roadmap/ACTION_PLAN_TOP_100.md)
+
+### Security
+- [Security Guidelines](docs/security/SECURITY.md)
+
+### Performance
+- [Performance Expectations](docs/performance/PERFORMANCE.md)
+
+### Accessibility
+- [Accessibility Audit & Guidelines](docs/audits/ACCESSIBILITY.md)
+
+### AI Platform
+- [AI Integration](docs/ai/README.md)
+
+### Developer & Tech Debt
+- [Design System](docs/developer/DESIGN_SYSTEM.md)
+- [Framework Spec](docs/developer/ELS_v1.0_Framework_Spec.md)
+- [Tech Debt](docs/developer/TECH_DEBT.md)
+- [Bundle Decisions](docs/decisions/BUNDLE_DECISIONS.md)
+- [Exceptions](docs/decisions/EXCEPTIONS.md)
+
+### Knowledge Vault (KV) Tools
+- [KV Index](docs/kv/README.md)
+
+### Audits & Checklists
+- [Code Audit](docs/audits/CODE_AUDIT.md)
+- [SEO Audit](docs/audits/SEO_AUDIT.md)
+- [UX Audit](docs/audits/UX_AUDIT.md)
+- [Tool Audit](docs/audits/TOOL_AUDIT.md)
+- [Tool Inventory](docs/audits/TOOL_INVENTORY.md)
+- [Heavy Ops Inventory](docs/audits/HEAVY_OPERATIONS_INVENTORY.md)
+- [Heavy Ops Compliance](docs/audits/HEAVY_OPS_COMPLIANCE_CHECKLIST.md)
+- [PDF Tools Audit](docs/audits/PDF_TOOLS_AUDIT.md)
+
+---
+
 ## 0. Hard Prohibitions ⛔
 
 The following patterns are **NEVER** allowed under any circumstances:

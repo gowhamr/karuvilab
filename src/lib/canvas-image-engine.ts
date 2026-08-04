@@ -51,7 +51,17 @@ const DEFAULT_QUALITY = 0.92;
 
 // ---------- Internal helpers ----------
 
-function createCanvas(width: number, height: number): [HTMLCanvasElement, CanvasRenderingContext2D] {
+function createCanvas(width: number, height: number): [HTMLCanvasElement | OffscreenCanvas, CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D] {
+  if (typeof OffscreenCanvas !== 'undefined') {
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      return [canvas, ctx as OffscreenCanvasRenderingContext2D];
+    }
+  }
+
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -63,12 +73,16 @@ function createCanvas(width: number, height: number): [HTMLCanvasElement, Canvas
 }
 
 function canvasToBlob(
-  canvas: HTMLCanvasElement,
+  canvas: HTMLCanvasElement | OffscreenCanvas,
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
+  if (canvas instanceof OffscreenCanvas) {
+    return canvas.convertToBlob({ type: format, quality: format === 'image/png' ? undefined : quality });
+  }
+
   return new Promise((resolve, reject) => {
-    canvas.toBlob(
+    (canvas as HTMLCanvasElement).toBlob(
       (blob) => {
         if (blob) resolve(blob);
         else reject(new Error('Failed to export canvas to blob'));
@@ -110,13 +124,13 @@ function getAnchorOffset(
  * Flip an image horizontally, vertically, or both.
  */
 export function flipImage(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   direction: FlipDirection,
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
+  const w = img.width || (img as any).naturalWidth;
+  const h = img.height || (img as any).naturalHeight;
   const [canvas, ctx] = createCanvas(w, h);
 
   const scaleX = direction === 'horizontal' || direction === 'both' ? -1 : 1;
@@ -134,7 +148,7 @@ export function flipImage(
  * Mirror an image (horizontal flip — alias with semantic name).
  */
 export function mirrorImage(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
@@ -146,7 +160,7 @@ export function mirrorImage(
  * The image stays the same size; the workspace grows/shrinks.
  */
 export function resizeCanvas(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   newWidth: number,
   newHeight: number,
   anchor: Anchor = 'center',
@@ -154,8 +168,8 @@ export function resizeCanvas(
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
+  const w = img.width || (img as any).naturalWidth;
+  const h = img.height || (img as any).naturalHeight;
   const [canvas, ctx] = createCanvas(newWidth, newHeight);
 
   if (bgColor !== 'transparent') {
@@ -173,14 +187,14 @@ export function resizeCanvas(
  * Add padding around an image.
  */
 export function addPadding(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   padding: PaddingConfig,
   bgColor: string = '#ffffff',
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
+  const w = img.width || (img as any).naturalWidth;
+  const h = img.height || (img as any).naturalHeight;
   const newW = w + padding.left + padding.right;
   const newH = h + padding.top + padding.bottom;
   const [canvas, ctx] = createCanvas(newW, newH);
@@ -196,13 +210,13 @@ export function addPadding(
  * Add a border around an image.
  */
 export function addBorder(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   border: BorderConfig,
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
+  const w = img.width || (img as any).naturalWidth;
+  const h = img.height || (img as any).naturalHeight;
   const bw = border.width;
   const newW = w + bw * 2;
   const newH = h + bw * 2;
@@ -267,7 +281,7 @@ export function addBorder(
  * mode 'pad'  — pad with bgColor to fit ratio
  */
 export function convertAspectRatio(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   targetW: number,
   targetH: number,
   mode: 'crop' | 'pad' = 'pad',
@@ -275,8 +289,8 @@ export function convertAspectRatio(
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
+  const w = img.width || (img as any).naturalWidth;
+  const h = img.height || (img as any).naturalHeight;
   const targetRatio = targetW / targetH;
   const currentRatio = w / h;
 
@@ -316,14 +330,14 @@ export function convertAspectRatio(
  * Calculates bounding box so no part of the image is clipped.
  */
 export function rotateImage(
-  img: HTMLImageElement,
+  img: HTMLImageElement | ImageBitmap,
   degrees: number,
   bgColor: string = 'transparent',
   format: OutputFormat = 'image/png',
   quality: number = DEFAULT_QUALITY,
 ): Promise<Blob> {
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
+  const w = img.width || (img as any).naturalWidth;
+  const h = img.height || (img as any).naturalHeight;
   const rad = (degrees * Math.PI) / 180;
   const sin = Math.abs(Math.sin(rad));
   const cos = Math.abs(Math.cos(rad));
@@ -347,7 +361,7 @@ export function rotateImage(
 // ---------- Internal drawing helpers ----------
 
 function roundRect(
-  ctx: CanvasRenderingContext2D,
+  ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
   x: number,
   y: number,
   w: number,

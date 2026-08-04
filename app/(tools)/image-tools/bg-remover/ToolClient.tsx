@@ -103,77 +103,25 @@ export default function ToolClient() {
       });
       imageRef.current = img;
 
-      setProgress({ percent: 30, stage: 'Preprocessing Image Tensor [1, 3, 1024, 1024]' });
+      setProgress({ percent: 30, stage: 'Selecting Optimal AI Model & Preprocessing' });
 
-      const { tensorData, dims, originalWidth, originalHeight } = await preprocessImage(img, 1024, 1024);
-
-      setProgress({ percent: 50, stage: 'Running In-Browser AI Inference' });
-
-      // Load & run inference via KaruviLab AI SDK
+      // Load SDK & run unified removeBackground API
       const { ai } = await import('@/src/ai/sdk');
-      await ai.ensureModel(RMBG_MODEL_MANIFEST.id, (p) => {
-        setProgress({ percent: 50 + Math.round(p.percent * 0.3), stage: `AI Model: ${p.stage}` });
-      }, abortControllerRef.current.signal);
-
-      // Execute AI segmentation inference
-      await ai.run({
-        model: RMBG_MODEL_MANIFEST.id,
-        input: { input: tensorData },
-        ...(selectedBackend !== 'auto' ? { preferredBackend: selectedBackend } : {}),
-        abortSignal: abortControllerRef.current.signal
+      const { blob, modelUsed, inferenceTimeMs } = await ai.removeBackground(file, {
+        onProgress: (p) => {
+          setProgress({ percent: 40 + Math.round(p.percent * 0.4), stage: `AI Engine: ${p.stage}` });
+        },
+        abortSignal: abortControllerRef.current.signal,
+        refineHair: true,
+        quality: 'auto'
       });
 
-      // Salient object segmentation mask calculation
-      const channelSize = 1024 * 1024;
-      const outputTensor = new Float32Array(channelSize);
+      setProgress({ percent: 90, stage: 'Compositing High-Res Transparent PNG' });
 
-      for (let i = 0; i < channelSize; i++) {
-        const r = tensorData[i] ?? 0;
-        const g = tensorData[channelSize + i] ?? 0;
-        const b = tensorData[channelSize * 2 + i] ?? 0;
-        
-        // Edge gradient + corner color distance background detection algorithm
-        const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-        const colorVar = Math.abs(r - g) + Math.abs(g - b) + Math.abs(b - r);
-        
-        // Identify background contrast vs subject foreground
-        const isLightBg = (r > 0.88 && g > 0.88 && b > 0.88) && colorVar < 0.1;
-        const isDarkBg = (r < 0.08 && g < 0.08 && b < 0.08);
-        const isChromaGreen = (g > r + 0.18 && g > b + 0.18);
-
-        if (isLightBg || isDarkBg || isChromaGreen) {
-          outputTensor[i] = 0.0;
-        } else {
-          outputTensor[i] = Math.min(1.0, Math.max(0.2, luminance + (1.0 - colorVar * 0.5)));
-        }
-      }
-
-      rawOutputTensorRef.current = outputTensor;
-
-      setProgress({ percent: 85, stage: 'Compositing High-Res Transparent PNG' });
-
-      const transparentCanvas = await createTransparentCanvas({
-        outputTensorData: outputTensor,
-        maskWidth: 1024,
-        maskHeight: 1024,
-        originalImage: img,
-        threshold,
-        feather,
-        invert
-      });
-
-      const resultBlob = await new Promise<Blob | null>((resolve) => {
-        transparentCanvas.toBlob((blob) => resolve(blob), 'image/png');
-      });
-
-      if (!resultBlob) {
-        throw new Error('Failed to generate PNG image blob');
-      }
-
-      const transparentUrl = createUrl(resultBlob);
+      const transparentUrl = createUrl(blob);
       setResultUrl(transparentUrl);
       setIsCachedModel(true);
-      toast('Background removed successfully!', 'success');
+      toast(`Background removed using ${modelUsed} in ${inferenceTimeMs}ms`, 'success');
     } catch (err: any) {
       if (err.name !== 'AbortError') {
         console.error('Background removal failed:', err);
@@ -201,7 +149,16 @@ export default function ToolClient() {
       });
 
       const resultBlob = await new Promise<Blob | null>((resolve) => {
-        transparentCanvas.toBlob((blob) => resolve(blob), 'image/png');
+        const canvas = document.createElement('canvas');
+        canvas.width = transparentCanvas.width;
+        canvas.height = transparentCanvas.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(transparentCanvas, 0, 0);
+          canvas.toBlob((blob: Blob | null) => resolve(blob), 'image/png');
+        } else {
+          resolve(null);
+        }
       });
 
       if (resultBlob) {

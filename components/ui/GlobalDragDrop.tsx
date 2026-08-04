@@ -329,10 +329,10 @@ export function GlobalDragDrop() {
                   {compatibleTools.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {compatibleTools.map(tool => (
-                        <div
+                        <button
                           key={tool.id}
                           onClick={() => handleSelectTool(tool)}
-                          className="group flex items-start gap-4 p-4 bg-surface hover:bg-hover border border-border/60 hover:border-brand-primary/40 rounded-2xl cursor-pointer transition-all active:scale-99"
+                          className="group flex items-start text-left w-full gap-4 p-4 bg-surface hover:bg-hover border border-border/60 hover:border-brand-primary/40 rounded-2xl cursor-pointer transition-all active:scale-99 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-transparent"
                         >
                           <div className="w-10 h-10 rounded-xl bg-brand-primary/8 border border-brand-primary/12 flex items-center justify-center text-brand-primary shrink-0 group-hover:bg-brand-primary group-hover:text-white transition-all">
                             <Upload className="w-5 h-5" />
@@ -346,7 +346,7 @@ export function GlobalDragDrop() {
                               {tool.desc}
                             </p>
                           </div>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   ) : (

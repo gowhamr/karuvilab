@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { flipImage, FlipDirection, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { FlipDirection, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { flipImage } from "@/src/lib/canvas-worker-client";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";

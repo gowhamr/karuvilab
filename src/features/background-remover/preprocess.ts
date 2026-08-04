@@ -30,9 +30,7 @@ export async function preprocessImage(
   }
 
   // Create an offscreen canvas to resize image to model target dimensions (1024x1024)
-  const canvas = typeof OffscreenCanvas !== 'undefined'
-    ? new OffscreenCanvas(targetWidth, targetHeight)
-    : document.createElement('canvas');
+  const canvas = new OffscreenCanvas(targetWidth, targetHeight);
 
   canvas.width = targetWidth;
   canvas.height = targetHeight;
@@ -44,9 +42,7 @@ export async function preprocessImage(
 
   // Draw scaled image
   if (imageSource instanceof ImageData) {
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = origWidth;
-    tempCanvas.height = origHeight;
+    const tempCanvas = new OffscreenCanvas(origWidth, origHeight);
     const tempCtx = tempCanvas.getContext('2d');
     tempCtx?.putImageData(imageSource, 0, 0);
     ctx.drawImage(tempCanvas, 0, 0, targetWidth, targetHeight);

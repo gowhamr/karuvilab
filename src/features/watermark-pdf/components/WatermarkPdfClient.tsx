@@ -184,13 +184,10 @@ export default function WatermarkPdfClient() {
         ) : (
           <div className="space-y-1">
             <label className="text-sm font-medium">Watermark Image</label>
-            <div
-              className="bg-bg border-2 border-dashed border-border rounded-xl p-4 text-center cursor-pointer hover:border-blue transition-colors"
-              onClick={() => imageRef.current?.click()}
-              onDragOver={e => e.preventDefault()}
-              onDrop={e => {
-                e.preventDefault();
-                const f = e.dataTransfer.files?.[0];
+            <DropZone
+              className="bg-bg border-border rounded-xl p-4 hover:border-blue transition-colors"
+              onFilesSelected={(files) => {
+                const f = files[0];
                 if (f && (f.type === "image/png" || f.type === "image/jpeg" || f.name.endsWith(".png") || f.name.endsWith(".jpg"))) {
                   if (f.size > 5 * 1024 * 1024) {
                     toast("Image too large. Maximum size is 5MB.", "error");
@@ -203,31 +200,11 @@ export default function WatermarkPdfClient() {
                   toast("Only PNG and JPG images are supported.", "error");
                 }
               }}
-            >
-              {watermarkImageUrl ? (
-                <img src={watermarkImageUrl} alt="Watermark" className="mx-auto max-h-16 object-contain" />
-              ) : (
-                <p className="text-xs font-bold text-text-4">Drop PNG/JPG here or click</p>
-              )}
-              <input
-                ref={imageRef}
-                type="file"
-                accept="image/png, image/jpeg"
-                className="hidden"
-                onChange={e => {
-                  const f = e.target.files?.[0];
-                  if (f) {
-                    if (f.size > 5 * 1024 * 1024) {
-                      toast("Image too large. Maximum size is 5MB.", "error");
-                      return;
-                    }
-                    if (watermarkImageUrl) revokeUrl(watermarkImageUrl);
-                    setWatermarkImage(f);
-                    setWatermarkImageUrl(createUrl(f));
-                  }
-                }}
-              />
-            </div>
+              accept="image/png,image/jpeg"
+              multiple={false}
+              title={watermarkImageUrl ? <img src={watermarkImageUrl} alt="Watermark" className="mx-auto max-h-16 object-contain" /> : "Select Image"}
+              subtitle={!watermarkImageUrl ? "Drop PNG/JPG here or click" : undefined}
+            />
           </div>
         )}
 

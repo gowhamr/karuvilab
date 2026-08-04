@@ -42,4 +42,86 @@ describe('AI Platform Governance Suite', () => {
     const diagnostics = ai.getDiagnostics();
     expect(diagnostics.activeBackend).toBeDefined();
   });
+
+  it('should verify SHA-256 model checksum integrity', async () => {
+    const dummyBuffer = new Uint8Array([1, 2, 3, 4, 5]).buffer;
+    const isValid = await modelManager.verifyModelIntegrity(dummyBuffer, '74f81fe167d99b4cb41d6d0ccda82278caee9f3e2f25d5e5a3936ff3dcec60d0');
+    expect(isValid).toBe(true);
+
+    const isInvalid = await modelManager.verifyModelIntegrity(dummyBuffer, 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+    expect(isInvalid).toBe(false);
+  });
+
+  it('should execute ai.run() and support releaseSession()', async () => {
+    const input = { tensor: [1, 2, 3] };
+    const result = await ai.run({
+      model: 'background-removal-rmbg',
+      input
+    });
+    expect(result).toBeDefined();
+
+    await ai.releaseSession('background-removal-rmbg');
+    const status = await ai.getStatus();
+    expect(status.loadedModels.includes('background-removal-rmbg')).toBe(false);
+  });
+
+  it('should support LRU model cache eviction', async () => {
+    const { evictLruModelCache } = await import('@/src/ai/model-cache');
+    const evicted = await evictLruModelCache(500 * 1024 * 1024);
+    expect(typeof evicted).toBe('number');
+    expect(evicted).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should process YOLOv8 detection output tensors and apply NMS correctly', async () => {
+    const { processDetectionOutputs, applyNMS } = await import('@/src/features/detection/postprocess');
+    const outputTensor = new Float32Array(84 * 8400);
+
+    // Mock anchor 0: cx=320, cy=320, w=100, h=100, class_0=0.85
+    outputTensor[0 * 8400 + 0] = 320;
+    outputTensor[1 * 8400 + 0] = 320;
+    outputTensor[2 * 8400 + 0] = 100;
+    outputTensor[3 * 8400 + 0] = 100;
+    outputTensor[4 * 8400 + 0] = 0.85;
+
+    const boxes = processDetectionOutputs(outputTensor, 1280, 720, 0.5);
+    expect(boxes.length).toBe(1);
+    expect(boxes[0]?.label).toBe('face');
+    expect(boxes[0]?.confidence).toBeCloseTo(0.85);
+
+    const candidates = [
+      { x: 10, y: 10, width: 100, height: 100, confidence: 0.9, label: 'face' },
+      { x: 12, y: 12, width: 100, height: 100, confidence: 0.8, label: 'face' } // Overlapping duplicate
+    ];
+    const filtered = applyNMS(candidates, 0.45);
+    expect(filtered.length).toBe(1);
+    expect(filtered[0]?.confidence).toBe(0.9);
+  });
+
+  it('should select optimal model via selectOptimalBackgroundModel based on device and preferences', async () => {
+    const { selectOptimalBackgroundModel } = await import('@/src/ai/selector');
+    
+    // Default desktop high-precision
+    const desktopModel = await selectOptimalBackgroundModel({ imageWidth: 1920, imageHeight: 1080 });
+    expect(desktopModel.id).toBeDefined();
+
+    // Speed priority
+    const speedModel = await selectOptimalBackgroundModel({ imageWidth: 1024, imageHeight: 1024, preferredQuality: 'speed' });
+    expect(speedModel.id).toBe('u2netp-mobile');
+
+    // Portrait priority
+    const portraitModel = await selectOptimalBackgroundModel({ imageWidth: 512, imageHeight: 512, isHumanPortrait: true });
+    expect(portraitModel.id).toBe('modnet-portrait');
+  });
+
+  it('should apply guided image filter for alpha refinement', async () => {
+    const { applyGuidedFilter } = await import('@/src/features/background-remover/guided-filter');
+    const coarseAlpha = new Float32Array([0.0, 0.5, 1.0, 0.5]);
+    const guideRGBA = new Uint8Array([0,0,0,255, 128,128,128,255, 255,255,255,255, 200,200,200,255]);
+
+    const refined = applyGuidedFilter(coarseAlpha, guideRGBA, 2, 2);
+    expect(refined.length).toBe(4);
+    expect(refined[0]).toBe(0.0);
+    expect(refined[2]).toBe(1.0);
+    expect(refined[1]).toBeGreaterThan(0.0);
+  });
 });

@@ -9,12 +9,12 @@ export interface PostprocessOptions {
   maskWidth: number;
   maskHeight: number;
   originalImage: HTMLImageElement | ImageBitmap;
-  threshold?: number; // 0.0 to 1.0 threshold (default 0.5)
-  feather?: number; // 0 to 10px edge smoothing
-  invert?: boolean; // Invert subject and background
+  threshold?: number | undefined; // 0.0 to 1.0 threshold (default 0.5)
+  feather?: number | undefined; // 0 to 10px edge smoothing
+  invert?: boolean | undefined; // Invert subject and background
 }
 
-export async function createTransparentCanvas(options: PostprocessOptions): Promise<HTMLCanvasElement> {
+export async function createTransparentCanvas(options: PostprocessOptions): Promise<ImageBitmap> {
   const {
     outputTensorData,
     maskWidth,
@@ -33,9 +33,7 @@ export async function createTransparentCanvas(options: PostprocessOptions): Prom
     : originalImage.height;
 
   // 1. Render raw Float32 probability tensor to 1024x1024 alpha mask canvas
-  const maskCanvas = document.createElement('canvas');
-  maskCanvas.width = maskWidth;
-  maskCanvas.height = maskHeight;
+  const maskCanvas = new OffscreenCanvas(maskWidth, maskHeight);
   const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
   if (!maskCtx) {
     throw new Error('Failed to create mask canvas context');
@@ -82,11 +80,8 @@ export async function createTransparentCanvas(options: PostprocessOptions): Prom
 
   maskCtx.putImageData(maskImageData, 0, 0);
 
-  // 2. Apply optional edge feathering via Canvas blur filter if requested
   if (feather > 0) {
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = maskWidth;
-    tempCanvas.height = maskHeight;
+    const tempCanvas = new OffscreenCanvas(maskWidth, maskHeight);
     const tempCtx = tempCanvas.getContext('2d');
     if (tempCtx) {
       tempCtx.filter = `blur(${feather}px)`;
@@ -97,9 +92,7 @@ export async function createTransparentCanvas(options: PostprocessOptions): Prom
   }
 
   // 3. Composite original high-res image with scaled alpha mask
-  const resultCanvas = document.createElement('canvas');
-  resultCanvas.width = origWidth;
-  resultCanvas.height = origHeight;
+  const resultCanvas = new OffscreenCanvas(origWidth, origHeight);
   const resultCtx = resultCanvas.getContext('2d');
   if (!resultCtx) {
     throw new Error('Failed to create result canvas context');
@@ -110,5 +103,5 @@ export async function createTransparentCanvas(options: PostprocessOptions): Prom
   resultCtx.drawImage(maskCanvas, 0, 0, origWidth, origHeight);
   resultCtx.globalCompositeOperation = 'source-over';
 
-  return resultCanvas;
+  return resultCanvas.transferToImageBitmap();
 }

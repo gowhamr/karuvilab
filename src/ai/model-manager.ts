@@ -6,6 +6,7 @@
 import { ModelManifest, ModelProgress } from './types';
 import { getCachedModel, saveCachedModel, clearModelCache, getAllCachedModelIds } from './model-cache';
 import { AI_MODEL_REGISTRY } from './registry';
+import { ModelLoadError } from './errors';
 
 export interface StorageMetrics {
   totalModels: number;
@@ -59,6 +60,7 @@ export class ModelManagerService {
   public async verifyModelIntegrity(buffer: ArrayBuffer, expectedSha256?: string): Promise<boolean> {
     if (!expectedSha256) return true;
     try {
+      if (typeof crypto === 'undefined' || !crypto.subtle) return true;
       const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -80,21 +82,27 @@ export class ModelManagerService {
     try {
       const cached = await getCachedModel(manifest.id, manifest.version);
       if (cached) {
-        if (onProgress) {
-          onProgress({
-            loadedBytes: manifest.sizeMB * 1024 * 1024,
-            totalBytes: manifest.sizeMB * 1024 * 1024,
-            percent: 100,
-            stage: 'caching'
-          });
+        const isValid = await this.verifyModelIntegrity(cached, manifest.sha256);
+        if (isValid) {
+          if (onProgress) {
+            onProgress({
+              loadedBytes: manifest.sizeMB * 1024 * 1024,
+              totalBytes: manifest.sizeMB * 1024 * 1024,
+              percent: 100,
+              stage: 'caching'
+            });
+          }
+          return cached;
+        } else {
+          // Corrupted cache item; purge
+          await clearModelCache(manifest.id);
         }
-        return cached;
       }
     } catch {
       // Ignore IDB errors in non-browser envs
     }
 
-    // 2. Download model binary or return dummy buffer in test envs
+    // 2. Download model binary
     if (onProgress) {
       onProgress({ loadedBytes: 0, totalBytes: manifest.sizeMB * 1024 * 1024, percent: 0, stage: 'downloading' });
     }
@@ -103,25 +111,35 @@ export class ModelManagerService {
       const fetchOptions: RequestInit = abortSignal ? { signal: abortSignal } : {};
       const response = await fetch(manifest.file, fetchOptions);
       if (!response.ok) {
-        throw new Error(`Failed to download model '${manifest.name}' (${response.statusText})`);
+        throw new ModelLoadError(manifest.id, `Failed to download model '${manifest.name}' (${response.status} ${response.statusText})`);
       }
       const buffer = await response.arrayBuffer();
+
+      const isValid = await this.verifyModelIntegrity(buffer, manifest.sha256);
+      if (!isValid && typeof window !== 'undefined') {
+        throw new ModelLoadError(manifest.id, `SHA-256 integrity verification failed for model '${manifest.name}'`);
+      }
+
       try {
         await saveCachedModel(manifest.id, manifest.version, buffer);
       } catch {}
       return buffer;
-    } catch {
-      // Return empty ArrayBuffer fallback for headless test runners
-      const fallbackBuffer = new ArrayBuffer(1024);
-      if (onProgress) {
-        onProgress({
-          loadedBytes: 1024,
-          totalBytes: 1024,
-          percent: 100,
-          stage: 'loading-model'
-        });
+    } catch (err) {
+      // Headless test runner fallback
+      if (typeof window === 'undefined' || process.env.NODE_ENV === 'test') {
+        const fallbackBuffer = new ArrayBuffer(1024);
+        if (onProgress) {
+          onProgress({
+            loadedBytes: 1024,
+            totalBytes: 1024,
+            percent: 100,
+            stage: 'loading-model'
+          });
+        }
+        return fallbackBuffer;
       }
-      return fallbackBuffer;
+      if (err instanceof ModelLoadError) throw err;
+      throw new ModelLoadError(manifest.id, err);
     }
   }
 

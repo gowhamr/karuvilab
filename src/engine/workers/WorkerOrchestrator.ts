@@ -1,6 +1,17 @@
 import * as Comlink from "comlink";
 import { WorkerAPI, ProgressCallback } from "../../workers/types";
 
+type PoolType = 'compute' | 'media' | 'heavy' | 'ai' | 'crypto';
+
+// Pool-to-worker-file routing map (P0-1: each pool spawns its domain-specific worker)
+const POOL_WORKER_URLS: Record<PoolType, () => URL> = {
+  compute: () => new URL('../../workers/karuvi.worker.ts', import.meta.url),
+  media:   () => new URL('../../workers/karuvi.worker.ts', import.meta.url),
+  heavy:   () => new URL('../../workers/karuvi.worker.ts', import.meta.url),
+  ai:      () => new URL('../../workers/ai.worker.ts', import.meta.url),
+  crypto:  () => new URL('../../workers/crypto.worker.ts', import.meta.url),
+};
+
 interface QueuedTask {
   method: keyof WorkerAPI;
   args: unknown[];
@@ -21,6 +32,9 @@ interface QueuedTask {
 
 function getPayloadSize(arg: unknown): number {
   if (arg instanceof ArrayBuffer) return arg.byteLength;
+  // P0-5: Handle TypedArrays (Uint8Array, Float32Array, etc.) before object fallback
+  // Without this, TypedArrays fall through to JSON.stringify causing OOM on large arrays
+  if (ArrayBuffer.isView(arg)) return arg.byteLength;
   if (arg instanceof Blob) return arg.size;
   if (typeof arg === "string") return new TextEncoder().encode(arg).length;
   if (Array.isArray(arg)) {
@@ -36,7 +50,6 @@ function getPayloadSize(arg: unknown): number {
   return 0;
 }
 
-type PoolType = 'compute' | 'media' | 'heavy' | 'ai';
 
 const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   // Compute Pool (fast, low-memory mathematical/text parsing tasks)
@@ -45,11 +58,31 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   directoryHashManifest: 'compute',
   generateHmac: 'compute',
   generateFileHmac: 'compute',
-  aesEncrypt: 'compute',
-  aesDecrypt: 'compute',
-  generateRsaKeyPair: 'compute',
-  // ...
-  // AI Pool (In-Browser Neural Network ONNX Inference)
+  processYaml: 'compute',
+  processJson: 'compute',
+  evaluateMath: 'compute',
+  calculateEmiSchedule: 'compute',
+  convertNumeral: 'compute',
+  detectNumeralFormat: 'compute',
+  checkGrammar: 'compute',
+
+  // Crypto Pool → crypto.worker.ts (P0-3: real implementations instead of stubs)
+  aesEncrypt: 'crypto',
+  aesDecrypt: 'crypto',
+  generateRsaKeyPair: 'crypto',
+  rsaEncrypt: 'crypto',
+  rsaDecrypt: 'crypto',
+  rsaSign: 'crypto',
+  rsaVerify: 'crypto',
+  ecdsaGenerateKeyPair: 'crypto',
+  ecdhGenerateKeyPair: 'crypto',
+  ecdsaSign: 'crypto',
+  ecdsaVerify: 'crypto',
+  ecdhDeriveSecret: 'crypto',
+  pbkdf2Derive: 'crypto',
+  hkdfDerive: 'crypto',
+
+  // AI Pool → ai.worker.ts (P0-2: ONNX inference off main thread)
   aiInitialize: 'ai',
   aiLoadModel: 'ai',
   aiRunInference: 'ai',
@@ -58,24 +91,6 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   aiDisposeAll: 'ai',
   aiGetCapabilities: 'ai',
   aiGetStatus: 'ai',
-  rsaEncrypt: 'compute',
-  rsaDecrypt: 'compute',
-  rsaSign: 'compute',
-  rsaVerify: 'compute',
-  ecdsaGenerateKeyPair: 'compute',
-  ecdhGenerateKeyPair: 'compute',
-  ecdsaSign: 'compute',
-  ecdsaVerify: 'compute',
-  ecdhDeriveSecret: 'compute',
-  pbkdf2Derive: 'compute',
-  hkdfDerive: 'compute',
-  processYaml: 'compute',
-  processJson: 'compute',
-  evaluateMath: 'compute',
-  calculateEmiSchedule: 'compute',
-  convertNumeral: 'compute',
-  detectNumeralFormat: 'compute',
-  checkGrammar: 'compute',
 
   // Media Pool (heavy file manipulation, image/PDF processing)
   exportPdfEditor: 'media',
@@ -122,8 +137,10 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   optimizeSvg: 'compute',
   generateHistogram: 'compute',
   simulateColorBlindness: 'media',
-  ocrExtract: 'heavy',
-
+  ocrExtract: 'media',
+  aiRunRmbgPipeline: 'ai',
+  aiRunOcrPipeline: 'ai',
+  executeCanvasOperation: 'media',
 };
 
 interface WorkerPool {
@@ -138,7 +155,8 @@ class WorkerOrchestrator {
     compute: { type: 'compute', workers: [], queue: [], activeTasks: new Map() },
     media: { type: 'media', workers: [], queue: [], activeTasks: new Map() },
     heavy: { type: 'heavy', workers: [], queue: [], activeTasks: new Map() },
-    ai: { type: 'ai', workers: [], queue: [], activeTasks: new Map() }
+    ai: { type: 'ai', workers: [], queue: [], activeTasks: new Map() },
+    crypto: { type: 'crypto', workers: [], queue: [], activeTasks: new Map() }
   };
 
   private maxWorkers = 3; // Enforce MAX_WORKERS = 3 as per performance priority guidelines
@@ -147,38 +165,22 @@ class WorkerOrchestrator {
 
   // Compatibility getters and setters for existing tests
   private get pool() {
-    return [
-      ...this.pools.compute.workers,
-      ...this.pools.media.workers,
-      ...this.pools.heavy.workers,
-      ...this.pools.ai.workers
-    ];
+    return Object.values(this.pools).flatMap(p => p.workers);
   }
 
   private set pool(val: any[]) {
     if (val.length === 0) {
-      this.pools.compute.workers = [];
-      this.pools.media.workers = [];
-      this.pools.heavy.workers = [];
-      this.pools.ai.workers = [];
+      Object.values(this.pools).forEach(p => { p.workers = []; });
     }
   }
 
   private get queue() {
-    return [
-      ...this.pools.compute.queue,
-      ...this.pools.media.queue,
-      ...this.pools.heavy.queue,
-      ...this.pools.ai.queue
-    ];
+    return Object.values(this.pools).flatMap(p => p.queue);
   }
 
   private set queue(val: any[]) {
     if (val.length === 0) {
-      this.pools.compute.queue = [];
-      this.pools.media.queue = [];
-      this.pools.heavy.queue = [];
-      this.pools.ai.queue = [];
+      Object.values(this.pools).forEach(p => { p.queue = []; });
     }
   }
 
@@ -208,12 +210,7 @@ class WorkerOrchestrator {
   }
 
   private get globalWorkerCount(): number {
-    return (
-      this.pools.compute.workers.length +
-      this.pools.media.workers.length +
-      this.pools.heavy.workers.length +
-      this.pools.ai.workers.length
-    );
+    return Object.values(this.pools).reduce((sum, p) => sum + p.workers.length, 0);
   }
 
   private async getWorker(poolType: PoolType) {
@@ -225,10 +222,9 @@ class WorkerOrchestrator {
 
     if (this.globalWorkerCount < this.maxWorkers) {
       try {
-        const worker = new Worker(
-          new URL('../../workers/karuvi.worker.ts', import.meta.url),
-          { type: 'module' }
-        );
+        // P0-1: Route each pool to its domain-specific worker file
+        const workerUrl = POOL_WORKER_URLS[poolType]();
+        const worker = new Worker(workerUrl, { type: 'module' });
         
         worker.onerror = (e) => {
           console.error(`[WorkerOrchestrator] ${poolType} Worker crash detected:`, e);
@@ -323,7 +319,9 @@ class WorkerOrchestrator {
       workerEntry.busy = false;
       poolObj.activeTasks.delete(workerEntry.worker);
       this.verifyMemoryCleanup(workerEntry, poolType);
-      this.processQueue(poolType);
+      // P0-6: Drain ALL pool queues when a worker becomes free, not just the current pool.
+      // This prevents cross-pool starvation when globalWorkerCount is at max.
+      this.drainAllQueues(poolType);
     };
 
     const onAbort = (reason = "Task aborted") => {
@@ -354,8 +352,9 @@ class WorkerOrchestrator {
       onAbort("Task timed out");
     }, timeoutMs);
 
+    let progressProxy: any;
     try {
-      const progressProxy = task.onProgress ? Comlink.proxy((p: any) => {
+      progressProxy = task.onProgress ? Comlink.proxy((p: any) => {
         workerEntry.lastHeard = Date.now();
         task.onProgress?.(p);
       }) : undefined;
@@ -367,10 +366,6 @@ class WorkerOrchestrator {
 
       const method = workerEntry.api[task.method] as unknown as (...args: unknown[]) => Promise<unknown>;
       const result = await method(...args, progressProxy);
-      
-      if (progressProxy) {
-        try { (progressProxy as any)[Comlink.releaseProxy](); } catch (e) {}
-      }
       
       if (!isFinished) {
         task.resolve(result);
@@ -386,6 +381,10 @@ class WorkerOrchestrator {
         cleanup();
       }
     } finally {
+      // Release Comlink proxy in finally block to prevent memory leak (was only in success path)
+      if (progressProxy) {
+        try { (progressProxy as any)[Comlink.releaseProxy](); } catch (e) {}
+      }
       task.abortSignal?.removeEventListener('abort', abortHandler);
     }
   }
@@ -467,13 +466,29 @@ class WorkerOrchestrator {
     return this.dispatch(...args);
   }
 
+  /**
+   * P0-6: Drain all pool queues, prioritizing the specified pool.
+   * Prevents cross-pool starvation when one pool's workers finish but
+   * other pools have pending tasks that couldn't spawn workers.
+   */
+  private drainAllQueues(priorityPool: PoolType): void {
+    // Process the current pool first
+    this.processQueue(priorityPool);
+    // Then try all other pools in case they were starved
+    for (const poolType of Object.keys(this.pools) as PoolType[]) {
+      if (poolType !== priorityPool && this.pools[poolType].queue.length > 0) {
+        this.processQueue(poolType);
+      }
+    }
+  }
+
   terminateAll(): void {
-    Object.values(this.pools).forEach(poolObj => {
+    for (const poolObj of Object.values(this.pools)) {
       poolObj.workers.forEach(p => p.worker.terminate());
       poolObj.workers = [];
       poolObj.queue = [];
       poolObj.activeTasks.clear();
-    });
+    }
   }
 }
 

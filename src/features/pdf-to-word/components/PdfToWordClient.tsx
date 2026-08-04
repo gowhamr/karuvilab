@@ -9,6 +9,7 @@ import { EngineLoader } from "@/components/system/EngineLoader";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { logger } from "@/src/lib/logger";
 import { useProgress } from "@/src/contexts/ProgressContext";
+import { DropZone } from "@/components/ui/DropZone";
 
 
 export default function PdfToWordClient() {
@@ -91,33 +92,13 @@ export default function PdfToWordClient() {
         errorMessage="Failed to load PDF extraction engine."
       >
         <>
-          <div
-            className="bg-surface border-2 border-dashed border-border rounded-4xl p-6 sm:p-12 text-center cursor-pointer hover:border-blue transition-all group"
-            onClick={() => fileRef.current?.click()}
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) { setFile(f); setText(""); } }}
-          >
-            {file ? (
-              <div className="space-y-2">
-                <div className="w-16 h-16 bg-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-8 h-8 text-blue" />
-                </div>
-                <p className="font-black text-lg text-text">{file.name}</p>
-                <p className="text-xs font-bold text-text-4 uppercase tracking-widest">{(file.size / 1024).toFixed(0)} KB</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-                  <Download className="w-8 h-8 text-text-4 group-hover:text-blue transition-colors" />
-                </div>
-                <div>
-                  <p className="font-black text-xl text-text">Drop PDF here</p>
-                  <p className="text-sm font-medium text-text-4">or click to browse files</p>
-                </div>
-              </div>
-            )}
-            <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) { setFile(f); setText(""); } }} />
-          </div>
+          <DropZone
+            onFilesSelected={(files) => { const f = files[0]; if (f) { setFile(f); setText(""); } }}
+            accept=".pdf,application/pdf"
+            multiple={false}
+            title={file ? file.name : "Drop PDF here"}
+            subtitle={file ? `${(file.size / 1024).toFixed(0)} KB` : "or click to browse files"}
+          />
 
           {error && <div className="p-4 bg-error/5 border border-error/10 rounded-xl text-error text-xs font-bold">{error}</div>}
 

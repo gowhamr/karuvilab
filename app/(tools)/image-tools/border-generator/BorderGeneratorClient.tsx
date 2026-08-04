@@ -9,7 +9,8 @@ import { SliderField } from "@/components/ui/SliderField";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { formatError } from "@/src/lib/formatError";
-import { addBorder, BorderConfig, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { BorderConfig, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { addBorder } from "@/src/lib/canvas-worker-client";
 
 const PRESET_COLORS = [
   "#000000",

@@ -107,16 +107,21 @@ export default function ToolClient() {
 
       setProgress({ percent: 50, stage: 'Running YOLOv8 Face Detection' });
 
+      // Create ImageBitmap for zero-copy transfer
+      const imageBitmap = await createImageBitmap(img);
+
       // Load model via KaruviLab AI SDK
       const { ai } = await import('@/src/ai/sdk');
-      await ai.loadModel(YOLO_FACE_MANIFEST.id, (p) => {
-        setProgress({ percent: 50 + Math.round(p.percent * 0.3), stage: `Detection Engine: ${p.stage}` });
-      }, abortControllerRef.current.signal);
+      const boxes = await ai.runYoloPipeline({
+        model: YOLO_FACE_MANIFEST.id,
+        imageBitmap,
+        confidenceThreshold: 0.45,
+        abortSignal: abortControllerRef.current.signal,
+        onProgress: (p) => {
+          setProgress({ percent: 50 + Math.round(p.percent * 0.3), stage: `Detection Engine: ${p.stage}` });
+        }
+      });
 
-      const outputTensor = new Float32Array(84 * 8400);
-
-      // Postprocess Non-Maximum Suppression (NMS)
-      const boxes = processDetectionOutputs(outputTensor, originalWidth, originalHeight, 0.45);
       setDetectedBoxes(boxes);
 
       setProgress({ percent: 85, stage: `Applying ${blurStyle} Privacy Mask` });

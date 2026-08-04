@@ -15,7 +15,8 @@ import {
   Check,
   Zap,
 } from "lucide-react";
-import { rotateImage, OutputFormat } from "@/src/lib/canvas-image-engine";
+import { OutputFormat } from "@/src/lib/canvas-image-engine";
+import { rotateImage } from "@/src/lib/canvas-worker-client";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
