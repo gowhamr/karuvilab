@@ -40,7 +40,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     version: '1.0',
     family: 'u2net',
     file: '/models/u2netp.onnx',
-    sha256: '7b89c0123456789abcdef0123456789abcdef0123456789abcdef0123456789a',
+    sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
     sizeMB: 4.7,
     backend: ['wasm', 'webgpu'],
     input: { width: 320, height: 320, channels: 3, dataType: 'float32', shape: [1, 3, 320, 320] },

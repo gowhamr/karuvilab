@@ -270,10 +270,12 @@ export default function HomeClient() {
           icon={LayoutGrid}
           headingId="categories-heading"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {CATEGORIES.map(cat => {
             const IconComponent = CATEGORY_ICONS[cat.id] || Sparkles;
             const count = categoryCounts[cat.id] || 0;
+            const isAiCategory = cat.id === 'image' || cat.id === 'pdf' || cat.id === 'media';
+            
             return (
               <Link 
                 key={cat.id} 
@@ -283,32 +285,39 @@ export default function HomeClient() {
                 <Card 
                   variant="interactive" 
                   padding="md" 
-                  className="h-full flex flex-col justify-between min-h-[140px] group transition-all duration-200 border-l-4"
+                  className="h-full flex flex-col justify-between p-3.5 sm:p-5 min-h-[130px] sm:min-h-[140px] group transition-all duration-200 border-l-4"
                   style={{ 
                     borderLeftColor: cat.color,
                   }}
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
+                  <div className="space-y-2.5 sm:space-y-3">
+                    <div className="flex items-center justify-between gap-1 flex-wrap">
                       <div 
-                        className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
                         style={{ 
                           backgroundColor: `${cat.color}10`, 
                           color: cat.color,
                           border: `1px solid ${cat.color}20` 
                         }}
                       >
-                        <IconComponent className="w-5 h-5" />
+                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
-                      <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-[10px] font-bold">
-                        {count} {count === 1 ? 'tool' : 'tools'}
-                      </Badge>
+                      <div className="flex items-center gap-1">
+                        {isAiCategory && (
+                          <Badge variant="primary" size="sm" className="bg-primary/10 text-primary border border-primary/20 text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.2">
+                            AI
+                          </Badge>
+                        )}
+                        <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-[10px] font-bold px-1.5 py-0.2">
+                          {count} {count === 1 ? 'tool' : 'tools'}
+                        </Badge>
+                      </div>
                     </div>
                     <div>
-                      <h3 className="text-body font-bold text-text-primary group-hover:text-primary transition-colors">
+                      <h3 className="text-caption sm:text-body font-bold text-text-primary group-hover:text-primary transition-colors">
                         {cat.label}
                       </h3>
-                      <p className="text-caption text-text-secondary mt-1 line-clamp-2 leading-relaxed">
+                      <p className="text-[11px] sm:text-caption text-text-secondary mt-0.5 sm:mt-1 line-clamp-2 leading-relaxed">
                         {cat.description}
                       </p>
                     </div>

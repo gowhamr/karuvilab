@@ -105,13 +105,35 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
 
                 <div className="flex items-center gap-2">
                   <ModelStatusBadge isCached={isCached} sizeMB={model.sizeMB} />
-                  {isCached && (
+                  {isCached ? (
                     <button
                       onClick={() => handleDelete(model.id)}
                       className="p-1.5 hover:bg-red-500/10 hover:text-red-500 rounded-lg text-text-muted transition-colors"
                       title="Delete cached model"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={async () => {
+                        try {
+                          setDownloadingId(model.id);
+                          await modelManager.ensureModelAvailable(model, () => {}, undefined);
+                          await refreshMetrics();
+                        } catch (err) {
+                          console.error("Failed to download model", err);
+                        } finally {
+                          setDownloadingId(null);
+                        }
+                      }}
+                      disabled={downloadingId === model.id}
+                      className={cn(
+                        "p-1.5 rounded-lg transition-colors",
+                        downloadingId === model.id ? "text-blue bg-blue/10 animate-pulse" : "hover:bg-blue/10 hover:text-blue text-text-muted"
+                      )}
+                      title="Download and cache model"
+                    >
+                      <Download className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>

@@ -31,6 +31,7 @@ export default function ToolClient() {
   const [feather, setFeather] = useState<number>(2);
   const [invert, setInvert] = useState<boolean>(false);
   const [selectedBackend, setSelectedBackend] = useState<ModelBackend | 'auto'>('auto');
+  const [selectedModelId, setSelectedModelId] = useState<string>('rmbg-2.0');
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<{ percent: number; stage: string } | null>(null);
@@ -108,6 +109,7 @@ export default function ToolClient() {
       // Load SDK & run unified removeBackground API
       const { ai } = await import('@/src/ai/sdk');
       const { blob, modelUsed, inferenceTimeMs, rawTensor } = await ai.removeBackground(file, {
+        modelId: selectedModelId,
         onProgress: (p) => {
           setProgress({ percent: 40 + Math.round(p.percent * 0.4), stage: `AI Engine: ${p.stage}` });
         },
@@ -235,11 +237,27 @@ export default function ToolClient() {
         </div>
       </div>
 
-      {/* Backend Selector */}
-      <BackendSelector
-        selectedBackend={selectedBackend}
-        onSelect={(b) => setSelectedBackend(b)}
-      />
+      {/* Backend and Model Selector */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <BackendSelector
+          selectedBackend={selectedBackend}
+          onSelect={(b) => setSelectedBackend(b)}
+        />
+        <div className="flex-1 bg-surface border border-border rounded-2xl p-4 flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-text">AI Model</span>
+          </div>
+          <select
+            value={selectedModelId}
+            onChange={(e) => setSelectedModelId(e.target.value)}
+            className="w-full bg-surface-elevated border border-border rounded-xl px-3 py-2 text-sm text-text focus:outline-none focus:border-blue"
+          >
+            <option value="rmbg-2.0">RMBG 2.0 (High Quality)</option>
+            <option value="u2netp-mobile">U²-NetP (Ultra-Fast Mobile)</option>
+            <option value="modnet-portrait">MODNet (Portrait & Hair)</option>
+          </select>
+        </div>
+      </div>
 
       {/* Primary Interaction Area */}
       {!file ? (
