@@ -135,7 +135,7 @@ export default function ToolClient() {
       setIsProcessing(false);
       setProgress(null);
     }
-  }, [file, originalUrl, createUrl, toast]);
+  }, [file, originalUrl, selectedModelId, createUrl, toast]);
 
   // Re-render transparent canvas instantly when threshold/feather/invert controls change
   const applyControlChanges = useCallback(async () => {
