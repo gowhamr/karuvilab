@@ -56,6 +56,7 @@ export interface ClientToolShellProps {
     faq: { question: string; answer: string }[];
   };
   fullWidth?: boolean | undefined;
+  workspaceSize?: 'standard' | 'wide' | 'full' | undefined;
 }
 
 function UseCasesList({ useCases, visibleExamples = 2 }: { useCases: string[], visibleExamples?: number }) {
@@ -126,7 +127,7 @@ function FAQList({ faq }: { faq: { question: string, answer: string }[] }) {
   );
 }
 
-export function ClientToolShell({ title, description, category, children, toolId, content, parsedContent, fullWidth, visibleExamples = 2 }: ClientToolShellProps) {
+export function ClientToolShell({ title, description, category, children, toolId, content, parsedContent, fullWidth, workspaceSize, visibleExamples = 2 }: ClientToolShellProps) {
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   const finalToolId = toolId || currentTool?.id || '';
   useWorkflowIntegration(finalToolId);
@@ -220,12 +221,22 @@ export function ClientToolShell({ title, description, category, children, toolId
     ALL_TOOLS.filter(t => suggestionIds.includes(t.id) && t.id !== finalToolId && !relatedIds.includes(t.id))
   , [suggestionIds, finalToolId, relatedIds]);
 
+  const isWideWorkspace = workspaceSize === 'wide' || (!workspaceSize && category && ['developer', 'pdf', 'image', 'media', 'productivity', 'security'].includes(category.id));
+
+  const containerWidthClass = isEmbed
+    ? "w-full max-w-none px-2 py-4"
+    : (fullWidth || workspaceSize === 'full')
+      ? "w-full max-w-none px-4 md:px-8"
+      : isWideWorkspace
+        ? "max-w-screen-2xl px-4 md:px-8"
+        : "max-w-7xl px-4 md:px-8";
+
   return (
     <m.div 
       initial={false}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        isEmbed ? "w-full max-w-none px-2 py-4" : fullWidth ? "w-full max-w-none px-4 md:px-8" : "max-w-6xl px-4",
+        containerWidthClass,
         "mx-auto space-y-8 sm:space-y-10 lg:space-y-12",
         !isEmbed && "pb-24"
       )}

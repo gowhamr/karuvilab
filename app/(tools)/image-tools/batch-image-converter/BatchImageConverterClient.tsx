@@ -147,7 +147,7 @@ export default function BatchImageConverterClient() {
   const allCompleted = hasItems && items.every(i => i.status === "completed");
 
   return (
-    <div className="max-w-5xl mx-auto space-y-10 pb-20">
+    <div className="w-full mx-auto space-y-10 pb-20">
       {/* Zone 1: Options & Batch Upload */}
       <section className="grid lg:grid-cols-5 gap-8 items-start">
         <div className="lg:col-span-3 space-y-6">

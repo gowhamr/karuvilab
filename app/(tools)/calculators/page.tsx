@@ -25,7 +25,7 @@ export default function CalculatorsPage() {
   }, {} as Record<string, typeof tools>);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
       <StructuredData category={cat} />
       <div className="space-y-2">
         <Breadcrumbs category={cat} />

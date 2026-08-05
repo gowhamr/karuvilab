@@ -11,6 +11,7 @@ interface ToolShellProps {
   toolId?: string;
   content?: ClientToolShellProps['content'];
   fullWidth?: boolean;
+  workspaceSize?: 'standard' | 'wide' | 'full';
   visibleExamples?: number;
 }
 
@@ -18,7 +19,7 @@ interface ToolShellProps {
  * ToolShell is now a Server Component to prevent the entire 400KB+ TOOL_CONTENT 
  * registry from being bundled into the client-side JavaScript.
  */
-export async function ToolShell({ title, description, category, children, toolId, content, fullWidth, visibleExamples }: ToolShellProps) {
+export async function ToolShell({ title, description, category, children, toolId, content, fullWidth, workspaceSize, visibleExamples }: ToolShellProps) {
   // Perform lookups on the server
   const currentTool = ALL_TOOLS.find(t => t.id === toolId || t.name === title);
   
@@ -76,6 +77,7 @@ export async function ToolShell({ title, description, category, children, toolId
         content={mergedContent}
         parsedContent={parsedContent}
         fullWidth={fullWidth}
+        workspaceSize={workspaceSize}
         visibleExamples={visibleExamples ?? reg.visibleExamples ?? (currentTool as any)?.visibleExamples}
       >
         {children}

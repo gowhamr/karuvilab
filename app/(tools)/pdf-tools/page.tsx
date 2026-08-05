@@ -25,7 +25,7 @@ export default function PdfToolsPage() {
   }, {} as Record<string, typeof tools>);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12">
+    <div className="max-w-screen-2xl mx-auto px-4 md:px-8 space-y-12">
       <StructuredData category={cat} />
       <div className="space-y-2">
         <Breadcrumbs category={cat} />

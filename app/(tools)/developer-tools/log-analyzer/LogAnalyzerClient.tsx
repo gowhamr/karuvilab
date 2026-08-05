@@ -99,7 +99,7 @@ export default function LogAnalyzerClient() {
   }, [parsedLogs]);
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-6 w-full mx-auto">
       {/* Log Input */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">

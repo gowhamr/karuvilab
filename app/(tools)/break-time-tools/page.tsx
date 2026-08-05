@@ -41,7 +41,7 @@ export default function BreakTimePage() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8">
       <StructuredData category={cat} />
       <div className="space-y-2">
         <Breadcrumbs category={cat} />

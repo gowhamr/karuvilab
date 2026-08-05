@@ -76,7 +76,7 @@ export default function NotesPage() {
     <div className="flex flex-col md:flex-row min-h-[calc(100vh-4rem)] bg-bg">
       <FolderSidebar />
       
-      <main className="flex-1 max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-8 pb-32">
+      <main className="flex-1 max-w-screen-2xl mx-auto px-4 md:px-8 py-8 space-y-8 pb-32">
         {/* Tabs Section */}
         <div className="flex justify-start">
           <div className="relative z-base flex items-center gap-1 bg-surface border border-border rounded-2xl p-1 shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">

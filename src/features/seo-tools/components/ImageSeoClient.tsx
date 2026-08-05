@@ -112,7 +112,7 @@ export default function ImageSeoClient() {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 w-full mx-auto">
       {/* ── Tab Switcher (Raycast Style) ─────────────────────────────────── */}
       <div className="flex flex-wrap gap-2 p-1.5 bg-surface border border-border rounded-2xl w-fit mx-auto md:mx-0 shadow-sm">
         {(["optimize", "batch", "analyzer"] as const).map(t => (
