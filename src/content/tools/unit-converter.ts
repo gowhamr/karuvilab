@@ -52,21 +52,6 @@ The compiler mathematically tracks the Units as if they were algebraic variables
 - **E-Commerce Logistics:** Global shipping giants like Amazon rely on highly complex, real-time unit conversion engines to seamlessly translate product weights from Chinese Grams to American Ounces to calculate international freight taxes.
 - **Frontend CSS:** Browsers constantly run unit conversion algorithms in the background, converting \`rem\`, \`em\`, and \`vh\` units into strict physical \`px\` coordinates on your monitor 60 times a second.
 
----
-
-## 5. Interactive Quiz
-
-**Beginner:**
-1. Why is unit conversion critical in international software? *(Answer: Because mixing up Metric (Kilometers/Celsius) and Imperial (Miles/Fahrenheit) can lead to catastrophic user errors or system failures).*
-
-**Intermediate:**
-2. What happens if you add 0.1 + 0.2 in standard JavaScript? *(Answer: You get 0.30000000000000004 due to the IEEE 754 floating-point rounding errors in binary arithmetic).*
-
-**Advanced:**
-3. How do modern programming languages prevent unit conversion disasters like the Mars Orbiter crash? *(Answer: Through strict Type Systems and Dimensional Analysis, which force the compiler to mathematically verify that the units (e.g., Meters vs Feet) match before allowing the code to run).*
-
----
-*End of Elite Learning Hub Content.*
 `,
   howTo: [
     "**Step 1:** Select the Category (e.g., Length, Mass, Temperature).",

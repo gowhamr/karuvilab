@@ -83,7 +83,7 @@ The regex \`<div>(.*?)</div>\` tells the engine to stop matching at the very *fi
 3. What is a ReDoS attack, and why does it crash servers? *(Answer: Regular Expression Denial of Service. It occurs when a hacker submits a carefully crafted string to a poorly written Regex containing nested quantifiers. The regex engine experiences "catastrophic backtracking", requiring trillions of calculations and freezing the CPU).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter your Regular Expression in the top field.",

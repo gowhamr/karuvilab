@@ -73,7 +73,7 @@ If you pay an extra $1,000 toward the Principal in Month 1 of a 30-year mortgage
 3. Why does making a small extra principal payment in Year 1 save exponentially more money than making it in Year 29? *(Answer: Because Amortization calculates interest based on the remaining principal balance. Reducing the principal in Year 1 permanently stops that money from compounding interest over the next 29 years).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter the total Loan Amount (Principal).",

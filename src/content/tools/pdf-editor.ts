@@ -103,7 +103,7 @@ How are PDFs programmatically manipulated in the enterprise?
 4. Why is inserting text into the middle of a PDF paragraph incredibly difficult? *(Answer: Because the PDF format does not have a concept of "text flow" or "margins". The text is hardcoded to absolute coordinates. Inserting a word requires the editor engine to manually recalculate the coordinates of every subsequent word on the page).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select a PDF file from your device. It will load instantly since nothing is uploaded.",

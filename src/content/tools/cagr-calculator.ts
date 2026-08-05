@@ -79,7 +79,7 @@ While CAGR prevents the "average return" lie, it has its own mathematical blind 
 3. If you invest $1,000 every month into an account, can you use CAGR to calculate your returns? *(Answer: No. CAGR only calculates the growth of a single, upfront Lumpsum. For multiple investments over time, you must use XIRR).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter your Initial Investment Value (e.g., $10,000).",

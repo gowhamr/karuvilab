@@ -87,7 +87,7 @@ The OAuth spec doesn't actually define what a token must look like (it can be ra
 3. Why is storing an OAuth Access Token in \`localStorage\` considered a critical security vulnerability? *(Answer: Because any malicious JavaScript executed via an XSS attack can read \`localStorage\`, steal the token, and impersonate the user. Secure architectures use HttpOnly cookies).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste your OAuth Access Token (usually a Base64-encoded JWT).",

@@ -79,7 +79,7 @@ When you parse an EMV dump, you will see a massive tree of Hexadecimal tags. Her
 4. What role does Tag 9F37 (Unpredictable Number) play in EMV security? *(Answer: It acts as a cryptographic nonce. By forcing the chip to include this random terminal-generated number in its Cryptogram calculation, it mathematically proves the transaction is happening live and prevents Replay Attacks).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste your raw Hexadecimal string containing the EMV TLV data (often found in ISO 8583 DE 55).",

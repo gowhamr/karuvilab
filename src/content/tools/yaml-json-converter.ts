@@ -93,7 +93,7 @@ Converting YAML to JSON requires a complex state machine parser to:
 3. Why is accepting arbitrary YAML payloads from users extremely dangerous? *(Answer: Because YAML supports custom Object Tags. If a backend uses an unsafe parser, a hacker can inject a payload that executes arbitrary system commands (RCE) during the deserialization process).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select your conversion direction: YAML to JSON, or JSON to YAML.",

@@ -87,7 +87,7 @@ To achieve true, aggressive compression strictly inside the browser (without upl
 3. Why do most online tools require you to upload the PDF to compress it? *(Answer: Because true image downsampling and font optimization requires massive C++ engines like Ghostscript, which are difficult to run natively in a web browser without advanced WebAssembly).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select the PDF you wish to shrink.",

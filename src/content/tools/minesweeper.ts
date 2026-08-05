@@ -54,21 +54,6 @@ Why do software engineers study Minesweeper?
 - **UI State Management:** In React, if you naively trigger a state update every time a single cell in a 400-cell grid changes, the browser will freeze. Building Minesweeper forces engineers to learn batch rendering and optimized DOM updates.
 - **Pathfinding (AI):** The grid neighbor-checking math (checking rows -1 to +1, columns -1 to +1) is the exact foundational math used in AI pathfinding algorithms (like A* Search) for video games and autonomous robots mapping a room.
 
----
-
-## 5. Interactive Quiz
-
-**Beginner:**
-1. How does a computer represent a visual grid in memory? *(Answer: Using a 2D Array, where each coordinate (Row, Column) points to a data object storing the cell's state).*
-
-**Intermediate:**
-2. Why don't you ever hit a mine on your very first click? *(Answer: Because of Lazy Initialization. The engine waits until you click, and then generates the bombs around your click to guarantee a safe start).*
-
-**Advanced:**
-3. What algorithm clears out massive empty spaces instantly when you click a zero-mine cell? *(Answer: The Flood Fill algorithm, which uses Depth-First Search (DFS) recursion to rapidly check and reveal all 8 surrounding neighbors until it hits a numerical boundary).*
-
----
-*End of Elite Learning Hub Content.*
 `,
   howTo: [
     "**Step 1:** Select a difficulty level (Grid size and Mine count).",

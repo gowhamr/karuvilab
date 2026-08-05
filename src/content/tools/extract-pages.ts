@@ -68,7 +68,7 @@ A professional extraction engine must detect annotations on the extracted page, 
 3. Why do interactive text boxes sometimes disappear or break when a page is extracted? *(Answer: Because form fields (AcroForms) are stored globally at the root of the document, not on the page itself. If the extraction tool doesn't explicitly copy the global form logic over, the page annotation breaks).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Upload your source PDF document.",

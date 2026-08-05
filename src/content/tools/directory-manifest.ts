@@ -70,7 +70,7 @@ Checking a manifest requires the computer to open every single file on the hard 
 3. How do web browsers use manifests to protect against Supply Chain attacks on CDNs? *(Answer: Using Subresource Integrity (SRI). The developer includes the expected hash in the HTML \`<script>\` tag. If the CDN is hacked and the file is altered, the browser detects the hash mismatch and refuses to execute the malicious code).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select a directory (folder) from your local file system.",

@@ -93,7 +93,7 @@ When building an IBAN validator in JavaScript, engineers hit a fatal wall.
 3. Why does standard JavaScript arithmetic fail when calculating the IBAN checksum? *(Answer: Because the IBAN string converts into a 30+ digit number, which exceeds JavaScript's \`MAX_SAFE_INTEGER\` (16 digits). This forces precision loss unless the developer specifically uses \`BigInt\` or piecewise string division).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter the IBAN string (spaces and dashes are automatically stripped).",

@@ -88,7 +88,7 @@ PostgreSQL, MySQL, SQLite, and Microsoft T-SQL all have unique proprietary synta
 3. How do Parameterized Queries prevent SQL Injection? *(Answer: They separate the SQL logic from the user data. The database compiles the execution tree first, ensuring that any subsequent user data is treated strictly as a literal string value, not executable syntax).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste your messy, unformatted, or ORM-generated SQL query.",

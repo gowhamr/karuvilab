@@ -118,7 +118,7 @@ When you use KaruviLab's ECDH tool:
 4. What does the 'E' in ECDHE stand for, and why is it critical for modern security? *(Answer: Ephemeral. It means a new, temporary key is generated for every single session, ensuring Perfect Forward Secrecy. If a long-term master key is compromised, past traffic remains secure).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select an Elliptic Curve (P-256, P-384, or P-521). P-256 is the standard for modern web apps.",

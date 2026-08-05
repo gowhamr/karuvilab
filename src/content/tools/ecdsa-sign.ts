@@ -110,7 +110,7 @@ While ECDSA is the current industry standard, a newer algorithm called **Ed25519
 4. How does Ed25519 solve the biggest security flaw of ECDSA? *(Answer: It generates the nonce $k$ deterministically rather than relying on a random number generator that might be flawed or biased).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Generate or paste an ECDSA Private Key.",

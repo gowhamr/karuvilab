@@ -74,7 +74,7 @@ A professional tax calculator runs two parallel simulation threads on your incom
 3. How does investing in a tax-deductible fund (like a 401k or Section 80C) mathematically save you money? *(Answer: It removes that specific amount from your topmost tax buckets. If you invest $10k and your marginal rate is 30%, you instantly save $3,000 in taxes that year).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select your Financial Year and Assessment Year.",

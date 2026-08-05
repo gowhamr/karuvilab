@@ -88,7 +88,7 @@ CSV is a surprisingly fragile format.
 3. What is CSV Injection (Formula Injection)? *(Answer: An attack where a hacker submits malicious data starting with an \`=\` sign. When the data is exported to CSV and opened in Excel, Excel executes the data as a formula, potentially triggering malware).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select your conversion mode (JSON to CSV, or CSV to JSON).",

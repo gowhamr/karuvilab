@@ -76,7 +76,7 @@ If the stock market returns 12% a year, but inflation is 6% a year, your **Real 
 3. Why does the compounding curve look like a hockey stick? *(Answer: Because it is an exponential mathematical function. In the later decades, your generated interest starts generating its own interest, causing the portfolio value to explode vertically).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter your Monthly Investment amount.",

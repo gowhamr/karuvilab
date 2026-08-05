@@ -75,7 +75,7 @@ If a user selects the **Auto-Choice Lifecycle Fund**, the NPS backend executes a
 3. Why did governments abandon traditional Pensions in favor of systems like NPS? *(Answer: Traditional defined-benefit pensions became mathematical liabilities as lifespans increased, threatening state bankruptcy. Systems like NPS shift 100% of the investment and longevity risk onto the individual citizen).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter your Current Age.",

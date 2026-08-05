@@ -50,21 +50,6 @@ Because politicians constantly change DST rules (e.g., stopping it entirely, or 
 - **Frontend Rendering (Intl API):** Modern web browsers have a built-in \`Intl.DateTimeFormat\` API. The backend sends the raw UTC string to the frontend, and the frontend automatically references the user's OS timezone settings to format the date perfectly (e.g., converting UTC to IST for a user in Mumbai).
 - **Distributed Logs:** AWS and Google Cloud servers operate strictly in UTC. If servers in Tokyo, Paris, and Seattle all logged errors in their local times, debugging a global outage would be impossible. Standardizing on UTC allows engineers to seamlessly interlace logs chronologically.
 
----
-
-## 5. Interactive Quiz
-
-**Beginner:**
-1. Should you save a user's local time (like 5:00 PM EST) directly into a database? *(Answer: No! You must always convert it to a universal standard like UTC before saving, otherwise users in other countries will see the wrong time).*
-
-**Intermediate:**
-2. What is Unix Epoch Time? *(Answer: It is the total number of seconds that have passed since January 1st, 1970 (UTC), providing computers with a simple integer they can use for ultra-fast time calculations).*
-
-**Advanced:**
-3. Why is it dangerous to schedule a recurring daily event by simply adding exactly 24 hours (86,400 seconds) to a timestamp? *(Answer: Because of Daylight Saving Time (DST). On the days when clocks change, a day might have 23 or 25 hours. Adding exactly 24 hours will cause the event to trigger an hour early or late).*
-
----
-*End of Elite Learning Hub Content.*
 `,
   howTo: [
     "**Step 1:** Select your source Timezone and enter the local time.",

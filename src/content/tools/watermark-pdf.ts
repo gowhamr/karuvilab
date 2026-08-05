@@ -86,7 +86,7 @@ When you use KaruviLab to apply a watermark:
 3. How do you permanently fuse a watermark to a document so it cannot be selected or deleted? *(Answer: By Rasterizing or Flattening the PDF, which converts the entire vector document into a single, flat pixel image).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Upload your target PDF.",

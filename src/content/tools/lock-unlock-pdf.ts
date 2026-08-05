@@ -96,7 +96,7 @@ How does KaruviLab unlock a PDF locally in your browser?
 4. Why did the PDF committee completely deprecate RC4 in PDF 2.0? *(Answer: RC4 is a stream cipher that was proven severely vulnerable to multiple statistical biases and keystream recovery attacks (the same attacks that killed WEP Wi-Fi security)).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**To Lock a PDF:**",

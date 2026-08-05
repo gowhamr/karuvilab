@@ -107,7 +107,7 @@ In ASCII, the number "50" takes 2 bytes (Hex: \`35 30\`). In BCD, two decimal di
 4. Why is BCD (Binary Coded Decimal) heavily used in ISO 8583? *(Answer: It compresses numeric data by 50%. It packs two decimal digits into a single 8-bit byte, significantly reducing network payload size).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste the raw Hexadecimal dump of the ISO 8583 message.",

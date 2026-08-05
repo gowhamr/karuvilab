@@ -86,7 +86,7 @@ Under the hood, KaruviLab uses libraries like \`pdf-lib\`.
 3. When the engine extracts a page, how does it know which fonts and images to copy? *(Answer: It traverses the PDF Object Dictionary (the Dependency Graph) for that specific page, recursively copying any referenced XObjects and Font Streams).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select the PDF you wish to split.",

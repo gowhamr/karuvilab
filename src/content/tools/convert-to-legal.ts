@@ -95,7 +95,7 @@ To perform this conversion strictly in the browser using \`pdf-lib\`:
 3. Why does the engine need a Transformation Matrix to resize the page, instead of just changing the paper size setting? *(Answer: If you only change the paper size, the content will stay at its original size anchored to the bottom-left corner, leaving massive empty margins. The matrix mathematically scales and centers the existing content to fit the new paper).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Upload your A4, Letter, or custom-sized PDF.",

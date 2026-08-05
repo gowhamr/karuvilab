@@ -49,24 +49,8 @@ If you delete the closing brace \`}\` of Function A, and insert a new closing br
 
 ## 4. Production Workflows
 
-- **Git & Version Control:** When you run \`git diff\`, the terminal executes a highly optimized C implementation of the Myers algorithm.
+- **Git & Version Control:** When you run `git diff`, the terminal executes a highly optimized C implementation of the Myers algorithm.
 - **Continuous Integration (CI):** Platforms like GitHub automatically block Pull Requests if the Diff algorithm detects that multiple developers modified the exact same anchor point, triggering a "Merge Conflict" that requires manual human intervention.
-
----
-
-## 5. Interactive Quiz
-
-**Beginner:**
-1. What does a Diff tool actually do? *(Answer: It compares two text files and visually highlights the exact lines and characters that were inserted or deleted).*
-
-**Intermediate:**
-2. Why is finding the differences between files computationally difficult? *(Answer: Because the computer must calculate the absolute shortest possible sequence of edits (Longest Common Subsequence), which requires traversing a complex mathematical matrix).*
-
-**Advanced:**
-3. Why did engineers invent "Patience Diff" as an upgrade to the standard Myers algorithm? *(Answer: Because the standard algorithm optimizes for mathematical brevity, which can sometimes misalign code blocks. Patience Diff anchors the comparison on unique lines (like function names) to ensure the output makes logical sense to a human code reviewer).*
-
----
-*End of Elite Learning Hub Content.*
 `,
   howTo: [
     "**Step 1:** Paste your Original text in the left pane.",

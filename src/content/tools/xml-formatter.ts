@@ -87,7 +87,7 @@ If JSON is better, why is XML still used?
 3. How does an XXE (XML External Entity) attack work? *(Answer: The attacker exploits a poorly configured XML parser by passing a payload containing a \`SYSTEM\` entity. The parser executes the entity, reads sensitive local files off the server's hard drive, and returns the data to the attacker).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste your raw, minified, or disorganized XML payload.",

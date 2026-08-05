@@ -77,7 +77,7 @@ Instead of loading a massive 20MB RAW image entirely into RAM, the KaruviLab eng
 3. How do websites like Facebook protect you from EXIF doxxing? *(Answer: Their backend servers run an image processing pipeline (like ImageMagick) that automatically strips the APP1 EXIF block from the JPEG header before serving the image to the public).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select an image (JPEG/TIFF) from your device.",

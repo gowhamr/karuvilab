@@ -88,7 +88,7 @@ Parsing MT messages is an exercise in complex Regex. KaruviLab reads the raw \`{
 4. How did hackers steal $81 million from the Central Bank of Bangladesh if SWIFT cryptography wasn't broken? *(Answer: They bypassed the cryptography entirely by hacking the bank's internal Windows network, taking remote control of the SWIFT terminal, and legally authorizing the transfers as if they were bank employees).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste your raw SWIFT MT message text (must contain the {1:...} header blocks).",

@@ -98,7 +98,7 @@ A DevOps engineer deploys a new web server, but users see a massive red warning 
 4. What happens if the \`Basic Constraints: CA\` flag is set to TRUE on a website's certificate? *(Answer: It means the certificate has authority to issue other trusted certificates. CAs strictly forbid this for standard leaf certificates to prevent users from becoming rogue CAs).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Open your certificate file (.pem, .crt, .cer) in a text editor.",

@@ -72,7 +72,7 @@ If cropping is dangerous for security, why do we use it?
 3. How can I safely remove sensitive information from a PDF? *(Answer: You must use a dedicated Redaction tool that chemically alters the text stream to delete the data, or you must convert the PDF to a flat image (rasterize it) and paint over the pixels).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Upload your target PDF.",

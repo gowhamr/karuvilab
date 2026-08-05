@@ -81,7 +81,7 @@ Because JavaScript can execute the Luhn algorithm in a fraction of a millisecond
 4. Why doesn't the Luhn algorithm detect the transposition of the digits \`09\` to \`90\`? *(Answer: If you double 0, you get 0 (0+9=9). If you double 9, you get 18 (1+8=9). Both result in the value 9, so the overall sum doesn't change, and the algorithm fails to spot the typo).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter the Credit Card, IMEI, or Identification number.",

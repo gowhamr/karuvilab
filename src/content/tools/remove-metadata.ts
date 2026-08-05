@@ -49,21 +49,6 @@ When you use KaruviLab's Remove Metadata tool, the entire EXIF block—including
 - **Journalism / Whistleblowing:** SecureDrop systems used by investigative journalists automatically run rigorous metadata scrubbing on every leaked document and photo submitted to them. If they didn't, the EXIF data could expose the whistleblowers' identities to the government.
 - **Enterprise Security:** Law firms use automated scrubbing pipelines on PDF and Word documents to ensure hidden tracked changes, author names, and internal server paths are permanently deleted before sending the files to opposing counsel.
 
----
-
-## 5. Interactive Quiz
-
-**Beginner:**
-1. Does scrubbing an image reduce its visual quality? *(Answer: Not if done correctly. A proper scrubber performs a lossless binary splice, deleting the text header without touching the pixel data).*
-
-**Intermediate:**
-2. What is the danger of the EXIF Thumbnail? *(Answer: The thumbnail might contain the original version of the photo before you cropped or censored it. If it isn't deleted, hackers can extract it to see what you tried to hide).*
-
-**Advanced:**
-3. Can a metadata scrubber detect a secret message hidden via Steganography? *(Answer: No. Steganography alters the mathematical color values of the pixels themselves. Metadata scrubbers only delete the text-based headers).*
-
----
-*End of Elite Learning Hub Content.*
 `,
   howTo: [
     "**Step 1:** Select the image or document you wish to anonymize.",

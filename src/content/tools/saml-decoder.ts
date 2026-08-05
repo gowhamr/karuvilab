@@ -89,7 +89,7 @@ Why does the enterprise still use SAML if OAuth and OpenID Connect (OIDC) are ne
 3. What is an XML Signature Wrapping (XSW) attack? *(Answer: A catastrophic vulnerability where a hacker injects a fake XML assertion into the payload. If the Service Provider's XML parser is flawed, it verifies the signature of the legitimate assertion, but executes the login using the data from the fake assertion).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Intercept the SAML login flow using your browser's Network tab.",

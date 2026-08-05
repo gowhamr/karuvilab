@@ -75,7 +75,7 @@ Modern extraction engines instantly convert the palette into **HSL (Hue, Saturat
 3. How do browsers extract palettes instantly without freezing when processing massive 20MB photos? *(Answer: The engine performs aggressive downsampling (scaling the image down to ~200px) and Quantization before running the K-Means algorithm, reducing the mathematical workload by 99%).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Upload any image file.",

@@ -113,7 +113,7 @@ This generates the CSR. They paste the CSR text into their AWS or GoDaddy dashbo
 4. What is a SAN (Subject Alternative Name)? *(Answer: An attribute added to modern CSRs that allows a single certificate to secure multiple domains, e.g., \`example.com\` and \`www.example.com\`).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Enter your Common Name (e.g., www.yourdomain.com).",

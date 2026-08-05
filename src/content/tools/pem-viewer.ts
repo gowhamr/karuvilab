@@ -88,7 +88,7 @@ When configuring HTTPS on NGINX, you are required to provide a \`.crt\` or \`.pe
 3. What is the difference between PKCS#1 and PKCS#8 private keys? *(Answer: PKCS#1 headers like \`BEGIN RSA PRIVATE KEY\` are specific to the RSA algorithm. PKCS#8 \`BEGIN PRIVATE KEY\` is a modern universal container that can hold RSA, ECC, or Ed25519 keys).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Paste your PEM string (including headers) into the input box.",

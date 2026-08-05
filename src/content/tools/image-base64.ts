@@ -67,7 +67,7 @@ If Base64 causes a 33% size penalty and ruins caching, why do engineers use it?
 3. Why is embedding large Base64 images directly into HTML considered terrible for web performance? *(Answer: It dramatically inflates the HTML file size, blocks the browser parser from rendering the rest of the page, and prevents the image from being cached independently in the user's browser).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Upload an image (PNG, JPEG, WebP, SVG).",

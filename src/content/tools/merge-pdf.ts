@@ -84,7 +84,7 @@ Merging massive documents is highly stressful on a web browser.
 3. What happens if you merge a digitally signed, legally binding contract with another page? *(Answer: The digital signature is instantly invalidated. Signatures guarantee the document structure hasn't changed; merging changes the structure).*
 
 ---
-*End of Elite Learning Hub Content.*
+
 `,
   howTo: [
     "**Step 1:** Select two or more PDF files from your device.",

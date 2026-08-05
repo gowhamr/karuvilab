@@ -417,7 +417,14 @@ export function ClientToolShell({ title, description, category, children, toolId
                           <h2 className="text-xl font-black text-text tracking-tight">About this tool</h2>
                           <div 
                             className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
-                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalParsedContent.detailedDescription) }}
+                            dangerouslySetInnerHTML={{ 
+                              __html: sanitizeHtml(
+                                finalParsedContent.detailedDescription
+                                  .replace(/<p>\s*<em>\s*\*?End of Elite Learning Hub Content\.?\*?\s*<\/em>\s*<\/p>/gi, '')
+                                  .replace(/<p>\s*\*?End of Elite Learning Hub Content\.?\*?\s*<\/p>/gi, '')
+                                  .replace(/\*?End of Elite Learning Hub Content\.?\*?/gi, '')
+                              ) 
+                            }}
                           />
                         </div>
                       )}

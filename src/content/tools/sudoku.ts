@@ -51,21 +51,6 @@ Why do computer science interviews focus on Sudoku solvers?
 - **Resource Allocation:** The exact same Backtracking algorithm used to solve Sudoku is used by university mainframes to schedule thousands of student classes into 50 rooms without overlapping a single professor's time slot.
 - **Supply Chain Routing:** FedEx and Amazon use Constraint Satisfaction algorithms to plot the absolute most efficient delivery routes for their trucks while respecting constraints (e.g., Truck A must finish by 5 PM, Truck B cannot carry hazardous materials).
 
----
-
-## 5. Interactive Quiz
-
-**Beginner:**
-1. How does a computer view a Sudoku puzzle? *(Answer: As a Constraint Satisfaction Problem. It just sees a grid with three strict mathematical rules that cannot be violated).*
-
-**Intermediate:**
-2. What algorithm do engines use to solve Sudoku so fast? *(Answer: The Backtracking Algorithm. It guesses a number, moves forward, and if it hits a dead end, it recursively erases its steps and tries a different branch).*
-
-**Advanced:**
-3. Why is Sudoku mathematically similar to modern Cryptography? *(Answer: Both belong to the NP-Complete class of problems. They rely on the asymmetry of computation: it is incredibly easy for a computer to verify the final answer, but exponentially difficult for a computer to guess the answer from scratch).*
-
----
-*End of Elite Learning Hub Content.*
 `,
   howTo: [
     "**Step 1:** Select a difficulty level to generate a valid puzzle.",
