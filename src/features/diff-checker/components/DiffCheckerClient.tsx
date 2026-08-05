@@ -154,7 +154,7 @@ function DropArea({ id, label, value, onChange }: { id: string; label: string; v
           "w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none",
           dragging && "ring-2 ring-blue"
         )}
-        rows={12}
+        rows={20}
         placeholder={dragging ? "Drop to load file..." : `Paste ${label.toLowerCase()} text or drop a file…`}
         value={value}
         onChange={e => handleChange(e.target.value)}

@@ -19,6 +19,7 @@ export default function Page() {
       description="Compare two text blocks line by line. Added lines in green, removed in red."
       category={cat}
       toolId={toolId}
+      fullWidth
     >
       <DiffCheckerClientWrapper />
 

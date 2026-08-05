@@ -124,7 +124,7 @@ export function FocusModeWrapper({
           <div className={`
               absolute z-content
               ${triggerPosition === 'top-right' ? 'top-3 right-3' : 'bottom-3 right-3'}
-              flex items-center gap-1.5 opacity-0 group-hover/focus:opacity-100 focus-within:opacity-100 transition-all duration-150
+              flex items-center gap-1.5 opacity-0 pointer-events-none group-hover/focus:opacity-100 group-hover/focus:pointer-events-auto focus-within:opacity-100 focus-within:pointer-events-auto transition-all duration-150
           `}>
             <button
               onClick={() => enterFocus(toolId)}
