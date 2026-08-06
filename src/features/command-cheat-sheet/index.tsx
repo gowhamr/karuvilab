@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { LiveFilterBar } from '@/components/ui/LiveFilterBar';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { m, AnimatePresence } from 'framer-motion';
-import { Search, X, Terminal, ShieldAlert, Cpu, Monitor, Apple, Command as CmdIcon, Check, Copy, ExternalLink, HelpCircle } from 'lucide-react';
+import { Search, X, Terminal, ShieldAlert, Cpu, Monitor, Apple, Command as CmdIcon, Check, Copy, ExternalLink, HelpCircle, Sparkles, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/src/hooks/useDragScroll';
 import { COMMANDS_DATA, COMMAND_CATEGORIES, CommandEntry } from './commandsData';
 import { Card } from '@/components/ui/Card';
@@ -33,6 +33,22 @@ export default function CommandCheatSheet() {
       return matchesSearch && matchesCategory;
     });
   }, [search, activeCategory]);
+
+  // Compute 4 related commands for the selected modal command
+  const relatedCommands = useMemo(() => {
+    if (!selectedCommand) return [];
+    const currentCmdLower = selectedCommand.cmd.toLowerCase();
+    const currentCategory = selectedCommand.category;
+    const baseKeyword = currentCmdLower.split(' ')[0] || '';
+
+    return COMMANDS_DATA.filter(c => {
+      if (c.cmd === selectedCommand.cmd || c.id === selectedCommand.id) return false;
+      const cCmdLower = c.cmd.toLowerCase();
+      const sharesKeyword = baseKeyword.length >= 3 && cCmdLower.startsWith(baseKeyword);
+      const sharesCategory = c.category === currentCategory;
+      return sharesKeyword || sharesCategory;
+    }).slice(0, 4);
+  }, [selectedCommand]);
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -257,6 +273,37 @@ export default function CommandCheatSheet() {
                     <div>
                       <span className="font-bold block mb-0.5">Safety Warning</span>
                       {selectedCommand.warning}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Related Commands Grid ── */}
+                {relatedCommands.length > 0 && (
+                  <div className="space-y-3 pt-2 border-t border-border/40">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-4 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-blue" /> Related Commands
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {relatedCommands.map(rel => (
+                        <button
+                          key={rel.id || rel.cmd}
+                          onClick={() => setSelectedCommand(rel)}
+                          className="text-left p-3 rounded-xl bg-surface-2/40 border border-border/50 hover:border-blue/50 hover:bg-blue/5 transition-all group"
+                        >
+                          <div className="flex items-center justify-between gap-1 mb-1">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-blue bg-blue/10 px-1.5 py-0.5 rounded">
+                              {rel.category}
+                            </span>
+                            <span className="text-[10px] text-text-4 group-hover:text-blue transition-colors flex items-center gap-0.5">
+                              View <ChevronRight className="w-3 h-3" />
+                            </span>
+                          </div>
+                          <code className="text-xs font-mono text-text block truncate group-hover:text-blue font-semibold">
+                            {rel.cmd}
+                          </code>
+                          <p className="text-[11px] text-text-4 truncate mt-0.5">{rel.desc}</p>
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
