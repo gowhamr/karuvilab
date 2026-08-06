@@ -213,7 +213,7 @@ export default function AllToolsClient() {
               {viewMode === "grid" ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
                   {group.tools.map(tool => (
-                    <ToolCard key={tool.id} tool={tool} compact />
+                    <ToolCard key={tool.id} tool={tool} compact hideCategory={activeCategory !== "all"} />
                   ))}
                 </div>
               ) : (
@@ -243,9 +243,11 @@ export default function AllToolsClient() {
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0">
-                          <Badge variant="neutral" size="sm" className="text-[10px]">
-                            {tool.category}
-                          </Badge>
+                          {activeCategory === "all" && (
+                            <Badge variant="neutral" size="sm" className="text-[10px]">
+                              {tool.category}
+                            </Badge>
+                          )}
                           {!tool.requiresNetwork && (
                             <Badge variant="success" size="sm" className="text-[10px] hidden sm:inline-flex">
                               Offline
