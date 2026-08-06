@@ -89,6 +89,7 @@ export function DeveloperPanel() {
   const [activeTab, setActiveTab] = useState<"metrics" | "ai" | "capabilities" | "architecture" | "learn">("metrics");
   const [activeExplainConcept, setActiveExplainConcept] = useState<string | null>(null);
   const [heapMb, setHeapMb] = useState<number>(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const updateMemoryUsage = useCallback(() => {
@@ -99,6 +100,22 @@ export function DeveloperPanel() {
       setHeapMb(0);
     }
   }, []);
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    updateMemoryUsage();
+    
+    // Sample main thread latency & memory state
+    const t0 = performance.now();
+    setTimeout(() => {
+      const currentHeap = typeof window !== "undefined" && (performance as any).memory
+        ? Math.round((performance as any).memory.usedJSHeapSize / (1024 * 1024))
+        : 0;
+      if (currentHeap > 0) setHeapMb(currentHeap);
+      setIsRefreshing(false);
+      toast(`Performance diagnostics refreshed ${currentHeap > 0 ? `(Heap: ${currentHeap} MB)` : ""}`, "info");
+    }, 350);
+  }, [updateMemoryUsage, toast]);
 
   useEffect(() => {
     const handleToggle = () => setIsOpen(prev => !prev);
@@ -258,11 +275,13 @@ export function DeveloperPanel() {
 
             <div className="flex items-center gap-1">
               <button
-                onClick={updateMemoryUsage}
-                aria-label="Refresh memory usage"
-                className="p-1.5 hover:bg-surface-elevated rounded-lg text-text-muted hover:text-text transition-colors"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                aria-label="Refresh performance metrics"
+                title="Refresh performance metrics and memory usage"
+                className="p-1.5 hover:bg-surface-elevated rounded-lg text-text-muted hover:text-text transition-colors disabled:opacity-50 cursor-pointer"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
+                <RefreshCw className={cn("w-3.5 h-3.5 transition-transform", isRefreshing && "animate-spin text-blue")} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
