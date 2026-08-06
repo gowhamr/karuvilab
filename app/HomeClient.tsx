@@ -550,7 +550,7 @@ export default function HomeClient() {
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 min-h-20 content-start">
                               {groupTools.map(tool => (
                                 <div key={tool.id} className="flex flex-col h-full">
-                                  <ToolCard tool={tool} compact />
+                                  <ToolCard tool={tool} compact hideCategory={activeCategory !== 'all'} />
                                 </div>
                               ))}
                             </div>

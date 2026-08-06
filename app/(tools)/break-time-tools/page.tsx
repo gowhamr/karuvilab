@@ -59,7 +59,7 @@ export default function BreakTimePage() {
               <h2 className="text-2xl font-bold">{subCat}</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                 {categoryTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} compact />
+                  <ToolCard key={tool.id} tool={tool} compact hideCategory />
                 ))}
               </div>
             </div>

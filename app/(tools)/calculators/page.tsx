@@ -41,7 +41,7 @@ export default function CalculatorsPage() {
               {groupName}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-              {groupTools.map(tool => <ToolCard key={tool.id} tool={tool} compact />)}
+              {groupTools.map(tool => <ToolCard key={tool.id} tool={tool} compact hideCategory />)}
             </div>
           </section>
         ))}

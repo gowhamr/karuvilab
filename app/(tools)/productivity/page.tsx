@@ -31,7 +31,7 @@ export default function ProductivityPage() {
         <p className="text-text-3 text-lg">{cat.description}</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-        {tools.map(tool => <ToolCard key={tool.id} tool={tool} compact />)}
+        {tools.map(tool => <ToolCard key={tool.id} tool={tool} compact hideCategory />)}
       </div>
     </div>
   );

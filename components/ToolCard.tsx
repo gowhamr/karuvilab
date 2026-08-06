@@ -15,9 +15,10 @@ import { useRouter } from "next/navigation";
 interface ToolCardProps {
   tool: ToolEntry;
   compact?: boolean;
+  hideCategory?: boolean;
 }
 
-export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps) {
+export const ToolCard = memo(function ToolCard({ tool, compact, hideCategory }: ToolCardProps) {
   const router = useRouter();
   const favorites = useFavoriteStore(state => state.favorites);
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
@@ -80,12 +81,13 @@ export const ToolCard = memo(function ToolCard({ tool, compact }: ToolCardProps)
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 flex-wrap mt-auto">
-            <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-xs">
-              {tool.category}
-            </Badge>
-
-          </div>
+          {!hideCategory && (
+            <div className="flex items-center gap-1.5 flex-wrap mt-auto">
+              <Badge variant="neutral" size="sm" className="bg-surface-elevated/50 text-xs">
+                {tool.category}
+              </Badge>
+            </div>
+          )}
         </Card>
       </Link>
 
