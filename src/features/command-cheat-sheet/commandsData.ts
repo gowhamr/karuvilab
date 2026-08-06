@@ -1,5 +1,5 @@
 export interface CommandEntry {
-  id: string;
+  id?: string;
   cmd: string;
   desc: string;
   category: 'Git' | 'Linux' | 'Windows' | 'macOS' | 'SSH/SFTP' | 'Permissions' | 'OpenSSL' | 'Editors' | 'Network' | 'Node/npm' | 'Docker' | 'Kubernetes' | 'Python' | 'Hashing';
