@@ -1,182 +1,67 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { LiveFilterBar } from '@/components/ui/LiveFilterBar';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { m, AnimatePresence } from 'framer-motion';
-import { Search } from 'lucide-react';
-
-interface Command {
-  cmd: string;
-  desc: string;
-  category: string;
-}
-
-const COMMANDS: Command[] = [
-  // Git
-  { category: 'Git', cmd: 'git init', desc: 'Initialize a new local repository' },
-  { category: 'Git', cmd: 'git clone <url>', desc: 'Clone a repository from a URL' },
-  { category: 'Git', cmd: 'git add .', desc: 'Add all current changes to the staging area' },
-  { category: 'Git', cmd: 'git commit -m "<msg>"', desc: 'Commit staged changes with a message' },
-  { category: 'Git', cmd: 'git push origin <branch>', desc: 'Push local commits to a remote branch' },
-  { category: 'Git', cmd: 'git pull', desc: 'Fetch and merge changes from remote' },
-  { category: 'Git', cmd: 'git stash', desc: 'Stash changes in a dirty working directory' },
-  { category: 'Git', cmd: 'git log --oneline', desc: 'View commit history in one line' },
-  { category: 'Git', cmd: 'git rebase -i HEAD~N', desc: 'Interactively rebase the last N commits' },
-
-  // Linux
-  { category: 'Linux', cmd: 'ls -la', desc: 'List all files with details and hidden files' },
-  { category: 'Linux', cmd: 'chmod +x <file>', desc: 'Make a file executable' },
-  { category: 'Linux', cmd: 'chown <user>:<group> <file>', desc: 'Change file owner and group' },
-  { category: 'Linux', cmd: 'sudo systemctl restart <service>', desc: 'Restart a system service' },
-  { category: 'Linux', cmd: 'df -h', desc: 'Show disk space usage in human-readable format' },
-  { category: 'Linux', cmd: 'du -sh *', desc: 'Show size of directories in current path' },
-  { category: 'Linux', cmd: 'htop', desc: 'Interactive process viewer (advanced top)' },
-  { category: 'Linux', cmd: 'lsof -i :<port>', desc: 'Find process running on a specific port' },
-  { category: 'Linux', cmd: 'grep -r "<pattern>" .', desc: 'Search for pattern recursively in current directory' },
-  { category: 'Linux', cmd: 'tail -f <file>', desc: 'Output appended data as the file grows' },
-
-  // Windows
-  { category: 'Windows', cmd: 'ipconfig /all', desc: 'Display full TCP/IP configuration' },
-  { category: 'Windows', cmd: 'systeminfo', desc: 'Display operating system configuration' },
-  { category: 'Windows', cmd: 'tasklist', desc: 'Display a list of currently running processes' },
-  { category: 'Windows', cmd: 'netstat -ano', desc: 'Display active connections and port IDs' },
-  { category: 'Windows', cmd: 'sfc /scannow', desc: 'Scan and repair system files' },
-  { category: 'Windows', cmd: 'gpupdate /force', desc: 'Force update of Group Policy settings' },
-  { category: 'Windows', cmd: 'dir /ah', desc: 'List all files including hidden ones' },
-
-  // Node / npm
-  { category: 'Node/npm', cmd: 'npm init -y', desc: 'Initialize a new package.json' },
-  { category: 'Node/npm', cmd: 'npm install <pkg>', desc: 'Install a package' },
-  { category: 'Node/npm', cmd: 'npm i -D <pkg>', desc: 'Install a package as a dev dependency' },
-  { category: 'Node/npm', cmd: 'npx <pkg>', desc: 'Execute a package binary' },
-  { category: 'Node/npm', cmd: 'npm run <script>', desc: 'Run a script from package.json' },
-  { category: 'Node/npm', cmd: 'npm cache clean --force', desc: 'Clear the npm cache completely' },
-
-  // Network / cURL
-  { category: 'Network', cmd: 'curl -O <url>', desc: 'Download a file and save it with its original name' },
-  { category: 'Network', cmd: 'curl -I <url>', desc: 'Fetch only the HTTP headers' },
-  { category: 'Network', cmd: 'curl -X POST -d \'<data>\' <url>', desc: 'Send a POST request with data' },
-  { category: 'Network', cmd: 'ping <host>', desc: 'Test reachability of a host' },
-  { category: 'Network', cmd: 'traceroute <host>', desc: 'Trace the network path to a host' },
-
-  // Kubernetes
-  { category: 'Kubernetes', cmd: 'kubectl get pods', desc: 'List all pods in the current namespace' },
-  { category: 'Kubernetes', cmd: 'kubectl logs <pod>', desc: 'Print the logs for a container in a pod' },
-  { category: 'Kubernetes', cmd: 'kubectl apply -f <file.yaml>', desc: 'Apply a configuration to a resource' },
-  { category: 'Kubernetes', cmd: 'kubectl describe pod <pod>', desc: 'Show detailed information about a pod' },
-  { category: 'Kubernetes', cmd: 'kubectl port-forward <pod> <local>:<remote>', desc: 'Forward local port to a pod' },
-
-  // Python
-  { category: 'Python', cmd: 'python -m venv venv', desc: 'Create a virtual environment' },
-  { category: 'Python', cmd: 'source venv/bin/activate', desc: 'Activate virtual environment (Linux/Mac)' },
-  { category: 'Python', cmd: 'venv\\Scripts\\activate', desc: 'Activate virtual environment (Windows)' },
-  { category: 'Python', cmd: 'pip install -r reqs.txt', desc: 'Install packages from a requirements file' },
-  { category: 'Python', cmd: 'pip freeze > reqs.txt', desc: 'Save installed packages to a requirements file' },
-
-  // SSH
-  { category: 'SSH', cmd: 'ssh <user>@<host>', desc: 'Connect to a remote machine via SSH' },
-  { category: 'SSH', cmd: 'ssh-keygen -t ed25519', desc: 'Generate a new SSH key (Modern/Secure)' },
-  { category: 'SSH', cmd: 'ssh-copy-id <user>@<host>', desc: 'Copy your public key to a remote server' },
-  { category: 'SSH', cmd: 'ssh -i <key_path> <user>@<host>', desc: 'Connect using a specific private key' },
-  { category: 'SSH', cmd: 'ssh -L <local_port>:localhost:<remote_port> <user>@<host>', desc: 'Setup local port forwarding (tunnel)' },
-
-  // SFTP
-  { category: 'SFTP', cmd: 'sftp <user>@<host>', desc: 'Open a secure FTP connection' },
-  { category: 'SFTP', cmd: 'put <local_file>', desc: 'Upload a file to the remote server' },
-  { category: 'SFTP', cmd: 'get <remote_file>', desc: 'Download a file from the remote server' },
-  { category: 'SFTP', cmd: 'lls', desc: 'List files in the local directory' },
-
-  // OpenSSL
-  { category: 'OpenSSL', cmd: 'openssl genrsa -out key.pem 2048', desc: 'Generate a 2048-bit RSA private key' },
-  { category: 'OpenSSL', cmd: 'openssl req -new -key key.pem -out csr.pem', desc: 'Generate a Certificate Signing Request (CSR)' },
-  { category: 'OpenSSL', cmd: 'openssl x509 -text -noout -in cert.pem', desc: 'View full details of a certificate' },
-  { category: 'OpenSSL', cmd: 'openssl s_client -connect <host>:443', desc: 'Test and debug SSL/TLS connections' },
-
-  // Hashing
-  { category: 'Hashing', cmd: 'sha256sum <file>', desc: 'Calculate SHA256 checksum (Linux)' },
-  { category: 'Hashing', cmd: 'md5sum <file>', desc: 'Calculate MD5 checksum (Linux)' },
-  { category: 'Hashing', cmd: 'certutil -hashfile <file> SHA256', desc: 'Calculate SHA256 checksum (Windows)' },
-
-  // Docker
-  { category: 'Docker', cmd: 'docker ps', desc: 'List running containers' },
-  { category: 'Docker', cmd: 'docker images', desc: 'List local images' },
-  { category: 'Docker', cmd: 'docker build -t <name> .', desc: 'Build an image from a Dockerfile' },
-  { category: 'Docker', cmd: 'docker run -p <host>:<cont> <name>', desc: 'Run a container with port mapping' },
-  { category: 'Docker', cmd: 'docker exec -it <id> /bin/bash', desc: 'Open an interactive shell in a container' },
-  { category: 'Docker', cmd: 'docker system prune -a', desc: 'Remove all unused images and containers' },
-
-  // Power User (Advanced)
-  { category: 'Advanced', cmd: "awk '{print $1}' <file>", desc: 'Extract first column from a text file (Linux/Unix)' },
-  { category: 'Advanced', cmd: "sed -i 's/old/new/g' <file>", desc: 'Find and replace text inside a file (Linux/Unix)' },
-  { category: 'Advanced', cmd: 'robocopy <src> <dest> /MIR', desc: 'Mirror a directory tree (Robust Copy for Windows)' },
-  { category: 'Advanced', cmd: 'find . -type f -name "*.log" -delete', desc: 'Find and delete all log files recursively' },
-  { category: 'Advanced', cmd: 'lscpu', desc: 'Display information about the CPU architecture' },
-  
-  // Legacy / SCO Unix
-  { category: 'Unix/SCO', cmd: 'sysadmsh', desc: 'SCO Admin visual shell (Legacy Admin Tool)' },
-  { category: 'Unix/SCO', cmd: 'sar -u 1 10', desc: 'System activity reporter (Monitor CPU usage)' },
-  { category: 'Unix/SCO', cmd: 'lp -d <printer> <file>', desc: 'Submit print request to a specific printer' },
-
-  // Editors
-  { category: 'Editors', cmd: 'vi <file>', desc: 'Open file in Vi/Vim editor' },
-  { category: 'Editors', cmd: 'i', desc: 'Vi: Enter Insert mode (Edit text)' },
-  { category: 'Editors', cmd: 'Esc', desc: 'Vi: Return to Command mode' },
-  { category: 'Editors', cmd: ':wq', desc: 'Vi: Save and Quit' },
-  { category: 'Editors', cmd: ':q!', desc: 'Vi: Quit without saving' },
-  { category: 'Editors', cmd: 'dd', desc: 'Vi: Delete current line' },
-  { category: 'Editors', cmd: 'yy', desc: 'Vi: Yank (Copy) current line' },
-  { category: 'Editors', cmd: 'p', desc: 'Vi: Paste after cursor' },
-  { category: 'Editors', cmd: 'u', desc: 'Vi: Undo last change' },
-  { category: 'Editors', cmd: 'Ctrl + r', desc: 'Vi: Redo last undone change' },
-  { category: 'Editors', cmd: '/<pattern>', desc: 'Vi: Search forward for a pattern' },
-  { category: 'Editors', cmd: ':%s/old/new/g', desc: 'Vi: Replace all occurrences of old with new' },
-  { category: 'Editors', cmd: 'gg', desc: 'Vi: Jump to the beginning of the file' },
-  { category: 'Editors', cmd: 'G', desc: 'Vi: Jump to the end of the file' },
-  { category: 'Editors', cmd: ':<number>', desc: 'Vi: Jump to a specific line number' },
-  { category: 'Editors', cmd: 'v', desc: 'Vi: Enter Visual mode (Highlight text)' },
-  { category: 'Editors', cmd: ':vsp', desc: 'Vi: Split screen vertically' },
-  { category: 'Editors', cmd: ':bn', desc: 'Vi: Switch to next buffer/file' },
-  { category: 'Editors', cmd: 'nano <file>', desc: 'Open file in Nano editor' },
-  { category: 'Editors', cmd: 'Ctrl + O', desc: 'Nano: Save (Write Out) changes' },
-  { category: 'Editors', cmd: 'Ctrl + X', desc: 'Nano: Exit editor' },
-  { category: 'Editors', cmd: 'Ctrl + W', desc: 'Nano: Search for text' },
-];
-
-const CATEGORIES = ['All', ...Array.from(new Set(COMMANDS.map(c => c.category)))];
-
+import { Search, X, Terminal, ShieldAlert, Cpu, Monitor, Apple, Command as CmdIcon, Check, Copy, ExternalLink, HelpCircle } from 'lucide-react';
 import { useDragScroll } from '@/src/hooks/useDragScroll';
+import { COMMANDS_DATA, COMMAND_CATEGORIES, CommandEntry } from './commandsData';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 
 export default function CommandCheatSheet() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
+  const [selectedCommand, setSelectedCommand] = useState<CommandEntry | null>(null);
   const { containerRef, events, dragged } = useDragScroll<HTMLDivElement>();
 
+  // Filter commands based on search and category
   const filteredCommands = useMemo(() => {
-    return COMMANDS.filter(c => {
-      const matchesSearch = c.cmd.toLowerCase().includes(search.toLowerCase()) || 
-                            c.desc.toLowerCase().includes(search.toLowerCase());
+    return COMMANDS_DATA.filter(c => {
+      const query = search.toLowerCase().trim();
+      const matchesSearch = 
+        c.cmd.toLowerCase().includes(query) || 
+        c.desc.toLowerCase().includes(query) ||
+        (c.details && c.details.toLowerCase().includes(query)) ||
+        (c.syntax && c.syntax.toLowerCase().includes(query)) ||
+        (c.linux && c.linux.toLowerCase().includes(query)) ||
+        (c.windows && c.windows.toLowerCase().includes(query)) ||
+        (c.mac && c.mac.toLowerCase().includes(query));
       const matchesCategory = activeCategory === 'All' || c.category === activeCategory;
       return matchesSearch && matchesCategory;
     });
   }, [search, activeCategory]);
 
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedCommand(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className="space-y-6">
+      {/* ── Search Bar & Category Filter Pills ── */}
       <div className="flex flex-col lg:flex-row gap-6 items-center">
         <div className="flex-1 w-full">
           <LiveFilterBar 
             value={search} 
             onChange={setSearch} 
-            placeholder="Search commands or descriptions..."
+            placeholder="Search commands, flags, SSH, nano, permissions, OpenSSL, or OS alternatives..."
           />
         </div>
         <div 
           ref={containerRef}
           {...events}
-          className="flex gap-2 overflow-x-auto pb-4 pt-1 px-1 w-full lg:w-auto no-scrollbar snap-x select-none"
+          className="flex gap-2 overflow-x-auto pb-3 pt-1 px-1 w-full lg:w-auto no-scrollbar snap-x select-none"
         >
-          {CATEGORIES.map(cat => (
+          {COMMAND_CATEGORIES.map(cat => (
             <button
               key={cat}
               onClick={(e) => {
@@ -186,9 +71,9 @@ export default function CommandCheatSheet() {
                 }
                 setActiveCategory(cat);
               }}
-              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all whitespace-nowrap snap-start ${
+              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap snap-start ${
                 activeCategory === cat 
-                  ? 'bg-blue text-white shadow-xl shadow-blue/30 scale-105' 
+                  ? 'bg-blue text-white shadow-lg shadow-blue/30 scale-105' 
                   : 'bg-surface/80 border border-border text-text-3 hover:text-text hover:bg-hover'
               }`}
             >
@@ -198,34 +83,44 @@ export default function CommandCheatSheet() {
         </div>
       </div>
 
+      {/* ── Main Command Grid ── */}
       <div>
         <AnimatePresence mode="popLayout">
           {filteredCommands.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 items-stretch">
               {filteredCommands.map((command, i) => (
                 <m.div
-                  key={command.cmd}
+                  key={command.id || command.cmd}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ delay: Math.min(i, 20) * 0.02 }}
-                  className="group bg-surface/50 border border-border rounded-xl p-4 hover:border-blue/50 transition-all flex flex-col justify-between gap-4 h-full"
+                  transition={{ delay: Math.min(i, 20) * 0.015 }}
+                  onClick={() => setSelectedCommand(command)}
+                  className="group bg-surface/60 border border-border/80 rounded-2xl p-5 hover:border-blue/50 hover:shadow-md transition-all flex flex-col justify-between gap-4 h-full cursor-pointer relative"
                 >
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-md bg-blue/10 text-[10px] font-bold uppercase tracking-wider text-blue">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="px-2.5 py-1 rounded-lg bg-blue/10 text-[10px] font-bold uppercase tracking-wider text-blue">
                         {command.category}
                       </span>
+                      <div className="flex items-center gap-1.5 text-text-4 text-xs group-hover:text-blue transition-colors">
+                        <span>Details</span>
+                        <CmdIcon className="w-3.5 h-3.5" />
+                      </div>
                     </div>
-                    <code className="text-[15px] sm:text-base font-mono text-text block group-hover:text-blue transition-colors break-words">
+
+                    <code className="text-sm sm:text-base font-mono text-text block group-hover:text-blue transition-colors break-words font-semibold">
                       {command.cmd}
                     </code>
                   </div>
-                  <div className="flex items-end justify-between gap-3 mt-auto pt-2 border-t border-border/50">
-                    <p className="text-sm text-text-4 leading-snug">
+
+                  <div className="flex items-end justify-between gap-3 mt-auto pt-3 border-t border-border/50">
+                    <p className="text-xs sm:text-sm text-text-3 leading-snug line-clamp-2">
                       {command.desc}
                     </p>
-                    <CopyButton text={command.cmd} className="flex-shrink-0" />
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <CopyButton text={command.cmd} className="flex-shrink-0" />
+                    </div>
                   </div>
                 </m.div>
               ))}
@@ -240,12 +135,143 @@ export default function CommandCheatSheet() {
                 <Search className="w-8 h-8 text-text-4" />
               </div>
               <h3 className="text-text-3 font-medium">No commands found</h3>
-              <p className="text-text-4 text-sm">Try adjusting your search or category filter.</p>
+              <p className="text-text-4 text-sm">Try searching for "nano", "ssh", "chmod", "openssl", or choose a category.</p>
             </m.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* ── Interactive Command Detail Modal ── */}
+      <AnimatePresence>
+        {selectedCommand && (
+          <div className="fixed inset-0 z-modal flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+            <m.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.2 }}
+              className="bg-surface border border-border shadow-2xl rounded-3xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b border-border/60 bg-surface-elevated/40">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue">
+                    <Terminal className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue bg-blue/10 px-2 py-0.5 rounded-md">
+                      {selectedCommand.category}
+                    </span>
+                    <h3 className="text-lg font-bold text-text mt-0.5">{selectedCommand.desc}</h3>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedCommand(null)}
+                  className="w-9 h-9 rounded-full bg-surface-2 hover:bg-hover text-text-4 hover:text-text flex items-center justify-center transition-colors"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Content Scroll Body */}
+              <div className="p-6 overflow-y-auto space-y-6 flex-1 text-text-2">
+                {/* Primary Command Snippet Box */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-text-4">Command</label>
+                  <div className="flex items-center justify-between gap-3 p-4 bg-bg border border-border/80 rounded-2xl font-mono text-sm sm:text-base text-text font-bold">
+                    <span className="break-all">{selectedCommand.cmd}</span>
+                    <CopyButton text={selectedCommand.cmd} />
+                  </div>
+                </div>
+
+                {/* Extended Details */}
+                {selectedCommand.details && (
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-4">Explanation & Usage</label>
+                    <p className="text-sm text-text-3 leading-relaxed bg-surface-2/40 p-4 rounded-xl border border-border/40">
+                      {selectedCommand.details}
+                    </p>
+                  </div>
+                )}
+
+                {/* Syntax & Flags */}
+                {selectedCommand.syntax && (
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-4">Syntax Pattern</label>
+                    <div className="p-3 bg-bg border border-border/60 rounded-xl font-mono text-xs text-text-3">
+                      {selectedCommand.syntax}
+                    </div>
+                  </div>
+                )}
+
+                {/* Cross-Platform Equivalents Section */}
+                {(selectedCommand.linux || selectedCommand.mac || selectedCommand.windows) && (
+                  <div className="space-y-3">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-4">Cross-Platform Alternatives</label>
+                    <div className="space-y-2">
+                      {selectedCommand.linux && (
+                        <div className="flex items-start gap-3 p-3 bg-surface-2/40 rounded-xl border border-border/50 text-xs">
+                          <span className="font-bold text-text shrink-0 w-24 flex items-center gap-1.5">
+                            🐧 Linux
+                          </span>
+                          <code className="font-mono text-text-2 break-all flex-1">{selectedCommand.linux}</code>
+                        </div>
+                      )}
+                      {selectedCommand.mac && (
+                        <div className="flex items-start gap-3 p-3 bg-surface-2/40 rounded-xl border border-border/50 text-xs">
+                          <span className="font-bold text-text shrink-0 w-24 flex items-center gap-1.5">
+                            🍎 macOS
+                          </span>
+                          <code className="font-mono text-text-2 break-all flex-1">{selectedCommand.mac}</code>
+                        </div>
+                      )}
+                      {selectedCommand.windows && (
+                        <div className="flex items-start gap-3 p-3 bg-surface-2/40 rounded-xl border border-border/50 text-xs">
+                          <span className="font-bold text-text shrink-0 w-24 flex items-center gap-1.5">
+                            🪟 Windows
+                          </span>
+                          <code className="font-mono text-text-2 break-all flex-1">{selectedCommand.windows}</code>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Real World Example */}
+                {selectedCommand.example && (
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-4">Practical Example</label>
+                    <div className="flex items-center justify-between gap-3 p-3.5 bg-bg border border-border/60 rounded-xl font-mono text-xs text-text">
+                      <span className="break-all">{selectedCommand.example}</span>
+                      <CopyButton text={selectedCommand.example} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Security / Safety Warning */}
+                {selectedCommand.warning && (
+                  <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-300 rounded-2xl text-xs font-medium">
+                    <ShieldAlert className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+                    <div>
+                      <span className="font-bold block mb-0.5">Safety Warning</span>
+                      {selectedCommand.warning}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-border/60 bg-surface-elevated/40 flex justify-end">
+                <Button variant="secondary" onClick={() => setSelectedCommand(null)}>
+                  Close (Esc)
+                </Button>
+              </div>
+            </m.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
