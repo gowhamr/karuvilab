@@ -12,6 +12,8 @@ import { Heart } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
+import { useToast } from "@/components/ui/Toast";
+
 interface ToolCardProps {
   tool: ToolEntry;
   compact?: boolean;
@@ -22,6 +24,7 @@ export const ToolCard = memo(function ToolCard({ tool, compact, hideCategory }: 
   const router = useRouter();
   const favorites = useFavoriteStore(state => state.favorites);
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
+  const { toast } = useToast();
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -44,8 +47,10 @@ export const ToolCard = memo(function ToolCard({ tool, compact, hideCategory }: 
   const handleFavClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const willBeFav = !isFavorite;
     toggleFavorite(tool.id);
-  }, [toggleFavorite, tool.id]);
+    toast(willBeFav ? `Added ${tool.name} to favorites` : `Removed ${tool.name} from favorites`, "info");
+  }, [toggleFavorite, tool.id, isFavorite, tool.name, toast]);
 
   return (
     <div className="relative group w-full h-full">

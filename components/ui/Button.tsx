@@ -32,7 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "inline-flex items-center justify-center font-bold tracking-tight transition-all duration-150 outline-none select-none",
           "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
-          "active:scale-98 disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100",
+          "active:scale-[0.97] active:shadow-inner disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100",
           
           // Radius: Button 16px (rounded-btn)
           "rounded-btn",

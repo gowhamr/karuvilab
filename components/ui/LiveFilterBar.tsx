@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, memo } from "react";
-import { Search, Command } from "lucide-react";
+import { Search, Command, X } from "lucide-react";
 
 interface SearchBarProps {
   value: string;
@@ -43,8 +43,21 @@ export const LiveFilterBar = memo(function LiveFilterBar({ value, onChange, plac
           className="w-full h-full px-4 bg-transparent outline-none text-base text-text placeholder:text-text-4 font-bold tracking-tight"
         />
 
-        <div className="pr-4 hidden sm:flex items-center">
-          <div className="flex items-center gap-1 px-1.5 py-1 bg-bg border border-border rounded-lg text-tiny font-mono font-bold text-text-4 group-focus-within:border-blue/20 group-focus-within:text-blue/60 transition-colors">
+        <div className="pr-4 flex items-center gap-2">
+          {value && (
+            <button
+              type="button"
+              onClick={() => {
+                onChange("");
+                inputRef.current?.focus();
+              }}
+              className="p-1.5 rounded-lg text-text-4 hover:text-text hover:bg-surface-elevated transition-all active:scale-90 cursor-pointer"
+              aria-label="Clear search input"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+          <div className="hidden sm:flex items-center gap-1 px-1.5 py-1 bg-bg border border-border rounded-lg text-tiny font-mono font-bold text-text-4 group-focus-within:border-blue/20 group-focus-within:text-blue/60 transition-colors">
             <Command className="w-2.5 h-2.5" />
             <span>K</span>
           </div>

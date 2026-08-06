@@ -30,8 +30,8 @@ export function CopyButton({
   };
 
   const motionProps = !disabled ? {
-    whileHover: { scale: 1.02 },
-    whileTap: { scale: 0.95 }
+    whileHover: { scale: 1.03 },
+    whileTap: { scale: 0.92 }
   } : {};
 
   return (
@@ -41,15 +41,15 @@ export function CopyButton({
       disabled={disabled}
       aria-label={copied ? "Copied!" : label.toLowerCase().startsWith("copy") ? label : `Copy ${label}`}
       className={`
-        min-h-11 px-3 py-2 text-sm font-bold rounded-lg transition-all border outline-none focus-visible:ring-2 focus-visible:ring-blue/20
-        ${copied ? "bg-green-500/10 border-green-500/30 text-green-600" : "bg-surface border-border hov:border-blue hov:text-blue"}
+        min-h-11 px-3 py-2 text-sm font-bold rounded-lg transition-all border outline-none focus-visible:ring-2 focus-visible:ring-blue/20 cursor-pointer active:scale-95
+        ${copied ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-300 font-extrabold shadow-sm" : "bg-surface border-border hov:border-blue hov:text-blue"}
         ${disabled ? "opacity-40 cursor-not-allowed grayscale" : ""}
         ${className || ""}
       `}
     >
       <div className="flex items-center gap-2">
         {copied ? (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className="w-4 h-4 text-emerald-500 animate-in zoom-in-75 duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         ) : (
