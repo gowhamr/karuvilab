@@ -123,7 +123,7 @@ export function FocusModeWrapper({
         <div className="relative group/focus">
           <div className={`
               absolute z-content
-              ${triggerPosition === 'top-right' ? 'top-3 right-3' : 'bottom-3 right-3'}
+              ${triggerPosition === 'top-right' ? '-top-10 right-0' : 'bottom-3 right-3'}
               flex items-center gap-1.5 opacity-0 pointer-events-none group-hover/focus:opacity-100 group-hover/focus:pointer-events-auto focus-within:opacity-100 focus-within:pointer-events-auto transition-all duration-150
           `}>
             <button
