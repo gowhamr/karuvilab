@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useWorldClockStore, type ClockItem } from "@/src/features/world-clock/store";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
-import { Plus, Globe, Clock, Maximize2, Minimize2, Search, ArrowUpDown, Filter, Download, ArrowRight } from "lucide-react";
+import { Plus, Globe, Clock, Maximize2, Minimize2, Search, ArrowUpDown, Filter, Download, ArrowRight, LayoutGrid, Columns } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { TimezoneSearchModal } from "@/components/tools/world-clock/TimezoneSearchModal";
 import * as Popover from '@radix-ui/react-popover';
@@ -40,6 +40,7 @@ export default function WorldClockClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localTz, setLocalTz] = useState('');
   const [filterMode, setFilterMode] = useState<"all" | "open">("all");
+  const [mobileCols, setMobileCols] = useState<1 | 2>(2);
   const { toast } = useToast();
   const openFeedback = useSupportStore(state => state.openFeedback);
   
@@ -254,6 +255,14 @@ export default function WorldClockClient() {
              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-success animate-pulse" /> {openClocks} Open</span>
            </div>
            
+           <button 
+             onClick={() => setMobileCols(c => c === 1 ? 2 : 1)} 
+             title={mobileCols === 1 ? "Switch to 2-Column Mobile View" : "Switch to 1-Column Mobile View"} 
+             className="md:hidden p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center"
+           >
+             {mobileCols === 1 ? <LayoutGrid className="w-4 h-4" /> : <Columns className="w-4 h-4" />}
+           </button>
+
            <button onClick={handleSort} title="Sort Alphabetically" className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center">
              <ArrowUpDown className="w-4 h-4" />
            </button>
@@ -286,7 +295,11 @@ export default function WorldClockClient() {
           items={displayClocks.map(c => c.id)}
           strategy={rectSortingStrategy}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className={cn(
+            "grid gap-3 sm:gap-6",
+            mobileCols === 2 ? "grid-cols-2" : "grid-cols-1",
+            "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          )}>
             {/* Clock Cards */}
             {displayClocks.map((clock) => (
               <ClockCard 

@@ -50,7 +50,7 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
       ref={setNodeRef}
       style={style}
       className={cn(
-        "bg-surface border rounded-3xl p-6 flex flex-col justify-between group transition-all duration-300 min-h-72 relative overflow-hidden",
+        "bg-surface border rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col justify-between group transition-all duration-300 min-h-48 sm:min-h-72 relative overflow-hidden",
         isLocal ? "border-blue shadow-lg shadow-blue/5" : "border-border hover:border-text-4/50 shadow-sm hover:shadow-md",
         t.isNight ? "bg-indigo-950/10" : "bg-amber-500/5",
         isDragging ? "shadow-2xl scale-102 opacity-90 border-blue/50" : ""
@@ -66,12 +66,12 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
 
       {/* Header */}
       <div className="flex items-start justify-between relative z-content">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
+        <div className="space-y-1 min-w-0 flex-1 pr-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {isLocal ? (
-              <Star className="w-4 h-4 text-blue fill-current shrink-0 mt-0.5" />
+              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue fill-current shrink-0 mt-0.5" />
             ) : (
-              t.isNight ? <Moon className="w-4 h-4 text-text-muted shrink-0 mt-0.5" /> : <Sun className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+              t.isNight ? <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-muted shrink-0 mt-0.5" /> : <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0 mt-0.5" />
             )}
             {settings.primaryLabel === 'custom' ? (
               <input 
@@ -79,65 +79,65 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
                 value={clock.customLabel || ""}
                 onChange={handleCustomLabelChange}
                 placeholder={city}
-                className="font-black text-xl text-text leading-tight tracking-tight bg-transparent border-b border-dashed border-border/50 hover:border-text-4 focus:border-blue outline-none transition-colors w-full pb-0.5"
+                className="font-black text-base sm:text-xl text-text leading-tight tracking-tight bg-transparent border-b border-dashed border-border/50 hover:border-text-4 focus:border-blue outline-none transition-colors w-full pb-0.5"
                 onPointerDown={e => e.stopPropagation()} // Prevent drag when focusing input
               />
             ) : (
-              <h2 className="font-black text-xl text-text leading-tight tracking-tight">{title}</h2>
+              <h2 className="font-black text-base sm:text-xl text-text leading-tight tracking-tight truncate">{title}</h2>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <p className="text-xs text-text-muted font-bold uppercase tracking-wider">{subtitle}</p>
-            <span className="text-tiny font-bold uppercase tracking-widest-sm bg-surface-2 px-1.5 py-0.5 rounded text-text-3">
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+            <p className="text-[11px] sm:text-xs text-text-muted font-bold uppercase tracking-wider truncate">{subtitle}</p>
+            <span className="text-[10px] sm:text-tiny font-bold uppercase tracking-widest-sm bg-surface-2 px-1.5 py-0.5 rounded text-text-3 shrink-0">
               {t.relativeText}
             </span>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 sm:gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
           {isDraggable && (
             <div 
               {...attributes}
               {...listeners}
-              className="p-2 cursor-grab active:cursor-grabbing text-text-muted hover:text-text bg-surface-2 hover:bg-surface-2/80 rounded-xl touch-none flex items-center justify-center shadow-sm border border-transparent hover:border-border"
+              className="p-1.5 sm:p-2 cursor-grab active:cursor-grabbing text-text-muted hover:text-text bg-surface-2 hover:bg-surface-2/80 rounded-lg sm:rounded-xl touch-none flex items-center justify-center shadow-sm border border-transparent hover:border-border"
             >
-              <GripVertical className="w-4 h-4 pointer-events-none" />
+              <GripVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4 pointer-events-none" />
             </div>
           )}
           <button 
             onClick={() => removeClock(id)} 
-            className="p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-muted hover:text-error rounded-xl transition-all shadow-sm flex items-center justify-center" 
+            className="p-1.5 sm:p-2 bg-surface-2 hover:bg-error/10 border border-transparent hover:border-error/20 text-text-muted hover:text-error rounded-lg sm:rounded-xl transition-all shadow-sm flex items-center justify-center" 
             title="Remove clock"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>
 
       {/* Clock Face & Time */}
-      <div className="flex flex-col items-center justify-center py-8 relative z-content">
+      <div className="flex flex-col items-center justify-center py-4 sm:py-8 relative z-content">
         <div className="font-mono flex flex-col items-center justify-center">
-          <div className="flex items-baseline justify-center gap-1">
-            <p className="text-5xl md:text-6xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
-            <p className="text-2xl font-bold text-text-muted tabular-nums">:{t.displaySeconds}</p>
+          <div className="flex items-baseline justify-center gap-0.5 sm:gap-1">
+            <p className="text-3xl sm:text-5xl md:text-6xl font-black text-text tabular-nums tracking-tighter">{t.displayTime}</p>
+            <p className="text-base sm:text-2xl font-bold text-text-muted tabular-nums">:{t.displaySeconds}</p>
           </div>
           {settings.hourFormat === 12 && (
-            <p className="text-base font-black text-blue mt-1">{t.ampm}</p>
+            <p className="text-xs sm:text-base font-black text-blue mt-0.5 sm:mt-1">{t.ampm}</p>
           )}
         </div>
       </div>
 
       {/* Footer details */}
-      <div className="space-y-3 relative z-content">
+      <div className="space-y-2 sm:space-y-3 relative z-content">
         {/* Business Hours Progress */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest">
+        <div className="space-y-1 sm:space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider">
             <span className={biz.isOpen ? "text-success" : "text-text-muted opacity-70"}>
               {biz.isOpen ? "Open" : "Closed"}
             </span>
-            <span className="text-text-muted">{biz.text}</span>
+            <span className="text-text-muted truncate max-w-[120px] sm:max-w-none text-right">{biz.text}</span>
           </div>
-          <div className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
+          <div className="h-1 sm:h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
             <div 
               className={cn("h-full rounded-full transition-all duration-1000", biz.isOpen ? "bg-success" : "bg-text-4 opacity-20")}
               style={{ width: `${biz.progress}%` }}
@@ -145,9 +145,9 @@ export function ClockCard({ clock, now, localTz, isDraggable }: { clock: ClockIt
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-xs pt-3 border-t border-border/50">
-          <span className="text-text-3 font-bold uppercase tracking-wider">{t.date}</span>
-          <span className="text-text-muted font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded">{t.offset}</span>
+        <div className="flex items-center justify-between text-[11px] sm:text-xs pt-2 sm:pt-3 border-t border-border/50">
+          <span className="text-text-3 font-bold uppercase tracking-wider truncate pr-1">{t.date}</span>
+          <span className="text-text-muted font-mono font-semibold bg-surface-2 px-1.5 py-0.5 rounded shrink-0">{t.offset}</span>
         </div>
       </div>
     </div>
