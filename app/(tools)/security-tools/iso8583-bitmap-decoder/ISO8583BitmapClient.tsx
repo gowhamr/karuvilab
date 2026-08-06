@@ -1,53 +1,31 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Binary, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { Binary, CheckCircle2, RefreshCw, Search, Grid, Eye, CheckSquare, Square, Info } from "lucide-react";
+import { ISO8583_FIELD_NAMES, ISO8583_DEFS } from "@/src/lib/iso8583/parser";
 
-export const ISO8583_FIELD_NAMES: Record<number, string> = {
-  1: "Secondary Bitmap Indicator",
-  2: "Primary Account Number (PAN)",
-  3: "Processing Code",
-  4: "Amount, Transaction",
-  5: "Amount, Settlement",
-  6: "Amount, Cardholder Billing",
-  7: "Transmission Date & Time",
-  11: "System Trace Audit Number (STAN)",
-  12: "Local Transaction Time (hhmmss)",
-  13: "Local Transaction Date (MMDD)",
-  14: "Expiration Date (YYMM)",
-  15: "Settlement Date",
-  18: "Merchant Type / Category Code",
-  22: "Point of Service (POS) Entry Mode",
-  23: "Card Sequence Number",
-  25: "POS Condition Code",
-  28: "Amount, Transaction Fee",
-  32: "Acquiring Institution ID Code",
-  35: "Track 2 Data",
-  37: "Retrieval Reference Number (RRN)",
-  38: "Authorization ID Response",
-  39: "Response Code",
-  41: "Card Acceptor Terminal ID",
-  42: "Card Acceptor ID Code",
-  43: "Card Acceptor Name / Location",
-  48: "Additional Data - Private",
-  49: "Currency Code, Transaction",
-  52: "Personal ID Number (PIN) Data",
-  53: "Security Related Control Information",
-  54: "Additional Amounts",
-  55: "ICC Data - EMV Tags",
-  60: "Private Use - Self-Defined",
-  64: "Message Authentication Code (MAC)",
-  70: "Network Management Information Code",
-  90: "Original Data Elements",
-  102: "Account Identification 1",
-  103: "Account Identification 2",
-  128: "Secondary MAC",
-};
+export const PRESET_BITMAPS = [
+  {
+    label: "Financial Purchase (7224640108800000)",
+    hex: "7224640108800000"
+  },
+  {
+    label: "Financial Response (7224640108800000)",
+    hex: "7224640108800000"
+  },
+  {
+    label: "Network Sign-On (8220000000000000)",
+    hex: "8220000000000000"
+  }
+];
 
 export default function ISO8583BitmapClient() {
   const [hexInput, setHexInput] = useState("7224640108800000");
   const [selectedFields, setSelectedFields] = useState<Set<number>>(new Set([2, 3, 4, 7, 11, 12, 14, 22, 37, 39, 41]));
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterMode, setFilterMode] = useState<"all" | "selected" | "primary" | "secondary">("all");
+  const [formatSpace, setFormatSpace] = useState(false);
 
   const decodeHex = useCallback((hex: string) => {
     const cleaned = hex.replace(/[^0-9a-fA-F]/g, "").toUpperCase();
@@ -89,7 +67,7 @@ export default function ISO8583BitmapClient() {
     setSelectedFields(updated);
   };
 
-  const generatedHex = useCallback(() => {
+  const generatedHex = useMemo(() => {
     const maxField = Array.from(selectedFields).some(f => f > 64) ? 128 : 64;
     const numBytes = maxField / 8;
     const bytes = new Uint8Array(numBytes);
@@ -102,17 +80,81 @@ export default function ISO8583BitmapClient() {
       }
     });
 
-    return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
-  }, [selectedFields])();
+    const hexArr = Array.from(bytes).map(b => b.toString(16).padStart(2, "0").toUpperCase());
+    return formatSpace ? hexArr.join(" ") : hexArr.join("");
+  }, [selectedFields, formatSpace]);
+
+  // Binary Bit Matrix representation (16 bytes = 128 bits)
+  const bitMatrix = useMemo(() => {
+    const maxField = Array.from(selectedFields).some(f => f > 64) ? 128 : 64;
+    const rows = [];
+    for (let byteIdx = 0; byteIdx < maxField / 8; byteIdx++) {
+      const bits = [];
+      for (let bitIdx = 0; bitIdx < 8; bitIdx++) {
+        const fieldNum = byteIdx * 8 + bitIdx + 1;
+        bits.push({
+          fieldNum,
+          active: selectedFields.has(fieldNum)
+        });
+      }
+      rows.push({ byteIdx: byteIdx + 1, bits });
+    }
+    return rows;
+  }, [selectedFields]);
+
+  const filteredFieldsList = useMemo(() => {
+    let list = Array.from({ length: 128 }, (_, i) => i + 1);
+    
+    if (filterMode === "selected") {
+      list = list.filter(f => selectedFields.has(f));
+    } else if (filterMode === "primary") {
+      list = list.filter(f => f <= 64);
+    } else if (filterMode === "secondary") {
+      list = list.filter(f => f > 64);
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(f => {
+        const name = ISO8583_FIELD_NAMES[f] || `Field ${f}`;
+        return f.toString().includes(q) || name.toLowerCase().includes(q);
+      });
+    }
+
+    return list;
+  }, [selectedFields, filterMode, searchQuery]);
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Input Row */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border space-y-3">
-        <label className="text-sm font-semibold text-text flex items-center gap-2">
-          <Binary className="w-4 h-4 text-sky-400" />
-          Hex Bitmap Input (16 Chars = 64-bit Primary, 32 Chars = 128-bit Secondary):
-        </label>
+      <div className="p-5 rounded-2xl bg-surface border border-border space-y-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <label htmlFor="iso-bitmap-hex-input" className="text-sm font-bold text-text flex items-center gap-2">
+            <Binary className="w-4 h-4 text-sky-400" />
+            Hex Bitmap Input (16 Chars = 64-bit Primary, 32 Chars = 128-bit Secondary):
+          </label>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-text-muted">Presets:</span>
+            <select
+              aria-label="Select Preset Bitmap"
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val) {
+                  setHexInput(val);
+                  const { present } = decodeHex(val);
+                  setSelectedFields(present);
+                }
+              }}
+              className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs font-medium text-text focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="">Choose Preset...</option>
+              {PRESET_BITMAPS.map((p, idx) => (
+                <option key={idx} value={p.hex}>{p.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         <div className="flex gap-2">
           <input
@@ -121,71 +163,187 @@ export default function ISO8583BitmapClient() {
             placeholder="e.g. 7224640108800000"
             value={hexInput}
             onChange={(e) => setHexInput(e.target.value)}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-surface border border-border font-mono text-sm uppercase focus:outline-none"
+            className="flex-1 px-4 py-2.5 rounded-xl bg-surface-2 border border-border font-mono text-sm uppercase focus:outline-none focus:ring-2 focus:ring-primary transition"
           />
           <button
             id="iso-bitmap-decode-btn"
             onClick={handleDecodeInput}
-            className="px-5 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:opacity-90 transition"
+            className="px-5 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:opacity-90 transition shadow-sm"
           >
-            Decode Bitmap
+            Decode Hex Bitmap
           </button>
         </div>
       </div>
 
-      {/* Generated Hex Output */}
-      <div className="p-4 rounded-xl bg-surface border border-border space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-text">
-            Generated Hex Bitmap ({selectedFields.has(1) ? "128-bit Primary + Secondary" : "64-bit Primary"}):
-          </label>
-          <CopyButton text={generatedHex} />
+      {/* Output Hex Bitmap Card */}
+      <div className="p-5 rounded-2xl bg-surface-2 border border-border space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-bold text-text">
+              Generated Hex Bitmap ({selectedFields.has(1) ? "128-bit Primary + Secondary" : "64-bit Primary"}):
+            </label>
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/20">
+              {selectedFields.size} Fields Active
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-1.5 text-xs text-text-muted font-medium cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formatSpace}
+                onChange={e => setFormatSpace(e.target.checked)}
+                className="rounded border-border"
+              />
+              Space Bytes
+            </label>
+            <CopyButton text={generatedHex} />
+          </div>
         </div>
-        <p className="font-mono text-lg font-bold text-emerald-300 tracking-wider break-all">{generatedHex}</p>
+        <p className="font-mono text-lg font-black text-emerald-400 tracking-wider break-all bg-surface p-3.5 rounded-xl border border-border">
+          {generatedHex}
+        </p>
       </div>
 
-      {/* Field Grid Matrix */}
+      {/* Binary Bit Grid Visualizer */}
+      <div className="p-5 rounded-2xl bg-surface border border-border space-y-3">
+        <h4 className="font-bold text-sm text-text flex items-center gap-2">
+          <Grid className="w-4 h-4 text-primary" />
+          Binary Bit Grid (Byte 1 .. {bitMatrix.length}):
+        </h4>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
+          {bitMatrix.map(row => (
+            <div key={row.byteIdx} className="p-2.5 rounded-xl bg-surface-2 border border-border space-y-1.5">
+              <span className="text-[10px] font-mono text-text-muted font-bold block text-center">Byte {row.byteIdx}</span>
+              <div className="grid grid-cols-4 gap-1">
+                {row.bits.map(b => (
+                  <button
+                    key={b.fieldNum}
+                    type="button"
+                    onClick={() => toggleField(b.fieldNum)}
+                    title={`Field ${b.fieldNum}: ${ISO8583_FIELD_NAMES[b.fieldNum] || 'Reserved'}`}
+                    className={`h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center transition ${
+                      b.active
+                        ? "bg-emerald-500 text-black shadow-xs"
+                        : "bg-surface text-text-muted hover:bg-surface/80"
+                    }`}
+                  >
+                    {b.fieldNum}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Data Elements Matrix */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold text-base text-text">ISO 8583 Data Elements Matrix (Fields 1–128)</h3>
-          <span className="text-xs font-mono text-sky-400">
-            Selected: <strong>{selectedFields.size}</strong> fields active
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <h3 className="font-bold text-base text-text">ISO 8583 Data Elements Matrix (Fields 1–128)</h3>
+            <div className="flex gap-1 bg-surface-2 p-1 rounded-xl border border-border">
+              <button
+                type="button"
+                onClick={() => setFilterMode("all")}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "all" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterMode("selected")}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "selected" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+              >
+                Selected ({selectedFields.size})
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterMode("primary")}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "primary" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+              >
+                1–64
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterMode("secondary")}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "secondary" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+              >
+                65–128
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-text-muted absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search data elements..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="pl-8 pr-3 py-1.5 rounded-xl bg-surface border border-border text-xs focus:outline-none focus:ring-2 focus:ring-primary w-48"
+              />
+            </div>
+            
+            <button
+              type="button"
+              onClick={() => setSelectedFields(new Set())}
+              className="px-3 py-1.5 rounded-xl border border-border bg-surface text-text-muted hover:text-text text-xs font-bold transition"
+            >
+              Clear All
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-[500px] overflow-y-auto pr-1">
-          {Array.from({ length: 128 }, (_, i) => i + 1).map((fieldNum) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[500px] overflow-y-auto pr-1">
+          {filteredFieldsList.map((fieldNum) => {
             const isPresent = selectedFields.has(fieldNum);
             const name = ISO8583_FIELD_NAMES[fieldNum] || `Field ${fieldNum}`;
+            const def = ISO8583_DEFS[fieldNum];
 
             return (
               <div
                 key={fieldNum}
                 id={`iso-field-${fieldNum}`}
                 onClick={() => toggleField(fieldNum)}
-                className={`p-2.5 rounded-lg border cursor-pointer flex items-center justify-between transition ${
+                className={`p-3 rounded-xl border cursor-pointer flex items-center justify-between transition ${
                   isPresent
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-xs'
                     : 'bg-surface-2 border-border text-text-muted hover:border-text-muted'
                 }`}
               >
-                <div className="flex items-center gap-2 truncate pr-2">
-                  <span className={`w-6 h-6 rounded flex items-center justify-center text-xs font-mono font-bold ${
-                    isPresent ? 'bg-emerald-500 text-black' : 'bg-surface text-text-muted'
+                <div className="flex items-center gap-2.5 truncate pr-2">
+                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                    isPresent ? 'bg-emerald-500 text-black' : 'bg-surface text-text-muted border border-border'
                   }`}>
                     {fieldNum}
                   </span>
-                  <span className="text-xs font-medium truncate">{name}</span>
+                  <div className="truncate space-y-0.5">
+                    <span className="text-xs font-bold truncate block text-text">{name}</span>
+                    {def && (
+                      <span className="text-[10px] font-mono text-text-muted block">
+                        {def.type} {def.length}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <input
                   type="checkbox"
                   checked={isPresent}
                   readOnly
-                  className="rounded border-border"
+                  className="rounded border-border shrink-0"
                 />
               </div>
             );
           })}
+
+          {filteredFieldsList.length === 0 && (
+            <div className="col-span-full p-8 text-center text-text-muted text-sm border border-dashed border-border rounded-xl">
+              No fields match your search filter
+            </div>
+          )}
         </div>
       </div>
     </div>
