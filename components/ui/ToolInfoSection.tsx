@@ -63,7 +63,7 @@ export function ToolInfoSection({ id, title, preview, isOpen: controlledIsOpen, 
       </summary>
       
       {isOpen && (
-        <div className="px-5 pb-6 md:px-6 md:pb-8 pt-0 border-t border-border/50 animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="px-5 pt-5 pb-6 md:px-6 md:pt-6 md:pb-8 border-t border-border/50 animate-in fade-in slide-in-from-top-2 duration-300">
           {children}
         </div>
       )}

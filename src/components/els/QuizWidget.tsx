@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, HelpCircle, RotateCcw } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
 interface QuizOption {
@@ -73,22 +73,22 @@ export function QuizWidget({ question, options, questions }: QuizWidgetProps) {
               aria-pressed={isSelected}
               className={cn(
                 "w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between",
-                !isSubmitted && isSelected ? "border-blue bg-blue/5 shadow-sm" : "border-border/60 hover:border-blue/30 bg-surface",
-                showSuccess ? "border-emerald-500 bg-emerald-500/10 text-emerald-700" : "",
-                showError ? "border-red-500 bg-red-500/10 text-red-700" : "",
-                showMissed ? "border-emerald-500/50 bg-emerald-500/5" : "",
+                !isSubmitted && isSelected ? "border-blue bg-blue/5 shadow-sm" : "border-border/60 hover:border-blue/30 bg-surface text-text-primary",
+                showSuccess ? "border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold" : "",
+                showError ? "border-red-500 bg-red-500/10 text-red-700 dark:text-red-300 font-bold" : "",
+                showMissed ? "border-emerald-500/50 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-medium" : "",
                 isSubmitted && !isSelected && !option.isCorrect ? "opacity-50 grayscale" : ""
               )}
             >
               <span className="font-medium">{option.text}</span>
-              {showSuccess && <CheckCircle2 className="w-5 h-5 text-emerald-500" aria-label="Correct Option" />}
-              {showError && <XCircle className="w-5 h-5 text-red-500" aria-label="Incorrect Option" />}
+              {showSuccess && <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" aria-label="Correct Option" />}
+              {showError && <XCircle className="w-5 h-5 text-red-500 shrink-0" aria-label="Incorrect Option" />}
             </button>
           );
         })}
       </div>
 
-      {!isSubmitted && (
+      {!isSubmitted ? (
         <div className="flex justify-end">
           <Button 
             variant="primary" 
@@ -96,6 +96,21 @@ export function QuizWidget({ question, options, questions }: QuizWidgetProps) {
             onClick={() => setIsSubmitted(true)}
           >
             Check Answer
+          </Button>
+        </div>
+      ) : (
+        <div className="flex justify-end">
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={() => {
+              setIsSubmitted(false);
+              setSelectedId(null);
+            }}
+            className="flex items-center gap-1.5 font-bold"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Try Again
           </Button>
         </div>
       )}
@@ -106,7 +121,7 @@ export function QuizWidget({ question, options, questions }: QuizWidgetProps) {
           aria-live="polite"
           className={cn(
             "p-4 rounded-xl border mt-4 animate-in fade-in slide-in-from-top-2",
-            isCorrect ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800" : "bg-blue/10 border-blue/20 text-blue-dark"
+            isCorrect ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800 dark:text-emerald-200" : "bg-blue/10 border-blue/20 text-blue-900 dark:text-blue-200"
           )}
         >
           <p className="font-bold mb-1">

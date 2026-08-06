@@ -416,7 +416,7 @@ export function ClientToolShell({ title, description, category, children, toolId
                         <div className="space-y-4">
                           <h2 className="text-xl font-black text-text tracking-tight">About this tool</h2>
                           <div 
-                            className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-3 leading-relaxed"
+                            className="prose prose-sm prose-slate dark:prose-invert max-w-none text-text-2 leading-relaxed prose-p:leading-relaxed prose-p:my-3 prose-headings:font-bold prose-headings:text-text prose-a:text-blue hover:prose-a:underline prose-code:bg-surface-2 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs"
                             dangerouslySetInnerHTML={{ 
                               __html: sanitizeHtml(
                                 finalParsedContent.detailedDescription
