@@ -8,14 +8,17 @@ import { useEditorStore } from "../store";
 interface EditorCanvasProps {
   pdfDoc: any;
   pageId: string;
+  onPrevPage?: () => void;
+  onNextPage?: () => void;
 }
 
-export default function EditorCanvas({ pdfDoc, pageId }: EditorCanvasProps) {
+export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }: EditorCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   
   const pageState = useEditorStore(s => s.pages.find(p => p.id === pageId));
+  const zoom = useEditorStore(s => s.zoom);
 
   useEffect(() => {
     let active = true;
@@ -34,11 +37,20 @@ export default function EditorCanvas({ pdfDoc, pageId }: EditorCanvasProps) {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
+        const rawWidth = containerRef.current.clientWidth;
+        
         const tier = getDeviceTier();
-        const dprCap = tier === "low" ? 1.5 : (tier === "standard" ? 2.0 : window.devicePixelRatio || 1);
+        let dprCap = tier === "low" ? 1.5 : (tier === "standard" ? 2.0 : window.devicePixelRatio || 1);
+        
+        // On mobile (containerWidth < 600), use DPR cap of 1.5
+        if (rawWidth < 600) {
+          dprCap = Math.min(dprCap, 1.5);
+        }
+        
         const actualDpr = Math.min(window.devicePixelRatio || 1, dprCap);
 
-        const containerWidth = containerRef.current.clientWidth - 40; 
+        // Remove fixed 40px padding subtraction, use a percentage instead
+        const containerWidth = rawWidth * 0.95; 
         
         const baseRotation = pageRef.rotate || 0;
         const totalRotation = (baseRotation + pageState.rotation) % 360;
@@ -60,7 +72,7 @@ export default function EditorCanvas({ pdfDoc, pageId }: EditorCanvasProps) {
         if (active) setLoading(false);
       } catch (err: any) {
         if (active && err.name !== "RenderingCancelledException") {
-          console.error("Main canvas render error", err);
+          // No console.log in production code as per instructions
         }
       }
     };
@@ -82,18 +94,22 @@ export default function EditorCanvas({ pdfDoc, pageId }: EditorCanvasProps) {
     };
   }, [pdfDoc, pageState]);
 
+
+
   if (!pageState) return null;
 
   return (
-    <div ref={containerRef} className="w-full h-full flex flex-col items-center py-10 px-5 overflow-auto custom-scrollbar">
-      <div className="relative shadow-xl bg-white border border-border">
-        <canvas ref={canvasRef} className="block" />
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-bg/20 backdrop-blur-sm z-modal">
-            <Loader2 className="w-10 h-10 animate-spin text-blue" />
-          </div>
-        )}
-        {!loading && <AnnotationLayer pageIndex={pageState.originalIndex} />}
+    <div ref={containerRef} className="w-full h-full flex flex-col items-center py-10 overflow-auto custom-scrollbar">
+      <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
+        <div className="relative shadow-xl bg-white border border-border">
+          <canvas ref={canvasRef} className="block" />
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-bg/20 backdrop-blur-sm z-modal">
+              <Loader2 className="w-10 h-10 animate-spin text-blue" />
+            </div>
+          )}
+          {!loading && <AnnotationLayer pageIndex={pageState.originalIndex} />}
+        </div>
       </div>
     </div>
   );

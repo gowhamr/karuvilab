@@ -12,6 +12,8 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
   const activeTool = useEditorStore(state => state.activeTool);
   const addAnnotation = useEditorStore(state => state.addAnnotation);
   const updateAnnotation = useEditorStore(state => state.updateAnnotation);
+  const setSelectedAnnotation = useEditorStore(state => state.setSelectedAnnotation);
+  const setActiveTool = useEditorStore(state => state.setActiveTool);
   
   const layerRef = useRef<HTMLDivElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -36,7 +38,13 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
   };
 
   const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
-    if (activeTool === 'select') return;
+    if (activeTool === 'select') {
+      if (layerRef.current && e.target === layerRef.current) {
+        setSelectedAnnotation(null);
+      }
+      return;
+    }
+    
     if (layerRef.current && e.target !== layerRef.current) return;
     
     const { x, y } = getPercentagePos(e);
@@ -46,12 +54,13 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
       addAnnotation({
         id, pageIndex, x, y,
         type: 'text',
-        content: 'New Text',
+        content: '',
         fontSize: 3, 
         color: '#000000',
         isEditing: true
       } as TextAnnotation);
-      useEditorStore.getState().setActiveTool('select');
+      setSelectedAnnotation(id);
+      setActiveTool('select');
     } else if (activeTool === 'shape') {
       addAnnotation({
         id, pageIndex, x, y,
@@ -61,6 +70,7 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
         color: '#4F46E5',
         strokeWidth: 3
       } as ShapeAnnotation);
+      setSelectedAnnotation(id);
     } else if (activeTool === 'draw') {
       setIsDrawing(true);
       setCurrentDrawId(id);
@@ -71,12 +81,14 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
         color: '#EF4444',
         strokeWidth: 3
       } as DrawAnnotation);
+      setSelectedAnnotation(id);
     } else if (activeTool === 'blackout') {
       addAnnotation({
         id, pageIndex, x, y,
         type: 'blackout',
         width: 15, height: 5,
       } as BlackoutAnnotation);
+      setSelectedAnnotation(id);
     }
   };
 
@@ -98,10 +110,12 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
     setCurrentDrawId(null);
   };
 
+  const isDrawingTool = activeTool === 'draw' || activeTool === 'shape' || activeTool === 'blackout';
+
   return (
     <div 
       ref={layerRef}
-      className="absolute inset-0 z-content touch-none"
+      className={`absolute inset-0 z-content ${isDrawingTool ? 'touch-none' : ''}`}
       onMouseDown={handlePointerDown}
       onMouseMove={handlePointerMove}
       onMouseUp={handlePointerUp}
@@ -122,14 +136,19 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   const updateAnnotation = useEditorStore(state => state.updateAnnotation);
   const deleteAnnotation = useEditorStore(state => state.deleteAnnotation);
   const activeTool = useEditorStore(state => state.activeTool);
+  const selectedAnnotationId = useEditorStore(state => state.selectedAnnotationId);
+  const setSelectedAnnotation = useEditorStore(state => state.setSelectedAnnotation);
+  
   const [isDragging, setIsDragging] = useState(false);
   const [isEditing, setIsEditing] = useState(
     annotation.type === 'text' ? Boolean((annotation as TextAnnotation).isEditing) : false
   );
+  const lastTapRef = useRef<number>(0);
 
   const isSelectMode = activeTool === 'select';
+  const isSelected = selectedAnnotationId === annotation.id;
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDelete = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
     deleteAnnotation(annotation.id);
   };
@@ -137,18 +156,25 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   const handlePointerDown = (e: React.PointerEvent<Element>) => {
     if (!isSelectMode || isEditing) return;
 
-    if (e.detail === 2 && annotation.type === 'text') {
-      e.stopPropagation();
+    e.stopPropagation();
+    setSelectedAnnotation(annotation.id);
+
+    const now = Date.now();
+    const timeSinceLastTap = now - lastTapRef.current;
+    lastTapRef.current = now;
+
+    if (annotation.type === 'text' && timeSinceLastTap < 500) {
       setIsEditing(true);
       return;
     }
 
-    e.stopPropagation();
     const target = e.currentTarget;
     const parent = target.parentElement;
     if (!parent) return;
 
-    target.setPointerCapture(e.pointerId);
+    try {
+      target.setPointerCapture(e.pointerId);
+    } catch {}
     setIsDragging(true);
 
     const startX = e.clientX;
@@ -196,6 +222,36 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     }
   };
 
+  const renderControls = () => {
+    if (!isSelectMode || !isSelected || isEditing) return null;
+    return (
+      <div className="absolute -top-14 -right-4 flex items-center gap-2 z-content bg-surface p-1 rounded-lg shadow-lg pointer-events-auto">
+        {annotation.type === 'text' && (
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsEditing(true);
+            }}
+            onTouchEnd={(e) => {
+              e.stopPropagation();
+              setIsEditing(true);
+            }}
+            aria-label="Edit text"
+            title="Edit text"
+            className="bg-blue text-white rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center text-lg shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue"
+          >✏️</button>
+        )}
+        <button 
+          onClick={handleDelete}
+          onTouchEnd={handleDelete}
+          aria-label="Delete annotation"
+          title="Delete"
+          className="bg-red-500 text-white rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center text-lg shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500"
+        >✕</button>
+      </div>
+    );
+  };
+
   if (annotation.type === 'text') {
     return (
       <div 
@@ -208,14 +264,9 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           fontSize: `${Math.max(16, window.innerHeight * (annotation.fontSize / 100))}px`,
           fontWeight: 'bold',
           whiteSpace: 'pre-wrap',
-          border: isSelectMode ? '1px dashed transparent' : 'none',
-        }}
-        onDoubleClick={(e) => {
-          e.stopPropagation();
-          setIsEditing(true);
         }}
       >
-        <div className="group-hover:border-blue border border-transparent p-1 transition-colors relative">
+        <div className={`p-1 transition-colors relative border-2 ${isSelected && !isEditing ? 'border-blue' : 'border-transparent'}`}>
           {isEditing ? (
             <input
               type="text"
@@ -229,30 +280,12 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
                 }
               }}
               onPointerDown={(e) => e.stopPropagation()}
-              className="bg-surface-elevated text-text border border-blue px-2 py-1 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue min-w-[140px]"
+              className="bg-surface-elevated text-text border-2 border-blue px-2 py-1 rounded shadow-md focus:outline-none min-w-[140px]"
             />
           ) : (
-            (annotation.content || "Double-click to edit")
+            (annotation.content || "Tap to edit")
           )}
-          {isSelectMode && !isEditing && (
-            <div className="absolute -top-3 -right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity z-content">
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsEditing(true);
-                }}
-                aria-label="Edit text"
-                title="Edit text"
-                className="bg-blue text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] shadow-sm hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue"
-              >✏️</button>
-              <button 
-                onClick={handleDelete}
-                aria-label="Delete annotation"
-                title="Delete text"
-                className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-sm hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500"
-              >✕</button>
-            </div>
-          )}
+          {renderControls()}
         </div>
       </div>
     );
@@ -271,16 +304,12 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           height: `${annotation.height}%`,
           border: `${annotation.strokeWidth}px solid ${annotation.color}`,
           backgroundColor: annotation.fill || 'transparent',
-          borderRadius: isCircle ? '50%' : '0'
+          borderRadius: isCircle ? '50%' : '0',
+          outline: isSelected ? '2px solid #4F46E5' : 'none',
+          outlineOffset: '2px'
         }}
       >
-        {isSelectMode && (
-          <button 
-            onClick={handleDelete}
-            aria-label="Delete annotation"
-            className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-content focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500"
-          >✕</button>
-        )}
+        {renderControls()}
       </div>
     );
   }
@@ -292,39 +321,41 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     const minY = Math.min(...annotation.points.map(p => p.y));
     const maxX = Math.max(...annotation.points.map(p => p.x));
     const maxY = Math.max(...annotation.points.map(p => p.y));
+    
+    const width = Math.max(maxX - minX, 0.1);
+    const height = Math.max(maxY - minY, 0.1);
 
-    // Convert points to SVG polyline coordinates relative to its bounding box
     const polylinePoints = annotation.points.map(p => `${p.x - minX},${p.y - minY}`).join(' ');
     
     return (
-      <svg
+      <div
         onPointerDown={handlePointerDown}
-        className={`absolute overflow-visible pointer-events-none ${isSelectMode ? 'group pointer-events-auto cursor-move' : ''}`}
+        className={`absolute overflow-visible pointer-events-auto ${isSelectMode ? 'group cursor-move' : ''}`}
         style={{
           left: `${minX}%`,
           top: `${minY}%`,
-          width: `${maxX - minX}%`,
-          height: `${maxY - minY}%`
+          width: `${width}%`,
+          height: `${height}%`,
+          border: isSelected ? '2px solid #4F46E5' : '2px solid transparent',
         }}
       >
-        <polyline
-          points={polylinePoints}
-          fill="none"
-          stroke={annotation.color}
-          strokeWidth={annotation.strokeWidth}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-        {isSelectMode && (
-          <rect 
-            x="0" y="0" width="100%" height="100%" 
-            fill="transparent" stroke="transparent" 
-            className="group-hover:stroke-blue stroke-dashed cursor-pointer pointer-events-auto"
-            onClick={(e) => { e.stopPropagation(); }} // Prevent adding new annotation
+        <svg
+          className="w-full h-full overflow-visible pointer-events-none"
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="none"
+        >
+          <polyline
+            points={polylinePoints}
+            fill="none"
+            stroke={annotation.color}
+            strokeWidth={annotation.strokeWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
           />
-        )}
-      </svg>
+        </svg>
+        {renderControls()}
+      </div>
     );
   }
 
@@ -339,17 +370,12 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           width: `${annotation.width}%`,
           height: `${annotation.height}%`,
           backgroundColor: '#000000',
-          border: isSelectMode ? '1px solid #4F46E5' : 'none',
+          outline: isSelected ? '2px solid #4F46E5' : 'none',
+          outlineOffset: '2px'
         }}
       >
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wLDggTDgsMCB6IiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-50 pointer-events-none" />
-        {isSelectMode && (
-          <button 
-            onClick={handleDelete}
-            aria-label="Delete annotation"
-            className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-content focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500"
-          >✕</button>
-        )}
+        {renderControls()}
       </div>
     );
   }
@@ -364,7 +390,8 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           top: `${annotation.y}%`,
           width: `${annotation.width}%`,
           height: `${annotation.height}%`,
-          border: isSelectMode ? '1px dashed #4F46E5' : 'none',
+          outline: isSelected ? '2px solid #4F46E5' : 'none',
+          outlineOffset: '2px'
         }}
       >
         <img 
@@ -372,13 +399,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           alt="User annotation" 
           className="w-full h-full object-contain pointer-events-none" 
         />
-        {isSelectMode && (
-          <button 
-            onClick={handleDelete}
-            aria-label="Delete annotation"
-            className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-content focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500"
-          >✕</button>
-        )}
+        {renderControls()}
       </div>
     );
   }
