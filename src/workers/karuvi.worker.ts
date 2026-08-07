@@ -718,10 +718,14 @@ const api: Partial<WorkerAPI> = {
   async getPdfBookmarks(file: ArrayBuffer, onProgress?: any) {
     if (onProgress) onProgress({ percent: 20, message: "Loading PDF..." });
     const pdfjsLib = await import("pdfjs-dist");
-    const workerUrl = typeof location !== 'undefined' ? location.origin + (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
+    const version = pdfjsLib.version || '6.2.108';
+    const workerUrl = typeof location !== 'undefined'
+      ? `${location.origin}${process.env.NEXT_PUBLIC_BASE_PATH || ''}/pdf.worker.min.mjs?v=${version}`
+      : `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;
     if (pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+    }
+    if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
       (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
     }
 
@@ -750,10 +754,14 @@ const api: Partial<WorkerAPI> = {
   async extractPdfAttachments(file: ArrayBuffer, onProgress?: any) {
     if (onProgress) onProgress({ percent: 20, message: "Loading PDF..." });
     const pdfjsLib = await import("pdfjs-dist");
-    const workerUrl = typeof location !== 'undefined' ? location.origin + (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
+    const version = pdfjsLib.version || '6.2.108';
+    const workerUrl = typeof location !== 'undefined'
+      ? `${location.origin}${process.env.NEXT_PUBLIC_BASE_PATH || ''}/pdf.worker.min.mjs?v=${version}`
+      : `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;
     if (pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+    }
+    if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
       (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
     }
 
@@ -1598,10 +1606,14 @@ const api: Partial<WorkerAPI> = {
 
   async extractImagesFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
-    const workerUrl = typeof location !== 'undefined' ? location.origin + (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
+    const version = pdfjsLib.version || '6.2.108';
+    const workerUrl = typeof location !== 'undefined'
+      ? `${location.origin}${process.env.NEXT_PUBLIC_BASE_PATH || ''}/pdf.worker.min.mjs?v=${version}`
+      : `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;
     if (pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+    }
+    if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
       (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
     }
 
@@ -1670,10 +1682,14 @@ const api: Partial<WorkerAPI> = {
 
   async extractTextFromPdf(file, onProgress) {
     const pdfjsLib = await import("pdfjs-dist");
-    const workerUrl = typeof location !== 'undefined' ? location.origin + (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
+    const version = pdfjsLib.version || '6.2.108';
+    const workerUrl = typeof location !== 'undefined'
+      ? `${location.origin}${process.env.NEXT_PUBLIC_BASE_PATH || ''}/pdf.worker.min.mjs?v=${version}`
+      : `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;
     if (pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-    } else if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+    }
+    if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
       (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
     }
 

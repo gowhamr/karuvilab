@@ -37,6 +37,7 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
 
   const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
     if (activeTool === 'select') return;
+    if (layerRef.current && e.target !== layerRef.current) return;
     
     const { x, y } = getPercentagePos(e);
     const id = Date.now().toString();
@@ -45,10 +46,11 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
       addAnnotation({
         id, pageIndex, x, y,
         type: 'text',
-        content: 'Double click to edit',
+        content: 'Click to edit text',
         fontSize: 3, 
         color: '#000000'
       } as TextAnnotation);
+      useEditorStore.getState().setActiveTool('select');
     } else if (activeTool === 'shape') {
       addAnnotation({
         id, pageIndex, x, y,
@@ -120,6 +122,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   const deleteAnnotation = useEditorStore(state => state.deleteAnnotation);
   const activeTool = useEditorStore(state => state.activeTool);
   const [isDragging, setIsDragging] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const isSelectMode = activeTool === 'select';
 
@@ -129,7 +132,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
   };
 
   const handlePointerDown = (e: React.PointerEvent<Element>) => {
-    if (!isSelectMode) return;
+    if (!isSelectMode || isEditing) return;
     e.stopPropagation();
     const target = e.currentTarget;
     const parent = target.parentElement;
@@ -174,7 +177,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     return (
       <div 
         onPointerDown={handlePointerDown}
-        className={`absolute pointer-events-auto ${isSelectMode ? 'group cursor-move' : ''}`}
+        className={`absolute pointer-events-auto ${isSelectMode && !isEditing ? 'group cursor-move' : ''}`}
         style={{
           left: `${annotation.x}%`,
           top: `${annotation.y}%`,
@@ -185,15 +188,30 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           border: isSelectMode ? '1px dashed transparent' : 'none',
         }}
         onDoubleClick={(e) => {
-          if (!isSelectMode) return;
           e.stopPropagation();
-          const newText = prompt("Edit text:", annotation.content);
-          if (newText !== null) updateAnnotation(annotation.id, { content: newText });
+          setIsEditing(true);
         }}
       >
         <div className="group-hover:border-blue border border-transparent p-1 transition-colors relative">
-          {annotation.content || "Text"}
-          {isSelectMode && (
+          {isEditing ? (
+            <input
+              type="text"
+              autoFocus
+              value={annotation.content}
+              onChange={(e) => updateAnnotation(annotation.id, { content: e.target.value })}
+              onBlur={() => setIsEditing(false)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === 'Escape') {
+                  setIsEditing(false);
+                }
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="bg-surface-elevated text-text border border-blue px-2 py-1 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-blue min-w-[120px]"
+            />
+          ) : (
+            (annotation.content || "Click to edit text")
+          )}
+          {isSelectMode && !isEditing && (
             <button 
               onClick={handleDelete}
               aria-label="Delete annotation"

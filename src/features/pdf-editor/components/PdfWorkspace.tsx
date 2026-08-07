@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download } from "lucide-react";
+import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import ThumbnailSidebar from "./ThumbnailSidebar";
 import EditorCanvas from "./EditorCanvas";
 import { useEditorStore } from "../store";
@@ -27,6 +27,20 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
   const displayIndex = activePages.findIndex(p => p.id === currentPageId) + 1;
   const numActivePages = activePages.length;
   const activeTool = useEditorStore(s => s.activeTool);
+
+  const goToPrevPage = () => {
+    const currentIndex = activePages.findIndex(p => p.id === currentPageId);
+    if (currentIndex > 0) {
+      setCurrentPageId(activePages[currentIndex - 1]!.id);
+    }
+  };
+
+  const goToNextPage = () => {
+    const currentIndex = activePages.findIndex(p => p.id === currentPageId);
+    if (currentIndex < activePages.length - 1) {
+      setCurrentPageId(activePages[currentIndex + 1]!.id);
+    }
+  };
 
   const { state: progressState, startProcessing, setStage, setProgress, finishProcessing } = useProgress();
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -112,10 +126,14 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
         const pdfjsLib = await import("pdfjs-dist");
         
         const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-        const workerUrl = typeof window !== 'undefined' ? window.location.origin + basePath + '/pdf.worker.min.mjs' : 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
-        if (pdfjsLib.GlobalWorkerOptions && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+        const version = pdfjsLib.version || '6.2.108';
+        const workerUrl = typeof window !== 'undefined' 
+          ? `${window.location.origin}${basePath}/pdf.worker.min.mjs?v=${version}` 
+          : `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;
+        if (pdfjsLib.GlobalWorkerOptions) {
           pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-        } else if ((pdfjsLib as any).default?.GlobalWorkerOptions && !(pdfjsLib as any).default.GlobalWorkerOptions.workerSrc) {
+        }
+        if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
           (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
         }
 
@@ -192,10 +210,28 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
         <div className="border-b border-border bg-surface flex flex-col sm:flex-row items-center justify-between p-2 sm:px-4 sm:h-14 z-content relative gap-2 sm:gap-0">
           <div className="flex items-center justify-between w-full sm:w-auto gap-2 sm:gap-4">
             <span className="text-sm font-bold text-text-2 truncate max-w-[150px] sm:max-w-[300px]">{file.name}</span>
-            <div className="flex gap-2 items-center shrink-0">
-              <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-4 uppercase tracking-widest shrink-0">
+            <div className="flex gap-1 items-center shrink-0">
+              <button
+                onClick={goToPrevPage}
+                disabled={displayIndex <= 1}
+                className="p-1 bg-bg border border-border rounded-md text-text hover:bg-surface-2 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                title="Previous Page"
+                aria-label="Previous Page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-2 uppercase tracking-widest shrink-0">
                 Page {displayIndex} / {numActivePages}
               </span>
+              <button
+                onClick={goToNextPage}
+                disabled={displayIndex >= numActivePages}
+                className="p-1 bg-bg border border-border rounded-md text-text hover:bg-surface-2 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                title="Next Page"
+                aria-label="Next Page"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
               <button 
                 onClick={() => setShowThumbnails(!showThumbnails)}
                 className="sm:hidden px-2 py-1 bg-blue/10 text-blue border border-blue/20 rounded-md text-xs font-bold uppercase tracking-widest"
