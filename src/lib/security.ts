@@ -90,10 +90,62 @@ export function sanitizeHtml(html: string, options?: Record<string, unknown>): s
 }
 
 /**
+ * Pre-processes LaTeX math expressions ($...$ and $$...$$) into clean HTML math elements
+ * before passing to marked.parse, preventing LaTeX leaks in UI text.
+ */
+export function parseMathNotation(text: string): string {
+  if (!text) return text;
+
+  const cleanLatex = (math: string): string => {
+    return math
+      .replace(/\\mathcal\{([A-Za-z]+)\}/g, '$1')
+      .replace(/\\text\{([^}]+)\}/g, '$1')
+      .replace(/\\mathrm\{([^}]+)\}/g, '$1')
+      .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+      .replace(/\\le\b|\\leq\b/g, '≤')
+      .replace(/\\ge\b|\\geq\b/g, '≥')
+      .replace(/\\neq\b/g, '≠')
+      .replace(/\\times\b/g, '×')
+      .replace(/\\cdot\b/g, '·')
+      .replace(/\\in\b/g, '∈')
+      .replace(/\\infty\b/g, '∞')
+      .replace(/\\approx\b/g, '≈')
+      .replace(/\\alpha\b/g, 'α')
+      .replace(/\\beta\b/g, 'β')
+      .replace(/\\theta\b/g, 'θ')
+      .replace(/\\pi\b/g, 'π')
+      .replace(/\^2\b/g, '²')
+      .replace(/\^3\b/g, '³')
+      .replace(/\\log\b/g, 'log')
+      .replace(/\\ln\b/g, 'ln')
+      .replace(/\\/g, '');
+  };
+
+  // 1. Display math: $$ ... $$ or \[ ... \]
+  let result = text.replace(/(?:\$\$|\\\[)([\s\S]+?)(?:\$\$|\\\])/g, (_, math) => {
+    const cleaned = cleanLatex(math.trim());
+    return `<div class="math-display">${cleaned}</div>`;
+  });
+
+  // 2. Inline math: $ ... $ or \( ... \)
+  result = result.replace(/(?<!\$)\$([^\$\n]+?)\$(?!\$)|\\\(([\s\S]+?)\\\)/g, (match, m1, m2) => {
+    const mathContent = (m1 || m2 || '').trim();
+    if (/^\d+(?:\.\d+)?$/.test(mathContent)) {
+      return match;
+    }
+    const cleaned = cleanLatex(mathContent);
+    return `<span class="math-inline">${cleaned}</span>`;
+  });
+
+  return result;
+}
+
+/**
  * Safely parses and sanitizes markdown.
  */
 export async function parseAndSanitizeMarkdown(md: string): Promise<string> {
-  const rawHtml = await marked.parse(md);
+  const mdWithMath = parseMathNotation(md);
+  const rawHtml = await marked.parse(mdWithMath);
   return sanitizeHtml(rawHtml);
 }
 
@@ -101,6 +153,7 @@ export async function parseAndSanitizeMarkdown(md: string): Promise<string> {
  * Synchronous version of markdown sanitization.
  */
 export function parseAndSanitizeMarkdownSync(md: string): string {
-  const rawHtml = marked.parse(md, { async: false }) as string;
+  const mdWithMath = parseMathNotation(md);
+  const rawHtml = marked.parse(mdWithMath, { async: false }) as string;
   return sanitizeHtml(rawHtml);
 }

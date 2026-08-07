@@ -1,7 +1,7 @@
 import { ALL_TOOLS, CATEGORIES, CategoryEntry } from '@/src/tool-registry';
 import { StructuredData } from '@/src/lib/seo';
 import { ClientToolShell, ClientToolShellProps } from './ClientToolShell';
-import { marked } from 'marked';
+import { parseAndSanitizeMarkdown } from '@/src/lib/security';
 
 interface ToolShellProps {
   title: string;
@@ -58,11 +58,11 @@ export async function ToolShell({ title, description, category, children, toolId
   };
 
   const parsedContent: ClientToolShellProps['parsedContent'] = {
-    detailedDescription: mergedContent.detailedDescription ? await marked.parse(mergedContent.detailedDescription) : '',
-    howTo: await Promise.all((mergedContent.howTo || []).map(async step => await marked.parse(step))),
+    detailedDescription: mergedContent.detailedDescription ? await parseAndSanitizeMarkdown(mergedContent.detailedDescription) : '',
+    howTo: await Promise.all((mergedContent.howTo || []).map(async step => await parseAndSanitizeMarkdown(step))),
     faq: await Promise.all((mergedContent.faq || []).map(async item => ({
       question: item.question,
-      answer: await marked.parse(item.answer)
+      answer: await parseAndSanitizeMarkdown(item.answer)
     })))
   };
 

@@ -27,7 +27,7 @@ export async function selectOptimalBackgroundModel(
   const isMobile = !isServer && (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768);
 
   // 1. Force Speed or Constrained Memory Mobile Device (< 1.5GB RAM or Mobile Viewport without WebGPU)
-  if (context.preferredQuality === 'speed' || isMobile || deviceRamMB < 1536 || !caps.webgpu) {
+  if (context.preferredQuality === 'speed' || (isMobile && !caps.webgpu) || deviceRamMB < 1536) {
     const mobileModel = AI_MODEL_REGISTRY['u2netp-mobile'];
     if (mobileModel) return mobileModel;
   }

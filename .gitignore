@@ -18,3 +18,7 @@ public/pdf.min.mjs
 # Local env files
 .env.local
 .env*.local
+
+# AI Models (large binaries)
+public/models/*.onnx
+!public/models/u2netp.onnx
