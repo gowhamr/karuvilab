@@ -181,6 +181,17 @@ export function PdfOrganizer({ mode, toolId, title, description, actionLabel }: 
     setProgress(0);
     try {
       const pdfjsLib = await import("pdfjs-dist");
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const version = pdfjsLib.version || '6.2.108';
+      const workerUrl = typeof window !== 'undefined' 
+        ? `${window.location.origin}${basePath}/pdf.worker.min.mjs?v=${version}` 
+        : `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`;
+      if (pdfjsLib.GlobalWorkerOptions) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+      }
+      if ((pdfjsLib as any).default?.GlobalWorkerOptions) {
+        (pdfjsLib as any).default.GlobalWorkerOptions.workerSrc = workerUrl;
+      }
       const doc = await pdfjsLib.getDocument({ data: buffer }).promise;
       
       let deletedCount = 0;

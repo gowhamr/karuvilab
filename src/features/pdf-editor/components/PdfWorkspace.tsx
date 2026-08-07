@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import ThumbnailSidebar from "./ThumbnailSidebar";
 import EditorCanvas from "./EditorCanvas";
 import { useEditorStore } from "../store";
@@ -27,6 +27,29 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
   const displayIndex = activePages.findIndex(p => p.id === currentPageId) + 1;
   const numActivePages = activePages.length;
   const activeTool = useEditorStore(s => s.activeTool);
+
+  const [pageInput, setPageInput] = useState<string>(String(displayIndex));
+
+  useEffect(() => {
+    setPageInput(String(displayIndex > 0 ? displayIndex : 1));
+  }, [displayIndex]);
+
+  const handlePageJump = (val: string) => {
+    const num = parseInt(val, 10);
+    if (!isNaN(num) && num >= 1 && num <= numActivePages) {
+      setCurrentPageId(activePages[num - 1]!.id);
+    } else {
+      setPageInput(String(displayIndex > 0 ? displayIndex : 1));
+    }
+  };
+
+  const goToFirstPage = () => {
+    if (activePages.length > 0) setCurrentPageId(activePages[0]!.id);
+  };
+
+  const goToLastPage = () => {
+    if (activePages.length > 0) setCurrentPageId(activePages[activePages.length - 1]!.id);
+  };
 
   const goToPrevPage = () => {
     const currentIndex = activePages.findIndex(p => p.id === currentPageId);
@@ -212,6 +235,15 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
             <span className="text-sm font-bold text-text-2 truncate max-w-[150px] sm:max-w-[300px]">{file.name}</span>
             <div className="flex gap-1 items-center shrink-0">
               <button
+                onClick={goToFirstPage}
+                disabled={displayIndex <= 1}
+                className="p-1 bg-bg border border-border rounded-md text-text hover:bg-surface-2 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                title="First Page"
+                aria-label="First Page"
+              >
+                <ChevronsLeft className="w-4 h-4" />
+              </button>
+              <button
                 onClick={goToPrevPage}
                 disabled={displayIndex <= 1}
                 className="p-1 bg-bg border border-border rounded-md text-text hover:bg-surface-2 disabled:opacity-30 disabled:pointer-events-none transition-colors"
@@ -220,9 +252,23 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="px-2 py-1 bg-bg border border-border rounded-md text-xs font-bold text-text-2 uppercase tracking-widest shrink-0">
-                Page {displayIndex} / {numActivePages}
-              </span>
+              <div className="flex items-center gap-1 bg-bg border border-border rounded-md px-1.5 py-0.5 shrink-0">
+                <span className="text-[11px] font-bold text-text-muted">Page</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={numActivePages}
+                  value={pageInput}
+                  onChange={(e) => setPageInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handlePageJump(pageInput);
+                  }}
+                  onBlur={() => handlePageJump(pageInput)}
+                  aria-label="Target Page Number"
+                  className="w-10 text-center text-xs font-bold text-text bg-surface-2 border border-border/60 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue"
+                />
+                <span className="text-[11px] font-bold text-text-muted">/ {numActivePages}</span>
+              </div>
               <button
                 onClick={goToNextPage}
                 disabled={displayIndex >= numActivePages}
@@ -231,6 +277,15 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
                 aria-label="Next Page"
               >
                 <ChevronRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={goToLastPage}
+                disabled={displayIndex >= numActivePages}
+                className="p-1 bg-bg border border-border rounded-md text-text hover:bg-surface-2 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                title="Last Page"
+                aria-label="Last Page"
+              >
+                <ChevronsRight className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => setShowThumbnails(!showThumbnails)}

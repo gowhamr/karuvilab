@@ -16,6 +16,7 @@ export interface TextAnnotation extends BaseAnnotation {
   fontSize: number; // percentage of page height or static size
   color: string;
   width?: number; // percentage
+  isEditing?: boolean;
 }
 
 export interface PathPoint {
