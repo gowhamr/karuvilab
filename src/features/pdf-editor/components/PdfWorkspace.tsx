@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ZoomIn, ZoomOut, Undo2 } from "lucide-react";
 import ThumbnailSidebar from "./ThumbnailSidebar";
 import EditorCanvas from "./EditorCanvas";
+import AnnotationProperties from "./AnnotationProperties";
 import { useEditorStore } from "../store";
 import { useProgress } from "@/src/contexts/ProgressContext";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -530,6 +531,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
 
         {/* Main Canvas Area */}
         <div className="flex-1 relative overflow-hidden">
+          <AnnotationProperties />
           <EditorCanvas 
             pdfDoc={pdfDoc} 
             pageId={currentPageId} 
