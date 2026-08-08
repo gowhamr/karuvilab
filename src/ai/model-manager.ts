@@ -109,7 +109,9 @@ export class ModelManagerService {
 
     try {
       const fetchOptions: RequestInit = abortSignal ? { signal: abortSignal } : {};
-      const response = await fetch(manifest.file, fetchOptions);
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const modelUrl = manifest.file.startsWith('/') ? `${basePath}${manifest.file}` : manifest.file;
+      const response = await fetch(modelUrl, fetchOptions);
       if (!response.ok) {
         throw new ModelLoadError(manifest.id, `Failed to download model '${manifest.name}' (${response.status} ${response.statusText})`);
       }

@@ -31,7 +31,7 @@ export default function ToolClient() {
   const [feather, setFeather] = useState<number>(2);
   const [invert, setInvert] = useState<boolean>(false);
   const [selectedBackend, setSelectedBackend] = useState<ModelBackend | 'auto'>('auto');
-  const [selectedModelId, setSelectedModelId] = useState<string>('rmbg-2.0');
+  const [selectedModelId, setSelectedModelId] = useState<string>('background-removal-rmbg');
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<{ percent: number; stage: string } | null>(null);
@@ -252,7 +252,7 @@ export default function ToolClient() {
             onChange={(e) => setSelectedModelId(e.target.value)}
             className="w-full bg-surface-elevated border border-border rounded-xl px-3 py-2 text-sm text-text focus:outline-none focus:border-blue"
           >
-            <option value="rmbg-2.0">RMBG 2.0 (High Quality)</option>
+            <option value="background-removal-rmbg">RMBG 2.0 (High Quality)</option>
             <option value="u2netp-mobile">U²-NetP (Ultra-Fast Mobile)</option>
             <option value="modnet-portrait">MODNet (Portrait & Hair)</option>
           </select>
