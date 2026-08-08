@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Loader2 } from "lucide-react";
 import { getDeviceTier } from "../utils/device";
 import AnnotationLayer from "./AnnotationLayer";
@@ -19,6 +19,61 @@ export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }:
   
   const pageState = useEditorStore(s => s.pages.find(p => p.id === pageId));
   const zoom = useEditorStore(s => s.zoom);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        const state = useEditorStore.getState();
+        const delta = e.deltaY * -0.01;
+        state.setZoom(Math.min(Math.max(state.zoom + delta, 0.5), 3.0));
+      }
+    };
+    
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target?.result) {
+            useEditorStore.getState().addAnnotation({
+              id: crypto.randomUUID(),
+              type: 'image',
+              pageIndex: pageState!.originalIndex,
+              x: 10,
+              y: 10,
+              width: 20,
+              height: 20,
+              dataUrl: event.target.result as string,
+            });
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }, [pageState]);
 
   useEffect(() => {
     let active = true;
@@ -99,7 +154,12 @@ export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }:
   if (!pageState) return null;
 
   return (
-    <div ref={containerRef} className="w-full h-full flex flex-col items-center py-10 overflow-auto custom-scrollbar">
+    <div 
+      ref={containerRef} 
+      className="w-full h-full flex flex-col items-center py-10 overflow-auto custom-scrollbar"
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
         <div className="relative shadow-xl bg-white border border-border">
           <canvas ref={canvasRef} className="block" />

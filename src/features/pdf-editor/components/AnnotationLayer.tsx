@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { useEditorStore, Annotation, TextAnnotation, DrawAnnotation, ShapeAnnotation, ImageAnnotation, BlackoutAnnotation, ToolType } from "../store";
 
 interface AnnotationLayerProps {
@@ -222,6 +222,108 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     }
   };
 
+  const handleResizeDown = useCallback((e: React.PointerEvent, handleId: string) => {
+    e.stopPropagation();
+    const target = e.currentTarget;
+    const layerElement = target.closest('.z-content') || target.parentElement?.parentElement;
+    if (!layerElement) return;
+
+    try {
+      target.setPointerCapture(e.pointerId);
+    } catch {}
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startAnnX = annotation.x;
+    const startAnnY = annotation.y;
+    const startWidth = (annotation as any).width;
+    const startHeight = (annotation as any).height;
+    const rect = layerElement.getBoundingClientRect();
+
+    const onMove = (ev: any) => {
+      const dx = ((ev.clientX - startX) / rect.width) * 100;
+      const dy = ((ev.clientY - startY) / rect.height) * 100;
+
+      let newX = startAnnX;
+      let newY = startAnnY;
+      let newWidth = startWidth;
+      let newHeight = startHeight;
+
+      if (handleId.includes('left')) {
+        newX = startAnnX + dx;
+        newWidth = startWidth - dx;
+      } else {
+        newWidth = startWidth + dx;
+      }
+
+      if (handleId.includes('top')) {
+        newY = startAnnY + dy;
+        newHeight = startHeight - dy;
+      } else {
+        newHeight = startHeight + dy;
+      }
+
+      if (newWidth < 2) {
+        if (handleId.includes('left')) newX = startAnnX + startWidth - 2;
+        newWidth = 2;
+      }
+      if (newHeight < 2) {
+        if (handleId.includes('top')) newY = startAnnY + startHeight - 2;
+        newHeight = 2;
+      }
+
+      updateAnnotation(annotation.id, { x: newX, y: newY, width: newWidth, height: newHeight });
+    };
+
+    const onUp = (ev: any) => {
+      try {
+        target.releasePointerCapture(ev.pointerId);
+      } catch {}
+      target.removeEventListener('pointermove', onMove);
+      target.removeEventListener('pointerup', onUp);
+      target.removeEventListener('pointercancel', onUp);
+    };
+
+    target.addEventListener('pointermove', onMove);
+    target.addEventListener('pointerup', onUp);
+    target.addEventListener('pointercancel', onUp);
+  }, [annotation, updateAnnotation]);
+
+  const renderResizeHandles = () => {
+    if (!isSelectMode || !isSelected || isEditing) return null;
+    if (annotation.type !== 'shape' && annotation.type !== 'blackout' && annotation.type !== 'image') return null;
+
+    const handles = [
+      { id: 'top-left', style: { top: 0, left: 0 }, cursor: 'nwse-resize' },
+      { id: 'top-right', style: { top: 0, left: '100%' }, cursor: 'nesw-resize' },
+      { id: 'bottom-left', style: { top: '100%', left: 0 }, cursor: 'nesw-resize' },
+      { id: 'bottom-right', style: { top: '100%', left: '100%' }, cursor: 'nwse-resize' },
+    ];
+
+    return (
+      <>
+        {handles.map(h => (
+          <div
+            key={h.id}
+            onPointerDown={(e) => handleResizeDown(e, h.id)}
+            className="absolute flex items-center justify-center pointer-events-auto"
+            style={{ 
+              ...h.style, 
+              width: '44px', 
+              height: '44px',
+              cursor: h.cursor,
+              transform: 'translate(-50%, -50%)',
+              zIndex: 10
+            }}
+            aria-label={`Resize ${h.id}`}
+          >
+            <div className="w-4 h-4 bg-white border-2 border-blue rounded-full shadow-sm" />
+          </div>
+        ))}
+      </>
+    );
+  };
+
   const renderControls = () => {
     if (!isSelectMode || !isSelected || isEditing) return null;
     return (
@@ -310,6 +412,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
         }}
       >
         {renderControls()}
+        {renderResizeHandles()}
       </div>
     );
   }
@@ -376,6 +479,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
       >
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wLDggTDgsMCB6IiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-50 pointer-events-none" />
         {renderControls()}
+        {renderResizeHandles()}
       </div>
     );
   }
@@ -400,6 +504,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           className="w-full h-full object-contain pointer-events-none" 
         />
         {renderControls()}
+        {renderResizeHandles()}
       </div>
     );
   }
