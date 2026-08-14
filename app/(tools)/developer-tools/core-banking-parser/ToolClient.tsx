@@ -3,7 +3,7 @@
 import React, { useState, useDeferredValue, useMemo } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { ToolResultArea } from '@/components/ui/ToolResultArea';
-import { AlertCircle } from 'lucide-react';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 import { parseIso8583 } from '@/src/lib/iso8583/parser';
 
 export default function ToolClient() {
@@ -28,30 +28,23 @@ export default function ToolClient() {
   }, [deferredInput]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <ToolInput 
-        value={input} 
-        onChange={setInput} 
-        placeholder="Paste Core Banking trace log or ISO 8583 hex string here" 
-        label="Core Banking Log / ISO 8583"
-      />
-      <div className="flex flex-col gap-2 h-full min-h-[400px]">
-        {error ? (
-          <div className="p-4 bg-error/10 text-error rounded-xl border border-error/20 flex items-start gap-3">
-             <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-             <div>
-               <p className="font-bold">Parsing Error</p>
-               <p className="text-sm mt-1">{error}</p>
-             </div>
-          </div>
-        ) : (
-          <ToolResultArea 
-            value={output} 
-            label="Parsed Data"
-            language="json"
-          />
-        )}
-      </div>
-    </div>
+    <ToolWorkspace
+      input={
+        <ToolInput 
+          value={input} 
+          onChange={setInput} 
+          placeholder="Paste Core Banking trace log or ISO 8583 hex string here" 
+          label="Core Banking Log / ISO 8583"
+        />
+      }
+      output={
+        <ToolResultArea 
+          value={output} 
+          label="Parsed Data"
+          language="json"
+          error={error || undefined}
+        />
+      }
+    />
   );
 }

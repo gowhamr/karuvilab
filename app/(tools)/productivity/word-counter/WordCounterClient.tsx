@@ -7,6 +7,7 @@ import { DropZone } from "@/components/ui/DropZone";
 import { FileText, Clock, Type, AlignLeft, Hash, Quote } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 export default function WordCounterClient() {
   const [text, setText] = useState("");
@@ -84,63 +85,67 @@ export default function WordCounterClient() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-3 space-y-4">
-          <label htmlFor="word-counter-input" className="text-sm font-black uppercase tracking-widest text-text-muted">Input Text</label>
-          <ToolInput
-            id="word-counter-input"
-            value={text}
-            onChange={setText}
-            placeholder="Type, paste, or drop a text or .docx file here..."
-            rows={12}
+    <ToolWorkspace
+      layout="stacked"
+      input={
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 space-y-4">
+            <label htmlFor="word-counter-input" className="text-sm font-black uppercase tracking-widest text-text-muted">Input Text</label>
+            <ToolInput
+              id="word-counter-input"
+              value={text}
+              onChange={setText}
+              placeholder="Type, paste, or drop a text or .docx file here..."
+              rows={12}
+            />
+          </div>
+          <div className="space-y-4 h-full flex flex-col">
+            <label className="text-sm font-black uppercase tracking-widest text-text-muted">Upload File</label>
+            <DropZone
+              onFilesSelected={handleFiles}
+              accept=".txt,.docx"
+              title="Drop file (.txt, .docx)"
+              description="or click to browse"
+              className="flex-1"
+            />
+          </div>
+        </div>
+      }
+      infoPanel={
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <MetricCard
+            label="Words"
+            value={stats.words.toString()}
+            icon={AlignLeft}
+            accent
+          />
+          <MetricCard
+            label="Chars (all)"
+            value={stats.charsWithSpaces.toString()}
+            icon={Type}
+          />
+          <MetricCard
+            label="Chars (no space)"
+            value={stats.charsWithoutSpaces.toString()}
+            icon={Hash}
+          />
+          <MetricCard
+            label="Sentences"
+            value={stats.sentences.toString()}
+            icon={Quote}
+          />
+          <MetricCard
+            label="Paragraphs"
+            value={stats.paragraphs.toString()}
+            icon={FileText}
+          />
+          <MetricCard
+            label="Reading Time"
+            value={stats.readingTime}
+            icon={Clock}
           />
         </div>
-        <div className="space-y-4">
-          <label className="text-sm font-black uppercase tracking-widest text-text-muted">Upload File</label>
-          <DropZone
-            onFilesSelected={handleFiles}
-            accept=".txt,.docx"
-            title="Drop file (.txt, .docx)"
-            description="or click to browse"
-            className="h-72"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <MetricCard
-          label="Words"
-          value={stats.words.toString()}
-          icon={AlignLeft}
-          accent
-        />
-        <MetricCard
-          label="Chars (all)"
-          value={stats.charsWithSpaces.toString()}
-          icon={Type}
-        />
-        <MetricCard
-          label="Chars (no space)"
-          value={stats.charsWithoutSpaces.toString()}
-          icon={Hash}
-        />
-        <MetricCard
-          label="Sentences"
-          value={stats.sentences.toString()}
-          icon={Quote}
-        />
-        <MetricCard
-          label="Paragraphs"
-          value={stats.paragraphs.toString()}
-          icon={FileText}
-        />
-        <MetricCard
-          label="Reading Time"
-          value={stats.readingTime}
-          icon={Clock}
-        />
-      </div>
-    </div>
+      }
+    />
   );
 }

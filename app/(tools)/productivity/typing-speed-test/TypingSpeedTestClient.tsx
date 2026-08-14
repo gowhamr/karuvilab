@@ -5,6 +5,8 @@ import { Timer, Trophy, Target, RefreshCw, Keyboard, Activity, TrendingUp, Alert
 import { m, AnimatePresence } from "framer-motion";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { cn } from "@/src/lib/utils";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -277,175 +279,185 @@ export default function TypingSpeedTestClient() {
     : 0;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-12">
-      {/* ── Stats ── */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { icon: Trophy,   label: "WPM",      val: stats.wpm,      suffix: "",  best: bestWpm, isNew: isNewBestWpm },
-          { icon: Target,   label: "Accuracy", val: stats.accuracy, suffix: "%", best: bestAcc, isNew: isNewBestAcc },
-          { icon: Timer,    label: "Time",     val: stats.timeS,    suffix: "s", best: null,    isNew: false },
-        ].map(({ icon: Icon, label, val, suffix, best, isNew }) => (
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="flex flex-col h-full space-y-6">
           <div
-            key={label}
-            className="p-5 bg-surface border border-border rounded-3xl flex flex-col items-center justify-center gap-1.5"
-            aria-label={`${label}: ${val}${suffix}`}
-          >
-            <Icon className="w-5 h-5 text-[#8B5CF6]" aria-hidden="true" />
-            <div className="text-3xl font-black text-text">{val}{suffix}</div>
-            <div className="text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
-            {best !== null && (
-              <div className={`text-[10px] font-bold ${isNew ? "text-emerald-500" : "text-text-muted"}`}>
-                {isNew ? "🏆 New best!" : `Best: ${best}${suffix}`}
-              </div>
+            className={cn(
+              "relative flex-1 space-y-2 overflow-hidden cursor-text transition-colors duration-300",
+              status === "finished" ? "bg-emerald-500/5 rounded-2xl p-4 -mx-4 -mt-4" : ""
             )}
-          </div>
-        ))}
-      </div>
-
-      {/* ── Text Display + Hidden Textarea ── */}
-      <div
-        className={`relative p-4 sm:p-8 bg-surface border rounded-4xl space-y-2 overflow-hidden cursor-text transition-colors duration-300 ${status === 'finished' ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border'}`}
-        onClick={() => inputRef.current?.focus()}
-      >
-        {status === "idle" && (
-          <p className="text-xs font-bold text-[#8B5CF6] uppercase tracking-widest mb-2">
-            <Keyboard className="w-3 h-3 inline mr-1.5" aria-hidden="true" />
-            Click here or start typing
-          </p>
-        )}
-        <div
-          className="text-xl leading-relaxed font-medium font-mono select-none"
-          aria-live="off"
-        >
-          {renderText()}
-        </div>
-
-        <textarea
-          ref={inputRef}
-          value={input}
-          onChange={handleInput}
-          disabled={status === "finished"}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-text resize-none"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck={false}
-          aria-label="Type the prompt text here."
-        />
-
-        <AnimatePresence>
-          {status === "finished" && (
-            <m.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-center gap-4 pt-6 border-t border-border mt-6 relative z-content"
+            onClick={() => inputRef.current?.focus()}
+          >
+            {status === "idle" && (
+              <p className="text-xs font-bold text-[#8B5CF6] uppercase tracking-widest mb-2">
+                <Keyboard className="w-3 h-3 inline mr-1.5" aria-hidden="true" />
+                Click here or start typing
+              </p>
+            )}
+            <div
+              className="text-xl leading-relaxed font-medium font-mono select-none"
+              aria-live="off"
             >
+              {renderText()}
+            </div>
+
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={handleInput}
+              disabled={status === "finished"}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-text resize-none"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              aria-label="Type the prompt text here."
+            />
+
+            <AnimatePresence>
+              {status === "finished" && (
+                <m.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center justify-center gap-4 pt-6 mt-6 relative z-content"
+                >
+                  <button
+                    onClick={reset}
+                    className="flex items-center gap-2 px-6 py-3 bg-[#8B5CF6] text-white rounded-xl font-bold hover:bg-[#7C3AED] transition-colors shadow-lg shadow-[#8B5CF6]/20"
+                  >
+                    <RefreshCw className="w-4 h-4" /> Next Test
+                  </button>
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* ── Bottom bar / Progress ── */}
+          {status !== "finished" && (
+            <div className="flex justify-between items-center pt-4 border-t border-border/50">
+              <p className="text-sm text-text-muted font-medium">
+                {status === "idle"
+                  ? "Start typing to begin the timer."
+                  : `${input.length} / ${targetText.length} characters`}
+              </p>
               <button
                 onClick={reset}
-                className="flex items-center gap-2 px-6 py-3 bg-[#8B5CF6] text-white rounded-xl font-bold hover:bg-[#7C3AED] transition-colors shadow-lg shadow-[#8B5CF6]/20"
+                className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-text-2 hover:border-[#8B5CF6] transition-colors"
               >
-                <RefreshCw className="w-4 h-4" /> Next Test
+                <RefreshCw className="w-4 h-4" /> Skip
               </button>
-            </m.div>
+            </div>
           )}
-        </AnimatePresence>
-      </div>
-
-      {/* ── Bottom bar / Progress ── */}
-      {status !== "finished" && (
-        <div className="flex justify-between items-center px-1">
-          <p className="text-sm text-text-muted font-medium">
-            {status === "idle"
-              ? "Start typing to begin the timer."
-              : `${input.length} / ${targetText.length} characters`}
-          </p>
-          <button
-            onClick={reset}
-            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-text-2 hover:border-[#8B5CF6] transition-colors"
-          >
-            <RefreshCw className="w-4 h-4" /> Skip
-          </button>
         </div>
-      )}
+      }
+      output={
+        <div className="space-y-8 flex flex-col h-full">
+          {/* ── Stats ── */}
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { icon: Trophy,   label: "WPM",      val: stats.wpm,      suffix: "",  best: bestWpm, isNew: isNewBestWpm },
+              { icon: Target,   label: "Accuracy", val: stats.accuracy, suffix: "%", best: bestAcc, isNew: isNewBestAcc },
+              { icon: Timer,    label: "Time",     val: stats.timeS,    suffix: "s", best: null,    isNew: false },
+            ].map(({ icon: Icon, label, val, suffix, best, isNew }) => (
+              <div
+                key={label}
+                className="p-4 bg-bg border border-border rounded-3xl flex flex-col items-center justify-center gap-1.5"
+                aria-label={`${label}: ${val}${suffix}`}
+              >
+                <Icon className="w-5 h-5 text-[#8B5CF6]" aria-hidden="true" />
+                <div className="text-2xl sm:text-3xl font-black text-text">{val}{suffix}</div>
+                <div className="text-[10px] sm:text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
+                {best !== null && (
+                  <div className={`text-[10px] font-bold ${isNew ? "text-emerald-500" : "text-text-muted"}`}>
+                    {isNew ? "🏆 New best!" : `Best: ${best}${suffix}`}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
 
-      {/* ── Performance Summary (Finished State) ── */}
-      <AnimatePresence>
-        {status === "finished" && (
-          <m.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 overflow-hidden"
-          >
-            {/* Level & Tips */}
-            <div className="bg-surface border border-border p-6 rounded-3xl space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-blue/10 rounded-xl">
-                  <Activity className="w-5 h-5 text-blue" />
+          {/* ── Performance Summary (Finished State) ── */}
+          <AnimatePresence>
+            {status === "finished" && (
+              <m.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="flex flex-col gap-4 overflow-hidden"
+              >
+                {/* Level & Tips */}
+                <div className="bg-bg border border-border p-6 rounded-3xl space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-blue/10 rounded-xl">
+                      <Activity className="w-5 h-5 text-blue" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-text text-sm uppercase tracking-wider">Performance Summary</h3>
+                      <p className="text-xs text-text-muted font-medium">Your skill assessment</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center py-3 border-b border-border/50">
+                    <span className="text-sm text-text-3 font-bold">Typing Level</span>
+                    <span className={`text-lg font-black ${level.color}`}>{level.title}</span>
+                  </div>
+                  
+                  <div className="space-y-2 pt-2">
+                    <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Improvement Tip</span>
+                    <p className="text-sm text-text-2 leading-relaxed bg-surface p-4 rounded-2xl border border-border/50">
+                      {getImprovementTip(stats.wpm, stats.accuracy)}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-text text-sm uppercase tracking-wider">Performance Summary</h3>
-                  <p className="text-xs text-text-muted font-medium">Your skill assessment</p>
-                </div>
-              </div>
-              
-              <div className="flex justify-between items-center py-3 border-b border-border/50">
-                <span className="text-sm text-text-3 font-bold">Typing Level</span>
-                <span className={`text-lg font-black ${level.color}`}>{level.title}</span>
-              </div>
-              
-              <div className="space-y-2 pt-2">
-                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Improvement Tip</span>
-                <p className="text-sm text-text-2 leading-relaxed bg-bg p-4 rounded-2xl border border-border/50">
-                  {getImprovementTip(stats.wpm, stats.accuracy)}
-                </p>
-              </div>
-            </div>
 
-            {/* Mistakes & History */}
-            <div className="bg-surface border border-border p-6 rounded-3xl space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-rose-500/10 rounded-xl">
-                  <TrendingUp className="w-5 h-5 text-rose-500" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-text text-sm uppercase tracking-wider">Analysis & History</h3>
-                  <p className="text-xs text-text-muted font-medium">Mistakes and tracking</p>
-                </div>
-              </div>
+                {/* Mistakes & History */}
+                <div className="bg-bg border border-border p-6 rounded-3xl space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-rose-500/10 rounded-xl">
+                      <TrendingUp className="w-5 h-5 text-rose-500" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-text text-sm uppercase tracking-wider">Analysis & History</h3>
+                      <p className="text-xs text-text-muted font-medium">Mistakes and tracking</p>
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-bg p-4 rounded-2xl border border-border/50 flex flex-col justify-center gap-1">
-                  <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Mistakes Made</span>
-                  <span className="text-2xl font-black text-text">{mistakesCount}</span>
-                </div>
-                <div className="bg-bg p-4 rounded-2xl border border-border/50 flex flex-col justify-center gap-1">
-                  <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Recent Avg WPM</span>
-                  <span className="text-2xl font-black text-text">{history.length > 0 ? avgWpm : stats.wpm}</span>
-                </div>
-              </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-surface p-4 rounded-2xl border border-border/50 flex flex-col justify-center gap-1">
+                      <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Mistakes</span>
+                      <span className="text-2xl font-black text-text">{mistakesCount}</span>
+                    </div>
+                    <div className="bg-surface p-4 rounded-2xl border border-border/50 flex flex-col justify-center gap-1">
+                      <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Recent Avg</span>
+                      <span className="text-2xl font-black text-text">{history.length > 0 ? avgWpm : stats.wpm}</span>
+                    </div>
+                  </div>
 
-              {topMissed.length > 0 && (
-                <div className="pt-3">
-                   <div className="flex items-center gap-2 mb-3">
-                     <AlertTriangle className="w-3.5 h-3.5 text-orange-400" />
-                     <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Trouble Keys</span>
-                   </div>
-                   <div className="flex gap-2 flex-wrap">
-                     {topMissed.map(([char, count]) => (
-                       <div key={char} className="flex items-center gap-1.5 px-3 py-1.5 bg-bg border border-border rounded-lg text-sm">
-                         <span className="font-mono font-bold text-rose-400">
-                           {char === ' ' ? 'Space' : char}
-                         </span>
-                         <span className="text-text-muted text-xs font-bold">×{count}</span>
+                  {topMissed.length > 0 && (
+                    <div className="pt-3">
+                       <div className="flex items-center gap-2 mb-3">
+                         <AlertTriangle className="w-3.5 h-3.5 text-orange-400" />
+                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Trouble Keys</span>
                        </div>
-                     ))}
-                   </div>
+                       <div className="flex gap-2 flex-wrap">
+                         {topMissed.map(([char, count]) => (
+                           <div key={char} className="flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-lg text-sm">
+                             <span className="font-mono font-bold text-rose-400">
+                               {char === ' ' ? 'Space' : char}
+                             </span>
+                             <span className="text-text-muted text-xs font-bold">×{count}</span>
+                           </div>
+                         ))}
+                       </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
-    </div>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </div>
+      }
+    />
   );
 }

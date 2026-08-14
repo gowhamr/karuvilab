@@ -12,14 +12,27 @@ describe('AI Platform Governance Suite', () => {
     const models = Object.values(AI_MODEL_REGISTRY);
     expect(models.length).toBeGreaterThanOrEqual(4);
 
+    // All models must have required structural fields
     for (const model of models) {
       expect(model.id).toBeDefined();
-      expect(model.sha256).toBeDefined();
-      expect(model.sha256?.length).toBe(64);
       expect(model.sizeMB).toBeGreaterThan(0);
       expect(model.backend.length).toBeGreaterThan(0);
       expect(model.inputFormats.length).toBeGreaterThan(0);
       expect(model.outputFormats.length).toBeGreaterThan(0);
+    }
+
+    // Available (non-placeholder) models MUST have a valid 64-char SHA-256
+    const availableModels = models.filter(m => m.available !== false);
+    expect(availableModels.length).toBeGreaterThanOrEqual(1);
+    for (const model of availableModels) {
+      expect(model.sha256, `Model '${model.id}' is marked available but has no valid sha256`).toBeDefined();
+      expect(model.sha256?.length, `Model '${model.id}' sha256 must be 64 hex chars`).toBe(64);
+    }
+
+    // Unavailable (placeholder) models must be explicitly flagged
+    const unavailableModels = models.filter(m => m.available === false);
+    for (const model of unavailableModels) {
+      expect(model.available, `Model '${model.id}' placeholder must explicitly set available:false`).toBe(false);
     }
   });
 

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
 import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
@@ -101,9 +101,9 @@ export default function ImageResizerClient() {
   };
 
   return (
-    
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-4">
+    <ToolWorkspace
+      input={
+        <>
           <DropZone
             onFilesSelected={(files) => {
               const f = files instanceof FileList ? files[0] : files[0];
@@ -120,59 +120,59 @@ export default function ImageResizerClient() {
           />
 
           {origW > 0 && (
-            <p className="text-xs text-text-muted text-center">Original: {origW} × {origH}px</p>
+            <p className="text-xs text-text-muted text-center mt-4">Original: {origW} × {origH}px</p>
           )}
-
-          {/* Options */}
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <ToolInput
-                label="Width (px)"
-                type="number"
-                value={width}
-                onChange={handleWidth}
-                placeholder="800"
-              />
-              <ToolInput
-                label="Height (px)"
-                type="number"
-                value={height}
-                onChange={handleHeight}
-                placeholder="600"
-              />
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <Checkbox
-                label="Lock aspect ratio"
-                checked={lockRatio}
-                onChange={e => setLockRatio(e.target.checked)}
-              />
-              
-              <div className="flex gap-2 bg-bg p-1 rounded-xl border border-border w-full sm:w-auto">
-                {(["fit", "fill", "stretch"] as const).map(m => (
-                  <button
-                    key={m}
-                    onClick={() => setMode(m)}
-                    className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-bold capitalize transition-all ${mode === m ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text-2"}`}
-                  >
-                    {m}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button onClick={resize} disabled={!originalUrl || processing} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">
-              {processing ? "Processing…" : "Resize Image"}
-            </button>
+        </>
+      }
+      optionsPanel={
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <ToolInput
+              label="Width (px)"
+              type="number"
+              value={width}
+              onChange={handleWidth}
+              placeholder="800"
+            />
+            <ToolInput
+              label="Height (px)"
+              type="number"
+              value={height}
+              onChange={handleHeight}
+              placeholder="600"
+            />
           </div>
-        </div>
 
-        {/* Output */}
-        <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
-          <h2 className="font-black text-text-2 text-sm uppercase tracking-widest">Result</h2>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <Checkbox
+              label="Lock aspect ratio"
+              checked={lockRatio}
+              onChange={e => setLockRatio(e.target.checked)}
+            />
+            
+            <div className="flex gap-2 bg-bg p-1 rounded-xl border border-border w-full sm:w-auto">
+              {(["fit", "fill", "stretch"] as const).map(m => (
+                <button
+                  key={m}
+                  onClick={() => setMode(m)}
+                  className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-bold capitalize transition-all ${mode === m ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text-2"}`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button onClick={resize} disabled={!originalUrl || processing} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">
+            {processing ? "Processing…" : "Resize Image"}
+          </button>
+        </>
+      }
+      output={
+        <>
+          <h2 className="font-black text-text-2 text-sm uppercase tracking-widest mb-2">Result</h2>
           {resizedUrl ? (
-            <>
+            <div className="space-y-4">
               <img src={resizedUrl} alt="Resized" className="mx-auto max-h-64 rounded-xl object-contain border border-border" />
               <div className="flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-wider">
                 <span>{width} × {height}px</span>
@@ -181,14 +181,14 @@ export default function ImageResizerClient() {
               <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
                 Download Resized Image
               </button>
-            </>
+            </div>
           ) : (
-            <div className="flex items-center justify-center h-64 text-text-muted text-xs font-bold uppercase tracking-widest border-2 border-dashed border-border rounded-2xl">
+            <div className="flex items-center justify-center flex-1 min-h-64 text-text-muted text-xs font-bold uppercase tracking-widest border-2 border-dashed border-border rounded-2xl">
               Resized image will appear here
             </div>
           )}
-        </div>
-      </div>
-    
+        </>
+      }
+    />
   );
 }

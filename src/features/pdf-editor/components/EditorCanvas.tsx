@@ -5,6 +5,8 @@ import { getDeviceTier } from "../utils/device";
 import AnnotationLayer from "./AnnotationLayer";
 import { useEditorStore } from "../store";
 
+import "pdfjs-dist/web/pdf_viewer.css";
+
 interface EditorCanvasProps {
   pdfDoc: any;
   pageId: string;
@@ -14,6 +16,7 @@ interface EditorCanvasProps {
 
 export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }: EditorCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textLayerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -54,25 +57,113 @@ export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }:
       const file = e.dataTransfer.files[0];
       if (!file) return;
       
-      if (file.type.startsWith('image/')) {
+      if (file.type === 'image/png' || file.type === 'image/jpeg') {
+        let x = 10;
+        let y = 10;
+        
+        if (canvasRef.current) {
+          const rect = canvasRef.current.getBoundingClientRect();
+          const dropX = e.clientX - rect.left;
+          const dropY = e.clientY - rect.top;
+          
+          x = (dropX / rect.width) * 100;
+          y = (dropY / rect.height) * 100;
+          
+          x = Math.max(0, Math.min(x, 100));
+          y = Math.max(0, Math.min(y, 100));
+        }
+
         const reader = new FileReader();
         reader.onload = (event) => {
           if (event.target?.result) {
-            useEditorStore.getState().addAnnotation({
-              id: crypto.randomUUID(),
-              type: 'image',
-              pageIndex: pageState!.originalIndex,
-              x: 10,
-              y: 10,
-              width: 20,
-              height: 20,
-              dataUrl: event.target.result as string,
-            });
+            const dataUrl = event.target.result as string;
+            const img = new Image();
+            img.onload = () => {
+              const imgRatio = img.width / img.height;
+              let annWidth = 20;
+              let annHeight = 20;
+              
+              if (canvasRef.current) {
+                const rect = canvasRef.current.getBoundingClientRect();
+                const actualWidthPx = (20 / 100) * rect.width;
+                const actualHeightPx = actualWidthPx / imgRatio;
+                annHeight = (actualHeightPx / rect.height) * 100;
+              }
+              
+              useEditorStore.getState().addAnnotation({
+                id: crypto.randomUUID(),
+                type: 'image',
+                pageIndex: pageState!.originalIndex,
+                x,
+                y,
+                width: annWidth,
+                height: annHeight,
+                dataUrl,
+              });
+            };
+            img.src = dataUrl;
           }
         };
         reader.readAsDataURL(file);
       }
     }
+  }, [pageState]);
+
+  useEffect(() => {
+    const handleMouseUp = () => {
+      const state = useEditorStore.getState();
+      if (state.activeTool === 'highlight') {
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) return;
+        
+        const layer = textLayerRef.current;
+        if (!layer) return;
+        
+        const layerRect = layer.getBoundingClientRect();
+        const rects = [];
+        
+        for (let i = 0; i < selection.rangeCount; i++) {
+          const range = selection.getRangeAt(i);
+          const clientRects = range.getClientRects();
+          for (let j = 0; j < clientRects.length; j++) {
+            const rect = clientRects[j]!;
+            if (
+              rect.right < layerRect.left ||
+              rect.left > layerRect.right ||
+              rect.bottom < layerRect.top ||
+              rect.top > layerRect.bottom
+            ) continue;
+            
+            rects.push({
+              x: ((rect.left - layerRect.left) / layerRect.width) * 100,
+              y: ((rect.top - layerRect.top) / layerRect.height) * 100,
+              width: (rect.width / layerRect.width) * 100,
+              height: (rect.height / layerRect.height) * 100
+            });
+          }
+        }
+        
+        if (rects.length > 0) {
+          state.addAnnotation({
+            id: crypto.randomUUID(),
+            pageIndex: pageState!.originalIndex,
+            type: 'highlight',
+            rects,
+            color: '#FEF08A', // Yellow highlight
+            x: 0, y: 0 // Base properties
+          } as any);
+        }
+        
+        selection.removeAllRanges();
+      }
+    };
+    
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('touchend', handleMouseUp);
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchend', handleMouseUp);
+    };
   }, [pageState]);
 
   useEffect(() => {
@@ -124,7 +215,19 @@ export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }:
         renderTask = pageRef.render({ canvasContext: ctx, viewport });
         await renderTask.promise;
 
-        if (active) setLoading(false);
+        if (active && textLayerRef.current) {
+          textLayerRef.current.innerHTML = '';
+          const textContent = await pageRef.getTextContent();
+          const pdfjsLib = await import('pdfjs-dist');
+          const textLayer = new pdfjsLib.TextLayer({
+            textContentSource: textContent,
+            container: textLayerRef.current,
+            viewport: viewport
+          });
+          textLayerRef.current.style.setProperty('--scale-factor', String(actualDpr));
+          await textLayer.render();
+          setLoading(false);
+        }
       } catch (err: any) {
         if (active && err.name !== "RenderingCancelledException") {
           // No console.log in production code as per instructions
@@ -153,16 +256,28 @@ export default function EditorCanvas({ pdfDoc, pageId, onPrevPage, onNextPage }:
 
   if (!pageState) return null;
 
+  const handleContainerPointerDown = (e: React.PointerEvent) => {
+    const state = useEditorStore.getState();
+    if (state.activeTool === 'select') {
+      // Only deselect if we didn't click on an annotation. Annotations have pointer-events-auto and will stop propagation.
+      // Wait, we can just check if the target is an annotation. But annotations are inside AnnotationLayer.
+      // Easiest is to let AnnotationItem call e.stopPropagation(). Since they do, any click reaching here is a background click.
+      state.setSelectedAnnotation(null);
+    }
+  };
+
   return (
     <div 
       ref={containerRef} 
       className="w-full h-full flex flex-col items-center py-10 overflow-auto custom-scrollbar"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
+      onPointerDown={handleContainerPointerDown}
     >
       <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
         <div className="relative shadow-xl bg-white border border-border">
           <canvas ref={canvasRef} className="block" />
+          <div ref={textLayerRef} className="textLayer absolute inset-0 mix-blend-multiply" />
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-bg/20 backdrop-blur-sm z-modal">
               <Loader2 className="w-10 h-10 animate-spin text-blue" />

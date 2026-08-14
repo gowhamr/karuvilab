@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { Code2, Wand2 } from "lucide-react";
+import { Wand2 } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
+import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export function formatSql(sql: string, uppercaseKeywords: boolean = true, indentSpaces: number = 2): string {
   if (!sql.trim()) return "";
@@ -64,80 +68,62 @@ export default function SqlFormatterClient() {
   }, [inputSql, uppercaseKeywords, indentSpaces]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Controls */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4 text-xs font-semibold text-text">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
+    <ToolWorkspace
+      input={
+        <ToolInput
+          label="Raw SQL Query"
+          value={inputSql}
+          onChange={(val) => {
+            if (val.length > 5 * 1024 * 1024) {
+              toast("Input text exceeds 5MB limit", "error");
+            } else {
+              setInputSql(val);
+            }
+          }}
+          rows={12}
+          mono
+          id="sql-raw-input"
+          placeholder="Enter SQL here..."
+        />
+      }
+      optionsPanel={
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center w-full">
+          <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+            <Checkbox
+              label="Uppercase SQL Keywords"
               checked={uppercaseKeywords}
               onChange={(e) => setUppercaseKeywords(e.target.checked)}
-              className="rounded border-border"
             />
-            Uppercase SQL Keywords
-          </label>
-
-          <div className="flex items-center gap-2">
-            <span className="text-text-muted">Indent:</span>
-            <select
-              value={indentSpaces}
-              onChange={(e) => setIndentSpaces(Number(e.target.value))}
-              className="px-2 py-1 rounded bg-surface border border-border text-xs"
-            >
-              <option value={2}>2 Spaces</option>
-              <option value={4}>4 Spaces</option>
-            </select>
+            <div className="flex items-center gap-2 px-1">
+              <span className="text-sm font-bold text-text-2">Indent:</span>
+              <select
+                value={indentSpaces}
+                onChange={(e) => setIndentSpaces(Number(e.target.value))}
+                className="w-[120px] px-4 py-3 bg-bg border border-divider rounded-input outline-none transition-all min-h-12 text-text-primary text-body focus:ring-4 focus:ring-inset focus:ring-primary/10 focus:border-primary"
+              >
+                <option value={2}>2 Spaces</option>
+                <option value={4}>4 Spaces</option>
+              </select>
+            </div>
           </div>
+          <Button
+            id="sql-format-btn"
+            onClick={handleFormat}
+            variant="primary"
+            className="w-full sm:w-auto"
+          >
+            <Wand2 className="w-4 h-4" />
+            Format SQL Query
+          </Button>
         </div>
-
-        <button
-          id="sql-format-btn"
-          onClick={handleFormat}
-          className="px-5 py-2.5 rounded-xl bg-primary text-white font-bold text-sm flex items-center gap-2 hover:opacity-90 transition"
-        >
-          <Wand2 className="w-4 h-4" />
-          Format SQL Query
-        </button>
-      </div>
-
-      {/* Editor Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-text flex items-center gap-2">
-            <Code2 className="w-4 h-4 text-sky-400" />
-            Raw SQL Query:
-          </label>
-          <textarea
-            id="sql-raw-input"
-            rows={12}
-            value={inputSql}
-            onChange={(e) => {
-              if (e.target.value.length > 5 * 1024 * 1024) {
-                toast("Input text exceeds 5MB limit", "error");
-              } else {
-                setInputSql(e.target.value);
-              }
-            }}
-            className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-semibold text-text">Formatted Output:</label>
-            <CopyButton text={formattedSql} />
-          </div>
-          <textarea
-            id="sql-formatted-output"
-            rows={12}
-            readOnly
-            value={formattedSql}
-            placeholder="Click 'Format SQL Query' to view beautified output..."
-            className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs text-emerald-300 focus:outline-none"
-          />
-        </div>
-      </div>
-    </div>
+      }
+      output={
+        <ToolResultArea
+          label="Formatted Output"
+          value={formattedSql}
+          language="sql"
+        />
+      }
+    />
   );
 }

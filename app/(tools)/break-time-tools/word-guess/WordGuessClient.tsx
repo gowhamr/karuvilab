@@ -2,10 +2,11 @@
 
 import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { RotateCcw, Trophy, Sparkles, HelpCircle, Delete, CornerDownLeft, X } from "lucide-react";
+import { RotateCcw, Trophy, Sparkles, HelpCircle, Delete, CornerDownLeft } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
 import { useToast } from "@/components/ui/Toast";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // ─── Word Lists ──────────────────────────────────────────────────────────────
 
@@ -87,7 +88,6 @@ export default function WordGuessClient() {
   const [currentGuess, setCurrentGuess] = useState("");
   const [gameState, setGameState] = useState<"playing" | "won" | "lost">("playing");
   const [invalidWordShake, setInvalidWordShake] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
 
   // Stats
   const [stats, setStats] = useState<GameStats>(DEFAULT_STATS);
@@ -307,75 +307,97 @@ export default function WordGuessClient() {
   });
 
   return (
-    <div className="max-w-md mx-auto space-y-6">
-      {/* ── Header Toolbar ── */}
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2">
-          {[{ label: "Streak", val: stats.currentStreak }, { label: "Max Streak", val: stats.maxStreak }].map(({ label, val }) => (
-            <div key={label} className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[80px]">
-              <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{label}</div>
-              <div className="text-lg font-black text-text">{val}</div>
-            </div>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowHelp(true)}
-            className="flex items-center justify-center p-3 rounded-xl bg-surface border border-border text-text-muted hover:text-text hover:border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="How to play"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-5 h-5" />
-          </button>
-          <m.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={initGame}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <RotateCcw className="w-4 h-4" /> New Game
-          </m.button>
-        </div>
-      </div>
-
-      {/* ── Letter Grid Row Area ── */}
-      <m.div
-        animate={invalidWordShake ? { x: [-10, 10, -8, 8, -5, 5, 0] } : {}}
-        transition={{ duration: 0.4 }}
-        className="space-y-2 py-4"
-      >
-        {rows}
-      </m.div>
-
-      {/* ── Keyboard Keys Layout ── */}
-      <div className="space-y-1.5 py-2">
-        {KEYBOARD_ROWS.map((row, rowIdx) => (
-          <div key={rowIdx} className="flex gap-1 justify-center max-w-full">
-            {row.map((key) => {
-              const isAction = key === "ENTER" || key === "DELETE";
-              return (
+    <>
+      <ToolWorkspace
+        layout="stacked"
+        output={
+          <div className="w-full space-y-6 max-w-lg mx-auto">
+            {/* ── Header Toolbar ── */}
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2">
+                {[{ label: "Streak", val: stats.currentStreak }, { label: "Max Streak", val: stats.maxStreak }].map(({ label, val }) => (
+                  <div key={label} className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[80px]">
+                    <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{label}</div>
+                    <div className="text-lg font-black text-text">{val}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-2">
                 <m.button
-                  key={key}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => handleInput(key)}
-                  className={getKeyboardKeyClass(key)}
-                  style={{ flex: isAction ? 1.5 : 1 }}
-                  aria-label={key}
+                  onClick={initGame}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
-                  {key === "DELETE" ? (
-                    <Delete className="w-4 h-4" />
-                  ) : key === "ENTER" ? (
-                    <CornerDownLeft className="w-4 h-4" />
-                  ) : (
-                    key
-                  )}
+                  <RotateCcw className="w-4 h-4" /> New Game
                 </m.button>
-              );
-            })}
+              </div>
+            </div>
+
+            {/* ── Letter Grid Row Area ── */}
+            <m.div
+              animate={invalidWordShake ? { x: [-10, 10, -8, 8, -5, 5, 0] } : {}}
+              transition={{ duration: 0.4 }}
+              className="space-y-2 py-4"
+            >
+              {rows}
+            </m.div>
+
+            {/* ── Keyboard Keys Layout ── */}
+            <div className="space-y-1.5 py-2">
+              {KEYBOARD_ROWS.map((row, rowIdx) => (
+                <div key={rowIdx} className="flex gap-1 justify-center max-w-full">
+                  {row.map((key) => {
+                    const isAction = key === "ENTER" || key === "DELETE";
+                    return (
+                      <m.button
+                        key={key}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleInput(key)}
+                        className={getKeyboardKeyClass(key)}
+                        style={{ flex: isAction ? 1.5 : 1 }}
+                        aria-label={key}
+                      >
+                        {key === "DELETE" ? (
+                          <Delete className="w-4 h-4" />
+                        ) : key === "ENTER" ? (
+                          <CornerDownLeft className="w-4 h-4" />
+                        ) : (
+                          key
+                        )}
+                      </m.button>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
+        }
+        infoPanel={
+          <div className="bg-surface border border-border p-4 rounded-xl space-y-4 text-sm text-text-2">
+            <div className="flex items-center gap-2 text-text">
+              <HelpCircle className="w-5 h-5" />
+              <h3 className="font-bold">How To Play</h3>
+            </div>
+            <p>Guess the Word in 6 tries. Each guess must be a valid 5-letter word.</p>
+            <div className="space-y-2 mt-2">
+              <div className="flex gap-3 items-center">
+                <div className="w-8 h-8 flex items-center justify-center bg-emerald-600 text-white font-bold rounded-md">W</div>
+                <span className="text-text-3">is in the word and in the correct spot.</span>
+              </div>
+              <div className="flex gap-3 items-center">
+                <div className="w-8 h-8 flex items-center justify-center bg-amber-500 text-white font-bold rounded-md">O</div>
+                <span className="text-text-3">is in the word but in the wrong spot.</span>
+              </div>
+              <div className="flex gap-3 items-center">
+                <div className="w-8 h-8 flex items-center justify-center bg-surface-elevated/40 border border-border/20 text-text-muted font-bold rounded-md">R</div>
+                <span className="text-text-3">is not in the word in any spot.</span>
+              </div>
+            </div>
+          </div>
+        }
+      />
 
       {/* Game Over / Win celebration Overlay */}
       <AnimatePresence>
@@ -441,62 +463,7 @@ export default function WordGuessClient() {
             </m.div>
           </m.div>
         )}
-        
-        {showHelp && (
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-surface/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 z-modal"
-          >
-            <m.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="max-w-md w-full bg-surface border border-border p-6 rounded-3xl space-y-4 shadow-xl"
-            >
-              <div className="flex justify-between items-center border-b border-border pb-4">
-                <h2 className="text-xl font-black text-text">How To Play</h2>
-                <button 
-                  onClick={() => setShowHelp(false)}
-                  className="p-2 hover:bg-surface-elevated rounded-xl transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="space-y-4 text-sm text-text-2">
-                <p>Guess the Word in 6 tries.</p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>Each guess must be a valid 5-letter word.</li>
-                  <li>The color of the tiles will change to show how close your guess was to the word.</li>
-                </ul>
-                <div className="space-y-2 mt-4">
-                  <div className="flex gap-2 items-center">
-                    <div className="w-8 h-8 flex items-center justify-center bg-emerald-600 text-white font-bold rounded-md">W</div>
-                    <span className="text-text-3">is in the word and in the correct spot.</span>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <div className="w-8 h-8 flex items-center justify-center bg-amber-500 text-white font-bold rounded-md">O</div>
-                    <span className="text-text-3">is in the word but in the wrong spot.</span>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <div className="w-8 h-8 flex items-center justify-center bg-surface-elevated/40 border border-border/20 text-text-muted font-bold rounded-md">R</div>
-                    <span className="text-text-3">is not in the word in any spot.</span>
-                  </div>
-                </div>
-              </div>
-              <m.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowHelp(false)}
-                className="w-full mt-2 px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors"
-              >
-                Let's Play!
-              </m.button>
-            </m.div>
-          </m.div>
-        )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

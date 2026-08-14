@@ -5,6 +5,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useStopwatchStore, Lap } from "@/src/features/stopwatch/store";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 function formatTime(ms: number, showMs: boolean = true) {
   const mins = Math.floor(ms / 60000);
@@ -212,7 +213,7 @@ export default function StopwatchClient() {
   );
 
   const renderLapsList = () => (
-    <div className={cn("w-full max-w-2xl mx-auto flex-1 overflow-auto mt-12", isDashboard ? "max-h-[40vh]" : "max-h-[500px]")}>
+    <div className={cn("w-full mx-auto flex-1 overflow-auto", isDashboard ? "max-w-2xl mt-12 max-h-[40vh]" : "h-full max-h-[500px] pr-2")}>
       {laps.length === 0 ? (
         <div className="text-center text-text-muted opacity-50 py-8 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
           <Flag className="w-4 h-4" /> No laps recorded
@@ -280,17 +281,45 @@ export default function StopwatchClient() {
 
   // Normal / Focus Mode
   return (
-    <div className="space-y-8 max-w-4xl mx-auto flex flex-col items-center py-12">
-      <div className="w-full flex justify-end px-4">
-        {renderSettingsPopover()}
-      </div>
-      
-      <div className="bg-surface border border-border rounded-5xl p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative">
-        {renderMainClock()}
-        {renderControls()}
-      </div>
-
-      {settings.showLaps && renderLapsList()}
-    </div>
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="flex flex-col items-center justify-center py-8 space-y-8">
+          {renderMainClock()}
+          {renderControls()}
+        </div>
+      }
+      optionsPanel={
+        <div className="space-y-4">
+          <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted">Settings</h3>
+          <div className="space-y-2">
+            <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-surface-2 rounded-lg transition-colors">
+              <span className="text-sm font-medium">Show Milliseconds</span>
+              <input type="checkbox" checked={settings.showMilliseconds} onChange={e => updateSettings({ showMilliseconds: e.target.checked })} className="accent-blue w-4 h-4" />
+            </label>
+            <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-surface-2 rounded-lg transition-colors">
+              <span className="text-sm font-medium">Show Laps</span>
+              <input type="checkbox" checked={settings.showLaps} onChange={e => updateSettings({ showLaps: e.target.checked })} className="accent-blue w-4 h-4" />
+            </label>
+          </div>
+        </div>
+      }
+      output={
+        settings.showLaps ? (
+          <div className="flex flex-col h-full space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted">Laps</h3>
+              <span className="text-xs font-medium text-text-muted bg-surface-2 px-2 py-1 rounded-md">{laps.length} Total</span>
+            </div>
+            {renderLapsList()}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-text-muted opacity-50 space-y-4 min-h-[200px]">
+            <Flag className="w-8 h-8" />
+            <div className="text-sm font-bold uppercase tracking-widest">Laps are disabled</div>
+          </div>
+        )
+      }
+    />
   );
 }

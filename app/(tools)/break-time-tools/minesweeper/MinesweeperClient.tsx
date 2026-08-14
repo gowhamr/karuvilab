@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Timer, Flag, Bomb, ShieldAlert, Sparkles, Smile, Frown } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // ─── Types & Constants ────────────────────────────────────────────────────────
 
@@ -318,212 +319,217 @@ export default function MinesweeperClient() {
   const minesLeft = config.mines - flagsPlaced;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      {/* ── Settings / Stats Toolbar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* Difficulties */}
-        <div className="flex gap-2">
-          {(["easy", "medium", "hard"] as const).map((diff) => (
-            <m.button
-              key={diff}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => { setDifficulty(diff); initBoard(diff); }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                difficulty === diff
-                  ? "bg-primary/20 text-primary border border-primary/30"
-                  : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-primary/50"
+    <ToolWorkspace
+      layout="stacked"
+      optionsPanel={
+        <div className="space-y-6">
+          {/* ── Settings / Stats Toolbar ── */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Difficulties */}
+            <div className="flex gap-2">
+              {(["easy", "medium", "hard"] as const).map((diff) => (
+                <m.button
+                  key={diff}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => { setDifficulty(diff); initBoard(diff); }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    difficulty === diff
+                      ? "bg-primary/20 text-primary border border-primary/30"
+                      : "bg-surface border border-border text-text-muted hover:text-text-2 hover:border-primary/50"
+                  }`}
+                >
+                  {diff}
+                </m.button>
+              ))}
+            </div>
+
+            {/* Stats Grid */}
+            <div className="flex items-center justify-between sm:justify-end gap-6 font-mono font-bold text-text-3">
+              <div className="flex items-center gap-1.5" title="Mines remaining">
+                <Bomb className="w-4 h-4 text-primary" />
+                <span>{minesLeft}</span>
+              </div>
+
+              <div className="flex items-center gap-1.5" title="Timer">
+                <Timer className="w-4 h-4 text-primary" />
+                <span>{formatTime(elapsed)}</span>
+              </div>
+
+              <m.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => initBoard(difficulty)}
+                className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-border text-text-2 rounded-xl font-bold hover:border-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <RotateCcw className="w-4 h-4" /> Reset
+              </m.button>
+            </div>
+          </div>
+
+          {/* ── Mobile Flag Mode Selector ── */}
+          <div className="flex gap-2 justify-center">
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onClick={() => setFlagMode(false)}
+              className={`flex items-center gap-1.5 px-4 py-2 border rounded-xl font-bold text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                !flagMode
+                  ? "bg-primary/20 text-primary border-primary/30"
+                  : "bg-surface border-border text-text-2 hover:border-primary/50"
               }`}
             >
-              {diff}
+              <Smile className="w-4 h-4" /> Reveal Mode
             </m.button>
-          ))}
+            <m.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setFlagMode(!flagMode)}
+              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                flagMode 
+                  ? "bg-danger/20 text-danger border border-danger/30 shadow-inner" 
+                  : "bg-surface border border-border text-text shadow-md hover:border-primary/50"
+              }`}
+            >
+              <Flag className={`w-5 h-5 ${flagMode ? "fill-danger" : ""}`} />
+              {flagMode ? "Flag Mode: ON" : "Flag Mode: OFF"}
+            </m.button>
+          </div>
         </div>
-
-        {/* Stats Grid */}
-        <div className="flex items-center justify-between sm:justify-end gap-6 font-mono font-bold text-text-3">
-          <div className="flex items-center gap-1.5" title="Mines remaining">
-            <Bomb className="w-4 h-4 text-primary" />
-            <span>{minesLeft}</span>
-          </div>
-
-          <div className="flex items-center gap-1.5" title="Timer">
-            <Timer className="w-4 h-4 text-primary" />
-            <span>{formatTime(elapsed)}</span>
-          </div>
-
-          <m.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => initBoard(difficulty)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-border text-text-2 rounded-xl font-bold hover:border-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      }
+      output={
+        <div className="relative overflow-auto max-w-full flex justify-center py-4">
+          <div
+            className="grid gap-1 select-none w-max"
+            style={{
+              gridTemplateColumns: `repeat(${config.cols}, minmax(0, 1fr))`,
+            }}
+            role="grid"
+            aria-label="Minesweeper board"
           >
-            <RotateCcw className="w-4 h-4" /> Reset
-          </m.button>
-        </div>
-      </div>
+            {board.map((row, r) =>
+              row.map((cell, c) => {
+                const { isRevealed, isFlagged, isMine, neighborMines } = cell;
 
-      {/* ── Mobile Flag Mode Selector ── */}
-      <div className="flex gap-2 justify-center">
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-          onClick={() => setFlagMode(false)}
-          className={`flex items-center gap-1.5 px-4 py-2 border rounded-xl font-bold text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-            !flagMode
-              ? "bg-primary/20 text-primary border-primary/30"
-              : "bg-surface border-border text-text-2 hover:border-primary/50"
-          }`}
-        >
-          <Smile className="w-4 h-4" /> Reveal Mode
-        </m.button>
-        <m.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setFlagMode(!flagMode)}
-          className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-            flagMode 
-              ? "bg-danger/20 text-danger border border-danger/30 shadow-inner" 
-              : "bg-surface border border-border text-text shadow-md hover:border-primary/50"
-          }`}
-        >
-          <Flag className={`w-5 h-5 ${flagMode ? "fill-danger" : ""}`} />
-          {flagMode ? "Flag Mode: ON" : "Flag Mode: OFF"}
-        </m.button>
-      </div>
+                return (
+                  <m.button
+                    key={`${r}-${c}`}
+                    whileHover={!isRevealed ? { scale: 1.05 } : {}}
+                    whileTap={!isRevealed ? { scale: 0.95 } : {}}
+                    onClick={() => handleCellClick(r, c)}
+                    onContextMenu={(e) => toggleFlag(r, c, e)}
+                    role="gridcell"
+                    className={`
+                      w-8 h-8 rounded-md flex items-center justify-center text-sm font-black transition-all outline-none border border-border/40
+                      ${isRevealed
+                        ? isMine
+                          ? "bg-danger/25 text-danger border-danger"
+                          : "bg-surface-elevated/20 text-text border-border/30 shadow-inner"
+                        : "bg-surface-elevated hover:bg-primary/10 hover:border-primary/40 cursor-pointer shadow-md"
+                      }
+                      ${isFlagged ? "bg-primary/10 border-primary" : ""}
+                    `}
+                  >
+                    <AnimatePresence>
+                      {isRevealed && (
+                        <m.div
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.5, opacity: 0 }}
+                          className="flex items-center justify-center w-full h-full"
+                        >
+                          {isMine ? (
+                            <Bomb className="w-4 h-4 text-danger fill-danger" />
+                          ) : neighborMines > 0 ? (
+                            <span className={NUMBER_COLORS[neighborMines]}>{neighborMines}</span>
+                          ) : null}
+                        </m.div>
+                      )}
+                      {!isRevealed && isFlagged && (
+                        <m.div
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.5, opacity: 0 }}
+                        >
+                          <Flag className="w-4 h-4 text-danger fill-danger" />
+                        </m.div>
+                      )}
+                    </AnimatePresence>
+                  </m.button>
+                );
+              })
+            )}
+          </div>
 
-      {/* ── Game Grid (Scrollable for large sizes) ── */}
-      <div className="relative border border-border bg-surface rounded-2xl p-4 overflow-auto max-w-full shadow-inner flex justify-center">
-        <div
-          className="grid gap-1 select-none w-max"
-          style={{
-            gridTemplateColumns: `repeat(${config.cols}, minmax(0, 1fr))`,
-          }}
-          role="grid"
-          aria-label="Minesweeper board"
-        >
-          {board.map((row, r) =>
-            row.map((cell, c) => {
-              const { isRevealed, isFlagged, isMine, neighborMines } = cell;
-
-              return (
+          {/* Win/Loss Overlays */}
+          <AnimatePresence>
+            {gameState === "won" && (
+              <m.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-content text-center"
+                role="alert"
+                aria-live="assertive"
+              >
+                <Sparkles className="w-16 h-16 text-primary animate-bounce" />
+                <div>
+                  <h2 className="text-3xl font-black text-text">Board Cleared! 🏆</h2>
+                  <p className="text-text-3 text-sm mt-1">
+                    Difficulty: <strong>{difficulty.toUpperCase()}</strong> · Time: <strong>{formatTime(elapsed)}</strong>
+                    {currentBest !== null && elapsed <= currentBest && (
+                      <span className="block text-primary font-bold mt-1">🏆 New Best Time!</span>
+                    )}
+                  </p>
+                </div>
                 <m.button
-                  key={`${r}-${c}`}
-                  whileHover={!isRevealed ? { scale: 1.05 } : {}}
-                  whileTap={!isRevealed ? { scale: 0.95 } : {}}
-                  onClick={() => handleCellClick(r, c)}
-                  onContextMenu={(e) => toggleFlag(r, c, e)}
-                  role="gridcell"
-                  className={`
-                    w-8 h-8 rounded-md flex items-center justify-center text-sm font-black transition-all outline-none border border-border/40
-                    ${isRevealed
-                      ? isMine
-                        ? "bg-danger/25 text-danger border-danger"
-                        : "bg-surface-elevated/20 text-text border-border/30 shadow-inner"
-                      : "bg-surface-elevated hover:bg-primary/10 hover:border-primary/40 cursor-pointer shadow-md"
-                    }
-                    ${isFlagged ? "bg-primary/10 border-primary" : ""}
-                  `}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => initBoard(difficulty)}
+                  className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
-                  <AnimatePresence>
-                    {isRevealed && (
-                      <m.div
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.5, opacity: 0 }}
-                        className="flex items-center justify-center w-full h-full"
-                      >
-                        {isMine ? (
-                          <Bomb className="w-4 h-4 text-danger fill-danger" />
-                        ) : neighborMines > 0 ? (
-                          <span className={NUMBER_COLORS[neighborMines]}>{neighborMines}</span>
-                        ) : null}
-                      </m.div>
-                    )}
-                    {!isRevealed && isFlagged && (
-                      <m.div
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.5, opacity: 0 }}
-                      >
-                        <Flag className="w-4 h-4 text-danger fill-danger" />
-                      </m.div>
-                    )}
-                  </AnimatePresence>
+                  Play Again
                 </m.button>
-              );
-            })
+              </m.div>
+            )}
+
+            {gameState === "lost" && (
+              <m.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-content text-center"
+                role="alert"
+                aria-live="assertive"
+              >
+                <ShieldAlert className="w-16 h-16 text-danger animate-pulse" />
+                <div>
+                  <h2 className="text-2xl font-black text-text">Mine Detonated!</h2>
+                  <p className="text-text-3 text-sm mt-1">
+                    Better luck next time.
+                  </p>
+                </div>
+                <m.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => initBoard(difficulty)}
+                  className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  Try Again
+                </m.button>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </div>
+      }
+      infoPanel={
+        <div className="flex flex-col items-center gap-1.5 text-center text-xs text-text-muted font-bold">
+          <p>Right-click or click Flag Mode to place flags. Double-click or click surrounding revealed numbers to check.</p>
+          {currentBest !== null && (
+            <p>
+              Best Time ({difficulty}): <strong>{formatTime(currentBest)}</strong>
+            </p>
           )}
         </div>
-
-        {/* Win/Loss Overlays */}
-        <AnimatePresence>
-          {gameState === "won" && (
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-content text-center"
-              role="alert"
-              aria-live="assertive"
-            >
-              <Sparkles className="w-16 h-16 text-primary animate-bounce" />
-              <div>
-                <h2 className="text-3xl font-black text-text">Board Cleared! 🏆</h2>
-                <p className="text-text-3 text-sm mt-1">
-                  Difficulty: <strong>{difficulty.toUpperCase()}</strong> · Time: <strong>{formatTime(elapsed)}</strong>
-                  {currentBest !== null && elapsed <= currentBest && (
-                    <span className="block text-primary font-bold mt-1">🏆 New Best Time!</span>
-                  )}
-                </p>
-              </div>
-              <m.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => initBoard(difficulty)}
-                className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                Play Again
-              </m.button>
-            </m.div>
-          )}
-
-          {gameState === "lost" && (
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-surface/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4 z-content text-center"
-              role="alert"
-              aria-live="assertive"
-            >
-              <ShieldAlert className="w-16 h-16 text-danger animate-pulse" />
-              <div>
-                <h2 className="text-2xl font-black text-text">Mine Detonated!</h2>
-                <p className="text-text-3 text-sm mt-1">
-                  Better luck next time.
-                </p>
-              </div>
-              <m.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => initBoard(difficulty)}
-                className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                Try Again
-              </m.button>
-            </m.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Instructions footer */}
-      <div className="flex flex-col items-center gap-1.5 text-center text-xs text-text-muted font-bold">
-        <p>Right-click or click Flag Mode to place flags. Double-click or click surrounding revealed numbers to check.</p>
-        {currentBest !== null && (
-          <p>
-            Best Time ({difficulty}): <strong>{formatTime(currentBest)}</strong>
-          </p>
-        )}
-      </div>
-    </div>
+      }
+    />
   );
 }

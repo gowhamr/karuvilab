@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { b64EncodeUtf8, b64DecodeUtf8 } from "@/src/utils";
@@ -128,86 +130,59 @@ export default function Base64Client() {
   };
 
   return (
-    <div className="bg-surface border border-border p-6 md:p-8 rounded-3xl shadow-sm space-y-8">
-      {/* Top Controls: Mode & Input Type */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        {/* Tab Switcher (Encode/Decode) */}
-        <div className="flex p-1 bg-bg border border-border rounded-2xl w-fit">
-          {(["encode", "decode"] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => { setTab(t); setFileResult(null); setFileError(""); }}
-              className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${tab === t ? "bg-blue text-white shadow-md shadow-blue/10" : "text-text-3 hover:text-text"}`}
+    <ToolWorkspace
+      tabs={{
+        activeId: tab,
+        onChange: (t) => { setTab(t as "encode" | "decode"); setFileResult(null); setFileError(""); },
+        options: [
+          { id: "encode", label: "Encode" },
+          { id: "decode", label: "Decode" }
+        ]
+      }}
+      optionsPanel={
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <h3 className="text-sm font-bold text-text-2 uppercase tracking-wider">Input Mode</h3>
+            <SegmentedControl
+              options={[
+                { id: "text", label: "Text" },
+                { id: "file", label: "File" }
+              ]}
+              activeId={inputType}
+              onChange={(id) => setInputType(id as "text" | "file")}
+            />
+          </div>
+
+          <label className="flex items-center gap-3 cursor-pointer select-none group w-fit">
+            <div
+              onClick={() => setUrlSafe(v => !v)}
+              className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-all group-hover:scale-110 ${urlSafe ? "bg-blue border-blue shadow-md shadow-blue/10" : "border-border bg-bg"}`}
             >
-              {t === "encode" ? "Encode" : "Decode"}
-            </button>
-          ))}
+              {urlSafe && (
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+            <div className="space-y-0.5">
+              <span className="text-sm font-bold text-text-2">URL-safe Base64</span>
+              <p className="text-xs text-text-muted font-medium uppercase tracking-tighter">+→-, /→_, no padding</p>
+            </div>
+          </label>
         </div>
-
-        {/* Type Switcher (Text/File) */}
-        <div className="flex p-1 bg-bg border border-border rounded-2xl w-fit">
-          <button
-            onClick={() => setInputType("text")}
-            className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${inputType === "text" ? "bg-surface-2 text-text shadow-sm" : "text-text-3 hover:text-text"}`}
-          >
-            Text Mode
-          </button>
-          <button
-            onClick={() => setInputType("file")}
-            className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${inputType === "file" ? "bg-surface-2 text-text shadow-sm" : "text-text-3 hover:text-text"}`}
-          >
-            File Mode
-          </button>
-        </div>
-      </div>
-
-      {inputType === "text" ? (
-        <>
-          {/* Text Input Section */}
-          <div className="space-y-6">
-            <ToolInput
-              label={tab === "encode" ? "Plain Text" : "Base64 Input"}
-              value={input}
-              onChange={setInput}
-              placeholder={tab === "encode" ? "Enter text to encode..." : "Paste Base64 string..."}
-              rows={6}
-              mono
-              description={tab === "encode" ? "UTF-8 Supported" : "Automatic Padding"}
-            />
-
-            <label className="flex items-center gap-3 cursor-pointer select-none group w-fit">
-              <div
-                onClick={() => setUrlSafe(v => !v)}
-                className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-all group-hover:scale-110 ${urlSafe ? "bg-blue border-blue shadow-md shadow-blue/10" : "border-border bg-bg"}`}
-              >
-                {urlSafe && (
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-              <div className="space-y-0.5">
-                <span className="text-sm font-bold text-text-2">URL-safe Base64</span>
-                <p className="text-xs text-text-muted font-medium uppercase tracking-tighter">+→-, /→_, no padding</p>
-              </div>
-            </label>
-          </div>
-
-          {/* Text Result Section */}
-          <div className="pt-4 border-t border-border/50">
-            <ToolResultArea
-              label={tab === "encode" ? "Base64 Output" : "Decoded Text"}
-              value={output}
-              error={error}
-              onClear={() => setInput("")}
-              onDownload={handleDownloadText}
-              language={tab === "encode" ? "Base64" : "UTF-8"}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          {/* File Input Section */}
+      }
+      input={
+        inputType === "text" ? (
+          <ToolInput
+            label={tab === "encode" ? "Plain Text" : "Base64 Input"}
+            value={input}
+            onChange={setInput}
+            placeholder={tab === "encode" ? "Enter text to encode..." : "Paste Base64 string..."}
+            rows={6}
+            mono
+            description={tab === "encode" ? "UTF-8 Supported" : "Automatic Padding"}
+          />
+        ) : (
           <div className="space-y-6">
             <DropZone
               onFilesSelected={(files) => {
@@ -226,23 +201,6 @@ export default function Base64Client() {
               description={file ? `${(file.size / 1024).toFixed(0)} KB` : (tab === "encode" ? "Supports any file format" : "Supports .txt, .b64")}
               icon={<div className="text-4xl">{file ? "📁" : "📄"}</div>}
             />
-
-            <label className="flex items-center gap-3 cursor-pointer select-none group w-fit">
-              <div
-                onClick={() => setUrlSafe(v => !v)}
-                className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-all group-hover:scale-110 ${urlSafe ? "bg-blue border-blue shadow-md shadow-blue/10" : "border-border bg-bg"}`}
-              >
-                {urlSafe && (
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-              <div className="space-y-0.5">
-                <span className="text-sm font-bold text-text-2">URL-safe Base64</span>
-                <p className="text-xs text-text-muted font-medium uppercase tracking-tighter">+→-, /→_, no padding</p>
-              </div>
-            </label>
 
             {fileError && (
               <div className="p-4 bg-error/5 border border-error/10 rounded-2xl flex items-start gap-3">
@@ -266,11 +224,22 @@ export default function Base64Client() {
               )}
             </button>
           </div>
-
-          {/* File Result Section */}
-          {fileResult && (
-            <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 sm:gap-4">
+        )
+      }
+      output={
+        inputType === "text" ? (
+          <ToolResultArea
+            label={tab === "encode" ? "Base64 Output" : "Decoded Text"}
+            value={output}
+            error={error}
+            onClear={() => setInput("")}
+            onDownload={handleDownloadText}
+            language={tab === "encode" ? "Base64" : "UTF-8"}
+          />
+        ) : (
+          fileResult ? (
+            <div className="flex flex-col h-full justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4 w-full sm:w-auto min-w-0">
                   <div className="w-12 h-12 shrink-0 bg-success/10 rounded-2xl flex items-center justify-center">
                     <FileCode className="w-6 h-6 text-success" />
@@ -288,9 +257,13 @@ export default function Base64Client() {
                 </button>
               </div>
             </div>
-          )}
-        </>
-      )}
-    </div>
+          ) : (
+            <div className="flex items-center justify-center h-full text-text-muted text-sm font-medium">
+              No file processed yet
+            </div>
+          )
+        )
+      }
+    />
   );
 }

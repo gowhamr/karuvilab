@@ -1,5 +1,405 @@
 "use client";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { CATEGORIES } from "@/src/tool-registry";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
+import { useCurrencyStore } from "@/src/features/currency-converter/store";
+import { clearExpiredCurrencyRates } from "@/src/lib/db";
+import { 
+  RefreshCw, 
+  AlertTriangle, 
+  Clock, 
+  ArrowRightLeft,
+  Globe,
+  WifiOff,
+  Terminal,
+  ChevronUp,
+  ExternalLink,
+  Activity
+} from "lucide-react";
+import { cn } from "@/src/lib/utils";
+import { CurrencySelect } from "@/src/features/currency-converter/components/CurrencySelect";
 
-import CurrencyConverterClient from "@/src/features/currency-converter/components/CurrencyConverterClient";
+const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
-export default CurrencyConverterClient;
+const POPULAR_CURRENCIES = ["USD", "EUR", "INR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "SGD", "AED"];
+
+const CURRENCY_LABELS: Record<string, string> = {
+  USD: "US Dollar",
+  EUR: "Euro",
+  GBP: "British Pound",
+  INR: "Indian Rupee",
+  JPY: "Japanese Yen",
+  AUD: "Australian Dollar",
+  CAD: "Canadian Dollar",
+  CHF: "Swiss Franc",
+  SGD: "Singapore Dollar",
+  AED: "UAE Dirham",
+  CNY: "Chinese Yuan",
+  NZD: "NZ Dollar",
+  HKD: "HK Dollar",
+  BRL: "Brazilian Real",
+  ZAR: "SA Rand",
+  RUB: "Russian Ruble",
+  KRW: "South Korean Won",
+  TRY: "Turkish Lira",
+  MXN: "Mexican Peso",
+  IDR: "Indonesian Rupiah",
+  THB: "Thai Baht",
+  MYR: "Malaysian Ringgit",
+  PHP: "Philippine Peso",
+  SAR: "Saudi Riyal",
+  KWD: "Kuwaiti Dinar",
+  QAR: "Qatari Riyal",
+};
+
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: "$", EUR: "€", GBP: "£", INR: "₹", JPY: "¥",
+  AUD: "A$", CAD: "C$", CHF: "Fr", SGD: "S$", AED: "د.إ", CNY: "¥",
+  NZD: "$", HKD: "$", BRL: "R$", ZAR: "R", RUB: "₽", KRW: "₩",
+  TRY: "₺", MXN: "$", IDR: "Rp", THB: "฿", MYR: "RM", PHP: "₱",
+  SAR: "ر.س", KWD: "د.ك", QAR: "ر.ق",
+};
+
+export default function CurrencyConverterClient() {
+  const ratesData = useCurrencyStore(state => state.ratesData);
+  const isLoading = useCurrencyStore(state => state.isLoading);
+  const error = useCurrencyStore(state => state.error);
+  const amount = useCurrencyStore(state => state.amount);
+  const from = useCurrencyStore(state => state.from);
+  const to = useCurrencyStore(state => state.to);
+  const fetchRates = useCurrencyStore(state => state.fetchRates);
+  const setAmount = useCurrencyStore(state => state.setAmount);
+  const setFrom = useCurrencyStore(state => state.setFrom);
+  const setTo = useCurrencyStore(state => state.setTo);
+  const swapCurrencies = useCurrencyStore(state => state.swapCurrencies);
+
+  const [showDebug, setShowDebug] = useState(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+
+  useEffect(() => {
+    Promise.resolve().then(() => {
+      setCurrentTime(Date.now());
+    });
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchRates();
+    clearExpiredCurrencyRates();
+  }, [fetchRates]);
+
+  const currencies = useMemo(() => {
+    if (!ratesData) return Object.keys(CURRENCY_LABELS);
+    const apiCurrencies = Object.keys(ratesData.rates);
+    // Combine known labels with any extra from API
+    return Array.from(new Set([...Object.keys(CURRENCY_LABELS), ...apiCurrencies])).sort();
+  }, [ratesData]);
+
+  const currencyOptions = useMemo(() => {
+    return currencies.map(code => ({
+      code,
+      name: CURRENCY_LABELS[code] || "Currency"
+    }));
+  }, [currencies]);
+
+  const convert = useCallback((val: number, f: string, t: string) => {
+    if (!ratesData) return 0;
+    const baseRate = ratesData.rates[f] || 1;
+    const targetRate = ratesData.rates[t] || 1;
+    // Cross conversion through base (1/baseRate converts to USD, then * targetRate)
+    return (val / baseRate) * targetRate;
+  }, [ratesData]);
+
+  const result = useMemo(() => {
+    const v = parseFloat(amount) || 0;
+    return convert(v, from, to);
+  }, [amount, from, to, convert]);
+
+  const rate = useMemo(() => convert(1, from, to), [from, to, convert]);
+
+  const fmt = (n: number, currency: string): string => {
+    const sym = CURRENCY_SYMBOLS[currency] ?? currency;
+    if (currency === "JPY") return sym + Math.round(n).toLocaleString();
+    return sym + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  const getTimeAgo = (timestamp: number) => {
+    if (!currentTime) return "loading...";
+    const seconds = Math.floor((currentTime - timestamp) / 1000);
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return new Date(timestamp).toLocaleDateString();
+  };
+
+  const isStale = ratesData && currentTime > 0 && (currentTime > ratesData.expiresAt);
+  const isOffline = typeof navigator !== 'undefined' && !navigator.onLine;
+
+  return (
+    <div className="space-y-6">
+      {/* Network/Status Banners */}
+      {error && (
+        <div className="bg-error/10 border border-error/30 rounded-xl p-4 text-xs font-bold text-error space-y-2 animate-in fade-in slide-in-from-top-2" role="alert">
+          <div className="flex items-center gap-3">
+            <AlertTriangle size={16} />
+            {error}
+          </div>
+          {ratesData?.debugInfo && (
+            <button 
+              onClick={() => setShowDebug(true)}
+              className="ml-7 text-xs uppercase tracking-widest text-error hover:underline flex items-center gap-1"
+            >
+              <Terminal size={10} />
+              View Technical Details
+            </button>
+          )}
+        </div>
+      )}
+
+      {isOffline && !ratesData && (
+        <div className="bg-surface border border-border rounded-2xl p-12 text-center space-y-4">
+          <div className="w-16 h-16 bg-blue/10 rounded-full flex items-center justify-center mx-auto text-blue">
+            <WifiOff size={32} />
+          </div>
+          <h3 className="text-lg font-black uppercase tracking-tight">Offline</h3>
+          <p className="text-sm text-text-4 max-w-xs mx-auto font-bold uppercase leading-relaxed">
+            Internet connection required to load exchange rates for the first time.
+          </p>
+          <button 
+            onClick={() => fetchRates(true)}
+            className="px-6 py-3 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:scale-105 active:scale-95 transition-all"
+          >
+            Retry Connection
+          </button>
+        </div>
+      )}
+
+      {ratesData && (isOffline || (ratesData.source === 'cache' && isStale)) && (
+        <div className="bg-warning/10 border border-warning/30 rounded-xl p-4 text-xs font-bold text-warning flex items-center gap-3 animate-in fade-in slide-in-from-top-2" role="alert">
+          <AlertTriangle size={16} className="shrink-0" />
+          <div className="flex-1">
+            {isOffline ? "You are currently offline." : "Using cached rates – go online for live updates."} 
+            <span className="block mt-0.5 opacity-80 font-medium">Last updated: {new Date(ratesData.timestamp).toLocaleString()}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Debug Console */}
+      {showDebug && ratesData?.debugInfo && (
+        <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="px-5 py-3 border-b border-border flex items-center justify-between bg-surface/50">
+            <div className="flex items-center gap-2 text-text-4">
+              <Terminal size={14} />
+              <span className="text-tiny font-bold uppercase tracking-widest-sm">Network Diagnostics</span>
+            </div>
+            <button 
+              onClick={() => setShowDebug(false)}
+              className="text-text-4 hover:text-white transition-colors"
+            >
+              <ChevronUp size={16} />
+            </button>
+          </div>
+          <div className="p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-surface/80 p-3 rounded-xl border border-border/50">
+                <span className="block text-xs text-text-4 font-black uppercase tracking-widest mb-1">Total Latency</span>
+                <span className="text-blue font-mono text-sm font-bold">{ratesData.debugInfo.latency || 'N/A'}ms</span>
+              </div>
+              <div className="bg-surface/80 p-3 rounded-xl border border-border/50">
+                <span className="block text-xs text-text-4 font-black uppercase tracking-widest mb-1">Active Source</span>
+                <span className="text-success font-mono text-sm font-bold uppercase">{ratesData.source}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <span className="text-xs text-text-4 font-black uppercase tracking-widest px-1">Fetch Attempts</span>
+              {ratesData.debugInfo.attempts.map((attempt, i) => (
+                <div key={i} className="bg-surface/80 p-3 rounded-xl border border-border/50 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={cn(
+                        "w-1.5 h-1.5 rounded-full",
+                        attempt.success ? "bg-success" : "bg-error"
+                      )} />
+                      <span className="text-xs font-bold text-text-3 uppercase">{attempt.source}</span>
+                    </div>
+                    {attempt.latency && <span className="text-xs font-mono text-text-4">{attempt.latency}ms</span>}
+                  </div>
+                  {attempt.url && (
+                    <div className="flex items-center gap-1.5 opacity-50 overflow-hidden">
+                      <ExternalLink size={10} className="shrink-0" />
+                      <span className="text-xs font-mono truncate text-text-4">{attempt.url}</span>
+                    </div>
+                  )}
+                  {attempt.error && (
+                    <div className="text-xs font-mono text-error/80 leading-relaxed bg-error/5 p-2 rounded-lg border border-error/10">
+                      ERR: {attempt.error} {attempt.status && `(HTTP ${attempt.status})`}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <ToolWorkspace
+        layout="split"
+        input={
+          <div className="space-y-5 relative">
+            {isLoading && (
+              <div className="w-full h-1 bg-blue/20 overflow-hidden rounded-full mb-4">
+                <div className="h-full bg-blue animate-progress w-full" />
+              </div>
+            )}
+
+            <ToolInput
+              label="Amount"
+              type="number"
+              value={amount}
+              onChange={setAmount}
+              placeholder="Enter amount"
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-end relative z-above">
+              <div className="sm:col-span-5">
+                <CurrencySelect
+                  label="From"
+                  value={from}
+                  onChange={setFrom}
+                  options={currencyOptions}
+                  popularCodes={POPULAR_CURRENCIES}
+                />
+              </div>
+
+              <div className="sm:col-span-1 flex justify-center pb-2">
+                <button
+                  onClick={swapCurrencies}
+                  aria-label="Swap currencies"
+                  className="p-3 rounded-full bg-surface border border-border hover:border-blue hover:text-blue transition-all active:rotate-180 duration-500"
+                >
+                  <ArrowRightLeft size={18} />
+                </button>
+              </div>
+
+              <div className="sm:col-span-5">
+                <CurrencySelect
+                  label="To"
+                  value={to}
+                  onChange={setTo}
+                  options={currencyOptions}
+                  popularCodes={POPULAR_CURRENCIES}
+                />
+              </div>
+            </div>
+
+            {/* Freshness Indicator */}
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-2 text-tiny font-bold uppercase tracking-widest-sm text-text-4" aria-live="polite">
+                {isLoading ? (
+                  <>
+                    <RefreshCw size={10} className="animate-spin text-blue" />
+                    <span className="text-blue">Updating rates...</span>
+                  </>
+                ) : ratesData ? (
+                  <>
+                    {isStale ? <AlertTriangle size={10} className="text-warning" /> : <Clock size={10} />}
+                    <span className={cn(isStale && "text-warning")}>
+                      Rates updated: {getTimeAgo(ratesData.timestamp)}
+                      {isStale && " (May be outdated)"}
+                    </span>
+                    <button 
+                      onClick={() => setShowDebug(!showDebug)}
+                      className={cn(
+                        "ml-2 flex items-center gap-1 transition-colors",
+                        showDebug ? "text-blue" : "hover:text-blue opacity-50 hover:opacity-100"
+                      )}
+                    >
+                      <Activity size={10} />
+                      Diagnostics
+                    </button>
+                  </>
+                ) : null}
+              </div>
+              
+              <button
+                onClick={() => fetchRates(true)}
+                disabled={isLoading}
+                aria-label="Refresh exchange rates"
+                className="flex items-center gap-1.5 text-tiny font-bold uppercase tracking-widest-sm text-blue hover:opacity-70 disabled:opacity-30 transition-opacity"
+              >
+                <RefreshCw size={10} className={cn(isLoading && "animate-spin")} />
+                Refresh
+              </button>
+            </div>
+          </div>
+        }
+        output={
+          <ToolResultArea
+            label={`Converted Amount (${to})`}
+            value={ratesData ? `${fmt(result, to)}\n\nExchange Rate: 1 ${from} = ${fmt(rate, to)}` : ''}
+            contentClassName="text-3xl font-black tabular-nums tracking-tight"
+          />
+        }
+        infoPanel={
+          <div className="bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
+            <div className="p-5 border-b border-border bg-surface/50 backdrop-blur-sm flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Globe size={18} className="text-blue" />
+                <h2 className="font-black uppercase tracking-widest text-xs">Live Market Rates</h2>
+              </div>
+              <span className="text-xs font-bold text-text-4 uppercase tracking-wider">Base: {from}</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-surface border-b border-border">
+                    <th className="px-6 py-4 text-left font-black uppercase tracking-widest text-xs text-text-3">Currency</th>
+                    <th className="px-6 py-4 text-left font-black uppercase tracking-widest text-xs text-text-3">Name</th>
+                    <th className="px-6 py-4 text-right font-black uppercase tracking-widest text-xs text-text-3">Rate (1 {from})</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/30">
+                  {currencies.slice(0, 15).map((c) => {
+                    const r = ratesData?.rates[c];
+                    return (
+                      <tr
+                        key={c}
+                        className={cn(
+                          "transition-colors",
+                          c === to ? "bg-blue/5" : "hover:bg-blue/5"
+                        )}
+                      >
+                        <td className="px-6 py-4 font-mono font-black text-xs text-text">{c}</td>
+                        <td className="px-6 py-4 text-xs font-bold text-text-3">{CURRENCY_LABELS[c] || c}</td>
+                        <td className={cn(
+                          "px-6 py-4 text-right font-black tabular-nums text-xs",
+                          c === to ? "text-blue" : "text-text"
+                        )}>
+                          {r ? fmt(r, c) : '--'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="p-4 bg-bg/30 text-center">
+              <p className="text-xs font-bold text-text-4 uppercase tracking-widest">
+                Showing top market currencies. All conversions use live mid-market rates.
+              </p>
+            </div>
+          </div>
+        }
+      />
+    </div>
+  );
+}

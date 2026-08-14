@@ -1,24 +1,18 @@
 "use client";
-import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { CopyButton } from "@/components/ui/CopyButton";
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+import { useState, useMemo } from "react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 const fmt = (n: number) =>
   n.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 6 });
 
-function ResultBox({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="bg-surface border border-border rounded-xl p-4">
-      <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</div>
-      <div className="text-2xl font-black text-blue">{value}</div>
-    </div>
-  );
-}
+type Mode = "m1" | "m2" | "m3";
 
 export default function PercentageCalculatorClient() {
+  const [activeTab, setActiveTab] = useState<Mode>("m1");
+
   // Mode 1: What is X% of Y?
   const [m1x, setM1x] = useState("20");
   const [m1y, setM1y] = useState("500");
@@ -51,118 +45,139 @@ export default function PercentageCalculatorClient() {
     return ((y - x) / Math.abs(x)) * 100;
   }, [m3x, m3y]);
 
-  const INPUT = "w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg font-bold";
+  const tabs = {
+    options: [
+      { id: "m1" as const, label: "What is X% of Y?" },
+      { id: "m2" as const, label: "X is what % of Y?" },
+      { id: "m3" as const, label: "% Change" }
+    ],
+    activeId: activeTab,
+    onChange: setActiveTab
+  };
+
+  const renderInput = () => {
+    switch (activeTab) {
+      case "m1":
+        return (
+          <div className="space-y-4">
+            <ToolInput
+              label="Percentage (X)"
+              type="number"
+              value={m1x}
+              onChange={setM1x}
+              placeholder="e.g. 20"
+            />
+            <ToolInput
+              label="Value (Y)"
+              type="number"
+              value={m1y}
+              onChange={setM1y}
+              placeholder="e.g. 500"
+            />
+          </div>
+        );
+      case "m2":
+        return (
+          <div className="space-y-4">
+            <ToolInput
+              label="Value (X)"
+              type="number"
+              value={m2x}
+              onChange={setM2x}
+              placeholder="e.g. 80"
+            />
+            <ToolInput
+              label="Total (Y)"
+              type="number"
+              value={m2y}
+              onChange={setM2y}
+              placeholder="e.g. 400"
+            />
+          </div>
+        );
+      case "m3":
+        return (
+          <div className="space-y-4">
+            <ToolInput
+              label="Original Value (From)"
+              type="number"
+              value={m3x}
+              onChange={setM3x}
+              placeholder="e.g. 200"
+            />
+            <ToolInput
+              label="New Value (To)"
+              type="number"
+              value={m3y}
+              onChange={setM3y}
+              placeholder="e.g. 250"
+            />
+          </div>
+        );
+    }
+  };
+
+  const renderOutput = () => {
+    switch (activeTab) {
+      case "m1":
+        return (
+          <div className="h-full flex flex-col space-y-4">
+            <ToolResultArea
+              label="Result"
+              value={fmt(r1)}
+              className="flex-1"
+              contentClassName="text-3xl font-black text-blue flex items-center justify-center"
+            />
+            <div className="text-sm text-text-3 px-2 text-center bg-bg/50 py-3 rounded-xl">
+              {m1x || 0}% of {m1y || 0} = <strong className="text-text">{fmt(r1)}</strong>
+            </div>
+          </div>
+        );
+      case "m2":
+        return (
+          <div className="h-full flex flex-col space-y-4">
+            <ToolResultArea
+              label="Percentage"
+              value={r2 !== null ? fmt(r2) + "%" : "—"}
+              className="flex-1"
+              contentClassName="text-3xl font-black text-blue flex items-center justify-center"
+            />
+            {r2 !== null && (
+              <div className="text-sm text-text-3 px-2 text-center bg-bg/50 py-3 rounded-xl">
+                {m2x || 0} is <strong className="text-text">{fmt(r2)}%</strong> of {m2y || 0}
+              </div>
+            )}
+          </div>
+        );
+      case "m3":
+        return (
+          <div className="h-full flex flex-col space-y-4">
+            <ToolResultArea
+              label={r3 !== null && r3 >= 0 ? "Increase" : (r3 !== null ? "Decrease" : "Result")}
+              value={r3 !== null ? (r3 >= 0 ? "+" : "") + fmt(r3) + "%" : "—"}
+              className="flex-1"
+              contentClassName={`text-3xl font-black flex items-center justify-center ${
+                r3 !== null ? (r3 >= 0 ? "text-green-500" : "text-red-400") : "text-blue"
+              }`}
+            />
+            {r3 !== null && (
+              <div className="text-sm text-text-3 px-2 text-center bg-bg/50 py-3 rounded-xl">
+                From {m3x || 0} to {m3y || 0} is a{" "}
+                <strong className={r3 >= 0 ? "text-green-500" : "text-red-400"}>
+                  {r3 >= 0 ? "+" : ""}{fmt(r3)}% {r3 >= 0 ? "increase" : "decrease"}
+                </strong>
+              </div>
+            )}
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Mode 1 */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="text-lg font-black uppercase tracking-widest text-text">Mode 1 — What is X% of Y?</h2>
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-text-3 text-sm font-medium">What is</span>
-          <input
-            type="number"
-            value={m1x || ''}
-            onChange={(e) => setM1x(e.target.value)}
-            className="w-24 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
-            placeholder="X"
-            aria-label="Percentage X"
-          />
-          <span className="text-text-3 text-sm font-medium">% of</span>
-          <input
-            type="number"
-            value={m1y || ''}
-            onChange={(e) => setM1y(e.target.value)}
-            className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
-            placeholder="Y"
-            aria-label="Value Y"
-          />
-          <span className="text-text-3 text-sm font-medium">?</span>
-        </div>
-        <ResultBox label="Result" value={fmt(r1)} />
-        <p className="text-sm text-text-3">
-          {m1x}% of {m1y} = <strong className="text-text">{fmt(r1)}</strong>
-        </p>
-      </div>
-
-      {/* Mode 2 */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="text-lg font-black uppercase tracking-widest text-text">Mode 2 — X is what % of Y?</h2>
-        <div className="flex items-center gap-3 flex-wrap">
-          <input
-            type="number"
-            value={m2x || ''}
-            onChange={(e) => setM2x(e.target.value)}
-            className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
-            placeholder="X"
-            aria-label="Value X"
-          />
-          <span className="text-text-3 text-sm font-medium">is what % of</span>
-          <input
-            type="number"
-            value={m2y || ''}
-            onChange={(e) => setM2y(e.target.value)}
-            className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
-            placeholder="Y"
-            aria-label="Value Y"
-          />
-          <span className="text-text-3 text-sm font-medium">?</span>
-        </div>
-        <ResultBox
-          label="Percentage"
-          value={r2 !== null ? fmt(r2) + "%" : "—"}
-        />
-        {r2 !== null && (
-          <p className="text-sm text-text-3">
-            {m2x} is <strong className="text-text">{fmt(r2)}%</strong> of {m2y}
-          </p>
-        )}
-      </div>
-
-      {/* Mode 3 */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <h2 className="text-lg font-black uppercase tracking-widest text-text">Mode 3 — Percentage Change</h2>
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-text-3 text-sm font-medium">From</span>
-          <input
-            type="number"
-            value={m3x || ''}
-            onChange={(e) => setM3x(e.target.value)}
-            className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
-            placeholder="From"
-            aria-label="Original value"
-          />
-          <span className="text-text-3 text-sm font-medium">to</span>
-          <input
-            type="number"
-            value={m3y || ''}
-            onChange={(e) => setM3y(e.target.value)}
-            className="w-28 px-3 py-2 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none text-base font-bold"
-            placeholder="To"
-            aria-label="New value"
-          />
-        </div>
-        {r3 !== null && (
-          <>
-            <div className="bg-surface border border-border rounded-xl p-4">
-              <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
-                {r3 >= 0 ? "Increase" : "Decrease"}
-              </div>
-              <div
-                className={`text-2xl font-black ${r3 >= 0 ? "text-green-500" : "text-red-400"}`}
-              >
-                {r3 >= 0 ? "+" : ""}{fmt(r3)}%
-              </div>
-            </div>
-            <p className="text-sm text-text-3">
-              From {m3x} to {m3y} is a{" "}
-              <strong className={r3 >= 0 ? "text-green-500" : "text-red-400"}>
-                {r3 >= 0 ? "+" : ""}{fmt(r3)}% {r3 >= 0 ? "increase" : "decrease"}
-              </strong>
-            </p>
-          </>
-        )}
-      </div>
-    </div>
+    <ToolWorkspace
+      tabs={tabs}
+      input={renderInput()}
+      output={renderOutput()}
+    />
   );
 }

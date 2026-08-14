@@ -9,6 +9,7 @@ import { useUrlState } from '@/src/hooks/useUrlState';
 import { ShareButton } from '@/components/ui/ShareButton';
 import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
 import { QRModal } from '@/components/ui/QRModal';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 
 type TaxRegime = 'old' | 'new';
 type AgeGroup = 'below60' | '60to80' | 'above80';
@@ -184,7 +185,7 @@ export default function IncomeTaxClient() {
   const activeResult = activeRegime === 'new' ? results.new : results.old;
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
+    <div className="w-full space-y-8 pb-12">
       <SharedResultBanner hasParams={hasParams} toolName="Income Tax Calculator" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       
@@ -205,41 +206,27 @@ export default function IncomeTaxClient() {
             </p>
           )}
         </div>
-        <div className="flex bg-bg border border-border p-1 rounded-2xl shrink-0">
-          <button
-            onClick={() => setActiveRegime('new')}
-            className={cn(
-              "px-6 py-3 rounded-xl text-sm font-black transition-all",
-              activeRegime === 'new' ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text"
-            )}
-          >
-            New Regime
-          </button>
-          <button
-            onClick={() => setActiveRegime('old')}
-            className={cn(
-              "px-6 py-3 rounded-xl text-sm font-black transition-all",
-              activeRegime === 'old' ? "bg-purple-500 text-white shadow-md shadow-purple-500/20" : "text-text-muted hover:text-text"
-            )}
-          >
-            Old Regime
-          </button>
+        <div className="flex items-center shrink-0">
+          <ShareButton
+            url={shareUrl}
+            title={`Income Tax: ${formatCurrency(activeResult.totalTax)} total tax (${activeRegime} regime) — KaruviLab`}
+            onQrClick={() => setIsQrOpen(true)}
+          />
         </div>
       </div>
 
-      <div className="flex justify-end">
-        <ShareButton
-          url={shareUrl}
-          title={`Income Tax: ${formatCurrency(activeResult.totalTax)} total tax (${activeRegime} regime) — KaruviLab`}
-          onQrClick={() => setIsQrOpen(true)}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT COLUMN: Inputs */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
+      <ToolWorkspace
+        layout="split"
+        tabs={{
+          options: [
+            { id: 'new', label: 'New Regime' },
+            { id: 'old', label: 'Old Regime' }
+          ],
+          activeId: activeRegime,
+          onChange: (id) => setActiveRegime(id as TaxRegime)
+        }}
+        input={
+          <div className="space-y-6">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Briefcase className="w-3.5 h-3.5" /> Income Details
             </h3>
@@ -276,14 +263,16 @@ export default function IncomeTaxClient() {
               </div>
             </div>
           </div>
-
+        }
+        optionsPanel={
           <AnimatePresence mode="popLayout">
-            {activeRegime === 'old' && (
+            {activeRegime === 'old' ? (
               <m.div
+                key="old"
                 initial={{ opacity: 0, height: 0, y: -20 }}
                 animate={{ opacity: 1, height: 'auto', y: 0 }}
                 exit={{ opacity: 0, height: 0, y: -20 }}
-                className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 overflow-hidden"
+                className="space-y-6 overflow-hidden"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-purple-500 flex items-center gap-2">
@@ -317,13 +306,13 @@ export default function IncomeTaxClient() {
                   <p className="text-xs text-text-muted font-medium text-center pt-2 italic">Standard deduction of ₹50,000 is auto-applied.</p>
                 </div>
               </m.div>
-            )}
-            
-            {activeRegime === 'new' && (
+            ) : (
               <m.div
+                key="new"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-blue/5 border border-blue/20 rounded-4xl p-6 sm:p-8 text-center space-y-3"
+                exit={{ opacity: 0 }}
+                className="text-center space-y-3"
               >
                 <Info className="w-6 h-6 text-blue mx-auto mb-2 opacity-50" />
                 <p className="text-sm font-bold text-blue">No Deductions Needed</p>
@@ -333,25 +322,23 @@ export default function IncomeTaxClient() {
               </m.div>
             )}
           </AnimatePresence>
-        </div>
-
-        {/* RIGHT COLUMN: Results */}
-        <div className="lg:col-span-7 space-y-6" aria-live="polite" role="region" aria-label="Tax Calculation Results">
-          <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted px-2">Tax Breakdown</h3>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <MetricCard label="Gross Income" value={formatCurrency(activeResult.grossIncome)} />
-            <MetricCard label="Total Deductions" value={`-${formatCurrency(activeResult.totalDeductions)}`} accent className="text-green-500" />
-            <MetricCard label="Taxable Income" value={formatCurrency(activeResult.taxableIncome)} className="col-span-2 bg-bg/50" />
-          </div>
-
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 relative overflow-hidden">
+        }
+        output={
+          <div className="space-y-6 relative overflow-hidden h-full" aria-live="polite" role="region" aria-label="Tax Calculation Results">
             <div className={cn(
-              "absolute -top-32 -right-32 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700",
+              "absolute -top-32 -right-32 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700 pointer-events-none",
               activeRegime === 'new' ? 'bg-blue' : 'bg-purple-500'
             )} />
             
-            <div className="flex items-end justify-between border-b border-border/50 pb-6">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted px-2">Tax Breakdown</h3>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <MetricCard label="Gross Income" value={formatCurrency(activeResult.grossIncome)} />
+              <MetricCard label="Total Deductions" value={`-${formatCurrency(activeResult.totalDeductions)}`} accent className="text-green-500" />
+              <MetricCard label="Taxable Income" value={formatCurrency(activeResult.taxableIncome)} className="col-span-2 bg-bg/50" />
+            </div>
+
+            <div className="flex items-end justify-between border-t border-border/50 mt-6 pt-6 pb-6 border-b">
               <div>
                 <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-2">Total Tax Payable</p>
                 <div className="flex items-baseline gap-2">
@@ -375,7 +362,6 @@ export default function IncomeTaxClient() {
                </div>
             </div>
 
-            {/* Slab Table */}
             <div className="pt-6 space-y-3">
               <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
                 <FileText className="w-3 h-3" /> Slab Breakdown
@@ -409,11 +395,9 @@ export default function IncomeTaxClient() {
                 </table>
               </div>
             </div>
-
           </div>
-        </div>
-
-      </div>
+        }
+      />
     </div>
   );
 }

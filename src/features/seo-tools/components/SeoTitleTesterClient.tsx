@@ -1,9 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-
-
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const POWER_WORDS = ["amazing","best","free","new","now","proven","ultimate","complete","essential","incredible","powerful","instant","guaranteed","exclusive","secret","insider","remarkable","surprising","outstanding","phenomenal","revolutionary","breakthrough"];
 const POSITIVE_WORDS = ["great","good","best","top","better","amazing","excellent","wonderful","brilliant","perfect","awesome","fantastic","love","easy","simple","fast","quick","powerful","ultimate","leading","effective","proven","trusted","reliable","smart","beautiful","fun","incredible","outstanding","rewarding","helpful","comprehensive","expert","premium","superior","innovative"];
@@ -17,7 +15,7 @@ interface Criterion {
   points: number;
 }
 
-function analyzeTtitle(title: string): { score: number; criteria: Criterion[] } {
+function analyzeTitle(title: string): { score: number; criteria: Criterion[] } {
   const len = title.length;
   const words = title.toLowerCase().split(/\s+/).filter(Boolean);
   const firstWord = words[0] || "";
@@ -92,7 +90,7 @@ function analyzeTtitle(title: string): { score: number; criteria: Criterion[] } 
 export default function SeoTitleTesterClient() {
   const [title, setTitle] = useState("");
 
-  const { score, criteria } = useMemo(() => analyzeTtitle(title), [title]);
+  const { score, criteria } = useMemo(() => analyzeTitle(title), [title]);
 
   const scoreColor = score >= 70 ? "text-success" : score >= 40 ? "text-warn" : "text-error";
   const scoreBg = score >= 70 ? "bg-success" : score >= 40 ? "bg-warn" : "bg-error";
@@ -103,28 +101,49 @@ export default function SeoTitleTesterClient() {
     pass === true ? "text-success" : pass === "warn" ? "text-warn" : "text-error";
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <label className="text-sm font-medium">Your Title</label>
-        <input
-          type="text"
-          className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg"
-          placeholder="Enter your SEO title here..."
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-        />
-        <div className="flex items-center justify-between text-xs text-text-4">
-          <span>{title.length} characters</span>
-          <span className={title.length > 60 ? "text-red-500" : title.length > 50 ? "text-green-500" : "text-text-4"}>
-            {title.length < 50 ? `${50 - title.length} more to ideal` : title.length <= 60 ? "Perfect length!" : `${title.length - 60} over limit`}
-          </span>
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="space-y-2">
+          <ToolInput
+            label="Your Title"
+            value={title}
+            onChange={setTitle}
+            placeholder="Enter your SEO title here..."
+          />
+          <div className="flex items-center justify-between text-xs text-text-4 px-1">
+            <span>{title.length} characters</span>
+            <span className={title.length > 60 ? "text-error" : title.length > 50 ? "text-success" : "text-text-4"}>
+              {title.length < 50 ? `${50 - title.length} more to ideal` : title.length <= 60 ? "Perfect length!" : `${title.length - 60} over limit`}
+            </span>
+          </div>
         </div>
-      </div>
-
-      {title && (
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Score */}
-          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
+      }
+      optionsPanel={
+        <div>
+          <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider mb-2">Google Preview</h2>
+          <p className="text-xs text-text-4 mb-4">~600px width container with title truncation at 60 chars</p>
+          <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl p-5 max-w-full mb-4">
+            <p className="text-blue text-xl font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-full">
+              {title || "Your Title Here"}
+            </p>
+            <p className="text-green-600 dark:text-green-400 text-sm mt-0.5">https://example.com › page-url</p>
+            <p className="text-text-3 text-sm mt-1 line-clamp-2">
+              Your meta description will appear here. Keep it between 120–160 characters for best results.
+            </p>
+          </div>
+          <div className="text-xs text-text-4 space-y-1">
+            <p>Title length: <strong className={title.length > 60 ? "text-error" : "text-success"}>{title.length} chars</strong></p>
+            {title.length > 60 && (
+              <p className="text-error">Truncated version: <strong>"{title.slice(0, 60)}…"</strong></p>
+            )}
+          </div>
+        </div>
+      }
+      output={
+        title ? (
+          <div className="space-y-6">
+            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider mb-2">SEO Score</h2>
             <div className="flex items-center gap-6">
               <div className={`text-6xl font-black ${scoreColor}`}>{score}</div>
               <div>
@@ -138,7 +157,7 @@ export default function SeoTitleTesterClient() {
               <div className={`h-3 rounded-full transition-all duration-500 ${scoreBg}`} style={{ width: `${score}%` }} />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3 pt-2">
               {criteria.map(c => (
                 <div key={c.id} className="flex items-start gap-3">
                   <span className={`text-base font-bold flex-shrink-0 mt-0.5 ${passColor(c.pass)}`}>{passIcon(c.pass)}</span>
@@ -150,35 +169,12 @@ export default function SeoTitleTesterClient() {
               ))}
             </div>
           </div>
-
-          {/* Google preview */}
-          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Google Preview</h2>
-            <p className="text-xs text-text-4">~600px width container with title truncation at 60 chars</p>
-            <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl p-5 max-w-full">
-              <p className="text-blue text-xl font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-full">
-                {title || "Your Title Here"}
-              </p>
-              <p className="text-green-600 dark:text-green-400 text-sm mt-0.5">https://example.com › page-url</p>
-              <p className="text-text-3 text-sm mt-1 line-clamp-2">
-                Your meta description will appear here. Keep it between 120–160 characters for best results.
-              </p>
-            </div>
-            <div className="text-xs text-text-4 space-y-1">
-              <p>Title length: <strong className={title.length > 60 ? "text-red-500" : "text-green-500"}>{title.length} chars</strong></p>
-              {title.length > 60 && (
-                <p className="text-red-500">Truncated version: <strong>"{title.slice(0, 60)}…"</strong></p>
-              )}
-            </div>
+        ) : (
+          <div className="flex items-center justify-center h-full text-center text-text-4 min-h-[200px]">
+            Type a title to see your SEO score.
           </div>
-        </div>
-      )}
-
-      {!title && (
-        <div className="bg-surface border border-border p-12 rounded-2xl shadow-sm text-center text-text-4">
-          Type a title above to see your SEO score and Google preview.
-        </div>
-      )}
-    </div>
+        )
+      }
+    />
   );
 }

@@ -5,6 +5,8 @@ import { ToolInput } from "@/components/ui/ToolInput";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { cn } from "@/src/lib/utils";
 import { 
   Download, 
   RefreshCw, 
@@ -163,53 +165,93 @@ export default function FakeDataGeneratorClient() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Sidebar Configuration */}
-        <div className="lg:col-span-4 space-y-4 sm:space-y-6">
-          <div className="bg-surface border border-border rounded-3xl sm:rounded-4xl p-4 sm:p-8 shadow-sm space-y-6 sm:space-y-8">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-3">
-                <RefreshCw className={cn("w-5 h-5 sm:w-6 sm:h-6 text-blue", isGenerating && "animate-spin")} />
-                Configure Generator
-              </h2>
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <h2 className="text-lg sm:text-xl font-bold text-text">Select Data Fields</h2>
+              <p className="text-xs text-text-muted font-bold uppercase tracking-wider mt-1">
+                {selectedFields.length} fields selected
+              </p>
             </div>
-
-            <div className="space-y-6">
-              <ToolInput
-                label="Number of Records"
-                type="number"
-                value={count}
-                onChange={setCount}
-                placeholder="25"
-                description="Generate up to 2000 records at once."
-              />
-
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-text-2 px-1">Output Format</label>
-                <SegmentedControl
-                  activeId={format}
-                  onChange={(v) => setFormat(v as any)}
-                  options={[
-                    { label: "JSON", id: "json", icon: <FileJson className="w-4 h-4" /> },
-                    { label: "CSV", id: "csv", icon: <TableIcon className="w-4 h-4" /> },
-                    { label: "SQL", id: "sql", icon: <Database className="w-4 h-4" /> },
-                  ]}
-                />
-              </div>
-
-              <button
-                onClick={generateData}
-                disabled={isGenerating || selectedFields.length === 0}
-                className="w-full py-5 bg-blue text-white rounded-xl font-black text-lg shadow-xl shadow-blue/20 hover:shadow-blue/30 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-              >
-                {isGenerating ? <RefreshCw className="w-6 h-6 animate-spin" /> : <ShieldCheck className="w-6 h-6" />}
-                Generate Realistic Data
-              </button>
+            <div className="flex gap-2">
+              <button onClick={selectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-blue hover:bg-blue/5 bg-blue/5 sm:bg-transparent rounded-xl transition-all">Select All</button>
+              <button onClick={deselectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-text-muted hover:bg-black/5 bg-black/5 sm:bg-transparent rounded-xl transition-all">Clear All</button>
             </div>
           </div>
 
-          <div className="bg-blue/5 border border-blue/10 rounded-4xl p-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {(Object.entries(categories) as [FieldCategory, DataField[]][]).map(([cat, fields]) => (
+              <div key={cat} className="space-y-4">
+                <div className="flex items-center gap-2 pb-2 border-b border-border/50">
+                  {cat === "Personal" && <User className="w-4 h-4 text-indigo-500" />}
+                  {cat === "Professional" && <Briefcase className="w-4 h-4 text-emerald-500" />}
+                  {cat === "Technical" && <Globe className="w-4 h-4 text-blue-500" />}
+                  {cat === "Financial" && <Database className="w-4 h-4 text-amber-500" />}
+                  <h3 className="text-sm font-black text-text-2 uppercase tracking-widest">{cat}</h3>
+                </div>
+                <div className="grid grid-cols-1 gap-1">
+                  {fields.map(field => (
+                    <div key={field.id} className="flex items-center gap-3 py-1 group">
+                      <Checkbox
+                        id={field.id}
+                        label={field.label}
+                        checked={selectedFields.includes(field.id)}
+                        onChange={() => toggleField(field.id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-bold flex items-center gap-3">
+              <RefreshCw className={cn("w-5 h-5 sm:w-6 sm:h-6 text-blue", isGenerating && "animate-spin")} />
+              Configure Generator
+            </h2>
+          </div>
+
+          <div className="space-y-6">
+            <ToolInput
+              label="Number of Records"
+              type="number"
+              value={count}
+              onChange={setCount}
+              placeholder="25"
+              description="Generate up to 2000 records at once."
+            />
+
+            <div className="space-y-3">
+              <label className="text-sm font-bold text-text-2 px-1">Output Format</label>
+              <SegmentedControl
+                activeId={format}
+                onChange={(v) => setFormat(v as any)}
+                options={[
+                  { label: "JSON", id: "json", icon: <FileJson className="w-4 h-4" /> },
+                  { label: "CSV", id: "csv", icon: <TableIcon className="w-4 h-4" /> },
+                  { label: "SQL", id: "sql", icon: <Database className="w-4 h-4" /> },
+                ]}
+              />
+            </div>
+
+            <button
+              onClick={generateData}
+              disabled={isGenerating || selectedFields.length === 0}
+              className="w-full py-5 bg-blue text-white rounded-xl font-black text-lg shadow-xl shadow-blue/20 hover:shadow-blue/30 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            >
+              {isGenerating ? <RefreshCw className="w-6 h-6 animate-spin" /> : <ShieldCheck className="w-6 h-6" />}
+              Generate Realistic Data
+            </button>
+          </div>
+
+          <div className="bg-blue/5 border border-blue/10 rounded-3xl p-6 space-y-4">
             <h3 className="text-sm font-black text-blue uppercase tracking-widest flex items-center gap-2">
               <ShieldCheck className="w-4 h-4" />
               Privacy Assurance
@@ -219,72 +261,27 @@ export default function FakeDataGeneratorClient() {
             </p>
           </div>
         </div>
-
-        {/* Main Selection Area */}
-        <div className="lg:col-span-8 space-y-6">
-          <div className="bg-surface border border-border rounded-3xl sm:rounded-4xl p-4 sm:p-8 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
-              <div>
-                <h2 className="text-lg sm:text-xl font-bold text-text">Select Data Fields</h2>
-                <p className="text-xs text-text-muted font-bold uppercase tracking-wider mt-1">
-                  {selectedFields.length} fields selected
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button onClick={selectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-blue hover:bg-blue/5 bg-blue/5 sm:bg-transparent rounded-xl transition-all">Select All</button>
-                <button onClick={deselectAll} className="flex-1 sm:flex-none px-4 py-2 text-xs font-black text-text-muted hover:bg-black/5 bg-black/5 sm:bg-transparent rounded-xl transition-all">Clear All</button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {(Object.entries(categories) as [FieldCategory, DataField[]][]).map(([cat, fields]) => (
-                <div key={cat} className="space-y-4">
-                  <div className="flex items-center gap-2 pb-2 border-b border-border/50">
-                    {cat === "Personal" && <User className="w-4 h-4 text-indigo-500" />}
-                    {cat === "Professional" && <Briefcase className="w-4 h-4 text-emerald-500" />}
-                    {cat === "Technical" && <Globe className="w-4 h-4 text-blue-500" />}
-                    {cat === "Financial" && <Database className="w-4 h-4 text-amber-500" />}
-                    <h3 className="text-sm font-black text-text-2 uppercase tracking-widest">{cat}</h3>
-                  </div>
-                  <div className="grid grid-cols-1 gap-1">
-                    {fields.map(field => (
-                      <div key={field.id} className="flex items-center gap-3 py-1 group">
-                        <Checkbox
-                          id={field.id}
-                          label={field.label}
-                          checked={selectedFields.includes(field.id)}
-                          onChange={() => toggleField(field.id)}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative group">
-             <ToolResultArea
+      }
+      output={
+        <div className="relative group h-full flex flex-col">
+          <div className="flex-1">
+            <ToolResultArea
               value={result}
               label="Data Preview"
               {...(result ? { onDownload: downloadFile } : {})}
             />
-            {result && (
-               <div className="absolute top-14 right-8 flex items-center gap-2">
-                 <div className="px-3 py-1 bg-green-500/10 text-green-600 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                   <CheckCircle2 className="w-3 h-3" />
-                   Ready to Use
-                 </div>
-               </div>
-            )}
           </div>
-          <WorkflowSuggestions />
+          {result && (
+            <div className="absolute top-14 right-8 flex items-center gap-2">
+              <div className="px-3 py-1 bg-green-500/10 text-green-600 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 className="w-3 h-3" />
+                Ready to Use
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    </div>
+      }
+      infoPanel={<WorkflowSuggestions />}
+    />
   );
-}
-
-function cn(...classes: any[]) {
-  return classes.filter(Boolean).join(" ");
 }

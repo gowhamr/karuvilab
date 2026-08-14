@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
 import { workerManager } from "@/src/workers/manager";
-import { FileSignature, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { FileSignature, CheckCircle2, XCircle } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export default function RsaSignClient() {
   const [mode, setMode] = useState<'sign' | 'verify'>('sign');
@@ -58,55 +60,40 @@ export default function RsaSignClient() {
     }
   }, [mode, text, keyPem, signatureB64, hash]);
 
-  return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Mode Bar */}
-      <div className="flex gap-2 p-1 bg-surface-2 rounded-xl border border-border w-fit">
-        <button
-          id="rsa-tab-sign"
-          onClick={() => { setMode('sign'); setError(null); setVerifyStatus(null); }}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition ${
-            mode === 'sign' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'
-          }`}
-        >
-          <FileSignature className="w-4 h-4" />
-          Generate RSA Signature
-        </button>
-        <button
-          id="rsa-tab-verify"
-          onClick={() => { setMode('verify'); setError(null); setVerifyStatus(null); }}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition ${
-            mode === 'verify' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'
-          }`}
-        >
-          <CheckCircle2 className="w-4 h-4" />
-          Verify Signature
-        </button>
-      </div>
+  const tabs = {
+    options: [
+      { id: 'sign', label: 'Generate Signature', icon: <FileSignature className="w-4 h-4" /> },
+      { id: 'verify', label: 'Verify Signature', icon: <CheckCircle2 className="w-4 h-4" /> }
+    ],
+    activeId: mode,
+    onChange: (id: 'sign' | 'verify') => {
+      setMode(id);
+      setError(null);
+      setVerifyStatus(null);
+    }
+  };
 
-      {/* Inputs */}
+  const inputPanel = (
+    <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-2 space-y-1">
-          <label className="text-xs font-semibold text-text-muted">
-            {mode === 'sign' ? 'Private Key (PKCS#8 PEM):' : 'Public Key (SPKI PEM):'}
-          </label>
-          <textarea
+        <div className="md:col-span-2">
+          <ToolInput
             id="rsa-sign-key-pem"
-            rows={5}
+            label={mode === 'sign' ? 'Private Key (PKCS#8 PEM)' : 'Public Key (SPKI PEM)'}
             placeholder={mode === 'sign' ? '-----BEGIN PRIVATE KEY-----\n...' : '-----BEGIN PUBLIC KEY-----\n...'}
             value={keyPem}
-            onChange={(e) => setKeyPem(e.target.value)}
-            className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
+            onChange={setKeyPem}
+            rows={5}
+            mono
           />
         </div>
-
         <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">Digest Hash Algorithm</label>
+          <label className="text-sm font-bold text-text-2 mb-2 block">Digest Hash Algorithm</label>
           <select
             id="rsa-sign-hash-select"
             value={hash}
             onChange={(e) => setHash(e.target.value as any)}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
+            className="w-full px-4 py-3 bg-bg border border-divider rounded-input text-body text-text-primary focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
           >
             <option value="SHA-256">SHA-256</option>
             <option value="SHA-512">SHA-512</option>
@@ -114,29 +101,31 @@ export default function RsaSignClient() {
         </div>
       </div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-semibold text-text">Message / Data to Sign or Verify:</label>
-        <textarea
-          id="rsa-sign-message-input"
-          rows={4}
-          placeholder="Type message content..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-sm focus:outline-none"
-        />
-      </div>
+      <ToolInput
+        id="rsa-sign-message-input"
+        label="Message / Data to Sign or Verify"
+        placeholder="Type message content..."
+        value={text}
+        onChange={setText}
+        rows={4}
+        mono
+      />
 
       {mode === 'verify' && (
-        <div className="space-y-1">
-          <label className="text-sm font-semibold text-text">Base64 Signature to Verify:</label>
-          <textarea
-            id="rsa-verify-sig-input"
-            rows={3}
-            placeholder="Paste signature Base64 string..."
-            value={signatureB64}
-            onChange={(e) => setSignatureB64(e.target.value)}
-            className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
-          />
+        <ToolInput
+          id="rsa-verify-sig-input"
+          label="Base64 Signature to Verify"
+          placeholder="Paste signature Base64 string..."
+          value={signatureB64}
+          onChange={setSignatureB64}
+          rows={3}
+          mono
+        />
+      )}
+
+      {error && (
+        <div role="alert" className="w-full px-4 py-3 bg-danger/5 border border-danger/20 rounded-xl text-danger text-sm font-medium">
+          {error}
         </div>
       )}
 
@@ -149,47 +138,45 @@ export default function RsaSignClient() {
         <FileSignature className="w-5 h-5" />
         {isProcessing ? 'Processing...' : mode === 'sign' ? 'Generate Signature' : 'Verify Signature'}
       </button>
+    </div>
+  );
 
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          {error}
-        </div>
-      )}
-
-      {/* Sign Output */}
-      {mode === 'sign' && signatureB64 && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-semibold text-text">Base64 RSA Signature Output:</label>
-            <CopyButton text={signatureB64} />
-          </div>
-          <textarea
-            id="rsa-sign-output"
-            readOnly
-            rows={3}
-            value={signatureB64}
-            className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs text-sky-300 focus:outline-none"
-          />
-        </div>
-      )}
-
-      {/* Verify Output */}
-      {mode === 'verify' && verifyStatus !== null && (
-        <div className={`p-4 rounded-xl border flex items-center gap-3 ${
-          verifyStatus ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'
+  const outputPanel = mode === 'sign' ? (
+    <ToolResultArea
+      label="Base64 RSA Signature"
+      value={signatureB64}
+      onClear={() => setSignatureB64("")}
+    />
+  ) : (
+    <div className="flex flex-col h-full space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className="text-sm font-bold text-text-2">Verification Result</div>
+      {verifyStatus !== null ? (
+        <div className={`p-6 rounded-xl border flex items-center gap-4 flex-1 ${
+          verifyStatus ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400'
         }`}>
-          {verifyStatus ? <CheckCircle2 className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
+          {verifyStatus ? <CheckCircle2 className="w-8 h-8 flex-shrink-0" /> : <XCircle className="w-8 h-8 flex-shrink-0" />}
           <div>
-            <h4 className="font-bold text-base">{verifyStatus ? "VALID SIGNATURE" : "INVALID SIGNATURE"}</h4>
-            <p className="text-xs opacity-90">
+            <h4 className="font-bold text-lg mb-1">{verifyStatus ? "VALID SIGNATURE" : "INVALID SIGNATURE"}</h4>
+            <p className="text-sm opacity-90">
               {verifyStatus
                 ? "The signature matches the provided message and public key digest."
                 : "The signature could not be verified with this public key or the message was tampered with."}
             </p>
           </div>
         </div>
+      ) : (
+        <div className="flex-1 border border-border rounded-xl flex items-center justify-center p-6 text-text-muted italic text-sm">
+          Run verification to see result here...
+        </div>
       )}
     </div>
+  );
+
+  return (
+    <ToolWorkspace
+      tabs={tabs as any}
+      input={inputPanel}
+      output={outputPanel}
+    />
   );
 }

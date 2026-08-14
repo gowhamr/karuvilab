@@ -1,10 +1,8 @@
 "use client";
 import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { CopyButton } from "@/components/ui/CopyButton";
-
-const cat = CATEGORIES.find(c => c.id === "utilities")!;
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 const TRACKING_PARAMS = new Set([
   // UTM
@@ -65,92 +63,75 @@ export default function URLCleanerClient() {
   const removed = !hasError ? result.removed : [];
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <label htmlFor="url-cleaner-input" className="text-sm font-bold text-text-2">Paste URL</label>
-        <input
-          id="url-cleaner-input"
-          type="text"
-          className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono text-sm"
+    <ToolWorkspace
+      layout="split"
+      input={
+        <ToolInput
+          label="Paste URL"
           placeholder="https://example.com/page?utm_source=newsletter&utm_medium=email&fbclid=abc123"
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={setInput}
+          error={hasError && input ? result.error : undefined}
+          mono
+          rows={4}
         />
-        {hasError && input && (
-          <p className="text-sm text-red-500">{result.error}</p>
-        )}
-      </div>
+      }
+      output={
+        cleaned ? (
+          <div className="space-y-6 flex flex-col h-full">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="bg-bg border border-border p-4 rounded-xl text-center">
+                <dd className="text-2xl font-black text-blue">{removed.length}</dd>
+                <dt className="text-xs text-text-muted mt-1">Parameters Removed</dt>
+              </div>
+              <div className="bg-bg border border-border p-4 rounded-xl text-center">
+                <dd className="text-2xl font-black text-text">
+                  {Math.round(((input.length - cleaned.length) / input.length) * 100)}%
+                </dd>
+                <dt className="text-xs text-text-muted mt-1">URL Shorter</dt>
+              </div>
+            </dl>
 
-      {cleaned && (
-        <div className="space-y-4">
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <dd className="text-2xl font-black text-blue">{removed.length}</dd>
-              <dt className="text-xs text-text-muted mt-1">Parameters Removed</dt>
-            </div>
-            <div className="bg-surface border border-border p-4 rounded-xl text-center">
-              <dd className="text-2xl font-black text-text">
-                {Math.round(((input.length - cleaned.length) / input.length) * 100)}%
-              </dd>
-              <dt className="text-xs text-text-muted mt-1">URL Shorter</dt>
-            </div>
-          </dl>
+            <ToolResultArea
+              label="Cleaned URL"
+              value={cleaned}
+            />
 
-          <div className="bg-surface border border-border p-5 rounded-2xl space-y-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider">Original URL</h3>
-                <CopyButton text={input} label="Copy Original" />
+            {removed.length > 0 && (
+              <div className="bg-bg border border-border p-5 rounded-xl space-y-3">
+                <h2 className="text-sm font-bold text-text-2">Removed Parameters</h2>
+                <div className="flex flex-wrap gap-2">
+                  {removed.map(param => (
+                    <span key={param} className="px-3 py-1.5 text-xs font-mono font-bold bg-red-500/10 text-red-500 border border-red-500/20 rounded-full">
+                      {param}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="font-mono text-xs text-text-3 break-all bg-bg border border-border rounded-xl p-3">
-                {input}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider">Cleaned URL</h3>
-                <CopyButton text={cleaned} label="Copy Cleaned" />
-              </div>
-              <div className="font-mono text-sm text-text break-all bg-bg border border-border rounded-xl p-3">
-                {cleaned}
-              </div>
-            </div>
+            )}
           </div>
-
-          {removed.length > 0 && (
-            <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-              <h2 className="text-sm font-bold text-text-2">Removed Parameters</h2>
-              <div className="flex flex-wrap gap-2">
-                {removed.map(param => (
-                  <span key={param} className="px-3 py-1.5 text-xs font-mono font-bold bg-red-500/10 text-red-500 border border-red-500/20 rounded-full">
-                    {param}
-                  </span>
-                ))}
+        ) : undefined
+      }
+      infoPanel={
+        <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
+          <h2 className="text-sm font-bold text-text-2">Tracked Parameter Categories</h2>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-3">
+            {[
+              ["UTM Tags", "utm_source, utm_medium, utm_campaign…"],
+              ["Google", "gclid, dclid, gclsrc"],
+              ["Facebook", "fbclid, fb_source, igshid"],
+              ["Microsoft", "msclkid"],
+              ["Mailchimp", "mc_eid, mc_cid"],
+              ["Others", "ref, ttclid, twclid, yclid…"],
+            ].map(([cat, params]) => (
+              <div key={cat} className="bg-bg border border-border rounded-xl p-3">
+                <dt className="font-bold text-text mb-0.5">{cat}</dt>
+                <dd className="text-text-muted">{params}</dd>
               </div>
-            </div>
-          )}
+            ))}
+          </dl>
         </div>
-      )}
-
-      <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-        <h2 className="text-sm font-bold text-text-2">Tracked Parameter Categories</h2>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-3">
-          {[
-            ["UTM Tags", "utm_source, utm_medium, utm_campaign…"],
-            ["Google", "gclid, dclid, gclsrc"],
-            ["Facebook", "fbclid, fb_source, igshid"],
-            ["Microsoft", "msclkid"],
-            ["Mailchimp", "mc_eid, mc_cid"],
-            ["Others", "ref, ttclid, twclid, yclid…"],
-          ].map(([cat, params]) => (
-            <div key={cat} className="bg-bg border border-border rounded-xl p-3">
-              <dt className="font-bold text-text mb-0.5">{cat}</dt>
-              <dd className="text-text-muted">{params}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </div>
+      }
+    />
   );
 }

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Camera, Mic, MicOff, Video, VideoOff, Settings, Camera as CameraIcon, RefreshCw, Download } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 export default function MicCameraTesterClient() {
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -157,46 +158,9 @@ export default function MicCameraTesterClient() {
           )}
         </AnimatePresence>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Hardware View */}
-          <div className="relative aspect-video bg-surface rounded-4xl overflow-hidden border border-border group shadow-sm flex items-center justify-center">
-            <video 
-              ref={videoRef} 
-              autoPlay 
-              playsInline 
-              muted 
-              className={`w-full h-full object-cover transition-opacity duration-300 ${stream && !isInitializing ? 'opacity-100' : 'opacity-0'}`} 
-            />
-            
-            {(!stream || isInitializing) && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 text-text-muted bg-bg/50 backdrop-blur-sm">
-                {isInitializing ? (
-                  <RefreshCw className="w-12 h-12 animate-spin text-blue" aria-hidden="true" />
-                ) : (
-                  <>
-                    <VideoOff className="w-16 h-16 opacity-20" aria-hidden="true" />
-                    <p className="text-sm font-medium uppercase tracking-widest text-text-3">Stream Inactive</p>
-                  </>
-                )}
-              </div>
-            )}
-            
-            {stream && !isInitializing && (
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                <div className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10 flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                  <span className="text-tiny font-black text-white uppercase tracking-widest">Live</span>
-                </div>
-              </div>
-            )}
-            
-            <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
-          </div>
-
-          {/* Controls & Metrics */}
-          <div className="space-y-6 flex flex-col justify-center">
-            <div className="p-6 sm:p-8 bg-surface border border-border rounded-4xl space-y-8">
-              
+        <ToolWorkspace
+          input={
+            <div className="space-y-8">
               {/* Device Selectors */}
               <div className="space-y-4">
                 <div className="space-y-2">
@@ -273,8 +237,44 @@ export default function MicCameraTesterClient() {
                 </button>
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
+          }
+          output={
+            <div className="relative w-full aspect-video bg-black/5 rounded-2xl overflow-hidden border border-border flex items-center justify-center h-full min-h-[300px]">
+              <video 
+                ref={videoRef} 
+                autoPlay 
+                playsInline 
+                muted 
+                className={`w-full h-full object-cover transition-opacity duration-300 ${stream && !isInitializing ? 'opacity-100' : 'opacity-0'}`} 
+              />
+              
+              {(!stream || isInitializing) && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 text-text-muted bg-bg/50 backdrop-blur-sm">
+                  {isInitializing ? (
+                    <RefreshCw className="w-12 h-12 animate-spin text-blue" aria-hidden="true" />
+                  ) : (
+                    <>
+                      <VideoOff className="w-16 h-16 opacity-20" aria-hidden="true" />
+                      <p className="text-sm font-medium uppercase tracking-widest text-text-3">Stream Inactive</p>
+                    </>
+                  )}
+                </div>
+              )}
+              
+              {stream && !isInitializing && (
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+                  <div className="px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                    <span className="text-tiny font-black text-white uppercase tracking-widest">Live</span>
+                  </div>
+                </div>
+              )}
+              
+              <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
+            </div>
+          }
+          infoPanel={
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <dl className="p-4 bg-surface border border-border rounded-2xl space-y-1">
                 <dt className="text-tiny font-black text-blue uppercase tracking-widest flex items-center gap-1.5">
                   <Settings className="w-3 h-3" aria-hidden="true" /> Privacy
@@ -288,8 +288,8 @@ export default function MicCameraTesterClient() {
                 <dd className="text-xs font-bold text-text-2 leading-tight">Zero-delay local loopback</dd>
               </dl>
             </div>
-          </div>
-        </div>
+          }
+        />
       </div>
     </ToolShell>
   );

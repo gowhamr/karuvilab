@@ -78,6 +78,15 @@ export class ModelManagerService {
     onProgress?: (progress: ModelProgress) => void,
     abortSignal?: AbortSignal
   ): Promise<ArrayBuffer> {
+    // 0. Reject placeholder / unavailable models immediately — do not attempt download
+    const extManifest = manifest as import('./types').ExtendedModelManifest;
+    if (extManifest.available === false) {
+      throw new ModelLoadError(
+        manifest.id,
+        `Model '${manifest.name}' is not yet available in this version of KaruviLab. ` +
+        `The model file requires replacement with a real trained ONNX weight file.`
+      );
+    }
     // 1. Try loading from IndexedDB cache
     try {
       const cached = await getCachedModel(manifest.id, manifest.version);

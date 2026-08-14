@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Play, Pause, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Zap, RefreshCw } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const triggerHaptic = (type: 'eat' | 'golden' | 'death') => {
   if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -725,8 +726,11 @@ export default function SnakeGameClient() {
   }, [snake, food, direction, activeTheme, bossMode, portals, boardPowerUp, activePowerUp]);
 
   return (
-    <div className="max-w-md mx-auto space-y-6">
-      {/* ── Header ── */}
+    <ToolWorkspace
+      layout="stacked"
+      output={
+        <div className="w-full max-w-lg mx-auto space-y-6">
+          {/* ── Header ── */}
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           <div className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[70px]">
@@ -1050,10 +1054,15 @@ export default function SnakeGameClient() {
           <ChevronRight className="w-5 h-5 mx-auto" />
         </m.button>
       </div>
-
-      <p className="text-center text-xs text-text-muted">
-        Arrow keys or WASD to control. Space to Pause/Start. Swipe on mobile.
-      </p>
-    </div>
+        </div>
+      }
+      infoPanel={
+        <div className="flex justify-center text-center mt-2">
+          <p className="text-sm text-text-muted">
+            Arrow keys or WASD to control. Space to Pause/Start. Swipe on mobile.
+          </p>
+        </div>
+      }
+    />
   );
 }

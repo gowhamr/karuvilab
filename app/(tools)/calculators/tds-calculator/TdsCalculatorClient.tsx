@@ -5,6 +5,7 @@ import { Percent, Info, AlertTriangle, Building, User } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn, formatCurrency } from '@/src/lib/utils';
 import { MetricCard } from '@/components/ui/MetricCard';
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 interface TDSSection {
   code: string;
@@ -52,156 +53,159 @@ export default function TdsCalculatorClient() {
     };
   }, [amount, isCompany, hasPan, activeSection]);
 
-  return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        
-        {/* LEFT COLUMN: Inputs */}
-        <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
-          <div className="flex items-center justify-between">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
-              <Percent className="w-3.5 h-3.5" /> Payment Details
-            </h3>
-          </div>
-          
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Nature of Payment (Section)</label>
-              <select
-                value={sectionCode}
-                onChange={(e) => setSectionCode(e.target.value)}
-                className="w-full bg-bg border border-border rounded-2xl p-4 text-sm font-bold text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all appearance-none cursor-pointer"
-              >
-                {SECTIONS.map(s => (
-                  <option key={s.code} value={s.code}>
-                    Sec {s.code.split('_')[0]} — {s.description}
-                  </option>
-                ))}
-              </select>
-            </div>
+  const inputContent = (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
+          <Percent className="w-3.5 h-3.5" /> Payment Details
+        </h3>
+      </div>
+      
+      <div className="space-y-6">
+        <div className="space-y-3">
+          <label className="text-xs font-bold text-text-3 block">Nature of Payment (Section)</label>
+          <select
+            value={sectionCode}
+            onChange={(e) => setSectionCode(e.target.value)}
+            className="w-full bg-bg border border-border rounded-2xl p-4 text-sm font-bold text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all appearance-none cursor-pointer"
+          >
+            {SECTIONS.map(s => (
+              <option key={s.code} value={s.code}>
+                Sec {s.code.split('_')[0]} — {s.description}
+              </option>
+            ))}
+          </select>
+        </div>
 
-            <div className="space-y-3">
-              <label className="text-xs font-bold text-text-3 block">Payment Amount</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
-                <input
-                  type="number"
-                  value={amount || ''}
-                  onChange={(e) => {
-                    const num = Number(e.target.value);
-                    if (num >= 0 && num <= 1000000000000) setAmount(num);
-                  }}
-                  className="w-full bg-bg border border-border rounded-2xl py-4 pl-10 pr-4 font-mono text-xl text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-2 border-t border-border/50">
-              <label className="text-xs font-bold text-text-3 block">Payee Type (Deductee)</label>
-              <div className="flex bg-bg border border-border rounded-2xl p-1">
-                <button
-                  onClick={() => setIsCompany(false)}
-                  className={cn(
-                    "flex-1 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
-                    !isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
-                  )}
-                >
-                  <User className="w-4 h-4" /> Individual / HUF
-                </button>
-                <button
-                  onClick={() => setIsCompany(true)}
-                  className={cn(
-                    "flex-1 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
-                    isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
-                  )}
-                >
-                  <Building className="w-4 h-4" /> Company / Firm
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <label className="flex items-center gap-3 cursor-pointer group p-4 bg-bg border border-border rounded-2xl">
-                <input
-                  type="checkbox"
-                  checked={hasPan}
-                  onChange={(e) => setHasPan(e.target.checked)}
-                  className="w-5 h-5 rounded text-blue focus:ring-blue/20 border-border"
-                />
-                <div>
-                  <span className="text-sm font-bold text-text group-hover:text-blue transition-colors block">Valid PAN Provided</span>
-                  <span className="text-xs text-text-muted font-medium">Uncheck if payee has not submitted PAN (Sec 206AA).</span>
-                </div>
-              </label>
-            </div>
+        <div className="space-y-3">
+          <label className="text-xs font-bold text-text-3 block">Payment Amount</label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-text-muted">₹</span>
+            <input
+              type="number"
+              value={amount || ''}
+              onChange={(e) => {
+                const num = Number(e.target.value);
+                if (num >= 0 && num <= 1000000000000) setAmount(num);
+              }}
+              className="w-full bg-bg border border-border rounded-2xl py-4 pl-10 pr-4 font-mono text-xl text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all"
+            />
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Results */}
-        <div className="space-y-6">
-          {!result.tdsApplicable && (
-            <m.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-success/10 border border-success/20 rounded-3xl p-6 flex gap-4 items-start"
+        <div className="space-y-3 pt-2 border-t border-border/50">
+          <label className="text-xs font-bold text-text-3 block">Payee Type (Deductee)</label>
+          <div className="flex bg-bg border border-border rounded-2xl p-1">
+            <button
+              onClick={() => setIsCompany(false)}
+              className={cn(
+                "flex-1 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
+                !isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
+              )}
             >
-              <Info className="w-5 h-5 text-success shrink-0" />
-              <div>
-                <p className="text-success text-sm font-black uppercase tracking-widest">
-                  No TDS Required
-                </p>
-                <p className="text-text-3 text-sm mt-1 leading-relaxed font-medium">
-                  The payment amount is within the annual exemption threshold of <strong className="text-text">₹{activeSection.threshold.toLocaleString()}</strong> for this section.
-                </p>
-              </div>
-            </m.div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4">
-            <MetricCard 
-              label="TDS Rate Applied" 
-              value={`${result.rate}%`} 
-              className={cn("col-span-2", !hasPan && "bg-error/5 border-error/20 text-error")} 
-              sub={!hasPan ? "Higher rate due to absent PAN" : undefined}
-            />
-            <MetricCard 
-              label="TDS Amount to Deduct" 
-              value={`- ${formatCurrency(result.tdsAmount)}`} 
-              className="bg-error/5 border-error/20 text-error" 
-            />
-            <MetricCard 
-              label="Net Payable to Payee" 
-              value={formatCurrency(result.netAmount)} 
-              className="bg-success/10 border-success/30 text-success" 
-            />
+              <User className="w-4 h-4" /> Individual / HUF
+            </button>
+            <button
+              onClick={() => setIsCompany(true)}
+              className={cn(
+                "flex-1 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
+                isCompany ? "bg-surface text-blue shadow-sm ring-1 ring-border" : "text-text-muted hover:text-text"
+              )}
+            >
+              <Building className="w-4 h-4" /> Company / Firm
+            </button>
           </div>
+        </div>
 
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
-            <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
-              <Info className="w-3 h-3" /> Section Details: {activeSection.code.split('_')[0]}
-            </h4>
-            
-            <div className="space-y-4 font-mono text-sm">
-              <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
-                <span>Description</span>
-                <strong className="text-text text-right max-w-3/5">{activeSection.description}</strong>
-              </div>
-              <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
-                <span>Exemption Limit</span>
-                <strong className="text-text">{formatCurrency(activeSection.threshold)}</strong>
-              </div>
-              <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
-                <span>Standard Rate (Ind/Comp)</span>
-                <strong className="text-text">{activeSection.rateInd}% / {activeSection.rateComp}%</strong>
-              </div>
+        <div className="space-y-3 pt-2">
+          <label className="flex items-center gap-3 cursor-pointer group p-4 bg-bg border border-border rounded-2xl">
+            <input
+              type="checkbox"
+              checked={hasPan}
+              onChange={(e) => setHasPan(e.target.checked)}
+              className="w-5 h-5 rounded text-blue focus:ring-blue/20 border-border"
+            />
+            <div>
+              <span className="text-sm font-bold text-text group-hover:text-blue transition-colors block">Valid PAN Provided</span>
+              <span className="text-xs text-text-muted font-medium">Uncheck if payee has not submitted PAN (Sec 206AA).</span>
             </div>
-            
-            <p className="text-xs font-medium text-text-muted leading-relaxed text-center italic mt-4">
-              Note: Surcharge and Health & Education Cess (4%) are generally not applicable on payments made to residents (except Salary u/s 192). This calculator assumes a resident payee.
-            </p>
-          </div>
+          </label>
         </div>
       </div>
     </div>
+  );
+
+  const outputContent = (
+    <div className="space-y-6">
+      {!result.tdsApplicable && (
+        <m.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-success/10 border border-success/20 rounded-3xl p-6 flex gap-4 items-start"
+        >
+          <Info className="w-5 h-5 text-success shrink-0" />
+          <div>
+            <p className="text-success text-sm font-black uppercase tracking-widest">
+              No TDS Required
+            </p>
+            <p className="text-text-3 text-sm mt-1 leading-relaxed font-medium">
+              The payment amount is within the annual exemption threshold of <strong className="text-text">₹{activeSection.threshold.toLocaleString()}</strong> for this section.
+            </p>
+          </div>
+        </m.div>
+      )}
+
+      <div className="grid grid-cols-2 gap-4">
+        <MetricCard 
+          label="TDS Rate Applied" 
+          value={`${result.rate}%`} 
+          className={cn("col-span-2", !hasPan && "bg-error/5 border-error/20 text-error")} 
+          sub={!hasPan ? "Higher rate due to absent PAN" : undefined}
+        />
+        <MetricCard 
+          label="TDS Amount to Deduct" 
+          value={`- ${formatCurrency(result.tdsAmount)}`} 
+          className="bg-error/5 border-error/20 text-error" 
+        />
+        <MetricCard 
+          label="Net Payable to Payee" 
+          value={formatCurrency(result.netAmount)} 
+          className="bg-success/10 border-success/30 text-success" 
+        />
+      </div>
+
+      <div className="space-y-6 pt-6 border-t border-border/50">
+        <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
+          <Info className="w-3 h-3" /> Section Details: {activeSection.code.split('_')[0]}
+        </h4>
+        
+        <div className="space-y-4 font-mono text-sm">
+          <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
+            <span>Description</span>
+            <strong className="text-text text-right max-w-3/5">{activeSection.description}</strong>
+          </div>
+          <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
+            <span>Exemption Limit</span>
+            <strong className="text-text">{formatCurrency(activeSection.threshold)}</strong>
+          </div>
+          <div className="p-4 bg-bg border border-border rounded-2xl flex justify-between items-center text-text-3">
+            <span>Standard Rate (Ind/Comp)</span>
+            <strong className="text-text">{activeSection.rateInd}% / {activeSection.rateComp}%</strong>
+          </div>
+        </div>
+        
+        <p className="text-xs font-medium text-text-muted leading-relaxed text-center italic mt-4">
+          Note: Surcharge and Health & Education Cess (4%) are generally not applicable on payments made to residents (except Salary u/s 192). This calculator assumes a resident payee.
+        </p>
+      </div>
+    </div>
+  );
+
+  return (
+    <ToolWorkspace
+      layout="split"
+      input={inputContent}
+      output={outputContent}
+    />
   );
 }

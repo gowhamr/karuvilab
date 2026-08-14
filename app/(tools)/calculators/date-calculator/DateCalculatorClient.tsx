@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { cn } from "@/src/lib/utils";
 import { Calendar, Plus, Minus, Hash } from "lucide-react";
 
@@ -86,68 +87,33 @@ export default function DateCalculatorClient() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Tabs */}
-      <div className="flex p-1 bg-surface border border-border rounded-2xl w-fit mx-auto shadow-sm">
-        {(["diff", "add"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={cn(
-              "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all",
-              tab === t ? "bg-blue text-white shadow-md shadow-blue/10 scale-102" : "text-text-muted hover:text-text"
-            )}
-          >
-            {t === "diff" ? "Difference" : "Add/Sub"}
-          </button>
-        ))}
-      </div>
-
-      {tab === "diff" && (
-        <div className="space-y-8">
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <ToolInput
-                label="From Date"
-                type="date"
-                value={fromDate}
-                onChange={setFromDate}
-              />
-              <ToolInput
-                label="To Date"
-                type="date"
-                value={toDate}
-                onChange={setToDate}
-              />
-            </div>
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: "diff", label: "Difference" },
+          { id: "add", label: "Add/Sub" }
+        ],
+        activeId: tab,
+        onChange: (id) => setTab(id)
+      }}
+      input={
+        tab === "diff" ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ToolInput
+              label="From Date"
+              type="date"
+              value={fromDate}
+              onChange={setFromDate}
+            />
+            <ToolInput
+              label="To Date"
+              type="date"
+              value={toDate}
+              onChange={setToDate}
+            />
           </div>
-
-          {diff && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <MetricCard label="Years" value={String(diff.years)} accent />
-                <MetricCard label="Months" value={String(diff.months)} />
-                <MetricCard label="Days" value={String(diff.days)} />
-                <MetricCard label="Total Days" value={String(diff.totalDays)} />
-                <MetricCard label="Total Weeks" value={String(diff.totalWeeks)} />
-                <MetricCard label="Total Hours" value={diff.totalHours.toLocaleString()} />
-              </div>
-              <div className="bg-surface border border-border p-5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
-                <span className="text-sm text-text-3 font-medium">
-                  {diff.future ? "There are" : "There were"}{" "}
-                  <strong className="text-blue">{diff.totalDays} days</strong>{" "}
-                  {diff.future ? "until" : "since"} {toDate}
-                </span>
-                <CopyButton text={diffSummary} label="Copy Summary" className="bg-bg border border-border" />
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {tab === "add" && (
-        <div className="space-y-8">
-          <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
+        ) : (
+          <div className="space-y-8">
             <ToolInput
               label="Base Date"
               type="date"
@@ -208,9 +174,33 @@ export default function DateCalculatorClient() {
               </div>
             </div>
           </div>
-
-          {addResult && (
-            <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-6">
+        )
+      }
+      output={
+        tab === "diff" ? (
+          diff ? (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <MetricCard label="Years" value={String(diff.years)} accent />
+                <MetricCard label="Months" value={String(diff.months)} />
+                <MetricCard label="Days" value={String(diff.days)} />
+                <MetricCard label="Total Days" value={String(diff.totalDays)} />
+                <MetricCard label="Total Weeks" value={String(diff.totalWeeks)} />
+                <MetricCard label="Total Hours" value={diff.totalHours.toLocaleString()} />
+              </div>
+              <div className="bg-bg border border-border p-5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
+                <span className="text-sm text-text-3 font-medium">
+                  {diff.future ? "There are" : "There were"}{" "}
+                  <strong className="text-blue">{diff.totalDays} days</strong>{" "}
+                  {diff.future ? "until" : "since"} {toDate}
+                </span>
+                <CopyButton text={diffSummary} label="Copy Summary" className="bg-surface border border-border" />
+              </div>
+            </div>
+          ) : null
+        ) : (
+          addResult ? (
+            <div className="space-y-6">
               <div className="flex items-center gap-3 border-b border-border pb-4">
                 <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue">
                   <Calendar size={20} />
@@ -231,9 +221,9 @@ export default function DateCalculatorClient() {
                 </p>
               </div>
             </div>
-          )}
-        </div>
-      )}
-    </div>
+          ) : null
+        )
+      }
+    />
   );
 }

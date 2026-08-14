@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { ArrowLeftRight, Copy, Download, Code2, Table as TableIcon, AlertTriangle } from 'lucide-react';
-import { m, AnimatePresence } from 'framer-motion';
-import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
+import React, { useState, useMemo } from 'react';
+import { Table as TableIcon, AlertTriangle } from 'lucide-react';
 import { blobManager } from '@/src/lib/blob-manager';
 import { useToast } from '@/components/ui/Toast';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolInput } from '@/components/ui/ToolInput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 type ConversionMode = 'csv-to-json' | 'json-to-csv';
-type Delimiter = ',' | ';' | '\\t' | '|' | 'auto';
+type Delimiter = ',' | ';' | '\t' | '|' | 'auto';
 
 interface CSVParseOptions {
   delimiter: Delimiter;
@@ -30,17 +30,17 @@ interface ParseResult {
 }
 
 function detectDelimiter(csv: string): string {
-  const firstLine = csv.split('\\n')[0] || '';
+  const firstLine = csv.split('\n')[0] || '';
   const commaCount = (firstLine.match(/,/g) || []).length;
   const semiCount = (firstLine.match(/;/g) || []).length;
-  const tabCount = (firstLine.match(/\\t/g) || []).length;
-  const pipeCount = (firstLine.match(/\\|/g) || []).length;
+  const tabCount = (firstLine.match(/\t/g) || []).length;
+  const pipeCount = (firstLine.match(/\|/g) || []).length;
   
   const max = Math.max(commaCount, semiCount, tabCount, pipeCount);
   if (max === 0) return ',';
   if (max === commaCount) return ',';
   if (max === semiCount) return ';';
-  if (max === tabCount) return '\\t';
+  if (max === tabCount) return '\t';
   return '|';
 }
 
@@ -65,7 +65,7 @@ function parseCSV(csv: string, options: CSVParseOptions): ParseResult {
   if (!csv.trim()) return { data: [], headers: [], rowCount: 0, colCount: 0, errors: [], preview: [] };
 
   const actualDelimiter = options.delimiter === 'auto' ? detectDelimiter(csv) : options.delimiter;
-  const rows = csv.split('\\n');
+  const rows = csv.split('\n');
   const result: Record<string, unknown>[] = [];
   const errors: { row: number; message: string }[] = [];
   
@@ -181,114 +181,62 @@ export default function CsvToJsonClient() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-            <ArrowLeftRight className="w-4 h-4" />
-            CSV / JSON Converter
-          </h2>
-          
-          <div className="flex bg-bg border border-border rounded-xl p-1">
-            <button
-              onClick={() => setMode('csv-to-json')}
-              className={cn(
-                "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'csv-to-json' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
-              )}
-            >
-              CSV to JSON
-            </button>
-            <button
-              onClick={() => setMode('json-to-csv')}
-              className={cn(
-                "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'json-to-csv' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
-              )}
-            >
-              JSON to CSV
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Input Area */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
-                Input {mode === 'csv-to-json' ? 'CSV' : 'JSON'}
-              </label>
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: 'csv-to-json', label: 'CSV to JSON' },
+          { id: 'json-to-csv', label: 'JSON to CSV' }
+        ],
+        activeId: mode,
+        onChange: (id) => setMode(id as ConversionMode)
+      }}
+      input={
+        <div className="space-y-4 flex flex-col h-full">
+          <div className="flex justify-between items-center px-1">
+            <label className="text-sm font-bold text-text-2">
+              Input {mode === 'csv-to-json' ? 'CSV' : 'JSON'}
+            </label>
+            {input && (
               <button 
                 onClick={() => setInput('')}
                 className="text-xs font-bold text-red-500 hover:underline"
               >
                 Clear
               </button>
-            </div>
-            <textarea
-              value={input}
-              onChange={(e) => {
-                if (e.target.value.length > 5 * 1024 * 1024) {
-                  toast("Input text exceeds 5MB limit", "error");
-                } else {
-                  setInput(e.target.value);
-                }
-              }}
-              placeholder={mode === 'csv-to-json' ? "id,name,age\\n1,John,30\\n2,Jane,25" : "[\\n  { \"id\": 1, \"name\": \"John\", \"age\": 30 }\\n]"}
-              className="w-full h-96 bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
-            />
+            )}
           </div>
-
-          {/* Output Area */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
-                Output {mode === 'csv-to-json' ? 'JSON' : 'CSV'}
-                {parsedResult && parsedResult.errors.length > 0 && (
-                  <span className="flex items-center gap-1 text-amber-500 px-2 py-0.5 bg-amber-500/10 rounded-full">
-                    <AlertTriangle className="w-3 h-3" />
-                    {parsedResult.errors.length} Errors
-                  </span>
-                )}
-              </label>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleDownload}
-                  className="p-1.5 text-text-muted hover:text-blue transition-colors"
-                  title="Download File"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-                <CopyButton text={output} />
-              </div>
-            </div>
-            <textarea
-              readOnly
-              value={output}
-              className={cn(
-                "w-full h-96 bg-mat-base border border-mat-border rounded-2xl p-4 font-mono text-sm outline-none resize-none",
-                output.startsWith('Error:') ? "text-red-500" : "text-text-3"
-              )}
-            />
-          </div>
+          <ToolInput
+            value={input}
+            onChange={(val) => {
+              if (val.length > 5 * 1024 * 1024) {
+                toast("Input text exceeds 5MB limit", "error");
+              } else {
+                setInput(val);
+              }
+            }}
+            placeholder={mode === 'csv-to-json' ? "id,name,age\n1,John,30\n2,Jane,25" : "[\n  { \"id\": 1, \"name\": \"John\", \"age\": 30 }\n]"}
+            mono
+            rows={16}
+            className="flex-1 min-h-[384px] resize-none"
+          />
         </div>
-
-        {/* Options Panel */}
-        <div className="bg-bg border border-border rounded-3xl p-6 space-y-6">
-          <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Parsing Options</h3>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          <h3 className="text-sm font-bold text-text-2">Parsing Options</h3>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-3">
               <label className="text-xs font-bold text-text-2">Delimiter</label>
               <select
                 value={options.delimiter}
                 onChange={(e) => setOptions({ ...options, delimiter: e.target.value as Delimiter })}
-                className="w-full bg-surface border border-border rounded-xl p-2.5 text-sm font-medium text-text focus:ring-2 focus:ring-blue/20 outline-none"
+                className="w-full bg-bg border border-border rounded-xl p-2.5 text-sm font-medium text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all"
               >
                 <option value="auto">Auto-detect</option>
                 <option value=",">Comma (,)</option>
                 <option value=";">Semicolon (;)</option>
-                <option value="\\t">Tab (\\t)</option>
+                <option value="\t">Tab (\t)</option>
                 <option value="|">Pipe (|)</option>
               </select>
             </div>
@@ -301,7 +249,7 @@ export default function CsvToJsonClient() {
                   onChange={(e) => setOptions({ ...options, hasHeader: e.target.checked })}
                   className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
                 />
-                <span className="text-sm font-medium text-text-2 group-hover:text-text">First row is header</span>
+                <span className="text-sm font-medium text-text-2 group-hover:text-text transition-colors">First row is header</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer group">
                 <input
@@ -310,7 +258,7 @@ export default function CsvToJsonClient() {
                   onChange={(e) => setOptions({ ...options, skipEmptyRows: e.target.checked })}
                   className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
                 />
-                <span className="text-sm font-medium text-text-2 group-hover:text-text">Skip empty rows</span>
+                <span className="text-sm font-medium text-text-2 group-hover:text-text transition-colors">Skip empty rows</span>
               </label>
             </div>
 
@@ -322,7 +270,7 @@ export default function CsvToJsonClient() {
                   onChange={(e) => setOptions({ ...options, parseNumbers: e.target.checked })}
                   className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
                 />
-                <span className="text-sm font-medium text-text-2 group-hover:text-text">Parse numbers</span>
+                <span className="text-sm font-medium text-text-2 group-hover:text-text transition-colors">Parse numbers</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer group">
                 <input
@@ -331,29 +279,49 @@ export default function CsvToJsonClient() {
                   onChange={(e) => setOptions({ ...options, parseBooleans: e.target.checked })}
                   className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
                 />
-                <span className="text-sm font-medium text-text-2 group-hover:text-text">Parse booleans</span>
+                <span className="text-sm font-medium text-text-2 group-hover:text-text transition-colors">Parse booleans</span>
               </label>
             </div>
           </div>
         </div>
-
-        {/* Visual Preview (CSV to JSON only) */}
-        {mode === 'csv-to-json' && parsedResult && parsedResult.data.length > 0 && (
-          <div className="space-y-4 pt-4 border-t border-border/50">
-            <div className="flex items-center justify-between px-2">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
-                <TableIcon className="w-3.5 h-3.5" />
+      }
+      output={
+        <ToolResultArea
+          label={`Output ${mode === 'csv-to-json' ? 'JSON' : 'CSV'}`}
+          value={output.startsWith('Error:') ? '' : output}
+          onDownload={handleDownload}
+          error={output.startsWith('Error:') ? output : undefined}
+          language={mode === 'csv-to-json' ? "json" : "csv"}
+          contentClassName="min-h-[384px]"
+        />
+      }
+      infoPanel={
+        mode === 'csv-to-json' && parsedResult && parsedResult.data.length > 0 && (
+          <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-2">
+              <h3 className="text-sm font-bold text-text-2 flex items-center gap-2">
+                <TableIcon className="w-4 h-4" />
                 Data Preview (First 5 Rows)
               </h3>
-              <span className="text-xs font-bold text-text-3">{parsedResult.rowCount} rows × {parsedResult.colCount} columns</span>
+              <div className="flex items-center gap-4">
+                {parsedResult.errors.length > 0 && (
+                  <span className="flex items-center gap-1.5 text-amber-500 px-2.5 py-1 bg-amber-500/10 rounded-lg text-xs font-bold">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    {parsedResult.errors.length} Errors
+                  </span>
+                )}
+                <span className="text-xs font-bold text-text-3">
+                  {parsedResult.rowCount} rows × {parsedResult.colCount} columns
+                </span>
+              </div>
             </div>
             
-            <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm overflow-x-auto">
+            <div className="bg-bg border border-border rounded-2xl overflow-hidden shadow-sm overflow-x-auto">
               <table className="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                  <tr className="bg-bg/80 border-b border-border">
+                  <tr className="bg-surface border-b border-border">
                     {parsedResult.headers.map((h, i) => (
-                      <th key={i} className="px-4 py-3 text-tiny font-bold uppercase tracking-widest-sm text-text-muted border-r border-border last:border-r-0">
+                      <th key={i} className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-text-muted border-r border-border last:border-r-0">
                         {h}
                       </th>
                     ))}
@@ -361,7 +329,7 @@ export default function CsvToJsonClient() {
                 </thead>
                 <tbody>
                   {parsedResult.preview.map((row, rowIndex) => (
-                    <tr key={rowIndex} className="border-b border-border last:border-0 hover:bg-bg/50 transition-colors">
+                    <tr key={rowIndex} className="border-b border-border last:border-0 hover:bg-surface transition-colors">
                       {parsedResult.headers.map((h, colIndex) => (
                         <td key={colIndex} className="px-4 py-3 text-sm text-text-3 font-mono border-r border-border last:border-r-0">
                           {String(row[h] ?? '')}
@@ -373,8 +341,8 @@ export default function CsvToJsonClient() {
               </table>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+      }
+    />
   );
 }

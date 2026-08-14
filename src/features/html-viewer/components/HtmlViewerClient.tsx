@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useId } from "react";
-import Editor, { loader } from "@monaco-editor/react";
+import dynamic from "next/dynamic";
+const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 import LZString from "lz-string";
 import { 
   Download, Share2, Plus, X, Laptop, Tablet, Smartphone, 
@@ -91,14 +92,16 @@ export default function HtmlViewerClient() {
     const basePath = isGithubPages ? '/karuvilab' : '';
     const localMonacoPath = `${basePath}/lib/monaco/vs`;
 
-    loader.config({ paths: { vs: localMonacoPath } });
+    import("@monaco-editor/react").then(({ loader }) => {
+      loader.config({ paths: { vs: localMonacoPath } });
 
-    loader.init().then(monacoInstance => {
-      (window as any).monaco = monacoInstance;
-    }).catch(() => {
-      loader.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' } });
       loader.init().then(monacoInstance => {
         (window as any).monaco = monacoInstance;
+      }).catch(() => {
+        loader.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' } });
+        loader.init().then(monacoInstance => {
+          (window as any).monaco = monacoInstance;
+        });
       });
     });
   }, []);

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useWorldClockStore, type ClockItem } from "@/src/features/world-clock/store";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { Plus, Globe, Clock, Maximize2, Minimize2, Search, ArrowUpDown, Filter, Download, ArrowRight, LayoutGrid, Columns } from "lucide-react";
@@ -234,113 +235,117 @@ export default function WorldClockClient() {
   };
 
   return (
-    <div className={cn("space-y-8 mx-auto transition-all duration-300 w-full", isFocus ? "max-w-none pt-4 pb-12 px-4 sm:px-8" : "max-w-7xl")}>
+    <>
       <TimezoneSearchModal isOpen={isModalOpen} onClose={handleCloseModal} />
-      
-      {/* Header: Primary Search Action & Minimized Stats/Tools */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-2 bg-surface border border-border rounded-2xl shadow-sm">
-         <button 
-           onClick={() => setIsModalOpen(true)}
-           className="w-full md:w-auto px-6 py-3.5 bg-blue text-white rounded-xl text-sm font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-blue/20 active:scale-98 transition-all"
-         >
-           <Search className="w-4 h-4 fill-current" />
-           Add City 
-           <kbd className="hidden sm:inline-flex px-2 py-0.5 bg-black/20 rounded text-xs shadow-inner font-mono tracking-normal">⌘K</kbd>
-         </button>
+      <ToolWorkspace
+        className={cn("mx-auto transition-all duration-300 w-full", isFocus ? "max-w-none pt-4 pb-12 px-4 sm:px-8" : "max-w-7xl")}
+        layout="stacked"
+        optionsPanel={
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full md:w-auto px-6 py-3.5 bg-blue text-white rounded-xl text-sm font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-blue/20 active:scale-98 transition-all"
+            >
+              <Search className="w-4 h-4 fill-current" />
+              Add City 
+              <kbd className="hidden sm:inline-flex px-2 py-0.5 bg-black/20 rounded text-xs shadow-inner font-mono tracking-normal">⌘K</kbd>
+            </button>
 
-         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto px-2 md:px-0 pb-1 md:pb-0 no-scrollbar">
-           {/* Minimized Stats */}
-           <div className="hidden lg:flex items-center gap-4 px-4 text-text-muted text-xs font-bold uppercase tracking-widest border-r border-border mr-1">
-             <span>{clocks.length} Zones</span>
-             <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-success animate-pulse" /> {openClocks} Open</span>
-           </div>
-           
-           <button 
-             onClick={() => setMobileCols(c => c === 1 ? 2 : 1)} 
-             title={mobileCols === 1 ? "Switch to 2-Column Mobile View" : "Switch to 1-Column Mobile View"} 
-             className="md:hidden p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center"
-           >
-             {mobileCols === 1 ? <LayoutGrid className="w-4 h-4" /> : <Columns className="w-4 h-4" />}
-           </button>
+            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto px-2 md:px-0 pb-1 md:pb-0 no-scrollbar">
+              {/* Minimized Stats */}
+              <div className="hidden lg:flex items-center gap-4 px-4 text-text-muted text-xs font-bold uppercase tracking-widest border-r border-border mr-1">
+                <span>{clocks.length} Zones</span>
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-success animate-pulse" /> {openClocks} Open</span>
+              </div>
+              
+              <button 
+                onClick={() => setMobileCols(c => c === 1 ? 2 : 1)} 
+                title={mobileCols === 1 ? "Switch to 2-Column Mobile View" : "Switch to 1-Column Mobile View"} 
+                className="md:hidden p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center"
+              >
+                {mobileCols === 1 ? <LayoutGrid className="w-4 h-4" /> : <Columns className="w-4 h-4" />}
+              </button>
 
-           <button onClick={handleSort} title="Sort Alphabetically" className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center">
-             <ArrowUpDown className="w-4 h-4" />
-           </button>
-           <button onClick={() => setFilterMode(f => f === "all" ? "open" : "all")} title="Toggle Open Only" className={cn("p-3 border rounded-xl transition-all flex items-center justify-center", filterMode === "open" ? "bg-success/10 border-success/30 text-success" : "bg-surface-2 border-border text-text-3 hover:text-text")}>
-             <Filter className="w-4 h-4" />
-           </button>
-           <button onClick={handleExport} title="Export to CSV" className="p-3 bg-blue/10 border border-blue/20 rounded-xl text-blue hover:bg-blue/20 transition-all flex items-center justify-center">
-             <Download className="w-4 h-4" />
-           </button>
-           
-           <div className="w-px h-8 bg-border mx-1" />
-           
-           <button 
-             onClick={() => toggleFocus('world-clock')} 
-             title={isFocus ? "Exit Focus Mode (Esc)" : "Focus Mode (F)"} 
-             className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center"
-           >
-             {isFocus ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-           </button>
-         </div>
-      </div>
-
-      {/* Grid Layout: scales up for ultrawide */}
-      <DndContext 
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext 
-          items={displayClocks.map(c => c.id)}
-          strategy={rectSortingStrategy}
-        >
-          <div className={cn(
-            "grid gap-3 sm:gap-6",
-            mobileCols === 2 ? "grid-cols-2" : "grid-cols-1",
-            "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          )}>
-            {/* Clock Cards */}
-            {displayClocks.map((clock) => (
-              <ClockCard 
-                key={clock.id} 
-                clock={clock} 
-                now={now} 
-                localTz={localTz} 
-                isDraggable={filterMode === "all"} 
-              />
-            ))}
+              <button onClick={handleSort} title="Sort Alphabetically" className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center">
+                <ArrowUpDown className="w-4 h-4" />
+              </button>
+              <button onClick={() => setFilterMode(f => f === "all" ? "open" : "all")} title="Toggle Open Only" className={cn("p-3 border rounded-xl transition-all flex items-center justify-center", filterMode === "open" ? "bg-success/10 border-success/30 text-success" : "bg-surface-2 border-border text-text-3 hover:text-text")}>
+                <Filter className="w-4 h-4" />
+              </button>
+              <button onClick={handleExport} title="Export to CSV" className="p-3 bg-blue/10 border border-blue/20 rounded-xl text-blue hover:bg-blue/20 transition-all flex items-center justify-center">
+                <Download className="w-4 h-4" />
+              </button>
+              
+              <div className="w-px h-8 bg-border mx-1" />
+              
+              <button 
+                onClick={() => toggleFocus('world-clock')} 
+                title={isFocus ? "Exit Focus Mode (Esc)" : "Focus Mode (F)"} 
+                className="p-3 bg-surface-2 hover:bg-surface border border-border hover:border-text-4/30 rounded-xl text-text-3 hover:text-text transition-all flex items-center justify-center"
+              >
+                {isFocus ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
-        </SortableContext>
-      </DndContext>
-
-      {/* Enhanced Footer */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl mt-8">
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-success animate-pulse shadow-glow-success" />
-            Auto Refresh Active
-          </div>
-          <div className="flex items-center gap-2">
-            <Globe className="w-3.5 h-3.5" />
-            IANA Time Zone Database
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-3.5 h-3.5" />
-            Sync: {now.toISOString().split('T')[1]?.split('.')[0]} UTC
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <span className="opacity-50">v2.1.0</span>
-          <button 
-            onClick={() => openFeedback("feature", { toolId: "world-clock", toolName: "World Clock" })}
-            className="flex items-center gap-2 text-blue hover:text-blue-400 transition-colors bg-blue/10 px-3 py-1.5 rounded-lg"
+        }
+        output={
+          <DndContext 
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            Feedback <ArrowRight className="w-3 h-3" />
-          </button>
-        </div>
-      </div>
-    </div>
+            <SortableContext 
+              items={displayClocks.map(c => c.id)}
+              strategy={rectSortingStrategy}
+            >
+              <div className={cn(
+                "grid gap-3 sm:gap-6",
+                mobileCols === 2 ? "grid-cols-2" : "grid-cols-1",
+                "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              )}>
+                {/* Clock Cards */}
+                {displayClocks.map((clock) => (
+                  <ClockCard 
+                    key={clock.id} 
+                    clock={clock} 
+                    now={now} 
+                    localTz={localTz} 
+                    isDraggable={filterMode === "all"} 
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        }
+        infoPanel={
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted font-bold uppercase tracking-widest bg-surface/40 backdrop-blur-md border border-border p-5 rounded-3xl">
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse shadow-glow-success" />
+                Auto Refresh Active
+              </div>
+              <div className="flex items-center gap-2">
+                <Globe className="w-3.5 h-3.5" />
+                IANA Time Zone Database
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5" />
+                Sync: {now.toISOString().split('T')[1]?.split('.')[0]} UTC
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <span className="opacity-50">v2.1.0</span>
+              <button 
+                onClick={() => openFeedback("feature", { toolId: "world-clock", toolName: "World Clock" })}
+                className="flex items-center gap-2 text-blue hover:text-blue-400 transition-colors bg-blue/10 px-3 py-1.5 rounded-lg"
+              >
+                Feedback <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+        }
+      />
+    </>
   );
 }

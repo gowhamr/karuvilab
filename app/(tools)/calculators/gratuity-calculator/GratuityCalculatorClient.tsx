@@ -5,6 +5,7 @@ import { Award, Info, AlertTriangle } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn, formatCurrency } from '@/src/lib/utils';
 import { MetricCard } from '@/components/ui/MetricCard';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 
 interface GratuityInput {
   lastSalary: number;
@@ -70,11 +71,9 @@ export default function GratuityCalculatorClient() {
   }), [lastSalary, years, months, type]);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        
-        {/* LEFT COLUMN: Inputs */}
-        <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
+    <ToolWorkspace
+      input={
+        <div className="space-y-8">
           <div className="flex items-center justify-between">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Award className="w-3.5 h-3.5" /> Employment Details
@@ -152,8 +151,8 @@ export default function GratuityCalculatorClient() {
             </div>
           </div>
         </div>
-
-        {/* RIGHT COLUMN: Results */}
+      }
+      output={
         <div className="space-y-6">
           {!isEligible && (
             <m.div 
@@ -193,7 +192,7 @@ export default function GratuityCalculatorClient() {
               />
             </div>
 
-            <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 mt-6">
+            <div className="pt-6 mt-6 border-t border-border/50 space-y-6">
               <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
                 <Info className="w-3 h-3" /> Calculation Breakdown
               </h4>
@@ -220,7 +219,7 @@ export default function GratuityCalculatorClient() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }

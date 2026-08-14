@@ -1,10 +1,9 @@
 "use client";
 import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 import { CopyButton } from "@/components/ui/CopyButton";
-
-const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
 type SplitMethod = "equal" | "chars" | "delimiter" | "custom";
 
@@ -42,132 +41,109 @@ function splitText(text: string, method: SplitMethod, parts: number, chars: numb
 export default function SplitCopyClient() {
   const [input, setInput] = useState("");
   const [method, setMethod] = useState<SplitMethod>("equal");
-  const [parts, setParts] = useState(3);
-  const [chars, setChars] = useState(500);
-  const [delimiter, setDelimiter] = useState("\n\n");
+  const [parts, setParts] = useState("3");
+  const [chars, setChars] = useState("500");
+  const [delimiter, setDelimiter] = useState("\\n\\n");
   const [customLines, setCustomLines] = useState("10");
 
   const chunks = useMemo(
-    () => splitText(input, method, parts, chars, delimiter, customLines),
+    () => splitText(input, method, Number(parts) || 2, Number(chars) || 100, delimiter, customLines),
     [input, method, parts, chars, delimiter, customLines]
   );
 
   const allAsNumbered = chunks.map((c, i) => `[${i + 1}/${chunks.length}]\n${c}`).join("\n\n---\n\n");
 
-  return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <div className="space-y-2">
-          <label htmlFor="split-input" className="text-sm font-bold text-text-2">Input Text</label>
-          <textarea
-            id="split-input"
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
-            rows={6}
-            placeholder="Paste your long text here…"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-          />
-          <p className="text-xs text-text-muted">{input.length} characters</p>
-        </div>
+  const tabs = {
+    options: [
+      { id: "equal", label: "Equal Parts" },
+      { id: "chars", label: "By Char Count" },
+      { id: "delimiter", label: "By Delimiter" },
+      { id: "custom", label: "By Line Count" },
+    ] as { id: SplitMethod; label: string }[],
+    activeId: method,
+    onChange: (id: SplitMethod) => setMethod(id),
+  };
 
-        <div className="space-y-3">
-          <label id="split-method-label" className="text-sm font-bold text-text-2">Split Method</label>
-          <div role="group" aria-labelledby="split-method-label" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-            {([
-              ["equal", "Equal Parts"],
-              ["chars", "By Char Count"],
-              ["delimiter", "By Delimiter"],
-              ["custom", "By Line Count"],
-            ] as [SplitMethod, string][]).map(([m, label]) => (
-              <button
-                key={m}
-                onClick={() => setMethod(m)}
-                className={`px-3 py-2 rounded-xl text-sm font-bold transition-all ${method === m ? "bg-blue text-white" : "bg-bg border border-border text-text-2 hover:border-blue"}`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+  const inputPanel = (
+    <ToolInput
+      label="Input Text"
+      description={`${input.length} characters`}
+      value={input}
+      onChange={setInput}
+      rows={6}
+      placeholder="Paste your long text here…"
+      mono
+    />
+  );
 
-          {method === "equal" && (
-            <div className="flex items-center gap-3">
-              <label htmlFor="split-parts" className="text-sm text-text-3 min-w-max">Number of parts:</label>
-              <input
-                id="split-parts"
-                type="number"
-                min={2}
-                max={100}
-                className="w-24 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                value={parts || ''}
-                onChange={e => setParts(Number(e.target.value))}
-              />
-            </div>
-          )}
-          {method === "chars" && (
-            <div className="flex items-center gap-3">
-              <label htmlFor="split-chars" className="text-sm text-text-3 min-w-max">Characters per chunk:</label>
-              <input
-                id="split-chars"
-                type="number"
-                min={1}
-                className="w-28 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                value={chars || ''}
-                onChange={e => setChars(Number(e.target.value))}
-              />
-            </div>
-          )}
-          {method === "delimiter" && (
-            <div className="flex items-center gap-3">
-              <label htmlFor="split-delim" className="text-sm text-text-3 min-w-max">Delimiter:</label>
-              <input
-                id="split-delim"
-                type="text"
-                className="flex-1 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                placeholder="\n\n or , or any string"
-                value={delimiter}
-                onChange={e => setDelimiter(e.target.value)}
-              />
-            </div>
-          )}
-          {method === "custom" && (
-            <div className="flex items-center gap-3">
-              <label htmlFor="split-lines" className="text-sm text-text-3 min-w-max">Lines per chunk:</label>
-              <input
-                id="split-lines"
-                type="number"
-                min={1}
-                className="w-24 px-3 py-2 bg-bg border border-border rounded-xl text-sm font-mono focus:ring-2 focus:ring-blue outline-none"
-                value={customLines || ''}
-                onChange={e => setCustomLines(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      {chunks.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-bold text-text-2">{chunks.length} chunks</p>
-            <CopyButton text={allAsNumbered} label="Copy All (Numbered)" />
-          </div>
-          <div className="space-y-3">
-            {chunks.map((chunk, i) => (
-              <div key={i} className="bg-surface border border-border p-4 rounded-xl space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
-                    Chunk {i + 1} / {chunks.length} — {chunk.length} chars
-                  </span>
-                  <CopyButton text={chunk} />
-                </div>
-                <div className="font-mono text-sm text-text bg-bg border border-border rounded-xl px-3 py-2 max-h-32 overflow-y-auto whitespace-pre-wrap">
-                  {chunk}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+  const optionsPanel = (
+    <div className="space-y-4">
+      {method === "equal" && (
+        <ToolInput
+          label="Number of parts"
+          type="number"
+          value={parts}
+          onChange={setParts}
+        />
+      )}
+      {method === "chars" && (
+        <ToolInput
+          label="Characters per chunk"
+          type="number"
+          value={chars}
+          onChange={setChars}
+        />
+      )}
+      {method === "delimiter" && (
+        <ToolInput
+          label="Delimiter"
+          type="text"
+          value={delimiter}
+          onChange={setDelimiter}
+          placeholder="\\n\\n or , or any string"
+          mono
+        />
+      )}
+      {method === "custom" && (
+        <ToolInput
+          label="Lines per chunk"
+          type="number"
+          value={customLines}
+          onChange={setCustomLines}
+        />
       )}
     </div>
+  );
+
+  const outputPanel = chunks.length > 0 ? (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-bold text-text-2">{chunks.length} chunks</p>
+        <CopyButton text={allAsNumbered} label="Copy All (Numbered)" />
+      </div>
+      <div className="space-y-6">
+        {chunks.map((chunk, i) => (
+          <ToolResultArea
+            key={i}
+            label={`Chunk ${i + 1} / ${chunks.length}`}
+            value={chunk}
+            language={`${chunk.length} chars`}
+          />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="flex items-center justify-center h-full min-h-[200px] text-text-muted">
+      Enter some text to see it split into chunks
+    </div>
+  );
+
+  return (
+    <ToolWorkspace
+      tabs={tabs}
+      input={inputPanel}
+      optionsPanel={optionsPanel}
+      output={outputPanel}
+    />
   );
 }

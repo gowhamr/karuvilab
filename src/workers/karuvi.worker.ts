@@ -215,7 +215,7 @@ const api: Partial<WorkerAPI> = {
   },
 
   async exportPdfEditor(file: ArrayBuffer, pagesState: any[], annotations: any[], onProgress?: any) {
-    const { PDFDocument, rgb, degrees, StandardFonts } = await import("pdf-lib");
+    const { PDFDocument, rgb, degrees, StandardFonts, PDFName, PDFRef, PDFArray, PDFRawStream, decodePDFRawStream, BlendMode } = await import("pdf-lib");
     if (onProgress) onProgress({ percent: 10, message: "Loading original PDF..." });
     const srcDoc = await PDFDocument.load(file);
     const newDoc = await PDFDocument.create();
@@ -268,12 +268,119 @@ const api: Partial<WorkerAPI> = {
         const pw = (ann.width / 100) * VW;
         const ph = (ann.height / 100) * VH;
         const pt = getOriginalCoords(px, py + ph);
+        
+        // Redact underlying text from the PDF stream
+        const contentsRef = page.node.get(PDFName.of('Contents'));
+        if (contentsRef) {
+          const streams: any[] = [];
+          const refs: any[] = [];
+          if (contentsRef instanceof PDFRef) {
+             const contents = newDoc.context.lookup(contentsRef);
+             if (contents instanceof PDFArray) {
+               for (let i = 0; i < contents.size(); i++) {
+                 refs.push(contents.get(i));
+                 streams.push(newDoc.context.lookup(contents.get(i)));
+               }
+             } else {
+               refs.push(contentsRef);
+               streams.push(contents);
+             }
+          } else if (contentsRef instanceof PDFArray) {
+             for (let i = 0; i < contentsRef.size(); i++) {
+                 refs.push(contentsRef.get(i));
+                 streams.push(newDoc.context.lookup(contentsRef.get(i)));
+             }
+          }
+          
+          for (let i = 0; i < streams.length; i++) {
+            const stream = streams[i];
+            const ref = refs[i];
+            if (stream instanceof PDFRawStream && ref instanceof PDFRef) {
+              try {
+                const decoded = decodePDFRawStream(stream as any).decode();
+                let textStr = Array.from(decoded).map(b => String.fromCharCode(b)).join('');
+                
+                let currentX = 0;
+                let currentY = 0;
+                let inTextObj = false;
+
+                const regex = /(BT|ET|([\-\d\.]+)\s+([\-\d\.]+)\s+([\-\d\.]+)\s+([\-\d\.]+)\s+([\-\d\.]+)\s+([\-\d\.]+)\s+Tm|([\-\d\.]+)\s+([\-\d\.]+)\s+T[dD]|\((?:[^()\\]|\\.)*\)\s*Tj|<[0-9A-Fa-f]*>\s*Tj|\[(?:[^\[\]\\]|\\.)*\]\s*TJ)/g;
+                
+                textStr = textStr.replace(regex, (match) => {
+                  if (match === 'BT') {
+                    inTextObj = true; currentX = 0; currentY = 0; return match;
+                  }
+                  if (match === 'ET') {
+                    inTextObj = false; return match;
+                  }
+                  if (!inTextObj) return match;
+
+                  if (match.endsWith('Tm')) {
+                    const parts = match.trim().split(/\s+/);
+                    currentX = parseFloat(parts[4]!);
+                    currentY = parseFloat(parts[5]!);
+                    return match;
+                  }
+                  if (match.endsWith('Td') || match.endsWith('TD')) {
+                    const parts = match.trim().split(/\s+/);
+                    currentX += parseFloat(parts[0]!);
+                    currentY += parseFloat(parts[1]!);
+                    return match;
+                  }
+                  if (match.endsWith('Tj') || match.endsWith('TJ')) {
+                    const blX = pt.x;
+                    const blY = pt.y;
+                    const trX = pt.x + pw;
+                    const trY = pt.y + ph;
+                    
+                    if (currentX >= blX - 20 && currentX <= trX + 20 &&
+                        currentY >= blY - 20 && currentY <= trY + 20) {
+                      if (match.endsWith('Tj')) return match.trim().startsWith('<') ? '<> Tj' : '() Tj';
+                      if (match.endsWith('TJ')) return '[] TJ';
+                    }
+                  }
+                  return match;
+                });
+                
+                const encoded = new Uint8Array(textStr.length);
+                for (let j = 0; j < textStr.length; j++) encoded[j] = textStr.charCodeAt(j);
+                
+                stream.dict.delete(PDFName.of('Filter'));
+                stream.dict.set(PDFName.of('Length'), newDoc.context.obj(encoded.length));
+                const newStream = PDFRawStream.of(stream.dict, encoded);
+                newDoc.context.assign(ref, newStream);
+              } catch (err) {
+                console.warn('Failed to parse and redact stream:', err);
+              }
+            }
+          }
+        }
+
         page.drawRectangle({
           x: pt.x, y: pt.y,
           width: pw, height: ph,
           color: rgb(0, 0, 0),
           rotate: degrees(360 - pageRotation)
         });
+      } else if (ann.type === 'highlight') {
+        const { r, g, b } = hexToRgb(ann.color || '#FEF08A');
+        for (const rect of ann.rects) {
+          const rx = (rect.x / 100) * VW;
+          const ry = (rect.y / 100) * VH;
+          const rw = (rect.width / 100) * VW;
+          const rh = (rect.height / 100) * VH;
+          const pt = getOriginalCoords(rx, ry + rh);
+          
+          const opts: any = {
+            x: pt.x, y: pt.y,
+            width: rw, height: rh,
+            color: rgb(r, g, b),
+            opacity: 0.5,
+            rotate: degrees(360 - pageRotation)
+          };
+          if (BlendMode) opts.blendMode = BlendMode.Multiply;
+          page.drawRectangle(opts);
+        }
       } else if (ann.type === 'image') {
         const pw = (ann.width / 100) * VW;
         const ph = (ann.height / 100) * VH;
@@ -336,6 +443,38 @@ const api: Partial<WorkerAPI> = {
             });
           }
         }
+      } else if (ann.type === 'arrow') {
+        const { r, g, b } = hexToRgb(ann.color || '#4F46E5');
+        const px1 = (ann.x / 100) * VW, py1 = (ann.y / 100) * VH;
+        const px2 = (ann.endX / 100) * VW, py2 = (ann.endY / 100) * VH;
+        const pt1 = getOriginalCoords(px1, py1);
+        const pt2 = getOriginalCoords(px2, py2);
+        
+        page.drawLine({
+          start: pt1, end: pt2,
+          thickness: ann.strokeWidth || 3,
+          color: rgb(r, g, b)
+        });
+
+        // Calculate arrowhead
+        const angle = Math.atan2(pt2.y - pt1.y, pt2.x - pt1.x);
+        const headlen = 10 + (ann.strokeWidth || 3);
+        
+        const pt3 = {
+          x: pt2.x - headlen * Math.cos(angle - Math.PI / 8),
+          y: pt2.y - headlen * Math.sin(angle - Math.PI / 8)
+        };
+        const pt4 = {
+          x: pt2.x - headlen * Math.cos(angle + Math.PI / 8),
+          y: pt2.y - headlen * Math.sin(angle + Math.PI / 8)
+        };
+        
+        const path = `M ${pt2.x},${pt2.y} L ${pt3.x},${pt3.y} L ${pt4.x},${pt4.y} Z`;
+        page.drawSvgPath(path, {
+          color: rgb(r, g, b),
+          borderColor: rgb(r, g, b),
+          borderWidth: 1,
+        });
       }
     }
 

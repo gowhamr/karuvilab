@@ -3,8 +3,10 @@
 import { useState, useCallback } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
-import { Lock, Unlock, Key, Settings, ShieldCheck, AlertCircle, Eye, EyeOff, Info } from "lucide-react";
-
+import { Lock, Unlock, Key, AlertCircle, Eye, EyeOff, Info } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
+import { ToolInput } from "@/components/ui/ToolInput";
 type KeyMode = "passphrase" | "rawkey";
 
 function hexOrBase64ToHex(input: string): string {
@@ -98,212 +100,185 @@ export default function AesClient() {
   const ivLen = mode === 'GCM' ? 12 : 16;
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Encrypt / Decrypt tabs */}
-      <div className="flex gap-2 p-1 bg-surface-2 rounded-xl border border-border w-fit">
-        <button
-          id="aes-tab-encrypt"
-          onClick={() => switchAction('encrypt')}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition ${
-            action === 'encrypt' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'
-          }`}
-        >
-          <Lock className="w-4 h-4" />
-          Encrypt
-        </button>
-        <button
-          id="aes-tab-decrypt"
-          onClick={() => switchAction('decrypt')}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition ${
-            action === 'decrypt' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'
-          }`}
-        >
-          <Unlock className="w-4 h-4" />
-          Decrypt
-        </button>
-      </div>
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: 'encrypt', label: 'Encrypt', icon: <Lock className="w-4 h-4" /> },
+          { id: 'decrypt', label: 'Decrypt', icon: <Unlock className="w-4 h-4" /> }
+        ],
+        activeId: action,
+        onChange: switchAction
+      }}
+      input={
+        <div className="space-y-6">
+          <ToolInput
+            label={action === 'encrypt' ? 'Plaintext Input' : 'Base64 Ciphertext Input'}
+            value={inputText}
+            onChange={setInputText}
+            placeholder={action === 'encrypt' ? 'Type sensitive message here…' : 'Paste Base64 ciphertext string here…'}
+            rows={5}
+            mono
+          />
 
-      {/* Config Row — Mode + Key Size */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-        <div>
-          <label htmlFor="aes-mode-select" className="text-xs font-semibold text-text-muted block mb-1">AES Mode</label>
-          <select
-            id="aes-mode-select"
-            value={mode}
-            onChange={(e) => setMode(e.target.value as 'GCM' | 'CBC')}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
+          <button
+            id="aes-submit-btn"
+            onClick={handleProcess}
+            disabled={isProcessing}
+            className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition shadow-lg shadow-primary/20"
           >
-            <option value="GCM">AES-GCM (Authenticated — Recommended)</option>
-            <option value="CBC">AES-CBC (Cipher Block Chaining)</option>
-          </select>
-        </div>
+            {action === 'encrypt' ? <Lock className="w-5 h-5" /> : <Unlock className="w-5 h-5" />}
+            {isProcessing ? 'Processing…' : action === 'encrypt' ? 'Encrypt Text' : 'Decrypt Text'}
+          </button>
 
-        <div>
-          <label htmlFor="aes-keysize-select" className="text-xs font-semibold text-text-muted block mb-1">Key Size</label>
-          <select
-            id="aes-keysize-select"
-            value={keySize}
-            onChange={(e) => setKeySize(Number(e.target.value) as 128 | 192 | 256)}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-          >
-            <option value={256}>256-bit (Strongest)</option>
-            <option value={192}>192-bit</option>
-            <option value={128}>128-bit</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Key Mode toggle */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border space-y-4">
-        <div className="flex items-center gap-3">
-          <Key className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold text-text">Key Input Mode</span>
-          <div className="flex gap-1 p-0.5 bg-surface rounded-lg border border-border ml-auto">
-            <button
-              id="aes-keymode-passphrase"
-              onClick={() => setKeyMode("passphrase")}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
-                keyMode === "passphrase" ? "bg-primary text-white" : "text-text-muted hover:text-text"
-              }`}
-            >
-              Passphrase
-            </button>
-            <button
-              id="aes-keymode-rawkey"
-              onClick={() => setKeyMode("rawkey")}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
-                keyMode === "rawkey" ? "bg-primary text-white" : "text-text-muted hover:text-text"
-              }`}
-            >
-              Raw Key (Hex/Base64)
-            </button>
-          </div>
-        </div>
-
-        {keyMode === "passphrase" ? (
-          <div>
-            <label htmlFor="aes-password-input" className="text-xs font-semibold text-text-muted block mb-1">Passphrase</label>
-            <input
-              id="aes-password-input"
-              type="password"
-              placeholder="Enter passphrase (key derived via PBKDF2 / 600k iterations)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <div className="flex gap-2 items-end">
-              <div className="flex-1">
-                <label htmlFor="aes-rawkey-input" className="text-xs font-semibold text-text-muted block mb-1">
-                  Raw AES Key ({keyBits / 8} bytes = {keyBits / 4} hex chars or {Math.ceil(keyBits / 6)} base64 chars)
-                </label>
-                <input
-                  id="aes-rawkey-input"
-                  type="text"
-                  placeholder={rawKeyFormat === "hex"
-                    ? `${keyBits / 4} hex chars e.g. 00112233...`
-                    : `Base64-encoded ${keyBits / 8}-byte key`}
-                  value={rawKey}
-                  onChange={(e) => setRawKey(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <select
-                id="aes-rawkey-format"
-                value={rawKeyFormat}
-                onChange={(e) => setRawKeyFormat(e.target.value as "hex" | "base64")}
-                className="px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-              >
-                <option value="hex">Hex</option>
-                <option value="base64">Base64</option>
-              </select>
+          {error && (
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-2" role="alert">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <p className="text-sm font-medium">{error}</p>
             </div>
-            <p className="text-xs text-text-muted flex items-center gap-1">
-              <Info className="w-3 h-3 shrink-0" />
-              Raw key is used directly — no key derivation. Keep it secret and store it securely.
-            </p>
-          </div>
-        )}
-
-        {/* IV Section */}
-        <div className="border-t border-border pt-4 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-muted">
-              Initialisation Vector (IV) — {ivLen} bytes for AES-{mode}
-            </span>
-            <button
-              id="aes-custom-iv-toggle"
-              onClick={() => setShowCustomIv(v => !v)}
-              className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
-            >
-              {showCustomIv ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-              {showCustomIv ? "Use auto-generated IV" : "Provide custom IV"}
-            </button>
-          </div>
-
-          {showCustomIv ? (
-            <div>
-              <input
-                id="aes-custom-iv-input"
-                type="text"
-                placeholder={`${ivLen * 2} hex chars (${ivLen} bytes) — required for decryption when IV was custom`}
-                value={customIv}
-                onChange={(e) => setCustomIv(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <p className="text-xs text-text-muted mt-1 flex items-center gap-1">
-                <Info className="w-3 h-3 shrink-0" />
-                For encryption: leave blank to auto-generate. For decryption: paste the IV shown after encrypting.
-              </p>
-            </div>
-          ) : (
-            <p className="text-xs text-text-muted">
-              IV will be auto-generated per encryption and shown in the result panel. Copy it for later decryption.
-            </p>
           )}
         </div>
-      </div>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          {/* Config Row — Mode + Key Size */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+            <div>
+              <label htmlFor="aes-mode-select" className="text-sm font-bold text-text-2 block mb-2">AES Mode</label>
+              <select
+                id="aes-mode-select"
+                value={mode}
+                onChange={(e) => setMode(e.target.value as 'GCM' | 'CBC')}
+                className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium outline-none focus:border-primary transition-all"
+              >
+                <option value="GCM">AES-GCM (Recommended)</option>
+                <option value="CBC">AES-CBC (Cipher Block Chaining)</option>
+              </select>
+            </div>
 
-      {/* Input Area */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-text">
-          {action === 'encrypt' ? 'Plaintext Input:' : 'Base64 Ciphertext Input:'}
-        </label>
-        <textarea
-          id="aes-text-input"
-          rows={5}
-          placeholder={action === 'encrypt' ? 'Type sensitive message here…' : 'Paste Base64 ciphertext string here…'}
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
+            <div>
+              <label htmlFor="aes-keysize-select" className="text-sm font-bold text-text-2 block mb-2">Key Size</label>
+              <select
+                id="aes-keysize-select"
+                value={keySize}
+                onChange={(e) => setKeySize(Number(e.target.value) as 128 | 192 | 256)}
+                className="w-full px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium outline-none focus:border-primary transition-all"
+              >
+                <option value={256}>256-bit (Strongest)</option>
+                <option value={192}>192-bit</option>
+                <option value={128}>128-bit</option>
+              </select>
+            </div>
+          </div>
 
-      <button
-        id="aes-submit-btn"
-        onClick={handleProcess}
-        disabled={isProcessing}
-        className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition shadow-lg shadow-primary/20"
-      >
-        {action === 'encrypt' ? <Lock className="w-5 h-5" /> : <Unlock className="w-5 h-5" />}
-        {isProcessing ? 'Processing…' : action === 'encrypt' ? 'Encrypt Text' : 'Decrypt Text'}
-      </button>
+          {/* Key Mode toggle */}
+          <div className="space-y-4 pt-4 border-t border-border">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label className="text-sm font-bold text-text-2 flex items-center gap-2">
+                <Key className="w-4 h-4 text-primary" /> Key Input Mode
+              </label>
+              <div className="flex gap-1 p-1 bg-bg rounded-lg border border-border">
+                <button
+                  id="aes-keymode-passphrase"
+                  onClick={() => setKeyMode("passphrase")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                    keyMode === "passphrase" ? "bg-primary text-white" : "text-text-muted hover:text-text"
+                  }`}
+                >
+                  Passphrase
+                </button>
+                <button
+                  id="aes-keymode-rawkey"
+                  onClick={() => setKeyMode("rawkey")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                    keyMode === "rawkey" ? "bg-primary text-white" : "text-text-muted hover:text-text"
+                  }`}
+                >
+                  Raw Key
+                </button>
+              </div>
+            </div>
 
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-2" role="alert">
-          <AlertCircle className="w-5 h-5 shrink-0" />
-          <p className="text-sm font-medium">{error}</p>
+            {keyMode === "passphrase" ? (
+              <ToolInput
+                type="password"
+                label="Passphrase"
+                placeholder="Enter passphrase (key derived via PBKDF2 / 600k iterations)"
+                value={password}
+                onChange={setPassword}
+              />
+            ) : (
+              <div className="space-y-3">
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <ToolInput
+                      label={`Raw AES Key (${keyBits / 8} bytes = ${keyBits / 4} hex chars or ${Math.ceil(keyBits / 6)} base64 chars)`}
+                      placeholder={rawKeyFormat === "hex"
+                        ? `${keyBits / 4} hex chars e.g. 00112233...`
+                        : `Base64-encoded ${keyBits / 8}-byte key`}
+                      value={rawKey}
+                      onChange={setRawKey}
+                      mono
+                    />
+                  </div>
+                  <select
+                    id="aes-rawkey-format"
+                    value={rawKeyFormat}
+                    onChange={(e) => setRawKeyFormat(e.target.value as "hex" | "base64")}
+                    className="px-4 py-3 bg-bg border border-border rounded-xl text-sm font-medium outline-none focus:border-primary transition-all h-[52px]"
+                  >
+                    <option value="hex">Hex</option>
+                    <option value="base64">Base64</option>
+                  </select>
+                </div>
+                <p className="text-xs text-text-muted flex items-center gap-1">
+                  <Info className="w-3 h-3 shrink-0" />
+                  Raw key is used directly — no key derivation. Keep it secret and store it securely.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* IV Section */}
+          <div className="border-t border-border pt-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-bold text-text-2">
+                Initialisation Vector (IV) — {ivLen} bytes
+              </span>
+              <button
+                id="aes-custom-iv-toggle"
+                onClick={() => setShowCustomIv(v => !v)}
+                className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+              >
+                {showCustomIv ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                {showCustomIv ? "Use auto-generated IV" : "Provide custom IV"}
+              </button>
+            </div>
+
+            {showCustomIv ? (
+              <div className="space-y-2">
+                <ToolInput
+                  value={customIv}
+                  onChange={setCustomIv}
+                  placeholder={`${ivLen * 2} hex chars (${ivLen} bytes) — required for decryption when IV was custom`}
+                  mono
+                />
+                <p className="text-xs text-text-muted flex items-center gap-1">
+                  <Info className="w-3 h-3 shrink-0" />
+                  For encryption: leave blank to auto-generate. For decryption: paste the IV shown after encrypting.
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-text-muted">
+                IV will be auto-generated per encryption and shown in the result panel. Copy it for later decryption.
+              </p>
+            )}
+          </div>
         </div>
-      )}
-
-      {/* Output */}
-      {result && (
-        <div className="space-y-3">
-          {/* IV display — always shown after encrypt */}
+      }
+      output={
+        <div className="flex flex-col h-full min-h-[400px]">
           {ivHex && (
-            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1 mb-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-amber-400">
                   IV (Initialisation Vector) — save this for decryption
@@ -316,25 +291,17 @@ export default function AesClient() {
               </p>
             </div>
           )}
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-text flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                {action === 'encrypt' ? 'Base64 Encrypted Result:' : 'Decrypted Plaintext:'}
-              </label>
-              <CopyButton text={result} />
-            </div>
-            <textarea
-              id="aes-result-output"
-              readOnly
-              rows={5}
-              value={result}
-              className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-sm text-emerald-300 focus:outline-none"
-            />
-          </div>
+          
+          <ToolResultArea
+            label={action === 'encrypt' ? 'Base64 Encrypted Result' : 'Decrypted Plaintext'}
+            value={result}
+            onClear={() => {
+              setResult("");
+              setIvHex(null);
+            }}
+          />
         </div>
-      )}
-    </div>
+      }
+    />
   );
 }

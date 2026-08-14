@@ -10,6 +10,8 @@ import { Scissors, Play, Download, Timer, Box, Maximize } from "lucide-react";
 import * as Slider from "@radix-ui/react-slider";
 import { formatDuration } from "@/src/utils";
 import { m, AnimatePresence } from "framer-motion";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+
 
 export default function VideoTrimClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -157,23 +159,40 @@ export default function VideoTrimClient() {
 
   const selectedDuration = (range[1] || 0) - (range[0] || 0);
 
-  return (
-    <div className="space-y-8">
-      {!file ? (
+  return !file ? (
+    <ToolWorkspace
+      layout="stacked"
+      input={
         <MediaDropZone
           type="video"
           accept="video/*"
           onFileSelect={handleFileSelect}
           description="Trim MP4, WebM, or MOV files locally"
         />
-      ) : (
-        <m.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-8"
-        >
-          <div className="bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
-            <div className="aspect-video relative bg-black">
+      }
+    />
+  ) : (
+    <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <ToolWorkspace
+        layout="split"
+        input={
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-text-2">Video Editor</h3>
+              <button
+                onClick={() => {
+                  setFile(null);
+                  setVideoUrl(null);
+                  setResult(null);
+                  setError(null);
+                }}
+                className="text-sm font-bold text-blue hover:text-blue/80 transition-colors"
+              >
+                Change File
+              </button>
+            </div>
+            
+            <div className="aspect-video relative bg-black rounded-2xl overflow-hidden shadow-inner">
               <video
                 ref={videoRef}
                 src={videoUrl || undefined}
@@ -187,12 +206,12 @@ export default function VideoTrimClient() {
                 }}
               />
               
-              <div className="absolute top-6 left-6 flex items-center gap-3">
+              <div className="absolute top-4 left-4 flex items-center gap-3">
                 <MediaStatusBadge status={status} />
               </div>
             </div>
 
-            <div className="p-8 space-y-8">
+            <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center text-tiny font-bold uppercase tracking-widest-sm text-text-4">
                   <span>{formatDuration(range[0] || 0)}</span>
@@ -238,7 +257,7 @@ export default function VideoTrimClient() {
                 <button
                   onClick={handleTrim}
                   disabled={status === "processing"}
-                  className="flex-1 flex items-center justify-center gap-3 py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-3 py-3 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
                 >
                   <Scissors size={18} />
                   {status === "processing" ? `Trimming ${Math.round(progress)}%` : "Trim Video"}
@@ -246,66 +265,94 @@ export default function VideoTrimClient() {
               </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <MetricCard 
-              label="Original Size" 
-              value={`${(file.size / 1024 / 1024).toFixed(2)} MB`} 
-              icon={Box}
-            />
-            <MetricCard 
-              label="Format" 
-              value={file?.type.split("/")[1]?.toUpperCase() || "MP4"} 
-              icon={Maximize}
-            />
-            <MetricCard 
-              label="Total Duration" 
-              value={formatDuration(duration)} 
-              icon={Timer}
-            />
-          </div>
-
-          <AnimatePresence>
-            {error && (
-              <MediaErrorBanner
-                title={error.title}
-                description={error.description}
-                errorCode={error.code}
-                changeFileAction={() => {
-                  setFile(null);
-                  setVideoUrl(null);
-                }}
+        }
+        output={
+          <div className="space-y-6 flex flex-col h-full">
+            <h3 className="font-bold text-text-2">File Details</h3>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <MetricCard 
+                label="Original Size" 
+                value={`${(file.size / 1024 / 1024).toFixed(2)} MB`} 
+                icon={Box}
               />
-            )}
+              <MetricCard 
+                label="Format" 
+                value={file?.type.split("/")[1]?.toUpperCase() || "MP4"} 
+                icon={Maximize}
+              />
+              <MetricCard 
+                label="Total Duration" 
+                value={formatDuration(duration)} 
+                icon={Timer}
+              />
+              <MetricCard 
+                label="Selected" 
+                value={formatDuration(selectedDuration)} 
+                icon={Timer}
+              />
+            </div>
 
-            {result && (
-              <m.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-8 bg-success/5 border border-success/20 rounded-4xl flex flex-col md:flex-row items-center justify-between gap-6"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-success/10 rounded-2xl flex items-center justify-center text-success">
-                    <Download />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-sm uppercase tracking-widest text-text">Trim Complete</h3>
-                    <p className="text-xs font-bold text-text-4 uppercase">
-                      {result.name} • {(result.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleDownload}
-                  className="w-full md:w-auto px-10 py-4 bg-success text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-success/20 hover:opacity-90 active:scale-95 transition-all"
-                >
-                  Download Trimmed Video
-                </button>
-              </m.div>
-            )}
-          </AnimatePresence>
-        </m.div>
-      )}
-    </div>
+            <div className="flex-1 flex flex-col justify-end mt-4">
+              <AnimatePresence mode="wait">
+                {error ? (
+                  <m.div 
+                    key="error"
+                    initial={{ opacity: 0, y: 10 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <MediaErrorBanner
+                      title={error.title}
+                      description={error.description}
+                      errorCode={error.code}
+                      changeFileAction={() => {
+                        setFile(null);
+                        setVideoUrl(null);
+                        setError(null);
+                      }}
+                    />
+                  </m.div>
+                ) : result ? (
+                  <m.div
+                    key="result"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="p-6 bg-success/5 border border-success/20 rounded-3xl flex flex-col gap-4 text-center items-center"
+                  >
+                    <div className="w-12 h-12 bg-success/10 rounded-2xl flex items-center justify-center text-success mb-2">
+                      <Download />
+                    </div>
+                    <div>
+                      <h3 className="font-black text-sm uppercase tracking-widest text-text">Trim Complete</h3>
+                      <p className="text-xs font-bold text-text-4 uppercase mt-1">
+                        {result.name} • {(result.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleDownload}
+                      className="w-full px-8 py-3 bg-success text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-success/20 hover:opacity-90 active:scale-95 transition-all mt-2"
+                    >
+                      Download Video
+                    </button>
+                  </m.div>
+                ) : (
+                  <m.div 
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex-1 flex items-center justify-center text-text-4 text-sm font-medium border-2 border-dashed border-border rounded-3xl min-h-[200px]"
+                  >
+                    {status === "processing" ? "Processing video..." : "Trimmed video will appear here"}
+                  </m.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        }
+      />
+    </m.div>
   );
 }

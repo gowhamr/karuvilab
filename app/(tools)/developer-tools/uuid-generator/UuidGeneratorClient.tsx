@@ -1,21 +1,15 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { Fingerprint, RefreshCw, Copy, List, Check, AlertCircle, ShieldCheck } from 'lucide-react';
-import { m, AnimatePresence } from 'framer-motion';
+import { Fingerprint, RefreshCw, List, Check, AlertCircle, ShieldCheck } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 type UUIDVersion = 'v1' | 'v4' | 'v5' | 'v7';
 type UUIDFormat = 'standard' | 'uppercase' | 'no-dashes' | 'braces' | 'urn';
-
-interface UUIDResult {
-  uuid: string;
-  version: UUIDVersion;
-  formatted: string;
-  timestamp?: string;
-  isValid: boolean;
-}
+type TabMode = 'generate' | 'bulk' | 'validate';
 
 const NAMESPACES = {
   DNS:  '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
@@ -50,7 +44,6 @@ function generateV1(): string {
 }
 
 async function generateV5(namespace: string, name: string): Promise<string> {
-  // Simplified SHA-1 hashing for V5
   const encoder = new TextEncoder();
   const data = encoder.encode(namespace + name);
   const hashBuffer = await crypto.subtle.digest('SHA-1', data);
@@ -91,6 +84,8 @@ function detectVersion(uuid: string): UUIDVersion | null {
 }
 
 export default function UuidGeneratorClient() {
+  const [mode, setMode] = useState<TabMode>('generate');
+  
   const [version, setVersion] = useState<UUIDVersion>('v4');
   const [format, setFormat] = useState<UUIDFormat>('standard');
   const [current, setCurrent] = useState<string>(generateV4());
@@ -129,20 +124,15 @@ export default function UuidGeneratorClient() {
 
   const formattedCurrent = useMemo(() => formatUUID(current, format), [current, format]);
 
-  return (
-    <div className="max-w-4xl mx-auto space-y-10 pb-12">
-      {/* 1. Main Generator Section */}
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-          <Fingerprint className="w-4 h-4" />
-          UUID Generator
-        </h2>
-
+  const renderVersionAndFormat = () => (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <label className="text-sm font-bold text-text-2">Version</label>
         <div className="flex flex-wrap gap-2">
           {(['v1', 'v4', 'v5', 'v7'] as UUIDVersion[]).map(v => (
             <button
               key={v}
-              onClick={() => { setVersion(v); handleGenerate(); }}
+              onClick={() => { setVersion(v); if(mode === 'generate') handleGenerate(); }}
               className={cn(
                 "px-5 py-2.5 rounded-full text-xs font-bold transition-all",
                 version === v ? "bg-blue text-white shadow-md shadow-blue/10" : "bg-bg text-text-3 hover:text-text border border-border"
@@ -152,151 +142,150 @@ export default function UuidGeneratorClient() {
             </button>
           ))}
         </div>
+      </div>
 
-        {version === 'v5' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-bg/50 p-4 rounded-2xl border border-border/50">
-            <div>
-              <label htmlFor="uuid-v5-namespace" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Namespace</label>
-              <select
-                id="uuid-v5-namespace"
-                value={v5Namespace}
-                onChange={(e) => setV5Namespace(e.target.value)}
-                className="w-full bg-surface border border-border rounded-xl p-3 text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none"
-              >
-                <option value={NAMESPACES.URL}>URL</option>
-                <option value={NAMESPACES.DNS}>DNS</option>
-                <option value={NAMESPACES.OID}>OID</option>
-                <option value={NAMESPACES.X500}>X500</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="uuid-v5-name" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Name String</label>
-              <input
-                id="uuid-v5-name"
-                type="text"
-                value={v5Name}
-                onChange={(e) => { setV5Name(e.target.value); handleGenerate(); }}
-                placeholder="e.g., example.com"
-                className="w-full bg-surface border border-border rounded-xl p-3 text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none"
-              />
-            </div>
-          </div>
-        )}
-
-        <div className="relative group">
-          <div className="font-mono text-xl sm:text-2xl md:text-3xl bg-bg border border-border rounded-2xl p-6 md:p-8 text-text text-center w-full transition-all flex items-center justify-center break-all">
-            {formattedCurrent}
-          </div>
-          <div className="absolute -top-3 right-4 flex gap-2">
-            <button
-              onClick={handleGenerate}
-              className="p-2.5 bg-blue text-white rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all"
-              title="Regenerate"
+      {version === 'v5' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label htmlFor="uuid-v5-namespace" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block">Namespace</label>
+            <select
+              id="uuid-v5-namespace"
+              value={v5Namespace}
+              onChange={(e) => setV5Namespace(e.target.value)}
+              className="w-full bg-bg border border-border rounded-xl p-3 text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none"
             >
-              <RefreshCw className="w-4 h-4" />
+              <option value={NAMESPACES.URL}>URL</option>
+              <option value={NAMESPACES.DNS}>DNS</option>
+              <option value={NAMESPACES.OID}>OID</option>
+              <option value={NAMESPACES.X500}>X500</option>
+            </select>
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="uuid-v5-name" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block">Name String</label>
+            <input
+              id="uuid-v5-name"
+              type="text"
+              value={v5Name}
+              onChange={(e) => { setV5Name(e.target.value); if(mode === 'generate') handleGenerate(); }}
+              placeholder="e.g., example.com"
+              className="w-full bg-bg border border-border rounded-xl p-3 text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none"
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <label className="text-sm font-bold text-text-2">Format</label>
+        <div className="flex flex-wrap gap-2">
+          {(['standard', 'uppercase', 'no-dashes', 'braces', 'urn'] as UUIDFormat[]).map(f => (
+            <button
+              key={f}
+              onClick={() => setFormat(f)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors",
+                format === f ? "bg-blue/10 text-blue border border-blue/20" : "text-text-muted hover:bg-bg border border-transparent"
+              )}
+            >
+              {f.replace('-', ' ')}
             </button>
-          </div>
+          ))}
         </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-2">
-            {(['standard', 'uppercase', 'no-dashes', 'braces', 'urn'] as UUIDFormat[]).map(f => (
-              <button
-                key={f}
-                onClick={() => setFormat(f)}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors",
-                  format === f ? "bg-blue/10 text-blue border border-blue/20" : "text-text-muted hover:bg-bg border border-transparent"
-                )}
-              >
-                {f.replace('-', ' ')}
-              </button>
-            ))}
-          </div>
-          <CopyButton text={formattedCurrent} />
-        </div>
-      </div>
-
-      {/* 2. Bulk Generation */}
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
-        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-          <List className="w-4 h-4" />
-          Bulk Generation
-        </h2>
-        
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="flex-1 w-full flex items-center gap-3 bg-bg border border-border rounded-xl p-2 px-4">
-            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Count</span>
-            <input 
-              type="number" 
-              min={1} 
-              max={1000} 
-              value={bulkCount || ''} 
-              onChange={(e) => setBulkCount(Number(e.target.value))}
-              className="bg-transparent border-none outline-none text-text font-mono font-bold w-full"
-            />
-          </div>
-          <button 
-            onClick={handleBulkGenerate}
-            className="w-full sm:w-auto px-8 py-3.5 bg-surface border border-border hover:border-blue text-text-2 hover:text-blue font-black uppercase tracking-widest rounded-xl transition-all active:scale-95"
-          >
-            Generate List
-          </button>
-        </div>
-
-        {bulkList.length > 0 && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-text-muted">Generated {bulkList.length} UUIDs</span>
-              <CopyButton text={bulkList.join('\n')} label="Copy All" />
-            </div>
-            <textarea 
-              readOnly 
-              value={bulkList.join('\n')}
-              className="w-full h-48 bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text-3 outline-none resize-y"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* 3. Validator */}
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
-        <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-          <ShieldCheck className="w-4 h-4" />
-          UUID Validator
-        </h2>
-        
-        <input 
-          type="text" 
-          value={validatorInput} 
-          onChange={(e) => setValidatorInput(e.target.value)}
-          placeholder="Paste UUID here..."
-          className="w-full bg-bg border border-border rounded-xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all"
-        />
-
-        {validatorInput && (
-          <div className="pt-2">
-            {validateUUID(validatorInput) ? (
-              <div className="flex items-center gap-3 p-4 bg-success/10 border border-success/20 rounded-2xl">
-                <Check className="w-5 h-5 text-success" />
-                <div>
-                  <p className="text-success font-bold">Valid UUID</p>
-                  <p className="text-xs text-success/70 font-medium mt-0.5">Detected Version: {detectVersion(validatorInput)}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center gap-3 p-4 bg-error/10 border border-error/20 rounded-2xl">
-                <AlertCircle className="w-5 h-5 text-error" />
-                <div>
-                  <p className="text-error font-bold">Invalid UUID Format</p>
-                  <p className="text-xs text-error/70 font-medium mt-0.5">Ensure it follows the 8-4-4-4-12 hex pattern.</p>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
+  );
+
+  return (
+    <ToolWorkspace
+      tabs={{
+        activeId: mode,
+        onChange: setMode,
+        options: [
+          { id: 'generate', label: 'Generate', icon: <Fingerprint className="w-4 h-4" /> },
+          { id: 'bulk', label: 'Bulk Generate', icon: <List className="w-4 h-4" /> },
+          { id: 'validate', label: 'Validate', icon: <ShieldCheck className="w-4 h-4" /> },
+        ]
+      }}
+      optionsPanel={
+        mode === 'generate' ? (
+          <div className="space-y-6">
+            {renderVersionAndFormat()}
+            <button 
+              onClick={handleGenerate}
+              className="w-full mt-6 py-3.5 bg-blue text-white font-black uppercase tracking-widest rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Regenerate UUID
+            </button>
+          </div>
+        ) : mode === 'bulk' ? (
+          <div className="space-y-6">
+            <ToolInput
+              label="Count"
+              type="number"
+              value={bulkCount ? bulkCount.toString() : ''}
+              onChange={(v) => setBulkCount(Number(v))}
+            />
+            <div className="my-6 border-t border-border/50" />
+            {renderVersionAndFormat()}
+            <button 
+              onClick={handleBulkGenerate}
+              className="w-full mt-6 py-3.5 bg-blue text-white font-black uppercase tracking-widest rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <List className="w-4 h-4" />
+              Generate List
+            </button>
+          </div>
+        ) : null
+      }
+      input={
+        mode === 'validate' ? (
+          <ToolInput
+            label="UUID to Validate"
+            value={validatorInput}
+            onChange={setValidatorInput}
+            placeholder="Paste UUID here..."
+          />
+        ) : undefined
+      }
+      output={
+        mode === 'generate' ? (
+          <ToolResultArea
+            label="Generated UUID"
+            value={formattedCurrent}
+          />
+        ) : mode === 'bulk' ? (
+          <ToolResultArea
+            label="Generated UUIDs"
+            value={bulkList.join('\n')}
+          />
+        ) : mode === 'validate' ? (
+          <div className="flex flex-col h-full space-y-4">
+            <div className="text-sm font-bold text-text-2">Validation Result</div>
+            {validatorInput ? (
+              validateUUID(validatorInput) ? (
+                <div className="flex items-center gap-3 p-4 bg-success/10 border border-success/20 rounded-2xl">
+                  <Check className="w-5 h-5 text-success" />
+                  <div>
+                    <p className="text-success font-bold">Valid UUID</p>
+                    <p className="text-xs text-success/70 font-medium mt-0.5">Detected Version: {detectVersion(validatorInput)}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 p-4 bg-error/10 border border-error/20 rounded-2xl">
+                  <AlertCircle className="w-5 h-5 text-error" />
+                  <div>
+                    <p className="text-error font-bold">Invalid UUID Format</p>
+                    <p className="text-xs text-error/70 font-medium mt-0.5">Ensure it follows the 8-4-4-4-12 hex pattern.</p>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="text-text-4 italic text-sm">Enter a UUID to validate</div>
+            )}
+          </div>
+        ) : null
+      }
+    />
   );
 }
 

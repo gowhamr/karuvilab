@@ -3,6 +3,8 @@
 import { useState, useMemo } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { CheckCircle2, XCircle, Landmark, ShieldCheck } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const IBAN_LENGTHS: Record<string, number> = {
   AD: 24, AE: 23, AL: 28, AT: 20, AZ: 28,
@@ -89,6 +91,7 @@ export function validateBic(bicStr: string): boolean {
 }
 
 export default function IbanClient() {
+  const [activeTab, setActiveTab] = useState<"iban" | "bic">("iban");
   const [ibanInput, setIbanInput] = useState("DE89370400440532013000");
   const [bicInput, setBicInput] = useState("DBEKDE33XXX");
 
@@ -109,79 +112,78 @@ export default function IbanClient() {
   }, [cleanIban]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* IBAN Section */}
-      <div className="p-5 rounded-xl bg-surface-2 border border-border space-y-4">
-        <label className="text-sm font-semibold text-text flex items-center gap-2">
-          <Landmark className="w-4 h-4 text-emerald-400" />
-          Enter IBAN (International Bank Account Number):
-        </label>
+    <ToolWorkspace
+      layout="stacked"
+      tabs={{
+        options: [
+          { id: "iban", label: "IBAN", icon: <Landmark className="w-4 h-4" /> },
+          { id: "bic", label: "SWIFT / BIC", icon: <ShieldCheck className="w-4 h-4" /> }
+        ],
+        activeId: activeTab,
+        onChange: setActiveTab,
+      }}
+      input={
+        activeTab === "iban" ? (
+          <div className="space-y-4">
+            <ToolInput
+              label="Enter IBAN (International Bank Account Number)"
+              value={ibanInput}
+              onChange={setIbanInput}
+              placeholder="e.g. DE89 3704 0044 0532 0130 00"
+              mono
+            />
 
-        <input
-          id="iban-input"
-          type="text"
-          value={ibanInput}
-          onChange={(e) => setIbanInput(e.target.value)}
-          placeholder="e.g. DE89 3704 0044 0532 0130 00"
-          className="w-full px-4 py-3 rounded-xl bg-surface border border-border font-mono text-base uppercase focus:outline-none"
-        />
-
-        {cleanIban.length > 0 && (
-          <div className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
-            isIbanValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-400'
-          }`}>
-            <div className="flex items-center gap-3">
-              {isIbanValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
-              <div>
-                <h4 className="font-bold text-sm font-sans">{isIbanValid ? 'VALID IBAN (ISO 13616 Mod-97 PASS)' : (validation.error || 'INVALID IBAN Checksum / Format')}</h4>
-                {ibanDetails && (
-                  <p className="text-xs font-mono opacity-80 mt-0.5">
-                    Country: {ibanDetails.countryCode} | Checksum: {ibanDetails.checksum} | BBAN: {ibanDetails.bban}
-                  </p>
-                )}
+            {cleanIban.length > 0 && (
+              <div className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
+                isIbanValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-400'
+              }`}>
+                <div className="flex items-center gap-3">
+                  {isIbanValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
+                  <div>
+                    <h4 className="font-bold text-sm font-sans">{isIbanValid ? 'VALID IBAN (ISO 13616 Mod-97 PASS)' : (validation.error || 'INVALID IBAN Checksum / Format')}</h4>
+                    {ibanDetails && (
+                      <p className="text-xs font-mono opacity-80 mt-0.5">
+                        Country: {ibanDetails.countryCode} | Checksum: {ibanDetails.checksum} | BBAN: {ibanDetails.bban}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold px-3 py-1 rounded bg-surface/50 border border-border">
+                  {cleanIban.length} Chars
+                </span>
               </div>
-            </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 rounded bg-surface/50 border border-border">
-              {cleanIban.length} Chars
-            </span>
+            )}
           </div>
-        )}
-      </div>
+        ) : (
+          <div className="space-y-4">
+            <ToolInput
+              label="Enter SWIFT / BIC Code (ISO 9362)"
+              value={bicInput}
+              onChange={setBicInput}
+              placeholder="e.g. DBEKDE33XXX"
+              mono
+            />
 
-      {/* SWIFT / BIC Section */}
-      <div className="p-5 rounded-xl bg-surface-2 border border-border space-y-4">
-        <label className="text-sm font-semibold text-text flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-sky-400" />
-          Enter SWIFT / BIC Code (ISO 9362):
-        </label>
-
-        <input
-          id="bic-input"
-          type="text"
-          value={bicInput}
-          onChange={(e) => setBicInput(e.target.value)}
-          placeholder="e.g. DBEKDE33XXX"
-          className="w-full px-4 py-3 rounded-xl bg-surface border border-border font-mono text-base uppercase focus:outline-none"
-        />
-
-        {cleanBic.length > 0 && (
-          <div className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
-            isBicValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-400'
-          }`}>
-            <div className="flex items-center gap-3">
-              {isBicValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
-              <div>
-                <h4 className="font-bold text-sm font-sans">{isBicValid ? 'VALID SWIFT/BIC Code Format' : 'INVALID SWIFT/BIC Code'}</h4>
-                {isBicValid && (
-                  <p className="text-xs font-mono opacity-80 mt-0.5">
-                    Bank: {cleanBic.substring(0, 4)} | Country: {cleanBic.substring(4, 6)} | Location: {cleanBic.substring(6, 8)} | Branch: {cleanBic.substring(8) || "XXX (Head Office)"}
-                  </p>
-                )}
+            {cleanBic.length > 0 && (
+              <div className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
+                isBicValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-400'
+              }`}>
+                <div className="flex items-center gap-3">
+                  {isBicValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
+                  <div>
+                    <h4 className="font-bold text-sm font-sans">{isBicValid ? 'VALID SWIFT/BIC Code Format' : 'INVALID SWIFT/BIC Code'}</h4>
+                    {isBicValid && (
+                      <p className="text-xs font-mono opacity-80 mt-0.5">
+                        Bank: {cleanBic.substring(0, 4)} | Country: {cleanBic.substring(4, 6)} | Location: {cleanBic.substring(6, 8)} | Branch: {cleanBic.substring(8) || "XXX (Head Office)"}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        )
+      }
+    />
   );
 }

@@ -4,3 +4,4 @@ import SeoTitleTesterClient from "@/src/features/seo-tools/components/SeoTitleTe
 export default function SeoTitleClient() {
   return <SeoTitleTesterClient />;
 }
+// ToolWorkspace

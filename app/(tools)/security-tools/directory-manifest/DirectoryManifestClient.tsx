@@ -6,6 +6,8 @@ import { workerManager } from "@/src/workers/manager";
 import { TaskProgress } from "@/src/workers/types";
 import { FolderCheck, Upload, Download, FileText, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 import { blobManager } from "@/src/lib/blob-manager";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 interface ManifestItem {
   path: string;
@@ -85,60 +87,62 @@ export default function DirectoryManifestClient() {
     blobManager.download(blob, `directory-manifest.${ext}`);
   }, [manifestText, format]);
 
-  return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Config Bar */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex flex-wrap items-center gap-3">
-          <label className="text-sm font-semibold text-text">Algorithm:</label>
-          <select
-            id="manifest-algo"
-            value={algo}
-            onChange={(e) => setAlgo(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-surface border border-border text-sm font-medium"
-          >
-            {["MD5", "SHA-1", "SHA-224", "SHA-256", "SHA-384", "SHA-512"].map((a) => (
-              <option key={a} value={a}>{a}</option>
-            ))}
-          </select>
-
-          <label className="text-sm font-semibold text-text ml-2">Output Format:</label>
-          <select
-            id="manifest-format"
-            value={format}
-            onChange={(e) => setFormat(e.target.value as any)}
-            className="px-3 py-1.5 rounded-lg bg-surface border border-border text-sm font-medium"
-          >
-            <option value="json">JSON Manifest</option>
-            <option value="csv">CSV Table</option>
-            <option value="sha256sum">sha256sum standard</option>
-          </select>
-        </div>
-
-        <div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            webkitdirectory=""
-            directory=""
-            multiple
-            className="hidden"
-            onChange={handleFolderSelect}
-            id="manifest-folder-input"
-          />
-          <button
-            id="manifest-select-folder-btn"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isProcessing}
-            className="px-4 py-2 rounded-xl bg-primary text-white font-semibold text-sm flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition"
-          >
-            <FolderCheck className="w-4 h-4" />
-            Select Directory
-          </button>
-        </div>
+  const optionsPanel = (
+    <div className="flex flex-wrap items-center gap-6">
+      <div className="flex items-center gap-3">
+        <label className="text-sm font-semibold text-text">Algorithm:</label>
+        <select
+          id="manifest-algo"
+          value={algo}
+          onChange={(e) => setAlgo(e.target.value)}
+          className="px-3 py-1.5 rounded-lg bg-surface border border-border text-sm font-medium"
+        >
+          {["MD5", "SHA-1", "SHA-224", "SHA-256", "SHA-384", "SHA-512"].map((a) => (
+            <option key={a} value={a}>{a}</option>
+          ))}
+        </select>
       </div>
 
-      {/* Progress & Error */}
+      <div className="flex items-center gap-3">
+        <label className="text-sm font-semibold text-text">Output Format:</label>
+        <select
+          id="manifest-format"
+          value={format}
+          onChange={(e) => setFormat(e.target.value as any)}
+          className="px-3 py-1.5 rounded-lg bg-surface border border-border text-sm font-medium"
+        >
+          <option value="json">JSON Manifest</option>
+          <option value="csv">CSV Table</option>
+          <option value="sha256sum">sha256sum standard</option>
+        </select>
+      </div>
+    </div>
+  );
+
+  const inputPanel = (
+    <div className="space-y-4">
+      <div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          webkitdirectory=""
+          directory=""
+          multiple
+          className="hidden"
+          onChange={handleFolderSelect}
+          id="manifest-folder-input"
+        />
+        <button
+          id="manifest-select-folder-btn"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isProcessing}
+          className="w-full h-32 border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center gap-3 hover:bg-surface-2 transition text-text-muted hover:text-text cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
+        >
+          <FolderCheck className="w-8 h-8" />
+          <span className="text-sm font-medium">Click to Select Directory</span>
+        </button>
+      </div>
+
       {isProcessing && (
         <div className="p-4 rounded-xl bg-surface-2 border border-border flex items-center gap-3">
           <RefreshCw className="w-5 h-5 animate-spin text-primary" />
@@ -163,32 +167,22 @@ export default function DirectoryManifestClient() {
           <button onClick={() => setError(null)} className="text-xs underline">Dismiss</button>
         </div>
       )}
-
-      {/* Results View */}
-      {items.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-text-muted">
-              Hashed <strong className="text-text">{items.length}</strong> files using {algo}
-            </span>
-            <div className="flex gap-2">
-              <CopyButton text={manifestText} />
-              <button
-                id="manifest-download-btn"
-                onClick={handleDownload}
-                className="px-3 py-1.5 rounded-lg bg-surface border border-border text-sm font-semibold flex items-center gap-1.5 hover:bg-surface-2"
-              >
-                <Download className="w-4 h-4" />
-                Download Manifest
-              </button>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-surface border border-border font-mono text-xs overflow-x-auto max-h-96">
-            <pre className="whitespace-pre">{manifestText}</pre>
-          </div>
-        </div>
-      )}
     </div>
+  );
+
+  const outputPanel = items.length > 0 ? (
+    <ToolResultArea
+      label={`Manifest (${items.length} files hashed using ${algo})`}
+      value={manifestText}
+      onDownload={handleDownload}
+    />
+  ) : null;
+
+  return (
+    <ToolWorkspace
+      optionsPanel={optionsPanel}
+      input={inputPanel}
+      output={outputPanel}
+    />
   );
 }

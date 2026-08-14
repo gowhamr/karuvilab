@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { Layers, AlertCircle, Cpu } from "lucide-react";
+import { Layers } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export const EMV_TAG_DICTIONARY: Record<string, string> = {
   "9F02": "Amount, Authorised (Numeric)",
@@ -54,51 +56,37 @@ export default function TlvParserClient() {
   }, [hexInput]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Input */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-text flex items-center gap-2">
-          <Cpu className="w-4 h-4 text-emerald-400" />
-          EMV BER-TLV Hex Payload:
-        </label>
-        <textarea
-          id="tlv-hex-input"
-          rows={4}
-          value={hexInput}
-          onChange={(e) => setHexInput(e.target.value)}
-          placeholder="e.g. 9F02060000000010009F0306000000000000..."
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs uppercase focus:outline-none"
-        />
-      </div>
-
-      <button
-        id="tlv-parse-btn"
-        onClick={handleParse}
-        className="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
-      >
-        <Layers className="w-5 h-5" />
-        Parse TLV Data Stream
-      </button>
-
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          {error}
-        </div>
-      )}
-
-      {elements.length > 0 && (
+    <ToolWorkspace
+      input={
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-bold text-base text-text">Parsed TLV Elements ({elements.length} Tags)</h3>
-            <CopyButton text={JSON.stringify(elements, null, 2)} />
-          </div>
-
-            <pre className="text-xs font-mono whitespace-pre-wrap overflow-x-auto">
-              {JSON.stringify(elements, null, 2)}
-            </pre>
+          <ToolInput
+            id="tlv-hex-input"
+            label="EMV BER-TLV Hex Payload"
+            value={hexInput}
+            onChange={setHexInput}
+            placeholder="e.g. 9F02060000000010009F0306000000000000..."
+            rows={4}
+            mono
+            className="uppercase"
+          />
+          <button
+            id="tlv-parse-btn"
+            onClick={handleParse}
+            className="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
+          >
+            <Layers className="w-5 h-5" />
+            Parse TLV Data Stream
+          </button>
         </div>
-      )}
-    </div>
+      }
+      output={
+        <ToolResultArea
+          label={elements.length > 0 ? `Parsed TLV Elements (${elements.length} Tags)` : "Parsed TLV Elements"}
+          value={elements.length > 0 ? JSON.stringify(elements, null, 2) : ""}
+          error={error || undefined}
+          language="json"
+        />
+      }
+    />
   );
 }

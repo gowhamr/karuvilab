@@ -10,6 +10,8 @@ import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-pro
 import { TaskProgress } from "@/src/workers/types";
 
 import { DropZone } from "@/components/ui/DropZone";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const toolId = "bulk-resizer";
 
@@ -131,70 +133,56 @@ export default function BulkImageResizerClient() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Sidebar Settings */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-surface border border-border p-4 sm:p-8 rounded-3xl shadow-sm space-y-8 sticky top-24">
-            <div className="space-y-2">
-              <h2 className="text-xl font-black italic">Settings</h2>
-              <div className="h-1 w-12 bg-blue rounded-full" />
-            </div>
-
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <label htmlFor="bulk-target-width" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Target Width (px)</label>
-                <input
-                  id="bulk-target-width"
-                  type="number"
-                  className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold"
-                  value={targetW || ''}
-                  onChange={e => setTargetW(e.target.value)}
-                  placeholder="800"
+    <ToolWorkspace
+      optionsPanel={
+        <div className="space-y-6">
+          <ToolInput
+            id="bulk-target-width"
+            label="Target Width (px)"
+            type="number"
+            mono
+            value={targetW || ''}
+            onChange={val => setTargetW(val)}
+            placeholder="800"
+          />
+          <ToolInput
+            id="bulk-target-height"
+            label="Target Height (px)"
+            type="number"
+            mono
+            value={targetH || ''}
+            onChange={val => setTargetH(val)}
+            placeholder="Auto"
+          />
+          
+          <div className="p-4 bg-bg border border-border rounded-2xl">
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div className="relative flex items-center">
+                <input 
+                  type="checkbox" 
+                  checked={lockRatio} 
+                  onChange={e => setLockRatio(e.target.checked)} 
+                  className="w-5 h-5 rounded-lg border border-border checked:bg-blue checked:border-blue transition-all cursor-pointer appearance-none" 
                 />
+                {lockRatio && <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-white text-xs font-black">✓</div>}
               </div>
-              <div className="space-y-3">
-                <label htmlFor="bulk-target-height" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Target Height (px)</label>
-                <input
-                  id="bulk-target-height"
-                  type="number"
-                  className="w-full px-5 py-4 bg-bg border border-border rounded-2xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono font-bold"
-                  value={targetH || ''}
-                  onChange={e => setTargetH(e.target.value)}
-                  placeholder="Auto"
-                />
-              </div>
-              
-              <div className="p-4 bg-bg border border-border rounded-2xl">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative flex items-center">
-                    <input 
-                      type="checkbox" 
-                      checked={lockRatio} 
-                      onChange={e => setLockRatio(e.target.checked)} 
-                      className="w-5 h-5 rounded-lg border border-border checked:bg-blue checked:border-blue transition-all cursor-pointer appearance-none" 
-                    />
-                    {lockRatio && <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-white text-xs font-black">✓</div>}
-                  </div>
-                  <span className="text-sm font-bold text-text-2 group-hover:text-blue transition-colors">Lock Aspect Ratio</span>
-                </label>
-              </div>
-
-              <DropZone
-                onFilesSelected={handleFiles}
-                accept="image/*"
-                multiple
-                title="Add Images"
-                description="Drop here or click"
-                className="p-6"
-                icon={<div className="text-2xl">📁</div>}
-              />
-            </div>
+              <span className="text-sm font-bold text-text-2 group-hover:text-blue transition-colors">Lock Aspect Ratio</span>
+            </label>
           </div>
-        </div>
 
-        {/* Main Queue Area */}
-        <div className="lg:col-span-2 space-y-6">
+          <DropZone
+            onFilesSelected={handleFiles}
+            accept="image/*"
+            multiple
+            title="Add Images"
+            description="Drop here or click"
+            className="p-6"
+            icon={<div className="text-2xl">📁</div>}
+          />
+        </div>
+      }
+      output={
+        <div className="space-y-6">
           <BatchQueue 
             toolId={toolId}
             isProcessing={isProcessing}
@@ -216,7 +204,7 @@ export default function BulkImageResizerClient() {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 import { useObjectUrlManager } from "@/src/lib/hooks";
@@ -130,77 +131,75 @@ export default function InvoiceGeneratorClient() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <StatusBadge status={isGenerating ? "processing" : "idle"} label="Generating PDF..." />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8 space-y-8">
-          <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-8">
-            <div className="flex flex-col md:flex-row justify-between gap-6">
-              <div className="space-y-4 flex-1">
-                <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
-                   <div className="w-1.5 h-1.5 rounded-full bg-blue" />
-                   Template & Branding
-                </h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <span id="label-visual-style" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Visual Style</span>
-                    <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="label-visual-style">
-                      {(["classic", "modern", "professional", "minimal"] as TemplateType[]).map(t => (
-                        <button
-                          key={t}
-                          onClick={() => setTemplate(t)}
-                          role="radio"
-                          aria-checked={template === t}
-                          className={`flex-1 min-w-20 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-muted hover:border-blue/30'}`}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="currency-symbol" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Currency Symbol</label>
-                    <input 
-                      id="currency-symbol"
-                      value={currency} 
-                      onChange={(e) => setCurrency(e.target.value)} 
-                      className="w-full px-4 py-2 bg-bg border border-border rounded-xl text-sm font-bold focus:border-blue outline-none"
-                      placeholder="e.g. ₹ or $"
-                    />
+    <ToolWorkspace
+      layout="split"
+      optionsPanel={
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between gap-6">
+            <div className="space-y-4 flex-1">
+              <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
+                 <div className="w-1.5 h-1.5 rounded-full bg-blue" />
+                 Template & Branding
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <span id="label-visual-style" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Visual Style</span>
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="label-visual-style">
+                    {(["classic", "modern", "professional", "minimal"] as TemplateType[]).map(t => (
+                      <button
+                        key={t}
+                        onClick={() => setTemplate(t)}
+                        role="radio"
+                        aria-checked={template === t}
+                        className={`flex-1 min-w-20 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${template === t ? 'bg-blue text-white shadow-md shadow-blue/10' : 'bg-bg border border-border text-text-muted hover:border-blue/30'}`}
+                      >
+                        {t}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </div>
-              <div className="w-full md:w-48">
-                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Company Logo</label>
-                {logo ? (
-                  <div className="relative group aspect-square rounded-2xl border border-border overflow-hidden bg-bg">
-                    <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
-                    <button 
-                      onClick={() => setLogo(null)}
-                      aria-label="Remove logo"
-                      className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                    >
-                      <Trash2 className="w-6 h-6 text-white" />
-                    </button>
-                  </div>
-                ) : (
-                  <DropZone
-                    onFilesSelected={handleLogoUpload}
-                    accept="image/*"
-                    title="Upload"
-                    description="PNG/JPG"
-                    className="aspect-square flex-col justify-center gap-2"
+                <div className="space-y-2">
+                  <label htmlFor="currency-symbol" className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Currency Symbol</label>
+                  <input 
+                    id="currency-symbol"
+                    value={currency} 
+                    onChange={(e) => setCurrency(e.target.value)} 
+                    className="w-full px-4 py-2 bg-bg border border-border rounded-xl text-sm font-bold focus:border-blue outline-none"
+                    placeholder="e.g. ₹ or $"
                   />
-                )}
+                </div>
               </div>
             </div>
+            <div className="w-full md:w-48">
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-2">Company Logo</label>
+              {logo ? (
+                <div className="relative group aspect-square rounded-2xl border border-border overflow-hidden bg-bg">
+                  <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
+                  <button 
+                    onClick={() => setLogo(null)}
+                    aria-label="Remove logo"
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                  >
+                    <Trash2 className="w-6 h-6 text-white" />
+                  </button>
+                </div>
+              ) : (
+                <DropZone
+                  onFilesSelected={handleLogoUpload}
+                  accept="image/*"
+                  title="Upload"
+                  description="PNG/JPG"
+                  className="aspect-square flex-col justify-center gap-2"
+                />
+              )}
+            </div>
           </div>
-
+        </div>
+      }
+      input={
+        <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-6">
+             <div className="space-y-6">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    From (Your Details)
@@ -219,7 +218,7 @@ export default function InvoiceGeneratorClient() {
                 </div>
              </div>
 
-             <div className="bg-surface border border-border p-4 sm:p-8 rounded-4xl shadow-sm space-y-6">
+             <div className="space-y-6">
                 <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                    Bill To (Client)
@@ -247,8 +246,12 @@ export default function InvoiceGeneratorClient() {
             updateItem={updateItem} 
           />
         </div>
-
-        <div className="lg:col-span-4 space-y-6">
+      }
+      output={
+        <div className="space-y-6 h-full flex flex-col">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <StatusBadge status={isGenerating ? "processing" : "idle"} label="Generating PDF..." />
+          </div>
           <InvoiceSummarySection 
             meta={meta}
             setMeta={setMeta}
@@ -267,7 +270,7 @@ export default function InvoiceGeneratorClient() {
             isGenerating={isGenerating}
           />
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }

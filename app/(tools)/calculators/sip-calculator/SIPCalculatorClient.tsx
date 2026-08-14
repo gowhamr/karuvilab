@@ -14,6 +14,7 @@ import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const DEFAULT_STATE = {
   monthly: 5000,
@@ -149,185 +150,197 @@ Generated via KaruviLab`;
     <div className="space-y-6">
       <SharedResultBanner hasParams={hasParams} toolName="SIP Calculator" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
-        <SliderField
-          label="Monthly SIP Amount"
-          id="sip-monthly"
-          min={500}
-          max={100000}
-          step={500}
-          value={monthly}
-          onChange={setMonthly}
-          format={(v) => formatINR(v)}
-        />
-        <SliderField
-          label="Expected Annual Return"
-          id="sip-rate"
-          min={1}
-          max={30}
-          step={0.5}
-          value={rate}
-          onChange={setRate}
-          format={(v) => formatPercent(v)}
-        />
-        <SliderField
-          label="Investment Duration"
-          id="sip-years"
-          min={1}
-          max={40}
-          step={1}
-          value={years}
-          onChange={setYears}
-          format={(v) => v + " yr"}
-        />
-        
-        <Accordion type="single" collapsible className="border-t border-border pt-2">
-          <AccordionItem value="adjustments" className="border-none">
-            <AccordionTrigger className="py-2 hover:no-underline">
-              <div className="flex items-center gap-2 text-blue">
-                <Settings2 className="w-4 h-4" />
-                <span className="text-sm font-black uppercase tracking-wider">Advanced Adjustments</span>
+      
+      <ToolWorkspace
+        layout="split"
+        input={
+          <div className="space-y-6">
+            <SliderField
+              label="Monthly SIP Amount"
+              id="sip-monthly"
+              min={500}
+              max={100000}
+              step={500}
+              value={monthly}
+              onChange={setMonthly}
+              format={(v) => formatINR(v)}
+            />
+            <SliderField
+              label="Expected Annual Return"
+              id="sip-rate"
+              min={1}
+              max={30}
+              step={0.5}
+              value={rate}
+              onChange={setRate}
+              format={(v) => formatPercent(v)}
+            />
+            <SliderField
+              label="Investment Duration"
+              id="sip-years"
+              min={1}
+              max={40}
+              step={1}
+              value={years}
+              onChange={setYears}
+              format={(v) => v + " yr"}
+            />
+            
+            <Accordion type="single" collapsible className="border-t border-border pt-2">
+              <AccordionItem value="adjustments" className="border-none">
+                <AccordionTrigger className="py-2 hover:no-underline">
+                  <div className="flex items-center gap-2 text-blue">
+                    <Settings2 className="w-4 h-4" />
+                    <span className="text-sm font-black uppercase tracking-wider">Advanced Adjustments</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-6 pt-4">
+                  <SliderField
+                    label="Annual Inflation Rate"
+                    id="sip-inflation"
+                    min={0}
+                    max={15}
+                    step={0.5}
+                    value={inflationRate}
+                    onChange={setInflationRate}
+                    format={(v) => formatPercent(v)}
+                  />
+                  <SliderField
+                    label="Capital Gains Tax (%)"
+                    id="sip-tax"
+                    min={0}
+                    max={40}
+                    step={1}
+                    value={taxRate}
+                    onChange={setTaxRate}
+                    format={(v) => formatPercent(v)}
+                  />
+                  <SliderField
+                    label="Management Fees / Expense Ratio (%)"
+                    id="sip-fees"
+                    min={0}
+                    max={5}
+                    step={0.1}
+                    value={feeRate}
+                    onChange={setFeeRate}
+                    format={(v) => formatPercent(v)}
+                  />
+                  <SliderField
+                    label="Annual Step-up (%)"
+                    id="sip-stepup"
+                    min={0}
+                    max={30}
+                    step={1}
+                    value={stepUp}
+                    onChange={setStepUp}
+                    format={(v) => formatPercent(v)}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            <ToolInput
+              label="One-time Lumpsum (optional)"
+              id="sip-lumpsum"
+              type="number"
+              placeholder="0"
+              value={String(lumpsum || "")}
+              onChange={(v) => {
+                const num = Number(v);
+                if (num >= 0 && num <= 1000000000000) setLumpsum(num);
+              }}
+              description={formatINR(lumpsum)}
+            />
+          </div>
+        }
+        output={
+          <div className="space-y-6 flex flex-col h-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <MetricCard label="Net Total Value" value={formatINR(result.netValue)} accent sub="After Tax & Fees" />
+              <MetricCard label="Total Invested" value={formatINR(result.totalInvested)} />
+              <MetricCard label="Gross Gains" value={formatINR(result.totalGains)} />
+              <MetricCard label="Net Yield" value={formatPercent(result.netYieldPct)} />
+            </div>
+
+            <div className="bg-bg border border-border p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="space-y-1">
+                <div className="text-sm text-text-3 font-medium">
+                  Inflation-adjusted ({inflationRate}%/yr):{" "}
+                  <strong className="text-blue">{formatINR(result.inflAdj)}</strong>
+                </div>
+                <div className="text-xs text-text-muted font-black uppercase tracking-widest">
+                  Gross Value: {formatINR(result.totalValue)}
+                </div>
               </div>
-            </AccordionTrigger>
-            <AccordionContent className="space-y-6 pt-4">
-              <SliderField
-                label="Annual Inflation Rate"
-                id="sip-inflation"
-                min={0}
-                max={15}
-                step={0.5}
-                value={inflationRate}
-                onChange={setInflationRate}
-                format={(v) => formatPercent(v)}
-              />
-              <SliderField
-                label="Capital Gains Tax (%)"
-                id="sip-tax"
-                min={0}
-                max={40}
-                step={1}
-                value={taxRate}
-                onChange={setTaxRate}
-                format={(v) => formatPercent(v)}
-              />
-              <SliderField
-                label="Management Fees / Expense Ratio (%)"
-                id="sip-fees"
-                min={0}
-                max={5}
-                step={0.1}
-                value={feeRate}
-                onChange={setFeeRate}
-                format={(v) => formatPercent(v)}
-              />
-              <SliderField
-                label="Annual Step-up (%)"
-                id="sip-stepup"
-                min={0}
-                max={30}
-                step={1}
-                value={stepUp}
-                onChange={setStepUp}
-                format={(v) => formatPercent(v)}
-              />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+            </div>
 
-        <ToolInput
-          label="One-time Lumpsum (optional)"
-          id="sip-lumpsum"
-          type="number"
-          placeholder="0"
-          value={String(lumpsum || "")}
-          onChange={(v) => {
-            const num = Number(v);
-            if (num >= 0 && num <= 1000000000000) setLumpsum(num);
-          }}
-          description={formatINR(lumpsum)}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <MetricCard label="Net Total Value" value={formatINR(result.netValue)} accent sub="After Tax & Fees" />
-        <MetricCard label="Total Invested" value={formatINR(result.totalInvested)} />
-        <MetricCard label="Gross Gains" value={formatINR(result.totalGains)} />
-        <MetricCard label="Net Yield" value={formatPercent(result.netYieldPct)} />
-      </div>
-
-      <div className="bg-surface border border-border p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="space-y-1">
-          <div className="text-sm text-text-3 font-medium">
-            Inflation-adjusted ({inflationRate}%/yr):{" "}
-            <strong className="text-blue">{formatINR(result.inflAdj)}</strong>
+            <div className="flex justify-end mt-auto pt-4">
+              <ShareButton
+                url={shareUrl}
+                title={`SIP Result: ${formatINR(result.netValue)} net value in ${years}y — KaruviLab`}
+                onQrClick={() => setIsQrOpen(true)}
+              />
+            </div>
           </div>
-          <div className="text-xs text-text-muted font-black uppercase tracking-widest">
-            Gross Value: {formatINR(result.totalValue)}
+        }
+        infoPanel={
+          <div className="space-y-6">
+            <CalculatorActionBar
+              summary={summary}
+              toolId="sip-calculator"
+              historyLabel={`${formatINR(monthly)}/mo for ${years}y`}
+              historyData={{
+                monthly, rate, years, stepUp, lumpsum, inflationRate, taxRate, feeRate,
+                result: {
+                  totalInvested: result.totalInvested,
+                  totalValue: result.totalValue,
+                  netValue: result.netValue
+                }
+              }}
+              onExport={handleExport}
+              showProjection={showTable}
+              onToggleProjection={() => setShowTable(!showTable)}
+            />
+
+            {showTable && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-black">Yearly Projection</h2>
+                </div>
+                <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-bg border-b border-border">
+                        <th className="px-4 py-3 text-left font-bold text-text-3">Year</th>
+                        <th className="px-4 py-3 text-right font-bold text-text-3">Invested</th>
+                        <th className="px-4 py-3 text-right font-bold text-text-3">Gains (Gross)</th>
+                        <th className="px-4 py-3 text-right font-bold text-text-3">Total Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.rows.map((row) => (
+                        <tr
+                          key={row.year}
+                          className="border-b border-border/50 hover:bg-bg transition-colors"
+                        >
+                          <td className="px-4 py-3 text-text-2">Year {row.year}</td>
+                          <td className="px-4 py-3 text-right text-text">{formatINR(row.invested)}</td>
+                          <td className="px-4 py-3 text-right text-green-500">
+                            {formatINR(row.gains)}
+                          </td>
+                          <td className="px-4 py-3 text-right font-bold text-blue">
+                            {formatINR(row.value)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      </div>
-
-      <div className="flex justify-end">
-        <ShareButton
-          url={shareUrl}
-          title={`SIP Result: ${formatINR(result.netValue)} net value in ${years}y — KaruviLab`}
-          onQrClick={() => setIsQrOpen(true)}
-        />
-      </div>
-
-      <CalculatorActionBar
-        summary={summary}
-        toolId="sip-calculator"
-        historyLabel={`${formatINR(monthly)}/mo for ${years}y`}
-        historyData={{
-          monthly, rate, years, stepUp, lumpsum, inflationRate, taxRate, feeRate,
-          result: {
-            totalInvested: result.totalInvested,
-            totalValue: result.totalValue,
-            netValue: result.netValue
-          }
-        }}
-        onExport={handleExport}
-        showProjection={showTable}
-        onToggleProjection={() => setShowTable(!showTable)}
+        }
       />
-
-      {showTable && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-black">Yearly Projection</h2>
-          </div>
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-surface border-b border-border">
-                  <th className="px-4 py-3 text-left font-bold text-text-3">Year</th>
-                  <th className="px-4 py-3 text-right font-bold text-text-3">Invested</th>
-                  <th className="px-4 py-3 text-right font-bold text-text-3">Gains (Gross)</th>
-                  <th className="px-4 py-3 text-right font-bold text-text-3">Total Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.rows.map((row) => (
-                  <tr
-                    key={row.year}
-                    className="border-b border-border/50 hover:bg-surface transition-colors"
-                  >
-                    <td className="px-4 py-3 text-text-2">Year {row.year}</td>
-                    <td className="px-4 py-3 text-right text-text">{formatINR(row.invested)}</td>
-                    <td className="px-4 py-3 text-right text-green-500">
-                      {formatINR(row.gains)}
-                    </td>
-                    <td className="px-4 py-3 text-right font-bold text-blue">
-                      {formatINR(row.value)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

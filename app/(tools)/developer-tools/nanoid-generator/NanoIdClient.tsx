@@ -4,6 +4,8 @@ import { useState, useCallback, useEffect } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { RefreshCw, Key, ShieldCheck } from "lucide-react";
 
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+
 export const DEFAULT_ALPHABET = "A-Za-z0-9_-";
 
 export function generateNanoId(size: number = 21, alphabetStr: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"): string {
@@ -49,78 +51,85 @@ export default function NanoIdClient() {
   }, [handleGenerate]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Config Panel */}
-      <div className="p-5 rounded-xl bg-surface-2 border border-border grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="space-y-1">
-          <label htmlFor="nanoid-size-input" className="text-xs font-semibold text-text-muted">ID Length (Characters):</label>
-          <input
-            id="nanoid-size-input"
-            type="number"
-            min={5}
-            max={128}
-            value={size || ''}
-            onChange={(e) => setSize(Number(e.target.value))}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono"
-          />
-        </div>
+    <ToolWorkspace
+      optionsPanel={
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="space-y-1">
+              <label htmlFor="nanoid-size-input" className="text-xs font-semibold text-text-muted">ID Length (Characters):</label>
+              <input
+                id="nanoid-size-input"
+                type="number"
+                min={5}
+                max={128}
+                value={size || ''}
+                onChange={(e) => setSize(Number(e.target.value))}
+                className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono"
+              />
+            </div>
 
-        <div className="space-y-1">
-          <label htmlFor="nanoid-count-input" className="text-xs font-semibold text-text-muted">Quantity:</label>
-          <input
-            id="nanoid-count-input"
-            type="number"
-            min={1}
-            max={50}
-            value={count || ''}
-            onChange={(e) => setCount(Number(e.target.value))}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono"
-          />
-        </div>
+            <div className="space-y-1">
+              <label htmlFor="nanoid-count-input" className="text-xs font-semibold text-text-muted">Quantity:</label>
+              <input
+                id="nanoid-count-input"
+                type="number"
+                min={1}
+                max={50}
+                value={count || ''}
+                onChange={(e) => setCount(Number(e.target.value))}
+                className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-mono"
+              />
+            </div>
 
-        <div className="space-y-1">
-          <label htmlFor="nanoid-preset-select" className="text-xs font-semibold text-text-muted">Alphabet Preset:</label>
-          <select
-            id="nanoid-preset-select"
-            value={alphabetPreset}
-            onChange={(e) => setAlphabetPreset(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm"
+            <div className="space-y-1">
+              <label htmlFor="nanoid-preset-select" className="text-xs font-semibold text-text-muted">Alphabet Preset:</label>
+              <select
+                id="nanoid-preset-select"
+                value={alphabetPreset}
+                onChange={(e) => setAlphabetPreset(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm"
+              >
+                <option value="default">Default URL-Safe (A-Za-z0-9_-)</option>
+                <option value="alphanumeric">Alphanumeric (A-Za-z0-9)</option>
+                <option value="hex">Lowercase Hex (0-9a-f)</option>
+                <option value="numbers">Numeric Only (0-9)</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            id="nanoid-generate-btn"
+            onClick={handleGenerate}
+            className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
           >
-            <option value="default">Default URL-Safe (A-Za-z0-9_-)</option>
-            <option value="alphanumeric">Alphanumeric (A-Za-z0-9)</option>
-            <option value="hex">Lowercase Hex (0-9a-f)</option>
-            <option value="numbers">Numeric Only (0-9)</option>
-          </select>
+            <RefreshCw className="w-5 h-5" />
+            Generate NanoIDs
+          </button>
         </div>
-      </div>
-
-      <button
-        id="nanoid-generate-btn"
-        onClick={handleGenerate}
-        className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
-      >
-        <RefreshCw className="w-5 h-5" />
-        Generate NanoIDs
-      </button>
-
-      {/* Generated IDs Output */}
-      {generatedIds.length > 0 && (
-        <div className="space-y-3">
+      }
+      output={
+        <div className="space-y-3 flex flex-col h-full">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-sm text-text">Generated NanoIDs</h3>
             <CopyButton text={generatedIds.join("\n")} />
           </div>
 
-          <div className="space-y-2">
-            {generatedIds.map((id, index) => (
-              <div key={index} className="p-3 rounded-lg bg-surface border border-border flex items-center justify-between font-mono text-sm">
-                <span className="text-emerald-300 font-bold">{id}</span>
-                <CopyButton text={id} />
-              </div>
-            ))}
-          </div>
+          {generatedIds.length > 0 ? (
+            <div className="space-y-2 overflow-auto flex-1">
+              {generatedIds.map((id, index) => (
+                <div key={index} className="p-3 rounded-lg bg-bg border border-border flex items-center justify-between font-mono text-sm">
+                  <span className="text-emerald-300 font-bold">{id}</span>
+                  <CopyButton text={id} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-text-4 italic text-sm">
+              Result will appear here...
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      }
+    />
   );
 }

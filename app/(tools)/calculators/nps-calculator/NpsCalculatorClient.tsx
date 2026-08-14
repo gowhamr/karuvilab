@@ -9,6 +9,7 @@ import { useUrlState } from '@/src/hooks/useUrlState';
 import { ShareButton } from '@/components/ui/ShareButton';
 import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
 import { QRModal } from '@/components/ui/QRModal';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 
 interface NPSResult {
   yearsToRetirement: number;
@@ -76,14 +77,14 @@ export default function NpsCalculatorClient() {
     [age, retireAge, monthlyInv, returnRate, annuityRate, annuityPercent]);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
+    <div className="w-full space-y-8 pb-12">
       <SharedResultBanner hasParams={hasParams} toolName="NPS Calculator" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT COLUMN: Inputs */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
+      
+      <ToolWorkspace
+        className="pb-0 space-y-0"
+        input={
+          <div className="space-y-8">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <TrendingUp className="w-3.5 h-3.5" /> Investment Details
             </h3>
@@ -139,8 +140,9 @@ export default function NpsCalculatorClient() {
               />
             </div>
           </div>
-
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
+        }
+        optionsPanel={
+          <div className="space-y-6">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Briefcase className="w-3.5 h-3.5" /> Post-Retirement Allocation
             </h3>
@@ -173,19 +175,17 @@ export default function NpsCalculatorClient() {
               />
             </div>
           </div>
-        </div>
-
-        {/* RIGHT COLUMN: Results */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6 relative overflow-hidden">
-            <div className="absolute -top-32 -right-32 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700 bg-blue" />
+        }
+        output={
+          <div className="space-y-6 relative h-full flex flex-col">
+            <div className="absolute -top-32 -right-32 w-64 h-64 blur-3xl opacity-[0.05] rounded-full transition-colors duration-700 bg-blue pointer-events-none" />
             
-            <div className="text-center border-b border-border/50 pb-8">
+            <div className="text-center border-b border-border/50 pb-8 relative z-content">
               <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-2">Total Estimated Corpus</p>
               <span className="text-4xl sm:text-5xl md:text-6xl font-black text-text tracking-tighter block">{formatCurrency(result.estimatedCorpus)}</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-8 pt-4">
+            <div className="grid grid-cols-2 gap-8 pt-4 relative z-content">
                <div>
                   <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted mb-1">Total Invested</p>
                   <span className="text-xl font-bold text-text-2">{formatCurrency(result.totalInvested)}</span>
@@ -195,32 +195,33 @@ export default function NpsCalculatorClient() {
                   <span className="text-xl font-bold text-green-500">+{formatCurrency(result.estimatedCorpus - result.totalInvested)}</span>
                </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <MetricCard 
-              label="Tax-Free Lumpsum (60%)" 
-              value={formatCurrency(result.lumpsum)} 
-              className="bg-blue/5 border-blue/20" 
-              sub="Available for withdrawal at retirement"
-            />
-            <MetricCard 
-              label="Estimated Monthly Pension" 
-              value={formatCurrency(result.monthlyPension)} 
-              className="bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400" 
-              sub="Taxable as per slab rate"
-            />
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto pt-6 relative z-content">
+              <MetricCard 
+                label="Tax-Free Lumpsum (60%)" 
+                value={formatCurrency(result.lumpsum)} 
+                className="bg-blue/5 border-blue/20" 
+                sub="Available for withdrawal at retirement"
+              />
+              <MetricCard 
+                label="Estimated Monthly Pension" 
+                value={formatCurrency(result.monthlyPension)} 
+                className="bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400" 
+                sub="Taxable as per slab rate"
+              />
+            </div>
 
-          <div className="flex justify-end">
-            <ShareButton
-              url={shareUrl}
-              title={`NPS Corpus: ${formatCurrency(result.estimatedCorpus)} at retirement — KaruviLab`}
-              onQrClick={() => setIsQrOpen(true)}
-            />
+            <div className="flex justify-end pt-4 relative z-content">
+              <ShareButton
+                url={shareUrl}
+                title={`NPS Corpus: ${formatCurrency(result.estimatedCorpus)} at retirement — KaruviLab`}
+                onQrClick={() => setIsQrOpen(true)}
+              />
+            </div>
           </div>
-
-          <div className="bg-blue/5 border border-blue/20 rounded-3xl p-6 flex gap-4 items-start mt-6">
+        }
+        infoPanel={
+          <div className="bg-blue/5 border border-blue/20 rounded-3xl p-6 flex gap-4 items-start">
             <PiggyBank className="w-5 h-5 text-blue shrink-0" />
             <div>
               <p className="text-blue font-black uppercase tracking-widest text-sm">Tax Benefits</p>
@@ -231,8 +232,8 @@ export default function NpsCalculatorClient() {
               </ul>
             </div>
           </div>
-        </div>
-      </div>
+        }
+      />
     </div>
   );
 }

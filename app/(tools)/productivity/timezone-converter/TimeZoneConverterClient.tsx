@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { 
   Plus, 
   Trash2, 
@@ -216,10 +217,10 @@ const getOffsetMinutes = useCallback((date: Date, timeZone: string) => {
   }, [sourceDate, sourceTZ, targetTZs, getFormatter, getOffsetMinutes]);
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
-      {/* Configuration Panel */}
-      <div className="bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
-        <div className="p-4 sm:p-8 space-y-8">
+    <>
+      <ToolWorkspace
+        layout="stacked"
+        input={
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Source Time & Zone */}
             <div className="space-y-6">
@@ -388,111 +389,111 @@ const getOffsetMinutes = useCallback((date: Date, timeZone: string) => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Info Bar */}
-        <div className="bg-bg/50 px-8 py-3 border-t border-border flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-widest-lg">
-          <div className="flex items-center gap-2">
-            <Info className="w-3 h-3" />
-            Comparing {targetTZs.length} zones to {sourceTZ}
-          </div>
-          <div>Browser Native • 100% Private</div>
-        </div>
-      </div>
-
-      {/* Results Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <AnimatePresence mode="popLayout">
-          {conversions.map((conv) => (
-            <m.div
-              key={conv.tz}
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="group bg-surface border border-border rounded-2xl p-6 hover:shadow-xl hover:border-blue/30 transition-all relative overflow-hidden"
-            >
-              {/* Decorative Background Icon */}
-              <Globe className="absolute -right-4 -bottom-4 w-24 h-24 text-blue/5 group-hover:text-blue/10 transition-colors pointer-events-none" />
-              
-              <div className="relative z-content space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-blue">
-                      <Globe className="w-4 h-4" />
-                      <span className="text-xs font-black uppercase tracking-wider">
-                        {conv.tz.split('/').pop()?.replace(/_/g, ' ')}
-                      </span>
-                    </div>
-                    <div className="text-xs text-text-muted font-bold truncate max-w-40">
-                      {conv.tz}
-                    </div>
-                  </div>
+        }
+        output={
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence mode="popLayout">
+              {conversions.map((conv) => (
+                <m.div
+                  key={conv.tz}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="group bg-bg border border-border rounded-2xl p-6 hover:shadow-xl hover:border-blue/30 transition-all relative overflow-hidden"
+                >
+                  {/* Decorative Background Icon */}
+                  <Globe className="absolute -right-4 -bottom-4 w-24 h-24 text-blue/5 group-hover:text-blue/10 transition-colors pointer-events-none" />
                   
-                  <div className="flex gap-1">
-                    <CopyButton 
-                      text={conv.full} 
-                      className="p-2 text-text-muted hover:text-blue hover:bg-blue/10 rounded-lg transition-all"
-                    />
-                    <button
-                      onClick={() => removeTargetTZ(conv.tz)}
-                      className="p-2 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-all"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+                  <div className="relative z-content space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-blue">
+                          <Globe className="w-4 h-4" />
+                          <span className="text-xs font-black uppercase tracking-wider">
+                            {conv.tz.split('/').pop()?.replace(/_/g, ' ')}
+                          </span>
+                        </div>
+                        <div className="text-xs text-text-muted font-bold truncate max-w-40">
+                          {conv.tz}
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-1">
+                        <CopyButton 
+                          text={conv.full} 
+                          className="p-2 text-text-muted hover:text-blue hover:bg-blue/10 rounded-lg transition-all"
+                        />
+                        <button
+                          onClick={() => removeTargetTZ(conv.tz)}
+                          className="p-2 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-baseline gap-2">
-                    <h2 className="text-4xl font-black text-text tracking-tighter">
-                      {conv.time}
-                    </h2>
-                    {conv.relativeDay && (
-                      <span className="text-xs bg-blue/10 text-blue px-2 py-0.5 rounded-full font-black uppercase">
-                        {conv.relativeDay}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-text-3 font-medium">
-                    <Calendar className="w-3 h-3" />
-                    {conv.date}
-                  </div>
-                </div>
+                    <div className="space-y-1">
+                      <div className="flex items-baseline gap-2">
+                        <h2 className="text-4xl font-black text-text tracking-tighter">
+                          {conv.time}
+                        </h2>
+                        {conv.relativeDay && (
+                          <span className="text-xs bg-blue/10 text-blue px-2 py-0.5 rounded-full font-black uppercase">
+                            {conv.relativeDay}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-text-3 font-medium">
+                        <Calendar className="w-3 h-3" />
+                        {conv.date}
+                      </div>
+                    </div>
 
-                <div className="pt-4 border-t border-border flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-black text-text-muted uppercase tracking-wider">Offset:</span>
-                    <span className={`text-xs font-bold ${conv.offsetLabel.startsWith('+') ? 'text-success' : conv.offsetLabel.startsWith('-') ? 'text-error' : 'text-blue'}`}>
-                      {conv.offsetLabel}
-                    </span>
+                    <div className="pt-4 border-t border-border flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-text-muted uppercase tracking-wider">Offset:</span>
+                        <span className={`text-xs font-bold ${conv.offsetLabel.startsWith('+') ? 'text-success' : conv.offsetLabel.startsWith('-') ? 'text-error' : 'text-blue'}`}>
+                          {conv.offsetLabel}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </m.div>
-          ))}
-        </AnimatePresence>
+                </m.div>
+              ))}
+            </AnimatePresence>
 
-        {/* Empty State / Add New Card */}
-        {targetTZs.length < 6 && (
-           <button
-           onClick={() => {
-             setTargetSearch("");
-             setIsSearchingTarget(true);
-             window.scrollTo({ top: 0, behavior: 'smooth' });
-           }}
-           className="border-2 border-dashed border-border rounded-2xl p-4 sm:p-8 flex flex-col items-center justify-center gap-4 hover:border-blue hover:bg-blue/5 transition-all group"
-         >
-           <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center group-hover:scale-110 group-hover:bg-blue group-hover:text-white transition-all">
-             <Plus className="w-6 h-6" />
-           </div>
-           <div className="text-center">
-             <p className="font-bold text-text">Add another zone</p>
-             <p className="text-xs text-text-muted">Compare more cities</p>
-           </div>
-         </button>
-        )}
-      </div>
+            {/* Empty State / Add New Card */}
+            {targetTZs.length < 6 && (
+              <button
+                onClick={() => {
+                  setTargetSearch("");
+                  setIsSearchingTarget(true);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="border-2 border-dashed border-border rounded-2xl p-4 sm:p-8 flex flex-col items-center justify-center gap-4 hover:border-blue hover:bg-blue/5 transition-all group"
+              >
+                <div className="w-12 h-12 rounded-full bg-bg border border-border flex items-center justify-center group-hover:scale-110 group-hover:bg-blue group-hover:text-white transition-all">
+                  <Plus className="w-6 h-6" />
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-text">Add another zone</p>
+                  <p className="text-xs text-text-muted">Compare more cities</p>
+                </div>
+              </button>
+            )}
+          </div>
+        }
+        infoPanel={
+          <div className="bg-surface border border-border px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-text-muted uppercase tracking-widest-lg rounded-2xl">
+            <div className="flex items-center gap-2">
+              <Info className="w-4 h-4" />
+              Comparing {targetTZs.length} zones to {sourceTZ}
+            </div>
+            <div>Browser Native • 100% Private</div>
+          </div>
+        }
+      />
 
       {/* Backdrop for mobile search */}
       <AnimatePresence>
@@ -511,7 +512,6 @@ const getOffsetMinutes = useCallback((date: Date, timeZone: string) => {
           />
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
-

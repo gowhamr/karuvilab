@@ -24,7 +24,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { DropZone } from "@/components/ui/DropZone";
-import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { formatError } from "@/src/lib/formatError";
 import { extractGifFrames } from "@/src/format-utils";
@@ -279,336 +279,334 @@ export default function GifExtractorClient() {
 
   const activeModalFrame = activeModalIndex !== null ? frames[activeModalIndex] : null;
 
-  return (
-    <div className="w-full space-y-6">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-surface p-4 rounded-2xl border border-border shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue/10 text-blue flex items-center justify-center font-bold">
-            <Film className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-bold text-foreground">GIF Frame Extractor</h2>
-            <p className="text-xs text-text-muted">Split animated GIFs into high-resolution PNG frames in browser</p>
-          </div>
-        </div>
-        <PrivacyBadge />
-      </div>
-
-      {/* No file selected state */}
-      {!file && !isExtracting && (
-        <div className="space-y-6">
-          <DropZone
-            onFilesSelected={handleFilesSelected}
-            accept="image/gif,.gif"
-            multiple={false}
-            title="Drop GIF image here"
-            description="Supports animated .gif files. Processed 100% locally."
-            icon={<Film className="w-8 h-8" />}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-surface border border-border space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-semibold text-sm">
-                1
-              </div>
-              <h3 className="text-sm font-semibold text-foreground">Zero Upload</h3>
-              <p className="text-xs text-text-muted">Your GIF stays on your device. Extraction happens inside your browser engine.</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-surface border border-border space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-blue/10 text-blue flex items-center justify-center font-semibold text-sm">
-                2
-              </div>
-              <h3 className="text-sm font-semibold text-foreground">Full Resolution PNG</h3>
-              <p className="text-xs text-text-muted">Frames are decoded pixel-perfect directly into lossless PNG files.</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-surface border border-border space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center font-semibold text-sm">
-                3
-              </div>
-              <h3 className="text-sm font-semibold text-foreground">ZIP Archive Export</h3>
-              <p className="text-xs text-text-muted">Download individual frames or export all frames bundled as a ZIP package.</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Loading State */}
-      {isExtracting && (
-        <div className="flex flex-col items-center justify-center p-12 bg-surface rounded-3xl border border-border space-y-4 text-center">
-          <m.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-            className="w-12 h-12 rounded-full border-4 border-blue/20 border-t-blue"
-          />
-          <div className="space-y-1">
-            <h3 className="text-base font-bold text-foreground">Extracting Frames</h3>
-            <p className="text-xs text-text-muted">{extractProgress}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Error Banner */}
-      <AnimatePresence>
-        {error && (
-          <m.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="p-4 rounded-2xl bg-error/10 border border-error/20 text-error flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-          >
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <h4 className="text-sm font-bold">Frame Extraction Failed</h4>
-                <p className="text-xs text-error/90 leading-relaxed">{error}</p>
-                {error.includes("ImageDecoder") && (
-                  <div className="mt-2 text-xs bg-error/10 p-2.5 rounded-xl border border-error/20 space-y-1">
-                    <p className="font-semibold">Browser Compatibility Note:</p>
-                    <p>
-                      Native GIF frame decoding requires the WebCodecs <code className="font-mono bg-error/20 px-1 rounded">ImageDecoder</code> API.
-                      This feature is supported in Chrome, Edge, Brave, Opera, and Android Chrome. If you are using Firefox or Safari, please try switching to a Chromium-based browser.
-                    </p>
-                  </div>
+  const inputContent = (
+    <div className="space-y-6">
+      {!file && !isExtracting ? (
+        <DropZone
+          onFilesSelected={handleFilesSelected}
+          accept="image/gif,.gif"
+          multiple={false}
+          title="Drop GIF image here"
+          description="Supports animated .gif files. Processed 100% locally."
+          icon={<Film className="w-8 h-8" />}
+        />
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="min-w-0 pr-4">
+              <h3 className="text-sm font-bold text-foreground truncate" title={file?.name}>
+                {file?.name}
+              </h3>
+              <div className="flex items-center gap-2 text-xs text-text-muted font-medium mt-1">
+                <span>{formatBytes(file?.size || 0)}</span>
+                {totalFrameCount > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="text-blue font-bold">{totalFrameCount} Frames</span>
+                  </>
                 )}
               </div>
             </div>
             <button
               onClick={resetAll}
-              className="px-4 py-2 text-xs font-semibold rounded-xl bg-error/20 hover:bg-error/30 transition-colors shrink-0"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl bg-bg hover:bg-surface-hover border border-border text-foreground transition-colors shrink-0"
             >
-              Try Another File
+              <RefreshCw className="w-4 h-4" />
+              <span>New GIF</span>
             </button>
-          </m.div>
-        )}
-      </AnimatePresence>
-
-      {/* Extracted Frames View */}
-      {!isExtracting && frames.length > 0 && (
-        <div className="space-y-6">
-          {/* File summary & Controls header */}
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-surface p-5 rounded-3xl border border-border shadow-xs">
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="space-y-1">
-                <h3 className="text-sm font-bold text-foreground truncate max-w-[280px]">
-                  {file?.name}
-                </h3>
-                <div className="flex items-center gap-2 text-xs text-text-muted font-medium">
-                  <span>{formatBytes(file?.size || 0)}</span>
-                  <span>•</span>
-                  <span className="text-blue font-bold">{totalFrameCount} Frames Total</span>
-                </div>
-              </div>
-
-              {isCapped && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-xs font-semibold">
-                  <Info className="w-4 h-4" />
-                  <span>Showing first 100 frames for browser safety</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => setShowOriginalPreview(!showOriginalPreview)}
-                className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl bg-bg hover:bg-surface-hover border border-border text-foreground transition-colors"
-              >
-                {showOriginalPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                <span>{showOriginalPreview ? "Hide Original GIF" : "Preview Original GIF"}</span>
-              </button>
-
-              <button
-                onClick={resetAll}
-                className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl bg-bg hover:bg-surface-hover border border-border text-foreground transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                <span>New GIF</span>
-              </button>
-            </div>
           </div>
 
-          {/* Collapsible Original GIF preview */}
-          <AnimatePresence>
-            {showOriginalPreview && gifUrl && (
-              <m.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="p-5 bg-surface rounded-3xl border border-border flex flex-col items-center gap-3 overflow-hidden"
+          {isCapped && (
+            <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-xs font-semibold">
+              <Info className="w-4 h-4 shrink-0" />
+              <span>Showing first 100 frames for browser safety</span>
+            </div>
+          )}
+
+          {gifUrl && (
+            <div className="space-y-2">
+              <button
+                onClick={() => setShowOriginalPreview(!showOriginalPreview)}
+                className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold rounded-xl bg-bg hover:bg-surface-hover border border-border text-foreground transition-colors"
               >
-                <div className="flex items-center justify-between w-full text-xs font-bold text-text-muted">
-                  <span>Original Animated GIF Preview</span>
-                  <button
-                    onClick={() => setShowOriginalPreview(false)}
-                    className="p-1 rounded-lg hover:bg-bg transition-colors"
+                <div className="flex items-center gap-2">
+                  {showOriginalPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  <span>{showOriginalPreview ? "Hide Original GIF" : "Preview Original GIF"}</span>
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {showOriginalPreview && (
+                  <m.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
                   >
-                    <X className="w-4 h-4" />
-                  </button>
+                    <div className="mt-2 p-3 rounded-2xl bg-bg border border-border w-full flex justify-center" style={CHECKERBOARD_BG}>
+                      <img
+                        src={gifUrl}
+                        alt="Original GIF"
+                        className="max-h-[300px] object-contain rounded-xl"
+                      />
+                    </div>
+                  </m.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          <AnimatePresence>
+            {error && (
+              <m.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="p-4 rounded-2xl bg-error/10 border border-error/20 text-error flex flex-col items-start gap-4"
+              >
+                <div className="flex items-start gap-3 w-full">
+                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div className="space-y-2 w-full">
+                    <h4 className="text-sm font-bold">Frame Extraction Failed</h4>
+                    <p className="text-xs text-error/90 leading-relaxed">{error}</p>
+                    {error.includes("ImageDecoder") && (
+                      <div className="text-xs bg-error/10 p-3 rounded-xl border border-error/20 space-y-1.5 mt-2">
+                        <p className="font-semibold">Browser Compatibility Note:</p>
+                        <p>
+                          Native GIF frame decoding requires the WebCodecs <code className="font-mono bg-error/20 px-1 rounded">ImageDecoder</code> API.
+                          This feature is supported in Chrome, Edge, Brave, Opera, and Android Chrome. If you are using Firefox or Safari, please try switching to a Chromium-based browser.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="p-3 rounded-2xl bg-bg border border-border" style={CHECKERBOARD_BG}>
-                  <img
-                    src={gifUrl}
-                    alt="Original GIF"
-                    className="max-h-64 object-contain rounded-xl"
-                  />
-                </div>
+                <button
+                  onClick={resetAll}
+                  className="px-4 py-2.5 text-sm font-semibold rounded-xl bg-error/20 hover:bg-error/30 transition-colors shrink-0 w-full"
+                >
+                  Try Another File
+                </button>
               </m.div>
             )}
           </AnimatePresence>
-
-          {/* Action Toolbar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-surface p-4 rounded-2xl border border-border">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={toggleSelectAll}
-                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-xl bg-bg hover:bg-surface-hover border border-border text-foreground transition-colors"
-              >
-                {selectedIds.size === frames.length ? (
-                  <CheckSquare className="w-4 h-4 text-blue" />
-                ) : (
-                  <Square className="w-4 h-4 text-text-muted" />
-                )}
-                <span>
-                  {selectedIds.size === frames.length ? "Deselect All" : `Select All (${frames.length})`}
-                </span>
-              </button>
-
-              <span className="text-xs text-text-muted font-semibold">
-                {selectedIds.size} of {frames.length} selected
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {/* Grid Column Selector */}
-              <div className="hidden sm:flex items-center gap-1 bg-bg p-1 rounded-xl border border-border">
-                <Grid className="w-3.5 h-3.5 text-text-muted ml-1.5" />
-                {[2, 3, 4, 6].map((cols) => (
-                  <button
-                    key={cols}
-                    onClick={() => setColumnCount(cols)}
-                    className={`px-2 py-1 text-xs font-bold rounded-lg transition-colors ${
-                      columnCount === cols
-                        ? "bg-surface text-blue shadow-xs"
-                        : "text-text-muted hover:text-foreground"
-                    }`}
-                  >
-                    {cols} col
-                  </button>
-                ))}
-              </div>
-
-              {/* Download ZIP Button */}
-              <button
-                onClick={() => handleDownloadZip()}
-                disabled={isZipping || selectedIds.size === 0}
-                className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-blue text-white hover:opacity-90 disabled:opacity-50 transition-all shadow-xs"
-              >
-                {isZipping ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                ) : (
-                  <FileArchive className="w-4 h-4" />
-                )}
-                <span>
-                  {selectedIds.size === frames.length
-                    ? "Download All as ZIP"
-                    : `Download Selected ZIP (${selectedIds.size})`}
-                </span>
-              </button>
-            </div>
-          </div>
-
-          {/* Grid of Extracted Frames */}
-          <div
-            className="grid gap-4"
-            style={{
-              gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
-            }}
-          >
-            {frames.map((frame, index) => {
-              const isSelected = selectedIds.has(frame.id);
-              const isCopied = copiedFrameId === frame.id;
-
-              return (
-                <m.div
-                  key={frame.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2, delay: Math.min(index * 0.02, 0.5) }}
-                  className={`group relative flex flex-col justify-between rounded-2xl bg-surface border transition-all duration-200 overflow-hidden ${
-                    isSelected
-                      ? "border-blue ring-2 ring-blue/20 shadow-xs"
-                      : "border-border hover:border-border/80"
-                  }`}
-                >
-                  {/* Card Header */}
-                  <div className="flex items-center justify-between p-3 border-b border-border/50 bg-bg/50">
-                    <button
-                      onClick={() => toggleSelectFrame(frame.id)}
-                      className="flex items-center gap-2 text-xs font-bold text-foreground hover:text-blue transition-colors"
-                    >
-                      {isSelected ? (
-                        <CheckSquare className="w-4 h-4 text-blue shrink-0" />
-                      ) : (
-                        <Square className="w-4 h-4 text-text-muted shrink-0" />
-                      )}
-                      <span>Frame #{frame.id}</span>
-                    </button>
-
-                    <span className="text-[11px] font-medium text-text-muted">
-                      {frame.width > 0 ? `${frame.width}×${frame.height}` : ""}
-                    </span>
-                  </div>
-
-                  {/* Thumbnail area */}
-                  <div
-                    onClick={() => setActiveModalIndex(index)}
-                    className="relative flex items-center justify-center p-3 h-48 cursor-pointer overflow-hidden group/thumb"
-                    style={CHECKERBOARD_BG}
-                  >
-                    <img
-                      src={frame.url}
-                      alt={`Frame ${frame.id}`}
-                      className="max-h-full max-w-full object-contain rounded-lg transition-transform duration-200 group-hover/thumb:scale-105"
-                    />
-
-                    {/* Hover Overlay Zoom Button */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white gap-2 font-semibold text-xs">
-                      <ZoomIn className="w-5 h-5" />
-                      <span>Inspect</span>
-                    </div>
-                  </div>
-
-                  {/* Card Footer Actions */}
-                  <div className="flex items-center justify-between p-2.5 bg-surface border-t border-border/50 gap-2">
-                    <span className="text-[11px] text-text-muted font-mono pl-1">
-                      {frame.sizeFormatted}
-                    </span>
-
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => copyFrameToClipboard(frame)}
-                        title="Copy image to clipboard"
-                        className="p-1.5 rounded-lg bg-bg hover:bg-surface-hover text-text-muted hover:text-foreground border border-border transition-colors"
-                      >
-                        {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
-
-                      <button
-                        onClick={() => downloadSingleFrame(frame)}
-                        title="Download PNG frame"
-                        className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg bg-blue/10 hover:bg-blue/20 text-blue transition-colors"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        <span>PNG</span>
-                      </button>
-                    </div>
-                  </div>
-                </m.div>
-              );
-            })}
-          </div>
         </div>
       )}
+    </div>
+  );
+
+  const optionsPanelContent = (!isExtracting && frames.length > 0) ? (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+         <span className="text-sm font-bold text-foreground">Selection & Layout</span>
+         <span className="text-xs text-text-muted font-semibold">
+           {selectedIds.size} of {frames.length} selected
+         </span>
+      </div>
+      
+      <div className="flex flex-col gap-3">
+        <button
+          onClick={toggleSelectAll}
+          className="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl bg-bg hover:bg-surface-hover border border-border text-foreground transition-colors"
+        >
+          <span>
+            {selectedIds.size === frames.length ? "Deselect All" : "Select All"}
+          </span>
+          {selectedIds.size === frames.length ? (
+            <CheckSquare className="w-4 h-4 text-blue" />
+          ) : (
+            <Square className="w-4 h-4 text-text-muted" />
+          )}
+        </button>
+
+        <div className="flex items-center justify-between px-3 py-2 bg-bg rounded-xl border border-border">
+           <span className="text-sm font-semibold text-foreground">Columns</span>
+           <div className="flex items-center gap-1">
+             {[2, 3, 4, 6].map((cols) => (
+               <button
+                 key={cols}
+                 onClick={() => setColumnCount(cols)}
+                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                   columnCount === cols
+                     ? "bg-surface text-blue shadow-xs border border-border/50"
+                     : "text-text-muted hover:text-foreground hover:bg-surface/50 border border-transparent"
+                 }`}
+               >
+                 {cols}
+               </button>
+             ))}
+           </div>
+        </div>
+
+        <button
+          onClick={() => handleDownloadZip()}
+          disabled={isZipping || selectedIds.size === 0}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 mt-2 text-sm font-bold rounded-xl bg-blue text-white hover:opacity-90 disabled:opacity-50 transition-all shadow-xs w-full"
+        >
+          {isZipping ? (
+            <RefreshCw className="w-4 h-4 animate-spin" />
+          ) : (
+            <FileArchive className="w-4 h-4" />
+          )}
+          <span>
+            {selectedIds.size === frames.length
+              ? "Download All as ZIP"
+              : `Download Selected ZIP (${selectedIds.size})`}
+          </span>
+        </button>
+      </div>
+    </div>
+  ) : undefined;
+
+  const outputContent = isExtracting ? (
+    <div className="flex flex-col items-center justify-center p-12 h-full min-h-[400px] space-y-4 text-center">
+      <m.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+        className="w-12 h-12 rounded-full border-4 border-blue/20 border-t-blue"
+      />
+      <div className="space-y-1">
+        <h3 className="text-base font-bold text-foreground">Extracting Frames</h3>
+        <p className="text-xs text-text-muted">{extractProgress}</p>
+      </div>
+    </div>
+  ) : frames.length > 0 ? (
+    <div className="flex flex-col h-full space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-bold text-foreground">Extracted Frames</h3>
+      </div>
+      <div
+        className="grid gap-4 flex-1 overflow-y-auto pr-1"
+        style={{
+          gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+        }}
+      >
+        {frames.map((frame, index) => {
+          const isSelected = selectedIds.has(frame.id);
+          const isCopied = copiedFrameId === frame.id;
+
+          return (
+            <m.div
+              key={frame.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2, delay: Math.min(index * 0.02, 0.5) }}
+              className={`group relative flex flex-col justify-between rounded-2xl bg-bg border transition-all duration-200 overflow-hidden ${
+                isSelected
+                  ? "border-blue ring-2 ring-blue/20 shadow-xs"
+                  : "border-border hover:border-border/80"
+              }`}
+            >
+              {/* Card Header */}
+              <div className="flex items-center justify-between p-2.5 border-b border-border/50 bg-bg/50">
+                <button
+                  onClick={() => toggleSelectFrame(frame.id)}
+                  className="flex items-center gap-2 text-xs font-bold text-foreground hover:text-blue transition-colors"
+                >
+                  {isSelected ? (
+                    <CheckSquare className="w-4 h-4 text-blue shrink-0" />
+                  ) : (
+                    <Square className="w-4 h-4 text-text-muted shrink-0" />
+                  )}
+                  <span>Frame #{frame.id}</span>
+                </button>
+                <span className="text-[11px] font-medium text-text-muted">
+                  {frame.width > 0 ? `${frame.width}×${frame.height}` : ""}
+                </span>
+              </div>
+
+              {/* Thumbnail area */}
+              <div
+                onClick={() => setActiveModalIndex(index)}
+                className="relative flex items-center justify-center p-3 h-48 cursor-pointer overflow-hidden group/thumb"
+                style={CHECKERBOARD_BG}
+              >
+                <img
+                  src={frame.url}
+                  alt={`Frame ${frame.id}`}
+                  className="max-h-full max-w-full object-contain rounded-lg transition-transform duration-200 group-hover/thumb:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white gap-2 font-semibold text-xs">
+                  <ZoomIn className="w-5 h-5" />
+                  <span>Inspect</span>
+                </div>
+              </div>
+
+              {/* Card Footer Actions */}
+              <div className="flex items-center justify-between p-2.5 bg-surface border-t border-border/50 gap-2">
+                <span className="text-[11px] text-text-muted font-mono pl-1">
+                  {frame.sizeFormatted}
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => copyFrameToClipboard(frame)}
+                    title="Copy image to clipboard"
+                    className="p-1.5 rounded-lg bg-bg hover:bg-surface-hover text-text-muted hover:text-foreground border border-border transition-colors"
+                  >
+                    {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                  <button
+                    onClick={() => downloadSingleFrame(frame)}
+                    title="Download PNG frame"
+                    className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg bg-blue/10 hover:bg-blue/20 text-blue transition-colors"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>PNG</span>
+                  </button>
+                </div>
+              </div>
+            </m.div>
+          );
+        })}
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center text-text-muted bg-bg rounded-2xl border border-dashed border-border p-6">
+      <Film className="w-12 h-12 opacity-20 mb-4" />
+      <p className="text-sm font-medium">Extracted frames will appear here</p>
+    </div>
+  );
+
+  const infoPanelContent = !file && !isExtracting ? (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="p-5 rounded-3xl bg-surface border border-border space-y-3 shadow-sm">
+        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold text-base">
+          1
+        </div>
+        <div>
+          <h3 className="text-sm font-bold text-foreground mb-1">Zero Upload</h3>
+          <p className="text-xs text-text-muted leading-relaxed">Your GIF stays on your device. Extraction happens inside your browser engine.</p>
+        </div>
+      </div>
+      <div className="p-5 rounded-3xl bg-surface border border-border space-y-3 shadow-sm">
+        <div className="w-10 h-10 rounded-xl bg-blue/10 text-blue flex items-center justify-center font-bold text-base">
+          2
+        </div>
+        <div>
+          <h3 className="text-sm font-bold text-foreground mb-1">Full Resolution PNG</h3>
+          <p className="text-xs text-text-muted leading-relaxed">Frames are decoded pixel-perfect directly into lossless PNG files.</p>
+        </div>
+      </div>
+      <div className="p-5 rounded-3xl bg-surface border border-border space-y-3 shadow-sm">
+        <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center font-bold text-base">
+          3
+        </div>
+        <div>
+          <h3 className="text-sm font-bold text-foreground mb-1">ZIP Archive Export</h3>
+          <p className="text-xs text-text-muted leading-relaxed">Download individual frames or export all frames bundled as a ZIP package.</p>
+        </div>
+      </div>
+    </div>
+  ) : undefined;
+
+  return (
+    <>
+      <ToolWorkspace
+        layout="split"
+        input={inputContent}
+        optionsPanel={optionsPanelContent}
+        output={outputContent}
+        infoPanel={infoPanelContent}
+      />
 
       {/* Lightbox / Frame Inspection Modal */}
       <AnimatePresence>
@@ -723,6 +721,6 @@ export default function GifExtractorClient() {
           </m.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

@@ -42,8 +42,8 @@ export async function loadAny(file: File): Promise<HTMLImageElement | HTMLCanvas
 }
 
 export async function loadHeic(file: File): Promise<HTMLImageElement> {
-  if (typeof window === 'undefined' || !(window as any).heic2any) throw new Error('HEIC decoder (heic2any) not loaded. Check your network connection.');
-  const result = await (window as any).heic2any({ blob: file, toType: 'image/png', quality: 0.95 });
+  const heic2any = (await import('heic2any')).default;
+  const result = await heic2any({ blob: file, toType: 'image/png', quality: 0.95 });
   const pngBlob = Array.isArray(result) ? result[0] : result;
   if (!pngBlob) throw new Error('HEIC conversion failed.');
   const url = blobManager.create(pngBlob);
@@ -53,8 +53,7 @@ export async function loadHeic(file: File): Promise<HTMLImageElement> {
 }
 
 export async function loadTiff(file: File): Promise<HTMLCanvasElement> {
-  if (typeof window === 'undefined' || !(window as any).UTIF) throw new Error('TIFF decoder (UTIF) not loaded. Check your network connection.');
-  const UTIF = (window as any).UTIF;
+  const UTIF = (await import('utif')).default || await import('utif');
   const ab   = await Utils.readAsArrayBuffer(file);
   const ifds = UTIF.decode(ab);
   if (!ifds || !ifds.length) throw new Error('No images found in TIFF file.');
@@ -72,9 +71,8 @@ export async function loadTiff(file: File): Promise<HTMLCanvasElement> {
   return canvas;
 }
 
-export function encodeTiff(canvas: HTMLCanvasElement): Blob {
-  if (typeof window === 'undefined' || !(window as any).UTIF) throw new Error('TIFF encoder (UTIF) not loaded.');
-  const UTIF = (window as any).UTIF;
+export async function encodeTiff(canvas: HTMLCanvasElement): Promise<Blob> {
+  const UTIF = (await import('utif')).default || await import('utif');
   const ctx     = canvas.getContext('2d') as CanvasRenderingContext2D;
   const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const tiffBuf = UTIF.encodeImage(imgData.data, canvas.width, canvas.height);

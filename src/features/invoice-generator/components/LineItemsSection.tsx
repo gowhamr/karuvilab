@@ -12,7 +12,7 @@ interface LineItemsSectionProps {
 
 export const LineItemsSection = ({ items, currency, addItem, removeItem, updateItem }: LineItemsSectionProps) => {
   return (
-    <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
            <div className="w-1.5 h-1.5 rounded-full bg-blue" />

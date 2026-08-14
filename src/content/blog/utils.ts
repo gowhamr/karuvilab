@@ -4,10 +4,10 @@ export function getArticleMetadata(slug: string, article: any) {
   const readingTime = Math.ceil(wordCount / 200);
   
   const match = article.content.match(/<p>(.*?)<\/p>/);
-  const description = match ? match[1].replace(/<[^>]*>?/gm, '').substring(0, 150) + '...' : article.title;
+  const description = article.description || (match ? match[1].replace(/<[^>]*>?/gm, '').substring(0, 150) + '...' : article.title);
 
   const hash = slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const date = new Date(2026, 0, 1 + (hash % 180));
+  const date = article.date ? new Date(article.date) : new Date(2026, 0, 1 + (hash % 180));
   
   return {
     slug,

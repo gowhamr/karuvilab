@@ -4,10 +4,11 @@ import { useState, useCallback } from "react";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { formatError } from "@/src/lib/formatError";
 import { formatBytes } from "@/src/utils";
 import { loadAny, loadTiff, encodeTiff } from "@/src/format-utils";
-import { m, AnimatePresence } from "framer-motion";
+import { m } from "framer-motion";
 import {
   Download,
   RefreshCw,
@@ -63,56 +64,7 @@ const TARGET_OPTIONS: FormatOption[] = [
   }
 ];
 
-async function ensureUtifLoaded(): Promise<void> {
-  if (typeof window === "undefined") return;
-  if ((window as any).UTIF) return;
 
-  return new Promise((resolve, reject) => {
-    const existing = document.querySelector('script[data-utif-script="true"]');
-    if (existing) {
-      let interval: NodeJS.Timeout;
-      const timeout = setTimeout(() => {
-        clearInterval(interval);
-        reject(new Error("TIFF converter engine initialization timed out."));
-      }, 10000);
-      interval = setInterval(() => {
-        if ((window as any).UTIF) {
-          clearTimeout(timeout);
-          clearInterval(interval);
-          resolve();
-        }
-      }, 100);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.setAttribute("data-utif-script", "true");
-    script.src = "https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.js";
-    script.async = true;
-    script.onload = () => {
-      if ((window as any).UTIF) {
-        resolve();
-      } else {
-        reject(new Error("TIFF engine failed to initialize."));
-      }
-    };
-    script.onerror = () => {
-      const fallbackScript = document.createElement("script");
-      fallbackScript.setAttribute("data-utif-script", "true");
-      fallbackScript.src = "https://unpkg.com/utif@3.1.0/UTIF.js";
-      fallbackScript.async = true;
-      fallbackScript.onload = () => {
-        if ((window as any).UTIF) resolve();
-        else reject(new Error("TIFF engine failed to initialize from fallback CDN."));
-      };
-      fallbackScript.onerror = () => {
-        reject(new Error("Failed to load TIFF processor engine. Please check your network connection."));
-      };
-      document.body.appendChild(fallbackScript);
-    };
-    document.body.appendChild(script);
-  });
-}
 
 function elementToCanvas(el: HTMLImageElement | HTMLCanvasElement): HTMLCanvasElement {
   if (el instanceof HTMLCanvasElement) {
@@ -158,8 +110,8 @@ export default function TiffConverterClient() {
 
         let blob: Blob;
         if (format === "image/tiff") {
-          await ensureUtifLoaded();
-          blob = encodeTiff(canvas);
+
+          blob = await encodeTiff(canvas);
         } else {
           blob = await new Promise<Blob>((resolve, reject) => {
             canvas.toBlob(
@@ -211,7 +163,7 @@ export default function TiffConverterClient() {
 
         if (isTiff) {
           setLoadingMessage("Initializing TIFF engine & decoding image...");
-          await ensureUtifLoaded();
+
           canvas = await loadTiff(selectedFile);
 
           setLoadingMessage("Generating visual preview...");
@@ -292,7 +244,7 @@ export default function TiffConverterClient() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       <PrivacyBadge />
 
       {errorMsg && (
@@ -306,99 +258,98 @@ export default function TiffConverterClient() {
         </m.div>
       )}
 
-      {!file ? (
-        <div className="space-y-6">
-          <DropZone
-            onFilesSelected={handleFileSelect}
-            accept=".tiff,.tif,.png,.jpg,.jpeg,.webp,.bmp,.heic,.gif,image/*"
-            title="Drop image to convert to or from TIFF"
-            subtitle="Supports TIFF, TIF, PNG, JPEG, WebP, BMP, HEIC, and GIF"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl bg-surface border border-border space-y-2">
-              <div className="flex items-center gap-2 text-blue font-semibold text-sm">
-                <Layers className="w-4 h-4" />
-                <span>Lossless Quality</span>
-              </div>
-              <p className="text-xs text-text-muted">
-                TIFF preserves absolute maximum image detail, making it ideal for professional photography, archives, and printing.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-surface border border-border space-y-2">
-              <div className="flex items-center gap-2 text-emerald-500 font-semibold text-sm">
-                <Sparkles className="w-4 h-4" />
-                <span>Auto-Detection Mode</span>
-              </div>
-              <p className="text-xs text-text-muted">
-                Drop a TIFF image to convert to web formats (PNG/JPEG/WebP), or drop any standard image to convert it into a TIFF.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-surface border border-border space-y-2">
-              <div className="flex items-center gap-2 text-amber-500 font-semibold text-sm">
-                <Info className="w-4 h-4" />
-                <span>100% Private & Local</span>
-              </div>
-              <p className="text-xs text-text-muted">
-                All decoding and encoding happens directly inside your browser memory using WebAssembly & pure JavaScript.
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <AnimatePresence mode="wait">
-          <m.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            className="space-y-6"
-          >
-            {/* Header info bar */}
-            <div className="p-4 rounded-2xl bg-surface border border-border flex flex-wrap items-center justify-between gap-4 shadow-sm">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="p-2.5 rounded-xl bg-blue/10 text-blue shrink-0">
-                  <FileImage className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-sm font-bold text-text truncate max-w-xs md:max-w-md">
-                    {file.name}
-                  </h3>
-                  <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
-                    <span className="px-2 py-0.5 rounded-full bg-border/50 font-medium uppercase text-[10px]">
-                      {inputFormatLabel}
-                    </span>
-                    <span>•</span>
-                    <span>{formatBytes(file.size)}</span>
-                    {origDimensions && (
-                      <>
-                        <span>•</span>
-                        <span>
-                          {origDimensions.width} × {origDimensions.height} px
-                        </span>
-                      </>
-                    )}
+      <ToolWorkspace
+        layout={file ? "split" : "stacked"}
+        input={
+          !file ? (
+            <DropZone
+              onFilesSelected={handleFileSelect}
+              accept=".tiff,.tif,.png,.jpg,.jpeg,.webp,.bmp,.heic,.gif,image/*"
+              title="Drop image to convert to or from TIFF"
+              subtitle="Supports TIFF, TIF, PNG, JPEG, WebP, BMP, HEIC, and GIF"
+            />
+          ) : (
+            <div className="space-y-6 flex flex-col h-full">
+              {/* Header info bar */}
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-border/40">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2.5 rounded-xl bg-blue/10 text-blue shrink-0">
+                    <FileImage className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-bold text-text truncate max-w-xs md:max-w-md">
+                      {file.name}
+                    </h3>
+                    <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
+                      <span className="px-2 py-0.5 rounded-full bg-border/50 font-medium uppercase text-[10px]">
+                        {inputFormatLabel}
+                      </span>
+                      <span>•</span>
+                      <span>{formatBytes(file.size)}</span>
+                      {origDimensions && (
+                        <>
+                          <span>•</span>
+                          <span>
+                            {origDimensions.width} × {origDimensions.height} px
+                          </span>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-blue/10 text-blue font-semibold text-xs border border-blue/20">
+                    {isInputTiff ? "TIFF → Standard Format" : "Standard Format → TIFF"}
+                  </span>
+                  <button
+                    onClick={handleReset}
+                    className="px-3 py-1.5 rounded-xl bg-border/40 hover:bg-border/70 text-text text-xs font-semibold flex items-center gap-1.5 transition-colors active:scale-95"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Change Image</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-blue/10 text-blue font-semibold text-xs border border-blue/20">
-                  {isInputTiff ? "TIFF → Standard Format" : "Standard Format → TIFF"}
-                </span>
-                <button
-                  onClick={handleReset}
-                  className="px-3 py-1.5 rounded-xl bg-border/40 hover:bg-border/70 text-text text-xs font-semibold flex items-center gap-1.5 transition-colors active:scale-95"
-                >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  <span>Change Image</span>
-                </button>
+              {/* Original Preview */}
+              <div className="flex-1 flex flex-col space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-text uppercase tracking-wider">
+                    Original Preview
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md bg-border/50 text-text font-semibold text-[10px]">
+                    {inputFormatLabel}
+                  </span>
+                </div>
+
+                <div className="flex-1 min-h-[240px] max-h-[360px] rounded-xl bg-border/20 border border-border/50 overflow-hidden flex items-center justify-center p-2 relative bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]">
+                  {inputPreviewUrl ? (
+                    <img
+                      src={inputPreviewUrl}
+                      alt="Original input preview"
+                      className="max-h-[320px] w-auto max-w-full object-contain rounded-lg shadow-sm"
+                    />
+                  ) : (
+                    <Loader2 className="w-6 h-6 animate-spin text-blue" />
+                  )}
+                </div>
+
+                <div className="pt-2 flex justify-between text-xs text-text-muted border-t border-border/40">
+                  <span>Size: {formatBytes(file.size)}</span>
+                  {origDimensions && (
+                    <span>
+                      {origDimensions.width} × {origDimensions.height} px
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-
-            {/* Target Settings */}
-            <div className="p-5 rounded-2xl bg-surface border border-border space-y-4 shadow-sm">
+          )
+        }
+        optionsPanel={
+          file ? (
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm font-bold text-text">
                   <Sliders className="w-4 h-4 text-blue" />
@@ -459,129 +410,130 @@ export default function TiffConverterClient() {
                 )}
               </div>
             </div>
-
-            {/* Dual Previews Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Original Preview */}
-              <div className="p-4 rounded-2xl bg-surface border border-border space-y-3 flex flex-col">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-text uppercase tracking-wider">
-                    Original Preview
-                  </span>
-                  <span className="px-2 py-0.5 rounded-md bg-border/50 text-text font-semibold text-[10px]">
-                    {inputFormatLabel}
-                  </span>
-                </div>
-
-                <div className="flex-1 min-h-[240px] max-h-[360px] rounded-xl bg-border/20 border border-border/50 overflow-hidden flex items-center justify-center p-2 relative bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]">
-                  {inputPreviewUrl ? (
-                    <img
-                      src={inputPreviewUrl}
-                      alt="Original input preview"
-                      className="max-h-[320px] w-auto max-w-full object-contain rounded-lg shadow-sm"
-                    />
-                  ) : (
-                    <Loader2 className="w-6 h-6 animate-spin text-blue" />
-                  )}
-                </div>
-
-                <div className="pt-2 flex justify-between text-xs text-text-muted border-t border-border/40">
-                  <span>Size: {formatBytes(file.size)}</span>
-                  {origDimensions && (
-                    <span>
-                      {origDimensions.width} × {origDimensions.height} px
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Converted Preview */}
-              <div className="p-4 rounded-2xl bg-surface border border-border space-y-3 flex flex-col">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-text uppercase tracking-wider">
-                    Converted Preview
-                  </span>
-                  {resultBlob && (
-                    <span className="px-2 py-0.5 rounded-md bg-blue/10 text-blue font-bold text-[10px]">
-                      {targetFormat === "image/tiff"
-                        ? "TIFF"
-                        : (targetFormat.split("/")[1]?.toUpperCase() || "UNKNOWN")}
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex-1 min-h-[240px] max-h-[360px] rounded-xl bg-border/20 border border-border/50 overflow-hidden flex items-center justify-center p-2 relative bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]">
-                  {isProcessing ? (
-                    <div className="flex flex-col items-center gap-2 text-text-muted p-4 text-center">
-                      <Loader2 className="w-8 h-8 animate-spin text-blue" />
-                      <span className="text-xs font-medium">{loadingMessage}</span>
-                    </div>
-                  ) : resultUrl ? (
-                    <img
-                      src={resultUrl}
-                      alt="Converted output preview"
-                      className="max-h-[320px] w-auto max-w-full object-contain rounded-lg shadow-sm"
-                    />
-                  ) : (
-                    <span className="text-xs text-text-muted">No converted preview</span>
-                  )}
-                </div>
-
-                <div className="pt-2 flex items-center justify-between text-xs text-text-muted border-t border-border/40">
-                  {resultBlob ? (
-                    <>
-                      <span>Size: {formatBytes(resultBlob.size)}</span>
-                      {(() => {
-                        const diff = resultBlob.size - file.size;
-                        const pct = ((Math.abs(diff) / file.size) * 100).toFixed(1);
-                        const isSmaller = diff < 0;
-                        return (
-                          <span
-                            className={`font-semibold px-2 py-0.5 rounded-md text-[10px] ${
-                              isSmaller
-                                ? "bg-emerald-500/10 text-emerald-500"
-                                : "bg-amber-500/10 text-amber-500"
-                            }`}
-                          >
-                            {isSmaller ? `-${pct}% smaller` : `+${pct}% larger`}
-                          </span>
-                        );
-                      })()}
-                    </>
-                  ) : (
-                    <span>Ready to convert</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Action Bar */}
-            <div className="p-4 rounded-2xl bg-surface border border-border flex flex-wrap items-center justify-between gap-4 shadow-sm">
-              <div className="flex items-center gap-2 text-xs text-text-muted">
-                <Sparkles className="w-4 h-4 text-blue" />
-                <span>
-                  Ready to download in{" "}
-                  <strong>
+          ) : undefined
+        }
+        output={
+          file ? (
+            <div className="space-y-4 flex flex-col h-full">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-text uppercase tracking-wider">
+                  Converted Preview
+                </span>
+                {resultBlob && (
+                  <span className="px-2 py-0.5 rounded-md bg-blue/10 text-blue font-bold text-[10px]">
                     {targetFormat === "image/tiff"
                       ? "TIFF"
                       : (targetFormat.split("/")[1]?.toUpperCase() || "UNKNOWN")}
-                  </strong>{" "}
-                  format.
-                </span>
+                  </span>
+                )}
               </div>
 
-              <button
-                onClick={handleDownload}
-                disabled={!resultUrl || isProcessing}
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue hover:bg-blue/90 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download Converted Image</span>
-              </button>
+              <div className="flex-1 min-h-[240px] max-h-[360px] rounded-xl bg-border/20 border border-border/50 overflow-hidden flex items-center justify-center p-2 relative bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]">
+                {isProcessing ? (
+                  <div className="flex flex-col items-center gap-2 text-text-muted p-4 text-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue" />
+                    <span className="text-xs font-medium">{loadingMessage}</span>
+                  </div>
+                ) : resultUrl ? (
+                  <img
+                    src={resultUrl}
+                    alt="Converted output preview"
+                    className="max-h-[320px] w-auto max-w-full object-contain rounded-lg shadow-sm"
+                  />
+                ) : (
+                  <span className="text-xs text-text-muted">No converted preview</span>
+                )}
+              </div>
+
+              <div className="pt-2 flex items-center justify-between text-xs text-text-muted border-t border-border/40">
+                {resultBlob ? (
+                  <>
+                    <span>Size: {formatBytes(resultBlob.size)}</span>
+                    {(() => {
+                      const diff = resultBlob.size - file.size;
+                      const pct = ((Math.abs(diff) / file.size) * 100).toFixed(1);
+                      const isSmaller = diff < 0;
+                      return (
+                        <span
+                          className={`font-semibold px-2 py-0.5 rounded-md text-[10px] ${
+                            isSmaller
+                              ? "bg-emerald-500/10 text-emerald-500"
+                              : "bg-amber-500/10 text-amber-500"
+                          }`}
+                        >
+                          {isSmaller ? `-${pct}% smaller` : `+${pct}% larger`}
+                        </span>
+                      );
+                    })()}
+                  </>
+                ) : (
+                  <span>Ready to convert</span>
+                )}
+              </div>
+
+              {/* Bottom Action Bar */}
+              <div className="pt-4 border-t border-border/40 flex flex-wrap items-center justify-between gap-4 mt-auto">
+                <div className="flex items-center gap-2 text-xs text-text-muted">
+                  <Sparkles className="w-4 h-4 text-blue" />
+                  <span>
+                    Ready to download in{" "}
+                    <strong>
+                      {targetFormat === "image/tiff"
+                        ? "TIFF"
+                        : (targetFormat.split("/")[1]?.toUpperCase() || "UNKNOWN")}
+                    </strong>{" "}
+                    format.
+                  </span>
+                </div>
+
+                <button
+                  onClick={handleDownload}
+                  disabled={!resultUrl || isProcessing}
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue hover:bg-blue/90 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue/20 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download Converted Image</span>
+                </button>
+              </div>
             </div>
-          </m.div>
-        </AnimatePresence>
-      )}
+          ) : undefined
+        }
+        infoPanel={
+          !file ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 rounded-xl bg-surface border border-border space-y-2 shadow-sm">
+                <div className="flex items-center gap-2 text-blue font-semibold text-sm">
+                  <Layers className="w-4 h-4" />
+                  <span>Lossless Quality</span>
+                </div>
+                <p className="text-xs text-text-muted">
+                  TIFF preserves absolute maximum image detail, making it ideal for professional photography, archives, and printing.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-surface border border-border space-y-2 shadow-sm">
+                <div className="flex items-center gap-2 text-emerald-500 font-semibold text-sm">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Auto-Detection Mode</span>
+                </div>
+                <p className="text-xs text-text-muted">
+                  Drop a TIFF image to convert to web formats (PNG/JPEG/WebP), or drop any standard image to convert it into a TIFF.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-surface border border-border space-y-2 shadow-sm">
+                <div className="flex items-center gap-2 text-amber-500 font-semibold text-sm">
+                  <Info className="w-4 h-4" />
+                  <span>100% Private & Local</span>
+                </div>
+                <p className="text-xs text-text-muted">
+                  All decoding and encoding happens directly inside your browser memory using WebAssembly & pure JavaScript.
+                </p>
+              </div>
+            </div>
+          ) : undefined
+        }
+      />
     </div>
   );
 }

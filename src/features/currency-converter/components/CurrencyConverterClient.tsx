@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { MetricCard } from "@/components/ui/MetricCard";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { useCurrencyStore } from "../store";
 import { clearExpiredCurrencyRates } from "@/src/lib/db";
@@ -251,11 +250,12 @@ export default function CurrencyConverterClient() {
         </div>
       )}
 
-      {(ratesData || isLoading) && (
-        <>
-          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5 relative">
+      <ToolWorkspace
+        layout="split"
+        input={
+          <div className="space-y-5 relative">
             {isLoading && (
-              <div className="absolute top-0 left-0 w-full h-1 bg-blue/20 overflow-hidden rounded-t-2xl">
+              <div className="w-full h-1 bg-blue/20 overflow-hidden rounded-full mb-4">
                 <div className="h-full bg-blue animate-progress w-full" />
               </div>
             )}
@@ -340,22 +340,29 @@ export default function CurrencyConverterClient() {
               </button>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <MetricCard
-              label={`Converted Amount (${to})`}
-              value={ratesData ? fmt(result, to) : '--'}
-              accent
-            />
-            <MetricCard
-              label={`Current Exchange Rate`}
-              sub={`1 ${from} = ${ratesData ? fmt(rate, to) : '--'}`}
-              value={ratesData ? fmt(rate, to) : '--'}
-            />
+        }
+        output={
+          <div className="h-full flex flex-col justify-center space-y-12 py-8 min-h-[300px]">
+            <div className="text-center space-y-4">
+              <div className="text-xs font-black text-text-4 uppercase tracking-widest">Converted Amount ({to})</div>
+              <div className="text-5xl sm:text-6xl font-black text-blue tabular-nums break-words leading-tight">
+                {ratesData ? fmt(result, to) : '--'}
+              </div>
+            </div>
+            
+            <div className="text-center space-y-3">
+              <div className="text-xs font-black text-text-4 uppercase tracking-widest">Exchange Rate</div>
+              <div className="text-3xl font-black text-text tabular-nums break-words">
+                {ratesData ? fmt(rate, to) : '--'}
+              </div>
+              <div className="text-sm font-bold text-text-3">
+                1 {from} = {ratesData ? fmt(rate, to) : '--'}
+              </div>
+            </div>
           </div>
-
-          {/* Quick Rates Table */}
-          <div className="bg-surface border border-border rounded-2xl overflow-hidden">
+        }
+        infoPanel={
+          <div className="bg-surface border border-border rounded-4xl overflow-hidden shadow-sm">
             <div className="p-5 border-b border-border bg-surface/50 backdrop-blur-sm flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Globe size={18} className="text-blue" />
@@ -403,8 +410,8 @@ export default function CurrencyConverterClient() {
               </p>
             </div>
           </div>
-        </>
-      )}
+        }
+      />
     </div>
   );
 }

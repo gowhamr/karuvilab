@@ -1,110 +1,89 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { base64UrlEncode, base64UrlDecode } from "@/src/lib/security/tokens";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { ArrowRightLeft, ShieldCheck, AlertCircle } from "lucide-react";
+import { ArrowRightLeft } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export default function Base64UrlClient() {
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>();
 
-  const handleConvert = useCallback(() => {
-    setError(null);
+  useEffect(() => {
+    setError(undefined);
     if (!input) {
       setResult("");
       return;
     }
 
-    try {
-      if (mode === 'encode') {
-        const out = base64UrlEncode(input);
-        setResult(out);
-      } else {
-        const out = base64UrlDecode(input);
-        setResult(out);
+    const timer = setTimeout(() => {
+      try {
+        if (mode === 'encode') {
+          const out = base64UrlEncode(input);
+          setResult(out);
+        } else {
+          const out = base64UrlDecode(input);
+          setResult(out);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Base64URL conversion failed');
+        setResult("");
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Base64URL conversion failed');
-    }
+    }, 150);
+    
+    return () => clearTimeout(timer);
   }, [mode, input]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Mode Tabs */}
-      <div className="flex gap-2 p-1 bg-surface-2 rounded-xl border border-border w-fit">
-        <button
-          id="b64url-tab-encode"
-          onClick={() => { setMode('encode'); setError(null); setResult(""); }}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition ${
-            mode === 'encode' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'
-          }`}
-        >
-          <ArrowRightLeft className="w-4 h-4" />
-          Encode to Base64URL
-        </button>
-        <button
-          id="b64url-tab-decode"
-          onClick={() => { setMode('decode'); setError(null); setResult(""); }}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition ${
-            mode === 'decode' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'
-          }`}
-        >
-          <ArrowRightLeft className="w-4 h-4 rotate-180" />
-          Decode Base64URL
-        </button>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-text">
-          {mode === 'encode' ? 'Plaintext / UTF-8 Input:' : 'Base64URL Encoded String:'}
-        </label>
-        <textarea
-          id="b64url-input-text"
-          rows={5}
-          placeholder={mode === 'encode' ? 'Type text to encode...' : 'Paste Base64URL string (e.g. eyJhbGciOiJSUzI1Ni...)'}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
-        />
-      </div>
-
-      <button
-        id="b64url-submit-btn"
-        onClick={handleConvert}
-        className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
-      >
-        <ArrowRightLeft className="w-5 h-5" />
-        {mode === 'encode' ? 'Encode to Base64URL' : 'Decode Base64URL'}
-      </button>
-
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          {error}
-        </div>
-      )}
-
-      {result && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-semibold text-text flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              Result Output:
-            </label>
-            <CopyButton text={result} />
+    <ToolWorkspace
+      layout="split"
+      tabs={{
+        options: [
+          { id: 'encode', label: 'Encode to Base64URL', icon: <ArrowRightLeft size={16} /> },
+          { id: 'decode', label: 'Decode Base64URL', icon: <ArrowRightLeft size={16} className="rotate-180" /> }
+        ],
+        activeId: mode,
+        onChange: (id) => {
+           setMode(id as 'encode' | 'decode');
+           setInput("");
+           setResult("");
+        }
+      }}
+      input={
+        <div className="flex flex-col h-full space-y-2">
+          <div className="flex justify-between items-center px-1">
+            <span className="text-sm font-bold text-text-2">
+              {mode === 'encode' ? 'Plaintext / UTF-8 Input' : 'Base64URL Encoded String'}
+            </span>
+            <button 
+              onClick={() => setInput('')}
+              className="text-xs font-bold text-red-500 hover:underline"
+            >
+              Clear
+            </button>
           </div>
-          <textarea
-            id="b64url-result-output"
-            readOnly
-            rows={5}
-            value={result}
-            className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs text-emerald-300 focus:outline-none"
+          <ToolInput
+            value={input}
+            onChange={setInput}
+            placeholder={mode === 'encode' ? 'Type text to encode...' : 'Paste Base64URL string (e.g. eyJhbGciOiJSUzI1Ni...)'}
+            mono
+            className="flex-1 min-h-52 resize-none"
           />
         </div>
-      )}
-    </div>
+      }
+      output={
+        <ToolResultArea
+          label="Result Output"
+          value={result}
+          error={error}
+          downloadFilename={`base64url-result-${Date.now()}.txt`}
+          contentClassName="min-h-52 text-emerald-300"
+        />
+      }
+    />
   );
 }

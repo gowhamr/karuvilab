@@ -4,42 +4,54 @@ import React from "react";
 import { CopyButton } from "./CopyButton";
 import { useToast } from "./Toast";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { cn } from "@/src/lib/utils";
 
 interface ToolResultAreaProps {
   label: string;
   value: string;
-  onClear?: () => void;
-  onDownload?: () => void;
-  error?: string;
-  language?: string;
+  onClear?: (() => void) | undefined;
+  onDownload?: (() => void) | undefined;
+  downloadFilename?: string | undefined;
+  downloadMimeType?: string | undefined;
+  error?: string | undefined;
+  language?: string | undefined;
+  className?: string | undefined;
+  contentClassName?: string | undefined;
 }
 
 export function ToolResultArea({ 
   label, 
   value, 
   onClear, 
-  onDownload, 
+  onDownload,
+  downloadFilename,
+  downloadMimeType,
   error,
-  language
+  language,
+  className,
+  contentClassName
 }: ToolResultAreaProps) {
   const { toast } = useToast();
   const { createUrl, revokeUrl } = useObjectUrlManager();
 
   const handleDownload = () => {
     if (!value) return;
-    const blob = new Blob([value], { type: "text/plain" });
+    if (onDownload) {
+      onDownload();
+      return;
+    }
+    const blob = new Blob([value], { type: downloadMimeType || "text/plain" });
     const url = createUrl(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `result-${Date.now()}.txt`;
+    a.download = downloadFilename || `result-${Date.now()}.txt`;
     a.click();
     revokeUrl(url);
     toast("Download started");
-    onDownload?.();
   };
 
   return (
-    <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className={cn("space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col h-full", className)}>
       <div className="flex items-center justify-between">
         <div className="text-sm font-bold text-text-2 flex items-center gap-2">
           {label}
@@ -83,13 +95,13 @@ export function ToolResultArea({
           {error}
         </div>
       ) : (
-        <div className="relative group">
+        <div className="relative group flex-1 flex flex-col">
           <div 
             aria-live="polite"
             role="region"
             aria-label={`${label} result`}
             tabIndex={0}
-            className="w-full min-h-30 px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10 outline-none focus:border-blue"
+            className={cn("w-full flex-1 min-h-30 px-4 py-4 bg-bg border border-border rounded-xl font-mono text-sm text-text break-all whitespace-pre-wrap leading-relaxed ring-offset-bg focus-within:ring-2 focus-within:ring-blue/10 outline-none focus:border-blue overflow-auto", contentClassName)}
           >
             {value || <span className="text-text-4 italic" aria-hidden="true">Result will appear here...</span>}
             {!value && <span className="sr-only">Result will appear here.</span>}

@@ -3,6 +3,7 @@
 import React, { useState, useDeferredValue, useMemo } from 'react';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { ToolResultArea } from '@/components/ui/ToolResultArea';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 import { AlertCircle } from 'lucide-react';
 
 export const MT_TAG_DICTIONARY: Record<string, string> = {
@@ -216,15 +217,17 @@ export default function ToolClient() {
   }, [deferredInput]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <ToolInput 
-        value={input} 
-        onChange={setInput} 
-        placeholder="Paste SWIFT MT (e.g. {1:F01...}) or MX (XML) message here" 
-        label="SWIFT Message"
-      />
-      <div className="flex flex-col gap-2 h-full min-h-[400px]">
-        {error ? (
+    <ToolWorkspace
+      input={
+        <ToolInput 
+          value={input} 
+          onChange={setInput} 
+          placeholder="Paste SWIFT MT (e.g. {1:F01...}) or MX (XML) message here" 
+          label="SWIFT Message"
+        />
+      }
+      output={
+        error ? (
           <div className="p-4 bg-error/10 text-error rounded-xl border border-error/20 flex items-start gap-3">
              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
              <div>
@@ -238,8 +241,8 @@ export default function ToolClient() {
             label="Parsed Message"
             language="json"
           />
-        )}
-      </div>
-    </div>
+        )
+      }
+    />
   );
 }

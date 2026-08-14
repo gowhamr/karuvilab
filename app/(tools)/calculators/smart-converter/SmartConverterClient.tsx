@@ -1,9 +1,8 @@
 "use client";
-import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
 
-const cat = CATEGORIES.find((c) => c.id === "calculators")!;
+import { useState, useMemo } from "react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 // Unit conversion map: key = canonical unit name, value = { toBase, fromBase, aliases }
 type UnitEntry = { toBase: (v: number) => number; fromBase: (v: number) => number; group: string };
@@ -136,76 +135,65 @@ export default function SmartConverterClient() {
   }, [query]);
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="smart-input" className="text-sm font-bold text-text-2">
-            What do you want to convert?
-          </label>
-          <input
-            id="smart-input"
-            type="text"
+    <ToolWorkspace
+      layout="stacked"
+      input={
+        <div className="space-y-4">
+          <ToolInput
+            label="What do you want to convert?"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={setQuery}
             placeholder="e.g. 5 kg to lbs"
-            className="w-full px-4 py-4 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all text-lg"
-            autoFocus
+            id="smart-input"
           />
+          {/* Example pills */}
+          <div className="flex flex-wrap gap-2">
+            {EXAMPLES.map((ex) => (
+              <button
+                key={ex}
+                onClick={() => setQuery(ex)}
+                className="px-3 py-1.5 rounded-full text-xs font-medium bg-bg border border-border hover:border-primary hover:text-primary transition-colors text-text-primary"
+              >
+                {ex}
+              </button>
+            ))}
+          </div>
         </div>
-
-        {/* Example pills */}
-        <div className="flex flex-wrap gap-2">
-          {EXAMPLES.map((ex) => (
-            <button
-              key={ex}
-              onClick={() => setQuery(ex)}
-              className="px-3 py-1.5 rounded-full text-xs font-medium bg-bg border border-border hover:border-blue hover:text-blue transition-colors"
-            >
-              {ex}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {result && (
-        <div
-          className={`p-6 rounded-2xl border ${
-            "error" in result
-              ? "bg-red-500/10 border-red-500/30"
-              : "bg-surface border-border"
-          }`}
-        >
-          {"error" in result ? (
-            <p className="text-red-400 font-medium">{result.error}</p>
+      }
+      output={
+        result ? (
+          "error" in result ? (
+            <p className="text-danger font-medium">{result.error}</p>
           ) : (
             <div className="space-y-2">
-              <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Result</div>
+              <div className="text-xs font-bold text-text-secondary uppercase tracking-wider">Result</div>
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-xl text-text-3 font-medium">
+                <span className="text-xl text-text-secondary font-medium">
                   {fmt(result.value)} {result.from}
                 </span>
-                <span className="text-text-muted">=</span>
-                <span className="text-4xl font-black text-blue">
+                <span className="text-text-secondary">=</span>
+                <span className="text-4xl font-black text-primary">
                   {fmt(result.result)} {result.to}
                 </span>
               </div>
             </div>
-          )}
-        </div>
-      )}
-
-      {!result && (
-        <div className="bg-surface border border-border rounded-2xl p-6 space-y-3">
-          <h2 className="font-bold text-text-2 text-sm">Supported formats</h2>
-          <ul className="space-y-1 text-sm text-text-3">
-            <li>• <code className="bg-bg px-1.5 py-0.5 rounded text-xs font-mono">5 kg to lbs</code> — weight conversion</li>
-            <li>• <code className="bg-bg px-1.5 py-0.5 rounded text-xs font-mono">100 USD to INR</code> — currency (approximate)</li>
-            <li>• <code className="bg-bg px-1.5 py-0.5 rounded text-xs font-mono">3 feet in cm</code> — length conversion</li>
-            <li>• <code className="bg-bg px-1.5 py-0.5 rounded text-xs font-mono">72 F to C</code> — temperature</li>
-            <li>• <code className="bg-bg px-1.5 py-0.5 rounded text-xs font-mono">60 mph to km/h</code> — speed</li>
-          </ul>
-        </div>
-      )}
-    </div>
+          )
+        ) : null
+      }
+      infoPanel={
+        !result ? (
+          <div className="bg-surface border border-border rounded-4xl p-6 space-y-3 shadow-sm">
+            <h2 className="font-bold text-text-primary text-sm">Supported formats</h2>
+            <ul className="space-y-1 text-sm text-text-secondary">
+              <li>• <code className="bg-bg border border-divider px-1.5 py-0.5 rounded text-xs font-mono">5 kg to lbs</code> — weight conversion</li>
+              <li>• <code className="bg-bg border border-divider px-1.5 py-0.5 rounded text-xs font-mono">100 USD to INR</code> — currency (approximate)</li>
+              <li>• <code className="bg-bg border border-divider px-1.5 py-0.5 rounded text-xs font-mono">3 feet in cm</code> — length conversion</li>
+              <li>• <code className="bg-bg border border-divider px-1.5 py-0.5 rounded text-xs font-mono">72 F to C</code> — temperature</li>
+              <li>• <code className="bg-bg border border-divider px-1.5 py-0.5 rounded text-xs font-mono">60 mph to km/h</code> — speed</li>
+            </ul>
+          </div>
+        ) : undefined
+      }
+    />
   );
 }

@@ -33,7 +33,7 @@ export const InvoiceSummarySection = ({
   notes, setNotes, terms, setTerms, handlePrint, generatePDF, isGenerating
 }: InvoiceSummarySectionProps) => {
   return (
-    <div className="bg-surface border border-border p-8 rounded-4xl shadow-sm space-y-8 sticky top-24 print:hidden">
+    <div className="space-y-8 h-full flex flex-col justify-between print:hidden">
        <h2 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-4">Final Summary</h2>
        
        <div className="grid grid-cols-2 gap-4">

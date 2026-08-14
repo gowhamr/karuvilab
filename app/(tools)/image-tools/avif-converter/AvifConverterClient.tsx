@@ -20,6 +20,7 @@ import { downloadBlob, replaceExt } from "@/src/utils";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { SliderField } from "@/components/ui/SliderField";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 export default function AvifConverterClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -190,10 +191,10 @@ export default function AvifConverterClient() {
       : 0;
 
   return (
-    <div className="w-full mx-auto space-y-8">
-      {/* Main Container */}
-      {!file ? (
-        <div className="space-y-6">
+    <ToolWorkspace
+      layout={file ? "split" : "stacked"}
+      input={
+        !file ? (
           <DropZone
             onFilesSelected={handleFilesSelected}
             accept="image/*,.heic,.heif,.tiff,.tif,.bmp"
@@ -202,7 +203,200 @@ export default function AvifConverterClient() {
             icon={<FileImage className="w-10 h-10 text-blue" />}
             className="border-dashed border-2 hover:border-blue/50 transition-colors py-16"
           />
+        ) : (
+          <div className="space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue shrink-0">
+                  <FileImage className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-text truncate max-w-xs sm:max-w-md">
+                    {file.name}
+                  </p>
+                  <div className="flex items-center gap-3 text-xs text-text-muted font-medium mt-0.5">
+                    <span>{formatFileSize(file.size)}</span>
+                    {dimensions && (
+                      <>
+                        <span>•</span>
+                        <span>
+                          {dimensions.width} × {dimensions.height} px
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
 
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 px-4 py-2 bg-surface-2 hover:bg-border border border-border rounded-xl text-xs font-bold text-text-3 transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Change Image
+                </button>
+              </div>
+            </div>
+
+            <hr className="border-border" />
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-text-muted">
+                  Original Image
+                </span>
+                <span className="text-xs font-bold px-2.5 py-1 bg-surface-2 rounded-lg text-text-3 border border-border">
+                  {formatFileSize(originalSize)}
+                </span>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden border border-border bg-surface-2 min-h-64 flex items-center justify-center p-4">
+                {originalUrl && (
+                  <img
+                    src={originalUrl}
+                    alt="Original input"
+                    className="max-h-72 w-full object-contain rounded-lg"
+                  />
+                )}
+              </div>
+
+              <div className="text-xs text-text-muted font-medium flex items-center justify-between pt-2">
+                <span>Format: {file.type || "Image"}</span>
+                {dimensions && (
+                  <span>
+                    {dimensions.width} × {dimensions.height}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      }
+      optionsPanel={
+        file ? (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-text font-bold text-sm">
+              <Sliders className="w-4 h-4 text-blue" />
+              <span>Encoding Controls</span>
+            </div>
+
+            <SliderField
+              id="avif-quality"
+              label="Quality Level"
+              min={1}
+              max={100}
+              step={1}
+              value={quality}
+              onChange={setQuality}
+              format={(v) => `${v}%`}
+            />
+
+            <p className="text-xs text-text-muted font-medium flex items-center gap-1.5">
+              <Info className="w-3.5 h-3.5 text-blue shrink-0" />
+              AVIF encoding is computationally intensive. Higher quality settings may take longer to process.
+            </p>
+          </div>
+        ) : undefined
+      }
+      output={
+        file ? (
+          <div className="space-y-6 flex flex-col h-full">
+            <AnimatePresence>
+              {isFallback && (
+                <m.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="bg-amber-500/10 border border-amber-500/30 p-5 rounded-2xl flex items-start gap-3 text-amber-600 dark:text-amber-400"
+                >
+                  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div className="space-y-1 text-xs font-medium">
+                    <p className="font-bold text-sm">AVIF Encoding Not Supported</p>
+                    <p>
+                      Your current browser does not natively support exporting images to the AVIF format via HTML Canvas.
+                      The converted output fell back to <strong>PNG format</strong>.
+                    </p>
+                    <p className="opacity-80">
+                      To export native AVIF files, please use Chrome, Edge, or Firefox 93+.
+                    </p>
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
+
+            {error && (
+              <div className="bg-error/10 border border-error/30 p-5 rounded-2xl flex items-center gap-3 text-error text-xs font-bold">
+                <AlertTriangle className="w-5 h-5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <div className="space-y-3 flex-1 flex flex-col">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-blue flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {isFallback ? "Fallback (PNG)" : "AVIF Output"}
+                </span>
+
+                {resultBlob && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold px-2.5 py-1 bg-blue/10 text-blue rounded-lg border border-blue/20">
+                      {formatFileSize(convertedSize)}
+                    </span>
+                    {percentSavings > 0 ? (
+                      <span className="text-xs font-extrabold px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg border border-emerald-500/20">
+                        -{percentSavings.toFixed(1)}%
+                      </span>
+                    ) : percentSavings < 0 ? (
+                      <span className="text-xs font-extrabold px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg border border-amber-500/20">
+                        +{Math.abs(percentSavings).toFixed(1)}%
+                      </span>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden border border-border bg-surface-2 min-h-64 flex-1 flex items-center justify-center p-4">
+                {isProcessing ? (
+                  <div className="flex flex-col items-center justify-center gap-3 text-center p-8">
+                    <Loader2 className="w-8 h-8 text-blue animate-spin" />
+                    <div className="space-y-1">
+                      <p className="font-bold text-sm text-text">Encoding to AVIF...</p>
+                      <p className="text-xs text-text-muted font-medium">
+                        Processing frame data in browser memory
+                      </p>
+                    </div>
+                  </div>
+                ) : resultUrl ? (
+                  <img
+                    src={resultUrl}
+                    alt="AVIF Converted preview"
+                    className="max-h-72 w-full object-contain rounded-lg"
+                  />
+                ) : (
+                  <div className="text-xs text-text-muted font-medium">
+                    No result generated yet.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-2 mt-auto">
+              <button
+                onClick={handleDownload}
+                disabled={!resultBlob || isProcessing}
+                className="w-full py-3 px-5 bg-blue hover:bg-blue-hover disabled:opacity-50 text-white rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue/20 cursor-pointer disabled:cursor-not-allowed"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download {isFallback ? "Converted Image" : "AVIF Image"}</span>
+              </button>
+            </div>
+          </div>
+        ) : undefined
+      }
+      infoPanel={
+        !file ? (
           <div className="grid md:grid-cols-3 gap-4">
             <div className="bg-surface border border-border p-5 rounded-2xl space-y-2">
               <div className="w-8 h-8 rounded-xl bg-blue/10 flex items-center justify-center text-blue font-bold text-sm">
@@ -234,201 +428,8 @@ export default function AvifConverterClient() {
               </p>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {/* File Toolbar */}
-          <div className="bg-surface border border-border p-5 rounded-3xl flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue shrink-0">
-                <FileImage className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-bold text-sm text-text truncate max-w-xs sm:max-w-md">
-                  {file.name}
-                </p>
-                <div className="flex items-center gap-3 text-xs text-text-muted font-medium mt-0.5">
-                  <span>{formatFileSize(file.size)}</span>
-                  {dimensions && (
-                    <>
-                      <span>•</span>
-                      <span>
-                        {dimensions.width} × {dimensions.height} px
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-2 px-4 py-2 bg-surface-2 hover:bg-border border border-border rounded-xl text-xs font-bold text-text-3 transition-colors cursor-pointer"
-              >
-                <Trash2 className="w-4 h-4" />
-                Change Image
-              </button>
-            </div>
-          </div>
-
-          {/* Quality Controls */}
-          <div className="bg-surface border border-border p-6 rounded-3xl space-y-4">
-            <div className="flex items-center gap-2 text-text font-bold text-sm">
-              <Sliders className="w-4 h-4 text-blue" />
-              <span>Encoding Controls</span>
-            </div>
-
-            <SliderField
-              id="avif-quality"
-              label="Quality Level"
-              min={1}
-              max={100}
-              step={1}
-              value={quality}
-              onChange={setQuality}
-              format={(v) => `${v}%`}
-            />
-
-            <p className="text-xs text-text-muted font-medium flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-blue shrink-0" />
-              AVIF encoding is computationally intensive. Higher quality settings may take longer to process.
-            </p>
-          </div>
-
-          {/* Fallback Warning Alert */}
-          <AnimatePresence>
-            {isFallback && (
-              <m.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="bg-amber-500/10 border border-amber-500/30 p-5 rounded-2xl flex items-start gap-3 text-amber-600 dark:text-amber-400"
-              >
-                <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
-                <div className="space-y-1 text-xs font-medium">
-                  <p className="font-bold text-sm">AVIF Encoding Not Supported</p>
-                  <p>
-                    Your current browser does not natively support exporting images to the AVIF format via HTML Canvas.
-                    The converted output fell back to <strong>PNG format</strong>.
-                  </p>
-                  <p className="opacity-80">
-                    To export native AVIF files, please use Chrome, Edge, or Firefox 93+.
-                  </p>
-                </div>
-              </m.div>
-            )}
-          </AnimatePresence>
-
-          {/* Error Message */}
-          {error && (
-            <div className="bg-error/10 border border-error/30 p-5 rounded-2xl flex items-center gap-3 text-error text-xs font-bold">
-              <AlertTriangle className="w-5 h-5 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          {/* Side by Side Preview & Comparison */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Original Card */}
-            <div className="bg-surface border border-border p-5 rounded-3xl space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-text-muted">
-                    Original Image
-                  </span>
-                  <span className="text-xs font-bold px-2.5 py-1 bg-surface-2 rounded-lg text-text-3 border border-border">
-                    {formatFileSize(originalSize)}
-                  </span>
-                </div>
-
-                <div className="relative rounded-2xl overflow-hidden border border-border bg-surface-2 min-h-64 flex items-center justify-center p-4">
-                  {originalUrl && (
-                    <img
-                      src={originalUrl}
-                      alt="Original input"
-                      className="max-h-72 w-full object-contain rounded-lg"
-                    />
-                  )}
-                </div>
-              </div>
-
-              <div className="text-xs text-text-muted font-medium flex items-center justify-between pt-2">
-                <span>Format: {file.type || "Image"}</span>
-                {dimensions && (
-                  <span>
-                    {dimensions.width} × {dimensions.height}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* AVIF Converted Card */}
-            <div className="bg-surface border border-border p-5 rounded-3xl space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-blue flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    {isFallback ? "Fallback (PNG)" : "AVIF Output"}
-                  </span>
-
-                  {resultBlob && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold px-2.5 py-1 bg-blue/10 text-blue rounded-lg border border-blue/20">
-                        {formatFileSize(convertedSize)}
-                      </span>
-                      {percentSavings > 0 ? (
-                        <span className="text-xs font-extrabold px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg border border-emerald-500/20">
-                          -{percentSavings.toFixed(1)}%
-                        </span>
-                      ) : percentSavings < 0 ? (
-                        <span className="text-xs font-extrabold px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg border border-amber-500/20">
-                          +{Math.abs(percentSavings).toFixed(1)}%
-                        </span>
-                      ) : null}
-                    </div>
-                  )}
-                </div>
-
-                <div className="relative rounded-2xl overflow-hidden border border-border bg-surface-2 min-h-64 flex items-center justify-center p-4">
-                  {isProcessing ? (
-                    <div className="flex flex-col items-center justify-center gap-3 text-center p-8">
-                      <Loader2 className="w-8 h-8 text-blue animate-spin" />
-                      <div className="space-y-1">
-                        <p className="font-bold text-sm text-text">Encoding to AVIF...</p>
-                        <p className="text-xs text-text-muted font-medium">
-                          Processing frame data in browser memory
-                        </p>
-                      </div>
-                    </div>
-                  ) : resultUrl ? (
-                    <img
-                      src={resultUrl}
-                      alt="AVIF Converted preview"
-                      className="max-h-72 w-full object-contain rounded-lg"
-                    />
-                  ) : (
-                    <div className="text-xs text-text-muted font-medium">
-                      No result generated yet.
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <button
-                  onClick={handleDownload}
-                  disabled={!resultBlob || isProcessing}
-                  className="w-full py-3 px-5 bg-blue hover:bg-blue-hover disabled:opacity-50 text-white rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue/20 cursor-pointer disabled:cursor-not-allowed"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download {isFallback ? "Converted Image" : "AVIF Image"}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        ) : undefined
+      }
+    />
   );
 }

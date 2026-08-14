@@ -4,6 +4,7 @@ import { useState, useMemo, memo } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { m } from "framer-motion";
 
 const inr = (n: number, d = 0) =>
@@ -43,42 +44,44 @@ const RDCalculatorClient = memo(function RDCalculatorClient() {
 
   const summary = `RD Calculator Results\n----------------------\nMonthly Deposit: ${inr(monthly)}\nRate: ${rate}% | Years: ${years}\n\nTotal Invested: ${inr(result.totalInvested)}\nInterest Earned: ${inr(result.totalInterest)}\nMaturity Amount: ${inr(result.maturity)}\n\nGenerated via KaruviLab`;
 
-  return (
+  const inputPanel = (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
-        <SliderField
-          label="Monthly Deposit Amount"
-          id="rd-monthly"
-          min={500}
-          max={100000}
-          step={500}
-          value={monthly}
-          onChange={setMonthly}
-          format={(v) => inr(v)}
-        />
-        <SliderField
-          label="Interest Rate (Annual)"
-          id="rd-rate"
-          min={1}
-          max={15}
-          step={0.1}
-          value={rate}
-          onChange={setRate}
-          format={(v) => v.toFixed(1) + "%"}
-        />
-        <SliderField
-          label="Tenure (Years)"
-          id="rd-years"
-          min={1}
-          max={10}
-          step={1}
-          value={years}
-          onChange={setYears}
-          format={(v) => v + " yr"}
-        />
-      </div>
+      <SliderField
+        label="Monthly Deposit Amount"
+        id="rd-monthly"
+        min={500}
+        max={100000}
+        step={500}
+        value={monthly}
+        onChange={setMonthly}
+        format={(v) => inr(v)}
+      />
+      <SliderField
+        label="Interest Rate (Annual)"
+        id="rd-rate"
+        min={1}
+        max={15}
+        step={0.1}
+        value={rate}
+        onChange={setRate}
+        format={(v) => v.toFixed(1) + "%"}
+      />
+      <SliderField
+        label="Tenure (Years)"
+        id="rd-years"
+        min={1}
+        max={10}
+        step={1}
+        value={years}
+        onChange={setYears}
+        format={(v) => v + " yr"}
+      />
+    </div>
+  );
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  const outputPanel = (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-4">
         <MetricCard label="Maturity Amount" value={inr(result.maturity)} accent />
         <MetricCard label="Total Invested" value={inr(result.totalInvested)} />
         <MetricCard label="Interest Earned" value={inr(result.totalInterest)} />
@@ -123,6 +126,13 @@ const RDCalculatorClient = memo(function RDCalculatorClient() {
         </m.div>
       )}
     </div>
+  );
+
+  return (
+    <ToolWorkspace
+      input={inputPanel}
+      output={outputPanel}
+    />
   );
 });
 

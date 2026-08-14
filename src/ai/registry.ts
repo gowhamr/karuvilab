@@ -13,7 +13,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     family: 'birefnet',
     file: '/models/rmbg-2.0.onnx',
     sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-    sizeMB: 18.4,
+    sizeMB: 168,
     backend: ['webgpu', 'wasm'],
     input: { width: 1024, height: 1024, channels: 3, dataType: 'float32', shape: [1, 3, 1024, 1024] },
     output: { channels: 1, dataType: 'float32', shape: [1, 1, 1024, 1024] },
@@ -28,9 +28,10 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     estimatedInferenceMs: 1200,
     minimumRamMB: 2048,
     supportsTiling: true,
-    supportsGuidedFilter: true,
+    supportsGuidedFilter: false,
     qualityScore: 95,
     speedScore: 78,
+    available: true,
     description: 'High-accuracy portrait & object background removal model.',
     license: 'Open-Rail'
   },
@@ -39,8 +40,9 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'U²-NetP Ultra-Fast Mobile',
     version: '1.0',
     family: 'u2net',
+    // IMPORTANT: Model file is a placeholder. Replace with real u2netp.onnx (~4.7MB).
     file: '/models/u2netp.onnx',
-    sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
+    sha256: '',
     sizeMB: 4.7,
     backend: ['wasm', 'webgpu'],
     input: { width: 320, height: 320, channels: 3, dataType: 'float32', shape: [1, 3, 320, 320] },
@@ -59,6 +61,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsGuidedFilter: false,
     qualityScore: 82,
     speedScore: 98,
+    available: false,
     description: 'Lightweight pruned U2-Net model optimized for mobile browsers.',
     license: 'Apache-2.0'
   },
@@ -67,8 +70,9 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'MODNet Portrait Matting',
     version: '1.0',
     family: 'modnet',
+    // IMPORTANT: Model file is a placeholder. Replace with real modnet.onnx (~13.8MB).
     file: '/models/modnet.onnx',
-    sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
+    sha256: '',
     sizeMB: 13.8,
     backend: ['webgpu', 'wasm'],
     input: { width: 512, height: 512, channels: 3, dataType: 'float32', shape: [1, 3, 512, 512] },
@@ -84,9 +88,10 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     estimatedInferenceMs: 450,
     minimumRamMB: 1024,
     supportsTiling: false,
-    supportsGuidedFilter: true,
+    supportsGuidedFilter: false,
     qualityScore: 94,
     speedScore: 90,
+    available: false,
     description: 'Real-time human portrait trimap matting model.',
     license: 'Apache-2.0'
   },
@@ -95,8 +100,9 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'PaddleOCR Lightweight',
     version: '1.0',
     family: 'paddle',
+    // IMPORTANT: Model file is a placeholder. Replace with real paddle-ocr.onnx (~8.2MB).
     file: '/models/paddle-ocr.onnx',
-    sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
+    sha256: '',
     sizeMB: 8.2,
     backend: ['webgpu', 'wasm'],
     input: { width: 640, height: 640, channels: 3, dataType: 'float32', shape: [1, 3, 640, 640] },
@@ -110,6 +116,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsOffline: true,
     estimatedMemoryMB: 90,
     estimatedInferenceMs: 650,
+    available: false,
     description: 'In-browser optical character recognition engine.',
     license: 'Apache-2.0'
   },
@@ -117,8 +124,9 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     id: 'super-resolution-esrgan',
     name: 'Real-ESRGAN 4x Upscaler',
     version: '4.0',
+    // IMPORTANT: Model file is a placeholder. Replace with real realesrgan-4x.onnx (~24.1MB).
     file: '/models/realesrgan-4x.onnx',
-    sha256: 'f8723939c05878d6b9d6a3666d6268800938f328a6f3a61f237890a88e89f990',
+    sha256: '',
     sizeMB: 24.1,
     backend: ['webgpu', 'wasm'],
     input: { width: 256, height: 256, channels: 3, dataType: 'float32', shape: [1, 3, 256, 256] },
@@ -132,6 +140,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsOffline: true,
     estimatedMemoryMB: 220,
     estimatedInferenceMs: 1800,
+    available: false,
     description: '2x / 4x AI image upscaling and clarity enhancement.',
     license: 'BSD-3-Clause'
   },
@@ -140,8 +149,9 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'YOLOv8 Face Detection',
     version: '8.0',
     family: 'yolo',
+    // IMPORTANT: Model file is a placeholder. Replace with real yolov8-face.onnx (~6.5MB).
     file: '/models/yolov8-face.onnx',
-    sha256: 'a1287939c05878d6b9d6a3666d6268800938f328a6f3a61f237890a88e89f120',
+    sha256: '',
     sizeMB: 6.5,
     backend: ['webgpu', 'wasm'],
     input: { width: 640, height: 640, channels: 3, dataType: 'float32', shape: [1, 3, 640, 640] },
@@ -155,6 +165,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsOffline: true,
     estimatedMemoryMB: 75,
     estimatedInferenceMs: 450,
+    available: false,
     description: 'Automatic privacy face blurring & object detection model.',
     license: 'AGPL-3.0'
   }

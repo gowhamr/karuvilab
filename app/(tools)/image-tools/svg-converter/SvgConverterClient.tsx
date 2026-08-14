@@ -24,6 +24,7 @@ import { blobManager } from "@/src/lib/blob-manager";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const PRESET_SCALES = [
   { label: "0.5×", factor: 0.5 },
@@ -332,122 +333,105 @@ export default function SvgConverterClient() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Header / Privacy Badge */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <PrivacyBadge message="100% Client-Side Conversion — SVG vector rendered locally" />
-      </div>
-
-      {/* Error Notice */}
-      {error && (
-        <m.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-600 rounded-xl text-sm"
-        >
-          <AlertCircle className="w-5 h-5 shrink-0" />
-          <span>{error}</span>
-        </m.div>
-      )}
-
-      {/* Upload or Main Interface */}
-      {!file ? (
-        <div className="max-w-2xl mx-auto">
-          <DropZone
-            onFilesSelected={handleFileSelect}
-            accept=".svg,image/svg+xml"
-            title="Drop SVG file here or click to browse"
-            description="Supports vector SVG files (.svg)"
-            icon={<FileCode className="w-12 h-12 text-blue mx-auto" />}
-            className="py-16"
-          />
-        </div>
-      ) : (
-        <div className="grid gap-6 lg:grid-cols-2 items-start">
-          {/* Settings Column */}
+    <ToolWorkspace
+      layout={file ? "split" : "stacked"}
+      input={
+        !file ? (
+          <div className="w-full">
+            <DropZone
+              onFilesSelected={handleFileSelect}
+              accept=".svg,image/svg+xml"
+              title="Drop SVG file here or click to browse"
+              description="Supports vector SVG files (.svg)"
+              icon={<FileCode className="w-12 h-12 text-blue mx-auto" />}
+              className="py-16"
+            />
+          </div>
+        ) : (
           <div className="space-y-6">
-            {/* Dimensions Control */}
-            <div className="bg-surface border border-border p-6 rounded-2xl space-y-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-bold uppercase tracking-widest text-text-3 flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-blue" />
-                  Target Export Dimensions
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setLockRatio(!lockRatio)}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    lockRatio
-                      ? "bg-blue/10 text-blue border border-blue/20"
-                      : "bg-bg text-text-muted border border-border hover:text-text-3"
-                  }`}
-                  title={lockRatio ? "Aspect ratio locked" : "Aspect ratio unlocked"}
-                >
-                  {lockRatio ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
-                  <span>{lockRatio ? "Locked Ratio" : "Unlocked"}</span>
-                </button>
-              </div>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-widest text-text-3 flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-blue" />
+                Target Export Dimensions
+              </label>
+              <button
+                type="button"
+                onClick={() => setLockRatio(!lockRatio)}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  lockRatio
+                    ? "bg-blue/10 text-blue border border-blue/20"
+                    : "bg-bg text-text-muted border border-border hover:text-text-3"
+                }`}
+                title={lockRatio ? "Aspect ratio locked" : "Aspect ratio unlocked"}
+              >
+                {lockRatio ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
+                <span>{lockRatio ? "Locked Ratio" : "Unlocked"}</span>
+              </button>
+            </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <ToolInput
-                  label="Width (px)"
-                  type="number"
-                  value={targetWidth}
-                  onChange={handleWidthChange}
-                  placeholder="800"
-                />
-                <ToolInput
-                  label="Height (px)"
-                  type="number"
-                  value={targetHeight}
-                  onChange={handleHeightChange}
-                  placeholder="600"
-                />
-              </div>
+            <div className="grid grid-cols-2 gap-4">
+              <ToolInput
+                label="Width (px)"
+                type="number"
+                value={targetWidth}
+                onChange={handleWidthChange}
+                placeholder="800"
+              />
+              <ToolInput
+                label="Height (px)"
+                type="number"
+                value={targetHeight}
+                onChange={handleHeightChange}
+                placeholder="600"
+              />
+            </div>
 
-              {/* Quick Scale Presets */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-text-3 flex items-center gap-1.5">
-                  <Scaling className="w-3.5 h-3.5 text-blue" />
-                  Scale Multiplier
-                </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {PRESET_SCALES.map((ps) => (
-                    <button
-                      key={ps.label}
-                      type="button"
-                      onClick={() => applyScale(ps.factor)}
-                      className="py-2 px-3 bg-bg hover:bg-surface border border-border hover:border-blue/50 rounded-xl text-xs font-bold text-text-2 hover:text-blue transition-all"
-                    >
-                      {ps.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quick Resolution Presets */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-text-3 flex items-center gap-1.5">
-                  <Maximize2 className="w-3.5 h-3.5 text-blue" />
-                  Preset Widths
-                </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {PRESET_SIZES.map((sz) => (
-                    <button
-                      key={sz}
-                      type="button"
-                      onClick={() => applyPresetWidth(sz)}
-                      className="py-2 px-3 bg-bg hover:bg-surface border border-border hover:border-blue/50 rounded-xl text-xs font-bold text-text-2 hover:text-blue transition-all"
-                    >
-                      {sz}px
-                    </button>
-                  ))}
-                </div>
+            {/* Quick Scale Presets */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-text-3 flex items-center gap-1.5">
+                <Scaling className="w-3.5 h-3.5 text-blue" />
+                Scale Multiplier
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {PRESET_SCALES.map((ps) => (
+                  <button
+                    key={ps.label}
+                    type="button"
+                    onClick={() => applyScale(ps.factor)}
+                    className="py-2 px-3 bg-bg hover:bg-surface border border-border hover:border-blue/50 rounded-xl text-xs font-bold text-text-2 hover:text-blue transition-all"
+                  >
+                    {ps.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Background Color Settings */}
-            <div className="bg-surface border border-border p-6 rounded-2xl space-y-4 shadow-sm">
+            {/* Quick Resolution Presets */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-text-3 flex items-center gap-1.5">
+                <Maximize2 className="w-3.5 h-3.5 text-blue" />
+                Preset Widths
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {PRESET_SIZES.map((sz) => (
+                  <button
+                    key={sz}
+                    type="button"
+                    onClick={() => applyPresetWidth(sz)}
+                    className="py-2 px-3 bg-bg hover:bg-surface border border-border hover:border-blue/50 rounded-xl text-xs font-bold text-text-2 hover:text-blue transition-all"
+                  >
+                    {sz}px
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      }
+      optionsPanel={
+        file ? (
+          <div className="space-y-6">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold uppercase tracking-widest text-text-3 flex items-center gap-2">
                   <Palette className="w-4 h-4 text-blue" />
@@ -498,7 +482,7 @@ export default function SvgConverterClient() {
                 {isProcessing ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Rasterizing SVG...
+                    Rasterizing...
                   </>
                 ) : (
                   <>
@@ -518,79 +502,98 @@ export default function SvgConverterClient() {
               </button>
             </div>
           </div>
-
-          {/* Preview Column */}
-          <div className="space-y-6">
-            <div className="bg-surface border border-border p-6 rounded-2xl space-y-4 shadow-sm">
-              <div className="flex items-center justify-between border-b border-border pb-4">
-                <div className="flex items-center gap-2 font-bold text-sm text-text">
-                  <ImageIcon className="w-4 h-4 text-blue" />
-                  PNG Result Preview
+        ) : null
+      }
+      output={
+        file ? (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div className="flex items-center gap-2 font-bold text-sm text-text">
+                <ImageIcon className="w-4 h-4 text-blue" />
+                PNG Result Preview
+              </div>
+              {isProcessing && (
+                <div className="flex items-center gap-2 text-xs font-semibold text-blue animate-pulse">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Rendering Canvas...
                 </div>
-                {isProcessing && (
-                  <div className="flex items-center gap-2 text-xs font-semibold text-blue animate-pulse">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    Rendering Canvas...
-                  </div>
-                )}
+              )}
+            </div>
+
+            {/* Info stats banner */}
+            <div className="grid grid-cols-2 gap-3 p-3 bg-bg border border-border rounded-xl text-xs">
+              <div>
+                <span className="text-text-muted font-medium block">Original SVG</span>
+                <span className="font-bold text-text text-sm">
+                  {origWidth} × {origHeight} px
+                </span>
+                {file && <span className="text-text-muted block mt-0.5">{formatBytes(file.size)}</span>}
               </div>
 
-              {/* Info stats banner */}
-              <div className="grid grid-cols-2 gap-3 p-3 bg-bg border border-border rounded-xl text-xs">
-                <div>
-                  <span className="text-text-muted font-medium block">Original SVG</span>
-                  <span className="font-bold text-text text-sm">
-                    {origWidth} × {origHeight} px
-                  </span>
-                  {file && <span className="text-text-muted block mt-0.5">{formatBytes(file.size)}</span>}
-                </div>
-
-                <div className="border-l border-border pl-3">
-                  <span className="text-text-muted font-medium block">Rasterized PNG</span>
-                  <span className="font-bold text-blue text-sm">
-                    {targetWidth && targetHeight ? `${targetWidth} × ${targetHeight} px` : "Calculating..."}
-                  </span>
-                  {resultBlob && (
-                    <span className="text-text-muted block mt-0.5">{formatBytes(resultBlob.size)}</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Live Preview Display */}
-              <div className="relative min-h-[320px] max-h-[520px] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-border p-4 flex items-center justify-center overflow-hidden">
-                {isProcessing && (
-                  <div className="absolute inset-0 bg-surface/70 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-content">
-                    <Loader2 className="w-8 h-8 text-blue animate-spin" />
-                    <span className="text-xs font-bold text-text-3">Rasterizing Vector...</span>
-                  </div>
-                )}
-
-                {resultUrl ? (
-                  <m.img
-                    key={resultUrl}
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    src={resultUrl}
-                    alt="Rasterized PNG Preview"
-                    className="max-h-[480px] w-auto h-auto object-contain rounded-lg shadow-md border border-border/50"
-                  />
-                ) : originalUrl ? (
-                  <img
-                    src={originalUrl}
-                    alt="SVG Original"
-                    className="max-h-[480px] w-auto h-auto object-contain rounded-lg opacity-60"
-                  />
-                ) : (
-                  <div className="text-center text-text-muted py-12">
-                    <FileCode className="w-12 h-12 mx-auto mb-2 opacity-40" />
-                    <p className="text-sm font-medium">Upload an SVG file to start</p>
-                  </div>
+              <div className="border-l border-border pl-3">
+                <span className="text-text-muted font-medium block">Rasterized PNG</span>
+                <span className="font-bold text-blue text-sm">
+                  {targetWidth && targetHeight ? `${targetWidth} × ${targetHeight} px` : "Calculating..."}
+                </span>
+                {resultBlob && (
+                  <span className="text-text-muted block mt-0.5">{formatBytes(resultBlob.size)}</span>
                 )}
               </div>
             </div>
+
+            {/* Live Preview Display */}
+            <div className="relative min-h-[320px] max-h-[520px] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-border p-4 flex items-center justify-center overflow-hidden">
+              {isProcessing && (
+                <div className="absolute inset-0 bg-surface/70 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-content">
+                  <Loader2 className="w-8 h-8 text-blue animate-spin" />
+                  <span className="text-xs font-bold text-text-3">Rasterizing Vector...</span>
+                </div>
+              )}
+
+              {resultUrl ? (
+                <m.img
+                  key={resultUrl}
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  src={resultUrl}
+                  alt="Rasterized PNG Preview"
+                  className="max-h-[480px] w-auto h-auto object-contain rounded-lg shadow-md border border-border/50"
+                />
+              ) : originalUrl ? (
+                <img
+                  src={originalUrl}
+                  alt="SVG Original"
+                  className="max-h-[480px] w-auto h-auto object-contain rounded-lg opacity-60"
+                />
+              ) : (
+                <div className="text-center text-text-muted py-12">
+                  <FileCode className="w-12 h-12 mx-auto mb-2 opacity-40" />
+                  <p className="text-sm font-medium">Upload an SVG file to start</p>
+                </div>
+              )}
+            </div>
           </div>
+        ) : null
+      }
+      infoPanel={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <PrivacyBadge message="100% Client-Side Conversion — SVG vector rendered locally" />
+          </div>
+
+          {/* Error Notice */}
+          {error && (
+            <m.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-600 rounded-xl text-sm"
+            >
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>{error}</span>
+            </m.div>
+          )}
         </div>
-      )}
-    </div>
+      }
+    />
   );
 }

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { Binary, CheckCircle2, RefreshCw, Search, Grid, Eye, CheckSquare, Square, Info } from "lucide-react";
+import { Binary, Search, Grid } from "lucide-react";
 import { ISO8583_FIELD_NAMES, ISO8583_DEFS } from "@/src/lib/iso8583/parser";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export const PRESET_BITMAPS = [
   {
@@ -125,70 +127,64 @@ export default function ISO8583BitmapClient() {
   }, [selectedFields, filterMode, searchQuery]);
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Input Row */}
-      <div className="p-5 rounded-2xl bg-surface border border-border space-y-4 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <label htmlFor="iso-bitmap-hex-input" className="text-sm font-bold text-text flex items-center gap-2">
-            <Binary className="w-4 h-4 text-sky-400" />
-            Hex Bitmap Input (16 Chars = 64-bit Primary, 32 Chars = 128-bit Secondary):
-          </label>
-          
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-text-muted">Presets:</span>
-            <select
-              aria-label="Select Preset Bitmap"
-              onChange={(e) => {
-                const val = e.target.value;
-                if (val) {
-                  setHexInput(val);
-                  const { present } = decodeHex(val);
-                  setSelectedFields(present);
-                }
-              }}
-              className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs font-medium text-text focus:outline-none focus:ring-2 focus:ring-primary"
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-sm font-bold text-text-2 flex items-center gap-2">
+              <Binary className="w-4 h-4 text-sky-400" />
+              Hex Bitmap Input
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-text-muted">Presets:</span>
+              <select
+                aria-label="Select Preset Bitmap"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val) {
+                    setHexInput(val);
+                    const { present } = decodeHex(val);
+                    setSelectedFields(present);
+                  }
+                }}
+                className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs font-medium text-text focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Choose Preset...</option>
+                {PRESET_BITMAPS.map((p, idx) => (
+                  <option key={idx} value={p.hex}>{p.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+  
+          <div className="flex gap-2 items-end">
+            <div className="flex-1">
+              <ToolInput
+                id="iso-bitmap-hex-input"
+                value={hexInput}
+                onChange={setHexInput}
+                placeholder="e.g. 7224640108800000"
+                mono
+                description="16 Chars = 64-bit Primary, 32 Chars = 128-bit Secondary"
+              />
+            </div>
+            <button
+              id="iso-bitmap-decode-btn"
+              onClick={handleDecodeInput}
+              className="px-5 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:opacity-90 transition shadow-sm h-12 mb-0.5"
             >
-              <option value="">Choose Preset...</option>
-              {PRESET_BITMAPS.map((p, idx) => (
-                <option key={idx} value={p.hex}>{p.label}</option>
-              ))}
-            </select>
+              Decode
+            </button>
           </div>
         </div>
-
-        <div className="flex gap-2">
-          <input
-            id="iso-bitmap-hex-input"
-            type="text"
-            placeholder="e.g. 7224640108800000"
-            value={hexInput}
-            onChange={(e) => setHexInput(e.target.value)}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-surface-2 border border-border font-mono text-sm uppercase focus:outline-none focus:ring-2 focus:ring-primary transition"
-          />
-          <button
-            id="iso-bitmap-decode-btn"
-            onClick={handleDecodeInput}
-            className="px-5 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:opacity-90 transition shadow-sm"
-          >
-            Decode Hex Bitmap
-          </button>
-        </div>
-      </div>
-
-      {/* Output Hex Bitmap Card */}
-      <div className="p-5 rounded-2xl bg-surface-2 border border-border space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-bold text-text">
-              Generated Hex Bitmap ({selectedFields.has(1) ? "128-bit Primary + Secondary" : "64-bit Primary"}):
-            </label>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/20">
-              {selectedFields.size} Fields Active
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <label className="flex items-center gap-1.5 text-xs text-text-muted font-medium cursor-pointer">
+      }
+      optionsPanel={
+        <div className="space-y-4">
+          <h3 className="text-sm font-bold text-text-2">Options</h3>
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm text-text-2 font-medium cursor-pointer">
               <input
                 type="checkbox"
                 checked={formatSpace}
@@ -197,155 +193,164 @@ export default function ISO8583BitmapClient() {
               />
               Space Bytes
             </label>
-            <CopyButton text={generatedHex} />
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/20">
+              {selectedFields.size} Fields Active
+            </span>
           </div>
         </div>
-        <p className="font-mono text-lg font-black text-emerald-400 tracking-wider break-all bg-surface p-3.5 rounded-xl border border-border">
-          {generatedHex}
-        </p>
-      </div>
-
-      {/* Binary Bit Grid Visualizer */}
-      <div className="p-5 rounded-2xl bg-surface border border-border space-y-3">
-        <h4 className="font-bold text-sm text-text flex items-center gap-2">
-          <Grid className="w-4 h-4 text-primary" />
-          Binary Bit Grid (Byte 1 .. {bitMatrix.length}):
-        </h4>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
-          {bitMatrix.map(row => (
-            <div key={row.byteIdx} className="p-2.5 rounded-xl bg-surface-2 border border-border space-y-1.5">
-              <span className="text-[10px] font-mono text-text-muted font-bold block text-center">Byte {row.byteIdx}</span>
-              <div className="grid grid-cols-4 gap-1">
-                {row.bits.map(b => (
-                  <button
-                    key={b.fieldNum}
-                    type="button"
-                    onClick={() => toggleField(b.fieldNum)}
-                    title={`Field ${b.fieldNum}: ${ISO8583_FIELD_NAMES[b.fieldNum] || 'Reserved'}`}
-                    className={`h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center transition ${
-                      b.active
-                        ? "bg-emerald-500 text-black shadow-xs"
-                        : "bg-surface text-text-muted hover:bg-surface/80"
-                    }`}
-                  >
-                    {b.fieldNum}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Data Elements Matrix */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <h3 className="font-bold text-base text-text">ISO 8583 Data Elements Matrix (Fields 1–128)</h3>
-            <div className="flex gap-1 bg-surface-2 p-1 rounded-xl border border-border">
-              <button
-                type="button"
-                onClick={() => setFilterMode("all")}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "all" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                onClick={() => setFilterMode("selected")}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "selected" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
-              >
-                Selected ({selectedFields.size})
-              </button>
-              <button
-                type="button"
-                onClick={() => setFilterMode("primary")}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "primary" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
-              >
-                1–64
-              </button>
-              <button
-                type="button"
-                onClick={() => setFilterMode("secondary")}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "secondary" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
-              >
-                65–128
-              </button>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 text-text-muted absolute left-3 top-2.5" />
-              <input
-                type="text"
-                placeholder="Search data elements..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-xl bg-surface border border-border text-xs focus:outline-none focus:ring-2 focus:ring-primary w-48"
-              />
-            </div>
-            
-            <button
-              type="button"
-              onClick={() => setSelectedFields(new Set())}
-              className="px-3 py-1.5 rounded-xl border border-border bg-surface text-text-muted hover:text-text text-xs font-bold transition"
-            >
-              Clear All
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[500px] overflow-y-auto pr-1">
-          {filteredFieldsList.map((fieldNum) => {
-            const isPresent = selectedFields.has(fieldNum);
-            const name = ISO8583_FIELD_NAMES[fieldNum] || `Field ${fieldNum}`;
-            const def = ISO8583_DEFS[fieldNum];
-
-            return (
-              <div
-                key={fieldNum}
-                id={`iso-field-${fieldNum}`}
-                onClick={() => toggleField(fieldNum)}
-                className={`p-3 rounded-xl border cursor-pointer flex items-center justify-between transition ${
-                  isPresent
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-xs'
-                    : 'bg-surface-2 border-border text-text-muted hover:border-text-muted'
-                }`}
-              >
-                <div className="flex items-center gap-2.5 truncate pr-2">
-                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                    isPresent ? 'bg-emerald-500 text-black' : 'bg-surface text-text-muted border border-border'
-                  }`}>
-                    {fieldNum}
-                  </span>
-                  <div className="truncate space-y-0.5">
-                    <span className="text-xs font-bold truncate block text-text">{name}</span>
-                    {def && (
-                      <span className="text-[10px] font-mono text-text-muted block">
-                        {def.type} {def.length}
-                      </span>
-                    )}
+      }
+      output={
+        <ToolResultArea
+          label={`Generated Hex (${selectedFields.has(1) ? "128-bit" : "64-bit"})`}
+          value={generatedHex}
+          onClear={() => setSelectedFields(new Set())}
+        />
+      }
+      infoPanel={
+        <div className="space-y-6">
+          {/* Binary Bit Grid Visualizer */}
+          <div className="p-5 rounded-4xl bg-surface border border-border space-y-3 shadow-sm">
+            <h4 className="font-bold text-sm text-text-2 flex items-center gap-2">
+              <Grid className="w-4 h-4 text-primary" />
+              Binary Bit Grid (Byte 1 .. {bitMatrix.length}):
+            </h4>
+    
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
+              {bitMatrix.map(row => (
+                <div key={row.byteIdx} className="p-2.5 rounded-xl bg-surface-2 border border-border space-y-1.5">
+                  <span className="text-[10px] font-mono text-text-muted font-bold block text-center">Byte {row.byteIdx}</span>
+                  <div className="grid grid-cols-4 gap-1">
+                    {row.bits.map(b => (
+                      <button
+                        key={b.fieldNum}
+                        type="button"
+                        onClick={() => toggleField(b.fieldNum)}
+                        title={`Field ${b.fieldNum}: ${ISO8583_FIELD_NAMES[b.fieldNum] || 'Reserved'}`}
+                        className={`h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center transition ${
+                          b.active
+                            ? "bg-emerald-500 text-black shadow-xs"
+                            : "bg-surface text-text-muted hover:bg-surface/80"
+                        }`}
+                      >
+                        {b.fieldNum}
+                      </button>
+                    ))}
                   </div>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={isPresent}
-                  readOnly
-                  className="rounded border-border shrink-0"
-                />
-              </div>
-            );
-          })}
-
-          {filteredFieldsList.length === 0 && (
-            <div className="col-span-full p-8 text-center text-text-muted text-sm border border-dashed border-border rounded-xl">
-              No fields match your search filter
+              ))}
             </div>
-          )}
+          </div>
+    
+          {/* Data Elements Matrix */}
+          <div className="p-5 rounded-4xl bg-surface border border-border space-y-4 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <h3 className="font-bold text-base text-text-2">ISO 8583 Data Elements Matrix (Fields 1–128)</h3>
+                <div className="flex gap-1 bg-surface-2 p-1 rounded-xl border border-border">
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode("all")}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "all" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+                  >
+                    All
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode("selected")}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "selected" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+                  >
+                    Selected ({selectedFields.size})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode("primary")}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "primary" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+                  >
+                    1–64
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode("secondary")}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${filterMode === "secondary" ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}
+                  >
+                    65–128
+                  </button>
+                </div>
+              </div>
+    
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-text-muted absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    placeholder="Search data elements..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="pl-8 pr-3 py-1.5 rounded-xl bg-surface border border-border text-xs focus:outline-none focus:ring-2 focus:ring-primary w-48 text-text"
+                  />
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={() => setSelectedFields(new Set())}
+                  className="px-3 py-1.5 rounded-xl border border-border bg-surface text-text-muted hover:text-text text-xs font-bold transition"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+    
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[500px] overflow-y-auto pr-1">
+              {filteredFieldsList.map((fieldNum) => {
+                const isPresent = selectedFields.has(fieldNum);
+                const name = ISO8583_FIELD_NAMES[fieldNum] || `Field ${fieldNum}`;
+                const def = ISO8583_DEFS[fieldNum];
+    
+                return (
+                  <div
+                    key={fieldNum}
+                    id={`iso-field-${fieldNum}`}
+                    onClick={() => toggleField(fieldNum)}
+                    className={`p-3 rounded-xl border cursor-pointer flex items-center justify-between transition ${
+                      isPresent
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-xs'
+                        : 'bg-surface-2 border-border text-text-muted hover:border-text-muted'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 truncate pr-2">
+                      <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                        isPresent ? 'bg-emerald-500 text-black' : 'bg-surface text-text-muted border border-border'
+                      }`}>
+                        {fieldNum}
+                      </span>
+                      <div className="truncate space-y-0.5">
+                        <span className="text-xs font-bold truncate block text-text">{name}</span>
+                        {def && (
+                          <span className="text-[10px] font-mono text-text-muted block">
+                            {def.type} {def.length}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={isPresent}
+                      readOnly
+                      className="rounded border-border shrink-0"
+                    />
+                  </div>
+                );
+              })}
+    
+              {filteredFieldsList.length === 0 && (
+                <div className="col-span-full p-8 text-center text-text-muted text-sm border border-dashed border-border rounded-xl">
+                  No fields match your search filter
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }

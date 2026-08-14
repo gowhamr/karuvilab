@@ -9,6 +9,7 @@ import { useUrlState } from '@/src/hooks/useUrlState';
 import { ShareButton } from '@/components/ui/ShareButton';
 import { SharedResultBanner } from '@/components/ui/SharedResultBanner';
 import { QRModal } from '@/components/ui/QRModal';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 import { 
   parseCronExpression, 
   SPECIAL_EXPRESSIONS, 
@@ -107,99 +108,104 @@ export default function CrontabEditorClient() {
   });
 
   return (
-    <div className="w-full">
-      <div className="max-w-4xl mx-auto space-y-8 pb-12 w-full">
+    <>
       <SharedResultBanner hasParams={hasParams} toolName="Crontab Editor" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
       
-      <div className="space-y-4">
-        <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue">
-          Cron Expression
-        </label>
-        <div className="relative group">
-          <input
-            type="text"
-            value={localExpression}
-            onChange={(e) => handleExpressionChange(e.target.value)}
-            className={cn(
-              "font-mono text-xl md:text-2xl bg-bg rounded-3xl p-6 pr-16 text-text w-full transition-all outline-none",
-              parsed.valid 
-                ? "border border-green-500/30 focus:border-green-500/60 focus:ring-8 focus:ring-green-500/5 shadow-sm" 
-                : "border border-red-500/30 focus:border-red-500/60 focus:ring-8 focus:ring-red-500/5 shadow-sm"
-            )}
-            style={{ fontSize: `${fontSize + 4}px` }}
-            placeholder="* * * * *"
-          />
-          <button
-            onClick={handleCopy}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-surface hover:bg-mat-hover border border-mat-border rounded-2xl transition-all active:scale-95 group-hover:shadow-md"
-            title="Copy Expression"
-          >
-            {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-text-3" />}
-          </button>
-        </div>
-        
-        <div className="flex items-center gap-2 min-h-7 px-2">
-          {parsed.valid ? (
-            <m.div 
-              initial={{ opacity: 0, y: -5 }} 
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 text-green-500"
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-green-600 dark:text-green-400 font-bold text-base leading-tight">
-                {parsed.humanReadable}
-              </span>
-            </m.div>
-          ) : (
-            <m.div 
-              initial={{ opacity: 0, y: -5 }} 
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 text-red-500"
-            >
-              <AlertCircle className="w-4 h-4" />
-              <span className="text-red-600 dark:text-red-400 font-bold text-sm">
-                {parsed.error}
-              </span>
-            </m.div>
-          )}
-        </div>
-      </div>
+      <ToolWorkspace
+        layout="stacked"
+        input={
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <label className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue">
+                  Cron Expression
+                </label>
+                {parsed.valid && (
+                  <ShareButton
+                    url={shareUrl}
+                    title={`Cron: "${localExpression}" — ${parsed.humanReadable} — KaruviLab`}
+                    onQrClick={() => setIsQrOpen(true)}
+                  />
+                )}
+              </div>
+              <div className="relative group">
+                <input
+                  type="text"
+                  value={localExpression}
+                  onChange={(e) => handleExpressionChange(e.target.value)}
+                  className={cn(
+                    "font-mono text-xl md:text-2xl bg-bg rounded-3xl p-6 pr-16 text-text w-full transition-all outline-none",
+                    parsed.valid 
+                      ? "border border-green-500/30 focus:border-green-500/60 focus:ring-8 focus:ring-green-500/5 shadow-sm" 
+                      : "border border-red-500/30 focus:border-red-500/60 focus:ring-8 focus:ring-red-500/5 shadow-sm"
+                  )}
+                  style={{ fontSize: `${fontSize + 4}px` }}
+                  placeholder="* * * * *"
+                />
+                <button
+                  onClick={handleCopy}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-surface hover:bg-mat-hover border border-mat-border rounded-2xl transition-all active:scale-95 group-hover:shadow-md"
+                  title="Copy Expression"
+                >
+                  {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-text-3" />}
+                </button>
+              </div>
+              
+              <div className="flex items-center gap-2 min-h-7 px-2">
+                {parsed.valid ? (
+                  <m.div 
+                    initial={{ opacity: 0, y: -5 }} 
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-green-500"
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-green-600 dark:text-green-400 font-bold text-base leading-tight">
+                      {parsed.humanReadable}
+                    </span>
+                  </m.div>
+                ) : (
+                  <m.div 
+                    initial={{ opacity: 0, y: -5 }} 
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-red-500"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span className="text-red-600 dark:text-red-400 font-bold text-sm">
+                      {parsed.error}
+                    </span>
+                  </m.div>
+                )}
+              </div>
+            </div>
 
-      {parsed.valid && (
-        <div className="flex justify-end">
-          <ShareButton
-            url={shareUrl}
-            title={`Cron: "${localExpression}" — ${parsed.humanReadable} — KaruviLab`}
-            onQrClick={() => setIsQrOpen(true)}
-          />
-        </div>
-      )}
-
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 text-blue">
-          <Zap className="w-3.5 h-3.5" />
-          <label className="text-tiny font-bold uppercase tracking-widest-sm-lg">Quick Presets</label>
-        </div>
-        <div className="flex gap-2 overflow-x-auto pb-2 px-1 no-scrollbar snap-x">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset.label}
-              onClick={() => handleExpressionChange(preset.expr)}
-              className={cn(
-                "px-5 py-2.5 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all whitespace-nowrap snap-start border",
-                localExpression === preset.expr
-                  ? "bg-blue/10 border-blue/40 text-blue shadow-lg shadow-blue/5"
-                  : "bg-surface border-mat-border text-text-muted hover:border-blue/30 hover:text-blue"
-              )}
-            >
-              {preset.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-4">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 text-blue">
+                <Zap className="w-3.5 h-3.5" />
+                <label className="text-tiny font-bold uppercase tracking-widest-sm-lg">Quick Presets</label>
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-2 px-1 no-scrollbar snap-x">
+                {PRESETS.map((preset) => (
+                  <button
+                    key={preset.label}
+                    onClick={() => handleExpressionChange(preset.expr)}
+                    className={cn(
+                      "px-5 py-2.5 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all whitespace-nowrap snap-start border",
+                      localExpression === preset.expr
+                        ? "bg-blue/10 border-blue/40 text-blue shadow-lg shadow-blue/5"
+                        : "bg-surface border-mat-border text-text-muted hover:border-blue/30 hover:text-blue"
+                    )}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        }
+        output={
+          <div className="space-y-8">
+            <div className="space-y-4">
         <div className="flex items-center gap-2 text-blue">
           <List className="w-3.5 h-3.5" />
           <label className="text-tiny font-bold uppercase tracking-widest-sm-lg">Live Field Breakdown</label>
@@ -246,58 +252,60 @@ export default function CrontabEditorClient() {
             </div>
           )}
         </div>
-      </div>
+            </div>
 
-      {parsed.valid && parsed.nextRuns.length > 0 && (
-        <m.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-4 pt-4"
-        >
-          <div className="flex items-center gap-2 text-blue">
-            <Clock className="w-3.5 h-3.5" />
-            <label className="text-tiny font-bold uppercase tracking-widest-sm-lg">Execution Schedule</label>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {parsed.nextRuns.map((date, i) => (
-              <m.div
-                key={i}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="flex items-center justify-between p-5 bg-surface border border-mat-border rounded-2xl group hover:border-blue/30 transition-all shadow-sm hover:shadow-md"
+            {parsed.valid && parsed.nextRuns.length > 0 && (
+              <m.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="space-y-4 pt-4 border-t border-border"
               >
-                <div className="flex items-center gap-4">
-                  <span className={cn(
-                    "w-8 h-8 flex items-center justify-center rounded-xl text-xs font-black",
-                    i === 0 ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-mat-base text-text-muted"
-                  )}>{i + 1}</span>
-                  <div className="space-y-0.5">
-                    <span className="text-sm font-black text-text group-hover:text-blue transition-colors block">
-                      {date.toLocaleString('en-US', { 
-                        weekday: 'short', 
-                        day: '2-digit', 
-                        month: 'short', 
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true
-                      })}
-                    </span>
-                    <span className="text-xs font-bold text-text-muted uppercase tracking-widest">
-                      {date.getFullYear()}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-2 text-blue">
+                  <Clock className="w-3.5 h-3.5" />
+                  <label className="text-tiny font-bold uppercase tracking-widest-sm-lg">Execution Schedule</label>
                 </div>
-                <span className="text-tiny font-bold uppercase tracking-widest-sm text-blue bg-blue/5 px-3 py-1.5 rounded-xl border border-blue/10">
-                  {formatRelative(date)}
-                </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {parsed.nextRuns.map((date, i) => (
+                    <m.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex items-center justify-between p-5 bg-bg border border-border rounded-2xl group hover:border-blue/30 transition-all shadow-sm hover:shadow-md"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className={cn(
+                          "w-8 h-8 flex items-center justify-center rounded-xl text-xs font-black",
+                          i === 0 ? "bg-blue text-white shadow-lg shadow-blue/20" : "bg-surface text-text-muted border border-border"
+                        )}>{i + 1}</span>
+                        <div className="space-y-0.5">
+                          <span className="text-sm font-black text-text group-hover:text-blue transition-colors block">
+                            {date.toLocaleString('en-US', { 
+                              weekday: 'short', 
+                              day: '2-digit', 
+                              month: 'short', 
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: true
+                            })}
+                          </span>
+                          <span className="text-xs font-bold text-text-muted uppercase tracking-widest">
+                            {date.getFullYear()}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-tiny font-bold uppercase tracking-widest-sm text-blue bg-blue/5 px-3 py-1.5 rounded-xl border border-blue/10">
+                        {formatRelative(date)}
+                      </span>
+                    </m.div>
+                  ))}
+                </div>
               </m.div>
-            ))}
+            )}
           </div>
-        </m.div>
-      )}
-
-      <div className="pt-8 no-print">
+        }
+        infoPanel={
+          <div className="no-print">
         <div className="bg-surface border border-mat-border rounded-3xl overflow-hidden shadow-sm">
           <button
             onClick={() => setCheatsheetOpen(!cheatsheetOpen)}
@@ -362,10 +370,11 @@ export default function CrontabEditorClient() {
                 </div>
               </m.div>
             )}
-          </AnimatePresence>
-        </div>
-      </div>
-      </div>
-    </div>
+            </AnimatePresence>
+          </div>
+          </div>
+        }
+      />
+    </>
   );
 }

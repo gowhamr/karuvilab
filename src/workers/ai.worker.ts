@@ -161,26 +161,39 @@ class AiWorkerEngine {
       const feeds: Record<string, unknown> = { input: pre.tensorData };
       const out = await session.run(feeds);
 
-      // 3. Postprocess logic inside worker
-      const tensorData = pre.tensorData;
-      const channelSize = 1024 * 1024;
-      const outputTensor = new Float32Array(channelSize);
+      // 3. Extract real model output tensor from ONNX inference result
+      // RMBG-2.0 / BiRefNet outputs a single-channel probability map [1, 1, 1024, 1024]
+      // The output key varies by export; try 'output', then fall back to first available key.
+      const outputKey = Object.prototype.hasOwnProperty.call(out, 'output')
+        ? 'output'
+        : Object.keys(out)[0];
 
-      for (let i = 0; i < channelSize; i++) {
-        const r = tensorData[i] ?? 0;
-        const g = tensorData[channelSize + i] ?? 0;
-        const b = tensorData[channelSize * 2 + i] ?? 0;
-        const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-        const colorVar = Math.abs(r - g) + Math.abs(g - b) + Math.abs(b - r);
-        const isLightBg = (r > 0.88 && g > 0.88 && b > 0.88) && colorVar < 0.1;
-        const isDarkBg = (r < 0.08 && g < 0.08 && b < 0.08);
-        const isChromaGreen = (g > r + 0.18 && g > b + 0.18);
+      if (!outputKey) {
+        throw new InferenceFailedError(modelId, new Error('Model produced no output tensors'));
+      }
 
-        if (isLightBg || isDarkBg || isChromaGreen) {
-          outputTensor[i] = 0.0;
-        } else {
-          outputTensor[i] = Math.min(1.0, Math.max(0.2, luminance + (1.0 - colorVar * 0.5)));
-        }
+      const outputVal = (out as Record<string, unknown>)[outputKey];
+
+      // ONNX Runtime Web returns tensors as { data: Float32Array, dims: number[], ... }
+      let outputTensor: Float32Array;
+      if (outputVal && typeof outputVal === 'object' && 'data' in outputVal) {
+        const rawData = (outputVal as { data: unknown }).data;
+        outputTensor = rawData instanceof Float32Array
+          ? rawData
+          : new Float32Array(rawData as ArrayBufferLike);
+      } else if (outputVal instanceof Float32Array) {
+        outputTensor = outputVal;
+      } else {
+        throw new InferenceFailedError(modelId, new Error(`Unexpected output tensor type: ${typeof outputVal}`));
+      }
+
+      // Verify tensor length matches expected mask size (1 * 1024 * 1024)
+      const expectedSize = 1024 * 1024;
+      if (outputTensor.length !== expectedSize) {
+        throw new InferenceFailedError(
+          modelId,
+          new Error(`Output tensor size mismatch: expected ${expectedSize}, got ${outputTensor.length}`)
+        );
       }
 
       const resultBitmap = await createTransparentCanvas({

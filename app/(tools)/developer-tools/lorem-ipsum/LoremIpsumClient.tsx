@@ -4,8 +4,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { FileText, Copy, RefreshCw, Download, Layers, Text as TextIcon, AlignLeft } from 'lucide-react';
 import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
-import { blobManager } from '@/src/lib/blob-manager';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
+import { useObjectUrlManager } from '@/src/lib/hooks';
 
 type LoremUnit = 'words' | 'sentences' | 'paragraphs';
 type LoremVariant = 'classic' | 'cicero' | 'random' | 'hipster' | 'tech';
@@ -107,6 +108,7 @@ function generateLorem(options: LoremOptions): string {
 }
 
 export default function LoremIpsumClient() {
+  const { createUrl, revokeUrl } = useObjectUrlManager();
   const [options, setOptions] = useState<LoremOptions>({
     unit: 'paragraphs',
     count: 3,
@@ -125,12 +127,12 @@ export default function LoremIpsumClient() {
 
   const handleDownload = () => {
     const blob = new Blob([output], { type: 'text/plain' });
-    const url = blobManager.create(blob);
+    const url = createUrl(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'lorem-ipsum.txt';
     a.click();
-    blobManager.revoke(url);
+    revokeUrl(url);
   };
 
   const wordCount = output.split(/\\s+/).filter(w => w.length > 0).length;
@@ -138,161 +140,161 @@ export default function LoremIpsumClient() {
   const sentenceCount = output.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
   const paragraphCount = output.split(/\\n\\n/).filter(p => p.trim().length > 0).length;
 
-  return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-12">
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
+  const optionsPanel = (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
         <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
           <FileText className="w-4 h-4" />
           Lorem Ipsum Generator
         </h2>
+        <button
+          onClick={() => setSeed(s => s + 1)}
+          className="flex items-center gap-2 px-4 py-2 bg-blue/10 text-blue hover:bg-blue/20 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+          title="Regenerate"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Regenerate
+        </button>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Unit</label>
-              <div className="flex bg-bg border border-border rounded-xl p-1">
-                {(['words', 'sentences', 'paragraphs'] as LoremUnit[]).map(u => (
-                  <button
-                    key={u}
-                    onClick={() => setOptions({ ...options, unit: u })}
-                    className={cn(
-                      "flex-1 py-2 rounded-lg text-xs font-bold transition-all capitalize",
-                      options.unit === u ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
-                    )}
-                  >
-                    {u}
-                  </button>
-                ))}
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Unit</label>
+            <div className="flex bg-bg border border-border rounded-xl p-1">
+              {(['words', 'sentences', 'paragraphs'] as LoremUnit[]).map(u => (
+                <button
+                  key={u}
+                  onClick={() => setOptions({ ...options, unit: u })}
+                  className={cn(
+                    "flex-1 py-2 rounded-lg text-xs font-bold transition-all capitalize",
+                    options.unit === u ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
+                  )}
+                >
+                  {u}
+                </button>
+              ))}
             </div>
+          </div>
 
-            <div className="space-y-3">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Count</label>
+          <div className="space-y-3">
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Count</label>
+            <div className="flex items-center gap-4">
+              <input
+                type="range"
+                min={1}
+                max={100}
+                value={options.count}
+                onChange={(e) => setOptions({ ...options, count: Number(e.target.value) })}
+                className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue"
+              />
+              <input
+                type="number"
+                min={1}
+                max={100}
+                value={options.count || ''}
+                onChange={(e) => setOptions({ ...options, count: Number(e.target.value) })}
+                className="w-20 bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Variant</label>
+            <div className="grid grid-cols-2 gap-2">
+              {(['classic', 'tech', 'hipster', 'random'] as LoremVariant[]).map(v => (
+                <button
+                  key={v}
+                  onClick={() => setOptions({ ...options, variant: v })}
+                  className={cn(
+                    "px-4 py-2.5 rounded-xl text-xs font-bold transition-all capitalize border",
+                    options.variant === v ? "bg-blue/10 border-blue text-blue" : "bg-bg border-border text-text-muted hover:text-text hover:border-blue/50"
+                  )}
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-4 bg-bg border border-border rounded-2xl p-6">
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={options.startWithLorem}
+                onChange={(e) => setOptions({ ...options, startWithLorem: e.target.checked })}
+                className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
+              />
+              <span className="text-sm font-medium text-text-2 group-hover:text-text">Start with "Lorem ipsum..."</span>
+            </label>
+
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={options.includeHTML}
+                onChange={(e) => setOptions({ ...options, includeHTML: e.target.checked })}
+                className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
+              />
+              <span className="text-sm font-medium text-text-2 group-hover:text-text">Include &lt;p&gt; tags</span>
+            </label>
+          </div>
+
+          {options.unit === 'paragraphs' && (
+            <div className="space-y-4">
+              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Sentences per Paragraph</label>
               <div className="flex items-center gap-4">
-                <input
-                  type="range"
-                  min={1}
-                  max={100}
-                  value={options.count}
-                  onChange={(e) => setOptions({ ...options, count: Number(e.target.value) })}
-                  className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue"
-                />
                 <input
                   type="number"
                   min={1}
-                  max={100}
-                  value={options.count || ''}
-                  onChange={(e) => setOptions({ ...options, count: Number(e.target.value) })}
-                  className="w-20 bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
+                  max={20}
+                  value={options.minSentences || ''}
+                  onChange={(e) => setOptions({ ...options, minSentences: Number(e.target.value) })}
+                  className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
+                  placeholder="Min"
                 />
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Variant</label>
-              <div className="grid grid-cols-2 gap-2">
-                {(['classic', 'tech', 'hipster', 'random'] as LoremVariant[]).map(v => (
-                  <button
-                    key={v}
-                    onClick={() => setOptions({ ...options, variant: v })}
-                    className={cn(
-                      "px-4 py-2.5 rounded-xl text-xs font-bold transition-all capitalize border",
-                      options.variant === v ? "bg-blue/10 border-blue text-blue" : "bg-bg border-border text-text-muted hover:text-text hover:border-blue/50"
-                    )}
-                  >
-                    {v}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div className="space-y-4 bg-bg border border-border rounded-2xl p-6">
-              <label className="flex items-center gap-3 cursor-pointer group">
+                <span className="text-text-muted font-bold">to</span>
                 <input
-                  type="checkbox"
-                  checked={options.startWithLorem}
-                  onChange={(e) => setOptions({ ...options, startWithLorem: e.target.checked })}
-                  className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={options.maxSentences || ''}
+                  onChange={(e) => setOptions({ ...options, maxSentences: Number(e.target.value) })}
+                  className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
+                  placeholder="Max"
                 />
-                <span className="text-sm font-medium text-text-2 group-hover:text-text">Start with "Lorem ipsum..."</span>
-              </label>
-
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={options.includeHTML}
-                  onChange={(e) => setOptions({ ...options, includeHTML: e.target.checked })}
-                  className="w-4 h-4 rounded text-blue focus:ring-blue/20 border-border"
-                />
-                <span className="text-sm font-medium text-text-2 group-hover:text-text">Include &lt;p&gt; tags</span>
-              </label>
-            </div>
-
-            {options.unit === 'paragraphs' && (
-              <div className="space-y-4">
-                <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Sentences per Paragraph</label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={options.minSentences || ''}
-                    onChange={(e) => setOptions({ ...options, minSentences: Number(e.target.value) })}
-                    className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
-                    placeholder="Min"
-                  />
-                  <span className="text-text-muted font-bold">to</span>
-                  <input
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={options.maxSentences || ''}
-                    onChange={(e) => setOptions({ ...options, maxSentences: Number(e.target.value) })}
-                    className="w-full bg-bg border border-border rounded-xl p-2 text-center text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
-                    placeholder="Max"
-                  />
-                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      </div>
-
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
-            <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" /> {paragraphCount} Paragraphs</span>
-            <span className="flex items-center gap-1.5"><AlignLeft className="w-3.5 h-3.5" /> {sentenceCount} Sentences</span>
-            <span className="flex items-center gap-1.5"><TextIcon className="w-3.5 h-3.5" /> {wordCount} Words</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSeed(s => s + 1)}
-              className="p-2.5 bg-bg border border-border text-text-3 hover:text-blue hover:border-blue/30 rounded-xl transition-all"
-              title="Regenerate"
-            >
-              <RefreshCw className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleDownload}
-              className="p-2.5 bg-bg border border-border text-text-3 hover:text-blue hover:border-blue/30 rounded-xl transition-all"
-              title="Download .txt"
-            >
-              <Download className="w-4 h-4" />
-            </button>
-            <CopyButton text={output} />
-          </div>
-        </div>
-
-        <textarea
-          readOnly
-          value={output}
-          className="w-full h-96 bg-bg border border-border rounded-2xl p-6 font-mono text-sm text-text outline-none resize-y leading-relaxed"
-        />
       </div>
     </div>
+  );
+
+  const infoPanel = (
+    <div className="flex flex-wrap items-center justify-center gap-6 text-tiny font-bold uppercase tracking-widest-sm text-text-muted bg-surface border border-border p-4 rounded-3xl">
+      <span className="flex items-center gap-2"><Layers className="w-4 h-4 text-blue" /> {paragraphCount} Paragraphs</span>
+      <span className="flex items-center gap-2"><AlignLeft className="w-4 h-4 text-blue" /> {sentenceCount} Sentences</span>
+      <span className="flex items-center gap-2"><TextIcon className="w-4 h-4 text-blue" /> {wordCount} Words</span>
+    </div>
+  );
+
+  return (
+    <ToolWorkspace
+      layout="stacked"
+      optionsPanel={optionsPanel}
+      infoPanel={infoPanel}
+      output={
+        <ToolResultArea
+          label="Generated Text"
+          value={output}
+          onDownload={handleDownload}
+          downloadFilename="lorem-ipsum.txt"
+          downloadMimeType="text/plain"
+          contentClassName="h-96"
+        />
+      }
+    />
   );
 }

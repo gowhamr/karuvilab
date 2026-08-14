@@ -4,3 +4,4 @@ import MetaTagsGeneratorClient from "@/src/features/seo-tools/components/MetaTag
 export default function MetaTagsClient() {
   return <MetaTagsGeneratorClient />;
 }
+// ToolWorkspace

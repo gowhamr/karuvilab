@@ -8,6 +8,7 @@ import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { formatError } from "@/src/lib/formatError";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { cn } from "@/src/lib/utils";
 import { m, AnimatePresence } from "framer-motion";
 import {
@@ -241,7 +242,7 @@ export default function CanvasResizeClient() {
   const deltaH = targetH - origH;
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
+    <div className="space-y-6 w-full">
       {/* Top Banner */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <PrivacyBadge message="Canvas resizing is processed 100% locally in your browser." />
@@ -267,11 +268,10 @@ export default function CanvasResizeClient() {
           description="Drag & drop PNG, JPEG, WebP, or click to browse"
         />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-12 items-start">
-          {/* Controls Column */}
-          <div className="lg:col-span-6 space-y-6">
-            {/* Canvas Dimensions Card */}
-            <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm space-y-5">
+        <ToolWorkspace
+          layout="split"
+          input={
+            <div className="space-y-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Maximize2 className="w-5 h-5 text-blue" />
@@ -358,9 +358,11 @@ export default function CanvasResizeClient() {
                 </div>
               </div>
             </div>
-
-            {/* Anchor Position 3x3 Grid Card */}
-            <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm space-y-4">
+          }
+          optionsPanel={
+            <div className="space-y-6">
+              {/* Anchor Position 3x3 Grid */}
+              <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Grid className="w-5 h-5 text-blue" />
@@ -398,8 +400,10 @@ export default function CanvasResizeClient() {
               </div>
             </div>
 
-            {/* Background Color & Format Card */}
-            <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm space-y-5">
+              <hr className="border-border" />
+
+              {/* Background Color & Format */}
+              <div className="space-y-5">
               {/* Background Color */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -496,10 +500,9 @@ export default function CanvasResizeClient() {
               </div>
             </div>
           </div>
-
-          {/* Preview & Output Column */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm space-y-6 sticky top-6">
+          }
+          output={
+            <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <ImageIcon className="w-5 h-5 text-blue" />
@@ -604,8 +607,8 @@ export default function CanvasResizeClient() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          }
+        />
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePomodoroStore } from '@/src/features/pomodoro-timer/store';
 import { useSessionStore } from '@/src/store/useSessionStore';
 import { SessionRestoredBanner } from '@/components/ui/SessionRestoredBanner';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 import { m, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Settings, Bell, Sparkles, Trophy, Coffee, Timer } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
@@ -222,177 +223,169 @@ export default function PomodoroTimerClient() {
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center gap-12 py-8 max-w-2xl mx-auto">
+    <div className="relative w-full">
       <SessionRestoredBanner 
         isVisible={showRestoredBanner}
         onClear={handleClearSession}
         onDismiss={() => setShowRestoredBanner(false)}
       />
 
-      {/* Header Stats */}
-      <div className="w-full flex items-center justify-between px-6 py-4 bg-surface/40 backdrop-blur-md border border-border rounded-3xl shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-warning/10 flex items-center justify-center text-warning">
-            <Trophy size={20} />
+      <ToolWorkspace
+        layout="stacked"
+        tabs={{
+          options: [
+            { id: 'focus' as const, label: 'Focus', icon: <Sparkles size={14} /> },
+            { id: 'break' as const, label: 'Break', icon: <Coffee size={14} /> },
+          ],
+          activeId: mode,
+          onChange: (id) => switchMode(id as 'focus' | 'break'),
+        }}
+        input={
+          /* Header Stats */
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-warning/10 flex items-center justify-center text-warning">
+                <Trophy size={20} />
+              </div>
+              <div>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Today's Focus</p>
+                <p className="text-sm font-black text-text">{dailyCompleted} Sessions</p>
+              </div>
+            </div>
+
+            <div className="h-8 w-px bg-border/50 mx-2" />
+
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+                <Sparkles size={20} />
+              </div>
+              <div>
+                <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Current Streak</p>
+                <p className="text-sm font-black text-text">{dailyCompleted % 4} / 4 Pomos</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Today's Focus</p>
-            <p className="text-sm font-black text-text">{dailyCompleted} Sessions</p>
+        }
+        output={
+          /* Timer Card */
+          <div className="flex items-center justify-center py-4">
+            <div className="relative group">
+              {/* Glow Effect */}
+              <AnimatePresence>
+                {isActive && (
+                  <m.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1.1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="absolute inset-0 bg-blue/20 blur-3xl rounded-full z-behind"
+                    transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
+                  />
+                )}
+              </AnimatePresence>
+
+              <div className="relative w-72 md:w-80 aspect-square rounded-full flex items-center justify-center bg-surface border border-border/50 shadow-surface-4 transition-all group-hover:border-blue/30">
+                <svg className="absolute inset-0 w-full h-full transform -rotate-90 p-4" viewBox="0 0 100 100">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="48"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    fill="transparent"
+                    className="text-white/5"
+                  />
+                  <m.circle
+                    cx="50"
+                    cy="50"
+                    r="48"
+                    stroke="currentColor"
+                    className="text-blue"
+                    strokeWidth="2.5"
+                    strokeDasharray="301.6"
+                    initial={{ strokeDashoffset: 0 }}
+                    animate={{ strokeDashoffset: 301.6 * (1 - progress) }}
+                    transition={{ duration: 1, ease: "linear" }}
+                    fill="transparent"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="text-center z-content">
+                  <m.p 
+                    key={timeLeft}
+                    initial={{ scale: 0.95, opacity: 0.8 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="text-7xl font-black font-mono tabular-nums tracking-tighter text-text"
+                  >
+                    {formatTime(timeLeft)}
+                  </m.p>
+                  <p className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-text-muted mt-2">
+                    {isActive ? 'Keep Going' : 'Ready?'}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div className="h-8 w-px bg-border/50 mx-2" />
-
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
-            <Sparkles size={20} />
-          </div>
-          <div>
-            <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Current Streak</p>
-            <p className="text-sm font-black text-text">{dailyCompleted % 4} / 4 Pomos</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Mode Switcher */}
-      <div className="flex p-1.5 bg-surface border border-border rounded-2xl shadow-premium relative z-content">
-        {(['focus', 'break'] as const).map((mType) => (
-          <button
-            key={mType}
-            onClick={() => switchMode(mType)}
-            className={cn(
-              "relative px-8 py-3 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm-lg transition-all outline-none",
-              mode === mType ? "text-white" : "text-text-muted hover:text-text"
-            )}
-          >
-            {mode === mType && (
-              <m.div
-                layoutId="pomo-mode"
-                className="absolute inset-0 bg-blue rounded-2xl z-behind shadow-md shadow-blue/10"
-                transition={TRANSITION}
-              />
-            )}
-            <span className="relative z-content flex items-center gap-2">
-              {mType === 'focus' ? <Sparkles size={14} /> : <Coffee size={14} />}
-              {mType}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      {/* Timer Card */}
-      <div className="relative group">
-        {/* Glow Effect */}
-        <AnimatePresence>
-          {isActive && (
-            <m.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1.1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute inset-0 bg-blue/20 blur-3xl rounded-full z-behind"
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
-            />
-          )}
-        </AnimatePresence>
-
-        <div className="relative w-72 md:w-80 aspect-square rounded-full flex items-center justify-center bg-surface border border-border/50 shadow-surface-4 transition-all group-hover:border-blue/30">
-          <svg className="absolute inset-0 w-full h-full transform -rotate-90 p-4" viewBox="0 0 100 100">
-            <circle
-              cx="50"
-              cy="50"
-              r="48"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="transparent"
-              className="text-white/5"
-            />
-            <m.circle
-              cx="50"
-              cy="50"
-              r="48"
-              stroke="currentColor"
-              className="text-blue"
-              strokeWidth="2.5"
-              strokeDasharray="301.6"
-              initial={{ strokeDashoffset: 0 }}
-              animate={{ strokeDashoffset: 301.6 * (1 - progress) }}
-              transition={{ duration: 1, ease: "linear" }}
-              fill="transparent"
-              strokeLinecap="round"
-            />
-          </svg>
-          <div className="text-center z-content">
-            <m.p 
-              key={timeLeft}
-              initial={{ scale: 0.95, opacity: 0.8 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="text-7xl font-black font-mono tabular-nums tracking-tighter text-text"
+        }
+        optionsPanel={
+          /* Controls */
+          <div className="flex items-center justify-center gap-8">
+            <m.button 
+              whileHover={{ scale: 1.1, rotate: -30 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={resetTimer} 
+              title="Reset Timer"
+              className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
             >
-              {formatTime(timeLeft)}
-            </m.p>
-            <p className="text-tiny font-bold uppercase tracking-widest-sm-2xl text-text-muted mt-2">
-              {isActive ? 'Keep Going' : 'Ready?'}
-            </p>
+              <RotateCcw className="w-6 h-6" />
+            </m.button>
+            
+            <m.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleTimer} 
+              className="w-28 h-28 rounded-5xl bg-blue text-white flex items-center justify-center shadow-2xl shadow-blue/40 hover:bg-blue/90 transition-all border-4 border-white/10"
+            >
+              {isActive ? <Pause className="w-12 h-12" /> : <Play className="w-12 h-12 ml-1" />}
+            </m.button>
+
+            <m.button 
+              whileHover={{ scale: 1.1, rotate: 30 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsSettingsOpen(true)} 
+              title="Settings"
+              className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
+            >
+              <Settings className="w-6 h-6" />
+            </m.button>
           </div>
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="flex items-center gap-8">
-        <m.button 
-          whileHover={{ scale: 1.1, rotate: -30 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={resetTimer} 
-          title="Reset Timer"
-          className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
-        >
-          <RotateCcw className="w-6 h-6" />
-        </m.button>
-        
-        <m.button 
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={toggleTimer} 
-          className="w-28 h-28 rounded-5xl bg-blue text-white flex items-center justify-center shadow-2xl shadow-blue/40 hover:bg-blue/90 transition-all border-4 border-white/10"
-        >
-          {isActive ? <Pause className="w-12 h-12" /> : <Play className="w-12 h-12 ml-1" />}
-        </m.button>
-
-        <m.button 
-          whileHover={{ scale: 1.1, rotate: 30 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsSettingsOpen(true)} 
-          title="Settings"
-          className="p-5 rounded-3xl bg-surface border border-border hover:border-blue/30 hover:text-blue transition-all shadow-sm"
-        >
-          <Settings className="w-6 h-6" />
-        </m.button>
-      </div>
-      
-      {/* Footer Info */}
-      <div className="flex flex-col items-center gap-4">
-        {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && notificationStatus !== 'denied' && (
-          <button 
-            onClick={requestNotificationPermission}
-            className="flex items-center gap-2 px-6 py-3 bg-blue/5 border border-blue/10 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm text-blue hover:bg-blue/10 transition-all"
-          >
-            <Bell className="w-4 h-4" /> Enable Alerts
-          </button>
-        )}
-        
-        {notificationStatus === 'denied' && (
-          <p className="text-xs text-error font-bold uppercase tracking-widest text-center max-w-sm">
-            ⚠️ Web Notifications are blocked. You will only hear an audio alert when the timer finishes.
-          </p>
-        )}
-        
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface/30 border border-border/50">
-          <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-success animate-pulse" : "bg-text-4")} />
-          <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
-            {isActive ? 'Session in progress' : 'Timer Paused'}
-          </span>
-        </div>
-      </div>
+        }
+        infoPanel={
+          /* Footer Info */
+          <div className="flex flex-col items-center gap-4">
+            {notificationStatus !== 'granted' && notificationStatus !== 'unsupported' && notificationStatus !== 'denied' && (
+              <button 
+                onClick={requestNotificationPermission}
+                className="flex items-center gap-2 px-6 py-3 bg-blue/5 border border-blue/10 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm text-blue hover:bg-blue/10 transition-all"
+              >
+                <Bell className="w-4 h-4" /> Enable Alerts
+              </button>
+            )}
+            
+            {notificationStatus === 'denied' && (
+              <p className="text-xs text-error font-bold uppercase tracking-widest text-center max-w-sm">
+                ⚠️ Web Notifications are blocked. You will only hear an audio alert when the timer finishes.
+              </p>
+            )}
+            
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface/30 border border-border/50">
+              <div className={cn("w-2 h-2 rounded-full", isActive ? "bg-success animate-pulse" : "bg-text-4")} />
+              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
+                {isActive ? 'Session in progress' : 'Timer Paused'}
+              </span>
+            </div>
+          </div>
+        }
+      />
 
       <PomodoroSettings 
         isOpen={isSettingsOpen} 

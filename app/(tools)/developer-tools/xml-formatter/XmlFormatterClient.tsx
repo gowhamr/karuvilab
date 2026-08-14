@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Code2, Play, Check, AlertTriangle, Copy, Download, Braces } from 'lucide-react';
-import { m } from 'framer-motion';
+import { Check, AlertTriangle, Download } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 import { blobManager } from '@/src/lib/blob-manager';
 import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
 import { useFullscreenContext } from '@/src/contexts/FullscreenContext';
@@ -165,35 +165,20 @@ export default function XmlFormatterClient() {
   });
 
   return (
-    <div className="w-full">
-      <div className="max-w-6xl mx-auto space-y-8 pb-12 w-full">
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-            <Code2 className="w-4 h-4" />
-            XML Formatter
-          </h2>
-          
-          <div className="flex bg-bg border border-border rounded-xl p-1">
-            {(['format', 'minify', 'validate'] as XMLFormatMode[]).map(m => (
-              <button
-                key={m}
-                onClick={() => setOptions({ ...options, mode: m })}
-                className={cn(
-                  "px-4 py-2 rounded-lg text-xs font-bold transition-all capitalize",
-                  options.mode === m ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
-                )}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {options.mode === 'format' && (
-          <div className="flex items-center gap-4 bg-bg border border-border rounded-2xl p-4">
-            <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Indentation</span>
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: 'format', label: 'Format' },
+          { id: 'minify', label: 'Minify' },
+          { id: 'validate', label: 'Validate' }
+        ],
+        activeId: options.mode,
+        onChange: (id) => setOptions({ ...options, mode: id as XMLFormatMode })
+      }}
+      optionsPanel={
+        options.mode === 'format' ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-bold text-text-2">Indentation</span>
             <div className="flex gap-2">
               {(['2', '4', 'tab'] as XMLIndent[]).map(ind => (
                 <button
@@ -209,110 +194,110 @@ export default function XmlFormatterClient() {
               ))}
             </div>
           </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Input Area */}
-          <div className="space-y-3">
-            <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Input XML</label>
-              <button onClick={() => setInput('')} className="text-xs font-bold text-red-500 hover:underline">Clear</button>
-            </div>
-            <textarea
-              value={input}
-              onChange={(e) => {
-                if (e.target.value.length > 5 * 1024 * 1024) {
-                  toast("Input text exceeds 5MB limit", "error");
-                } else {
-                  setInput(e.target.value);
-                }
-              }}
-              placeholder="<root>\n  <item>Data</item>\n</root>"
-              className={`w-full h-full bg-bg border border-border rounded-2xl p-4 font-mono text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
-              style={{ fontSize: `${fontSize}px` }}
-              spellCheck="false"
-            />
+        ) : undefined
+      }
+      input={
+        <div className="space-y-3 flex flex-col h-full min-h-[300px]">
+          <div className="flex justify-between items-center px-1">
+            <label className="text-sm font-bold text-text-2">Input XML</label>
+            {input && (
+              <button onClick={() => setInput('')} className="text-xs font-bold text-red-500 hover:underline">
+                Clear
+              </button>
+            )}
           </div>
-
-          {/* Output Area */}
-          <div className="space-y-3">
-            <div className="flex justify-between items-center px-2 min-h-6">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
-                {options.mode === 'validate' ? 'Validation Result' : 'Output'}
-              </label>
-              {options.mode !== 'validate' && result.valid && (
-                <div className="flex items-center gap-2">
-                  <button onClick={handleDownload} className="p-1.5 text-text-muted hover:text-blue transition-colors" title="Download">
-                    <Download className="w-4 h-4" />
-                  </button>
-                  <CopyButton text={result.output} />
-                </div>
-              )}
-            </div>
-            
-            <div className={cn(
-              "w-full h-full rounded-2xl overflow-hidden border",
-              !input ? "bg-mat-base border-mat-border" :
-              result.valid ? "bg-mat-surface border-green-500/30 ring-1 ring-green-500/10" : "bg-red-500/5 border-red-500/30"
-            )}>
-              {input && result.valid ? (
-                options.mode === 'validate' ? (
-                  <div className="h-full flex flex-col items-center justify-center text-green-500 p-8 text-center space-y-4">
-                    <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center">
-                      <Check className="w-8 h-8" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-black uppercase tracking-widest">Valid XML</h3>
-                      <p className="text-sm font-medium text-text-3 mt-2">The document is well-formed and structurally sound.</p>
-                    </div>
+          <textarea
+            value={input}
+            onChange={(e) => {
+              if (e.target.value.length > 5 * 1024 * 1024) {
+                toast("Input text exceeds 5MB limit", "error");
+              } else {
+                setInput(e.target.value);
+              }
+            }}
+            placeholder="<root>\n  <item>Data</item>\n</root>"
+            className={`w-full flex-1 bg-bg border border-border rounded-xl p-4 font-mono text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+            style={{ fontSize: `${fontSize}px` }}
+            spellCheck="false"
+          />
+        </div>
+      }
+      output={
+        <div className="space-y-3 flex flex-col h-full min-h-[300px]">
+          <div className="flex justify-between items-center px-1 min-h-[24px]">
+            <label className="text-sm font-bold text-text-2">
+              {options.mode === 'validate' ? 'Validation Result' : 'Output'}
+            </label>
+            {options.mode !== 'validate' && result.valid && (
+              <div className="flex items-center gap-2">
+                <button onClick={handleDownload} className="min-w-11 min-h-11 flex items-center justify-center text-text-4 hover:text-blue transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-blue/20 outline-none" title="Download">
+                  <Download className="w-4 h-4" />
+                </button>
+                <CopyButton text={result.output} />
+              </div>
+            )}
+          </div>
+          
+          <div className={cn(
+            "w-full flex-1 rounded-xl overflow-hidden border flex flex-col",
+            !input ? "bg-bg border-border text-text-muted items-center justify-center" :
+            result.valid ? "bg-mat-surface border-green-500/30 ring-1 ring-green-500/10" : "bg-error/5 border-error/30 items-center justify-center"
+          )}>
+            {!input ? (
+              <div className="font-mono text-sm">Awaiting input...</div>
+            ) : result.valid ? (
+              options.mode === 'validate' ? (
+                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
+                  <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center text-green-500">
+                    <Check className="w-8 h-8" />
                   </div>
-                ) : (
-                  <textarea
-                    readOnly
-                    value={result.output}
-                    className={`w-full h-full bg-transparent p-4 font-mono text-text-2 outline-none resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
-                    style={{ fontSize: `${fontSize}px` }}
-                  />
-                )
-              ) : input && result.error ? (
-                <div className="h-full flex flex-col items-center justify-center text-error p-8 text-center space-y-4">
-                  <AlertTriangle className="w-12 h-12" />
                   <div>
-                    <h3 className="text-base font-black uppercase tracking-widest">Parsing Error</h3>
-                    <p className="font-mono text-sm mt-4 bg-error/10 p-3 rounded-xl border border-error/20">{result.error.message}</p>
-                    {(result.error.line || result.error.col) && (
-                      <p className="text-xs font-bold mt-3 text-error">
-                        Line: {result.error.line || '?'} | Col: {result.error.col || '?'}
-                      </p>
-                    )}
+                    <h3 className="text-lg font-black uppercase tracking-widest text-green-500">Valid XML</h3>
+                    <p className="text-sm font-medium text-text-3 mt-2">The document is well-formed and structurally sound.</p>
                   </div>
                 </div>
               ) : (
-                 <div className="h-full flex items-center justify-center text-text-muted font-mono text-sm">
-                   Awaiting input...
-                 </div>
-              )}
-            </div>
+                <textarea
+                  readOnly
+                  value={result.output}
+                  className={`w-full h-full bg-transparent p-4 font-mono text-text outline-none resize-none ${wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto'}`}
+                  style={{ fontSize: `${fontSize}px` }}
+                />
+              )
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
+                <AlertTriangle className="w-12 h-12 text-error" />
+                <div>
+                  <h3 className="text-base font-black uppercase tracking-widest text-error">Parsing Error</h3>
+                  <p className="font-mono text-sm mt-4 bg-error/10 text-error p-3 rounded-xl border border-error/20">{result.error?.message}</p>
+                  {(result.error?.line || result.error?.col) && (
+                    <p className="text-xs font-bold mt-3 text-error">
+                      Line: {result.error?.line || '?'} | Col: {result.error?.col || '?'}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Stats Footer */}
-        {input && result.valid && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/50">
-            <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Elements</span>
+      }
+      infoPanel={
+        input && result.valid ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-surface rounded-xl p-4 border border-border shadow-sm">
+              <span className="text-xs font-bold uppercase tracking-widest text-text-muted block mb-1">Elements</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.elements}</span>
             </div>
-            <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Attributes</span>
+            <div className="bg-surface rounded-xl p-4 border border-border shadow-sm">
+              <span className="text-xs font-bold uppercase tracking-widest text-text-muted block mb-1">Attributes</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.attributes}</span>
             </div>
-            <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Max Depth</span>
+            <div className="bg-surface rounded-xl p-4 border border-border shadow-sm">
+              <span className="text-xs font-bold uppercase tracking-widest text-text-muted block mb-1">Max Depth</span>
               <span className="text-xl font-mono font-black text-text">{result.stats.depth}</span>
             </div>
-            <div className="bg-bg rounded-xl p-4 border border-border">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted block mb-1">Size {options.mode === 'minify' ? 'Reduction' : 'Change'}</span>
+            <div className="bg-surface rounded-xl p-4 border border-border shadow-sm">
+              <span className="text-xs font-bold uppercase tracking-widest text-text-muted block mb-1">Size {options.mode === 'minify' ? 'Reduction' : 'Change'}</span>
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-mono font-black text-text">
                   {(result.stats.size.output / 1024).toFixed(1)} <span className="text-sm font-bold text-text-muted">KB</span>
@@ -325,11 +310,9 @@ export default function XmlFormatterClient() {
               </div>
             </div>
           </div>
-        )}
-
-      </div>
-      </div>
-    </div>
+        ) : undefined
+      }
+    />
   );
 }
 

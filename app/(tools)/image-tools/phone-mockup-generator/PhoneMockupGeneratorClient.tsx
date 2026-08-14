@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { DropZone } from "@/components/ui/DropZone";
 import { Smartphone, Download, Image as ImageIcon } from "lucide-react";
 import { useObjectUrlManager } from "@/src/lib/hooks";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 interface DeviceProfile {
   id: string;
@@ -308,119 +309,136 @@ export default function PhoneMockupGeneratorClient() {
   }, [selectedDevice.id]);
 
   return (
-    <div className="space-y-8">
-      {!image ? (
-        <DropZone
-          onFilesSelected={onFilesSelected}
-          accept="image/*"
-          title="Upload Screenshot"
-          description="Drag and drop your app screenshot here"
-          icon={<ImageIcon className="w-8 h-8" />}
-        />
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1 space-y-6 p-4 sm:p-8 bg-surface border border-border rounded-4xl">
-            <h2 className="text-lg font-bold flex items-center gap-2">
-              <Smartphone className="w-5 h-5 text-blue" aria-hidden="true" />
-              Customization
-            </h2>
-
-            {/* Device selector */}
-            <div className="space-y-3">
-              <label id="device-select-label" className="text-sm font-bold text-text-2">Select Device</label>
-              <div role="group" aria-labelledby="device-select-label" className="grid grid-cols-1 gap-2">
-                {DEVICES.map(dev => (
-                  <button
-                    key={dev.id}
-                    id={`device-${dev.id}`}
-                    onClick={() => setSelectedDevice(dev)}
-                    className={`p-4 rounded-2xl border text-left transition-all ${
-                      selectedDevice.id === dev.id
-                        ? "bg-blue/10 border-blue text-blue font-bold"
-                        : "bg-bg border-border text-text-3"
-                    }`}
-                  >
-                    {dev.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Color scheme */}
-            <div className="space-y-3">
-              <label id="device-color-label" className="text-sm font-bold text-text-2">Device Color</label>
-              <div role="group" aria-labelledby="device-color-label" className="flex gap-2">
-                <button
-                  id="device-color-dark"
-                  onClick={() => setColorScheme("dark")}
-                  className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-all ${
-                    colorScheme === "dark"
-                      ? "bg-slate-900 text-white border-blue"
-                      : "bg-bg border-border text-text-3"
-                  }`}
-                >
-                  Space Black
-                </button>
-                <button
-                  id="device-color-silver"
-                  onClick={() => setColorScheme("silver")}
-                  className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-all ${
-                    colorScheme === "silver"
-                      ? "bg-gray-100 text-gray-800 border-blue"
-                      : "bg-bg border-border text-text-3"
-                  }`}
-                >
-                  Silver
-                </button>
-              </div>
-            </div>
-
-            {/* Background color */}
-            <div className="space-y-3">
-              <label id="bg-color-label" className="text-sm font-bold text-text-2">Background Color</label>
-              <div role="group" aria-labelledby="bg-color-label" className="flex flex-wrap gap-2">
-                {["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#FFFFFF", "#000000"].map(c => (
-                  <button
-                    key={c}
-                    onClick={() => setBgColor(c)}
-                    aria-label={`Select background color ${c}`}
-                    className={`w-10 h-10 rounded-full border-2 transition-all ${bgColor === c ? "border-blue scale-110" : "border-transparent"}`}
-                    style={{ backgroundColor: c }}
-                  />
-                ))}
-                <input
-                  type="color"
-                  value={bgColor}
-                  onChange={(e) => setBgColor(e.target.value)}
-                  aria-label="Custom background color"
-                  className="w-10 h-10 rounded-full border-none cursor-pointer overflow-hidden"
-                />
-              </div>
-            </div>
-
-            <div className="pt-6 flex gap-3">
+    <ToolWorkspace
+      input={
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-bold text-text-2">Screenshot</label>
+            {image && (
               <button
-                id="mockup-reset-btn"
                 onClick={() => setImage(null)}
-                className="flex-1 py-4 bg-bg border border-border text-text-2 rounded-2xl font-bold hover:border-error hover:text-error transition-all"
+                className="text-xs font-bold text-error hover:text-error/80 transition-colors flex items-center gap-1"
               >
-                Reset
+                Clear
               </button>
+            )}
+          </div>
+          <DropZone
+            onFilesSelected={onFilesSelected}
+            accept="image/*"
+            title="Upload Screenshot"
+            description="Drag and drop your app screenshot here"
+            icon={<ImageIcon className="w-8 h-8" />}
+          />
+        </div>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          <h2 className="text-sm font-bold text-text-2 flex items-center gap-2">
+            <Smartphone className="w-4 h-4 text-blue" aria-hidden="true" />
+            Customization
+          </h2>
+
+          {/* Device selector */}
+          <div className="space-y-3">
+            <label id="device-select-label" className="text-sm font-bold text-text-2">Select Device</label>
+            <div role="group" aria-labelledby="device-select-label" className="grid grid-cols-1 gap-2">
+              {DEVICES.map(dev => (
+                <button
+                  key={dev.id}
+                  id={`device-${dev.id}`}
+                  onClick={() => setSelectedDevice(dev)}
+                  className={`p-3 rounded-xl border text-left text-sm transition-all ${
+                    selectedDevice.id === dev.id
+                      ? "bg-blue/10 border-blue text-blue font-bold"
+                      : "bg-bg border-border text-text-3"
+                  }`}
+                >
+                  {dev.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Color scheme */}
+          <div className="space-y-3">
+            <label id="device-color-label" className="text-sm font-bold text-text-2">Device Color</label>
+            <div role="group" aria-labelledby="device-color-label" className="flex gap-2">
+              <button
+                id="device-color-dark"
+                onClick={() => setColorScheme("dark")}
+                className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-all ${
+                  colorScheme === "dark"
+                    ? "bg-slate-900 text-white border-blue"
+                    : "bg-bg border-border text-text-3"
+                }`}
+              >
+                Space Black
+              </button>
+              <button
+                id="device-color-silver"
+                onClick={() => setColorScheme("silver")}
+                className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-all ${
+                  colorScheme === "silver"
+                    ? "bg-gray-100 text-gray-800 border-blue"
+                    : "bg-bg border-border text-text-3"
+                }`}
+              >
+                Silver
+              </button>
+            </div>
+          </div>
+
+          {/* Background color */}
+          <div className="space-y-3">
+            <label id="bg-color-label" className="text-sm font-bold text-text-2">Background Color</label>
+            <div role="group" aria-labelledby="bg-color-label" className="flex flex-wrap gap-2">
+              {["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#FFFFFF", "#000000"].map(c => (
+                <button
+                  key={c}
+                  onClick={() => setBgColor(c)}
+                  aria-label={`Select background color ${c}`}
+                  className={`w-8 h-8 rounded-full border-2 transition-all ${bgColor === c ? "border-blue scale-110" : "border-transparent"}`}
+                  style={{ backgroundColor: c }}
+                />
+              ))}
+              <input
+                type="color"
+                value={bgColor}
+                onChange={(e) => setBgColor(e.target.value)}
+                aria-label="Custom background color"
+                className="w-8 h-8 rounded-full border-none cursor-pointer overflow-hidden"
+              />
+            </div>
+          </div>
+        </div>
+      }
+      output={
+        <div className="flex flex-col h-full space-y-4 min-h-[400px]">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-text-2">Mockup Preview</h2>
+            {image && (
               <button
                 id="mockup-download-btn"
                 onClick={download}
-                className="flex-[2] py-4 bg-blue text-white rounded-2xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                className="px-4 py-2 bg-blue text-white rounded-xl text-sm font-bold hover:shadow-lg transition-all flex items-center gap-2"
               >
-                <Download className="w-5 h-5" aria-hidden="true" /> Download
+                <Download className="w-4 h-4" aria-hidden="true" /> Download
               </button>
-            </div>
+            )}
           </div>
-
-          <div className="lg:col-span-2 flex items-center justify-center p-4 sm:p-8 bg-bg border border-border rounded-4xl overflow-hidden">
-            <canvas ref={canvasRef} className="max-w-full h-auto rounded-2xl shadow-2xl" />
+          <div className="flex-1 flex items-center justify-center p-4 sm:p-8 bg-bg border border-border rounded-3xl overflow-hidden relative">
+            {image ? (
+              <canvas ref={canvasRef} className="max-w-full h-auto rounded-2xl shadow-2xl" />
+            ) : (
+              <div className="text-text-4 italic flex flex-col items-center gap-2">
+                <ImageIcon className="w-8 h-8 opacity-50" />
+                <span>Upload an image to generate mockup</span>
+              </div>
+            )}
           </div>
         </div>
-      )}
-    </div>
+      }
+    />
   );
 }

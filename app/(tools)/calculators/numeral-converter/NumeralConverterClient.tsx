@@ -4,7 +4,8 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { 
   detectFormat, decodeToBytes, encodeFromBytes, decodeJWT 
 } from "@/src/features/numeral-converter/utils/conversion-helpers";
-import { TabNavigation } from "@/src/features/numeral-converter/components/TabNavigation";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ArrowLeftRight, Hash, TextCursorInput, ShieldCheck } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
 import { useDebounce } from "@/src/hooks/useDebounce";
@@ -18,6 +19,14 @@ import { TextPanel } from "@/src/features/numeral-converter/components/TextPanel
 import { JwtPanel } from "@/src/features/numeral-converter/components/JwtPanel";
 
 type TabMode = "smart" | "number" | "encode" | "text" | "jwt";
+
+const TABS: Array<{ id: TabMode; label: string; icon?: React.ReactNode }> = [
+  { id: "smart", label: "Smart Converter", icon: <ArrowLeftRight size={16} /> },
+  { id: "number", label: "Single Number", icon: <Hash size={16} /> },
+  { id: "encode", label: "Encode ⇄ Decode", icon: <ArrowLeftRight size={16} /> },
+  { id: "text", label: "Text / Bytes", icon: <TextCursorInput size={16} /> },
+  { id: "jwt", label: "JWT Decoder", icon: <ShieldCheck size={16} /> }
+];
 
 const INPUT_FORMATS = [
   { id: "auto", label: "Auto-Detect" },
@@ -253,51 +262,57 @@ export default function NumeralConverterClient() {
   }, [bytes]);
 
   return (
-    <div className="space-y-8">
-      <TabNavigation 
-        activeTab={activeTab} 
-        onTabChange={(id) => {
-          setActiveTab(id as TabMode);
+    <ToolWorkspace<TabMode>
+      layout="stacked"
+      tabs={{
+        options: TABS,
+        activeId: activeTab,
+        onChange: (id) => {
+          setActiveTab(id);
           if (id === "jwt") setInputValue(SAMPLES.jwt);
           else if (!inputValue || inputValue === SAMPLES.jwt) setInputValue(SAMPLES.text);
-        }} 
-      />
+        }
+      }}
+      input={
+        activeTab !== "number" && activeTab !== "encode" ? (
+          <InputArea 
+            value={inputValue} onChange={setInputValue}
+            inputFormat={inputFormat} setInputFormat={setInputFormat}
+            detectedFormat={detectedFormat} confidence={confidence}
+            activeTab={activeTab} formats={INPUT_FORMATS}
+            onLoadSample={() => setInputValue(activeTab === "jwt" ? SAMPLES.jwt : SAMPLES.text)}
+          />
+        ) : undefined
+      }
+      output={
+        <>
+          {activeTab === "smart" && (
+            <SmartPanel 
+              inputValue={inputValue} bytes={bytes} smartOutputs={smartOutputs}
+              utf8Validation={utf8Validation} caesarShiftVal={caesarShiftVal} setCaesarShiftVal={setCaesarShiftVal}
+              encodeAllEntities={encodeAllEntities} setEncodeAllEntities={setEncodeAllEntities}
+              unicodeEscapeStyle={unicodeEscapeStyle} setUnicodeEscapeStyle={setUnicodeEscapeStyle}
+              playMorseAudio={playMorseAudio} charBreakdown={charBreakdown}
+            />
+          )}
 
-      {activeTab !== "number" && (
-        <InputArea 
-          value={inputValue} onChange={setInputValue}
-          inputFormat={inputFormat} setInputFormat={setInputFormat}
-          detectedFormat={detectedFormat} confidence={confidence}
-          activeTab={activeTab} formats={INPUT_FORMATS}
-          onLoadSample={() => setInputValue(activeTab === "jwt" ? SAMPLES.jwt : SAMPLES.text)}
-        />
-      )}
+          {activeTab === "number" && <NumberPanel initialDec={bytes.length === 1 && bytes[0] !== undefined ? bytes[0].toString() : "42"} />}
 
-      {activeTab === "smart" && (
-        <SmartPanel 
-          inputValue={inputValue} bytes={bytes} smartOutputs={smartOutputs}
-          utf8Validation={utf8Validation} caesarShiftVal={caesarShiftVal} setCaesarShiftVal={setCaesarShiftVal}
-          encodeAllEntities={encodeAllEntities} setEncodeAllEntities={setEncodeAllEntities}
-          unicodeEscapeStyle={unicodeEscapeStyle} setUnicodeEscapeStyle={setUnicodeEscapeStyle}
-          playMorseAudio={playMorseAudio} charBreakdown={charBreakdown}
-        />
-      )}
+          {activeTab === "encode" && (
+            <EncodingPanel 
+              inputValue={inputValue} setInputValue={setInputValue}
+              encodeFromFormat={encodeFromFormat} setEncodeFromFormat={setEncodeFromFormat}
+              encodeToFormat={encodeToFormat} setEncodeToFormat={setEncodeToFormat}
+              encodeDecodeResult={encodeDecodeResult} isConverting={isConverting}
+              formats={ENCODE_DECODE_FORMATS}
+            />
+          )}
 
-      {activeTab === "number" && <NumberPanel initialDec={bytes.length === 1 && bytes[0] !== undefined ? bytes[0].toString() : "42"} />}
+          {activeTab === "text" && <TextPanel charBreakdown={charBreakdown} bytes={bytes} />}
 
-      {activeTab === "encode" && (
-        <EncodingPanel 
-          inputValue={inputValue} setInputValue={setInputValue}
-          encodeFromFormat={encodeFromFormat} setEncodeFromFormat={setEncodeFromFormat}
-          encodeToFormat={encodeToFormat} setEncodeToFormat={setEncodeToFormat}
-          encodeDecodeResult={encodeDecodeResult} isConverting={isConverting}
-          formats={ENCODE_DECODE_FORMATS}
-        />
-      )}
-
-      {activeTab === "text" && <TextPanel charBreakdown={charBreakdown} bytes={bytes} />}
-
-      {activeTab === "jwt" && <JwtPanel jwtDecoded={jwtDecoded} />}
-    </div>
+          {activeTab === "jwt" && <JwtPanel jwtDecoded={jwtDecoded} />}
+        </>
+      }
+    />
   );
 }

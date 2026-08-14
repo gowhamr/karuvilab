@@ -8,6 +8,7 @@ import { SliderField } from '@/components/ui/SliderField';
 import { useObjectUrlManager } from '@/src/lib/hooks';
 import { Image as ImageIcon, Loader, Palette } from 'lucide-react';
 import { m } from 'framer-motion';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 
 export default function ColorPaletteExtractorClient() {
   const [palette, setPalette] = useState<string[]>([]);
@@ -58,11 +59,13 @@ export default function ColorPaletteExtractorClient() {
   }, [imageUrl, createUrl, revokeUrl, numColors]);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-6">
+    <ToolWorkspace
+      layout="stacked"
+      input={
         <DropZone onFilesSelected={(files) => handleFile(files[0])} accept="image/*" />
-        
-        <div className="max-w-md mx-auto">
+      }
+      optionsPanel={
+        <div className="w-full">
           <SliderField
             id="num-colors"
             label="Max Colors"
@@ -73,45 +76,50 @@ export default function ColorPaletteExtractorClient() {
             step={1}
           />
         </div>
-      </div>
+      }
+      output={
+        (isLoading || error || imageUrl) ? (
+          <div className="space-y-8">
+            {isLoading && (
+              <div className="text-center">
+                <Loader className="animate-spin inline-block mb-2" />
+                <p className="text-sm font-bold text-text-3">{progress.message} ({progress.percent}%)</p>
+              </div>
+            )}
+            
+            {error && <p className="text-center text-red-500">{error}</p>}
 
-      {isLoading && (
-        <div className="text-center">
-          <Loader className="animate-spin inline-block mb-2" />
-          <p className="text-sm font-bold text-text-3">{progress.message} ({progress.percent}%)</p>
-        </div>
-      )}
-      
-      {error && <p className="text-center text-red-500">{error}</p>}
-
-      {imageUrl && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <img src={imageUrl} alt="Preview" className="rounded-2xl shadow-lg w-full h-auto object-contain" />
-          </m.div>
-          
-          <div className="space-y-4">
-             <div className="flex items-center gap-2">
-                <Palette className="w-5 h-5 text-blue"/>
-                <h2 className="text-lg font-bold">Extracted Palette</h2>
-             </div>
-            {palette.length > 0 && (
-              <m.div className="flex flex-wrap gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                {palette.map((color, idx) => (
-                  <div key={`${color}-${idx}`} className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-border">
-                    <div
-                      className="w-10 h-10 rounded-md border border-border"
-                      style={{ backgroundColor: color }}
-                    />
-                    <div className="font-mono text-sm">{color}</div>
-                    <CopyButton text={color} />
-                  </div>
-                ))}
-              </m.div>
+            {imageUrl && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <img src={imageUrl} alt="Preview" className="rounded-2xl shadow-lg w-full h-auto object-contain" />
+                </m.div>
+                
+                <div className="space-y-4">
+                   <div className="flex items-center gap-2">
+                      <Palette className="w-5 h-5 text-blue"/>
+                      <h2 className="text-lg font-bold">Extracted Palette</h2>
+                   </div>
+                  {palette.length > 0 && (
+                    <m.div className="flex flex-wrap gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                      {palette.map((color, idx) => (
+                        <div key={`${color}-${idx}`} className="flex items-center gap-3 p-3 bg-surface rounded-lg border border-border">
+                          <div
+                            className="w-10 h-10 rounded-md border border-border"
+                            style={{ backgroundColor: color }}
+                          />
+                          <div className="font-mono text-sm">{color}</div>
+                          <CopyButton text={color} />
+                        </div>
+                      ))}
+                    </m.div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
-        </div>
-      )}
-    </div>
+        ) : null
+      }
+    />
   );
 }

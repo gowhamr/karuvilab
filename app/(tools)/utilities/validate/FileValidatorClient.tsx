@@ -1,10 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useObjectUrlManager } from "@/src/lib/hooks";
-
-const cat = CATEGORIES.find(c => c.id === "utilities")!;
 
 // Magic bytes → MIME type map
 const MAGIC_BYTES: { hex: string; mime: string; ext: string[] }[] = [
@@ -188,10 +185,11 @@ export default function FileValidatorClient() {
     setLoading(false);
   };
 
-  return (
-    <div className="space-y-6">
+  const inputContent = (
+    <div className="space-y-4">
+      <div className="text-sm font-bold text-text-2">File Input</div>
       <div
-        className="bg-surface border-2 border-dashed border-border p-10 rounded-2xl text-center cursor-pointer hover:border-blue transition-colors"
+        className="bg-bg border-2 border-dashed border-border p-10 rounded-2xl text-center cursor-pointer hover:border-blue transition-colors"
         onClick={() => inputRef.current?.click()}
         onDragOver={e => e.preventDefault()}
         onDrop={e => {
@@ -212,12 +210,34 @@ export default function FileValidatorClient() {
       </div>
 
       {loading && (
-        <div className="text-center py-6 text-text-muted">Analyzing file…</div>
+        <div className="text-center py-4 text-text-muted text-sm font-medium animate-pulse">Analyzing file…</div>
+      )}
+    </div>
+  );
+
+  const outputContent = (
+    <div className="space-y-6 h-full flex flex-col">
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-bold text-text-2">Analysis Results</div>
+        {fileInfo && (
+          <button
+            onClick={() => setFileInfo(null)}
+            className="text-xs font-bold text-text-muted hover:text-red-500 uppercase tracking-widest transition-colors"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      {!fileInfo && !loading && (
+        <div className="flex-1 flex items-center justify-center text-text-muted border border-border border-dashed rounded-2xl bg-bg p-8 text-center min-h-[200px]">
+          Select or drop a file to see its analysis results here.
+        </div>
       )}
 
       {fileInfo && !loading && (
-        <div className="space-y-4">
-          <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
+        <div className="space-y-4 flex-1 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="bg-bg border border-border p-5 rounded-2xl space-y-3">
             <h2 className="text-sm font-bold text-text-2">File Information</h2>
             <dl className="grid grid-cols-2 gap-3 text-sm">
               {[
@@ -226,7 +246,7 @@ export default function FileValidatorClient() {
                 { label: "Type", value: fileInfo.type || "(unknown)" },
                 { label: "Last Modified", value: new Date(fileInfo.lastModified).toLocaleString() },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-bg border border-border rounded-xl p-3">
+                <div key={label} className="bg-surface border border-border rounded-xl p-3">
                   <dt className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</dt>
                   <dd className="font-mono text-text break-all text-xs">{value}</dd>
                 </div>
@@ -235,14 +255,14 @@ export default function FileValidatorClient() {
           </div>
 
           {fileInfo.imageInfo && (
-            <div className="bg-surface border border-border p-5 rounded-2xl">
+            <div className="bg-bg border border-border p-5 rounded-2xl">
               <h2 className="text-sm font-bold text-text-2 mb-3">Image Preview</h2>
               <dl className="grid grid-cols-2 gap-3">
-                <div className="bg-bg border border-border rounded-xl p-3 text-center">
+                <div className="bg-surface border border-border rounded-xl p-3 text-center">
                   <dt className="text-xs font-bold text-text-muted mb-1">Width</dt>
                   <dd className="text-xl font-black text-text">{fileInfo.imageInfo.width}px</dd>
                 </div>
-                <div className="bg-bg border border-border rounded-xl p-3 text-center">
+                <div className="bg-surface border border-border rounded-xl p-3 text-center">
                   <dt className="text-xs font-bold text-text-muted mb-1">Height</dt>
                   <dd className="text-xl font-black text-text">{fileInfo.imageInfo.height}px</dd>
                 </div>
@@ -250,15 +270,15 @@ export default function FileValidatorClient() {
             </div>
           )}
 
-          <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
+          <div className="bg-bg border border-border p-5 rounded-2xl space-y-3">
             <h2 className="text-sm font-bold text-text-2">Validation Checks</h2>
             <div className="space-y-2">
               {fileInfo.checks.map((check, i) => (
-                <div key={i} className={`flex items-center gap-3 border rounded-xl p-3 text-sm ${STATUS_STYLES[check.status]}`}>
-                  <span className="font-bold text-base w-5 text-center">{STATUS_ICONS[check.status]}</span>
+                <div key={i} className={`flex items-start gap-3 border rounded-xl p-3 text-sm ${STATUS_STYLES[check.status]}`}>
+                  <span className="font-bold text-base w-5 text-center shrink-0">{STATUS_ICONS[check.status]}</span>
                   <div>
                     <span className="font-bold">{check.label}: </span>
-                    <span>{check.value}</span>
+                    <span className="break-all">{check.value}</span>
                   </div>
                 </div>
               ))}
@@ -267,5 +287,13 @@ export default function FileValidatorClient() {
         </div>
       )}
     </div>
+  );
+
+  return (
+    <ToolWorkspace
+      layout="split"
+      input={inputContent}
+      output={outputContent}
+    />
   );
 }

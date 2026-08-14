@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type ToolType = 'select' | 'text' | 'draw' | 'shape' | 'image' | 'blackout';
+export type ToolType = 'select' | 'text' | 'draw' | 'shape' | 'image' | 'blackout' | 'signature' | 'arrow' | 'highlight';
 
 export interface BaseAnnotation {
   id: string;
@@ -54,7 +54,28 @@ export interface BlackoutAnnotation extends BaseAnnotation {
   height: number; // percentage
 }
 
-export type Annotation = TextAnnotation | DrawAnnotation | ShapeAnnotation | ImageAnnotation | BlackoutAnnotation;
+export interface ArrowAnnotation extends BaseAnnotation {
+  type: 'arrow';
+  endX: number; // percentage
+  endY: number; // percentage
+  color: string;
+  strokeWidth: number;
+}
+
+export interface HighlightRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface HighlightAnnotation extends BaseAnnotation {
+  type: 'highlight';
+  rects: HighlightRect[];
+  color: string;
+}
+
+export type Annotation = TextAnnotation | DrawAnnotation | ShapeAnnotation | ImageAnnotation | BlackoutAnnotation | ArrowAnnotation | HighlightAnnotation;
 
 export interface PageState {
   id: string; // original page index as string "1", "2"
@@ -70,11 +91,13 @@ interface PdfEditorState {
   selectedAnnotationId: string | null;
   zoom: number;
   undoStack: Annotation[][];
+  isSignatureModalOpen: boolean;
   
   reset: () => void;
   setActiveTool: (tool: ToolType) => void;
   setSelectedAnnotation: (id: string | null) => void;
   setZoom: (zoom: number) => void;
+  setSignatureModalOpen: (isOpen: boolean) => void;
   
   addAnnotation: (annotation: Annotation) => void;
   updateAnnotation: (id: string, updates: Partial<Annotation>) => void;
@@ -94,6 +117,7 @@ export const useEditorStore = create<PdfEditorState>((set) => ({
   selectedAnnotationId: null,
   zoom: 1.0,
   undoStack: [],
+  isSignatureModalOpen: false,
   
   reset: () => set({
     activeTool: 'select',
@@ -101,12 +125,14 @@ export const useEditorStore = create<PdfEditorState>((set) => ({
     pages: [],
     selectedAnnotationId: null,
     zoom: 1.0,
-    undoStack: []
+    undoStack: [],
+    isSignatureModalOpen: false
   }),
   
   setActiveTool: (tool) => set({ activeTool: tool }),
   setSelectedAnnotation: (id) => set({ selectedAnnotationId: id }),
   setZoom: (zoom) => set({ zoom }),
+  setSignatureModalOpen: (isOpen) => set({ isSignatureModalOpen: isOpen }),
   
   addAnnotation: (annotation) => set((state) => {
     const newUndoStack = [...state.undoStack, state.annotations].slice(-20);

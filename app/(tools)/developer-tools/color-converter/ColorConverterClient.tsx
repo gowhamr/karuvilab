@@ -11,6 +11,7 @@ import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
 import { KV_BLUE } from "@/src/theme/constants";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // Color Conversion & Analysis Utils
 function hexToRgb(hex: string) {
@@ -125,136 +126,149 @@ export default function ColorConverterClient() {
 
   
 
+  const inputPanel = (
+    <div className="flex items-start gap-8">
+       <div className="relative group">
+          <div 
+            className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl border-4 border-surface ring-1 ring-white/10"
+            style={{ backgroundImage: "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEADJgY0AAL///8HMRiZmYAsRgY0AAL///8HMRiZmYAsRgYQYAIWAgD8D2IAAAAA')", backgroundRepeat: "repeat" }}
+          >
+             <m.div 
+               animate={{ backgroundColor: hex }}
+               className="w-full h-full shadow-inner" 
+             />
+          </div>
+          <input 
+            type="color" 
+            value={hex}
+            onChange={(e) => updateColor(e.target.value)}
+            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+          />
+       </div>
+       
+       <div className="flex-1 space-y-4 pt-1">
+          <div className="flex flex-wrap gap-1 p-1 bg-surface border border-border rounded-xl w-fit">
+             {FORMATS.map(f => (
+               <button
+                 key={f}
+                 onClick={() => setActiveFormat(f)}
+                 className={cn(
+                   "px-4 py-1.5 rounded-lg text-xs font-black transition-all",
+                   activeFormat === f ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                 )}
+               >
+                 {f}
+               </button>
+             ))}
+          </div>
+          
+          <m.div 
+            animate={invalid ? { x: [-4, 4, -4, 4, 0] } : {}}
+            transition={{ duration: 0.3 }}
+            className={cn(
+              "flex items-center gap-3 bg-surface border p-4 rounded-xl shadow-sm transition-colors",
+              invalid ? "border-error/50" : "border-border"
+            )}
+          >
+             <Hash className={cn("w-5 h-5", invalid ? "text-error" : "text-blue")} />
+             <input 
+               value={hex}
+               onChange={(e) => handleInputChange(e.target.value)}
+               className="bg-transparent outline-none font-mono font-bold text-xl w-full uppercase"
+               placeholder="#000000"
+             />
+             {invalid && <AlertCircle className="w-4 h-4 text-error animate-pulse" />}
+          </m.div>
+       </div>
+    </div>
+  );
+
+  const optionsPanel = (
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 gap-8 p-6 bg-surface/50 border border-border rounded-2xl shadow-inner">
+         <ContrastBadge ratio={contrastWhite} label="On White Background" />
+         <ContrastBadge ratio={contrastBlack} label="On Black Background" />
+      </div>
+
+      <div className="space-y-4">
+         <h4 className="text-xs font-black text-text-muted uppercase tracking-widest-lg flex items-center gap-2">
+            <Sparkles className="w-3 h-3" /> Recent Palettes
+         </h4>
+         <div className="flex flex-wrap gap-3">
+            <AnimatePresence mode="popLayout">
+              {history.map((c, i) => (
+                <m.button
+                  key={`${c}-${i}`}
+                  layout
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={() => updateColor(c, false)}
+                  className="w-8 h-8 rounded-lg border border-surface shadow-sm hover:scale-110 transition-transform active:scale-95"
+                  style={{ backgroundColor: c }}
+                  title={c}
+                />
+              ))}
+            </AnimatePresence>
+         </div>
+      </div>
+    </div>
+  );
+
+  const outputPanel = (
+    <div className="space-y-4">
+       {[
+         { label: "RGB", value: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` },
+         { label: "HSL", value: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` },
+         { label: "HEX-A", value: `${hex}FF` },
+         { label: "GL-SL", value: `vec3(${(rgb.r/255).toFixed(2)}, ${(rgb.g/255).toFixed(2)}, ${(rgb.b/255).toFixed(2)})` }
+       ].map((row) => (
+         <div key={row.label} className="group flex items-center justify-between p-4 bg-surface border border-border rounded-xl hover:border-blue/30 transition-all shadow-sm">
+            <div className="space-y-0.5">
+               <span className="text-tiny font-black text-text-muted uppercase tracking-widest block">{row.label}</span>
+               <span className="font-mono text-sm font-bold text-text-2">{row.value}</span>
+            </div>
+            <CopyButton text={row.value} />
+         </div>
+       ))}
+       
+       <div className="pt-4">
+          <div 
+            className="w-full p-4 sm:p-8 rounded-4xl flex items-center justify-center transition-all duration-500 border border-white/5 shadow-2xl"
+            style={{ backgroundColor: hex }}
+          >
+             <span className={cn(
+               "text-4xl font-black font-mono tracking-tighter drop-shadow-sm",
+               contrastWhite > 4.5 ? "text-white" : "text-black"
+             )}>
+                {hex}
+             </span>
+          </div>
+       </div>
+    </div>
+  );
+
+  const infoPanel = (
+    <div className="flex justify-end">
+      <ShareButton
+        url={shareUrl}
+        title={`Color ${hex} converted — KaruviLab Color Converter`}
+        onQrClick={() => setIsQrOpen(true)}
+      />
+    </div>
+  );
+
   return (
     <div className="space-y-12">
       <SharedResultBanner hasParams={hasParams} toolName="Color Converter" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Left: Swatch & History */}
-        <div className="space-y-8">
-          <div className="flex items-start gap-8">
-             <div className="relative group">
-                <div 
-                  className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl border-4 border-surface ring-1 ring-white/10"
-                  style={{ backgroundImage: "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEADJgY0AAL///8HMRiZmYAsRgY0AAL///8HMRiZmYAsRgYQYAIWAgD8D2IAAAAA')", backgroundRepeat: "repeat" }}
-                >
-                   <m.div 
-                     animate={{ backgroundColor: hex }}
-                     className="w-full h-full shadow-inner" 
-                   />
-                </div>
-                <input 
-                  type="color" 
-                  value={hex}
-                  onChange={(e) => updateColor(e.target.value)}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                />
-             </div>
-             
-             <div className="flex-1 space-y-4 pt-1">
-                <div className="flex flex-wrap gap-1 p-1 bg-surface border border-border rounded-xl w-fit">
-                   {FORMATS.map(f => (
-                     <button
-                       key={f}
-                       onClick={() => setActiveFormat(f)}
-                       className={cn(
-                         "px-4 py-1.5 rounded-lg text-xs font-black transition-all",
-                         activeFormat === f ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
-                       )}
-                     >
-                       {f}
-                     </button>
-                   ))}
-                </div>
-                
-                <m.div 
-                  animate={invalid ? { x: [-4, 4, -4, 4, 0] } : {}}
-                  transition={{ duration: 0.3 }}
-                  className={cn(
-                    "flex items-center gap-3 bg-surface border p-4 rounded-xl shadow-sm transition-colors",
-                    invalid ? "border-error/50" : "border-border"
-                  )}
-                >
-                   <Hash className={cn("w-5 h-5", invalid ? "text-error" : "text-blue")} />
-                   <input 
-                     value={hex}
-                     onChange={(e) => handleInputChange(e.target.value)}
-                     className="bg-transparent outline-none font-mono font-bold text-xl w-full uppercase"
-                     placeholder="#000000"
-                   />
-                   {invalid && <AlertCircle className="w-4 h-4 text-error animate-pulse" />}
-                </m.div>
-             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-8 p-6 bg-surface/50 border border-border rounded-2xl shadow-inner">
-             <ContrastBadge ratio={contrastWhite} label="On White Background" />
-             <ContrastBadge ratio={contrastBlack} label="On Black Background" />
-          </div>
-
-          <div className="space-y-4">
-             <h4 className="text-xs font-black text-text-muted uppercase tracking-widest-lg flex items-center gap-2">
-                <Sparkles className="w-3 h-3" /> Recent Palettes
-             </h4>
-             <div className="flex flex-wrap gap-3">
-                <AnimatePresence mode="popLayout">
-                  {history.map((c, i) => (
-                    <m.button
-                      key={`${c}-${i}`}
-                      layout
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      onClick={() => updateColor(c, false)}
-                      className="w-8 h-8 rounded-lg border border-surface shadow-sm hover:scale-110 transition-transform active:scale-95"
-                      style={{ backgroundColor: c }}
-                      title={c}
-                    />
-                  ))}
-                </AnimatePresence>
-             </div>
-          </div>
-        </div>
-
-        {/* Right: Conversion Pill Rows */}
-        <div className="space-y-4">
-           {[
-             { label: "RGB", value: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` },
-             { label: "HSL", value: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` },
-             { label: "HEX-A", value: `${hex}FF` },
-             { label: "GL-SL", value: `vec3(${(rgb.r/255).toFixed(2)}, ${(rgb.g/255).toFixed(2)}, ${(rgb.b/255).toFixed(2)})` }
-           ].map((row) => (
-             <div key={row.label} className="group flex items-center justify-between p-4 bg-surface border border-border rounded-xl hover:border-blue/30 transition-all shadow-sm">
-                <div className="space-y-0.5">
-                   <span className="text-tiny font-black text-text-muted uppercase tracking-widest block">{row.label}</span>
-                   <span className="font-mono text-sm font-bold text-text-2">{row.value}</span>
-                </div>
-                <CopyButton text={row.value} />
-             </div>
-           ))}
-           
-           <div className="pt-4">
-              <div 
-                className="w-full p-4 sm:p-8 rounded-4xl flex items-center justify-center transition-all duration-500 border border-white/5 shadow-2xl"
-                style={{ backgroundColor: hex }}
-              >
-                 <span className={cn(
-                   "text-4xl font-black font-mono tracking-tighter drop-shadow-sm",
-                   contrastWhite > 4.5 ? "text-white" : "text-black"
-                 )}>
-                    {hex}
-                 </span>
-              </div>
-           </div>
-        </div>
-      </div>
-
-      <div className="flex justify-end">
-        <ShareButton
-          url={shareUrl}
-          title={`Color ${hex} converted — KaruviLab Color Converter`}
-          onQrClick={() => setIsQrOpen(true)}
-        />
-      </div>
+      
+      <ToolWorkspace
+        layout="split"
+        input={inputPanel}
+        optionsPanel={optionsPanel}
+        output={outputPanel}
+        infoPanel={infoPanel}
+      />
     </div>
   );
 }

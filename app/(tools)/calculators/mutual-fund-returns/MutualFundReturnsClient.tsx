@@ -7,6 +7,7 @@ import { m } from "framer-motion";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl, exportToCSV } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
 import { useToast } from "@/components/ui/Toast";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const DEFAULT_STATE = {
   lumpsum: 100000,
@@ -95,9 +96,10 @@ Generated via KaruviLab`;
   };
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-surface border border-border p-6 rounded-2xl space-y-6">
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="space-y-6">
           <SliderField
             label="Initial Lumpsum"
             id="mf-lumpsum"
@@ -139,8 +141,9 @@ Generated via KaruviLab`;
             format={(v) => v + " yrs"}
           />
         </div>
-
-        <div className="space-y-4">
+      }
+      output={
+        <>
           <div className="grid grid-cols-2 gap-4">
             <MetricCard label="Total Value" value={formatINR(result.currentValue)} accent />
             <MetricCard label="Total Invested" value={formatINR(result.totalInvested)} />
@@ -157,37 +160,38 @@ Generated via KaruviLab`;
             showProjection={showTable}
             onToggleProjection={() => setShowTable(!showTable)}
           />
-        </div>
-      </div>
-
-      {showTable && (
-        <m.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="overflow-x-auto rounded-xl border border-border"
-        >
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-surface border-b border-border text-text-3">
-                <th className="px-4 py-3 text-left font-bold">Year</th>
-                <th className="px-4 py-3 text-right font-bold">Invested</th>
-                <th className="px-4 py-3 text-right font-bold">Gains</th>
-                <th className="px-4 py-3 text-right font-bold">Total Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {result.rows.map((row) => (
-                <tr key={row.year} className="border-b border-border/50 hover:bg-surface/50 transition-colors">
-                  <td className="px-4 py-3 text-text-2 font-medium">Year {row.year}</td>
-                  <td className="px-4 py-3 text-right text-text">{formatINR(row.invested)}</td>
-                  <td className="px-4 py-3 text-right text-green-500 font-medium">{formatINR(row.gains)}</td>
-                  <td className="px-4 py-3 text-right font-bold text-blue">{formatINR(row.value)}</td>
+        </>
+      }
+      infoPanel={
+        showTable && (
+          <m.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="overflow-x-auto rounded-xl border border-border"
+          >
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-surface border-b border-border text-text-3">
+                  <th className="px-4 py-3 text-left font-bold">Year</th>
+                  <th className="px-4 py-3 text-right font-bold">Invested</th>
+                  <th className="px-4 py-3 text-right font-bold">Gains</th>
+                  <th className="px-4 py-3 text-right font-bold">Total Value</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </m.div>
-      )}
-    </div>
+              </thead>
+              <tbody>
+                {result.rows.map((row) => (
+                  <tr key={row.year} className="border-b border-border/50 hover:bg-surface/50 transition-colors">
+                    <td className="px-4 py-3 text-text-2 font-medium">Year {row.year}</td>
+                    <td className="px-4 py-3 text-right text-text">{formatINR(row.invested)}</td>
+                    <td className="px-4 py-3 text-right text-green-500 font-medium">{formatINR(row.gains)}</td>
+                    <td className="px-4 py-3 text-right font-bold text-blue">{formatINR(row.value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </m.div>
+        )
+      }
+    />
   );
 }

@@ -8,6 +8,7 @@ import { formatError } from "@/src/lib/formatError";
 import { loadAny, encodeBmp } from "@/src/format-utils";
 import { formatBytes, downloadBlob, replaceExt } from "@/src/utils";
 import { cn } from "@/src/lib/utils";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import {
   Download,
   RefreshCw,
@@ -186,7 +187,7 @@ export default function BmpConverterClient() {
   const isHuge = bmpSize > 10 * 1024 * 1024; // > 10MB
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-16">
+    <div className="w-full space-y-8 pb-16">
       {/* Header Info & Privacy */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -203,42 +204,82 @@ export default function BmpConverterClient() {
 
       {/* File Upload DropZone */}
       {!file ? (
-        <DropZone
-          onFilesSelected={handleFileSelect}
-          accept="image/*,.heic,.heif,.tiff,.tif,.bmp"
-          title="Drop image here to convert to BMP"
-          description="Supports PNG, JPEG, WebP, HEIC, TIFF, GIF, and more"
+        <ToolWorkspace
+          layout="stacked"
+          input={
+            <DropZone
+              onFilesSelected={handleFileSelect}
+              accept="image/*,.heic,.heif,.tiff,.tif,.bmp"
+              title="Drop image here to convert to BMP"
+              description="Supports PNG, JPEG, WebP, HEIC, TIFF, GIF, and more"
+            />
+          }
         />
       ) : (
-        <div className="space-y-6">
-          {/* Active File Header Bar */}
-          <div className="p-6 bg-surface border border-border rounded-2xl shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border pb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-500">
-                  <FileImage className="w-5 h-5" />
+        <ToolWorkspace
+          layout="split"
+          input={
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-500">
+                    <FileImage className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-text-1 truncate max-w-xs sm:max-w-md">
+                      {file.name}
+                    </h3>
+                    {dimensions && (
+                      <p className="text-xs text-text-3">
+                        {dimensions.width} × {dimensions.height} px • {formatBytes(originalSize)}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-text-1 truncate max-w-xs sm:max-w-md">
-                    {file.name}
-                  </h3>
-                  {dimensions && (
-                    <p className="text-xs text-text-3">
-                      {dimensions.width} × {dimensions.height} px • {formatBytes(originalSize)}
-                    </p>
-                  )}
-                </div>
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-2 bg-surface-2 hover:bg-surface-3 rounded-xl border border-border transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Change Image
+                </button>
               </div>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-2 bg-surface-2 hover:bg-surface-3 rounded-xl border border-border transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                Change Image
-              </button>
-            </div>
 
-            {/* Options: Background Fill for Transparency */}
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-text-1 flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-text-3" />
+                  Original Image
+                </span>
+                <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-surface-2 text-text-3 border border-border uppercase">
+                  {file.name.split(".").pop() || "ORIGINAL"}
+                </span>
+              </div>
+
+              {/* Preview Box */}
+              <div className="relative w-full flex-1 min-h-[260px] max-h-[380px] rounded-xl overflow-hidden border border-border bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] flex items-center justify-center p-4">
+                {originalUrl && (
+                  <img
+                    src={originalUrl}
+                    alt="Original Preview"
+                    className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
+                  />
+                )}
+              </div>
+
+              {/* Specs */}
+              <div className="flex items-center justify-between text-xs text-text-2 pt-2 border-t border-border">
+                <span>
+                  Original Size: <strong className="text-text-1">{formatBytes(originalSize)}</strong>
+                </span>
+                {dimensions && (
+                  <span>
+                    Dimensions: <strong className="text-text-1">{dimensions.width} × {dimensions.height}</strong>
+                  </span>
+                )}
+              </div>
+            </div>
+          }
+          optionsPanel={
             <div className="space-y-3">
               <label className="text-sm font-medium text-text-1 flex items-center gap-2">
                 <Palette className="w-4 h-4 text-blue-500" />
@@ -274,92 +315,9 @@ export default function BmpConverterClient() {
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* Error Banner */}
-          {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-red-500">
-              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-              <div className="text-sm">
-                <p className="font-semibold">Conversion Error</p>
-                <p className="mt-0.5 text-red-400">{error}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Large BMP Warning / Info Banner */}
-          {convertedBlob && (isBmpLarger || isHuge) && (
-            <div
-              className={cn(
-                "p-4 rounded-xl border flex items-start gap-3 text-sm",
-                isHuge
-                  ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400"
-                  : "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400"
-              )}
-            >
-              {isHuge ? (
-                <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-amber-500" />
-              ) : (
-                <Info className="w-5 h-5 shrink-0 mt-0.5 text-blue-500" />
-              )}
-              <div className="space-y-1">
-                <p className="font-semibold flex items-center gap-2">
-                  <span>Uncompressed Bitmap Output</span>
-                  <span className="px-2 py-0.5 text-xs font-bold rounded bg-amber-500/20 text-amber-600 dark:text-amber-300">
-                    {sizeRatio}× size of original
-                  </span>
-                </p>
-                <p className="text-xs leading-relaxed opacity-90">
-                  BMP stores 24-bit raw RGB pixel data without compression. At{" "}
-                  <strong>
-                    {dimensions?.width} × {dimensions?.height}
-                  </strong>{" "}
-                  pixels, this BMP file uses <strong>{formatBytes(bmpSize)}</strong>. This large size is standard for uncompressed BMP image files.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Side-by-Side Image Preview & Metadata */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Original Card */}
-            <div className="p-5 bg-surface border border-border rounded-2xl shadow-sm flex flex-col space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-text-1 flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-text-3" />
-                  Original Image
-                </span>
-                <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-surface-2 text-text-3 border border-border uppercase">
-                  {file.name.split(".").pop() || "ORIGINAL"}
-                </span>
-              </div>
-
-              {/* Preview Box */}
-              <div className="relative flex-1 min-h-[260px] max-h-[380px] rounded-xl overflow-hidden border border-border bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] flex items-center justify-center p-4">
-                {originalUrl && (
-                  <img
-                    src={originalUrl}
-                    alt="Original Preview"
-                    className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
-                  />
-                )}
-              </div>
-
-              {/* Specs */}
-              <div className="flex items-center justify-between text-xs text-text-2 pt-2 border-t border-border">
-                <span>
-                  Original Size: <strong className="text-text-1">{formatBytes(originalSize)}</strong>
-                </span>
-                {dimensions && (
-                  <span>
-                    Dimensions: <strong className="text-text-1">{dimensions.width} × {dimensions.height}</strong>
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* BMP Converted Output Card */}
-            <div className="p-5 bg-surface border border-border rounded-2xl shadow-sm flex flex-col space-y-4">
+          }
+          output={
+            <div className="flex flex-col space-y-4 h-full">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-text-1 flex items-center gap-2">
                   <HardDrive className="w-4 h-4 text-blue-500" />
@@ -416,8 +374,53 @@ export default function BmpConverterClient() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+          }
+          infoPanel={
+            <div className="space-y-4">
+              {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-red-500">
+                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-semibold">Conversion Error</p>
+                    <p className="mt-0.5 text-red-400">{error}</p>
+                  </div>
+                </div>
+              )}
+
+              {convertedBlob && (isBmpLarger || isHuge) && (
+                <div
+                  className={cn(
+                    "p-4 rounded-xl border flex items-start gap-3 text-sm",
+                    isHuge
+                      ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400"
+                      : "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400"
+                  )}
+                >
+                  {isHuge ? (
+                    <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-amber-500" />
+                  ) : (
+                    <Info className="w-5 h-5 shrink-0 mt-0.5 text-blue-500" />
+                  )}
+                  <div className="space-y-1">
+                    <p className="font-semibold flex items-center gap-2">
+                      <span>Uncompressed Bitmap Output</span>
+                      <span className="px-2 py-0.5 text-xs font-bold rounded bg-amber-500/20 text-amber-600 dark:text-amber-300">
+                        {sizeRatio}× size of original
+                      </span>
+                    </p>
+                    <p className="text-xs leading-relaxed opacity-90">
+                      BMP stores 24-bit raw RGB pixel data without compression. At{" "}
+                      <strong>
+                        {dimensions?.width} × {dimensions?.height}
+                      </strong>{" "}
+                      pixels, this BMP file uses <strong>{formatBytes(bmpSize)}</strong>. This large size is standard for uncompressed BMP image files.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          }
+        />
       )}
     </div>
   );

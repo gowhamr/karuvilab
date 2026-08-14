@@ -4,6 +4,7 @@ import { useState, useMemo, memo } from "react";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const inr = (n: number, d = 0) =>
   "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -30,9 +31,10 @@ const FDCalculatorClient = memo(function FDCalculatorClient() {
   const summary = `FD Maturity Summary\n------------------\nPrincipal: ${inr(principal)}\nInterest Rate: ${rate}%\nTenure: ${tenure} ${tenureUnit}\nCompounding: ${compounding === 12 ? 'Monthly' : compounding === 4 ? 'Quarterly' : compounding === 2 ? 'Half-yearly' : 'Annual'}\n\nTotal Interest: ${inr(result.totalInterest)}\nMaturity Amount: ${inr(result.maturityValue)}\n\nGenerated via KaruviLab`;
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-surface border border-border p-6 rounded-2xl space-y-6">
+    <ToolWorkspace
+      layout="split"
+      input={
+        <>
           <SliderField
             label="Principal Amount"
             id="fd-principal"
@@ -95,21 +97,22 @@ const FDCalculatorClient = memo(function FDCalculatorClient() {
               <option value={1}>Annual</option>
             </select>
           </div>
-        </div>
-
-        <div className="space-y-4">
+        </>
+      }
+      output={
+        <div className="flex flex-col h-full space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <MetricCard label="Maturity Amount" value={inr(result.maturityValue)} accent />
             <MetricCard label="Total Interest" value={inr(result.totalInterest)} />
             <MetricCard label="Principal" value={inr(principal)} />
           </div>
           
-          <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between gap-3">
+          <div className="flex items-center justify-end gap-3 mt-auto pt-4 border-t border-border">
              <CopyButton text={summary} label="Copy Summary" />
           </div>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 });
 

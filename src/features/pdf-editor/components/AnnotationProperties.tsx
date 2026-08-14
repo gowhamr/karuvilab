@@ -36,10 +36,13 @@ export default function AnnotationProperties() {
     const val = parseFloat(e.target.value);
     if (selectedAnnotation.type === 'text') {
       updateAnnotation(selectedAnnotation.id, { fontSize: val });
-    } else if (selectedAnnotation.type === 'draw' || selectedAnnotation.type === 'shape') {
+    } else if (selectedAnnotation.type === 'draw' || selectedAnnotation.type === 'shape' || selectedAnnotation.type === 'arrow') {
       updateAnnotation(selectedAnnotation.id, { strokeWidth: val });
     }
   };
+
+  const hasColor = selectedAnnotation.type === 'text' || selectedAnnotation.type === 'draw' || selectedAnnotation.type === 'shape' || selectedAnnotation.type === 'arrow' || selectedAnnotation.type === 'highlight';
+  const hasSize = selectedAnnotation.type === 'text' || selectedAnnotation.type === 'draw' || selectedAnnotation.type === 'shape' || selectedAnnotation.type === 'arrow';
 
   return (
     <div className="absolute top-16 right-4 sm:top-20 sm:right-6 bg-surface shadow-xl border border-border rounded-xl p-4 z-modal flex flex-col gap-4 w-64">
@@ -47,8 +50,8 @@ export default function AnnotationProperties() {
         {selectedAnnotation.type.charAt(0).toUpperCase() + selectedAnnotation.type.slice(1)} Properties
       </h3>
 
-      {/* Color Picker (for Text, Draw, Shape Border) */}
-      {(selectedAnnotation.type === 'text' || selectedAnnotation.type === 'draw' || selectedAnnotation.type === 'shape') && (
+      {/* Color Picker (for Text, Draw, Shape Border, Arrow) */}
+      {hasColor && (
         <div className="space-y-2">
           <label className="text-xs font-bold text-text-muted">Color</label>
           <div className="flex flex-wrap gap-2">
@@ -56,7 +59,7 @@ export default function AnnotationProperties() {
               <button
                 key={color.value}
                 onClick={() => handleColorChange(color.value)}
-                className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${(selectedAnnotation as TextAnnotation).color === color.value ? 'border-blue scale-110 shadow-sm' : 'border-transparent shadow-sm'}`}
+                className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${(selectedAnnotation as any).color === color.value ? 'border-blue scale-110 shadow-sm' : 'border-transparent shadow-sm'}`}
                 style={{ backgroundColor: color.value }}
                 title={color.label}
                 aria-label={`Set color to ${color.label}`}
@@ -85,8 +88,8 @@ export default function AnnotationProperties() {
         </div>
       )}
 
-      {/* Size Slider (Text fontSize or Draw/Shape strokeWidth) */}
-      {(selectedAnnotation.type === 'text' || selectedAnnotation.type === 'draw' || selectedAnnotation.type === 'shape') && (
+      {/* Size Slider (Text fontSize or Draw/Shape/Arrow strokeWidth) */}
+      {hasSize && (
         <div className="space-y-2">
           <label className="text-xs font-bold text-text-muted flex justify-between">
             <span>{selectedAnnotation.type === 'text' ? 'Font Size' : 'Stroke Width'}</span>
@@ -99,8 +102,8 @@ export default function AnnotationProperties() {
           <input
             type="range"
             min="1"
-            max="10"
-            step="0.5"
+            max={selectedAnnotation.type === 'text' ? "120" : "20"}
+            step={selectedAnnotation.type === 'text' ? "1" : "0.5"}
             value={
               selectedAnnotation.type === 'text'
                 ? (selectedAnnotation as TextAnnotation).fontSize

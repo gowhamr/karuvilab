@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useWorkflowStore } from "@/src/store/workflowStore";
 import { DropZone } from "@/components/ui/DropZone";
 import { ToolResultArea } from "@/components/ui/ToolResultArea";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { Camera, Image as ImageIcon, VideoOff, ScanLine, ExternalLink, AlertCircle } from "lucide-react";
 import { m } from "framer-motion";
@@ -243,110 +244,103 @@ export default function BarcodeScannerClient() {
         </div>
       )}
 
-      {/* Mode tabs */}
-      <div className="flex bg-surface border border-border p-1 rounded-xl w-fit mx-auto">
-        <button
-          id="barcode-mode-camera"
-          onClick={() => setMode("camera")}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-bold transition-all ${mode === "camera" ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text"}`}
-        >
-          <Camera className="w-4 h-4" /> Camera
-        </button>
-        <button
-          id="barcode-mode-image"
-          onClick={() => setMode("image")}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-bold transition-all ${mode === "image" ? "bg-blue text-white shadow-md" : "text-text-3 hover:text-text"}`}
-        >
-          <ImageIcon className="w-4 h-4" /> Image
-        </button>
-      </div>
+      <ToolWorkspace
+        tabs={{
+          options: [
+            { id: "camera", label: "Camera", icon: <Camera className="w-4 h-4" /> },
+            { id: "image", label: "Image", icon: <ImageIcon className="w-4 h-4" /> }
+          ],
+          activeId: mode,
+          onChange: (id) => setMode(id as "camera" | "image")
+        }}
+        input={
+          <>
+            {mode === "camera" ? (
+              <div className="relative aspect-square md:aspect-video bg-black rounded-4xl overflow-hidden border border-border shadow-xl">
+                {stream ? (
+                  <>
+                    <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 border-[40px] border-black/40 pointer-events-none" />
+                    <m.div
+                      className="absolute inset-x-12 h-0.5 bg-blue shadow-glow-primary"
+                      animate={{ top: ["20%", "80%", "20%"] }}
+                      transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+                    />
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-text-muted space-y-4">
+                    <VideoOff className="w-16 h-16 opacity-20" />
+                    <p className="text-sm font-medium">Camera is inactive</p>
+                  </div>
+                )}
+                <canvas ref={canvasRef} className="hidden" />
+              </div>
+            ) : (
+              <DropZone
+                onFilesSelected={handleImageUpload}
+                accept="image/*"
+                title="Upload Image"
+                description="Upload an image containing a QR or barcode"
+                icon={<ScanLine className="w-8 h-8" />}
+              />
+            )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-6">
-          {mode === "camera" ? (
-            <div className="relative aspect-square md:aspect-video bg-black rounded-4xl overflow-hidden border border-border shadow-xl">
-              {stream ? (
-                <>
-                  <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 border-[40px] border-black/40 pointer-events-none" />
-                  <m.div
-                    className="absolute inset-x-12 h-0.5 bg-blue shadow-glow-primary"
-                    animate={{ top: ["20%", "80%", "20%"] }}
-                    transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
-                  />
-                </>
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-text-muted space-y-4">
-                  <VideoOff className="w-16 h-16 opacity-20" />
-                  <p className="text-sm font-medium">Camera is inactive</p>
-                </div>
-              )}
-              <canvas ref={canvasRef} className="hidden" />
-            </div>
-          ) : (
-            <DropZone
-              onFilesSelected={handleImageUpload}
-              accept="image/*"
-              title="Upload Image"
-              description="Upload an image containing a QR or barcode"
-              icon={<ScanLine className="w-8 h-8" />}
-            />
-          )}
-
-          {error && (
-            <div className="p-4 bg-error/10 text-error text-sm font-bold rounded-xl border border-error/20" role="alert">
-              {error}
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-6">
-          <ToolResultArea value={result || ""} label="Scanned Data" />
-          {result && (
-            <div className="flex flex-col gap-3">
-              {result.startsWith("http") && (
-                <a
-                  href={result}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-4 bg-blue/10 text-blue rounded-2xl font-bold hover:bg-blue/20 transition-colors"
+            {error && (
+              <div className="p-4 bg-error/10 text-error text-sm font-bold rounded-xl border border-error/20" role="alert">
+                {error}
+              </div>
+            )}
+          </>
+        }
+        output={
+          <div className="space-y-6 flex flex-col h-full">
+            <ToolResultArea value={result || ""} label="Scanned Data" />
+            {result && (
+              <div className="flex flex-col gap-3">
+                {result.startsWith("http") && (
+                  <a
+                    href={result}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-4 bg-blue/10 text-blue rounded-2xl font-bold hover:bg-blue/20 transition-colors"
+                  >
+                    <ExternalLink className="w-4 h-4" /> Open Link
+                  </a>
+                )}
+                <button
+                  id="barcode-recreate-qr"
+                  onClick={() => {
+                    useWorkflowStore.getState().setPendingQrData(result);
+                    router.push("/utilities/qrcode");
+                  }}
+                  className="flex items-center justify-center gap-2 w-full py-4 bg-blue text-white rounded-2xl font-bold hover:bg-blue-dark transition-colors shadow-lg shadow-blue/20"
                 >
-                  <ExternalLink className="w-4 h-4" /> Open Link
-                </a>
-              )}
+                  Recreate QR
+                </button>
+              </div>
+            )}
+            {format && (
+              <div className="p-4 bg-surface border border-border rounded-2xl flex items-center justify-between">
+                <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Format</span>
+                <span className="font-bold text-blue bg-blue/10 px-3 py-1 rounded-lg">{format.toUpperCase()}</span>
+              </div>
+            )}
+            {result && mode === "camera" && (
               <button
-                id="barcode-recreate-qr"
+                id="barcode-scan-another"
                 onClick={() => {
-                  useWorkflowStore.getState().setPendingQrData(result);
-                  router.push("/utilities/qrcode");
+                  setResult(null);
+                  setFormat(null);
+                  setScanTrigger(prev => prev + 1);
                 }}
-                className="flex items-center justify-center gap-2 w-full py-4 bg-blue text-white rounded-2xl font-bold hover:bg-blue-dark transition-colors shadow-lg shadow-blue/20"
+                className="w-full py-4 bg-surface border border-border text-text-2 rounded-2xl font-bold hover:border-blue hover:text-blue transition-all"
               >
-                Recreate QR
+                Scan Another
               </button>
-            </div>
-          )}
-          {format && (
-            <div className="p-4 bg-surface border border-border rounded-2xl flex items-center justify-between">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-widest">Format</span>
-              <span className="font-bold text-blue bg-blue/10 px-3 py-1 rounded-lg">{format.toUpperCase()}</span>
-            </div>
-          )}
-          {result && mode === "camera" && (
-            <button
-              id="barcode-scan-another"
-              onClick={() => {
-                setResult(null);
-                setFormat(null);
-                setScanTrigger(prev => prev + 1);
-              }}
-              className="w-full py-4 bg-surface border border-border text-text-2 rounded-2xl font-bold hover:border-blue hover:text-blue transition-all"
-            >
-              Scan Another
-            </button>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
+        }
+      />
     </div>
   );
 }

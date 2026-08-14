@@ -6,6 +6,7 @@ import { mirrorImage } from "@/src/lib/canvas-worker-client";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { formatError } from "@/src/lib/formatError";
 import { m, AnimatePresence } from "framer-motion";
 import {
@@ -140,7 +141,7 @@ export default function ImageMirrorClient() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-16">
+    <div className="w-full space-y-8 pb-16">
       {/* Header Info & Privacy Badge */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -154,24 +155,6 @@ export default function ImageMirrorClient() {
         </div>
         <PrivacyBadge />
       </div>
-
-      {/* Upload Zone when no image loaded */}
-      {!originalUrl && (
-        <m.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-4"
-        >
-          <DropZone
-            onFilesSelected={handleFilesSelected}
-            accept="image/*"
-            title="Drop image here or click to browse"
-            description="Supports PNG, JPEG, WebP, GIF, SVG"
-            icon={<FlipHorizontal className="w-10 h-10 text-blue" />}
-            className="p-12 border-dashed border-2 border-border hover:border-blue/50 transition-colors"
-          />
-        </m.div>
-      )}
 
       {/* Error Message Alert */}
       <AnimatePresence>
@@ -188,16 +171,65 @@ export default function ImageMirrorClient() {
         )}
       </AnimatePresence>
 
-      {/* Main Workspace when image is loaded */}
-      {originalUrl && (
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-8"
-        >
-          {/* Top Controls Toolbar */}
-          <div className="bg-surface border border-border p-6 rounded-3xl shadow-sm space-y-6">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <ToolWorkspace
+        layout={originalUrl ? "split" : "stacked"}
+        input={
+          !originalUrl ? (
+            <m.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <DropZone
+                onFilesSelected={handleFilesSelected}
+                accept="image/*"
+                title="Drop image here or click to browse"
+                description="Supports PNG, JPEG, WebP, GIF, SVG"
+                icon={<FlipHorizontal className="w-10 h-10 text-blue" />}
+                className="p-12 border-dashed border-2 border-border hover:border-blue/50 transition-colors"
+              />
+            </m.div>
+          ) : (
+            <m.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col h-full gap-4"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-widest text-text-3 flex items-center gap-2">
+                  <FileImage className="w-4 h-4 text-text-muted" />
+                  Original Image
+                </span>
+                {dimensions && (
+                  <span className="text-xs font-semibold text-text-muted">
+                    {dimensions.width} × {dimensions.height} px
+                  </span>
+                )}
+              </div>
+
+              <div className="relative bg-bg border border-border rounded-2xl p-4 min-h-[300px] flex items-center justify-center overflow-hidden flex-1">
+                <img
+                  src={originalUrl}
+                  alt="Original"
+                  className="max-h-80 w-auto max-w-full object-contain rounded-lg"
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-text-muted pt-4 border-t border-border/50">
+                <span className="truncate max-w-[200px]" title={file?.name}>
+                  {file?.name}
+                </span>
+                <span className="font-bold">{formatFileSize(originalSize)}</span>
+              </div>
+            </m.div>
+          )
+        }
+        optionsPanel={
+          originalUrl ? (
+            <m.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+            >
               {/* Output Format Selector */}
               <div className="space-y-2 w-full md:w-auto">
                 <label className="text-xs font-bold uppercase tracking-widest text-text-3">
@@ -249,88 +281,57 @@ export default function ImageMirrorClient() {
                   )}
                 </button>
               </div>
-            </div>
-          </div>
-
-          {/* Side-by-Side Comparison */}
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Original Card */}
-            <div className="bg-surface border border-border p-6 rounded-3xl shadow-sm space-y-4 flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-widest text-text-3 flex items-center gap-2">
-                    <FileImage className="w-4 h-4 text-text-muted" />
-                    Original Image
+            </m.div>
+          ) : undefined
+        }
+        output={
+          originalUrl ? (
+            <m.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col h-full gap-4"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-widest text-blue flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue" />
+                  Mirrored Preview
+                </span>
+                {dimensions && (
+                  <span className="text-xs font-semibold text-text-muted">
+                    {dimensions.width} × {dimensions.height} px
                   </span>
-                  {dimensions && (
-                    <span className="text-xs font-semibold text-text-muted">
-                      {dimensions.width} × {dimensions.height} px
-                    </span>
-                  )}
-                </div>
+                )}
+              </div>
 
-                <div className="relative bg-bg border border-border rounded-2xl p-4 min-h-[300px] flex items-center justify-center overflow-hidden">
+              <div className="relative bg-bg border border-border rounded-2xl p-4 min-h-[300px] flex items-center justify-center overflow-hidden flex-1">
+                {isProcessing && (
+                  <div className="absolute inset-0 bg-surface/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-content">
+                    <Loader2 className="w-8 h-8 text-blue animate-spin" />
+                    <span className="text-xs font-bold text-text-3">Reflecting Image...</span>
+                  </div>
+                )}
+
+                {mirroredUrl ? (
                   <img
-                    src={originalUrl}
-                    alt="Original"
+                    src={mirroredUrl}
+                    alt="Mirrored"
                     className="max-h-80 w-auto max-w-full object-contain rounded-lg"
                   />
-                </div>
+                ) : (
+                  <div className="text-text-muted text-xs font-semibold">
+                    Generating mirror preview...
+                  </div>
+                )}
               </div>
 
-              <div className="flex items-center justify-between text-xs text-text-muted pt-2 border-t border-border/50">
-                <span className="truncate max-w-[200px]" title={file?.name}>
-                  {file?.name}
-                </span>
-                <span className="font-bold">{formatFileSize(originalSize)}</span>
-              </div>
-            </div>
-
-            {/* Mirrored Card */}
-            <div className="bg-surface border border-border p-6 rounded-3xl shadow-sm space-y-4 flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-widest text-blue flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-blue" />
-                    Mirrored Preview
-                  </span>
-                  {dimensions && (
-                    <span className="text-xs font-semibold text-text-muted">
-                      {dimensions.width} × {dimensions.height} px
-                    </span>
-                  )}
-                </div>
-
-                <div className="relative bg-bg border border-border rounded-2xl p-4 min-h-[300px] flex items-center justify-center overflow-hidden">
-                  {isProcessing && (
-                    <div className="absolute inset-0 bg-surface/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-content">
-                      <Loader2 className="w-8 h-8 text-blue animate-spin" />
-                      <span className="text-xs font-bold text-text-3">Reflecting Image...</span>
-                    </div>
-                  )}
-
-                  {mirroredUrl ? (
-                    <img
-                      src={mirroredUrl}
-                      alt="Mirrored"
-                      className="max-h-80 w-auto max-w-full object-contain rounded-lg"
-                    />
-                  ) : (
-                    <div className="text-text-muted text-xs font-semibold">
-                      Generating mirror preview...
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-xs text-text-muted pt-2 border-t border-border/50">
+              <div className="flex items-center justify-between text-xs text-text-muted pt-4 border-t border-border/50">
                 <span>Reflected horizontally</span>
                 <span className="font-bold text-text-2">{formatFileSize(mirroredSize)}</span>
               </div>
-            </div>
-          </div>
-        </m.div>
-      )}
+            </m.div>
+          ) : undefined
+        }
+      />
     </div>
   );
 }

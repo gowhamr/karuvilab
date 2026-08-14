@@ -48,7 +48,11 @@ export default function GrammarCheckerClient() {
   const [isProcessing, setIsProcessing] = useState(false);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const abortController = useRef<AbortController | null>(null);
-  const { ignoredWords, addIgnoredWord, removeIgnoredWord, tone, setTone } = useGrammarStore();
+  const ignoredWords = useGrammarStore(s => s.ignoredWords);
+  const addIgnoredWord = useGrammarStore(s => s.addIgnoredWord);
+  const removeIgnoredWord = useGrammarStore(s => s.removeIgnoredWord);
+  const tone = useGrammarStore(s => s.tone);
+  const setTone = useGrammarStore(s => s.setTone);
 
   const editor = useEditor({
     extensions: [

@@ -14,13 +14,13 @@ import {
   Palette,
   Loader2,
   AlertCircle,
-  Sparkles,
   ImageIcon,
   Check,
   Scaling,
   Layers,
   Info,
 } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 export type IcoSize = 16 | 32 | 48 | 64 | 128 | 256;
 
@@ -209,29 +209,29 @@ export default function IcoGeneratorClient() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
-      {/* Privacy Badge moved to top right corner conceptually or just rendered inline if needed, but since it's global let's just place it nicely if we want, or remove it since ToolShell handles it. We'll leave it out since ToolShell is the main header. */}
-      {/* Main Container */}
-      {!file ? (
-        <m.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-2xl border border-border p-6 shadow-sm"
-        >
-          <DropZone
-            onFilesSelected={handleFileSelect}
-            accept="image/*"
-            title="Drop your image here to create an ICO file"
-            subtitle="Supports PNG, JPG, WebP, AVIF, HEIC, TIFF, BMP, GIF"
-          />
-        </m.div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Settings Panel (Left Column) */}
+    <ToolWorkspace
+      layout={file ? "split" : "stacked"}
+      input={
+        !file ? (
+          <m.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <DropZone
+              onFilesSelected={handleFileSelect}
+              accept="image/*"
+              title="Drop your image here to create an ICO file"
+              subtitle="Supports PNG, JPG, WebP, AVIF, HEIC, TIFF, BMP, GIF"
+            />
+          </m.div>
+        ) : null
+      }
+      optionsPanel={
+        file ? (
           <m.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-5 space-y-5 bg-card rounded-2xl border border-border p-5 shadow-sm"
+            className="space-y-5"
           >
             {/* Header with Change File */}
             <div className="flex items-center justify-between pb-3 border-b border-border">
@@ -330,12 +330,14 @@ export default function IcoGeneratorClient() {
               </div>
             </div>
           </m.div>
-
-          {/* Preview & Download Panel (Right Column) */}
+        ) : null
+      }
+      output={
+        file ? (
           <m.div
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-7 space-y-5 flex flex-col"
+            className="space-y-5 flex flex-col h-full"
           >
             {/* Error banner */}
             <AnimatePresence>
@@ -353,7 +355,7 @@ export default function IcoGeneratorClient() {
             </AnimatePresence>
 
             {/* Preview Card */}
-            <div className="bg-card rounded-2xl border border-border p-5 shadow-sm flex-1 flex flex-col justify-between space-y-6">
+            <div className="flex-1 flex flex-col justify-between space-y-6">
               <div>
                 <div className="flex items-center justify-between pb-3 border-b border-border">
                   <span className="font-semibold text-sm flex items-center gap-2">
@@ -452,8 +454,8 @@ export default function IcoGeneratorClient() {
               </button>
             </div>
           </m.div>
-        </div>
-      )}
-    </div>
+        ) : null
+      }
+    />
   );
 }

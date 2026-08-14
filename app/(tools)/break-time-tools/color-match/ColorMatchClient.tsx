@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Award, Timer, ShieldAlert } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const BEST_STREAK_KEY = "karuvi.breaktime.colormatch.best";
 const ROUND_TIME_LIMIT = 5; // 5 seconds per round
@@ -202,156 +203,159 @@ export default function ColorMatchClient() {
     : 0;
 
   return (
-    <div className="max-w-xl mx-auto space-y-6">
-      {/* Stats display */}
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: "Best Streak", val: bestStreak, icon: <Trophy className="w-4 h-4 text-primary" /> },
-          { label: "Current Streak", val: streak, icon: <Award className="w-4 h-4 text-primary" /> },
-          { label: "Accuracy", val: totalAttempts > 0 ? `${accuracy}%` : "—", icon: <Timer className="w-4 h-4 text-primary" /> },
-        ].map(({ label, val, icon }) => (
-          <div key={label} className="rounded-card border border-divider bg-surface p-3 flex flex-col items-center gap-1 select-none">
-            {icon}
-            <span className="text-xl font-black text-text">{val}</span>
-            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest text-center">{label}</span>
-          </div>
-        ))}
-      </div>
-
-      <AnimatePresence mode="wait">
-        {gameState === "idle" && (
-          <m.div
-            key="idle"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="rounded-card border border-divider bg-surface p-4 sm:p-8 text-center space-y-5"
-          >
-            <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto text-3xl">
-              🎨
+    <ToolWorkspace
+      layout="stacked"
+      optionsPanel={
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: "Best Streak", val: bestStreak, icon: <Trophy className="w-4 h-4 text-primary" /> },
+            { label: "Current Streak", val: streak, icon: <Award className="w-4 h-4 text-primary" /> },
+            { label: "Accuracy", val: totalAttempts > 0 ? `${accuracy}%` : "—", icon: <Timer className="w-4 h-4 text-primary" /> },
+          ].map(({ label, val, icon }) => (
+            <div key={label} className="rounded-2xl border border-divider bg-surface-elevated/40 p-3 flex flex-col items-center gap-1 select-none">
+              {icon}
+              <span className="text-xl font-black text-text">{val}</span>
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest text-center">{label}</span>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-black text-text">Color Match Test</h2>
-              <p className="text-text-muted text-sm max-w-sm mx-auto leading-relaxed">
-                A target color block will be shown. You have 5 seconds to select the exact matching swatch from 4 similar choices.
-              </p>
-            </div>
-            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-              onClick={startGame}
-              className="rounded-btn px-6 py-3 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
+          ))}
+        </div>
+      }
+      output={
+        <AnimatePresence mode="wait">
+          {gameState === "idle" && (
+            <m.div
+              key="idle"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-center space-y-5 flex flex-col items-center justify-center py-8"
             >
-              Start Game
-            </m.button>
-          </m.div>
-        )}
-
-        {gameState === "playing" && (
-          <m.div
-            key="playing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="space-y-6"
-          >
-            {/* Round info and Timer */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs font-bold text-text-muted">
-                <span>PICK THE EXACT MATCH</span>
-                <span className={timeLeft <= 1.5 ? "text-danger animate-pulse" : ""}>
-                  TIME: {timeLeft.toFixed(1)}s
-                </span>
+              <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto text-3xl">
+                🎨
               </div>
-              <div className="h-2 bg-divider rounded-full overflow-hidden" role="progressbar" aria-valuenow={timeLeft} aria-valuemin={0} aria-valuemax={ROUND_TIME_LIMIT}>
-                <m.div
-                  className={`h-full rounded-full ${timeLeft <= 1.5 ? "bg-danger" : "bg-primary"}`}
-                  animate={{ width: `${(timeLeft / ROUND_TIME_LIMIT) * 100}%` }}
-                  transition={{ duration: 0.1 }}
-                />
+              <div className="space-y-2">
+                <h2 className="text-2xl font-black text-text">Color Match Test</h2>
+                <p className="text-text-muted text-sm w-full max-w-md mx-auto leading-relaxed">
+                  A target color block will be shown. You have 5 seconds to select the exact matching swatch from 4 similar choices.
+                </p>
               </div>
-            </div>
-
-            {/* Target Color Block */}
-            <div className="flex flex-col items-center justify-center gap-2 p-6 rounded-card border border-divider bg-surface select-none">
-              <div
-                className="w-32 h-32 rounded-2xl shadow-inner border border-black/10"
-                style={{ backgroundColor: toHSLString(targetColor) }}
-              />
-              <span className="text-xs font-black text-text-muted mt-2 tracking-widest uppercase">Target Color</span>
-            </div>
-
-            {/* Swatch Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {swatches.map((swatch, idx) => (
-                <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  key={swatch.id}
-                  onClick={() => selectSwatch(swatch)}
-                  className="p-3 rounded-card border-2 border-divider bg-surface hover:border-primary/50  transition-all flex flex-col items-center gap-3 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label={`Color swatch option ${idx + 1}`}
-                >
-                  <div
-                    className="w-full aspect-[2/1] rounded-xl border border-black/5"
-                    style={{ backgroundColor: toHSLString(swatch.color) }}
-                  />
-                  <div className="flex items-center gap-1.5 justify-center">
-                    <kbd className="px-1.5 py-0.5 rounded bg-surface-elevated border border-divider text-[10px] font-mono font-bold text-text-muted">
-                      {idx + 1}
-                    </kbd>
-                    <span className="text-xs font-bold text-text-muted">Select</span>
-                  </div>
-                </m.button>
-              ))}
-            </div>
-          </m.div>
-        )}
-
-        {gameState === "gameover" && (
-          <m.div
-            key="gameover"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="rounded-card border border-divider bg-surface p-4 sm:p-8 text-center space-y-5"
-          >
-            <div className="w-16 h-16 rounded-full bg-danger/10 text-danger flex items-center justify-center mx-auto">
-              <ShieldAlert className="w-8 h-8" />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-2xl font-black text-text">
-                {gameOverReason === "timeout" ? "Time ran out!" : "Incorrect Match!"}
-              </h2>
-              <p className="text-text-muted text-sm max-w-sm mx-auto">
-                You reached a streak of <strong className="text-text-primary">{streak}</strong>. Good effort!
-              </p>
-            </div>
-
-            <div className="border border-divider rounded-2xl p-4 bg-surface-elevated/40 grid grid-cols-2 gap-2 text-center text-sm font-medium">
-              <div>
-                <span className="text-text-muted block text-xs">Total Rounds</span>
-                <span className="text-lg font-black text-text">{totalAttempts}</span>
-              </div>
-              <div>
-                <span className="text-text-muted block text-xs">Correct Matches</span>
-                <span className="text-lg font-black text-text">{correctAttempts}</span>
-              </div>
-            </div>
-
-            <div className="flex justify-center gap-3">
-              <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                onClick={() => setGameState("idle")}
-                className="rounded-btn px-5 py-2.5 bg-surface border border-divider font-bold text-text-secondary hover:text-text-primary transition-all "
-              >
-                Back Menu
-              </m.button>
               <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 onClick={startGame}
-                className="rounded-btn px-6 py-2.5 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
+                className="rounded-btn px-6 py-3 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary mt-4"
               >
-                Play Again
+                Start Game
               </m.button>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
-    </div>
+            </m.div>
+          )}
+
+          {gameState === "playing" && (
+            <m.div
+              key="playing"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-6"
+            >
+              {/* Round info and Timer */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs font-bold text-text-muted">
+                  <span>PICK THE EXACT MATCH</span>
+                  <span className={timeLeft <= 1.5 ? "text-danger animate-pulse" : ""}>
+                    TIME: {timeLeft.toFixed(1)}s
+                  </span>
+                </div>
+                <div className="h-2 bg-divider rounded-full overflow-hidden" role="progressbar" aria-valuenow={timeLeft} aria-valuemin={0} aria-valuemax={ROUND_TIME_LIMIT}>
+                  <m.div
+                    className={`h-full rounded-full ${timeLeft <= 1.5 ? "bg-danger" : "bg-primary"}`}
+                    animate={{ width: `${(timeLeft / ROUND_TIME_LIMIT) * 100}%` }}
+                    transition={{ duration: 0.1 }}
+                  />
+                </div>
+              </div>
+
+              {/* Target Color Block */}
+              <div className="flex flex-col items-center justify-center gap-2 p-6 rounded-3xl border border-divider bg-surface-elevated/40 select-none">
+                <div
+                  className="w-32 h-32 rounded-2xl shadow-inner border border-black/10"
+                  style={{ backgroundColor: toHSLString(targetColor) }}
+                />
+                <span className="text-xs font-black text-text-muted mt-2 tracking-widest uppercase">Target Color</span>
+              </div>
+
+              {/* Swatch Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                {swatches.map((swatch, idx) => (
+                  <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                    key={swatch.id}
+                    onClick={() => selectSwatch(swatch)}
+                    className="p-3 rounded-2xl border-2 border-divider bg-surface-elevated/40 hover:border-primary/50 transition-all flex flex-col items-center gap-3 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-label={`Color swatch option ${idx + 1}`}
+                  >
+                    <div
+                      className="w-full aspect-[2/1] rounded-xl border border-black/5"
+                      style={{ backgroundColor: toHSLString(swatch.color) }}
+                    />
+                    <div className="flex items-center gap-1.5 justify-center">
+                      <kbd className="px-1.5 py-0.5 rounded bg-surface border border-divider text-[10px] font-mono font-bold text-text-muted">
+                        {idx + 1}
+                      </kbd>
+                      <span className="text-xs font-bold text-text-muted">Select</span>
+                    </div>
+                  </m.button>
+                ))}
+              </div>
+            </m.div>
+          )}
+
+          {gameState === "gameover" && (
+            <m.div
+              key="gameover"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="text-center space-y-6 flex flex-col items-center justify-center py-8"
+            >
+              <div className="w-16 h-16 rounded-full bg-danger/10 text-danger flex items-center justify-center mx-auto">
+                <ShieldAlert className="w-8 h-8" />
+              </div>
+              <div className="space-y-1">
+                <h2 className="text-2xl font-black text-text">
+                  {gameOverReason === "timeout" ? "Time ran out!" : "Incorrect Match!"}
+                </h2>
+                <p className="text-text-muted text-sm w-full">
+                  You reached a streak of <strong className="text-text-primary">{streak}</strong>. Good effort!
+                </p>
+              </div>
+
+              <div className="border border-divider rounded-2xl p-4 bg-surface-elevated/40 grid grid-cols-2 gap-2 text-center text-sm font-medium w-full max-w-sm mx-auto">
+                <div>
+                  <span className="text-text-muted block text-xs">Total Rounds</span>
+                  <span className="text-lg font-black text-text">{totalAttempts}</span>
+                </div>
+                <div>
+                  <span className="text-text-muted block text-xs">Correct Matches</span>
+                  <span className="text-lg font-black text-text">{correctAttempts}</span>
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-3 mt-4">
+                <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                  onClick={() => setGameState("idle")}
+                  className="rounded-btn px-5 py-2.5 bg-surface-elevated border border-divider font-bold text-text-secondary hover:text-text-primary transition-all "
+                >
+                  Back Menu
+                </m.button>
+                <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                  onClick={startGame}
+                  className="rounded-btn px-6 py-2.5 bg-primary text-white font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
+                >
+                  Play Again
+                </m.button>
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      }
+    />
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 import { ToolInput } from '@/components/ui/ToolInput';
 import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
@@ -109,18 +110,22 @@ export default function ToolClient() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <ToolInput 
-        value={input} 
-        onChange={handleInput} 
-        placeholder="Paste Track 2 data here (e.g. ;1234567890123456=2412120...)" 
-        label="Track 2 Data"
-      />
-      <ToolResultArea 
-        value={output} 
-        label="Parsed Data"
-        language="json"
-      />
-    </div>
+    <ToolWorkspace
+      input={
+        <ToolInput 
+          value={input} 
+          onChange={handleInput} 
+          placeholder="Paste Track 2 data here (e.g. ;1234567890123456=2412120...)" 
+          label="Track 2 Data"
+        />
+      }
+      output={
+        <ToolResultArea 
+          value={output} 
+          label="Parsed Data"
+          language="json"
+        />
+      }
+    />
   );
 }

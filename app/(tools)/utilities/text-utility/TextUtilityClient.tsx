@@ -1,11 +1,9 @@
 "use client";
 import { useState, useMemo } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
-import { CopyButton } from "@/components/ui/CopyButton";
 import { useToast } from "@/components/ui/Toast";
-
-const cat = CATEGORIES.find(c => c.id === "utilities")!;
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 function toTitleCase(s: string) {
   return s.replace(/\b\w/g, c => c.toUpperCase());
@@ -93,102 +91,102 @@ export default function TextUtilityClient() {
   };
 
   return (
-    <div className="space-y-6">
-      <dl className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-        {[
-          { label: "Words", value: stats.words },
-          { label: "Characters", value: stats.chars },
-          { label: "Lines", value: stats.lines },
-          { label: "Reading Time", value: `~${stats.readingTime}m` },
-        ].map(({ label, value }) => (
-          <div key={label} className="bg-surface border border-border p-4 rounded-xl">
-            <dt className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</dt>
-            <dd className="text-xl font-black text-text">{value}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-        <label className="text-sm font-bold text-text-2">Input Text</label>
-        <textarea
-          className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm focus:ring-2 focus:ring-blue outline-none transition-all resize-none"
-          rows={7}
-          placeholder="Type or paste your text here…"
-          value={input}
-          onChange={e => {
-            if (e.target.value.length > 500000) {
-              toast("Text exceeds 500KB limit", "error");
-              setInput(e.target.value.slice(0, 500000));
-            } else {
-              setInput(e.target.value);
-            }
-          }}
-        />
-      </div>
-
-      {OPERATIONS.map(({ group, items }) => (
-        <div key={group} className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-          <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">{group}</h2>
-          <div className="flex flex-wrap gap-2">
-            {items.map(({ label, fn }) => (
-              <button
-                key={label}
-                onClick={() => applyOp(label, fn)}
-                className="px-4 py-2 text-sm font-medium bg-bg border border-border rounded-xl hover:border-blue hover:text-blue transition-all"
-              >
-                {label}
-              </button>
+    <ToolWorkspace
+      input={
+        <div className="space-y-6">
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+            {[
+              { label: "Words", value: stats.words },
+              { label: "Characters", value: stats.chars },
+              { label: "Lines", value: stats.lines },
+              { label: "Reading Time", value: `~${stats.readingTime}m` },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-bg border border-border p-3 rounded-2xl">
+                <dt className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">{label}</dt>
+                <dd className="text-xl font-black text-text">{value}</dd>
+              </div>
             ))}
-          </div>
-        </div>
-      ))}
-
-      {output && (
-        <div className="bg-surface border border-border p-5 rounded-2xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="text-sm font-bold text-text-2">Output</label>
-              {lastOp && <span className="ml-2 text-xs text-text-muted">— {lastOp}</span>}
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-text-muted">{outputStats.chars} chars</span>
-              <CopyButton text={output} />
-            </div>
-          </div>
-          <textarea
-            readOnly
-            className="w-full px-4 py-3 bg-bg border border-border rounded-xl font-mono text-sm text-text resize-none outline-none"
+          </dl>
+          <ToolInput
+            label="Input Text"
+            value={input}
+            onChange={val => {
+              if (val.length > 500000) {
+                toast("Text exceeds 500KB limit", "error");
+                setInput(val.slice(0, 500000));
+              } else {
+                setInput(val);
+              }
+            }}
+            placeholder="Type or paste your text here…"
             rows={7}
-            value={output}
           />
-          <button
-            onClick={() => setInput(output)}
-            className="text-xs text-blue hover:underline"
-          >
-            Use as new input
-          </button>
         </div>
-      )}
-
-      <div className="bg-surface border border-border p-5 rounded-2xl">
-        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">Detailed Stats</h2>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-          {[
-            { label: "Words", value: stats.words },
-            { label: "Characters", value: stats.chars },
-            { label: "Chars (no spaces)", value: stats.charsNoSpaces },
-            { label: "Lines", value: stats.lines },
-            { label: "Sentences", value: stats.sentences },
-            { label: "Paragraphs", value: stats.paragraphs },
-            { label: "Reading Time", value: `~${stats.readingTime} min` },
-          ].map(({ label, value }) => (
-            <div key={label} className="bg-bg border border-border rounded-xl p-3">
-              <dt className="text-xs text-text-muted mb-0.5">{label}</dt>
-              <dd className="font-bold text-text">{value}</dd>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          {OPERATIONS.map(({ group, items }) => (
+            <div key={group} className="space-y-3">
+              <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">{group}</h2>
+              <div className="flex flex-wrap gap-2">
+                {items.map(({ label, fn }) => (
+                  <button
+                    key={label}
+                    onClick={() => applyOp(label, fn)}
+                    className="px-4 py-2 text-sm font-medium bg-bg border border-border rounded-xl hover:border-blue hover:text-blue transition-all"
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
-        </dl>
-      </div>
-    </div>
+        </div>
+      }
+      output={
+        <div className="flex flex-col h-full space-y-4">
+          <ToolResultArea
+            label={`Output${lastOp ? ` — ${lastOp}` : ""}`}
+            value={output}
+            onClear={() => {
+              setOutput("");
+              setLastOp("");
+            }}
+          />
+          {output && (
+            <div className="flex justify-between items-center px-1">
+              <span className="text-xs text-text-muted">{outputStats.chars} chars</span>
+              <button
+                onClick={() => setInput(output)}
+                className="text-xs text-blue hover:underline font-medium"
+              >
+                Use as new input
+              </button>
+            </div>
+          )}
+        </div>
+      }
+      infoPanel={
+        <div className="bg-surface border border-border p-4 sm:p-6 rounded-4xl shadow-sm">
+          <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-4">Detailed Stats</h2>
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            {[
+              { label: "Words", value: stats.words },
+              { label: "Characters", value: stats.chars },
+              { label: "Chars (no spaces)", value: stats.charsNoSpaces },
+              { label: "Lines", value: stats.lines },
+              { label: "Sentences", value: stats.sentences },
+              { label: "Paragraphs", value: stats.paragraphs },
+              { label: "Reading Time", value: `~${stats.readingTime} min` },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-bg border border-border rounded-2xl p-4">
+                <dt className="text-xs font-bold text-text-muted mb-1 uppercase tracking-wider">{label}</dt>
+                <dd className="text-lg font-black text-text">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      }
+    />
   );
 }

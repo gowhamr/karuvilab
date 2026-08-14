@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
 
 const IST_OFFSET_MINUTES = 5 * 60 + 30; // UTC+5:30
 
@@ -94,73 +96,73 @@ export default function UtcIstConverterClient() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Live clocks */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Current UTC</div>
-          <div className="text-2xl font-black font-mono text-text">{liveUtc.split("T")[1]}</div>
-          <div className="text-sm text-text-3">{liveUtc.split("T")[0]}</div>
-        </div>
-        <div className="bg-surface border border-blue/30 p-5 rounded-2xl shadow-sm space-y-1">
-          <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Current IST (UTC+5:30)</div>
-          <div className="text-2xl font-black font-mono text-blue">{liveIst.split("T")[1]}</div>
-          <div className="text-sm text-text-3">{liveIst.split("T")[0]}</div>
-        </div>
-      </div>
-
-      {/* Converter inputs */}
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        <h2 className="font-bold text-text-2">Convert a specific date & time</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">UTC Date & Time</label>
-            <input
+    <ToolWorkspace
+      layout="split"
+      input={
+        <>
+          <h2 className="font-bold text-text-2 mb-4">Convert a specific date & time</h2>
+          <div className="space-y-4">
+            <ToolInput
               type="datetime-local"
+              label="UTC Date & Time"
               value={utcInput}
-              onChange={(e) => handleUtcChange(e.target.value)}
-              className="w-full px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
+              onChange={handleUtcChange}
+              mono
+              description={fmtDisplay(utcInput)}
             />
-            <p className="text-xs text-text-muted">{fmtDisplay(utcInput)}</p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-text-2">IST Date & Time (UTC+5:30)</label>
-            <input
+            <ToolInput
               type="datetime-local"
+              label="IST Date & Time (UTC+5:30)"
               value={istInput}
-              onChange={(e) => handleIstChange(e.target.value)}
-              className="w-full px-4 py-3 bg-bg border border-blue/30 rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-mono"
+              onChange={handleIstChange}
+              mono
+              description={fmtDisplay(istInput)}
             />
-            <p className="text-xs text-text-muted">{fmtDisplay(istInput)}</p>
           </div>
-        </div>
-        <button
-          onClick={() => { handleUtcChange(nowUTC()); }}
-          className="px-4 py-2 text-sm font-bold border border-border rounded-xl hover:border-blue hover:text-blue transition-colors"
-        >
-          Use Current Time
-        </button>
-      </div>
-
-      {/* Common IST business hours */}
-      <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-border font-bold text-text-2">
-          Common IST Business Hours in UTC
-        </div>
-        <div className="divide-y divide-border">
-          {IST_BIZ_HOURS.map((row) => (
-            <div key={row.istLabel} className="flex justify-between px-4 py-3">
-              <span className="text-sm font-medium text-text">{row.istLabel}</span>
-              <span className="text-sm font-bold text-blue">{row.utcLabel}</span>
+          <button
+            onClick={() => { handleUtcChange(nowUTC()); }}
+            className="mt-6 px-4 py-2 text-sm font-bold border border-border rounded-xl hover:border-blue hover:text-blue transition-colors"
+          >
+            Use Current Time
+          </button>
+        </>
+      }
+      optionsPanel={
+        <>
+          <h2 className="font-bold text-text-2 mb-4">Live Clocks</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-bg border border-border p-5 rounded-2xl shadow-sm space-y-1">
+              <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Current UTC</div>
+              <div className="text-2xl font-black font-mono text-text">{liveUtc.split("T")[1] || ""}</div>
+              <div className="text-sm text-text-3">{liveUtc.split("T")[0] || ""}</div>
             </div>
-          ))}
+            <div className="bg-bg border border-blue/30 p-5 rounded-2xl shadow-sm space-y-1">
+              <div className="text-xs font-bold text-text-muted uppercase tracking-wider">Current IST</div>
+              <div className="text-2xl font-black font-mono text-blue">{liveIst.split("T")[1] || ""}</div>
+              <div className="text-sm text-text-3">{liveIst.split("T")[0] || ""}</div>
+            </div>
+          </div>
+        </>
+      }
+      output={
+        <>
+          <h2 className="font-bold text-text-2 mb-4">Common IST Business Hours in UTC</h2>
+          <div className="divide-y divide-border">
+            {IST_BIZ_HOURS.map((row) => (
+              <div key={row.istLabel} className="flex justify-between py-3">
+                <span className="text-sm font-medium text-text">{row.istLabel}</span>
+                <span className="text-sm font-bold text-blue">{row.utcLabel}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      }
+      infoPanel={
+        <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between">
+          <span className="text-sm text-text-3">IST = UTC + 5 hours 30 minutes</span>
+          <CopyButton text={summary} label="Copy Summary" />
         </div>
-      </div>
-
-      <div className="bg-surface border border-border p-4 rounded-xl flex items-center justify-between">
-        <span className="text-sm text-text-3">IST = UTC + 5 hours 30 minutes</span>
-        <CopyButton text={summary} label="Copy Summary" />
-      </div>
-    </div>
+      }
+    />
   );
 }

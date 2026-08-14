@@ -7,6 +7,7 @@ import { Download, RotateCcw, Image as ImageIcon, Sparkles, AlertCircle, Check }
 import { DropZone } from "@/components/ui/DropZone";
 import { SliderField } from "@/components/ui/SliderField";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { formatError } from "@/src/lib/formatError";
 import { BorderConfig, OutputFormat } from "@/src/lib/canvas-image-engine";
@@ -174,7 +175,7 @@ export default function BorderGeneratorClient() {
     : null;
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-16">
+    <div className="w-full space-y-8 pb-16">
       {/* Privacy Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -195,10 +196,9 @@ export default function BorderGeneratorClient() {
           />
         </div>
       ) : (
-        <div className="grid gap-8 lg:grid-cols-12 items-start">
-          {/* Controls Column */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-surface border border-border p-6 rounded-3xl space-y-6 shadow-sm">
+        <ToolWorkspace
+          optionsPanel={
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-text-2 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-blue" />
@@ -321,11 +321,9 @@ export default function BorderGeneratorClient() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Preview & Output Column */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="bg-surface border border-border p-6 rounded-3xl space-y-6 shadow-sm">
+          }
+          output={
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-text-2">
                   Live Preview
@@ -403,8 +401,8 @@ export default function BorderGeneratorClient() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+          }
+        />
       )}
     </div>
   );

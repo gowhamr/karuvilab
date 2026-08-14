@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Play, Square, Timer, Settings2, BellRing, Pause, RotateCcw } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import { cn } from "@/src/lib/utils";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useCountdownTimerStore } from "@/src/features/countdown-timer/store";
 import { sendNotification } from "@/src/lib/notifications";
@@ -403,27 +404,39 @@ export default function CountdownTimerClient() {
 
   // Normal / Focus Mode
   return (
-    <div className="space-y-8 max-w-4xl mx-auto flex flex-col items-center py-12">
-      <div className="w-full flex justify-end px-4">
-        {renderSettingsPopover()}
-      </div>
-      
-      <div className="bg-surface border border-border rounded-5xl p-12 shadow-2xl w-full flex flex-col items-center justify-center overflow-hidden relative min-h-[400px]">
-        {!isRunning && !isPaused && !isFinished ? (
-          renderInputScreen()
-        ) : (
-          <>
-            {renderMainClock()}
-            {renderControls()}
-          </>
-        )}
-      </div>
-      
-      {notificationStatus === 'denied' && (
-        <p className="text-xs text-error font-bold uppercase tracking-widest text-center max-w-sm mt-4">
-          ⚠️ Web Notifications are blocked. You will only hear an audio alert when the timer finishes.
-        </p>
-      )}
-    </div>
+    <ToolWorkspace
+      layout="stacked"
+      input={
+        <div className="w-full flex flex-col items-center justify-center overflow-hidden relative min-h-[400px] py-8">
+          {!isRunning && !isPaused && !isFinished ? (
+            renderInputScreen()
+          ) : (
+            <>
+              {renderMainClock()}
+              {renderControls()}
+            </>
+          )}
+        </div>
+      }
+      optionsPanel={
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" checked={settings.showMilliseconds} onChange={e => updateSettings({ showMilliseconds: e.target.checked })} className="w-4 h-4 accent-blue" />
+            <span className="text-sm font-medium">Show Milliseconds</span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" checked={settings.soundEnabled} onChange={e => updateSettings({ soundEnabled: e.target.checked })} className="w-4 h-4 accent-blue" />
+            <span className="text-sm font-medium">Play Alarm Sound</span>
+          </label>
+        </div>
+      }
+      infoPanel={
+        notificationStatus === 'denied' ? (
+          <p className="text-xs text-error font-bold uppercase tracking-widest text-center mt-4">
+            ⚠️ Web Notifications are blocked. You will only hear an audio alert when the timer finishes.
+          </p>
+        ) : undefined
+      }
+    />
   );
 }

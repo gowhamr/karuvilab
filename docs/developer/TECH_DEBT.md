@@ -99,3 +99,42 @@ Format: `[Date] [Severity] Description — context and resolution path`
 ---
 
 *This file is maintained per AGENTS.md Rule 12. All deferred items — fixes, decisions, scope cuts — must be logged here immediately.*
+
+---
+
+## Items Added in v1.3 Critical Fix Pass (2026-08-12)
+
+### TD-012 · 5 AI model files are placeholder binaries — tools non-functional
+- **Date logged:** 2026-08-12
+- **Severity:** P0 (AI tools advertised but non-functional)
+- **Source:** v1.3 QA Audit — AI/ONNX Phase
+- **Description:** `u2netp.onnx`, `modnet.onnx`, `paddle-ocr.onnx`, `realesrgan-4x.onnx`, `yolov8-face.onnx` in `public/models/` are identical 4.4MB dummy files (same MD5). All are marked `available: false` in the registry and guarded in `model-manager.ts` to throw a user-visible error rather than silently fail.
+- **Tools affected:** `face-blur`, `super-resolution`, `ocr-scanner`, secondary background removal models (`u2netp-mobile`, `modnet-portrait`).
+- **Resolution path:** Source real pretrained ONNX weight files, place in `public/models/`, set `available: true` and update `sha256` with the real SHA-256 hash in `src/ai/registry.ts`.
+- **Blocked by:** Real model files must be sourced (training or public model hub). No code change needed beyond registry update once files are in place.
+
+### TD-013 · User signature stored in `localStorage` (should be IndexedDB)
+- **Date logged:** 2026-08-12
+- **Severity:** P1 (localStorage cleared on privacy browser settings; data loss risk)
+- **Source:** v1.3 QA Audit — Security Phase
+- **Description:** Signature Pad tool persists the user's drawn signature in `localStorage`. `localStorage` is cleared by "Clear Site Data" and is synchronous/blocking. Binary data (base64 PNG) in localStorage is inefficient and inconsistent with the platform's IndexedDB-first offline storage policy.
+- **Resolution path:** Migrate to IndexedDB using the existing `idb` dependency. Key: `kv-signature-v1`. Provide migration shim to read existing localStorage value on first load and delete it after migration.
+- **Blocked by:** Product decision needed: should signature be per-session or persistent across sessions?
+
+### TD-014 · Monaco Editor and PDF.js imported synchronously — P-04 violation
+- **Date logged:** 2026-08-12
+- **Severity:** P1 (PERF-04, PERF-06: main-thread long task)
+- **Source:** v1.3 QA Audit — Performance Phase
+- **Files:** `app/(tools)/developer/html-viewer/HtmlViewerClient.tsx` (Monaco), `app/(tools)/pdf/*/EditorCanvas.tsx` (PDF.js)
+- **Description:** Both heavy libraries are imported at module level, causing synchronous main-thread blocking during route load. Monaco is ~3–5MB; pdfjs-dist ~1.3MB worker + ~800KB main. Combined initial parse blocks main thread >50ms (PERF-06).
+- **Resolution path:** Wrap both with `dynamic(() => import(...), { ssr: false })` behind a loading skeleton. Monaco has a known `@monaco-editor/react` dynamic import pattern.
+- **Blocked by:** Nothing. Architecture pattern already used elsewhere in the codebase.
+
+### TD-015 · HEIC Converter injects CDN `<script>` tag at runtime — P-09 violation
+- **Date logged:** 2026-08-12
+- **Severity:** P1 (P-09: server-side/CDN processing for local tool; P-16: dynamic script injection)
+- **Source:** v1.3 QA Audit — Security/Privacy Phase
+- **Description:** The HEIC-to-JPEG converter dynamically appends `<script src="https://cdn.jsdelivr.net/...">` to document head at runtime to load `heic2any` and `UTIF.js`. This violates the platform's offline-first guarantee and introduces a CDN dependency into an ostensibly local tool. If CDN is unreachable, tool silently fails.
+- **Resolution path:** Bundle `heic2any` locally as a devDependency (requires BUNDLE_DECISIONS.md entry, ~120KB gzipped). Add `navigator.onLine` guard and user notification if CDN fallback is ever needed as a transition measure.
+- **Blocked by:** User approval required for bundle size addition (AGENTS Rule 6). `heic2any` gzipped size: ~120KB.
+

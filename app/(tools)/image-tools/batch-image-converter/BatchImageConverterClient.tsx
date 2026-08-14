@@ -15,6 +15,7 @@ import { formatError } from "@/src/lib/formatError";
 import { m, AnimatePresence } from "framer-motion";
 import { FileDown, ImageIcon, Sparkles, Loader2, Sliders, Layers } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const toolId = "batch-image-converter";
 
@@ -148,24 +149,33 @@ export default function BatchImageConverterClient() {
 
   return (
     <div className="w-full mx-auto space-y-10 pb-20">
-      {/* Zone 1: Options & Batch Upload */}
-      <section className="grid lg:grid-cols-5 gap-8 items-start">
-        <div className="lg:col-span-3 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 text-text">
-                <Sparkles className="w-6 h-6 text-blue" />
-                Batch Converter
-              </h2>
-              <p className="text-text-muted text-xs font-medium leading-relaxed">
-                Convert multiple images concurrently directly inside your browser.
-              </p>
-            </div>
-            <PrivacyBadge />
-          </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 text-text">
+            <Sparkles className="w-6 h-6 text-blue" />
+            Batch Converter
+          </h2>
+          <p className="text-text-muted text-xs font-medium leading-relaxed">
+            Convert multiple images concurrently directly inside your browser.
+          </p>
+        </div>
+        <PrivacyBadge />
+      </div>
 
-          {/* Configuration Card */}
-          <div className="bg-surface border border-border rounded-2xl p-6 space-y-6 shadow-sm">
+      <ToolWorkspace
+        layout="split"
+        input={
+          <DropZone
+            onFilesSelected={handleFiles}
+            accept="image/*"
+            multiple={true}
+            title="Upload multiple images"
+            description="JPG, PNG, WebP, BMP supported for bulk conversion"
+            className="border-dashed border-2 hover:border-blue/50 transition-colors"
+          />
+        }
+        optionsPanel={
+          <div className="space-y-6">
             <div className="space-y-3">
               <label className="text-xs font-bold uppercase tracking-widest text-text-3 block flex items-center gap-2">
                 <Layers className="w-4 h-4 text-blue" />
@@ -196,7 +206,6 @@ export default function BatchImageConverterClient() {
               </div>
             </div>
 
-            {/* Quality Slider */}
             <div className="pt-2 border-t border-border/50">
               <SliderField
                 label="Quality"
@@ -210,54 +219,9 @@ export default function BatchImageConverterClient() {
               />
             </div>
           </div>
-
-          {/* Upload Area */}
-          <DropZone
-            onFilesSelected={handleFiles}
-            accept="image/*"
-            multiple={true}
-            title="Upload multiple images"
-            description="JPG, PNG, WebP, BMP supported for bulk conversion"
-            className="border-dashed border-2 hover:border-blue/50 transition-colors"
-          />
-        </div>
-
-        {/* Feature Side Box */}
-        <div className="lg:col-span-2 hidden lg:block sticky top-8">
-          <div className="bg-surface border border-border rounded-2xl p-6 space-y-6 shadow-sm">
-            <h3 className="font-black text-xs uppercase tracking-widest text-blue flex items-center gap-2">
-              <Sliders className="w-4 h-4" />
-              Batch Highlights
-            </h3>
-            <ul className="space-y-4">
-              {[
-                { title: "Zero Uploads", desc: "All files process locally using Web Workers." },
-                { title: "Bulk Export", desc: "Download individual files or export all as ZIP." },
-                { title: "Multi-Format", desc: "Convert seamlessly between JPEG, PNG, WebP, and BMP." },
-                { title: "Worker Multithreading", desc: "UI stays fully interactive during execution." },
-              ].map((h, i) => (
-                <li key={i} className="flex gap-3 text-xs">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue mt-1.5 shrink-0" />
-                  <div>
-                    <p className="font-bold text-text uppercase tracking-wider">{h.title}</p>
-                    <p className="text-text-muted font-medium leading-relaxed">{h.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Zone 2: Batch Queue & Results */}
-      <AnimatePresence mode="wait">
-        {hasItems ? (
-          <m.section
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            className="space-y-6"
-          >
+        }
+        output={
+          <div className="space-y-6 flex flex-col h-full">
             <div className="flex items-center justify-between px-1">
               <h2 className="text-xl font-black tracking-tight flex items-center gap-3 text-text">
                 <FileDown className="w-5 h-5 text-blue" />
@@ -265,32 +229,70 @@ export default function BatchImageConverterClient() {
               </h2>
             </div>
 
-            <BatchQueue 
-              toolId={toolId}
-              isProcessing={isProcessing}
-              onProcess={processAll}
-              onDownload={downloadOne}
-              onDownloadAll={allCompleted ? downloadAll : undefined}
-              renderThumbnail={renderThumbnail}
-              processLabel="Convert All Images"
-            />
-          </m.section>
-        ) : (
-          <m.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            className="py-24 flex flex-col items-center justify-center text-center space-y-4 border-2 border-dashed border-border rounded-2xl bg-surface/30"
-          >
-            <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-border">
-              📁
-            </div>
-            <div className="space-y-1">
-              <p className="font-black text-text uppercase tracking-widest text-xs">No images queued</p>
-              <p className="text-xs text-text-muted font-medium">Select target format above and drop your images to begin.</p>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
+            <AnimatePresence mode="wait">
+              {hasItems ? (
+                <m.div
+                  key="queue"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 16 }}
+                  className="flex-1"
+                >
+                  <BatchQueue 
+                    toolId={toolId}
+                    isProcessing={isProcessing}
+                    onProcess={processAll}
+                    onDownload={downloadOne}
+                    onDownloadAll={allCompleted ? downloadAll : undefined}
+                    renderThumbnail={renderThumbnail}
+                    processLabel="Convert All Images"
+                  />
+                </m.div>
+              ) : (
+                <m.div 
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.6 }}
+                  exit={{ opacity: 0 }}
+                  className="py-24 flex-1 flex flex-col items-center justify-center text-center space-y-4 border-2 border-dashed border-border rounded-2xl bg-bg/50 min-h-[300px]"
+                >
+                  <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-border">
+                    📁
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-black text-text uppercase tracking-widest text-xs">No images queued</p>
+                    <p className="text-xs text-text-muted font-medium">Select target format above and drop your images to begin.</p>
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
+        }
+        infoPanel={
+          <div className="bg-surface border border-border rounded-2xl p-6 space-y-6 shadow-sm">
+            <h3 className="font-black text-xs uppercase tracking-widest text-blue flex items-center gap-2">
+              <Sliders className="w-4 h-4" />
+              Batch Highlights
+            </h3>
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { title: "Zero Uploads", desc: "All files process locally using Web Workers." },
+                { title: "Bulk Export", desc: "Download individual files or export all as ZIP." },
+                { title: "Multi-Format", desc: "Convert seamlessly between JPEG, PNG, WebP, and BMP." },
+                { title: "Worker Multithreading", desc: "UI stays fully interactive during execution." },
+              ].map((h, i) => (
+                <li key={i} className="flex gap-3 text-xs bg-bg border border-border p-4 rounded-xl">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue mt-1.5 shrink-0" />
+                  <div>
+                    <p className="font-bold text-text uppercase tracking-wider">{h.title}</p>
+                    <p className="text-text-muted font-medium leading-relaxed mt-1">{h.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        }
+      />
 
       {/* Global Zipping Overlay */}
       <AnimatePresence>

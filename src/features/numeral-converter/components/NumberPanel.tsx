@@ -111,7 +111,7 @@ export function NumberPanel({ initialDec = "42" }: NumberPanelProps) {
 
   return (
     <div className="space-y-8">
-      <div className="bg-surface border border-border p-6 rounded-4xl space-y-6 shadow-sm">
+      <div className="w-full space-y-6">
         <h3 className="text-xs font-black text-text-3 uppercase tracking-widest border-b border-border/50 pb-2 flex items-center gap-1.5">
           <Hash size={14} className="text-blue" />
           Base-N Conversion
@@ -171,7 +171,7 @@ export function NumberPanel({ initialDec = "42" }: NumberPanelProps) {
         </div>
       </div>
 
-      <div className="bg-surface border border-border p-6 rounded-4xl space-y-6 shadow-sm">
+      <div className="w-full space-y-6">
         <div className="flex flex-wrap items-center justify-between border-b border-border/50 pb-2 gap-4">
           <h3 className="text-xs font-black text-text-3 uppercase tracking-widest flex items-center gap-1.5">
             <Binary size={14} className="text-blue" /> IEEE 754 Floating Point

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { ShieldAlert, CreditCard, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export function luhnCheck(digits: string): boolean {
   if (digits.length < 13 || digits.length > 19) return false;
@@ -65,72 +67,60 @@ Phone check: +1 555-555-5555 should not be masked.`);
   }, [inputText, firstDigits, lastDigits]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Settings Header */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4 text-xs font-semibold text-text">
-          <div className="flex items-center gap-2">
-            <span className="text-text-muted">Keep Unmasked First Digits:</span>
-            <input
-              id="card-masker-first-digits"
-              type="number"
-              min={0}
-              max={8}
-              value={firstDigits || ''}
-              onChange={(e) => setFirstDigits(Number(e.target.value))}
-              className="w-16 px-2 py-1 rounded bg-surface border border-border font-mono text-xs"
-            />
+    <ToolWorkspace
+      layout="split"
+      input={
+        <ToolInput
+          label="Raw Text / Logs containing Card Numbers"
+          value={inputText}
+          onChange={setInputText}
+          rows={12}
+          mono
+          placeholder="Enter text containing credit card numbers..."
+        />
+      }
+      optionsPanel={
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label htmlFor="card-masker-first-digits" className="text-sm font-bold text-text-2">Keep First Digits:</label>
+              <input
+                id="card-masker-first-digits"
+                type="number"
+                min={0}
+                max={8}
+                value={firstDigits}
+                onChange={(e) => setFirstDigits(Number(e.target.value))}
+                className="w-16 px-2 py-1 bg-bg border border-border rounded outline-none focus:border-primary text-sm font-mono"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <label htmlFor="card-masker-last-digits" className="text-sm font-bold text-text-2">Keep Last Digits:</label>
+              <input
+                id="card-masker-last-digits"
+                type="number"
+                min={0}
+                max={6}
+                value={lastDigits}
+                onChange={(e) => setLastDigits(Number(e.target.value))}
+                className="w-16 px-2 py-1 bg-bg border border-border rounded outline-none focus:border-primary text-sm font-mono"
+              />
+            </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-text-muted">Keep Unmasked Last Digits:</span>
-            <input
-              id="card-masker-last-digits"
-              type="number"
-              min={0}
-              max={6}
-              value={lastDigits || ''}
-              onChange={(e) => setLastDigits(Number(e.target.value))}
-              className="w-16 px-2 py-1 rounded bg-surface border border-border font-mono text-xs"
-            />
-          </div>
+          <span className="text-xs font-mono font-bold text-emerald-500 flex items-center gap-1">
+            <Lock className="w-3.5 h-3.5" /> PCI-DSS Compliant Masking
+          </span>
         </div>
-
-        <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1">
-          <Lock className="w-3.5 h-3.5" /> PCI-DSS Compliant Masking
-        </span>
-      </div>
-
-      {/* Editor Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-text flex items-center gap-2">
-            <CreditCard className="w-4 h-4 text-sky-400" />
-            Raw Text / Logs containing Card Numbers:
-          </label>
-          <textarea
-            id="card-masker-raw-input"
-            rows={12}
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-semibold text-text">Masked & Sanitized Output:</label>
-            <CopyButton text={maskedOutput} />
-          </div>
-          <textarea
-            id="card-masker-masked-output"
-            rows={12}
-            readOnly
-            value={maskedOutput}
-            className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs text-emerald-300 focus:outline-none"
-          />
-        </div>
-      </div>
-    </div>
+      }
+      output={
+        <ToolResultArea
+          label="Masked & Sanitized Output"
+          value={maskedOutput}
+          onClear={() => setInputText('')}
+          contentClassName="text-emerald-500"
+        />
+      }
+    />
   );
 }

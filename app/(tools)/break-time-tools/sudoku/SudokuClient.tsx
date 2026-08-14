@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Timer, Undo2, Check, Lightbulb, Pencil } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // ─── Sudoku Helpers & Generation ─────────────────────────────────────────────
 
@@ -387,9 +388,12 @@ export default function SudokuClient() {
   const currentBest = bestTimes[difficulty];
 
   return (
-    <div className="max-w-xl mx-auto space-y-6">
-      {/* ── Difficulty / Reset Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="w-full space-y-6">
+          {/* ── Difficulty / Reset Header ── */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex gap-2">
           {(["easy", "medium", "hard"] as const).map((diff) => (
             <m.button
@@ -518,10 +522,13 @@ export default function SudokuClient() {
           )}
         </AnimatePresence>
       </div>
-
-      {/* ── Number Pad & Control Toolbar ── */}
-      <div className="space-y-4">
-        {/* Toolbar */}
+        </div>
+      }
+      output={
+        <div className="w-full h-full flex flex-col justify-center space-y-8">
+          {/* ── Number Pad & Control Toolbar ── */}
+          <div className="space-y-4">
+            {/* Toolbar */}
         <div className="flex justify-between items-center gap-3">
           <div className="flex gap-2">
             <m.button
@@ -599,12 +606,14 @@ export default function SudokuClient() {
         </m.button>
       </div>
 
-      {/* Best Score Info */}
-      {currentBest !== null && (
-        <p className="text-center text-xs text-text-muted font-bold">
-          Best time ({difficulty}): <strong>{formatTime(currentBest)}</strong>
-        </p>
-      )}
-    </div>
+          {/* Best Score Info */}
+          {currentBest !== null && (
+            <p className="text-center text-xs text-text-muted font-bold">
+              Best time ({difficulty}): <strong>{formatTime(currentBest)}</strong>
+            </p>
+          )}
+        </div>
+      }
+    />
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 const cat = CATEGORIES.find((c) => c.id === "calculators")!;
 
@@ -134,123 +134,114 @@ export default function UnitConverterClient() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Category pills */}
-      <div className="flex flex-wrap gap-2">
-        {Object.entries(CATEGORIES_DATA).map(([k, v]) => (
-          <button
-            key={k}
-            onClick={() => handleCat(k)}
-            className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
-              catKey === k
-                ? "bg-blue text-white border-blue"
-                : "bg-surface border-border hover:border-blue hover:text-blue"
-            }`}
-          >
-            {v.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-5">
-        {/* From unit */}
-        <div className="space-y-2">
-          <label htmlFor="from-unit-select" className="text-sm font-bold text-text-2">From</label>
-          <div className="flex gap-3">
-            <select
-              id="from-unit-select"
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
-              className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-            >
-              {unitKeys.map((k) => (
-                <option key={k} value={k}>
-                  {category.units[k]!.label || k}
-                </option>
-              ))}
-            </select>
-            <input
-              type="number"
-              value={value || ''}
-              onChange={(e) => setValue(e.target.value)}
-              className="w-36 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-bold text-lg"
-              placeholder="Value"
-            />
-          </div>
-        </div>
-
-        {/* Swap button */}
-        <div className="flex justify-center">
-          <button
-            onClick={() => { const t = from; setFrom(to); setTo(t); }}
-            className="px-4 py-2 rounded-xl border border-border hover:border-blue hover:text-blue transition-colors text-sm font-bold"
-          >
-            ⇅ Swap
-          </button>
-        </div>
-
-        {/* To unit */}
-        <div className="space-y-2">
-          <label htmlFor="to-unit-select" className="text-sm font-bold text-text-2">To</label>
-          <div className="flex gap-3">
-            <select
-              id="to-unit-select"
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
-              className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
-            >
-              {unitKeys.map((k) => (
-                <option key={k} value={k}>
-                  {category.units[k]!.label || k}
-                </option>
-              ))}
-            </select>
-            <div className="w-36 px-4 py-3 bg-bg border border-blue/50 rounded-xl font-bold text-lg text-blue">
-              {result !== null ? fmtNum(result) : "—"}
+    <ToolWorkspace
+      layout="split"
+      tabs={{
+        options: Object.entries(CATEGORIES_DATA).map(([k, v]) => ({ id: k, label: v.label })),
+        activeId: catKey,
+        onChange: handleCat
+      }}
+      input={
+        <div className="space-y-5">
+          {/* From unit */}
+          <div className="space-y-2">
+            <label htmlFor="from-unit-select" className="text-sm font-bold text-text-2">From</label>
+            <div className="flex gap-3">
+              <select
+                id="from-unit-select"
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+                className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
+              >
+                {unitKeys.map((k) => (
+                  <option key={k} value={k}>
+                    {category.units[k]!.label || k}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                value={value || ''}
+                onChange={(e) => setValue(e.target.value)}
+                className="w-36 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all font-bold text-lg"
+                placeholder="Value"
+              />
             </div>
           </div>
-        </div>
-      </div>
 
-      {result !== null && (
-        <div className="bg-surface border border-border p-4 rounded-xl text-sm text-text-3">
-          <strong>{value} {from}</strong> = <strong className="text-blue">{fmtNum(result)} {to}</strong>
-        </div>
-      )}
+          {/* Swap button */}
+          <div className="flex justify-center">
+            <button
+              onClick={() => { const t = from; setFrom(to); setTo(t); }}
+              className="px-4 py-2 rounded-xl border border-border hover:border-blue hover:text-blue transition-colors text-sm font-bold"
+            >
+              ⇅ Swap
+            </button>
+          </div>
 
-      {/* All conversions table */}
-      <div className="overflow-x-auto rounded-xl border border-border">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-surface border-b border-border">
-              <th className="px-4 py-3 text-left font-bold text-text-3">Unit</th>
-              <th className="px-4 py-3 text-right font-bold text-text-3">Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {unitKeys.map((k) => {
-              const v = parseFloat(value);
-              if (isNaN(v)) return null;
-              const fromUnit = category.units[from]!;
-              const base = fromUnit.toBase(v);
-              const conv = category.units[k]!.fromBase(base);
-              return (
-                <tr
-                  key={k}
-                  className={`border-b border-border/50 transition-colors ${
-                    k === to ? "bg-blue/5 font-bold" : "hover:bg-surface"
-                  }`}
-                >
-                  <td className="px-4 py-3 text-text-2">{category.units[k]!.label || k}</td>
-                  <td className={`px-4 py-3 text-right font-bold ${k === to ? "text-blue" : "text-text"}`}>
-                    {fmtNum(conv)}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          {/* To unit */}
+          <div className="space-y-2">
+            <label htmlFor="to-unit-select" className="text-sm font-bold text-text-2">To</label>
+            <div className="flex gap-3">
+              <select
+                id="to-unit-select"
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+                className="flex-1 px-4 py-3 bg-bg border border-border rounded-xl focus:ring-2 focus:ring-blue outline-none transition-all"
+              >
+                {unitKeys.map((k) => (
+                  <option key={k} value={k}>
+                    {category.units[k]!.label || k}
+                  </option>
+                ))}
+              </select>
+              <div className="w-36 px-4 py-3 bg-bg border border-blue/50 rounded-xl font-bold text-lg text-blue flex items-center">
+                {result !== null ? fmtNum(result) : "—"}
+              </div>
+            </div>
+          </div>
+
+          {result !== null && (
+            <div className="bg-surface border border-border p-4 rounded-xl text-sm text-text-3">
+              <strong>{value} {from}</strong> = <strong className="text-blue">{fmtNum(result)} {to}</strong>
+            </div>
+          )}
+        </div>
+      }
+      output={
+        <div className="overflow-x-auto rounded-xl border border-border h-full">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-surface border-b border-border">
+                <th className="px-4 py-3 text-left font-bold text-text-3">Unit</th>
+                <th className="px-4 py-3 text-right font-bold text-text-3">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {unitKeys.map((k) => {
+                const v = parseFloat(value);
+                if (isNaN(v)) return null;
+                const fromUnit = category.units[from]!;
+                const base = fromUnit.toBase(v);
+                const conv = category.units[k]!.fromBase(base);
+                return (
+                  <tr
+                    key={k}
+                    className={`border-b border-border/50 transition-colors ${
+                      k === to ? "bg-blue/5 font-bold" : "hover:bg-surface"
+                    }`}
+                  >
+                    <td className="px-4 py-3 text-text-2">{category.units[k]!.label || k}</td>
+                    <td className={`px-4 py-3 text-right font-bold ${k === to ? "text-blue" : "text-text"}`}>
+                      {fmtNum(conv)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      }
+    />
   );
 }

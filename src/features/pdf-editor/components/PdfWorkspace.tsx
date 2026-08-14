@@ -1,13 +1,15 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ZoomIn, ZoomOut, Undo2 } from "lucide-react";
+import { Loader2, MousePointer2, Type, PenTool, Square, Image as ImageIcon, Eraser, Download, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ZoomIn, ZoomOut, Undo2, Signature as SignatureIcon, ArrowUpRight, Highlighter } from "lucide-react";
 import ThumbnailSidebar from "./ThumbnailSidebar";
 import EditorCanvas from "./EditorCanvas";
 import AnnotationProperties from "./AnnotationProperties";
+import SignatureModal from "./SignatureModal";
 import { useEditorStore } from "../store";
 import { useProgress } from "@/src/contexts/ProgressContext";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
+import { getSignature } from "../utils/signature-db";
 
 interface PdfWorkspaceProps {
   file: File;
@@ -440,10 +442,13 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
               
               {[
                 { id: 'select', icon: MousePointer2, label: 'Select' },
+                { id: 'highlight', icon: Highlighter, label: 'Highlight' },
                 { id: 'text', icon: Type, label: 'Text' },
                 { id: 'draw', icon: PenTool, label: 'Draw' },
                 { id: 'shape', icon: Square, label: 'Shape' },
+                { id: 'arrow', icon: ArrowUpRight, label: 'Arrow' },
                 { id: 'image', icon: ImageIcon, label: 'Image' },
+                { id: 'signature', icon: SignatureIcon, label: 'Signature' },
                 { id: 'blackout', icon: Eraser, label: 'Black Out (Redact)' }
               ].map(tool => {
                 const Icon = tool.icon;
@@ -453,8 +458,21 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
                     onClick={() => {
                       if (tool.id === 'image') {
                         fileInputRef.current?.click();
+                      } else if (tool.id === 'signature') {
+                        getSignature().then(sig => {
+                          if (sig) {
+                            useEditorStore.getState().setActiveTool('signature');
+                          } else {
+                            useEditorStore.getState().setSignatureModalOpen(true);
+                          }
+                        });
                       } else {
                         useEditorStore.getState().setActiveTool(tool.id as any);
+                      }
+                    }}
+                    onDoubleClick={() => {
+                      if (tool.id === 'signature') {
+                        useEditorStore.getState().setSignatureModalOpen(true);
                       }
                     }}
                     className={`p-2 sm:p-1.5 min-w-[44px] sm:min-w-0 min-h-[44px] sm:min-h-0 rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTool === tool.id ? 'bg-blue text-white' : 'text-text-4 hover:bg-surface-2'}`}
@@ -540,6 +558,7 @@ export default function PdfWorkspace({ file, onClear }: PdfWorkspaceProps) {
           />
         </div>
       </div>
+      <SignatureModal />
     </div>
   );
 }

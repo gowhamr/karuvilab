@@ -5,6 +5,7 @@ import { Eye, ArrowLeftRight, Download, Check, AlertTriangle } from 'lucide-reac
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
 import { CopyButton } from '@/components/ui/CopyButton';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
 
 // Utility: hex to relative luminance
 function getRelativeLuminance(hex: string): number {
@@ -56,155 +57,157 @@ export default function ContrastCheckerClient() {
     setBg(fg);
   };
 
-  return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        
-        {/* LEFT COLUMN: Controls */}
-        <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-          <div className="flex items-center justify-between">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
-              <Eye className="w-3.5 h-3.5" /> Color Selection
-            </h3>
-          </div>
+  const inputContent = (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
+          <Eye className="w-3.5 h-3.5" /> Color Selection
+        </h3>
+      </div>
 
-          <div className="space-y-6 relative">
-            <div className="space-y-3">
-              <label htmlFor="contrast-fg-text" className="text-xs font-bold text-text-3 block">Foreground (Text) Color</label>
-              <div className="flex gap-4">
-                <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-border">
-                  <input
-                    type="color"
-                    value={fg}
-                    onChange={(e) => setFg(e.target.value)}
-                    aria-label="Foreground color picker"
-                    className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer"
-                  />
-                </div>
-                <input
-                  id="contrast-fg-text"
-                  type="text"
-                  value={fg.toUpperCase()}
-                  onChange={(e) => setFg(e.target.value)}
-                  className="w-full bg-bg border border-border rounded-2xl py-3.5 px-4 font-mono text-lg text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all uppercase"
-                />
-              </div>
+      <div className="space-y-6 relative">
+        <div className="space-y-3">
+          <label htmlFor="contrast-fg-text" className="text-xs font-bold text-text-3 block">Foreground (Text) Color</label>
+          <div className="flex gap-4">
+            <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-border">
+              <input
+                type="color"
+                value={fg}
+                onChange={(e) => setFg(e.target.value)}
+                aria-label="Foreground color picker"
+                className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer"
+              />
             </div>
-
-            <div className="absolute top-1/2 left-4 -translate-y-1/2 z-content">
-              <button 
-                onClick={swapColors}
-                className="w-8 h-8 bg-surface border border-border rounded-full flex items-center justify-center text-text-3 hover:text-blue hover:border-blue shadow-sm transition-all"
-                title="Swap Colors"
-              >
-                <ArrowLeftRight className="w-4 h-4 rotate-90" />
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              <label htmlFor="contrast-bg-text" className="text-xs font-bold text-text-3 block">Background Color</label>
-              <div className="flex gap-4">
-                <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-border">
-                  <input
-                    type="color"
-                    value={bg}
-                    onChange={(e) => setBg(e.target.value)}
-                    aria-label="Background color picker"
-                    className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer"
-                  />
-                </div>
-                <input
-                  id="contrast-bg-text"
-                  type="text"
-                  value={bg.toUpperCase()}
-                  onChange={(e) => setBg(e.target.value)}
-                  className="w-full bg-bg border border-border rounded-2xl py-3.5 px-4 font-mono text-lg text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all uppercase"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-border/50">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Contrast Ratio</span>
-              <span className={cn(
-                "px-3 py-1 rounded-lg text-tiny font-bold uppercase tracking-widest-sm",
-                result.level === 'aaa' ? "bg-success/10 text-success" :
-                result.level === 'aa' ? "bg-blue/10 text-blue" : "bg-error/10 text-error"
-              )}>
-                {result.level === 'fail' ? 'FAIL' : `Pass ${result.level.toUpperCase()}`}
-              </span>
-            </div>
-            
-            <div className="text-center bg-bg border border-border p-6 rounded-3xl">
-              <span className={cn(
-                "text-6xl font-black tracking-tighter block",
-                result.level === 'fail' ? "text-error" : "text-text"
-              )}>
-                {result.ratioDisplay}
-              </span>
-            </div>
+            <input
+              id="contrast-fg-text"
+              type="text"
+              value={fg.toUpperCase()}
+              onChange={(e) => setFg(e.target.value)}
+              className="w-full bg-bg border border-border rounded-2xl py-3.5 px-4 font-mono text-lg text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all uppercase"
+            />
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Results & Previews */}
-        <div className="space-y-6">
-          <div 
-            className="rounded-4xl p-8 border border-border/50 shadow-sm space-y-6 transition-colors duration-300"
-            style={{ backgroundColor: bg }}
+        <div className="absolute top-1/2 left-4 -translate-y-1/2 z-content">
+          <button 
+            onClick={swapColors}
+            className="w-8 h-8 bg-surface border border-border rounded-full flex items-center justify-center text-text-3 hover:text-blue hover:border-blue shadow-sm transition-all"
+            title="Swap Colors"
           >
-            <div style={{ color: fg }} className="space-y-6 transition-colors duration-300">
-              <div>
-                <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">Normal Text (16px)</h4>
-                <p className="text-base">
-                  The quick brown fox jumps over the lazy dog. A good contrast ratio ensures that users with visual impairments can read the text comfortably.
-                </p>
-              </div>
-              
-              <div>
-                <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">Large Text (24px Bold)</h4>
-                <p className="text-2xl font-bold tracking-tight">
-                  Design for Accessibility
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">UI Component</h4>
-                <div className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold border transition-colors duration-300" style={{ borderColor: fg }}>
-                  Interactive Button
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">WCAG Compliance</h3>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: 'AA Normal Text', pass: result.aa.normal, req: '4.5:1' },
-                { label: 'AA Large Text', pass: result.aa.large, req: '3.0:1' },
-                { label: 'AA UI Components', pass: result.aa.ui, req: '3.0:1' },
-                { label: 'AAA Normal Text', pass: result.aaa.normal, req: '7.0:1' },
-                { label: 'AAA Large Text', pass: result.aaa.large, req: '4.5:1' },
-              ].map((item, i) => (
-                <div key={i} className="bg-bg border border-border p-4 rounded-2xl flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-text-3 block">{item.label}</span>
-                    <span className="text-tiny font-medium text-text-muted uppercase tracking-widest">Req: {item.req}</span>
-                  </div>
-                  {item.pass ? (
-                    <div className="w-6 h-6 rounded-full bg-success/10 flex items-center justify-center"><Check className="w-3 h-3 text-success" /></div>
-                  ) : (
-                    <div className="w-6 h-6 rounded-full bg-error/10 flex items-center justify-center"><AlertTriangle className="w-3 h-3 text-error" /></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+            <ArrowLeftRight className="w-4 h-4 rotate-90" />
+          </button>
         </div>
 
+        <div className="space-y-3">
+          <label htmlFor="contrast-bg-text" className="text-xs font-bold text-text-3 block">Background Color</label>
+          <div className="flex gap-4">
+            <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-border">
+              <input
+                type="color"
+                value={bg}
+                onChange={(e) => setBg(e.target.value)}
+                aria-label="Background color picker"
+                className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer"
+              />
+            </div>
+            <input
+              id="contrast-bg-text"
+              type="text"
+              value={bg.toUpperCase()}
+              onChange={(e) => setBg(e.target.value)}
+              className="w-full bg-bg border border-border rounded-2xl py-3.5 px-4 font-mono text-lg text-text focus:ring-4 focus:ring-blue/10 focus:border-blue outline-none transition-all uppercase"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-6 border-t border-border/50">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Contrast Ratio</span>
+          <span className={cn(
+            "px-3 py-1 rounded-lg text-tiny font-bold uppercase tracking-widest-sm",
+            result.level === 'aaa' ? "bg-success/10 text-success" :
+            result.level === 'aa' ? "bg-blue/10 text-blue" : "bg-error/10 text-error"
+          )}>
+            {result.level === 'fail' ? 'FAIL' : `Pass ${result.level.toUpperCase()}`}
+          </span>
+        </div>
+        
+        <div className="text-center bg-bg border border-border p-6 rounded-3xl">
+          <span className={cn(
+            "text-6xl font-black tracking-tighter block",
+            result.level === 'fail' ? "text-error" : "text-text"
+          )}>
+            {result.ratioDisplay}
+          </span>
+        </div>
       </div>
     </div>
+  );
+
+  const outputContent = (
+    <div className="space-y-6">
+      <div 
+        className="rounded-4xl p-8 border border-border/50 shadow-sm space-y-6 transition-colors duration-300"
+        style={{ backgroundColor: bg }}
+      >
+        <div style={{ color: fg }} className="space-y-6 transition-colors duration-300">
+          <div>
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">Normal Text (16px)</h4>
+            <p className="text-base">
+              The quick brown fox jumps over the lazy dog. A good contrast ratio ensures that users with visual impairments can read the text comfortably.
+            </p>
+          </div>
+          
+          <div>
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">Large Text (24px Bold)</h4>
+            <p className="text-2xl font-bold tracking-tight">
+              Design for Accessibility
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-tiny font-bold uppercase tracking-widest-sm-lg opacity-50 mb-2">UI Component</h4>
+            <div className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold border transition-colors duration-300" style={{ borderColor: fg }}>
+              Interactive Button
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">WCAG Compliance</h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            { label: 'AA Normal Text', pass: result.aa.normal, req: '4.5:1' },
+            { label: 'AA Large Text', pass: result.aa.large, req: '3.0:1' },
+            { label: 'AA UI Components', pass: result.aa.ui, req: '3.0:1' },
+            { label: 'AAA Normal Text', pass: result.aaa.normal, req: '7.0:1' },
+            { label: 'AAA Large Text', pass: result.aaa.large, req: '4.5:1' },
+          ].map((item, i) => (
+            <div key={i} className="bg-bg border border-border p-4 rounded-2xl flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold text-text-3 block">{item.label}</span>
+                <span className="text-tiny font-medium text-text-muted uppercase tracking-widest">Req: {item.req}</span>
+              </div>
+              {item.pass ? (
+                <div className="w-6 h-6 rounded-full bg-success/10 flex items-center justify-center"><Check className="w-3 h-3 text-success" /></div>
+              ) : (
+                <div className="w-6 h-6 rounded-full bg-error/10 flex items-center justify-center"><AlertTriangle className="w-3 h-3 text-error" /></div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <ToolWorkspace
+      layout="split"
+      input={inputContent}
+      output={outputContent}
+    />
   );
 }

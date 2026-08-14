@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, useId } from 'react';
-import { Palette, Copy, RefreshCw, Layers, SlidersHorizontal, Trash2, Plus, ArrowLeftRight } from 'lucide-react';
-import { m } from 'framer-motion';
+import React, { useState, useMemo, useId } from 'react';
+import { Palette, RefreshCw, SlidersHorizontal, Trash2, Plus, ArrowLeftRight } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 type GradientType = 'linear' | 'radial' | 'conic';
 type ColorStop = { id: string; color: string; position: number };
@@ -59,6 +59,7 @@ export default function GradientGeneratorClient() {
 
   const cssValue = useMemo(() => generateCSS(config), [config]);
   const tailwindValue = useMemo(() => generateTailwind(config), [config]);
+  const resultValue = outputTab === 'css' ? `background: ${cssValue};` : tailwindValue;
 
   const addStop = () => {
     if (config.colorStops.length >= 8) return;
@@ -108,77 +109,87 @@ export default function GradientGeneratorClient() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
+    <div className="w-full space-y-8 pb-12">
       {/* 1. Preview Area */}
       <div 
         className="w-full h-48 sm:h-64 rounded-4xl border border-border/50 shadow-inner transition-all duration-300"
         style={{ background: cssValue }}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT: Controls */}
-        <div className="lg:col-span-7 bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
-          
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex bg-bg border border-border p-1 rounded-2xl w-full sm:w-auto">
-              {(['linear', 'radial', 'conic'] as GradientType[]).map(t => (
-                <button
-                  key={t}
-                  onClick={() => setConfig({ ...config, type: t })}
-                  className={cn(
-                    "flex-1 px-4 py-2.5 rounded-xl text-xs font-bold transition-all capitalize",
-                    config.type === t ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text"
-                  )}
-                >
-                  {t}
-                </button>
-              ))}
+      <ToolWorkspace
+        className="!pb-0 !space-y-8"
+        layout="split"
+        tabs={{
+          options: [
+            { id: 'css', label: 'CSS' },
+            { id: 'tailwind', label: 'Tailwind' }
+          ],
+          activeId: outputTab,
+          onChange: (id) => setOutputTab(id as 'css' | 'tailwind')
+        }}
+        input={
+          <div className="space-y-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex bg-bg border border-border p-1 rounded-2xl w-full sm:w-auto">
+                {(['linear', 'radial', 'conic'] as GradientType[]).map(t => (
+                  <button
+                    key={t}
+                    onClick={() => setConfig({ ...config, type: t })}
+                    className={cn(
+                      "flex-1 px-4 py-2.5 rounded-xl text-xs font-bold transition-all capitalize",
+                      config.type === t ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text"
+                    )}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex gap-2 w-full sm:w-auto">
+                 <button onClick={reverseStops} className="flex-1 sm:flex-none p-2.5 bg-bg border border-border rounded-xl text-text-3 hover:text-text hover:border-blue transition-all" title="Reverse Gradient"><ArrowLeftRight className="w-4 h-4 mx-auto" /></button>
+                 <button onClick={randomize} className="flex-1 sm:flex-none p-2.5 bg-bg border border-border rounded-xl text-text-3 hover:text-text hover:border-blue transition-all" title="Randomize Colors"><RefreshCw className="w-4 h-4 mx-auto" /></button>
+              </div>
             </div>
 
-            <div className="flex gap-2 w-full sm:w-auto">
-               <button onClick={reverseStops} className="flex-1 sm:flex-none p-2.5 bg-bg border border-border rounded-xl text-text-3 hover:text-text hover:border-blue transition-all" title="Reverse Gradient"><ArrowLeftRight className="w-4 h-4 mx-auto" /></button>
-               <button onClick={randomize} className="flex-1 sm:flex-none p-2.5 bg-bg border border-border rounded-xl text-text-3 hover:text-text hover:border-blue transition-all" title="Randomize Colors"><RefreshCw className="w-4 h-4 mx-auto" /></button>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
-              <SlidersHorizontal className="w-3.5 h-3.5" /> Adjustments
-            </h3>
-            
-            {(config.type === 'linear' || config.type === 'conic') && (
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <label className="text-xs font-bold text-text-3">Angle</label>
-                  <span className="text-xs font-bold text-text-muted">{config.angle}°</span>
+            <div className="space-y-4">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
+                <SlidersHorizontal className="w-3.5 h-3.5" /> Adjustments
+              </h3>
+              
+              {(config.type === 'linear' || config.type === 'conic') && (
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <label className="text-xs font-bold text-text-3">Angle</label>
+                    <span className="text-xs font-bold text-text-muted">{config.angle}°</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0} max={360}
+                    value={config.angle}
+                    onChange={(e) => setConfig({ ...config, angle: Number(e.target.value) })}
+                    className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue"
+                  />
                 </div>
-                <input
-                  type="range"
-                  min={0} max={360}
-                  value={config.angle}
-                  onChange={(e) => setConfig({ ...config, angle: Number(e.target.value) })}
-                  className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue"
-                />
-              </div>
-            )}
+              )}
 
-            {config.type === 'radial' && (
-              <div className="space-y-3 pt-2">
-                <label className="text-xs font-bold text-text-3 block">Shape</label>
-                <select
-                  value={config.shape}
-                  onChange={(e) => setConfig({ ...config, shape: e.target.value as any })}
-                  className="w-full bg-bg border border-border rounded-xl p-3 text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
-                >
-                  <option value="circle">Circle</option>
-                  <option value="ellipse">Ellipse</option>
-                </select>
-              </div>
-            )}
+              {config.type === 'radial' && (
+                <div className="space-y-3 pt-2">
+                  <label className="text-xs font-bold text-text-3 block">Shape</label>
+                  <select
+                    value={config.shape}
+                    onChange={(e) => setConfig({ ...config, shape: e.target.value as any })}
+                    className="w-full bg-bg border border-border rounded-xl p-3 text-sm font-bold text-text focus:ring-2 focus:ring-blue/20 outline-none"
+                  >
+                    <option value="circle">Circle</option>
+                    <option value="ellipse">Ellipse</option>
+                  </select>
+                </div>
+              )}
+            </div>
           </div>
-
-          <div className="space-y-4 border-t border-border/50 pt-6">
+        }
+        optionsPanel={
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
                 <Palette className="w-3.5 h-3.5" /> Color Stops ({config.colorStops.length}/8)
@@ -233,31 +244,18 @@ export default function GradientGeneratorClient() {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* RIGHT: Output & Presets */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-             <div className="flex items-center justify-between">
-                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Code</h3>
-                <CopyButton text={outputTab === 'css' ? `background: ${cssValue};` : tailwindValue} />
-             </div>
-
-             <div className="flex bg-bg border border-border p-1 rounded-xl">
-                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>CSS</button>
-                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Tailwind</button>
-             </div>
-
-             <textarea
-               readOnly
-               value={outputTab === 'css' ? `background: ${cssValue};` : tailwindValue}
-               className="w-full h-32 bg-bg border border-border rounded-2xl p-4 font-mono text-xs text-text-3 outline-none resize-none leading-relaxed"
-             />
-          </div>
-
-          <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
+        }
+        output={
+          <ToolResultArea
+            label="Export Code"
+            value={resultValue}
+            language={outputTab}
+          />
+        }
+        infoPanel={
+          <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-4">
              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Preset Gallery</h3>
-             <div className="grid grid-cols-4 gap-3">
+             <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
                {PRESETS.map((p, i) => (
                  <button
                    key={i}
@@ -271,9 +269,8 @@ export default function GradientGeneratorClient() {
                ))}
              </div>
           </div>
-        </div>
-
-      </div>
+        }
+      />
     </div>
   );
 }

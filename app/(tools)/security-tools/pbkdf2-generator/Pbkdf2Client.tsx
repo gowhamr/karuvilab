@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
 import { workerManager } from "@/src/workers/manager";
-import { Key, ShieldCheck, Zap, AlertCircle } from "lucide-react";
+import { Zap, AlertCircle } from "lucide-react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export default function Pbkdf2Client() {
   const [password, setPassword] = useState("");
   const [salt, setSalt] = useState("karuvilab-salt");
-  const [iterations, setIterations] = useState(100000);
+  const [iterations, setIterations] = useState<number | "">(100000);
   const [hash, setHash] = useState("SHA-256");
   const [keyLengthBits, setKeyLengthBits] = useState(256);
 
@@ -30,7 +32,7 @@ export default function Pbkdf2Client() {
       setError("Salt is too large. Maximum size is 1MB.");
       return;
     }
-    if (iterations < 1 || iterations > 10000000) {
+    if (typeof iterations !== 'number' || iterations < 1 || iterations > 10000000) {
       setError("Iterations must be between 1 and 10,000,000.");
       return;
     }
@@ -49,111 +51,96 @@ export default function Pbkdf2Client() {
   }, [password, salt, iterations, hash, keyLengthBits]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Parameters */}
-      <div className="p-4 rounded-xl bg-surface-2 border border-border grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">Hash Algorithm</label>
-          <select
-            id="pbkdf2-hash-select"
-            value={hash}
-            onChange={(e) => setHash(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-          >
-            <option value="SHA-256">SHA-256</option>
-            <option value="SHA-384">SHA-384</option>
-            <option value="SHA-512">SHA-512</option>
-            <option value="SHA-1">SHA-1</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">Iterations</label>
-          <input
-            id="pbkdf2-iterations-input"
-            type="number"
-            value={iterations || ''}
-            onChange={(e) => setIterations(Number(e.target.value))}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-          />
-        </div>
-
-        <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">Output Length (Bits)</label>
-          <select
-            id="pbkdf2-length-select"
-            value={keyLengthBits}
-            onChange={(e) => setKeyLengthBits(Number(e.target.value))}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-          >
-            <option value={128}>128 bits (16 bytes)</option>
-            <option value={256}>256 bits (32 bytes)</option>
-            <option value={512}>512 bits (64 bytes)</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="text-xs font-semibold text-text-muted block mb-1">Salt String</label>
-          <input
-            id="pbkdf2-salt-input"
-            type="text"
-            value={salt}
-            onChange={(e) => setSalt(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-          />
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className="space-y-1">
-        <label className="text-sm font-semibold text-text">Password / Secret Material:</label>
-        <input
-          id="pbkdf2-password-input"
-          type="password"
-          placeholder="Enter password..."
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-sm focus:outline-none"
-        />
-      </div>
-
-      <button
-        id="pbkdf2-derive-btn"
-        onClick={handleDerive}
-        disabled={isProcessing}
-        className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition"
-      >
-        <Zap className="w-5 h-5" />
-        {isProcessing ? 'Deriving Key...' : 'Derive PBKDF2 Key'}
-      </button>
-
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          {error}
-        </div>
-      )}
-
-      {/* Output */}
-      {hexResult && (
+    <ToolWorkspace
+      input={
         <div className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-text">Hex Encoded Derived Key:</label>
-              <CopyButton text={hexResult} />
+          <ToolInput
+            id="pbkdf2-password-input"
+            label="Password / Secret Material"
+            type="password"
+            placeholder="Enter password..."
+            value={password}
+            onChange={setPassword}
+          />
+          <button
+            id="pbkdf2-derive-btn"
+            onClick={handleDerive}
+            disabled={isProcessing}
+            className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition"
+          >
+            <Zap className="w-5 h-5" />
+            {isProcessing ? 'Deriving Key...' : 'Derive PBKDF2 Key'}
+          </button>
+
+          {error && (
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              {error}
             </div>
-            <textarea readOnly rows={2} value={hexResult} className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs text-emerald-300" />
+          )}
+        </div>
+      }
+      optionsPanel={
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label htmlFor="pbkdf2-hash-select" className="text-sm font-bold text-text-2">Hash Algorithm</label>
+            <select
+              id="pbkdf2-hash-select"
+              value={hash}
+              onChange={(e) => setHash(e.target.value)}
+              className="w-full px-4 py-3 bg-bg border border-divider rounded-input outline-none focus:border-primary focus:ring-4 focus:ring-inset focus:ring-primary/10 transition-all text-body text-text-primary"
+            >
+              <option value="SHA-256">SHA-256</option>
+              <option value="SHA-384">SHA-384</option>
+              <option value="SHA-512">SHA-512</option>
+              <option value="SHA-1">SHA-1</option>
+            </select>
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-text">Base64 Encoded Derived Key:</label>
-              <CopyButton text={b64Result} />
-            </div>
-            <textarea readOnly rows={2} value={b64Result} className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs text-sky-300" />
+            <label htmlFor="pbkdf2-length-select" className="text-sm font-bold text-text-2">Output Length</label>
+            <select
+              id="pbkdf2-length-select"
+              value={keyLengthBits}
+              onChange={(e) => setKeyLengthBits(Number(e.target.value))}
+              className="w-full px-4 py-3 bg-bg border border-divider rounded-input outline-none focus:border-primary focus:ring-4 focus:ring-inset focus:ring-primary/10 transition-all text-body text-text-primary"
+            >
+              <option value={128}>128 bits (16 bytes)</option>
+              <option value={256}>256 bits (32 bytes)</option>
+              <option value={512}>512 bits (64 bytes)</option>
+            </select>
           </div>
+
+          <ToolInput
+            id="pbkdf2-iterations-input"
+            label="Iterations"
+            type="number"
+            value={iterations.toString()}
+            onChange={(val) => setIterations(val ? Number(val) : "")}
+          />
+
+          <ToolInput
+            id="pbkdf2-salt-input"
+            label="Salt String"
+            value={salt}
+            onChange={setSalt}
+          />
         </div>
-      )}
-    </div>
+      }
+      output={
+        <div className="space-y-4 flex flex-col h-full">
+          <ToolResultArea
+            label="Hex Encoded Derived Key"
+            value={hexResult}
+            className="flex-1"
+          />
+          <ToolResultArea
+            label="Base64 Encoded Derived Key"
+            value={b64Result}
+            className="flex-1"
+          />
+        </div>
+      }
+    />
   );
 }

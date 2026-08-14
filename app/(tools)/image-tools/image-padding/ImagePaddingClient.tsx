@@ -5,6 +5,7 @@ import { PaddingConfig, OutputFormat } from "@/src/lib/canvas-image-engine";
 import { addPadding } from "@/src/lib/canvas-worker-client";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { formatError } from "@/src/lib/formatError";
 import { m } from "framer-motion";
@@ -251,7 +252,7 @@ export default function ImagePaddingClient() {
       </div>
 
       {!originalUrl ? (
-        <div className="max-w-2xl mx-auto">
+        <div className="w-full">
           <DropZone
             onFilesSelected={(files) => {
               const f = files instanceof FileList ? files[0] : files[0];
@@ -264,11 +265,9 @@ export default function ImagePaddingClient() {
           />
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2 items-start">
-          {/* Controls Column */}
-          <div className="space-y-6">
-            {/* Header with Change File button */}
-            <div className="flex items-center justify-between bg-surface border border-border p-4 rounded-2xl">
+        <ToolWorkspace
+          input={
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 overflow-hidden">
                 <div className="w-10 h-10 rounded-xl overflow-hidden bg-bg flex-shrink-0 border border-border">
                   <img src={originalUrl} alt="Source thumbnail" className="w-full h-full object-cover" />
@@ -286,9 +285,9 @@ export default function ImagePaddingClient() {
                 Change File
               </button>
             </div>
-
-            {/* Main Configuration Card */}
-            <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
+          }
+          optionsPanel={
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div className="flex items-center gap-2">
                   <Sliders className="w-4 h-4 text-blue" />
@@ -545,11 +544,9 @@ export default function ImagePaddingClient() {
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Result & Preview Column */}
-          <div className="space-y-6">
-            <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
+          }
+          output={
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div className="flex items-center gap-2">
                   <ImageIcon className="w-4 h-4 text-blue" />
@@ -645,8 +642,8 @@ export default function ImagePaddingClient() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+          }
+        />
       )}
     </div>
   );

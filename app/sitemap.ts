@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
 import { ALL_TOOLS, CATEGORIES } from '@/src/tool-registry';
+import { articles } from '@/src/content/blog/articles';
+import { getArticleMetadata } from '@/src/content/blog/utils';
 
 const BASE_URL = 'https://karuvilab.com';
 
@@ -21,11 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/disclaimer',
     '/contact',
     '/all-tools',
+    '/blog',
   ].map(route => ({
     url: `${BASE_URL}${route}/`,
     lastModified: new Date(),
     changeFrequency: 'monthly',
-    priority: route === '' ? 1.0 : 0.8,
+    priority: route === '' ? 1.0 : (route === '/blog' ? 0.8 : 0.8),
   }));
 
   // 2. Category Hubs
@@ -45,5 +48,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: tool.priority || 0.8,
   }));
 
-  return [...staticPages, ...categoryPages, ...toolPages];
+  // 4. Blog Articles
+  const blogPages: MetadataRoute.Sitemap = Object.entries(articles).map(([slug, article]) => {
+    const meta = getArticleMetadata(slug, article);
+    return {
+      url: `${BASE_URL}/blog/${slug}/`,
+      lastModified: new Date(meta.isoDate),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    };
+  });
+
+  return [...staticPages, ...categoryPages, ...toolPages, ...blogPages];
 }

@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ArrowLeftRight, Download, Code2, AlertTriangle } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
-import { blobManager } from '@/src/lib/blob-manager';
+import { ArrowLeftRight } from 'lucide-react';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolInput } from '@/components/ui/ToolInput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 import { useToast } from '@/components/ui/Toast';
 
 type ConversionMode = 'json-to-xml' | 'xml-to-json';
@@ -75,7 +75,6 @@ function jsonToXml(obj: any, rootName = 'root', indentSpaces = 2): string {
   try {
     const data = typeof obj === 'string' ? JSON.parse(obj) : obj;
     xml = `<?xml version="1.0" encoding="UTF-8"?>\n${createNode(rootName, data, 0)}`;
-    // If indentSpaces is 0, we can optionally remove newlines, but keeping them is fine for "minified lines"
     return indentSpaces === 0 ? xml.replace(/\n/g, '') : xml;
   } catch (err) {
     return `Error parsing JSON: ${err instanceof Error ? err.message : 'Unknown error'}`;
@@ -93,11 +92,11 @@ function xmlToJson(xmlStr: string): string {
     }
 
     const domNodeToObject = (node: Node): any => {
-      if (node.nodeType === 3 || node.nodeType === 4) { // TEXT or CDATA
+      if (node.nodeType === 3 || node.nodeType === 4) {
         const text = node.nodeValue?.trim();
         return text ? text : null;
       }
-      if (node.nodeType === 1) { // ELEMENT
+      if (node.nodeType === 1) {
         const obj: any = {};
         const element = node as Element;
         
@@ -165,127 +164,60 @@ export default function JsonToXmlClient() {
     }
   }, [mode, input, rootNodeName, indentSpaces]);
 
-  const handleDownload = () => {
-    if (!output || output.startsWith('Error:')) return;
-    const blob = new Blob([output], { type: mode === 'json-to-xml' ? 'application/xml' : 'application/json' });
-    const url = blobManager.create(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = mode === 'json-to-xml' ? 'converted.xml' : 'converted.json';
-    a.click();
-    blobManager.revoke(url);
-  };
+  const error = output.startsWith('Error:') ? output : undefined;
+  const validOutput = error ? '' : output;
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="bg-surface border border-border p-6 sm:p-8 rounded-4xl shadow-sm space-y-8">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue flex items-center gap-3">
-            <ArrowLeftRight className="w-4 h-4" />
-            JSON / XML Converter
-          </h2>
-          
-          <div className="flex bg-bg border border-border rounded-xl p-1">
-            <button
-              onClick={() => setMode('json-to-xml')}
-              className={cn(
-                "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'json-to-xml' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
-              )}
+    <ToolWorkspace
+      layout="split"
+      tabs={{
+        options: [
+          { id: 'json-to-xml', label: 'JSON to XML', icon: <ArrowLeftRight size={16} /> },
+          { id: 'xml-to-json', label: 'XML to JSON', icon: <ArrowLeftRight size={16} /> }
+        ],
+        activeId: mode,
+        onChange: (id) => setMode(id as ConversionMode)
+      }}
+      input={
+        <div className="flex flex-col h-full">
+          <div className="flex justify-between items-center px-1 mb-2">
+            <span className="text-sm font-bold text-text-2">Input {mode === 'json-to-xml' ? 'JSON' : 'XML'}</span>
+            <button 
+              onClick={() => setInput('')}
+              className="text-xs font-bold text-red-500 hover:underline"
             >
-              JSON to XML
-            </button>
-            <button
-              onClick={() => setMode('xml-to-json')}
-              className={cn(
-                "px-4 py-2 rounded-lg text-xs font-bold transition-all",
-                mode === 'xml-to-json' ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text-3"
-              )}
-            >
-              XML to JSON
+              Clear
             </button>
           </div>
+          <ToolInput
+            value={input}
+            onChange={(val) => {
+               if (val.length > 5 * 1024 * 1024) toast("Input text exceeds 5MB limit", "error");
+               else setInput(val);
+            }}
+            placeholder={mode === 'json-to-xml' ? '{\n  "name": "John",\n  "age": 30\n}' : '<root>\n  <name>John</name>\n  <age>30</age>\n</root>'}
+            mono
+            className="flex-1 min-h-96 lg:min-h-[700px] resize-none"
+          />
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Input Area */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
-                Input {mode === 'json-to-xml' ? 'JSON' : 'XML'}
-              </label>
-              <button 
-                onClick={() => setInput('')}
-                className="text-xs font-bold text-red-500 hover:underline"
-              >
-                Clear
-              </button>
-            </div>
-            <textarea
-              value={input}
-              onChange={(e) => {
-                if (e.target.value.length > 5 * 1024 * 1024) {
-                  toast("Input text exceeds 5MB limit", "error");
-                } else {
-                  setInput(e.target.value);
-                }
-              }}
-              placeholder={mode === 'json-to-xml' ? '{\n  "name": "John",\n  "age": 30\n}' : '<root>\n  <name>John</name>\n  <age>30</age>\n</root>'}
-              className="w-full h-96 bg-bg border border-border rounded-2xl p-4 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none transition-all resize-none"
-            />
-          </div>
-
-          {/* Output Area */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center px-2">
-              <label className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted flex items-center gap-2">
-                Output {mode === 'json-to-xml' ? 'XML' : 'JSON'}
-              </label>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleDownload}
-                  disabled={!output || output.startsWith('Error:')}
-                  className="p-1.5 text-text-muted hover:text-blue transition-colors disabled:opacity-50"
-                  title="Download File"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-                <CopyButton text={output} />
-              </div>
-            </div>
-            <textarea
-              readOnly
-              value={output}
-              className={cn(
-                "w-full h-96 bg-mat-base border border-mat-border rounded-2xl p-4 font-mono text-sm outline-none resize-none",
-                output.startsWith('Error:') ? "text-red-500" : "text-text-3"
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Options Panel */}
-        {mode === 'json-to-xml' && (
-          <div className="bg-bg border border-border rounded-3xl p-6 space-y-6">
+      }
+      optionsPanel={
+        mode === 'json-to-xml' ? (
+          <div className="space-y-6">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Options</h3>
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <label className="text-xs font-bold text-text-2">Root Node Name</label>
-                <input
-                  type="text"
-                  value={rootNodeName}
-                  onChange={(e) => setRootNodeName(e.target.value)}
-                  placeholder="root"
-                  className="w-full bg-surface border border-border rounded-xl p-2.5 text-sm font-medium text-text focus:ring-2 focus:ring-blue/20 outline-none"
-                />
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-bold text-text-2">Indentation</label>
+              <ToolInput
+                label="Root Node Name"
+                value={rootNodeName}
+                onChange={setRootNodeName}
+                placeholder="root"
+              />
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-text-2 px-1">Indentation</label>
                 <select
                   value={indentSpaces}
                   onChange={(e) => setIndentSpaces(Number(e.target.value))}
-                  className="w-full bg-surface border border-border rounded-xl p-2.5 text-sm font-medium text-text focus:ring-2 focus:ring-blue/20 outline-none"
+                  className="w-full px-4 py-3 bg-bg border border-border rounded-input text-body text-text-primary focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none h-12"
                 >
                   <option value={0}>Minified (No spaces)</option>
                   <option value={2}>2 Spaces</option>
@@ -294,8 +226,19 @@ export default function JsonToXmlClient() {
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        ) : undefined
+      }
+      output={
+        <ToolResultArea
+          label={`Output ${mode === 'json-to-xml' ? 'XML' : 'JSON'}`}
+          value={validOutput}
+          error={error}
+          downloadFilename={mode === 'json-to-xml' ? 'converted.xml' : 'converted.json'}
+          downloadMimeType={mode === 'json-to-xml' ? 'application/xml' : 'application/json'}
+          language={mode === 'json-to-xml' ? 'xml' : 'json'}
+          contentClassName="h-96 lg:h-[700px] max-h-[700px]"
+        />
+      }
+    />
   );
 }

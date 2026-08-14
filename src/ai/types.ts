@@ -55,6 +55,12 @@ export interface ExtendedModelManifest extends ModelManifest {
   supportsGuidedFilter?: boolean;
   qualityScore?: number; // 0 to 100
   speedScore?: number;   // 0 to 100
+  /**
+   * When false, the model file is a placeholder and must not be loaded.
+   * UI should display an honest "Model not available" state.
+   * Defaults to true when omitted.
+   */
+  available?: boolean;
   quantizedVariants?: {
     int8?: { file: string; sizeMB: number; sha256: string };
     fp16?: { file: string; sizeMB: number; sha256: string };

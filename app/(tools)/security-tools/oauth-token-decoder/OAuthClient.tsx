@@ -2,9 +2,11 @@
 
 import { useState, useCallback } from "react";
 import { parseJwt, JwtParsed } from "@/src/lib/security/tokens";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { Key, Clock, ShieldCheck, AlertCircle } from "lucide-react";
+import { Key, Clock, AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 export default function OAuthClient() {
   const { toast } = useToast();
@@ -29,85 +31,85 @@ export default function OAuthClient() {
   }, [tokenInput]);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-text">Paste OAuth 2.0 Bearer / ID Token:</label>
-        <textarea
-          id="oauth-token-input"
-          rows={5}
-          placeholder="eyJhY2Nlc3NfdG9rZW4iOi... or eyJhbGciOiJSUzI1Ni..."
-          value={tokenInput}
-          onChange={(e) => {
-            if (e.target.value.length > 1 * 1024 * 1024) {
-              toast("Input token exceeds 1MB limit", "error");
-            } else {
-              setTokenInput(e.target.value);
-            }
-          }}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none"
-        />
-      </div>
+    <ToolWorkspace
+      input={
+        <div className="space-y-4">
+          <ToolInput
+            label="Paste OAuth 2.0 Bearer / ID Token:"
+            id="oauth-token-input"
+            rows={5}
+            mono
+            placeholder="eyJhY2Nlc3NfdG9rZW4iOi... or eyJhbGciOiJSUzI1Ni..."
+            value={tokenInput}
+            onChange={(val) => {
+              if (val.length > 1 * 1024 * 1024) {
+                toast("Input token exceeds 1MB limit", "error");
+              } else {
+                setTokenInput(val);
+              }
+            }}
+          />
 
-      <button
-        id="oauth-decode-btn"
-        onClick={handleDecode}
-        className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
-      >
-        <Key className="w-5 h-5" />
-        Decode OAuth Token
-      </button>
-
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
-          <AlertCircle className="w-5 h-5" />
-          {error}
+          <button
+            id="oauth-decode-btn"
+            onClick={handleDecode}
+            className="w-full py-3 rounded-xl bg-primary text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition"
+          >
+            <Key className="w-5 h-5" />
+            Decode OAuth Token
+          </button>
         </div>
-      )}
-
-      {parsed && (
-        <div className="space-y-6">
-          {/* Status Banner */}
-          <div className={`p-4 rounded-xl border flex items-center justify-between ${
-            parsed.isExpired
-              ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-              : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-          }`}>
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              <span className="font-bold text-sm">
-                Status: {parsed.isExpired ? 'EXPIRED TOKEN' : 'ACTIVE / VALID EXPIRATION'}
-              </span>
+      }
+      output={
+        <div className="space-y-6 h-full flex flex-col">
+          {error && (
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              {error}
             </div>
-            {parsed.expirationDate && (
-              <span className="text-xs font-mono">Exp: {parsed.expirationDate}</span>
-            )}
-          </div>
+          )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Header */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-semibold text-text">Header (JOSE Parameters):</label>
-                <CopyButton text={JSON.stringify(parsed.header, null, 2)} />
+          {parsed && (
+            <>
+              {/* Status Banner */}
+              <div className={`p-4 rounded-xl border flex items-center justify-between ${
+                parsed.isExpired
+                  ? 'bg-amber-500/10 border-amber-500/20 text-amber-500'
+                  : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'
+              }`}>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  <span className="font-bold text-sm">
+                    Status: {parsed.isExpired ? 'EXPIRED TOKEN' : 'ACTIVE / VALID EXPIRATION'}
+                  </span>
+                </div>
+                {parsed.expirationDate && (
+                  <span className="text-xs font-mono">Exp: {parsed.expirationDate}</span>
+                )}
               </div>
-              <pre className="p-4 rounded-xl bg-surface border border-border font-mono text-xs text-sky-300 overflow-x-auto">
-                {JSON.stringify(parsed.header, null, 2)}
-              </pre>
-            </div>
 
-            {/* Claims / Payload */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-semibold text-text">Payload (OAuth Claims & Scopes):</label>
-                <CopyButton text={JSON.stringify(parsed.payload, null, 2)} />
+              <div className="flex flex-col gap-6 flex-1">
+                <ToolResultArea
+                  label="Header (JOSE Parameters)"
+                  value={JSON.stringify(parsed.header, null, 2)}
+                  language="json"
+                />
+                <ToolResultArea
+                  label="Payload (OAuth Claims & Scopes)"
+                  value={JSON.stringify(parsed.payload, null, 2)}
+                  language="json"
+                />
               </div>
-              <pre className="p-4 rounded-xl bg-surface border border-border font-mono text-xs text-emerald-300 overflow-x-auto">
-                {JSON.stringify(parsed.payload, null, 2)}
-              </pre>
+            </>
+          )}
+
+          {!error && !parsed && (
+            <div className="flex-1 flex items-center justify-center text-text-4 italic">
+              Decoded token information will appear here...
             </div>
-          </div>
+          )}
         </div>
-      )}
-    </div>
+      }
+    />
   );
 }

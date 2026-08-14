@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { CATEGORIES } from "@/src/tool-registry";
-import { ToolShell } from "@/components/ui/ToolShell";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import dynamic from "next/dynamic";
 import type { Crop, PixelCrop } from "react-image-crop";
@@ -10,7 +9,6 @@ import "react-image-crop/dist/ReactCrop.css";
 
 import { DropZone } from "@/components/ui/DropZone";
 
-const cat = CATEGORIES.find(c => c.id === "image")!;
 
 const PRESETS = [
   { label: "Free", w: 0, h: 0 },
@@ -154,8 +152,8 @@ export default function ImageCropClient() {
   const scale = origW > 0 ? Math.min(1, previewMaxW / origW) : 1;
 
   return (
-    
-      <div className="grid gap-6 lg:grid-cols-2">
+    <ToolWorkspace
+      input={
         <div className="space-y-4">
           <DropZone
             onFilesSelected={(files) => {
@@ -187,10 +185,12 @@ export default function ImageCropClient() {
                   </ReactCrop>
             </div>
           )}
-
-          {/* Preset buttons */}
-          {origW > 0 && (
-            <>
+        </div>
+      }
+      optionsPanel={
+        origW > 0 ? (
+          <div className="space-y-4">
+            <div>
               <div className="flex flex-wrap gap-2">
                 {PRESETS.map(p => (
                   <button
@@ -214,15 +214,13 @@ export default function ImageCropClient() {
                   </button>
                 ))}
               </div>
-            </>
-          )}
-        </div>
+            </div>
 
-        <div className="space-y-4">
-          {origW > 0 && (
-            <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-4">
-              <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Crop Parameters</h2>
-              <p className="text-xs text-text-muted">Original: {origW} × {origH}px</p>
+            <div className="pt-4 border-t border-border space-y-4">
+              <div className="flex justify-between items-end">
+                <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Crop Parameters</h2>
+                <p className="text-xs text-text-muted">Original: {origW} × {origH}px</p>
+              </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -247,25 +245,28 @@ export default function ImageCropClient() {
                 Crop Image
               </button>
             </div>
-          )}
-
-          <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-4">
-            <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Cropped Preview</h2>
-            {croppedUrl ? (
-              <>
-                <img src={croppedUrl} alt="Cropped" className="mx-auto max-h-64 rounded-xl object-contain border border-border" />
-                <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all">
-                  Download Cropped Image
-                </button>
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-48 border-2 border-dashed border-border rounded-xl text-text-muted text-sm">
-                Crop preview will appear here
-              </div>
-            )}
           </div>
+        ) : undefined
+      }
+      output={
+        <div className="flex flex-col h-full space-y-4">
+          <h2 className="font-bold text-text-2 text-sm uppercase tracking-wider">Cropped Preview</h2>
+          {croppedUrl ? (
+            <>
+              <div className="flex-1 flex justify-center items-center">
+                <img src={croppedUrl} alt="Cropped" className="max-h-[50vh] rounded-xl object-contain border border-border" />
+              </div>
+              <button onClick={download} className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all mt-auto">
+                Download Cropped Image
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center justify-center flex-1 min-h-[12rem] border-2 border-dashed border-border rounded-xl text-text-muted text-sm">
+              Crop preview will appear here
+            </div>
+          )}
         </div>
-      </div>
-    
+      }
+    />
   );
 }

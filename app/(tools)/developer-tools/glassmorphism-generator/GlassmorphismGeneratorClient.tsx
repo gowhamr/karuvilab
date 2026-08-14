@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useMemo, useId } from 'react';
-import { Layers, Copy } from 'lucide-react';
+import { Layers } from 'lucide-react';
 import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 interface GlassConfig {
   blur: number;
@@ -59,110 +60,68 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
   }, [config]);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      
-      {/* 1. Preview Area */}
-      <div 
-        className="w-full h-80 sm:h-96 rounded-4xl border border-border/50 shadow-inner flex items-center justify-center relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, ${config.bgColors.join(', ')})` }}
-      >
-        <div 
-          className="w-80 p-8 flex flex-col gap-4 transition-all duration-300"
-          style={{
-            background: hexToRgba(config.tintColor, 100 - config.transparency),
-            backdropFilter: `blur(${config.blur}px)`,
-            WebkitBackdropFilter: `blur(${config.blur}px)`,
-            border: `${config.borderWidth}px solid ${hexToRgba(config.tintColor === '#ffffff' ? '#ffffff' : '#000000', config.borderOpacity)}`,
-            borderRadius: `${config.borderRadius}px`,
-            boxShadow: `0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)}`,
-            color: config.textColor
-          }}
-        >
-          <div className="w-12 h-12 rounded-2xl bg-current opacity-20" />
-          <h2 className="text-2xl font-black tracking-tight">Glassmorphism</h2>
-          <p className="text-sm font-medium opacity-80 leading-relaxed">
-            This is a preview of your frosted glass effect. Adjust the parameters below to fine-tune the blur, transparency, and borders.
-          </p>
-          <div className="mt-2 py-3 px-6 rounded-xl font-bold text-center border border-current opacity-80">
-            Action Button
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT: Controls */}
-        <div className="lg:col-span-7 bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
-          <div className="flex items-center justify-between">
-            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5" /> Glass Properties
-            </h3>
-          </div>
-
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor={`${baseId}-blur`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Blur Radius (backdrop-filter) <span>{config.blur}px</span></label>
-              <input id={`${baseId}-blur`} type="range" min="0" max="40" value={config.blur} onChange={e => setConfig({ ...config, blur: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: 'css', label: 'CSS' },
+          { id: 'tailwind', label: 'Tailwind' }
+        ],
+        activeId: outputTab,
+        onChange: (id) => setOutputTab(id as 'css' | 'tailwind')
+      }}
+      input={
+        <div className="space-y-6">
+          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
+            <div className="flex items-center justify-between">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
+                <Layers className="w-3.5 h-3.5" /> Glass Properties
+              </h3>
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor={`${baseId}-transparency`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Transparency <span>{config.transparency}%</span></label>
-              <input id={`${baseId}-transparency`} type="range" min="0" max="100" value={config.transparency} onChange={e => setConfig({ ...config, transparency: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
-            </div>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label htmlFor={`${baseId}-blur`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Blur Radius (backdrop-filter) <span>{config.blur}px</span></label>
+                <input id={`${baseId}-blur`} type="range" min="0" max="40" value={config.blur} onChange={e => setConfig({ ...config, blur: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+              </div>
 
-            <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label htmlFor={`${baseId}-border-width`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Width <span>{config.borderWidth}px</span></label>
-                <input id={`${baseId}-border-width`} type="range" min="0" max="4" step="1" value={config.borderWidth} onChange={e => setConfig({ ...config, borderWidth: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                <label htmlFor={`${baseId}-transparency`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Transparency <span>{config.transparency}%</span></label>
+                <input id={`${baseId}-transparency`} type="range" min="0" max="100" value={config.transparency} onChange={e => setConfig({ ...config, transparency: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
               </div>
-              <div className="space-y-2">
-                <label htmlFor={`${baseId}-border-opacity`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Opacity <span>{config.borderOpacity}%</span></label>
-                <input id={`${baseId}-border-opacity`} type="range" min="0" max="100" value={config.borderOpacity} onChange={e => setConfig({ ...config, borderOpacity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label htmlFor={`${baseId}-border-radius`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Radius <span>{config.borderRadius}px</span></label>
-                <input id={`${baseId}-border-radius`} type="range" min="0" max="64" value={config.borderRadius} onChange={e => setConfig({ ...config, borderRadius: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor={`${baseId}-border-width`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Width <span>{config.borderWidth}px</span></label>
+                  <input id={`${baseId}-border-width`} type="range" min="0" max="4" step="1" value={config.borderWidth} onChange={e => setConfig({ ...config, borderWidth: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor={`${baseId}-border-opacity`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Opacity <span>{config.borderOpacity}%</span></label>
+                  <input id={`${baseId}-border-opacity`} type="range" min="0" max="100" value={config.borderOpacity} onChange={e => setConfig({ ...config, borderOpacity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                </div>
               </div>
-              <div className="space-y-2">
-                <label htmlFor={`${baseId}-shadow-intensity`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Shadow Intensity <span>{config.shadowIntensity}%</span></label>
-                <input id={`${baseId}-shadow-intensity`} type="range" min="0" max="100" value={config.shadowIntensity} onChange={e => setConfig({ ...config, shadowIntensity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor={`${baseId}-border-radius`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Radius <span>{config.borderRadius}px</span></label>
+                  <input id={`${baseId}-border-radius`} type="range" min="0" max="64" value={config.borderRadius} onChange={e => setConfig({ ...config, borderRadius: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor={`${baseId}-shadow-intensity`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Shadow Intensity <span>{config.shadowIntensity}%</span></label>
+                  <input id={`${baseId}-shadow-intensity`} type="range" min="0" max="100" value={config.shadowIntensity} onChange={e => setConfig({ ...config, shadowIntensity: Number(e.target.value) })} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue" />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6 pt-4 border-t border-border/50">
+                 <div className="flex items-center gap-2">
+                   <input type="color" value={config.tintColor} onChange={e => setConfig({ ...config, tintColor: e.target.value })} className="w-8 h-8 rounded cursor-pointer border border-border p-0" />
+                   <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Tint Color</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                   <input type="color" value={config.textColor} onChange={e => setConfig({ ...config, textColor: e.target.value })} className="w-8 h-8 rounded cursor-pointer border border-border p-0" />
+                   <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Text Color</span>
+                 </div>
               </div>
             </div>
-
-            <div className="flex items-center gap-6 pt-4 border-t border-border/50">
-               <div className="flex items-center gap-2">
-                 <input type="color" value={config.tintColor} onChange={e => setConfig({ ...config, tintColor: e.target.value })} className="w-8 h-8 rounded cursor-pointer border border-border p-0" />
-                 <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Tint Color</span>
-               </div>
-               <div className="flex items-center gap-2">
-                 <input type="color" value={config.textColor} onChange={e => setConfig({ ...config, textColor: e.target.value })} className="w-8 h-8 rounded cursor-pointer border border-border p-0" />
-                 <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Text Color</span>
-               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT: Output & Settings */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-             <div className="flex items-center justify-between">
-                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Code</h3>
-                <CopyButton text={outputTab === 'css' ? cssValue : tailwindValue} />
-             </div>
-
-             <div className="flex bg-bg border border-border p-1 rounded-xl">
-                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>CSS</button>
-                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Tailwind</button>
-             </div>
-
-             <textarea
-               readOnly
-               value={outputTab === 'css' ? cssValue : tailwindValue}
-               className="w-full h-40 bg-bg border border-border rounded-2xl p-4 font-mono text-xs text-text-3 outline-none resize-none leading-relaxed whitespace-pre"
-             />
           </div>
 
           <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
@@ -180,8 +139,45 @@ box-shadow: 0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)};`;
              </div>
           </div>
         </div>
+      }
+      output={
+        <div className="flex flex-col space-y-6 h-full">
+          <div 
+            className="w-full h-64 sm:h-80 rounded-4xl border border-border/50 shadow-inner flex items-center justify-center relative overflow-hidden shrink-0"
+            style={{ background: `linear-gradient(135deg, ${config.bgColors.join(', ')})` }}
+          >
+            <div 
+              className="w-80 p-8 flex flex-col gap-4 transition-all duration-300"
+              style={{
+                background: hexToRgba(config.tintColor, 100 - config.transparency),
+                backdropFilter: `blur(${config.blur}px)`,
+                WebkitBackdropFilter: `blur(${config.blur}px)`,
+                border: `${config.borderWidth}px solid ${hexToRgba(config.tintColor === '#ffffff' ? '#ffffff' : '#000000', config.borderOpacity)}`,
+                borderRadius: `${config.borderRadius}px`,
+                boxShadow: `0 4px 30px ${hexToRgba('#000000', config.shadowIntensity)}`,
+                color: config.textColor
+              }}
+            >
+              <div className="w-12 h-12 rounded-2xl bg-current opacity-20" />
+              <h2 className="text-2xl font-black tracking-tight">Glassmorphism</h2>
+              <p className="text-sm font-medium opacity-80 leading-relaxed">
+                This is a preview of your frosted glass effect. Adjust the parameters below to fine-tune the blur, transparency, and borders.
+              </p>
+              <div className="mt-2 py-3 px-6 rounded-xl font-bold text-center border border-current opacity-80">
+                Action Button
+              </div>
+            </div>
+          </div>
 
-      </div>
-    </div>
+          <div className="flex-1 min-h-[160px]">
+            <ToolResultArea
+              label="Export Code"
+              value={outputTab === 'css' ? cssValue : tailwindValue}
+              language={outputTab}
+            />
+          </div>
+        </div>
+      }
+    />
   );
 }

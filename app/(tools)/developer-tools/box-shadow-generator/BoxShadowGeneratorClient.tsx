@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useMemo, useId } from 'react';
-import { Square, Plus, Trash2, SlidersHorizontal, Copy, Layers } from 'lucide-react';
+import { Plus, Trash2, Layers } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
-import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 import { KV_BLUE } from '@/src/theme/constants';
 
 interface ShadowLayer {
@@ -80,39 +80,17 @@ export default function BoxShadowGeneratorClient() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      
-      {/* 1. Preview Area */}
-      <div 
-        className="w-full h-64 sm:h-80 rounded-4xl border border-border/50 shadow-inner transition-all duration-300 flex items-center justify-center relative overflow-hidden"
-        style={{ backgroundColor: bgColor }}
-      >
-        {/* Colors controls floating */}
-        <div className="absolute top-4 left-4 flex gap-4 bg-surface/80 backdrop-blur-md p-2 rounded-2xl border border-border/50 shadow-sm z-content">
-           <div className="flex items-center gap-2">
-             <input type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-6 h-6 rounded cursor-pointer border-none p-0" />
-             <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">BG</span>
-           </div>
-           <div className="flex items-center gap-2 border-l border-border/50 pl-4">
-             <input type="color" value={boxColor} onChange={e => setBoxColor(e.target.value)} className="w-6 h-6 rounded cursor-pointer border-none p-0" />
-             <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Box</span>
-           </div>
-        </div>
-
-        <div 
-          className="w-40 h-40 sm:w-48 sm:h-48 transition-all duration-300 ease-out"
-          style={{ 
-            backgroundColor: boxColor,
-            borderRadius: `${borderRadius}px`,
-            boxShadow: cssValue 
-          }}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT: Layers */}
-        <div className="lg:col-span-7 bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-8">
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: 'css', label: 'CSS' },
+          { id: 'tailwind', label: 'Tailwind' }
+        ],
+        activeId: outputTab,
+        onChange: (id) => setOutputTab(id as 'css' | 'tailwind')
+      }}
+      input={
+        <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
               <Layers className="w-3.5 h-3.5" /> Shadow Layers ({layers.length}/6)
@@ -185,28 +163,10 @@ export default function BoxShadowGeneratorClient() {
             </AnimatePresence>
           </div>
         </div>
-
-        {/* RIGHT: Output & Settings */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-             <div className="flex items-center justify-between">
-                <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Code</h3>
-                <CopyButton text={outputTab === 'css' ? `box-shadow: ${cssValue};` : tailwindValue} />
-             </div>
-
-             <div className="flex bg-bg border border-border p-1 rounded-xl">
-                <button onClick={() => setOutputTab('css')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'css' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>CSS</button>
-                <button onClick={() => setOutputTab('tailwind')} className={cn("flex-1 py-1.5 rounded-lg text-xs font-bold transition-all", outputTab === 'tailwind' ? "bg-surface text-text shadow-sm" : "text-text-muted")}>Tailwind</button>
-             </div>
-
-             <textarea
-               readOnly
-               value={outputTab === 'css' ? `box-shadow: ${cssValue};` : tailwindValue}
-               className="w-full h-32 bg-bg border border-border rounded-2xl p-4 font-mono text-xs text-text-3 outline-none resize-none leading-relaxed"
-             />
-          </div>
-
-          <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-6">
+      }
+      optionsPanel={
+        <div className="space-y-8">
+          <div className="space-y-4">
              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Box Properties</h3>
              <div className="space-y-2">
                 <label htmlFor={`${baseId}-radius`} className="text-xs font-bold uppercase tracking-widest text-text-muted flex justify-between">Border Radius <span>{borderRadius}px</span></label>
@@ -214,7 +174,7 @@ export default function BoxShadowGeneratorClient() {
              </div>
           </div>
 
-          <div className="bg-surface border border-border rounded-4xl p-6 shadow-sm space-y-4">
+          <div className="space-y-4">
              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Presets</h3>
              <div className="grid grid-cols-2 gap-3">
                {PRESETS.map((p, i) => (
@@ -229,8 +189,46 @@ export default function BoxShadowGeneratorClient() {
              </div>
           </div>
         </div>
+      }
+      output={
+        <div className="flex flex-col space-y-6 h-full">
+          {/* Preview Area */}
+          <div 
+            className="w-full h-64 sm:h-80 rounded-3xl border border-border/50 shadow-inner transition-all duration-300 flex items-center justify-center relative overflow-hidden shrink-0"
+            style={{ backgroundColor: bgColor }}
+          >
+            {/* Colors controls floating */}
+            <div className="absolute top-4 left-4 flex gap-4 bg-surface/80 backdrop-blur-md p-2 rounded-2xl border border-border/50 shadow-sm z-content">
+               <div className="flex items-center gap-2">
+                 <input type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-6 h-6 rounded cursor-pointer border-none p-0" />
+                 <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">BG</span>
+               </div>
+               <div className="flex items-center gap-2 border-l border-border/50 pl-4">
+                 <input type="color" value={boxColor} onChange={e => setBoxColor(e.target.value)} className="w-6 h-6 rounded cursor-pointer border-none p-0" />
+                 <span className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">Box</span>
+               </div>
+            </div>
 
-      </div>
-    </div>
+            <div 
+              className="w-40 h-40 sm:w-48 sm:h-48 transition-all duration-300 ease-out"
+              style={{ 
+                backgroundColor: boxColor,
+                borderRadius: `${borderRadius}px`,
+                boxShadow: cssValue 
+              }}
+            />
+          </div>
+
+          <div className="flex-1 min-h-[160px]">
+            <ToolResultArea
+              label="Export Code"
+              value={outputTab === 'css' ? `box-shadow: ${cssValue};` : tailwindValue}
+              language={outputTab}
+            />
+          </div>
+        </div>
+      }
+    />
   );
 }
+

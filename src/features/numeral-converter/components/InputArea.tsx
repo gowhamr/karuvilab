@@ -60,7 +60,7 @@ export function InputArea({
   };
 
   return (
-    <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6">
+    <div className="w-full space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-text-2">Input Mode:</span>

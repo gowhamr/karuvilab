@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { Download, Copy, Check, Palette, LayoutGrid } from "lucide-react";
 import { m } from "framer-motion";
 import { useToast } from "@/components/ui/Toast";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { DataPoint, ChartType, PALETTES, ChartOptions } from "./types";
 import ChartPreview from "./ChartPreview";
 import ChartControls from "./ChartControls";
@@ -136,111 +137,103 @@ export default function ChartGeneratorClient() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-        
-        {/* Sidebar Controls */}
-        <div className="xl:col-span-4">
-          <ChartControls 
-            data={data}
-            type={type}
-            options={options}
-            setData={setData}
-            setType={setType}
-            setOptions={setOptions}
-            addPoint={addPoint}
-            updatePoint={updatePoint}
-            removePoint={removePoint}
-            applyPalette={applyPalette}
-          />
-        </div>
+    <ToolWorkspace
+      input={
+        <ChartControls 
+          data={data}
+          type={type}
+          options={options}
+          setData={setData}
+          setType={setType}
+          setOptions={setOptions}
+          addPoint={addPoint}
+          updatePoint={updatePoint}
+          removePoint={removePoint}
+          applyPalette={applyPalette}
+        />
+      }
+      output={
+        <div className="flex flex-col items-center justify-center min-h-[500px] h-full relative overflow-hidden group/canvas py-4 md:py-8">
+          {/* Background Texture */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none rounded-3xl" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        {/* Chart Preview */}
-        <div className="xl:col-span-8 space-y-6">
-          <div className="p-8 md:p-12 bg-surface border border-border rounded-6xl shadow-sm flex flex-col items-center justify-center min-h-full relative overflow-hidden group/canvas">
+          <div className="relative z-content w-full flex flex-col items-center gap-12">
+            {options.title && (
+              <m.h2 
+                key={options.title}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-2xl md:text-3xl font-black tracking-tight text-center max-w-lg"
+              >
+                {options.title}
+              </m.h2>
+            )}
+
+            <ChartPreview 
+              data={data}
+              type={type}
+              options={options}
+              svgRef={svgRef}
+            />
             
-            {/* Background Texture */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-
-            <div className="relative z-content w-full flex flex-col items-center gap-12">
-              {options.title && (
-                <m.h2 
-                  key={options.title}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-2xl md:text-3xl font-black tracking-tight text-center max-w-lg"
-                >
-                  {options.title}
-                </m.h2>
-              )}
-
-              <ChartPreview 
-                data={data}
-                type={type}
-                options={options}
-                svgRef={svgRef}
-              />
-              
-              {/* Legend */}
-              <div className="flex flex-wrap justify-center gap-6 max-w-xl">
-                {data.map((d) => (
-                  <div key={d.id} className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: d.color }} />
-                    <span className="text-xs font-bold text-text-2">{d.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Float Actions */}
-            <div className="absolute top-6 right-6 flex items-center gap-3 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
-              <button 
-                onClick={copySVG}
-                className="p-3 bg-surface border border-border rounded-2xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm"
-                title="Copy SVG Code"
-              >
-                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-              </button>
-              <button 
-                onClick={copyImage}
-                className="p-3 bg-surface border border-border rounded-2xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm"
-                title="Copy Image"
-              >
-                <LayoutGrid className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={downloadPNG}
-                className="flex items-center gap-2 px-6 py-3 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
-              >
-                <Download className="w-4 h-4" /> Export PNG
-              </button>
+            {/* Legend */}
+            <div className="flex flex-wrap justify-center gap-6 max-w-xl">
+              {data.map((d) => (
+                <div key={d.id} className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: d.color }} />
+                  <span className="text-xs font-bold text-text-2">{d.label}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Empty State / Tips */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
-                <Palette className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm">Visual Palettes</h3>
-                <p className="text-xs text-text-muted">Apply curated color schemes for consistent brand aesthetics.</p>
-              </div>
+          {/* Float Actions */}
+          <div className="absolute top-2 right-2 flex items-center gap-3 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
+            <button 
+              onClick={copySVG}
+              className="p-3 bg-surface border border-border rounded-2xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm"
+              title="Copy SVG Code"
+            >
+              {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+            </button>
+            <button 
+              onClick={copyImage}
+              className="p-3 bg-surface border border-border rounded-2xl text-text-3 hover:text-blue hover:border-blue/30 transition-all active:scale-90 shadow-sm"
+              title="Copy Image"
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={downloadPNG}
+              className="flex items-center gap-2 px-6 py-3 bg-blue text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue/20 hover:scale-105 active:scale-95 transition-all"
+            >
+              <Download className="w-4 h-4" /> Export PNG
+            </button>
+          </div>
+        </div>
+      }
+      infoPanel={
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4 shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
+              <Palette className="w-6 h-6" />
             </div>
-            <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
-                <LayoutGrid className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm">Vector Precision</h3>
-                <p className="text-xs text-text-muted">Charts are rendered as high-fidelity SVGs for maximum crispness.</p>
-              </div>
+            <div>
+              <h3 className="font-bold text-sm">Visual Palettes</h3>
+              <p className="text-xs text-text-muted">Apply curated color schemes for consistent brand aesthetics.</p>
+            </div>
+          </div>
+          <div className="p-6 bg-surface border border-border rounded-4xl flex items-center gap-4 shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
+              <LayoutGrid className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm">Vector Precision</h3>
+              <p className="text-xs text-text-muted">Charts are rendered as high-fidelity SVGs for maximum crispness.</p>
             </div>
           </div>
         </div>
-
-      </div>
-    </div>
+      }
+    />
   );
 }

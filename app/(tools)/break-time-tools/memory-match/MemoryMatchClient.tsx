@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Timer, Eye } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // ─── Constants & Types ────────────────────────────────────────────────────────
 
@@ -235,23 +236,18 @@ export default function MemoryMatchClient() {
   const currentBest = bestScores[difficulty];
 
   return (
-    <div className="max-w-lg mx-auto space-y-6">
-      {/* ── Difficulty Switcher ── */}
-      <div className="flex gap-2 justify-center">
-        {(["easy", "medium", "hard"] as const).map((diff) => (
-          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            key={diff}
-            onClick={() => handleDifficultyChange(diff)}
-            className={`px-4 py-2 rounded-xl font-bold text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              difficulty === diff
-                ? "bg-primary text-white"
-                : "bg-surface border border-border text-text-2 hover:border-primary/50"
-            }`}
-          >
-            {diff.toUpperCase()} ({DIFFICULTIES[diff].rows}x{DIFFICULTIES[diff].cols})
-          </m.button>
-        ))}
-      </div>
+    <ToolWorkspace
+      layout="stacked"
+      tabs={{
+        options: (["easy", "medium", "hard"] as const).map((diff) => ({
+          id: diff,
+          label: `${diff.toUpperCase()} (${DIFFICULTIES[diff].rows}x${DIFFICULTIES[diff].cols})`
+        })),
+        activeId: difficulty,
+        onChange: handleDifficultyChange
+      }}
+      optionsPanel={
+        <div className="space-y-6">
 
       {/* ── Stats ── */}
       <div className="grid grid-cols-3 gap-3">
@@ -276,8 +272,10 @@ export default function MemoryMatchClient() {
           transition={SPRING_CONFIG}
         />
       </div>
-
-      {/* ── Card Grid ── */}
+      </div>
+    }
+    output={
+      <div className="space-y-6 relative">
       <div
         className={`grid gap-3`}
         style={{
@@ -362,6 +360,8 @@ export default function MemoryMatchClient() {
           </m.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    }
+  />
   );
 }

@@ -7,7 +7,7 @@ import { useUrlState } from "@/src/hooks/useUrlState";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
-
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 function todayISO(): string {
   return new Date().toISOString().split('T')[0]!;
 }
@@ -63,57 +63,62 @@ export default function AgeCalculatorClient() {
   }, [dob, asOf]);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="w-full space-y-8">
       <SharedResultBanner hasParams={hasParams} toolName="Age Calculator" />
       <QRModal url={shareUrl} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
 
-      <div className="bg-surface border border-border p-6 md:p-8 rounded-4xl shadow-sm space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <HybridDateInput
-            label="Date of Birth"
-            value={dob}
-            onChange={setDob}
-            max={asOf}
-            description="DD / MM / YYYY"
-            id="age-calc-dob"
-          />
-          <HybridDateInput
-            label="Calculate As Of"
-            value={asOf}
-            onChange={setAsOf}
-            max={todayISO()}
-            description="DD / MM / YYYY"
-            id="age-calc-asof"
-          />
-        </div>
-      </div>
-
-      {result && (
-        <>
-          <div className="flex justify-end">
-            <ShareButton
-              url={shareUrl}
-              title={`Age: ${result.years} years ${result.months} months ${result.days} days — KaruviLab`}
-              onQrClick={() => setIsQrOpen(true)}
+      <ToolWorkspace
+        layout="split"
+        input={
+          <div className="grid grid-cols-1 gap-6">
+            <HybridDateInput
+              label="Date of Birth"
+              value={dob}
+              onChange={setDob}
+              max={asOf}
+              description="DD / MM / YYYY"
+              id="age-calc-dob"
+            />
+            <HybridDateInput
+              label="Calculate As Of"
+              value={asOf}
+              onChange={setAsOf}
+              max={todayISO()}
+              description="DD / MM / YYYY"
+              id="age-calc-asof"
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-3">
-              <MetricCard 
-                label="Exact Age" 
-                value={`${result.years} Years, ${result.months} Months, ${result.days} Days`} 
-                accent 
-              />
+        }
+        output={
+          result ? (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-text">Result</h3>
+                <ShareButton
+                  url={shareUrl}
+                  title={`Age: ${result.years} years ${result.months} months ${result.days} days — KaruviLab`}
+                  onQrClick={() => setIsQrOpen(true)}
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <MetricCard 
+                    label="Exact Age" 
+                    value={`${result.years} Years, ${result.months} Months, ${result.days} Days`} 
+                    accent 
+                  />
+                </div>
+                <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
+                <MetricCard 
+                  label="Total Weeks" 
+                  value={result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} 
+                />
+                <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
+              </div>
             </div>
-            <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
-            <MetricCard 
-              label="Total Weeks" 
-              value={result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} 
-            />
-            <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
-          </div>
-        </>
-      )}
+          ) : null
+        }
+      />
     </div>
   );
 }

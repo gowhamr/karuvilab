@@ -42,7 +42,7 @@ export const DeveloperSection = memo(function DeveloperSection() {
       const workerBlob = new Blob([
         `self.onmessage = function(e) { self.postMessage('pong'); };`
       ], { type: 'application/javascript' });
-      const blobUrl = URL.createObjectURL(workerBlob);
+      const blobUrl = createUrl(workerBlob);
       const testWorker = new Worker(blobUrl);
       
       await new Promise<void>((resolve) => {
@@ -50,7 +50,7 @@ export const DeveloperSection = memo(function DeveloperSection() {
           const latency = Math.round(performance.now() - start);
           setWorkerPingMs(latency);
           testWorker.terminate();
-          URL.revokeObjectURL(blobUrl);
+          revokeUrl(blobUrl);
           resolve();
         };
         testWorker.postMessage('ping');

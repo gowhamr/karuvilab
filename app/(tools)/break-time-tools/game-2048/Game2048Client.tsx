@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Undo2 } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // ─── Constants & Types ────────────────────────────────────────────────────────
 
@@ -22,7 +23,7 @@ interface HistoryState {
 // ─── Tile Colors ──────────────────────────────────────────────────────────────
 
 const TILE_STYLES: Record<number, { bg: string; text: string; font: string }> = {
-  0:    { bg: "bg-surface border border-border", text: "text-transparent", font: "text-2xl" },
+  0:    { bg: "bg-surface-elevated/20 border border-border", text: "text-transparent", font: "text-2xl" },
   2:    { bg: "bg-surface-elevated/40 border border-border/60 text-text font-bold", text: "text-text", font: "text-3xl font-bold" },
   4:    { bg: "bg-surface-elevated/80 border border-border text-text font-bold", text: "text-text", font: "text-3xl font-bold" },
   8:    { bg: "bg-primary/20 border border-primary/40 text-primary font-bold", text: "text-primary", font: "text-3xl font-bold" },
@@ -257,117 +258,126 @@ export default function Game2048Client() {
   }, [applyMove]);
 
   return (
-    <div className="max-w-md mx-auto space-y-6">
-      {/* ── Header ── */}
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2">
-          {[{ label: "Score", val: score }, { label: "Best", val: best }].map(({ label, val }) => (
-            <div key={label} className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[80px]">
-              <div className="text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
-              <div className="text-xl font-black text-text">{val}</div>
+    <ToolWorkspace
+      layout="stacked"
+      output={
+        <div className="w-full max-w-sm mx-auto space-y-6">
+          {/* ── Header ── */}
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2">
+              {[{ label: "Score", val: score }, { label: "Best", val: best }].map(({ label, val }) => (
+                <div key={label} className="rounded-xl bg-surface border border-border px-4 py-2 text-center min-w-[80px]">
+                  <div className="text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
+                  <div className="text-xl font-black text-text">{val}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            onClick={undoMove}
-            disabled={history.length === 0}
-            className="flex items-center justify-center p-3.5 bg-surface border border-border text-text-2 hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:text-text-2 disabled:hover:border-border rounded-xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
-            title="Undo move"
-            aria-label="Undo move"
-          >
-            <Undo2 className="w-4 h-4" />
-          </m.button>
-          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            onClick={resetGame}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
-            aria-label="Start a new game"
-          >
-            <RotateCcw className="w-4 h-4" aria-hidden="true" /> New Game
-          </m.button>
-        </div>
-      </div>
-
-      {/* ── Board ── */}
-      <div
-        className="relative rounded-2xl bg-surface border border-border p-3 select-none touch-none"
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        role="application"
-        aria-label="2048 game board. Use arrow keys or swipe to move tiles."
-      >
-        <div className="grid grid-cols-4 gap-2.5">
-          {grid.map((row, r) =>
-            row.map((cell, c) => {
-              const style = getTileStyle(cell ?? 0);
-              return (
-                <m.div
-                  key={`${r}-${c}`}
-                  className={`${style.bg} ${style.text} ${style.font} aspect-square rounded-xl flex items-center justify-center transition-all`}
-                  aria-label={cell ? `Tile ${cell}` : "Empty cell"}
-                >
-                  <AnimatePresence mode="wait">
-                    {cell && (
-                      <m.span
-                        key={cell}
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.8, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      >
-                        {cell}
-                      </m.span>
-                    )}
-                  </AnimatePresence>
-                </m.div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Game Over Overlay */}
-        <AnimatePresence>
-          {gameOver && (
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 rounded-2xl bg-surface/90 backdrop-blur-sm flex flex-col items-center justify-center gap-4 z-content"
-              role="alert"
-              aria-live="assertive"
-            >
-              <Trophy className="w-10 h-10 text-primary animate-bounce" />
-              <h2 className="text-2xl font-black text-text">Game Over!</h2>
-              <p className="text-text-3">Score: <strong>{score}</strong> · Best: <strong>{best}</strong></p>
+            <div className="flex gap-2">
+              <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                onClick={undoMove}
+                disabled={history.length === 0}
+                className="flex items-center justify-center p-3.5 bg-surface border border-border text-text-2 hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:text-text-2 disabled:hover:border-border rounded-xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
+                title="Undo move"
+                aria-label="Undo move"
+              >
+                <Undo2 className="w-4 h-4" />
+              </m.button>
               <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 onClick={resetGame}
-                className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary "
+                aria-label="Start a new game"
               >
-                Play Again
+                <RotateCcw className="w-4 h-4" aria-hidden="true" /> New Game
               </m.button>
-            </m.div>
-          )}
-        </AnimatePresence>
-      </div>
+            </div>
+          </div>
 
-      {/* ── Arrow Controls (mobile-friendly) ── */}
-      <div className="grid grid-cols-3 gap-2 max-w-[160px] mx-auto" aria-label="Game controls">
-        <div />
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("up")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move up">
-          <ChevronUp className="w-5 h-5 mx-auto" />
-        </m.button>
-        <div />
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("left")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move left">
-          <ChevronLeft className="w-5 h-5 mx-auto" />
-        </m.button>
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("down")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move down">
-          <ChevronDown className="w-5 h-5 mx-auto" />
-        </m.button>
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("right")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move right">
-          <ChevronRight className="w-5 h-5 mx-auto" />
-        </m.button>
-      </div>
-      <p className="text-center text-xs text-text-muted">Use keyboard arrow keys or swipe. Undo: Ctrl+Z</p>
-    </div>
+          {/* ── Board ── */}
+          <div
+            className="relative rounded-2xl bg-surface border border-border p-3 select-none touch-none"
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            role="application"
+            aria-label="2048 game board. Use arrow keys or swipe to move tiles."
+          >
+            <div className="grid grid-cols-4 gap-2.5">
+              {grid.map((row, r) =>
+                row.map((cell, c) => {
+                  const style = getTileStyle(cell ?? 0);
+                  return (
+                    <m.div
+                      key={`${r}-${c}`}
+                      className={`${style.bg} ${style.text} ${style.font} aspect-square rounded-xl flex items-center justify-center transition-all`}
+                      aria-label={cell ? `Tile ${cell}` : "Empty cell"}
+                    >
+                      <AnimatePresence mode="wait">
+                        {cell && (
+                          <m.span
+                            key={cell}
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          >
+                            {cell}
+                          </m.span>
+                        )}
+                      </AnimatePresence>
+                    </m.div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Game Over Overlay */}
+            <AnimatePresence>
+              {gameOver && (
+                <m.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 rounded-2xl bg-surface/90 backdrop-blur-sm flex flex-col items-center justify-center gap-4 z-content"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  <Trophy className="w-10 h-10 text-primary animate-bounce" />
+                  <h2 className="text-2xl font-black text-text">Game Over!</h2>
+                  <p className="text-text-3">Score: <strong>{score}</strong> · Best: <strong>{best}</strong></p>
+                  <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                    onClick={resetGame}
+                    className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    Play Again
+                  </m.button>
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* ── Arrow Controls (mobile-friendly) ── */}
+          <div className="grid grid-cols-3 gap-2 max-w-[160px] mx-auto" aria-label="Game controls">
+            <div />
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("up")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move up">
+              <ChevronUp className="w-5 h-5 mx-auto" />
+            </m.button>
+            <div />
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("left")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move left">
+              <ChevronLeft className="w-5 h-5 mx-auto" />
+            </m.button>
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("down")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move down">
+              <ChevronDown className="w-5 h-5 mx-auto" />
+            </m.button>
+            <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => applyMove("right")} className="p-3.5 rounded-xl bg-surface border border-border hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " aria-label="Move right">
+              <ChevronRight className="w-5 h-5 mx-auto" />
+            </m.button>
+          </div>
+        </div>
+      }
+      infoPanel={
+        <div className="flex justify-center text-center">
+          <p className="text-sm text-text-muted mt-2">Use keyboard arrow keys or swipe. Undo: Ctrl+Z</p>
+        </div>
+      }
+    />
   );
 }

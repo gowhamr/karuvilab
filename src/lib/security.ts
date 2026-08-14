@@ -23,6 +23,9 @@ function getClientPurify() {
           const href = node.getAttribute('href');
           if (href && href.trim().toLowerCase().startsWith('javascript:')) {
             node.removeAttribute('href');
+          } else if (href && href.trim().startsWith('#')) {
+            node.removeAttribute('target');
+            node.removeAttribute('rel');
           } else {
             node.setAttribute('target', '_blank');
             node.setAttribute('rel', 'noopener noreferrer');
@@ -49,12 +52,14 @@ const DEFAULT_SANITIZE_CONFIG = {
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
     'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 
     'strike', 'code', 'pre', 'hr', 'br', 'div', 'span', 'img', 'del',
-    'svg', 'path', 'rect', 'circle', 'line', 'polyline', 'polygon', 'g'
+    'svg', 'path', 'rect', 'circle', 'line', 'polyline', 'polygon', 'g',
+    'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'sub', 'sup', 'details', 'summary'
   ],
   ALLOWED_ATTR: [
     'href', 'src', 'alt', 'title', 'class', 'className', 'target', 'rel',
     'width', 'height', 'viewBox', 'fill', 'stroke', 'stroke-width',
-    'stroke-linecap', 'stroke-linejoin', 'points', 'd', 'rx', 'ry', 'cx', 'cy', 'r'
+    'stroke-linecap', 'stroke-linejoin', 'points', 'd', 'rx', 'ry', 'cx', 'cy', 'r',
+    'id', 'colspan', 'rowspan', 'scope', 'open', 'name'
   ],
   ADD_ATTR: ['target', 'rel'],
   FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'base'],

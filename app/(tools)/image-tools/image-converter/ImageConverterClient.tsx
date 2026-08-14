@@ -11,6 +11,7 @@ import { DropZone } from "@/components/ui/DropZone";
 import { ImageConverterControls } from "@/src/features/image-converter/components/ImageConverterControls";
 import { ImageFormat, ConversionPreset, IMAGE_FORMATS, PRESETS } from "@/src/features/image-converter/types";
 import { createBatchZip } from "@/src/features/image-converter/utils/zip-utils";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { m, AnimatePresence } from "framer-motion";
 import { FileDown, ImageIcon, Sparkles, AlertCircle, Loader2 } from "lucide-react";
 
@@ -152,43 +153,94 @@ export default function ImageConverterClient() {
   const allCompleted = hasItems && items.every(i => i.status === 'completed');
 
   return (
-    <div className="max-w-5xl mx-auto space-y-12 pb-20">
-      {/* Zone 1: Configuration & Upload */}
-      <section className="grid lg:grid-cols-5 gap-8 items-start">
-        <div className="lg:col-span-3 space-y-8">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-black tracking-tight flex items-center gap-3">
-              <Sparkles className="w-6 h-6 text-blue" />
-              Configure & Upload
-            </h2>
-            <p className="text-text-muted text-sm font-medium leading-relaxed max-w-md">
-              Select your target format and drop your images below. Everything happens in your browser.
-            </p>
+    <>
+      <ToolWorkspace
+        layout="split"
+        optionsPanel={
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <h2 className="text-xl font-black tracking-tight flex items-center gap-3">
+                <Sparkles className="w-5 h-5 text-blue" />
+                Settings
+              </h2>
+              <p className="text-text-muted text-xs font-medium leading-relaxed max-w-md">
+                Select your target format and quality.
+              </p>
+            </div>
+            <ImageConverterControls
+              targetFmt={targetFmt}
+              setTargetFmt={setTargetFmt}
+              quality={quality}
+              setQuality={setQuality}
+              preset={preset}
+              setPreset={setPreset}
+            />
           </div>
+        }
+        input={
+          <div className="space-y-4">
+            <h2 className="text-xl font-black tracking-tight flex items-center gap-3">
+              <FileDown className="w-5 h-5 text-blue" />
+              Upload Images
+            </h2>
+            <DropZone
+              onFilesSelected={handleFiles}
+              accept="image/*"
+              multiple
+              title="Add images"
+              description="JPG, PNG, WebP, BMP supported"
+              className="border-dashed border-2 hover:border-blue/50 transition-colors"
+            />
+          </div>
+        }
+        output={
+          <AnimatePresence mode="wait">
+            {hasItems ? (
+              <m.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="space-y-6 flex-1 flex flex-col h-full"
+              >
+                <div className="flex items-center justify-between px-2">
+                  <h2 className="text-xl font-black tracking-tight flex items-center gap-3">
+                    <FileDown className="w-6 h-6 text-text-3" />
+                    Processing Queue
+                  </h2>
+                </div>
 
-          <ImageConverterControls
-            targetFmt={targetFmt}
-            setTargetFmt={setTargetFmt}
-            quality={quality}
-            setQuality={setQuality}
-            preset={preset}
-            setPreset={setPreset}
-          />
-
-          <DropZone
-            onFilesSelected={handleFiles}
-            accept="image/*"
-            multiple
-            title="Add images"
-            description="JPG, PNG, WebP, BMP supported"
-            className="border-dashed border-2 hover:border-blue/50 transition-colors"
-          />
-        </div>
-
-        <div className="lg:col-span-2 hidden lg:block sticky top-8">
+                <div className="flex-1 min-h-0">
+                  <BatchQueue 
+                    toolId={toolId}
+                    isProcessing={isProcessing}
+                    onProcess={processAll}
+                    onDownload={downloadOne}
+                    onDownloadAll={allCompleted ? handleDownloadAll : undefined}
+                    renderThumbnail={renderThumbnail}
+                  />
+                </div>
+              </m.div>
+            ) : (
+              <m.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                className="flex-1 min-h-[400px] flex flex-col items-center justify-center text-center space-y-6 border-2 border-dashed border-border rounded-4xl"
+              >
+                <div className="w-20 h-20 bg-bg rounded-full flex items-center justify-center text-4xl">
+                  📥
+                </div>
+                <div className="space-y-2">
+                  <p className="font-black text-text-3 uppercase tracking-widest-2xl text-sm">Waiting for your files</p>
+                  <p className="text-xs text-text-muted font-medium">Drop images in the upload zone to get started</p>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
+        }
+        infoPanel={
           <div className="bg-blue/5 border border-blue/10 rounded-4xl p-4 sm:p-8 space-y-6">
             <h2 className="font-black text-sm uppercase tracking-widest text-blue">Platform Hardening</h2>
-            <ul className="space-y-4">
+            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { title: "Zero Upload", desc: "Files never leave your device" },
                 { title: "Batch Processing", desc: "Up to 3 images concurrently" },
@@ -204,50 +256,8 @@ export default function ImageConverterClient() {
               ))}
             </ul>
           </div>
-        </div>
-      </section>
-
-      {/* Zone 2: Queue & Results */}
-      <AnimatePresence mode="wait">
-        {hasItems ? (
-          <m.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="space-y-6"
-          >
-            <div className="flex items-center justify-between px-2">
-              <h2 className="text-xl font-black tracking-tight flex items-center gap-3">
-                <FileDown className="w-6 h-6 text-text-3" />
-                Processing Queue
-              </h2>
-            </div>
-
-            <BatchQueue 
-              toolId={toolId}
-              isProcessing={isProcessing}
-              onProcess={processAll}
-              onDownload={downloadOne}
-              onDownloadAll={allCompleted ? handleDownloadAll : undefined}
-              renderThumbnail={renderThumbnail}
-            />
-          </m.section>
-        ) : (
-          <m.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            className="py-32 flex flex-col items-center justify-center text-center space-y-6 border-2 border-dashed border-border rounded-4xl"
-          >
-            <div className="w-20 h-20 bg-bg rounded-full flex items-center justify-center text-4xl">
-              📥
-            </div>
-            <div className="space-y-2">
-              <p className="font-black text-text-3 uppercase tracking-widest-2xl text-sm">Waiting for your files</p>
-              <p className="text-xs text-text-muted font-medium">Drop images here or click 'Add images' above</p>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
+        }
+      />
 
       {/* Global Zipping Overlay */}
       <AnimatePresence>
@@ -268,7 +278,7 @@ export default function ImageConverterClient() {
           </m.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
 

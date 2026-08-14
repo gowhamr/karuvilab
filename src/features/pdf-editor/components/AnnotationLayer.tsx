@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef, useState, useCallback } from "react";
-import { useEditorStore, Annotation, TextAnnotation, DrawAnnotation, ShapeAnnotation, ImageAnnotation, BlackoutAnnotation, ToolType } from "../store";
+import { useEditorStore, Annotation, TextAnnotation, DrawAnnotation, ShapeAnnotation, ImageAnnotation, BlackoutAnnotation, ArrowAnnotation, ToolType } from "../store";
+import { getSignature } from "../utils/signature-db";
 
 interface AnnotationLayerProps {
   pageIndex: number;
@@ -37,7 +38,7 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
     return { x, y };
   };
 
-  const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
+  const handlePointerDown = async (e: React.MouseEvent | React.TouchEvent) => {
     if (activeTool === 'select') {
       if (layerRef.current && e.target === layerRef.current) {
         setSelectedAnnotation(null);
@@ -89,19 +90,53 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
         width: 15, height: 5,
       } as BlackoutAnnotation);
       setSelectedAnnotation(id);
+    } else if (activeTool === 'signature') {
+      const dataUrl = await getSignature();
+      if (dataUrl) {
+        addAnnotation({
+          id, pageIndex, x, y,
+          type: 'image',
+          dataUrl,
+          width: 20, height: 10,
+        } as ImageAnnotation);
+        setSelectedAnnotation(id);
+        setActiveTool('select');
+      } else {
+        alert("No saved signature found. Please use the Signature tool in the sidebar to create one first.");
+      }
+    } else if (activeTool === 'arrow') {
+      setIsDrawing(true);
+      setCurrentDrawId(id);
+      addAnnotation({
+        id, pageIndex, x, y,
+        type: 'arrow',
+        endX: x, endY: y,
+        color: '#4F46E5',
+        strokeWidth: 3
+      } as ArrowAnnotation);
+      setSelectedAnnotation(id);
     }
   };
 
   const handlePointerMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing || !currentDrawId || activeTool !== 'draw') return;
+    if (!isDrawing || !currentDrawId) return;
     
     const { x, y } = getPercentagePos(e);
     
-    const currentAnn = annotations.find(a => a.id === currentDrawId) as DrawAnnotation;
-    if (currentAnn) {
-      updateAnnotation(currentDrawId, {
-        points: [...currentAnn.points, { x, y }]
-      });
+    if (activeTool === 'draw') {
+      const currentAnn = annotations.find(a => a.id === currentDrawId) as DrawAnnotation;
+      if (currentAnn) {
+        updateAnnotation(currentDrawId, {
+          points: [...currentAnn.points, { x, y }]
+        });
+      }
+    } else if (activeTool === 'arrow') {
+      const currentAnn = annotations.find(a => a.id === currentDrawId) as ArrowAnnotation;
+      if (currentAnn) {
+        updateAnnotation(currentDrawId, {
+          endX: x, endY: y
+        });
+      }
     }
   };
 
@@ -110,12 +145,14 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
     setCurrentDrawId(null);
   };
 
-  const isDrawingTool = activeTool === 'draw' || activeTool === 'shape' || activeTool === 'blackout';
+  const isDrawingTool = activeTool === 'draw' || activeTool === 'shape' || activeTool === 'blackout' || activeTool === 'arrow' || activeTool === 'signature';
+  const isHighlightTool = activeTool === 'highlight';
+  const pointerEventsClass = (activeTool === 'highlight' || activeTool === 'select') ? 'pointer-events-none' : 'pointer-events-auto';
 
   return (
     <div 
       ref={layerRef}
-      className={`absolute inset-0 z-content ${isDrawingTool ? 'touch-none' : ''}`}
+      className={`absolute inset-0 z-content ${isDrawingTool ? 'touch-none' : ''} ${pointerEventsClass}`}
       onMouseDown={handlePointerDown}
       onMouseMove={handlePointerMove}
       onMouseUp={handlePointerUp}
@@ -182,6 +219,8 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     const startAnnX = annotation.x;
     const startAnnY = annotation.y;
     const initialPoints = annotation.type === 'draw' ? [...annotation.points] : [];
+    const initialEndX = annotation.type === 'arrow' ? (annotation as ArrowAnnotation).endX : 0;
+    const initialEndY = annotation.type === 'arrow' ? (annotation as ArrowAnnotation).endY : 0;
     const rect = parent.getBoundingClientRect();
 
     const onMove = (ev: any) => {
@@ -190,6 +229,11 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
       if (annotation.type === 'draw') {
         updateAnnotation(annotation.id, {
           points: initialPoints.map(p => ({ x: p.x + dx, y: p.y + dy }))
+        });
+      } else if (annotation.type === 'arrow') {
+        updateAnnotation(annotation.id, { 
+          x: startAnnX + dx, y: startAnnY + dy,
+          endX: initialEndX + dx, endY: initialEndY + dy
         });
       } else {
         updateAnnotation(annotation.id, { x: startAnnX + dx, y: startAnnY + dy });
@@ -252,14 +296,14 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
       if (handleId.includes('left')) {
         newX = startAnnX + dx;
         newWidth = startWidth - dx;
-      } else {
+      } else if (handleId.includes('right')) {
         newWidth = startWidth + dx;
       }
 
       if (handleId.includes('top')) {
         newY = startAnnY + dy;
         newHeight = startHeight - dy;
-      } else {
+      } else if (handleId.includes('bottom')) {
         newHeight = startHeight + dy;
       }
 
@@ -295,8 +339,12 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
 
     const handles = [
       { id: 'top-left', style: { top: 0, left: 0 }, cursor: 'nwse-resize' },
+      { id: 'top-center', style: { top: 0, left: '50%' }, cursor: 'ns-resize' },
       { id: 'top-right', style: { top: 0, left: '100%' }, cursor: 'nesw-resize' },
+      { id: 'left-center', style: { top: '50%', left: 0 }, cursor: 'ew-resize' },
+      { id: 'right-center', style: { top: '50%', left: '100%' }, cursor: 'ew-resize' },
       { id: 'bottom-left', style: { top: '100%', left: 0 }, cursor: 'nesw-resize' },
+      { id: 'bottom-center', style: { top: '100%', left: '50%' }, cursor: 'ns-resize' },
       { id: 'bottom-right', style: { top: '100%', left: '100%' }, cursor: 'nwse-resize' },
     ];
 
@@ -306,14 +354,13 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
           <div
             key={h.id}
             onPointerDown={(e) => handleResizeDown(e, h.id)}
-            className="absolute flex items-center justify-center pointer-events-auto"
+            className="absolute flex items-center justify-center pointer-events-auto z-content"
             style={{ 
               ...h.style, 
               width: '44px', 
               height: '44px',
               cursor: h.cursor,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10
+              transform: 'translate(-50%, -50%)'
             }}
             aria-label={`Resize ${h.id}`}
           >
@@ -462,6 +509,53 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     );
   }
 
+  if (annotation.type === 'arrow') {
+    const arr = annotation as ArrowAnnotation;
+    const minX = Math.min(arr.x, arr.endX);
+    const minY = Math.min(arr.y, arr.endY);
+    const maxX = Math.max(arr.x, arr.endX);
+    const maxY = Math.max(arr.y, arr.endY);
+    const width = Math.max(maxX - minX, 0.1);
+    const height = Math.max(maxY - minY, 0.1);
+
+    const isLeftToRight = arr.x <= arr.endX;
+    const isTopToBottom = arr.y <= arr.endY;
+
+    const x1 = isLeftToRight ? '0%' : '100%';
+    const y1 = isTopToBottom ? '0%' : '100%';
+    const x2 = isLeftToRight ? '100%' : '0%';
+    const y2 = isTopToBottom ? '100%' : '0%';
+
+    return (
+      <div
+        onPointerDown={handlePointerDown}
+        className={`absolute overflow-visible pointer-events-auto ${isSelectMode ? 'group cursor-move' : ''}`}
+        style={{
+          left: `${minX}%`,
+          top: `${minY}%`,
+          width: `${width}%`,
+          height: `${height}%`,
+          border: isSelected ? '2px solid #4F46E5' : '2px solid transparent',
+        }}
+      >
+        <svg className="w-full h-full overflow-visible pointer-events-none">
+          <defs>
+            <marker id={`arrowhead-${annotation.id}`} markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+              <polygon points="0 0, 7 3.5, 0 7" fill={arr.color} />
+            </marker>
+          </defs>
+          <line
+            x1={x1} y1={y1} x2={x2} y2={y2}
+            stroke={arr.color}
+            strokeWidth={arr.strokeWidth}
+            markerEnd={`url(#arrowhead-${annotation.id})`}
+          />
+        </svg>
+        {renderControls()}
+      </div>
+    );
+  }
+
   if (annotation.type === 'blackout') {
     return (
       <div
@@ -505,6 +599,34 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
         />
         {renderControls()}
         {renderResizeHandles()}
+      </div>
+    );
+  }
+
+  if (annotation.type === 'highlight') {
+    return (
+      <div className="absolute inset-0 pointer-events-none">
+        {annotation.rects.map((rect, idx) => (
+          <div
+            key={idx}
+            className={`absolute pointer-events-auto ${isSelectMode ? 'cursor-pointer' : ''}`}
+            onPointerDown={(e) => {
+              // only the first rect handles selection for simplicity or any rect
+              handlePointerDown(e);
+            }}
+            style={{
+              left: `${rect.x}%`,
+              top: `${rect.y}%`,
+              width: `${rect.width}%`,
+              height: `${rect.height}%`,
+              backgroundColor: annotation.color,
+              mixBlendMode: 'multiply',
+              outline: isSelected ? '2px solid #4F46E5' : 'none',
+            }}
+          >
+            {idx === 0 && renderControls()}
+          </div>
+        ))}
       </div>
     );
   }

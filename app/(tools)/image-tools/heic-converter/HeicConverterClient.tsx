@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback } from "react";
 import { loadHeic } from "@/src/format-utils";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { DropZone } from "@/components/ui/DropZone";
-import { PrivacyBadge } from "@/components/system/PrivacyBadge";
+
 import { formatError } from "@/src/lib/formatError";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { m, AnimatePresence } from "framer-motion";
 import {
   Download,
@@ -19,7 +20,6 @@ import {
   Copy,
   Layers,
   ArrowRight,
-  Eye,
   Maximize2,
 } from "lucide-react";
 
@@ -37,42 +37,7 @@ interface ConvertedFileItem {
   errorMessage: string | null;
 }
 
-/**
- * Dynamically ensures that the window.heic2any library is loaded.
- * If not present, loads it from standard CDN endpoints.
- */
-async function ensureHeic2Any(): Promise<void> {
-  if (typeof window === "undefined") return;
-  if ((window as any).heic2any) return;
 
-  return new Promise<void>((resolve, reject) => {
-    const existingScript = document.querySelector('script[src*="heic2any"]');
-    if (existingScript) {
-      const handleLoad = () => resolve();
-      const handleError = () => reject(new Error("Failed to load HEIC decoder module."));
-      existingScript.addEventListener("load", handleLoad, { once: true });
-      existingScript.addEventListener("error", handleError, { once: true });
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js";
-    script.onload = () => resolve();
-    script.onerror = () => {
-      const fallbackScript = document.createElement("script");
-      fallbackScript.src = "https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js";
-      fallbackScript.onload = () => resolve();
-      fallbackScript.onerror = () =>
-        reject(
-          new Error(
-            "Failed to load HEIC decoder from CDN. Please check your internet connection."
-          )
-        );
-      document.head.appendChild(fallbackScript);
-    };
-    document.head.appendChild(script);
-  });
-}
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 B";
@@ -178,7 +143,7 @@ export default function HeicConverterClient() {
 
       try {
         setStatusText("Loading HEIC decoder engine...");
-        await ensureHeic2Any();
+
 
         for (let i = 0; i < initialItems.length; i++) {
           const currentItem = initialItems[i]!;
@@ -338,258 +303,70 @@ export default function HeicConverterClient() {
   }, [items, revokeUrl, setIsProcessing]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
-      {/* Top Banner / Privacy */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-surface border border-border p-4 rounded-2xl">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-blue/10 text-blue rounded-xl font-bold">
-            <FileImage className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-bold text-text">HEIC Photo Converter</h2>
-            <p className="text-xs text-text-muted font-medium">
-              Directly converts iPhone & Apple photos to JPEG locally in your browser
-            </p>
-          </div>
-        </div>
-        <PrivacyBadge message="100% Offline & Private" />
-      </div>
-
-      {/* Main Upload / Conversion Area */}
-      {items.length === 0 ? (
-        <m.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-4"
-        >
-          <DropZone
-            onFilesSelected={processFiles}
-            accept=".heic,.heif,image/heic,image/heif"
-            multiple={true}
-            title="Drop HEIC or HEIF photos here"
-            description="or click to browse from iPhone, Mac, or PC (.heic, .heif)"
-            icon={<FileImage className="w-10 h-10 text-blue" />}
-          />
-
-          {/* Feature highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-            <div className="bg-surface/50 border border-border/60 p-3.5 rounded-xl text-center">
-              <Sparkles className="w-4 h-4 text-blue mx-auto mb-1.5" />
-              <div className="text-xs font-bold text-text">Zero Quality Loss</div>
-              <div className="text-[11px] text-text-muted">Configurable JPEG output up to 100% quality</div>
-            </div>
-            <div className="bg-surface/50 border border-border/60 p-3.5 rounded-xl text-center">
-              <Layers className="w-4 h-4 text-blue mx-auto mb-1.5" />
-              <div className="text-xs font-bold text-text">Batch Processing</div>
-              <div className="text-[11px] text-text-muted">Convert multiple iPhone photos at once</div>
-            </div>
-            <div className="bg-surface/50 border border-border/60 p-3.5 rounded-xl text-center">
-              <ArrowRight className="w-4 h-4 text-blue mx-auto mb-1.5" />
-              <div className="text-xs font-bold text-text">Instant Download</div>
-              <div className="text-[11px] text-text-muted">Generates standard .jpg files instantly</div>
-            </div>
-          </div>
-        </m.div>
-      ) : (
-        <div className="space-y-6">
-          {/* Controls Bar */}
-          <div className="bg-surface border border-border p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-4 flex-1 min-w-[240px]">
-              <Sliders className="w-4 h-4 text-blue shrink-0" />
-              <div className="flex-1 space-y-1">
-                <div className="flex justify-between text-xs font-bold text-text">
-                  <span>JPEG Quality</span>
-                  <span className="text-blue">{Math.round(quality * 100)}%</span>
+    <>
+      <ToolWorkspace
+        layout="split"
+        input={
+          items.length === 0 ? (
+            <div className="space-y-4">
+              <DropZone
+                onFilesSelected={processFiles}
+                accept=".heic,.heif,image/heic,image/heif"
+                multiple={true}
+                title="Drop HEIC or HEIF photos here"
+                description="or click to browse from iPhone, Mac, or PC (.heic, .heif)"
+                icon={<FileImage className="w-10 h-10 text-blue" />}
+              />
+              {/* Feature highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <div className="bg-bg border border-border/60 p-3.5 rounded-xl text-center">
+                  <Sparkles className="w-4 h-4 text-blue mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-text">Zero Quality Loss</div>
+                  <div className="text-[11px] text-text-muted">Configurable JPEG output up to 100% quality</div>
                 </div>
-                <input
-                  type="range"
-                  min="0.50"
-                  max="1.00"
-                  step="0.05"
-                  value={quality}
-                  onChange={(e) => handleQualityChange(parseFloat(e.target.value))}
-                  disabled={isProcessing}
-                  className="w-full h-2 bg-bg rounded-lg appearance-none cursor-pointer accent-blue disabled:opacity-50"
-                />
+                <div className="bg-bg border border-border/60 p-3.5 rounded-xl text-center">
+                  <Layers className="w-4 h-4 text-blue mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-text">Batch Processing</div>
+                  <div className="text-[11px] text-text-muted">Convert multiple iPhone photos at once</div>
+                </div>
+                <div className="bg-bg border border-border/60 p-3.5 rounded-xl text-center">
+                  <ArrowRight className="w-4 h-4 text-blue mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-text">Instant Download</div>
+                  <div className="text-[11px] text-text-muted">Generates standard .jpg files instantly</div>
+                </div>
               </div>
             </div>
-
-            <div className="flex items-center gap-2">
-              {items.length > 1 && (
-                <button
-                  onClick={handleDownloadAll}
-                  disabled={isProcessing}
-                  className="px-4 py-2 bg-blue text-white rounded-xl font-bold text-xs flex items-center gap-2 hover:bg-blue/90 transition-colors shadow-sm disabled:opacity-50"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  Download All ({items.filter((i) => i.status === "done").length})
-                </button>
-              )}
-
-              <button
-                onClick={handleReset}
-                className="px-4 py-2 bg-bg border border-border text-text hover:text-blue hover:border-blue/30 rounded-xl font-bold text-xs flex items-center gap-2 transition-colors"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                Change Photos
-              </button>
-            </div>
-          </div>
-
-          {/* Loading Indicator during processing */}
-          {isProcessing && (
-            <div className="bg-blue/5 border border-blue/20 p-4 rounded-2xl flex items-center gap-3 animate-pulse">
-              <Loader2 className="w-5 h-5 text-blue animate-spin shrink-0" />
-              <span className="text-xs font-bold text-blue">{statusText}</span>
-            </div>
-          )}
-
-          {/* Active Item Preview & Details */}
-          {activeItem && activeItem.status === "done" && activeItem.jpegUrl && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Image Preview Box */}
-              <div className="lg:col-span-2 bg-surface border border-border rounded-2xl p-4 flex flex-col items-center justify-center min-h-[340px] relative group overflow-hidden">
-                <img
-                  src={activeItem.jpegUrl}
-                  alt={activeItem.originalName}
-                  className="max-h-[460px] w-auto object-contain rounded-xl shadow-md transition-transform duration-200"
-                />
-
-                <button
-                  onClick={() => setIsFullscreen(true)}
-                  className="absolute top-4 right-4 p-2 bg-bg/80 backdrop-blur border border-border/50 text-text rounded-xl opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue hover:text-white"
-                  title="View Fullscreen"
-                >
-                  <Maximize2 className="w-4 h-4" />
-                </button>
-
-                <div className="absolute bottom-4 left-4 right-4 bg-bg/80 backdrop-blur border border-border/50 p-2.5 rounded-xl flex items-center justify-between text-xs text-text-muted font-medium">
-                  <div className="flex items-center gap-2 truncate">
-                    <span className="font-bold text-text truncate">
-                      {activeItem.originalName}
-                    </span>
-                  </div>
-                  {activeItem.dimensions && (
-                    <span className="shrink-0 bg-blue/10 text-blue font-bold px-2 py-0.5 rounded-md">
-                      {activeItem.dimensions.width} × {activeItem.dimensions.height} px
-                    </span>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-text">Uploaded Photos ({items.length})</span>
+                <div className="flex gap-2">
+                  {items.length > 1 && (
+                    <button
+                      onClick={handleDownloadAll}
+                      disabled={isProcessing}
+                      className="px-3 py-1.5 bg-blue text-white rounded-lg font-bold text-xs flex items-center gap-1.5 hover:bg-blue/90 transition-colors shadow-sm disabled:opacity-50"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Download All
+                    </button>
                   )}
-                </div>
-              </div>
-
-              {/* Conversion Summary & Action Panel */}
-              <div className="bg-surface border border-border p-6 rounded-2xl flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-text uppercase tracking-wider">
-                    Conversion Summary
-                  </h3>
-
-                  {/* Size Comparison Card */}
-                  <div className="bg-bg border border-border p-4 rounded-xl space-y-3">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-text-muted font-medium">Original HEIC</span>
-                      <span className="font-bold text-text">
-                        {formatBytes(activeItem.originalSize)}
-                      </span>
-                    </div>
-
-                    <div className="w-full bg-border h-px" />
-
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-text-muted font-medium">Converted JPEG</span>
-                      <span className="font-bold text-blue">
-                        {formatBytes(activeItem.jpegSize)}
-                      </span>
-                    </div>
-
-                    {activeItem.originalSize > 0 && activeItem.jpegSize > 0 && (
-                      <div className="pt-1 text-[11px] text-emerald-500 font-bold flex items-center justify-between">
-                        <span>Size Diff</span>
-                        <span>
-                          {activeItem.jpegSize < activeItem.originalSize
-                            ? `-${Math.round(
-                                ((activeItem.originalSize - activeItem.jpegSize) /
-                                  activeItem.originalSize) *
-                                  100
-                              )}% saved`
-                            : `+${Math.round(
-                                ((activeItem.jpegSize - activeItem.originalSize) /
-                                  activeItem.originalSize) *
-                                  100
-                              )}%`}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Details List */}
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-border/50 text-text-muted font-medium">
-                      <span>Format</span>
-                      <span className="text-text font-bold uppercase">JPEG (.jpg)</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-border/50 text-text-muted font-medium">
-                      <span>Compression Quality</span>
-                      <span className="text-text font-bold">
-                        {Math.round(quality * 100)}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between py-1 text-text-muted font-medium">
-                      <span>Output File</span>
-                      <span className="text-blue font-bold truncate max-w-[160px]">
-                        {getJpgFilename(activeItem.originalName)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Primary Action Buttons */}
-                <div className="space-y-2 pt-2">
                   <button
-                    onClick={() => handleDownload(activeItem)}
-                    className="w-full py-3 bg-blue hover:bg-blue/90 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-blue/20"
+                    onClick={handleReset}
+                    className="px-3 py-1.5 bg-bg border border-border text-text hover:text-blue hover:border-blue/30 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-colors"
                   >
-                    <Download className="w-4 h-4" />
-                    Download JPG Photo
-                  </button>
-
-                  <button
-                    onClick={() => handleCopyImage(activeItem)}
-                    className="w-full py-2.5 bg-bg hover:bg-surface border border-border text-text rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors"
-                  >
-                    {copiedId === activeItem.id ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-500" />
-                        <span className="text-emerald-500">Copied to Clipboard!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5 text-text-muted" />
-                        Copy Image
-                      </>
-                    )}
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Clear
                   </button>
                 </div>
               </div>
-            </div>
-          )}
 
-          {/* Batch Thumbnail Selector if multiple files */}
-          {items.length > 1 && (
-            <div className="bg-surface border border-border p-4 rounded-2xl space-y-3">
-              <div className="text-xs font-bold text-text flex items-center justify-between">
-                <span>All Uploaded Photos ({items.length})</span>
-                <span className="text-text-muted font-normal">
-                  Click photo to select & preview
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-thin">
+              <div className="flex flex-wrap gap-3 max-h-64 overflow-y-auto pr-2 scrollbar-thin">
                 {items.map((item, idx) => (
                   <button
                     key={item.id}
                     onClick={() => setSelectedIndex(idx)}
-                    className={`relative shrink-0 w-24 h-24 rounded-xl border-2 overflow-hidden transition-all text-left ${
+                    className={`relative shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 overflow-hidden transition-all text-left ${
                       selectedIndex === idx
                         ? "border-blue ring-2 ring-blue/20 shadow-md"
                         : "border-border hover:border-text-4 opacity-75 hover:opacity-100"
@@ -610,7 +387,6 @@ export default function HeicConverterClient() {
                         <AlertCircle className="w-5 h-5 text-error" />
                       </div>
                     )}
-
                     <div className="absolute bottom-0 inset-x-0 bg-bg/90 backdrop-blur p-1 text-[10px] font-bold text-text truncate">
                       {item.originalName}
                     </div>
@@ -618,24 +394,157 @@ export default function HeicConverterClient() {
                 ))}
               </div>
             </div>
-          )}
-        </div>
-      )}
-
-      {/* Global Error Banner */}
-      <AnimatePresence>
-        {globalError && (
-          <m.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="p-4 bg-error/10 border border-error/20 rounded-2xl flex items-center gap-3 text-xs font-bold text-error"
-          >
-            <AlertCircle className="w-5 h-5 shrink-0" />
-            <div className="flex-1">{globalError}</div>
-          </m.div>
-        )}
-      </AnimatePresence>
+          )
+        }
+        optionsPanel={
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 font-bold text-sm text-text">
+              <Sliders className="w-4 h-4 text-blue" />
+              JPEG Quality
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs font-bold text-text">
+                <span>Quality</span>
+                <span className="text-blue">{Math.round(quality * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0.50"
+                max="1.00"
+                step="0.05"
+                value={quality}
+                onChange={(e) => handleQualityChange(parseFloat(e.target.value))}
+                disabled={isProcessing && items.length > 0}
+                className="w-full h-2 bg-bg rounded-lg appearance-none cursor-pointer accent-blue disabled:opacity-50"
+              />
+            </div>
+          </div>
+        }
+        output={
+          items.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-text-muted min-h-[300px]">
+              <div className="text-center space-y-2">
+                <FileImage className="w-12 h-12 mx-auto opacity-20" />
+                <p className="text-sm">Converted photos will appear here</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col h-full space-y-6">
+              {isProcessing && (
+                <div className="bg-blue/5 border border-blue/20 p-4 rounded-xl flex items-center gap-3 animate-pulse">
+                  <Loader2 className="w-5 h-5 text-blue animate-spin shrink-0" />
+                  <span className="text-xs font-bold text-blue">{statusText}</span>
+                </div>
+              )}
+              {activeItem && activeItem.status === "done" && activeItem.jpegUrl && (
+                <>
+                  <div className="relative group overflow-hidden flex-1 min-h-[250px] flex flex-col items-center justify-center bg-bg rounded-xl border border-border p-2">
+                    <img
+                      src={activeItem.jpegUrl}
+                      alt={activeItem.originalName}
+                      className="max-h-[360px] w-auto object-contain rounded-xl shadow-sm transition-transform duration-200"
+                    />
+                    <button
+                      onClick={() => setIsFullscreen(true)}
+                      className="absolute top-4 right-4 p-2 bg-surface/80 backdrop-blur border border-border/50 text-text rounded-xl opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue hover:text-white"
+                      title="View Fullscreen"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                    <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur border border-border/50 p-2.5 rounded-xl flex items-center justify-between text-xs text-text-muted font-medium">
+                      <div className="flex items-center gap-2 truncate">
+                        <span className="font-bold text-text truncate">
+                          {activeItem.originalName}
+                        </span>
+                      </div>
+                      {activeItem.dimensions && (
+                        <span className="shrink-0 bg-blue/10 text-blue font-bold px-2 py-0.5 rounded-md">
+                          {activeItem.dimensions.width} × {activeItem.dimensions.height} px
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-4 mt-auto">
+                    <div className="bg-bg border border-border p-4 rounded-xl space-y-3">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-text-muted font-medium">Original HEIC</span>
+                        <span className="font-bold text-text">
+                          {formatBytes(activeItem.originalSize)}
+                        </span>
+                      </div>
+                      <div className="w-full bg-border h-px" />
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-text-muted font-medium">Converted JPEG</span>
+                        <span className="font-bold text-blue">
+                          {formatBytes(activeItem.jpegSize)}
+                        </span>
+                      </div>
+                      {activeItem.originalSize > 0 && activeItem.jpegSize > 0 && (
+                        <div className="pt-1 text-[11px] text-emerald-500 font-bold flex items-center justify-between">
+                          <span>Size Diff</span>
+                          <span>
+                            {activeItem.jpegSize < activeItem.originalSize
+                              ? `-${Math.round(
+                                  ((activeItem.originalSize - activeItem.jpegSize) /
+                                    activeItem.originalSize) *
+                                    100
+                                )}% saved`
+                              : `+${Math.round(
+                                  ((activeItem.jpegSize - activeItem.originalSize) /
+                                    activeItem.originalSize) *
+                                    100
+                                )}%`}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleDownload(activeItem)}
+                        className="flex-1 py-2.5 bg-blue hover:bg-blue/90 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-md shadow-blue/20"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download JPG
+                      </button>
+                      <button
+                        onClick={() => handleCopyImage(activeItem)}
+                        className="flex-1 py-2.5 bg-bg hover:bg-surface border border-border text-text rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                      >
+                        {copiedId === activeItem.id ? (
+                          <>
+                            <Check className="w-4 h-4 text-emerald-500" />
+                            <span className="text-emerald-500">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4 text-text-muted" />
+                            Copy Image
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          )
+        }
+        infoPanel={
+          <AnimatePresence>
+            {globalError && (
+              <m.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="p-4 bg-error/10 border border-error/20 rounded-2xl flex items-center gap-3 text-xs font-bold text-error"
+              >
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <div className="flex-1">{globalError}</div>
+              </m.div>
+            )}
+          </AnimatePresence>
+        }
+      />
 
       {/* Fullscreen Lightbox Modal */}
       {isFullscreen && activeItem && activeItem.jpegUrl && (
@@ -658,6 +567,6 @@ export default function HeicConverterClient() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

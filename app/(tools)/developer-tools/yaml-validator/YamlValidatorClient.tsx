@@ -3,8 +3,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { workerOrchestrator } from '@/src/engine/workers/WorkerOrchestrator';
-import { CopyButton } from '@/components/ui/CopyButton';
-import { AlertTriangle, CheckCircle } from 'lucide-react';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolInput } from '@/components/ui/ToolInput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
+import { Loader2 } from 'lucide-react';
 
 type Action = 'validate' | 'json_to_yaml' | 'yaml_to_json';
 
@@ -13,6 +15,7 @@ export default function YamlValidatorClient() {
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [mode, setMode] = useState<Action>('validate');
   const searchParams = useSearchParams();
 
   const handleProcess = useCallback(async (action: Action, currentInput = input) => {
@@ -52,6 +55,7 @@ export default function YamlValidatorClient() {
       try {
         const decoded = decodeURIComponent(initialInput);
         setInput(decoded);
+        setMode('json_to_yaml');
         handleProcess('json_to_yaml', decoded);
       } catch (e) {
         console.error("Failed to decode URL input:", e);
@@ -60,80 +64,66 @@ export default function YamlValidatorClient() {
   }, [searchParams, handleProcess]);
 
   return (
-    <div className="space-y-6">
-      {/* Action Buttons */}
-      <div className="flex flex-wrap items-center gap-4 bg-surface border border-border p-4 rounded-2xl">
-        <button
-          onClick={() => handleProcess('yaml_to_json')}
-          disabled={isLoading}
-          className="px-4 py-2 bg-blue text-white font-bold rounded-lg disabled:opacity-50"
-        >
-          YAML to JSON
-        </button>
-        <button
-          onClick={() => handleProcess('json_to_yaml')}
-          disabled={isLoading}
-          className="px-4 py-2 bg-blue text-white font-bold rounded-lg disabled:opacity-50"
-        >
-          JSON to YAML
-        </button>
-        <button
-          onClick={() => handleProcess('validate')}
-          disabled={isLoading}
-          className="px-4 py-2 bg-green-600 text-white font-bold rounded-lg disabled:opacity-50"
-        >
-          Validate YAML
-        </button>
-      </div>
-
-      {/* Input / Output Panels */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Input Panel */}
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-3">Input (YAML or JSON)</label>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Paste your YAML or JSON here..."
-            className="w-full h-96 p-4 bg-surface border border-border rounded-xl font-mono text-sm focus:border-blue outline-none transition-colors"
-          />
-        </div>
-
-        {/* Output Panel */}
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-3">Output / Result</label>
-          <div className="relative w-full h-96 bg-surface border border-border rounded-xl">
-            <textarea
-              value={output}
-              readOnly
-              placeholder="Result will appear here..."
-              className="w-full h-full p-4 bg-transparent rounded-xl font-mono text-sm outline-none resize-none"
-            />
-            {output && !error && (
-              <div className="absolute top-3 right-3">
-                <CopyButton text={output} />
-              </div>
+    <ToolWorkspace
+      tabs={{
+        activeId: mode,
+        onChange: (t) => {
+          setMode(t as Action);
+          setOutput('');
+          setError('');
+        },
+        options: [
+          { id: 'validate', label: 'Validate YAML' },
+          { id: 'yaml_to_json', label: 'YAML to JSON' },
+          { id: 'json_to_yaml', label: 'JSON to YAML' },
+        ],
+      }}
+      input={
+        <ToolInput
+          label="Input (YAML or JSON)"
+          value={input}
+          onChange={(v) => {
+            setInput(v);
+            if (error) setError('');
+          }}
+          placeholder="Paste your YAML or JSON here..."
+          rows={15}
+          mono
+        />
+      }
+      optionsPanel={
+        <div className="flex flex-col gap-4">
+          <button
+            onClick={() => handleProcess(mode)}
+            disabled={isLoading || !input.trim()}
+            className="w-full py-4 bg-blue text-white font-black uppercase tracking-widest rounded-2xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 shadow-lg shadow-blue/20 flex items-center justify-center gap-2"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              'Process'
             )}
-          </div>
+          </button>
         </div>
-      </div>
-
-      {/* Status Area */}
-      <div className="h-16">
-        {isLoading && <p className="text-blue">Processing...</p>}
-        {error && (
-          <div className="flex items-center gap-2 text-error bg-error/10 p-3 rounded-lg">
-            <AlertTriangle className="w-5 h-5" />
-            <p className="font-bold">{error}</p>
-          </div>
-        )}
-        {output && !error && (
-          <div className="flex items-center gap-2 text-success bg-success/10 p-3 rounded-lg">
-            <CheckCircle className="w-5 h-5" />
-            <p className="font-bold">Operation completed successfully.</p>
-          </div>
-        )}
-      </div>
-    </div>
+      }
+      output={
+        <ToolResultArea
+          label="Output / Result"
+          value={output}
+          error={error}
+          language={
+            mode === 'yaml_to_json' ? 'JSON' : mode === 'json_to_yaml' ? 'YAML' : undefined
+          }
+          onClear={() => {
+            setInput('');
+            setOutput('');
+            setError('');
+          }}
+        />
+      }
+    />
   );
 }

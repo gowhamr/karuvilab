@@ -2,6 +2,8 @@
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
 import { FileSearch, Filter, AlertTriangle, Info, CheckCircle2, Search, Loader2 } from "lucide-react";
 import { workerManager } from "@/src/workers/manager";
 import { useToast } from "@/components/ui/Toast";
@@ -99,91 +101,94 @@ export default function LogAnalyzerClient() {
   }, [parsedLogs]);
 
   return (
-    <div className="space-y-6 w-full mx-auto">
-      {/* Log Input */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-text flex items-center gap-2">
-            <FileSearch className="w-4 h-4 text-sky-400" />
-            Paste Server / Application Log Stream:
-          </label>
-          {isProcessing && (
-            <span className="text-xs text-primary flex items-center gap-1 font-medium animate-pulse">
-              <Loader2 className="w-3 h-3 animate-spin" />
-              {progressMsg}
-            </span>
-          )}
-        </div>
-        <textarea
-          id="log-raw-input"
-          rows={6}
-          value={logText}
-          onChange={(e) => setLogText(e.target.value)}
-          className="w-full p-4 rounded-xl bg-surface border border-border font-mono text-xs focus:outline-none focus:ring-1 focus:ring-primary"
-          placeholder="Paste millions of lines of logs here..."
-        />
-      </div>
-
-      {/* Summary Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3 rounded-xl bg-surface-2 border border-border text-center">
-          <span className="text-xs font-sans text-text-muted block">TOTAL LOGS</span>
-          <span className="text-lg font-bold font-mono text-text">{parsedLogs.length}</span>
-        </div>
-        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
-          <span className="text-xs font-sans text-emerald-400 block">INFO</span>
-          <span className="text-lg font-bold font-mono text-emerald-300">{metrics.INFO}</span>
-        </div>
-        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
-          <span className="text-xs font-sans text-amber-400 block">WARN</span>
-          <span className="text-lg font-bold font-mono text-amber-300">{metrics.WARN}</span>
-        </div>
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
-          <span className="text-xs font-sans text-red-400 block">ERROR / FATAL</span>
-          <span className="text-lg font-bold font-mono text-red-300">{metrics.ERROR + metrics.FATAL}</span>
-        </div>
-        <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 text-center">
-          <span className="text-xs font-sans text-sky-400 block">DEBUG</span>
-          <span className="text-lg font-bold font-mono text-sky-300">{metrics.DEBUG}</span>
-        </div>
-      </div>
-
-      {/* Filter Toolbar */}
-      <div className="p-4 rounded-xl bg-surface border border-border flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2 flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 text-text-muted shrink-0" />
-          <input
-            id="log-search-input"
-            type="text"
-            placeholder="Search log messages, IPs, JSON keys..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+    <ToolWorkspace
+      input={
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-semibold text-text flex items-center gap-2">
+              <FileSearch className="w-4 h-4 text-sky-400" />
+              Paste Server / Application Log Stream:
+            </label>
+            {isProcessing && (
+              <span className="text-xs text-primary flex items-center gap-1 font-medium animate-pulse">
+                <Loader2 className="w-3 h-3 animate-spin" />
+                {progressMsg}
+              </span>
+            )}
+          </div>
+          <ToolInput
+            id="log-raw-input"
+            rows={6}
+            value={logText}
+            onChange={setLogText}
+            mono
+            placeholder="Paste millions of lines of logs here..."
           />
         </div>
+      }
+      optionsPanel={
+        <div className="space-y-4">
+          {/* Summary Metrics */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="p-3 rounded-xl bg-surface-2 border border-border text-center">
+              <span className="text-xs font-sans text-text-muted block">TOTAL LOGS</span>
+              <span className="text-lg font-bold font-mono text-text">{parsedLogs.length}</span>
+            </div>
+            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+              <span className="text-xs font-sans text-emerald-400 block">INFO</span>
+              <span className="text-lg font-bold font-mono text-emerald-300">{metrics.INFO}</span>
+            </div>
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
+              <span className="text-xs font-sans text-amber-400 block">WARN</span>
+              <span className="text-lg font-bold font-mono text-amber-300">{metrics.WARN}</span>
+            </div>
+            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
+              <span className="text-xs font-sans text-red-400 block">ERROR / FATAL</span>
+              <span className="text-lg font-bold font-mono text-red-300">{metrics.ERROR + metrics.FATAL}</span>
+            </div>
+            <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 text-center">
+              <span className="text-xs font-sans text-sky-400 block">DEBUG</span>
+              <span className="text-lg font-bold font-mono text-sky-300">{metrics.DEBUG}</span>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-text-muted" />
-          <select
-            id="log-level-filter"
-            value={filterLevel}
-            onChange={(e) => setFilterLevel(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs"
-          >
-            <option value="ALL">All Levels</option>
-            <option value="ERROR">ERROR Only</option>
-            <option value="WARN">WARN Only</option>
-            <option value="INFO">INFO Only</option>
-            <option value="DEBUG">DEBUG Only</option>
-            <option value="FATAL">FATAL Only</option>
-          </select>
+          {/* Filter Toolbar */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+              <Search className="w-4 h-4 text-text-muted shrink-0" />
+              <input
+                id="log-search-input"
+                type="text"
+                placeholder="Search log messages, IPs, JSON keys..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </div>
 
-          <CopyButton text={filteredLogs.map((l) => l.raw).join("\\n")} />
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-text-muted" />
+              <select
+                id="log-level-filter"
+                value={filterLevel}
+                onChange={(e) => setFilterLevel(e.target.value)}
+                className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-xs"
+              >
+                <option value="ALL">All Levels</option>
+                <option value="ERROR">ERROR Only</option>
+                <option value="WARN">WARN Only</option>
+                <option value="INFO">INFO Only</option>
+                <option value="DEBUG">DEBUG Only</option>
+                <option value="FATAL">FATAL Only</option>
+              </select>
+
+              <CopyButton text={filteredLogs.map((l) => l.raw).join("\\n")} />
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Log Feed */}
-      <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+      }
+      output={
+        <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
         {filteredLogs.length === 0 && (
           <div className="text-center py-10 text-text-muted text-sm border border-dashed border-border rounded-xl">
             No logs matched your criteria.
@@ -269,7 +274,8 @@ export default function LogAnalyzerClient() {
             </div>
           );
         })}
-      </div>
-    </div>
+        </div>
+      }
+    />
   );
 }

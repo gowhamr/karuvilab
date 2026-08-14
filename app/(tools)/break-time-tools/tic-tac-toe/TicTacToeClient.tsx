@@ -5,6 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { RotateCcw, Trophy, Bot, Users, Sparkles } from "lucide-react";
 import { idbStorage } from "@/src/store/idb-storage";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -236,28 +237,8 @@ export default function TicTacToeClient() {
     return `Player ${current}'s turn`;
   }, [winner, current, mode, aiThinking]);
 
-  return (
-    <div className="max-w-lg mx-auto space-y-6">
-      {/* ── Mode Selector ── */}
-      <div className="flex gap-2 justify-center">
-        {([
-          { id: "pvp" as const, label: "2 Players", icon: <Users className="w-4 h-4" /> },
-          { id: "ai" as const, label: "vs AI", icon: <Bot className="w-4 h-4" /> },
-        ]).map(({ id, label, icon }) => (
-          <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            key={id}
-            onClick={() => switchMode(id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              mode === id
-                ? "bg-primary text-white"
-                : "bg-surface border border-border text-text-2 hover:border-primary/50"
-            }`}
-          >
-            {icon} {label}
-          </m.button>
-        ))}
-      </div>
-
+  const leftPanel = (
+    <div className="space-y-8">
       {/* ── AI Difficulty (only in AI mode) ── */}
       <AnimatePresence>
         {mode === "ai" && (
@@ -315,9 +296,32 @@ export default function TicTacToeClient() {
         })}
       </div>
 
+      {/* ── Actions ── */}
+      <div className="flex gap-3 justify-center pt-4 border-t border-border/50">
+        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+          onClick={resetGame}
+          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="Start a new game"
+        >
+          <RotateCcw className="w-4 h-4" aria-hidden="true" />
+          New Game
+        </m.button>
+        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+          onClick={resetAll}
+          className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-border text-text-2 rounded-xl font-bold hover:border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="Reset all scores"
+        >
+          Reset Scores
+        </m.button>
+      </div>
+    </div>
+  );
+
+  const boardPanel = (
+    <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-sm mx-auto">
       {/* ── Status ── */}
       <p
-        className="text-center text-lg font-bold text-text-2"
+        className="text-center text-lg font-bold text-text-2 h-7"
         role="status"
         aria-live="polite"
       >
@@ -333,7 +337,7 @@ export default function TicTacToeClient() {
       </p>
 
       {/* ── Board ── */}
-      <div className="relative">
+      <div className="relative w-full">
         <div
           className="grid grid-cols-3 gap-3"
           role="grid"
@@ -352,7 +356,7 @@ export default function TicTacToeClient() {
                 whileHover={!isDisabled ? { scale: 1.04, y: -2 } : {}}
                 whileTap={!isDisabled ? { scale: 0.96 } : {}}
                 className={`
-                  aspect-square rounded-2xl border-2 flex items-center justify-center text-5xl font-black transition-all
+                  aspect-square rounded-2xl border-2 flex items-center justify-center text-5xl sm:text-6xl font-black transition-all
                   ${isWinCell ? "border-primary bg-primary/20" : "border-border bg-surface"}
                   ${!isDisabled ? "hover:border-primary/50 hover:bg-primary/5 cursor-pointer" : ""}
                   ${cell ? "cursor-default" : ""}
@@ -412,25 +416,22 @@ export default function TicTacToeClient() {
           )}
         </AnimatePresence>
       </div>
-
-      {/* ── Actions ── */}
-      <div className="flex gap-3 justify-center">
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-          onClick={resetGame}
-          className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          aria-label="Start a new game"
-        >
-          <RotateCcw className="w-4 h-4" aria-hidden="true" />
-          New Game
-        </m.button>
-        <m.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-          onClick={resetAll}
-          className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-border text-text-2 rounded-xl font-bold hover:border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          aria-label="Reset all scores"
-        >
-          Reset Scores
-        </m.button>
-      </div>
     </div>
+  );
+
+  return (
+    <ToolWorkspace
+      layout="split"
+      tabs={{
+        options: [
+          { id: "pvp", label: "2 Players", icon: <Users className="w-4 h-4" /> },
+          { id: "ai", label: "vs AI", icon: <Bot className="w-4 h-4" /> },
+        ],
+        activeId: mode,
+        onChange: switchMode,
+      }}
+      input={leftPanel}
+      output={boardPanel}
+    />
   );
 }

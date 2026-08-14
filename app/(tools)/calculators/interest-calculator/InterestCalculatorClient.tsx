@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { SliderField } from "@/components/ui/SliderField";
 import { d, formatINR, formatPercent, syncStateToUrl, getInitialStateFromUrl } from "@/src/lib/calculator-utils";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
-
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 // STD-06: module-level constants — stable references, no new function created on every render
 const FMT_INR     = (v: number) => formatINR(v);
 const FMT_PERCENT = (v: number) => formatPercent(v);
@@ -16,7 +16,6 @@ const DEFAULT_STATE = {
   rate: 10,
   years: 10,
 };
-
 const toolId = "interest-calculator";
 
 export default function InterestCalculatorClient() {
@@ -71,63 +70,69 @@ Total Return (Cumulative): ${formatPercent(result.returnPct)}
 Generated via KaruviLab`, [principal, rate, years, result]);
 
   return (
-    <div className="space-y-8">
-      <div className="bg-surface border border-border p-6 rounded-2xl shadow-sm space-y-6">
-        <SliderField
-          label="Principal Amount"
-          id="si-principal"
-          min={1000}
-          max={10000000}
-          step={1000}
-          value={principal}
-          onChange={setPrincipal}
-          format={FMT_INR}
+    <ToolWorkspace
+      layout="split"
+      input={
+        <div className="space-y-6">
+          <SliderField
+            label="Principal Amount"
+            id="si-principal"
+            min={1000}
+            max={10000000}
+            step={1000}
+            value={principal}
+            onChange={setPrincipal}
+            format={FMT_INR}
+          />
+          <SliderField
+            label="Annual Interest Rate"
+            id="si-rate"
+            min={0.5}
+            max={50}
+            step={0.5}
+            value={rate}
+            onChange={setRate}
+            format={FMT_PERCENT}
+          />
+          <SliderField
+            label="Duration"
+            id="si-years"
+            min={1}
+            max={50}
+            step={1}
+            value={years}
+            onChange={setYears}
+            format={FMT_YEARS}
+          />
+        </div>
+      }
+      output={
+        <div className="flex flex-col space-y-4">
+          <MetricCard
+            label="Final Amount"
+            value={formatINR(result.finalAmount)}
+            accent
+          />
+          <MetricCard
+            label="Total Interest"
+            value={formatINR(result.interest)}
+          />
+          {/* BUG-04: renamed from "Total Return" — SI return equals rate*years, making it cumulative not annualised */}
+          <MetricCard
+            label="Total Return (Cumulative)"
+            value={formatPercent(result.returnPct)}
+          />
+        </div>
+      }
+      infoPanel={
+        <CalculatorActionBar
+          summary={summary}
+          toolId={toolId}
+          historyLabel={`${formatINR(principal)} for ${years}y @ ${rate}%`}
+          historyData={{ principal, rate, years, result }}
         />
-        <SliderField
-          label="Annual Interest Rate"
-          id="si-rate"
-          min={0.5}
-          max={50}
-          step={0.5}
-          value={rate}
-          onChange={setRate}
-          format={FMT_PERCENT}
-        />
-        <SliderField
-          label="Duration"
-          id="si-years"
-          min={1}
-          max={50}
-          step={1}
-          value={years}
-          onChange={setYears}
-          format={FMT_YEARS}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <MetricCard
-          label="Final Amount"
-          value={formatINR(result.finalAmount)}
-          accent
-        />
-        <MetricCard
-          label="Total Interest"
-          value={formatINR(result.interest)}
-        />
-        {/* BUG-04: renamed from "Total Return" — SI return equals rate*years, making it cumulative not annualised */}
-        <MetricCard
-          label="Total Return (Cumulative)"
-          value={formatPercent(result.returnPct)}
-        />
-      </div>
-
-      <CalculatorActionBar
-        summary={summary}
-        toolId={toolId}
-        historyLabel={`${formatINR(principal)} for ${years}y @ ${rate}%`}
-        historyData={{ principal, rate, years, result }}
-      />
-    </div>
+      }
+    />
   );
 }
+

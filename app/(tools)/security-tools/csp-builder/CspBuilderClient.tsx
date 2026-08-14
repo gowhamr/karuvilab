@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Shield, Copy, AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
-import { m, AnimatePresence } from 'framer-motion';
+import { Shield, AlertTriangle, CheckCircle2, Trash2 } from 'lucide-react';
+import { m } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
 import { useToast } from '@/components/ui/Toast';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 
 type CSPDirective = 
   | 'default-src' 
@@ -221,198 +222,184 @@ export default function CspBuilderClient() {
     'manifest-src', 'base-uri', 'form-action', 'frame-ancestors'
   ];
 
+  const exportValue = activeTab === 'header' ? `${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'}: ${cspString}` :
+    activeTab === 'meta' ? `<meta http-equiv="${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'}" content="${cspString}">` :
+    activeTab === 'nginx' ? `add_header ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}";` :
+    `Header set ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}"`;
+
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="flex bg-bg border border-border p-1.5 rounded-2xl overflow-x-auto no-scrollbar gap-1 shadow-sm">
-        {Object.entries(PRESETS).map(([name, directives]) => (
-          <button 
-            key={name}
-            onClick={() => setConfig({ directives: JSON.parse(JSON.stringify(directives)), reportOnly: false })} 
-            className="px-5 py-2.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:bg-surface transition-all whitespace-nowrap"
-          >
-            {name}
-          </button>
-        ))}
-      </div>
+    <ToolWorkspace
+      input={
+        <div className="space-y-6">
+          <div className="flex bg-bg border border-border p-1.5 rounded-2xl overflow-x-auto no-scrollbar gap-1 shadow-sm">
+            {Object.entries(PRESETS).map(([name, directives]) => (
+              <button 
+                key={name}
+                onClick={() => setConfig({ directives: JSON.parse(JSON.stringify(directives)), reportOnly: false })} 
+                className="px-5 py-2.5 rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:bg-surface transition-all whitespace-nowrap"
+              >
+                {name}
+              </button>
+            ))}
+          </div>
 
-      {/* Import Section */}
-      <div className="bg-surface border border-border rounded-4xl p-4 sm:p-6 shadow-sm space-y-4">
-        <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
-           Import & Analyze Existing Policy
-        </h3>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <input 
-            type="text"
-            value={importValue}
-            onChange={(e) => {
-              if (e.target.value.length > 5 * 1024 * 1024) {
-                toast("CSP string exceeds 5MB limit", "error");
-              } else {
-                setImportValue(e.target.value);
-              }
-            }}
-            placeholder="Paste your CSP header or meta tag here..."
-            className="flex-1 bg-bg border border-border rounded-xl px-4 py-3 text-xs font-mono text-text focus:border-blue outline-none shadow-inner"
-          />
-          <button 
-            onClick={handleImport}
-            className="px-8 py-3 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm shadow-md hover:shadow-lg active:scale-95 transition-all"
-          >
-            Analyze
-          </button>
-        </div>
-        {importError && <p className="text-xs text-red-500 font-bold px-1">{importError}</p>}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT COLUMN: Builder */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
-                <Shield className="w-3.5 h-3.5" /> Directives Configuration
-              </h3>
-              <div className="flex items-center gap-3">
-                <label className="flex items-center gap-2 cursor-pointer bg-bg border border-border px-3 py-1.5 rounded-lg shadow-sm hover:border-blue/30 transition-colors">
-                  <input type="checkbox" checked={config.reportOnly} onChange={e => setConfig({...config, reportOnly: e.target.checked})} className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500/20" />
-                  <span className="text-xs font-black uppercase tracking-wider text-text-3">Report-Only</span>
-                </label>
-              </div>
+          <div className="space-y-4">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
+               Import & Analyze Existing Policy
+            </h3>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input 
+                type="text"
+                value={importValue}
+                onChange={(e) => {
+                  if (e.target.value.length > 5 * 1024 * 1024) {
+                    toast("CSP string exceeds 5MB limit", "error");
+                  } else {
+                    setImportValue(e.target.value);
+                  }
+                }}
+                placeholder="Paste your CSP header or meta tag here..."
+                className="flex-1 bg-bg border border-border rounded-xl px-4 py-3 text-xs font-mono text-text focus:border-blue outline-none shadow-inner"
+              />
+              <button 
+                onClick={handleImport}
+                className="px-8 py-3 bg-blue text-white rounded-xl text-tiny font-bold uppercase tracking-widest-sm shadow-md hover:shadow-lg active:scale-95 transition-all"
+              >
+                Analyze
+              </button>
             </div>
-
-            <div className="space-y-4">
-              {Object.keys(config.directives).map(dir => {
-                const activeSources = config.directives[dir] || [];
-                return (
-                  <m.div 
-                    layout
-                    key={dir} 
-                    className="bg-bg border border-border rounded-3xl p-5 space-y-4 shadow-sm"
-                  >
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-black text-text uppercase tracking-widest">{dir}</h4>
-                      <button 
-                        onClick={() => removeDirective(dir)}
-                        className="p-1.5 text-text-muted hover:text-red-500 transition-colors"
-                        title="Remove directive"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                    
-                    {/* Selected Sources Badges */}
-                    <div className="flex flex-wrap gap-1.5 min-h-7">
-                      {activeSources.map(src => (
-                        <span key={src} className="flex items-center gap-1 pl-2.5 pr-1 py-1 bg-blue/5 border border-blue/10 text-blue rounded-lg text-xs font-mono font-bold group">
-                          {src}
-                          <button onClick={() => removeSource(dir, src)} className="p-0.5 opacity-0 group-hover:opacity-100 hover:bg-blue/10 rounded transition-all"><Trash2 className="w-2.5 h-2.5" /></button>
-                        </span>
-                      ))}
-                      {activeSources.length === 0 && <span className="text-xs text-text-muted italic py-1">No sources (fallback applies)</span>}
-                    </div>
-
-                    {/* Common Source Toggles */}
-                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-border/50">
-                      {COMMON_SOURCES.map(src => (
-                        <button
-                          key={src}
-                          onClick={() => toggleSource(dir, src)}
-                          className={cn(
-                            "px-2.5 py-1.5 rounded-lg text-tiny font-mono font-bold transition-all border",
-                            activeSources.includes(src) ? "bg-blue text-white border-blue shadow-md shadow-blue/20" : "bg-transparent text-text-muted border-transparent hover:bg-surface/50"
-                          )}
-                        >
-                          {src}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Custom Input */}
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="text" 
-                        value={customInputs[dir] || ''} 
-                        onChange={e => setCustomInputs({...customInputs, [dir]: e.target.value})}
-                        onKeyDown={e => e.key === 'Enter' && addCustomSource(dir)}
-                        placeholder="e.g. *.google.com"
-                        className="flex-1 bg-surface border border-border rounded-xl px-3 py-2 text-xs font-mono text-text focus:border-blue outline-none transition-colors"
-                      />
-                      <button onClick={() => addCustomSource(dir)} className="px-4 py-2 bg-blue text-white rounded-xl text-xs font-bold uppercase tracking-widest shrink-0 shadow-sm active:scale-95 transition-all">Add</button>
-                    </div>
-                  </m.div>
-                );
-              })}
-            </div>
-
-            {/* Add New Directive Dropdown */}
-            <div className="pt-4 border-t border-border/50">
-               <div className="flex items-center gap-3">
-                 <select 
-                   onChange={(e) => { if(e.target.value) addDirective(e.target.value); e.target.value = ''; }}
-                   className="flex-1 bg-bg border border-border rounded-xl px-4 py-3 text-xs font-bold text-text-2 focus:border-blue outline-none"
-                   value=""
-                 >
-                   <option value="" disabled>Add more directives...</option>
-                   {availableDirectives.filter(d => !config.directives[d]).map(d => (
-                     <option key={d} value={d}>{d}</option>
-                   ))}
-                 </select>
-               </div>
-            </div>
+            {importError && <p className="text-xs text-red-500 font-bold px-1">{importError}</p>}
           </div>
         </div>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue flex items-center gap-2">
+              <Shield className="w-3.5 h-3.5" /> Directives Configuration
+            </h3>
+            <div className="flex items-center gap-3">
+              <label className="flex items-center gap-2 cursor-pointer bg-bg border border-border px-3 py-1.5 rounded-lg shadow-sm hover:border-blue/30 transition-colors">
+                <input type="checkbox" checked={config.reportOnly} onChange={e => setConfig({...config, reportOnly: e.target.checked})} className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500/20" />
+                <span className="text-xs font-black uppercase tracking-wider text-text-3">Report-Only</span>
+              </label>
+            </div>
+          </div>
 
-        {/* RIGHT COLUMN: Output */}
-        <div className="lg:col-span-5 space-y-6 sticky top-24">
-          
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">Export Policy</h3>
-              <div className="flex items-center gap-2">
-                <div className={cn(
-                  "px-2 py-0.5 rounded-full text-tiny font-black uppercase",
-                  securityScore.score > 80 ? "bg-emerald-500/10 text-emerald-500" :
-                  securityScore.score > 50 ? "bg-amber-500/10 text-amber-500" : "bg-red-500/10 text-red-500"
-                )}>
-                  Score: {securityScore.score}
-                </div>
-                <CopyButton text={
-                  activeTab === 'header' ? `${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'}: ${cspString}` :
-                  activeTab === 'meta' ? `<meta http-equiv="${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'}" content="${cspString}">` :
-                  activeTab === 'nginx' ? `add_header ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}";` :
-                  `Header set ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}"`
-                } />
+          <div className="space-y-4">
+            {Object.keys(config.directives).map(dir => {
+              const activeSources = config.directives[dir] || [];
+              return (
+                <m.div 
+                  layout
+                  key={dir} 
+                  className="bg-bg border border-border rounded-3xl p-5 space-y-4 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-black text-text uppercase tracking-widest">{dir}</h4>
+                    <button 
+                      onClick={() => removeDirective(dir)}
+                      className="p-1.5 text-text-muted hover:text-red-500 transition-colors"
+                      title="Remove directive"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  
+                  {/* Selected Sources Badges */}
+                  <div className="flex flex-wrap gap-1.5 min-h-7">
+                    {activeSources.map(src => (
+                      <span key={src} className="flex items-center gap-1 pl-2.5 pr-1 py-1 bg-blue/5 border border-blue/10 text-blue rounded-lg text-xs font-mono font-bold group">
+                        {src}
+                        <button onClick={() => removeSource(dir, src)} className="p-0.5 opacity-0 group-hover:opacity-100 hover:bg-blue/10 rounded transition-all"><Trash2 className="w-2.5 h-2.5" /></button>
+                      </span>
+                    ))}
+                    {activeSources.length === 0 && <span className="text-xs text-text-muted italic py-1">No sources (fallback applies)</span>}
+                  </div>
+
+                  {/* Common Source Toggles */}
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-border/50">
+                    {COMMON_SOURCES.map(src => (
+                      <button
+                        key={src}
+                        onClick={() => toggleSource(dir, src)}
+                        className={cn(
+                          "px-2.5 py-1.5 rounded-lg text-tiny font-mono font-bold transition-all border",
+                          activeSources.includes(src) ? "bg-blue text-white border-blue shadow-md shadow-blue/20" : "bg-transparent text-text-muted border-transparent hover:bg-surface/50"
+                        )}
+                      >
+                        {src}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Custom Input */}
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="text" 
+                      value={customInputs[dir] || ''} 
+                      onChange={e => setCustomInputs({...customInputs, [dir]: e.target.value})}
+                      onKeyDown={e => e.key === 'Enter' && addCustomSource(dir)}
+                      placeholder="e.g. *.google.com"
+                      className="flex-1 bg-surface border border-border rounded-xl px-3 py-2 text-xs font-mono text-text focus:border-blue outline-none transition-colors"
+                    />
+                    <button onClick={() => addCustomSource(dir)} className="px-4 py-2 bg-blue text-white rounded-xl text-xs font-bold uppercase tracking-widest shrink-0 shadow-sm active:scale-95 transition-all">Add</button>
+                  </div>
+                </m.div>
+              );
+            })}
+          </div>
+
+          {/* Add New Directive Dropdown */}
+          <div className="pt-4 border-t border-border/50">
+             <div className="flex items-center gap-3">
+               <select 
+                 onChange={(e) => { if(e.target.value) addDirective(e.target.value); e.target.value = ''; }}
+                 className="flex-1 bg-bg border border-border rounded-xl px-4 py-3 text-xs font-bold text-text-2 focus:border-blue outline-none"
+                 value=""
+               >
+                 <option value="" disabled>Add more directives...</option>
+                 {availableDirectives.filter(d => !config.directives[d]).map(d => (
+                   <option key={d} value={d}>{d}</option>
+                 ))}
+               </select>
+             </div>
+          </div>
+        </div>
+      }
+      output={
+        <div className="space-y-8 flex flex-col h-full">
+          <div className="flex flex-col space-y-4 flex-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex bg-bg border border-border p-1 rounded-xl shadow-inner overflow-x-auto w-full sm:w-auto">
+                {(['header', 'meta', 'nginx', 'apache'] as const).map(t => (
+                  <button
+                    key={t}
+                    onClick={() => setActiveTab(t)}
+                    className={cn("flex-1 px-4 py-2 rounded-lg text-tiny font-black uppercase tracking-widest transition-all", activeTab === t ? "bg-surface text-text shadow-sm" : "text-text-muted hover:text-text")}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              <div className={cn(
+                "px-3 py-1 rounded-full text-xs font-black uppercase",
+                securityScore.score > 80 ? "bg-emerald-500/10 text-emerald-500" :
+                securityScore.score > 50 ? "bg-amber-500/10 text-amber-500" : "bg-red-500/10 text-red-500"
+              )}>
+                Score: {securityScore.score}
               </div>
             </div>
             
-            <div className="flex bg-bg border border-border p-1 rounded-xl shadow-inner">
-              {(['header', 'meta', 'nginx', 'apache'] as const).map(t => (
-                <button
-                  key={t}
-                  onClick={() => setActiveTab(t)}
-                  className={cn("flex-1 py-2 rounded-lg text-tiny font-black uppercase tracking-widest transition-all", activeTab === t ? "bg-surface text-text shadow-sm" : "text-text-muted")}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-
-            <div className="relative group">
-              <textarea
-                readOnly
-                value={
-                  activeTab === 'header' ? `${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'}: ${cspString}` :
-                  activeTab === 'meta' ? `<meta http-equiv="${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'}" content="${cspString}">` :
-                  activeTab === 'nginx' ? `add_header ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}";` :
-                  `Header set ${config.reportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'} "${cspString}"`
-                }
-                className="w-full h-56 bg-bg border border-border rounded-2xl p-5 font-mono text-xs text-text-3 outline-none resize-none leading-relaxed break-all shadow-inner"
-              />
-            </div>
+            <ToolResultArea
+              label="Generated Policy"
+              value={exportValue}
+              className="flex-1"
+              contentClassName="min-h-[200px]"
+            />
           </div>
 
-          <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-4">
+          <div className="space-y-4 pt-6 border-t border-border">
             <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted flex items-center gap-2">
                Security Analysis
             </h3>
@@ -453,10 +440,9 @@ export default function CspBuilderClient() {
               </div>
             )}
           </div>
-          
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }
 

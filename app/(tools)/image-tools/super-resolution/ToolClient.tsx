@@ -11,6 +11,7 @@ import { preprocessSuperResImage } from "@/src/features/super-resolution/preproc
 import { createUpscaledCanvas } from "@/src/features/super-resolution/postprocess";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { useToast } from "@/components/ui/Toast";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { ModelBackend } from "@/src/ai/types";
 import { 
   Sparkles, Download, RefreshCw, Layers, ShieldCheck, 
@@ -208,225 +209,235 @@ export default function ToolClient() {
         </div>
       </div>
 
-      {/* Backend Selector & Controls */}
-      <BackendSelector
-        selectedBackend={selectedBackend}
-        onSelect={(b) => setSelectedBackend(b)}
-      />
-
-      {/* Primary Interaction Area */}
-      {!file ? (
-        <DropZone
-          onFilesSelected={handleFilesSelected}
-          accept="image/*"
-          title="Drop image here to upscale 2x / 4x"
-          subtitle="Supports PNG, JPEG, WebP. Enhanced 100% in your browser."
-          icon={<ZoomIn className="w-8 h-8 text-blue" />}
-        />
-      ) : (
-        <div className="space-y-6">
-          {/* Error Banner */}
-          {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 shrink-0" />
-                <span className="text-xs font-semibold">{error}</span>
-              </div>
-              <div className="flex items-center gap-2 self-end sm:self-auto">
-                <button
-                  onClick={processSuperResolution}
-                  className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
-                >
-                  Retry
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="px-3 py-1 bg-surface border border-border text-text-muted text-xs font-bold rounded-lg hover:bg-surface-elevated transition-colors"
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Scale Selector */}
-          <div className="flex items-center justify-between p-4 bg-surface border border-border rounded-2xl">
-            <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Select Upscale Factor</span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setScale(2)}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
-                  scale === 2 ? "bg-blue text-white shadow-sm" : "bg-surface-elevated text-text-muted hover:text-text"
-                )}
-              >
-                2x Scale
-              </button>
-              <button
-                onClick={() => setScale(4)}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
-                  scale === 4 ? "bg-blue text-white shadow-sm" : "bg-surface-elevated text-text-muted hover:text-text"
-                )}
-              >
-                4x Scale (Clarity Boost)
-              </button>
-            </div>
-          </div>
-
-          {/* Inference Progress Component */}
-          {isProcessing && progress && (
-            <InferenceProgress
-              stage={progress.stage}
-              percent={progress.percent}
-              onCancel={() => abortControllerRef.current?.abort()}
+      <ToolWorkspace
+        layout="stacked"
+        optionsPanel={
+          <div className="space-y-6">
+            <BackendSelector
+              selectedBackend={selectedBackend}
+              onSelect={(b) => setSelectedBackend(b)}
             />
-          )}
-
-          {/* Before / After Comparison Slider Container */}
-          {resultUrl && originalUrl && !isProcessing && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Before / After Comparison</span>
-
+            {file && (
+              <div className="flex items-center justify-between p-4 bg-surface border border-border rounded-2xl">
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Select Upscale Factor</span>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={handleReset}
-                    className="px-3 py-1.5 rounded-xl border border-border hover:bg-surface-elevated text-xs font-semibold text-text-muted hover:text-text transition-colors flex items-center gap-1.5"
+                    onClick={() => setScale(2)}
+                    className={cn(
+                      "px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
+                      scale === 2 ? "bg-blue text-white shadow-sm" : "bg-surface-elevated text-text-muted hover:text-text"
+                    )}
                   >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Reset</span>
+                    2x Scale
                   </button>
                   <button
-                    onClick={handleDownload}
-                    className="px-4 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                    onClick={() => setScale(4)}
+                    className={cn(
+                      "px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
+                      scale === 4 ? "bg-blue text-white shadow-sm" : "bg-surface-elevated text-text-muted hover:text-text"
+                    )}
                   >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Download {scale}x PNG</span>
+                    4x Scale (Clarity Boost)
                   </button>
                 </div>
               </div>
-
-              {/* Interactive Split View */}
-              <div className="relative w-full h-[400px] sm:h-[500px] rounded-3xl border border-border overflow-hidden select-none bg-surface">
-                {/* Result Upscaled Image */}
-                <img
-                  src={resultUrl}
-                  alt="Upscaled Result"
-                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-                />
-
-                {/* Original Image (Clipped by slider) */}
-                <img
-                  src={originalUrl}
-                  alt="Original Image"
-                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-                  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-                />
-                
-                <div 
-                  className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
-                  style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
-                >
-                  Original
+            )}
+          </div>
+        }
+        input={
+          !file ? (
+            <DropZone
+              onFilesSelected={handleFilesSelected}
+              accept="image/*"
+              title="Drop image here to upscale 2x / 4x"
+              subtitle="Supports PNG, JPEG, WebP. Enhanced 100% in your browser."
+              icon={<ZoomIn className="w-8 h-8 text-blue" />}
+            />
+          ) : (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-2">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-xl bg-surface-elevated overflow-hidden border border-border/50 shrink-0">
+                  <img src={originalUrl || ''} alt="Original Thumbnail" className="w-full h-full object-cover" />
                 </div>
-
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">
-                  {scale}x AI Enhanced
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-text truncate max-w-[200px] sm:max-w-[300px]">{file.name}</span>
+                  <span className="text-xs text-text-muted">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
                 </div>
-
-                {/* Range Slider Control */}
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={sliderPosition}
-                  onChange={(e) => setSliderPosition(Number(e.target.value))}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-above"
-                  aria-label="Before and after split image comparison slider"
-                />
               </div>
+              <button
+                onClick={handleReset}
+                className="px-4 py-2 bg-surface border border-border hover:bg-surface-elevated text-text-muted hover:text-text text-sm font-bold rounded-xl transition-colors flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Change Image
+              </button>
             </div>
-          )}
-        </div>
-      )}
-
-      {/* Educational Learning Section (ELS) */}
-      <div className="p-6 bg-surface border border-border rounded-3xl space-y-6">
-        <div className="flex items-center gap-2 text-xs font-bold text-text-4 uppercase tracking-widest">
-          <BookOpen className="w-4 h-4 text-blue" />
-          <span>Educational Learning Section (ELS)</span>
-        </div>
-
-        {/* ELS Tabs */}
-        <div className="flex flex-wrap gap-2 border-b border-border/60 pb-3">
-          {[
-            { id: 'architecture', label: '1. Real-ESRGAN Architecture' },
-            { id: 'tiling', label: '2. Tiling & Memory Management' },
-            { id: 'clarity', label: '3. Feature Sharpening' },
-            { id: 'webgpu', label: '4. WebGPU Shaders' }
-          ].map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveElsTab(tab.id as any)}
-              className={cn(
-                "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer",
-                activeElsTab === tab.id
-                  ? "bg-blue text-white shadow-sm"
-                  : "text-text-muted hover:bg-surface-elevated hover:text-text"
+          )
+        }
+        output={
+          file ? (
+            <div className="space-y-6">
+              {/* Error Banner */}
+              {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <span className="text-xs font-semibold">{error}</span>
+                  </div>
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                    <button
+                      onClick={processSuperResolution}
+                      className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                </div>
               )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
 
-        {/* Tab Content */}
-        <div className="text-xs text-text-3 leading-relaxed space-y-3 font-mono">
-          {activeElsTab === 'architecture' && (
-            <div className="space-y-2">
-              <h4 className="font-bold text-text text-sm">Real-ESRGAN Deep Learning Architecture</h4>
-              <p>
-                Real-ESRGAN (Enhanced Super-Resolution Generative Adversarial Networks) uses residual-in-residual dense blocks (RRDB) to hallucinate realistic high-frequency detail from low-resolution images.
-              </p>
+              {/* Inference Progress Component */}
+              {isProcessing && progress && (
+                <InferenceProgress
+                  stage={progress.stage}
+                  percent={progress.percent}
+                  onCancel={() => abortControllerRef.current?.abort()}
+                />
+              )}
+
+              {/* Before / After Comparison Slider Container */}
+              {resultUrl && originalUrl && !isProcessing && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Before / After Comparison</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleDownload}
+                        className="px-4 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Download {scale}x PNG</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Interactive Split View */}
+                  <div className="relative w-full h-[400px] sm:h-[500px] rounded-3xl border border-border overflow-hidden select-none bg-surface">
+                    <img
+                      src={resultUrl}
+                      alt="Upscaled Result"
+                      className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                    />
+                    <img
+                      src={originalUrl}
+                      alt="Original Image"
+                      className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                      style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                    />
+                    
+                    <div 
+                      className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
+                      style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
+                    >
+                      Original
+                    </div>
+
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">
+                      {scale}x AI Enhanced
+                    </div>
+
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={sliderPosition}
+                      onChange={(e) => setSliderPosition(Number(e.target.value))}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-above"
+                      aria-label="Before and after split image comparison slider"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-
-          {activeElsTab === 'tiling' && (
-            <div className="space-y-2">
-              <h4 className="font-bold text-text text-sm">Tile Decomposition & OOM Protection</h4>
-              <p>
-                Large high-resolution images require significant GPU memory.
-                To prevent out-of-memory (OOM) crashes on mobile devices, the image is decomposed into overlapping $256 \times 256$ tiles, upscaled independently, and blended smoothly.
-              </p>
+          ) : null
+        }
+        infoPanel={
+          <div className="p-6 bg-surface border border-border rounded-3xl space-y-6">
+            <div className="flex items-center gap-2 text-xs font-bold text-text-4 uppercase tracking-widest">
+              <BookOpen className="w-4 h-4 text-blue" />
+              <span>Educational Learning Section (ELS)</span>
             </div>
-          )}
 
-          {activeElsTab === 'clarity' && (
-            <div className="space-y-2">
-              <h4 className="font-bold text-text text-sm">Sub-Pixel Convolution & Sharpening</h4>
-              <p>
-                Instead of simple bicubic interpolation (which causes blurriness), sub-pixel convolution rearrangement increases spatial resolution by expanding feature channels into spatial pixel dimensions.
-              </p>
+            {/* ELS Tabs */}
+            <div className="flex flex-wrap gap-2 border-b border-border/60 pb-3">
+              {[
+                { id: 'architecture', label: '1. Real-ESRGAN Architecture' },
+                { id: 'tiling', label: '2. Tiling & Memory Management' },
+                { id: 'clarity', label: '3. Feature Sharpening' },
+                { id: 'webgpu', label: '4. WebGPU Shaders' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveElsTab(tab.id as any)}
+                  className={cn(
+                    "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer",
+                    activeElsTab === tab.id
+                      ? "bg-blue text-white shadow-sm"
+                      : "text-text-muted hover:bg-surface-elevated hover:text-text"
+                  )}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
-          )}
 
-          {activeElsTab === 'webgpu' && (
-            <div className="space-y-2">
-              <h4 className="font-bold text-text text-sm">WebGPU Shader Acceleration</h4>
-              <p>
-                Inference runs off the main thread inside a Web Worker managed by <code>WorkerOrchestrator</code>.
-                WebGPU passes matrix multiplications directly to the physical GPU hardware, achieving up to $5\times$ speedups over standard CPU execution.
-              </p>
+            {/* Tab Content */}
+            <div className="text-xs text-text-3 leading-relaxed space-y-3 font-mono">
+              {activeElsTab === 'architecture' && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-text text-sm">Real-ESRGAN Deep Learning Architecture</h4>
+                  <p>
+                    Real-ESRGAN (Enhanced Super-Resolution Generative Adversarial Networks) uses residual-in-residual dense blocks (RRDB) to hallucinate realistic high-frequency detail from low-resolution images.
+                  </p>
+                </div>
+              )}
+
+              {activeElsTab === 'tiling' && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-text text-sm">Tile Decomposition & OOM Protection</h4>
+                  <p>
+                    Large high-resolution images require significant GPU memory.
+                    To prevent out-of-memory (OOM) crashes on mobile devices, the image is decomposed into overlapping $256 \times 256$ tiles, upscaled independently, and blended smoothly.
+                  </p>
+                </div>
+              )}
+
+              {activeElsTab === 'clarity' && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-text text-sm">Sub-Pixel Convolution & Sharpening</h4>
+                  <p>
+                    Instead of simple bicubic interpolation (which causes blurriness), sub-pixel convolution rearrangement increases spatial resolution by expanding feature channels into spatial pixel dimensions.
+                  </p>
+                </div>
+              )}
+
+              {activeElsTab === 'webgpu' && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-text text-sm">WebGPU Shader Acceleration</h4>
+                  <p>
+                    Inference runs off the main thread inside a Web Worker managed by <code>WorkerOrchestrator</code>.
+                    WebGPU passes matrix multiplications directly to the physical GPU hardware, achieving up to $5\times$ speedups over standard CPU execution.
+                  </p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="flex items-center gap-2 text-tiny font-mono text-text-4 pt-2 border-t border-border/50">
-          <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-          <span>100% Client-Side • ONNX Runtime Web • Zero Server Transmission</span>
-        </div>
-      </div>
+            <div className="flex items-center gap-2 text-tiny font-mono text-text-4 pt-2 border-t border-border/50">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span>100% Client-Side • ONNX Runtime Web • Zero Server Transmission</span>
+            </div>
+          </div>
+        }
+      />
 
       {/* Model Manager Dialog */}
       <ModelManagerDialog

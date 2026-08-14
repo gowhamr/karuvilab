@@ -11,7 +11,7 @@ interface TextPanelProps {
 export function TextPanel({ charBreakdown, bytes }: TextPanelProps) {
   return (
     <div className="space-y-6">
-      <div className="bg-surface border border-border p-6 rounded-4xl shadow-sm space-y-6">
+      <div className="w-full space-y-6">
         <h3 className="text-xs font-black text-text-3 uppercase tracking-widest flex items-center gap-1.5 border-b border-border/50 pb-2">
           <TextCursorInput size={14} className="text-blue" />
           Raw Multi-Byte Breakdown

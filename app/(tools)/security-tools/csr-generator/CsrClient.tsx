@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { CopyButton } from "@/components/ui/CopyButton";
-import { workerManager } from "@/src/workers/manager";
-import { FileText, Key, Download, RefreshCw, AlertCircle } from "lucide-react";
+import { RefreshCw, AlertCircle } from "lucide-react";
 import { blobManager } from "@/src/lib/blob-manager";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { ToolResultArea } from "@/components/ui/ToolResultArea";
 
 function concat(...arrays: Uint8Array[]): Uint8Array {
   const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
@@ -164,70 +165,52 @@ export default function CsrClient() {
     blobManager.download(blob, filename);
   };
 
-  return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Subject Form */}
-      <div className="p-5 rounded-xl bg-surface-2 border border-border space-y-4">
-        <h3 className="font-bold text-base text-text">Certificate Subject Details</h3>
+  const inputPanel = (
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <h3 className="font-bold text-base text-text-2">Certificate Subject Details</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="csr-cn-input" className="text-xs font-semibold text-text-muted block mb-1">Common Name (CN) *</label>
-            <input
-              id="csr-cn-input"
-              type="text"
-              placeholder="e.g. example.com or *.mydomain.com"
-              value={commonName}
-              onChange={(e) => setCommonName(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-            />
-          </div>
+          <ToolInput
+            id="csr-cn-input"
+            label="Common Name (CN) *"
+            placeholder="e.g. example.com or *.mydomain.com"
+            value={commonName}
+            onChange={setCommonName}
+          />
 
-          <div>
-            <label htmlFor="csr-org-input" className="text-xs font-semibold text-text-muted block mb-1">Organization (O)</label>
-            <input
-              id="csr-org-input"
-              type="text"
-              placeholder="e.g. Acme Corp"
-              value={organization}
-              onChange={(e) => setOrganization(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-            />
-          </div>
+          <ToolInput
+            id="csr-org-input"
+            label="Organization (O)"
+            placeholder="e.g. Acme Corp"
+            value={organization}
+            onChange={setOrganization}
+          />
 
-          <div>
-            <label htmlFor="csr-ou-input" className="text-xs font-semibold text-text-muted block mb-1">Organizational Unit (OU)</label>
-            <input
-              id="csr-ou-input"
-              type="text"
-              placeholder="e.g. Security / IT"
-              value={unit}
-              onChange={(e) => setUnit(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-            />
-          </div>
+          <ToolInput
+            id="csr-ou-input"
+            label="Organizational Unit (OU)"
+            placeholder="e.g. Security / IT"
+            value={unit}
+            onChange={setUnit}
+          />
 
-          <div>
-            <label htmlFor="csr-c-input" className="text-xs font-semibold text-text-muted block mb-1">Country Code (C)</label>
-            <input
-              id="csr-c-input"
-              type="text"
-              maxLength={2}
-              placeholder="e.g. US, IN, GB"
-              value={country}
-              onChange={(e) => setCountry(e.target.value.toUpperCase())}
-              className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
-            />
-          </div>
+          <ToolInput
+            id="csr-c-input"
+            label="Country Code (C)"
+            placeholder="e.g. US, IN, GB"
+            value={country}
+            onChange={(val) => setCountry(val.substring(0, 2).toUpperCase())}
+          />
         </div>
 
         <div>
-          <label htmlFor="csr-keysize-select" className="text-xs font-semibold text-text-muted block mb-1">RSA Key Length</label>
+          <label htmlFor="csr-keysize-select" className="text-sm font-bold text-text-2 block mb-2">RSA Key Length</label>
           <select
             id="csr-keysize-select"
             value={keySize}
             onChange={(e) => setKeySize(Number(e.target.value) as any)}
-            className="w-full sm:w-64 px-3 py-2 rounded-lg bg-surface border border-border text-sm font-medium"
+            className="w-full sm:w-64 px-4 py-3 bg-bg border border-divider rounded-input outline-none transition-all text-text-primary focus:ring-4 focus:ring-inset focus:ring-primary/10 focus:border-primary"
           >
             <option value={2048}>2048-bit RSA (Standard)</option>
             <option value={4096}>4096-bit RSA (High Security)</option>
@@ -246,56 +229,41 @@ export default function CsrClient() {
       </button>
 
       {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+        <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-sm font-medium flex items-center gap-2">
           <AlertCircle className="w-5 h-5" />
           {error}
         </div>
       )}
+    </div>
+  );
 
-      {/* Output */}
+  const outputPanel = (csrPem || privateKeyPem) ? (
+    <div className="space-y-6 flex flex-col h-full">
       {csrPem && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-text flex items-center gap-1.5">
-                <FileText className="w-4 h-4 text-sky-400" />
-                Certificate Signing Request (CSR)
-              </label>
-              <div className="flex gap-2">
-                <CopyButton text={csrPem} />
-                <button
-                  id="csr-download-csr-btn"
-                  onClick={() => handleDownload(csrPem, `${commonName.replace(/\*/g, 'wildcard')}.csr`)}
-                  className="p-1.5 rounded-lg bg-surface border border-border hover:bg-surface-2"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <textarea readOnly rows={10} value={csrPem} className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs text-sky-300" />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-text flex items-center gap-1.5">
-                <Key className="w-4 h-4 text-amber-400" />
-                Matching Private Key
-              </label>
-              <div className="flex gap-2">
-                <CopyButton text={privateKeyPem} />
-                <button
-                  id="csr-download-key-btn"
-                  onClick={() => handleDownload(privateKeyPem, `${commonName.replace(/\*/g, 'wildcard')}.key`)}
-                  className="p-1.5 rounded-lg bg-surface border border-border hover:bg-surface-2 text-amber-400"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <textarea readOnly rows={10} value={privateKeyPem} className="w-full p-3 rounded-xl bg-surface border border-border font-mono text-xs text-amber-300" />
-          </div>
-        </div>
+        <ToolResultArea
+          label="Certificate Signing Request (CSR)"
+          value={csrPem}
+          onDownload={() => handleDownload(csrPem, `${commonName.replace(/\*/g, 'wildcard')}.csr`)}
+          language="PEM"
+          className="flex-1"
+        />
+      )}
+      {privateKeyPem && (
+        <ToolResultArea
+          label="Matching Private Key"
+          value={privateKeyPem}
+          onDownload={() => handleDownload(privateKeyPem, `${commonName.replace(/\*/g, 'wildcard')}.key`)}
+          language="PEM"
+          className="flex-1"
+        />
       )}
     </div>
+  ) : null;
+
+  return (
+    <ToolWorkspace
+      input={inputPanel}
+      output={outputPanel}
+    />
   );
 }

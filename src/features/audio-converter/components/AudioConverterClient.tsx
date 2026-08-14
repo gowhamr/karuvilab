@@ -3,15 +3,14 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { MediaDropZone } from "@/components/ui/MediaDropZone";
 import { MediaPreviewPlayer } from "@/components/ui/MediaPreviewPlayer";
-import { MediaStatusBadge } from "@/components/system/MediaStatusBadge";
 import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
-import { MetricCard } from "@/components/ui/MetricCard";
 import { useObjectUrlManager } from "@/src/lib/hooks";
 import { workerManager } from "@/src/workers/manager";
 import { Music, Download, Settings, Loader2 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { logger } from "@/src/lib/logger";
 import { useEffect, useRef } from "react";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 type Format = "mp3" | "wav";
 
@@ -144,112 +143,145 @@ export default function AudioConverterClient() {
           description="Convert audio between WAV and MP3 locally"
         />
       ) : (
-        <m.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-8"
-        >
-          <div className="bg-surface border border-border rounded-4xl p-8 shadow-sm space-y-8">
-            <div className="flex flex-col md:flex-row gap-8">
-              <div className="flex-1 space-y-6">
+        <ToolWorkspace
+          layout="split"
+          input={
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-blue">
                   <Music className="w-5 h-5" />
                   <h3 className="font-black text-sm uppercase tracking-widest">Source Audio</h3>
                 </div>
-                {audioUrl && <MediaPreviewPlayer type="audio" url={audioUrl} className="bg-bg border-none" />}
+                <button
+                  onClick={() => setFile(null)}
+                  className="text-xs font-bold uppercase tracking-widest text-text-4 hover:text-text transition-colors"
+                >
+                  Change File
+                </button>
+              </div>
+              {audioUrl && <MediaPreviewPlayer type="audio" url={audioUrl} className="bg-bg border-none" />}
+            </div>
+          }
+          optionsPanel={
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 text-blue">
+                <Settings className="w-5 h-5" />
+                <h3 className="font-black text-sm uppercase tracking-widest">Target Format</h3>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                {(["mp3", "wav"] as Format[]).map(f => (
+                  <button
+                    key={f}
+                    onClick={() => setTargetFormat(f)}
+                    className={`py-4 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${
+                      targetFormat === f 
+                        ? "bg-blue text-white shadow-lg shadow-blue/20" 
+                        : "bg-bg border border-border text-text-4 hover:border-blue/30"
+                    }`}
+                  >
+                    {f}
+                  </button>
+                ))}
               </div>
 
-              <div className="w-full md:w-80 space-y-6">
-                <div className="flex items-center gap-3 text-blue">
-                  <Settings className="w-5 h-5" />
-                  <h3 className="font-black text-sm uppercase tracking-widest">Target Format</h3>
+              <button
+                onClick={handleConvert}
+                disabled={status === "processing"}
+                className="w-full py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+              >
+                {status === "processing" ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Converting {Math.round(progress)}%
+                  </>
+                ) : (
+                  <>
+                    <Download size={18} />
+                    Convert to {targetFormat.toUpperCase()}
+                  </>
+                )}
+              </button>
+
+              {status === "processing" && (
+                <div className="w-full bg-surface-2 rounded-full h-1.5 overflow-hidden mt-2">
+                  <div 
+                    className="bg-blue h-1.5 rounded-full transition-transform duration-300 origin-left" 
+                    style={{ transform: `scaleX(${progress / 100})` }} 
+                  />
                 </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  {(["mp3", "wav"] as Format[]).map(f => (
-                    <button
-                      key={f}
-                      onClick={() => setTargetFormat(f)}
-                      className={`py-4 rounded-2xl text-tiny font-bold uppercase tracking-widest-sm transition-all ${
-                        targetFormat === f 
-                          ? "bg-blue text-white shadow-lg shadow-blue/20" 
-                          : "bg-bg border border-border text-text-4 hover:border-blue/30"
-                      }`}
+              )}
+            </div>
+          }
+          output={
+            <div className="h-full flex flex-col space-y-6">
+              <div className="flex items-center gap-3 text-blue">
+                <Download className="w-5 h-5" />
+                <h3 className="font-black text-sm uppercase tracking-widest">Result</h3>
+              </div>
+
+              <div className="flex-1 flex flex-col relative">
+                <AnimatePresence mode="wait">
+                  {error && (
+                    <m.div 
+                      key="error"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
                     >
-                      {f}
-                    </button>
-                  ))}
-                </div>
+                      <MediaErrorBanner
+                        title={error.title}
+                        description={error.description}
+                        errorCode={error.code}
+                        retryAction={handleConvert}
+                        changeFileAction={() => setFile(null)}
+                      />
+                    </m.div>
+                  )}
+
+                  {result && !error && (
+                    <m.div
+                      key="result"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="p-8 bg-success/5 border border-success/20 rounded-4xl flex flex-col items-center justify-center gap-6 h-full min-h-[200px]"
+                    >
+                      <div className="w-16 h-16 bg-success/10 rounded-2xl flex items-center justify-center text-success text-xl font-black mb-2">
+                        {targetFormat.toUpperCase()}
+                      </div>
+                      <div className="text-center space-y-2">
+                        <h3 className="font-black text-lg uppercase tracking-widest text-text">Conversion Ready</h3>
+                        <p className="text-sm font-bold text-text-4 uppercase">
+                          {result.name} • {(result.size / 1024).toFixed(0)} KB
+                        </p>
+                      </div>
+                      <a
+                        href={result.url}
+                        download={result.name}
+                        className="w-full px-10 py-4 bg-success text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-success/20 hover:opacity-90 active:scale-95 transition-all text-center mt-2"
+                      >
+                        Download Result
+                      </a>
+                    </m.div>
+                  )}
+
+                  {!result && !error && (
+                    <m.div 
+                      key="empty"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex-1 h-full min-h-[200px] border-2 border-dashed border-border rounded-3xl flex items-center justify-center text-text-4 font-medium italic"
+                    >
+                      Converted file will appear here
+                    </m.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
-
-            <button
-              onClick={handleConvert}
-              disabled={status === "processing"}
-              className="w-full py-4 bg-blue text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-            >
-              {status === "processing" ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Converting {Math.round(progress)}%
-                </>
-              ) : (
-                <>
-                  <Download size={18} />
-                  Convert to {targetFormat.toUpperCase()}
-                </>
-              )}
-            </button>
-
-            {status === "processing" && (
-              <div className="w-full bg-surface-2 rounded-full h-1.5 overflow-hidden mt-2">
-                <div 
-                  className="bg-blue h-1.5 rounded-full transition-transform duration-300 origin-left" 
-                  style={{ transform: `scaleX(${progress / 100})` }} 
-                />
-              </div>
-            )}
-          </div>
-
-          <AnimatePresence>
-            {error && (
-              <MediaErrorBanner
-                title={error.title}
-                description={error.description}
-                errorCode={error.code}
-                retryAction={handleConvert}
-                changeFileAction={() => setFile(null)}
-              />
-            )}
-
-            {result && (
-              <m.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-8 bg-success/5 border border-success/20 rounded-4xl flex flex-col md:flex-row items-center justify-between gap-6"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-success/10 rounded-2xl flex items-center justify-center text-success text-sm font-black">
-                    {targetFormat.toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className="font-black text-sm uppercase tracking-widest text-text">Conversion Ready</h3>
-                    <p className="text-xs font-bold text-text-4 uppercase">
-                      {result.name} • {(result.size / 1024).toFixed(0)} KB
-                    </p>
-                  </div>
-                </div>
-                <a
-                  href={result.url}
-                  download={result.name}
-                  className="w-full md:w-auto px-10 py-4 bg-success text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-success/20 hover:opacity-90 active:scale-95 transition-all text-center"
-                >
-                  Download Result
-                </a>
-              </m.div>
-            )}
-          </AnimatePresence>
-        </m.div>
+          }
+        />
       )}
     </div>
   );

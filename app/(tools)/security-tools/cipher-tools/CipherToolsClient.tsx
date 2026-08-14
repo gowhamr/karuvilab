@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Lock, ArrowLeftRight, Play, Square, Info, ShieldAlert, Sparkles } from 'lucide-react';
+import { ArrowLeftRight, Play, Square, Info } from 'lucide-react';
 import { m, AnimatePresence } from 'framer-motion';
 import { cn } from '@/src/lib/utils';
-import { CopyButton } from '@/components/ui/CopyButton';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { ToolWorkspace } from '@/components/ui/ToolWorkspace';
+import { ToolInput } from '@/components/ui/ToolInput';
+import { ToolResultArea } from '@/components/ui/ToolResultArea';
 import { useCiphers, CipherType } from './useCiphers';
 
 const CIPHER_METADATA: Record<CipherType, { name: string; type: string; security: string; desc: string; history: string }> = {
@@ -151,77 +152,93 @@ export default function CipherToolsClient() {
   const activeMeta = CIPHER_METADATA[activeCipher];
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      <div className="flex bg-surface border border-border p-2 rounded-2xl overflow-x-auto no-scrollbar snap-x">
-        {(['caesar', 'rot13', 'rot47', 'atbash', 'vigenere', 'xor', 'morse'] as CipherType[]).map(c => (
-          <button key={c} onClick={() => setActiveCipher(c)}
-            className={cn("flex-shrink-0 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all snap-start outline-none",
-              activeCipher === c ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text hover:bg-bg")}>
-            {c}
-          </button>
-        ))}
-      </div>
-
-      <div className="bg-surface border border-border rounded-4xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-          <SegmentedControl options={[{ id: 'encode', label: 'Encode' }, { id: 'decode', label: 'Decode' }]}
-            activeId={isEncode ? 'encode' : 'decode'} onChange={(id) => setIsEncode(id === 'encode')} />
-          
-          <div className="w-full md:w-auto">
-            <AnimatePresence mode="popLayout">
-              {activeCipher === 'caesar' && (
-                <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-4 bg-bg border border-border px-6 py-3 rounded-2xl w-full md:w-80 shadow-premium">
-                  <label htmlFor="caesar-shift" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 w-20 shrink-0 text-micro">Shift: {caesarShift}</label>
-                  <input id="caesar-shift" type="range" min={1} max={25} value={caesarShift} onChange={e => setCaesarShift(Number(e.target.value))} className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-blue outline-none" />
-                </m.div>
-              )}
-              {activeCipher === 'vigenere' && (
-                <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-3 bg-bg border border-border px-4 py-2 rounded-2xl w-full md:w-80 shadow-premium">
-                  <label htmlFor="vigenere-key" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 shrink-0 text-micro">Key:</label>
-                  <input id="vigenere-key" type="text" value={vigenereKey} onChange={e => setVigenereKey(e.target.value.toUpperCase())} className="w-full bg-surface border border-border rounded-xl px-3 py-1.5 font-mono text-xs text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="KEYWORD" />
-                </m.div>
-              )}
-              {activeCipher === 'xor' && (
-                <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-3 bg-bg border border-border px-4 py-2 rounded-2xl w-full md:w-80 shadow-premium">
-                  <label htmlFor="xor-key" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3 shrink-0 text-micro">XOR Key:</label>
-                  <input id="xor-key" type="text" value={xorKey} onChange={e => setXorKey(e.target.value)} className="w-full bg-surface border border-border rounded-xl px-3 py-1.5 font-mono text-xs text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="Secret Key" />
-                </m.div>
-              )}
-              {activeCipher === 'morse' && isEncode && (
-                <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex items-center gap-4 bg-bg border border-border px-5 py-2.5 rounded-2xl shadow-premium">
-                  <button onClick={playMorse} disabled={!output} className={cn("flex items-center gap-2 px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all", isPlaying ? "bg-error text-white" : "bg-blue text-white active:scale-95 disabled:opacity-50")} aria-label="Square">
-                    {isPlaying ? <Square className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-                    <span>{isPlaying ? 'Stop' : 'Play'}</span>
-                  </button>
-                  <div className="flex items-center gap-2.5">
-                    <div className={cn("w-4 h-4 rounded-full transition-all duration-75", blinkState === 'off' && "bg-border/60 shadow-none", blinkState === 'dot' && "bg-yellow-400 shadow-lg scale-110", blinkState === 'dash' && "bg-yellow-400 shadow-xl scale-125 w-7 h-4 rounded-md")} />
-                    <span className="text-micro font-black uppercase tracking-widest text-text-muted w-12">{blinkState === 'off' ? 'Idle' : blinkState.toUpperCase()}</span>
-                  </div>
-                </m.div>
-              )}
-            </AnimatePresence>
+    <ToolWorkspace
+      tabs={{
+        options: [
+          { id: 'encode', label: 'Encode' },
+          { id: 'decode', label: 'Decode' }
+        ],
+        activeId: isEncode ? 'encode' : 'decode',
+        onChange: (id) => setIsEncode(id === 'encode')
+      }}
+      input={
+        <div className="space-y-2">
+          <div className="flex justify-between items-end px-1 mb-1">
+            <label className="text-sm font-bold text-text-2">{isEncode ? 'Plaintext' : 'Ciphertext'}</label>
+            <button onClick={() => setInput('')} className="text-tiny font-bold uppercase tracking-widest-sm text-error hover:underline">Clear</button>
           </div>
+          <ToolInput
+            value={input}
+            onChange={setInput}
+            placeholder="Enter text..."
+            rows={8}
+            mono
+          />
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-blue">{isEncode ? 'Plaintext' : 'Ciphertext'}</h3>
-              <button onClick={() => setInput('')} className="text-tiny font-bold uppercase tracking-widest-sm text-error hover:underline">Clear</button>
+      }
+      optionsPanel={
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex bg-bg border border-border p-1.5 rounded-2xl overflow-x-auto no-scrollbar max-w-full">
+              {(['caesar', 'rot13', 'rot47', 'atbash', 'vigenere', 'xor', 'morse'] as CipherType[]).map(c => (
+                <button key={c} onClick={() => setActiveCipher(c)}
+                  className={cn("flex-shrink-0 px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest transition-all outline-none",
+                    activeCipher === c ? "bg-blue text-white shadow-md shadow-blue/20" : "text-text-muted hover:text-text hover:bg-surface/50")}>
+                  {c}
+                </button>
+              ))}
             </div>
-            <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder="Enter text..." className="w-full h-64 bg-bg border border-border rounded-3xl p-4 sm:p-6 font-mono text-sm text-text focus:ring-4 focus:ring-blue/10 outline-none transition-all resize-none" />
+            
+            <button onClick={swap} className="shrink-0 flex items-center gap-2 px-4 py-2 bg-surface border border-border hover:bg-bg hover:text-blue transition-all rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-2 shadow-sm">
+              <ArrowLeftRight className="w-4 h-4" />
+              Swap
+            </button>
           </div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-content hidden lg:block">
-            <button onClick={swap} className="w-10 h-10 bg-blue text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 shadow-md shadow-blue/10 transition-all border border-border" aria-label="Arrow Left Right"><ArrowLeftRight className="w-4 h-4" /></button>
-          </div>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between min-h-5"><h3 className="text-tiny font-bold uppercase tracking-widest-sm-lg text-text-muted">{isEncode ? 'Ciphertext' : 'Plaintext'}</h3><CopyButton text={output} /></div>
-            <textarea readOnly value={output} placeholder="Output..." className="w-full h-64 bg-mat-base border border-mat-border rounded-3xl p-4 sm:p-6 font-mono text-sm text-text-2 outline-none resize-none" />
-          </div>
+          
+          <AnimatePresence mode="popLayout">
+            {activeCipher === 'caesar' && (
+              <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex flex-col gap-2">
+                <label htmlFor="caesar-shift" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Shift: {caesarShift}</label>
+                <input id="caesar-shift" type="range" min={1} max={25} value={caesarShift} onChange={e => setCaesarShift(Number(e.target.value))} className="w-full h-2 bg-border rounded-full appearance-none cursor-pointer accent-blue outline-none" />
+              </m.div>
+            )}
+            {activeCipher === 'vigenere' && (
+              <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex flex-col gap-2">
+                <label htmlFor="vigenere-key" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Key</label>
+                <input id="vigenere-key" type="text" value={vigenereKey} onChange={e => setVigenereKey(e.target.value.toUpperCase())} className="w-full bg-bg border border-border rounded-xl px-4 py-2 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="KEYWORD" />
+              </m.div>
+            )}
+            {activeCipher === 'xor' && (
+              <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex flex-col gap-2">
+                <label htmlFor="xor-key" className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">XOR Key</label>
+                <input id="xor-key" type="text" value={xorKey} onChange={e => setXorKey(e.target.value)} className="w-full bg-bg border border-border rounded-xl px-4 py-2 font-mono text-sm text-text focus:ring-2 focus:ring-blue/20 outline-none" placeholder="Secret Key" />
+              </m.div>
+            )}
+            {activeCipher === 'morse' && isEncode && (
+              <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex items-center gap-4">
+                <button onClick={playMorse} disabled={!output} className={cn("flex items-center gap-2 px-4 py-2 rounded-xl text-tiny font-bold uppercase tracking-widest-sm transition-all", isPlaying ? "bg-error text-white" : "bg-blue text-white active:scale-95 disabled:opacity-50")} aria-label="Square">
+                  {isPlaying ? <Square className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+                  <span>{isPlaying ? 'Stop' : 'Play'}</span>
+                </button>
+                <div className="flex items-center gap-2.5">
+                  <div className={cn("w-4 h-4 rounded-full transition-all duration-75", blinkState === 'off' && "bg-border/60 shadow-none", blinkState === 'dot' && "bg-yellow-400 shadow-lg scale-110", blinkState === 'dash' && "bg-yellow-400 shadow-xl scale-125 w-7 h-4 rounded-md")} />
+                  <span className="text-micro font-black uppercase tracking-widest text-text-muted w-12">{blinkState === 'off' ? 'Idle' : blinkState.toUpperCase()}</span>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-border/60">
-          <div className="md:col-span-2 bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4 overflow-hidden">
+      }
+      output={
+        <ToolResultArea
+          label={isEncode ? 'Ciphertext' : 'Plaintext'}
+          value={output}
+          contentClassName="min-h-[250px]"
+        />
+      }
+      infoPanel={
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+          <div className="md:col-span-2 bg-surface border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4 overflow-hidden shadow-sm">
             <h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Frequency Analysis</h4>
             <div className="w-full overflow-x-auto no-scrollbar pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
               <div className="flex items-end justify-between gap-1 md:gap-1.5 h-32 pt-2 border-b border-border min-w-[480px]">
@@ -242,7 +259,7 @@ export default function CipherToolsClient() {
               </div>
             </div>
           </div>
-          <div className="bg-bg border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4">
+          <div className="bg-surface border border-border rounded-2xl p-4 sm:p-5 md:p-6 space-y-4 shadow-sm">
             <div className="flex items-center gap-2 text-blue"><Info className="w-4 h-4" /><h4 className="text-tiny font-bold uppercase tracking-widest-sm text-text">Insight</h4></div>
             <div className="space-y-3 text-xs leading-relaxed text-text-2 font-medium">
               <div><p className="text-tiny font-black uppercase tracking-widest text-text-muted mb-0.5">Algorithm</p><p className="font-bold text-text">{activeMeta.name}</p></div>
@@ -251,7 +268,7 @@ export default function CipherToolsClient() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }

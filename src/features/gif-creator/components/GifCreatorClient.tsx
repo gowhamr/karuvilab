@@ -9,6 +9,7 @@ import { m, AnimatePresence, Reorder } from "framer-motion";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { MediaErrorBanner } from "@/components/system/MediaErrorBanner";
 import { logger } from "@/src/lib/logger";
+import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 
 interface Frame {
   id: string;
@@ -142,8 +143,10 @@ export default function GifCreatorClient() {
   };
 
   return (
-    <div className="space-y-8">
-        {frames.length === 0 ? (
+    <ToolWorkspace
+      layout="stacked"
+      input={
+        frames.length === 0 ? (
           <DropZone
             accept="image/*"
             multiple={true}
@@ -153,13 +156,8 @@ export default function GifCreatorClient() {
             icon={<ImageIcon className="w-10 h-10" />}
           />
         ) : (
-          <m.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="space-y-8"
-          >
-            {/* Header Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface border border-border p-6 rounded-4xl shadow-sm">
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-blue/10 rounded-2xl flex items-center justify-center text-blue">
                     <Images />
@@ -170,21 +168,7 @@ export default function GifCreatorClient() {
                   </div>
                </div>
 
-               <div className="flex items-center gap-3 w-full sm:w-auto justify-between">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-bg border border-border rounded-xl">
-                    <Settings size={14} className="text-text-4" />
-                    <label htmlFor={delayId} className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Delay:</label>
-                    <input 
-                      type="number" 
-                      min="10"
-                      max="5000"
-                      value={delay} 
-                      onChange={(e) => setDelay(Math.max(10, parseInt(e.target.value) || 100))}
-                      className="w-16 bg-transparent border-none p-0 focus:ring-0 text-xs font-black tabular-nums"
-                    />
-                    <span className="text-xs font-bold text-text-4">ms</span>
-                  </div>
-                  
+               <div className="flex items-center gap-3">
                   <button 
                     onClick={() => document.getElementById('frame-upload')?.click()}
                     className="p-3 bg-bg border border-border rounded-xl hover:border-blue hover:text-blue transition-all active:scale-95 shadow-sm"
@@ -203,8 +187,7 @@ export default function GifCreatorClient() {
                </div>
             </div>
 
-            {/* Frame Reordering */}
-            <div className="bg-bg/50 border border-border rounded-4xl p-6">
+            <div className="bg-bg/50 border border-border rounded-2xl p-4">
               <Reorder.Group 
                 axis="x" 
                 values={frames} 
@@ -235,14 +218,41 @@ export default function GifCreatorClient() {
                 </AnimatePresence>
               </Reorder.Group>
             </div>
+          </div>
+        )
+      }
+      optionsPanel={
+        frames.length > 0 ? (
+          <div className="flex flex-col space-y-6">
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="font-bold text-sm text-text-2">Settings</h3>
+              <div className="flex items-center gap-2 px-4 py-2 bg-bg border border-border rounded-xl">
+                <Settings size={14} className="text-text-4" />
+                <label htmlFor={delayId} className="text-tiny font-bold uppercase tracking-widest-sm text-text-3">Delay:</label>
+                <input 
+                  id={delayId}
+                  type="number" 
+                  min="10"
+                  max="5000"
+                  value={delay} 
+                  onChange={(e) => setDelay(Math.max(10, parseInt(e.target.value) || 100))}
+                  className="w-16 bg-transparent border-none p-0 focus:ring-0 text-xs font-black tabular-nums"
+                />
+                <span className="text-xs font-bold text-text-4">ms</span>
+              </div>
+            </div>
 
-            {/* Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                <MetricCard label="Frames" value={frames.length.toString()} icon={Images} />
                <MetricCard label="Frame Delay" value={`${delay}ms`} icon={Settings} />
                <MetricCard label="Duration" value={`${((frames.length * delay) / 1000).toFixed(1)}s`} icon={Play} />
             </div>
-
+          </div>
+        ) : undefined
+      }
+      output={
+        frames.length > 0 ? (
+          <div className="space-y-6">
             <button
               onClick={handleCreate}
               disabled={status === "processing" || frames.length < 2}
@@ -307,8 +317,9 @@ export default function GifCreatorClient() {
                 </m.div>
               )}
             </AnimatePresence>
-          </m.div>
-        )}
-      </div>
+          </div>
+        ) : undefined
+      }
+    />
   );
 }
