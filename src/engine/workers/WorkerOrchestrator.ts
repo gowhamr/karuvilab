@@ -3,14 +3,21 @@ import { WorkerAPI, ProgressCallback } from "../../workers/types";
 
 type PoolType = 'compute' | 'media' | 'heavy' | 'ai' | 'crypto';
 
-// Pool-to-worker-file routing map (P0-1: each pool spawns its domain-specific worker)
-const POOL_WORKER_URLS: Record<PoolType, () => URL> = {
-  compute: () => new URL('../../workers/karuvi.worker.ts', import.meta.url),
-  media:   () => new URL('../../workers/karuvi.worker.ts', import.meta.url),
-  heavy:   () => new URL('../../workers/karuvi.worker.ts', import.meta.url),
-  ai:      () => new URL('../../workers/ai.worker.ts', import.meta.url),
-  crypto:  () => new URL('../../workers/crypto.worker.ts', import.meta.url),
-};
+// Static worker instantiation factory required for Webpack 5 WorkerPlugin AST parsing
+function createWorkerForPool(poolType: PoolType): Worker {
+  switch (poolType) {
+    case 'ai':
+      return new Worker(new URL('../../workers/ai.worker.ts', import.meta.url), { type: 'module' });
+    case 'crypto':
+      return new Worker(new URL('../../workers/crypto.worker.ts', import.meta.url), { type: 'module' });
+    case 'compute':
+    case 'media':
+    case 'heavy':
+    default:
+      return new Worker(new URL('../../workers/karuvi.worker.ts', import.meta.url), { type: 'module' });
+  }
+}
+
 
 interface QueuedTask {
   method: keyof WorkerAPI;
@@ -65,6 +72,8 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   convertNumeral: 'compute',
   detectNumeralFormat: 'compute',
   checkGrammar: 'compute',
+  parseLogs: 'compute',
+  parseMarkdown: 'compute',
 
   // Crypto Pool → crypto.worker.ts (P0-3: real implementations instead of stubs)
   aesEncrypt: 'crypto',
@@ -224,9 +233,8 @@ class WorkerOrchestrator {
 
     if (this.globalWorkerCount < this.maxWorkers) {
       try {
-        // P0-1: Route each pool to its domain-specific worker file
-        const workerUrl = POOL_WORKER_URLS[poolType]();
-        const worker = new Worker(workerUrl, { type: 'module' });
+        // Route each pool to its statically analyzeable domain-specific worker
+        const worker = createWorkerForPool(poolType);
         
         worker.onerror = (e) => {
           console.error(`[WorkerOrchestrator] ${poolType} Worker crash detected:`, e);

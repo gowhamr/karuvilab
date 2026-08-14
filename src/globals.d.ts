@@ -294,3 +294,5 @@ interface KaruviRegistryInterface {
 
 declare module 'lamejs';
 declare module 'gifenc';
+declare module 'utif';
+
