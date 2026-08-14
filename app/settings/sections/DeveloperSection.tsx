@@ -62,7 +62,7 @@ export const DeveloperSection = memo(function DeveloperSection() {
     } finally {
       setIsTestingWorker(false);
     }
-  }, [toast]);
+  }, [toast, createUrl, revokeUrl]);
 
   // Export Diagnostics
   const exportDiagnosticsJson = useCallback(() => {
