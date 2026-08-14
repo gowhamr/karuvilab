@@ -81,7 +81,7 @@ export function Footer() {
         {/* Legal (One Row) */}
         <nav aria-label="Legal links">
           <ul className="flex flex-row flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-muted">
-            <li aria-label="Copyright">&copy; {mounted ? new Date().getFullYear() : ""} KaruviLab</li>
+            <li aria-label="Copyright">&copy; {new Date().getFullYear()} KaruviLab</li>
             {legalLinks.map((link) => (
               <li key={link.label}>
                 <Link

@@ -27,14 +27,18 @@ export function ToolMoreMenu({ toolId, toolName }: ToolMoreMenuProps) {
 
   useEffect(() => {
     if (isOpen && menuRef.current) {
-      const rect = menuRef.current.getBoundingClientRect();
-      const isNearLeft = rect.left < 250;
-      const isNearBottom = rect.bottom > window.innerHeight - 350;
+      const handle = requestAnimationFrame(() => {
+        if (!menuRef.current) return;
+        const rect = menuRef.current.getBoundingClientRect();
+        const isNearLeft = rect.left < 250;
+        const isNearBottom = rect.bottom > window.innerHeight - 350;
 
-      setPosition({
-        x: isNearLeft ? "left" : "right",
-        y: isNearBottom ? "top" : "bottom"
+        setPosition({
+          x: isNearLeft ? "left" : "right",
+          y: isNearBottom ? "top" : "bottom"
+        });
       });
+      return () => cancelAnimationFrame(handle);
     }
   }, [isOpen]);
 
