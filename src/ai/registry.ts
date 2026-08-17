@@ -11,6 +11,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'RMBG 2.0 (BiRefNet)',
     version: '2.0',
     family: 'birefnet',
+    // IMPORTANT: Model file is a placeholder. Replace with real rmbg-2.0.onnx (~168MB).
     file: '/models/rmbg-2.0.onnx',
     sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
     sizeMB: 168,
@@ -31,7 +32,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsGuidedFilter: false,
     qualityScore: 95,
     speedScore: 78,
-    available: true,
+    available: false,
     description: 'High-accuracy portrait & object background removal model.',
     license: 'Open-Rail'
   },
