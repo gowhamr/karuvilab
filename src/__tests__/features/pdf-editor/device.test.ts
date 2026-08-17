@@ -7,18 +7,18 @@ describe('device memory heuristics', () => {
   let originalNavigator: any;
 
   beforeEach(() => {
-    originalWindow = { ...window };
-    originalNavigator = { ...navigator };
-    
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true });
-    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, writable: true });
+    originalWindow = { innerWidth: window.innerWidth };
+    originalNavigator = { hardwareConcurrency: navigator.hardwareConcurrency, deviceMemory: (navigator as any).deviceMemory };
+
+    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, writable: true, configurable: true });
     Object.defineProperty(navigator, 'deviceMemory', { value: undefined, writable: true, configurable: true });
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'innerWidth', { value: originalWindow.innerWidth, writable: true });
-    Object.defineProperty(navigator, 'hardwareConcurrency', { value: originalNavigator.hardwareConcurrency, writable: true });
-    Object.defineProperty(navigator, 'deviceMemory', { value: originalNavigator.deviceMemory, writable: true, configurable: true });
+    Object.defineProperty(window, 'innerWidth', { value: originalWindow?.innerWidth ?? 1024, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'hardwareConcurrency', { value: originalNavigator?.hardwareConcurrency ?? 8, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'deviceMemory', { value: undefined, writable: true, configurable: true });
   });
 
   it('uses deviceMemory directly if available (low)', () => {
@@ -37,26 +37,26 @@ describe('device memory heuristics', () => {
   });
 
   it('falls back to viewport+cores for low tier', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 400, writable: true });
-    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 4, writable: true });
+    Object.defineProperty(window, 'innerWidth', { value: 400, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 4, writable: true, configurable: true });
     expect(getDeviceTier()).toBe('low');
   });
 
   it('falls back to viewport+cores for standard tier (narrow but many cores)', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 400, writable: true });
-    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, writable: true });
+    Object.defineProperty(window, 'innerWidth', { value: 400, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, writable: true, configurable: true });
     expect(getDeviceTier()).toBe('standard');
   });
 
   it('falls back to viewport+cores for standard tier (wide but few cores)', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true });
-    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 4, writable: true });
+    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 4, writable: true, configurable: true });
     expect(getDeviceTier()).toBe('standard');
   });
 
   it('falls back to viewport+cores for desktop tier (wide and many cores)', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true });
-    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, writable: true });
+    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, writable: true, configurable: true });
     expect(getDeviceTier()).toBe('desktop');
   });
 

@@ -48,6 +48,11 @@ export default function AnnotationLayer({ pageIndex }: AnnotationLayerProps) {
     
     if (layerRef.current && e.target !== layerRef.current) return;
     
+    // Prevent default to stop focus stealing (for text tool) and native dragging (for drawing tools)
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+    
     const { x, y } = getPercentagePos(e);
     const id = Date.now().toString();
 
@@ -194,6 +199,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
     if (!isSelectMode || isEditing) return;
 
     e.stopPropagation();
+    if (e.cancelable) e.preventDefault();
     setSelectedAnnotation(annotation.id);
 
     const now = Date.now();
@@ -268,6 +274,7 @@ function AnnotationItem({ annotation }: { annotation: Annotation }) {
 
   const handleResizeDown = useCallback((e: React.PointerEvent, handleId: string) => {
     e.stopPropagation();
+    if (e.cancelable) e.preventDefault();
     const target = e.currentTarget;
     const layerElement = target.closest('.z-content') || target.parentElement?.parentElement;
     if (!layerElement) return;

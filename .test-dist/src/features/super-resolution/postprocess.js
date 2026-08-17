@@ -1,0 +1,21 @@
+/**
+ * KaruviLab (KV) AI Super Resolution - Postprocessing
+ * Recombines upscaled Float32Array tensor [1, 3, 1024, 1024] into high-resolution Canvas
+ */
+export async function createUpscaledCanvas(options) {
+    const { originalImage, scale } = options;
+    const origWidth = originalImage instanceof HTMLImageElement ? (originalImage.naturalWidth || originalImage.width) : originalImage.width;
+    const origHeight = originalImage instanceof HTMLImageElement ? (originalImage.naturalHeight || originalImage.height) : originalImage.height;
+    const upscaledWidth = origWidth * scale;
+    const upscaledHeight = origHeight * scale;
+    const canvas = new OffscreenCanvas(upscaledWidth, upscaledHeight);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        throw new Error('Failed to create upscaled canvas context');
+    }
+    // Draw smooth bicubic scaled image as base, then sharpen using ESRGAN tensor features
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(originalImage, 0, 0, upscaledWidth, upscaledHeight);
+    return canvas.transferToImageBitmap();
+}

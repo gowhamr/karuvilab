@@ -6,6 +6,7 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { parseIso8583, ParsedISOField, decodeMTI, MTIDecoded } from "@/src/lib/iso8583/parser";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { ToolInput } from "@/components/ui/ToolInput";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 
 export const SAMPLE_MESSAGES = [
   {
@@ -263,6 +264,9 @@ export default function ISO8583ParserClient() {
               <span className="font-bold text-text-2 block text-sm">3. Data Elements</span>
               <p>Field payloads serialized sequentially as FIXED length, LLVAR (2-digit length prefix), or LLLVAR (3-digit length prefix).</p>
             </div>
+          </div>
+          <div className="pt-2 border-t border-border mt-4">
+            <PrivacyBadge />
           </div>
         </div>
       }

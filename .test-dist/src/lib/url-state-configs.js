@@ -1,0 +1,18 @@
+export const URL_STATE_CONFIGS = {
+    'bmi-calculator': { h: 170, w: 70, unit: 'metric', hft: 5, hin: 7 },
+    'emi-calculator': { p: 500000, r: 8.5, n: 240, type: 'monthly' },
+    'sip-calculator': { amount: 5000, rate: 12, years: 10, stepup: 0 },
+    'income-tax': { salary: 1000000, regime: 'new', age: 'below60', c80: 0, c80d: 0, hra: 0, hli: 0 },
+    'hra-calculator': { basic: 50000, hra: 20000, rent: 15000, city: 'metro', da: 0 },
+    'gratuity-calculator': { salary: 50000, years: 5, months: 0, type: 'covered' },
+    'ppf-calculator': { amount: 150000, years: 15, rate: 7.1 },
+    'fd-calculator': { principal: 100000, rate: 7.5, years: 1, months: 0, freq: 4 },
+    'nps-calculator': { age: 30, retire: 60, monthly: 5000, employer: 0, return: 10, annuity: 6, annuityPct: 40 },
+    'cagr-calculator': { initial: 100000, final: 200000, years: 5 },
+    'inflation-calculator': { amount: 100000, rate: 6, years: 10 },
+    'swp-calculator': { corpus: 1000000, withdrawal: 10000, rate: 12, years: 20 },
+    'unix-timestamp': { ts: 0, unit: 'seconds', tz: '' },
+    'color-converter': { hex: 'FF6B6B', mode: 'hex' },
+    'crontab-editor': { expr: '* * * * *' },
+    'age-calculator': { dob: '', ref: '' },
+};

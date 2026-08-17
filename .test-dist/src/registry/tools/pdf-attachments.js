@@ -1,0 +1,12 @@
+export const pdfAttachments = {
+    id: "pdf-attachments",
+    name: "PDF Attachments",
+    desc: "Extract embedded files and attachments from PDFs",
+    category: "pdf",
+    subCategory: 'Security & Metadata',
+    href: "/pdf-tools/pdf-attachments/",
+    input: "pdf",
+    output: "any-file",
+    status: "new",
+    keywords: ["pdf", "attachments", "extract", "embedded", "files"]
+};

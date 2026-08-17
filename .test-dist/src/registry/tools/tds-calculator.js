@@ -1,0 +1,22 @@
+export const tdsCalculator = {
+    "id": "tds-calculator",
+    "name": "Tds Calculator",
+    "desc": "Calculate Tax Deducted at Source (TDS) percentages.",
+    "href": "/calculators/tds-calculator/",
+    "category": "calculators",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": new Date().toISOString().split('T')[0],
+    "keywords": [
+        "tds calculator",
+        "calculators"
+    ],
+    "input": null,
+    "output": null,
+    "related": [],
+    "subCategory": null,
+    "requiresNetwork": false
+};

@@ -4,7 +4,7 @@ export const grammarChecker: ToolEntry = {
   id: "grammar-checker",
   name: "Grammar & Spell Checker",
   desc: "100% private, client-side grammar, spell, and readability checker for your text.",
-  href: "/text/grammar-checker/",
+  href: "/utilities/grammar-checker/",
   category: "utilities",
   icon: null,
   color: null,

@@ -10,8 +10,8 @@ import { HomeHero } from "./HomeHero";
 import { CategoryChips } from "@/components/ui/CategoryChips";
 import dynamic from "next/dynamic";
 
-const QuickActionsDashboard = dynamic(() => import("@/components/ui/QuickActionsDashboard").then(mod => mod.QuickActionsDashboard), { ssr: false });
-const CollectionsDashboard = dynamic(() => import("@/components/ui/collections/CollectionsDashboard").then(mod => mod.CollectionsDashboard), { ssr: false });
+const QuickActionsDashboard = dynamic(() => import("@/components/ui/QuickActionsDashboard").then(mod => mod.QuickActionsDashboard), { ssr: false, loading: () => <div className="h-64 rounded-3xl bg-surface-2/30 animate-pulse border border-border" /> });
+const CollectionsDashboard = dynamic(() => import("@/components/ui/collections/CollectionsDashboard").then(mod => mod.CollectionsDashboard), { ssr: false, loading: () => <div className="h-96 rounded-3xl bg-surface-2/30 animate-pulse border border-border" /> });
 
 import { useSearchStore } from "@/src/store/useSearchStore";
 import { useFavoriteStore } from "@/src/store/useFavoriteStore";
@@ -567,123 +567,81 @@ export default function HomeClient() {
                     animate={{ opacity: 1 }}
                     className="space-y-10 md:space-y-12"
                   >
-                    {isReturning ? (
-                      <>
-                        {/* Quick Actions Dashboard */}
-                        {hydrated && (
-                          <AnimatePresence>
-                            <m.section
-                              key="quick-actions"
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.22 }}
-                            >
-                              <QuickActionsDashboard 
-                                continueTool={continueWorkingTool}
-                                recentTools={recentTools}
-                                favoriteTools={favoriteTools}
-                                frequentlyUsedTools={popularTools}
-                                suggestedTools={suggestedTools}
-                              />
-                            </m.section>
-                          </AnimatePresence>
-                        )}
-
-                        {/* Popular Tools */}
-                        <section aria-labelledby="popular-heading">
-                          <SectionHeader
-                            title={t("common.popular")}
-                            subtitle="Most-used across all users"
-                            icon={TrendingUp}
-                            badge="Hot"
-                            headingId="popular-heading"
-                          />
-                          <m.div
-                            initial={false}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-60px" }}
-                            transition={{ duration: 0.4 }}
-                            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
-                          >
-                            {popularTools.map(tool => (
-                              <div key={tool.id} className="flex flex-col h-full">
-                                <ToolCard tool={tool} compact />
-                              </div>
-                            ))}
-                          </m.div>
-                        </section>
-
-                        {/* Popular Categories */}
-                        {renderCategoriesSection(false)}
-
-
-
-                        {/* Personal Section */}
-                        {renderPersonalSection()}
-
-                        {/* Footer Transition */}
-
-                      </>
-                    ) : (
-                      <>
-                        {/* Browse by Category - Placed FIRST for new users to shorten path */}
-                        {renderCategoriesSection(true)}
-
-                        {/* Popular Tools */}
-                        <section aria-labelledby="popular-heading">
-                          <SectionHeader
-                            title={t("common.popular")}
-                            subtitle="Most-used starter tools"
-                            icon={TrendingUp}
-                            badge="Hot"
-                            headingId="popular-heading"
-                          />
-                          <m.div
-                            initial={false}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-60px" }}
-                            transition={{ duration: 0.4 }}
-                            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
-                          >
-                            {popularTools.map(tool => (
-                              <div key={tool.id} className="flex flex-col h-full">
-                                <ToolCard tool={tool} compact />
-                              </div>
-                            ))}
-                          </m.div>
-                        </section>
-
-                        {/* Inline promo / View All banner */}
-                        <m.div
-                          initial={false}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+                    {/* 1. QuickActionsDashboard (Returning only) */}
+                    {hydrated && isReturning && (
+                      <AnimatePresence>
+                        <m.section
+                          key="quick-actions"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.22 }}
                         >
-                          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent" />
-                          <div className="relative flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
-                              <Sparkles className="w-6 h-6" aria-hidden="true" />
-                            </div>
-                            <div>
-                              <p className="font-black text-text text-base leading-tight">Discover 150+ free tools</p>
-                              <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
-                            </div>
+                          <QuickActionsDashboard 
+                            continueTool={continueWorkingTool}
+                            recentTools={recentTools}
+                            favoriteTools={favoriteTools}
+                            frequentlyUsedTools={popularTools}
+                            suggestedTools={suggestedTools}
+                          />
+                        </m.section>
+                      </AnimatePresence>
+                    )}
+
+                    {/* 2. Popular Categories */}
+                    {renderCategoriesSection(!isReturning)}
+
+                    {/* 3. Popular Tools */}
+                    <section aria-labelledby="popular-heading">
+                      <SectionHeader
+                        title={t("common.popular")}
+                        subtitle={isReturning ? "Most-used across all users" : "Most-used starter tools"}
+                        icon={TrendingUp}
+                        badge="Hot"
+                        headingId="popular-heading"
+                      />
+                      <m.div
+                        initial={false}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.4 }}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
+                      >
+                        {popularTools.map(tool => (
+                          <div key={tool.id} className="flex flex-col h-full">
+                            <ToolCard tool={tool} compact />
                           </div>
-                          <Link href="/all-tools" passHref legacyBehavior>
-                            <Button variant="primary" size="md" className="min-w-[160px] cursor-pointer min-h-11 flex items-center justify-center">
-                              Browse All Tools
-                            </Button>
-                          </Link>
-                        </m.div>
+                        ))}
+                      </m.div>
+                    </section>
 
-
-
-                        {/* Footer Transition */}
-
-                      </>
+                    {/* 4. Personal Section or Promo */}
+                    {hydrated && isReturning ? (
+                      renderPersonalSection()
+                    ) : (
+                      <m.div
+                        initial={false}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+                      >
+                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent" />
+                        <div className="relative flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
+                            <Sparkles className="w-6 h-6" aria-hidden="true" />
+                          </div>
+                          <div>
+                            <p className="font-black text-text text-base leading-tight">Discover 150+ free tools</p>
+                            <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
+                          </div>
+                        </div>
+                        <Link href="/all-tools" passHref legacyBehavior>
+                          <Button variant="primary" size="md" className="min-w-[160px] cursor-pointer min-h-11 flex items-center justify-center">
+                            Browse All Tools
+                          </Button>
+                        </Link>
+                      </m.div>
                     )}
                   </m.div>
                 )}

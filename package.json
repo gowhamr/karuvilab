@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "generate-tool": "node scripts/scaffold-tool.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
-    "test": "vitest run",
+    "test": "node --import ./scripts/register-hooks.mjs scripts/run-unit-tests.mjs",
     "test:ui": "vitest --ui",
     "postinstall": "node scripts/check-ts-version.mjs && node scripts/sync-workers.mjs",
     "prebuild": "node scripts/generate-registries.mjs && node scripts/sync-workers.mjs"
@@ -120,7 +120,9 @@
   },
   "optionalDependencies": {
     "lightningcss-linux-arm64-gnu": "1.32.0",
-    "lightningcss-linux-arm64-musl": "1.32.0"
+    "lightningcss-linux-arm64-musl": "1.32.0",
+    "@rolldown/binding-linux-arm64-gnu": "*",
+    "@rolldown/binding-linux-arm64-musl": "*"
   },
   "browserslist": [
     "defaults and supports es6-module",

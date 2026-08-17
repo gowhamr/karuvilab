@@ -77,7 +77,7 @@
 - [GIF Frame Extractor](https://karuvilab.com//image-tools/gif-extractor/): Extract individual frames from animated GIFs
 - [Glassmorphism Generator](https://karuvilab.com//developer-tools/glassmorphism-generator/): Generate CSS code for modern frosted-glass card designs.
 - [Gradient Generator](https://karuvilab.com//developer-tools/gradient-generator/): Design linear and radial CSS gradients visually for backgrounds.
-- [Grammar & Spell Checker](https://karuvilab.com//text/grammar-checker/): 100% private, client-side grammar, spell, and readability checker for your text.
+- [Grammar & Spell Checker](https://karuvilab.com//utilities/grammar-checker/): 100% private, client-side grammar, spell, and readability checker for your text.
 - [Gratuity Calculator](https://karuvilab.com//calculators/gratuity-calculator/): Estimate standard gratuity benefits based on salary and tenure.
 - [GST Calculator](https://karuvilab.com//calculators/gst-calculator/): Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.
 - [Hash Generator](https://karuvilab.com//security-tools/hash-generator/): MD5, SHA-1/256/512 hashes
@@ -100,8 +100,10 @@
 - [Image Resizer](https://karuvilab.com//image-tools/image-resizer/): Resize images to exact dimensions
 - [Image Seo](https://karuvilab.com//developer-tools/image-seo/): Optimize image file names and alt attributes to rank higher on search engines.
 - [Image to PDF](https://karuvilab.com//pdf-tools/image-to-pdf/): Convert images into a single PDF
+- [Image Watermark](https://karuvilab.com//image-tools/image-watermark/): Add text or image watermarks to your pictures.
 - [Income Tax](https://karuvilab.com//calculators/income-tax/): Calculate annual income tax estimates and select the best tax regime.
 - [Inflation Calculator](https://karuvilab.com//calculators/inflation-calculator/): Purchasing power over time
+- [Interest Calculator](https://karuvilab.com//calculators/interest-calculator/): Calculate simple and compound interest.
 - [Speed Tester](https://karuvilab.com//utilities/internet-speed-test/): Measure your internet connection speed
 - [Invoice Generator](https://karuvilab.com//calculators/invoice-generator/): Build professional custom invoices and download them as PDFs.
 - [Iso8583 Bitmap Decoder](https://karuvilab.com//security-tools/iso8583-bitmap-decoder/): Parse and visualize ISO 8583 payment card transaction bitmaps.
@@ -111,6 +113,7 @@
 - [JSON to TypeScript](https://karuvilab.com//developer-tools/json-to-ts/): Generate TypeScript interfaces from JSON
 - [Json To Xml](https://karuvilab.com//developer-tools/json-to-xml/): Convert JSON to XML and XML to JSON.
 - [JWT Decoder](https://karuvilab.com//security-tools/jwt-decoder/): Inspect JSON Web Tokens
+- [LLMs.txt Generator](https://karuvilab.com//developer-tools/llms-txt-generator/): Generate llms.txt files for AI agents and LLMs to index your site.
 - [Lock / Unlock PDF](https://karuvilab.com//pdf-tools/lock-unlock/): Add or remove PDF passwords
 - [Log Analyzer](https://karuvilab.com//developer-tools/log-analyzer/): Analyze and filter server and application access log files.
 - [Lorem Ipsum](https://karuvilab.com//developer-tools/lorem-ipsum/): Generate custom dummy placeholder text for layouts and copy.

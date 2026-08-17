@@ -61,7 +61,16 @@ describe('AI Platform v1.0 - Generic Tensor Pipeline', () => {
   });
 
   it('should ensure model availability via high-level SDK ai.ensureModel()', async () => {
-    const ok = await ai.ensureModel('background-removal-rmbg');
-    expect(ok).toBe(true);
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () => ({
+      ok: true,
+      arrayBuffer: async () => new ArrayBuffer(1024),
+    })) as any;
+    try {
+      const ok = await ai.ensureModel('background-removal-rmbg');
+      expect(ok).toBe(true);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });

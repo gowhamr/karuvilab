@@ -2,7 +2,7 @@
  * KaruviLab (KV) AI Platform v1.0 - Tensor Pipeline & SDK Unit Tests
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { 
   createFloat32Tensor, 
   normalizePixels, 
@@ -61,6 +61,8 @@ describe('AI Platform v1.0 - Generic Tensor Pipeline', () => {
   });
 
   it('should ensure model availability via high-level SDK ai.ensureModel()', async () => {
+    const { modelManager } = await import('@/src/ai/model-manager');
+    vi.spyOn(modelManager, 'ensureModelAvailable').mockImplementation(async () => new Uint8Array([1, 2, 3]).buffer);
     const ok = await ai.ensureModel('background-removal-rmbg');
     expect(ok).toBe(true);
   });

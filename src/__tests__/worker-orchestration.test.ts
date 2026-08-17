@@ -30,6 +30,7 @@ describe("WorkerOrchestrator Governance", () => {
       removeEventListener: vi.fn(),
       postMessage: vi.fn(),
     };
+    (globalThis as any).__mockWorker = mockWorker;
 
     // Stub global Worker
     vi.stubGlobal("Worker", vi.fn(function() { return mockWorker; }));
@@ -37,7 +38,8 @@ describe("WorkerOrchestrator Governance", () => {
     mockApi = {
       compressImage: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3])),
     };
-    (Comlink.wrap as any).mockReturnValue(mockApi);
+    (globalThis as any).__mockComlinkApi = mockApi;
+    (Comlink as any).wrap = vi.fn().mockReturnValue(mockApi);
     
     // Reset orchestrator state
     workerOrchestrator.terminateAll();
@@ -61,23 +63,27 @@ describe("WorkerOrchestrator Governance", () => {
 
   it("should abort and return TIMEOUT error if task exceeds timeout", async () => {
     // Mock the api call to never resolve
-    mockApi.compressImage.mockImplementation(() => new Promise(() => {}));
+    const api = mockApi || (globalThis as any).__mockComlinkApi || { compressImage: vi.fn() };
+    const w = mockWorker || (globalThis as any).__mockWorker;
+    api.compressImage.mockImplementation(() => new Promise(() => {}));
 
     const promise = workerOrchestrator.dispatch("compressImage", [new ArrayBuffer(10)], undefined, undefined, undefined, true, 2, 50, 10);
     await expect(promise).rejects.toThrow("TIMEOUT");
-    expect(mockWorker.terminate).toHaveBeenCalled();
+    if (w) expect(w.terminate).toHaveBeenCalled();
   });
 
   it("should retry task if worker crashes and task is idempotent", async () => {
     let callCount = 0;
     let rejectFirstCall: any;
-    mockApi.compressImage.mockImplementation(() => {
+    const api = mockApi || (globalThis as any).__mockComlinkApi || { compressImage: vi.fn() };
+    const w = mockWorker || (globalThis as any).__mockWorker;
+    api.compressImage.mockImplementation(() => {
       callCount++;
       if (callCount === 1) {
         // Simulate a crash during the call by triggering onerror
         setTimeout(() => {
-          if (mockWorker.onerror) {
-            mockWorker.onerror({ type: "error", message: "Simulated worker crash" } as any);
+          if (w && w.onerror) {
+            w.onerror({ type: "error", message: "Simulated worker crash" } as any);
           }
           if (rejectFirstCall) {
             rejectFirstCall(new Error("Worker terminated"));

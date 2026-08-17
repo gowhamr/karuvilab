@@ -57,13 +57,15 @@ export default function VideoMetadataViewerClient() {
       const url = createUrl(f);
       videoUrlRef.current = url;
       const video = document.createElement("video");
-      video.src = url;
+      video.preload = "metadata";
       
       await new Promise((resolve, reject) => {
         video.onloadedmetadata = resolve;
         video.onerror = () => reject(new Error("Failed to load video metadata"));
         // Timeout after 5s
         setTimeout(() => reject(new Error("Metadata load timeout")), 5000);
+        
+        video.src = url;
       });
 
       setMeta({

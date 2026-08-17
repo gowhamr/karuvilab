@@ -40,7 +40,7 @@ export function MarkdownEditor() {
   const { isFullscreen, activeToolId } = useFullscreenContext();
 
 
-  const isThisToolFullscreen = isFullscreen && activeToolId === "markdown-editor";
+  const isThisToolFullscreen = isFullscreen && activeToolId === "markdown";
   
   const [showFind, setShowFind] = useState(false);
   const [findState, setFindState] = useState({ matches: [] as number[], index: 0 });

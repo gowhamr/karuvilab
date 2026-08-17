@@ -20,12 +20,12 @@ export default function MarkdownEditorWrapper() {
       
       <Script 
         src={`${basePath}/lib/markdown/highlight.min.js`} 
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
       
       <Script 
         src={`${basePath}/lib/markdown/mermaid.min.js`} 
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         onLoad={() => {
           if (typeof window !== 'undefined' && (window as any).mermaid) {
             try {

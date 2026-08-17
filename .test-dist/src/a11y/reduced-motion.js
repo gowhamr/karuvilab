@@ -1,0 +1,19 @@
+import { useEffect, useState } from 'react';
+/**
+ * Hook to detect if the user prefers reduced m.
+ */
+export const useReducedMotion = () => {
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        Promise.resolve().then(() => {
+            setPrefersReducedMotion(mediaQuery.matches);
+        });
+        const onChange = (event) => {
+            setPrefersReducedMotion(event.matches);
+        };
+        mediaQuery.addEventListener('change', onChange);
+        return () => mediaQuery.removeEventListener('change', onChange);
+    }, []);
+    return prefersReducedMotion;
+};

@@ -1,0 +1,7 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { m, AnimatePresence } from 'framer-motion';
+import { cn } from "@/src/lib/utils";
+export function ConsoleDrawer({ isOpen, logs, onClear }) {
+    return (_jsx(AnimatePresence, { children: isOpen && (_jsxs(m.div, { initial: { y: "100%" }, animate: { y: 0 }, exit: { y: "100%" }, className: "absolute bottom-20 right-6 w-80 max-h-72 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-dropdown", children: [_jsxs("div", { className: "px-4 py-2 border-b border-white/5 flex items-center justify-between bg-white/5", children: [_jsx("span", { className: "text-tiny font-bold uppercase tracking-widest-sm text-blue", children: "Output Logs" }), _jsx("button", { onClick: onClear, className: "text-tiny font-bold uppercase tracking-widest-sm text-red-400 hover:text-red-300", "aria-label": "Clear console logs", children: "Clear" })] }), _jsxs("div", { className: "flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar", children: [logs.length === 0 && _jsx("p", { className: "text-xs text-white/20 italic", children: "No output yet..." }), logs.map(log => (_jsxs("div", { className: cn("text-xs font-mono break-all", log.type === "error" ? "text-red-400" : log.type === "warn" ? "text-yellow-400" : "text-blue-200"), children: [_jsxs("span", { className: "opacity-30 mr-2", children: ["[", log.type, "]"] }), log.content] }, log.id)))] })] })) }));
+}

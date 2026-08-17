@@ -3,7 +3,7 @@ import { useBatchStore } from '../store/useBatchStore';
 
 describe('useBatchStore', () => {
   beforeEach(() => {
-    useBatchStore.getState().clearItems('test-tool');
+    useBatchStore.setState({ items: {} });
   });
 
   it('should add items to the queue', () => {

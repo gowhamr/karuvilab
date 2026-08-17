@@ -25,7 +25,7 @@ function parseUserDate(raw: string): string | null {
   if (!trimmed) return null;
 
   // ISO format: YYYY-MM-DD or YYYY/MM/DD
-  const isoMatch = trimmed.match(/^(\d{4})[/\-.](\d{1,2})[/\-.](\d{1,2})$/);
+  const isoMatch = trimmed.match(/^(\d{4})\s*[/\-.]\s*(\d{1,2})\s*[/\-.]\s*(\d{1,2})$/);
   if (isoMatch) {
     const [, y, m, d] = isoMatch;
     const year = parseInt(y!, 10);
@@ -41,7 +41,7 @@ function parseUserDate(raw: string): string | null {
   }
 
   // DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY
-  const dmy = trimmed.match(/^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$/);
+  const dmy = trimmed.match(/^(\d{1,2})\s*[/\-.]\s*(\d{1,2})\s*[/\-.]\s*(\d{4})$/);
   if (dmy) {
     const [, d, m, y] = dmy;
     const year = parseInt(y!, 10);
