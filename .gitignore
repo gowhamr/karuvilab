@@ -21,4 +21,5 @@ public/pdf.min.mjs
 
 # AI Models (large binaries)
 public/models/*.onnx
+public/models/*.bak
 !public/models/u2netp.onnx
