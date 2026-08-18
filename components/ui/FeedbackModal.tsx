@@ -84,7 +84,7 @@ export function FeedbackModal() {
         };
       }
 
-      const response = await fetch('/api/send-feedback', {
+      const response = await fetch('/api/send-feedback/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,10 +99,17 @@ export function FeedbackModal() {
         }),
       });
 
-      const data = await response.json();
+      let data;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`Server Error (${response.status}): Expected JSON but received HTML. This might be due to static hosting (like GitHub Pages) which doesn't support API routes.`);
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit feedback');
+        throw new Error(data?.error || 'Failed to submit feedback');
       }
 
       setIsSuccess(true);

@@ -10,8 +10,8 @@ export const RMBG_MODEL_MANIFEST: ModelManifest = {
   name: 'RMBG 2.0 (Quantized)',
   version: '2.0',
   file: '/models/rmbg-2.0.onnx',
-  sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-  sizeMB: 18.4,
+  sha256: '8cafcf770b06757c4eaced21b1a88e57fd2b66de01b8045f35f01535ba742e0f',
+  sizeMB: 168,
   backend: ['webgpu', 'wasm'],
   input: {
     width: 1024,

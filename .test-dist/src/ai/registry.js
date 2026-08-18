@@ -8,8 +8,9 @@ export const AI_MODEL_REGISTRY = {
         name: 'RMBG 2.0 (BiRefNet)',
         version: '2.0',
         family: 'birefnet',
+        // IMPORTANT: Model file is a placeholder. Replace with real rmbg-2.0.onnx (~168MB).
         file: '/models/rmbg-2.0.onnx',
-        sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+        sha256: '8cafcf770b06757c4eaced21b1a88e57fd2b66de01b8045f35f01535ba742e0f',
         sizeMB: 168,
         backend: ['webgpu', 'wasm'],
         input: { width: 1024, height: 1024, channels: 3, dataType: 'float32', shape: [1, 3, 1024, 1024] },

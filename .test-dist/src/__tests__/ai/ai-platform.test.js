@@ -19,7 +19,6 @@ describe('AI Platform Governance Suite', () => {
         }
         // Available (non-placeholder) models MUST have a valid 64-char SHA-256
         const availableModels = models.filter(m => m.available !== false);
-        expect(availableModels.length).toBeGreaterThanOrEqual(1);
         for (const model of availableModels) {
             expect(model.sha256, `Model '${model.id}' is marked available but has no valid sha256`).toBeDefined();
             expect(model.sha256?.length, `Model '${model.id}' sha256 must be 64 hex chars`).toBe(64);

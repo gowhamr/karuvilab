@@ -242,7 +242,7 @@ export async function runGrammarCheck(text: string, ignoredWords: string[] = [],
     errors.push({
       id: `punct-ms-${pMatch.index}`,
       message: "Missing space after punctuation.",
-      replacements: [`${pMatch[1]} ${pMatch[2]}`],
+      replacements: [`${pMatch[1] || ''} ${pMatch[2] || ''}`],
       offset: pMatch.index,
       length: pMatch[0].length,
       type: 'style'
@@ -266,7 +266,7 @@ export async function runGrammarCheck(text: string, ignoredWords: string[] = [],
     errors.push({
       id: `punct-sp-${pMatch.index}`,
       message: "Space before punctuation.",
-      replacements: [pMatch[1]],
+      replacements: [pMatch[1] || ''],
       offset: pMatch.index,
       length: pMatch[0].length,
       type: 'style'

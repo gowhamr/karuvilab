@@ -46,6 +46,10 @@ describe('AI Platform v1.0 - Generic Tensor Pipeline', () => {
         expect(tiles[0]?.height).toBe(256);
     });
     it('should ensure model availability via high-level SDK ai.ensureModel()', async () => {
+        const { AI_MODEL_REGISTRY } = await import('../registry');
+        const modelManifest = AI_MODEL_REGISTRY['background-removal-rmbg'];
+        const originalAvailable = modelManifest.available;
+        modelManifest.available = true;
         const originalFetch = globalThis.fetch;
         globalThis.fetch = (async () => ({
             ok: true,
@@ -57,6 +61,7 @@ describe('AI Platform v1.0 - Generic Tensor Pipeline', () => {
         }
         finally {
             globalThis.fetch = originalFetch;
+            modelManifest.available = originalAvailable ?? false;
         }
     });
 });

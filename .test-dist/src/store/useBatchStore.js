@@ -152,10 +152,12 @@ export const useBatchStore = create((set, get) => ({
                     });
                 }
                 catch (error) {
+                    console.error("DEBUG ERROR CAUGHT:", error);
                     if (error.name === 'AbortError' || error.message === 'Task cancelled' || error.message === 'Task aborted') {
                         get().updateItem(toolId, item.id, { status: 'cancelled', message: 'Cancelled', progress: 0 });
                     }
                     else {
+                        console.error("DEBUG SETTING STATUS TO FAILED FOR ITEM:", item.id);
                         get().updateItem(toolId, item.id, {
                             status: 'failed',
                             error: error.message || 'Unknown error',

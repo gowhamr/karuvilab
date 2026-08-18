@@ -7,14 +7,21 @@ import { InferenceProgress } from "@/components/ui/ai/InferenceProgress";
 import { BackendSelector } from "@/components/ui/ai/BackendSelector";
 import { ModelManagerDialog } from "@/components/ui/ai/ModelManagerDialog";
 import { RMBG_MODEL_MANIFEST } from "@/src/features/background-remover/constants";
-import { preprocessImage } from "@/src/features/background-remover/preprocess";
 import { createTransparentCanvas } from "@/src/features/background-remover/postprocess";
-import { useObjectUrlManager } from "@/src/lib/hooks";
+import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { useToast } from "@/components/ui/Toast";
 import { ModelBackend } from "@/src/ai/types";
+import { SliderField } from "@/components/ui/SliderField";
+import { ToolInput } from "@/components/ui/ToolInput";
+import { workerManager } from "@/src/workers/manager";
+import { safeImageProcess } from "@/src/features/image-compressor/utils/safe-process";
+import { formatError } from "@/src/lib/formatError";
+import { StatusBadge } from "@/components/system/StatusBadge";
+import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { 
-  Sparkles, Download, RefreshCw, Layers, ShieldCheck, 
-  Cpu, HardDrive, Info, Check, Eye, HelpCircle, AlertCircle, Sliders, ToggleLeft, ToggleRight
+  Sparkles, Download, Layers, ShieldCheck, 
+  HardDrive, Check, AlertCircle, ToggleLeft, ToggleRight,
+  Palette, Zap, Trash2, Image as ImageIcon2, RefreshCw
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
@@ -23,24 +30,33 @@ export default function ToolClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const { toast } = useToast();
 
+  // Mode Selection: 'canvas' (Color/Tolerance) vs 'ai' (Neural Network)
+  const [activeTab, setActiveTab] = useState<'canvas' | 'ai'>('canvas');
+
+  // Shared file state
   const [file, setFile] = useState<File | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
-  
-  // Controls
+
+  // Canvas Mode Controls
+  const [bgColor, setBgColor] = useState("#ffffff");
+  const [tolerance, setTolerance] = useState(40);
+  const [canvasProcessing, setCanvasProcessing] = useAsyncSafeState(false);
+  const [canvasError, setCanvasError] = useState<string | null>(null);
+
+  // AI Mode Controls
   const [threshold, setThreshold] = useState<number>(0.5);
   const [feather, setFeather] = useState<number>(2);
   const [invert, setInvert] = useState<boolean>(false);
   const [selectedBackend, setSelectedBackend] = useState<ModelBackend | 'auto'>('auto');
   const [selectedModelId, setSelectedModelId] = useState<string>('background-removal-rmbg');
-
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<{ percent: number; stage: string } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
   const [isCachedModel, setIsCachedModel] = useState<boolean>(false);
   const [isManagerOpen, setIsManagerOpen] = useState(false);
-  
-  // Interactive UI state
+
+  // Split comparison slider & visual settings
   const [sliderPosition, setSliderPosition] = useState(50);
   const [activeElsTab, setActiveElsTab] = useState<'segmentation' | 'tensors' | 'alpha' | 'wasm'>('segmentation');
   const [showCheckerboard, setShowCheckerboard] = useState(true);
@@ -78,7 +94,8 @@ export default function ToolClient() {
     if (resultUrl) revokeUrl(resultUrl);
 
     setFile(selected);
-    setError(null);
+    setCanvasError(null);
+    setAiError(null);
     setResultUrl(null);
     rawOutputTensorRef.current = null;
 
@@ -86,11 +103,36 @@ export default function ToolClient() {
     setOriginalUrl(url);
   };
 
-  const processBackgroundRemoval = useCallback(async () => {
+  // Canvas Mode Removal (Instant local pixel color matching)
+  const removeBackgroundCanvas = useCallback(async () => {
+    if (!file) return;
+    setCanvasProcessing(true);
+    setCanvasError(null);
+
+    const result = await safeImageProcess(async () => {
+      const buffer = await file.arrayBuffer();
+      const resultBytes = await workerManager.removeBackground(buffer, bgColor, tolerance);
+      const blob = new Blob([resultBytes as any], { type: 'image/png' });
+      return createUrl(blob);
+    }, 'bg-remover');
+
+    if (result.success && result.data) {
+      if (resultUrl) revokeUrl(resultUrl);
+      setResultUrl(result.data);
+      toast('Background removed via Canvas algorithm', 'success');
+    } else {
+      setCanvasError(formatError(result.error));
+    }
+    
+    setCanvasProcessing(false);
+  }, [file, bgColor, tolerance, resultUrl, createUrl, revokeUrl, setCanvasProcessing, toast]);
+
+  // AI Mode Removal (Deep Learning RMBG 2.0 / BiRefNet)
+  const processBackgroundRemovalAi = useCallback(async () => {
     if (!file || !originalUrl) return;
 
     setIsProcessing(true);
-    setError(null);
+    setAiError(null);
     setProgress({ percent: 10, stage: 'Loading Original Image' });
 
     abortControllerRef.current = new AbortController();
@@ -107,7 +149,6 @@ export default function ToolClient() {
 
       setProgress({ percent: 30, stage: 'Selecting Optimal AI Model & Preprocessing' });
 
-      // Load SDK & run unified removeBackground API
       const { ai } = await import('@/src/ai/sdk');
       const { blob, modelUsed, inferenceTimeMs, rawTensor } = await ai.removeBackground(file, {
         modelId: selectedModelId,
@@ -130,7 +171,7 @@ export default function ToolClient() {
     } catch (err: any) {
       if (err.name !== 'AbortError') {
         console.error('Background removal failed:', err);
-        setError(err.message || 'Background removal failed');
+        setAiError(err.message || 'Background removal failed');
       }
     } finally {
       setIsProcessing(false);
@@ -138,7 +179,7 @@ export default function ToolClient() {
     }
   }, [file, originalUrl, selectedModelId, createUrl, toast]);
 
-  // Re-render transparent canvas instantly when threshold/feather/invert controls change
+  // Re-render transparent canvas when AI mask sliders change
   const applyControlChanges = useCallback(async () => {
     if (!imageRef.current || !rawOutputTensorRef.current || !originalUrl) return;
 
@@ -176,12 +217,6 @@ export default function ToolClient() {
     }
   }, [threshold, feather, invert, originalUrl, resultUrl, createUrl, revokeUrl]);
 
-  useEffect(() => {
-    if (file && originalUrl && !resultUrl && !isProcessing && !error) {
-      processBackgroundRemoval();
-    }
-  }, [file, originalUrl, resultUrl, isProcessing, error, processBackgroundRemoval]);
-
   const handleReset = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -192,7 +227,8 @@ export default function ToolClient() {
     setFile(null);
     setOriginalUrl(null);
     setResultUrl(null);
-    setError(null);
+    setCanvasError(null);
+    setAiError(null);
     setIsProcessing(false);
     setProgress(null);
     rawOutputTensorRef.current = null;
@@ -212,28 +248,71 @@ export default function ToolClient() {
 
   return (
     <div className="space-y-8 w-full mx-auto font-sans">
-      {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-surface border border-border rounded-3xl">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue">
-              <Sparkles className="w-4 h-4" />
+      {/* Header Banner with Mode Switcher */}
+      <div className="flex flex-col gap-4 p-5 bg-surface border border-border rounded-3xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue">
+                {activeTab === 'ai' ? <Sparkles className="w-4 h-4" /> : <Palette className="w-4 h-4" />}
+              </div>
+              <h1 className="text-lg font-black text-text tracking-tight">Background Remover</h1>
             </div>
-            <h1 className="text-lg font-black text-text tracking-tight">AI Background Remover</h1>
+            <p className="text-xs text-text-muted">
+              Choose between instant Canvas Color matching or deep learning AI Neural Network segmentation. 100% private, browser-only.
+            </p>
           </div>
-          <p className="text-xs text-text-muted">
-            Remove image backgrounds automatically in your browser using local AI (RMBG 2.0 / BiRefNet). 100% private, zero uploads.
-          </p>
+
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            {activeTab === 'ai' && (
+              <>
+                <ModelStatusBadge isCached={isCachedModel} sizeMB={RMBG_MODEL_MANIFEST.sizeMB} />
+                <button
+                  onClick={() => setIsManagerOpen(true)}
+                  className="p-1.5 hover:bg-surface-elevated rounded-xl border border-border text-text-muted hover:text-text transition-colors"
+                  title="Open AI Model Manager"
+                  aria-label="Open AI Model Manager"
+                >
+                  <HardDrive className="w-4 h-4" />
+                </button>
+              </>
+            )}
+            {activeTab === 'canvas' && <PrivacyBadge />}
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <ModelStatusBadge isCached={isCachedModel} sizeMB={RMBG_MODEL_MANIFEST.sizeMB} />
+        {/* Tab Switcher */}
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border/60">
           <button
-            onClick={() => setIsManagerOpen(true)}
-            className="p-1.5 hover:bg-surface-elevated rounded-xl border border-border text-text-muted hover:text-text transition-colors"
-            title="Open AI Model Manager"
+            onClick={() => {
+              setActiveTab('canvas');
+              setResultUrl(null);
+            }}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer",
+              activeTab === 'canvas'
+                ? "bg-blue text-white shadow-md shadow-blue/20"
+                : "bg-surface-elevated text-text-muted border border-border hover:text-text"
+            )}
           >
-            <HardDrive className="w-4 h-4" />
+            <Zap className="w-3.5 h-3.5" />
+            <span>Canvas Removal (Instant • Solid/Studio BG)</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('ai');
+              setResultUrl(null);
+            }}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer",
+              activeTab === 'ai'
+                ? "bg-blue text-white shadow-md shadow-blue/20"
+                : "bg-surface-elevated text-text-muted border border-border hover:text-text"
+            )}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>AI Neural Removal (RMBG 2.0 • Complex/Portraits)</span>
           </button>
         </div>
       </div>
@@ -242,230 +321,329 @@ export default function ToolClient() {
         layout="split"
         input={
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-text">Input Image</h3>
+            <div className="flex justify-between items-center px-1">
+              <span className="text-sm font-bold text-text-2">Input Image</span>
+              {file && (
+                <button 
+                  onClick={handleReset}
+                  className="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear Image
+                </button>
+              )}
+            </div>
+
             {!file ? (
               <DropZone
                 onFilesSelected={handleFilesSelected}
                 accept="image/*"
                 title="Drop image here to remove background"
                 subtitle="Supports PNG, JPEG, WebP. Processed 100% in your browser."
-                icon={<Sparkles className="w-8 h-8 text-blue" />}
+                icon={activeTab === 'ai' ? <Sparkles className="w-8 h-8 text-blue" /> : <Palette className="w-8 h-8 text-blue" />}
               />
             ) : (
               <div className="p-4 bg-surface-elevated border border-border rounded-2xl flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue/10 flex items-center justify-center">
-                    <Check className="w-5 h-5 text-blue" />
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue shrink-0">
+                    <ImageIcon2 className="w-5 h-5" />
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-text truncate max-w-[200px]" title={file.name}>{file.name}</p>
-                    <p className="text-xs text-text-muted">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-text truncate" title={file.name}>{file.name}</p>
+                    <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">{(file.size / 1024).toFixed(1)} KB</p>
                   </div>
                 </div>
                 <button
                   onClick={handleReset}
-                  className="px-3 py-1.5 bg-surface border border-border text-text-muted text-xs font-bold rounded-lg hover:bg-surface-elevated transition-colors"
+                  className="px-3 py-1.5 bg-surface border border-border text-text-muted text-xs font-bold rounded-lg hover:bg-surface-elevated transition-colors shrink-0 ml-2"
                 >
                   Change
                 </button>
+              </div>
+            )}
+
+            {originalUrl && (
+              <div className="relative rounded-2xl overflow-hidden border border-border bg-bg/50 max-h-[350px] flex items-center justify-center p-2">
+                <img src={originalUrl} alt="Original input" className="max-h-[300px] object-contain rounded-lg" />
               </div>
             )}
           </div>
         }
         optionsPanel={
           <div className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-text">Settings</h3>
-              <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
+                {activeTab === 'canvas' ? 'Canvas Settings' : 'AI Inference Settings'}
+              </h3>
+              <StatusBadge status={
+                (isProcessing || canvasProcessing) ? "processing" : 
+                (aiError || canvasError) ? "error" : 
+                resultUrl ? "complete" : "idle"
+              } />
+            </div>
+
+            {/* Error notifications */}
+            {(canvasError || aiError) && (
+              <div className="p-3.5 bg-red-500/10 text-red-400 text-xs rounded-xl border border-red-500/20 flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-bold">Removal Error</p>
+                  <p>{canvasError || aiError}</p>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 1: CANVAS OPTIONS */}
+            {activeTab === 'canvas' && (
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-text-2 px-1">Background Color to Remove</label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="color" 
+                      value={bgColor} 
+                      onChange={e => setBgColor(e.target.value)} 
+                      className="w-12 h-12 rounded-xl border border-border cursor-pointer shrink-0 p-1 bg-bg" 
+                      aria-label="Pick background color"
+                    />
+                    <ToolInput
+                      value={bgColor}
+                      onChange={setBgColor}
+                      mono
+                      className="h-12 flex-1"
+                    />
+                  </div>
+                  <p className="text-xs text-text-muted px-1">Pick a color or type Hex. Defaults to White (#ffffff).</p>
+                </div>
+
+                <div className="pt-2">
+                  <SliderField
+                    id="canvas-tolerance"
+                    label="Color Tolerance"
+                    min={0}
+                    max={255}
+                    value={tolerance}
+                    onChange={setTolerance}
+                  />
+                  <p className="text-xs text-text-muted -mt-2 px-1">Higher tolerance removes nearby color shades. Range: 30-60 recommended.</p>
+                </div>
+
+                <button
+                  onClick={removeBackgroundCanvas}
+                  disabled={!file || canvasProcessing}
+                  className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-blue/20 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  {canvasProcessing ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span>Processing Canvas...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-4 h-4" />
+                      <span>Remove Background (Canvas)</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
+            {/* TAB 2: AI NEURAL OPTIONS */}
+            {activeTab === 'ai' && (
+              <div className="space-y-5">
                 <BackendSelector
                   selectedBackend={selectedBackend}
                   onSelect={(b) => setSelectedBackend(b)}
                 />
+
                 <div className="bg-surface-elevated border border-border rounded-2xl p-4 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-text">AI Model</span>
-                  </div>
+                  <span className="text-sm font-bold text-text">AI Segmentation Model</span>
                   <select
                     value={selectedModelId}
                     onChange={(e) => setSelectedModelId(e.target.value)}
                     className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-sm text-text focus:outline-none focus:border-blue"
                   >
-                    <option value="background-removal-rmbg">RMBG 2.0 (High Quality)</option>
-                    <option value="u2netp-mobile">U²-NetP (Ultra-Fast Mobile)</option>
-                    <option value="modnet-portrait">MODNet (Portrait & Hair)</option>
+                    <option value="background-removal-rmbg">RMBG 2.0 (BiRefNet High Quality)</option>
                   </select>
                 </div>
-              </div>
-            </div>
 
-            {resultUrl && (
-              <div className="space-y-4 pt-4 border-t border-border">
-                <h3 className="text-sm font-bold text-text">Mask Tuning</h3>
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-wider">
-                      <span>Alpha Threshold</span>
-                      <span className="text-blue font-mono">{threshold.toFixed(2)}</span>
+                <button
+                  onClick={processBackgroundRemovalAi}
+                  disabled={!file || isProcessing}
+                  className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-blue/20 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  {isProcessing ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span>Running AI Inference...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      <span>Remove Background (AI Model)</span>
+                    </>
+                  )}
+                </button>
+
+                {/* AI Mask Fine-Tuning Controls */}
+                {resultUrl && (
+                  <div className="space-y-4 pt-4 border-t border-border">
+                    <h4 className="text-sm font-bold text-text">Post-Processing Mask Tuning</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-wider">
+                          <span>Alpha Threshold</span>
+                          <span className="text-blue font-mono">{threshold.toFixed(2)}</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0.1"
+                          max="0.9"
+                          step="0.05"
+                          value={threshold}
+                          onChange={(e) => setThreshold(Number(e.target.value))}
+                          onMouseUp={applyControlChanges}
+                          className="w-full cursor-pointer accent-blue"
+                          aria-label="Alpha Threshold"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-wider">
+                          <span>Edge Feathering</span>
+                          <span className="text-blue font-mono">{feather}px</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="10"
+                          step="1"
+                          value={feather}
+                          onChange={(e) => setFeather(Number(e.target.value))}
+                          onMouseUp={applyControlChanges}
+                          className="w-full cursor-pointer accent-blue"
+                          aria-label="Edge Feathering"
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2 border-t border-border">
+                        <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Invert Mask</span>
+                        <button
+                          onClick={() => { setInvert(!invert); setTimeout(applyControlChanges, 0); }}
+                          className={cn(
+                            "p-1.5 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-bold font-mono",
+                            invert ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface-elevated border-border text-text-muted"
+                          )}
+                        >
+                          {invert ? <ToggleRight className="w-5 h-5 text-blue" /> : <ToggleLeft className="w-5 h-5" />}
+                          <span>{invert ? 'Inverted' : 'Normal'}</span>
+                        </button>
+                      </div>
                     </div>
-                    <input
-                      type="range"
-                      min="0.1"
-                      max="0.9"
-                      step="0.05"
-                      value={threshold}
-                      onChange={(e) => setThreshold(Number(e.target.value))}
-                      onMouseUp={applyControlChanges}
-                      className="w-full cursor-pointer accent-blue"
-                    />
                   </div>
-
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-xs font-bold text-text-muted uppercase tracking-wider">
-                      <span>Edge Feathering</span>
-                      <span className="text-blue font-mono">{feather}px</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      value={feather}
-                      onChange={(e) => setFeather(Number(e.target.value))}
-                      onMouseUp={applyControlChanges}
-                      className="w-full cursor-pointer accent-blue"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-border">
-                    <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Invert Selection</span>
-                    <button
-                      onClick={() => { setInvert(!invert); setTimeout(applyControlChanges, 0); }}
-                      className={cn(
-                        "p-1.5 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-bold font-mono",
-                        invert ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface-elevated border-border text-text-muted"
-                      )}
-                    >
-                      {invert ? <ToggleRight className="w-5 h-5 text-blue" /> : <ToggleLeft className="w-5 h-5" />}
-                      <span>{invert ? 'Inverted' : 'Normal'}</span>
-                    </button>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </div>
         }
         output={
           <div className="space-y-6 h-full flex flex-col">
-            <h3 className="text-lg font-bold text-text">Output</h3>
-            
-            {!file && (
-              <div className="flex-1 border-2 border-dashed border-border rounded-3xl flex flex-col items-center justify-center text-text-muted min-h-[300px]">
-                <Layers className="w-8 h-8 mb-2 opacity-50" />
-                <p className="text-sm">Processed image will appear here</p>
-              </div>
+            <div className="flex justify-between items-center px-1">
+              <h3 className="text-sm font-bold text-text-2">Result (Transparent PNG)</h3>
+              {resultUrl && (
+                <button
+                  onClick={handleDownload}
+                  className="px-3.5 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download PNG</span>
+                </button>
+              )}
+            </div>
+
+            {/* Inference progress */}
+            {isProcessing && progress && (
+              <InferenceProgress
+                stage={progress.stage}
+                percent={progress.percent}
+                onCancel={() => abortControllerRef.current?.abort()}
+              />
             )}
 
-            {file && (
-              <div className="flex-1 space-y-6 flex flex-col">
-                {error && (
-                  <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
-                    <div className="flex items-center gap-2">
-                      <AlertCircle className="w-5 h-5 shrink-0" />
-                      <span className="text-xs font-semibold">{error}</span>
-                    </div>
-                    <div className="flex items-center gap-2 self-end sm:self-auto">
-                      <button
-                        onClick={processBackgroundRemoval}
-                        className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
-                      >
-                        Retry
-                      </button>
-                      <button
-                        onClick={handleReset}
-                        className="px-3 py-1 bg-surface border border-border text-text-muted text-xs font-bold rounded-lg hover:bg-surface-elevated transition-colors"
-                      >
-                        Reset
-                      </button>
-                    </div>
-                  </div>
-                )}
+            {/* Result display */}
+            {resultUrl ? (
+              <div className="space-y-4 flex-1 flex flex-col">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <button
+                    onClick={() => setShowCheckerboard(!showCheckerboard)}
+                    className={cn(
+                      "px-2.5 py-1 rounded-lg text-tiny font-mono font-bold border transition-colors flex items-center gap-1",
+                      showCheckerboard ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-muted"
+                    )}
+                  >
+                    <Layers className="w-3 h-3" />
+                    <span>{showCheckerboard ? "Checkerboard Pattern" : "Solid Background"}</span>
+                  </button>
+                </div>
 
-                {isProcessing && progress && (
-                  <InferenceProgress
-                    stage={progress.stage}
-                    percent={progress.percent}
-                    onCancel={() => abortControllerRef.current?.abort()}
-                  />
-                )}
+                {activeTab === 'ai' && originalUrl ? (
+                  // AI Mode: Split Comparison View
+                  <div 
+                    className={cn(
+                      "relative w-full flex-1 min-h-[400px] rounded-3xl border border-border overflow-hidden select-none",
+                      showCheckerboard ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
+                    )}
+                  >
+                    <img
+                      src={resultUrl}
+                      alt="Background Removed Result"
+                      className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                    />
 
-                {resultUrl && originalUrl && !isProcessing && (
-                  <div className="space-y-4 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Comparison</span>
-                        <button
-                          onClick={() => setShowCheckerboard(!showCheckerboard)}
-                          className={cn(
-                            "px-2.5 py-1 rounded-lg text-tiny font-mono font-bold border transition-colors flex items-center gap-1",
-                            showCheckerboard ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-muted"
-                          )}
-                        >
-                          <Layers className="w-3 h-3" />
-                          <span>Checkerboard</span>
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={handleDownload}
-                        className="px-4 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        <span>Download</span>
-                      </button>
-                    </div>
-
+                    <img
+                      src={originalUrl}
+                      alt="Original Image"
+                      className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                      style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                    />
+                    
                     <div 
-                      className={cn(
-                        "relative w-full flex-1 min-h-[400px] rounded-3xl border border-border overflow-hidden select-none",
-                        showCheckerboard ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
-                      )}
+                      className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
+                      style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
                     >
-                      <img
-                        src={resultUrl}
-                        alt="Background Removed Result"
-                        className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-                      />
-
-                      <img
-                        src={originalUrl}
-                        alt="Original Image"
-                        className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-                        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-                      />
-                      
-                      <div 
-                        className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-border text-tiny font-bold uppercase tracking-wider text-text transition-opacity duration-200"
-                        style={{ opacity: sliderPosition > 15 ? 1 : 0, pointerEvents: 'none' }}
-                      >
-                        Original
-                      </div>
-
-                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">
-                        Transparent PNG
-                      </div>
-
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={sliderPosition}
-                        onChange={(e) => setSliderPosition(Number(e.target.value))}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-above"
-                        aria-label="Before and after split image comparison slider"
-                      />
+                      Original
                     </div>
+
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">
+                      Transparent PNG
+                    </div>
+
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={sliderPosition}
+                      onChange={(e) => setSliderPosition(Number(e.target.value))}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-above"
+                      aria-label="Before and after split image comparison slider"
+                    />
+                  </div>
+                ) : (
+                  // Canvas Mode: Direct Result View
+                  <div className={cn(
+                    "flex-1 flex flex-col justify-center min-h-[350px] rounded-3xl overflow-hidden border border-border p-4",
+                    showCheckerboard ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
+                  )}>
+                    <img src={resultUrl} alt="Result with background removed" className="max-h-[450px] object-contain mx-auto" />
                   </div>
                 )}
+              </div>
+            ) : (
+              <div className="flex-1 border-2 border-dashed border-border rounded-3xl flex flex-col items-center justify-center text-text-muted min-h-[350px] p-6 text-center">
+                <Layers className="w-8 h-8 mb-2 opacity-50 text-blue" />
+                <p className="text-sm font-bold text-text">No Background Removed Yet</p>
+                <p className="text-xs text-text-muted mt-1 max-w-xs">
+                  Upload an image and click {activeTab === 'canvas' ? '"Remove Background (Canvas)"' : '"Remove Background (AI)"'} to preview the transparent result here.
+                </p>
               </div>
             )}
           </div>
@@ -479,10 +657,10 @@ export default function ToolClient() {
 
             <div className="flex flex-wrap gap-2 border-b border-border/60 pb-3">
               {[
-                { id: 'segmentation', label: '1. Image Segmentation' },
+                { id: 'segmentation', label: '1. Neural Segmentation' },
                 { id: 'tensors', label: '2. Tensor Normalization' },
                 { id: 'alpha', label: '3. Alpha Matting' },
-                { id: 'wasm', label: '4. WASM vs WebGPU' }
+                { id: 'wasm', label: '4. Canvas vs AI Math' }
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -532,10 +710,10 @@ export default function ToolClient() {
 
               {activeElsTab === 'wasm' && (
                 <div className="space-y-2">
-                  <h4 className="font-bold text-text text-sm">WebAssembly (WASM) & WebGPU Acceleration</h4>
+                  <h4 className="font-bold text-text text-sm">Canvas Color-Tolerance vs Deep Learning AI</h4>
                   <p>
-                    Inference runs off the main UI thread inside an isolated Web Worker via <code>WorkerOrchestrator</code>.
-                    Browsers supporting <strong>WebGPU</strong> leverage hardware GPU shaders, while fallback browsers execute C++ compiled WebAssembly with SIMD vector extensions.
+                    <strong>Canvas Mode:</strong> Computes Euclidean color distance $\Delta E = \sqrt{(r_1-r_2)^2 + (g_1-g_2)^2 + (b_1-b_2)^2}$ per pixel in Web Workers. 0 MB download, instant speed.<br />
+                    <strong>AI Mode:</strong> Executes multi-scale feature maps in ONNX Runtime with WebGPU acceleration.
                   </p>
                 </div>
               )}
@@ -543,7 +721,7 @@ export default function ToolClient() {
 
             <div className="flex items-center gap-2 text-tiny font-mono text-text-4 pt-2 border-t border-border/50">
               <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-              <span>100% Client-Side • ONNX Runtime Web • Zero Server Transmission</span>
+              <span>100% Client-Side • Web Worker & ONNX Runtime Web • Zero Server Uploads</span>
             </div>
           </div>
         }

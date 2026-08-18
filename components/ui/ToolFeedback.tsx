@@ -46,7 +46,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
     if (type === 'up') {
       setIsSubmitting(true);
       try {
-        const response = await fetch('/api/send-feedback', {
+        const response = await fetch('/api/send-feedback/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,8 +64,17 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
           }),
         });
 
+        let data;
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          await response.text();
+          throw new Error(`Server Error (${response.status}): Expected JSON but received HTML. This might be due to static hosting (like GitHub Pages) which doesn't support API routes.`);
+        }
+
         if (!response.ok) {
-          throw new Error('API failed');
+          throw new Error(data?.error || 'API failed');
         }
 
         setSubmitted(true);
@@ -95,7 +104,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
       const finalEmail = email.trim() || 'anonymous@karuvilab.com';
       const finalMessage = `Thumbs Down feedback for tool "${toolName}" (ID: ${toolId})\n\nComment: ${comment.trim()}`;
       
-      const response = await fetch('/api/send-feedback', {
+      const response = await fetch('/api/send-feedback/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,9 +122,17 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
         }),
       });
 
+      let data;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        await response.text();
+        throw new Error(`Server Error (${response.status}): Expected JSON but received HTML. This might be due to static hosting (like GitHub Pages) which doesn't support API routes.`);
+      }
+
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to submit feedback');
+        throw new Error(data?.error || 'Failed to submit feedback');
       }
 
       setSubmitted(true);
