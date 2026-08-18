@@ -31,10 +31,14 @@ function getZodiacSign(month: number, day: number): string {
     { sign: 'Capricorn', emoji: '♑', start: [12, 22], end: [12, 31] },
   ];
   for (const s of signs) {
-    const [sm, sd] = s.start;
-    const [em, ed] = s.end;
-    if ((month === sm && day >= sd) || (month === em && day <= ed)) {
-      return `${s.emoji} ${s.sign}`;
+    const sm = s.start[0];
+    const sd = s.start[1];
+    const em = s.end[0];
+    const ed = s.end[1];
+    if (sm !== undefined && sd !== undefined && em !== undefined && ed !== undefined) {
+      if ((month === sm && day >= sd) || (month === em && day <= ed)) {
+        return `${s.emoji} ${s.sign}`;
+      }
     }
   }
   return '♑ Capricorn';
@@ -218,7 +222,7 @@ export default function AgeCalculatorClient() {
 
               {/* Section 3: Birthday Countdown */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <MetricCard label="Next Birthday" value={result.nextBirthday} />
+                <MetricCard label="Next Birthday" value={result.nextBirthday || ''} />
                 <MetricCard label="Days Until Birthday" value={`${result.daysUntilBirthday.toLocaleString()} 🎂`} />
               </div>
 

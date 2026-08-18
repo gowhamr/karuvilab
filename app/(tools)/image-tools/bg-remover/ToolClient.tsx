@@ -712,7 +712,7 @@ export default function ToolClient() {
                 <div className="space-y-2">
                   <h4 className="font-bold text-text text-sm">Canvas Color-Tolerance vs Deep Learning AI</h4>
                   <p>
-                    <strong>Canvas Mode:</strong> Computes Euclidean color distance $\Delta E = \sqrt{(r_1-r_2)^2 + (g_1-g_2)^2 + (b_1-b_2)^2}$ per pixel in Web Workers. 0 MB download, instant speed.<br />
+                    <strong>Canvas Mode:</strong> Computes Euclidean color distance &Delta;E = &radic;((r1-r2)&sup2; + (g1-g2)&sup2; + (b1-b2)&sup2;) per pixel in Web Workers. 0 MB download, instant speed.<br />
                     <strong>AI Mode:</strong> Executes multi-scale feature maps in ONNX Runtime with WebGPU acceleration.
                   </p>
                 </div>
