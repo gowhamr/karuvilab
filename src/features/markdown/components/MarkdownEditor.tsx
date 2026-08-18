@@ -4,7 +4,7 @@ import React, { useState, useCallback, useMemo, useRef, useEffect } from "react"
 import { 
   FileText, Upload, Code2, Download, Search, 
   RefreshCw, CheckCircle2, X, ChevronRight,
-  FileCode, FileEdit, Type
+  FileCode, FileEdit, Type, Eye
 } from "lucide-react";
 import { m } from "framer-motion";
 import { cn } from "@/src/lib/utils";
@@ -21,6 +21,7 @@ import { StatBar } from "./StatBar";
 import { Toolbar } from "./Toolbar";
 import { FindBar } from "./FindBar";
 import { MarkdownPreview } from "./MarkdownPreview";
+import { MarkdownVisualEditor } from "./MarkdownVisualEditor";
 import { SAMPLE_MARKDOWN } from "../constants";
 
 
@@ -30,7 +31,8 @@ import { CATEGORIES } from "@/src/tool-registry";
 export function MarkdownEditor() {
   const { toast } = useToast();
   const [mode, setMode] = useState<"editor" | "upload">("editor");
-  const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+  type EditorTab = "write" | "visual" | "preview";
+  const [activeTab, setActiveTab] = useState<EditorTab>("write");
   const [md, setMd] = useState(SAMPLE_MARKDOWN);
   const [uploadMd, setUploadMd] = useState("");
   const [fileName, setFileName] = useState("");
@@ -343,13 +345,14 @@ export function MarkdownEditor() {
             onChange={(id) => setMode(id as any)}
           />
 
-          {/* Mobile-only View Toggle (only in Editor mode) */}
+          {/* Tri-Mode Segmented Control */}
           {mode === "editor" && (
-            <div className="md:hidden w-full sm:w-auto">
+            <div className="w-full sm:w-auto">
               <SegmentedControl
                 options={[
-                  { id: "edit", label: "Write" },
-                  { id: "preview", label: "Preview" },
+                  { id: "write", label: "Write", icon: <FileEdit className="w-4 h-4" /> },
+                  { id: "visual", label: "Visual", icon: <Type className="w-4 h-4" /> },
+                  { id: "preview", label: "Preview", icon: <Eye className="w-4 h-4" /> },
                 ]}
                 activeId={activeTab}
                 onChange={(id) => setActiveTab(id as any)}
@@ -403,18 +406,20 @@ export function MarkdownEditor() {
               isThisToolFullscreen ? "h-full" : "h-tool-viewport md:h-tool-viewport min-h-full max-h-screen"
             )}
           >
-            {/* Hide Toolbar in Preview mode on mobile */}
-            <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
-              <Toolbar 
-                onInsert={insertAtCursor} 
-                onClear={() => setMd("")}
-                onLoadSample={() => setMd(SAMPLE_MARKDOWN)}
-                scrollSync={scrollSync}
-                onToggleScrollSync={() => setScrollSync(!scrollSync)}
-              />
+            {/* Hide Toolbar in Visual/Preview mode */}
+            <div className={`${activeTab === "write" ? "block" : "hidden"}`}>
+              {activeTab === "write" && (
+                <Toolbar 
+                  onInsert={insertAtCursor} 
+                  onClear={() => setMd("")}
+                  onLoadSample={() => setMd(SAMPLE_MARKDOWN)}
+                  scrollSync={scrollSync}
+                  onToggleScrollSync={() => setScrollSync(!scrollSync)}
+                />
+              )}
             </div>
             
-            {showFind && (
+            {showFind && activeTab === "write" && (
               <FindBar
                 onFind={handleFind}
                 onReplace={handleReplace}
@@ -427,7 +432,7 @@ export function MarkdownEditor() {
             )}
 
             <div className="flex-1 flex flex-col md:flex-row min-h-0">
-              <div className={`flex-1 flex-col min-w-0 md:border-r border-border h-full ${activeTab === "edit" ? "flex" : "hidden"} md:flex`}>
+              <div className={`flex-1 flex-col min-w-0 h-full ${activeTab === "write" ? "flex" : "hidden"}`}>
                 <textarea
                   ref={textareaRef}
                   value={md}
@@ -446,21 +451,34 @@ export function MarkdownEditor() {
                   spellCheck={false}
                 />
               </div>
-              <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"} md:flex`}>
-                <MarkdownPreview 
-                  html={html} 
-                  ref={previewRef}
-                  hideHeader={true}
-                  onCopyRaw={() => {
-                    navigator.clipboard.writeText(md);
-                    toast("Markdown copied!");
-                  }} 
-                />
+
+              <div className={`flex-1 flex-col min-w-0 h-full ${activeTab === "visual" ? "flex" : "hidden"}`}>
+                {activeTab === "visual" && (
+                  <MarkdownVisualEditor 
+                    markdown={md} 
+                    onChange={setMd} 
+                    fontSize={fontSize} 
+                  />
+                )}
+              </div>
+
+              <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"}`}>
+                {activeTab === "preview" && (
+                  <MarkdownPreview 
+                    html={html} 
+                    ref={previewRef}
+                    hideHeader={true}
+                    onCopyRaw={() => {
+                      navigator.clipboard.writeText(md);
+                      toast("Markdown copied!");
+                    }} 
+                  />
+                )}
               </div>
             </div>
 
-            {/* Hide StatBar in Preview mode on mobile */}
-            <div className={`${activeTab === "preview" ? "hidden" : "block"} md:block`}>
+            {/* Hide StatBar in Preview mode */}
+            <div className={`${activeTab === "preview" ? "hidden" : "block"}`}>
               <StatBar stats={stats} />
             </div>
           </m.div>
