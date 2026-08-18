@@ -128,7 +128,10 @@ export function useSpeedTest() {
       try {
         await fetch(url, {
           method: 'POST',
-          body: payload,
+          body: new Blob([payload], { type: 'text/plain' }),
+          headers: {
+            'Content-Type': 'text/plain'
+          },
           cache: 'no-store',
           mode: 'cors',
           signal: abortController.current?.signal ?? null

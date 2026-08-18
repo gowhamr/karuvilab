@@ -49,7 +49,7 @@ const nextConfig = {
         style-src 'self' 'unsafe-inline';
         img-src 'self' data: blob:;
         worker-src 'self' blob: https://unpkg.com;
-        connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev;
+        connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev https://speed.cloudflare.com https://www.google.com;
         object-src 'none';
         frame-ancestors 'self';
         base-uri 'self';

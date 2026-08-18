@@ -544,7 +544,7 @@ Every tool page must have:
 | Script injection | No dynamic `<script>` tag injection |
 | Crypto | Web Crypto API is the only cryptographic library |
 | IndexedDB | No sensitive personal data without encryption |
-| CSP | Content-Security-Policy headers must be configured in `next.config.ts` |
+| CSP | Content-Security-Policy headers must be configured in `next.config.mjs`. Tools needing external APIs (like `speed.cloudflare.com` for Speed Tester) must explicitly list domains in `connect-src`. |
 | Subresource integrity | CDN fallback URLs must include `integrity` attribute where possible |
 | Security Headers | `X-Frame-Options` must be `SAMEORIGIN` (NEVER `DENY`) so the Workbench can frame local tools. |
 
