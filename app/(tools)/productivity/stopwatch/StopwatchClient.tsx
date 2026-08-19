@@ -5,27 +5,8 @@ import * as Popover from '@radix-ui/react-popover';
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useStopwatchStore, Lap } from "@/src/features/stopwatch/store";
+import { formatStopwatchTime, useWakeLock, calculateElapsed } from "@/src/features/stopwatch";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
-
-function formatTime(ms: number, showMs: boolean = true) {
-  const mins = Math.floor(ms / 60000);
-  const secs = Math.floor((ms % 60000) / 1000);
-  const millis = Math.floor((ms % 1000) / 10);
-
-  const mStr = String(mins).padStart(2, "0");
-  const sStr = String(secs).padStart(2, "0");
-  const msStr = String(millis).padStart(2, "0");
-
-  if (mins >= 60) {
-    const hrs = Math.floor(mins / 60);
-    const remMins = mins % 60;
-    const hStr = String(hrs).padStart(2, "0");
-    const rmStr = String(remMins).padStart(2, "0");
-    return showMs ? `${hStr}:${rmStr}:${sStr}.${msStr}` : `${hStr}:${rmStr}:${sStr}`;
-  }
-
-  return showMs ? `${mStr}:${sStr}.${msStr}` : `${mStr}:${sStr}`;
-}
 
 export default function StopwatchClient() {
   const { displayMode, activeToolId } = useFullscreenContext();
@@ -38,6 +19,9 @@ export default function StopwatchClient() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [laps, setLaps] = useState<Lap[]>([]);
+  
+  // Keep screen on while running
+  useWakeLock(isRunning);
   
   const requestRef = useRef<number | null>(null);
   
@@ -95,7 +79,7 @@ export default function StopwatchClient() {
     }
   };
 
-  const displayString = formatTime(elapsed, settings.showMilliseconds);
+  const displayString = formatStopwatchTime(elapsed, settings.showMilliseconds);
 
   // Layout calculations
   const bgClasses = isDashboard ? {
@@ -241,11 +225,11 @@ export default function StopwatchClient() {
                 
                 <span className="font-mono font-bold text-xl tabular-nums tracking-tight">
                   {isFastest && <ArrowUpCircle className="inline-block w-4 h-4 mr-2" />}
-                  {formatTime(lap.lapTime, settings.showMilliseconds)}
+                  {formatStopwatchTime(lap.lapTime, settings.showMilliseconds)}
                 </span>
                 
                 <span className="font-mono font-medium text-text-muted tabular-nums w-32 text-right">
-                  {formatTime(lap.totalTime, settings.showMilliseconds)}
+                  {formatStopwatchTime(lap.totalTime, settings.showMilliseconds)}
                 </span>
               </div>
             );
