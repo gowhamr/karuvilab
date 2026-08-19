@@ -17,9 +17,9 @@ if (typeof workbox !== 'undefined') {
 
   // Cache names
   const CACHE_NAMES = {
-    static: 'karuvilab-static-1786991868009',
-    images: 'karuvilab-images-1786991868009',
-    pages: 'karuvilab-pages-1786991868009',
+    static: 'karuvilab-static-1787114507063',
+    images: 'karuvilab-images-1787114507063',
+    pages: 'karuvilab-pages-1787114507063',
     googleFonts: 'google-fonts',
   };
 
@@ -178,5 +178,18 @@ if (typeof workbox !== 'undefined') {
     );
   });
 } else {
-  console.error('Workbox failed to initialize: workbox object is undefined');
+  // Pure native ServiceWorker fallback when Workbox is offline or unavailable
+  self.addEventListener('install', () => {
+    self.skipWaiting();
+  });
+  self.addEventListener('activate', (event) => {
+    event.waitUntil(self.clients.claim());
+  });
+  self.addEventListener('fetch', (event) => {
+    if (event.request.method === 'GET' && event.request.url.startsWith(self.location.origin)) {
+      event.respondWith(
+        fetch(event.request).catch(() => caches.match(event.request))
+      );
+    }
+  });
 }

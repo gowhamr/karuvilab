@@ -7,6 +7,7 @@ export const Table = Node.create({
   // @ts-expect-error: tableRole is an internal tiptap property
   tableRole: 'table',
   isolating: true,
+  parseHTML: () => [{ tag: 'table' }],
   renderHTML: ({ HTMLAttributes }) => ['table', { ...HTMLAttributes, class: 'border-collapse border border-border w-full my-4' }, ['tbody', 0]],
 });
 
@@ -15,6 +16,7 @@ export const TableRow = Node.create({
   content: '(tableCell | tableHeader)*',
   // @ts-expect-error: tableRole is an internal tiptap property
   tableRole: 'row',
+  parseHTML: () => [{ tag: 'tr' }],
   renderHTML: ({ HTMLAttributes }) => ['tr', HTMLAttributes, 0],
 });
 
@@ -24,6 +26,7 @@ export const TableHeader = Node.create({
   // @ts-expect-error: tableRole is an internal tiptap property
   tableRole: 'header_cell',
   isolating: true,
+  parseHTML: () => [{ tag: 'th' }],
   renderHTML: ({ HTMLAttributes }) => ['th', { ...HTMLAttributes, class: 'border border-border p-2 bg-surface-2 font-bold text-left' }, 0],
 });
 
@@ -33,6 +36,7 @@ export const TableCell = Node.create({
   // @ts-expect-error: tableRole is an internal tiptap property
   tableRole: 'cell',
   isolating: true,
+  parseHTML: () => [{ tag: 'td' }],
   renderHTML: ({ HTMLAttributes }) => ['td', { ...HTMLAttributes, class: 'border border-border p-2 text-left' }, 0],
 });
 
@@ -40,6 +44,7 @@ export const TaskList = Node.create({
   name: 'taskList',
   group: 'block list',
   content: 'taskItem+',
+  parseHTML: () => [{ tag: 'ul[data-type="taskList"]' }, { tag: 'ul.task-list' }],
   renderHTML: ({ HTMLAttributes }) => ['ul', { ...HTMLAttributes, 'data-type': 'taskList', class: 'list-none pl-0 space-y-1' }, 0],
 });
 
@@ -54,6 +59,7 @@ export const TaskItem = Node.create({
       renderHTML: attr => ({ 'data-checked': attr.checked }),
     },
   }),
+  parseHTML: () => [{ tag: 'li[data-type="taskItem"]' }, { tag: 'li.task-list-item' }],
   renderHTML: ({ HTMLAttributes }) => ['li', { ...HTMLAttributes, 'data-type': 'taskItem', class: 'flex items-start gap-2' }, 0],
 });
 
@@ -67,5 +73,6 @@ export const Image = Node.create({
     alt: { default: null },
     title: { default: null },
   }),
+  parseHTML: () => [{ tag: 'img[src]' }],
   renderHTML: ({ HTMLAttributes }) => ['img', { ...HTMLAttributes, class: 'rounded-xl max-w-full my-2' }],
 });

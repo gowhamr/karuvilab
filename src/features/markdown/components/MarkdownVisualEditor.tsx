@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
-import Link from "@tiptap/extension-link";
 import {
   Undo,
   Redo,
@@ -42,11 +41,12 @@ export function MarkdownVisualEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: { openOnClick: false },
+      }),
       Placeholder.configure({
         placeholder: "Start typing your markdown visually...",
       }),
-      Link.configure({ openOnClick: false }),
       Table,
       TableRow,
       TableHeader,
@@ -191,7 +191,20 @@ export function MarkdownVisualEditor({
         <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive("orderedList")}>
           <ListOrdered className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => editor.chain().focus().toggleList('taskList', 'taskItem').run()} isActive={editor.isActive("taskList")}>
+        <ToolbarButton 
+          onClick={() => {
+            editor.chain().focus().insertContent([
+              {
+                type: 'taskList',
+                content: [
+                  { type: 'taskItem', attrs: { checked: false }, content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Task item' }] }] }
+                ]
+              },
+              { type: 'paragraph' }
+            ]).run();
+          }} 
+          isActive={editor.isActive("taskList")}
+        >
           <ListTodo className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleBlockquote().run()} isActive={editor.isActive("blockquote")}>
@@ -200,29 +213,43 @@ export function MarkdownVisualEditor({
         <ToolbarButton onClick={() => editor.chain().focus().toggleCodeBlock().run()} isActive={editor.isActive("codeBlock")}>
           <SquareCode className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => {
-          editor.chain().focus().insertContent(`
-            <table class="border-collapse border border-border w-full my-4">
-              <tbody>
-                <tr>
-                  <th class="border border-border p-2 bg-surface-2 font-bold text-left">Header 1</th>
-                  <th class="border border-border p-2 bg-surface-2 font-bold text-left">Header 2</th>
-                  <th class="border border-border p-2 bg-surface-2 font-bold text-left">Header 3</th>
-                </tr>
-                <tr>
-                  <td class="border border-border p-2 text-left">Row 1 Cell 1</td>
-                  <td class="border border-border p-2 text-left">Row 1 Cell 2</td>
-                  <td class="border border-border p-2 text-left">Row 1 Cell 3</td>
-                </tr>
-                <tr>
-                  <td class="border border-border p-2 text-left">Row 2 Cell 1</td>
-                  <td class="border border-border p-2 text-left">Row 2 Cell 2</td>
-                  <td class="border border-border p-2 text-left">Row 2 Cell 3</td>
-                </tr>
-              </tbody>
-            </table>
-          `).run();
-        }}>
+        <ToolbarButton 
+          onClick={() => {
+            editor.chain().focus().insertContent([
+              {
+                type: 'table',
+                content: [
+                  {
+                    type: 'tableRow',
+                    content: [
+                      { type: 'tableHeader', content: [{ type: 'text', text: 'Header 1' }] },
+                      { type: 'tableHeader', content: [{ type: 'text', text: 'Header 2' }] },
+                      { type: 'tableHeader', content: [{ type: 'text', text: 'Header 3' }] },
+                    ]
+                  },
+                  {
+                    type: 'tableRow',
+                    content: [
+                      { type: 'tableCell', content: [{ type: 'text', text: 'Cell 1' }] },
+                      { type: 'tableCell', content: [{ type: 'text', text: 'Cell 2' }] },
+                      { type: 'tableCell', content: [{ type: 'text', text: 'Cell 3' }] },
+                    ]
+                  },
+                  {
+                    type: 'tableRow',
+                    content: [
+                      { type: 'tableCell', content: [{ type: 'text', text: 'Cell 4' }] },
+                      { type: 'tableCell', content: [{ type: 'text', text: 'Cell 5' }] },
+                      { type: 'tableCell', content: [{ type: 'text', text: 'Cell 6' }] },
+                    ]
+                  }
+                ]
+              },
+              { type: 'paragraph' }
+            ]).run();
+          }}
+          isActive={editor.isActive("table")}
+        >
           <TableIcon className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().setHorizontalRule().run()}>

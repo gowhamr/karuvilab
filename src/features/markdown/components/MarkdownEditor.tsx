@@ -251,50 +251,69 @@ export function MarkdownEditor() {
           pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // Create a clone to modify for export
-        const clone = element.cloneNode(true) as HTMLElement;
+        // Extract content and strip Tailwind classes that cause oklab/oklch parsing issues
+        const rawContent = element.querySelector('.markdown-body') || element;
+        const clone = rawContent.cloneNode(true) as HTMLElement;
         
-        // Reset container dimensions and scroll behavior for clean capture
-        clone.style.width = '180mm'; // A4 width (210) minus 15mm margins on each side
-        clone.style.height = 'auto';
-        clone.style.maxHeight = 'none';
-        clone.style.overflow = 'visible';
-        clone.style.position = 'static';
-        clone.style.padding = '0';
-        
-        // Remove UI elements that shouldn't be in PDF
+        // Remove UI buttons and copy widgets
         clone.querySelectorAll('.copy-code-btn, .mmd-copy, button, .flex.items-center.justify-between').forEach(el => el.remove());
+
+        // Strip Tailwind background/text/border classes to avoid oklab/oklch computed values
+        const allElements = [clone, ...Array.from(clone.querySelectorAll('*'))];
+        for (const el of allElements) {
+          if (el instanceof HTMLElement) {
+            el.className = el.className
+              .replace(/\b(bg|text|border|shadow|ring|backdrop|from|to|via)-[^\s]+/g, '')
+              .trim();
+          }
+        }
+
+        // Create a clean A4 export container
+        const container = document.createElement('div');
+        container.className = 'markdown-body';
+        container.style.width = '180mm';
+        container.style.padding = '0';
+        container.style.backgroundColor = '#ffffff';
+        container.style.color = '#24292e';
+        container.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
         
         // Add PDF-specific styles for professional output
         const style = document.createElement('style');
         style.innerHTML = `
+          * {
+            box-sizing: border-box !important;
+            color: #24292e !important;
+            border-color: #d0d7de !important;
+          }
           .markdown-body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; 
-            font-size: 14px; 
-            line-height: 1.6; 
-            color: #24292e; 
-            background: white !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important; 
+            font-size: 14px !important; 
+            line-height: 1.6 !important; 
+            color: #24292e !important; 
+            background: #ffffff !important;
             padding: 0 !important;
           }
-          .markdown-body h1 { font-size: 2em; margin-bottom: 16px; font-weight: 600; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
-          .markdown-body h2 { font-size: 1.5em; margin-top: 24px; margin-bottom: 16px; font-weight: 600; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
-          .markdown-body h3 { font-size: 1.25em; margin-top: 24px; margin-bottom: 16px; font-weight: 600; }
-          .markdown-body p { margin-top: 0; margin-bottom: 16px; }
-          .markdown-body pre { background-color: #f6f8fa; border-radius: 6px; padding: 16px; margin-bottom: 16px; white-space: pre-wrap; word-break: break-all; }
-          .markdown-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; background-color: rgba(27,31,35,0.05); border-radius: 3px; padding: 0.2em 0.4em; font-size: 85%; }
-          .markdown-body pre code { background-color: transparent; padding: 0; margin: 0; font-size: 100%; white-space: pre-wrap; word-break: break-all; }
-          .markdown-body blockquote { border-left: 0.25em solid #dfe2e5; color: #6a737d; padding: 0 1em; margin: 0 0 16px 0; }
-          .markdown-body table { border-collapse: collapse; width: 100%; margin-top: 0; margin-bottom: 16px; display: table !important; table-layout: fixed; word-break: break-word; }
-          .markdown-body th, .markdown-body td { border: 1px solid #dfe2e5; padding: 6px 13px; overflow-wrap: break-word; }
-          .markdown-body th { background-color: #f6f8fa; font-weight: 600; }
-          .markdown-body img { max-width: 100%; box-sizing: content-box; background-color: #fff; }
+          .markdown-body h1 { font-size: 2em !important; margin-bottom: 16px !important; font-weight: 600 !important; border-bottom: 1px solid #eaecef !important; padding-bottom: 0.3em !important; color: #24292e !important; }
+          .markdown-body h2 { font-size: 1.5em !important; margin-top: 24px !important; margin-bottom: 16px !important; font-weight: 600 !important; border-bottom: 1px solid #eaecef !important; padding-bottom: 0.3em !important; color: #24292e !important; }
+          .markdown-body h3 { font-size: 1.25em !important; margin-top: 24px !important; margin-bottom: 16px !important; font-weight: 600 !important; color: #24292e !important; }
+          .markdown-body p { margin-top: 0 !important; margin-bottom: 16px !important; color: #24292e !important; }
+          .markdown-body pre { background-color: #f6f8fa !important; border: 1px solid #d0d7de !important; border-radius: 6px !important; padding: 16px !important; margin-bottom: 16px !important; white-space: pre-wrap !important; word-break: break-all !important; }
+          .markdown-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important; background-color: #f1f3f5 !important; border-radius: 3px !important; padding: 0.2em 0.4em !important; font-size: 85% !important; color: #24292e !important; }
+          .markdown-body pre code { background-color: transparent !important; padding: 0 !important; margin: 0 !important; font-size: 100% !important; white-space: pre-wrap !important; word-break: break-all !important; color: #24292e !important; }
+          .markdown-body blockquote { border-left: 0.25em solid #dfe2e5 !important; color: #6a737d !important; padding: 0 1em !important; margin: 0 0 16px 0 !important; background: transparent !important; }
+          .markdown-body table { border-collapse: collapse !important; width: 100% !important; margin-top: 0 !important; margin-bottom: 16px !important; display: table !important; table-layout: fixed !important; word-break: break-word !important; }
+          .markdown-body th, .markdown-body td { border: 1px solid #dfe2e5 !important; padding: 6px 13px !important; overflow-wrap: break-word !important; text-align: left !important; color: #24292e !important; }
+          .markdown-body th { background-color: #f6f8fa !important; font-weight: 600 !important; }
+          .markdown-body img { max-width: 100% !important; box-sizing: content-box !important; background-color: #ffffff !important; }
           .markdown-body svg { max-width: 100% !important; height: auto !important; }
           .markdown-body [id^="mermaid-"] { height: auto !important; max-width: 100% !important; }
-          .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-top: 0; margin-bottom: 16px; }
+          .markdown-body ul, .markdown-body ol { padding-left: 2em !important; margin-top: 0 !important; margin-bottom: 16px !important; }
+          .markdown-body li { margin-bottom: 4px !important; color: #24292e !important; }
         `;
-        clone.prepend(style);
+        container.appendChild(style);
+        container.appendChild(clone);
 
-        await html2pdf().set(opt).from(clone).save();
+        await html2pdf().set(opt).from(container).save();
         toast("PDF exported successfully!");
       } catch (err) {
         console.error("PDF export failed:", err);
