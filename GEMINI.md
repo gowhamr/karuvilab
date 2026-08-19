@@ -1,5 +1,5 @@
 # KaruviLab (KV) — Elite Engineering Manifesto
-**Version:** 3.1.0 | **Last Updated:** 2026-06-20 | **Status:** ACTIVE
+**Version:** 3.2.0 | **Last Updated:** 2026-08-19 | **Status:** ACTIVE
 
 > This document is the **single source of truth** for KaruviLab's identity, architecture, and engineering standards.
 > All human contributors and AI agents (Gemini CLI, Cursor, Claude Code, etc.) **must** adhere strictly to every rule defined herein.
@@ -525,7 +525,9 @@ Every tool page must have:
 - Bottom nav must respect safe-area insets: `pb-[env(safe-area-inset-bottom)]`
 - FAB placed `bottom-24` on mobile to avoid overlap
 - No horizontal overflow at 320px — test on every new tool
-- **Responsive Padding Rule**: Never use static large paddings (e.g., `p-6`, `p-8`, `p-12`) on structural or layout wrappers. Always use fluid responsive spacing (`p-4 sm:p-6`, `p-4 sm:p-8`) to prevent layout crushing, horizontal scrolling, and CLS on narrow mobile viewports.
+- **Responsive Padding Rule**: Never use static large paddings (e.g., `p-6`, `p-8`, `p-12`) on structural or layout wrappers. Always use fluid responsive spacing (`p-3.5 sm:p-6`, `p-4 sm:p-8`) to prevent layout crushing, horizontal scrolling, and CLS on narrow mobile viewports.
+- **Grid Overflow Containment Rule**: All CSS Grid layouts and flex children must include `min-w-0 max-w-full` on both grid containers and items. Without `min-w-0`, CSS Grid items default to `min-width: auto`, which causes long strings, numbers, or unshrinkable content to push layout borders off the screen on 320px–375px viewports.
+- **Table Containment Rule**: Tables rendered inside metric cards or workspace panels must be wrapped in `<div className="overflow-x-auto w-full max-w-full min-w-0">` with `truncate` or `whitespace-nowrap` on headers/cells to ensure graceful horizontal scroll without blowing out parent card containers.
 
 ### 12.7 Privacy Transparency
 - File-processing tools must display `<PrivacyBadge>`: "Processed entirely in your browser"

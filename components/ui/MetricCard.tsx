@@ -33,7 +33,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } 
       }}
       className={cn(
-        "bg-mat-surface p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl space-y-2 sm:space-y-3 min-w-0 overflow-hidden shadow-mat-shine transition-[background-color,border-color] duration-150 ease-out border border-transparent hover:border-mat-border-focus hover:bg-mat-hover", 
+        "bg-mat-surface p-3 sm:p-5 rounded-2xl sm:rounded-3xl space-y-1.5 sm:space-y-3 min-w-0 max-w-full overflow-hidden shadow-mat-shine transition-[background-color,border-color] duration-150 ease-out border border-transparent hover:border-mat-border-focus hover:bg-mat-hover", 
         loading && "shimmer-wrapper",
         className
       )}
@@ -44,7 +44,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         <h3 
           id={label.replace(/\s+/g, "-").toLowerCase() + "-label"}
           title={label}
-          className="flex items-center gap-1.5 text-text-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider min-w-0 truncate"
+          className="flex items-center gap-1.5 text-text-2 text-[10px] xs:text-[11px] sm:text-xs font-bold uppercase tracking-wider min-w-0 truncate"
         >
           {Icon && <Icon className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" focusable="false" />}
           <span className="truncate">{label}</span>
@@ -66,8 +66,8 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
         aria-live="polite"
         aria-atomic="true"
         className={cn(
-          "text-lg sm:text-2xl font-black tabular-nums break-words leading-snug transition-colors", 
-          accent ? "text-brand-primary text-xl sm:text-3xl" : "text-text",
+          "text-base xs:text-lg sm:text-2xl font-black tabular-nums break-words leading-tight sm:leading-snug transition-colors min-w-0", 
+          accent ? "text-brand-primary text-lg xs:text-xl sm:text-3xl" : "text-text",
           valueClassName,
           loading && "opacity-20"
         )}
@@ -76,7 +76,7 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
       </div>
       {(sub || trend?.label) && (
         <p className={cn(
-          "text-[11px] sm:text-xs text-text-3 font-medium leading-normal break-words transition-all",
+          "text-[10px] xs:text-[11px] sm:text-xs text-text-3 font-medium leading-normal break-words transition-all min-w-0",
           loading && "opacity-20"
         )}>
           {loading ? "Calculating..." : (trend?.label ? `${trend.label}: ${sub || ""}` : sub)}
