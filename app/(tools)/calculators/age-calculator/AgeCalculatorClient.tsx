@@ -719,17 +719,20 @@ export default function AgeCalculatorClient() {
                   label="Exact Age" 
                   value={`${result.years} Years, ${result.months} Months, ${result.days} Days`} 
                   accent 
+                  className="bg-primary/5 border-primary/20 shadow-sm"
+                  valueClassName="text-xl xs:text-2xl sm:text-3xl md:text-4xl text-blue leading-tight"
+                  sub="Calculated to the exact day from date of birth"
                 />
               </div>
 
               {/* Section 2: Birthday Countdown */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <MetricCard label="Next Birthday" value={result.nextBirthday || ''} />
                 <MetricCard label="Days Until Birthday" value={`${result.daysUntilBirthday.toLocaleString()} 🎂`} />
               </div>
 
               {/* Section 3: Time Breakdown */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
                 <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
                 <MetricCard 
                   label="Total Weeks" 
@@ -748,24 +751,26 @@ export default function AgeCalculatorClient() {
                     label="Age Difference (Comparison)" 
                     value={`${comparisonResult.years} Years, ${comparisonResult.months} Months, ${comparisonResult.days} Days`} 
                     accent
+                    className="bg-blue/5 border-blue/20"
+                    valueClassName="text-lg xs:text-xl sm:text-2xl"
                   />
                 </div>
               )}
 
               {/* Section 4: Zodiac & Celestial Profile */}
-              <div className="space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
-                    <Sparkles className="w-3.5 h-3.5 text-blue" />
+                    <Sparkles className="w-3.5 h-3.5 text-blue flex-shrink-0" />
                     <span>Zodiac & Celestial Profile</span>
                   </div>
 
                   {/* Astrology System Switcher */}
-                  <div className="flex items-center gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs">
+                  <div className="flex items-center gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs self-start sm:self-auto">
                     <button
                       type="button"
                       onClick={() => setAstrologySystem("tropical")}
-                      className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg font-medium transition-colors cursor-pointer text-xs ${
                         astrologySystem === "tropical"
                           ? "bg-blue text-white shadow-sm"
                           : "text-text-muted hover:text-text"
@@ -776,7 +781,7 @@ export default function AgeCalculatorClient() {
                     <button
                       type="button"
                       onClick={() => setAstrologySystem("vedic")}
-                      className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg font-medium transition-colors cursor-pointer text-xs ${
                         astrologySystem === "vedic"
                           ? "bg-blue text-white shadow-sm"
                           : "text-text-muted hover:text-text"
@@ -787,7 +792,7 @@ export default function AgeCalculatorClient() {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
                   <MetricCard 
                     label="Sun Sign" 
                     value={result.sunSign}
@@ -798,12 +803,12 @@ export default function AgeCalculatorClient() {
                     value={astrologySystem === "tropical" ? result.tropicalMoon : result.vedicRasi} 
                     sub={
                       astrologySystem === "tropical"
-                        ? `${result.tropicalElement} Element • ${result.tropicalDeg}`
+                        ? `${result.tropicalElement} • ${result.tropicalDeg}`
                         : `${result.vedicElement} • ${result.vedicDeg} (Lahiri)`
                     } 
                   />
                   <MetricCard 
-                    label="Nakshatra (Lunar Mansion)" 
+                    label="Nakshatra (Mansion)" 
                     value={result.nakshatra} 
                     sub={result.nakshatraPada} 
                   />
@@ -826,7 +831,7 @@ export default function AgeCalculatorClient() {
 
                 {/* Planetary Positions Ephemeris Table */}
                 <div className="border border-border rounded-2xl overflow-hidden bg-surface-2/30">
-                  <div className="px-4 py-3 bg-surface-2 border-b border-border flex items-center justify-between">
+                  <div className="px-3.5 py-3 bg-surface-2 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <span className="text-xs font-bold text-text uppercase tracking-wider">
                       {astrologySystem === "tropical" ? "Western / Tropical Planetary Positions" : "Vedic / Sidereal Planetary Positions"}
                     </span>
@@ -835,26 +840,26 @@ export default function AgeCalculatorClient() {
                     </span>
                   </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs border-collapse">
+                  <div className="overflow-x-auto -mx-px">
+                    <table className="w-full text-left text-xs border-collapse min-w-[320px]">
                       <thead>
                         <tr className="border-b border-border text-text-muted bg-surface-2/50">
-                          <th className="py-2.5 px-4 font-semibold">Planet</th>
-                          <th className="py-2.5 px-4 font-semibold">Position</th>
-                          <th className="py-2.5 px-4 font-semibold">Element</th>
+                          <th className="py-2.5 px-3 sm:px-4 font-semibold">Planet</th>
+                          <th className="py-2.5 px-3 sm:px-4 font-semibold">Position</th>
+                          <th className="py-2.5 px-3 sm:px-4 font-semibold">Element</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border/60">
                         {result.ephemeris.planets.map((planet) => (
                           <tr key={planet.name} className="hover:bg-surface-2/40 transition-colors">
-                            <td className="py-2 px-4 font-medium text-text flex items-center gap-2">
-                              <span className="text-sm">{planet.symbol}</span>
-                              <span>{planet.name}</span>
+                            <td className="py-2 px-3 sm:px-4 font-medium text-text flex items-center gap-1.5 whitespace-nowrap">
+                              <span className="text-sm flex-shrink-0">{planet.symbol}</span>
+                              <span className="truncate">{planet.name}</span>
                             </td>
-                            <td className="py-2 px-4 font-semibold text-text">
+                            <td className="py-2 px-3 sm:px-4 font-semibold text-text whitespace-nowrap">
                               {astrologySystem === "tropical" ? planet.trop : planet.ved}
                             </td>
-                            <td className="py-2 px-4 text-text-muted">
+                            <td className="py-2 px-3 sm:px-4 text-text-muted whitespace-nowrap">
                               {astrologySystem === "tropical" ? planet.tropElement : planet.vedElement}
                             </td>
                           </tr>
@@ -868,25 +873,25 @@ export default function AgeCalculatorClient() {
               {/* Section 5: Life Statistics & Biological Estimates */}
               <div className="space-y-3">
                 <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
-                  <HeartPulse className="w-3.5 h-3.5 text-red-500" />
+                  <HeartPulse className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
                   <span>Life Statistics & Bio-Estimates</span>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
                   <MetricCard 
                     label="Days Lived" 
                     value={result.totalDays.toLocaleString()} 
-                    sub={`${result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} weeks`} 
+                    sub={`${result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} wks`} 
                   />
                   <MetricCard 
                     label="Months Lived" 
                     value={result.totalMonths.toLocaleString()} 
-                    sub={`${result.totalHours.toLocaleString()} hours`} 
+                    sub={`${result.totalHours.toLocaleString()} hrs`} 
                   />
                   <MetricCard 
                     label="Estimated Heartbeats" 
                     value={result.approxHeartbeats.toLocaleString()} 
-                    sub="~75 bpm resting avg (estimate)" 
+                    sub="~75 bpm resting (estimate)" 
                   />
                   <MetricCard 
                     label="Estimated Sleep" 
@@ -896,17 +901,17 @@ export default function AgeCalculatorClient() {
                   <MetricCard 
                     label="Estimated Breaths" 
                     value={result.approxBreaths.toLocaleString()} 
-                    sub="~16 breaths/min (estimate)" 
+                    sub="~16 breaths/min (est)" 
                   />
                   <MetricCard 
-                    label="Current Year Progress" 
+                    label="Year Progress" 
                     value={`${result.yearProgressPct.toFixed(1)}%`} 
                     sub={`Year ${new Date(asOf).getFullYear()} elapsed`} 
                   />
                   <MetricCard 
                     label="Statistical Lifespan" 
                     value={`${result.lifespanProgressPct.toFixed(1)}%`} 
-                    sub="Based on 80-yr statistical baseline" 
+                    sub="Based on 80-yr baseline" 
                   />
                   <MetricCard 
                     label="Total Seconds" 
@@ -917,8 +922,8 @@ export default function AgeCalculatorClient() {
               </div>
 
               {/* Section 6: Birth Info & Traditional Gems */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <MetricCard label="Birth Day of Week" value={result.birthDayOfWeek} />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+                <MetricCard label="Birth Day" value={result.birthDayOfWeek} />
                 <MetricCard label="Leap Year Birth" value={result.isLeapYearBirth ? "Yes" : "No"} />
                 <MetricCard label="Birthstone" value={result.birthstone} />
                 <MetricCard label="Birth Flower" value={result.birthFlower} />
