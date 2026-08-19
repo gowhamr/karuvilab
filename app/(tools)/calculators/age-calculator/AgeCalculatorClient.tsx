@@ -340,7 +340,26 @@ export default function AgeCalculatorClient() {
                 />
               </div>
 
-              {/* Section 2: Zodiac & Celestial Profile */}
+              {/* Section 2: Birthday Countdown */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <MetricCard label="Next Birthday" value={result.nextBirthday || ''} />
+                <MetricCard label="Days Until Birthday" value={`${result.daysUntilBirthday.toLocaleString()} 🎂`} />
+              </div>
+
+              {/* Section 3: Time Breakdown */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
+                <MetricCard 
+                  label="Total Weeks" 
+                  value={result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} 
+                />
+                <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
+                <MetricCard label="Total Hours" value={result.totalHours.toLocaleString()} />
+                <MetricCard label="Total Minutes" value={result.totalMinutes.toLocaleString()} />
+                <MetricCard label="Total Seconds" value={result.totalSeconds.toLocaleString()} />
+              </div>
+
+              {/* Section 4: Zodiac & Celestial Profile */}
               <div className="space-y-2">
                 <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
                   <Sparkles className="w-3.5 h-3.5 text-blue" />
@@ -370,31 +389,12 @@ export default function AgeCalculatorClient() {
                 </div>
               </div>
 
-              {/* Section 3: Birth Info & Traditional Gems */}
+              {/* Section 5: Birth Info & Traditional Gems */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <MetricCard label="Birth Day of Week" value={result.birthDayOfWeek} />
                 <MetricCard label="Leap Year Birth" value={result.isLeapYearBirth ? "Yes" : "No"} />
                 <MetricCard label="Birthstone" value={result.birthstone} />
                 <MetricCard label="Birth Flower" value={result.birthFlower} />
-              </div>
-
-              {/* Section 4: Birthday Countdown */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <MetricCard label="Next Birthday" value={result.nextBirthday || ''} />
-                <MetricCard label="Days Until Birthday" value={`${result.daysUntilBirthday.toLocaleString()} 🎂`} />
-              </div>
-
-              {/* Section 5: Time Breakdown */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
-                <MetricCard 
-                  label="Total Weeks" 
-                  value={result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} 
-                />
-                <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
-                <MetricCard label="Total Hours" value={result.totalHours.toLocaleString()} />
-                <MetricCard label="Total Minutes" value={result.totalMinutes.toLocaleString()} />
-                <MetricCard label="Total Seconds" value={result.totalSeconds.toLocaleString()} />
               </div>
 
               {/* Section 6: Comparison */}
