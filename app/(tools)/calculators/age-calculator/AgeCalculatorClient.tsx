@@ -8,11 +8,27 @@ import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
-import { RotateCcw, Users, Sparkles, Moon, Sun } from "lucide-react";
+import { RotateCcw, Users, Sparkles, Clock, Globe, ChevronDown, ChevronUp } from "lucide-react";
 
 function todayISO(): string {
   return new Date().toISOString().split('T')[0]!;
 }
+
+const TIMEZONE_PRESETS = [
+  { label: "India Standard Time (IST, UTC+5:30)", offset: 330, id: "Asia/Kolkata" },
+  { label: "UTC / GMT (London, UTC+0:00)", offset: 0, id: "Europe/London" },
+  { label: "US Eastern Time (EST/EDT, UTC-5:00)", offset: -300, id: "America/New_York" },
+  { label: "US Central Time (CST/CDT, UTC-6:00)", offset: -360, id: "America/Chicago" },
+  { label: "US Mountain Time (MST/MDT, UTC-7:00)", offset: -420, id: "America/Denver" },
+  { label: "US Pacific Time (PST/PDT, UTC-8:00)", offset: -480, id: "America/Los_Angeles" },
+  { label: "Central European Time (CET/CEST, UTC+1:00)", offset: 60, id: "Europe/Paris" },
+  { label: "Gulf Standard Time (Dubai/UAE, UTC+4:00)", offset: 240, id: "Asia/Dubai" },
+  { label: "Singapore / Malaysia / China (SGT/CST, UTC+8:00)", offset: 480, id: "Asia/Singapore" },
+  { label: "Japan Standard Time (JST, Tokyo, UTC+9:00)", offset: 540, id: "Asia/Tokyo" },
+  { label: "Australian Eastern Time (AEST/AEDT, UTC+10:00)", offset: 600, id: "Australia/Sydney" },
+  { label: "New Zealand Time (NZST/NZDT, UTC+12:00)", offset: 720, id: "Pacific/Auckland" },
+  { label: "Brazil / Sao Paulo (BRT, UTC-3:00)", offset: -180, id: "America/Sao_Paulo" },
+];
 
 function getSunZodiacSign(month: number, day: number): { sign: string; emoji: string; element: string; dates: string } {
   const signs = [
@@ -42,70 +58,162 @@ function getSunZodiacSign(month: number, day: number): { sign: string; emoji: st
   return signs[0]!;
 }
 
-function getMoonDetails(date: Date): { moonSign: string; moonElement: string; moonPhase: string; illumination: string } {
-  const j2000 = Date.UTC(2000, 0, 1, 12, 0, 0);
-  const d = (date.getTime() - j2000) / 86400000;
+function getDetailedMoonPosition(
+  dateStr: string,
+  timeStr: string = "12:00",
+  tzOffsetMinutes: number = 0
+): {
+  tropicalMoon: string;
+  tropicalElement: string;
+  tropicalDeg: string;
+  vedicRasi: string;
+  vedicElement: string;
+  vedicDeg: string;
+  nakshatra: string;
+  nakshatraPada: string;
+  moonPhase: string;
+  illumination: string;
+  ayanamsa: string;
+} {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [hh, mm] = (timeStr || "12:00").split(":").map(Number);
 
-  const L = (218.316 + 13.176396 * d) % 360;
-  const M = (134.963 + 13.064993 * d) % 360;
-  const F = (93.272 + 13.229350 * d) % 360;
-  const SunM = (357.529 + 0.98560028 * d) % 360;
-  const D = (297.850 + 12.190749 * d) % 360;
+  if (!y || !m || !d) {
+    return {
+      tropicalMoon: "Unknown",
+      tropicalElement: "Unknown",
+      tropicalDeg: "",
+      vedicRasi: "Unknown",
+      vedicElement: "Unknown",
+      vedicDeg: "",
+      nakshatra: "Unknown",
+      nakshatraPada: "",
+      moonPhase: "🌑 New Moon",
+      illumination: "0%",
+      ayanamsa: "0°",
+    };
+  }
+
+  // Convert local date/time to UTC timestamp
+  const localMs = Date.UTC(y, m - 1, d, hh || 12, mm || 0);
+  const utcMs = localMs - tzOffsetMinutes * 60 * 1000;
+  const utcDate = new Date(utcMs);
+
+  const j2000 = Date.UTC(2000, 0, 1, 12, 0, 0);
+  const days = (utcDate.getTime() - j2000) / 86400000;
+
+  const L = (218.3164477 + 13.17639647 * days) % 360;
+  const M = (134.9634025 + 13.06499295 * days) % 360;
+  const F = (93.2720950 + 13.22935026 * days) % 360;
+  const SunM = (357.5291092 + 0.98560028 * days) % 360;
+  const D = (297.8501921 + 12.19074912 * days) % 360;
 
   const toRad = (deg: number) => (deg * Math.PI) / 180;
 
   let lambda =
     L +
-    6.289 * Math.sin(toRad(M)) -
-    1.274 * Math.sin(toRad(2 * D - M)) +
-    0.658 * Math.sin(toRad(2 * D)) -
-    0.214 * Math.sin(toRad(2 * M)) -
-    0.186 * Math.sin(toRad(SunM)) -
-    0.114 * Math.sin(toRad(2 * F));
+    6.288774 * Math.sin(toRad(M)) -
+    1.274020 * Math.sin(toRad(2 * D - M)) +
+    0.658314 * Math.sin(toRad(2 * D)) +
+    0.213618 * Math.sin(toRad(2 * M)) -
+    0.185116 * Math.sin(toRad(SunM)) -
+    0.114332 * Math.sin(toRad(2 * F)) +
+    0.058793 * Math.sin(toRad(2 * D - 2 * M)) +
+    0.057066 * Math.sin(toRad(2 * D - SunM - M)) +
+    0.053322 * Math.sin(toRad(2 * D + M));
 
   lambda = ((lambda % 360) + 360) % 360;
 
   const signs = [
-    { sign: 'Aries', emoji: '♈', element: 'Fire' },
-    { sign: 'Taurus', emoji: '♉', element: 'Earth' },
-    { sign: 'Gemini', emoji: '♊', element: 'Air' },
-    { sign: 'Cancer', emoji: '♋', element: 'Water' },
-    { sign: 'Leo', emoji: '♌', element: 'Fire' },
-    { sign: 'Virgo', emoji: '♍', element: 'Earth' },
-    { sign: 'Libra', emoji: '♎', element: 'Air' },
-    { sign: 'Scorpio', emoji: '♏', element: 'Water' },
-    { sign: 'Sagittarius', emoji: '♐', element: 'Fire' },
-    { sign: 'Capricorn', emoji: '♑', element: 'Earth' },
-    { sign: 'Aquarius', emoji: '♒', element: 'Air' },
-    { sign: 'Pisces', emoji: '♓', element: 'Water' },
+    { sign: "Aries", emoji: "♈", element: "Fire" },
+    { sign: "Taurus", emoji: "♉", element: "Earth" },
+    { sign: "Gemini", emoji: "♊", element: "Air" },
+    { sign: "Cancer", emoji: "♋", element: "Water" },
+    { sign: "Leo", emoji: "♌", element: "Fire" },
+    { sign: "Virgo", emoji: "♍", element: "Earth" },
+    { sign: "Libra", emoji: "♎", element: "Air" },
+    { sign: "Scorpio", emoji: "♏", element: "Water" },
+    { sign: "Sagittarius", emoji: "♐", element: "Fire" },
+    { sign: "Capricorn", emoji: "♑", element: "Earth" },
+    { sign: "Aquarius", emoji: "♒", element: "Air" },
+    { sign: "Pisces", emoji: "♓", element: "Water" },
   ];
 
-  const signIndex = Math.floor(lambda / 30) % 12;
-  const sign = signs[signIndex] || signs[0]!;
+  // Western Tropical Sign
+  const tropSignIdx = Math.floor(lambda / 30) % 12;
+  const tropSign = signs[tropSignIdx] || signs[0]!;
+  const tropDeg = Math.floor(lambda % 30);
+  const tropMin = Math.floor(((lambda % 30) - tropDeg) * 60);
 
+  // Lahiri Ayanamsa for Vedic
+  const decimalYear = y + (m - 1) / 12 + d / 365.25;
+  const ayanamsa = 23.8566 + 0.013968 * (decimalYear - 2000);
+  const siderealLambda = ((lambda - ayanamsa) % 360 + 360) % 360;
+
+  const vedicRasis = [
+    { name: "Mesha (Aries)", emoji: "♈", element: "Fire" },
+    { name: "Vrishabha (Taurus)", emoji: "♉", element: "Earth" },
+    { name: "Mithuna (Gemini)", emoji: "♊", element: "Air" },
+    { name: "Karka (Cancer)", emoji: "♋", element: "Water" },
+    { name: "Simha (Leo)", emoji: "♌", element: "Fire" },
+    { name: "Kanya (Virgo)", emoji: "♍", element: "Earth" },
+    { name: "Tula (Libra)", emoji: "♎", element: "Air" },
+    { name: "Vrishchika (Scorpio)", emoji: "♏", element: "Water" },
+    { name: "Dhanu (Sagittarius)", emoji: "♐", element: "Fire" },
+    { name: "Makara (Capricorn)", emoji: "♑", element: "Earth" },
+    { name: "Kumbha (Aquarius)", emoji: "♒", element: "Air" },
+    { name: "Meena (Pisces)", emoji: "♓", element: "Water" },
+  ];
+
+  const vedicRasiIdx = Math.floor(siderealLambda / 30) % 12;
+  const vedicRasi = vedicRasis[vedicRasiIdx] || vedicRasis[0]!;
+  const vedicDeg = Math.floor(siderealLambda % 30);
+  const vedicMin = Math.floor(((siderealLambda % 30) - vedicDeg) * 60);
+
+  const nakshatras = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
+    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+  ];
+
+  const nakshatraSpan = 360 / 27;
+  const nakshatraIdx = Math.floor(siderealLambda / nakshatraSpan) % 27;
+  const nakshatraName = nakshatras[nakshatraIdx] || nakshatras[0]!;
+  const pada = Math.floor(((siderealLambda % nakshatraSpan) / (nakshatraSpan / 4))) + 1;
+
+  // Synodic Phase
   const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
-  const phaseDays = ((date.getTime() - knownNewMoon) / 86400000) % 29.530588853;
+  const phaseDays = ((utcDate.getTime() - knownNewMoon) / 86400000) % 29.530588853;
   const normalizedPhase = ((phaseDays % 29.530588853) + 29.530588853) % 29.530588853;
 
-  let phaseName = 'New Moon';
-  let phaseEmoji = '🌑';
-  if (normalizedPhase < 1.85) { phaseName = 'New Moon'; phaseEmoji = '🌑'; }
-  else if (normalizedPhase < 5.54) { phaseName = 'Waxing Crescent'; phaseEmoji = '🌒'; }
-  else if (normalizedPhase < 9.23) { phaseName = 'First Quarter'; phaseEmoji = '🌓'; }
-  else if (normalizedPhase < 12.92) { phaseName = 'Waxing Gibbous'; phaseEmoji = '🌔'; }
-  else if (normalizedPhase < 16.61) { phaseName = 'Full Moon'; phaseEmoji = '🌕'; }
-  else if (normalizedPhase < 20.30) { phaseName = 'Waning Gibbous'; phaseEmoji = '🌖'; }
-  else if (normalizedPhase < 23.99) { phaseName = 'Last Quarter'; phaseEmoji = '🌗'; }
-  else if (normalizedPhase < 27.68) { phaseName = 'Waning Crescent'; phaseEmoji = '🌘'; }
-  else { phaseName = 'New Moon'; phaseEmoji = '🌑'; }
+  let phaseName = "New Moon";
+  let phaseEmoji = "🌑";
+  if (normalizedPhase < 1.85) { phaseName = "New Moon"; phaseEmoji = "🌑"; }
+  else if (normalizedPhase < 5.54) { phaseName = "Waxing Crescent"; phaseEmoji = "🌒"; }
+  else if (normalizedPhase < 9.23) { phaseName = "First Quarter"; phaseEmoji = "🌓"; }
+  else if (normalizedPhase < 12.92) { phaseName = "Waxing Gibbous"; phaseEmoji = "🌔"; }
+  else if (normalizedPhase < 16.61) { phaseName = "Full Moon"; phaseEmoji = "🌕"; }
+  else if (normalizedPhase < 20.30) { phaseName = "Waning Gibbous"; phaseEmoji = "🌖"; }
+  else if (normalizedPhase < 23.99) { phaseName = "Last Quarter"; phaseEmoji = "🌗"; }
+  else if (normalizedPhase < 27.68) { phaseName = "Waning Crescent"; phaseEmoji = "🌘"; }
+  else { phaseName = "New Moon"; phaseEmoji = "🌑"; }
 
   const illumination = Math.round(((1 - Math.cos((normalizedPhase / 29.530588853) * 2 * Math.PI)) / 2) * 100);
 
   return {
-    moonSign: `${sign.emoji} ${sign.sign}`,
-    moonElement: sign.element,
+    tropicalMoon: `${tropSign.emoji} ${tropSign.sign}`,
+    tropicalElement: tropSign.element,
+    tropicalDeg: `${tropDeg}°${tropMin.toString().padStart(2, "0")}'`,
+    vedicRasi: `${vedicRasi.emoji} ${vedicRasi.name}`,
+    vedicElement: vedicRasi.element,
+    vedicDeg: `${vedicDeg}°${vedicMin.toString().padStart(2, "0")}'`,
+    nakshatra: nakshatraName,
+    nakshatraPada: `Pada ${pada}`,
     moonPhase: `${phaseEmoji} ${phaseName}`,
     illumination: `${illumination}%`,
+    ayanamsa: `${ayanamsa.toFixed(2)}°`,
   };
 }
 
@@ -191,6 +299,11 @@ export default function AgeCalculatorClient() {
   const [showComparison, setShowComparison] = useState(false);
   const [dob2, setDob2] = useState('');
 
+  // Precision Celestial state (Birth Time & Place/Timezone)
+  const [showPrecisionTime, setShowPrecisionTime] = useState(false);
+  const [birthTime, setBirthTime] = useState("12:00");
+  const [tzOffset, setTzOffset] = useState<number>(() => -new Date().getTimezoneOffset());
+
   const setDob = useCallback((v: string) => setState({ dob: v }), [setState]);
   const setAsOf = useCallback((v: string) => setState({ ref: v }), [setState]);
 
@@ -198,6 +311,9 @@ export default function AgeCalculatorClient() {
     setState({ dob: '1995-01-01', ref: todayISO() });
     setDob2('');
     setShowComparison(false);
+    setShowPrecisionTime(false);
+    setBirthTime("12:00");
+    setTzOffset(-new Date().getTimezoneOffset());
   };
 
   const result = useMemo(() => {
@@ -224,7 +340,11 @@ export default function AgeCalculatorClient() {
     }
 
     const sunZodiac = getSunZodiacSign(d1.getMonth() + 1, d1.getDate());
-    const moonDetails = getMoonDetails(d1);
+    const moonDetails = getDetailedMoonPosition(
+      dob,
+      showPrecisionTime ? birthTime : "12:00",
+      showPrecisionTime ? tzOffset : 0
+    );
     const chineseZodiac = getChineseZodiac(d1.getFullYear());
     const birthstoneFlower = getBirthstoneAndFlower(d1.getMonth() + 1);
 
@@ -242,8 +362,14 @@ export default function AgeCalculatorClient() {
       sunSign: `${sunZodiac.emoji} ${sunZodiac.sign}`,
       sunElement: sunZodiac.element,
       sunDates: sunZodiac.dates,
-      moonSign: moonDetails.moonSign,
-      moonElement: moonDetails.moonElement,
+      tropicalMoon: moonDetails.tropicalMoon,
+      tropicalElement: moonDetails.tropicalElement,
+      tropicalDeg: moonDetails.tropicalDeg,
+      vedicRasi: moonDetails.vedicRasi,
+      vedicElement: moonDetails.vedicElement,
+      vedicDeg: moonDetails.vedicDeg,
+      nakshatra: moonDetails.nakshatra,
+      nakshatraPada: moonDetails.nakshatraPada,
       moonPhase: moonDetails.moonPhase,
       moonIllumination: moonDetails.illumination,
       chineseZodiac: `${chineseZodiac.emoji} ${chineseZodiac.element} ${chineseZodiac.animal}`,
@@ -253,7 +379,7 @@ export default function AgeCalculatorClient() {
       daysUntilBirthday: Math.ceil((nextBDay.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)),
       isLeapYearBirth: (d1.getFullYear() % 4 === 0 && (d1.getFullYear() % 100 !== 0 || d1.getFullYear() % 400 === 0)),
     };
-  }, [dob, asOf]);
+  }, [dob, asOf, showPrecisionTime, birthTime, tzOffset]);
 
   const comparisonResult = useMemo(() => {
     if (!showComparison || !dob || !dob2) return null;
@@ -301,6 +427,68 @@ export default function AgeCalculatorClient() {
               description="DD / MM / YYYY"
               id="age-calc-asof"
             />
+
+            {/* Precision Celestial Settings Accordion */}
+            <div className="border border-border/80 rounded-2xl p-4 bg-surface-2/40 space-y-4">
+              <button
+                type="button"
+                onClick={() => setShowPrecisionTime(!showPrecisionTime)}
+                className="w-full flex items-center justify-between text-left text-sm font-semibold text-text hover:text-blue transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue" />
+                  <span>Precision Birth Time & Location (Optional)</span>
+                </div>
+                {showPrecisionTime ? (
+                  <ChevronUp className="w-4 h-4 text-text-muted" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-text-muted" />
+                )}
+              </button>
+
+              {showPrecisionTime && (
+                <div className="space-y-4 pt-2 border-t border-border/50 text-xs">
+                  <p className="text-text-muted">
+                    The Moon traverses a zodiac sign in ~54 hours. Enter birth time and location/timezone for pinpoint Moon Sign (Rasi) and Nakshatra precision.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="birth-time-input" className="flex items-center gap-1.5 font-medium text-text">
+                        <Clock className="w-3.5 h-3.5 text-blue" />
+                        <span>Birth Time (24h)</span>
+                      </label>
+                      <input
+                        id="birth-time-input"
+                        type="time"
+                        value={birthTime}
+                        onChange={(e) => setBirthTime(e.target.value)}
+                        className="w-full bg-surface-2 border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-sm"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="birth-tz-select" className="flex items-center gap-1.5 font-medium text-text">
+                        <Globe className="w-3.5 h-3.5 text-blue" />
+                        <span>Birth Place / Timezone</span>
+                      </label>
+                      <select
+                        id="birth-tz-select"
+                        value={tzOffset}
+                        onChange={(e) => setTzOffset(Number(e.target.value))}
+                        className="w-full bg-surface-2 border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-sm"
+                      >
+                        {TIMEZONE_PRESETS.map((tz) => (
+                          <option key={tz.id} value={tz.offset}>
+                            {tz.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         }
         output={
@@ -361,20 +549,38 @@ export default function AgeCalculatorClient() {
 
               {/* Section 4: Zodiac & Celestial Profile */}
               <div className="space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
-                  <Sparkles className="w-3.5 h-3.5 text-blue" />
-                  <span>Zodiac & Celestial Profile</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
+                    <Sparkles className="w-3.5 h-3.5 text-blue" />
+                    <span>Zodiac & Celestial Profile</span>
+                  </div>
+                  {showPrecisionTime && (
+                    <span className="text-[11px] font-medium bg-blue/15 text-blue px-2 py-0.5 rounded-full">
+                      Precision Birth Time: {birthTime}
+                    </span>
+                  )}
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   <MetricCard 
-                    label="Sun Sign (Zodiac)" 
+                    label="Sun Sign (Western)" 
                     value={result.sunSign}
                     sub={`${result.sunElement} • ${result.sunDates}`} 
                   />
                   <MetricCard 
-                    label="Moon Sign (Lunar Rasi)" 
-                    value={result.moonSign} 
-                    sub={`${result.moonElement} Element`} 
+                    label="Moon Sign (Tropical)" 
+                    value={result.tropicalMoon} 
+                    sub={`${result.tropicalElement} Element • ${result.tropicalDeg}`} 
+                  />
+                  <MetricCard 
+                    label="Vedic Moon (Janma Rasi)" 
+                    value={result.vedicRasi} 
+                    sub={`${result.vedicElement} • ${result.vedicDeg} (Lahiri)`} 
+                  />
+                  <MetricCard 
+                    label="Nakshatra (Lunar Mansion)" 
+                    value={result.nakshatra} 
+                    sub={result.nakshatraPada} 
                   />
                   <MetricCard 
                     label="Birth Moon Phase" 
