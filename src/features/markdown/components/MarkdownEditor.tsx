@@ -462,18 +462,16 @@ export function MarkdownEditor() {
                 )}
               </div>
 
-              <div className={`flex-1 min-w-0 bg-bg/30 h-full overflow-hidden ${activeTab === "preview" ? "flex" : "hidden"}`}>
-                {activeTab === "preview" && (
-                  <MarkdownPreview 
-                    html={html} 
-                    ref={previewRef}
-                    hideHeader={true}
-                    onCopyRaw={() => {
-                      navigator.clipboard.writeText(md);
-                      toast("Markdown copied!");
-                    }} 
-                  />
-                )}
+              <div className={cn("flex-1 min-w-0 bg-bg/30 h-full overflow-hidden", activeTab === "preview" ? "flex" : "hidden")}>
+                <MarkdownPreview 
+                  html={html} 
+                  ref={previewRef}
+                  hideHeader={true}
+                  onCopyRaw={() => {
+                    navigator.clipboard.writeText(md);
+                    toast("Markdown copied!");
+                  }} 
+                />
               </div>
             </div>
 
