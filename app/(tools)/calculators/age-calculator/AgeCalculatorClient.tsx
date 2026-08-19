@@ -741,6 +741,17 @@ export default function AgeCalculatorClient() {
                 <MetricCard label="Total Seconds" value={result.totalSeconds.toLocaleString()} />
               </div>
 
+              {/* Age Difference (Comparison Mode - Placed above Zodiac) */}
+              {showComparison && comparisonResult && (
+                <div className="w-full">
+                  <MetricCard 
+                    label="Age Difference (Comparison)" 
+                    value={`${comparisonResult.years} Years, ${comparisonResult.months} Months, ${comparisonResult.days} Days`} 
+                    accent
+                  />
+                </div>
+              )}
+
               {/* Section 4: Zodiac & Celestial Profile */}
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -912,16 +923,6 @@ export default function AgeCalculatorClient() {
                 <MetricCard label="Birthstone" value={result.birthstone} />
                 <MetricCard label="Birth Flower" value={result.birthFlower} />
               </div>
-
-              {/* Section 7: Comparison */}
-              {showComparison && comparisonResult && (
-                <div className="w-full mt-4">
-                  <MetricCard 
-                    label="Age Difference" 
-                    value={`${comparisonResult.years} Years, ${comparisonResult.months} Months, ${comparisonResult.days} Days`} 
-                  />
-                </div>
-              )}
             </div>
           ) : null
         }
