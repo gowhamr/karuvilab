@@ -36,7 +36,10 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
     // Handle Mermaid Diagrams
     const mermaid = win.mermaid;
     if (mermaid) {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || document.documentElement.classList.contains('dark');
+      const isDark =
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.documentElement.classList.contains('dark') ||
+        (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
       
       try {
         if (typeof (mermaid as any).initialize === 'function') {
@@ -58,13 +61,31 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
               mainBkg: '#1e293b',
               nodeBorder: '#3b82f6',
               clusterBkg: '#0f172a',
+              clusterBorder: '#334155',
               titleColor: '#f8fafc',
               edgeLabelBackground: '#1e293b',
+              actorTextColor: '#f8fafc',
+              actorLineColor: '#94a3b8',
+              signalColor: '#f8fafc',
+              signalTextColor: '#f8fafc',
+              labelTextColor: '#f8fafc',
+              loopTextColor: '#f8fafc',
+              noteBorderColor: '#60a5fa',
+              noteBkgColor: '#1e293b',
+              noteTextColor: '#f8fafc',
             } : {
               darkMode: false,
               background: '#ffffff',
+              primaryColor: '#e0e7ff',
+              primaryTextColor: '#0f172a',
+              primaryBorderColor: '#6366f1',
+              lineColor: '#475569',
               textColor: '#0f172a',
               nodeTextColor: '#0f172a',
+              mainBkg: '#f8fafc',
+              nodeBorder: '#6366f1',
+              titleColor: '#0f172a',
+              edgeLabelBackground: '#f8fafc',
             }
           });
         }
@@ -78,7 +99,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         const id = `mermaid-${Date.now()}-${idx}`;
         
         const wrapper = document.createElement('div');
-        wrapper.className = 'my-6 bg-surface border border-border rounded-xl overflow-hidden shadow-sm';
+        wrapper.className = 'my-6 bg-surface border border-border rounded-xl overflow-hidden shadow-sm mermaid-container';
         wrapper.innerHTML = sanitizeHtml(`
           <div class="flex items-center justify-between px-3 py-2 bg-bg border-b border-border">
             <span class="text-xs font-black text-text-4 uppercase tracking-widest flex items-center gap-1.5">
@@ -90,7 +111,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
               <span>Source</span>
             </button>
           </div>
-          <div id="${id}" class="p-6 overflow-x-auto flex justify-center bg-surface/50 text-text">
+          <div id="${id}" class="p-6 overflow-x-auto flex justify-center bg-surface/50 text-text [&_svg]:max-w-full [&_svg]:h-auto [&_text]:fill-current [&_tspan]:fill-current [&_.nodeLabel]:text-current [&_.label]:text-current [&_.labelText]:text-current [&_.actor]:fill-current [&_.messageText]:fill-current">
             <div class="w-8 h-8 border-2 border-blue border-t-transparent rounded-full animate-spin"></div>
           </div>
         `, { ADD_TAGS: ['svg', 'rect', 'path', 'span'], ADD_ATTR: ['stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill', 'stroke', 'rx', 'ry'] });
@@ -113,8 +134,23 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         try {
           const { svg } = await mermaid.render(`${id}-svg`, src);
           const body = wrapper.querySelector(`#${id}`);
-          // Sanitize SVG output from mermaid before injection (KL-09)
-          if (body) body.innerHTML = sanitizeHtml(svg, { USE_PROFILES: { svg: true, svgFilters: true } });
+          // Sanitize SVG output from mermaid before injection preserving foreignObject, style, text, and labels (KL-09)
+          if (body) {
+            body.innerHTML = sanitizeHtml(svg, {
+              USE_PROFILES: { svg: true, svgFilters: true, html: true },
+              ADD_TAGS: [
+                'foreignObject', 'foreignobject', 'style', 'text', 'tspan',
+                'defs', 'marker', 'use', 'clipPath', 'g', 'path', 'rect',
+                'circle', 'line', 'polyline', 'polygon', 'div', 'span', 'p'
+              ],
+              ADD_ATTR: [
+                'xmlns', 'viewBox', 'width', 'height', 'fill', 'stroke', 'stroke-width',
+                'transform', 'id', 'class', 'style', 'marker-end', 'marker-start',
+                'd', 'x', 'y', 'dx', 'dy', 'text-anchor', 'dominant-baseline',
+                'font-size', 'font-family', 'font-weight', 'rx', 'ry'
+              ]
+            });
+          }
         } catch (err) {
           const body = wrapper.querySelector(`#${id}`);
           // Sanitize error message to prevent XSS

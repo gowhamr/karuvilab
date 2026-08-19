@@ -83,3 +83,31 @@
   border-top: 1px solid var(--border);
   margin: 2rem 0;
 }
+
+/* Mermaid Diagram Styling & Text Visibility */
+.markdown-body .mermaid-container {
+  margin: 1.5rem 0;
+}
+.markdown-body .mermaid-container svg {
+  max-width: 100%;
+  height: auto;
+}
+.markdown-body .mermaid-container text,
+.markdown-body .mermaid-container tspan,
+.markdown-body .mermaid-container .nodeLabel,
+.markdown-body .mermaid-container .label,
+.markdown-body .mermaid-container .labelText,
+.markdown-body .mermaid-container .actor,
+.markdown-body .mermaid-container .messageText,
+.markdown-body .mermaid-container .loopText,
+.markdown-body .mermaid-container .noteText {
+  fill: var(--text, #f8fafc) !important;
+  color: var(--text, #f8fafc) !important;
+  font-family: inherit;
+}
+.markdown-body .mermaid-container foreignObject div,
+.markdown-body .mermaid-container foreignObject span,
+.markdown-body .mermaid-container foreignObject p {
+  color: var(--text, #f8fafc) !important;
+}
+
