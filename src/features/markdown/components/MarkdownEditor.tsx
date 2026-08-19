@@ -199,21 +199,159 @@ export function MarkdownEditor() {
 
     if (format === "html") {
       const fullHtml = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${name}</title>
   <style>
-    body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-    pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
-    code { font-family: monospace; background: #eee; padding: 2px 4px; border-radius: 3px; }
-    blockquote { border-left: 4px solid #ccc; margin: 0; padding-left: 20px; color: #666; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
+    :root {
+      --bg: #ffffff;
+      --text: #1f2328;
+      --border: #d0d7de;
+      --code-bg: #f6f8fa;
+      --header-bg: #f6f8fa;
+      --link: #0969da;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --text: #e6edf3;
+        --border: #30363d;
+        --code-bg: #161b22;
+        --header-bg: #161b22;
+        --link: #4493f8;
+      }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+    h1, h2, h3, h4, h5, h6 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }
+    h1 { font-size: 2em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+    h2 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    pre {
+      position: relative;
+      background: var(--code-bg);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      font-size: 85%;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      background: var(--code-bg);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 85%;
+    }
+    pre code { background: transparent; padding: 0; }
+    blockquote {
+      border-left: 4px solid var(--border);
+      margin: 16px 0;
+      padding: 0 16px;
+      color: #656d76;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 16px 0;
+      display: block;
+      overflow-x: auto;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: var(--header-bg);
+      font-weight: 600;
+    }
+    img { max-width: 100%; height: auto; border-radius: 8px; }
+    hr { height: 1px; background-color: var(--border); border: 0; margin: 24px 0; }
+    .mermaid-box {
+      margin: 20px 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--code-bg);
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .copy-btn:hover { opacity: 1; border-color: var(--link); color: var(--link); }
   </style>
 </head>
-<body>${html}</body>
+<body>
+  ${html}
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. Initialize Code Copy Buttons
+      document.querySelectorAll("pre").forEach(function(pre) {
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copy";
+        btn.onclick = function() {
+          var code = pre.querySelector("code") ? pre.querySelector("code").innerText : pre.innerText;
+          navigator.clipboard.writeText(code).then(function() {
+            btn.textContent = "Copied!";
+            setTimeout(function() { btn.textContent = "Copy"; }, 2000);
+          });
+        };
+        pre.appendChild(btn);
+      });
+
+      // 2. Initialize Mermaid Diagrams
+      if (typeof mermaid !== "undefined") {
+        var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark ? "dark" : "default",
+          securityLevel: "loose"
+        });
+
+        document.querySelectorAll(".mermaid-placeholder").forEach(function(ph, idx) {
+          var src = decodeURIComponent(ph.getAttribute("data-src") || "");
+          var container = document.createElement("div");
+          container.className = "mermaid-box";
+          var mDiv = document.createElement("div");
+          mDiv.className = "mermaid";
+          mDiv.textContent = src;
+          container.appendChild(mDiv);
+          ph.replaceWith(container);
+        });
+
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
 </html>`;
       const blob = new Blob([fullHtml], { type: "text/html" });
       const url = blobManager.create(blob);
@@ -321,19 +459,9 @@ export function MarkdownEditor() {
       }
     } else if (format === "word") {
       try {
-        const { Document, Packer, Paragraph, TextRun } = await import("docx");
-        const sections = [
-          {
-            properties: {},
-            children: activeMd.split("\n").map(line => 
-              new Paragraph({
-                children: [new TextRun({ text: line, size: 24 })],
-                spacing: { after: 200 }
-              })
-            ),
-          }
-        ];
-        const doc = new Document({ sections });
+        const { Packer } = await import("docx");
+        const { convertMarkdownToDocx } = await import("../utils/markdown-docx");
+        const doc = convertMarkdownToDocx(activeMd, name);
         const blob = await Packer.toBlob(doc);
         const url = blobManager.create(blob);
         const a = document.createElement("a");

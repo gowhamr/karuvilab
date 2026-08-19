@@ -116,4 +116,17 @@ describe('Phase 5: Document Fidelity & Synchronization Hardening', () => {
     const result = testModeSwitchingCycle(input);
     expect(result.final.trim()).toBe(input.trim());
   });
+
+  it('Word docx exporter converts Markdown AST into structured Document with tables and headings', async () => {
+    const { convertMarkdownToDocx } = await import('../../features/markdown/utils/markdown-docx');
+    const { Packer } = await import('docx');
+
+    const mdInput = `# Main Heading\n\nParagraph with **bold**, *italic*, and \`code\`.\n\n- Bullet 1\n- Bullet 2\n\n| H1 | H2 |\n|---|---|\n| C1 | C2 |\n\n\`\`\`ts\nconst x: number = 42;\n\`\`\`\n`;
+    const doc = convertMarkdownToDocx(mdInput, 'TestDoc');
+    expect(doc).toBeDefined();
+
+    const buffer = await Packer.toBuffer(doc);
+    expect(buffer.length).toBeGreaterThan(1000);
+  });
 });
+
