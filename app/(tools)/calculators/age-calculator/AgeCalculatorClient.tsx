@@ -8,7 +8,7 @@ import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
-import { RotateCcw, Users, Sparkles, Clock, Globe, ChevronDown, ChevronUp } from "lucide-react";
+import { RotateCcw, Users, Sparkles, Clock, Globe, ChevronDown, ChevronUp, HeartPulse } from "lucide-react";
 
 function todayISO(): string {
   return new Date().toISOString().split('T')[0]!;
@@ -489,6 +489,32 @@ export default function AgeCalculatorClient() {
     const totalDays = Math.floor((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     const totalMonths = years * 12 + months;
     const totalWeeks = totalDays / 7;
+    const totalHours = totalDays * 24;
+    const totalMinutes = totalDays * 24 * 60;
+    const totalSeconds = totalDays * 24 * 60 * 60;
+
+    // Life Statistics (Biological & Calendar Estimates)
+    const approxHeartbeats = Math.round(totalMinutes * 75); // ~75 bpm average resting heart rate
+    const approxSleepHours = Math.round(totalHours / 3); // ~8 hours/day (1/3 of life)
+    const approxBreaths = Math.round(totalMinutes * 16); // ~16 breaths per minute
+
+    // Percentage of current year completed
+    const startOfYear = new Date(d2.getFullYear(), 0, 1);
+    const endOfYear = new Date(d2.getFullYear() + 1, 0, 1);
+    const yearProgressPct = Math.min(
+      100,
+      Math.max(
+        0,
+        ((d2.getTime() - startOfYear.getTime()) / (endOfYear.getTime() - startOfYear.getTime())) * 100
+      )
+    );
+
+    // Percentage of expected lifespan (based on statistical 80-year lifespan baseline)
+    const expectedLifespanYears = 80;
+    const lifespanProgressPct = Math.min(
+      100,
+      (totalDays / (expectedLifespanYears * 365.2425)) * 100
+    );
     
     const today = new Date();
     let nextBDay = new Date(today.getFullYear(), d1.getMonth(), d1.getDate());
@@ -517,9 +543,14 @@ export default function AgeCalculatorClient() {
       totalMonths,
       totalDays,
       totalWeeks,
-      totalHours: totalDays * 24,
-      totalMinutes: totalDays * 24 * 60,
-      totalSeconds: totalDays * 24 * 60 * 60,
+      totalHours,
+      totalMinutes,
+      totalSeconds,
+      approxHeartbeats,
+      approxSleepHours,
+      approxBreaths,
+      yearProgressPct,
+      lifespanProgressPct,
       birthDayOfWeek: new Date(dob).toLocaleDateString('en-US', { weekday: 'long' }),
       sunSign: `${sunZodiac.emoji} ${sunZodiac.sign}`,
       sunElement: sunZodiac.element,
@@ -823,7 +854,58 @@ export default function AgeCalculatorClient() {
                 </div>
               </div>
 
-              {/* Section 5: Birth Info & Traditional Gems */}
+              {/* Section 5: Life Statistics & Biological Estimates */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
+                  <HeartPulse className="w-3.5 h-3.5 text-red-500" />
+                  <span>Life Statistics & Bio-Estimates</span>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <MetricCard 
+                    label="Days Lived" 
+                    value={result.totalDays.toLocaleString()} 
+                    sub={`${result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} weeks`} 
+                  />
+                  <MetricCard 
+                    label="Months Lived" 
+                    value={result.totalMonths.toLocaleString()} 
+                    sub={`${result.totalHours.toLocaleString()} hours`} 
+                  />
+                  <MetricCard 
+                    label="Estimated Heartbeats" 
+                    value={result.approxHeartbeats.toLocaleString()} 
+                    sub="~75 bpm resting avg (estimate)" 
+                  />
+                  <MetricCard 
+                    label="Estimated Sleep" 
+                    value={`${result.approxSleepHours.toLocaleString()} hrs`} 
+                    sub="~8 hrs/day (1/3 of life)" 
+                  />
+                  <MetricCard 
+                    label="Estimated Breaths" 
+                    value={result.approxBreaths.toLocaleString()} 
+                    sub="~16 breaths/min (estimate)" 
+                  />
+                  <MetricCard 
+                    label="Current Year Progress" 
+                    value={`${result.yearProgressPct.toFixed(1)}%`} 
+                    sub={`Year ${new Date(asOf).getFullYear()} elapsed`} 
+                  />
+                  <MetricCard 
+                    label="Statistical Lifespan" 
+                    value={`${result.lifespanProgressPct.toFixed(1)}%`} 
+                    sub="Based on 80-yr statistical baseline" 
+                  />
+                  <MetricCard 
+                    label="Total Seconds" 
+                    value={result.totalSeconds.toLocaleString()} 
+                    sub="Total seconds elapsed" 
+                  />
+                </div>
+              </div>
+
+              {/* Section 6: Birth Info & Traditional Gems */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <MetricCard label="Birth Day of Week" value={result.birthDayOfWeek} />
                 <MetricCard label="Leap Year Birth" value={result.isLeapYearBirth ? "Yes" : "No"} />
@@ -831,7 +913,7 @@ export default function AgeCalculatorClient() {
                 <MetricCard label="Birth Flower" value={result.birthFlower} />
               </div>
 
-              {/* Section 6: Comparison */}
+              {/* Section 7: Comparison */}
               {showComparison && comparisonResult && (
                 <div className="w-full mt-4">
                   <MetricCard 
