@@ -286,6 +286,162 @@ function calculateDiff(d1: Date, d2: Date) {
   return { years, months, days };
 }
 
+interface PlanetInfo {
+  name: string;
+  symbol: string;
+  trop: string;
+  tropElement: string;
+  ved: string;
+  vedElement: string;
+}
+
+function calculateEphemeris(
+  dateStr: string,
+  timeStr: string = "12:00",
+  tzOffsetMinutes: number = 0
+): {
+  ayanamsa: string;
+  planets: PlanetInfo[];
+} {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [hh, mm] = (timeStr || "12:00").split(":").map(Number);
+
+  if (!y || !m || !d) {
+    return { ayanamsa: "0°", planets: [] };
+  }
+
+  const localMs = Date.UTC(y, m - 1, d, hh || 12, mm || 0);
+  const utcMs = localMs - tzOffsetMinutes * 60 * 1000;
+  const utcDate = new Date(utcMs);
+
+  const j2000 = Date.UTC(2000, 0, 1, 12, 0, 0);
+  const days = (utcDate.getTime() - j2000) / 86400000;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const toDeg = (rad: number) => (rad * 180) / Math.PI;
+  const normDeg = (deg: number) => ((deg % 360) + 360) % 360;
+
+  // Sun
+  const sunL = normDeg(280.46646 + 0.98564736 * days);
+  const sunM = normDeg(357.52911 + 0.98560028 * days);
+  const sunLambda = normDeg(sunL + 1.914602 * Math.sin(toRad(sunM)) + 0.019993 * Math.sin(toRad(2 * sunM)));
+  const sunR = 1.00014 - 0.01671 * Math.cos(toRad(sunM)) - 0.00014 * Math.cos(toRad(2 * sunM));
+  const earthHelioX = sunR * Math.cos(toRad(sunLambda + 180));
+  const earthHelioY = sunR * Math.sin(toRad(sunLambda + 180));
+
+  // Moon
+  const moonL = normDeg(218.3164477 + 13.17639647 * days);
+  const moonM = normDeg(134.9634025 + 13.06499295 * days);
+  const moonF = normDeg(93.2720950 + 13.22935026 * days);
+  const moonD = normDeg(297.8501921 + 12.19074912 * days);
+  let moonLambda =
+    moonL +
+    6.288774 * Math.sin(toRad(moonM)) -
+    1.274020 * Math.sin(toRad(2 * moonD - moonM)) +
+    0.658314 * Math.sin(toRad(2 * moonD)) +
+    0.213618 * Math.sin(toRad(2 * moonM)) -
+    0.185116 * Math.sin(toRad(sunM)) -
+    0.114332 * Math.sin(toRad(2 * moonF));
+  moonLambda = normDeg(moonLambda);
+
+  function calcPlanetGeo(
+    a: number,
+    e: number,
+    meanL_0: number,
+    rateL: number,
+    meanM_0: number,
+    rateM: number,
+    c1: number,
+    c2: number = 0
+  ): number {
+    const lMean = normDeg(meanL_0 + rateL * days);
+    const mMean = normDeg(meanM_0 + rateM * days);
+    const center = c1 * Math.sin(toRad(mMean)) + c2 * Math.sin(toRad(2 * mMean));
+    const helioL = normDeg(lMean + center);
+    const r = (a * (1 - e * e)) / (1 + e * Math.cos(toRad(mMean + center)));
+    const xh = r * Math.cos(toRad(helioL));
+    const yh = r * Math.sin(toRad(helioL));
+    const xg = xh - earthHelioX;
+    const yg = yh - earthHelioY;
+    return normDeg(toDeg(Math.atan2(yg, xg)));
+  }
+
+  const mercuryLambda = calcPlanetGeo(0.387098, 0.205630, 252.2507, 4.0923388, 174.7947, 4.0923344, 23.440, 2.9818);
+  const venusLambda = calcPlanetGeo(0.723330, 0.006772, 181.9798, 1.6021302, 50.115, 1.6021305, 0.7758, 0.0033);
+  const marsLambda = calcPlanetGeo(1.523688, 0.093405, 355.433, 0.5240330, 19.373, 0.5240208, 10.691, 0.623);
+  const jupiterLambda = calcPlanetGeo(5.20256, 0.048498, 34.351, 0.0830853, 20.020, 0.0830853, 5.555, 0.168);
+  const saturnLambda = calcPlanetGeo(9.55475, 0.055546, 50.077, 0.0334442, 317.020, 0.0334442, 6.358, 0.220);
+  const uranusLambda = calcPlanetGeo(19.2184, 0.04638, 314.055, 0.0117258, 142.2386, 0.0117258, 5.304);
+  const neptuneLambda = calcPlanetGeo(30.1104, 0.00946, 304.349, 0.0059810, 256.228, 0.0059810, 1.100);
+  const plutoLambda = calcPlanetGeo(39.482, 0.2488, 238.929, 0.003960, 14.882, 0.003960, 28.3);
+  const rahuLambda = normDeg(125.04452 - 0.05295376 * days);
+  const ketuLambda = normDeg(rahuLambda + 180);
+
+  // Lahiri Ayanamsa
+  const decimalYear = y + (m - 1) / 12 + d / 365.25;
+  const ayanamsaVal = 23.8566 + 0.013968 * (decimalYear - 2000);
+
+  const signs = [
+    { sign: "Aries", vedic: "Mesha", emoji: "♈", element: "Fire" },
+    { sign: "Taurus", vedic: "Vrishabha", emoji: "♉", element: "Earth" },
+    { sign: "Gemini", vedic: "Mithuna", emoji: "♊", element: "Air" },
+    { sign: "Cancer", vedic: "Karka", emoji: "♋", element: "Water" },
+    { sign: "Leo", vedic: "Simha", emoji: "♌", element: "Fire" },
+    { sign: "Virgo", vedic: "Kanya", emoji: "♍", element: "Earth" },
+    { sign: "Libra", vedic: "Tula", emoji: "♎", element: "Air" },
+    { sign: "Scorpio", vedic: "Vrishchika", emoji: "♏", element: "Water" },
+    { sign: "Sagittarius", vedic: "Dhanu", emoji: "♐", element: "Fire" },
+    { sign: "Capricorn", vedic: "Makara", emoji: "♑", element: "Earth" },
+    { sign: "Aquarius", vedic: "Kumbha", emoji: "♒", element: "Air" },
+    { sign: "Pisces", vedic: "Meena", emoji: "♓", element: "Water" },
+  ];
+
+  function formatCoord(degVal: number, isVedic = false): { text: string; element: string } {
+    const adjusted = isVedic ? normDeg(degVal - ayanamsaVal) : degVal;
+    const signIdx = Math.floor(adjusted / 30) % 12;
+    const s = signs[signIdx] || signs[0]!;
+    const degNum = Math.floor(adjusted % 30);
+    const min = Math.floor(((adjusted % 30) - degNum) * 60);
+    const signName = isVedic ? s.vedic : s.sign;
+    return {
+      text: `${s.emoji} ${signName} ~${degNum}°${min.toString().padStart(2, "0")}'`,
+      element: s.element,
+    };
+  }
+
+  const rawBodies = [
+    { name: "Sun (Surya)", symbol: "☀️", deg: sunLambda },
+    { name: "Moon (Chandra)", symbol: "🌙", deg: moonLambda },
+    { name: "Mercury (Budha)", symbol: "☿", deg: mercuryLambda },
+    { name: "Venus (Shukra)", symbol: "♀", deg: venusLambda },
+    { name: "Mars (Mangala)", symbol: "♂", deg: marsLambda },
+    { name: "Jupiter (Guru)", symbol: "♃", deg: jupiterLambda },
+    { name: "Saturn (Shani)", symbol: "♄", deg: saturnLambda },
+    { name: "Uranus", symbol: "♅", deg: uranusLambda },
+    { name: "Neptune", symbol: "♆", deg: neptuneLambda },
+    { name: "Pluto", symbol: "♇", deg: plutoLambda },
+    { name: "Rahu (North Node)", symbol: "☊", deg: rahuLambda },
+    { name: "Ketu (South Node)", symbol: "☋", deg: ketuLambda },
+  ];
+
+  const planets: PlanetInfo[] = rawBodies.map((b) => {
+    const trop = formatCoord(b.deg, false);
+    const ved = formatCoord(b.deg, true);
+    return {
+      name: b.name,
+      symbol: b.symbol,
+      trop: trop.text,
+      tropElement: trop.element,
+      ved: ved.text,
+      vedElement: ved.element,
+    };
+  });
+
+  return {
+    ayanamsa: `${ayanamsaVal.toFixed(2)}°`,
+    planets,
+  };
+}
+
 export default function AgeCalculatorClient() {
   const { state, setState, shareUrl, hasParams } = useUrlState({
     defaults: { dob: '1995-01-01', ref: todayISO() },
@@ -303,6 +459,7 @@ export default function AgeCalculatorClient() {
   const [showPrecisionTime, setShowPrecisionTime] = useState(false);
   const [birthTime, setBirthTime] = useState("12:00");
   const [tzOffset, setTzOffset] = useState<number>(() => -new Date().getTimezoneOffset());
+  const [astrologySystem, setAstrologySystem] = useState<"tropical" | "vedic">("tropical");
 
   const setDob = useCallback((v: string) => setState({ dob: v }), [setState]);
   const setAsOf = useCallback((v: string) => setState({ ref: v }), [setState]);
@@ -345,6 +502,11 @@ export default function AgeCalculatorClient() {
       showPrecisionTime ? birthTime : "12:00",
       showPrecisionTime ? tzOffset : 0
     );
+    const ephemeris = calculateEphemeris(
+      dob,
+      showPrecisionTime ? birthTime : "12:00",
+      showPrecisionTime ? tzOffset : 0
+    );
     const chineseZodiac = getChineseZodiac(d1.getFullYear());
     const birthstoneFlower = getBirthstoneAndFlower(d1.getMonth() + 1);
 
@@ -378,6 +540,7 @@ export default function AgeCalculatorClient() {
       nextBirthday: nextBDay.toISOString().split('T')[0],
       daysUntilBirthday: Math.ceil((nextBDay.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)),
       isLeapYearBirth: (d1.getFullYear() % 4 === 0 && (d1.getFullYear() % 100 !== 0 || d1.getFullYear() % 400 === 0)),
+      ephemeris,
     };
   }, [dob, asOf, showPrecisionTime, birthTime, tzOffset]);
 
@@ -449,7 +612,7 @@ export default function AgeCalculatorClient() {
               {showPrecisionTime && (
                 <div className="space-y-4 pt-2 border-t border-border/50 text-xs">
                   <p className="text-text-muted">
-                    The Moon traverses a zodiac sign in ~54 hours. Enter birth time and location/timezone for pinpoint Moon Sign (Rasi) and Nakshatra precision.
+                    Planets traverse zodiac positions continually. Enter birth time and location/timezone for pinpoint planetary positions, Moon Sign (Rasi), and Nakshatra.
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -548,34 +711,54 @@ export default function AgeCalculatorClient() {
               </div>
 
               {/* Section 4: Zodiac & Celestial Profile */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted">
                     <Sparkles className="w-3.5 h-3.5 text-blue" />
                     <span>Zodiac & Celestial Profile</span>
                   </div>
-                  {showPrecisionTime && (
-                    <span className="text-[11px] font-medium bg-blue/15 text-blue px-2 py-0.5 rounded-full">
-                      Precision Birth Time: {birthTime}
-                    </span>
-                  )}
+
+                  {/* Astrology System Switcher */}
+                  <div className="flex items-center gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setAstrologySystem("tropical")}
+                      className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+                        astrologySystem === "tropical"
+                          ? "bg-blue text-white shadow-sm"
+                          : "text-text-muted hover:text-text"
+                      }`}
+                    >
+                      Western / Tropical
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAstrologySystem("vedic")}
+                      className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+                        astrologySystem === "vedic"
+                          ? "bg-blue text-white shadow-sm"
+                          : "text-text-muted hover:text-text"
+                      }`}
+                    >
+                      Vedic / Sidereal
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   <MetricCard 
-                    label="Sun Sign (Western)" 
+                    label="Sun Sign" 
                     value={result.sunSign}
                     sub={`${result.sunElement} • ${result.sunDates}`} 
                   />
                   <MetricCard 
-                    label="Moon Sign (Tropical)" 
-                    value={result.tropicalMoon} 
-                    sub={`${result.tropicalElement} Element • ${result.tropicalDeg}`} 
-                  />
-                  <MetricCard 
-                    label="Vedic Moon (Janma Rasi)" 
-                    value={result.vedicRasi} 
-                    sub={`${result.vedicElement} • ${result.vedicDeg} (Lahiri)`} 
+                    label="Moon Sign" 
+                    value={astrologySystem === "tropical" ? result.tropicalMoon : result.vedicRasi} 
+                    sub={
+                      astrologySystem === "tropical"
+                        ? `${result.tropicalElement} Element • ${result.tropicalDeg}`
+                        : `${result.vedicElement} • ${result.vedicDeg} (Lahiri)`
+                    } 
                   />
                   <MetricCard 
                     label="Nakshatra (Lunar Mansion)" 
@@ -592,6 +775,51 @@ export default function AgeCalculatorClient() {
                     value={result.chineseZodiac} 
                     sub="Lunar Year Stem" 
                   />
+                  <MetricCard 
+                    label="Ayanamsa (Precession)" 
+                    value={result.ephemeris.ayanamsa} 
+                    sub="Chitra Paksha / Lahiri" 
+                  />
+                </div>
+
+                {/* Planetary Positions Ephemeris Table */}
+                <div className="border border-border rounded-2xl overflow-hidden bg-surface-2/30">
+                  <div className="px-4 py-3 bg-surface-2 border-b border-border flex items-center justify-between">
+                    <span className="text-xs font-bold text-text uppercase tracking-wider">
+                      {astrologySystem === "tropical" ? "Western / Tropical Planetary Positions" : "Vedic / Sidereal Planetary Positions"}
+                    </span>
+                    <span className="text-[11px] text-text-muted">
+                      Ephemeris Longitudes at Birth
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-border text-text-muted bg-surface-2/50">
+                          <th className="py-2.5 px-4 font-semibold">Planet</th>
+                          <th className="py-2.5 px-4 font-semibold">Position</th>
+                          <th className="py-2.5 px-4 font-semibold">Element</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/60">
+                        {result.ephemeris.planets.map((planet) => (
+                          <tr key={planet.name} className="hover:bg-surface-2/40 transition-colors">
+                            <td className="py-2 px-4 font-medium text-text flex items-center gap-2">
+                              <span className="text-sm">{planet.symbol}</span>
+                              <span>{planet.name}</span>
+                            </td>
+                            <td className="py-2 px-4 font-semibold text-text">
+                              {astrologySystem === "tropical" ? planet.trop : planet.ved}
+                            </td>
+                            <td className="py-2 px-4 text-text-muted">
+                              {astrologySystem === "tropical" ? planet.tropElement : planet.vedElement}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 
@@ -619,3 +847,4 @@ export default function AgeCalculatorClient() {
     </div>
   );
 }
+
