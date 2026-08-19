@@ -157,6 +157,11 @@ const api: Partial<WorkerAPI> = {
     return html as string;
   },
 
+  async parseMarkdownToTipTap(text: string) {
+    const { markdownToTipTap } = await import("../features/markdown/transformer/markdown-tiptap");
+    return markdownToTipTap(text);
+  },
+
   async generateHashes(text: string, algos: string[], encoding: 'hex' | 'base64' = 'hex', onProgress?: ProgressCallback) {
     if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
       throw new Error("Input text too large or invalid (max 10MB)");

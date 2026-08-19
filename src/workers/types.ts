@@ -526,6 +526,7 @@ export interface WorkerAPI {
   simulateColorBlindness(file: ArrayBuffer, mimeType: string, type: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
   watermarkImage(file: ArrayBuffer, mimeType: string, options: any, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
   parseMarkdown(text: string): Promise<string>;
+  parseMarkdownToTipTap(text: string): Promise<any>;
   processBase64File(file: ArrayBuffer, mimeType: string, action: string, onProgress?: ProgressCallback): Promise<string | ArrayBuffer>;
   removeImageMetadata(file: ArrayBuffer, mimeType: string, onProgress?: ProgressCallback): Promise<ArrayBuffer>;
   cropImageCenter(file: ArrayBuffer, mimeType: string, width: number, height: number, onProgress?: ProgressCallback): Promise<ArrayBuffer>;

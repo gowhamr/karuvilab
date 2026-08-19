@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -23,6 +23,7 @@ import {
   Link as LinkIcon
 } from "lucide-react";
 import { markdownToTipTap, tipTapToMarkdown } from "../transformer/markdown-tiptap";
+import { MarkdownService } from "../MarkdownService";
 import { Table, TableRow, TableHeader, TableCell, TaskList, TaskItem, Image } from "../extensions";
 
 export interface MarkdownVisualEditorProps {
@@ -36,6 +37,9 @@ export function MarkdownVisualEditor({
   onChange,
   fontSize = 14,
 }: MarkdownVisualEditorProps) {
+  const lastEmittedRef = useRef(markdown);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -53,9 +57,15 @@ export function MarkdownVisualEditor({
     ],
     content: markdownToTipTap(markdown) as any,
     onUpdate: ({ editor }) => {
-      const json = editor.getJSON();
-      const newMarkdown = tipTapToMarkdown(json);
-      onChange(newMarkdown);
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      debounceTimerRef.current = setTimeout(() => {
+        const json = editor.getJSON();
+        const newMarkdown = tipTapToMarkdown(json);
+        lastEmittedRef.current = newMarkdown;
+        onChange(newMarkdown);
+      }, 150);
     },
     editorProps: {
       attributes: {
@@ -65,12 +75,34 @@ export function MarkdownVisualEditor({
   });
 
   useEffect(() => {
-    if (editor && !editor.isDestroyed && !editor.isFocused) {
-      const currentMd = tipTapToMarkdown(editor.getJSON());
-      if (currentMd.trim() !== markdown.trim() && currentMd !== markdown) {
-        editor.commands.setContent(markdownToTipTap(markdown) as any);
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    // If editor is actively focused or document is already synchronized, skip updating
+    if (!editor || editor.isDestroyed || editor.isFocused) {
+      return;
     }
+    if (lastEmittedRef.current === markdown) {
+      return;
+    }
+
+    lastEmittedRef.current = markdown;
+
+    let active = true;
+    MarkdownService.parseToTipTap(markdown).then(doc => {
+      if (active && editor && !editor.isDestroyed && !editor.isFocused) {
+        editor.commands.setContent(doc, { emitUpdate: false });
+      }
+    });
+
+    return () => {
+      active = false;
+    };
   }, [markdown, editor]);
 
   if (!editor) {

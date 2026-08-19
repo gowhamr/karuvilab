@@ -418,6 +418,10 @@ class WorkerManager {
     return workerOrchestrator.dispatch("parseMarkdown", [text], undefined, undefined, abortSignal);
   }
 
+  async parseMarkdownToTipTap(text: string, abortSignal?: AbortSignal): Promise<any> {
+    return workerOrchestrator.dispatch("parseMarkdownToTipTap", [text], undefined, undefined, abortSignal);
+  }
+
   async parseLogs(
     logText: string,
     onProgress?: ProgressCallback,
