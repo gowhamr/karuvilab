@@ -160,20 +160,22 @@ export default function EMICalculatorClient() {
         onDismiss={() => setShowRestoredBanner(false)}
       />
 
-      {/* Mobile Sticky Bar */}
+      {/* Mobile Sticky Bar Floating Above BottomNav */}
       <AnimatePresence>
         {isSticky && result && (
           <m.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            exit={{ y: 100 }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-nav bg-surface/95 backdrop-blur-md border-t border-border p-3.5 shadow-2xl flex items-center justify-between"
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="md:hidden fixed left-4 right-4 z-dropdown bg-surface/95 backdrop-blur-md border border-border rounded-2xl p-3.5 shadow-2xl shadow-black/30 flex items-center justify-between"
+            style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}
           >
-            <div className="space-y-0.5">
+            <div className="space-y-0.5 min-w-0">
                <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Monthly EMI</p>
-               <p className="text-base font-bold text-text">{formatCurrency(result.monthlyEmi)}</p>
+               <p className="text-base font-bold text-text truncate">{formatCurrency(result.monthlyEmi)}</p>
             </div>
-            <div className="text-right space-y-0.5">
+            <div className="text-right space-y-0.5 shrink-0 pl-2">
                <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Total Interest</p>
                <p className="text-xs font-semibold text-text">{formatCurrency(result.totalInterest)}</p>
             </div>
