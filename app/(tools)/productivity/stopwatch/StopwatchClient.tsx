@@ -1,40 +1,108 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Play, Square, Timer, RefreshCw, Flag, Settings2, Trash2, ArrowUpCircle } from "lucide-react";
+
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { 
+  Play, 
+  Pause, 
+  Square, 
+  RotateCcw, 
+  Flag, 
+  Settings2, 
+  Download, 
+  Copy, 
+  Share2, 
+  Zap, 
+  Timer, 
+  Flame, 
+  Activity, 
+  Check, 
+  Volume2, 
+  VolumeX, 
+  ArrowUpCircle, 
+  ArrowDownCircle, 
+  Sparkles,
+  ChevronRight,
+  ShieldCheck
+} from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
-import { useStopwatchStore, Lap } from "@/src/features/stopwatch/store";
-import { formatStopwatchTime, useWakeLock, calculateElapsed } from "@/src/features/stopwatch";
+import { useStopwatchStore } from "@/src/features/stopwatch/store";
+import { 
+  PrecisionMode,
+  LapRecord,
+  formatStopwatchTime, 
+  formatDeltaTime,
+  computeLapRecords,
+  computeStopwatchStats,
+  exportStopwatchCSV,
+  exportStopwatchJSON,
+  exportStopwatchText,
+  useWakeLock,
+  playCountdownBeep,
+  playLapChime,
+  playBeep
+} from "@/src/features/stopwatch";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { QRModal } from "@/components/ui/QRModal";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { useToast } from "@/components/ui/Toast";
+import { blobManager } from "@/src/lib/blob-manager";
+
+type StopwatchTabMode = 'standard' | 'countdown' | 'interval' | 'reaction';
 
 export default function StopwatchClient() {
   const { displayMode, activeToolId } = useFullscreenContext();
   const isDashboard = displayMode === 'dashboard' && activeToolId === 'stopwatch';
-  
-  const settings = useStopwatchStore(state => state.settings);
-  const updateSettings = useStopwatchStore(state => state.updateSettings);
+  const { toast } = useToast();
 
+  const settings = useStopwatchStore((s) => s.settings);
+  const updateSettings = useStopwatchStore((s) => s.updateSettings);
+
+  const [tabMode, setTabMode] = useState<StopwatchTabMode>('standard');
+  const [precision, setPrecision] = useState<PrecisionMode>(settings.precision || 'milliseconds');
+
+  // Standard Stopwatch State
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
-  const [laps, setLaps] = useState<Lap[]>([]);
-  
-  // Keep screen on while running
-  useWakeLock(isRunning);
-  
-  const requestRef = useRef<number | null>(null);
-  
-  const animateRef = useRef<(time: number) => void>(() => {});
+  const [rawLaps, setRawLaps] = useState<number[]>([]);
+  const [isQrOpen, setIsQrOpen] = useState(false);
 
-  useEffect(() => {
-    animateRef.current = (time: number) => {
-      if (startTime !== null && isRunning) {
-        setElapsed(performance.now() - startTime);
-      }
-      requestRef.current = requestAnimationFrame(animateRef.current);
-    };
-  });
+  // Countdown Start Mode State
+  const [countdownFrom, setCountdownFrom] = useState(3);
+  const [countdownValue, setCountdownValue] = useState<number | null>(null);
+  const [isCountingDown, setIsCountingDown] = useState(false);
+
+  // Interval / HIIT Timer State
+  const [intervalState, setIntervalState] = useState<'idle' | 'prep' | 'work' | 'rest' | 'complete'>('idle');
+  const [currentRound, setCurrentRound] = useState(1);
+  const [intervalTimeRemaining, setIntervalTimeRemaining] = useState(0);
+  const [isIntervalRunning, setIsIntervalRunning] = useState(false);
+  const intervalTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Reaction Timer State
+  const [reactionState, setReactionState] = useState<'idle' | 'waiting' | 'ready' | 'result' | 'early'>('idle');
+  const [reactionStartTime, setReactionStartTime] = useState<number | null>(null);
+  const [reactionScore, setReactionScore] = useState<number | null>(null);
+  const [reactionHistory, setReactionHistory] = useState<number[]>([]);
+  const reactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Screen Wake Lock
+  const shouldWakeLock = isRunning || isIntervalRunning || isCountingDown || reactionState === 'waiting';
+  const { isLocked: isWakeLocked, isSupported: isWakeSupported } = useWakeLock(shouldWakeLock);
+
+  // Animation Frame for Precision Stopwatch
+  const requestRef = useRef<number | null>(null);
+  const animateRef = useRef<() => void>(() => {});
+
+  animateRef.current = () => {
+    if (startTime !== null && isRunning) {
+      setElapsed(performance.now() - startTime);
+    }
+    requestRef.current = requestAnimationFrame(animateRef.current);
+  };
 
   useEffect(() => {
     if (isRunning) {
@@ -45,43 +113,233 @@ export default function StopwatchClient() {
     };
   }, [isRunning]);
 
-  const toggleStart = () => {
+  // Derived Lap Records & Statistics
+  const lapRecords = useMemo(() => computeLapRecords(rawLaps, elapsed), [rawLaps, elapsed]);
+  const stats = useMemo(() => computeStopwatchStats(rawLaps, elapsed), [rawLaps, elapsed]);
+
+  // Core Stopwatch Actions
+  const toggleStart = useCallback(() => {
     if (isRunning) {
       setIsRunning(false);
     } else {
       if (startTime === null) {
         setStartTime(performance.now());
       } else {
-        // Resuming: shift startTime to account for paused time
         setStartTime(performance.now() - elapsed);
       }
       setIsRunning(true);
     }
+  }, [isRunning, startTime, elapsed]);
+
+  const handleLap = useCallback(() => {
+    if (!isRunning) return;
+    const previousLapsSum = rawLaps.reduce((a, b) => a + b, 0);
+    const lapDuration = Math.max(0, elapsed - previousLapsSum);
+    setRawLaps((prev) => [...prev, lapDuration]);
+
+    if (settings.soundEnabled) {
+      playLapChime();
+    }
+  }, [isRunning, elapsed, rawLaps, settings.soundEnabled]);
+
+  const handleReset = useCallback(() => {
+    setIsRunning(false);
+    setStartTime(null);
+    setElapsed(0);
+    setRawLaps([]);
+  }, []);
+
+  // Keyboard Shortcuts Handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when user is typing in form inputs
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (tabMode === 'standard') {
+          toggleStart();
+        } else if (tabMode === 'reaction') {
+          handleReactionClick();
+        }
+      } else if (e.key === 'l' || e.key === 'L') {
+        if (tabMode === 'standard' && isRunning) {
+          e.preventDefault();
+          handleLap();
+        }
+      } else if (e.key === 'r' || e.key === 'R') {
+        if (tabMode === 'standard' && !isRunning) {
+          e.preventDefault();
+          handleReset();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [tabMode, isRunning, toggleStart, handleLap, handleReset]);
+
+  // Countdown Start Mode Implementation
+  const startCountdownSequence = () => {
+    setIsCountingDown(true);
+    setCountdownValue(countdownFrom);
+    handleReset();
+
+    if (settings.soundEnabled) playCountdownBeep(false);
+
+    let current = countdownFrom;
+    const interval = setInterval(() => {
+      current -= 1;
+      if (current > 0) {
+        setCountdownValue(current);
+        if (settings.soundEnabled) playCountdownBeep(false);
+      } else if (current === 0) {
+        setCountdownValue(0); // "GO!"
+        if (settings.soundEnabled) playCountdownBeep(true);
+      } else {
+        clearInterval(interval);
+        setIsCountingDown(false);
+        setCountdownValue(null);
+        setTabMode('standard');
+        setStartTime(performance.now());
+        setIsRunning(true);
+      }
+    }, 1000);
   };
 
-  const handleLapOrReset = () => {
-    if (isRunning) {
-      // Record Lap
-      const lastTotal = laps.length > 0 ? laps[0]!.totalTime : 0;
-      const lapTime = elapsed - lastTotal;
-      const newLap: Lap = {
-        id: Math.random().toString(36).substr(2, 9),
-        lapTime,
-        totalTime: elapsed
-      };
-      setLaps([newLap, ...laps]);
-    } else {
-      // Reset
-      setIsRunning(false);
-      setStartTime(null);
-      setElapsed(0);
-      setLaps([]);
+  // Interval (HIIT) Timer Implementation
+  const startInterval = () => {
+    setIsIntervalRunning(true);
+    setIntervalState('prep');
+    setIntervalTimeRemaining(3);
+    setCurrentRound(1);
+  };
+
+  const pauseInterval = () => {
+    setIsIntervalRunning(false);
+    if (intervalTimerRef.current) clearInterval(intervalTimerRef.current);
+  };
+
+  const resetInterval = () => {
+    setIsIntervalRunning(false);
+    setIntervalState('idle');
+    setCurrentRound(1);
+    setIntervalTimeRemaining(0);
+    if (intervalTimerRef.current) clearInterval(intervalTimerRef.current);
+  };
+
+  useEffect(() => {
+    if (!isIntervalRunning) return;
+
+    intervalTimerRef.current = setInterval(() => {
+      setIntervalTimeRemaining((prev) => {
+        if (prev > 1) {
+          if (prev <= 4 && settings.soundEnabled) {
+            playBeep(880, 80);
+          }
+          return prev - 1;
+        }
+
+        // Transition phases
+        if (intervalState === 'prep') {
+          setIntervalState('work');
+          if (settings.soundEnabled) playCountdownBeep(true);
+          return settings.workDurationSec;
+        } else if (intervalState === 'work') {
+          if (currentRound >= settings.totalRounds) {
+            setIntervalState('complete');
+            setIsIntervalRunning(false);
+            if (settings.soundEnabled) playBeep(1320, 400);
+            return 0;
+          }
+          setIntervalState('rest');
+          if (settings.soundEnabled) playBeep(440, 200);
+          return settings.restDurationSec;
+        } else if (intervalState === 'rest') {
+          setCurrentRound((r) => r + 1);
+          setIntervalState('work');
+          if (settings.soundEnabled) playCountdownBeep(true);
+          return settings.workDurationSec;
+        }
+
+        return 0;
+      });
+    }, 1000);
+
+    return () => {
+      if (intervalTimerRef.current) clearInterval(intervalTimerRef.current);
+    };
+  }, [isIntervalRunning, intervalState, currentRound, settings]);
+
+  // Reaction Timer Implementation
+  const handleReactionClick = () => {
+    if (reactionState === 'idle' || reactionState === 'result' || reactionState === 'early') {
+      // Start waiting for green
+      setReactionState('waiting');
+      const delay = Math.floor(Math.random() * 3000) + 1500; // 1.5s - 4.5s
+      reactionTimeoutRef.current = setTimeout(() => {
+        setReactionState('ready');
+        setReactionStartTime(performance.now());
+        if (settings.soundEnabled) playBeep(1000, 100);
+      }, delay);
+    } else if (reactionState === 'waiting') {
+      // Clicked too early!
+      if (reactionTimeoutRef.current) clearTimeout(reactionTimeoutRef.current);
+      setReactionState('early');
+    } else if (reactionState === 'ready' && reactionStartTime !== null) {
+      // Recorded successful click
+      const score = Math.round(performance.now() - reactionStartTime);
+      setReactionScore(score);
+      setReactionHistory((prev) => [score, ...prev.slice(0, 9)]);
+      setReactionState('result');
+      if (settings.soundEnabled) playLapChime();
     }
   };
 
-  const displayString = formatStopwatchTime(elapsed, settings.showMilliseconds);
+  // Export Handlers
+  const handleCopySummary = async () => {
+    const text = exportStopwatchText(stats, lapRecords, precision);
+    try {
+      await navigator.clipboard.writeText(text);
+      toast("Stopwatch session report copied to clipboard.", "success");
+    } catch {
+      toast("Could not access clipboard.", "error");
+    }
+  };
 
-  // Layout calculations
+  const handleDownloadCSV = () => {
+    const csvContent = exportStopwatchCSV(stats, lapRecords, precision);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = blobManager.create(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `stopwatch-laps-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => blobManager.revoke(url), 1000);
+    toast("CSV file saved successfully.", "success");
+  };
+
+  const handleDownloadJSON = () => {
+    const jsonContent = exportStopwatchJSON(stats, lapRecords, precision);
+    const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+    const url = blobManager.create(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `stopwatch-session-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => blobManager.revoke(url), 1000);
+    toast("JSON session data saved successfully.", "success");
+  };
+
+  const displayString = formatStopwatchTime(elapsed, precision);
+
+  // Fullscreen Dashboard Theme Handling
   const bgClasses = isDashboard ? {
     dark: 'bg-bg text-text',
     light: 'bg-slate-50 text-slate-900',
@@ -95,83 +353,164 @@ export default function StopwatchClient() {
     medium: 'text-8xl md:text-[10rem]',
     large: 'text-[10rem] md:text-[14rem]',
     huge: 'text-[14rem] md:text-[18rem]',
-  }[settings.clockSize] || 'text-8xl md:text-[14rem]' : 'text-6xl md:text-8xl';
+  }[settings.clockSize] || 'text-8xl md:text-[14rem]' : 'text-5xl xs:text-6xl sm:text-7xl md:text-8xl';
 
+  // Render Main Precision Clock
   const renderMainClock = () => (
-    <div className={cn("font-mono font-black tabular-nums tracking-tighter text-center", textSize)}>
-      {displayString}
+    <div className="flex flex-col items-center justify-center w-full min-w-0">
+      <div className={cn("font-mono font-black tabular-nums tracking-tighter text-center select-none transition-all", textSize)}>
+        {displayString}
+      </div>
+
+      {/* Sub-status Indicator Bar */}
+      <div className="flex flex-wrap items-center justify-center gap-3 mt-2 text-xs font-semibold text-text-muted">
+        {isRunning && (
+          <span className="flex items-center gap-1.5 text-success animate-pulse">
+            <span className="w-2 h-2 rounded-full bg-success" />
+            LIVE RUNNING
+          </span>
+        )}
+        {isWakeLocked && (
+          <span className="flex items-center gap-1 text-blue bg-blue/10 px-2 py-0.5 rounded-full border border-blue/20">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            Screen Awake
+          </span>
+        )}
+        {stats.currentLapElapsedMs > 0 && isRunning && (
+          <span>Current Lap: {formatStopwatchTime(stats.currentLapElapsedMs, precision)}</span>
+        )}
+      </div>
     </div>
   );
 
+  // Render Tactile Action Controls
   const renderControls = () => (
-    <div className={cn("flex items-center justify-center gap-6", isDashboard ? "mt-12 scale-150" : "mt-8")}>
+    <div className="flex items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 w-full">
+      {/* Lap / Split Button */}
       <button
-        onClick={handleLapOrReset}
+        type="button"
+        onClick={handleLap}
+        disabled={!isRunning}
         className={cn(
-          "w-20 h-20 rounded-full flex items-center justify-center border-4 transition-all focus:outline-none focus:ring-4 focus:ring-blue/30 active:scale-95",
+          "w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center border-2 sm:border-4 transition-all focus:outline-none focus:ring-4 focus:ring-blue/30 active:scale-95 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed",
           isRunning 
-            ? "border-text-4 text-text-3 hover:border-text-3" 
-            : "border-error/20 text-error hover:border-error/40 hover:bg-error/5"
+            ? "border-blue/40 text-blue hover:bg-blue/10 shadow-lg shadow-blue/10" 
+            : "border-border text-text-muted hover:border-text-muted"
         )}
-        title={isRunning ? "Lap" : "Reset"}
+        title="Record Lap (L)"
       >
-        {isRunning ? <Flag className="w-8 h-8" /> : <RefreshCw className="w-8 h-8" />}
+        <Flag className="w-5 h-5 sm:w-7 sm:h-7" />
+        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-0.5">Lap</span>
       </button>
 
+      {/* Main Start / Pause / Resume Button */}
       <button
+        type="button"
         onClick={toggleStart}
         className={cn(
-          "w-24 h-24 rounded-full flex items-center justify-center transition-all focus:outline-none focus:ring-4 active:scale-95 text-white shadow-2xl",
+          "w-20 h-20 sm:w-24 sm:h-24 rounded-full flex flex-col items-center justify-center transition-all focus:outline-none focus:ring-4 active:scale-95 text-white shadow-2xl cursor-pointer",
           isRunning 
-            ? "bg-error hover:bg-error/90 focus:ring-error/30 shadow-error/20" 
-            : "bg-success hover:bg-success/90 focus:ring-success/30 shadow-success/20 pl-2"
+            ? "bg-amber-500 hover:bg-amber-600 focus:ring-amber-500/30 shadow-amber-500/20" 
+            : "bg-success hover:bg-success/90 focus:ring-success/30 shadow-success/20 pl-0.5"
         )}
-        title={isRunning ? "Stop" : "Start"}
+        title={isRunning ? "Pause (Space)" : "Start (Space)"}
       >
-        {isRunning ? <Square className="w-10 h-10 fill-current" /> : <Play className="w-12 h-12 fill-current" />}
+        {isRunning ? (
+          <>
+            <Pause className="w-7 h-7 sm:w-9 sm:h-9 fill-current" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-0.5">Pause</span>
+          </>
+        ) : (
+          <>
+            <Play className="w-7 h-7 sm:w-9 sm:h-9 fill-current" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-0.5">
+              {elapsed > 0 ? "Resume" : "Start"}
+            </span>
+          </>
+        )}
+      </button>
+
+      {/* Reset Button */}
+      <button
+        type="button"
+        onClick={handleReset}
+        disabled={isRunning && elapsed === 0}
+        className={cn(
+          "w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center border-2 sm:border-4 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/30 active:scale-95 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed",
+          elapsed > 0 && !isRunning
+            ? "border-red-500/40 text-red-400 hover:bg-red-500/10 shadow-lg shadow-red-500/10"
+            : "border-border text-text-muted hover:border-text-muted"
+        )}
+        title="Reset Stopwatch (R)"
+      >
+        <RotateCcw className="w-5 h-5 sm:w-7 sm:h-7" />
+        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-0.5">Reset</span>
       </button>
     </div>
   );
 
+  // Settings Popover
   const renderSettingsPopover = () => (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <button className={cn("p-3 rounded-xl backdrop-blur-md transition-colors border", 
-          isDashboard ? "bg-surface-2/20 hover:bg-surface-2/40 border-border/10" : "bg-surface hover:bg-surface-2 border-border"
-        )}>
-          <Settings2 className="w-6 h-6 opacity-60 hover:opacity-100" />
+        <button 
+          type="button"
+          className={cn("p-2.5 sm:p-3 rounded-xl backdrop-blur-md transition-colors border cursor-pointer", 
+            isDashboard ? "bg-surface-2/20 hover:bg-surface-2/40 border-border/10" : "bg-surface hover:bg-surface-2 border-border"
+          )}
+          title="Stopwatch Settings"
+        >
+          <Settings2 className="w-5 h-5 opacity-70 hover:opacity-100" />
         </button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content sideOffset={8} align="end" className="w-80 bg-surface border border-border shadow-2xl rounded-2xl p-4 z-popover animate-in fade-in zoom-in-95">
-          <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted mb-4">Settings</h3>
+          <h3 className="font-bold text-xs uppercase tracking-widest text-text-muted mb-3">Stopwatch Settings</h3>
           
-          <div className="space-y-4">
+          <div className="space-y-4 text-xs">
+            {/* Audio Toggle */}
+            <label className="flex items-center justify-between cursor-pointer p-1.5 hover:bg-surface-2 rounded-lg">
+              <span className="font-semibold text-text flex items-center gap-2">
+                {settings.soundEnabled ? <Volume2 className="w-4 h-4 text-blue" /> : <VolumeX className="w-4 h-4 text-text-muted" />}
+                Sound Cues & Chimes
+              </span>
+              <input 
+                type="checkbox" 
+                checked={settings.soundEnabled} 
+                onChange={(e) => updateSettings({ soundEnabled: e.target.checked })} 
+                className="accent-blue w-4 h-4" 
+              />
+            </label>
+
+            {/* Dashboard Theme (Only shown in dashboard mode) */}
             {isDashboard && (
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-text-3">Theme (Dashboard)</label>
+              <div className="space-y-1.5 pt-2 border-t border-border/60">
+                <label className="font-bold text-text-muted">Dashboard Theme</label>
                 <select 
                   value={settings.dashboardTheme} 
-                  onChange={e => updateSettings({ dashboardTheme: e.target.value as "dark" | "amoled" | "light" | "matrix" })}
-                  className="w-full bg-surface-2 border border-border rounded-lg p-2 text-sm outline-none"
+                  onChange={(e) => updateSettings({ dashboardTheme: e.target.value as any })}
+                  className="w-full bg-surface-2 border border-border rounded-lg p-2 text-xs outline-none"
                 >
                   <option value="dark">Dark (Default)</option>
                   <option value="amoled">Pitch Black (AMOLED)</option>
                   <option value="light">Light Mode</option>
-                  <option value="matrix">Matrix Hacker</option>
+                  <option value="blue">Deep Ocean Blue</option>
+                  <option value="matrix">Matrix Hacker Green</option>
                 </select>
               </div>
             )}
 
+            {/* Dashboard Clock Size */}
             {isDashboard && (
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-text-3">Clock Size</label>
-                <div className="flex gap-2">
-                  {['small', 'medium', 'large', 'huge'].map(size => (
+              <div className="space-y-1.5">
+                <label className="font-bold text-text-muted">Clock Display Scale</label>
+                <div className="grid grid-cols-4 gap-1">
+                  {['small', 'medium', 'large', 'huge'].map((size) => (
                     <button 
                       key={size}
-                      onClick={() => updateSettings({ clockSize: size as "small" | "medium" | "large" | "huge" })}
-                      className={cn("flex-1 py-1.5 rounded text-xs font-bold capitalize transition-colors", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-2 text-text-muted hover:text-text")}
+                      type="button"
+                      onClick={() => updateSettings({ clockSize: size as any })}
+                      className={cn("py-1 rounded text-xs font-bold capitalize transition-colors cursor-pointer", settings.clockSize === size ? "bg-blue text-white" : "bg-surface-2 text-text-muted hover:text-text")}
                     >
                       {size}
                     </button>
@@ -179,131 +518,562 @@ export default function StopwatchClient() {
                 </div>
               </div>
             )}
-
-            <div className="space-y-2 pt-2 border-t border-border">
-              <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-sm font-medium">Show Milliseconds</span>
-                <input type="checkbox" checked={settings.showMilliseconds} onChange={e => updateSettings({ showMilliseconds: e.target.checked })} className="accent-blue" />
-              </label>
-              <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-sm font-medium">Show Laps</span>
-                <input type="checkbox" checked={settings.showLaps} onChange={e => updateSettings({ showLaps: e.target.checked })} className="accent-blue" />
-              </label>
-            </div>
           </div>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
   );
 
-  const renderLapsList = () => (
-    <div className={cn("w-full mx-auto flex-1 overflow-auto", isDashboard ? "max-w-2xl mt-12 max-h-[40vh]" : "h-full max-h-[500px] pr-2")}>
-      {laps.length === 0 ? (
-        <div className="text-center text-text-muted opacity-50 py-8 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
-          <Flag className="w-4 h-4" /> No laps recorded
+  // Live Lap Table
+  const renderLapsList = () => {
+    if (lapRecords.length === 0) {
+      return (
+        <div className="text-center text-text-muted opacity-50 py-8 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+          <Flag className="w-4 h-4" /> No laps recorded yet
         </div>
-      ) : (
-        <div className="space-y-2">
-          {laps.map((lap, idx) => {
-            const lapNum = laps.length - idx;
-            const isFastest = laps.length > 2 && lap.lapTime === Math.min(...laps.map(l => l.lapTime));
-            const isSlowest = laps.length > 2 && lap.lapTime === Math.max(...laps.map(l => l.lapTime));
-            
-            return (
-              <div 
-                key={lap.id} 
-                className={cn(
-                  "flex items-center justify-between py-4 px-6 rounded-2xl border transition-colors",
-                  isDashboard ? "bg-surface-2/10 border-border/20 backdrop-blur-md" : "bg-surface border-border",
-                  isFastest ? "text-success border-success/30 bg-success/5" : "",
-                  isSlowest ? "text-error border-error/30 bg-error/5" : ""
-                )}
-              >
-                <span className={cn("font-bold", isFastest ? "text-success" : isSlowest ? "text-error" : "text-text-muted")}>
-                  Lap {String(lapNum).padStart(2, '0')}
-                </span>
-                
-                <span className="font-mono font-bold text-xl tabular-nums tracking-tight">
-                  {isFastest && <ArrowUpCircle className="inline-block w-4 h-4 mr-2" />}
-                  {formatStopwatchTime(lap.lapTime, settings.showMilliseconds)}
-                </span>
-                
-                <span className="font-mono font-medium text-text-muted tabular-nums w-32 text-right">
-                  {formatStopwatchTime(lap.totalTime, settings.showMilliseconds)}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
+      );
+    }
 
+    return (
+      <div className="w-full overflow-x-auto min-w-0 max-w-full">
+        <table className="w-full text-left text-xs border-collapse min-w-[340px]">
+          <thead>
+            <tr className="border-b border-border text-text-muted bg-surface-2/50">
+              <th className="py-2.5 px-3 font-semibold">Lap</th>
+              <th className="py-2.5 px-3 font-semibold">Lap Time</th>
+              <th className="py-2.5 px-3 font-semibold">Diff (±)</th>
+              <th className="py-2.5 px-3 font-semibold text-right">Split Time</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border/60">
+            {/* Show latest lap first */}
+            {[...lapRecords].reverse().map((lap) => {
+              return (
+                <tr 
+                  key={lap.id} 
+                  className={cn(
+                    "hover:bg-surface-2/40 transition-colors",
+                    lap.isFastest ? "bg-emerald-500/5 text-emerald-400 font-semibold" : "",
+                    lap.isSlowest ? "bg-red-500/5 text-red-400 font-semibold" : ""
+                  )}
+                >
+                  <td className="py-2.5 px-3 whitespace-nowrap">
+                    <span className="font-bold">Lap {String(lap.lapNumber).padStart(2, '0')}</span>
+                    {lap.isFastest && (
+                      <span className="ml-1.5 inline-flex items-center text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full">
+                        ⭐ Best
+                      </span>
+                    )}
+                    {lap.isSlowest && (
+                      <span className="ml-1.5 inline-flex items-center text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded-full">
+                        🐢 Slow
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-2.5 px-3 font-mono font-bold whitespace-nowrap">
+                    {formatStopwatchTime(lap.lapTimeMs, precision)}
+                  </td>
+                  <td className="py-2.5 px-3 font-mono text-text-muted whitespace-nowrap">
+                    {lap.diffFromPrevMs === 0 ? '—' : formatDeltaTime(lap.diffFromPrevMs, precision)}
+                  </td>
+                  <td className="py-2.5 px-3 font-mono text-text-muted text-right whitespace-nowrap">
+                    {formatStopwatchTime(lap.splitTimeMs, precision)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  // If in Fullscreen Dashboard Mode
   if (isDashboard) {
     return (
-      <div className={cn("h-full w-full flex flex-col items-center justify-center relative overflow-hidden", bgClasses)}>
-        <div className="absolute top-6 right-6 z-modal">
+      <div className={cn("h-full w-full flex flex-col items-center justify-center relative overflow-hidden p-6", bgClasses)}>
+        <div className="absolute top-6 right-6 z-modal flex items-center gap-2">
           {renderSettingsPopover()}
         </div>
         
-        <div className="flex flex-col items-center justify-center w-full max-w-7xl px-8 flex-1">
+        <div className="flex flex-col items-center justify-center w-full max-w-7xl px-4 sm:px-8 flex-1">
           {renderMainClock()}
           {renderControls()}
-          {settings.showLaps && renderLapsList()}
+          <div className="w-full max-w-2xl mt-8 max-h-[35vh] overflow-y-auto rounded-2xl border border-border/40 p-2 bg-surface-2/20 backdrop-blur-md">
+            {renderLapsList()}
+          </div>
         </div>
 
-        <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-30 text-sm font-bold uppercase tracking-widest border-t-2 border-current pt-4">
+        <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-40 text-xs font-bold uppercase tracking-widest border-t border-current/20 pt-4">
           <div className="flex items-center gap-2">
             <Timer className="w-4 h-4" />
-            High Precision Active
+            Precision Monotonic Engine
           </div>
-          <div>Esc to Exit Full Screen</div>
+          <div>Press Esc to Exit Fullscreen</div>
         </div>
       </div>
     );
   }
 
-  // Normal / Focus Mode
+  // Standard Split Layout
   return (
-    <ToolWorkspace
-      layout="split"
-      input={
-        <div className="flex flex-col items-center justify-center py-8 space-y-8">
-          {renderMainClock()}
-          {renderControls()}
+    <div className="w-full min-w-0 max-w-full space-y-6">
+      <QRModal url={typeof window !== 'undefined' ? window.location.href : ''} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
+
+      {/* Mode Switcher Segmented Control */}
+      <div className="flex items-center justify-between gap-2 flex-wrap border-b border-border/80 pb-4">
+        <div className="grid grid-cols-2 sm:flex sm:flex-row gap-1 bg-surface-2 p-1 rounded-2xl border border-border text-xs min-w-0 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={() => setTabMode('standard')}
+            className={cn(
+              "px-3 py-2 rounded-xl font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5",
+              tabMode === 'standard' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+            )}
+          >
+            <Timer className="w-3.5 h-3.5" />
+            <span>Stopwatch</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setTabMode('countdown')}
+            className={cn(
+              "px-3 py-2 rounded-xl font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5",
+              tabMode === 'countdown' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+            )}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Countdown</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setTabMode('interval')}
+            className={cn(
+              "px-3 py-2 rounded-xl font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5",
+              tabMode === 'interval' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+            )}
+          >
+            <Flame className="w-3.5 h-3.5" />
+            <span>Interval (HIIT)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setTabMode('reaction')}
+            className={cn(
+              "px-3 py-2 rounded-xl font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5",
+              tabMode === 'reaction' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+            )}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Reaction Test</span>
+          </button>
         </div>
-      }
-      optionsPanel={
-        <div className="space-y-4">
-          <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted">Settings</h3>
-          <div className="space-y-2">
-            <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-surface-2 rounded-lg transition-colors">
-              <span className="text-sm font-medium">Show Milliseconds</span>
-              <input type="checkbox" checked={settings.showMilliseconds} onChange={e => updateSettings({ showMilliseconds: e.target.checked })} className="accent-blue w-4 h-4" />
-            </label>
-            <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-surface-2 rounded-lg transition-colors">
-              <span className="text-sm font-medium">Show Laps</span>
-              <input type="checkbox" checked={settings.showLaps} onChange={e => updateSettings({ showLaps: e.target.checked })} className="accent-blue w-4 h-4" />
-            </label>
-          </div>
-        </div>
-      }
-      output={
-        settings.showLaps ? (
-          <div className="flex flex-col h-full space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-sm uppercase tracking-widest text-text-muted">Laps</h3>
-              <span className="text-xs font-medium text-text-muted bg-surface-2 px-2 py-1 rounded-md">{laps.length} Total</span>
+
+        {/* Right Settings and Controls */}
+        <div className="flex items-center gap-2">
+          {tabMode === 'standard' && (
+            <div className="hidden sm:flex items-center gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs">
+              <button
+                type="button"
+                onClick={() => setPrecision('seconds')}
+                className={cn("px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer", precision === 'seconds' ? "bg-blue text-white" : "text-text-muted hover:text-text")}
+              >
+                .0s
+              </button>
+              <button
+                type="button"
+                onClick={() => setPrecision('centiseconds')}
+                className={cn("px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer", precision === 'centiseconds' ? "bg-blue text-white" : "text-text-muted hover:text-text")}
+              >
+                .00s
+              </button>
+              <button
+                type="button"
+                onClick={() => setPrecision('milliseconds')}
+                className={cn("px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer", precision === 'milliseconds' ? "bg-blue text-white" : "text-text-muted hover:text-text")}
+              >
+                .000s
+              </button>
             </div>
-            {renderLapsList()}
+          )}
+          {renderSettingsPopover()}
+        </div>
+      </div>
+
+      {/* Mode 1: Standard Precision Stopwatch */}
+      {tabMode === 'standard' && (
+        <ToolWorkspace
+          layout="split"
+          input={
+            <div className="flex flex-col items-center justify-center py-6 sm:py-10 space-y-6 sm:space-y-8 min-w-0 w-full">
+              {renderMainClock()}
+              {renderControls()}
+
+              {/* Keyboard Shortcuts Hint */}
+              <div className="flex items-center justify-center gap-4 text-[11px] text-text-muted pt-4 border-t border-border/40 w-full">
+                <span><kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border font-mono">Space</kbd> Start/Pause</span>
+                <span><kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border font-mono">L</kbd> Lap</span>
+                <span><kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border font-mono">R</kbd> Reset</span>
+              </div>
+            </div>
+          }
+          optionsPanel={
+            <div className="space-y-4">
+              <h3 className="font-bold text-xs uppercase tracking-widest text-text-muted">Display Precision</h3>
+              <div className="grid grid-cols-3 gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs">
+                <button
+                  type="button"
+                  onClick={() => setPrecision('seconds')}
+                  className={cn("py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-center", precision === 'seconds' ? "bg-blue text-white" : "text-text-muted hover:text-text")}
+                >
+                  Seconds (.0)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPrecision('centiseconds')}
+                  className={cn("py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-center", precision === 'centiseconds' ? "bg-blue text-white" : "text-text-muted hover:text-text")}
+                >
+                  Centiseconds (.00)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPrecision('milliseconds')}
+                  className={cn("py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-center", precision === 'milliseconds' ? "bg-blue text-white" : "text-text-muted hover:text-text")}
+                >
+                  Milliseconds (.000)
+                </button>
+              </div>
+
+              {/* Lap Statistics Summary */}
+              {lapRecords.length > 0 && (
+                <div className="pt-4 border-t border-border/60 space-y-3">
+                  <h3 className="font-bold text-xs uppercase tracking-widest text-text-muted">Lap Statistics</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <MetricCard 
+                      label="Fastest Lap" 
+                      value={stats.fastestLapMs !== null ? formatStopwatchTime(stats.fastestLapMs, precision) : '—'} 
+                      accent
+                    />
+                    <MetricCard 
+                      label="Slowest Lap" 
+                      value={stats.slowestLapMs !== null ? formatStopwatchTime(stats.slowestLapMs, precision) : '—'} 
+                    />
+                    <MetricCard 
+                      label="Average Lap" 
+                      value={stats.avgLapMs !== null ? formatStopwatchTime(stats.avgLapMs, precision) : '—'} 
+                    />
+                    <MetricCard 
+                      label="Consistency" 
+                      value={stats.consistencyScore !== null ? `${stats.consistencyScore.toFixed(1)}%` : '—'} 
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          }
+          output={
+            <div className="space-y-4 min-w-0 w-full">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-3">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-sm uppercase tracking-widest text-text">Lap Times</h3>
+                  <span className="text-xs font-semibold text-text-muted bg-surface-2 px-2 py-0.5 rounded-md border border-border">
+                    {lapRecords.length} Recorded
+                  </span>
+                </div>
+
+                {/* Export & Action Buttons */}
+                {lapRecords.length > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={handleCopySummary}
+                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                      title="Copy text summary"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Copy</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDownloadCSV}
+                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                      title="Download CSV"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>CSV</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDownloadJSON}
+                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                      title="Download JSON"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>JSON</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsQrOpen(true)}
+                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                      title="Share QR"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {renderLapsList()}
+            </div>
+          }
+        />
+      )}
+
+      {/* Mode 2: Countdown Start Mode */}
+      {tabMode === 'countdown' && (
+        <div className="border border-border rounded-3xl p-6 sm:p-12 bg-surface flex flex-col items-center justify-center text-center space-y-6">
+          <div className="max-w-md space-y-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-text">Countdown-Linked Start</h2>
+            <p className="text-xs sm:text-sm text-text-muted">
+              Initiates an audible 3-2-1 countdown before automatically launching the precision stopwatch on &ldquo;GO!&rdquo;.
+            </p>
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-text-muted opacity-50 space-y-4 min-h-[200px]">
-            <Flag className="w-8 h-8" />
-            <div className="text-sm font-bold uppercase tracking-widest">Laps are disabled</div>
+
+          {isCountingDown ? (
+            <div className="my-8">
+              <span className="text-8xl sm:text-9xl font-black text-blue animate-bounce">
+                {countdownValue === 0 ? "GO!" : countdownValue}
+              </span>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-6 my-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-text-muted">Countdown Seconds:</span>
+                {[3, 5, 10].map((sec) => (
+                  <button
+                    key={sec}
+                    type="button"
+                    onClick={() => setCountdownFrom(sec)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-xl font-bold text-xs border transition-colors cursor-pointer",
+                      countdownFrom === sec ? "bg-blue text-white border-blue" : "bg-surface-2 border-border text-text-muted hover:text-text"
+                    )}
+                  >
+                    {sec}s
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={startCountdownSequence}
+                className="bg-blue hover:bg-blue/90 text-white font-bold text-base px-8 py-4 rounded-2xl shadow-xl shadow-blue/20 transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <Sparkles className="w-5 h-5" />
+                <span>Start {countdownFrom}s Countdown</span>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mode 3: Interval Timer (HIIT / Work-Rest) */}
+      {tabMode === 'interval' && (
+        <div className="border border-border rounded-3xl p-6 sm:p-8 bg-surface space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+            <div>
+              <h2 className="text-lg font-bold text-text flex items-center gap-2">
+                <Flame className="w-5 h-5 text-orange-500" />
+                <span>Interval (HIIT) Workout Timer</span>
+              </h2>
+              <p className="text-xs text-text-muted">
+                Configurable Work / Rest alternating rounds with audio bells.
+              </p>
+            </div>
+
+            {/* Interval Configuration Controls */}
+            {!isIntervalRunning && intervalState === 'idle' && (
+              <div className="flex flex-wrap items-center gap-3 text-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-text-muted font-medium">Work:</span>
+                  <input
+                    type="number"
+                    min="5"
+                    max="600"
+                    value={settings.workDurationSec}
+                    onChange={(e) => updateSettings({ workDurationSec: Number(e.target.value) })}
+                    className="w-16 bg-surface-2 border border-border rounded-lg px-2 py-1 text-center font-bold text-text"
+                  />
+                  <span className="text-text-muted">s</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-text-muted font-medium">Rest:</span>
+                  <input
+                    type="number"
+                    min="0"
+                    max="300"
+                    value={settings.restDurationSec}
+                    onChange={(e) => updateSettings({ restDurationSec: Number(e.target.value) })}
+                    className="w-16 bg-surface-2 border border-border rounded-lg px-2 py-1 text-center font-bold text-text"
+                  />
+                  <span className="text-text-muted">s</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-text-muted font-medium">Rounds:</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={settings.totalRounds}
+                    onChange={(e) => updateSettings({ totalRounds: Number(e.target.value) })}
+                    className="w-16 bg-surface-2 border border-border rounded-lg px-2 py-1 text-center font-bold text-text"
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        )
-      }
-    />
+
+          {/* Active Interval Dashboard */}
+          <div className="flex flex-col items-center justify-center py-6 text-center space-y-6">
+            <div className="space-y-1">
+              <span className={cn(
+                "px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border",
+                intervalState === 'work' ? "bg-orange-500/20 text-orange-400 border-orange-500/40 animate-pulse" :
+                intervalState === 'rest' ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/40" :
+                intervalState === 'prep' ? "bg-amber-500/20 text-amber-400 border-amber-500/40" :
+                intervalState === 'complete' ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40" :
+                "bg-surface-2 text-text-muted border-border"
+              )}>
+                {intervalState === 'idle' ? 'Ready' : intervalState.toUpperCase()}
+              </span>
+              <div className="text-sm font-semibold text-text-muted pt-1">
+                Round {currentRound} of {settings.totalRounds}
+              </div>
+            </div>
+
+            {/* Big Countdown Timer */}
+            <div className="text-7xl sm:text-9xl font-black font-mono tracking-tighter tabular-nums">
+              {String(Math.floor(intervalTimeRemaining / 60)).padStart(2, '0')}:
+              {String(intervalTimeRemaining % 60).padStart(2, '0')}
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-4">
+              {intervalState === 'idle' || intervalState === 'complete' ? (
+                <button
+                  type="button"
+                  onClick={startInterval}
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-2xl shadow-xl shadow-orange-500/20 transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+                >
+                  <Play className="w-5 h-5 fill-current" />
+                  <span>Start Interval Workout</span>
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={isIntervalRunning ? pauseInterval : () => setIsIntervalRunning(true)}
+                    className={cn(
+                      "font-bold px-6 py-3 rounded-2xl text-white shadow-lg transition-all active:scale-95 cursor-pointer flex items-center gap-2",
+                      isIntervalRunning ? "bg-amber-500 hover:bg-amber-600 shadow-amber-500/20" : "bg-success hover:bg-success/90 shadow-success/20"
+                    )}
+                  >
+                    {isIntervalRunning ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
+                    <span>{isIntervalRunning ? "Pause" : "Resume"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetInterval}
+                    className="bg-surface-2 hover:bg-surface border border-border text-text-muted hover:text-text font-bold px-5 py-3 rounded-2xl transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <RotateCcw className="w-5 h-5" />
+                    <span>Reset</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mode 4: Reaction Time Benchmark */}
+      {tabMode === 'reaction' && (
+        <div className="space-y-6">
+          <div
+            onClick={handleReactionClick}
+            className={cn(
+              "w-full h-80 rounded-3xl flex flex-col items-center justify-center p-6 text-center select-none cursor-pointer transition-all duration-150 border-2",
+              reactionState === 'idle' ? "bg-surface-2/60 border-border hover:border-blue text-text" :
+              reactionState === 'waiting' ? "bg-red-600/90 border-red-500 text-white shadow-2xl shadow-red-500/20" :
+              reactionState === 'ready' ? "bg-emerald-500 border-emerald-400 text-white shadow-2xl shadow-emerald-500/30 animate-pulse" :
+              reactionState === 'early' ? "bg-amber-500/90 border-amber-400 text-white" :
+              "bg-surface border-border text-text"
+            )}
+          >
+            {reactionState === 'idle' && (
+              <div className="space-y-2">
+                <Zap className="w-12 h-12 text-blue mx-auto" />
+                <h3 className="text-2xl font-bold">Reaction Time Benchmark</h3>
+                <p className="text-xs sm:text-sm text-text-muted">Click or press <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border font-mono">Space</kbd> to begin. When red turns GREEN, click as fast as you can!</p>
+              </div>
+            )}
+
+            {reactionState === 'waiting' && (
+              <div className="space-y-2">
+                <h3 className="text-3xl font-black uppercase tracking-wider">Wait for Green...</h3>
+                <p className="text-xs opacity-80">Do not click yet</p>
+              </div>
+            )}
+
+            {reactionState === 'ready' && (
+              <div className="space-y-2">
+                <h3 className="text-5xl font-black uppercase tracking-wider">CLICK NOW!</h3>
+              </div>
+            )}
+
+            {reactionState === 'early' && (
+              <div className="space-y-2">
+                <h3 className="text-3xl font-black uppercase tracking-wider">Too Soon! ⚠️</h3>
+                <p className="text-xs">You clicked before green. Click to retry.</p>
+              </div>
+            )}
+
+            {reactionState === 'result' && (
+              <div className="space-y-3">
+                <div className="text-6xl font-black font-mono tracking-tight text-blue">
+                  {reactionScore} ms
+                </div>
+                <div className="text-sm font-bold">
+                  {reactionScore! < 200 ? "🚀 Godlike Reflexes!" :
+                   reactionScore! < 260 ? "⚡ Pro Reflexes" :
+                   reactionScore! < 340 ? "👍 Good Human Average" :
+                   "🐢 Slow Reaction"}
+                </div>
+                <p className="text-xs text-text-muted">Click to try again</p>
+              </div>
+            )}
+          </div>
+
+          {/* Reaction History Table */}
+          {reactionHistory.length > 0 && (
+            <div className="border border-border rounded-2xl p-4 bg-surface space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-text uppercase tracking-wider">Past Attempts</span>
+                <span className="text-text-muted">
+                  Best: <strong className="text-emerald-400">{Math.min(...reactionHistory)} ms</strong> • Avg: <strong>{Math.round(reactionHistory.reduce((a,b)=>a+b,0)/reactionHistory.length)} ms</strong>
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {reactionHistory.map((score, idx) => (
+                  <span key={idx} className="font-mono text-xs px-2.5 py-1 rounded-lg bg-surface-2 border border-border text-text">
+                    #{reactionHistory.length - idx}: <strong>{score} ms</strong>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
