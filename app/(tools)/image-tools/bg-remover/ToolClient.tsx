@@ -6,8 +6,14 @@ import { ModelStatusBadge } from "@/components/ui/ai/ModelStatusBadge";
 import { InferenceProgress } from "@/components/ui/ai/InferenceProgress";
 import { BackendSelector } from "@/components/ui/ai/BackendSelector";
 import { ModelManagerDialog } from "@/components/ui/ai/ModelManagerDialog";
-import { RMBG_MODEL_MANIFEST } from "@/src/features/background-remover/constants";
+import { RMBG_MODEL_MANIFEST, U2NETP_MODEL_MANIFEST } from "@/src/features/background-remover/constants";
 import { createTransparentCanvas } from "@/src/features/background-remover/postprocess";
+import { 
+  STUDIO_PRESETS, 
+  BackdropType, 
+  compositeCutoutWithBackdrop, 
+  autoDetectBackgroundColor 
+} from "@/src/features/background-remover/backdrop-compositor";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { useToast } from "@/components/ui/Toast";
 import { ModelBackend } from "@/src/ai/types";
@@ -20,11 +26,21 @@ import { StatusBadge } from "@/components/system/StatusBadge";
 import { PrivacyBadge } from "@/components/system/PrivacyBadge";
 import { 
   Sparkles, Download, Layers, ShieldCheck, 
-  HardDrive, Check, AlertCircle, ToggleLeft, ToggleRight,
-  Palette, Zap, Trash2, Image as ImageIcon2, RefreshCw
+  HardDrive, AlertCircle, ToggleLeft, ToggleRight,
+  Palette, Zap, Trash2, Image as ImageIcon2, RefreshCw,
+  Pipette, Copy, Check
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
+
+const SOLID_PRESETS = [
+  { label: 'White', color: '#ffffff' },
+  { label: 'Studio Dark', color: '#0f172a' },
+  { label: 'Slate Grey', color: '#64748b' },
+  { label: 'Passport Blue', color: '#1e40af' },
+  { label: 'Crimson', color: '#dc2626' },
+  { label: 'Mint', color: '#10b981' },
+];
 
 export default function ToolClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
@@ -36,7 +52,13 @@ export default function ToolClient() {
   // Shared file state
   const [file, setFile] = useState<File | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
-  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [resultTransparentUrl, setResultTransparentUrl] = useState<string | null>(null);
+  const [resultDisplayUrl, setResultDisplayUrl] = useState<string | null>(null);
+
+  // Background Replacement Settings (Applies to both Canvas and AI outputs)
+  const [backdropType, setBackdropType] = useState<BackdropType>('transparent');
+  const [replacementSolidColor, setReplacementSolidColor] = useState('#ffffff');
+  const [selectedStudioPresetId, setSelectedStudioPresetId] = useState('studio-soft-spotlight');
 
   // Canvas Mode Controls
   const [bgColor, setBgColor] = useState("#ffffff");
@@ -58,11 +80,13 @@ export default function ToolClient() {
 
   // Split comparison slider & visual settings
   const [sliderPosition, setSliderPosition] = useState(50);
-  const [activeElsTab, setActiveElsTab] = useState<'segmentation' | 'tensors' | 'alpha' | 'wasm'>('segmentation');
+  const [activeElsTab, setActiveElsTab] = useState<'canvas-mode' | 'u2netp' | 'rmbg' | 'alpha'>('canvas-mode');
   const [showCheckerboard, setShowCheckerboard] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const transparentCutoutCanvasRef = useRef<HTMLCanvasElement | ImageBitmap | OffscreenCanvas | null>(null);
   const rawOutputTensorRef = useRef<Float32Array | null>(null);
 
   // Check if model is cached in IndexedDB
@@ -70,16 +94,15 @@ export default function ToolClient() {
     async function checkModelCache() {
       try {
         const { getCachedModel } = await import('@/src/ai/model-cache');
-        const cached = await getCachedModel(RMBG_MODEL_MANIFEST.id, RMBG_MODEL_MANIFEST.version);
-        if (cached) {
-          setIsCachedModel(true);
-        }
+        const activeManifest = selectedModelId === 'u2netp-mobile' ? U2NETP_MODEL_MANIFEST : RMBG_MODEL_MANIFEST;
+        const cached = await getCachedModel(activeManifest.id, activeManifest.version);
+        setIsCachedModel(!!cached);
       } catch {
         setIsCachedModel(false);
       }
     }
     checkModelCache();
-  }, []);
+  }, [selectedModelId]);
 
   const handleFilesSelected = (files: File[]) => {
     const selected = files[0];
@@ -91,17 +114,68 @@ export default function ToolClient() {
     }
 
     if (originalUrl) revokeUrl(originalUrl);
-    if (resultUrl) revokeUrl(resultUrl);
+    if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
+    if (resultDisplayUrl) revokeUrl(resultDisplayUrl);
 
     setFile(selected);
     setCanvasError(null);
     setAiError(null);
-    setResultUrl(null);
+    setResultTransparentUrl(null);
+    setResultDisplayUrl(null);
+    transparentCutoutCanvasRef.current = null;
     rawOutputTensorRef.current = null;
 
     const url = createUrl(selected);
     setOriginalUrl(url);
+
+    // Auto-detect predominant background color from corners
+    const tempImg = new Image();
+    tempImg.src = url;
+    tempImg.onload = () => {
+      imageRef.current = tempImg;
+      const detected = autoDetectBackgroundColor(tempImg);
+      setBgColor(detected);
+    };
   };
+
+  const handleAutoDetectColor = () => {
+    if (!imageRef.current) return;
+    const detected = autoDetectBackgroundColor(imageRef.current);
+    setBgColor(detected);
+    toast(`Auto-detected background color: ${detected.toUpperCase()}`, 'info');
+  };
+
+  // Re-composite current transparent cutout onto chosen backdrop
+  const updateCompositedResult = useCallback(async (cutout: HTMLImageElement | ImageBitmap | HTMLCanvasElement | OffscreenCanvas) => {
+    if (!file) return;
+
+    const width = cutout instanceof HTMLImageElement ? (cutout.naturalWidth || cutout.width) : cutout.width;
+    const height = cutout instanceof HTMLImageElement ? (cutout.naturalHeight || cutout.height) : cutout.height;
+
+    try {
+      const compositeBlob = await compositeCutoutWithBackdrop({
+        cutoutImage: cutout,
+        width,
+        height,
+        backdropType,
+        solidColor: replacementSolidColor,
+        studioPresetId: selectedStudioPresetId
+      });
+
+      if (resultDisplayUrl) revokeUrl(resultDisplayUrl);
+      const url = createUrl(compositeBlob);
+      setResultDisplayUrl(url);
+    } catch (err) {
+      console.error('Failed to composite background:', err);
+    }
+  }, [file, backdropType, replacementSolidColor, selectedStudioPresetId, resultDisplayUrl, createUrl, revokeUrl]);
+
+  // Update composite whenever backdrop settings change
+  useEffect(() => {
+    if (transparentCutoutCanvasRef.current) {
+      updateCompositedResult(transparentCutoutCanvasRef.current);
+    }
+  }, [backdropType, replacementSolidColor, selectedStudioPresetId, updateCompositedResult]);
 
   // Canvas Mode Removal (Instant local pixel color matching)
   const removeBackgroundCanvas = useCallback(async () => {
@@ -113,21 +187,29 @@ export default function ToolClient() {
       const buffer = await file.arrayBuffer();
       const resultBytes = await workerManager.removeBackground(buffer, bgColor, tolerance);
       const blob = new Blob([resultBytes as any], { type: 'image/png' });
-      return createUrl(blob);
+      return blob;
     }, 'bg-remover');
 
     if (result.success && result.data) {
-      if (resultUrl) revokeUrl(resultUrl);
-      setResultUrl(result.data);
-      toast('Background removed via Canvas algorithm', 'success');
+      const transparentBlob = result.data;
+      if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
+      const tUrl = createUrl(transparentBlob);
+      setResultTransparentUrl(tUrl);
+
+      // Create ImageBitmap to allow instant background compositing
+      const bitmap = await createImageBitmap(transparentBlob);
+      transparentCutoutCanvasRef.current = bitmap;
+      await updateCompositedResult(bitmap);
+
+      toast('Background removed via Instant Canvas algorithm', 'success');
     } else {
       setCanvasError(formatError(result.error));
     }
     
     setCanvasProcessing(false);
-  }, [file, bgColor, tolerance, resultUrl, createUrl, revokeUrl, setCanvasProcessing, toast]);
+  }, [file, bgColor, tolerance, resultTransparentUrl, createUrl, revokeUrl, setCanvasProcessing, updateCompositedResult, toast]);
 
-  // AI Mode Removal (Deep Learning RMBG 2.0 / BiRefNet)
+  // AI Mode Removal (U²-NetP / RMBG 2.0)
   const processBackgroundRemovalAi = useCallback(async () => {
     if (!file || !originalUrl) return;
 
@@ -147,10 +229,10 @@ export default function ToolClient() {
       });
       imageRef.current = img;
 
-      setProgress({ percent: 30, stage: 'Selecting Optimal AI Model & Preprocessing' });
+      setProgress({ percent: 30, stage: `Initializing ${selectedModelId === 'u2netp-mobile' ? 'U²-NetP Offline' : 'RMBG 2.0'} Engine` });
 
       const { ai } = await import('@/src/ai/sdk');
-      const { blob, modelUsed, inferenceTimeMs, rawTensor } = await ai.removeBackground(file, {
+      const { blob, canvas, modelUsed, inferenceTimeMs, rawTensor } = await ai.removeBackground(file, {
         modelId: selectedModelId,
         onProgress: (p) => {
           setProgress({ percent: 40 + Math.round(p.percent * 0.4), stage: `AI Engine: ${p.stage}` });
@@ -161,13 +243,19 @@ export default function ToolClient() {
       });
 
       rawOutputTensorRef.current = rawTensor;
+      transparentCutoutCanvasRef.current = canvas;
 
-      setProgress({ percent: 90, stage: 'Compositing High-Res Transparent PNG' });
+      setProgress({ percent: 90, stage: 'Compositing High-Res Cutout' });
 
+      if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
       const transparentUrl = createUrl(blob);
-      setResultUrl(transparentUrl);
+      setResultTransparentUrl(transparentUrl);
+
+      await updateCompositedResult(canvas);
       setIsCachedModel(true);
-      toast(`Background removed using ${modelUsed} in ${inferenceTimeMs}ms`, 'success');
+
+      const modelName = selectedModelId === 'u2netp-mobile' ? 'U²-NetP (4.4MB)' : 'RMBG 2.0 HD';
+      toast(`Background removed using ${modelName} in ${inferenceTimeMs}ms`, 'success');
     } catch (err: any) {
       if (err.name !== 'AbortError') {
         console.error('Background removal failed:', err);
@@ -177,22 +265,27 @@ export default function ToolClient() {
       setIsProcessing(false);
       setProgress(null);
     }
-  }, [file, originalUrl, selectedModelId, createUrl, toast]);
+  }, [file, originalUrl, selectedModelId, resultTransparentUrl, createUrl, revokeUrl, updateCompositedResult, toast]);
 
-  // Re-render transparent canvas when AI mask sliders change
+  // Re-render transparent canvas when AI mask fine-tuning sliders change
   const applyControlChanges = useCallback(async () => {
-    if (!imageRef.current || !rawOutputTensorRef.current || !originalUrl) return;
+    if (!imageRef.current || !rawOutputTensorRef.current) return;
 
     try {
+      const modelWidth = selectedModelId === 'u2netp-mobile' ? 320 : 1024;
+      const modelHeight = selectedModelId === 'u2netp-mobile' ? 320 : 1024;
+
       const transparentCanvas = await createTransparentCanvas({
         outputTensorData: rawOutputTensorRef.current,
-        maskWidth: 1024,
-        maskHeight: 1024,
+        maskWidth: modelWidth,
+        maskHeight: modelHeight,
         originalImage: imageRef.current,
         threshold,
         feather,
         invert
       });
+
+      transparentCutoutCanvasRef.current = transparentCanvas;
 
       const resultBlob = await new Promise<Blob | null>((resolve) => {
         const canvas = document.createElement('canvas');
@@ -201,49 +294,96 @@ export default function ToolClient() {
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(transparentCanvas, 0, 0);
-          canvas.toBlob((blob: Blob | null) => resolve(blob), 'image/png');
+          canvas.toBlob((b: Blob | null) => resolve(b), 'image/png');
         } else {
           resolve(null);
         }
       });
 
       if (resultBlob) {
-        if (resultUrl) revokeUrl(resultUrl);
+        if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
         const updatedUrl = createUrl(resultBlob);
-        setResultUrl(updatedUrl);
+        setResultTransparentUrl(updatedUrl);
       }
+
+      await updateCompositedResult(transparentCanvas);
     } catch (err) {
       console.error('Failed to update canvas controls:', err);
     }
-  }, [threshold, feather, invert, originalUrl, resultUrl, createUrl, revokeUrl]);
+  }, [selectedModelId, threshold, feather, invert, resultTransparentUrl, createUrl, revokeUrl, updateCompositedResult]);
 
   const handleReset = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
     if (originalUrl) revokeUrl(originalUrl);
-    if (resultUrl) revokeUrl(resultUrl);
+    if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
+    if (resultDisplayUrl) revokeUrl(resultDisplayUrl);
 
     setFile(null);
     setOriginalUrl(null);
-    setResultUrl(null);
+    setResultTransparentUrl(null);
+    setResultDisplayUrl(null);
     setCanvasError(null);
     setAiError(null);
     setIsProcessing(false);
     setProgress(null);
     rawOutputTensorRef.current = null;
+    transparentCutoutCanvasRef.current = null;
   };
 
-  const handleDownload = () => {
-    if (!resultUrl || !file) return;
+  const handleDownloadTransparent = () => {
+    if (!resultTransparentUrl || !file) return;
     const a = document.createElement('a');
-    a.href = resultUrl;
+    a.href = resultTransparentUrl;
     const baseName = file.name.replace(/\.[^/.]+$/, "");
-    a.download = `${baseName}-no-bg.png`;
+    a.download = `${baseName}-transparent.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     toast('Downloaded transparent PNG', 'success');
+  };
+
+  const handleDownloadBackdrop = () => {
+    if (!resultDisplayUrl || !file) return;
+    const a = document.createElement('a');
+    a.href = resultDisplayUrl;
+    const baseName = file.name.replace(/\.[^/.]+$/, "");
+    const ext = backdropType === 'transparent' ? 'png' : 'jpg';
+    a.download = `${baseName}-${backdropType}-backdrop.${ext}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast(`Downloaded image with ${backdropType} backdrop`, 'success');
+  };
+
+  const handleCopyImage = async () => {
+    if (!resultDisplayUrl) return;
+    try {
+      const res = await fetch(resultDisplayUrl);
+      const blob = await res.blob();
+      // Ensure PNG format for clipboard
+      let pngBlob = blob;
+      if (blob.type !== 'image/png') {
+        const img = new Image();
+        img.src = resultDisplayUrl;
+        await new Promise((r) => { img.onload = r; });
+        const c = document.createElement('canvas');
+        c.width = img.width;
+        c.height = img.height;
+        const ctx = c.getContext('2d');
+        ctx?.drawImage(img, 0, 0);
+        pngBlob = await new Promise<Blob>((resolve) => c.toBlob((b) => resolve(b!), 'image/png'));
+      }
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': pngBlob })
+      ]);
+      setCopied(true);
+      toast('Copied image to clipboard!', 'success');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast('Unable to copy to clipboard in this browser', 'error');
+    }
   };
 
   return (
@@ -266,10 +406,13 @@ export default function ToolClient() {
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {activeTab === 'ai' && (
               <>
-                <ModelStatusBadge isCached={isCachedModel} sizeMB={RMBG_MODEL_MANIFEST.sizeMB} />
+                <ModelStatusBadge 
+                  isCached={isCachedModel} 
+                  sizeMB={selectedModelId === 'u2netp-mobile' ? U2NETP_MODEL_MANIFEST.sizeMB : RMBG_MODEL_MANIFEST.sizeMB} 
+                />
                 <button
                   onClick={() => setIsManagerOpen(true)}
-                  className="p-1.5 hover:bg-surface-elevated rounded-xl border border-border text-text-muted hover:text-text transition-colors"
+                  className="p-1.5 hover:bg-surface-elevated rounded-xl border border-border text-text-muted hover:text-text transition-colors cursor-pointer"
                   title="Open AI Model Manager"
                   aria-label="Open AI Model Manager"
                 >
@@ -286,7 +429,8 @@ export default function ToolClient() {
           <button
             onClick={() => {
               setActiveTab('canvas');
-              setResultUrl(null);
+              setResultTransparentUrl(null);
+              setResultDisplayUrl(null);
             }}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer",
@@ -302,7 +446,8 @@ export default function ToolClient() {
           <button
             onClick={() => {
               setActiveTab('ai');
-              setResultUrl(null);
+              setResultTransparentUrl(null);
+              setResultDisplayUrl(null);
             }}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer",
@@ -326,7 +471,7 @@ export default function ToolClient() {
               {file && (
                 <button 
                   onClick={handleReset}
-                  className="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
+                  className="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Clear Image
                 </button>
@@ -354,7 +499,7 @@ export default function ToolClient() {
                 </div>
                 <button
                   onClick={handleReset}
-                  className="px-3 py-1.5 bg-surface border border-border text-text-muted text-xs font-bold rounded-lg hover:bg-surface-elevated transition-colors shrink-0 ml-2"
+                  className="px-3 py-1.5 bg-surface border border-border text-text-muted text-xs font-bold rounded-lg hover:bg-surface-elevated transition-colors shrink-0 ml-2 cursor-pointer"
                 >
                   Change
                 </button>
@@ -372,12 +517,12 @@ export default function ToolClient() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="text-tiny font-bold uppercase tracking-widest-sm text-text-muted">
-                {activeTab === 'canvas' ? 'Canvas Settings' : 'AI Inference Settings'}
+                {activeTab === 'canvas' ? 'Canvas Settings' : 'AI Neural Settings'}
               </h3>
               <StatusBadge status={
                 (isProcessing || canvasProcessing) ? "processing" : 
                 (aiError || canvasError) ? "error" : 
-                resultUrl ? "complete" : "idle"
+                resultDisplayUrl ? "complete" : "idle"
               } />
             </div>
 
@@ -424,14 +569,26 @@ export default function ToolClient() {
             {activeTab === 'canvas' && (
               <div className="space-y-5">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-2 px-1">Background Color to Remove</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-bold text-text-2">Background Color to Remove</label>
+                    <button
+                      type="button"
+                      onClick={handleAutoDetectColor}
+                      disabled={!file}
+                      className="text-xs font-bold text-blue hover:text-blue-hover flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                      title="Sample the 4 corners of the image to auto-detect background color"
+                    >
+                      <Pipette className="w-3.5 h-3.5" />
+                      <span>Auto-Detect BG</span>
+                    </button>
+                  </div>
                   <div className="flex items-center gap-3">
                     <input 
                       type="color" 
                       value={bgColor} 
                       onChange={e => setBgColor(e.target.value)} 
                       className="w-12 h-12 rounded-xl border border-border cursor-pointer shrink-0 p-1 bg-bg" 
-                      aria-label="Pick background color"
+                      aria-label="Pick background color to remove"
                     />
                     <ToolInput
                       value={bgColor}
@@ -440,7 +597,7 @@ export default function ToolClient() {
                       className="h-12 flex-1"
                     />
                   </div>
-                  <p className="text-xs text-text-muted px-1">Pick a color or type Hex. Defaults to White (#ffffff).</p>
+                  <p className="text-xs text-text-muted px-1">Pick a color, enter Hex, or click Auto-Detect.</p>
                 </div>
 
                 <div className="pt-2">
@@ -458,7 +615,7 @@ export default function ToolClient() {
                 <button
                   onClick={removeBackgroundCanvas}
                   disabled={!file || canvasProcessing}
-                  className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-blue/20 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 bg-blue text-white font-bold rounded-xl hover:scale-101 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-blue/20 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {canvasProcessing ? (
                     <>
@@ -468,7 +625,7 @@ export default function ToolClient() {
                   ) : (
                     <>
                       <Zap className="w-4 h-4" />
-                      <span>Remove Background (Canvas)</span>
+                      <span>Remove Background (Instant Canvas)</span>
                     </>
                   )}
                 </button>
@@ -488,7 +645,7 @@ export default function ToolClient() {
                   <select
                     value={selectedModelId}
                     onChange={(e) => setSelectedModelId(e.target.value)}
-                    className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-sm text-text focus:outline-none focus:border-blue"
+                    className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-sm text-text focus:outline-none focus:border-blue cursor-pointer"
                   >
                     <option value="u2netp-mobile">U²-NetP Ultra-Fast Mobile (4.4 MB • Built-in Offline Fast)</option>
                     <option value="background-removal-rmbg">RMBG 2.0 / BiRefNet (168 MB • High Quality HD)</option>
@@ -503,7 +660,7 @@ export default function ToolClient() {
                 <button
                   onClick={processBackgroundRemovalAi}
                   disabled={!file || isProcessing}
-                  className="w-full py-4 bg-blue text-white font-bold rounded-xl hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-blue/20 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 bg-blue text-white font-bold rounded-xl hover:scale-101 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-blue/20 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isProcessing ? (
                     <>
@@ -519,7 +676,7 @@ export default function ToolClient() {
                 </button>
 
                 {/* AI Mask Fine-Tuning Controls */}
-                {resultUrl && (
+                {resultTransparentUrl && (
                   <div className="space-y-4 pt-4 border-t border-border">
                     <h4 className="text-sm font-bold text-text">Post-Processing Mask Tuning</h4>
                     <div className="grid grid-cols-1 gap-4">
@@ -536,6 +693,7 @@ export default function ToolClient() {
                           value={threshold}
                           onChange={(e) => setThreshold(Number(e.target.value))}
                           onMouseUp={applyControlChanges}
+                          onTouchEnd={applyControlChanges}
                           className="w-full cursor-pointer accent-blue"
                           aria-label="Alpha Threshold"
                         />
@@ -554,6 +712,7 @@ export default function ToolClient() {
                           value={feather}
                           onChange={(e) => setFeather(Number(e.target.value))}
                           onMouseUp={applyControlChanges}
+                          onTouchEnd={applyControlChanges}
                           className="w-full cursor-pointer accent-blue"
                           aria-label="Edge Feathering"
                         />
@@ -564,7 +723,7 @@ export default function ToolClient() {
                         <button
                           onClick={() => { setInvert(!invert); setTimeout(applyControlChanges, 0); }}
                           className={cn(
-                            "p-1.5 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-bold font-mono",
+                            "p-1.5 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-bold font-mono cursor-pointer",
                             invert ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface-elevated border-border text-text-muted"
                           )}
                         >
@@ -577,20 +736,152 @@ export default function ToolClient() {
                 )}
               </div>
             )}
+
+            {/* SHARED: Output Backdrop Replacement Controls */}
+            <div className="space-y-3 pt-4 border-t border-border/80">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-bold text-text">Replacement Background</h4>
+                <span className="text-tiny font-mono text-text-muted capitalize">{backdropType}</span>
+              </div>
+
+              {/* Backdrop Type Selector Tabs */}
+              <div className="grid grid-cols-3 gap-1.5 bg-surface-elevated p-1 rounded-xl border border-border">
+                <button
+                  type="button"
+                  onClick={() => setBackdropType('transparent')}
+                  className={cn(
+                    "py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    backdropType === 'transparent' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                  )}
+                >
+                  Transparent
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBackdropType('solid')}
+                  className={cn(
+                    "py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    backdropType === 'solid' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                  )}
+                >
+                  Solid BG
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBackdropType('studio')}
+                  className={cn(
+                    "py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    backdropType === 'studio' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                  )}
+                >
+                  Studio BG
+                </button>
+              </div>
+
+              {/* Solid Color Options */}
+              {backdropType === 'solid' && (
+                <div className="space-y-3 bg-surface-elevated/50 p-3.5 rounded-2xl border border-border/60">
+                  <div className="flex flex-wrap gap-2">
+                    {SOLID_PRESETS.map((preset) => (
+                      <button
+                        key={preset.color}
+                        type="button"
+                        onClick={() => setReplacementSolidColor(preset.color)}
+                        className={cn(
+                          "w-7 h-7 rounded-lg border flex items-center justify-center transition-all cursor-pointer",
+                          replacementSolidColor.toLowerCase() === preset.color.toLowerCase() 
+                            ? "ring-2 ring-blue border-white scale-110" 
+                            : "border-border hover:scale-105"
+                        )}
+                        style={{ backgroundColor: preset.color }}
+                        title={preset.label}
+                      >
+                        {replacementSolidColor.toLowerCase() === preset.color.toLowerCase() && (
+                          <Check className={cn("w-3.5 h-3.5", preset.color === '#ffffff' ? "text-slate-900" : "text-white")} />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={replacementSolidColor}
+                      onChange={(e) => setReplacementSolidColor(e.target.value)}
+                      className="w-8 h-8 rounded-lg border border-border cursor-pointer p-0.5 bg-bg"
+                      aria-label="Custom solid replacement color"
+                    />
+                    <ToolInput
+                      value={replacementSolidColor}
+                      onChange={setReplacementSolidColor}
+                      mono
+                      className="h-8 flex-1 text-xs"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Studio Gradient Options */}
+              {backdropType === 'studio' && (
+                <div className="grid grid-cols-2 gap-2 bg-surface-elevated/50 p-3 rounded-2xl border border-border/60 max-h-48 overflow-y-auto">
+                  {STUDIO_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setSelectedStudioPresetId(preset.id)}
+                      className={cn(
+                        "p-2 rounded-xl border text-left flex flex-col gap-1 transition-all cursor-pointer",
+                        selectedStudioPresetId === preset.id
+                          ? "border-blue ring-1 ring-blue bg-blue/5"
+                          : "border-border hover:border-border/80 bg-surface"
+                      )}
+                    >
+                      <div 
+                        className="w-full h-8 rounded-lg border border-border/50 shadow-inner" 
+                        style={{ background: preset.cssPreview }}
+                      />
+                      <span className="text-[11px] font-bold text-text truncate">{preset.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         }
         output={
           <div className="space-y-6 h-full flex flex-col">
-            <div className="flex justify-between items-center px-1">
-              <h3 className="text-sm font-bold text-text-2">Result (Transparent PNG)</h3>
-              {resultUrl && (
-                <button
-                  onClick={handleDownload}
-                  className="px-3.5 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download PNG</span>
-                </button>
+            <div className="flex justify-between items-center px-1 flex-wrap gap-2">
+              <h3 className="text-sm font-bold text-text-2">Result Preview</h3>
+              {resultDisplayUrl && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleCopyImage}
+                    className="p-1.5 rounded-xl border border-border bg-surface hover:bg-surface-elevated text-text text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                    title="Copy cutout image to clipboard"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copied ? 'Copied' : 'Copy'}</span>
+                  </button>
+
+                  <button
+                    onClick={handleDownloadTransparent}
+                    className="px-3 py-1.5 rounded-xl border border-border bg-surface hover:bg-surface-elevated text-text text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
+                    title="Download cutout as transparent PNG"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>PNG</span>
+                  </button>
+
+                  {backdropType !== 'transparent' && (
+                    <button
+                      onClick={handleDownloadBackdrop}
+                      className="px-3.5 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                      title="Download image with chosen solid/studio backdrop"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download with BG</span>
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
@@ -604,31 +895,34 @@ export default function ToolClient() {
             )}
 
             {/* Result display */}
-            {resultUrl ? (
+            {resultDisplayUrl ? (
               <div className="space-y-4 flex-1 flex flex-col">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <button
                     onClick={() => setShowCheckerboard(!showCheckerboard)}
                     className={cn(
-                      "px-2.5 py-1 rounded-lg text-tiny font-mono font-bold border transition-colors flex items-center gap-1",
+                      "px-2.5 py-1 rounded-lg text-tiny font-mono font-bold border transition-colors flex items-center gap-1 cursor-pointer",
                       showCheckerboard ? "bg-blue/10 border-blue/30 text-blue" : "bg-surface border-border text-text-muted"
                     )}
                   >
                     <Layers className="w-3 h-3" />
-                    <span>{showCheckerboard ? "Checkerboard Pattern" : "Solid Background"}</span>
+                    <span>{showCheckerboard ? "Checkerboard Canvas" : "Clean Canvas"}</span>
                   </button>
+                  <span className="text-tiny font-mono text-text-muted">
+                    {backdropType === 'transparent' ? 'Transparent PNG Output' : `Backdrop: ${backdropType}`}
+                  </span>
                 </div>
 
-                {activeTab === 'ai' && originalUrl ? (
-                  // AI Mode: Split Comparison View
+                {originalUrl ? (
+                  // Split Comparison View (Original vs Composite)
                   <div 
                     className={cn(
                       "relative w-full flex-1 min-h-[400px] rounded-3xl border border-border overflow-hidden select-none",
-                      showCheckerboard ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
+                      showCheckerboard && backdropType === 'transparent' ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
                     )}
                   >
                     <img
-                      src={resultUrl}
+                      src={resultDisplayUrl}
                       alt="Background Removed Result"
                       className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                     />
@@ -648,7 +942,7 @@ export default function ToolClient() {
                     </div>
 
                     <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md border border-blue/30 text-tiny font-bold uppercase tracking-wider text-blue">
-                      Transparent PNG
+                      {backdropType === 'transparent' ? 'Cutout' : 'With Backdrop'}
                     </div>
 
                     <input
@@ -662,12 +956,11 @@ export default function ToolClient() {
                     />
                   </div>
                 ) : (
-                  // Canvas Mode: Direct Result View
                   <div className={cn(
                     "flex-1 flex flex-col justify-center min-h-[350px] rounded-3xl overflow-hidden border border-border p-4",
-                    showCheckerboard ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
+                    showCheckerboard && backdropType === 'transparent' ? "bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] bg-surface" : "bg-surface"
                   )}>
-                    <img src={resultUrl} alt="Result with background removed" className="max-h-[450px] object-contain mx-auto" />
+                    <img src={resultDisplayUrl} alt="Result with background removed" className="max-h-[450px] object-contain mx-auto" />
                   </div>
                 )}
               </div>
@@ -676,7 +969,7 @@ export default function ToolClient() {
                 <Layers className="w-8 h-8 mb-2 opacity-50 text-blue" />
                 <p className="text-sm font-bold text-text">No Background Removed Yet</p>
                 <p className="text-xs text-text-muted mt-1 max-w-xs">
-                  Upload an image and click {activeTab === 'canvas' ? '"Remove Background (Canvas)"' : '"Remove Background (AI)"'} to preview the transparent result here.
+                  Upload an image and click {activeTab === 'canvas' ? '"Remove Background (Instant Canvas)"' : '"Remove Background (AI Model)"'} to preview your cutout and studio backdrops.
                 </p>
               </div>
             )}
@@ -691,10 +984,10 @@ export default function ToolClient() {
 
             <div className="flex flex-wrap gap-2 border-b border-border/60 pb-3">
               {[
-                { id: 'segmentation', label: '1. Neural Segmentation' },
-                { id: 'tensors', label: '2. Tensor Normalization' },
-                { id: 'alpha', label: '3. Alpha Matting' },
-                { id: 'wasm', label: '4. Canvas vs AI Math' }
+                { id: 'canvas-mode', label: '1. Instant Canvas Math' },
+                { id: 'u2netp', label: '2. U²-NetP Mobile AI' },
+                { id: 'rmbg', label: '3. RMBG 2.0 Neural Net' },
+                { id: 'alpha', label: '4. Alpha Compositing' }
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -712,42 +1005,45 @@ export default function ToolClient() {
             </div>
 
             <div className="text-xs text-text-3 leading-relaxed space-y-3 font-mono">
-              {activeElsTab === 'segmentation' && (
+              {activeElsTab === 'canvas-mode' && (
                 <div className="space-y-2">
-                  <h4 className="font-bold text-text text-sm">What is Neural Image Segmentation?</h4>
+                  <h4 className="font-bold text-text text-sm">Instant Canvas & Color Tolerance Algorithm</h4>
                   <p>
-                    Image segmentation partitions digital images into foreground vs background pixel sets.
-                    The <strong>RMBG 2.0 (BiRefNet)</strong> neural network outputs a 2D probability map representing foreground confidence for every pixel.
+                    <strong>Canvas Mode</strong> computes Euclidean color distance in RGB space: &Delta;E = &radic;((r1-r2)&sup2; + (g1-g2)&sup2; + (b1-b2)&sup2;) for each pixel in dedicated Web Workers.<br />
+                    • <strong>Speed:</strong> Instant (&lt; 15ms).<br />
+                    • <strong>Download:</strong> 0 MB (no neural weights).<br />
+                    • <strong>Best for:</strong> Solid backdrops, studio product photos, and clean single-color studio backgrounds.
                   </p>
                 </div>
               )}
 
-              {activeElsTab === 'tensors' && (
+              {activeElsTab === 'u2netp' && (
                 <div className="space-y-2">
-                  <h4 className="font-bold text-text text-sm">Pixel to Tensor Normalization</h4>
+                  <h4 className="font-bold text-text text-sm">U²-NetP: Ultra-Fast Mobile Neural Network (~4.4 MB)</h4>
                   <p>
-                    Raw canvas pixels are 8-bit integers $[0, 255]$ in interleaved RGBA format.
-                    Before feeding pixels to the neural network, they are resized to $1024 \times 1024$ and converted to a planar <strong>Float32Array Tensor</strong> $[1, 3, 1024, 1024]$ normalized to $[0.0, 1.0]$.
+                    <strong>U²-NetP</strong> uses a 2-level nested U-structure (ReSNet blocks) without pre-trained backbones. It processes images at 320 &times; 320 resolution.<br />
+                    • <strong>Footprint:</strong> Only 4.4 MB, packaged directly for 100% offline use.<br />
+                    • <strong>Inference:</strong> &lt; 180ms on standard CPU/WASM and mobile devices.
+                  </p>
+                </div>
+              )}
+
+              {activeElsTab === 'rmbg' && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-text text-sm">RMBG 2.0 (BiRefNet): Deep Bilateral Reference Segmentation</h4>
+                  <p>
+                    <strong>RMBG 2.0 (BiRefNet)</strong> leverages bilateral reference frames at 1024 &times; 1024 resolution to capture intricate details (hair strands, fur, glass transparency, fine jewelry).<br />
+                    • <strong>Footprint:</strong> 168 MB deep neural network streamed via AI CDN mirrors.<br />
+                    • <strong>Acceleration:</strong> WebGPU shader execution for studio-grade cutouts.
                   </p>
                 </div>
               )}
 
               {activeElsTab === 'alpha' && (
                 <div className="space-y-2">
-                  <h4 className="font-bold text-text text-sm">Alpha Matting & Edge Smoothstep Interpolation</h4>
+                  <h4 className="font-bold text-text text-sm">Alpha Matting & Studio Backdrop Compositing</h4>
                   <p>
-                    The postprocessor converts output probabilities into smoothstep alpha channels.
-                    Original high-resolution photos are then composited with destination-in blend operations to produce crisp, transparent PNGs.
-                  </p>
-                </div>
-              )}
-
-              {activeElsTab === 'wasm' && (
-                <div className="space-y-2">
-                  <h4 className="font-bold text-text text-sm">Canvas Color-Tolerance vs Deep Learning AI</h4>
-                  <p>
-                    <strong>Canvas Mode:</strong> Computes Euclidean color distance &Delta;E = &radic;((r1-r2)&sup2; + (g1-g2)&sup2; + (b1-b2)&sup2;) per pixel in Web Workers. 0 MB download, instant speed.<br />
-                    <strong>AI Mode:</strong> Executes multi-scale feature maps in ONNX Runtime with WebGPU acceleration.
+                    The postprocessor maps raw probabilities to smoothstep alpha curves: &alpha; = t&sup2; &times; (3 - 2t). The foreground cutout is blended onto solid hex backdrops or studio radial spotlight gradients via 2D Canvas matrix transforms.
                   </p>
                 </div>
               )}

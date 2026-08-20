@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { listAllModels, AI_MODEL_REGISTRY } from '@/src/ai/registry';
+import { listAllModels } from '@/src/ai/registry';
 import { modelManager, StorageMetrics } from '@/src/ai/model-manager';
 import { ModelStatusBadge } from './ModelStatusBadge';
 import { HardDrive, Trash2, RefreshCw, X, ShieldCheck, Download } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { useToast } from '@/components/ui/Toast';
 
 export interface ModelManagerDialogProps {
   isOpen: boolean;
@@ -15,6 +16,8 @@ export interface ModelManagerDialogProps {
 export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps) {
   const [metrics, setMetrics] = useState<StorageMetrics>({ totalModels: 0, totalModelsCount: 0, totalSizeMB: 0, cachedModels: [] });
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [downloadProgress, setDownloadProgress] = useState<{ [id: string]: number }>({});
+  const { toast } = useToast();
 
   const refreshMetrics = async () => {
     try {
@@ -35,14 +38,51 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
 
   const models = listAllModels();
 
-  const handleDelete = async (id: string) => {
-    await modelManager.deleteModel(id);
-    await refreshMetrics();
+  const handleDelete = async (id: string, name: string) => {
+    try {
+      await modelManager.deleteModel(id);
+      await refreshMetrics();
+      toast(`Deleted "${name}" from offline cache`, 'info');
+    } catch (err: any) {
+      toast(err.message || 'Failed to delete model', 'error');
+    }
   };
 
   const handleClearAll = async () => {
-    await modelManager.clearAll();
-    await refreshMetrics();
+    try {
+      await modelManager.clearAll();
+      await refreshMetrics();
+      toast('Cleared all cached AI models from local storage', 'info');
+    } catch (err: any) {
+      toast(err.message || 'Failed to clear models', 'error');
+    }
+  };
+
+  const handleDownload = async (model: any) => {
+    try {
+      setDownloadingId(model.id);
+      setDownloadProgress((prev) => ({ ...prev, [model.id]: 0 }));
+      
+      await modelManager.ensureModelAvailable(
+        model,
+        (p) => {
+          setDownloadProgress((prev) => ({ ...prev, [model.id]: p.percent }));
+        },
+        undefined
+      );
+      
+      await refreshMetrics();
+      toast(`"${model.name}" downloaded & ready offline!`, 'success');
+    } catch (err: any) {
+      toast(err.message || `Failed to download ${model.name}`, 'error');
+    } finally {
+      setDownloadingId(null);
+      setDownloadProgress((prev) => {
+        const next = { ...prev };
+        delete next[model.id];
+        return next;
+      });
+    }
   };
 
   return (
@@ -62,7 +102,7 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
 
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-surface-elevated rounded-xl text-text-muted hover:text-text transition-colors"
+            className="p-1.5 hover:bg-surface-elevated rounded-xl text-text-muted hover:text-text transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -78,7 +118,7 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
           {metrics.cachedModels.length > 0 && (
             <button
               onClick={handleClearAll}
-              className="px-3 py-1.5 rounded-xl border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-bold transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-xl border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear All Models</span>
@@ -90,6 +130,9 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
         <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
           {models.map((model) => {
             const isCached = metrics.cachedModels.some((m) => m.id === model.id);
+            const isDownloading = downloadingId === model.id;
+            const progress = downloadProgress[model.id] ?? 0;
+
             return (
               <div
                 key={model.id}
@@ -98,7 +141,7 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-text">{model.name}</span>
-                    <span className="text-[10px] font-mono text-text-4">v{model.version}</span>
+                    <span className="text-[10px] font-mono text-text-muted">v{model.version}</span>
                   </div>
                   <div className="text-tiny font-mono text-text-muted">{model.description}</div>
                 </div>
@@ -107,33 +150,35 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
                   <ModelStatusBadge isCached={isCached} sizeMB={model.sizeMB} />
                   {isCached ? (
                     <button
-                      onClick={() => handleDelete(model.id)}
-                      className="p-1.5 hover:bg-red-500/10 hover:text-red-500 rounded-lg text-text-muted transition-colors"
+                      onClick={() => handleDelete(model.id, model.name)}
+                      className="p-1.5 hover:bg-red-500/10 hover:text-red-500 rounded-lg text-text-muted transition-colors cursor-pointer"
                       title="Delete cached model"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   ) : (
                     <button
-                      onClick={async () => {
-                        try {
-                          setDownloadingId(model.id);
-                          await modelManager.ensureModelAvailable(model, () => {}, undefined);
-                          await refreshMetrics();
-                        } catch (err) {
-                          console.error("Failed to download model", err);
-                        } finally {
-                          setDownloadingId(null);
-                        }
-                      }}
-                      disabled={downloadingId === model.id}
+                      onClick={() => handleDownload(model)}
+                      disabled={isDownloading}
                       className={cn(
-                        "p-1.5 rounded-lg transition-colors",
-                        downloadingId === model.id ? "text-blue bg-blue/10 animate-pulse" : "hover:bg-blue/10 hover:text-blue text-text-muted"
+                        "px-2 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-bold cursor-pointer",
+                        isDownloading
+                          ? "text-blue bg-blue/10"
+                          : "hover:bg-blue/10 hover:text-blue text-text-muted border border-border/60"
                       )}
-                      title="Download and cache model"
+                      title="Download and cache model for offline use"
                     >
-                      <Download className="w-3.5 h-3.5" />
+                      {isDownloading ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          <span>{progress > 0 ? `${progress}%` : 'Downloading...'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Cache</span>
+                        </>
+                      )}
                     </button>
                   )}
                 </div>
@@ -143,7 +188,7 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-border/60 pt-4 text-tiny font-mono text-text-4">
+        <div className="flex items-center justify-between border-t border-border/60 pt-4 text-tiny font-mono text-text-muted">
           <div className="flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
             <span>SHA-256 Verified • 100% Client-Side Storage</span>
@@ -151,7 +196,7 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
 
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-colors"
+            className="px-4 py-1.5 rounded-xl bg-blue hover:bg-blue-hover text-white text-xs font-bold transition-colors cursor-pointer"
           >
             Done
           </button>
