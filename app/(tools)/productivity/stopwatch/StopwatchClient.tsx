@@ -62,6 +62,7 @@ import {
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { QRModal } from "@/components/ui/QRModal";
+import { ShareButton } from "@/components/ui/ShareButton";
 import { useToast } from "@/components/ui/Toast";
 import { blobManager } from "@/src/lib/blob-manager";
 
@@ -1162,14 +1163,11 @@ export default function StopwatchClient() {
                         <Download className="w-3.5 h-3.5" />
                         <span>JSON</span>
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsQrOpen(true)}
-                        className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
-                        title="Share QR"
-                      >
-                        <Share2 className="w-3.5 h-3.5" />
-                      </button>
+                      <ShareButton
+                        url={typeof window !== 'undefined' ? window.location.href : ''}
+                        title={lapRecords.length > 0 ? `KaruviLab Stopwatch: ${lapRecords.length} laps tracked (Best: ${stats.fastestLapMs !== null ? formatStopwatchTime(stats.fastestLapMs, precision) : '—'})` : 'KaruviLab Precision Stopwatch'}
+                        onQrClick={() => setIsQrOpen(true)}
+                      />
                     </>
                   )}
                 </div>

@@ -8,7 +8,7 @@ import { ShareButton } from "@/components/ui/ShareButton";
 import { SharedResultBanner } from "@/components/ui/SharedResultBanner";
 import { QRModal } from "@/components/ui/QRModal";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
-import { RotateCcw, Users, Sparkles, Clock, Globe, ChevronDown, ChevronUp, HeartPulse } from "lucide-react";
+import { RotateCcw, Users, Sparkles, Clock, Globe, HeartPulse, SlidersHorizontal } from "lucide-react";
 import {
   TIMEZONE_PRESETS,
   todayISO,
@@ -45,6 +45,7 @@ export default function AgeCalculatorClient() {
     setShowPrecisionTime(false);
     setBirthTime("12:00");
     setTzOffset(-new Date().getTimezoneOffset());
+    setAstrologySystem("tropical");
   };
 
   const result = useMemo(() => {
@@ -89,32 +90,65 @@ export default function AgeCalculatorClient() {
               description="DD / MM / YYYY"
               id="age-calc-asof"
             />
+          </div>
+        }
+        optionsPanel={
+          <div className="space-y-4 min-w-0 w-full">
+            <div className="flex items-center justify-between border-b border-border/60 pb-3">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-blue" />
+                <h3 className="text-sm font-bold text-text uppercase tracking-wider">Calculation Options</h3>
+              </div>
+            </div>
 
-            {/* Precision Celestial Settings Accordion */}
-            <div className="border border-border/80 rounded-2xl p-3 sm:p-4 bg-surface-2/40 space-y-3 sm:space-y-4 min-w-0 w-full overflow-hidden">
+            {/* Compare Ages Mode Toggle */}
+            <div className="flex items-center justify-between p-3 bg-surface-2/40 border border-border/80 rounded-2xl gap-3">
+              <div className="space-y-0.5 min-w-0">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-text">
+                  <Users className="w-3.5 h-3.5 text-blue flex-shrink-0" />
+                  <span>Age Comparison Mode</span>
+                </div>
+                <p className="text-[11px] text-text-muted">Compare age difference between two individuals</p>
+              </div>
               <button
                 type="button"
-                onClick={() => setShowPrecisionTime(!showPrecisionTime)}
-                className="w-full flex items-center justify-between text-left text-sm font-semibold text-text hover:text-blue transition-colors cursor-pointer min-w-0 gap-2"
+                onClick={() => setShowComparison(!showComparison)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex-shrink-0 ${
+                  showComparison
+                    ? "bg-blue text-white shadow-sm"
+                    : "bg-surface-2 text-text-muted hover:text-text border border-border"
+                }`}
               >
-                <div className="flex items-center gap-2 min-w-0 truncate">
-                  <Sparkles className="w-4 h-4 text-blue flex-shrink-0" />
-                  <span className="truncate">Precision Birth Time & Location</span>
-                </div>
-                {showPrecisionTime ? (
-                  <ChevronUp className="w-4 h-4 text-text-muted flex-shrink-0" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-text-muted flex-shrink-0" />
-                )}
+                {showComparison ? "Enabled" : "Disabled"}
               </button>
+            </div>
+
+            {/* Precision Celestial Parameters Toggle */}
+            <div className="space-y-3 p-3 bg-surface-2/40 border border-border/80 rounded-2xl min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="space-y-0.5 min-w-0">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-text">
+                    <Sparkles className="w-3.5 h-3.5 text-blue flex-shrink-0" />
+                    <span>Precision Celestial & Time</span>
+                  </div>
+                  <p className="text-[11px] text-text-muted">Exact birth time and timezone for planetary calculation</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowPrecisionTime(!showPrecisionTime)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex-shrink-0 ${
+                    showPrecisionTime
+                      ? "bg-blue text-white shadow-sm"
+                      : "bg-surface-2 text-text-muted hover:text-text border border-border"
+                  }`}
+                >
+                  {showPrecisionTime ? "Active" : "Off"}
+                </button>
+              </div>
 
               {showPrecisionTime && (
-                <div className="space-y-3 sm:space-y-4 pt-2 border-t border-border/50 text-xs min-w-0 w-full">
-                  <p className="text-text-muted break-words leading-relaxed">
-                    Planets traverse zodiac positions continually. Enter birth time and location/timezone for pinpoint planetary positions, Moon Sign (Rasi), and Nakshatra.
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 min-w-0 w-full">
+                <div className="space-y-3 pt-3 border-t border-border/50 text-xs min-w-0 w-full animate-in fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-0 w-full">
                     <div className="space-y-1.5 min-w-0 w-full">
                       <label htmlFor="birth-time-input" className="flex items-center gap-1.5 font-medium text-text">
                         <Clock className="w-3.5 h-3.5 text-blue flex-shrink-0" />
@@ -125,20 +159,20 @@ export default function AgeCalculatorClient() {
                         type="time"
                         value={birthTime}
                         onChange={(e) => setBirthTime(e.target.value)}
-                        className="w-full min-w-0 bg-surface-2 border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-sm"
+                        className="w-full min-w-0 bg-surface border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-sm"
                       />
                     </div>
 
                     <div className="space-y-1.5 min-w-0 w-full overflow-hidden">
                       <label htmlFor="birth-tz-select" className="flex items-center gap-1.5 font-medium text-text min-w-0">
                         <Globe className="w-3.5 h-3.5 text-blue flex-shrink-0" />
-                        <span className="truncate">Birth Place / Timezone</span>
+                        <span className="truncate">Timezone / Location</span>
                       </label>
                       <select
                         id="birth-tz-select"
                         value={tzOffset}
                         onChange={(e) => setTzOffset(Number(e.target.value))}
-                        className="w-full min-w-0 max-w-full bg-surface-2 border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-xs sm:text-sm truncate"
+                        className="w-full min-w-0 max-w-full bg-surface border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-xs sm:text-sm truncate"
                       >
                         {TIMEZONE_PRESETS.map((tz) => (
                           <option key={tz.id} value={tz.offset}>
@@ -151,27 +185,54 @@ export default function AgeCalculatorClient() {
                 </div>
               )}
             </div>
+
+            {/* Astrology System Switcher */}
+            <div className="p-3 bg-surface-2/40 border border-border/80 rounded-2xl space-y-2 min-w-0">
+              <div className="flex items-center justify-between text-xs font-semibold text-text">
+                <span>Ephemeris System</span>
+                <span className="text-[11px] text-text-muted">
+                  {astrologySystem === "tropical" ? "Western (Tropical)" : "Vedic (Lahiri Ayanamsa)"}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5 bg-surface p-1 rounded-xl border border-border text-xs min-w-0">
+                <button
+                  type="button"
+                  onClick={() => setAstrologySystem("tropical")}
+                  className={`px-2.5 py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-xs text-center truncate ${
+                    astrologySystem === "tropical"
+                      ? "bg-blue text-white shadow-sm"
+                      : "text-text-muted hover:text-text"
+                  }`}
+                >
+                  Western / Tropical
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAstrologySystem("vedic")}
+                  className={`px-2.5 py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-xs text-center truncate ${
+                    astrologySystem === "vedic"
+                      ? "bg-blue text-white shadow-sm"
+                      : "text-text-muted hover:text-text"
+                  }`}
+                >
+                  Vedic / Sidereal
+                </button>
+              </div>
+            </div>
           </div>
         }
         output={
           result ? (
             <div className="space-y-5 sm:space-y-6 min-w-0 w-full">
               {/* Header Actions Row */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0 w-full">
-                <h3 className="text-base sm:text-lg font-semibold text-text">Result</h3>
-                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                  <button 
-                    type="button"
-                    onClick={() => setShowComparison(!showComparison)}
-                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-surface-2 border border-border rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-text-muted hover:text-text transition-colors cursor-pointer whitespace-nowrap"
-                  >
-                    <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
-                    <span>{showComparison ? "Hide Comparison" : "Compare"}</span>
-                  </button>
+              <div className="flex items-center justify-between gap-3 min-w-0 w-full">
+                <h3 className="text-base sm:text-lg font-semibold text-text truncate">Calculated Age</h3>
+                <div className="flex items-center gap-2 flex-shrink-0">
                   <button 
                     type="button"
                     onClick={resetAll}
-                    className="flex items-center justify-center gap-1.5 bg-surface-2 border border-border rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-text-muted hover:text-text transition-colors cursor-pointer whitespace-nowrap"
+                    className="flex items-center justify-center gap-1.5 bg-surface-2 border border-border rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-text-muted hover:text-text transition-colors cursor-pointer whitespace-nowrap"
+                    title="Reset to defaults"
                   >
                     <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
                     <span>Reset</span>
@@ -215,7 +276,7 @@ export default function AgeCalculatorClient() {
                 <MetricCard label="Total Seconds" value={result.totalSeconds.toLocaleString()} />
               </div>
 
-              {/* Age Difference (Comparison Mode - Placed above Zodiac) */}
+              {/* Age Difference (Comparison Mode) */}
               {showComparison && comparisonResult && (
                 <div className="w-full min-w-0">
                   <MetricCard 
@@ -224,43 +285,16 @@ export default function AgeCalculatorClient() {
                     accent
                     className="bg-blue/5 border-blue/20 w-full min-w-0"
                     valueClassName="text-base xs:text-lg sm:text-xl"
+                    sub={`Between Person 1 (${dob}) and Person 2 (${dob2})`}
                   />
                 </div>
               )}
 
               {/* Section 4: Zodiac & Celestial Profile */}
               <div className="space-y-3 sm:space-y-4 min-w-0 w-full">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 min-w-0 w-full">
-                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted min-w-0">
-                    <Sparkles className="w-3.5 h-3.5 text-blue flex-shrink-0" />
-                    <span className="truncate">Zodiac & Celestial Profile</span>
-                  </div>
-
-                  {/* Astrology System Switcher */}
-                  <div className="grid grid-cols-2 w-full sm:w-auto gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs min-w-0">
-                    <button
-                      type="button"
-                      onClick={() => setAstrologySystem("tropical")}
-                      className={`px-2.5 py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-xs text-center truncate ${
-                        astrologySystem === "tropical"
-                          ? "bg-blue text-white shadow-sm"
-                          : "text-text-muted hover:text-text"
-                      }`}
-                    >
-                      Western / Tropical
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAstrologySystem("vedic")}
-                      className={`px-2.5 py-1.5 rounded-lg font-medium transition-colors cursor-pointer text-xs text-center truncate ${
-                        astrologySystem === "vedic"
-                          ? "bg-blue text-white shadow-sm"
-                          : "text-text-muted hover:text-text"
-                      }`}
-                    >
-                      Vedic / Sidereal
-                    </button>
-                  </div>
+                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-text-muted min-w-0">
+                  <Sparkles className="w-3.5 h-3.5 text-blue flex-shrink-0" />
+                  <span className="truncate">Zodiac & Celestial Profile ({astrologySystem === "tropical" ? "Western" : "Vedic"})</span>
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 w-full min-w-0">
@@ -311,7 +345,7 @@ export default function AgeCalculatorClient() {
                     </span>
                   </div>
 
-                  <div className="overflow-x-auto w-full max-w-full">
+                  <div className="overflow-x-auto w-full max-w-full min-w-0">
                     <table className="w-full text-left text-xs border-collapse min-w-[280px]">
                       <thead>
                         <tr className="border-b border-border text-text-muted bg-surface-2/50">
@@ -367,7 +401,7 @@ export default function AgeCalculatorClient() {
                   <MetricCard 
                     label="Estimated Sleep" 
                     value={`${result.approxSleepHours.toLocaleString()} hrs`} 
-                    sub="~8 hrs/day (1/3 of life)" 
+                    sub="~8 hrs/day (1/3 life)" 
                   />
                   <MetricCard 
                     label="Estimated Breaths" 
@@ -387,7 +421,7 @@ export default function AgeCalculatorClient() {
                   <MetricCard 
                     label="Total Seconds" 
                     value={result.totalSeconds.toLocaleString()} 
-                    sub="Total seconds elapsed" 
+                    sub="Total seconds" 
                   />
                 </div>
               </div>
@@ -406,4 +440,3 @@ export default function AgeCalculatorClient() {
     </div>
   );
 }
-

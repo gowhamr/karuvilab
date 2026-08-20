@@ -26,6 +26,18 @@ export function ShareButton({ url, title = 'Check out this result on KaruviLab',
   const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [alignLeft, setAlignLeft] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      if (rect.right < 230) {
+        setAlignLeft(true);
+      } else {
+        setAlignLeft(false);
+      }
+    }
+  }, [isOpen]);
 
   const hasNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 
@@ -123,7 +135,10 @@ export function ShareButton({ url, title = 'Check out this result on KaruviLab',
             animate="visible"
             exit="exit"
             transition={SPRING}
-            className="absolute right-0 top-full mt-2 w-56 bg-surface border border-border rounded-2xl shadow-2xl shadow-black/30 overflow-hidden z-dropdown"
+            className={cn(
+              "absolute top-full mt-2 w-56 max-w-[calc(100vw-2rem)] bg-surface border border-border rounded-2xl shadow-2xl shadow-black/30 overflow-hidden z-dropdown",
+              alignLeft ? "left-0" : "right-0"
+            )}
           >
             {/* Copy link */}
             <button

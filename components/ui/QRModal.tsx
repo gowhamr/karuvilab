@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { X, Download, QrCode } from 'lucide-react';
+import QRCode from 'qrcode';
 import { cn } from '@/src/lib/utils';
 import { logger } from '@/src/lib/logger';
 import { useFocusTrap } from '@/src/lib/a11y/useFocusTrap';
@@ -13,33 +14,20 @@ interface QRModalProps {
   onClose: () => void;
 }
 
-const OVERLAY_VARIANTS = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-  exit: { opacity: 0 },
-};
-
-const MODAL_VARIANTS = {
-  hidden: { opacity: 0, scale: 0.9, y: 20 },
-  visible: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.9, y: 20 },
-};
-
-const SPRING = { type: 'spring' as const, stiffness: 300, damping: 30 };
-
 export function QRModal({ url, isOpen, onClose }: QRModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, isOpen);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const scriptRef = useRef<HTMLScriptElement | null>(null);
+
+  const effectiveUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
 
   const renderQR = useCallback(() => {
-    if (!canvasRef.current || !window.QRCode) return;
-    window.QRCode.toCanvas(
+    if (!canvasRef.current || !effectiveUrl) return;
+    QRCode.toCanvas(
       canvasRef.current,
-      url,
+      effectiveUrl,
       {
         width: 256,
         margin: 2,
@@ -56,47 +44,20 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
         }
       }
     );
-  }, [url]);
+  }, [effectiveUrl]);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    if (window.QRCode) {
-      renderQR();
-      return;
+    if (isOpen) {
+      // Small timeout to allow canvas element to be attached to DOM
+      const timer = setTimeout(() => {
+        renderQR();
+      }, 50);
+      return () => clearTimeout(timer);
+    } else {
+      setIsLoaded(false);
+      setHasError(false);
     }
-
-    // Load QRCode from CDN
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
-    script.integrity = 'sha384-8k/674J8BfiDbYOO16+Z0gW2QiG+aRITthbJaaZpcE+AoWU0ep4TEMy8/xEhs4e3';
-    script.crossOrigin = 'anonymous';
-    script.async = true;
-    script.onload = () => renderQR();
-    script.onerror = () => {
-      logger.error('QRModal: failed to load QRCode script from CDN', { action: 'loadScript' });
-      setHasError(true);
-    };
-    document.head.appendChild(script);
-    scriptRef.current = script;
   }, [isOpen, renderQR]);
-
-  // Re-render if URL changes while open
-  useEffect(() => {
-    if (isOpen && window.QRCode) {
-      renderQR();
-    }
-  }, [url, isOpen, renderQR]);
-
-  // Cleanup script on unmount
-  useEffect(() => {
-    return () => {
-      if (scriptRef.current && !window.QRCode) {
-        document.head.removeChild(scriptRef.current);
-        scriptRef.current = null;
-      }
-    };
-  }, []);
 
   const handleDownload = useCallback(() => {
     if (!canvasRef.current) return;
@@ -121,7 +82,6 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
       {isOpen && (
         <>
           {/* Overlay */}
-          {/* NOTE: z-modal shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
           <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -130,7 +90,6 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
             onClick={onClose}
           />
           
-          {/* NOTE: z-modal shared across modal overlays (SearchOverlay, QRModal, TimezoneSearchModal, SessionRestoredBanner). Safe because only one modal renders at a time. */}
           <m.div
             ref={modalRef}
             role="dialog"
@@ -140,53 +99,53 @@ export function QRModal({ url, isOpen, onClose }: QRModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-modal w-full max-w-sm"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-modal w-full max-w-sm px-4"
           >
             <div className="bg-surface border border-border rounded-3xl shadow-2xl overflow-hidden">
               {/* Header */}
               <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border/50">
                 <div className="flex items-center gap-3">
                   <QrCode className="w-5 h-5 text-blue" />
-                  <h2 className="text-sm font-black uppercase tracking-widest">Share via QR</h2>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-text">Share via QR</h2>
                 </div>
                 <button
                   onClick={onClose}
                   aria-label="Close QR modal"
-                  className="p-2 rounded-lg text-text-4 hover:text-text hover:bg-bg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue"
+                  className="p-2 rounded-lg text-text-muted hover:text-text hover:bg-surface-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* QR Canvas */}
-              <div className="flex flex-col items-center p-8 gap-6">
+              <div className="flex flex-col items-center p-6 sm:p-8 gap-4 sm:gap-6">
                 <div className={cn(
                   'p-4 bg-white rounded-2xl shadow-inner transition-opacity',
-                  isLoaded ? 'opacity-100' : 'opacity-0'
+                  isLoaded ? 'opacity-100' : 'opacity-0 hidden'
                 )}>
                   <canvas ref={canvasRef} />
                 </div>
 
                 {!isLoaded && !hasError && (
-                  <div className="w-64 h-64 bg-bg rounded-2xl flex items-center justify-center">
-                    <div className="w-8 h-8 border border-blue border-t-transparent rounded-full animate-spin" />
+                  <div className="w-64 h-64 bg-surface-2 rounded-2xl flex items-center justify-center">
+                    <div className="w-8 h-8 border-2 border-blue border-t-transparent rounded-full animate-spin" />
                   </div>
                 )}
 
                 {hasError && (
-                  <div className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm font-bold text-center">
+                  <div className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-xs sm:text-sm font-bold text-center">
                     Failed to generate QR code. Please try copying the link instead.
                   </div>
                 )}
 
-                <p className="text-xs text-text-4 font-medium text-center leading-relaxed max-w-xs">
-                  Scan to open this shared result on any device
+                <p className="text-xs text-text-muted font-medium text-center leading-relaxed max-w-xs break-all">
+                  Scan to open this link on another device
                 </p>
 
                 {isLoaded && (
                   <button
                     onClick={handleDownload}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue text-white text-tiny font-bold uppercase tracking-widest-sm shadow-md shadow-blue/10 hover:bg-blue/90 active:scale-95 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue text-white text-xs font-bold uppercase tracking-wider shadow-md shadow-blue/10 hover:bg-blue/90 active:scale-95 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                     Download PNG
